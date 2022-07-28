@@ -68,11 +68,10 @@ static constexpr int REG_LEFTMOST  = 1u << 7;
 static constexpr int REG_TRIE      = 1u << 8;
 static constexpr int REG_GTOP      = 1u << 9;
 static constexpr int REG_SLOWPREC  = 1u << 10;
-static constexpr int REG_KUKLEWICZ = 1u << 12;
-static constexpr int REG_MULTIPASS = 1u << 13;
-static constexpr int REG_SUBHIST   = 1u << 14;
-static constexpr int REG_TSTRING   = 1u << 15;
-static constexpr int REG_AUTOTAGS  = 1u << 16;
+static constexpr int REG_MULTIPASS = 1u << 11;
+static constexpr int REG_SUBHIST   = 1u << 12;
+static constexpr int REG_TSTRING   = 1u << 13;
+static constexpr int REG_AUTOTAGS  = 1u << 14;
 
 // Deprecated, keep for backward compatibility.
 static constexpr int REG_REGLESS = REG_MULTIPASS; // old name for REG_MULTIPASS

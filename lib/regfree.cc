@@ -36,8 +36,6 @@ void regfree(regex_t* preg) {
             delete static_cast<pzsimctx_t*>(preg->simctx);
         } else if (preg->flags & REG_LEFTMOST) {
             delete static_cast<lsimctx_t*>(preg->simctx);
-        } else if (preg->flags & REG_KUKLEWICZ) {
-            delete static_cast<ksimctx_t*>(preg->simctx);
         } else {
             delete static_cast<psimctx_t*>(preg->simctx);
         }

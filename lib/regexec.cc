@@ -33,9 +33,7 @@ int regexec(const regex_t* re, const char* string, size_t nmatch, regmatch_t pma
             }
         } else {
             // POSIX disambiguation
-            if (cflags & REG_KUKLEWICZ) {
-                return regexec_nfa_posix_kuklewicz(re, string, nmatch, pmatch, eflags);
-            } else if (cflags & REG_TRIE) {
+            if (cflags & REG_TRIE) {
                 return regexec_nfa_posix_trie(re, string, nmatch, pmatch, eflags);
             } else {
                 return regexec_nfa_posix(re, string, nmatch, pmatch, eflags);

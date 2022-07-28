@@ -83,8 +83,6 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
             preg->simctx = new pzsimctx_t(*nfa, preg->re_nsub, cflags);
         } else if (cflags & REG_LEFTMOST) {
             preg->simctx = new lsimctx_t(*nfa, preg->re_nsub, cflags);
-        } else if (cflags & REG_KUKLEWICZ) {
-            preg->simctx = new ksimctx_t(*nfa, preg->re_nsub, cflags);
         } else {
             preg->simctx = new psimctx_t(*nfa, preg->re_nsub, cflags);
         }

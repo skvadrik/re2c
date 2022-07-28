@@ -82,7 +82,6 @@ int main(int argc, char** argv)
         {"GTOP-OS",   ENGINE_RE2C, REG_NFA},
         {"simple-OS", ENGINE_RE2C, REG_NFA | REG_SLOWPREC},
         {"lazy-OS",   ENGINE_RE2C, REG_NFA | REG_TRIE},
-        {"Kuklewicz", ENGINE_RE2C, REG_NFA | REG_KUKLEWICZ},
 #ifdef HAVE_RE2_RE2_H
         {"re2-LG",    ENGINE_RE2,  0},
 #endif

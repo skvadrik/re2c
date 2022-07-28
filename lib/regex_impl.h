@@ -131,39 +131,10 @@ struct zhistory_t {
     FORBID_COPY(zhistory_t);
 };
 
-// tag history for Kuklewicz disambiguation (POSIX semantics)
-struct khistory_t {
-    struct node_t {
-        tag_info_t info;
-        hidx_t pred;
-
-        inline node_t(tag_info_t info, hidx_t pred)
-            : info(info), pred(pred) {}
-    };
-
-    std::vector<node_t> nodes;
-    std::vector<int32_t> path1;
-    std::vector<int32_t> path2;
-
-    inline khistory_t(): nodes(), path1(), path2() { init(); }
-    inline void init();
-    inline node_t& node(hidx_t i) { return nodes[static_cast<uint32_t>(i)]; }
-    inline const node_t& node(hidx_t i) const { return nodes[static_cast<uint32_t>(i)]; }
-
-    template<typename ctx_t> inline hidx_t link(ctx_t& ctx, const typename ctx_t::conf_t& conf);
-    template<typename ctx_t> static int32_t precedence(ctx_t& ctx,
-                                                       const typename ctx_t::conf_t& x,
-                                                       const typename ctx_t::conf_t& y,
-                                                       int32_t& prec1,
-                                                       int32_t& prec2);
-    FORBID_COPY(khistory_t);
-};
-
 using psimctx_t = simctx_t<phistory_t>;
 using lsimctx_t = simctx_t<lhistory_t>;
 using pzsimctx_t = simctx_t<zhistory_t>;
 using lzsimctx_t = simctx_t<zhistory_t>;
-using ksimctx_t = simctx_t<khistory_t>;
 
 // regexec functions
 using regexec_t = int (const regex_t*, const char*, size_t, regmatch_t[], int);
@@ -171,7 +142,6 @@ regexec_t regexec_dfa;
 template<typename ctx_t> regexec_t regexec_dfa_multipass;
 regexec_t regexec_nfa_posix;
 regexec_t regexec_nfa_posix_trie;
-regexec_t regexec_nfa_posix_kuklewicz;
 regexec_t regexec_nfa_leftmost;
 regexec_t regexec_nfa_leftmost_trie;
 
@@ -232,16 +202,13 @@ simctx_t<history_t>::simctx_t(const Tnfa& nfa, size_t re_nsub, int flags)
         offsets2 = new regoff_t[ntags * ncores];
     }
     if (!(flags & REG_LEFTMOST) && !(flags & REG_TRIE)) {
-        const size_t dim = (flags & REG_KUKLEWICZ) ? ntags : ncores;
+        const size_t dim = ncores;
         newprectbl = new int32_t[ncores * dim];
         oldprectbl = new int32_t[ncores * dim];
         histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);
         fincount.resize(ncores + 1);
         worklist.reserve(nstates);
-    }
-    if (flags & REG_KUKLEWICZ) {
-        stateiters.reserve(ncores);
     }
 
     if (flags & REG_GTOP) {
@@ -443,22 +410,10 @@ void zhistory_t::init() {
     cache.clear();
 }
 
-void khistory_t::init() {
-    nodes.clear();
-    nodes.push_back(node_t(NOINFO, -1));
-}
-
 template<typename ctx_t>
 hidx_t zhistory_t::link(ctx_t& ctx, const typename ctx_t::conf_t& conf) {
     const int32_t i = static_cast<int32_t>(nodes.size());
     nodes.push_back(node_t(conf.state->tag, conf.thist, conf.origin, ctx.step));
-    return i;
-}
-
-template<typename ctx_t>
-hidx_t khistory_t::link(ctx_t& /* ctx */, const typename ctx_t::conf_t& conf) {
-    const int32_t i = static_cast<int32_t>(nodes.size());
-    nodes.push_back(node_t(conf.state->tag, conf.thist));
     return i;
 }
 
