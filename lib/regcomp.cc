@@ -38,7 +38,6 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     conopt_t globopts;
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
     globopts.FFlag = true;
-    globopts.backward = cflags & REG_BACKWARD;
     Msg msg;
     Opt opts(globopts, msg);
     opts.set_subhistories((cflags & REG_SUBHIST) != 0);
@@ -72,20 +71,6 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     Tnfa* nfa = new Tnfa;
     CHECK_RET(re_to_nfa(*nfa, std::move(re)));
 
-    Tnfa* nfa0 = nullptr;
-    if (cflags & REG_BACKWARD) {
-        conopt_t globopts0;
-        globopts0.FFlag = true;
-        Opt opts0(globopts0, msg);
-        const opt_t* opt0;
-        CHECK_RET(opts0.snapshot(opt0));
-        RESpec re0(opt0, msg);
-        CHECK_RET(re0.init(arv));
-        nfa0 = new Tnfa;
-        CHECK_RET(re_to_nfa(*nfa0, std::move(re0)));
-        delete opt0;
-    }
-
     DCHECK(nfa->rules.size() == 1);
     preg->re_nsub = nfa->rules[0].ncap + 1;
     preg->re_ntag = nfa->tags.size();
@@ -93,15 +78,15 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     if (cflags & REG_NFA) {
         preg->nfa = nfa;
         if ((cflags & REG_TRIE) && (cflags & REG_LEFTMOST)) {
-            preg->simctx = new lzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new lzsimctx_t(*nfa, preg->re_nsub, cflags);
         } else if (cflags & REG_TRIE) {
-            preg->simctx = new pzsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new pzsimctx_t(*nfa, preg->re_nsub, cflags);
         } else if (cflags & REG_LEFTMOST) {
-            preg->simctx = new lsimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new lsimctx_t(*nfa, preg->re_nsub, cflags);
         } else if (cflags & REG_KUKLEWICZ) {
-            preg->simctx = new ksimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new ksimctx_t(*nfa, preg->re_nsub, cflags);
         } else {
-            preg->simctx = new psimctx_t(*nfa, nfa0, preg->re_nsub, cflags);
+            preg->simctx = new psimctx_t(*nfa, preg->re_nsub, cflags);
         }
     } else if (cflags & REG_MULTIPASS) {
         preg->mptdfa = new MpTdfa(std::move(*nfa), opt, cflags);

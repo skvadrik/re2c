@@ -52,7 +52,6 @@ struct simctx_t {
     using history_t = history_type_t;
 
     const Tnfa& nfa;
-    const Tnfa* nfa0;
     const size_t nsub;
     const int flags;
 
@@ -91,7 +90,7 @@ struct simctx_t {
     gtop_heap_t gtop_heap;
     closure_stats_t dc_clstats;
 
-    simctx_t(const Tnfa& nfa, const Tnfa* nfa0, size_t re_nsub, int flags);
+    simctx_t(const Tnfa& nfa, size_t re_nsub, int flags);
     ~simctx_t();
     FORBID_COPY(simctx_t);
 };
@@ -172,7 +171,6 @@ regexec_t regexec_dfa;
 template<typename ctx_t> regexec_t regexec_dfa_multipass;
 regexec_t regexec_nfa_posix;
 regexec_t regexec_nfa_posix_trie;
-regexec_t regexec_nfa_posix_backward;
 regexec_t regexec_nfa_posix_kuklewicz;
 regexec_t regexec_nfa_leftmost;
 regexec_t regexec_nfa_leftmost_trie;
@@ -187,9 +185,8 @@ template<typename ctx_t>
 const tstring_t* regtstring_dfa_multipass(const regex_t*, const char*);
 
 template<typename history_t>
-simctx_t<history_t>::simctx_t(const Tnfa& nfa, const Tnfa* nfa0, size_t re_nsub, int flags)
+simctx_t<history_t>::simctx_t(const Tnfa& nfa, size_t re_nsub, int flags)
     : nfa(nfa),
-      nfa0(nfa0),
       nsub(2 * (re_nsub - 1)),
       flags(flags),
       tags(nfa.tags),
@@ -267,9 +264,6 @@ simctx_t<history_t>::~simctx_t() {
         delete[] newprectbl;
         delete[] oldprectbl;
         delete[] histlevel;
-    }
-    if (flags & REG_BACKWARD) {
-        delete nfa0;
     }
 }
 

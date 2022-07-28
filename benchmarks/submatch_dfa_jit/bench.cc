@@ -22,18 +22,18 @@ int main(int argc, char** argv)
     const char *aaa_strings[] = {aaa, NULL};
 
     const std::vector<bench_t> benches {
-        {"http-rfc7230",   MESSAGE_HEAD,  http_strings, 0},
-        {"http-simple",    MESSAGE_HEAD2, http_strings, 0},
-        {"uri-rfc3986",    URI,           uri_strings,  0},
-        {"uri-simple",     URI2,          uri_strings,  0},
-        {"ipv6",           IPV6,          ipv6_strings, 0},
-        {"ipv4",           IPV4,          ipv4_strings, 0},
-        {"date",           DATE,          date_strings, 0},
-        {"package",        PACKAGE_ATOM,  atom_strings, 0},
+        {"http-rfc7230",   MESSAGE_HEAD,  http_strings},
+        {"http-simple",    MESSAGE_HEAD2, http_strings},
+        {"uri-rfc3986",    URI,           uri_strings},
+        {"uri-simple",     URI2,          uri_strings},
+        {"ipv6",           IPV6,          ipv6_strings},
+        {"ipv4",           IPV4,          ipv4_strings},
+        {"date",           DATE,          date_strings},
+        {"package",        PACKAGE_ATOM,  atom_strings},
 
-        {NULL, "(a)*a{10}",   aaa_strings, 0},
-        {NULL, "(a)*a{100}",  aaa_strings, 0},
-        {NULL, "(a)*a{1000}", aaa_strings, 0},
+        {NULL, "(a)*a{10}",   aaa_strings},
+        {NULL, "(a)*a{100}",  aaa_strings},
+        {NULL, "(a)*a{1000}", aaa_strings},
     };
 
     const std::vector<alg_t> algs {
@@ -47,16 +47,12 @@ int main(int argc, char** argv)
 
     for (const bench_t &bench : benches) {
         for (const alg_t &alg : algs) {
-            if (alg.flags & bench.not_flags) continue;
-
             const char *name = bench.name ? bench.name : bench.regexp;
             snprintf(title, MAX_TITLE, "%s-regcomp_%s", name, alg.name);
             benchmark::RegisterBenchmark(title, bench_regcomp_t(), alg, bench)
                 ->Unit(benchmark::kMicrosecond);
         }
         for (const alg_t &alg : algs) {
-            if (alg.flags & bench.not_flags) continue;
-
             const char *name = bench.name ? bench.name : bench.regexp;
             snprintf(title, MAX_TITLE, "%s-regexec_%s", name, alg.name);
             benchmark::RegisterBenchmark(title, bench_regexec_t(), alg, bench)

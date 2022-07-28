@@ -437,7 +437,6 @@ if (RE2C_BUILD_LIBS)
         lib/regexec_nfa_leftmost_trie.cc
         lib/regexec_nfa_posix.cc
         lib/regexec_nfa_posix_trie.cc
-        lib/regexec_nfa_posix_backward.cc
         lib/regexec_nfa_posix_kuklewicz.cc
         lib/regfree.cc
         lib/stubs.cc

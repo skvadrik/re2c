@@ -68,7 +68,6 @@ libre2c_la_SRC = \
 	lib/regexec_nfa_leftmost_trie.cc \
 	lib/regexec_nfa_posix.cc \
 	lib/regexec_nfa_posix_trie.cc \
-	lib/regexec_nfa_posix_backward.cc \
 	lib/regexec_nfa_posix_kuklewicz.cc \
 	lib/regfree.cc \
 	lib/stubs.cc \

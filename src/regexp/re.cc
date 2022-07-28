@@ -37,8 +37,6 @@ RE* re_cat(RESpec& spec, RE* x, RE* y) {
     if (!x) return y;
     if (!y) return x;
 
-    if (spec.opts->backward) std::swap(x, y);
-
     RE* z = spec.ir_alc.alloct<RE>(1);
     z->kind = RE::Kind::CAT;
     z->cat.re1 = x;

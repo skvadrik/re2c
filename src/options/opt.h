@@ -66,7 +66,6 @@ class Scanner;
     CONSTOPT (PosixPrecedenceTable, posix_prectable, PosixPrecedenceTable::COMPLEX) \
     CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
     CONSTOPT (bool, optimize_tags, true) \
-    CONSTOPT (bool, backward, false) \
     CONSTOPT (bool, nested_negative_tags, true) \
     CONSTOPT (bool, eager_skip, false) \
     CONSTOPT (bool, loop_switch, false) \

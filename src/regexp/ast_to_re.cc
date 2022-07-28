@@ -139,9 +139,6 @@ LOCAL_NODISCARD(RE* insert_between_tags(RESpec& spec, RE* tags, RE* re)) {
         DCHECK(tags->cat.re1->kind == RE::Kind::TAG);
         DCHECK(tags->cat.re2->kind == RE::Kind::TAG);
         tags->cat.re2 = re_cat(spec, re, tags->cat.re2);
-        if (spec.opts->backward) { // undo the reverse done by concatenation
-            std::swap(tags->cat.re2->cat.re1, tags->cat.re2->cat.re2);
-        }
     }
     return tags;
 }

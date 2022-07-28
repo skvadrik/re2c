@@ -13,38 +13,30 @@ namespace {
 
 static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx) {
     RE* x = nullptr;
-
-    // Add transitions for all negative tags (including nested ones). It allows to avoid tag
-    // initialization and fixup at the end of match, at the cost of adding more tag actions.
     if (spec.opts->nested_negative_tags) {
+        // Add transitions for all negative tags (including nested ones). It allows to avoid tag
+        // initialization and fixup at the end of match, at the cost of adding more tag actions.
         for (; stidx < etidx; ++stidx) {
             x = re_cat(spec, x, re_tag(spec, *stidx, true));
         }
-    }
+    } else if (stidx < etidx) {
+        // Add transition only for one top-level negative tag, and save the full range of negative
+        // tags in this tag's metadata. This reduces the amount of tag actions at the cost of
+        // post-processing. (This option is essential for TNFA simulation and causes significant
+        // speedup on tests with many tags.)
 
-    // Add transition only for one top-level negative tag, and save the full range of negative tags
-    // in this tag's metadata. This reduces the amount of tag actions at the cost of
-    // post-processing. (This option is essential for TNFA simulation and causes significant speedup
-    // on tests with many tags.)
-    else if (stidx < etidx) {
         // POSIX syntax means that tags are defined by capturing parentheses. TNFA with raw tags is
         // possible, but we do not have any use cases yet.
         DCHECK(spec.opts->posix_syntax);
         // With POSIX syntax we must have at least two tags: opening and closing
         DCHECK(etidx - stidx > 1);
 
-        size_t first = *stidx, stag, etag;
-        if (!spec.opts->backward) {
-            DCHECK(first % 2 == 0); // forward matching, 1st tag is opening
-            stag = first;
-        } else {
-            DCHECK(first % 2 == 1); // backward matching, 1st tag is closing
-            stag = first - 1;
-        }
-        etag = stag + 1;
+        size_t stag = *stidx;
+        size_t etag = stag + 1;
+        DCHECK(stag % 2 == 0);
 
         // the range of nested tags is contiguous, find its upper bound
-        size_t last = first;
+        size_t last = stag;
         for (const size_t* i = stidx; ++i < etidx;) {
             last = std::max(last, *i);
         }
@@ -53,7 +45,6 @@ static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx)
         spec.tags[etag].lnest = stag;
         spec.tags[etag].hnest = last + 1;
     }
-
     return x;
 }
 
