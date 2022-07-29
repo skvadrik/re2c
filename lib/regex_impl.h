@@ -85,7 +85,7 @@ struct simctx_t {
     confset_t state;
     std::vector<TnfaState*> gor1_topsort;
     std::vector<TnfaState*> gor1_linear;
-    closure_stats_t dc_clstats;
+    closure_stats_t clstats;
 
     simctx_t(const Tnfa& nfa, size_t re_nsub, int flags);
     ~simctx_t();
@@ -179,7 +179,7 @@ simctx_t<history_t>::simctx_t(const Tnfa& nfa, size_t re_nsub, int flags)
       state(),
       gor1_topsort(),
       gor1_linear(),
-      dc_clstats() {
+      clstats() {
     const size_t
     ntags = nfa.tags.size(),
     nstates = nfa.nstates,

@@ -54,11 +54,11 @@ template<typename ctx_t>
 void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     if (!debug) return;
 
-    const uint32_t origin = ctx.dc_origin;
-    const uint32_t target = ctx.dc_target;
-    const uint32_t symbol = ctx.dc_symbol;
+    const uint32_t origin = ctx.origin;
+    const uint32_t target = ctx.target;
+    const uint32_t symbol = ctx.symbol;
     const Tdfa& dfa = ctx.dfa;
-    const tagver_table_t& tvtbl = ctx.dc_tagvertbl;
+    const tagver_table_t& tvtbl = ctx.tagvertbl;
     const typename ctx_t::history_t& thist = ctx.history;
     uint32_t i;
 
@@ -282,7 +282,7 @@ void dump_tags(const tagver_table_t& tagvertbl,
 
 template<typename ctx_t>
 void reset_clstats(ctx_t& ctx) {
-    closure_stats_t& cs = ctx.dc_clstats;
+    closure_stats_t& cs = ctx.clstats;
     cs.nscans = 0;
     cs.nprec = 0;
     cs.length = 0;
@@ -290,8 +290,8 @@ void reset_clstats(ctx_t& ctx) {
 
 template<typename ctx_t>
 void dump_clstats(const ctx_t& ctx) {
-    const closure_stats_t& cs = ctx.dc_clstats;
-    if (ctx.dc_opts->dump_closure_stats) {
+    const closure_stats_t& cs = ctx.clstats;
+    if (ctx.opts->dump_closure_stats) {
         fprintf(stderr,
                 "scans: %-10u prec: %-10u length: %-10zu\n",
                 cs.nscans, cs.nprec, cs.length);

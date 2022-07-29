@@ -114,7 +114,7 @@ void prune(ctx_t& ctx) {
         buffer.push_back(*f);
 
         // mark dropped rules as shadowed
-        if (ctx.dc_msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
+        if (ctx.msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
             std::vector<Rule>& rules = ctx.rules;
             const uint32_t l = rules[f->state->rule].semact->loc.line;
             for (const clos_t& c : closure) {
@@ -134,14 +134,14 @@ void generate_versions(ctx_t& ctx) {
     const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
     tagver_t& maxver = dfa.maxtagver;
-    tagver_table_t& tvtbl = ctx.dc_tagvertbl;
+    tagver_table_t& tvtbl = ctx.tagvertbl;
     tagver_t* vers = tvtbl.buffer;
     closure_t& clos = ctx.state;
     typename ctx_t::history_t& thist = ctx.history;
-    typename ctx_t::newvers_t& newvers = ctx.dc_newvers;
+    typename ctx_t::newvers_t& newvers = ctx.newvers;
 
     typename ctx_t::newvers_t newacts(
-        newver_cmp_t<typename ctx_t::history_t>(thist, ctx.dc_hc_caches));
+        newver_cmp_t<typename ctx_t::history_t>(thist, ctx.hc_caches));
     tcmd_t* cmd = nullptr;
 
     // For each tag, if there is at least one tagged transition, allocate a new version: negative
@@ -209,7 +209,7 @@ void generate_versions(ctx_t& ctx) {
         c.tvers = tvtbl.insert(vers);
     }
 
-    ctx.dc_actions = cmd;
+    ctx.actions = cmd;
 }
 
 template<typename history_t>

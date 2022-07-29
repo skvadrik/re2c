@@ -69,16 +69,18 @@ struct newver_cmp_t {
     bool operator()(const newver_t&, const newver_t&) const;
 };
 
+// TDFA state under construction ("kernel").
 struct kernel_t {
-    size_t size;                // the number of items in the kernel
-    TnfaState** state;          // TNFA state for each item
-    hidx_t* thist;              // lookahead tag history for each item
+    size_t size;                // kernel size (the number of TNFA states in it)
+    TnfaState** state;          // TNFA states
+    hidx_t* thist;              // lookahead tag histories for each TNFA state
     const prectable_t* prectbl; // POSIX precedence table, if applicable
-    uint32_t* tvers;            // TDFA: tag versions for each item
+    uint32_t* tvers;            // tag versions for each TNFA state
 
     FORBID_COPY(kernel_t);
 };
 
+// Temporary buffers used for manipulations on the kernels.
 struct kernel_buffers_t {
     size_t maxsize;
     kernel_t* kernel;
@@ -114,9 +116,9 @@ struct determ_context_t {
     using history_t = history_type_t;
     using newvers_t = std::map<newver_t, tagver_t, newver_cmp_t<history_t>>;
 
-    const opt_t* dc_opts;           // options
-    Msg& dc_msg;                    // error messages and warnings
-    const std::string& dc_condname; // the name of current condition (with -c)
+    const opt_t* opts;       // options
+    Msg& msg;                // error messages and warnings
+    const std::string& cond; // the name of current condition (with -c)
 
     // determinization input: TNFA
     TnfaState* nfa_root;
@@ -131,21 +133,21 @@ struct determ_context_t {
     Tdfa& dfa;
 
     // temporary structures used by determinization
-    uint32_t dc_origin;                // from-state of the current transition
-    uint32_t dc_target;                // to-state of the current transition
-    uint32_t dc_symbol;                // alphabet symbol of the current transition
-    tcmd_t* dc_actions;                // tag actions of the current transition
-    tagver_table_t dc_tagvertbl;
-    history_t history;                 // prefix trie of tag histories
-    kernels_t dc_kernels;              // TDFA states under construction
-    size_t kernels_total;              // sum total of all kernel sizes
-    kernel_buffers_t dc_buffers;
-    hc_caches_t dc_hc_caches;          // per-tag cache of history comparisons
-    newvers_t dc_newvers;              // map of triples (tag, version, history) to new version
-    tag_path_t dc_path1;               // buffer 1 for tag history
-    tag_path_t dc_path2;               // buffer 2 for tag history
-    tag_path_t dc_path3;               // buffer 3 for tag history
-    std::vector<uint32_t> dc_tagcount; // buffer for counting sort on tag history
+    uint32_t origin;                // from-state of the current transition
+    uint32_t target;                // to-state of the current transition
+    uint32_t symbol;                // alphabet symbol of the current transition
+    tcmd_t* actions;                // tag actions of the current transition
+    tagver_table_t tagvertbl;
+    history_t history;              // prefix trie of tag histories
+    kernels_t kernels;              // TDFA states under construction
+    size_t kernels_total;           // sum total of all kernel sizes
+    kernel_buffers_t buffers;
+    hc_caches_t hc_caches;          // per-tag cache of history comparisons
+    newvers_t newvers;              // map of triples (tag, version, history) to new version
+    tag_path_t path1;               // buffer 1 for tag history
+    tag_path_t path2;               // buffer 2 for tag history
+    tag_path_t path3;               // buffer 3 for tag history
+    std::vector<uint32_t> tagcount; // buffer for counting sort on tag history
 
     // tagged epsilon-closure
     confset_t reach;
@@ -164,8 +166,8 @@ struct determ_context_t {
 
     // debug
     dump_dfa_tree_t<determ_context_t> dump_dfa_tree;
-    dump_dfa_t dc_dump;
-    closure_stats_t dc_clstats;
+    dump_dfa_t dump;
+    closure_stats_t clstats;
 
     determ_context_t(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond);
     ~determ_context_t();

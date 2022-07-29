@@ -88,7 +88,7 @@ struct dump_dfa_tree_t {
 
 #define DDUMP_NFA(opts, nfa)         if (opts->dump_nfa) dump_nfa(nfa)
 #define DDUMP_DFA_TREE(isnew)        do { ctx.dump_dfa_tree.state(is_new); } while(0)
-#define DDUMP_DFA_RAW(ctx, isnew)    do { ctx.dc_dump.state(ctx, is_new); } while(0)
+#define DDUMP_DFA_RAW(ctx, isnew)    do { ctx.dump.state(ctx, is_new); } while(0)
 #define DDUMP_DFA_DET(opts, dfa)     if (opts->dump_dfa_det) dump_dfa(dfa)
 #define DDUMP_DFA_TAGOPT(opts, dfa)  if (opts->dump_dfa_tagopt) dump_dfa(dfa)
 #define DDUMP_DFA_MIN(opts, dfa)     if (opts->dump_dfa_min) dump_dfa(dfa)
@@ -96,9 +96,9 @@ struct dump_dfa_tree_t {
 #define DDUMP_CLSTATS(ctx)           dump_clstats(ctx)
 #define DDUMP_CFG(opts, cfg, live)   if (opts->dump_cfg) dump_cfg(cfg, live)
 #define DDUMP_INTERF(opts, cfg, itf) if (opts->dump_interf) dump_interf(cfg, itf)
-#define DINCCOUNT_CLSCANS(ctx)       ++ctx.dc_clstats.nscans
-#define DINCCOUNT_CLPREC(ctx)        ++ctx.dc_clstats.nprec
-#define DINCCOUNT_CLLENGTH(ctx, len) ctx.dc_clstats.length += len
+#define DINCCOUNT_CLSCANS(ctx)       ++ctx.clstats.nscans
+#define DINCCOUNT_CLPREC(ctx)        ++ctx.clstats.nprec
+#define DINCCOUNT_CLLENGTH(ctx, len) ctx.clstats.length += len
 #define DRESET_CLSTATS(ctx)          reset_clstats(ctx)
 
 void dump_nfa(const Tnfa&);

@@ -110,10 +110,10 @@ void find_state(ctx_t& ctx) {
         }
     }
 
-    if (ctx.dc_origin != Tdfa::NIL) {
-        TdfaState* s = dfa.states[ctx.dc_origin];
-        s->arcs[ctx.dc_symbol] = ctx.dc_target;
-        s->tcmd[ctx.dc_symbol] = ctx.dc_actions;
+    if (ctx.origin != Tdfa::NIL) {
+        TdfaState* s = dfa.states[ctx.origin];
+        s->arcs[ctx.symbol] = ctx.target;
+        s->tcmd[ctx.symbol] = ctx.actions;
     }
 
     DDUMP_DFA_RAW(ctx, is_new);
@@ -122,19 +122,19 @@ void find_state(ctx_t& ctx) {
 
 template<typename ctx_t, bool regless>
 bool do_find_state(ctx_t& ctx) {
-    kernels_t& kernels = ctx.dc_kernels;
+    kernels_t& kernels = ctx.kernels;
     const closure_t& closure = ctx.state;
 
     // empty closure corresponds to default state
     if (closure.size() == 0) {
-        ctx.dc_target = Tdfa::NIL;
-        ctx.dc_actions = nullptr;
+        ctx.target = Tdfa::NIL;
+        ctx.actions = nullptr;
         return false;
     }
 
     // resize buffer if closure is too large
     reserve_buffers(ctx);
-    kernel_t* k = ctx.dc_buffers.kernel;
+    kernel_t* k = ctx.buffers.kernel;
 
     // copy closure to buffer kernel
     copy_to_buffer(closure, ctx.newprectbl, k);
@@ -144,17 +144,17 @@ bool do_find_state(ctx_t& ctx) {
 
     // try to find identical kernel
     kernel_eq_t<ctx_t> cmp_eq = {ctx};
-    ctx.dc_target = kernels.find_with(hash, k, cmp_eq);
-    if (ctx.dc_target != kernels_t::NIL) return false;
+    ctx.target = kernels.find_with(hash, k, cmp_eq);
+    if (ctx.target != kernels_t::NIL) return false;
 
     // else try to find mappable kernel (see note [bijective mappings])
     kernel_map_t<ctx_t, regless> cmp_map = {ctx};
-    ctx.dc_target = kernels.find_with(hash, k, cmp_map);
-    if (ctx.dc_target != kernels_t::NIL) return false;
+    ctx.target = kernels.find_with(hash, k, cmp_map);
+    if (ctx.target != kernels_t::NIL) return false;
 
     // otherwise add new kernel
     kernel_t* kcopy = make_kernel_copy(k, ctx.ir_alc);
-    ctx.dc_target = kernels.push(hash, kcopy);
+    ctx.target = kernels.push(hash, kcopy);
     ctx.kernels_total += k->size;
     return true;
 }
@@ -162,7 +162,7 @@ bool do_find_state(ctx_t& ctx) {
 template<typename ctx_t>
 tcmd_t* final_actions(ctx_t& ctx, const clos_t& fin) {
     const Rule& rule = ctx.rules[fin.state->rule];
-    const tagver_t* vers = ctx.dc_tagvertbl[fin.tvers];
+    const tagver_t* vers = ctx.tagvertbl[fin.tvers];
     const hidx_t look = fin.thist;
     const typename ctx_t::history_t& thist = ctx.history;
     tcpool_t& tcpool = ctx.dfa.tcpool;
@@ -263,7 +263,7 @@ void copy_to_buffer(const closure_t& closure, const prectable_t* prectbl, kernel
 
 template<typename ctx_t>
 void reserve_buffers(ctx_t& ctx) {
-    kernel_buffers_t& kbufs = ctx.dc_buffers;
+    kernel_buffers_t& kbufs = ctx.buffers;
     IrAllocator& alc = ctx.ir_alc;
     const tagver_t maxver = ctx.dfa.maxtagver;
     const size_t nkern = ctx.state.size();
@@ -297,8 +297,8 @@ bool equal_lookahead_tags(ctx_t& ctx, const kernel_t* x, const kernel_t* y) {
     }
 
     typename ctx_t::history_t& thist = ctx.history;
-    tag_path_t& p1 = ctx.dc_path1, &p2 = ctx.dc_path2, &p3 = ctx.dc_path3;
-    std::vector<uint32_t>& count = ctx.dc_tagcount;
+    tag_path_t& p1 = ctx.path1, &p2 = ctx.path2, &p3 = ctx.path3;
+    std::vector<uint32_t>& count = ctx.tagcount;
 
     for (size_t i = 0; i < x->size; ++i) {
         const hidx_t xl = x->thist[i], yl = y->thist[i];
@@ -381,7 +381,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
 
     const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
-    kernel_buffers_t& bufs = ctx.dc_buffers;
+    kernel_buffers_t& bufs = ctx.buffers;
     tagver_t* x2y = bufs.x2y, *y2x = bufs.y2x, max = bufs.max;
     size_t* x2t = bufs.x2t;
 
@@ -389,8 +389,8 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
     std::fill(x2y, x2y + max, TAGVER_ZERO);
     std::fill(y2x, y2x + max, TAGVER_ZERO);
     for (size_t i = 0; i < n; ++i) {
-        const tagver_t *xvs = ctx.dc_tagvertbl[x->tvers[i]];
-        const tagver_t *yvs = ctx.dc_tagvertbl[y->tvers[i]];
+        const tagver_t *xvs = ctx.tagvertbl[x->tvers[i]];
+        const tagver_t *yvs = ctx.tagvertbl[y->tvers[i]];
         const hidx_t xl = x->thist[i];
 
         for (size_t t = 0; t < ntag; ++t) {
@@ -414,7 +414,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
     if (regless) return true;
 
     // We have a bijective mapping; now try to create list of commands.
-    tcmd_t** pacts = &ctx.dc_actions, *a, **pa, *copy = nullptr;
+    tcmd_t** pacts = &ctx.actions, *a, **pa, *copy = nullptr;
     tcmd_t* b1 = bufs.backup_actions, *b2 = b1;
 
     // Backup 'save' commands: if topsort finds cycles, this mapping will be rejected and we'll have

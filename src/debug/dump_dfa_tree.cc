@@ -57,7 +57,7 @@ dump_dfa_tree_t<ctx_t>::dump_dfa_tree_t(const ctx_t& ctx)
       origmap(),
       uniqidx(0),
       used_nodes() {
-    if (!ctx.dc_opts->dump_dfa_tree) return;
+    if (!ctx.opts->dump_dfa_tree) return;
 
     fprintf(stderr,
             "digraph tag_tree {\n"
@@ -77,7 +77,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
                                        const std::vector<uint32_t>& syms,
                                        bool loop) {
     const typename ctx_t::history_t& history = ctx.history;
-    const kernels_t& kernels = ctx.dc_kernels;
+    const kernels_t& kernels = ctx.kernels;
     std::set<const TnfaState*> active, active2;
     std::set<int32_t> used;
     const uint32_t pathlen = static_cast<uint32_t>(path.size());
@@ -157,7 +157,7 @@ void dump_dfa_tree_t<ctx_t>::path_tree(const std::vector<uint32_t>& path,
 
 template<typename ctx_t>
 dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t() {
-    if (!ctx.dc_opts->dump_dfa_tree) return;
+    if (!ctx.opts->dump_dfa_tree) return;
 
     fprintf(stderr, " }\n");
 
@@ -168,7 +168,7 @@ dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t() {
         }
     }
 
-    const size_t nkern = ctx.dc_kernels.size();
+    const size_t nkern = ctx.kernels.size();
     const size_t nsym = ctx.dfa.nchars;
     std::vector<uint32_t> path; // states
     std::vector<uint32_t> syms; // symbols
@@ -214,10 +214,10 @@ dump_dfa_tree_t<ctx_t>::~dump_dfa_tree_t() {
 
 template<typename ctx_t>
 void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
-    if (!ctx.dc_opts->dump_dfa_tree) return;
+    if (!ctx.opts->dump_dfa_tree) return;
 
-    const uint32_t origin = ctx.dc_origin;
-    const uint32_t target = ctx.dc_target;
+    const uint32_t origin = ctx.origin;
+    const uint32_t target = ctx.target;
     const uint32_t targetx = isnew ? target : ++uniqidx;
 
     if (target == Tdfa::NIL) return;
@@ -252,7 +252,7 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
         if (origin == Tdfa::NIL) {
             fprintf(stderr, "   void");
         } else {
-            fprintf(stderr, "   n%u_%u", origin, ctx.dc_kernels[origin]->state[c.origin]->topord);
+            fprintf(stderr, "   n%u_%u", origin, ctx.kernels[origin]->state[c.origin]->topord);
         }
         dump_history1(ctx.history, used_nodes, c.thist);
         fprintf(stderr, "->n%u_%u%s\n", targetx, c.state->topord, isnew ? "" : " [style=dotted]");
@@ -262,11 +262,9 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     fprintf(stderr, "  }\n");
 
     // save TNFA origins for this TDFA state
-    origins_t& origins = origmap[std::make_pair(origin, ctx.dc_symbol)];
+    origins_t& origins = origmap[std::make_pair(origin, ctx.symbol)];
     for (const clos_t& c : ctx.state) {
-        const TnfaState* o = origin == Tdfa::NIL
-                ? nullptr : ctx.dc_kernels[origin]->state[c.origin];
-        origins.push_back(o);
+        origins.push_back(origin == Tdfa::NIL ? nullptr : ctx.kernels[origin]->state[c.origin]);
     }
 }
 

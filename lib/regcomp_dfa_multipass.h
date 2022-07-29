@@ -126,10 +126,10 @@ static MpTdfaBacklink* construct_backlinks(const ctx_t& ctx,
                                            MpTdfa& mptdfa,
                                            std::vector<tchar_t>& tfrag,
                                            const std::vector<std::vector<uint32_t>>& uniq_orig) {
-    if (ctx.dc_target == Tdfa::NIL) return nullptr;
+    if (ctx.target == Tdfa::NIL) return nullptr;
 
     const bool tstring = mptdfa.flags & REG_TSTRING;
-    const std::vector<uint32_t>& uo = uniq_orig[ctx.dc_target];
+    const std::vector<uint32_t>& uo = uniq_orig[ctx.target];
     uint32_t nbacklinks = *std::max_element(uo.begin(), uo.end()) + 1;
     MpTdfaBacklink* links = mptdfa.alc.alloct<MpTdfaBacklink>(nbacklinks);
 
@@ -137,7 +137,7 @@ static MpTdfaBacklink* construct_backlinks(const ctx_t& ctx,
         for (k = 0; k < ctx.state.size() && uo[k] != j; ++k);
         const typename ctx_t::conf_t& x = ctx.state[k];
         MpTdfaBacklink& l = links[j];
-        l.conf = uniq_orig[ctx.dc_origin][x.origin];
+        l.conf = uniq_orig[ctx.origin][x.origin];
         get_tstring_fragment(ctx.history, mptdfa.alc, x.ttran, tfrag, l, tstring);
     }
 
@@ -168,8 +168,8 @@ static void determinization_multipass(Tnfa&& nfa, MpTdfa& mptdfa) {
 
     // Iterate while new states are added: for each alphabet symbol build tagged epsilon-closure of
     // all reachable NFA states, then find identical or mappable TDFA state, or add a new one.
-    for (uint32_t i = 0; i < ctx.dc_kernels.size(); ++i) {
-        ctx.dc_origin = i;
+    for (uint32_t i = 0; i < ctx.kernels.size(); ++i) {
+        ctx.origin = i;
 
         for (uint32_t c = 0; c < dfa.nchars; ++c) {
             reach_on_symbol(ctx, c);
@@ -177,7 +177,7 @@ static void determinization_multipass(Tnfa&& nfa, MpTdfa& mptdfa) {
             find_state_multipass(ctx, mptdfa, tfrag, uniq_orig);
 
             // Multi-pass TDFA stores backlinks instead of tag actions.
-            mptdfa.states[ctx.dc_origin]->arcs[c].backlinks =
+            mptdfa.states[ctx.origin]->arcs[c].backlinks =
                     construct_backlinks(ctx, mptdfa, tfrag, uniq_orig);
         }
     }
@@ -228,8 +228,8 @@ static void find_state_multipass(ctx_t& ctx,
         mptdfa.states.push_back(s);
     }
 
-    if (ctx.dc_origin != Tdfa::NIL) {
-        mptdfa.states[ctx.dc_origin]->arcs[ctx.dc_symbol].state = ctx.dc_target;
+    if (ctx.origin != Tdfa::NIL) {
+        mptdfa.states[ctx.origin]->arcs[ctx.symbol].state = ctx.target;
     }
 }
 
