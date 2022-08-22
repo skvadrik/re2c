@@ -130,7 +130,7 @@ static void find_fixed_tags(
                 // fixed tags do not apply to m-tags
             } else if (spec.opts->fixed_tags == FixedTags::NONE) {
                 // fixed tag optimization is globally disabled
-            } else if (spec.opts->subhistories) {
+            } else if (spec.opts->tags_history) {
                 // Fixed tags with subhistories are possible in principle, but it ends up being too
                 // slow (handling special case adds overhead).
             } else if (l.tag != Tag::NONE && l.dist_to_tag != VARDIST

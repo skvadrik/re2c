@@ -748,7 +748,6 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
 void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t tcid);
 void gen_goto(
         Output& output, const DFA& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
-const char* gen_lessthan(Scratchbuf& o, const opt_t* opts, size_t n);
 void gen_code(Output& output, dfas_t& dfas);
 void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases);

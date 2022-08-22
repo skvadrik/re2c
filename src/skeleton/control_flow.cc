@@ -61,7 +61,7 @@ void warn_undefined_control_flow(const Skeleton& skel) {
     std::valarray<bool> loops(skel.nodes_count);
     std::vector<path_t> paths;
     paths_size_t size(paths_size_t::from32(0u));
-    bool use_eof_rule = skel.opts->eof != NOEOF;
+    bool use_eof_rule = skel.opts->fill_eof != NOEOF;
 
     std::vector<StackItem> stack;
     path_t path(0);

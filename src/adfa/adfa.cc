@@ -20,7 +20,7 @@ namespace re2c {
 class Msg;
 
 static bool is_eof(const opt_t* opts, uint32_t ub) {
-    return opts->eof != NOEOF && static_cast<uint32_t>(opts->eof) == ub;
+    return opts->fill_eof != NOEOF && static_cast<uint32_t>(opts->fill_eof) == ub;
 }
 
 DFA::DFA(Tdfa&& dfa,
@@ -212,7 +212,7 @@ static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
     Span* const fe = f + fg->go.nspans;
     Span* const be = b + bg->go.nspans;
     Span* const x0 = x;
-    const uint32_t eofub = opts->eof + 1;
+    const uint32_t eofub = opts->fill_eof + 1;
 
     for (; !(f == fe && b == be);) {
         if (f->to == b->to
@@ -319,7 +319,7 @@ void DFA::prepare(const opt_t* opts) {
         }
 
         // last state, add end-of-input rule $ if needed (see note [end-of-input rule])
-        if (!s->next && opts->eof != NOEOF) {
+        if (!s->next && opts->fill_eof != NOEOF) {
             eof_state = new State;
             eof_state->action.set_rule(eof_rule);
             finstates[eof_rule] = eof_state;
@@ -345,7 +345,7 @@ void DFA::prepare(const opt_t* opts) {
     // With end-of-input rule $ there is a default quasi-transition on YYFILL failure, so the
     // default state is needed if there is at least one final state with at least one outgoing
     // transition to a non-final state.
-    if (!default_state && opts->eof != NOEOF) {
+    if (!default_state && opts->fill_eof != NOEOF) {
         bool have_fallback_states = false;
 
         for (State* s = head; s; s = s->next) {
@@ -478,7 +478,7 @@ static bool can_hoist_tags(const State* s, const opt_t* opts) {
 
     // If end-of-input rule $ is used, check that final/fallback tags agree with other tags, as the
     // lexer may follow the final/fallback transition.
-    if (opts->eof != NOEOF
+    if (opts->fill_eof != NOEOF
             && tags != (s->rule == Rule::NONE ? s->fall_tags : s->rule_tags)) {
         return false;
     }
@@ -495,7 +495,7 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
 
     // If the end-of-input rule $ is used, skip cannot be hoisted because the lexer may need to
     // rescan the current input character after YYFILL, and skip operation will be applied twice.
-    if (opts->eof != NOEOF) return false;
+    if (opts->fill_eof != NOEOF) return false;
 
     // All spans must agree on skip, and they all must be consuming.
     for (uint32_t i = 0; i < nspan; ++i) {

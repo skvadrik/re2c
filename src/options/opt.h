@@ -42,145 +42,144 @@ class Scanner;
 #endif
 
 #define RE2C_CONSTOPTS \
-    CONSTOPT1 (Target, target, Target::CODE) \
-    CONSTOPT (Lang, lang, RE2C_LANG) \
-    CONSTOPT (bool, bNoGenerationDate, false) \
-    CONSTOPT (bool, version, true) \
-    CONSTOPT (bool, cFlag, false) \
-    CONSTOPT (bool, fFlag, false) \
-    CONSTOPT (bool, FFlag, false) \
-    CONSTOPT (bool, verbose, false) \
+    CONSTOPT1(Target,   target, Target::CODE) \
+    CONSTOPT(Lang,      lang, RE2C_LANG) \
+    CONSTOPT(bool,      date, true) \
+    CONSTOPT(bool,      version, true) \
+    CONSTOPT(bool,      start_conditions, false) \
+    CONSTOPT(bool,      storable_state, false) \
+    CONSTOPT(bool,      flex_syntax, false) \
+    CONSTOPT(bool,      verbose, false) \
     /* files */ \
-    CONSTOPT (std::string, source_file, "") \
-    CONSTOPT (std::string, output_file, "") \
-    CONSTOPT (std::string, dep_file, "") \
-    /* include paths */ \
-    CONSTOPT (std::vector<std::string>, incpaths, std::vector<std::string>()) \
+    CONSTOPT(std::string,              source_file, "") \
+    CONSTOPT(std::string,              output_file, "") \
+    CONSTOPT(std::string,              dep_file, "") \
+    CONSTOPT(std::vector<std::string>, include_paths, std::vector<std::string>()) \
     /* input encoding */ \
-    CONSTOPT (Enc::Type, input_encoding, Enc::Type::ASCII) \
+    CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
     /* #line directives */ \
-    CONSTOPT (bool, iFlag, false) \
+    CONSTOPT(bool,      line_dirs, true) \
     /* internals */ \
-    CONSTOPT (Minimization, dfa_minimization, Minimization::MOORE) \
-    CONSTOPT (PosixPrecedenceTable, posix_prectable, PosixPrecedenceTable::COMPLEX) \
-    CONSTOPT (FixedTags, fixed_tags, FixedTags::ALL) \
-    CONSTOPT (bool, optimize_tags, true) \
-    CONSTOPT (bool, nested_negative_tags, true) \
-    CONSTOPT (bool, eager_skip, false) \
-    CONSTOPT (bool, loop_switch, false) \
+    CONSTOPT(Minimization,   minimization, Minimization::MOORE) \
+    CONSTOPT(PosixPrectable, posix_prectable, PosixPrectable::COMPLEX) \
+    CONSTOPT(FixedTags,      fixed_tags, FixedTags::ALL) \
+    CONSTOPT(bool,           optimize_tags, true) \
+    CONSTOPT(bool,           nested_negative_tags, true) \
+    CONSTOPT(bool,           eager_skip, false) \
+    CONSTOPT(bool,           loop_switch, false) \
     /* debug */ \
-    CONSTOPT (bool, dump_nfa, false) \
-    CONSTOPT (bool, dump_dfa_raw, false) \
-    CONSTOPT (bool, dump_dfa_det, false) \
-    CONSTOPT (bool, dump_dfa_tagopt, false) \
-    CONSTOPT (bool, dump_dfa_min, false) \
-    CONSTOPT (bool, dump_adfa, false) \
-    CONSTOPT (bool, dump_cfg, false) \
-    CONSTOPT (bool, dump_interf, false) \
-    CONSTOPT (bool, dump_closure_stats, false) \
-    CONSTOPT (bool, dump_dfa_tree, false) \
+    CONSTOPT(bool, dump_nfa, false) \
+    CONSTOPT(bool, dump_dfa_raw, false) \
+    CONSTOPT(bool, dump_dfa_det, false) \
+    CONSTOPT(bool, dump_dfa_tagopt, false) \
+    CONSTOPT(bool, dump_dfa_min, false) \
+    CONSTOPT(bool, dump_adfa, false) \
+    CONSTOPT(bool, dump_cfg, false) \
+    CONSTOPT(bool, dump_interf, false) \
+    CONSTOPT(bool, dump_closure_stats, false) \
+    CONSTOPT(bool, dump_dfa_tree, false) \
     /* end */
 
 #define RE2C_MUTOPTS \
     /* header file */ \
-    MUTOPT1 (std::string, header_file, "") \
+    MUTOPT1(std::string, header_file, "") \
     /* regular expressions */ \
-    MUTOPT (Enc, encoding, Enc ()) \
-    MUTOPT (bool, bCaseInsensitive, false) \
-    MUTOPT (bool, bCaseInverted, false) \
-    MUTOPT (EmptyClassPolicy, empty_class_policy, EmptyClassPolicy::MATCH_EMPTY) \
+    MUTOPT(Enc,        encoding, Enc()) \
+    MUTOPT(bool,       case_insensitive, false) \
+    MUTOPT(bool,       case_inverted, false) \
+    MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
     /* conditions */ \
-    MUTOPT (std::string, yycondtype, "YYCONDTYPE") \
-    MUTOPT (std::string, cond_get, "YYGETCONDITION") \
-    MUTOPT (bool, cond_get_naked, false) \
-    MUTOPT (std::string, cond_set, "YYSETCONDITION" ) \
-    MUTOPT (std::string, cond_set_arg, RE2C_SIGIL ) \
-    MUTOPT (bool, cond_set_naked, false ) \
-    MUTOPT (std::string, yyctable, "yyctable") \
-    MUTOPT (std::string, condPrefix, "yyc_") \
-    MUTOPT (std::string, condEnumPrefix, "yyc") \
-    MUTOPT (std::string, condDivider, "/* *********************************** */") \
-    MUTOPT (std::string, condDividerParam, RE2C_SIGIL) \
-    MUTOPT (std::string, condGoto, "goto " RE2C_SIGIL ";") \
-    MUTOPT (std::string, condGotoParam, RE2C_SIGIL) \
+    MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
+    MUTOPT(std::string, api_cond_get, "YYGETCONDITION") \
+    MUTOPT(bool,        cond_get_naked, false) \
+    MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
+    MUTOPT(std::string, cond_set_param, RE2C_SIGIL ) \
+    MUTOPT(bool,        cond_set_naked, false ) \
+    MUTOPT(std::string, var_cond_table, "yyctable") \
+    MUTOPT(std::string, cond_label_prefix, "yyc_") \
+    MUTOPT(std::string, cond_enum_prefix, "yyc") \
+    MUTOPT(std::string, cond_div, "/* *********************************** */") \
+    MUTOPT(std::string, cond_div_param, RE2C_SIGIL) \
+    MUTOPT(std::string, cond_goto, "goto " RE2C_SIGIL ";") \
+    MUTOPT(std::string, cond_goto_param, RE2C_SIGIL) \
     /* states */ \
-    MUTOPT (std::string, state_get, "YYGETSTATE") \
-    MUTOPT (bool, state_get_naked, false) \
-    MUTOPT (std::string, state_set, "YYSETSTATE") \
-    MUTOPT (std::string, state_set_arg, RE2C_SIGIL) \
-    MUTOPT (bool, state_set_naked, false) \
-    MUTOPT (std::string, yyfilllabel, "yyFillLabel") \
-    MUTOPT (std::string, yynext, "yyNext") \
-    MUTOPT (std::string, yyaccept, "yyaccept") \
-    MUTOPT (bool, bUseStateAbort, false) \
-    MUTOPT (bool, bUseStateNext, false) \
+    MUTOPT(std::string, api_state_get, "YYGETSTATE") \
+    MUTOPT(bool,        state_get_naked, false) \
+    MUTOPT(std::string, api_state_set, "YYSETSTATE") \
+    MUTOPT(std::string, state_set_param, RE2C_SIGIL) \
+    MUTOPT(bool,        state_set_naked, false) \
+    MUTOPT(std::string, label_fill, "yyFillLabel") \
+    MUTOPT(std::string, label_next, "yyNext") \
+    MUTOPT(std::string, var_accept, "yyaccept") \
+    MUTOPT(bool,        state_abort, false) \
+    MUTOPT(bool,        state_next, false) \
     /* tags */ \
-    MUTOPT (bool, tags, false) \
-    MUTOPT (std::string, tags_prefix, "yyt") \
-    MUTOPT (std::string, tags_expression, RE2C_SIGIL) \
-    MUTOPT (bool, posix_syntax, false) \
-    MUTOPT (bool, posix_semantics, false) \
-    MUTOPT (bool, subhistories, false) \
-    MUTOPT (bool, autotags, false) \
+    MUTOPT(bool,        tags, false) \
+    MUTOPT(std::string, tags_prefix, "yyt") \
+    MUTOPT(std::string, tags_expression, RE2C_SIGIL) \
+    MUTOPT(bool,        tags_posix_syntax, false) \
+    MUTOPT(bool,        tags_posix_semantics, false) \
+    MUTOPT(bool,        tags_history, false) \
+    MUTOPT(bool,        tags_automatic, false) \
     /* code generation */ \
-    MUTOPT (bool, sFlag, false) \
-    MUTOPT (bool, bFlag, false) \
-    MUTOPT (std::string, yybm, "yybm") \
-    MUTOPT (bool, yybmHexTable, false) \
-    MUTOPT (bool, gFlag, false) \
-    MUTOPT (bool, case_ranges, false) \
-    MUTOPT (bool, unsafe, true) \
-    MUTOPT (std::string, yyloop, "") \
-    MUTOPT (std::string, yystate, "yystate") \
-    MUTOPT (std::string, yytarget, "yytarget") \
-    MUTOPT (uint32_t, cGotoThreshold, 9) \
-    MUTOPT (uint32_t, eof, NOEOF) \
-    MUTOPT (uint32_t, sentinel, NOEOF) \
+    MUTOPT(bool,        nested_ifs, false) \
+    MUTOPT(bool,        bitmaps, false) \
+    MUTOPT(std::string, var_bitmaps, "yybm") \
+    MUTOPT(bool,        bitmaps_hex, false) \
+    MUTOPT(bool,        cgoto, false) \
+    MUTOPT(bool,        case_ranges, false) \
+    MUTOPT(bool,        unsafe, true) \
+    MUTOPT(std::string, label_loop, "") \
+    MUTOPT(std::string, var_state, "yystate") \
+    MUTOPT(std::string, var_cgoto_table, "yytarget") \
+    MUTOPT(uint32_t,    cgoto_threshold, 9) \
+    MUTOPT(uint32_t,    fill_eof, NOEOF) \
+    MUTOPT(uint32_t,    fill_sentinel, NOEOF) \
     /* formatting */ \
-    MUTOPT (uint32_t, topIndent, 0) \
-    MUTOPT (std::string, indString, "\t") \
+    MUTOPT(uint32_t,    indent_top, 0) \
+    MUTOPT(std::string, indent_str, "\t") \
     /* input API */ \
-    MUTOPT (Api, input_api, Api::DEFAULT) \
-    MUTOPT (std::string, yycursor, "YYCURSOR") \
-    MUTOPT (std::string, yymarker, "YYMARKER") \
-    MUTOPT (std::string, yyctxmarker, "YYCTXMARKER") \
-    MUTOPT (std::string, yylimit, "YYLIMIT") \
-    MUTOPT (std::string, yypeek, "YYPEEK") \
-    MUTOPT (std::string, yyskip, "YYSKIP") \
-    MUTOPT (std::string, yybackup, "YYBACKUP") \
-    MUTOPT (std::string, yybackupctx, "YYBACKUPCTX") \
-    MUTOPT (std::string, yyrestore, "YYRESTORE") \
-    MUTOPT (std::string, yyrestorectx, "YYRESTORECTX") \
-    MUTOPT (std::string, yyrestoretag, "YYRESTORETAG") \
-    MUTOPT (std::string, yylessthan, "YYLESSTHAN") \
-    MUTOPT (std::string, yystagn, "YYSTAGN") \
-    MUTOPT (std::string, yystagp, "YYSTAGP") \
-    MUTOPT (std::string, yymtagn, "YYMTAGN") \
-    MUTOPT (std::string, yymtagp, "YYMTAGP") \
-    MUTOPT (std::string, yyshift, "YYSHIFT") \
-    MUTOPT (std::string, yyshiftstag, "YYSHIFTSTAG") \
-    MUTOPT (std::string, yyshiftmtag, "YYSHIFTMTAG") \
-    MUTOPT (ApiStyle, api_style, ApiStyle::FUNCTIONS) \
-    MUTOPT (std::string, api_sigil, RE2C_SIGIL) \
+    MUTOPT(Api,         api, Api::DEFAULT) \
+    MUTOPT(std::string, api_cursor, "YYCURSOR") \
+    MUTOPT(std::string, api_marker, "YYMARKER") \
+    MUTOPT(std::string, api_ctxmarker, "YYCTXMARKER") \
+    MUTOPT(std::string, api_limit, "YYLIMIT") \
+    MUTOPT(std::string, api_peek, "YYPEEK") \
+    MUTOPT(std::string, api_skip, "YYSKIP") \
+    MUTOPT(std::string, api_backup, "YYBACKUP") \
+    MUTOPT(std::string, api_backup_ctx, "YYBACKUPCTX") \
+    MUTOPT(std::string, api_restore, "YYRESTORE") \
+    MUTOPT(std::string, api_restore_ctx, "YYRESTORECTX") \
+    MUTOPT(std::string, api_restore_tag, "YYRESTORETAG") \
+    MUTOPT(std::string, api_less_than, "YYLESSTHAN") \
+    MUTOPT(std::string, api_stag_neg, "YYSTAGN") \
+    MUTOPT(std::string, api_stag_pos, "YYSTAGP") \
+    MUTOPT(std::string, api_mtag_neg, "YYMTAGN") \
+    MUTOPT(std::string, api_mtag_pos, "YYMTAGP") \
+    MUTOPT(std::string, api_shift, "YYSHIFT") \
+    MUTOPT(std::string, api_shift_stag, "YYSHIFTSTAG") \
+    MUTOPT(std::string, api_shift_mtag, "YYSHIFTMTAG") \
+    MUTOPT(ApiStyle,    api_style, ApiStyle::FUNCTIONS) \
+    MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
     /* debug */ \
-    MUTOPT (bool, dFlag, false) \
-    MUTOPT (std::string, yydebug, "YYDEBUG") \
+    MUTOPT(bool,        debug, false) \
+    MUTOPT(std::string, api_debug, "YYDEBUG") \
     /* yych */ \
-    MUTOPT (std::string, yyctype, "YYCTYPE") \
-    MUTOPT (std::string, yych, "yych") \
-    MUTOPT (bool, bEmitYYCh, true) \
-    MUTOPT (bool, yychConversion, false) \
+    MUTOPT(std::string, api_char_type, "YYCTYPE") \
+    MUTOPT(std::string, var_char, "yych") \
+    MUTOPT(bool,        char_emit, true) \
+    MUTOPT(bool,        char_conv, false) \
     /* YYFILL */ \
-    MUTOPT (std::string, fill, "YYFILL") \
-    MUTOPT (bool, fill_use, true) \
-    MUTOPT (bool, fill_check, true) \
-    MUTOPT (std::string, fill_arg, RE2C_SIGIL) \
-    MUTOPT (bool, fill_arg_use, true) \
-    MUTOPT (bool, fill_naked, false) \
+    MUTOPT(std::string, api_fill, "YYFILL") \
+    MUTOPT(bool,        fill_enable, true) \
+    MUTOPT(bool,        fill_check, true) \
+    MUTOPT(std::string, fill_param, RE2C_SIGIL) \
+    MUTOPT(bool,        fill_param_enable, true) \
+    MUTOPT(bool,        fill_naked, false) \
     /* labels */ \
-    MUTOPT (std::string, labelPrefix, "yy") \
-    MUTOPT (std::string, startlabel, "") \
-    MUTOPT (bool, startlabel_force, false) \
+    MUTOPT(std::string, label_prefix, "yy") \
+    MUTOPT(std::string, label_start, "") \
+    MUTOPT(bool,        label_start_force, false) \
     /* end */
 
 // Constant options.
@@ -328,7 +327,7 @@ struct Opt {
     void set_encoding(Enc::Type type, bool on);
     void set_encoding_policy(Enc::Policy p);
 
-    void reset_group_startlabel();
+    void reset_group_label_start();
 
   private:
     Ret sync() NODISCARD;

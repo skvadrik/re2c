@@ -115,10 +115,10 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2) {
 template<typename ctx_t>
 void compute_prectable(ctx_t& ctx) {
     switch (ctx.opts->posix_prectable) {
-    case PosixPrecedenceTable::COMPLEX:
+    case PosixPrectable::COMPLEX:
         compute_prectable_complex(ctx);
         break;
-    case PosixPrecedenceTable::NAIVE:
+    case PosixPrectable::NAIVE:
         compute_prectable_naive(ctx);
         break;
     }

@@ -37,7 +37,7 @@ size_t Scanner::get_input_index() const {
 Ret Scanner::open(const std::string& filename, const std::string* parent) {
     Input* in = new Input(msg.filenames.size());
     files.push_back(in);
-    CHECK_RET(in->open(filename, parent, globopts->incpaths));
+    CHECK_RET(in->open(filename, parent, globopts->include_paths));
     filedeps.insert(in->escaped_name);
     msg.filenames.push_back(in->escaped_name);
     return Ret::OK;

@@ -134,7 +134,7 @@ Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, A
         }
     }
 
-    if (!opts->cFlag) {
+    if (!opts->start_conditions) {
         // normal mode: there must be no named specs corresponding to conditions
         for (const spec_t& s : specs) {
             if (!s.name.empty()) { // found named spec
@@ -243,11 +243,11 @@ Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, A
     // Check that 're2c:eof' configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
     for (const spec_t& s : specs) {
-        if (!s.eofs.empty() && opts->eof == NOEOF) {
+        if (!s.eofs.empty() && opts->fill_eof == NOEOF) {
             RET_FAIL(msg.error(s.eofs[0]->loc,
                                "%s$ rule found, but 're2c:eof' configuration is not set",
                                incond(s.name).c_str()));
-        } else if (s.eofs.empty() && opts->eof != NOEOF) {
+        } else if (s.eofs.empty() && opts->fill_eof != NOEOF) {
             RET_FAIL(error("%s're2c:eof' configuration is set, but no $ rule found",
                            incond(s.name).c_str()));
         }

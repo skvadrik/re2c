@@ -37,7 +37,7 @@ Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t
       eof_rule(eof_rule) {}
 
 Ret determinization(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
-    if (opts->posix_semantics) {
+    if (opts->tags_posix_semantics) {
         pdetctx_t ctx(std::move(nfa), dfa, opts, msg, cond);
         return determinization(ctx);
     } else {
@@ -178,7 +178,7 @@ uint32_t init_tag_versions(ctx_t& ctx) {
 // WARNING: This function assumes that kernel items are grouped by rule.
 template<typename ctx_t>
 void warn_nondeterministic_tags(const ctx_t& ctx) {
-    if (ctx.opts->posix_syntax) return;
+    if (ctx.opts->tags_posix_syntax) return;
 
     Warn& warn = ctx.msg.warn;
     const kernels_t& kernels = ctx.kernels;
@@ -283,7 +283,7 @@ determ_context_t<history_t>::determ_context_t(Tnfa&& nfa,
     path3.reserve(ntags);
     tagcount.resize(ntags);
 
-    if (opts->posix_semantics) {
+    if (opts->tags_posix_semantics) {
         newprectbl = new prectable_t[ncores * ncores];
         histlevel = new histleaf_t[ncores];
         sortcores.reserve(ncores);

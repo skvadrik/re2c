@@ -17,7 +17,7 @@ static CodeList* gen_goif(Output& output, const DFA& dfa, const CodeGoIf* go, co
 static const char* gen_cond(Output& output, const CodeCmp* cond) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
-    buf.str(opts->yych).cstr(" ").str(cond->cmp).cstr(" ");
+    buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
     prtChOrHex(buf.stream(),
                cond->val,
                opts->encoding.szCodeUnit(),
@@ -31,7 +31,7 @@ static CodeList* gen_gosw(Output& output, const DFA& dfa, const CodeGoSw* go, co
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const char* expr = o.str(opts->yych).flush();
+    const char* expr = o.str(opts->var_char).flush();
 
     CodeCases* cases = code_cases(alc);
     CodeCase* defcase = nullptr;
@@ -100,8 +100,8 @@ static CodeList* gen_gobm(Output& output, const DFA& dfa, const CodeGoBm* go, co
 
     const char* nonzero = opts->lang == Lang::C ? "" : " != 0";
 
-    const char* elif_cond = o.str(opts->yybm).cstr("[").u32(go->bitmap->offset).cstr("+")
-            .str(opts->yych).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1)
+    const char* elif_cond = o.str(opts->var_bitmaps).cstr("[").u32(go->bitmap->offset).cstr("+")
+            .str(opts->var_char).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1)
             .cstr(nonzero).flush();
 
     CodeList* if_else = code_list(alc);
@@ -110,7 +110,7 @@ static CodeList* gen_gobm(Output& output, const DFA& dfa, const CodeGoBm* go, co
 
     CodeList* stmts = code_list(alc);
     if (go->hgo != nullptr) {
-        const char* if_cond = o.str(opts->yych).cstr(" & ~0xFF").cstr(nonzero).flush();
+        const char* if_cond = o.str(opts->var_char).cstr(" & ~0xFF").cstr(nonzero).flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     } else {
@@ -144,7 +144,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
 
     CodeList* stmts = code_list(alc);
 
-    text = o.cstr("static void *").str(opts->yytarget).cstr("[256] = {").flush();
+    text = o.cstr("static void *").str(opts->var_cgoto_table).cstr("[256] = {").flush();
     append(stmts, code_text(alc, text));
 
     CodeList* block = code_list(alc);
@@ -152,7 +152,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
             const Label& l = *go->table[i * TABLE_WIDTH + j]->label;
 
-            o.cstr("&&").str(opts->labelPrefix).label(l);
+            o.cstr("&&").str(opts->label_prefix).label(l);
             if (j < TABLE_WIDTH - 1) {
                 const std::string padding(max_digits - label_width(l.index) + 1, ' ');
                 o.cstr(",").str(padding);
@@ -179,11 +179,12 @@ static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, co
     CodeList* stmts = code_list(alc);
 
     CodeList* if_else = gen_gocp_table(output, go->table);
-    text = o.cstr("goto *").str(opts->yytarget).cstr("[").str(opts->yych).cstr("]").flush();
+    text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_char).cstr("]")
+            .flush();
     append(if_else, code_stmt(alc, text));
 
     if (go->hgo != nullptr) {
-        text = o.str(opts->yych).cstr(" & ~0xFF").flush();
+        text = o.str(opts->var_char).cstr(" & ~0xFF").flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, text, if_then, if_else, false));
     } else {
@@ -245,7 +246,7 @@ void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from,
     }
 
     DCHECK(consume(from) || go->tags == TCID0);
-    if (opts->eof == NOEOF) {
+    if (opts->fill_eof == NOEOF) {
         // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
         // Without the $ rule the are no strict requirements, but generating them here (after YYFILL
         // label) allows to fuse skip and peek into one statement.

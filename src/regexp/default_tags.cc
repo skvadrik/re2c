@@ -27,7 +27,7 @@ static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx)
 
         // POSIX syntax means that tags are defined by capturing parentheses. TNFA with raw tags is
         // possible, but we do not have any use cases yet.
-        DCHECK(spec.opts->posix_syntax);
+        DCHECK(spec.opts->tags_posix_syntax);
         // With POSIX syntax we must have at least two tags: opening and closing
         DCHECK(etidx - stidx > 1);
 
@@ -95,7 +95,7 @@ void insert_default_tags(RESpec& spec) {
                 // performance. More benchmarks are needed to understand this (with AOT/JIT,
                 // TNFA/TDFA).
                 re->alt.re1 = re_cat(spec, re->alt.re1, y);
-                re->alt.re2 = spec.opts->posix_syntax
+                re->alt.re2 = spec.opts->tags_posix_syntax
                               ? re_cat(spec, x, re->alt.re2)
                               : re_cat(spec, re->alt.re2, x);
             }

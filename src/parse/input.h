@@ -26,7 +26,7 @@ struct Input {
     ~Input();
     Ret open(const std::string& filename,
              const std::string* parent,
-             const std::vector<std::string>& incpaths) NODISCARD;
+             const std::vector<std::string>& include_paths) NODISCARD;
 
     FORBID_COPY(Input);
 };

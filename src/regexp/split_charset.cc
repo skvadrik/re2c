@@ -52,9 +52,9 @@ void split_charset(RESpec& spec) {
     const opt_t* opts = spec.opts;
     cs.insert(0);
     cs.insert(opts->encoding.nCodeUnits());
-    if (opts->eof != NOEOF) {
-        cs.insert(opts->eof);
-        cs.insert(opts->eof + 1);
+    if (opts->fill_eof != NOEOF) {
+        cs.insert(opts->fill_eof);
+        cs.insert(opts->fill_eof + 1);
     }
 
     spec.charset.insert(spec.charset.end(), cs.begin(), cs.end());

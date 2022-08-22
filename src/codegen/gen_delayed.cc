@@ -37,11 +37,11 @@ LOCAL_NODISCARD(Ret find_blocks(CodegenCtxPass1& ctx,
 }
 
 static std::string output_cond_get(const opt_t* opts) {
-    return opts->cond_get + (opts->cond_get_naked ? "" : "()");
+    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
 }
 
 static std::string output_state_get(const opt_t* opts) {
-    return opts->state_get + (opts->state_get_naked ? "" : "()");
+    return opts->api_state_get + (opts->state_get_naked ? "" : "()");
 }
 
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
@@ -62,7 +62,7 @@ void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& 
             buf.str(s.str());
         }
     }
-    if (!opts->iFlag) {
+    if (opts->line_dirs) {
         const std::string& s = buf.stream().str();
         if (!s.empty() && *s.rbegin() != '\n') buf.cstr("\n");
     }
@@ -146,7 +146,7 @@ static void gen_cond_enum(Scratchbuf& buf,
         CodeList* block = code_list(alc);
 
         if (opts->lang == Lang::C) {
-            start = buf.cstr("enum ").str(opts->yycondtype).cstr(" {").flush();
+            start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
             end = "};";
             for (const StartCond& cond : conds) {
                 buf.str(cond.name);
@@ -177,9 +177,9 @@ static void gen_cond_enum(Scratchbuf& buf,
             start = "";
             end = "";
             DCHECK(opts->loop_switch);
-            for (const StartCond& cond : conds) {
-                buf.cstr("const ").str(cond.name).cstr(": ").cstr(opts->fFlag ? "isize" : "usize")
-                        .cstr(" = ").u32(cond.number);
+            for (const StartCond& c : conds) {
+                buf.cstr("const ").str(c.name).cstr(": ")
+                        .cstr(opts->storable_state ? "isize" : "usize").cstr(" = ").u32(c.number);
                 append(block, code_stmt(alc, buf.flush()));
             }
         } else {
@@ -201,7 +201,7 @@ LOCAL_NODISCARD(Ret add_condition_from_block(
         const OutputBlock& block, StartConds& conds, StartCond cond)) {
     // Condition prefix is specific to the block that defines it. If a few blocks define conditions
     // with the same name, but a different prefix, they should have different enum entries.
-    cond.name = block.opts->condEnumPrefix + cond.name;
+    cond.name = block.opts->cond_enum_prefix + cond.name;
 
     for (const StartCond& c : conds) {
         if (c.name == cond.name) {
@@ -346,10 +346,10 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
     lstart->used = true;
 
     CodeList* goto_start = code_list(alc);
-    text = o.cstr("goto ").str(bstart->opts->labelPrefix).u32(lstart->index).flush();
+    text = o.cstr("goto ").str(bstart->opts->label_prefix).u32(lstart->index).flush();
     append(goto_start, code_stmt(alc, text));
 
-    if (globopts->bUseStateAbort) {
+    if (globopts->state_abort) {
         // case -1: goto <start label>;
         prepend(cases, code_case_number(alc, goto_start, -1));
 
@@ -366,8 +366,8 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
     text = o.str(output_state_get(globopts)).flush();
     append(stmts, code_switch(alc, text, cases));
 
-    if (globopts->bUseStateNext) {
-        text = o.str(globopts->yynext).cstr(":").flush();
+    if (globopts->state_next) {
+        text = o.str(globopts->label_next).cstr(":").flush();
         append(stmts, code_textraw(alc, text));
     }
 
@@ -378,10 +378,10 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
 }
 
 static void gen_yych_decl(const opt_t* opts, Code* code) {
-    if (opts->bEmitYYCh) {
+    if (opts->char_emit) {
         code->kind = CodeKind::VAR;
         code->var.type = VarType::YYCTYPE;
-        code->var.name = opts->yych.c_str();
+        code->var.name = opts->var_char.c_str();
         code->var.init = nullptr;
     } else {
         code->kind = CodeKind::EMPTY;
@@ -392,7 +392,7 @@ static void gen_yyaccept_def(const opt_t* opts, Code* code, bool used_yyaccept) 
     if (used_yyaccept) {
         code->kind = CodeKind::VAR;
         code->var.type = VarType::UINT;
-        code->var.name = opts->yyaccept.c_str();
+        code->var.name = opts->var_accept.c_str();
         code->var.init = "0";
     } else {
         code->kind = CodeKind::EMPTY;
@@ -405,8 +405,8 @@ static void gen_yystate_def(CodegenCtxPass1& ctx, Code* code) {
 
     if (opts->loop_switch) {
         code->kind = CodeKind::VAR;
-        code->var.name = o.str(opts->yystate).flush();
-        if (opts->fFlag) {
+        code->var.name = o.str(opts->var_state).flush();
+        if (opts->storable_state) {
             // With storable state `yystate` should be initialized to YYGETSTATE. Since there is a
             // -1 case, `yystate` should have a signed type. If conditions are also used, YYGETSTATE
             // takes priority over YYGETCONDITION, because the lexer may be reentered after an
@@ -414,7 +414,7 @@ static void gen_yystate_def(CodegenCtxPass1& ctx, Code* code) {
             // final states.
             code->var.type = VarType::INT;
             code->var.init = o.str(output_state_get(opts)).flush();
-        } else if (opts->cFlag) {
+        } else if (opts->start_conditions) {
             // Else with start conditions yystate should be initialized to YYGETCONDITION.
             code->var.type = VarType::UINT;
             code->var.init = o.str(output_cond_get(opts)).flush();
@@ -506,7 +506,7 @@ static CodeList* gen_cond_goto_binary(CodegenCtxPass1& ctx, size_t lower, size_t
 
     CodeList* stmts = code_list(alc);
     if (lower == upper) {
-        o.cstr("goto ").str(opts->condPrefix).str(ctx.block->conds[lower].name);
+        o.cstr("goto ").str(opts->cond_label_prefix).str(ctx.block->conds[lower].name);
         append(stmts, code_stmt(alc, o.flush()));
     } else {
         const size_t middle = lower + (upper - lower + 1) / 2;
@@ -538,11 +538,11 @@ static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
             append(stmts, code_text(alc, text));
         }
     } else {
-        if (opts->gFlag) {
-            text = o.cstr("goto *").str(opts->yyctable).cstr("[").str(output_cond_get(opts))
-                    .cstr("]").flush();
+        if (opts->cgoto) {
+            text = o.cstr("goto *").str(opts->var_cond_table).cstr("[")
+                    .str(output_cond_get(opts)).cstr("]").flush();
             append(stmts, code_stmt(alc, text));
-        } else if (opts->sFlag) {
+        } else if (opts->nested_ifs) {
             warn_cond_ord &= ncond > 1;
             append(stmts, gen_cond_goto_binary(ctx, 0, ncond - 1));
         } else {
@@ -551,10 +551,10 @@ static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
             CodeCases* ccases = code_cases(alc);
             for (const StartCond& cond : conds) {
                 CodeList* body = code_list(alc);
-                text = o.cstr("goto ").str(opts->condPrefix).str(cond.name).flush();
+                text = o.cstr("goto ").str(opts->cond_label_prefix).str(cond.name).flush();
                 append(body, code_stmt(alc, text));
 
-                text = o.str(opts->condEnumPrefix).str(cond.name).flush();
+                text = o.str(opts->cond_enum_prefix).str(cond.name).flush();
                 append(ccases, code_case_string(alc, body, text));
             }
             text = o.str(output_cond_get(opts)).flush();
@@ -581,12 +581,12 @@ static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
 
     CodeList* stmts = code_list(alc);
 
-    o.cstr("static void *").str(opts->yyctable).cstr("[").u64(conds.size()).cstr("] = {");
+    o.cstr("static void *").str(opts->var_cond_table).cstr("[").u64(conds.size()).cstr("] = {");
     append(stmts, code_text(alc, o.flush()));
 
     CodeList* block = code_list(alc);
     for (const StartCond& cond : conds) {
-        o.cstr("&&").str(opts->condPrefix).str(cond.name).cstr(",");
+        o.cstr("&&").str(opts->cond_label_prefix).str(cond.name).cstr(",");
         append(block, code_text(alc, o.flush()));
     }
     append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
@@ -693,7 +693,7 @@ static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {
     } else if (label->nlabel->used) {
         DCHECK(label->nlabel->index != Label::NONE);
         code->kind = CodeKind::TEXT_RAW;
-        code->text = o.str(opts->labelPrefix).u32(label->nlabel->index).cstr(":").flush();
+        code->text = o.str(opts->label_prefix).u32(label->nlabel->index).cstr(":").flush();
     } else {
         code->kind = CodeKind::EMPTY;
     }

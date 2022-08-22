@@ -213,7 +213,7 @@ static CodeGoSwIf* code_goswif(OutAllocator& alc,
                                uint32_t eof,
                                const opt_t* opts) {
     CodeGoSwIf* x = alc.alloct<CodeGoSwIf>(1);
-    if ((!opts->sFlag && nsp > 2)
+    if ((!opts->nested_ifs && nsp > 2)
             || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2)))) {
         x->kind = CodeGoSwIf::Kind::SWITCH;
         x->gosw = code_gosw(alc, sp, nsp, skip, eof);
@@ -311,7 +311,7 @@ static CodeGoCp* code_gocp(OutAllocator& alc,
 
 State* fallback_state_with_eof_rule(
         const DFA& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
-    CHECK(opts->eof != NOEOF);
+    CHECK(opts->fill_eof != NOEOF);
 
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
@@ -348,7 +348,7 @@ void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from) 
     if (go->nspans == 0) return;
 
     // With end-of-input rule $, mark states that are targets of fallback transitions as used.
-    if (opts->eof != NOEOF && !(go->nspans == 1 && from->next == span[0].to)) {
+    if (opts->fill_eof != NOEOF && !(go->nspans == 1 && from->next == span[0].to)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
     }
@@ -378,7 +378,7 @@ void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from) 
     // initialize bitmaps
     uint32_t nBitmaps = 0;
     const CodeBmState* bm = nullptr;
-    if (opts->bFlag) {
+    if (opts->bitmaps) {
         for (uint32_t i = 0; i < go->nspans; ++i) {
             State* s = go->span[i].to;
             if (!s->isBase) continue;
@@ -394,20 +394,21 @@ void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from) 
     }
 
     // only do EOF check in states that dispatch on symbol
-    const uint32_t eof = from->go.nspans == 1 && !consume(from->go.span[0].to) ? NOEOF : opts->eof;
+    const uint32_t eof = from->go.nspans == 1 && !consume(from->go.span[0].to)
+            ? NOEOF : opts->fill_eof;
     const uint32_t dSpans = go->nspans - hSpans - nBitmaps;
     const bool part_skip = opts->eager_skip && !go->skip;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
         go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
-    } else if (opts->gFlag
+    } else if (opts->cgoto
                && !part_skip
-               && dSpans >= opts->cGotoThreshold
+               && dSpans >= opts->cgoto_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CPGOTO;
         go->gocp = code_gocp(alc, go->span, go->nspans, hspan, hSpans, from->next, eof, opts);
-    } else if (opts->bFlag && !part_skip && nBitmaps > 0) {
+    } else if (opts->bitmaps && !part_skip && nBitmaps > 0) {
         go->kind = CodeGo::Kind::BITMAP;
         go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm, from->next, eof, opts);
         dfa.bitmap->used = true;

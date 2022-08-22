@@ -93,17 +93,17 @@ opt_short: /*!local:re2c
     "v"  { return version(); }
     "V"  { return vernum(); }
 
-    "c" { globopts.cFlag = true;              goto opt_short; }
+    "c" { globopts.start_conditions = true;   goto opt_short; }
     "D" { globopts.target = Target::DOT;      goto opt_short; }
-    "f" { globopts.fFlag = true;              goto opt_short; }
-    "F" { globopts.FFlag = true;              goto opt_short; }
-    "i" { globopts.iFlag = true;              goto opt_short; }
+    "f" { globopts.storable_state = true;     goto opt_short; }
+    "F" { globopts.flex_syntax = true;        goto opt_short; }
+    "i" { globopts.line_dirs = false;         goto opt_short; }
     "S" { globopts.target = Target::SKELETON; goto opt_short; }
 
-    "b" { opts.set_bFlag(true);           goto opt_short; }
-    "d" { opts.set_dFlag(true);           goto opt_short; }
-    "g" { opts.set_gFlag(true);           goto opt_short; }
-    "s" { opts.set_sFlag(true);           goto opt_short; }
+    "b" { opts.set_bitmaps(true);         goto opt_short; }
+    "d" { opts.set_debug(true);           goto opt_short; }
+    "g" { opts.set_cgoto(true);           goto opt_short; }
+    "s" { opts.set_nested_ifs(true);      goto opt_short; }
     "T" { opts.set_tags(true);            goto opt_short; }
 
     "e" { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt_short; }
@@ -113,8 +113,8 @@ opt_short: /*!local:re2c
     "8" { opts.set_encoding(Enc::Type::UTF8, true);   goto opt_short; }
 
     "P" {
-        opts.set_posix_syntax(true);
-        opts.set_posix_semantics(true);
+        opts.set_tags_posix_syntax(true);
+        opts.set_tags_posix_semantics(true);
         goto opt_short;
     }
 
@@ -139,26 +139,26 @@ opt_long: /*!local:re2c
     "version"               end { return version(); }
     "vernum"                end { return vernum(); }
 
-    "start-"? "conditions"  end { globopts.cFlag = true;              goto opt; }
+    "start-"? "conditions"  end { globopts.start_conditions = true;   goto opt; }
     "emit-dot"              end { globopts.target = Target::DOT;      goto opt; }
-    "storable-state"        end { globopts.fFlag = true;              goto opt; }
-    "flex-syntax"           end { globopts.FFlag = true;              goto opt; }
+    "storable-state"        end { globopts.storable_state = true;     goto opt; }
+    "flex-syntax"           end { globopts.flex_syntax = true;        goto opt; }
     "verbose"               end { globopts.verbose = true;            goto opt; }
-    "no-debug-info"         end { globopts.iFlag = true;              goto opt; }
-    "no-generation-date"    end { globopts.bNoGenerationDate = true;  goto opt; }
+    "no-debug-info"         end { globopts.line_dirs = false;         goto opt; }
+    "no-generation-date"    end { globopts.date = false;              goto opt; }
     "no-version"            end { globopts.version = false;           goto opt; }
     "skeleton"              end { globopts.target = Target::SKELETON; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;         goto opt; }
     "loop-switch"           end { globopts.loop_switch = true;        goto opt; }
 
-    "bit-vectors"           end { opts.set_bFlag (true);             goto opt; }
-    "debug-output"          end { opts.set_dFlag (true);             goto opt; }
-    "case-ranges"           end { opts.set_case_ranges (true);       goto opt; }
-    "computed-gotos"        end { opts.set_gFlag (true);             goto opt; }
-    "nested-ifs"            end { opts.set_sFlag (true);             goto opt; }
-    "case-insensitive"      end { opts.set_bCaseInsensitive (true);  goto opt; }
-    "case-inverted"         end { opts.set_bCaseInverted (true);     goto opt; }
-    "tags"                  end { opts.set_tags (true);              goto opt; }
+    "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
+    "debug-output"          end { opts.set_debug(true);              goto opt; }
+    "case-ranges"           end { opts.set_case_ranges(true);        goto opt; }
+    "computed-gotos"        end { opts.set_cgoto(true);              goto opt; }
+    "nested-ifs"            end { opts.set_nested_ifs(true);         goto opt; }
+    "case-insensitive"      end { opts.set_case_insensitive(true);   goto opt; }
+    "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }
+    "tags"                  end { opts.set_tags(true);               goto opt; }
     "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
@@ -168,8 +168,8 @@ opt_long: /*!local:re2c
     "utf8"   | "utf-8"      end { opts.set_encoding(Enc::Type::UTF8, true);   goto opt; }
 
     "posix-captures" end {
-        opts.set_posix_syntax(true);
-        opts.set_posix_semantics(true);
+        opts.set_tags_posix_syntax(true);
+        opts.set_tags_posix_semantics(true);
         goto opt;
     }
 
@@ -188,7 +188,7 @@ opt_long: /*!local:re2c
     "reusable"              end { goto opt; }
 
     // internals
-    "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_dfa_minimization); }
+    "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_minimization); }
     "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
     "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
@@ -235,7 +235,7 @@ opt_depfile: /*!local:re2c
 
 opt_incpath: /*!local:re2c
     * { ERRARG("-I", "filename", *argv); }
-    filename end { globopts.incpaths.push_back(*argv); goto opt; }
+    filename end { globopts.include_paths.push_back(*argv); goto opt; }
 */
 
 opt_encoding_policy: /*!local:re2c
@@ -247,15 +247,15 @@ opt_encoding_policy: /*!local:re2c
 
 opt_input: /*!local:re2c
     * { ERRARG("--api, --input", "default | custom", *argv); }
-    "default" end { opts.set_input_api(Api::DEFAULT); goto opt; }
-    "custom"  end { opts.set_input_api(Api::CUSTOM);  goto opt; }
+    "default" end { opts.set_api(Api::DEFAULT); goto opt; }
+    "custom"  end { opts.set_api(Api::CUSTOM);  goto opt; }
 */
 
 opt_empty_class: /*!local:re2c
     * { ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
-    "match-empty" end { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_EMPTY); goto opt; }
-    "match-none"  end { opts.set_empty_class_policy(EmptyClassPolicy::MATCH_NONE);  goto opt; }
-    "error"       end { opts.set_empty_class_policy(EmptyClassPolicy::ERROR);       goto opt; }
+    "match-empty" end { opts.set_empty_class(EmptyClass::MATCH_EMPTY); goto opt; }
+    "match-none"  end { opts.set_empty_class(EmptyClass::MATCH_NONE);  goto opt; }
+    "error"       end { opts.set_empty_class(EmptyClass::ERROR);       goto opt; }
 */
 
 opt_location_format: /*!local:re2c
@@ -270,16 +270,16 @@ opt_input_encoding: /*!local:re2c
     "utf8"  end { globopts.input_encoding = Enc::Type::UTF8;  goto opt; }
 */
 
-opt_dfa_minimization: /*!local:re2c
+opt_minimization: /*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
-    "table" end { globopts.dfa_minimization = Minimization::TABLE; goto opt; }
-    "moore" end { globopts.dfa_minimization = Minimization::MOORE; goto opt; }
+    "table" end { globopts.minimization = Minimization::TABLE; goto opt; }
+    "moore" end { globopts.minimization = Minimization::MOORE; goto opt; }
 */
 
 opt_posix_prectable: /*!local:re2c
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
-    "naive"   end { globopts.posix_prectable = PosixPrecedenceTable::NAIVE;   goto opt; }
-    "complex" end { globopts.posix_prectable = PosixPrecedenceTable::COMPLEX; goto opt; }
+    "naive"   end { globopts.posix_prectable = PosixPrectable::NAIVE;   goto opt; }
+    "complex" end { globopts.posix_prectable = PosixPrectable::COMPLEX; goto opt; }
 */
 
 opt_fixed_tags: /*!local:re2c

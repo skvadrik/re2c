@@ -198,13 +198,13 @@ loop:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::COND_ENUM, opts->topIndent, allow));
+        CHECK_RET(lex_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
         goto next;
     }
 
     "/*!getstate:re2c" {
         out.state_goto = true;
-        if (!opts->fFlag) {
+        if (!opts->storable_state) {
             RET_FAIL(msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option"));
         } else if (opts->loop_switch) {
             RET_FAIL(msg.error(cur_loc(),
@@ -212,7 +212,7 @@ loop:
                                "it requires cross-block transitions that are unsupported without "
                                "the `goto` statement"));
         }
-        CHECK_RET(lex_block(out, CodeKind::STATE_GOTO, opts->topIndent, 0));
+        CHECK_RET(lex_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
         goto next;
     }
 
@@ -361,7 +361,7 @@ Ret Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mas
     BlockNameList* blocks;
     std::string s;
 
-    out.wraw(tok, ptr, !globopts->iFlag);
+    out.wraw(tok, ptr, globopts->line_dirs);
     CHECK_RET(lex_name_list(alc, &blocks));
 
 loop: /*!local:re2c
@@ -472,7 +472,7 @@ scan:
     }
 
     "{" name "}" {
-        if (!globopts->FFlag) {
+        if (!globopts->flex_syntax) {
             RET_FAIL(msg.error(tok_loc(), "curly braces for names only allowed with -F switch"));
         }
         yylval->cstr = ast.cstr(tok + 1, cur - 1);
@@ -484,7 +484,7 @@ scan:
     name {
         bool yes;
         CHECK_RET(lex_namedef_context_re2c(yes));
-        if (!globopts->FFlag || yes) {
+        if (!globopts->flex_syntax || yes) {
             yylval->cstr = ast.cstr(tok, cur);
             RET_TOK(TOKEN_ID);
         }

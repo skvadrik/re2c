@@ -87,7 +87,7 @@ LOCAL_NODISCARD(RE* fictive_tags(RESpec& spec, int32_t height)) {
 LOCAL_NODISCARD(RE* capture_tags(
         RESpec& spec, DfsAstToRe& x, bool orbit, const AstNode** psub, size_t* pncap)) {
     std::vector<Tag>& tags = spec.tags;
-    bool history = spec.opts->subhistories && (orbit || x.in_iter);
+    bool history = spec.opts->tags_history && (orbit || x.in_iter);
     size_t ncap = *pncap, lcap = ncap;
 
     const AstNode* ast = *psub;
@@ -119,10 +119,10 @@ LOCAL_NODISCARD(RE* structural_tags(
         RESpec& spec, DfsAstToRe& x, const AstNode* sub, size_t* pncap)) {
     if (sub->kind == AstKind::CAP) {
         // If this sub-AST is already a capture, no need for structural tags.
-    } else if (spec.opts->autotags) {
+    } else if (spec.opts->tags_automatic) {
         // Full parsing: automatically add tags as if this sub-RE was a capture.
         return capture_tags(spec, x, false, &x.ast, pncap);
-    } else if (spec.opts->posix_semantics && x.ast->has_caps) {
+    } else if (spec.opts->tags_posix_semantics && x.ast->has_caps) {
         // POSIX submatch extraction: add fictive structural tags.
         // See note [POSIX subexpression hierarchy].
         return fictive_tags(spec, x.height);
@@ -145,7 +145,7 @@ LOCAL_NODISCARD(RE* insert_between_tags(RESpec& spec, RE* tags, RE* re)) {
 
 LOCAL_NODISCARD(Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast)) {
     DCHECK(ast->kind == AstKind::REF);
-    if (spec.opts->posix_syntax) {
+    if (spec.opts->tags_posix_syntax) {
         RET_FAIL(spec.msg.error(ast->loc,
                                 "implicit grouping is forbidden with '--posix-captures' option, "
                                 "please wrap '%s' in capturing parenthesis",
@@ -169,7 +169,7 @@ LOCAL_NODISCARD(Ret check_tags_used_once(
 }
 
 bool is_icase(const opt_t* opts, bool icase) {
-    return opts->bCaseInsensitive || icase != opts->bCaseInverted;
+    return opts->case_insensitive || icase != opts->case_inverted;
 }
 
 LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range** prange)) {
@@ -222,15 +222,15 @@ LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range** prang
 
 LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* range, RE** pre)) {
     if (!range) {
-        switch (spec.opts->empty_class_policy) {
-        case EmptyClassPolicy::MATCH_EMPTY:
+        switch (spec.opts->empty_class) {
+        case EmptyClass::MATCH_EMPTY:
             spec.msg.warn.empty_class(loc);
             *pre = re_nil(spec);
             return Ret::OK;
-        case EmptyClassPolicy::MATCH_NONE:
+        case EmptyClass::MATCH_NONE:
             spec.msg.warn.empty_class(loc);
             break;
-        case EmptyClassPolicy::ERROR:
+        case EmptyClass::ERROR:
             RET_FAIL(spec.msg.error(loc, "empty character class"));
         }
     }
@@ -314,7 +314,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (spec.opts->posix_syntax) goto error;
+            if (spec.opts->tags_posix_syntax) goto error;
             x.ast = ast->cap; // replace on stack
             break;
 
@@ -422,7 +422,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             if (ast->tag.name && !opts->tags) {
                 RET_FAIL(spec.msg.error(
                         ast->loc, "tags are only allowed with '-T, --tags' option"));
-            } else if (opts->posix_syntax) {
+            } else if (opts->tags_posix_syntax) {
                 RET_FAIL(spec.msg.error(
                         ast->loc, "simple tags are not allowed with '--posix-captures' option"));
             }
@@ -432,7 +432,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (!opts->posix_syntax) { // ordinary group, replace with subexpr on stack
+            if (!opts->tags_posix_syntax) { // ordinary group, replace with subexpr on stack
                 x.ast = ast->cap;
             } else { // POSIX capturing group
                 if (x.succ == 0) { // 1st visit: push successor
@@ -491,7 +491,8 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                 ++x.succ;
                 const uint32_t m = ast->iter.max;
                 ast = ast->iter.ast;
-                if ((opts->posix_semantics && ast->kind == AstKind::CAP) || opts->autotags) {
+                if ((opts->tags_posix_semantics && ast->kind == AstKind::CAP)
+                        || opts->tags_automatic) {
                     x.re1 = capture_tags(spec, x, m > 1, &ast, pncap);
                 }
                 if (m > 0) {

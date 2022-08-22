@@ -25,11 +25,11 @@ void gen_yydebug(Output& output, const Label* label, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
 
-    if (!opts->dFlag) return;
+    if (!opts->debug) return;
 
     // The label may be unused but still have a valid index (one such example is the initial label
     // in goto/label mode). It still needs an YYDEBUG statement.
-    buf.str(opts->yydebug).cstr("(").unchecked_label(*label).cstr(", ");
+    buf.str(opts->api_debug).cstr("(").unchecked_label(*label).cstr(", ");
     gen_peek_expr(buf.stream(), opts);
     buf.cstr(")");
     append(stmts, code_stmt(output.allocator, buf.flush()));
@@ -53,7 +53,7 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
     const opt_t* opts = block.opts;
     OutAllocator& alc = output.allocator;
 
-    if (!opts->fFlag || !opts->loop_switch) return;
+    if (!opts->storable_state || !opts->loop_switch) return;
 
     // TODO: If `re2c:eof` is not used, some of these cases are redundant (they contain a single
     // transition to the DFA state that has the corresponding YYFILL invocation).
@@ -85,7 +85,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stm
     DCHECK(!opts->loop_switch);
     if (dfa.head->label->used && !opts->eager_skip) {
         dfa.initial_label->used = true;
-        o.cstr("goto ").str(opts->labelPrefix).label(*dfa.initial_label);
+        o.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
         append(stmts, code_stmt(alc, o.flush()));
     }
 
@@ -133,13 +133,13 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
-    if (opts->bUseStateAbort || opts->lang != Lang::C) {
+    if (opts->state_abort || opts->lang != Lang::C) {
         // Do not abort by default in C/C++ as it requires including a header.
         CodeList* abort = code_list(alc);
         append(abort, code_abort(alc));
         append(cases, code_case_default(alc, abort));
     }
-    append(loop, code_switch(alc, opts->yystate.c_str(), cases));
+    append(loop, code_switch(alc, opts->var_state.c_str(), cases));
     append(stmts, code_loop(alc, loop));
 }
 
@@ -206,7 +206,7 @@ void gen_code(Output& output, dfas_t& dfas) {
     for (const std::unique_ptr<DFA>& dfa : dfas) {
         const bool first = (dfa == first_dfa);
 
-        if (opts->bFlag) {
+        if (opts->bitmaps) {
             dfa->bitmap = code_bitmap(alc, std::min(dfa->ubChar, 256u));
             for (State* s = dfa->head; s; s = s->next) {
                 if (s->isBase) {
@@ -224,11 +224,11 @@ void gen_code(Output& output, dfas_t& dfas) {
 
         if (!opts->loop_switch) {
             if (first) {
-                if (opts->startlabel_force) {
+                if (opts->label_start_force) {
                     // User-enforced start label.
                     dfa->start_label = new_label(alc, output.label_counter++);
                     dfa->start_label->used = true;
-                } else if (opts->fFlag) {
+                } else if (opts->storable_state) {
                     // Start label is needed in `-f` mode: it points to state 0 (the beginning of
                     // block, before condition dispatch in `-c` mode).
                     dfa->start_label = new_label(alc, output.label_counter++);
@@ -262,7 +262,7 @@ void gen_code(Output& output, dfas_t& dfas) {
         // With loop/switch storable states need their own cases in the state switch, as they have
         // some logic on top of transition to the state that invoked YYFILL. Give them continuous
         // indices after the last state index.
-        if (opts->loop_switch && opts->fFlag) {
+        if (opts->loop_switch && opts->storable_state) {
             oblock.fill_index = output.label_counter;
         }
 
@@ -291,7 +291,7 @@ void gen_code(Output& output, dfas_t& dfas) {
             }
         }
     } else {
-        ind = output.block().opts->topIndent;
+        ind = output.block().opts->indent_top;
         bool have_bitmaps = false;
 
         const char* text;
@@ -300,14 +300,14 @@ void gen_code(Output& output, dfas_t& dfas) {
         for (std::unique_ptr<DFA>& dfa : dfas) {
             const bool first = (dfa == first_dfa);
 
-            CodeList* bms = opts->bFlag ? gen_bitmap(output, dfa->bitmap) : nullptr;
+            CodeList* bms = opts->bitmaps ? gen_bitmap(output, dfa->bitmap) : nullptr;
             have_bitmaps |= bms != nullptr;
 
-            if (first && opts->fFlag) {
+            if (first && opts->storable_state) {
                 append(program1, code_newline(alc));
             }
 
-            if (first && !opts->fFlag) {
+            if (first && !opts->storable_state) {
                 append(program1, code_yych_decl(alc));
                 append(program1, code_yyaccept_def(alc));
             }
@@ -319,11 +319,11 @@ void gen_code(Output& output, dfas_t& dfas) {
                 append(program1, bms);
             }
 
-            if (first && is_cond_block && opts->gFlag) {
+            if (first && is_cond_block && opts->cgoto) {
                 append(program1, code_cond_table(alc));
             }
 
-            if (opts->fFlag && !output.state_goto && !opts->loop_switch) {
+            if (opts->storable_state && !output.state_goto && !opts->loop_switch) {
                 append(program1,
                        code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
                 output.state_goto = true;
@@ -335,8 +335,8 @@ void gen_code(Output& output, dfas_t& dfas) {
             }
 
             // user-defined start label
-            if (first && !opts->startlabel.empty()) {
-                text = o.str(opts->startlabel).flush();
+            if (first && !opts->label_start.empty()) {
+                text = o.str(opts->label_start).flush();
                 append(program1, code_slabel(alc, text));
             }
 
@@ -345,12 +345,12 @@ void gen_code(Output& output, dfas_t& dfas) {
                     append(program1, code_cond_goto(alc));
                     output.cond_goto = true;
                 }
-                if (opts->condDivider.length()) {
-                    o.str(opts->condDivider);
-                    argsubst(o.stream(), opts->condDividerParam, "cond", true, dfa->cond);
+                if (opts->cond_div.length()) {
+                    o.str(opts->cond_div);
+                    argsubst(o.stream(), opts->cond_div_param, "cond", true, dfa->cond);
                     append(program1, code_textraw(alc, o.flush()));
                 }
-                text = o.str(opts->condPrefix).str(dfa->cond).flush();
+                text = o.str(opts->cond_label_prefix).str(dfa->cond).flush();
                 append(program1, code_slabel(alc, text));
             }
 
@@ -381,10 +381,10 @@ void gen_code(Output& output, dfas_t& dfas) {
         append(program, code_newline(alc));
         append(program, code_line_info_output(alc));
 
-        if ((opts->fFlag && opts->gFlag)
-                || (!opts->fFlag && (oblock.used_yyaccept || opts->bEmitYYCh))
+        if ((opts->storable_state && opts->cgoto)
+                || (!opts->storable_state && (oblock.used_yyaccept || opts->char_emit))
                 || (!is_cond_block && have_bitmaps)
-                || (is_cond_block && opts->gFlag)) {
+                || (is_cond_block && opts->cgoto)) {
             append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
         } else {
             ind = std::max(ind, 1u);

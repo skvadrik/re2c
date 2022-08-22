@@ -18,7 +18,7 @@ Input::Input(size_t fidx)
 
 Ret Input::open(const std::string& filename,
                 const std::string* parent,
-                const std::vector<std::string>& incpaths) {
+                const std::vector<std::string>& include_paths) {
     name = filename;
 
     if (!parent) {
@@ -32,7 +32,7 @@ Ret Input::open(const std::string& filename,
         file = fopen(path.c_str(), "rb");
 
         // otherwise search in all include paths
-        for (const std::string& incpath : incpaths) {
+        for (const std::string& incpath : include_paths) {
             if (file != nullptr) break;
             path = incpath + name;
             file = fopen(path.c_str(), "rb");

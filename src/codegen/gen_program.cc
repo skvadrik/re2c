@@ -154,7 +154,7 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     block->fill_index = total_fill_index;
 
     // start label hapens to be the only option that must be reset for each new block
-    opts.reset_group_startlabel();
+    opts.reset_group_label_start();
 
     return Ret::OK;
 }
@@ -251,7 +251,7 @@ Ret Output::emit() {
 
     // Emit header file.
     if (!opts->header_file.empty() || need_header) {
-        if (opts->cFlag && this->cond_enum_autogen) {
+        if (opts->start_conditions && this->cond_enum_autogen) {
             // Old-style -t, --type-headers usage implies condition enum.
             header_mode(true);
             wdelay_stmt(0, code_newline(allocator));
@@ -272,7 +272,7 @@ void output_version_time(std::ostream& os, const opt_t* opts) {
     if (opts->version) {
         os << " " << PACKAGE_VERSION;
     }
-    if (!opts->bNoGenerationDate) {
+    if (opts->date) {
         os << " on ";
         time_t now = time(nullptr);
         os.write(ctime(&now), 24);
@@ -281,7 +281,7 @@ void output_version_time(std::ostream& os, const opt_t* opts) {
 }
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {
-    if (opts->yybmHexTable) {
+    if (opts->bitmaps_hex) {
         prtHex(os, u, opts->encoding.szCodeUnit());
     } else {
         u32_width(u, width);

@@ -183,7 +183,7 @@ static void warn_dead_rules(Tdfa& dfa, const std::string& cond, const bool* live
 static void warn_sentinel_in_midrule(
         const Tdfa& dfa, const opt_t* opts, const std::string& cond, const bool* live, Msg& msg) {
     // perform check only in case sentinel method is used
-    if (opts->fill_use || opts->eof != NOEOF) return;
+    if (opts->fill_enable || opts->fill_eof != NOEOF) return;
 
     const size_t nstates = dfa.states.size();
     const size_t nsym = dfa.nchars;
@@ -192,7 +192,7 @@ static void warn_sentinel_in_midrule(
     memset(bad, 0, nrules);
 
     // find character class that contains sentinel symbol
-    const uint32_t sentsym = opts->sentinel == NOEOF ? 0 : opts->sentinel;
+    const uint32_t sentsym = opts->fill_sentinel == NOEOF ? 0 : opts->fill_sentinel;
     uint32_t sentcls = 0;
     DCHECK(dfa.charset.size() == nsym + 1);
     for (; sentcls < nsym && sentsym >= dfa.charset[sentcls + 1]; ++sentcls)
@@ -218,7 +218,7 @@ static void warn_sentinel_in_midrule(
 
     for (size_t r = 0; r < nrules; ++r) {
         if (bad[r]) {
-            msg.warn.sentinel_in_midrule(dfa.rules[r].semact->loc, cond, opts->sentinel);
+            msg.warn.sentinel_in_midrule(dfa.rules[r].semact->loc, cond, opts->fill_sentinel);
         }
     }
 
@@ -305,7 +305,7 @@ static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
 } // anonymous namespace
 
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
-    if (opts->eof != NOEOF) {
+    if (opts->fill_eof != NOEOF) {
         // See note [end-of-input rule].
         find_fallback_states_with_eof_rule(dfa);
         remove_dead_final_states_with_eof_rule(dfa);

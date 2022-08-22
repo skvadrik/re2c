@@ -97,7 +97,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
     freeze_tags(dfa);
 
-    minimization(dfa, opts->dfa_minimization);
+    minimization(dfa, opts->minimization);
     DDUMP_DFA_MIN(opts, dfa);
 
     // find strongly connected components and calculate argument to YYFILL

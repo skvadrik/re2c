@@ -42,7 +42,7 @@ enum class InputBlock: uint32_t {
     RULES
 };
 
-enum class EmptyClassPolicy: uint32_t {
+enum class EmptyClass: uint32_t {
     MATCH_EMPTY, // match on empty input
     MATCH_NONE,  // fail to match on any input
     ERROR        // compilation error
@@ -55,7 +55,7 @@ enum class Minimization: uint32_t {
 
 // Algorithm for construction of POSIX precedence table for disambiguation.
 // Complexity estimates are in terms of TNFA size (m) and the number of tags (t).
-enum class PosixPrecedenceTable: uint32_t {
+enum class PosixPrectable: uint32_t {
     NAIVE,  // O(m^2 * t)
     COMPLEX // O(m^2)
 };
