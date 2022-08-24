@@ -64,39 +64,15 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         // output files
         real.header_file = "";
         // default environment-sensitive formatting
-        real.indent_top = defaults.indent_top;
-        real.indent_str = defaults.indent_str;
         real.cond_div = defaults.cond_div;
         real.cond_div_param = defaults.cond_div_param;
+        real.indent_top = defaults.indent_top;
+        real.indent_str = defaults.indent_str;
         // default environment bindings
-        real.api_cond_type = defaults.api_cond_type;
-        real.api_cond_get = defaults.api_cond_get;
-        real.cond_get_naked = defaults.cond_get_naked;
-        real.api_cond_set = defaults.api_cond_set;
-        real.cond_set_param = defaults.cond_set_param;
-        real.cond_set_naked = defaults.cond_set_naked;
-        real.var_cond_table = defaults.var_cond_table;
-        real.cond_label_prefix = defaults.cond_label_prefix;
-        real.cond_enum_prefix = defaults.cond_enum_prefix;
-        real.cond_goto = defaults.cond_goto;
-        real.cond_goto_param = defaults.cond_goto_param;
-        real.api_state_get = defaults.api_state_get;
-        real.state_get_naked = defaults.state_get_naked;
-        real.api_state_set = defaults.api_state_set;
-        real.state_set_param = defaults.state_set_param;
-        real.state_set_naked = defaults.state_set_naked;
-        real.tags_prefix = defaults.tags_prefix;
-        real.tags_expression = defaults.tags_expression;
-        real.label_fill = defaults.label_fill;
-        real.label_next = defaults.label_next;
-        real.var_accept = defaults.var_accept;
-        real.state_abort = defaults.state_abort;
-        real.state_next = defaults.state_next;
-        real.var_bitmaps = defaults.var_bitmaps;
-        real.var_cgoto_table = defaults.var_cgoto_table;
         real.api = defaults.api;
         real.api_style = defaults.api_style;
         real.api_sigil = defaults.api_sigil;
+        real.api_char_type = defaults.api_char_type;
         real.api_cursor = defaults.api_cursor;
         real.api_marker = defaults.api_marker;
         real.api_ctxmarker = defaults.api_ctxmarker;
@@ -115,35 +91,59 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         real.api_shift = defaults.api_shift;
         real.api_shift_stag = defaults.api_shift_stag;
         real.api_shift_mtag = defaults.api_shift_mtag;
-        real.api_less_than = defaults.api_less_than;
-        real.debug = defaults.debug;
-        real.api_debug = defaults.api_debug;
-        real.api_char_type = defaults.api_char_type;
-        real.var_char = defaults.var_char;
-        real.char_emit = defaults.char_emit;
-        real.char_conv = defaults.char_conv;
-        real.label_loop = defaults.label_loop;
-        real.var_state = defaults.var_state;
         real.api_fill = defaults.api_fill;
+        real.api_less_than = defaults.api_less_than;
+        real.api_cond_type = defaults.api_cond_type;
+        real.api_cond_get = defaults.api_cond_get;
+        real.api_cond_set = defaults.api_cond_set;
+        real.api_state_get = defaults.api_state_get;
+        real.api_state_set = defaults.api_state_set;
+        real.api_debug = defaults.api_debug;
+        real.var_accept = defaults.var_accept;
+        real.var_bitmaps = defaults.var_bitmaps;
+        real.var_char = defaults.var_char;
+        real.var_cond_table = defaults.var_cond_table;
+        real.var_cgoto_table = defaults.var_cgoto_table;
+        real.var_state = defaults.var_state;
         real.fill_enable = defaults.fill_enable;
         real.fill_check = defaults.fill_check;
         real.fill_param = defaults.fill_param;
         real.fill_param_enable = defaults.fill_param_enable;
         real.fill_naked = defaults.fill_naked;
+        real.cond_get_naked = defaults.cond_get_naked;
+        real.cond_set_param = defaults.cond_set_param;
+        real.cond_set_naked = defaults.cond_set_naked;
+        real.cond_label_prefix = defaults.cond_label_prefix;
+        real.cond_enum_prefix = defaults.cond_enum_prefix;
+        real.cond_goto = defaults.cond_goto;
+        real.cond_goto_param = defaults.cond_goto_param;
+        real.state_abort = defaults.state_abort;
+        real.state_next = defaults.state_next;
+        real.state_get_naked = defaults.state_get_naked;
+        real.state_set_param = defaults.state_set_param;
+        real.state_set_naked = defaults.state_set_naked;
+        real.tags_prefix = defaults.tags_prefix;
+        real.tags_expression = defaults.tags_expression;
+        real.char_emit = defaults.char_emit;
+        real.char_conv = defaults.char_conv;
+        real.label_loop = defaults.label_loop;
+        real.label_fill = defaults.label_fill;
+        real.label_next = defaults.label_next;
         real.label_prefix = defaults.label_prefix;
         real.label_start = defaults.label_start;
         real.label_start_force = defaults.label_start_force;
+        real.debug = defaults.debug;
     }
 
     // respect hierarchy
     if (!glob.start_conditions) {
         real.api_cond_type = defaults.api_cond_type;
         real.api_cond_get = defaults.api_cond_get;
-        real.cond_get_naked = defaults.cond_get_naked;
         real.api_cond_set = defaults.api_cond_set;
+        real.var_cond_table = defaults.var_cond_table;
+        real.cond_get_naked = defaults.cond_get_naked;
         real.cond_set_param = defaults.cond_set_param;
         real.cond_set_naked = defaults.cond_set_naked;
-        real.var_cond_table = defaults.var_cond_table;
         real.cond_label_prefix = defaults.cond_label_prefix;
         real.cond_enum_prefix = defaults.cond_enum_prefix;
         real.cond_div = defaults.cond_div;
@@ -153,14 +153,14 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     }
     if (!glob.storable_state) {
         real.api_state_get = defaults.api_state_get;
-        real.state_get_naked = defaults.state_get_naked;
         real.api_state_set = defaults.api_state_set;
+        real.var_accept = defaults.var_accept;
+        real.state_next = defaults.state_next;
+        real.state_get_naked = defaults.state_get_naked;
         real.state_set_param = defaults.state_set_param;
         real.state_set_naked = defaults.state_set_naked;
         real.label_fill = defaults.label_fill;
         real.label_next = defaults.label_next;
-        real.var_accept = defaults.var_accept;
-        real.state_next = defaults.state_next;
     }
     if (!glob.storable_state && !glob.loop_switch) {
         real.state_abort = defaults.state_abort;

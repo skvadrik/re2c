@@ -50,15 +50,13 @@ class Scanner;
     CONSTOPT(bool,      storable_state, false) \
     CONSTOPT(bool,      flex_syntax, false) \
     CONSTOPT(bool,      verbose, false) \
+    CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
+    CONSTOPT(bool,      line_dirs, true) \
     /* files */ \
     CONSTOPT(std::string,              source_file, "") \
     CONSTOPT(std::string,              output_file, "") \
     CONSTOPT(std::string,              dep_file, "") \
     CONSTOPT(std::vector<std::string>, include_paths, std::vector<std::string>()) \
-    /* input encoding */ \
-    CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
-    /* #line directives */ \
-    CONSTOPT(bool,      line_dirs, true) \
     /* internals */ \
     CONSTOPT(Minimization,   minimization, Minimization::MOORE) \
     CONSTOPT(PosixPrectable, posix_prectable, PosixPrectable::COMPLEX) \
@@ -84,62 +82,15 @@ class Scanner;
     /* header file */ \
     MUTOPT1(std::string, header_file, "") \
     /* regular expressions */ \
-    MUTOPT(Enc,        encoding, Enc()) \
-    MUTOPT(bool,       case_insensitive, false) \
-    MUTOPT(bool,       case_inverted, false) \
-    MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
-    /* conditions */ \
-    MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
-    MUTOPT(std::string, api_cond_get, "YYGETCONDITION") \
-    MUTOPT(bool,        cond_get_naked, false) \
-    MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
-    MUTOPT(std::string, cond_set_param, RE2C_SIGIL ) \
-    MUTOPT(bool,        cond_set_naked, false ) \
-    MUTOPT(std::string, var_cond_table, "yyctable") \
-    MUTOPT(std::string, cond_label_prefix, "yyc_") \
-    MUTOPT(std::string, cond_enum_prefix, "yyc") \
-    MUTOPT(std::string, cond_div, "/* *********************************** */") \
-    MUTOPT(std::string, cond_div_param, RE2C_SIGIL) \
-    MUTOPT(std::string, cond_goto, "goto " RE2C_SIGIL ";") \
-    MUTOPT(std::string, cond_goto_param, RE2C_SIGIL) \
-    /* states */ \
-    MUTOPT(std::string, api_state_get, "YYGETSTATE") \
-    MUTOPT(bool,        state_get_naked, false) \
-    MUTOPT(std::string, api_state_set, "YYSETSTATE") \
-    MUTOPT(std::string, state_set_param, RE2C_SIGIL) \
-    MUTOPT(bool,        state_set_naked, false) \
-    MUTOPT(std::string, label_fill, "yyFillLabel") \
-    MUTOPT(std::string, label_next, "yyNext") \
-    MUTOPT(std::string, var_accept, "yyaccept") \
-    MUTOPT(bool,        state_abort, false) \
-    MUTOPT(bool,        state_next, false) \
-    /* tags */ \
-    MUTOPT(bool,        tags, false) \
-    MUTOPT(std::string, tags_prefix, "yyt") \
-    MUTOPT(std::string, tags_expression, RE2C_SIGIL) \
-    MUTOPT(bool,        tags_posix_syntax, false) \
-    MUTOPT(bool,        tags_posix_semantics, false) \
-    MUTOPT(bool,        tags_history, false) \
-    MUTOPT(bool,        tags_automatic, false) \
-    /* code generation */ \
-    MUTOPT(bool,        nested_ifs, false) \
-    MUTOPT(bool,        bitmaps, false) \
-    MUTOPT(std::string, var_bitmaps, "yybm") \
-    MUTOPT(bool,        bitmaps_hex, false) \
-    MUTOPT(bool,        cgoto, false) \
-    MUTOPT(bool,        case_ranges, false) \
-    MUTOPT(bool,        unsafe, true) \
-    MUTOPT(std::string, label_loop, "") \
-    MUTOPT(std::string, var_state, "yystate") \
-    MUTOPT(std::string, var_cgoto_table, "yytarget") \
-    MUTOPT(uint32_t,    cgoto_threshold, 9) \
-    MUTOPT(uint32_t,    fill_eof, NOEOF) \
-    MUTOPT(uint32_t,    fill_sentinel, NOEOF) \
-    /* formatting */ \
-    MUTOPT(uint32_t,    indent_top, 0) \
-    MUTOPT(std::string, indent_str, "\t") \
+    MUTOPT(Enc,         encoding, Enc()) \
+    MUTOPT(bool,        case_insensitive, false) \
+    MUTOPT(bool,        case_inverted, false) \
+    MUTOPT(EmptyClass,  empty_class, EmptyClass::MATCH_EMPTY) \
     /* input API */ \
     MUTOPT(Api,         api, Api::DEFAULT) \
+    MUTOPT(ApiStyle,    api_style, ApiStyle::FUNCTIONS) \
+    MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
+    MUTOPT(std::string, api_char_type, "YYCTYPE") \
     MUTOPT(std::string, api_cursor, "YYCURSOR") \
     MUTOPT(std::string, api_marker, "YYMARKER") \
     MUTOPT(std::string, api_ctxmarker, "YYCTXMARKER") \
@@ -159,27 +110,75 @@ class Scanner;
     MUTOPT(std::string, api_shift, "YYSHIFT") \
     MUTOPT(std::string, api_shift_stag, "YYSHIFTSTAG") \
     MUTOPT(std::string, api_shift_mtag, "YYSHIFTMTAG") \
-    MUTOPT(ApiStyle,    api_style, ApiStyle::FUNCTIONS) \
-    MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
-    /* debug */ \
-    MUTOPT(bool,        debug, false) \
-    MUTOPT(std::string, api_debug, "YYDEBUG") \
-    /* yych */ \
-    MUTOPT(std::string, api_char_type, "YYCTYPE") \
-    MUTOPT(std::string, var_char, "yych") \
-    MUTOPT(bool,        char_emit, true) \
-    MUTOPT(bool,        char_conv, false) \
-    /* YYFILL */ \
     MUTOPT(std::string, api_fill, "YYFILL") \
+    MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
+    MUTOPT(std::string, api_cond_get, "YYGETCONDITION") \
+    MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
+    MUTOPT(std::string, api_state_get, "YYGETSTATE") \
+    MUTOPT(std::string, api_state_set, "YYSETSTATE") \
+    MUTOPT(std::string, api_debug, "YYDEBUG") \
+    /* variables */ \
+    MUTOPT(std::string, var_accept, "yyaccept") \
+    MUTOPT(std::string, var_bitmaps, "yybm") \
+    MUTOPT(std::string, var_cgoto_table, "yytarget") \
+    MUTOPT(std::string, var_char, "yych") \
+    MUTOPT(std::string, var_cond_table, "yyctable") \
+    MUTOPT(std::string, var_state, "yystate") \
+    /* code generation */ \
+    MUTOPT(bool,        bitmaps, false) \
+    MUTOPT(bool,        bitmaps_hex, false) \
+    MUTOPT(bool,        case_ranges, false) \
+    MUTOPT(bool,        cgoto, false) \
+    MUTOPT(uint32_t,    cgoto_threshold, 9) \
+    MUTOPT(bool,        nested_ifs, false) \
+    MUTOPT(bool,        unsafe, true) \
+    /* YYFILL */ \
+    MUTOPT(uint32_t,    fill_eof, NOEOF) \
+    MUTOPT(uint32_t,    fill_sentinel, NOEOF) \
     MUTOPT(bool,        fill_enable, true) \
     MUTOPT(bool,        fill_check, true) \
     MUTOPT(std::string, fill_param, RE2C_SIGIL) \
     MUTOPT(bool,        fill_param_enable, true) \
     MUTOPT(bool,        fill_naked, false) \
+    /* yych */ \
+    MUTOPT(bool,        char_emit, true) \
+    MUTOPT(bool,        char_conv, false) \
+    /* conditions */ \
+    MUTOPT(bool,        cond_get_naked, false) \
+    MUTOPT(std::string, cond_set_param, RE2C_SIGIL ) \
+    MUTOPT(bool,        cond_set_naked, false ) \
+    MUTOPT(std::string, cond_label_prefix, "yyc_") \
+    MUTOPT(std::string, cond_enum_prefix, "yyc") \
+    MUTOPT(std::string, cond_div, "/* *********************************** */") \
+    MUTOPT(std::string, cond_div_param, RE2C_SIGIL) \
+    MUTOPT(std::string, cond_goto, "goto " RE2C_SIGIL ";") \
+    MUTOPT(std::string, cond_goto_param, RE2C_SIGIL) \
+    /* states */ \
+    MUTOPT(bool,        state_get_naked, false) \
+    MUTOPT(std::string, state_set_param, RE2C_SIGIL) \
+    MUTOPT(bool,        state_set_naked, false) \
+    MUTOPT(bool,        state_abort, false) \
+    MUTOPT(bool,        state_next, false) \
+    /* tags */ \
+    MUTOPT(bool,        tags, false) \
+    MUTOPT(std::string, tags_expression, RE2C_SIGIL) \
+    MUTOPT(bool,        tags_automatic, false) \
+    MUTOPT(bool,        tags_history, false) \
+    MUTOPT(bool,        tags_posix_syntax, false) \
+    MUTOPT(bool,        tags_posix_semantics, false) \
+    MUTOPT(std::string, tags_prefix, "yyt") \
     /* labels */ \
+    MUTOPT(std::string, label_fill, "yyFillLabel") \
+    MUTOPT(std::string, label_loop, "") \
+    MUTOPT(std::string, label_next, "yyNext") \
     MUTOPT(std::string, label_prefix, "yy") \
     MUTOPT(std::string, label_start, "") \
     MUTOPT(bool,        label_start_force, false) \
+    /* formatting */ \
+    MUTOPT(uint32_t,    indent_top, 0) \
+    MUTOPT(std::string, indent_str, "\t") \
+    /* debug */ \
+    MUTOPT(bool,        debug, false) \
     /* end */
 
 // Constant options.
