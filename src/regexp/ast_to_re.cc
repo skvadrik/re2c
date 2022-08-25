@@ -7,7 +7,6 @@
 #include <utility>
 #include <vector>
 
-#include "src/encoding/case.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/ebcdic.h"
 #include "src/encoding/utf16.h"
@@ -168,8 +167,20 @@ LOCAL_NODISCARD(Ret check_tags_used_once(
     return Ret::OK;
 }
 
-bool is_icase(const opt_t* opts, bool icase) {
+LOCAL_NODISCARD(inline bool is_icase(const opt_t* opts, bool icase)) {
     return opts->case_insensitive || icase != opts->case_inverted;
+}
+
+LOCAL_NODISCARD(inline bool is_alpha(uint32_t c)) {
+    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+}
+
+LOCAL_NODISCARD(inline uint32_t to_lower_unsafe(uint32_t c)) {
+    return c | 0x20u;
+}
+
+LOCAL_NODISCARD(inline uint32_t to_upper_unsafe(uint32_t c)) {
+    return c & ~0x20u;
 }
 
 LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, Range** prange)) {

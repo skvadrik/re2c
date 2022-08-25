@@ -34,7 +34,6 @@ re2c_HDR = \
 	src/dfa/tagver_table.h \
 	src/dfa/tcmd.h \
 	src/nfa/nfa.h \
-	src/encoding/case.h \
 	src/encoding/ebcdic.h \
 	src/encoding/enc.h \
 	src/encoding/range_suffix.h \
