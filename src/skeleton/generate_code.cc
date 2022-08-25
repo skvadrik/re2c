@@ -112,7 +112,7 @@ Code* emit_skeleton_prolog(Output& output) {
     return code_block(alc, code, CodeBlock::Kind::RAW);
 }
 
-static void emit_skeleton_defines(Output& output, CodeList* code, const DFA& dfa) {
+static void emit_skeleton_defines(Output& output, CodeList* code, const Adfa& dfa) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -151,7 +151,7 @@ static void emit_skeleton_defines(Output& output, CodeList* code, const DFA& dfa
     append(code, code_newline(alc));
 }
 
-static void emit_skeleton_function_action(Output& output, CodeList* code, const DFA& dfa) {
+static void emit_skeleton_function_action(Output& output, CodeList* code, const Adfa& dfa) {
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const uint64_t norule = rule2key(Rule::NONE, dfa.key_size, dfa.def_rule);
@@ -214,7 +214,7 @@ static void emit_skeleton_function_action(Output& output, CodeList* code, const 
     append(code, code_block(alc, body, CodeBlock::Kind::WRAPPED));
 }
 
-static void emit_skeleton_stags(Output& output, CodeList* code, const DFA& dfa) {
+static void emit_skeleton_stags(Output& output, CodeList* code, const Adfa& dfa) {
     const opt_t* opts = output.block().opts;
     if (dfa.stagvars.empty() && !opts->tags_posix_syntax) return;
 
@@ -365,7 +365,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(code, code_newline(alc));
 }
 
-static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) {
+static void emit_skeleton_mtags(Output& output, CodeList* code, const Adfa& dfa) {
     if (dfa.mtagvars.empty()) return;
 
     OutAllocator& alc = output.allocator;
@@ -458,7 +458,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const DFA& dfa) 
     append(code, code_block(alc, body, CodeBlock::Kind::WRAPPED));
 }
 
-static void emit_skeleton_function_check_key_count(Output& output, CodeList* code, DFA& dfa) {
+static void emit_skeleton_function_check_key_count(Output& output, CodeList* code, Adfa& dfa) {
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     CodeArgs* args;
@@ -487,7 +487,7 @@ static void emit_skeleton_function_check_key_count(Output& output, CodeList* cod
     append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 }
 
-static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa) {
+static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -712,7 +712,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, DFA& dfa)
     append(code, code_block(alc, block, CodeBlock::Kind::WRAPPED));
 }
 
-static void emit_skeleton_undefs(Output& output, CodeList* code, DFA& dfa) {
+static void emit_skeleton_undefs(Output& output, CodeList* code, Adfa& dfa) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 
@@ -738,7 +738,7 @@ static void emit_skeleton_undefs(Output& output, CodeList* code, DFA& dfa) {
     append(code, code_textraw(alc, "#undef YYFILL"));
 }
 
-void emit_skeleton(Output& output, CodeList* code, DFA& dfa) {
+void emit_skeleton(Output& output, CodeList* code, Adfa& dfa) {
     emit_skeleton_defines(output, code, dfa);
     emit_skeleton_function_action(output, code, dfa);
     emit_skeleton_stags(output, code, dfa);
@@ -769,7 +769,7 @@ Code* emit_skeleton_epilog(Output& output) {
     return code_block(alc, main, CodeBlock::Kind::RAW);
 }
 
-void emit_skeleton_action(Output& output, CodeList* code, const DFA& dfa, size_t rid) {
+void emit_skeleton_action(Output& output, CodeList* code, const Adfa& dfa, size_t rid) {
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const std::string& name = dfa.name;

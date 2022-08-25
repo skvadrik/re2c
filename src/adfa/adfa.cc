@@ -23,15 +23,15 @@ static bool is_eof(const opt_t* opts, uint32_t ub) {
     return opts->fill_eof != NOEOF && static_cast<uint32_t>(opts->fill_eof) == ub;
 }
 
-DFA::DFA(Tdfa&& dfa,
-         const std::vector<size_t>& fill,
-         size_t key,
-         const loc_t& loc,
-         const std::string& nm,
-         const std::string& cn,
-         const std::string& su,
-         const opt_t* opts,
-         Msg& msg)
+Adfa::Adfa(Tdfa&& dfa,
+           const std::vector<size_t>& fill,
+           size_t key,
+           const loc_t& loc,
+           const std::string& nm,
+           const std::string& cn,
+           const std::string& su,
+           const opt_t* opts,
+           Msg& msg)
     : // Move ownership from TDFA to ADFA.
       charset(std::move(dfa.charset)),
       rules(std::move(dfa.rules)),
@@ -127,7 +127,7 @@ DFA::DFA(Tdfa&& dfa,
     delete[] i2s;
 }
 
-DFA::~DFA() {
+Adfa::~Adfa() {
     State* s;
 
     while ((s = head)) {
@@ -150,7 +150,7 @@ DFA::~DFA() {
 // are ordered accoding to the (alphabetically) first symbol leading to each node. Each node must be
 // visited exactly once. Default state (NULL) is always the last state.
 
-void DFA::reorder() {
+void Adfa::reorder() {
     std::vector<State*> ord;
     ord.reserve(nStates);
 
@@ -180,7 +180,7 @@ void DFA::reorder() {
     }
 }
 
-void DFA::addState(State* s, State* next) {
+void Adfa::addState(State* s, State* next) {
     ++nStates;
     s->next = next->next;
     s->prev = next;
@@ -188,7 +188,7 @@ void DFA::addState(State* s, State* next) {
     next->prev = s->prev;
 }
 
-void DFA::split(State* s) {
+void Adfa::split(State* s) {
     State* move = new State;
     addState(move, s);
     move->action.set_move();
@@ -249,7 +249,7 @@ static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
     return static_cast<uint32_t>(x - x0);
 }
 
-void DFA::findBaseState(const opt_t* opts) {
+void Adfa::findBaseState(const opt_t* opts) {
     Span* span = allocate<Span>(ubChar - lbChar);
 
     for (State* s = head; s; s = s->next) {
@@ -297,7 +297,7 @@ void DFA::findBaseState(const opt_t* opts) {
 // splitting states with non-hoisted skip in the presence of `--eager-skip` (this way skip hoisting
 // wouldn't need to know tunneling results), but it's much worse for tunneling.
 
-void DFA::prepare(const opt_t* opts) {
+void Adfa::prepare(const opt_t* opts) {
     // create rule states
     for (State* s = head; s; s = s->next) {
         if (s->rule != Rule::NONE && s->rule != eof_rule) {
@@ -400,7 +400,7 @@ void DFA::prepare(const opt_t* opts) {
     }
 }
 
-Ret DFA::calc_stats(OutputBlock& out) {
+Ret Adfa::calc_stats(OutputBlock& out) {
     const opt_t* opts = out.opts;
 
     // calculate `YYMAXFILL`
@@ -505,7 +505,7 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
     return true;
 }
 
-void DFA::hoist_tags(const opt_t* opts) {
+void Adfa::hoist_tags(const opt_t* opts) {
     for(State* s = head; s; s = s->next) {
         Span* span = s->go.span;
         const size_t nspan = s->go.nspans;
@@ -520,7 +520,7 @@ void DFA::hoist_tags(const opt_t* opts) {
     }
 }
 
-void DFA::hoist_tags_and_skip(const opt_t* opts) {
+void Adfa::hoist_tags_and_skip(const opt_t* opts) {
     DCHECK(opts->eager_skip);
 
     for (State* s = head; s; s = s->next) {

@@ -33,8 +33,8 @@ struct CodeGoIf;
 struct Output;
 struct OutputBlock;
 struct State;
-struct DFA;
-using dfas_t = std::vector<std::unique_ptr<DFA>>;
+struct Adfa;
+using dfas_t = std::vector<std::unique_ptr<Adfa>>;
 template <typename value_t> class uniq_vector_t;
 
 struct Label {
@@ -735,22 +735,22 @@ struct Output {
 };
 
 void init_go(CodeGo* go);
-void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from);
+void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from);
 State* fallback_state_with_eof_rule(
-        const DFA& dfa, const opt_t* opts, const State* state, tcid_t* ptags);
+        const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags);
 CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s);
 void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap);
 
-void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from, CodeList* stmts);
+void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
-void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts);
-void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t tcid);
+void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts);
+void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid);
 void gen_goto(
-        Output& output, const DFA& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
+        Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
 void gen_code(Output& output, dfas_t& dfas);
-void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stmts);
-void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases);
+void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
+void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
 
 Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) NODISCARD;

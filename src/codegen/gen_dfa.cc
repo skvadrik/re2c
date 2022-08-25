@@ -73,7 +73,7 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
     first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
 
-void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stmts) {
+void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -96,7 +96,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const DFA& dfa, CodeList* stm
     }
 }
 
-void gen_dfa_as_switch_cases(Output& output, DFA& dfa, CodeCases* cases) {
+void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
     OutAllocator& alc = output.allocator;
 
     DCHECK(output.block().opts->loop_switch);
@@ -143,7 +143,7 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     append(stmts, code_loop(alc, loop));
 }
 
-void DFA::emit_dot(Output& output, CodeList* program) const {
+void Adfa::emit_dot(Output& output, CodeList* program) const {
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
     const char* text;
@@ -198,12 +198,12 @@ void gen_code(Output& output, dfas_t& dfas) {
     Scratchbuf& o = output.scratchbuf;
 
     if (dfas.empty()) return;
-    const std::unique_ptr<DFA>& first_dfa = *dfas.begin();
+    const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
 
     // All conditions are named, so it suffices to check the first DFA.
     const bool is_cond_block = !first_dfa->cond.empty();
 
-    for (const std::unique_ptr<DFA>& dfa : dfas) {
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
         const bool first = (dfa == first_dfa);
 
         if (opts->bitmaps) {
@@ -280,12 +280,12 @@ void gen_code(Output& output, dfas_t& dfas) {
     if (opts->target == Target::DOT) {
         append(program, code_text(alc, "digraph re2c {"));
         append(program, code_cond_goto(alc));
-        for (const std::unique_ptr<DFA>& dfa : dfas) {
+        for (const std::unique_ptr<Adfa>& dfa : dfas) {
             dfa->emit_dot(output, program);
         }
         append(program, code_text(alc, "}"));
     } else if (opts->target == Target::SKELETON) {
-        for (const std::unique_ptr<DFA>& dfa : dfas) {
+        for (const std::unique_ptr<Adfa>& dfa : dfas) {
             if (output.skeletons.insert(dfa->name).second) {
                 emit_skeleton(output, program, *dfa);
             }
@@ -297,7 +297,7 @@ void gen_code(Output& output, dfas_t& dfas) {
         const char* text;
         CodeList* program1 = code_list(alc);
         CodeCases* cases = code_cases(alc);
-        for (std::unique_ptr<DFA>& dfa : dfas) {
+        for (std::unique_ptr<Adfa>& dfa : dfas) {
             const bool first = (dfa == first_dfa);
 
             CodeList* bms = opts->bitmaps ? gen_bitmap(output, dfa->bitmap) : nullptr;

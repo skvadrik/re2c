@@ -21,11 +21,11 @@
 
 namespace re2c {
 
-static void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const State* s);
+static void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa, const State* s);
 static void emit_accept(
-        Output& output, CodeList* stmts, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc);
-static void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx);
-static void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& rule);
+        Output& output, CodeList* stmts, const Adfa& dfa, const uniq_vector_t<AcceptTrans>& acc);
+static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx);
+static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const Rule& rule);
 static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n);
 
 static const char* gen_fill_label(Output& output, uint32_t index) {
@@ -53,7 +53,7 @@ static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
     if (!omit_peek) append(stmts, code_peek(alc));
 }
 
-void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts) {
+void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -111,8 +111,11 @@ void emit_action(Output& output, const DFA& dfa, const State* s, CodeList* stmts
     }
 }
 
-static CodeList* emit_accept_binary(
-        Output& output, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc, size_t l, size_t r) {
+static CodeList* emit_accept_binary(Output& output,
+                                    const Adfa& dfa,
+                                    const uniq_vector_t<AcceptTrans>& acc,
+                                    size_t l,
+                                    size_t r) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -151,7 +154,7 @@ static void gen_restore(Output& output, CodeList* stmts) {
 }
 
 void emit_accept(
-        Output& output, CodeList* stmts, const DFA& dfa, const uniq_vector_t<AcceptTrans>& acc) {
+        Output& output, CodeList* stmts, const Adfa& dfa, const uniq_vector_t<AcceptTrans>& acc) {
     const opt_t* opts = output.block().opts;
     const size_t nacc = acc.size();
     OutAllocator& alc = output.allocator;
@@ -260,7 +263,7 @@ static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* nex
     append(stmts, code_stmt(alc, buf.flush()));
 }
 
-void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx) {
+void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx) {
     const opt_t* opts = output.block().opts;
     const Rule& rule = dfa.rules[rule_idx];
     const SemAct* semact = rule.semact;
@@ -322,7 +325,7 @@ void emit_rule(Output& output, CodeList* stmts, const DFA& dfa, size_t rule_idx)
 }
 
 static CodeList* gen_fill_falllback(
-        Output& output, const DFA& dfa, const State* from, const State* to) {
+        Output& output, const Adfa& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
@@ -362,7 +365,7 @@ static CodeList* gen_fill_falllback(
 }
 
 static void gen_fill(
-        Output& output, CodeList* stmts, const DFA& dfa, const State* from, const State* to) {
+        Output& output, CodeList* stmts, const Adfa& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
     const uint32_t fillidx = output.block().fill_index - 1;
@@ -438,7 +441,7 @@ static void gen_fill(
     append(stmts, fill);
 }
 
-void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const State* s) {
+void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa, const State* s) {
     const opt_t* opts = output.block().opts;
 
     const bool need_fill = opts->fill_enable && !endstate(s);
@@ -470,7 +473,7 @@ void gen_fill_and_label(Output& output, CodeList* stmts, const DFA& dfa, const S
 }
 
 void gen_goto(
-        Output& output, const DFA& dfa, CodeList* stmts, const State* from, const CodeJump& jump) {
+        Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -593,7 +596,7 @@ static void gen_restore_ctx(Output& output, CodeList* stmts, const std::string& 
     }
 }
 
-void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t tcid) {
+void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -660,7 +663,7 @@ void gen_settags(Output& output, CodeList* tag_actions, const DFA& dfa, tcid_t t
     }
 }
 
-void gen_fintags(Output& output, CodeList* stmts, const DFA& dfa, const Rule& rule) {
+void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const Rule& rule) {
     const opt_t* opts = output.block().opts;
     const bool generic = opts->api == Api::CUSTOM;
     const std::vector<Tag>& tags = dfa.tags;

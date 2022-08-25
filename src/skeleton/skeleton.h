@@ -28,7 +28,7 @@ namespace re2c {
 class bitmaps_t;
 class Msg;
 class path_t;
-struct DFA;
+struct Adfa;
 struct opt_t;
 struct tcmd_t;
 
@@ -178,8 +178,8 @@ void fprint_default_path(FILE* f, const Skeleton& skel, const path_t& p);
 Ret emit_data(Skeleton& skel) NODISCARD;
 Code* emit_skeleton_prolog(Output& output);
 Code* emit_skeleton_epilog(Output& output);
-void emit_skeleton(Output& output, CodeList* code, DFA& dfa);
-void emit_skeleton_action(Output& output, CodeList* code, const DFA& dfa, size_t rid);
+void emit_skeleton(Output& output, CodeList* code, Adfa& dfa);
+void emit_skeleton_action(Output& output, CodeList* code, const Adfa& dfa, size_t rid);
 
 } // namespace re2c
 

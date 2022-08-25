@@ -22,7 +22,7 @@ static void dump_adfa_range(uint32_t lower, uint32_t upper) {
     }
 }
 
-void dump_adfa(const DFA& dfa) {
+void dump_adfa(const Adfa& dfa) {
     std::map<const State*, uint32_t> st2idx;
     uint32_t idx = 0;
     for (const State* s = dfa.head; s; s = s->next) {

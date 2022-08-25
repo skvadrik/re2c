@@ -310,7 +310,7 @@ static CodeGoCp* code_gocp(OutAllocator& alc,
 }
 
 State* fallback_state_with_eof_rule(
-        const DFA& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
+        const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
     CHECK(opts->fill_eof != NOEOF);
 
     State* fallback = nullptr;
@@ -334,7 +334,7 @@ State* fallback_state_with_eof_rule(
     return fallback;
 }
 
-void code_go(OutAllocator& alc, const DFA& dfa, const opt_t* opts, State* from) {
+void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from) {
     // Mark all states that are targets of `yyaccept` switch to as used.
     if (from->action.kind == Action::Kind::ACCEPT) {
         for (const AcceptTrans& a : *from->action.info.accepts) {

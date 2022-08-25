@@ -105,9 +105,9 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     fillpoints(dfa, fill);
 
     // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
-    DFA* adfa = new DFA(
+    Adfa* adfa = new Adfa(
             std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
-    dfas.push_back(std::unique_ptr<DFA>(adfa));
+    dfas.push_back(std::unique_ptr<Adfa>(adfa));
 
     // see note [reordering DFA states]
     adfa->reorder();

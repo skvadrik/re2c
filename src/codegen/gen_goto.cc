@@ -12,7 +12,7 @@
 
 namespace re2c {
 
-static CodeList* gen_goif(Output& output, const DFA& dfa, const CodeGoIf* go, const State* from);
+static CodeList* gen_goif(Output& output, const Adfa& dfa, const CodeGoIf* go, const State* from);
 
 static const char* gen_cond(Output& output, const CodeCmp* cond) {
     const opt_t* opts = output.block().opts;
@@ -26,7 +26,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     return buf.flush();
 }
 
-static CodeList* gen_gosw(Output& output, const DFA& dfa, const CodeGoSw* go, const State* from) {
+static CodeList* gen_gosw(Output& output, const Adfa& dfa, const CodeGoSw* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -52,7 +52,8 @@ static CodeList* gen_gosw(Output& output, const DFA& dfa, const CodeGoSw* go, co
     return stmts;
 }
 
-static CodeList* gen_goifb(Output& output, const DFA& dfa, const CodeGoIfB* go, const State* from) {
+static CodeList* gen_goifb(
+        Output& output, const Adfa& dfa, const CodeGoIfB* go, const State* from) {
     OutAllocator& alc = output.allocator;
     CodeList* stmts = code_list(alc);
     const char* if_cond = gen_cond(output, go->cond);
@@ -62,7 +63,8 @@ static CodeList* gen_goifb(Output& output, const DFA& dfa, const CodeGoIfB* go, 
     return stmts;
 }
 
-static CodeList* gen_goifl(Output& output, const DFA& dfa, const CodeGoIfL* go, const State* from) {
+static CodeList* gen_goifl(
+        Output& output, const Adfa& dfa, const CodeGoIfL* go, const State* from) {
     OutAllocator& alc = output.allocator;
     CodeList* stmts = code_list(alc);
     for (uint32_t i = 0; i < go->nbranches; ++i) {
@@ -80,20 +82,20 @@ static CodeList* gen_goifl(Output& output, const DFA& dfa, const CodeGoIfL* go, 
     return stmts;
 }
 
-static CodeList* gen_goif(Output& output, const DFA& dfa, const CodeGoIf* go, const State* from) {
+static CodeList* gen_goif(Output& output, const Adfa& dfa, const CodeGoIf* go, const State* from) {
     return go->kind == CodeGoIf::Kind::BINARY
            ? gen_goifb(output, dfa, go->goifb, from)
            : gen_goifl(output, dfa, go->goifl, from);
 }
 
 static CodeList* gen_goswif(
-        Output& output, const DFA& dfa, const CodeGoSwIf* go, const State* from) {
+        Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from) {
     return go->kind == CodeGoSwIf::Kind::SWITCH
            ? gen_gosw(output, dfa, go->gosw, from)
            : gen_goif(output, dfa, go->goif, from);
 }
 
-static CodeList* gen_gobm(Output& output, const DFA& dfa, const CodeGoBm* go, const State* from) {
+static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -170,7 +172,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
     return stmts;
 }
 
-static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, const State* from) {
+static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -195,7 +197,7 @@ static CodeList* gen_gocp(Output& output, const DFA& dfa, const CodeGoCp* go, co
 }
 
 static void gen_godot(
-        Output& output, const DFA& dfa, const CodeGoSw* go, const State* from, CodeList* stmts) {
+        Output& output, const Adfa& dfa, const CodeGoSw* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -236,7 +238,7 @@ static void gen_godot(
     }
 }
 
-void gen_go(Output& output, const DFA& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
+void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 

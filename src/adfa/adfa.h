@@ -76,7 +76,7 @@ struct State {
     FORBID_COPY(State);
 };
 
-struct DFA {
+struct Adfa {
     std::vector<uint32_t> charset;
     std::vector<Rule> rules;
     std::vector<Tag> tags;
@@ -121,17 +121,17 @@ struct DFA {
     Label* start_label;
     Label* initial_label;
 
-    DFA(Tdfa&& dfa,
-        const std::vector<size_t>& fill,
-        size_t key,
-        const loc_t& loc,
-        const std::string& nm,
-        const std::string& cn,
-        const std::string& su,
-        const opt_t* opts,
-        Msg& msg);
+    Adfa(Tdfa&& dfa,
+         const std::vector<size_t>& fill,
+         size_t key,
+         const loc_t& loc,
+         const std::string& nm,
+         const std::string& cn,
+         const std::string& su,
+         const opt_t* opts,
+         Msg& msg);
 
-    ~DFA ();
+    ~Adfa();
     void reorder();
     void prepare(const opt_t* opts);
     Ret calc_stats(OutputBlock& out) NODISCARD;
@@ -144,7 +144,7 @@ struct DFA {
     void hoist_tags(const opt_t* opts);
     void hoist_tags_and_skip(const opt_t* opts);
 
-    FORBID_COPY (DFA);
+    FORBID_COPY(Adfa);
 };
 
 inline void Action::set_initial() {

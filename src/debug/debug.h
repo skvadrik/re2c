@@ -45,7 +45,7 @@ struct dump_dfa_tree_t {
 
 namespace re2c {
 
-struct DFA;
+struct Adfa;
 struct cfg_t;
 struct Tdfa;
 struct Tnfa;
@@ -103,7 +103,7 @@ struct dump_dfa_tree_t {
 
 void dump_nfa(const Tnfa&);
 void dump_dfa(const Tdfa&);
-void dump_adfa(const DFA&);
+void dump_adfa(const Adfa&);
 void dump_cfg(const cfg_t&, const bool*);
 void dump_interf(const cfg_t&, const bool*);
 void dump_tcmd(const tcmd_t*);
