@@ -116,7 +116,7 @@ static void emit_skeleton_defines(Output& output, CodeList* code, const Adfa& df
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-    const size_t sizeof_cunit = opts->encoding.szCodeUnit();
+    const size_t sizeof_cunit = opts->encoding.cunit_size();
     const char* text;
 
     append(code, code_newline(alc));
@@ -491,7 +491,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-    const size_t sizeof_cunit = opts->encoding.szCodeUnit();
+    const size_t sizeof_cunit = opts->encoding.cunit_size();
     std::set<std::string>::const_iterator var1, var2;
     CodeArgs* args;
     CodeList* block, *block2, *if_code, *if1_code;
@@ -552,7 +552,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
         text = o.cstr("for (i = 0; i < input_len; ++i) {").flush();
         append(block, code_text(alc, text));
         block2 = code_list(alc);
-        from_le(output, block2, "input[i]", opts->encoding.szCodeUnit());
+        from_le(output, block2, "input[i]", opts->encoding.cunit_size());
         append(block, code_block(alc, block2, CodeBlock::Kind::INDENTED));
         append(block, code_text(alc, "}"));
         append(block, code_newline(alc));

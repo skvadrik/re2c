@@ -62,16 +62,15 @@ class Enc {
 
     static const char* name(Type t);
 
-    inline uint32_t nCodePoints() const;
-    inline uint32_t nCodeUnits() const;
-    inline uint32_t szCodePoint() const;
-    inline uint32_t szCodeUnit() const;
+    inline uint32_t cpoint_count() const;
+    inline uint32_t cunit_count() const;
+    inline uint32_t cunit_size() const;
     inline bool multibyte_cunit() const;
 
-    uint32_t decodeUnsafe(uint32_t c) const;
-    bool validateChar(uint32_t& c) const;
-    Range* validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const;
-    Range* fullRange(RangeMgr& rm) const;
+    uint32_t decode_unsafe(uint32_t c) const;
+    bool validate_char(uint32_t& c) const;
+    Range* validate_range(RangeMgr& rm, uint32_t l, uint32_t h) const;
+    Range* full_range(RangeMgr& rm) const;
 };
 
 inline const char* Enc::name(Type t) {
@@ -92,7 +91,7 @@ inline const char* Enc::name(Type t) {
     return "<bad encoding>";
 }
 
-inline uint32_t Enc::nCodePoints() const {
+inline uint32_t Enc::cpoint_count() const {
     switch (type_) {
     case Type::ASCII:
     case Type::EBCDIC:
@@ -107,7 +106,7 @@ inline uint32_t Enc::nCodePoints() const {
     return 0;
 }
 
-inline uint32_t Enc::nCodeUnits() const {
+inline uint32_t Enc::cunit_count() const {
     switch (type_) {
     case Type::ASCII:
     case Type::EBCDIC:
@@ -122,23 +121,7 @@ inline uint32_t Enc::nCodeUnits() const {
     return 0;
 }
 
-// returns *maximal* code point size for encoding
-inline uint32_t Enc::szCodePoint() const {
-    switch (type_) {
-    case Type::ASCII:
-    case Type::EBCDIC:
-        return 1;
-    case Type::UCS2:
-        return 2;
-    case Type::UTF16:
-    case Type::UTF32:
-    case Type::UTF8:
-        return 4;
-    }
-    return 0;
-}
-
-inline uint32_t Enc::szCodeUnit() const {
+inline uint32_t Enc::cunit_size() const {
     switch (type_) {
     case Type::ASCII:
     case Type::EBCDIC:

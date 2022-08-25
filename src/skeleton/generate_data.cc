@@ -435,7 +435,7 @@ static void generate_paths_cunit(Skeleton& skel, cover_t& cover) {
 }
 
 static void generate_paths(Skeleton& skel, cover_t& cover) {
-    switch (skel.opts->encoding.szCodeUnit()) {
+    switch (skel.opts->encoding.cunit_size()) {
     case 4:
         generate_paths_cunit<uint32_t>(skel, cover);
         break;

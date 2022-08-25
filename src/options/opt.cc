@@ -292,7 +292,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
             RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "
                            "and -g, --computed gotos"));
         }
-        if (real.fill_eof >= real.encoding.nCodeUnits()) {
+        if (real.fill_eof >= real.encoding.cunit_count()) {
             RET_FAIL(error("EOF exceeds maximum code unit value for given encoding"));
         }
         if (!real.fill_check) {
@@ -300,7 +300,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         }
     }
     if (real.fill_sentinel != NOEOF) {
-        if (real.fill_sentinel >= real.encoding.nCodeUnits()) {
+        if (real.fill_sentinel >= real.encoding.cunit_count()) {
             RET_FAIL(error("sentinel exceeds maximum code unit value for given encoding"));
         }
         if (real.fill_enable || real.fill_eof != NOEOF) {

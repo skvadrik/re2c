@@ -73,7 +73,7 @@ void dump_adfa(const Adfa& dfa) {
             }
         }
 
-        const Span* x = s->go.span, *e = x + s->go.nspans;
+        const Span* x = s->go.span, *e = x + s->go.span_count;
         for (uint32_t lb = 0; x < e; lb = x->ub, ++x) {
             if (!x->to) continue;
 

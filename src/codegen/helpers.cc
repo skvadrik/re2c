@@ -19,11 +19,11 @@ static bool is_space(uint32_t c) {
 }
 
 static inline char hex(uint32_t c) {
-    static const char* sHex = "0123456789ABCDEF";
-    return sHex[c & 0x0F];
+    static const char* HEX_TABLE = "0123456789ABCDEF";
+    return HEX_TABLE[c & 0x0F];
 }
 
-static void prtCh(std::ostream& o, uint32_t c, bool dot) {
+static void print_char(std::ostream& o, uint32_t c, bool dot) {
     switch (c) {
     case '\'':
         o << (dot ? "'"     : "\\'");
@@ -65,7 +65,7 @@ bool is_print(uint32_t c) {
     return c >= 0x20 && c < 0x7F;
 }
 
-void prtHex(std::ostream& o, uint32_t c, uint32_t szcunit) {
+void print_hex(std::ostream& o, uint32_t c, uint32_t szcunit) {
     o << "0x";
 
     if (szcunit >= 4) {
@@ -79,31 +79,31 @@ void prtHex(std::ostream& o, uint32_t c, uint32_t szcunit) {
     o << hex(c >> 4u) << hex(c);
 }
 
-void prtChOrHex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot) {
+void print_char_or_hex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot) {
     if (!hex && (is_print(c) || is_space(c))) {
         o << '\'';
-        prtCh(o, c, dot);
+        print_char(o, c, dot);
         o << '\'';
     } else {
-        prtHex(o, c, szcunit);
+        print_hex(o, c, szcunit);
     }
 }
 
-static void prtChOrHexForSpan(
+static void print_char_for_span(
         std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot) {
     if (!ebcdic && c != ']' && is_print(c)) {
-        prtCh(o, c, dot);
+        print_char(o, c, dot);
     } else {
-        prtHex(o, c, szcunit);
+        print_hex(o, c, szcunit);
     }
 }
 
-void printSpan(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot) {
+void print_span(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot) {
     o << "[";
-    prtChOrHexForSpan(o, l, szcunit, ebcdic, dot);
+    print_char_for_span(o, l, szcunit, ebcdic, dot);
     if (u - l > 1) {
         o << "-";
-        prtChOrHexForSpan(o, u - 1, szcunit, ebcdic, dot);
+        print_char_for_span(o, u - 1, szcunit, ebcdic, dot);
     }
     o << "]";
 }

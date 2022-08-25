@@ -100,7 +100,7 @@ Ret Skeleton::init() {
     mtag_trie_init(tagtrie);
     arc_iters.init(256);
     char_iters.init(256);
-    buf_data.init(opts->encoding.szCodeUnit());
+    buf_data.init(opts->encoding.cunit_size());
     buf_keys.init(sizeof_key);
 
     return Ret::OK;
@@ -112,7 +112,7 @@ Skeleton::~Skeleton() {
     mtag_trie_free(tagtrie);
     arc_iters.free();
     char_iters.free();
-    buf_data.free(opts->encoding.szCodeUnit());
+    buf_data.free(opts->encoding.cunit_size());
     buf_keys.free(sizeof_key);
 }
 

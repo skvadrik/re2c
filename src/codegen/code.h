@@ -213,7 +213,7 @@ struct CodeGo {
     };
 
     Kind kind;
-    uint32_t nspans;
+    uint32_t span_count;
     Span* span;
     tcid_t tags;
     bool skip;

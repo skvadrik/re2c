@@ -10,8 +10,8 @@ namespace re2c {
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
 static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
     const Span
-    *b1 = go1->span, *e1 = &b1[go1->nspans],
-     *b2 = go2->span, *e2 = &b2[go2->nspans];
+    *b1 = go1->span, *e1 = &b1[go1->span_count],
+     *b2 = go2->span, *e2 = &b2[go2->span_count];
     uint32_t lb1 = 0, lb2 = 0;
 
     for (;;) {
@@ -95,7 +95,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
             b->mask = mask;
 
             uint32_t c = 0;
-            const Span* span = b->go->span, *last = span + b->go->nspans;
+            const Span* span = b->go->span, *last = span + b->go->span_count;
             for (; span < last; ++span) {
                 if (span->to == b->state) {
                     for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {

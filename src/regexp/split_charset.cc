@@ -51,7 +51,7 @@ void split_charset(RESpec& spec) {
 
     const opt_t* opts = spec.opts;
     cs.insert(0);
-    cs.insert(opts->encoding.nCodeUnits());
+    cs.insert(opts->encoding.cunit_count());
     if (opts->fill_eof != NOEOF) {
         cs.insert(opts->fill_eof);
         cs.insert(opts->fill_eof + 1);

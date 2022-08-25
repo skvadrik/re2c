@@ -11,8 +11,8 @@ namespace re2c {
 // exceeds maximum allowed value, or if it falls into the surrogates range. In the latter case the
 // current policy determines whether to ignore a surrogate, to replace it, or to fail.
 //
-bool Enc::validateChar(uint32_t& c) const {
-    if (c >= nCodePoints()) return false;
+bool Enc::validate_char(uint32_t& c) const {
+    if (c >= cpoint_count()) return false;
 
     switch (type_) {
     case Type::ASCII:
@@ -39,7 +39,7 @@ bool Enc::validateChar(uint32_t& c) const {
 }
 
 // Returns the  original representation of code point; assumes that the code point is valid.
-uint32_t Enc::decodeUnsafe(uint32_t c) const {
+uint32_t Enc::decode_unsafe(uint32_t c) const {
     switch (type_) {
     case Type::EBCDIC:
         c = ebcdic::ebc2asc[c & 0xFF];
@@ -59,8 +59,8 @@ uint32_t Enc::decodeUnsafe(uint32_t c) const {
 // contains code points that exceed maximum or are forbidden by current policy, otherwise it
 // returns the newly constructed range.
 //
-Range* Enc::validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const {
-    if (l >= nCodePoints () || h >= nCodePoints ()) return nullptr;
+Range* Enc::validate_range(RangeMgr& rm, uint32_t l, uint32_t h) const {
+    if (l >= cpoint_count() || h >= cpoint_count()) return nullptr;
 
     Range* r = nullptr;
     switch (type_) {
@@ -92,8 +92,8 @@ Range* Enc::validateRange(RangeMgr& rm, uint32_t l, uint32_t h) const {
     return r;
 }
 
-Range* Enc::fullRange(RangeMgr& rm) const {
-    Range* r = rm.ran(0, nCodePoints());
+Range* Enc::full_range(RangeMgr& rm) const {
+    Range* r = rm.ran(0, cpoint_count());
     if (policy_ != Policy::IGNORE) {
         // exclude surrogates
         r = rm.sub(r, rm.ran (SURR_MIN, SURR_MAX + 1));

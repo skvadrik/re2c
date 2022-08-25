@@ -216,7 +216,7 @@ static void render_number(RenderContext& rctx, int64_t num, VarType type) {
         break;
     case VarType::YYCTYPE:
         DCHECK(num >= 0);
-        prtChOrHex(os, static_cast<uint32_t>(num), enc.szCodeUnit(), hex, /*dot*/ false);
+        print_char_or_hex(os, static_cast<uint32_t>(num), enc.cunit_size(), hex, /*dot*/ false);
         break;
     }
 }
@@ -237,7 +237,7 @@ static void render_case_range(
             os << " ... ";
             render_number(rctx, upp, type);
         } else if (opts->debug && type == VarType::YYCTYPE && enc.type() == Enc::Type::EBCDIC) {
-            uint32_t c = enc.decodeUnsafe(static_cast<uint32_t>(low));
+            uint32_t c = enc.decode_unsafe(static_cast<uint32_t>(low));
             if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }
         os << ":";

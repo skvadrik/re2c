@@ -176,7 +176,7 @@ LOCAL_NODISCARD(Ret char_to_range(RESpec& spec, const AstChar& chr, bool icase, 
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = chr.chr;
 
-    if (!spec.opts->encoding.validateChar(c)) {
+    if (!spec.opts->encoding.validate_char(c)) {
         RET_FAIL(spec.msg.error(chr.loc, "bad code point: '0x%X'", c));
     }
 
@@ -191,7 +191,7 @@ LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range** prang
     Range *r = nullptr;
 
     for (const AstRange& a : ast->cls.ranges) {
-        Range* s = spec.opts->encoding.validateRange(rm, a.lower, a.upper);
+        Range* s = spec.opts->encoding.validate_range(rm, a.lower, a.upper);
         if (!s) {
             RET_FAIL(spec.msg.error(a.loc,
                                     "bad code point range: '0x%X - 0x%X'", a.lower, a.upper));
@@ -200,7 +200,7 @@ LOCAL_NODISCARD(Ret cls_to_range(RESpec& spec, const AstNode* ast, Range** prang
     }
 
     if (ast->cls.negated) {
-        r = rm.sub(spec.opts->encoding.fullRange(rm), r);
+        r = rm.sub(spec.opts->encoding.full_range(rm), r);
     }
 
     *prange = r;
@@ -212,11 +212,11 @@ LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range** prang
     RangeMgr& rm = spec.rangemgr;
     uint32_t c = '\n';
 
-    if (!spec.opts->encoding.validateChar(c)) {
+    if (!spec.opts->encoding.validate_char(c)) {
         RET_FAIL(spec.msg.error(ast->loc, "bad code point: '0x%X'", c));
     }
 
-    *prange = rm.sub(spec.opts->encoding.fullRange(rm), rm.sym(c));
+    *prange = rm.sub(spec.opts->encoding.full_range(rm), rm.sym(c));
     return Ret::OK;
 }
 
@@ -407,7 +407,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::DEF: // see note [default regexp]
-            range = spec.rangemgr.ran(0, opts->encoding.nCodeUnits());
+            range = spec.rangemgr.ran(0, opts->encoding.cunit_count());
             re = re_sym(spec, range);
             stack.pop_back();
             break;

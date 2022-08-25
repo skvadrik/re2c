@@ -207,9 +207,9 @@ void gen_code(Output& output, dfas_t& dfas) {
         const bool first = (dfa == first_dfa);
 
         if (opts->bitmaps) {
-            dfa->bitmap = code_bitmap(alc, std::min(dfa->ubChar, 256u));
+            dfa->bitmap = code_bitmap(alc, std::min(dfa->upper_char, 256u));
             for (State* s = dfa->head; s; s = s->next) {
-                if (s->isBase) {
+                if (s->is_base) {
                     DCHECK(s->next);
                     insert_bitmap(alc, dfa->bitmap, &s->next->go, s);
                 }

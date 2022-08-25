@@ -24,13 +24,13 @@ static bool is_eof(uint32_t eof, uint32_t ub) {
 }
 
 static CodeGoSw* code_gosw(
-        OutAllocator& alc, const Span* spans, uint32_t nspans, bool skip, uint32_t eof) {
+        OutAllocator& alc, const Span* spans, uint32_t span_count, bool skip, uint32_t eof) {
     CodeGoSw* go = alc.alloct<CodeGoSw>(1);
-    go->cases = alc.alloct<CodeGoCase>(nspans);
+    go->cases = alc.alloct<CodeGoCase>(span_count);
 
-    int64_t* ranges = alc.alloct<int64_t>(nspans * 2), *ranges_end = ranges;
+    int64_t* ranges = alc.alloct<int64_t>(span_count * 2), *ranges_end = ranges;
     CodeGoCase* cases = go->cases, *c;
-    const Span* span = spans, *endspan = span + nspans, *s;
+    const Span* span = spans, *endspan = span + span_count, *s;
 
     for (; span < endspan; ++span) {
         State* to = span->to;
@@ -71,11 +71,11 @@ static CodeGoSw* code_gosw(
         }
     }
 
-    DCHECK(static_cast<uint32_t>(ranges_end - ranges) == 2 * nspans);
+    DCHECK(static_cast<uint32_t>(ranges_end - ranges) == 2 * span_count);
     go->ncases = static_cast<uint32_t>(cases - go->cases);
 
     // find default case
-    DCHECK(nspans > 0);
+    DCHECK(span_count > 0);
     State* defstate = (endspan - 1)->to;
     for (c = go->cases; c < cases; ++c) {
         if (c->jump.to == defstate) {
@@ -254,9 +254,9 @@ static uint32_t unmap(Span* new_span, const Span* old_span, uint32_t old_nspans,
 
 static CodeGoBm* code_gobm(OutAllocator& alc,
                            const Span* span,
-                           uint32_t nSpans,
+                           uint32_t span_count,
                            const Span* hspan,
-                           uint32_t hSpans,
+                           uint32_t hspan_count,
                            const CodeBmState* bm,
                            State* next,
                            uint32_t eof,
@@ -266,25 +266,26 @@ static CodeGoBm* code_gobm(OutAllocator& alc,
     x->hgo = nullptr;
     x->lgo = nullptr;
 
-    Span* bspan = allocate<Span>(nSpans); // temporary
-    uint32_t bSpans = unmap (bspan, span, nSpans, bm->state);
-    x->lgo = bSpans == 0 ? nullptr : code_goswif(alc, bspan, bSpans, next, false, eof, opts);
+    Span* bspan = allocate<Span>(span_count); // temporary
+    uint32_t bspan_count = unmap (bspan, span, span_count, bm->state);
+    x->lgo = bspan_count == 0 ? nullptr
+            : code_goswif(alc, bspan, bspan_count, next, false, eof, opts);
     // If there are any low spans, then next state for high spans must be NULL to trigger explicit
     // goto generation in linear `if`.
-    x->hgo = hSpans == 0 ? nullptr
-             : code_goswif(alc, hspan, hSpans, x->lgo ? nullptr : next, false, eof, opts);
+    x->hgo = hspan_count == 0 ? nullptr
+            : code_goswif(alc, hspan, hspan_count, x->lgo ? nullptr : next, false, eof, opts);
     x->bitmap->state->label->used = true;
     operator delete(bspan);
 
     return x;
 }
 
-static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint32_t nSpans) {
+static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint32_t span_count) {
     CodeGoCpTable* x = alc.alloct<CodeGoCpTable>(1);
     x->table = alc.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
 
     uint32_t c = 0;
-    for (uint32_t i = 0; i < nSpans; ++i) {
+    for (uint32_t i = 0; i < span_count; ++i) {
         for(; c < span[i].ub && c < CodeGoCpTable::TABLE_SIZE; ++c) {
             State* to = span[i].to;
             x->table[c] = to;
@@ -297,15 +298,16 @@ static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint3
 
 static CodeGoCp* code_gocp(OutAllocator& alc,
                            const Span* span,
-                           uint32_t nSpans,
+                           uint32_t span_count,
                            const Span* hspan,
-                           uint32_t hSpans,
+                           uint32_t hspan_count,
                            State* next,
                            uint32_t eof,
                            const opt_t* opts) {
     CodeGoCp* x = alc.alloct<CodeGoCp>(1);
-    x->hgo = hSpans == 0 ? nullptr : code_goswif(alc, hspan, hSpans, next, false, eof, opts);
-    x->table = code_gocp_table(alc, span, nSpans);
+    x->hgo = hspan_count == 0 ? nullptr
+            : code_goswif(alc, hspan, hspan_count, next, false, eof, opts);
+    x->table = code_gocp_table(alc, span, span_count);
     return x;
 }
 
@@ -345,10 +347,10 @@ void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from)
     CodeGo* go = &from->go;
     Span* span = go->span;
 
-    if (go->nspans == 0) return;
+    if (go->span_count == 0) return;
 
     // With end-of-input rule $, mark states that are targets of fallback transitions as used.
-    if (opts->fill_eof != NOEOF && !(go->nspans == 1 && from->next == span[0].to)) {
+    if (opts->fill_eof != NOEOF && !(go->span_count == 1 && from->next == span[0].to)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
     }
@@ -357,18 +359,18 @@ void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from)
     if (opts->target == Target::DOT) from->label->used = true;
 
     // initialize high (wide) spans
-    uint32_t hSpans = 0;
+    uint32_t hspan_count = 0;
     const Span* hspan = nullptr;
-    for (uint32_t i = 0; i < go->nspans; ++i) {
+    for (uint32_t i = 0; i < go->span_count; ++i) {
         if (span[i].ub > 0x100) {
             hspan = &go->span[i];
-            hSpans = go->nspans - i;
+            hspan_count = go->span_count - i;
             break;
         }
     }
 
     bool low_spans_have_tags = false;
-    for (uint32_t i = 0; i < go->nspans - hSpans; ++i) {
+    for (uint32_t i = 0; i < go->span_count - hspan_count; ++i) {
         if (go->span[i].tags != TCID0) {
             low_spans_have_tags = true;
             break;
@@ -376,51 +378,53 @@ void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from)
     }
 
     // initialize bitmaps
-    uint32_t nBitmaps = 0;
+    uint32_t bitmap_count = 0;
     const CodeBmState* bm = nullptr;
     if (opts->bitmaps) {
-        for (uint32_t i = 0; i < go->nspans; ++i) {
+        for (uint32_t i = 0; i < go->span_count; ++i) {
             State* s = go->span[i].to;
-            if (!s->isBase) continue;
+            if (!s->is_base) continue;
 
             const CodeBmState* b = find_bitmap(dfa.bitmap, go, s);
             if (b) {
                 if (bm == nullptr) {
                     bm = b;
                 }
-                ++nBitmaps;
+                ++bitmap_count;
             }
         }
     }
 
     // only do EOF check in states that dispatch on symbol
-    const uint32_t eof = from->go.nspans == 1 && !consume(from->go.span[0].to)
+    const uint32_t eof = from->go.span_count == 1 && !consume(from->go.span[0].to)
             ? NOEOF : opts->fill_eof;
-    const uint32_t dSpans = go->nspans - hSpans - nBitmaps;
+    const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
     const bool part_skip = opts->eager_skip && !go->skip;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
-        go->godot = code_gosw(alc, go->span, go->nspans, false, eof);
+        go->godot = code_gosw(alc, go->span, go->span_count, false, eof);
     } else if (opts->cgoto
                && !part_skip
-               && dSpans >= opts->cgoto_threshold
+               && dspan_count >= opts->cgoto_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CPGOTO;
-        go->gocp = code_gocp(alc, go->span, go->nspans, hspan, hSpans, from->next, eof, opts);
-    } else if (opts->bitmaps && !part_skip && nBitmaps > 0) {
+        go->gocp = code_gocp(
+                alc, go->span, go->span_count, hspan, hspan_count, from->next, eof, opts);
+    } else if (opts->bitmaps && !part_skip && bitmap_count > 0) {
         go->kind = CodeGo::Kind::BITMAP;
-        go->gobm = code_gobm(alc, go->span, go->nspans, hspan, hSpans, bm, from->next, eof, opts);
+        go->gobm = code_gobm(
+                alc, go->span, go->span_count, hspan, hspan_count, bm, from->next, eof, opts);
         dfa.bitmap->used = true;
     } else {
         go->kind = CodeGo::Kind::SWITCH_IF;
-        go->goswif = code_goswif(alc, go->span, go->nspans, from->next, part_skip, eof, opts);
+        go->goswif = code_goswif(alc, go->span, go->span_count, from->next, part_skip, eof, opts);
     }
 }
 
 void init_go(CodeGo* go) {
     go->kind = CodeGo::Kind::EMPTY;
-    go->nspans = 0;
+    go->span_count = 0;
     go->span = nullptr;
     go->tags = TCID0;
     go->skip = false;

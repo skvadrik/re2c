@@ -282,7 +282,7 @@ void output_version_time(std::ostream& os, const opt_t* opts) {
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {
     if (opts->bitmaps_hex) {
-        prtHex(os, u, opts->encoding.szCodeUnit());
+        print_hex(os, u, opts->encoding.cunit_size());
     } else {
         u32_width(u, width);
     }

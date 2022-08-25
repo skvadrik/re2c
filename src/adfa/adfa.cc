@@ -48,9 +48,9 @@ Adfa::Adfa(Tdfa&& dfa,
 
       accepts(),
 
-      lbChar(0),
-      ubChar(charset.back()),
-      nStates(0),
+      lower_char(0),
+      upper_char(charset.back()),
+      state_count(0),
       head(nullptr),
       defstate(nullptr),
       eof_state(nullptr),
@@ -90,7 +90,7 @@ Adfa::Adfa(Tdfa&& dfa,
         TdfaState* t = dfa.states[i];
         State* s = i2s[i];
 
-        ++nStates;
+        ++state_count;
         *p = s;
         p = &s->next;
 
@@ -120,7 +120,7 @@ Adfa::Adfa(Tdfa&& dfa,
             s->go.span[j].ub = charset[c];
             s->go.span[j].tags = tc;
         }
-        s->go.nspans = j;
+        s->go.span_count = j;
     }
     *p = nullptr;
 
@@ -152,7 +152,7 @@ Adfa::~Adfa() {
 
 void Adfa::reorder() {
     std::vector<State*> ord;
-    ord.reserve(nStates);
+    ord.reserve(state_count);
 
     std::queue<State*> todo;
     todo.push(head);
@@ -164,7 +164,7 @@ void Adfa::reorder() {
         State* s = todo.front();
         todo.pop();
         ord.push_back(s);
-        for (uint32_t i = 0; i < s->go.nspans; ++i) {
+        for (uint32_t i = 0; i < s->go.span_count; ++i) {
             State* q = s->go.span[i].to;
             if(q && done.insert(q).second) {
                 todo.push(q);
@@ -172,16 +172,16 @@ void Adfa::reorder() {
         }
     }
 
-    DCHECK(nStates == ord.size());
+    DCHECK(state_count == ord.size());
 
     ord.push_back(nullptr);
-    for (uint32_t i = 0; i < nStates; ++i) {
+    for (uint32_t i = 0; i < state_count; ++i) {
         ord[i]->next = ord[i + 1];
     }
 }
 
-void Adfa::addState(State* s, State* next) {
-    ++nStates;
+void Adfa::add_state(State* s, State* next) {
+    ++state_count;
     s->next = next->next;
     s->prev = next;
     next->next = s;
@@ -190,7 +190,7 @@ void Adfa::addState(State* s, State* next) {
 
 void Adfa::split(State* s) {
     State* move = new State;
-    addState(move, s);
+    add_state(move, s);
     move->action.set_move();
     move->rule = s->rule;
     move->fill = s->fill; // used by tunneling, ignored by codegen
@@ -199,9 +199,9 @@ void Adfa::split(State* s) {
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
     s->rule = Rule::NONE;
-    s->go.nspans = 1;
+    s->go.span_count = 1;
     s->go.span = allocate<Span>(1);
-    s->go.span[0].ub = ubChar;
+    s->go.span[0].ub = upper_char;
     s->go.span[0].to = move;
     s->go.span[0].tags = TCID0;
 }
@@ -209,8 +209,8 @@ void Adfa::split(State* s) {
 static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
     Span* f = fg->go.span;
     Span* b = bg->go.span;
-    Span* const fe = f + fg->go.nspans;
-    Span* const be = b + bg->go.nspans;
+    Span* const fe = f + fg->go.span_count;
+    Span* const be = b + bg->go.span_count;
     Span* const x0 = x;
     const uint32_t eofub = opts->fill_eof + 1;
 
@@ -249,23 +249,23 @@ static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
     return static_cast<uint32_t>(x - x0);
 }
 
-void Adfa::findBaseState(const opt_t* opts) {
-    Span* span = allocate<Span>(ubChar - lbChar);
+void Adfa::find_base_state(const opt_t* opts) {
+    Span* span = allocate<Span>(upper_char - lower_char);
 
     for (State* s = head; s; s = s->next) {
         if (s->fill == 0) {
-            for (uint32_t i = 0; i < s->go.nspans; ++i) {
+            for (uint32_t i = 0; i < s->go.span_count; ++i) {
                 State* to = s->go.span[i].to;
 
-                if (to->isBase) {
+                if (to->is_base) {
                     to = to->go.span[0].to;
-                    uint32_t nspans = merge(span, s, to, opts);
+                    uint32_t span_count = merge(span, s, to, opts);
 
-                    if (nspans < s->go.nspans) {
+                    if (span_count < s->go.span_count) {
                         operator delete(s->go.span);
-                        s->go.nspans = nspans;
-                        s->go.span = allocate<Span>(nspans);
-                        memcpy(s->go.span, span, nspans * sizeof(Span));
+                        s->go.span_count = span_count;
+                        s->go.span = allocate<Span>(span_count);
+                        memcpy(s->go.span, span, span_count * sizeof(Span));
                         break;
                     }
                 }
@@ -308,9 +308,9 @@ void Adfa::prepare(const opt_t* opts) {
                 }
                 n->action.set_rule(s->rule);
                 finstates[s->rule] = n;
-                addState(n, s);
+                add_state(n, s);
             }
-            for (uint32_t i = 0; i < s->go.nspans; ++i) {
+            for (uint32_t i = 0; i < s->go.span_count; ++i) {
                 if (!s->go.span[i].to) {
                     s->go.span[i].to = finstates[s->rule];
                     s->go.span[i].tags = s->rule_tags;
@@ -323,7 +323,7 @@ void Adfa::prepare(const opt_t* opts) {
             eof_state = new State;
             eof_state->action.set_rule(eof_rule);
             finstates[eof_rule] = eof_state;
-            addState(eof_state, s);
+            add_state(eof_state, s);
             break;
         }
     }
@@ -331,11 +331,11 @@ void Adfa::prepare(const opt_t* opts) {
     // create default state (if needed)
     State* default_state = nullptr;
     for (State* s = head; s; s = s->next) {
-        for (uint32_t i = 0; i < s->go.nspans; ++i) {
+        for (uint32_t i = 0; i < s->go.span_count; ++i) {
             if (!s->go.span[i].to) {
                 if (!default_state) {
                     default_state = defstate = new State;
-                    addState(default_state, s);
+                    add_state(default_state, s);
                 }
                 s->go.span[i].to = defstate;
             }
@@ -353,7 +353,7 @@ void Adfa::prepare(const opt_t* opts) {
 
             if (!s->next && have_fallback_states) {
                 default_state = defstate = new State;
-                addState(default_state, s);
+                add_state(default_state, s);
                 break;
             }
         }
@@ -378,12 +378,12 @@ void Adfa::prepare(const opt_t* opts) {
 
     // split ``base'' states into two parts
     for (State* s = head; s; s = s->next) {
-        s->isBase = false;
+        s->is_base = false;
 
         if (s->fill != 0) {
-            for (uint32_t i = 0; i < s->go.nspans; ++i) {
+            for (uint32_t i = 0; i < s->go.span_count; ++i) {
                 if (s->go.span[i].to == s) {
-                    s->isBase = true;
+                    s->is_base = true;
                     split(s);
                     s = s->next;
                     break;
@@ -392,7 +392,7 @@ void Adfa::prepare(const opt_t* opts) {
         }
     }
     // find ``base'' state, if possible
-    findBaseState(opts);
+    find_base_state(opts);
 
     // see note [tag hoisting, skip hoisting and tunneling]
     if (opts->eager_skip) {
@@ -463,7 +463,7 @@ Ret Adfa::calc_stats(OutputBlock& out) {
 
 static bool can_hoist_tags(const State* s, const opt_t* opts) {
     Span* span = s->go.span;
-    const size_t nspan = s->go.nspans;
+    const size_t nspan = s->go.span_count;
     DCHECK(nspan != 0);
 
     if (nspan == 1 && s->rule != Rule::NONE) return false;
@@ -491,7 +491,7 @@ static bool can_hoist_tags(const State* s, const opt_t* opts) {
 
 static bool can_hoist_skip(const State* s, const opt_t* opts) {
     Span* span = s->go.span;
-    const size_t nspan = s->go.nspans;
+    const size_t nspan = s->go.span_count;
 
     // If the end-of-input rule $ is used, skip cannot be hoisted because the lexer may need to
     // rescan the current input character after YYFILL, and skip operation will be applied twice.
@@ -508,7 +508,7 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
 void Adfa::hoist_tags(const opt_t* opts) {
     for(State* s = head; s; s = s->next) {
         Span* span = s->go.span;
-        const size_t nspan = s->go.nspans;
+        const size_t nspan = s->go.span_count;
         if (nspan == 0) continue;
 
         if (can_hoist_tags(s, opts)) {
@@ -525,7 +525,7 @@ void Adfa::hoist_tags_and_skip(const opt_t* opts) {
 
     for (State* s = head; s; s = s->next) {
         Span* span = s->go.span;
-        const size_t nspan = s->go.nspans;
+        const size_t nspan = s->go.span_count;
         if (nspan == 0) continue;
 
         // hoist tags if possible

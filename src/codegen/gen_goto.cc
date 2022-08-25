@@ -18,11 +18,11 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
     buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
-    prtChOrHex(buf.stream(),
-               cond->val,
-               opts->encoding.szCodeUnit(),
-               opts->lang == Lang::RUST || opts->encoding.type() == Enc::Type::EBCDIC,
-               opts->target == Target::DOT);
+    print_char_or_hex(buf.stream(),
+                      cond->val,
+                      opts->encoding.cunit_size(),
+                      opts->lang == Lang::RUST || opts->encoding.type() == Enc::Type::EBCDIC,
+                      opts->target == Target::DOT);
     return buf.flush();
 }
 
@@ -215,12 +215,12 @@ static void gen_godot(
             const Enc& enc = opts->encoding;
             const int64_t* ranges = c->ranges->elems;
             for (uint32_t i = 0; i < c->ranges->size; ++i) {
-                printSpan(o.stream(),
-                          static_cast<uint32_t>(ranges[2 * i]),
-                          static_cast<uint32_t>(ranges[2 * i + 1]),
-                          enc.szCodeUnit(),
-                          enc.type() == Enc::Type::EBCDIC,
-                          true);
+                print_span(o.stream(),
+                           static_cast<uint32_t>(ranges[2 * i]),
+                           static_cast<uint32_t>(ranges[2 * i + 1]),
+                           enc.cunit_size(),
+                           enc.type() == Enc::Type::EBCDIC,
+                           true);
             }
 
             const tcmd_t* cmd = dfa.tcpool[c->jump.tags];

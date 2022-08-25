@@ -39,9 +39,9 @@ static bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
     // are final states (not all final states are 'end' states), but sometimes it be initial
     // non-accepting state, e.g. in case of rule '[]'.
-    DCHECK(s->go.nspans > 0);
+    DCHECK(s->go.span_count > 0);
     Action::Kind a = s->go.span[0].to->action.kind;
-    return s->go.nspans == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
+    return s->go.span_count == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
 }
 
 static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
@@ -49,7 +49,7 @@ static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
     // happen if there is a single transition which does not require matching on `yych` (one
     // exception is a transition to a move state, which doesn't have its own YYPEEK and relies on
     // the previous value of `yych`).
-    bool omit_peek = s->go.nspans == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE;
+    bool omit_peek = s->go.span_count == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE;
     if (!omit_peek) append(stmts, code_peek(alc));
 }
 

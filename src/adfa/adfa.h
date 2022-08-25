@@ -67,7 +67,7 @@ struct State {
     size_t rule;
     tcid_t rule_tags;
     tcid_t fall_tags;
-    bool isBase;
+    bool is_base;
     CodeGo go;
     Action action;
 
@@ -92,9 +92,9 @@ struct Adfa {
 
     uniq_vector_t<AcceptTrans> accepts;
 
-    uint32_t lbChar;
-    uint32_t ubChar;
-    uint32_t nStates;
+    uint32_t lower_char;
+    uint32_t upper_char;
+    uint32_t state_count;
     State* head;
     State* defstate;
     State* eof_state;
@@ -138,9 +138,9 @@ struct Adfa {
     void emit_dot(Output& output, CodeList* program) const;
 
   private:
-    void addState(State*, State*);
+    void add_state(State*, State*);
     void split(State*);
-    void findBaseState(const opt_t* opts);
+    void find_base_state(const opt_t* opts);
     void hoist_tags(const opt_t* opts);
     void hoist_tags_and_skip(const opt_t* opts);
 
@@ -194,7 +194,7 @@ inline State::State()
       rule(Rule::NONE),
       rule_tags(TCID0),
       fall_tags(TCID0),
-      isBase(false),
+      is_base(false),
       go(),
       action() {
     init_go(&go);
