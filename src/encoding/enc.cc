@@ -96,7 +96,7 @@ Range* Enc::full_range(RangeMgr& rm) const {
     Range* r = rm.ran(0, cpoint_count());
     if (policy_ != Policy::IGNORE) {
         // exclude surrogates
-        r = rm.sub(r, rm.ran (SURR_MIN, SURR_MAX + 1));
+        r = rm.sub(r, rm.ran(SURR_MIN, SURR_MAX + 1));
     }
     return r;
 }

@@ -63,8 +63,8 @@ opt:
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
 
-    "-W"      end { msg.warn.set_all ();       goto opt; }
-    "-Werror" end { msg.warn.set_all_error (); goto opt; }
+    "-W"      end { msg.warn.set_all();       goto opt; }
+    "-Werror" end { msg.warn.set_all_error(); goto opt; }
     "-W"          { option = Warn::W;        goto opt_warn; }
     "-Wno-"       { option = Warn::WNO;      goto opt_warn; }
     "-Werror-"    { option = Warn::WERROR;   goto opt_warn; }
@@ -74,15 +74,15 @@ opt:
 opt_warn: /*!local:re2c
     * { RET_FAIL(error("bad warning: %s", *argv)); }
 
-    "condition-order"        end { msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
-    "empty-character-class"  end { msg.warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
-    "match-empty-string"     end { msg.warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
-    "nondeterministic-tags"  end { msg.warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
-    "swapped-range"          end { msg.warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
-    "undefined-control-flow" end { msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
-    "unreachable-rules"      end { msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
-    "useless-escape"         end { msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
-    "sentinel-in-midrule"    end { msg.warn.set (Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
+    "condition-order"        end { msg.warn.set(Warn::CONDITION_ORDER,        option); goto opt; }
+    "empty-character-class"  end { msg.warn.set(Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
+    "match-empty-string"     end { msg.warn.set(Warn::MATCH_EMPTY_STRING,     option); goto opt; }
+    "nondeterministic-tags"  end { msg.warn.set(Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
+    "swapped-range"          end { msg.warn.set(Warn::SWAPPED_RANGE,          option); goto opt; }
+    "undefined-control-flow" end { msg.warn.set(Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+    "unreachable-rules"      end { msg.warn.set(Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "useless-escape"         end { msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
+    "sentinel-in-midrule"    end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 */
 
 opt_short: /*!local:re2c

@@ -10,8 +10,8 @@ namespace re2c {
 template<uint32_t LIMIT>
 class u32lim_t {
     uint32_t value;
-    explicit u32lim_t(uint32_t x): value (x < LIMIT ? x : LIMIT) {}
-    explicit u32lim_t(uint64_t x): value (x < LIMIT ? static_cast<uint32_t> (x) : LIMIT) {}
+    explicit u32lim_t(uint32_t x): value(x < LIMIT ? x : LIMIT) {}
+    explicit u32lim_t(uint64_t x): value(x < LIMIT ? static_cast<uint32_t>(x) : LIMIT) {}
 
   public:
     // Implicit conversion is forbidden, because operands should be converted before operation:
@@ -21,21 +21,21 @@ class u32lim_t {
     static u32lim_t from32(uint32_t x) { return u32lim_t(x); }
     static u32lim_t from64(uint64_t x) { return u32lim_t(x); }
 
-    static u32lim_t limit() { return u32lim_t (LIMIT); }
+    static u32lim_t limit() { return u32lim_t(LIMIT); }
 
     uint32_t uint32() const { return value; }
 
-    bool overflow () const {
+    bool overflow() const {
         return value == LIMIT;
     }
 
     friend u32lim_t operator+(u32lim_t x, u32lim_t y) {
-        const uint64_t z = static_cast<uint64_t> (x.value) + static_cast<uint64_t> (y.value);
+        const uint64_t z = static_cast<uint64_t>(x.value) + static_cast<uint64_t>(y.value);
         return z < LIMIT ? u32lim_t(z): u32lim_t(LIMIT);
     }
 
     friend u32lim_t operator * (u32lim_t x, u32lim_t y) {
-        const uint64_t z = static_cast<uint64_t> (x.value) * static_cast<uint64_t> (y.value);
+        const uint64_t z = static_cast<uint64_t>(x.value) * static_cast<uint64_t>(y.value);
         return z < LIMIT ? u32lim_t(z) : u32lim_t(LIMIT);
     }
 

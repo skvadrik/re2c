@@ -151,7 +151,7 @@ yy9:
 yy10:
 	++YYCURSOR;
 #line 66 "../src/options/parse_opts.re"
-	{ msg.warn.set_all ();       goto opt; }
+	{ msg.warn.set_all();       goto opt; }
 #line 156 "src/options/parse_opts.cc"
 yy11:
 	yych = *++YYCURSOR;
@@ -207,7 +207,7 @@ yy22:
 yy23:
 	++YYCURSOR;
 #line 67 "../src/options/parse_opts.re"
-	{ msg.warn.set_all_error (); goto opt; }
+	{ msg.warn.set_all_error(); goto opt; }
 #line 212 "src/options/parse_opts.cc"
 yy24:
 	++YYCURSOR;
@@ -729,7 +729,7 @@ yy147:
 yy148:
 	++YYCURSOR;
 #line 81 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::SWAPPED_RANGE,          option); goto opt; }
+	{ msg.warn.set(Warn::SWAPPED_RANGE,          option); goto opt; }
 #line 734 "src/options/parse_opts.cc"
 yy149:
 	yych = *++YYCURSOR;
@@ -774,12 +774,12 @@ yy158:
 yy159:
 	++YYCURSOR;
 #line 84 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::USELESS_ESCAPE,         option); goto opt; }
+	{ msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
 #line 779 "src/options/parse_opts.cc"
 yy160:
 	++YYCURSOR;
 #line 77 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::CONDITION_ORDER,        option); goto opt; }
+	{ msg.warn.set(Warn::CONDITION_ORDER,        option); goto opt; }
 #line 784 "src/options/parse_opts.cc"
 yy161:
 	yych = *++YYCURSOR;
@@ -852,7 +852,7 @@ yy177:
 yy178:
 	++YYCURSOR;
 #line 83 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::UNREACHABLE_RULES,      option); goto opt; }
+	{ msg.warn.set(Warn::UNREACHABLE_RULES,      option); goto opt; }
 #line 857 "src/options/parse_opts.cc"
 yy179:
 	yych = *++YYCURSOR;
@@ -861,7 +861,7 @@ yy179:
 yy180:
 	++YYCURSOR;
 #line 79 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::MATCH_EMPTY_STRING,     option); goto opt; }
+	{ msg.warn.set(Warn::MATCH_EMPTY_STRING,     option); goto opt; }
 #line 866 "src/options/parse_opts.cc"
 yy181:
 	yych = *++YYCURSOR;
@@ -886,7 +886,7 @@ yy185:
 yy186:
 	++YYCURSOR;
 #line 85 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
+	{ msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 #line 891 "src/options/parse_opts.cc"
 yy187:
 	yych = *++YYCURSOR;
@@ -907,19 +907,19 @@ yy190:
 yy191:
 	++YYCURSOR;
 #line 78 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
+	{ msg.warn.set(Warn::EMPTY_CHARACTER_CLASS,  option); goto opt; }
 #line 912 "src/options/parse_opts.cc"
 yy192:
 	++YYCURSOR;
 #line 80 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
+	{ msg.warn.set(Warn::NONDETERMINISTIC_TAGS,  option); goto opt; }
 #line 917 "src/options/parse_opts.cc"
 yy193:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy36;
 	++YYCURSOR;
 #line 82 "../src/options/parse_opts.re"
-	{ msg.warn.set (Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
+	{ msg.warn.set(Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
 #line 924 "src/options/parse_opts.cc"
 }
 #line 86 "../src/options/parse_opts.re"

@@ -17,7 +17,7 @@ struct RangeSuffix {
     RangeSuffix* next;
     RangeSuffix* child;
 
-    FORBID_COPY (RangeSuffix);
+    FORBID_COPY(RangeSuffix);
 };
 
 template<typename Allocator>

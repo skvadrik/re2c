@@ -721,17 +721,17 @@ struct Output {
     explicit Output(Msg& msg);
     ~Output();
     OutputBlock& block();
-    bool open ();
+    bool open();
     Ret new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) NODISCARD;
     void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
     void wraw(const uint8_t* s, const uint8_t* e, bool newline = false);
-    void wversion_time ();
+    void wversion_time();
     void wdelay_stmt(uint32_t ind, Code* code);
     Ret emit() NODISCARD;
     Ret emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) NODISCARD;
-    FORBID_COPY (Output);
+    FORBID_COPY(Output);
 };
 
 void init_go(CodeGo* go);

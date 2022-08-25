@@ -99,7 +99,7 @@ class Scanner: private ScannerState {
 
     uint32_t decode(const uint8_t* str) const;
 
-    FORBID_COPY (Scanner);
+    FORBID_COPY(Scanner);
 };
 
 inline Scanner::Scanner(const conopt_t* o, Msg& m)
