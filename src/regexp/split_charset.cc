@@ -17,33 +17,33 @@ namespace re2c {
 //
 void split_charset(RESpec& spec) {
     std::set<uint32_t> cs;
-    std::stack<const RE*> todo;
+    std::stack<const Regexp*> todo;
 
-    for (const RE* re : spec.res) {
+    for (const Regexp* re : spec.res) {
         todo.push(re);
     }
 
     while (!todo.empty()) {
-        const RE* re = todo.top();
+        const Regexp* re = todo.top();
         todo.pop();
         switch (re->kind) {
-        case RE::Kind::NIL: break;
-        case RE::Kind::TAG: break;
-        case RE::Kind::SYM:
+        case Regexp::Kind::NIL: break;
+        case Regexp::Kind::TAG: break;
+        case Regexp::Kind::SYM:
             for (const Range* r = re->sym; r; r = r->next()) {
                 cs.insert(r->lower());
                 cs.insert(r->upper());
             }
             break;
-        case RE::Kind::ALT:
+        case Regexp::Kind::ALT:
             todo.push(re->alt.re2);
             todo.push(re->alt.re1);
             break;
-        case RE::Kind::CAT:
+        case Regexp::Kind::CAT:
             todo.push(re->cat.re2);
             todo.push(re->cat.re1);
             break;
-        case RE::Kind::ITER:
+        case Regexp::Kind::ITER:
             todo.push(re->iter.re);
             break;
         }

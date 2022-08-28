@@ -33,7 +33,7 @@ struct regmatch_t {
 
 // subhistory_t stores subhistory of a capturing group: an array of offset pairs corresponding to
 // all positions in the input string where this capturing group has matched. The length of the array
-// depends on how many times the group has matched, which depends on the RE and the input string.
+// depends on how many times the group has matched, which depends on the regexp and the string.
 struct subhistory_t {
     size_t size;
     regmatch_t* offs;
@@ -88,7 +88,7 @@ struct regex_t {
         regoff_t* regs;
         re2c::libre2c::regoff_trie_t* regtrie;
     };
-    // Allow storing submatch results in RE (this is needed for Java bindings).
+    // Allow storing submatch results in the regexp (this is needed for Java bindings).
     union {
         regmatch_t* pmatch;
         subhistory_t* psubhist;

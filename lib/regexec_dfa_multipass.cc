@@ -259,7 +259,7 @@ const tstring_t* regtstring_dfa_multipass(const regex_t* preg, const char* strin
 
         link = (*log[offset])[link.conf];
     }
-    len += 2; // tags for the outermost capture that wraps the whole RE
+    len += 2; // tags for the outermost capture that wraps the whole regexp
     len += 1; // terminating NULL
 
     tstring_t* tstr = &preg->tstring;

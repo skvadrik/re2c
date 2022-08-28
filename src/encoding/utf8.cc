@@ -91,12 +91,12 @@ static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, r
     split_by_continuity(root, alc, l, h, nh);
 }
 
-static RE* symbol(RESpec& spec, rune r) {
+static Regexp* symbol(RESpec& spec, rune r) {
     RangeMgr& rm = spec.rangemgr;
 
     uint32_t chars[MAX_RUNE_LENGTH];
     const uint32_t chars_count = rune_to_bytes(chars, r);
-    RE* re = re_sym(spec, rm.sym(chars[0]));
+    Regexp* re = re_sym(spec, rm.sym(chars[0]));
     for (uint32_t i = 1; i < chars_count; ++i) {
         re = re_cat(spec, re, re_sym(spec, rm.sym(chars[i])));
     }
@@ -107,7 +107,7 @@ static RE* symbol(RESpec& spec, rune r) {
 // and return an alternation of them. We store partially built range in suffix tree, which allows us
 // to eliminate common suffixes while building.
 //
-RE* range(RESpec& spec, const Range* r) {
+Regexp* range(RESpec& spec, const Range* r) {
     // empty range
     if (!r) return nullptr;
 

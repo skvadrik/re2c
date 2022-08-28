@@ -19,20 +19,20 @@ struct AstRule;
 struct Rule;
 struct opt_t;
 
-struct RE {
+struct Regexp {
     enum class Kind: uint32_t {NIL, SYM, ALT, CAT, ITER, TAG} kind;
     union {
         const Range* sym;
         struct {
-            RE* re1;
-            RE* re2;
+            Regexp* re1;
+            Regexp* re2;
         } alt;
         struct {
-            RE* re1;
-            RE* re2;
+            Regexp* re1;
+            Regexp* re2;
         } cat;
         struct {
-            RE* re;
+            Regexp* re;
             uint32_t min;
             uint32_t max;
         } iter;
@@ -43,7 +43,7 @@ struct RE {
 struct RESpec {
     IrAllocator ir_alc;
     RangeMgr rangemgr;
-    std::vector<RE*> res;
+    std::vector<Regexp*> res;
     std::vector<uint32_t> charset;
     std::vector<Tag> tags;
     std::vector<Rule> rules;
@@ -61,12 +61,12 @@ void find_fixed_tags(RESpec& spec);
 void insert_default_tags(RESpec& spec);
 void warn_nullable(const RESpec& spec, const std::string& cond);
 
-RE* re_nil(RESpec& spec);
-RE* re_sym(RESpec& spec, const Range* r);
-RE* re_alt(RESpec& spec, RE* x, RE* y);
-RE* re_cat(RESpec& spec, RE* x, RE* y);
-RE* re_iter(RESpec& spec, RE* x, uint32_t n, uint32_t m);
-RE* re_tag(RESpec& spec, size_t idx, bool neg);
+Regexp* re_nil(RESpec& spec);
+Regexp* re_sym(RESpec& spec, const Range* r);
+Regexp* re_alt(RESpec& spec, Regexp* x, Regexp* y);
+Regexp* re_cat(RESpec& spec, Regexp* x, Regexp* y);
+Regexp* re_iter(RESpec& spec, Regexp* x, uint32_t n, uint32_t m);
+Regexp* re_tag(RESpec& spec, size_t idx, bool neg);
 
 } // namespace re2c
 

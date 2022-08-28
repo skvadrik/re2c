@@ -104,8 +104,8 @@ int32_t leftprec(tag_info_t info1, tag_info_t info2, bool last1, bool last2) {
     if (tag1 % 2 == 1) return -1;
     if (tag2 % 2 == 1) return  1;
 
-    // positive vs positive: smaller wins (this case is only possible because multiple top-level RE
-    // don't have proper negative tags)
+    // positive vs positive: smaller wins (this case is only possible because multiple top-level
+    // regexps don't have proper negative tags)
     if (tag1 < tag2) return -1;
     if (tag1 > tag2) return  1;
 

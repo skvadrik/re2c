@@ -8,7 +8,7 @@
 namespace re2c {
 namespace ebcdic {
 
-RE* range(RESpec& spec, const Range* r) {
+Regexp* range(RESpec& spec, const Range* r) {
     RangeMgr& rm = spec.rangemgr;
 
     Range* s = nullptr;

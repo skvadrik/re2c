@@ -21,7 +21,7 @@ namespace libre2c {
 // note [lazy computation and caching of precedence]
 //
 // Eagerly computing precedence values on each step for each pair of closure states is a waste of
-// time: most of these values are not needed, because RE may be unambigous, or the given input
+// time: most of these values are not needed, because regexp may be unambigous, or the given input
 // string may be unambigous, or even if there is ambiguity, it may take only a few comparisons to
 // resolve. All the rest is wasted effort.
 //

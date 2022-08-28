@@ -31,16 +31,16 @@ namespace {
 
 // On-stack information for computing approximate NFA size and depth.
 struct DfsTnfaParams {
-    const RE* re;   // current sub-RE
-    uint32_t size;  // sub-NFA size (only for alternative and concatenation)
-    uint32_t depth; // sub-NFA depth (only for alternative and concatenation)
-    uint8_t succ;   // index of the next sucessor to be visited
+    const Regexp* re; // current sub-regexp
+    uint32_t size;    // sub-NFA size (only for alternative and concatenation)
+    uint32_t depth;   // sub-NFA depth (only for alternative and concatenation)
+    uint8_t succ;     // index of the next sucessor to be visited
 };
 
 static void estimate_nfa_params(
-    const RE* re0, std::vector<DfsTnfaParams>& stack, size_t* psize, size_t* pdepth) {
+    const Regexp* re0, std::vector<DfsTnfaParams>& stack, size_t* psize, size_t* pdepth) {
 
-    // the estimated size and depth of the last sub-RE visited by DFS
+    // the estimated size and depth of the last sub-regexp visited by DFS
     uint32_t size = 0, depth = 0;
 
     stack.push_back({re0, 0, 0, 0});
@@ -49,48 +49,48 @@ static void estimate_nfa_params(
         const DfsTnfaParams i = stack.back();
         stack.pop_back();
 
-        const RE* re = i.re;
-        if (re->kind == RE::Kind::NIL) {
+        const Regexp* re = i.re;
+        if (re->kind == Regexp::Kind::NIL) {
             size = depth = 0;
-        } else if (re->kind == RE::Kind::SYM || re->kind == RE::Kind::TAG) {
+        } else if (re->kind == Regexp::Kind::SYM || re->kind == Regexp::Kind::TAG) {
             size = depth = 1;
-        } else if (re->kind == RE::Kind::ALT) {
+        } else if (re->kind == Regexp::Kind::ALT) {
             if (i.succ == 0) {
-                // recurse into the left sub-RE
+                // recurse into the left sub-regexp
                 stack.push_back({re, 0, 0, 1});
                 stack.push_back({re->alt.re1, 0, 0, 0});
             } else if (i.succ == 1) {
-                // recurse into the right sub-RE
+                // recurse into the right sub-regexp
                 stack.push_back({re, size, depth, 2});
                 stack.push_back({re->alt.re2, 0, 0, 0});
             } else {
-                // both sub-RE visited, recursive return
+                // both sub-regexp visited, recursive return
                 // (left one is on stack, right one was just visited by DFS)
                 size = 1 + i.size + size;
                 depth = 1 + std::max(i.depth, depth);
             }
-        } else if (re->kind == RE::Kind::CAT) {
+        } else if (re->kind == Regexp::Kind::CAT) {
             if (i.succ == 0) {
-                // recurse into the left sub-RE
+                // recurse into the left sub-regexp
                 stack.push_back({re, 0, 0, 1});
                 stack.push_back({re->cat.re1, 0, 0, 0});
             } else if (i.succ == 1) {
-                // recurse into the right sub-RE
+                // recurse into the right sub-regexp
                 stack.push_back({re, size, depth, 2});
                 stack.push_back({re->cat.re2, 0, 0, 0});
             } else {
-                // both sub-RE visited, recursive return
+                // both sub-regexp visited, recursive return
                 // (left one is on stack, right one was just visited by DFS)
                 size = i.size + size;
                 depth = i.depth + depth;
             }
-        } else if (re->kind == RE::Kind::ITER) {
+        } else if (re->kind == Regexp::Kind::ITER) {
             if (i.succ == 0) {
-                // recurse into the sub-RE
+                // recurse into the sub-regexp
                 stack.push_back({re, 0, 0, 1});
                 stack.push_back({re->iter.re, 0, 0, 0});
             } else {
-                // sub-RE visited, recursive return
+                // sub-regexp visited, recursive return
                 // formula is the same for size and depth (it reflects NFA construction)
                 const uint32_t min = re->iter.min, max = re->iter.max;
                 size = max == Ast::MANY ? size * min + 1 : size * max + (max - min);
@@ -169,14 +169,14 @@ static uint32_t nfa_stats(TnfaState* root) {
     return ncores;
 }
 
-// On-stack information for converting RE to NFA.
+// On-stack information for converting regexp to NFA.
 struct DfsReToTnfa {
-    // Current sub-RE is stored by value, as it is modified by the algorithm (e.g. repetition
-    // counters are decreased as the repetition sub-RE is unfolded).
-    RE re;
-    // Start state of the current sub-NFA under construction. It is needed for complex sub-RE like
-    // alternative and repetition that are visited multiple times on stack, as sub-NFA for their
-    // parts are constructed.
+    // Current sub-regexp is stored by value, as it is modified by the algorithm (e.g. repetition
+    // counters are decreased as the repetition sub-regexp is unfolded).
+    Regexp re;
+    // Start state of the current sub-NFA under construction. It is needed for complex sub-regexp
+    // like alternative and repetition that are visited multiple times on stack, as sub-NFA for
+    // their parts are constructed.
     TnfaState* start;
     // End state of the current sub-NFA. It is passed top-down, which is necessary, because it gets
     // recorded in multiple NFA fragments (patching the end states when connecting the fragments
@@ -197,29 +197,29 @@ static void one_re_to_nfa(
         // Refs to top of stack are invalidated after popping or pushing anything (backing storage
         // for the stack may get reallocated).
         DfsReToTnfa& x = stack.back();
-        RE& re = x.re;
+        Regexp& re = x.re;
 
         DCHECK(x.end != nullptr);
 
         switch (re.kind) {
-        case RE::Kind::NIL:
+        case Regexp::Kind::NIL:
             start = x.end;
             stack.pop_back();
             break;
 
-        case RE::Kind::SYM:
+        case Regexp::Kind::SYM:
             start = nfa.make_ran(rule, x.end, re.sym);
             stack.pop_back();
             break;
 
-        case RE::Kind::TAG: {
+        case Regexp::Kind::TAG: {
             const Tag& tag = nfa.tags[re.tag.idx];
             start = (fixed(tag) && !capture(tag)) ? x.end : nfa.make_tag(rule, x.end, re.tag);
             stack.pop_back();
             break;
         }
 
-        case RE::Kind::ALT:
+        case Regexp::Kind::ALT:
             if (x.start == nullptr) {
                 x.start = nfa.make_alt(rule, nullptr, nullptr);
                 stack.push_back({*re.alt.re1, nullptr, x.end});
@@ -233,7 +233,7 @@ static void one_re_to_nfa(
             }
             break;
 
-        case RE::Kind::CAT:
+        case Regexp::Kind::CAT:
             if (x.start == nullptr) {
                 x.start = x.end; // needed only to distinguish the 1st and the 2nd visit
                 stack.push_back({*re.cat.re2, nullptr, x.end});
@@ -243,7 +243,7 @@ static void one_re_to_nfa(
             }
             break;
 
-        case RE::Kind::ITER:
+        case Regexp::Kind::ITER:
             // see note [counted repetition and iteration expansion]
             if (re.iter.max == Ast::MANY) {
                 // Unbounded repetition `r{n,}`, unfold as `r{n-1} r*`.
@@ -307,7 +307,7 @@ Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) {
     std::vector<DfsTnfaParams> stack_nfa_params;
     size_t size = spec.res.size() - 1;
     size_t depth = 0;
-    for (const RE* re : spec.res) {
+    for (const Regexp* re : spec.res) {
         estimate_nfa_params(re, stack_nfa_params, &size, &depth);
     }
     if (size > MAX_NFA_STATES) {

@@ -8,7 +8,7 @@
 
 namespace re2c {
 
-struct RE;
+struct Regexp;
 struct RESpec;
 
 struct RangeSuffix {
@@ -30,7 +30,7 @@ RangeSuffix* make_range_suffix(Allocator& alc, uint32_t lo, uint32_t hi) {
     return p;
 }
 
-RE* to_regexp(RESpec& spec, RangeSuffix* p);
+Regexp* to_regexp(RESpec& spec, RangeSuffix* p);
 
 } // namespace re2c
 

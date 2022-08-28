@@ -11,8 +11,8 @@
 namespace re2c {
 namespace {
 
-static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx) {
-    RE* x = nullptr;
+static Regexp* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx) {
+    Regexp* x = nullptr;
     if (spec.opts->nested_negative_tags) {
         // Add transitions for all negative tags (including nested ones). It allows to avoid tag
         // initialization and fixup at the end of match, at the cost of adding more tag actions.
@@ -49,11 +49,11 @@ static RE* negative_tags(RESpec& spec, const size_t* stidx, const size_t* etidx)
 }
 
 struct StackItem {
-    // current RE
-    RE* re;
+    // current regexp
+    Regexp* re;
 
-    // Start of the subsequence of tags for the left/right sub-RE (null if the sub-RE has not been
-    // traversed yet, ot if RE is not an alternative).
+    // Start of the subsequence of tags for the left/right sub-regexp (null if the sub-regexp has
+    // not been traversed yet, ot if the regexp is not an alternative).
     size_t* ltag, *rtag;
 };
 
@@ -66,7 +66,7 @@ void insert_default_tags(RESpec& spec) {
     size_t* tags = new size_t[spec.tags.size()], *tag = tags;
     std::vector<StackItem> stack;
 
-    std::vector<RE*>::reverse_iterator i_re;
+    std::vector<Regexp*>::reverse_iterator i_re;
     for (i_re = spec.res.rbegin(); i_re != spec.res.rend(); ++i_re) {
         stack.push_back({*i_re, nullptr, nullptr});
     }
@@ -74,21 +74,21 @@ void insert_default_tags(RESpec& spec) {
     while (!stack.empty()) {
         StackItem i = stack.back();
         stack.pop_back();
-        RE* re = i.re;
+        Regexp* re = i.re;
 
-        if (re->kind == RE::Kind::ALT) {
+        if (re->kind == Regexp::Kind::ALT) {
             if (i.ltag == nullptr) {
-                // collect tags from the left sub-RE and return to this RE
+                // collect tags from the left sub-regexp and return to this regexp
                 stack.push_back({re, tag, nullptr});
                 stack.push_back({re->alt.re1, nullptr, nullptr});
             } else if (i.rtag == nullptr) {
-                // collect tags from the right sub-RE and return to this RE
+                // collect tags from the right sub-regexp and return to this regexp
                 stack.push_back({re, i.ltag, tag});
                 stack.push_back({re->alt.re2, nullptr, nullptr});
             } else {
-                // both sub-RE traversed, add negative tags
-                RE* x = negative_tags(spec, i.ltag, i.rtag);
-                RE* y = negative_tags(spec, i.rtag, tag);
+                // both sub-regexp traversed, add negative tags
+                Regexp* x = negative_tags(spec, i.ltag, i.rtag);
+                Regexp* y = negative_tags(spec, i.rtag, tag);
 
                 // Decision to place negative tags before/after could be based on POSIX semantics,
                 // not syntax. But strangely on some tests placing before results in better
@@ -99,12 +99,12 @@ void insert_default_tags(RESpec& spec) {
                               ? re_cat(spec, x, re->alt.re2)
                               : re_cat(spec, re->alt.re2, x);
             }
-        } else if (re->kind == RE::Kind::CAT) {
+        } else if (re->kind == Regexp::Kind::CAT) {
             stack.push_back({re->cat.re2, nullptr, nullptr});
             stack.push_back({re->cat.re1, nullptr, nullptr});
-        } else if (re->kind == RE::Kind::ITER) {
+        } else if (re->kind == Regexp::Kind::ITER) {
             stack.push_back({re->iter.re, nullptr, nullptr});
-        } else if (re->kind == RE::Kind::TAG) {
+        } else if (re->kind == Regexp::Kind::TAG) {
             *tag++ = re->tag.idx;
         }
     }

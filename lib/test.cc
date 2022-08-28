@@ -33,7 +33,7 @@ static int test(int flags,
 
     result = regcomp(&re, pattern, flags);
     if (result != 0) {
-        fprintf(stderr, "%s: regcomp() failed for RE %s\n", prefix, pattern);
+        fprintf(stderr, "%s: regcomp() failed for regexp %s\n", prefix, pattern);
         goto end;
     }
 
@@ -56,7 +56,7 @@ static int test(int flags,
                 result = 0;
             } else if (nmatch > 0) {
                 fprintf(stderr,
-                        "%s: regexec() failed for RE %s and string %s\n",
+                        "%s: regexec() failed for regexp %s and string %s\n",
                         prefix, pattern, string);
                 goto end;
             }
@@ -64,7 +64,7 @@ static int test(int flags,
             // regexed must have failed, something is wrong
             result = REG_NOMATCH;
             fprintf(stderr,
-                    "%s: regexec() didn't fail while it should for RE %s and string %s\n",
+                    "%s: regexec() didn't fail while it should for regexp %s and string %s\n",
                     prefix, pattern, string);
             goto end;
         }
@@ -84,7 +84,7 @@ static int test(int flags,
             if (expect_so != actual.rm_so || expect_eo != actual.rm_eo) {
                 result = 1;
                 fprintf(stderr,
-                        "%s: incorrect submatch for RE %s and string %s:\n"
+                        "%s: incorrect submatch for regexp %s and string %s:\n"
                         "\tpmatch[%u].rm_so = %td (expected %td)\n"
                         "\tpmatch[%u].rm_eo = %td (expected %td)\n",
                         prefix, pattern, string,
@@ -98,7 +98,7 @@ static int test(int flags,
             if (actual_history.size != expect_size) {
                 result = 1;
                 fprintf(stderr,
-                        "%s: wrong subhistory-%u length for RE %s and string %s: "
+                        "%s: wrong subhistory-%u length for regexp %s and string %s: "
                         "expected %zd, have %zd\n",
                         prefix, i, pattern, string, expect_size, actual_history.size);
                 goto end;
@@ -110,7 +110,7 @@ static int test(int flags,
                 if (expect_so != actual.rm_so || expect_eo != actual.rm_eo) {
                     result = 1;
                     fprintf(stderr,
-                            "%s: incorrect submatch for RE %s and string %s:\n"
+                            "%s: incorrect submatch for regexp %s and string %s:\n"
                             "\tpmatch[%u][%u].rm_so = %td (expected %td)\n"
                             "\tpmatch[%u][%u].rm_eo = %td (expected %td)\n",
                             prefix, pattern, string,
@@ -147,7 +147,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
 
     result = regcomp(&re, pattern, REG_MULTIPASS | REG_TSTRING);
     if (result != 0) {
-        fprintf(stderr, "[t-string] regcomp() failed for RE %s\n", pattern);
+        fprintf(stderr, "[t-string] regcomp() failed for regexp %s\n", pattern);
         goto end;
     }
 
@@ -157,7 +157,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
         tstr = regtstring(&re, string);
         if (tstr == nullptr) {
             result = 1;
-            fprintf(stderr, "regtstring() failed for RE %s and string %s\n", pattern, string);
+            fprintf(stderr, "regtstring() failed for regexp %s and string %s\n", pattern, string);
             goto end;
         }
     }
@@ -177,7 +177,7 @@ static int test_tstring(const char* pattern, const char* string, const char* exp
     if (strcmp(expected, s.str().c_str()) != 0) {
         result = 1;
         fprintf(stderr,
-                "incorrect t-string for RE %s and string %s:\n\texpect: %s\n\tactual: %s\n",
+                "incorrect t-string for regexp %s and string %s:\n\texpect: %s\n\tactual: %s\n",
                 pattern, string, expected, s.str().c_str());
     }
 

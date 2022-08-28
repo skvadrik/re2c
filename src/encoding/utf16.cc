@@ -121,7 +121,7 @@ static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, r
     }
 }
 
-static RE* symbol(RESpec& spec, rune r) {
+static Regexp* symbol(RESpec& spec, rune r) {
     RangeMgr& rm = spec.rangemgr;
     if (r <= MAX_1WORD_RUNE) {
         return re_sym(spec, rm.sym(r));
@@ -136,7 +136,7 @@ static RE* symbol(RESpec& spec, rune r) {
 // and return an alternation of them. We store partially built range in suffix tree, which allows us
 // to eliminate common suffixes while building.
 //
-RE* range(RESpec& spec, const Range* r) {
+Regexp* range(RESpec& spec, const Range* r) {
     // empty range
     if (!r) return nullptr;
 

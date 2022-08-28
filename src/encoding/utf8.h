@@ -6,7 +6,7 @@
 namespace re2c {
 
 class Range;
-struct RE;
+struct Regexp;
 struct RESpec;
 
 namespace utf8 {
@@ -50,7 +50,7 @@ uint32_t rune_length(rune r);
 // Maximum Unicode code point with a given length of UTF-8 bytestring.
 rune max_rune(uint32_t i);
 
-RE* range(RESpec& spec, const Range* r);
+Regexp* range(RESpec& spec, const Range* r);
 
 } // namespace utf8
 } // namespace re2c

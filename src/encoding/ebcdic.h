@@ -6,7 +6,7 @@
 namespace re2c {
 
 class Range;
-struct RE;
+struct Regexp;
 struct RESpec;
 
 namespace ebcdic {
@@ -51,7 +51,7 @@ const uint32_t ebc2asc[256] = {
     0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0xb3, 0xdb, 0xdc, 0xd9, 0xda, 0x9f
 };
 
-RE* range(RESpec& spec, const Range* r);
+Regexp* range(RESpec& spec, const Range* r);
 
 } // namespace ebcdic
 } // namespace re2c

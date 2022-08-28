@@ -6,7 +6,7 @@
 namespace re2c {
 
 class Range;
-struct RE;
+struct Regexp;
 struct RESpec;
 
 namespace utf16 {
@@ -28,7 +28,7 @@ inline constexpr uint32_t trail_surr(rune r) {
     return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
 }
 
-RE* range(RESpec& spec, const Range* r);
+Regexp* range(RESpec& spec, const Range* r);
 
 } // namespace utf16
 } // namespace re2c

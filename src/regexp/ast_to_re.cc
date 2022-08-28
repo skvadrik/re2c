@@ -46,12 +46,12 @@ struct loc_t;
 
 namespace {
 
-// On-stack information for iterative depth-first conversion of AST to RE.
+// On-stack information for iterative depth-first conversion of AST to regexp.
 struct DfsAstToRe {
     const AstNode* ast; // current subtree of the AST
-    RE *re1;            // first sub-RE under construction
-    RE *re2;            // second sub-RE under construction (used for alternative and catenation)
-    int32_t height;     // height of the current sub-RE (used in POSIX disambiguation)
+    Regexp *re1;        // first sub-regexp under construction
+    Regexp *re2;        // second sub-regexp under construction (used for alternative / catenation)
+    int32_t height;     // height of the current sub-regexp (used in POSIX disambiguation)
     uint8_t succ;       // index of the current successor node in AST
     bool in_iter;       // if this AST is under repetition
 
@@ -69,21 +69,21 @@ struct DfsDiffToRange {
         : ast(ast), range(nullptr), succ(0) {}
 };
 
-LOCAL_NODISCARD(RE* fictive_tags(RESpec& spec, int32_t height)) {
+LOCAL_NODISCARD(Regexp* fictive_tags(RESpec& spec, int32_t height)) {
     std::vector<Tag>& tags = spec.tags;
 
     // opening fictive tag
-    RE* t1 = re_tag(spec, tags.size(), false);
+    Regexp* t1 = re_tag(spec, tags.size(), false);
     tags.emplace_back(Tag::FICTIVE, Tag::FICTIVE, false, false, height + 1);
 
     // closing fictive tag
-    RE* t2 = re_tag(spec, tags.size(), false);
+    Regexp* t2 = re_tag(spec, tags.size(), false);
     tags.emplace_back(Tag::FICTIVE, Tag::FICTIVE, false, false, height);
 
     return re_cat(spec, t1, t2);
 }
 
-LOCAL_NODISCARD(RE* capture_tags(
+LOCAL_NODISCARD(Regexp* capture_tags(
         RESpec& spec, DfsAstToRe& x, bool orbit, const AstNode** psub, size_t* pncap)) {
     std::vector<Tag>& tags = spec.tags;
     bool history = spec.opts->tags_history && (orbit || x.in_iter);
@@ -103,23 +103,23 @@ LOCAL_NODISCARD(RE* capture_tags(
     }
 
     // opening capture tag
-    RE* t1 = re_tag(spec, tags.size(), false);
+    Regexp* t1 = re_tag(spec, tags.size(), false);
     tags.emplace_back(2 * lcap, 2 * ncap, history, orbit, x.height + 1);
 
     // closing capture tag
-    RE* t2 = re_tag(spec, tags.size(), false);
+    Regexp* t2 = re_tag(spec, tags.size(), false);
     tags.emplace_back(2 * lcap + 1, 2 * ncap + 1, history, orbit, x.height);
 
     *pncap = ncap + 1;
     return re_cat(spec, t1, t2);
 }
 
-LOCAL_NODISCARD(RE* structural_tags(
+LOCAL_NODISCARD(Regexp* structural_tags(
         RESpec& spec, DfsAstToRe& x, const AstNode* sub, size_t* pncap)) {
     if (sub->kind == AstKind::CAP) {
         // If this sub-AST is already a capture, no need for structural tags.
     } else if (spec.opts->tags_automatic) {
-        // Full parsing: automatically add tags as if this sub-RE was a capture.
+        // Full parsing: automatically add tags as if this sub-regexp was a capture.
         return capture_tags(spec, x, false, &x.ast, pncap);
     } else if (spec.opts->tags_posix_semantics && x.ast->has_caps) {
         // POSIX submatch extraction: add fictive structural tags.
@@ -129,14 +129,14 @@ LOCAL_NODISCARD(RE* structural_tags(
     return nullptr;
 }
 
-// Insert a RE in between a pair of concatenated tags. If there are no tags, just return the RE.
-LOCAL_NODISCARD(RE* insert_between_tags(RESpec& spec, RE* tags, RE* re)) {
+// Insert a regexp between concatenated tags. If there are no tags, just return the regexp.
+LOCAL_NODISCARD(Regexp* insert_between_tags(RESpec& spec, Regexp* tags, Regexp* re)) {
     if (tags == nullptr) {
         return re;
     } else if (re != nullptr) {
-        DCHECK(tags->kind == RE::Kind::CAT);
-        DCHECK(tags->cat.re1->kind == RE::Kind::TAG);
-        DCHECK(tags->cat.re2->kind == RE::Kind::TAG);
+        DCHECK(tags->kind == Regexp::Kind::CAT);
+        DCHECK(tags->cat.re1->kind == Regexp::Kind::TAG);
+        DCHECK(tags->cat.re2->kind == Regexp::Kind::TAG);
         tags->cat.re2 = re_cat(spec, re, tags->cat.re2);
     }
     return tags;
@@ -231,7 +231,7 @@ LOCAL_NODISCARD(Ret dot_to_range(RESpec& spec, const AstNode* ast, Range** prang
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* range, RE** pre)) {
+LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* range, Regexp** pre)) {
     if (!range) {
         switch (spec.opts->empty_class) {
         case EmptyClass::MATCH_EMPTY:
@@ -266,16 +266,16 @@ LOCAL_NODISCARD(Ret re_class(RESpec& spec, const loc_t& loc, const Range* range,
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret re_string(RESpec& spec, const AstNode* ast, RE** pre)) {
+LOCAL_NODISCARD(Ret re_string(RESpec& spec, const AstNode* ast, Regexp** pre)) {
     DCHECK(ast->kind == AstKind::STR);
 
-    RE* x = nullptr;
+    Regexp* x = nullptr;
     bool icase = is_icase(spec.opts, ast->str.icase);
 
     for (const AstChar& a : ast->str.chars) {
         Range* r;
         CHECK_RET(char_to_range(spec, a, icase, &r));
-        RE* y;
+        Regexp* y;
         CHECK_RET(re_class(spec, ast->loc, r, &y));
         x = re_cat(spec, x, y);
     }
@@ -376,11 +376,11 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                               std::vector<DfsDiffToRange>& stack_diff,
                               const AstNode* ast0,
                               size_t* pncap,
-                              RE** presult)) {
+                              Regexp** presult)) {
     std::vector<Tag>& tags = spec.tags;
     const opt_t* opts = spec.opts;
     Range* range;
-    RE* re;
+    Regexp* re;
 
     DCHECK(stack.empty());
     stack.emplace_back(ast0, 0, false);
@@ -543,7 +543,7 @@ Ret RESpec::init(const std::vector<AstRule>& ast) {
     std::vector<DfsDiffToRange> stack_diff;
     for (size_t i = 0; i < ast.size(); ++i) {
         size_t ltag = tags.size(), ncap = 0;
-        RE* re;
+        Regexp* re;
         CHECK_RET(ast_to_re(*this, stack, stack_diff, ast[i].ast, &ncap, &re));
         res.push_back(re);
 

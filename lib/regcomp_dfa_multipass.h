@@ -77,7 +77,7 @@ static inline tchar_t encode_tag(size_t tag) {
     // Tags in the t-string are indexed from 1 rather than 0 (so that negative tags can be
     // represented by negating tag index).
     tag += 1;
-    // Two extra tags for the outermost capture that wraps the whole RE.
+    // Two extra tags for the outermost capture that wraps the whole regexp.
     tag += 2;
     // T-string characters store either symbols or tags. Symbols use the lower half of the range (so
     // they don't need to be translated), and tags use the upper half.

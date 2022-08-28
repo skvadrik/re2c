@@ -114,8 +114,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     }
 
     if (cflags & REG_TSTRING) {
-        // T-string is stored in RE (reallocated on each regtstring() call if needed), and the user
-        // gets an immutable view of it (const ref).
+        // T-string is stored in the regexp (reallocated on each regtstring() call if needed), and
+        // the user gets an immutable view of it (const ref).
         tstring_t& ts = preg->tstring;
         ts.capacity = 256;
         ts.string = new tchar_t[ts.capacity];
