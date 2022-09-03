@@ -362,7 +362,7 @@ if REBUILD_PARSERS
 # generate lexer and update bootstrap files
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(BISON) --output=$@ --defines=$(@:cc=h) $<
+	$(AM_V_GEN)$(BISON) --warnings --output=$@ --defines=$(@:cc=h) $<
 	$(AM_V_GEN)cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D);
 else
 # copy bootstrap files

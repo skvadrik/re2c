@@ -10,7 +10,7 @@ function(re2c_bootstrap_parser ypp_file cc_file h_file)
         add_custom_command(
             OUTPUT ${cc_file} ${h_file}
             COMMAND "${CMAKE_COMMAND}" -E make_directory "${parent_dir}"
-            COMMAND "${BISON_EXECUTABLE}" --defines="${h_file}" -o "${cc_file}" "${relative_parser}"
+            COMMAND "${BISON_EXECUTABLE}" --warnings --defines="${h_file}" -o "${cc_file}" "${relative_parser}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${cc_file}" "${bootstrap_parser}"
             COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${h_file}" "${bootstrap_header}"
             DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/${ypp_file}"

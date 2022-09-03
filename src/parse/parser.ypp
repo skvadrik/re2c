@@ -57,7 +57,7 @@ extern "C" {
 %%
 
 spec
-: /* empty */
+: %empty
 | spec TOKEN_BLOCK {
     if (use_block(context, ast.temp_blockname) != Ret::OK) YYABORT;
     ast.temp_blockname.clear();
