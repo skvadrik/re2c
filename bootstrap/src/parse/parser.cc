@@ -80,8 +80,8 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(YYSTYPE* yylval, context_t& context, Ast& ast);
-    void yyerror(context_t& context, Ast& ast, const char*);
+    static int yylex(YYSTYPE* yylval, context_t& context, Ast& ast);
+    static void yyerror(context_t& context, Ast& ast, const char*);
 }
 
 
@@ -1598,13 +1598,13 @@ yyreturnlab:
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(context_t& context, Ast&, const char* s) {
+    static void yyerror(context_t& context, Ast&, const char* s) {
         if (!context.lexer_error) { // lexer error has already been reported
             context.input.msg.error(context.input.tok_loc(), "%s", s);
         }
     }
 
-    int yylex(YYSTYPE* yylval, context_t& context, Ast& ast) {
+    static int yylex(YYSTYPE* yylval, context_t& context, Ast& ast) {
         int token;
         if (context.input.scan(yylval, ast, token) != Ret::OK) {
             context.lexer_error = true;

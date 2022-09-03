@@ -137,8 +137,8 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 #line 38 "../lib/parse.ypp"
 
 extern "C" {
-    int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast);
-    void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
+    static int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast);
+    static void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
 }
 
 
@@ -1354,12 +1354,12 @@ yyreturnlab:
 #pragma GCC diagnostic pop
 
 extern "C" {
-    void yyerror(const uint8_t* pattern, Ast&, const char* msg) {
+    static void yyerror(const uint8_t* pattern, Ast&, const char* msg) {
         fprintf(stderr, "%s (on RE %s)", msg, pattern);
         exit(1);
     }
 
-    int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast) {
+    static int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast) {
         return lex(yylval, pattern, ast);
     }
 }
