@@ -11,6 +11,7 @@
 #include "src/msg/location.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
+#include "src/parse/parser.h"
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8.h"
 #include "src/util/allocator.h"
@@ -51,7 +52,7 @@ class Scanner: private ScannerState {
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file() const NODISCARD;
     Ret echo(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
-    Ret scan(Ast& ast, int& token) NODISCARD;
+    Ret scan(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
 
   private:
@@ -71,8 +72,8 @@ class Scanner: private ScannerState {
     Ret lex_name_list(OutAllocator& alc, BlockNameList** ptail) NODISCARD;
     Ret lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) NODISCARD;
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
-    Ret lex_code_indented(Ast& ast) NODISCARD;
-    Ret lex_code_in_braces(Ast& ast) NODISCARD;
+    Ret lex_code_indented(YYSTYPE* yylval, Ast& ast) NODISCARD;
+    Ret lex_code_in_braces(YYSTYPE* yylval, Ast& ast) NODISCARD;
     Ret try_lex_string_in_code(uint8_t quote) NODISCARD;
     Ret lex_c_comment() NODISCARD;
     Ret lex_cpp_comment() NODISCARD;

@@ -23,7 +23,7 @@
 #include "src/util/string_utils.h"
 #include "parser.h"
 
-extern YYSTYPE yylval;
+
 
 namespace re2c {
 
@@ -1684,7 +1684,7 @@ yy222:
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
-Ret Scanner::scan(Ast& ast, int& token) {
+Ret Scanner::scan(YYSTYPE* yylval, Ast& ast, int& token) {
     const uint8_t* p, *x, *y;
 scan:
     tok = cur;
@@ -1849,7 +1849,7 @@ yy230:
 yy231:
 	++cur;
 #line 430 "../src/parse/lex.re"
-	{ CHECK_RET(lex_str(ast, '"',   yylval.regexp)); RET_TOK(TOKEN_REGEXP); }
+	{ CHECK_RET(lex_str(ast, '"',   yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
 #line 1854 "src/parse/lex.cc"
 yy232:
 	yych = *++cur;
@@ -1875,7 +1875,7 @@ yy235:
 yy236:
 	++cur;
 #line 429 "../src/parse/lex.re"
-	{ CHECK_RET(lex_str(ast, '\'',  yylval.regexp)); RET_TOK(TOKEN_REGEXP); }
+	{ CHECK_RET(lex_str(ast, '\'',  yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
 #line 1880 "src/parse/lex.cc"
 yy237:
 	yych = *++cur;
@@ -1884,7 +1884,7 @@ yy237:
 yy238:
 	++cur;
 #line 529 "../src/parse/lex.re"
-	{ yylval.regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
+	{ yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
 #line 1889 "src/parse/lex.cc"
 yy239:
 	yych = *++cur;
@@ -1918,12 +1918,12 @@ yy244:
         bool yes;
         CHECK_RET(lex_namedef_context_re2c(yes));
         if (!globopts->FFlag || yes) {
-            yylval.cstr = ast.cstr(tok, cur);
+            yylval->cstr = ast.cstr(tok, cur);
             RET_TOK(TOKEN_ID);
         }
         CHECK_RET(lex_namedef_context_flex(yes));
         if (yes) {
-            yylval.cstr = ast.cstr(tok, cur);
+            yylval->cstr = ast.cstr(tok, cur);
             mode = LexMode::FLEX_NAME;
             RET_TOK(TOKEN_FID);
         }
@@ -1931,7 +1931,7 @@ yy244:
         // `ab*`: it should be `a(b)*`, not `(ab)*`
         cur = tok + 1;
         ast.temp_chars.push_back({tok[0], tok_loc()});
-        yylval.regexp = ast.str(tok_loc(), false);
+        yylval->regexp = ast.str(tok_loc(), false);
         RET_TOK(TOKEN_REGEXP);
     }
 #line 1938 "src/parse/lex.cc"
@@ -1939,7 +1939,7 @@ yy245:
 	yych = *++cur;
 	if (yych == '^') goto yy262;
 #line 431 "../src/parse/lex.re"
-	{ CHECK_RET(lex_cls(ast, false, yylval.regexp)); RET_TOK(TOKEN_REGEXP); }
+	{ CHECK_RET(lex_cls(ast, false, yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
 #line 1944 "src/parse/lex.cc"
 yy246:
 	yych = *++cur;
@@ -1964,7 +1964,7 @@ yy247:
 	}
 yy248:
 #line 414 "../src/parse/lex.re"
-	{ CHECK_RET(lex_code_in_braces(ast)); RET_TOK(TOKEN_CODE); }
+	{ CHECK_RET(lex_code_in_braces(yylval, ast)); RET_TOK(TOKEN_CODE); }
 #line 1969 "src/parse/lex.cc"
 yy249:
 	++cur;
@@ -2046,7 +2046,7 @@ yy254:
 yy255:
 #line 434 "../src/parse/lex.re"
 	{
-        yylval.regexp = ast.tag(tok_loc(), ast.cstr(tok + 1, cur), tok[0] == '#');
+        yylval->regexp = ast.tag(tok_loc(), ast.cstr(tok + 1, cur), tok[0] == '#');
         RET_TOK(TOKEN_REGEXP);
     }
 #line 2053 "src/parse/lex.cc"
@@ -2071,7 +2071,7 @@ yy259:
 	if (yych == '>') goto yy261;
 yy260:
 #line 415 "../src/parse/lex.re"
-	{ CHECK_RET(lex_code_indented(ast));  RET_TOK(TOKEN_CODE); }
+	{ CHECK_RET(lex_code_indented(yylval, ast));  RET_TOK(TOKEN_CODE); }
 #line 2076 "src/parse/lex.cc"
 yy261:
 	++cur;
@@ -2106,7 +2106,7 @@ yy261:
 yy262:
 	++cur;
 #line 432 "../src/parse/lex.re"
-	{ CHECK_RET(lex_cls(ast, true,  yylval.regexp)); RET_TOK(TOKEN_REGEXP); }
+	{ CHECK_RET(lex_cls(ast, true,  yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
 #line 2111 "src/parse/lex.cc"
 yy263:
 	yych = *++cur;
@@ -2189,7 +2189,7 @@ yy272:
 	p = yyt1;
 #line 417 "../src/parse/lex.re"
 	{
-        yylval.cstr = ast.cstr(p, cur);
+        yylval->cstr = ast.cstr(p, cur);
         RET_TOK(tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT);
     }
 #line 2196 "src/parse/lex.cc"
@@ -2208,10 +2208,10 @@ yy275:
 	++cur;
 #line 441 "../src/parse/lex.re"
 	{
-        if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval.bounds.min)) {
+        if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
             RET_FAIL(msg.error(tok_loc(), "repetition count overflow"));
         }
-        yylval.bounds.max = yylval.bounds.min;
+        yylval->bounds.max = yylval->bounds.min;
         RET_TOK(TOKEN_CLOSESIZE);
     }
 #line 2218 "src/parse/lex.cc"
@@ -2222,7 +2222,7 @@ yy276:
         if (!globopts->FFlag) {
             RET_FAIL(msg.error(tok_loc(), "curly braces for names only allowed with -F switch"));
         }
-        yylval.cstr = ast.cstr(tok + 1, cur - 1);
+        yylval->cstr = ast.cstr(tok + 1, cur - 1);
         RET_TOK(TOKEN_ID);
     }
 #line 2229 "src/parse/lex.cc"
@@ -2263,10 +2263,10 @@ yy283:
 	++cur;
 #line 460 "../src/parse/lex.re"
 	{
-        if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval.bounds.min)) {
+        if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval->bounds.min)) {
             RET_FAIL(msg.error(tok_loc(), "repetition lower bound overflow"));
         }
-        yylval.bounds.max = std::numeric_limits<uint32_t>::max();
+        yylval->bounds.max = std::numeric_limits<uint32_t>::max();
         RET_TOK(TOKEN_CLOSESIZE);
     }
 #line 2273 "src/parse/lex.cc"
@@ -2305,11 +2305,11 @@ yy288:
 	p = yyt1;
 #line 449 "../src/parse/lex.re"
 	{
-        if (!s_to_u32_unsafe(tok + 1, p, yylval.bounds.min)) {
+        if (!s_to_u32_unsafe(tok + 1, p, yylval->bounds.min)) {
             RET_FAIL(msg.error(tok_loc(), "repetition lower bound overflow"));
-        } else if (!s_to_u32_unsafe(p + 1, cur - 1, yylval.bounds.max)) {
+        } else if (!s_to_u32_unsafe(p + 1, cur - 1, yylval->bounds.max)) {
             RET_FAIL(msg.error(tok_loc(), "repetition upper bound overflow"));
-        } else if (yylval.bounds.min > yylval.bounds.max) {
+        } else if (yylval->bounds.min > yylval->bounds.max) {
             RET_FAIL(msg.error(tok_loc(), "repetition lower bound exceeds upper bound"));
         }
         RET_TOK(TOKEN_CLOSESIZE);
@@ -3049,7 +3049,7 @@ error:
     RET_FAIL(msg.error(cur_loc(), "syntax error in condition list"));
 }
 
-Ret Scanner::lex_code_indented(Ast& ast) {
+Ret Scanner::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: 
@@ -3136,7 +3136,7 @@ yy350:
         while (isspace(tok[0])) ++tok;
         uint8_t* p = cur;
         while (p > tok && isspace(p[-1])) --p;
-        yylval.semact = ast.sem_act(loc, ast.cstr(tok, p), nullptr, false);
+        yylval->semact = ast.sem_act(loc, ast.cstr(tok, p), nullptr, false);
         return Ret::OK;
     }
 #line 3143 "src/parse/lex.cc"
@@ -3151,7 +3151,7 @@ yy351:
 
 }
 
-Ret Scanner::lex_code_in_braces(Ast& ast) {
+Ret Scanner::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: 
@@ -3249,7 +3249,7 @@ yy360:
 #line 622 "../src/parse/lex.re"
 	{
         if (--depth == 0) {
-            yylval.semact = ast.sem_act(loc, ast.cstr(tok, cur), nullptr, false);
+            yylval->semact = ast.sem_act(loc, ast.cstr(tok, cur), nullptr, false);
             return Ret::OK;
         }
         goto code;

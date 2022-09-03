@@ -55,7 +55,7 @@
 #define YYSKELETON_NAME "yacc.c"
 
 /* Pure parsers.  */
-#define YYPURE 0
+#define YYPURE 2
 
 /* Push parsers.  */
 #define YYPUSH 0
@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "../lib/parse.ypp"
+#line 9 "../lib/parse.ypp"
 
 
 #include <stdio.h>
@@ -83,13 +83,7 @@
 
 using namespace re2c;
 
-extern "C" {
-    int yylex(const uint8_t*& pattern, Ast& ast);
-    void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
-}
-
-
-#line 93 "lib/parse.cc"
+#line 87 "lib/parse.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -139,6 +133,16 @@ enum yysymbol_kind_t
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
+/* Second part of user prologue.  */
+#line 38 "../lib/parse.ypp"
+
+extern "C" {
+    int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast);
+    void yyerror(const uint8_t* pattern, Ast&, const char* msg) RE2C_ATTR((noreturn));
+}
+
+
+#line 146 "lib/parse.cc"
 
 
 #ifdef short
@@ -521,8 +525,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    44,    44,    47,    48,    52,    53,    57,    58,    59,
-      60,    61,    65,    66,    67
+       0,    55,    55,    58,    59,    63,    64,    68,    69,    70,
+      71,    72,    76,    77,    78
 };
 #endif
 
@@ -833,13 +837,6 @@ yydestruct (const char *yymsg,
 }
 
 
-/* Lookahead token kind.  */
-int yychar;
-
-/* The semantic value of the lookahead symbol.  */
-YYSTYPE yylval;
-/* Number of syntax errors so far.  */
-int yynerrs;
 
 
 
@@ -851,6 +848,19 @@ int yynerrs;
 int
 yyparse (const uint8_t*& pattern, re2c::Ast& ast)
 {
+/* Lookahead token kind.  */
+int yychar;
+
+
+/* The semantic value of the lookahead symbol.  */
+/* Default value used for initialization, for pacifying older GCCs
+   or non-GCC compilers.  */
+YY_INITIAL_VALUE (static YYSTYPE yyval_default;)
+YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
+
+    /* Number of syntax errors so far.  */
+    int yynerrs = 0;
+
     yy_state_fast_t yystate = 0;
     /* Number of tokens to shift before error messages enabled.  */
     int yyerrstatus = 0;
@@ -1003,7 +1013,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (pattern, ast);
+      yychar = yylex (&yylval, pattern, ast);
     }
 
   if (yychar <= YYEOF)
@@ -1091,61 +1101,61 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* regexp: expr  */
-#line 44 "../lib/parse.ypp"
+#line 55 "../lib/parse.ypp"
              { regexp = (yyval.regexp); }
-#line 1097 "lib/parse.cc"
+#line 1107 "lib/parse.cc"
     break;
 
   case 4: /* expr: expr '|' term  */
-#line 48 "../lib/parse.ypp"
+#line 59 "../lib/parse.ypp"
                 { (yyval.regexp) = ast.alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1103 "lib/parse.cc"
+#line 1113 "lib/parse.cc"
     break;
 
   case 6: /* term: factor term  */
-#line 53 "../lib/parse.ypp"
+#line 64 "../lib/parse.ypp"
               { (yyval.regexp) = ast.cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1109 "lib/parse.cc"
+#line 1119 "lib/parse.cc"
     break;
 
   case 8: /* factor: primary '*'  */
-#line 58 "../lib/parse.ypp"
+#line 69 "../lib/parse.ypp"
                       { (yyval.regexp) = ast.iter((yyvsp[-1].regexp), 0, Ast::MANY); }
-#line 1115 "lib/parse.cc"
+#line 1125 "lib/parse.cc"
     break;
 
   case 9: /* factor: primary '+'  */
-#line 59 "../lib/parse.ypp"
+#line 70 "../lib/parse.ypp"
                       { (yyval.regexp) = ast.iter((yyvsp[-1].regexp), 1, Ast::MANY); }
-#line 1121 "lib/parse.cc"
+#line 1131 "lib/parse.cc"
     break;
 
   case 10: /* factor: primary '?'  */
-#line 60 "../lib/parse.ypp"
+#line 71 "../lib/parse.ypp"
                       { (yyval.regexp) = ast.iter((yyvsp[-1].regexp), 0, 1); }
-#line 1127 "lib/parse.cc"
+#line 1137 "lib/parse.cc"
     break;
 
   case 11: /* factor: primary TOKEN_COUNT  */
-#line 61 "../lib/parse.ypp"
+#line 72 "../lib/parse.ypp"
                       { (yyval.regexp) = ast.iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max); }
-#line 1133 "lib/parse.cc"
+#line 1143 "lib/parse.cc"
     break;
 
   case 13: /* primary: '(' ')'  */
-#line 66 "../lib/parse.ypp"
+#line 77 "../lib/parse.ypp"
                { (yyval.regexp) = ast.cap(ast.nil(NOWHERE)); }
-#line 1139 "lib/parse.cc"
+#line 1149 "lib/parse.cc"
     break;
 
   case 14: /* primary: '(' expr ')'  */
-#line 67 "../lib/parse.ypp"
+#line 78 "../lib/parse.ypp"
                { (yyval.regexp) = ast.cap((yyvsp[-1].regexp)); }
-#line 1145 "lib/parse.cc"
+#line 1155 "lib/parse.cc"
     break;
 
 
-#line 1149 "lib/parse.cc"
+#line 1159 "lib/parse.cc"
 
       default: break;
     }
@@ -1338,7 +1348,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 70 "../lib/parse.ypp"
+#line 81 "../lib/parse.ypp"
 
 
 #pragma GCC diagnostic pop
@@ -1349,8 +1359,8 @@ extern "C" {
         exit(1);
     }
 
-    int yylex(const uint8_t*& pattern, Ast& ast) {
-        return lex(pattern, ast);
+    int yylex(YYSTYPE* yylval, const uint8_t*& pattern, Ast& ast) {
+        return lex(yylval, pattern, ast);
     }
 }
 

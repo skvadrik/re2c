@@ -11,7 +11,7 @@
 #include "parse.h"
 #include "lib/lex.h"
 
-extern YYSTYPE yylval;
+
 
 namespace re2c {
 
@@ -20,7 +20,7 @@ static int32_t lex_cls_chr(const uint8_t*&, uint32_t&);
 #line 27 "../lib/lex.re"
 
 
-int lex(const uint8_t*& cur, Ast& ast) {
+int lex(YYSTYPE* yylval, const uint8_t*& cur, Ast& ast) {
     
 #line 26 "lib/lex.cc"
 const uint8_t* yyt1;const uint8_t* yyt2;
@@ -106,7 +106,7 @@ yy3:
 #line 73 "../lib/lex.re"
 	{
         ast.temp_chars.push_back({cur[-1], NOWHERE});
-        yylval.regexp = ast.str(NOWHERE, false);
+        yylval->regexp = ast.str(NOWHERE, false);
         return TOKEN_REGEXP;
     }
 #line 113 "lib/lex.cc"
@@ -127,7 +127,7 @@ yy6:
 	++cur;
 #line 68 "../lib/lex.re"
 	{
-        yylval.regexp = ast.dot(NOWHERE);
+        yylval->regexp = ast.dot(NOWHERE);
         return TOKEN_REGEXP;
     }
 #line 134 "lib/lex.cc"
@@ -174,8 +174,8 @@ yy13:
 	x = yyt1;
 #line 50 "../lib/lex.re"
 	{
-        if (!s_to_u32_unsafe(x, cur - 1, yylval.bounds.min)) goto err_cnt;
-        yylval.bounds.max = yylval.bounds.min;
+        if (!s_to_u32_unsafe(x, cur - 1, yylval->bounds.min)) goto err_cnt;
+        yylval->bounds.max = yylval->bounds.min;
         return TOKEN_COUNT;
     }
 #line 182 "lib/lex.cc"
@@ -190,8 +190,8 @@ yy15:
 	x = yyt1;
 #line 62 "../lib/lex.re"
 	{
-        if (!s_to_u32_unsafe(x, cur - 2, yylval.bounds.min)) goto err_cnt;
-        yylval.bounds.max = Ast::MANY;
+        if (!s_to_u32_unsafe(x, cur - 2, yylval->bounds.min)) goto err_cnt;
+        yylval->bounds.max = Ast::MANY;
         return TOKEN_COUNT;
     }
 #line 198 "lib/lex.cc"
@@ -201,8 +201,8 @@ yy16:
 	y = yyt2;
 #line 56 "../lib/lex.re"
 	{
-        if (!s_to_u32_unsafe(x, y - 1, yylval.bounds.min)
-            || !s_to_u32_unsafe(y, cur - 1, yylval.bounds.max)) goto err_cnt;
+        if (!s_to_u32_unsafe(x, y - 1, yylval->bounds.min)
+            || !s_to_u32_unsafe(y, cur - 1, yylval->bounds.max)) goto err_cnt;
         return TOKEN_COUNT;
     }
 #line 209 "lib/lex.cc"
@@ -252,7 +252,7 @@ yy22:
 	++cur;
 #line 91 "../lib/lex.re"
 	{
-        yylval.regexp = ast.cls(NOWHERE, neg);
+        yylval->regexp = ast.cls(NOWHERE, neg);
         return TOKEN_REGEXP;
     }
 #line 259 "lib/lex.cc"

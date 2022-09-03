@@ -9,7 +9,7 @@
 #include "parse.h"
 #include "lib/lex.h"
 
-extern YYSTYPE yylval;
+
 
 namespace re2c {
 
@@ -26,7 +26,7 @@ static int32_t lex_cls_chr(const uint8_t*&, uint32_t&);
     num = [0-9]+;
 */
 
-int lex(const uint8_t*& cur, Ast& ast) {
+int lex(YYSTYPE* yylval, const uint8_t*& cur, Ast& ast) {
     /*!stags:re2c format = "const uint8_t* @@;"; */
     const uint8_t* mar, *x, *y;
     bool neg = false;
@@ -48,31 +48,31 @@ int lex(const uint8_t*& cur, Ast& ast) {
     "["  { goto cls; }
 
     "{" @x num "}" {
-        if (!s_to_u32_unsafe(x, cur - 1, yylval.bounds.min)) goto err_cnt;
-        yylval.bounds.max = yylval.bounds.min;
+        if (!s_to_u32_unsafe(x, cur - 1, yylval->bounds.min)) goto err_cnt;
+        yylval->bounds.max = yylval->bounds.min;
         return TOKEN_COUNT;
     }
 
     "{" @x num "," @y num "}" {
-        if (!s_to_u32_unsafe(x, y - 1, yylval.bounds.min)
-            || !s_to_u32_unsafe(y, cur - 1, yylval.bounds.max)) goto err_cnt;
+        if (!s_to_u32_unsafe(x, y - 1, yylval->bounds.min)
+            || !s_to_u32_unsafe(y, cur - 1, yylval->bounds.max)) goto err_cnt;
         return TOKEN_COUNT;
     }
 
     "{" @x num ",}" {
-        if (!s_to_u32_unsafe(x, cur - 2, yylval.bounds.min)) goto err_cnt;
-        yylval.bounds.max = Ast::MANY;
+        if (!s_to_u32_unsafe(x, cur - 2, yylval->bounds.min)) goto err_cnt;
+        yylval->bounds.max = Ast::MANY;
         return TOKEN_COUNT;
     }
 
     "." {
-        yylval.regexp = ast.dot(NOWHERE);
+        yylval->regexp = ast.dot(NOWHERE);
         return TOKEN_REGEXP;
     }
 
     [^] \ nil {
         ast.temp_chars.push_back({cur[-1], NOWHERE});
-        yylval.regexp = ast.str(NOWHERE, false);
+        yylval->regexp = ast.str(NOWHERE, false);
         return TOKEN_REGEXP;
     }
 */
@@ -89,7 +89,7 @@ add:
 /*!local:re2c
     ""  { goto cls; }
     "]" {
-        yylval.regexp = ast.cls(NOWHERE, neg);
+        yylval->regexp = ast.cls(NOWHERE, neg);
         return TOKEN_REGEXP;
     }
 */

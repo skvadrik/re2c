@@ -22,7 +22,7 @@
 
 namespace re2c {
 
-int lex(const char* pattern);
+int lex(YYSTYPE* yylval, const char* pattern);
 const AstNode* regexp;
 
 } // namespace re2c
