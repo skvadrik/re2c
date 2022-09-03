@@ -61,6 +61,10 @@ jobs:
               echo "$(xcodebuild -version -sdk macosx Path)" >> $GITHUB_PATH
 
               brew install autoconf automake libtool bison coreutils
+              # bison is not activated by default to avoid clobbering
+              # already present outdated system bison. Let's prepend
+              # brew's path.
+              echo "$(brew --prefix bison)/bin" >> $GITHUB_PATH
               ;;
           esac
 
