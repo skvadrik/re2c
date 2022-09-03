@@ -10,7 +10,7 @@ if DEBUG
 AM_CXXFLAGS += -DRE2C_DEBUG
 endif
 
-RE2CFLAGS = -br -W -Wno-match-empty-string
+RE2CFLAGS = -b -W -Wno-match-empty-string --no-generation-date
 
 # binary
 bin_PROGRAMS = re2c
