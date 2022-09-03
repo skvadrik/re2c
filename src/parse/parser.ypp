@@ -1,3 +1,13 @@
+%code requires {
+/* pull in types to populate YYSTYPE: */
+#include "src/parse/ast.h"
+namespace re2c {
+    struct AstNode;
+    struct SemAct;
+    struct context_t;
+};
+}
+
 %{
 
 #pragma GCC diagnostic push
@@ -10,7 +20,7 @@
 using namespace re2c;
 
 extern "C" {
-    int yylex(context_t& context, Ast& ast);
+    int yylex(YYSTYPE* yylval, context_t& context, Ast& ast);
     void yyerror(context_t& context, Ast& ast, const char*);
 }
 
@@ -18,6 +28,7 @@ extern "C" {
 
 %start spec
 
+%define api.pure full
 %lex-param {re2c::context_t& context}
 %lex-param {re2c::Ast& ast}
 %parse-param {re2c::context_t& context}
@@ -217,9 +228,9 @@ extern "C" {
         }
     }
 
-    int yylex(context_t& context, Ast& ast) {
+    int yylex(YYSTYPE* yylval, context_t& context, Ast& ast) {
         int token;
-        if (context.input.scan(ast, token) != Ret::OK) {
+        if (context.input.scan(yylval, ast, token) != Ret::OK) {
             context.lexer_error = true;
             return TOKEN_ERROR;
         }

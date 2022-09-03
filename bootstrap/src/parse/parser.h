@@ -44,6 +44,18 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "../src/parse/parser.ypp"
+
+/* pull in types to populate YYSTYPE: */
+#include "src/parse/ast.h"
+namespace re2c {
+    struct AstNode;
+    struct SemAct;
+    struct context_t;
+};
+
+#line 59 "src/parse/parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -77,7 +89,7 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 26 "../src/parse/parser.ypp"
+#line 37 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
     const re2c::SemAct* semact;
@@ -86,7 +98,7 @@ union YYSTYPE
     const char* cstr;
     std::string* str;
 
-#line 90 "src/parse/parser.h"
+#line 102 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -95,7 +107,6 @@ typedef union YYSTYPE YYSTYPE;
 #endif
 
 
-extern YYSTYPE yylval;
 
 
 int yyparse (re2c::context_t& context, re2c::Ast& ast);
