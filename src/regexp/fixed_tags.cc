@@ -2,7 +2,7 @@
 #include <vector>
 
 #include "src/options/opt.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/regexp/tag.h"
 #include "src/util/check.h"
 

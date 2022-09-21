@@ -18,7 +18,7 @@
 #include "src/parse/ast.h"
 #include "src/parse/parse.h"
 #include "src/parse/scanner.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/regexp/rule.h"
 #include "src/skeleton/skeleton.h"
 #include "src/util/range.h"

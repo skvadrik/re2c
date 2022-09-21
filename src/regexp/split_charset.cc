@@ -5,7 +5,7 @@
 
 #include "src/options/opt.h"
 #include "src/encoding/enc.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/util/range.h"
 
 namespace re2c {

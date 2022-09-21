@@ -181,7 +181,7 @@ set(re2c_sources
     src/regexp/default_tags.cc
     src/regexp/fixed_tags.cc
     src/regexp/nullable.cc
-    src/regexp/re.cc
+    src/regexp/regexp.cc
     src/regexp/split_charset.cc
     src/compile.cc
     src/skeleton/control_flow.cc
@@ -479,7 +479,7 @@ if (RE2C_BUILD_LIBS)
         src/regexp/default_tags.cc
         src/regexp/fixed_tags.cc
         src/regexp/nullable.cc
-        src/regexp/re.cc
+        src/regexp/regexp.cc
         src/regexp/split_charset.cc
         src/skeleton/control_flow.cc
         src/skeleton/maxpath.cc

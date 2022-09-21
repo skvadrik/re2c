@@ -5,7 +5,7 @@
 #include <stdint.h>
 #include <vector>
 
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/forbid_copy.h"

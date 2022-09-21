@@ -15,7 +15,7 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/attribute.h"

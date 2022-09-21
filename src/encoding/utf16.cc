@@ -3,7 +3,7 @@
 
 #include "src/encoding/range_suffix.h"
 #include "src/encoding/utf16.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/util/range.h"
 
 namespace re2c {

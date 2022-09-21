@@ -4,7 +4,7 @@
 
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/util/check.h"

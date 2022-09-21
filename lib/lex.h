@@ -3,7 +3,7 @@
 
 #include "lib/parse.h"
 #include "src/msg/location.h"
-#include "src/regexp/re.h"
+#include "src/regexp/regexp.h"
 #include "src/parse/ast.h"
 
 namespace re2c {
