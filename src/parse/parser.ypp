@@ -13,9 +13,11 @@ namespace re2c {
 #pragma GCC diagnostic push
 #include "src/util/nowarn_in_bison.h"
 
-#include "src/parse/parse.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/parse/parser.h"
+#include "src/parse/scanner.h"
+#include "src/regexp/rule.h"
 
 using namespace re2c;
 

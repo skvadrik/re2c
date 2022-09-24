@@ -15,13 +15,10 @@
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
 #include "src/parse/scanner.h"
-#include "src/parse/parse.h" // needed by "parser.h"
 #include "src/regexp/rule.h"
 #include "src/util/check.h"
 #include "src/util/string_utils.h"
 #include "parser.h"
-
-
 
 namespace re2c {
 

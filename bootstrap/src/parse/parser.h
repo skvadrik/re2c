@@ -89,7 +89,7 @@ namespace re2c {
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 37 "../src/parse/parser.ypp"
+#line 39 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
     const re2c::SemAct* semact;

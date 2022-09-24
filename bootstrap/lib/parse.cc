@@ -1355,7 +1355,7 @@ yyreturnlab:
 
 extern "C" {
     static void yyerror(const uint8_t* pattern, Ast&, const char* msg) {
-        fprintf(stderr, "%s (on RE %s)", msg, pattern);
+        fprintf(stderr, "%s (on regexp %s)", msg, pattern);
         exit(1);
     }
 

@@ -16,7 +16,6 @@
 #include "src/nfa/nfa.h"
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
-#include "src/parse/parse.h"
 #include "src/parse/scanner.h"
 #include "src/regexp/regexp.h"
 #include "src/regexp/rule.h"
