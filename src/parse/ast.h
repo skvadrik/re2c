@@ -106,53 +106,6 @@ struct AstRule {
     AstRule(const AstNode* a, const SemAct* s): ast(a), semact(s) {}
 };
 
-// Abstract Syntax Tree.
-class Ast {
-  private:
-    // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
-    // (which happens after parsing and processing the whole translation unit, but before codegen).
-    AstAllocator allocator;
-
-    AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
-
-  public:
-    // Temporary buffers for constructing character strings and classes in lexer/parser. Generally
-    // LALR(1) parser requires a stack of nonterminals (a single value is insufficient) but these
-    // nonterminals cannot occur twice on the parser stack before a reduction happens (which we
-    // ensure by checking that a buffer is empty before using it).
-    std::vector<AstChar> temp_chars;
-    std::vector<AstRange> temp_ranges;
-    std::set<std::string> temp_condlist; // must be ordered, as condition order matters
-    std::string temp_blockname;
-
-    // Used to denote unbounded repetition (iteration, Kleene star).
-    static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
-
-    Ast(): allocator(), temp_chars(), temp_ranges(), temp_condlist(), temp_blockname() {}
-
-    // Methods for constructing individual AST nodes.
-    const AstNode* nil(const loc_t& loc);
-    const AstNode* str(const loc_t& loc, bool icase);
-    const AstNode* cls(const loc_t& loc, bool negated);
-    const AstNode* dot(const loc_t& loc);
-    const AstNode* def(const loc_t& loc);
-    const AstNode* alt(const AstNode* a1, const AstNode* a2);
-    const AstNode* cat(const AstNode* a1, const AstNode* a2);
-    const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
-    const AstNode* diff(const AstNode* a1, const AstNode* a2);
-    const AstNode* tag(const loc_t& loc, const char* n, bool h);
-    const AstNode* cap(const AstNode* a);
-    const AstNode* ref(const AstNode* a, const char* n);
-    const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
-    const char* cstr(const uint8_t* s, const uint8_t* e);
-
-    // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
-    // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`
-    // is parsed as `("a"|"aa")"b"`, not `"a"|"aab"`. However, such implicit groups do no exist in
-    // POSIX regular expressions, so re2c warns if the user accidentally creates one.
-    static bool needs_wrap(const AstNode* a);
-};
-
 struct spec_t {
     std::string name;
 
@@ -198,19 +151,66 @@ struct RulesBlocks {
     const opt_t* last_opts() const;
 };
 
-struct context_t {
-    Scanner& input;
-    specs_t& specs;
-    Opt& opts;
-    const RulesBlocks& rblocks;
-    bool lexer_error;
+// Abstract Syntax Tree.
+class Ast {
+  private:
+    // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
+    // (which happens after parsing and processing the whole translation unit, but before codegen).
+    AstAllocator allocator;
+
+    AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
+
+  public:
+    // Temporary buffers for constructing character strings and classes in lexer/parser. Generally
+    // LALR(1) parser requires a stack of nonterminals (a single value is insufficient) but these
+    // nonterminals cannot occur twice on the parser stack before a reduction happens (which we
+    // ensure by checking that a buffer is empty before using it).
+    std::vector<AstChar> temp_chars;
+    std::vector<AstRange> temp_ranges;
+    std::set<std::string> temp_condlist; // must be ordered, as condition order matters
+    std::string temp_blockname;
+
+    RulesBlocks rblocks;
+
+    // Used to denote unbounded repetition (iteration, Kleene star).
+    static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
+
+    Ast()
+        : allocator(),
+          temp_chars(),
+          temp_ranges(),
+          temp_condlist(),
+          temp_blockname(),
+          rblocks() {}
+
+    // Methods for constructing individual AST nodes.
+    const AstNode* nil(const loc_t& loc);
+    const AstNode* str(const loc_t& loc, bool icase);
+    const AstNode* cls(const loc_t& loc, bool negated);
+    const AstNode* dot(const loc_t& loc);
+    const AstNode* def(const loc_t& loc);
+    const AstNode* alt(const AstNode* a1, const AstNode* a2);
+    const AstNode* cat(const AstNode* a1, const AstNode* a2);
+    const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
+    const AstNode* diff(const AstNode* a1, const AstNode* a2);
+    const AstNode* tag(const loc_t& loc, const char* n, bool h);
+    const AstNode* cap(const AstNode* a);
+    const AstNode* ref(const AstNode* a, const char* n);
+    const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
+    const char* cstr(const uint8_t* s, const uint8_t* e);
+
+    // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
+    // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`
+    // is parsed as `("a"|"aa")"b"`, not `"a"|"aab"`. However, such implicit groups do no exist in
+    // POSIX regular expressions, so re2c warns if the user accidentally creates one.
+    static bool needs_wrap(const AstNode* a);
 };
 
 spec_t& find_or_add_spec(specs_t& specs, const std::string& name);
-Ret use_block(context_t& context, const std::string& name) NODISCARD;
+Ret use_block(
+    Scanner& input, const Ast& ast, Opt& opts, specs_t& specs, const std::string& name) NODISCARD;
 Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
-Ret parse(
-        Scanner& input, specs_t& specs, Opt& opts, const RulesBlocks& rblocks, Ast& ast) NODISCARD;
+Ret parse(Scanner& input, Ast& ast, Opt& opts, specs_t& specs) NODISCARD;
 
 } // namespace re2c
 

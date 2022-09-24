@@ -235,12 +235,12 @@ static inline void append(std::vector<T>& x, const std::vector<T>& y) {
     x.insert(x.end(), y.begin(), y.end());
 }
 
-Ret use_block(context_t& context, const std::string& name) {
-    const RulesBlock* rb = context.rblocks.find(name);
+Ret use_block(Scanner& input, const Ast& ast, Opt& opts, specs_t& specs, const std::string& name) {
+    const RulesBlock* rb = ast.rblocks.find(name);
     if (rb == nullptr) return Ret::FAIL;
 
     for (const spec_t& s : rb->specs) {
-        spec_t& spec = find_or_add_spec(context.specs, s.name);
+        spec_t& spec = find_or_add_spec(specs, s.name);
 
         // Merge rules. Inherited special rules *, $ and <!> are kept separate from those defined in
         // the current block, because they are handled differently: they have lower priority and it
@@ -253,7 +253,7 @@ Ret use_block(context_t& context, const std::string& name) {
     }
 
     // Merge configurations and symtab.
-    return context.opts.merge(rb->opts, context.input);
+    return opts.merge(rb->opts, input);
 }
 
 Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) {

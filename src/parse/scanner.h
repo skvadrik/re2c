@@ -36,6 +36,7 @@ class Scanner: private ScannerState {
     static const uint8_t* const ENDPOS;
 
     Msg& msg;
+    bool failed;
 
   private:
     std::vector<Input*> files;
@@ -105,6 +106,7 @@ class Scanner: private ScannerState {
 inline Scanner::Scanner(const conopt_t* o, Msg& m)
     : ScannerState(),
       msg(m),
+      failed(false),
       files(),
       filedeps(),
       globopts(o),

@@ -52,10 +52,9 @@ extern int yydebug;
 namespace re2c {
     struct AstNode;
     struct SemAct;
-    struct context_t;
 };
 
-#line 59 "src/parse/parser.h"
+#line 58 "src/parse/parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -89,7 +88,7 @@ namespace re2c {
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 39 "../src/parse/parser.ypp"
+#line 42 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
     const re2c::SemAct* semact;
@@ -98,7 +97,7 @@ union YYSTYPE
     const char* cstr;
     std::string* str;
 
-#line 102 "src/parse/parser.h"
+#line 101 "src/parse/parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -109,7 +108,7 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (re2c::context_t& context, re2c::Ast& ast);
+int yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs);
 
 
 #endif /* !YY_YY_SRC_PARSE_PARSER_H_INCLUDED  */

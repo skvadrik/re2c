@@ -126,7 +126,6 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
 Ret compile(Scanner& input, Output& output, Opt& opts) {
     Ast ast;
-    RulesBlocks rblocks;
     const conopt_t* globopts = &opts.glob;
     OutAllocator& out_alc = output.allocator;
     const loc_t& loc0 = input.tok_loc();
@@ -157,7 +156,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
         // parse the next re2c block
         specs_t specs;
         if (kind == InputBlock::USE) {
-            const RulesBlock* rb = rblocks.find(block_name);
+            const RulesBlock* rb = ast.rblocks.find(block_name);
             if (rb == nullptr) return Ret::FAIL;
             specs = rb->specs;
             CHECK_RET(opts.restore(rb->opts));
@@ -165,14 +164,14 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
         }
         output.cond_goto = false;
         block_loc = input.tok_loc();
-        CHECK_RET(parse(input, specs, opts, rblocks, ast));
+        CHECK_RET(parse(input, ast, opts, specs));
 
         // start new output block with accumulated options
         CHECK_RET(output.new_block(opts, kind, block_name, block_loc));
 
         if (kind == InputBlock::RULES) {
             // save AST and options for future use
-            rblocks.add(block_name, output.block().opts, specs);
+            ast.rblocks.add(block_name, output.block().opts, specs);
         } else {
             CHECK_RET(check_and_merge_special_rules(specs, output.block().opts, output.msg, ast));
 
@@ -201,7 +200,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
         }
     }
 
-    output.total_opts = accum_opts ? accum_opts : rblocks.last_opts();
+    output.total_opts = accum_opts ? accum_opts : ast.rblocks.last_opts();
 
     // For special targets (skeleton and .dot) merge header into the output file.
     if (globopts->target != Target::CODE && output.need_header) {
