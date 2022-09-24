@@ -35,6 +35,11 @@ void Msg::print_location(const loc_t& loc) const {
 }
 
 void Msg::error(const loc_t& loc, const char* fmt, ...) {
+    // If an error has already been reported, do not report another one. This prevents parser from
+    // reporting a generic "syntax error" after lexer reports a precise one.
+    if (error_seen) return;
+    error_seen = true;
+
     print_location(loc);
     fprintf(stderr, "error: ");
 

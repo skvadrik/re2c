@@ -84,7 +84,7 @@ loop:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-	if ((lim - cur) < 18) if (!fill(18)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 18) if (!fill(18)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\r') {
 		if (yych <= '\t') {
@@ -162,7 +162,7 @@ yy9:
 	goto yy3;
 yy10:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 32) {
 		goto yy10;
@@ -193,7 +193,7 @@ yy12:
 	goto yy11;
 yy13:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy13;
@@ -204,7 +204,7 @@ yy13:
 	}
 yy14:
 	++cur;
-	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy14;
@@ -415,7 +415,7 @@ yy57:
 	goto yy11;
 yy58:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy59:
 	if (yych <= 0x1F) {
@@ -496,7 +496,7 @@ yy73:
 	goto yy11;
 yy74:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
 		goto yy74;
@@ -565,7 +565,7 @@ yy87:
 	goto yy11;
 yy88:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy88;
@@ -644,7 +644,7 @@ yy103:
 	goto yy11;
 yy104:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy104;
@@ -711,7 +711,7 @@ yy118:
 	goto yy11;
 yy119:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy11;
 	if (yych == '\n') goto yy11;
@@ -1006,7 +1006,7 @@ yy168:
 	goto yy11;
 yy169:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy169;
@@ -1040,7 +1040,7 @@ yy172:
 #line 1041 "src/parse/lex.cc"
 yy173:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '!') {
 		if (yych <= 0x00) goto yy11;
@@ -1096,7 +1096,7 @@ yy176:
 	}
 yy177:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy11;
 	if (yych == '\n') goto yy11;
@@ -1166,7 +1166,7 @@ Ret Scanner::lex_opt_name(std::string& name) {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych <= 0x1F) {
 		if (yych <= '\n') {
@@ -1225,7 +1225,7 @@ yy185:
 	}
 yy186:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy186;
@@ -1307,7 +1307,7 @@ loop:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych <= 0x1F) {
 		if (yych <= '\n') {
@@ -1367,7 +1367,7 @@ yy194:
 	}
 yy195:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy195;
@@ -1435,7 +1435,7 @@ loop:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy199;
@@ -1460,7 +1460,7 @@ yy198:
 #line 1461 "src/parse/lex.cc"
 yy199:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy199;
@@ -1541,7 +1541,7 @@ loop:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 9) if (!fill(9)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 9) if (!fill(9)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy205;
@@ -1571,7 +1571,7 @@ yy204:
 #line 1572 "src/parse/lex.cc"
 yy205:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy205;
@@ -1725,7 +1725,7 @@ scan:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-	if ((lim - cur) < 9) if (!fill(9)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 9) if (!fill(9)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 16) {
 		goto yy226;
@@ -1805,7 +1805,7 @@ yy225:
 #line 1806 "src/parse/lex.cc"
 yy226:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 16) {
 		goto yy226;
@@ -1904,7 +1904,7 @@ yy242:
 	goto yy234;
 yy243:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy244:
 	if (yybm[0+yych] & 32) {
@@ -1965,7 +1965,7 @@ yy248:
 #line 1966 "src/parse/lex.cc"
 yy249:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy249;
@@ -2006,7 +2006,7 @@ yy250:
 	}
 yy251:
 	++cur;
-	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy251;
@@ -2026,7 +2026,7 @@ yy253:
 	goto yy250;
 yy254:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 'Z') {
 		if (yych <= '/') goto yy255;
@@ -2072,7 +2072,7 @@ yy260:
 #line 2073 "src/parse/lex.cc"
 yy261:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '@') {
 		if (yych <= '\t') {
@@ -2121,7 +2121,7 @@ yy265:
 #line 2122 "src/parse/lex.cc"
 yy266:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
 		goto yy266;
@@ -2134,7 +2134,7 @@ yy266:
 	goto yy250;
 yy267:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '^') {
 		if (yych <= '9') {
@@ -2168,7 +2168,7 @@ yy270:
 	goto yy250;
 yy271:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 'Z') {
 		if (yych <= '/') goto yy272;
@@ -2250,7 +2250,7 @@ yy281:
 	goto yy244;
 yy282:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '/') goto yy250;
 	if (yych <= '9') goto yy282;
@@ -2323,7 +2323,7 @@ yy290:
 	goto yy250;
 yy291:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= ':') {
 		if (yych <= 0x1F) {
@@ -2358,7 +2358,7 @@ yy291:
 	}
 yy292:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy293:
 	if (yych <= 0x1F) {
@@ -2379,7 +2379,7 @@ yy294:
 	goto yy250;
 yy295:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy295;
@@ -2414,7 +2414,7 @@ yy296:
 	}
 yy297:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\r') {
 		if (yych <= '\t') {
@@ -2468,7 +2468,7 @@ yy301:
 	goto yy250;
 yy302:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy302;
@@ -2490,7 +2490,7 @@ yy304:
 	goto yy250;
 yy305:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy305;
@@ -2505,7 +2505,7 @@ yy305:
 	}
 yy306:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy306;
@@ -2515,7 +2515,7 @@ yy306:
 	goto yy309;
 yy307:
 	++cur;
-	if ((lim - cur) < 4) if (!fill(4)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 4) if (!fill(4)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '!') {
 		if (yych <= 0x00) goto yy250;
@@ -2533,7 +2533,7 @@ yy308:
 	goto yy250;
 yy309:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy250;
 	if (yych == '\n') goto yy250;
@@ -2559,14 +2559,14 @@ yy310:
 	}
 yy311:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy250;
 	if (yych == '\n') goto yy250;
 	goto yy307;
 yy312:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy312;
@@ -2658,7 +2658,7 @@ Ret Scanner::lex_namedef_context_re2c(bool& yes) {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych <= 0x1F) {
 		if (yych == '\t') {
@@ -2681,7 +2681,7 @@ yy317:
 #line 2682 "src/parse/lex.cc"
 yy318:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy318;
@@ -2742,7 +2742,7 @@ Ret Scanner::lex_namedef_context_flex(bool& yes) {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych == '\t') {
 		yyt1 = cur;
@@ -2757,7 +2757,7 @@ Ret Scanner::lex_namedef_context_flex(bool& yes) {
 #line 2758 "src/parse/lex.cc"
 yy322:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy322;
@@ -2830,7 +2830,7 @@ Ret Scanner::lex_clist(Ast& ast, int& token) {
 yy325:
 	++cur;
 yy324:
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy325;
@@ -2844,7 +2844,7 @@ yy326:
 #line 2845 "src/parse/lex.cc"
 yy327:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych == '\t') goto yy327;
 	if (yych == ' ') goto yy327;
@@ -2899,7 +2899,7 @@ cond:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 'Z') {
 		if (yych == '*') goto yy331;
@@ -2924,7 +2924,7 @@ yy331:
 #line 2925 "src/parse/lex.cc"
 yy332:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy332;
@@ -2973,7 +2973,7 @@ next:
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= ' ') {
 		if (yych == '\t') goto yy335;
@@ -3006,7 +3006,7 @@ yy335:
 	}
 yy336:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy336;
@@ -3021,7 +3021,7 @@ yy337:
 #line 3022 "src/parse/lex.cc"
 yy338:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= ' ') {
 		if (yych == '\t') goto yy338;
@@ -3053,7 +3053,7 @@ code:
 #line 3054 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '&') {
 		if (yych <= '\f') {
@@ -3118,7 +3118,7 @@ indent:
 #line 3119 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\f') {
 		if (yych <= 0x08) goto yy350;
@@ -3189,7 +3189,7 @@ code:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '&') {
 		if (yych <= '\f') {
@@ -3254,7 +3254,7 @@ yy360:
 #line 3255 "src/parse/lex.cc"
 yy361:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 32) {
 		goto yy361;
@@ -3265,7 +3265,7 @@ yy362:
 	goto yy355;
 yy363:
 	++cur;
-	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy363;
@@ -3298,7 +3298,7 @@ yy366:
 	goto yy368;
 yy367:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy368:
 	if (yych <= 0x1F) {
@@ -3312,7 +3312,7 @@ yy368:
 	}
 yy369:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
 		goto yy369;
@@ -3328,7 +3328,7 @@ yy369:
 	}
 yy370:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy370;
@@ -3350,7 +3350,7 @@ yy372:
 	goto yy362;
 yy373:
 	++cur;
-	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 3) if (!fill(3)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy373;
@@ -3363,7 +3363,7 @@ yy373:
 	goto yy362;
 yy374:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy362;
 	if (yych == '\n') goto yy362;
@@ -3427,7 +3427,7 @@ Ret Scanner::try_lex_string_in_code(uint8_t quote) {
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 		  0,   0,   0,   0,   0,   0,   0,   0, 
 	};
-	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 5) if (!fill(5)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych <= 0xDF) {
 		if (yych <= '\\') {
@@ -3539,7 +3539,7 @@ yy390:
 	goto yy394;
 yy391:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy392:
 	if (yybm[0+yych] & 128) {
@@ -3549,7 +3549,7 @@ yy392:
 	goto yy378;
 yy393:
 	++cur;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy394:
 	if (yych <= 'F') {
@@ -3576,7 +3576,7 @@ loop:
 #line 3577 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '!') {
 		if (yych <= '\n') {
@@ -3634,7 +3634,7 @@ loop:
 #line 3635 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\f') {
 		if (yych == '\n') goto yy404;
@@ -3673,7 +3673,7 @@ loop:
 #line 3674 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych == '\n') goto yy409;
 	if (yych == '\r') goto yy410;
@@ -3706,7 +3706,7 @@ fst:
 #line 3707 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych == ']') goto yy412;
 #line 696 "../src/parse/lex.re"
@@ -3724,7 +3724,7 @@ snd:
 #line 3725 "src/parse/lex.cc"
 {
 	uint8_t yych;
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych == '-') goto yy415;
 yy414:
@@ -3769,7 +3769,7 @@ Ret Scanner::lex_cls_chr(uint32_t& c) {
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\f') {
 		if (yych == '\n') goto yy419;
@@ -4077,7 +4077,7 @@ yy453:
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x7F) {
 		if (yych <= '\f') {
@@ -4529,7 +4529,7 @@ Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\f') {
 		if (yych == '\n') goto yy510;
@@ -4822,7 +4822,7 @@ yy542:
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
-	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 10) if (!fill(10)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x7F) {
 		if (yych <= '\f') {
@@ -5300,7 +5300,7 @@ sourceline:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
-	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error("unexpected end of input"));
+	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= '\r') {
 		if (yych <= '\t') {
@@ -5346,7 +5346,7 @@ yy600:
 	goto yy603;
 yy601:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
 		goto yy601;
@@ -5363,7 +5363,7 @@ yy601:
 #line 5364 "src/parse/lex.cc"
 yy602:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 yy603:
 	if (yybm[0+yych] & 128) {
@@ -5389,7 +5389,7 @@ yy605:
 #line 5390 "src/parse/lex.cc"
 yy606:
 	++cur;
-	if (lim <= cur) if (!fill(1)) RET_FAIL(error("unexpected end of input"));
+	if (lim <= cur) if (!fill(1)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));
 	yych = *cur;
 	if (yych <= 0x00) goto yy604;
 	if (yych == '\n') goto yy604;

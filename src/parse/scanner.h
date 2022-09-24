@@ -36,7 +36,6 @@ class Scanner: private ScannerState {
     static const uint8_t* const ENDPOS;
 
     Msg& msg;
-    bool failed;
 
   private:
     std::vector<Input*> files;
@@ -106,19 +105,22 @@ class Scanner: private ScannerState {
 inline Scanner::Scanner(const conopt_t* o, Msg& m)
     : ScannerState(),
       msg(m),
-      failed(false),
       files(),
       filedeps(),
       globopts(o),
       location(ATSTART) {}
 
 inline loc_t Scanner::cur_loc() const {
-    const Input& in = get_cinput();
-    uint32_t c = static_cast<uint32_t>(cur - pos);
-    if (is_eof()) {
-        DCHECK(c > 0);
-        --c;
+    const uint8_t* p = cur;
+    ptrdiff_t padding = 0;
+    if (is_eof()) { // if this is the end, roll back to the beginning of YYMAXFILL padding
+        while (cur[padding] == 0) --padding;
+        ++padding; // point at the first null, not at the last valid character
     }
+    DCHECK(p >= pos);
+    uint32_t c = static_cast<uint32_t>(cur - pos + padding);
+
+    const Input& in = get_cinput();
     return {in.line, c, in.fidx};
 }
 

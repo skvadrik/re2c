@@ -11,7 +11,7 @@
 
 namespace re2c {
 
-#define YYFILL(n) if (!fill(n)) RET_FAIL(error("unexpected end of input in configuration"))
+#define YYFILL(n) if (!fill(n)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input in configuration"))
 
 #define RET_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(b)); \

@@ -33,7 +33,7 @@ namespace re2c {
     re2c:define:YYCURSOR = "cur";
     re2c:define:YYLIMIT  = "lim";
     re2c:define:YYMARKER = "mar";
-    re2c:define:YYFILL   = 'if (!fill(@@)) RET_FAIL(error("unexpected end of input"));';
+    re2c:define:YYFILL   = 'if (!fill(@@)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));';
 
     eof        = "\000";
     dstring    = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";

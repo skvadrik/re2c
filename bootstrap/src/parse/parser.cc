@@ -1604,18 +1604,12 @@ yyreturnlab:
 
 extern "C" {
     static void yyerror(Scanner& input, Ast&, Opt&, specs_t&, const char* s) {
-        if (!input.failed) { // lexer error has already been reported
-            input.msg.error(input.tok_loc(), "%s", s);
-        }
+        input.msg.error(input.tok_loc(), "%s", s);
     }
 
     static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, specs_t&) {
         int token;
-        if (input.scan(yylval, ast, token) != Ret::OK) {
-            input.failed = true;
-            return TOKEN_ERROR;
-        }
-        return token;
+        return input.scan(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
     }
 }
 
