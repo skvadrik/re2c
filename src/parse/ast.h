@@ -20,11 +20,11 @@ struct Opt;
 struct opt_t;
 struct SemAct;
 
-// AST node kinds.
+// Kinds of abstract syntax tree nodes.
 enum class AstKind: uint32_t {
     NIL,  // empty (nil) node
-    STR,  // character string, like "abc" or 'abc'
-    CLS,  // character class, like [a-z] or [^a-z]
+    STR,  // character string, like "abc" (case sensitive) or 'abc' (case insensitive)
+    CLS,  // character class, like [ac-z], possibly negated, like [^ac-z]
     DOT,  // any character except newline
     DEF,  // default rule *, matches any code unit, see note [default regexp]
     ALT,  // alternative of two nodes: x | y
@@ -36,11 +36,13 @@ enum class AstKind: uint32_t {
     REF   // non-capturing group
 };
 
+// A character (symbol) in the abstract syntax tree.
 struct AstChar {
     uint32_t chr;
     loc_t loc;
 };
 
+// A range of characters (symbols) in the abstract syntax tree.
 struct AstRange {
     uint32_t lower;
     uint32_t upper;
@@ -50,13 +52,14 @@ struct AstRange {
         : lower(low), upper(upp), loc(loc) {}
 };
 
+// Abstract syntax tree node for counted repetition bounds (upper bound possibly infinite).
 struct AstBounds {
     uint32_t min;
     uint32_t max;
 };
 
-// AST nodes must be immutable and independent of block options, as they may be shared by different
-// rules in blocks with different options.
+// Nodes of the abstract syntax tree. Generally AST must be immutable and independent of block
+// options, as it may be shared by different rules in blocks with different options.
 struct AstNode {
     AstKind kind;
     union {
@@ -99,6 +102,7 @@ struct AstNode {
     bool has_caps; // whether this AST has nested capturing groups
 };
 
+// Semanic action associated with an AST for a regular expression.
 struct AstRule {
     const AstNode* ast;
     const SemAct* semact;
@@ -106,7 +110,8 @@ struct AstRule {
     AstRule(const AstNode* a, const SemAct* s): ast(a), semact(s) {}
 };
 
-struct spec_t {
+// Regular grammar (a set of rules: regular expressions associated with semantic actions).
+struct AstGram {
     std::string name;
 
     // Normal rules specified in this block or inherited from other blocks.
@@ -125,29 +130,32 @@ struct spec_t {
     size_t def_rule;
     size_t eof_rule;
 
-    explicit spec_t(const std::string& name);
+    explicit AstGram(const std::string& name);
 };
 
-using specs_t = std::vector<spec_t>;
+using AstGrams = std::vector<AstGram>;
 
-struct RulesBlock {
+// Input program block (e.g. within `/*!re2c` and `*/` comments). May include one or more grammars.
+// Multiple grammars within one block are possible if start conditions are used (in that case each
+// grammar has a non-empty name), otherwise there is a single grammar with an empty name.
+struct AstBlock {
     std::string name;
     const opt_t* opts;
-    specs_t specs;
+    AstGrams grams;
 
-    RulesBlock(const std::string& name, const opt_t* opts, const specs_t& specs);
-    FORBID_COPY(RulesBlock);
+    AstBlock(const std::string& name, const opt_t* opts, const AstGrams& grams);
+    FORBID_COPY(AstBlock);
 };
 
-struct RulesBlocks {
-    std::vector<RulesBlock*> blocks;
+struct AstBlocks {
+    std::vector<AstBlock*> blocks;
 
   public:
-    RulesBlocks();
-    ~RulesBlocks();
+    AstBlocks();
+    ~AstBlocks();
     bool empty() const;
-    void add(const std::string& name, const opt_t* opts, const specs_t& specs);
-    const RulesBlock* find(const std::string& name) const;
+    void add(const std::string& name, const opt_t* opts, const AstGrams& grams);
+    const AstBlock* find(const std::string& name) const;
     const opt_t* last_opts() const;
 };
 
@@ -170,18 +178,13 @@ class Ast {
     std::set<std::string> temp_condlist; // must be ordered, as condition order matters
     std::string temp_blockname;
 
-    RulesBlocks rblocks;
+    // A list of `rules:re2c` blocks (other blocks don't need to be stored as they are not reused).
+    AstBlocks blocks;
 
     // Used to denote unbounded repetition (iteration, Kleene star).
     static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
 
-    Ast()
-        : allocator(),
-          temp_chars(),
-          temp_ranges(),
-          temp_condlist(),
-          temp_blockname(),
-          rblocks() {}
+    Ast(): allocator(), temp_chars(), temp_ranges(), temp_condlist(), temp_blockname(), blocks() {}
 
     // Methods for constructing individual AST nodes.
     const AstNode* nil(const loc_t& loc);
@@ -206,11 +209,11 @@ class Ast {
     static bool needs_wrap(const AstNode* a);
 };
 
-spec_t& find_or_add_spec(specs_t& specs, const std::string& name);
+AstGram& find_or_add_gram(AstGrams& grams, const std::string& name);
 Ret use_block(
-    Scanner& input, const Ast& ast, Opt& opts, specs_t& specs, const std::string& name) NODISCARD;
-Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
-Ret parse(Scanner& input, Ast& ast, Opt& opts, specs_t& specs) NODISCARD;
+    Scanner& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) NODISCARD;
+Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
+Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) NODISCARD;
 
 } // namespace re2c
 

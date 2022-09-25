@@ -108,7 +108,7 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs);
+int yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams);
 
 
 #endif /* !YY_YY_SRC_PARSE_PARSER_H_INCLUDED  */

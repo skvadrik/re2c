@@ -49,15 +49,15 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
 }
 
 LOCAL_NODISCARD(Ret ast_to_dfa(
-        const spec_t& spec, Output& output, dfas_t& dfas, DfaAllocator& dfa_alc)) {
+        const AstGram& gram, Output& output, dfas_t& dfas, DfaAllocator& dfa_alc)) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
     Msg& msg = output.msg;
-    const std::vector<AstRule>& ast = spec.rules;
-    const std::string&cond = spec.name;
+    const std::vector<AstRule>& ast = gram.rules;
+    const std::string&cond = gram.name;
     const std::string name = make_name(output, cond, loc);
-    const std::string& setup = spec.setup.empty() ? "" : spec.setup[0]->text;
+    const std::string& setup = gram.setup.empty() ? "" : gram.setup[0]->text;
 
     // Build a mutable tree representation of a regexp from an immutable AST.
     RESpec re(opts, msg);
@@ -73,7 +73,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.
-    Tdfa dfa(dfa_alc, nfa.charset.size(), spec.def_rule, spec.eof_rule);
+    Tdfa dfa(dfa_alc, nfa.charset.size(), gram.def_rule, gram.eof_rule);
     CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 
@@ -154,32 +154,32 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
         if (kind == InputBlock::END) break;
 
         // parse the next re2c block
-        specs_t specs;
+        AstGrams grams;
         if (kind == InputBlock::USE) {
-            const RulesBlock* rb = ast.rblocks.find(block_name);
-            if (rb == nullptr) return Ret::FAIL;
-            specs = rb->specs;
-            CHECK_RET(opts.restore(rb->opts));
+            const AstBlock* b = ast.blocks.find(block_name);
+            if (b == nullptr) return Ret::FAIL;
+            grams = b->grams;
+            CHECK_RET(opts.restore(b->opts));
             output.state_goto = false;
         }
         output.cond_goto = false;
         block_loc = input.tok_loc();
-        CHECK_RET(parse(input, ast, opts, specs));
+        CHECK_RET(parse(input, ast, opts, grams));
 
         // start new output block with accumulated options
         CHECK_RET(output.new_block(opts, kind, block_name, block_loc));
 
         if (kind == InputBlock::RULES) {
             // save AST and options for future use
-            ast.rblocks.add(block_name, output.block().opts, specs);
+            ast.blocks.add(block_name, output.block().opts, grams);
         } else {
-            CHECK_RET(check_and_merge_special_rules(specs, output.block().opts, output.msg, ast));
+            CHECK_RET(check_and_merge_special_rules(grams, output.block().opts, output.msg, ast));
 
             // compile AST to DFA
             DfaAllocator dfa_alc;
             dfas_t dfas;
-            for (const spec_t& spec : specs) {
-                CHECK_RET(ast_to_dfa(spec, output, dfas, dfa_alc));
+            for (const AstGram& gram : grams) {
+                CHECK_RET(ast_to_dfa(gram, output, dfas, dfa_alc));
             }
 
             // compile DFA to code
@@ -200,7 +200,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
         }
     }
 
-    output.total_opts = accum_opts ? accum_opts : ast.rblocks.last_opts();
+    output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
 
     // For special targets (skeleton and .dot) merge header into the output file.
     if (globopts->target != Target::CODE && output.need_header) {

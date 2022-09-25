@@ -82,8 +82,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, specs_t&, const char* s);
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, specs_t&);
+    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s);
+    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&);
 }
 
 
@@ -716,7 +716,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (input, ast, opts, specs, YY_("syntax error: cannot back up")); \
+        yyerror (input, ast, opts, grams, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -749,7 +749,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value, input, ast, opts, specs); \
+                  Kind, Value, input, ast, opts, grams); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -761,14 +761,14 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (input);
   YY_USE (ast);
   YY_USE (opts);
-  YY_USE (specs);
+  YY_USE (grams);
   if (!yyvaluep)
     return;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -783,12 +783,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep, input, ast, opts, specs);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, input, ast, opts, grams);
   YYFPRINTF (yyo, ")");
 }
 
@@ -822,7 +822,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs)
+                 int yyrule, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -835,7 +835,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)], input, ast, opts, specs);
+                       &yyvsp[(yyi + 1) - (yynrhs)], input, ast, opts, grams);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -843,7 +843,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule, input, ast, opts, specs); \
+    yy_reduce_print (yyssp, yyvsp, Rule, input, ast, opts, grams); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -884,13 +884,13 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   YY_USE (yyvaluep);
   YY_USE (input);
   YY_USE (ast);
   YY_USE (opts);
-  YY_USE (specs);
+  YY_USE (grams);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
@@ -910,7 +910,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::specs_t& specs)
+yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1077,7 +1077,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (&yylval, input, ast, opts, specs);
+      yychar = yylex (&yylval, input, ast, opts, grams);
     }
 
   if (yychar <= YYEOF)
@@ -1167,7 +1167,7 @@ yyreduce:
   case 3: /* spec: spec TOKEN_BLOCK  */
 #line 77 "../src/parse/parser.ypp"
                    {
-    if (use_block(input, ast, opts, specs, ast.temp_blockname) != Ret::OK) YYABORT;
+    if (use_block(input, ast, opts, grams, ast.temp_blockname) != Ret::OK) YYABORT;
     ast.temp_blockname.clear();
 }
 #line 1174 "src/parse/parser.cc"
@@ -1208,7 +1208,7 @@ yyreduce:
   case 14: /* rule: trailexpr TOKEN_CODE  */
 #line 107 "../src/parse/parser.ypp"
                        {
-    find_or_add_spec(specs, "").rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
+    find_or_add_gram(grams, "").rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
 #line 1214 "src/parse/parser.cc"
     break;
@@ -1216,7 +1216,7 @@ yyreduce:
   case 15: /* rule: '*' TOKEN_CODE  */
 #line 110 "../src/parse/parser.ypp"
                  {
-    find_or_add_spec(specs, "").defs.push_back((yyvsp[0].semact));
+    find_or_add_gram(grams, "").defs.push_back((yyvsp[0].semact));
 }
 #line 1222 "src/parse/parser.cc"
     break;
@@ -1224,7 +1224,7 @@ yyreduce:
   case 16: /* rule: '$' TOKEN_CODE  */
 #line 113 "../src/parse/parser.ypp"
                  {
-    find_or_add_spec(specs, "").eofs.push_back((yyvsp[0].semact));
+    find_or_add_gram(grams, "").eofs.push_back((yyvsp[0].semact));
 }
 #line 1230 "src/parse/parser.cc"
     break;
@@ -1233,7 +1233,7 @@ yyreduce:
 #line 116 "../src/parse/parser.ypp"
                               {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
+        find_or_add_gram(grams, cond).rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     ast.temp_condlist.clear();
 }
@@ -1244,7 +1244,7 @@ yyreduce:
 #line 122 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).defs.push_back((yyvsp[0].semact));
+        find_or_add_gram(grams, cond).defs.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
@@ -1255,7 +1255,7 @@ yyreduce:
 #line 128 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).eofs.push_back((yyvsp[0].semact));
+        find_or_add_gram(grams, cond).eofs.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
@@ -1266,7 +1266,7 @@ yyreduce:
 #line 134 "../src/parse/parser.ypp"
                           {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).setup.push_back((yyvsp[0].semact));
+        find_or_add_gram(grams, cond).setup.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
@@ -1277,7 +1277,7 @@ yyreduce:
 #line 140 "../src/parse/parser.ypp"
                     {
     const AstNode* r = ast.nil(input.tok_loc());
-    find_or_add_spec(specs, "0").rules.push_back(AstRule(r, (yyvsp[0].semact)));
+    find_or_add_gram(grams, "0").rules.push_back(AstRule(r, (yyvsp[0].semact)));
     ast.temp_condlist.clear();
 }
 #line 1284 "src/parse/parser.cc"
@@ -1451,7 +1451,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (input, ast, opts, specs, YY_("syntax error"));
+      yyerror (input, ast, opts, grams, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1468,7 +1468,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval, input, ast, opts, specs);
+                      yytoken, &yylval, input, ast, opts, grams);
           yychar = YYEMPTY;
         }
     }
@@ -1524,7 +1524,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp, input, ast, opts, specs);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, input, ast, opts, grams);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1562,7 +1562,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (input, ast, opts, specs, YY_("memory exhausted"));
+  yyerror (input, ast, opts, grams, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1577,7 +1577,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval, input, ast, opts, specs);
+                  yytoken, &yylval, input, ast, opts, grams);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1586,7 +1586,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, input, ast, opts, specs);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, input, ast, opts, grams);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1603,11 +1603,11 @@ yyreturnlab:
 #pragma GCC diagnostic pop
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, specs_t&, const char* s) {
+    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s) {
         input.msg.error(input.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, specs_t&) {
+    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&) {
         int token;
         return input.scan(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
     }
@@ -1615,8 +1615,8 @@ extern "C" {
 
 namespace re2c {
 
-Ret parse(Scanner& input, Ast& ast, Opt& opts, specs_t& specs) {
-    return yyparse(input, ast, opts, specs) == 0 ? Ret::OK : Ret::FAIL;
+Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) {
+    return yyparse(input, ast, opts, grams) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

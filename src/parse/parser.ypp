@@ -21,8 +21,8 @@ namespace re2c {
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, specs_t&, const char* s);
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, specs_t&);
+    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s);
+    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&);
 }
 
 %}
@@ -33,11 +33,11 @@ extern "C" {
 %lex-param {re2c::Scanner& input}
 %lex-param {re2c::Ast& ast}
 %lex-param {re2c::Opt& opts}
-%lex-param {re2c::specs_t& specs}
+%lex-param {re2c::AstGrams& grams}
 %parse-param {re2c::Scanner& input}
 %parse-param {re2c::Ast& ast}
 %parse-param {re2c::Opt& opts}
-%parse-param {re2c::specs_t& specs}
+%parse-param {re2c::AstGrams& grams}
 
 %union {
     const re2c::AstNode* regexp;
@@ -75,7 +75,7 @@ extern "C" {
 spec
 : %empty
 | spec TOKEN_BLOCK {
-    if (use_block(input, ast, opts, specs, ast.temp_blockname) != Ret::OK) YYABORT;
+    if (use_block(input, ast, opts, grams, ast.temp_blockname) != Ret::OK) YYABORT;
     ast.temp_blockname.clear();
 }
 | spec TOKEN_CONF {
@@ -105,41 +105,41 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 : trailexpr TOKEN_CODE {
-    find_or_add_spec(specs, "").rules.push_back(AstRule($1, $2));
+    find_or_add_gram(grams, "").rules.push_back(AstRule($1, $2));
 }
 | '*' TOKEN_CODE {
-    find_or_add_spec(specs, "").defs.push_back($2);
+    find_or_add_gram(grams, "").defs.push_back($2);
 }
 | '$' TOKEN_CODE {
-    find_or_add_spec(specs, "").eofs.push_back($2);
+    find_or_add_gram(grams, "").eofs.push_back($2);
 }
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).rules.push_back(AstRule($2, $3));
+        find_or_add_gram(grams, cond).rules.push_back(AstRule($2, $3));
     }
     ast.temp_condlist.clear();
 }
 | TOKEN_CLIST '*' ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).defs.push_back($3);
+        find_or_add_gram(grams, cond).defs.push_back($3);
     }
     ast.temp_condlist.clear();
 }
 | TOKEN_CLIST '$' ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).eofs.push_back($3);
+        find_or_add_gram(grams, cond).eofs.push_back($3);
     }
     ast.temp_condlist.clear();
 }
 | TOKEN_CSETUP TOKEN_CODE {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_spec(specs, cond).setup.push_back($2);
+        find_or_add_gram(grams, cond).setup.push_back($2);
     }
     ast.temp_condlist.clear();
 }
 | TOKEN_CZERO ccode {
     const AstNode* r = ast.nil(input.tok_loc());
-    find_or_add_spec(specs, "0").rules.push_back(AstRule(r, $2));
+    find_or_add_gram(grams, "0").rules.push_back(AstRule(r, $2));
     ast.temp_condlist.clear();
 };
 
@@ -226,11 +226,11 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, specs_t&, const char* s) {
+    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s) {
         input.msg.error(input.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, specs_t&) {
+    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&) {
         int token;
         return input.scan(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
     }
@@ -238,8 +238,8 @@ extern "C" {
 
 namespace re2c {
 
-Ret parse(Scanner& input, Ast& ast, Opt& opts, specs_t& specs) {
-    return yyparse(input, ast, opts, specs) == 0 ? Ret::OK : Ret::FAIL;
+Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) {
+    return yyparse(input, ast, opts, grams) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

@@ -172,7 +172,7 @@ bool Ast::needs_wrap(const AstNode* a) {
     return false; // unreachable
 }
 
-spec_t::spec_t(const std::string& name)
+AstGram::AstGram(const std::string& name)
     : name(name),
       rules(),
       defs(),
@@ -184,33 +184,33 @@ spec_t::spec_t(const std::string& name)
       def_rule(Rule::NONE),
       eof_rule(Rule::NONE) {}
 
-RulesBlock::RulesBlock(const std::string& name, const opt_t* opts, const specs_t& specs)
-    : name(name), opts(opts), specs(specs) {}
+AstBlock::AstBlock(const std::string& name, const opt_t* opts, const AstGrams& grams)
+    : name(name), opts(opts), grams(grams) {}
 
-RulesBlocks::RulesBlocks(): blocks() {}
+AstBlocks::AstBlocks(): blocks() {}
 
-RulesBlocks::~RulesBlocks() {
-    for (RulesBlock* b : blocks) {
+AstBlocks::~AstBlocks() {
+    for (AstBlock* b : blocks) {
         delete b;
     }
 }
 
-bool RulesBlocks::empty() const {
+bool AstBlocks::empty() const {
     return blocks.empty();
 }
 
-void RulesBlocks::add(const std::string& name, const opt_t* opts, const specs_t& specs) {
-    blocks.push_back(new RulesBlock(name, opts, specs));
+void AstBlocks::add(const std::string& name, const opt_t* opts, const AstGrams& grams) {
+    blocks.push_back(new AstBlock(name, opts, grams));
 }
 
-const RulesBlock* RulesBlocks::find(const std::string& name) const {
+const AstBlock* AstBlocks::find(const std::string& name) const {
     if (name.empty()) {
         if (!blocks.empty()) {
             return blocks.back();
         }
         error("cannot find `/*!rules:re2c ... */` block");
     } else {
-        for (const RulesBlock* b : blocks) {
+        for (const AstBlock* b : blocks) {
             if (b->name == name) return b;
         }
         error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
@@ -218,16 +218,16 @@ const RulesBlock* RulesBlocks::find(const std::string& name) const {
     return nullptr;
 }
 
-const opt_t* RulesBlocks::last_opts() const {
+const opt_t* AstBlocks::last_opts() const {
     return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
-spec_t& find_or_add_spec(specs_t& specs, const std::string& name) {
-    for (spec_t& spec : specs) {
-        if (spec.name == name) return spec;
+AstGram& find_or_add_gram(AstGrams& grams, const std::string& name) {
+    for (AstGram& gram : grams) {
+        if (gram.name == name) return gram;
     }
-    specs.push_back(spec_t(name));
-    return specs.back();
+    grams.push_back(AstGram(name));
+    return grams.back();
 }
 
 template<typename T>
@@ -235,162 +235,162 @@ static inline void append(std::vector<T>& x, const std::vector<T>& y) {
     x.insert(x.end(), y.begin(), y.end());
 }
 
-Ret use_block(Scanner& input, const Ast& ast, Opt& opts, specs_t& specs, const std::string& name) {
-    const RulesBlock* rb = ast.rblocks.find(name);
-    if (rb == nullptr) return Ret::FAIL;
+Ret use_block(Scanner& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) {
+    const AstBlock* b = ast.blocks.find(name);
+    if (b == nullptr) return Ret::FAIL;
 
-    for (const spec_t& s : rb->specs) {
-        spec_t& spec = find_or_add_spec(specs, s.name);
+    for (const AstGram& g : b->grams) {
+        AstGram& gram = find_or_add_gram(grams, g.name);
 
         // Merge rules. Inherited special rules *, $ and <!> are kept separate from those defined in
         // the current block, because they are handled differently: they have lower priority and it
         // is allowed to override them with local rules (while within one block redefinition of a
         // special rule is an error).
-        append(spec.rules, s.rules);
-        append(spec.inherited_defs, s.defs);
-        append(spec.inherited_eofs, s.eofs);
-        append(spec.inherited_setup, s.setup);
+        append(gram.rules, g.rules);
+        append(gram.inherited_defs, g.defs);
+        append(gram.inherited_eofs, g.eofs);
+        append(gram.inherited_setup, g.setup);
     }
 
     // Merge configurations and symtab.
-    return opts.merge(rb->opts, input);
+    return opts.merge(b->opts, input);
 }
 
-Ret check_and_merge_special_rules(specs_t& specs, const opt_t* opts, Msg& msg, Ast& ast) {
-    if (specs.empty()) return Ret::OK;
+Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) {
+    if (grams.empty()) return Ret::OK;
 
-    for (const spec_t& s : specs) {
-        if (s.defs.size() > 1) {
-            RET_FAIL(msg.error(s.defs[1]->loc,
+    for (const AstGram& g : grams) {
+        if (g.defs.size() > 1) {
+            RET_FAIL(msg.error(g.defs[1]->loc,
                                "code to default rule %sis already defined at line %u",
-                               incond(s.name).c_str(), s.defs[0]->loc.line));
-        } else if (s.eofs.size() > 1) {
-            RET_FAIL(msg.error(s.eofs[1]->loc,
+                               incond(g.name).c_str(), g.defs[0]->loc.line));
+        } else if (g.eofs.size() > 1) {
+            RET_FAIL(msg.error(g.eofs[1]->loc,
                                "EOF rule %sis already defined at line %u",
-                               incond(s.name).c_str(), s.eofs[0]->loc.line));
-        } else if (s.rules.empty() && s.defs.empty() && !s.eofs.empty()) {
-            RET_FAIL(msg.error(s.eofs[0]->loc,
+                               incond(g.name).c_str(), g.eofs[0]->loc.line));
+        } else if (g.rules.empty() && g.defs.empty() && !g.eofs.empty()) {
+            RET_FAIL(msg.error(g.eofs[0]->loc,
                                "EOF rule %swithout other rules doesn't make sense",
-                               incond(s.name).c_str()));
+                               incond(g.name).c_str()));
         }
     }
 
     if (!opts->start_conditions) {
-        // normal mode: there must be no named specs corresponding to conditions
-        for (const spec_t& s : specs) {
-            if (!s.name.empty()) { // found named spec
-                const loc_t& loc = !s.rules.empty() ? s.rules[0].semact->loc
-                        : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+        // normal mode: there must be no named grams corresponding to conditions
+        for (const AstGram& g : grams) {
+            if (!g.name.empty()) { // found named gram
+                const loc_t& loc = !g.rules.empty() ? g.rules[0].semact->loc
+                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
                 RET_FAIL(msg.error(loc,
                                    "conditions are only allowed with '-c', '--conditions' option"));
             }
         }
-    } else if (specs.size() == 1 && specs[0].name.empty()) {
-        // condition mode, a single unnamed spec => ok, normal blocks are allowed
+    } else if (grams.size() == 1 && grams[0].name.empty()) {
+        // condition mode, a single unnamed gram => ok, normal blocks are allowed
     } else {
-        // condition mode, at least one named spec => this is a block with conditions
+        // condition mode, at least one named gram => this is a block with conditions
 
-        for (const spec_t& s : specs) {
-            if (s.name.empty()) { // found unnamed spec
-                const loc_t& l = !s.rules.empty() ? s.rules[0].semact->loc
-                        : !s.defs.empty() ? s.defs[0]->loc : NOWHERE;
+        for (const AstGram& g : grams) {
+            if (g.name.empty()) { // found unnamed gram
+                const loc_t& l = !g.rules.empty() ? g.rules[0].semact->loc
+                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
                 RET_FAIL(msg.error(l, "cannot mix conditions with normal rules"));
             }
         }
 
-        for (const spec_t& s : specs) {
-            if (s.setup.size() > 1) {
-                RET_FAIL(msg.error(s.setup[1]->loc,
+        for (const AstGram& g : grams) {
+            if (g.setup.size() > 1) {
+                RET_FAIL(msg.error(g.setup[1]->loc,
                                    "code to setup rule '%s' is already defined at line %u",
-                                   s.name.c_str(), s.setup[0]->loc.line));
+                                   g.name.c_str(), g.setup[0]->loc.line));
             }
         }
 
-        for (const spec_t& s : specs) {
-            if (s.name != "*" && !s.setup.empty() && s.rules.empty()) {
-                RET_FAIL(msg.error(s.setup[0]->loc,
-                                   "setup for non existing condition '%s' found", s.name.c_str()));
+        for (const AstGram& g : grams) {
+            if (g.name != "*" && !g.setup.empty() && g.rules.empty()) {
+                RET_FAIL(msg.error(g.setup[0]->loc,
+                                   "setup for non existing condition '%s' found", g.name.c_str()));
             }
         }
 
         auto no_setup = std::find_if(
-                specs.begin(), specs.end(), [](const spec_t& s) { return s.setup.empty(); });
-        if (no_setup == specs.end()) { // all specs have setup
-            for (const spec_t& s : specs) {
-                if (s.name == "*") {
-                    RET_FAIL(msg.error(s.setup[0]->loc,
+                grams.begin(), grams.end(), [](const AstGram& g) { return g.setup.empty(); });
+        if (no_setup == grams.end()) { // all grams have setup
+            for (const AstGram& g : grams) {
+                if (g.name == "*") {
+                    RET_FAIL(msg.error(g.setup[0]->loc,
                                        "setup for all conditions '<!*>' is illegal if setup for "
                                        "each condition is defined explicitly"));
                 }
             }
         }
 
-        for (const spec_t& s : specs) {
-            if (s.name == "0" && s.rules.size() > 1) {
-                RET_FAIL(msg.error(s.rules[1].semact->loc,
+        for (const AstGram& g : grams) {
+            if (g.name == "0" && g.rules.size() > 1) {
+                RET_FAIL(msg.error(g.rules[1].semact->loc,
                                    "startup code is already defined at line %u",
-                                   s.rules[0].semact->loc.line));
+                                   g.rules[0].semact->loc.line));
             }
         }
     }
 
     // Inherit special rules from other blocks (unless a local one is defined).
-    for (spec_t& s : specs) {
-        append(s.defs, s.inherited_defs);
-        append(s.eofs, s.inherited_eofs);
-        append(s.setup, s.inherited_setup);
+    for (AstGram& g : grams) {
+        append(g.defs, g.inherited_defs);
+        append(g.eofs, g.inherited_eofs);
+        append(g.setup, g.inherited_setup);
     }
 
     // Merge <*> rules and <!*> setup to all conditions except "0". Star rules must have lower
     // priority than normal rules.
     auto star = std::find_if(
-            specs.begin(), specs.end(), [](const spec_t& s) { return s.name == "*"; });
-    if (star != specs.end()) {
-        for (spec_t& s : specs) {
-            if (s.name != "*" && s.name != "0") {
-                append(s.rules, star->rules);
-                append(s.defs, star->defs);
-                append(s.eofs, star->eofs);
-                append(s.setup, star->setup);
+            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
+    if (star != grams.end()) {
+        for (AstGram& g : grams) {
+            if (g.name != "*" && g.name != "0") {
+                append(g.rules, star->rules);
+                append(g.defs, star->defs);
+                append(g.eofs, star->eofs);
+                append(g.setup, star->setup);
             }
         }
-        specs.erase(star);
+        grams.erase(star);
     }
 
     // Merge end of input rule $ and default rule * with the lowest priority.
-    for (spec_t& s : specs) {
+    for (AstGram& g : grams) {
         // See note [EOF rule handling].
-        if (!s.eofs.empty()) {
-            s.eof_rule = s.rules.size();
-            const SemAct* a = s.eofs[0];
-            s.rules.push_back(AstRule(ast.nil(a->loc), a));
+        if (!g.eofs.empty()) {
+            g.eof_rule = g.rules.size();
+            const SemAct* a = g.eofs[0];
+            g.rules.push_back(AstRule(ast.nil(a->loc), a));
         }
-        if (!s.defs.empty()) {
-            s.def_rule = s.rules.size();
-            const SemAct* a = s.defs[0];
-            s.rules.push_back(AstRule(ast.def(a->loc), a));
+        if (!g.defs.empty()) {
+            g.def_rule = g.rules.size();
+            const SemAct* a = g.defs[0];
+            g.rules.push_back(AstRule(ast.def(a->loc), a));
         }
     }
 
     // "0" condition must be the first one.
     auto zero = std::find_if(
-            specs.begin(), specs.end(), [](const spec_t& s) { return s.name == "0"; });
-    if (zero != specs.end() && zero != specs.begin()) {
-        spec_t zero_copy(*zero);
-        specs.erase(zero);
-        specs.insert(specs.begin(), zero_copy);
+            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "0"; });
+    if (zero != grams.end() && zero != grams.begin()) {
+        AstGram zero_copy(*zero);
+        grams.erase(zero);
+        grams.insert(grams.begin(), zero_copy);
     }
 
     // Check that 're2c:eof' configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
-    for (const spec_t& s : specs) {
-        if (!s.eofs.empty() && opts->fill_eof == NOEOF) {
-            RET_FAIL(msg.error(s.eofs[0]->loc,
+    for (const AstGram& g : grams) {
+        if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
+            RET_FAIL(msg.error(g.eofs[0]->loc,
                                "%s$ rule found, but 're2c:eof' configuration is not set",
-                               incond(s.name).c_str()));
-        } else if (s.eofs.empty() && opts->fill_eof != NOEOF) {
+                               incond(g.name).c_str()));
+        } else if (g.eofs.empty() && opts->fill_eof != NOEOF) {
             RET_FAIL(error("%s're2c:eof' configuration is set, but no $ rule found",
-                           incond(s.name).c_str()));
+                           incond(g.name).c_str()));
         }
     }
 
