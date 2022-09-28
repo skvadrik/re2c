@@ -52,7 +52,6 @@ re2c_HDR = \
 	src/skeleton/skeleton.h \
 	src/parse/ast.h \
 	src/parse/input.h \
-	src/parse/scanner.h \
 	src/debug/debug.h \
 	src/util/allocator.h \
 	src/util/attribute.h \
@@ -128,7 +127,6 @@ re2c_SRC = \
 	src/skeleton/skeleton.cc \
 	src/parse/ast.cc \
 	src/parse/input.cc \
-	src/parse/scanner.cc \
 	src/util/file_utils.cc \
 	src/util/string_utils.cc \
 	src/util/range.cc

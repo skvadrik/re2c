@@ -11,7 +11,7 @@ namespace re2c {
 
 #line 13 "src/parse/lex.h"
 #define YYMAXFILL 18
-#line 69 "../src/parse/lex.re"
+#line 68 "../src/parse/lex.re"
 
 
 struct ScannerState {
@@ -23,7 +23,7 @@ struct ScannerState {
     
 #line 25 "src/parse/lex.h"
 uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
-#line 77 "../src/parse/lex.re"
+#line 76 "../src/parse/lex.re"
 
 
     inline ScannerState()
@@ -41,7 +41,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
           
 #line 43 "src/parse/lex.h"
 , yyt1(lim), yyt2(lim), yyt3(lim)
-#line 91 "../src/parse/lex.re"
+#line 90 "../src/parse/lex.re"
  {
         memset(lim, 0, YYMAXFILL);
     }
@@ -61,7 +61,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         
 #line 63 "src/parse/lex.h"
 if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; }
-#line 107 "../src/parse/lex.re"
+#line 106 "../src/parse/lex.re"
 
     }
 

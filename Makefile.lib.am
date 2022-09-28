@@ -44,7 +44,6 @@ libre2c_la_HDR = \
 	src/parse/ast.h \
 	src/parse/input.h \
 	src/parse/parser.h \
-	src/parse/scanner.h \
 	src/debug/debug.h \
 	src/util/allocator.h \
 	src/util/attribute.h \

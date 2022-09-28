@@ -1,6 +1,6 @@
 #include "src/msg/msg.h"
 #include "src/options/symtab.h"
-#include "src/parse/scanner.h"
+#include "src/parse/input.h"
 
 namespace re2c {
 

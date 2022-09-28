@@ -14,7 +14,6 @@
 #include "src/parse/ast.h"
 #include "src/parse/input.h"
 #include "src/parse/lex.h"
-#include "src/parse/scanner.h"
 #include "src/regexp/rule.h"
 #include "src/util/check.h"
 #include "src/util/string_utils.h"

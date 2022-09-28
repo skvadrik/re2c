@@ -6,7 +6,6 @@
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
 #include "src/parse/input.h"
-#include "src/parse/scanner.h"
 
 namespace re2c {
 

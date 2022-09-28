@@ -7,7 +7,7 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
-#include "src/parse/scanner.h"
+#include "src/parse/input.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
 

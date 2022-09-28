@@ -191,7 +191,6 @@ set(re2c_sources
     src/skeleton/skeleton.cc
     src/parse/ast.cc
     src/parse/input.cc
-    src/parse/scanner.cc
     src/util/file_utils.cc
     src/util/string_utils.cc
     src/util/range.cc

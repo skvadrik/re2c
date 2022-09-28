@@ -75,8 +75,8 @@
 
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/parse/input.h"
 #include "src/parse/parser.h"
-#include "src/parse/scanner.h"
 #include "src/regexp/rule.h"
 
 using namespace re2c;
