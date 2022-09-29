@@ -35,6 +35,13 @@ void Msg::print_location(const loc_t& loc) const {
 }
 
 void Msg::error(const loc_t& loc, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    verror(loc, fmt, args);
+    va_end(args);
+}
+
+void Msg::verror(const loc_t& loc, const char* fmt, va_list args) {
     // If an error has already been reported, do not report another one. This prevents parser from
     // reporting a generic "syntax error" after lexer reports a precise one.
     if (error_seen) return;
@@ -42,12 +49,7 @@ void Msg::error(const loc_t& loc, const char* fmt, ...) {
 
     print_location(loc);
     fprintf(stderr, "error: ");
-
-    va_list args;
-    va_start(args, fmt);
     vfprintf(stderr, fmt, args);
-    va_end(args);
-
     fprintf(stderr, "\n");
 }
 

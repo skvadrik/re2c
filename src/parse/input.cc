@@ -1,4 +1,4 @@
-#include <stdint.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 #include <algorithm>
@@ -266,6 +266,27 @@ Ret Scanner::gen_dep_file() const {
 
 uint32_t Scanner::decode(const uint8_t* str) const {
     return globopts->input_encoding == Enc::Type::ASCII ? str[0] : utf8::decode_unsafe(str);
+}
+
+void Scanner::error_at(const loc_t& loc, const char* fmt, ...) const {
+    va_list args;
+    va_start(args, fmt);
+    msg.verror(loc, fmt, args);
+    va_end(args);
+}
+
+void Scanner::error_at_cur(const char* fmt, ...) const {
+    va_list args;
+    va_start(args, fmt);
+    msg.verror(cur_loc(), fmt, args);
+    va_end(args);
+}
+
+void Scanner::error_at_tok(const char* fmt, ...) const {
+    va_list args;
+    va_start(args, fmt);
+    msg.verror(tok_loc(), fmt, args);
+    va_end(args);
 }
 
 } // namespace re2c

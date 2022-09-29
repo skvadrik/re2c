@@ -32,7 +32,7 @@ namespace re2c {
     re2c:define:YYCURSOR = "cur";
     re2c:define:YYLIMIT  = "lim";
     re2c:define:YYMARKER = "mar";
-    re2c:define:YYFILL   = 'if (!fill(@@)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input"));';
+    re2c:define:YYFILL   = 'if (!fill(@@)) RET_FAIL(error_at_cur("unexpected end of input"));';
 
     eof        = "\000";
     dstring    = "\"" ([^\x00\n\\"] | "\\" [^\x00\n])* "\"";
@@ -145,7 +145,7 @@ loop:
         out.wraw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         if (block_name == "local") {
-            RET_FAIL(msg.error(cur_loc(), "ill-formed local block, expected `local:re2c`"));
+            RET_FAIL(error_at_cur("ill-formed local block, expected `local:re2c`"));
         }
         RET_BLOCK(InputBlock::GLOBAL);
     }
@@ -201,12 +201,11 @@ loop:
     "/*!getstate:re2c" {
         out.state_goto = true;
         if (!opts->storable_state) {
-            RET_FAIL(msg.error(cur_loc(), "`getstate:re2c` without `-f --storable-state` option"));
+            RET_FAIL(error_at_cur("`getstate:re2c` without `-f --storable-state` option"));
         } else if (opts->loop_switch) {
-            RET_FAIL(msg.error(cur_loc(),
-                               "`getstate:re2c` is incompatible with the --loop-switch option, as "
-                               "it requires cross-block transitions that are unsupported without "
-                               "the `goto` statement"));
+            RET_FAIL(error_at_cur(
+                    "`getstate:re2c` is incompatible with the --loop-switch option, as it requires"
+                    " cross-block transitions that are unsupported without the `goto` statement"));
         }
         CHECK_RET(lex_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
         goto next;
@@ -228,9 +227,9 @@ loop:
         goto next;
     }
     "/*!header:re2c" {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed header directive: expected `/*!header:re2c:<on|off>` "
-                           "followed by a space, a newline or the end of block `*" "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed header directive: expected `/*!header:re2c:<on|off>` followed by a"
+                " space, a newline or the end of block `*" "/`"));
     }
 
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
@@ -241,9 +240,8 @@ loop:
         goto next;
     }
     "/*!include:re2c" {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed include directive: expected `/*!include:re2c \"<file>\" *"
-                           "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed include directive: expected `/*!include:re2c \"<file>\" *" "/`"));
     }
 
     "/*!ignore:re2c" / ws_or_eoc {
@@ -253,9 +251,9 @@ loop:
         goto next;
     }
     "/*!ignore:re2c" {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed start of `ignore:re2c` block: expected a space, a newline, "
-                           "or the end of block `*" "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed start of `ignore:re2c` block: expected a space, a newline, or the end"
+                " of block `*" "/`"));
     }
 
     eof {
@@ -288,9 +286,9 @@ Ret Scanner::lex_opt_name(std::string& name) {
     tok = cur;
 /*!local:re2c
     "" {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed start of a block: expected a space, a newline, a colon "
-                           "followed by a block name, or the end of block `*" "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed start of a block: expected a space, a newline, a colon followed by a"
+                " block name, or the end of block `*" "/`"));
     }
 
     ""       / ws_or_eoc { name.clear();              return Ret::OK; }
@@ -304,10 +302,9 @@ loop:
     tok = cur;
 /*!local:re2c
     "" {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed start of a block: expected a space, a newline, a colon "
-                           "followed by a list of colon-separated block names, or the end of block "
-                           "`*" "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed start of a block: expected a space, a newline, a colon followed by a"
+                " list of colon-separated block names, or the end of block `*" "/`"));
     }
 
     "" / ws_or_eoc { *ptail = nullptr; return Ret::OK; }
@@ -322,7 +319,7 @@ loop:
         // Check that the added name is unique.
         for (const BlockNameList *p = *phead; p != l; p = p->next) {
             if (strcmp(p->name, l->name) == 0) {
-                RET_FAIL(msg.error(cur_loc(), "duplicate block '%s' on the list", p->name));
+                RET_FAIL(error_at_cur("duplicate block '%s' on the list", p->name));
             }
         }
 
@@ -336,9 +333,8 @@ Ret Scanner::lex_block_end(Output& out, bool allow_garbage) {
 loop: /*!local:re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed end of block: expected optional whitespaces followed by `*"
-                           "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed end of block: expected optional whitespaces followed by `*" "/`"));
     }
     eoc {
         if (multiline) {
@@ -362,14 +358,14 @@ Ret Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mas
 
 loop: /*!local:re2c
     * {
-        RET_FAIL(msg.error(cur_loc(),
-                           "ill-formed directive: expected optional configurations followed by the "
-                           "end of block `*" "/`"));
+        RET_FAIL(error_at_cur(
+                "ill-formed directive: expected optional configurations followed by the end of"
+                " block `*" "/`"));
     }
 
     "format" {
         if ((mask & DCONF_FORMAT) == 0) {
-            RET_FAIL(msg.error(cur_loc(), "unexpected configuration 'format'"));
+            RET_FAIL(error_at_cur("unexpected configuration 'format'"));
         }
         CHECK_RET(lex_conf_string(s));
         fmt = copystr(s, alc);
@@ -378,7 +374,7 @@ loop: /*!local:re2c
 
     "separator" {
         if ((mask & DCONF_SEPARATOR) == 0) {
-            RET_FAIL(msg.error(cur_loc(), "unexpected configuration 'separator'"));
+            RET_FAIL(error_at_cur("unexpected configuration 'separator'"));
         }
         CHECK_RET(lex_conf_string(s));
         sep = copystr(s, alc);
@@ -436,7 +432,7 @@ scan:
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
-            RET_FAIL(msg.error(tok_loc(), "repetition count overflow"));
+            RET_FAIL(error_at_tok("repetition count overflow"));
         }
         yylval->bounds.max = yylval->bounds.min;
         RET_TOK(TOKEN_CLOSESIZE);
@@ -444,32 +440,31 @@ scan:
 
     "{" [0-9]+ @p "," [0-9]+ "}" {
         if (!s_to_u32_unsafe(tok + 1, p, yylval->bounds.min)) {
-            RET_FAIL(msg.error(tok_loc(), "repetition lower bound overflow"));
+            RET_FAIL(error_at_tok("repetition lower bound overflow"));
         } else if (!s_to_u32_unsafe(p + 1, cur - 1, yylval->bounds.max)) {
-            RET_FAIL(msg.error(tok_loc(), "repetition upper bound overflow"));
+            RET_FAIL(error_at_tok("repetition upper bound overflow"));
         } else if (yylval->bounds.min > yylval->bounds.max) {
-            RET_FAIL(msg.error(tok_loc(), "repetition lower bound exceeds upper bound"));
+            RET_FAIL(error_at_tok("repetition lower bound exceeds upper bound"));
         }
         RET_TOK(TOKEN_CLOSESIZE);
     }
 
     "{" [0-9]+ ",}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval->bounds.min)) {
-            RET_FAIL(msg.error(tok_loc(), "repetition lower bound overflow"));
+            RET_FAIL(error_at_tok("repetition lower bound overflow"));
         }
         yylval->bounds.max = std::numeric_limits<uint32_t>::max();
         RET_TOK(TOKEN_CLOSESIZE);
     }
 
     "{" [0-9]* "," {
-        RET_FAIL(msg.error(tok_loc(),
-                           "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are "
-                           "numbers"));
+        RET_FAIL(error_at_tok(
+                "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"));
     }
 
     "{" name "}" {
         if (!globopts->flex_syntax) {
-            RET_FAIL(msg.error(tok_loc(), "curly braces for names only allowed with -F switch"));
+            RET_FAIL(error_at_tok("curly braces for names only allowed with -F switch"));
         }
         yylval->cstr = ast.cstr(tok + 1, cur - 1);
         RET_TOK(TOKEN_ID);
@@ -503,10 +498,10 @@ scan:
         goto scan;
     }
     "!include" {
-        RET_FAIL(msg.error(tok_loc(),
-                           "ill-formed include directive: expected `!include` followed by spaces, "
-                           "a double-quoted file path, optional spaces, a semicolon, and finally "
-                           "a space, a newline, or the end of block"));
+        RET_FAIL(error_at_tok(
+                "ill-formed include directive: expected `!include` followed by spaces, a"
+                " double-quoted file path, optional spaces, a semicolon, and finally a space, a"
+                " newline, or the end of block"));
     }
 
     "!use:" @x name @y space* ";" / ws_or_eoc {
@@ -516,10 +511,10 @@ scan:
         RET_TOK(TOKEN_BLOCK);
     }
     "!use" {
-        RET_FAIL(msg.error(tok_loc(),
-                           "ill-formed use directive: expected `!use` followed by a colon, a block "
-                           "name, optional spaces, a semicolon, and finally a space, a newline, or "
-                           "the end of block"));
+        RET_FAIL(error_at_tok(
+                "ill-formed use directive: expected `!use` followed by a colon, a block name,"
+                " optional spaces, a semicolon, and finally a space, a newline, or the end of"
+                " block"));
     }
 
     "." { yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
@@ -537,7 +532,7 @@ scan:
         goto scan;
     }
 
-    * { RET_FAIL(msg.error(tok_loc(), "unexpected character: '%c'", *tok)); }
+    * { RET_FAIL(error_at_tok("unexpected character: '%c'", *tok)); }
 */
 }
 
@@ -585,7 +580,7 @@ end:
     return Ret::OK;
 error:
     cl.clear();
-    RET_FAIL(msg.error(cur_loc(), "syntax error in condition list"));
+    RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
 Ret Scanner::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
@@ -596,7 +591,7 @@ code: /*!re2c
     "//" { CHECK_RET(lex_cpp_comment()); goto indent; }
     "/*" { CHECK_RET(lex_c_comment()); goto code; }
     ["'] { CHECK_RET(try_lex_string_in_code(cur[-1])); goto code; }
-    [{}] { RET_FAIL(msg.error(cur_loc(), "Curly braces are not allowed after ':='")); }
+    [{}] { RET_FAIL(error_at_cur("Curly braces are not allowed after ':='")); }
     *    { goto code; }
 */
 indent: /*!re2c
@@ -715,11 +710,11 @@ Ret Scanner::lex_cls_chr(uint32_t& c) {
     tok = cur;
     const loc_t& loc = cur_loc();
 /*!rules:re2c:cls_chr
-    esc? eol    { RET_FAIL(msg.error(loc, "newline in character class")); }
-    esc [xXuU]  { RET_FAIL(msg.error(loc, "syntax error in hexadecimal escape sequence")); }
-    esc [0-7]   { RET_FAIL(msg.error(loc, "syntax error in octal escape sequence")); }
-    esc         { RET_FAIL(msg.error(loc, "syntax error in escape sequence")); }
-    *           { RET_FAIL(msg.error(loc, "syntax error")); }
+    esc? eol    { RET_FAIL(error_at(loc, "newline in character class")); }
+    esc [xXuU]  { RET_FAIL(error_at(loc, "syntax error in hexadecimal escape sequence")); }
+    esc [0-7]   { RET_FAIL(error_at(loc, "syntax error in octal escape sequence")); }
+    esc         { RET_FAIL(error_at(loc, "syntax error in escape sequence")); }
+    *           { RET_FAIL(error_at(loc, "syntax error")); }
 
     . \ esc     { c = decode(tok); return Ret::OK; }
     esc_hex     { c = unesc_hex(tok, cur); return Ret::OK; }
@@ -752,11 +747,11 @@ Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     stop = false;
     ast.loc = cur_loc();
 /*!rules:re2c:str_chr
-    esc? eol    { RET_FAIL(msg.error(ast.loc, "newline in character string")); }
-    esc [xXuU]  { RET_FAIL(msg.error(ast.loc, "syntax error in hexadecimal escape sequence")); }
-    esc [0-7]   { RET_FAIL(msg.error(ast.loc, "syntax error in octal escape sequence")); }
-    esc         { RET_FAIL(msg.error(ast.loc, "syntax error in escape sequence")); }
-    *           { RET_FAIL(msg.error(ast.loc, "syntax error")); }
+    esc? eol    { RET_FAIL(error_at(ast.loc, "newline in character string")); }
+    esc [xXuU]  { RET_FAIL(error_at(ast.loc, "syntax error in hexadecimal escape sequence")); }
+    esc [0-7]   { RET_FAIL(error_at(ast.loc, "syntax error in octal escape sequence")); }
+    esc         { RET_FAIL(error_at(ast.loc, "syntax error in escape sequence")); }
+    *           { RET_FAIL(error_at(ast.loc, "syntax error")); }
 
     . \ esc     { ast.chr = decode(tok); stop = (tok[0] == quote); return Ret::OK; }
     esc_hex     { ast.chr = unesc_hex(tok, cur); return Ret::OK; }
@@ -803,7 +798,7 @@ sourceline:
     lineno {
         uint32_t l;
         if (!s_to_u32_unsafe(tok, cur, l)) {
-            RET_FAIL(msg.error(tok_loc(), "line number overflow"));
+            RET_FAIL(error_at_tok("line number overflow"));
         }
         set_line(l);
         goto sourceline;

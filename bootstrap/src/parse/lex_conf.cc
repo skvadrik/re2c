@@ -13,7 +13,7 @@
 
 namespace re2c {
 
-#define YYFILL(n) if (!fill(n)) RET_FAIL(msg.error(cur_loc(), "unexpected end of input in configuration"))
+#define YYFILL(n) if (!fill(n)) RET_FAIL(error_at_cur("unexpected end of input in configuration"))
 
 #define RET_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(b)); \
@@ -35,7 +35,7 @@ namespace re2c {
 
 #define RET_CONF_NUM_NONNEG(conf) do { \
     CHECK_RET(lex_conf_number(n)); \
-    if (n < 0) RET_FAIL(msg.error(cur_loc(), "expected nonnegative value in configuration")); \
+    if (n < 0) RET_FAIL(error_at_cur("expected nonnegative value in configuration")); \
     opts.set_##conf(static_cast<uint32_t>(n)); \
     return Ret::OK; \
 } while(0)
@@ -162,8 +162,8 @@ Ret Scanner::lex_conf(Opt& opts) {
 yy1:
 #line 179 "../src/parse/lex_conf.re"
 	{
-        RET_FAIL(msg.error(
-                tok_loc(), "unrecognized configuration '%.*s'", static_cast<int>(cur - tok), tok));
+        RET_FAIL(error_at_tok(
+                "unrecognized configuration '%.*s'", static_cast<int>(cur - tok), tok));
     }
 #line 169 "src/parse/lex_conf.cc"
 yy2:
@@ -3724,8 +3724,8 @@ Ret Scanner::lex_conf_encoding_policy(Opt& opts) {
 yy695:
 #line 189 "../src/parse/lex_conf.re"
 	{
-        RET_FAIL(msg.error(cur_loc(),
-                           "bad configuration value (expected: 'ignore', 'substitute', 'fail')"));
+        RET_FAIL(error_at_cur(
+                "bad configuration value (expected: 'ignore', 'substitute', 'fail')"));
     }
 #line 3731 "src/parse/lex_conf.cc"
 yy696:
@@ -3828,7 +3828,7 @@ yy714:
 yy715:
 #line 204 "../src/parse/lex_conf.re"
 	{
-        RET_FAIL(msg.error(cur_loc(), "bad configuration value (expected: 'default', 'custom')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom')"));
     }
 #line 3834 "src/parse/lex_conf.cc"
 yy716:
@@ -3906,11 +3906,10 @@ Ret Scanner::lex_conf_empty_class(Opt& opts) {
 yy730:
 #line 217 "../src/parse/lex_conf.re"
 	{
-        RET_FAIL(msg.error(cur_loc(),
-                           "bad configuration value (expected: 'match-empty', 'match-none', "
-                           "'error')"));
+        RET_FAIL(error_at_cur(
+                "bad configuration value (expected: 'match-empty', 'match-none', 'error')"));
     }
-#line 3914 "src/parse/lex_conf.cc"
+#line 3913 "src/parse/lex_conf.cc"
 yy731:
 	yych = *(mar = ++cur);
 	if (yych == 'r') goto yy733;
@@ -3947,9 +3946,9 @@ yy739:
 	goto yy734;
 yy740:
 	++cur;
-#line 224 "../src/parse/lex_conf.re"
+#line 223 "../src/parse/lex_conf.re"
 	{ opts.set_empty_class(EmptyClass::ERROR);       goto end; }
-#line 3953 "src/parse/lex_conf.cc"
+#line 3952 "src/parse/lex_conf.cc"
 yy741:
 	yych = *++cur;
 	if (yych != '-') goto yy734;
@@ -3987,16 +3986,16 @@ yy748:
 	goto yy734;
 yy749:
 	++cur;
-#line 223 "../src/parse/lex_conf.re"
+#line 222 "../src/parse/lex_conf.re"
 	{ opts.set_empty_class(EmptyClass::MATCH_NONE);  goto end; }
-#line 3993 "src/parse/lex_conf.cc"
+#line 3992 "src/parse/lex_conf.cc"
 yy750:
 	++cur;
-#line 222 "../src/parse/lex_conf.re"
+#line 221 "../src/parse/lex_conf.re"
 	{ opts.set_empty_class(EmptyClass::MATCH_EMPTY); goto end; }
-#line 3998 "src/parse/lex_conf.cc"
+#line 3997 "src/parse/lex_conf.cc"
 }
-#line 225 "../src/parse/lex_conf.re"
+#line 224 "../src/parse/lex_conf.re"
 
 end:
     return lex_conf_semicolon();
@@ -4005,7 +4004,7 @@ end:
 Ret Scanner::lex_conf_api_style(Opt& opts) {
     CHECK_RET(lex_conf_assign());
 
-#line 4009 "src/parse/lex_conf.cc"
+#line 4008 "src/parse/lex_conf.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 9) YYFILL(9);
@@ -4013,12 +4012,11 @@ Ret Scanner::lex_conf_api_style(Opt& opts) {
 	if (yych == 'f') goto yy753;
 	++cur;
 yy752:
-#line 233 "../src/parse/lex_conf.re"
+#line 232 "../src/parse/lex_conf.re"
 	{
-        RET_FAIL(msg.error(cur_loc(),
-                           "bad configuration value (expected: 'functions', 'free-form')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'functions', 'free-form')"));
     }
-#line 4022 "src/parse/lex_conf.cc"
+#line 4020 "src/parse/lex_conf.cc"
 yy753:
 	yych = *(mar = ++cur);
 	if (yych == 'r') goto yy754;
@@ -4084,16 +4082,16 @@ yy768:
 	goto yy755;
 yy769:
 	++cur;
-#line 238 "../src/parse/lex_conf.re"
+#line 236 "../src/parse/lex_conf.re"
 	{ opts.set_api_style(ApiStyle::FREEFORM);  goto end; }
-#line 4090 "src/parse/lex_conf.cc"
+#line 4088 "src/parse/lex_conf.cc"
 yy770:
 	++cur;
-#line 237 "../src/parse/lex_conf.re"
+#line 235 "../src/parse/lex_conf.re"
 	{ opts.set_api_style(ApiStyle::FUNCTIONS); goto end; }
-#line 4095 "src/parse/lex_conf.cc"
+#line 4093 "src/parse/lex_conf.cc"
 }
-#line 239 "../src/parse/lex_conf.re"
+#line 237 "../src/parse/lex_conf.re"
 
 end:
     return lex_conf_semicolon();
@@ -4101,7 +4099,7 @@ end:
 
 Ret Scanner::lex_conf_assign() {
 
-#line 4105 "src/parse/lex_conf.cc"
+#line 4103 "src/parse/lex_conf.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -4148,9 +4146,9 @@ Ret Scanner::lex_conf_assign() {
 	}
 	++cur;
 yy772:
-#line 246 "../src/parse/lex_conf.re"
-	{ RET_FAIL(msg.error(cur_loc(), "missing '=' in configuration")); }
-#line 4154 "src/parse/lex_conf.cc"
+#line 244 "../src/parse/lex_conf.re"
+	{ RET_FAIL(error_at_cur("missing '=' in configuration")); }
+#line 4152 "src/parse/lex_conf.cc"
 yy773:
 	yych = *(mar = ++cur);
 	if (yych <= 0x1F) {
@@ -4167,9 +4165,9 @@ yy774:
 	if (yybm[0+yych] & 128) {
 		goto yy774;
 	}
-#line 247 "../src/parse/lex_conf.re"
+#line 245 "../src/parse/lex_conf.re"
 	{ return Ret::OK; }
-#line 4173 "src/parse/lex_conf.cc"
+#line 4171 "src/parse/lex_conf.cc"
 yy775:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -4183,13 +4181,13 @@ yy775:
 	cur = mar;
 	goto yy772;
 }
-#line 248 "../src/parse/lex_conf.re"
+#line 246 "../src/parse/lex_conf.re"
 
 }
 
 Ret Scanner::lex_conf_semicolon() {
 
-#line 4193 "src/parse/lex_conf.cc"
+#line 4191 "src/parse/lex_conf.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -4236,9 +4234,9 @@ Ret Scanner::lex_conf_semicolon() {
 	}
 	++cur;
 yy777:
-#line 253 "../src/parse/lex_conf.re"
-	{ RET_FAIL(msg.error(cur_loc(), "missing ending ';' in configuration")); }
-#line 4242 "src/parse/lex_conf.cc"
+#line 251 "../src/parse/lex_conf.re"
+	{ RET_FAIL(error_at_cur("missing ending ';' in configuration")); }
+#line 4240 "src/parse/lex_conf.cc"
 yy778:
 	yych = *(mar = ++cur);
 	if (yybm[0+yych] & 128) {
@@ -4247,9 +4245,9 @@ yy778:
 	if (yych != ';') goto yy777;
 yy779:
 	++cur;
-#line 254 "../src/parse/lex_conf.re"
+#line 252 "../src/parse/lex_conf.re"
 	{ return Ret::OK; }
-#line 4253 "src/parse/lex_conf.cc"
+#line 4251 "src/parse/lex_conf.cc"
 yy780:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -4261,7 +4259,7 @@ yy780:
 	cur = mar;
 	goto yy777;
 }
-#line 255 "../src/parse/lex_conf.re"
+#line 253 "../src/parse/lex_conf.re"
 
 }
 
@@ -4269,7 +4267,7 @@ Ret Scanner::lex_conf_number(int32_t& n) {
     CHECK_RET(lex_conf_assign());
     tok = cur;
 
-#line 4273 "src/parse/lex_conf.cc"
+#line 4271 "src/parse/lex_conf.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -4316,9 +4314,9 @@ Ret Scanner::lex_conf_number(int32_t& n) {
 	}
 	++cur;
 yy782:
-#line 262 "../src/parse/lex_conf.re"
-	{ RET_FAIL(msg.error(cur_loc(), "bad configuration value (expected number)")); }
-#line 4322 "src/parse/lex_conf.cc"
+#line 260 "../src/parse/lex_conf.re"
+	{ RET_FAIL(error_at_cur("bad configuration value (expected number)")); }
+#line 4320 "src/parse/lex_conf.cc"
 yy783:
 	yych = *++cur;
 	if (yych <= '0') goto yy782;
@@ -4327,15 +4325,15 @@ yy783:
 yy784:
 	++cur;
 yy785:
-#line 263 "../src/parse/lex_conf.re"
+#line 261 "../src/parse/lex_conf.re"
 	{
         n = 0;
         if (!s_to_i32_unsafe (tok, cur, n)) {
-            RET_FAIL(msg.error(cur_loc(), "configuration value overflow"));
+            RET_FAIL(error_at_cur("configuration value overflow"));
         }
         return lex_conf_semicolon();
     }
-#line 4339 "src/parse/lex_conf.cc"
+#line 4337 "src/parse/lex_conf.cc"
 yy786:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -4345,7 +4343,7 @@ yy786:
 	}
 	goto yy785;
 }
-#line 270 "../src/parse/lex_conf.re"
+#line 268 "../src/parse/lex_conf.re"
 
 }
 
@@ -4361,7 +4359,7 @@ Ret Scanner::lex_conf_string(std::string& s) {
     s.clear();
     tok = cur;
 
-#line 4365 "src/parse/lex_conf.cc"
+#line 4363 "src/parse/lex_conf.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -4417,9 +4415,9 @@ Ret Scanner::lex_conf_string(std::string& s) {
 		}
 	}
 yy788:
-#line 302 "../src/parse/lex_conf.re"
+#line 300 "../src/parse/lex_conf.re"
 	{ goto end; }
-#line 4423 "src/parse/lex_conf.cc"
+#line 4421 "src/parse/lex_conf.cc"
 yy789:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -4427,12 +4425,12 @@ yy789:
 	if (yybm[0+yych] & 128) {
 		goto yy789;
 	}
-#line 301 "../src/parse/lex_conf.re"
+#line 299 "../src/parse/lex_conf.re"
 	{ s.assign(tok, cur); goto end; }
-#line 4433 "src/parse/lex_conf.cc"
+#line 4431 "src/parse/lex_conf.cc"
 yy790:
 	++cur;
-#line 285 "../src/parse/lex_conf.re"
+#line 283 "../src/parse/lex_conf.re"
 	{
         const uint8_t quote = tok[0];
         AstChar c;
@@ -4442,16 +4440,16 @@ yy790:
             if (stop) {
                 goto end;
             } else if (c.chr > 0xFF) {
-                RET_FAIL(msg.error(c.loc,
-                                   "multibyte character in configuration string: 0x%X", c.chr));
+                RET_FAIL(error_at(
+                        c.loc, "multibyte character in configuration string: 0x%X", c.chr));
             } else {
                 s += static_cast<char>(c.chr);
             }
         }
     }
-#line 4453 "src/parse/lex_conf.cc"
+#line 4451 "src/parse/lex_conf.cc"
 }
-#line 303 "../src/parse/lex_conf.re"
+#line 301 "../src/parse/lex_conf.re"
 
 end:
     return lex_conf_semicolon();

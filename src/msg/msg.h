@@ -24,9 +24,10 @@ class Msg {
     inline Msg(): filenames(), warn(*this), locfmt(LOCFMT_GNU), error_seen(false) {}
 
     size_t register_filename(const std::string& filename);
-    void error(const loc_t& loc, const char* fmt, ...) RE2C_ATTR((format (printf, 3, 4)));
+    void error(const loc_t& loc, const char* fmt, ...) RE2C_ATTR((format(printf, 3, 4)));
+    void verror(const loc_t& loc, const char* fmt, va_list args) RE2C_ATTR((format(printf, 3, 0)));
     void warning(const char* type, const loc_t& loc, bool error, const char* fmt, ...)
-            RE2C_ATTR((format (printf, 5, 6)));
+            RE2C_ATTR((format(printf, 5, 6)));
 
     friend class Warn;
 
@@ -36,7 +37,7 @@ class Msg {
     void warning_end(const char* type, bool error);
 };
 
-void error(const char* fmt, ...) RE2C_ATTR((format (printf, 1, 2)));
+void error(const char* fmt, ...) RE2C_ATTR((format(printf, 1, 2)));
 void error_arg(const char* option);
 Ret usage() NODISCARD;
 Ret vernum() NODISCARD;

@@ -85,6 +85,10 @@ class Scanner: private ScannerState {
     inline void set_line(uint32_t l);
     inline void next_line();
 
+    void error_at(const loc_t& loc, const char* fmt, ...) const RE2C_ATTR((format(printf, 3, 4)));
+    void error_at_cur(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
+    void error_at_tok(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
+
     bool is_eof() const;
     Ret set_sourceline() NODISCARD;
     Ret lex_opt_name(std::string& name) NODISCARD;
