@@ -62,8 +62,10 @@ namespace re2c {
 FILE* temp_file(std::string& fname) {
     // append "random enough" suffix to filename
     const time_t t = time(nullptr);
-    char buffer[20];
-    strftime(buffer, sizeof(buffer), ".tmp.%Y%m%d%H%M%S", localtime(&t));
+    char buffer[20]; // 20 = 5(".tmp.") + 4(%Y) + 2(%m) + 2(%d) + 2(%H) + 2(%M) + 2(%S) + 1(null)
+    if (strftime(buffer, sizeof(buffer), ".tmp.%Y%m%d%H%M%S", localtime(&t)) == 0) {
+        return nullptr;
+    }
     fname += buffer;
 
     // open file for writing, unless it exists already
