@@ -14,8 +14,8 @@
 
 namespace re2c {
 
+class Msg;
 class Scanner;
-struct Msg;
 struct Opt;
 struct opt_t;
 struct SemAct;
