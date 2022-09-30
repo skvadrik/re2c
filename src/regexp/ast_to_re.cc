@@ -380,7 +380,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
     std::vector<Tag>& tags = spec.tags;
     const opt_t* opts = spec.opts;
     Range* range;
-    Regexp* re;
+    Regexp* re = nullptr;
 
     DCHECK(stack.empty());
     stack.emplace_back(ast0, 0, false);
