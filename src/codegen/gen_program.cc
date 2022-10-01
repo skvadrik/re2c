@@ -6,10 +6,11 @@
 #include "config.h"
 #include "src/codegen/code.h"
 #include "src/codegen/helpers.h"
+#include "src/encoding/enc.h"
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
-#include "src/encoding/enc.h"
+#include "src/skeleton/skeleton.h"
 #include "src/util/check.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
@@ -111,11 +112,6 @@ void Output::wraw(const uint8_t* s, const uint8_t* e, bool newline) {
     }
 }
 
-void Output::wversion_time() {
-    output_version_time(scratchbuf.stream(), block().opts);
-    wdelay_stmt(0, code_textraw(allocator, scratchbuf.flush()));
-}
-
 void Output::wdelay_stmt(uint32_t ind, Code* stmt) {
     block().fragments.push_back({stmt, ind});
 }
@@ -149,7 +145,7 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     OutputBlock* block = new OutputBlock(kind, name, loc);
     pblocks->push_back(block);
 
-    CHECK_RET(opts.snapshot(block->opts));
+    CHECK_RET(opts.snapshot(&block->opts));
 
     block->fill_index = total_fill_index;
 
@@ -267,17 +263,53 @@ Ret Output::emit() {
     return emit_blocks(opts->output_file, ctx);
 }
 
-void output_version_time(std::ostream& os, const opt_t* opts) {
-    os << (opts->lang == Lang::GO ? "// Code generated" : "/* Generated") << " by re2c";
+void Output::gen_version_time() {
+    const opt_t* opts = block().opts;
+
+    scratchbuf.cstr(opts->lang == Lang::GO ? "// Code generated" : "/* Generated").cstr(" by re2c");
     if (opts->version) {
-        os << " " << PACKAGE_VERSION;
+        scratchbuf.cstr(" " PACKAGE_VERSION);
     }
     if (opts->date) {
-        os << " on ";
+        scratchbuf.cstr(" on ");
         time_t now = time(nullptr);
-        os.write(ctime(&now), 24);
+        scratchbuf.stream().write(ctime(&now), 24);
     }
-    os << (opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
+    scratchbuf.cstr(opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
+
+    wdelay_stmt(0, code_textraw(allocator, scratchbuf.flush()));
+}
+
+Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
+    header_mode(true);
+    CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
+    gen_version_time();
+
+    header_mode(false);
+    CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
+    gen_version_time();
+    wdelay_stmt(0, code_line_info_input(allocator, loc));
+
+    if (block().opts->target == Target::SKELETON) {
+        wdelay_stmt(0, emit_skeleton_prolog(*this));
+    }
+
+    return Ret::OK;
+}
+
+void Output::gen_epilog() {
+    const opt_t* opts = block().opts;
+
+    // For special targets (skeleton and .dot) merge header into the output file.
+    if (opts->target != Target::CODE && need_header) {
+        need_header = false;
+        cblocks.insert(cblocks.end(), hblocks.begin(), hblocks.end());
+        hblocks.clear();
+    }
+
+    if (opts->target == Target::SKELETON) {
+        wdelay_stmt(0, emit_skeleton_epilog(*this));
+    }
 }
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {

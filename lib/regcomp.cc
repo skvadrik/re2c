@@ -45,7 +45,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     opts.set_tags_posix_syntax(true);
     opts.set_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
     const opt_t* opt;
-    CHECK_RET(opts.snapshot(opt));
+    CHECK_RET(opts.snapshot(&opt));
     preg->flags = cflags;
 
     Ast ast;

@@ -126,24 +126,10 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
 Ret compile(Input& input, Output& output, Opt& opts) {
     Ast ast;
-    const conopt_t* globopts = &opts.glob;
-    OutAllocator& out_alc = output.allocator;
-    const loc_t& loc0 = input.tok_loc();
     std::string block_name;
     loc_t block_loc;
 
-    output.header_mode(1);
-    CHECK_RET(output.new_block(opts, InputBlock::GLOBAL, block_name, loc0));
-    output.wversion_time();
-
-    output.header_mode(0);
-    CHECK_RET(output.new_block(opts, InputBlock::GLOBAL, block_name, loc0));
-    output.wversion_time();
-    output.wdelay_stmt(0, code_line_info_input(out_alc, loc0));
-
-    if (globopts->target == Target::SKELETON) {
-        output.wdelay_stmt(0, emit_skeleton_prolog(output));
-    }
+    CHECK_RET(output.gen_prolog(opts, input.tok_loc()));
 
     const opt_t* accum_opts = output.block().opts;
 
@@ -185,7 +171,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             // compile DFA to code
             gen_code(output, dfas);
         }
-        output.wdelay_stmt(0, code_line_info_input(out_alc, input.cur_loc()));
+        output.wdelay_stmt(0, code_line_info_input(output.allocator, input.cur_loc()));
 
         // accumulate whole-program information from this block
         output.gather_info_from_block();
@@ -202,17 +188,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
 
     output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
 
-    // For special targets (skeleton and .dot) merge header into the output file.
-    if (globopts->target != Target::CODE && output.need_header) {
-        output.need_header = false;
-        blocks_t& cblocks = output.cblocks, &hblocks = output.hblocks;
-        cblocks.insert(cblocks.end(), hblocks.begin(), hblocks.end());
-        hblocks.clear();
-    }
-
-    if (globopts->target == Target::SKELETON) {
-        output.wdelay_stmt(0, emit_skeleton_epilog(output));
-    }
+    output.gen_epilog();
 
     return Ret::OK;
 }

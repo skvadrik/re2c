@@ -727,8 +727,10 @@ struct Output {
     void header_mode(bool on);
     bool in_header() const;
     void wraw(const uint8_t* s, const uint8_t* e, bool newline = false);
-    void wversion_time();
+    void gen_version_time();
     void wdelay_stmt(uint32_t ind, Code* code);
+    Ret gen_prolog(Opt& opts, const loc_t& loc);
+    void gen_epilog();
     Ret emit() NODISCARD;
     Ret emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) NODISCARD;
     FORBID_COPY(Output);
@@ -764,7 +766,6 @@ void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
 std::string vartag_name(
         tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers);
 std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
-void output_version_time(std::ostream& os, const opt_t* opts);
 void gen_peek_expr(std::ostream& os, const opt_t* opts);
 void gen_yydebug(Output& output, const Label* label, CodeList* stmts);
 

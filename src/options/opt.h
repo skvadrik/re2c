@@ -311,7 +311,7 @@ struct Opt {
 
   public:
     Opt(const conopt_t& globopts, Msg& msg);
-    Ret snapshot(const opt_t*& p) NODISCARD;
+    Ret snapshot(const opt_t** opts) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
     Ret merge(const opt_t* opts, Input& input) NODISCARD;

@@ -378,9 +378,9 @@ Ret Opt::sync() {
     return Ret::OK;
 }
 
-Ret Opt::snapshot(const opt_t*& p) {
+Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
-    p = new opt_t(glob, real, is_default, symtab);
+    *opts = new opt_t(glob, real, is_default, symtab);
     return Ret::OK;
 }
 
