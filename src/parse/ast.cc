@@ -235,7 +235,7 @@ static inline void append(std::vector<T>& x, const std::vector<T>& y) {
     x.insert(x.end(), y.begin(), y.end());
 }
 
-Ret use_block(Scanner& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) {
+Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) {
     const AstBlock* b = ast.blocks.find(name);
     if (b == nullptr) return Ret::FAIL;
 

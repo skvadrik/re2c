@@ -32,7 +32,7 @@ namespace re2c {
 // accessible for reading all the time (the parser itself depends on them).
 
 class Msg;
-class Scanner;
+class Input;
 
 #define RE2C_SIGIL "@@"
 
@@ -314,7 +314,7 @@ struct Opt {
     Ret snapshot(const opt_t*& p) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
-    Ret merge(const opt_t* opts, Scanner& lexer) NODISCARD;
+    Ret merge(const opt_t* opts, Input& input) NODISCARD;
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \

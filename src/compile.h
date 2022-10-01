@@ -6,11 +6,11 @@
 
 namespace re2c {
 
-class Scanner;
+class Input;
 struct Opt;
 struct Output;
 
-Ret compile(Scanner& input, Output& output, Opt& opts) NODISCARD;
+Ret compile(Input& input, Output& output, Opt& opts) NODISCARD;
 
 } // namespace re2c
 

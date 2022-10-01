@@ -67,7 +67,7 @@ namespace re2c {
 
 /*!max:re2c*/
 
-struct ScannerState {
+struct LexerState {
     enum class LexMode: uint32_t { NORMAL, FLEX_NAME };
 
     LexMode mode;
@@ -75,7 +75,7 @@ struct ScannerState {
     uint8_t* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     /*!stags:re2c format = "uint8_t* @@;"; */
 
-    inline ScannerState()
+    inline LexerState()
         : mode(LexMode::NORMAL),
           BSIZE(8192),
           bot(new uint8_t[BSIZE + YYMAXFILL]),
@@ -91,7 +91,7 @@ struct ScannerState {
         memset(lim, 0, YYMAXFILL);
     }
 
-    inline ~ScannerState() {
+    inline ~LexerState() {
         delete[] bot;
     }
 
@@ -106,7 +106,7 @@ struct ScannerState {
         /*!stags:re2c format = "if (@@) { @@ += offs; }"; */
     }
 
-    FORBID_COPY(ScannerState);
+    FORBID_COPY(LexerState);
 };
 
 } // namespace re2c
@@ -116,7 +116,7 @@ struct ScannerState {
 
 #define RET_BLOCK(k) do { kind = k; return Ret::OK; } while(0)
 
-Ret Scanner::echo(Output& out, std::string& block_name, InputBlock& kind) {
+Ret Input::lex_program(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
     OutAllocator& alc = out.allocator;
     const uint8_t* x, *y;
@@ -169,24 +169,24 @@ loop:
     }
 
     "/*!max:re2c" {
-        CHECK_RET(lex_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
-        CHECK_RET(lex_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
         goto next;
     }
 
     "/*!stags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::STAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::STAGS, 0, allow));
         goto next;
     }
 
     "/*!mtags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::MTAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, 0, allow));
         goto next;
     }
 
@@ -194,7 +194,7 @@ loop:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
         goto next;
     }
 
@@ -207,7 +207,7 @@ loop:
                     "`getstate:re2c` is incompatible with the --loop-switch option, as it requires"
                     " cross-block transitions that are unsupported without the `goto` statement"));
         }
-        CHECK_RET(lex_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
+        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
         goto next;
     }
 
@@ -282,7 +282,7 @@ loop:
 
 #undef RET_BLOCK
 
-Ret Scanner::lex_opt_name(std::string& name) {
+Ret Input::lex_opt_name(std::string& name) {
     tok = cur;
 /*!local:re2c
     "" {
@@ -296,7 +296,7 @@ Ret Scanner::lex_opt_name(std::string& name) {
 */
 }
 
-Ret Scanner::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
+Ret Input::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
     BlockNameList** phead = ptail;
 loop:
     tok = cur;
@@ -328,7 +328,7 @@ loop:
 */
 }
 
-Ret Scanner::lex_block_end(Output& out, bool allow_garbage) {
+Ret Input::lex_block_end(Output& out, bool allow_garbage) {
     bool multiline = false;
 loop: /*!local:re2c
     * {
@@ -347,7 +347,7 @@ loop: /*!local:re2c
 */
 }
 
-Ret Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
+Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
@@ -396,7 +396,7 @@ loop: /*!local:re2c
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
-Ret Scanner::scan(YYSTYPE* yylval, Ast& ast, int& token) {
+Ret Input::lex_block(YYSTYPE* yylval, Ast& ast, int& token) {
     const uint8_t* p, *x, *y;
 scan:
     tok = cur;
@@ -538,14 +538,14 @@ scan:
 
 #undef RET_TOK
 
-Ret Scanner::lex_namedef_context_re2c(bool& yes) {
+Ret Input::lex_namedef_context_re2c(bool& yes) {
 /*!re2c
     "" / space* "=" [^>] { yes = true;  return Ret::OK; }
     ""                   { yes = false; return Ret::OK; }
 */
 }
 
-Ret Scanner::lex_namedef_context_flex(bool& yes) {
+Ret Input::lex_namedef_context_flex(bool& yes) {
 /*!re2c
     "" / space+ [=:{] { yes = false; return Ret::OK; } // exclude `=`, `=>`, `:=>`, `:=`, `{`
     "" / space+       { yes = true;  return Ret::OK; }
@@ -553,7 +553,7 @@ Ret Scanner::lex_namedef_context_flex(bool& yes) {
 */
 }
 
-Ret Scanner::lex_clist(Ast& ast, int& token) {
+Ret Input::lex_clist(Ast& ast, int& token) {
     token = TOKEN_CLIST;
     std::set<std::string>& cl = ast.temp_condlist;
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
@@ -583,7 +583,7 @@ error:
     RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
-Ret Scanner::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: /*!re2c
@@ -606,7 +606,7 @@ indent: /*!re2c
 */
 }
 
-Ret Scanner::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: /*!re2c
@@ -628,7 +628,7 @@ code: /*!re2c
 */
 }
 
-Ret Scanner::try_lex_string_in_code(uint8_t quote) {
+Ret Input::try_lex_string_in_code(uint8_t quote) {
     // We need to lex string literals in code blocks because they may contain closing brace symbol
     // that would otherwise be erroneously lexed as a real closing brace.
     //
@@ -655,7 +655,7 @@ Ret Scanner::try_lex_string_in_code(uint8_t quote) {
 */
 }
 
-Ret Scanner::lex_string(uint8_t delim) {
+Ret Input::lex_string(uint8_t delim) {
 loop: /*!re2c
     ["']       { if (cur[-1] == delim) return Ret::OK; else goto loop; }
     esc [\\"'] { goto loop; }
@@ -664,7 +664,7 @@ loop: /*!re2c
 */
 }
 
-Ret Scanner::lex_c_comment() {
+Ret Input::lex_c_comment() {
 loop: /*!re2c
     eoc { return Ret::OK; }
     eol { next_line(); goto loop; }
@@ -672,14 +672,14 @@ loop: /*!re2c
 */
 }
 
-Ret Scanner::lex_cpp_comment() {
+Ret Input::lex_cpp_comment() {
 loop: /*!re2c
     eol { next_line(); return Ret::OK; }
     *   { goto loop; }
 */
 }
 
-Ret Scanner::lex_cls(Ast& ast, bool neg, const AstNode*& a) {
+Ret Input::lex_cls(Ast& ast, bool neg, const AstNode*& a) {
     uint32_t u, l;
     const loc_t& loc0 = tok_loc();
     loc_t loc = cur_loc();
@@ -706,7 +706,7 @@ add:
     goto fst;
 }
 
-Ret Scanner::lex_cls_chr(uint32_t& c) {
+Ret Input::lex_cls_chr(uint32_t& c) {
     tok = cur;
     const loc_t& loc = cur_loc();
 /*!rules:re2c:cls_chr
@@ -742,7 +742,7 @@ Ret Scanner::lex_cls_chr(uint32_t& c) {
     }
 }
 
-Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
+Ret Input::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     tok = cur;
     stop = false;
     ast.loc = cur_loc();
@@ -777,7 +777,7 @@ Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     }
 }
 
-Ret Scanner::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
+Ret Input::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
     const loc_t& loc = tok_loc();
     AstChar c;
     bool stop;
@@ -791,7 +791,7 @@ Ret Scanner::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
     }
 }
 
-Ret Scanner::set_sourceline() {
+Ret Input::set_sourceline() {
 sourceline:
     tok = cur;
 /*!local:re2c
@@ -805,7 +805,7 @@ sourceline:
     }
 
     dstring {
-        Input &in = get_input();
+        InputFile &in = get_input();
         std::string &name = in.escaped_name;
         name = escape_backslashes(getstr(tok + 1, cur - 1));
         in.fidx = static_cast<uint32_t>(msg.filenames.size());

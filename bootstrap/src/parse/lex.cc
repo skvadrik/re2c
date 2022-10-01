@@ -32,7 +32,7 @@ namespace re2c {
 
 #define RET_BLOCK(k) do { kind = k; return Ret::OK; } while(0)
 
-Ret Scanner::echo(Output& out, std::string& block_name, InputBlock& kind) {
+Ret Input::lex_program(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
     OutAllocator& alc = out.allocator;
     const uint8_t* x, *y;
@@ -743,7 +743,7 @@ yy126:
 	++cur;
 #line 171 "../src/parse/lex.re"
 	{
-        CHECK_RET(lex_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
         goto next;
     }
 #line 750 "src/parse/lex.cc"
@@ -850,7 +850,7 @@ yy149:
 #line 187 "../src/parse/lex.re"
 	{
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::MTAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, 0, allow));
         goto next;
     }
 #line 857 "src/parse/lex.cc"
@@ -868,7 +868,7 @@ yy151:
 #line 181 "../src/parse/lex.re"
 	{
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::STAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::STAGS, 0, allow));
         goto next;
     }
 #line 875 "src/parse/lex.cc"
@@ -879,7 +879,7 @@ yy152:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
         goto next;
     }
 #line 886 "src/parse/lex.cc"
@@ -992,7 +992,7 @@ yy167:
                     "`getstate:re2c` is incompatible with the --loop-switch option, as it requires"
                     " cross-block transitions that are unsupported without the `goto` statement"));
         }
-        CHECK_RET(lex_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
+        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
         goto next;
     }
 #line 999 "src/parse/lex.cc"
@@ -1052,7 +1052,7 @@ yy174:
 	++cur;
 #line 176 "../src/parse/lex.re"
 	{
-        CHECK_RET(lex_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
         goto next;
     }
 #line 1059 "src/parse/lex.cc"
@@ -1123,7 +1123,7 @@ yy179:
 
 #undef RET_BLOCK
 
-Ret Scanner::lex_opt_name(std::string& name) {
+Ret Input::lex_opt_name(std::string& name) {
     tok = cur;
 
 #line 1130 "src/parse/lex.cc"
@@ -1262,7 +1262,7 @@ yy188:
 
 }
 
-Ret Scanner::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
+Ret Input::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
     BlockNameList** phead = ptail;
 loop:
     tok = cur;
@@ -1391,7 +1391,7 @@ yy195:
 
 }
 
-Ret Scanner::lex_block_end(Output& out, bool allow_garbage) {
+Ret Input::lex_block_end(Output& out, bool allow_garbage) {
     bool multiline = false;
 loop: 
 #line 1398 "src/parse/lex.cc"
@@ -1489,7 +1489,7 @@ yy202:
 
 }
 
-Ret Scanner::lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
+Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
@@ -1676,7 +1676,7 @@ yy222:
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
-Ret Scanner::scan(YYSTYPE* yylval, Ast& ast, int& token) {
+Ret Input::lex_block(YYSTYPE* yylval, Ast& ast, int& token) {
     const uint8_t* p, *x, *y;
 scan:
     tok = cur;
@@ -2613,7 +2613,7 @@ yy315:
 
 #undef RET_TOK
 
-Ret Scanner::lex_namedef_context_re2c(bool& yes) {
+Ret Input::lex_namedef_context_re2c(bool& yes) {
 
 #line 2619 "src/parse/lex.cc"
 {
@@ -2697,7 +2697,7 @@ yy320:
 
 }
 
-Ret Scanner::lex_namedef_context_flex(bool& yes) {
+Ret Input::lex_namedef_context_flex(bool& yes) {
 
 #line 2703 "src/parse/lex.cc"
 {
@@ -2777,7 +2777,7 @@ yy323:
 
 }
 
-Ret Scanner::lex_clist(Ast& ast, int& token) {
+Ret Input::lex_clist(Ast& ast, int& token) {
     token = TOKEN_CLIST;
     std::set<std::string>& cl = ast.temp_condlist;
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
@@ -3040,7 +3040,7 @@ error:
     RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
-Ret Scanner::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: 
@@ -3142,7 +3142,7 @@ yy351:
 
 }
 
-Ret Scanner::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: 
@@ -3367,7 +3367,7 @@ yy374:
 
 }
 
-Ret Scanner::try_lex_string_in_code(uint8_t quote) {
+Ret Input::try_lex_string_in_code(uint8_t quote) {
     // We need to lex string literals in code blocks because they may contain closing brace symbol
     // that would otherwise be erroneously lexed as a real closing brace.
     //
@@ -3565,7 +3565,7 @@ yy394:
 
 }
 
-Ret Scanner::lex_string(uint8_t delim) {
+Ret Input::lex_string(uint8_t delim) {
 loop: 
 #line 3571 "src/parse/lex.cc"
 {
@@ -3623,7 +3623,7 @@ yy401:
 
 }
 
-Ret Scanner::lex_c_comment() {
+Ret Input::lex_c_comment() {
 loop: 
 #line 3629 "src/parse/lex.cc"
 {
@@ -3662,7 +3662,7 @@ yy406:
 
 }
 
-Ret Scanner::lex_cpp_comment() {
+Ret Input::lex_cpp_comment() {
 loop: 
 #line 3668 "src/parse/lex.cc"
 {
@@ -3690,7 +3690,7 @@ yy410:
 
 }
 
-Ret Scanner::lex_cls(Ast& ast, bool neg, const AstNode*& a) {
+Ret Input::lex_cls(Ast& ast, bool neg, const AstNode*& a) {
     uint32_t u, l;
     const loc_t& loc0 = tok_loc();
     loc_t loc = cur_loc();
@@ -3752,7 +3752,7 @@ add:
     goto fst;
 }
 
-Ret Scanner::lex_cls_chr(uint32_t& c) {
+Ret Input::lex_cls_chr(uint32_t& c) {
     tok = cur;
     const loc_t& loc = cur_loc();
 #line 737 "../src/parse/lex.re"
@@ -4511,7 +4511,7 @@ yy507:
     }
 }
 
-Ret Scanner::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
+Ret Input::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     tok = cur;
     stop = false;
     ast.loc = cur_loc();
@@ -5239,7 +5239,7 @@ yy594:
     }
 }
 
-Ret Scanner::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
+Ret Input::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
     const loc_t& loc = tok_loc();
     AstChar c;
     bool stop;
@@ -5253,7 +5253,7 @@ Ret Scanner::lex_str(Ast& ast, uint8_t quote, const AstNode*& a) {
     }
 }
 
-Ret Scanner::set_sourceline() {
+Ret Input::set_sourceline() {
 sourceline:
     tok = cur;
 
@@ -5373,7 +5373,7 @@ yy605:
 	++cur;
 #line 807 "../src/parse/lex.re"
 	{
-        Input &in = get_input();
+        InputFile &in = get_input();
         std::string &name = in.escaped_name;
         name = escape_backslashes(getstr(tok + 1, cur - 1));
         in.fidx = static_cast<uint32_t>(msg.filenames.size());

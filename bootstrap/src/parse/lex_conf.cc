@@ -43,7 +43,7 @@ namespace re2c {
 #line 53 "../src/parse/lex_conf.re"
 
 
-Ret Scanner::lex_conf(Opt& opts) {
+Ret Input::lex_conf(Opt& opts) {
     bool b;
     int32_t n;
     uint32_t u;
@@ -3706,7 +3706,7 @@ yy693:
 
 }
 
-Ret Scanner::lex_conf_encoding_policy(Opt& opts) {
+Ret Input::lex_conf_encoding_policy(Opt& opts) {
     CHECK_RET(lex_conf_assign());
 
 #line 3713 "src/parse/lex_conf.cc"
@@ -3812,7 +3812,7 @@ end:
     return lex_conf_semicolon();
 }
 
-Ret Scanner::lex_conf_input(Opt& opts) {
+Ret Input::lex_conf_input(Opt& opts) {
     CHECK_RET(lex_conf_assign());
 
 #line 3819 "src/parse/lex_conf.cc"
@@ -3892,7 +3892,7 @@ end:
     return lex_conf_semicolon();
 }
 
-Ret Scanner::lex_conf_empty_class(Opt& opts) {
+Ret Input::lex_conf_empty_class(Opt& opts) {
     CHECK_RET(lex_conf_assign());
 
 #line 3899 "src/parse/lex_conf.cc"
@@ -4001,7 +4001,7 @@ end:
     return lex_conf_semicolon();
 }
 
-Ret Scanner::lex_conf_api_style(Opt& opts) {
+Ret Input::lex_conf_api_style(Opt& opts) {
     CHECK_RET(lex_conf_assign());
 
 #line 4008 "src/parse/lex_conf.cc"
@@ -4097,7 +4097,7 @@ end:
     return lex_conf_semicolon();
 }
 
-Ret Scanner::lex_conf_assign() {
+Ret Input::lex_conf_assign() {
 
 #line 4103 "src/parse/lex_conf.cc"
 {
@@ -4185,7 +4185,7 @@ yy775:
 
 }
 
-Ret Scanner::lex_conf_semicolon() {
+Ret Input::lex_conf_semicolon() {
 
 #line 4191 "src/parse/lex_conf.cc"
 {
@@ -4263,7 +4263,7 @@ yy780:
 
 }
 
-Ret Scanner::lex_conf_number(int32_t& n) {
+Ret Input::lex_conf_number(int32_t& n) {
     CHECK_RET(lex_conf_assign());
     tok = cur;
 
@@ -4347,14 +4347,14 @@ yy786:
 
 }
 
-inline Ret Scanner::lex_conf_bool(bool& b) {
+inline Ret Input::lex_conf_bool(bool& b) {
     int32_t n;
     CHECK_RET(lex_conf_number(n));
     b = n != 0;
     return Ret::OK;
 }
 
-Ret Scanner::lex_conf_string(std::string& s) {
+Ret Input::lex_conf_string(std::string& s) {
     CHECK_RET(lex_conf_assign());
     s.clear();
     tok = cur;
@@ -4455,7 +4455,7 @@ end:
     return lex_conf_semicolon();
 }
 
-Ret Scanner::lex_conf_eof(uint32_t& u) {
+Ret Input::lex_conf_eof(uint32_t& u) {
     int32_t n;
     CHECK_RET(lex_conf_number(n));
     u = n < 0 ? NOEOF : static_cast<uint32_t>(n);

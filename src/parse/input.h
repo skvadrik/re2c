@@ -31,7 +31,7 @@ struct conopt_t;
 struct opt_t;
 struct Opt;
 
-struct Input {
+struct InputFile {
     FILE* file;
     std::string name;
     std::string path;
@@ -41,59 +41,63 @@ struct Input {
     uint32_t line;
     uint32_t fidx;
 
-    explicit Input(size_t fidx);
-    ~Input();
+    explicit InputFile(size_t fidx);
+    ~InputFile();
     Ret open(const std::string& filename,
              const std::string* parent,
              const std::vector<std::string>& include_paths) NODISCARD;
 
-    FORBID_COPY(Input);
+    FORBID_COPY(InputFile);
 };
 
-class Scanner: private ScannerState {
+class Input: private LexerState {
   public:
     static const uint8_t* const ENDPOS;
 
-    Msg& msg;
-
   private:
-    std::vector<Input*> files;
+    Msg& msg;
+    std::vector<InputFile*> files;
     std::set<std::string> filedeps;
     const conopt_t* globopts;
     loc_t location;
 
   public:
-    Scanner(const conopt_t* o, Msg& m);
-    ~Scanner();
+    Input(const conopt_t* o, Msg& m);
+    ~Input();
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file() const NODISCARD;
-    Ret echo(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
-    Ret scan(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
+    Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
+    Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
+
+    void error_at(const loc_t& loc, const char* fmt, ...) const RE2C_ATTR((format(printf, 3, 4)));
+    void error_at_cur(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
+    void error_at_tok(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
 
   private:
     bool read(size_t want) NODISCARD;
     bool fill(size_t need) NODISCARD;
     void shift_ptrs_and_fpos(ptrdiff_t offs);
     void pop_finished_files();
-    size_t get_input_index() const;
-    Input& get_input();
-    const Input& get_cinput() const;
-    inline void set_line(uint32_t l);
-    inline void next_line();
 
-    void error_at(const loc_t& loc, const char* fmt, ...) const RE2C_ATTR((format(printf, 3, 4)));
-    void error_at_cur(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
-    void error_at_tok(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
+    size_t get_input_index() const;
+    InputFile& get_input();
+    const InputFile& get_cinput() const;
 
     bool is_eof() const;
+
+    uint32_t decode(const uint8_t* str) const;
+
+    inline void set_line(uint32_t l);
+    inline void next_line();
     Ret set_sourceline() NODISCARD;
+
     Ret lex_opt_name(std::string& name) NODISCARD;
     Ret lex_name_list(OutAllocator& alc, BlockNameList** ptail) NODISCARD;
-    Ret lex_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) NODISCARD;
+    Ret lex_special_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) NODISCARD;
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
     Ret lex_code_indented(YYSTYPE* yylval, Ast& ast) NODISCARD;
     Ret lex_code_in_braces(YYSTYPE* yylval, Ast& ast) NODISCARD;
@@ -120,20 +124,18 @@ class Scanner: private ScannerState {
     Ret lex_conf_eof(uint32_t& u) NODISCARD;
     Ret lex_conf_string(std::string& s) NODISCARD;
 
-    uint32_t decode(const uint8_t* str) const;
-
-    FORBID_COPY(Scanner);
+    FORBID_COPY(Input);
 };
 
-inline Scanner::Scanner(const conopt_t* o, Msg& m)
-    : ScannerState(),
+inline Input::Input(const conopt_t* o, Msg& m)
+    : LexerState(),
       msg(m),
       files(),
       filedeps(),
       globopts(o),
       location(ATSTART) {}
 
-inline loc_t Scanner::cur_loc() const {
+inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;
     ptrdiff_t padding = 0;
     if (is_eof()) { // if this is the end, roll back to the beginning of YYMAXFILL padding
@@ -143,32 +145,32 @@ inline loc_t Scanner::cur_loc() const {
     DCHECK(p >= pos);
     uint32_t c = static_cast<uint32_t>(cur - pos + padding);
 
-    const Input& in = get_cinput();
+    const InputFile& in = get_cinput();
     return {in.line, c, in.fidx};
 }
 
-inline const loc_t& Scanner::tok_loc() const {
+inline const loc_t& Input::tok_loc() const {
     return location;
 }
 
-inline void Scanner::set_line(uint32_t l) {
+inline void Input::set_line(uint32_t l) {
     get_input().line = l;
 }
 
-inline void Scanner::next_line() {
+inline void Input::next_line() {
     pos = cur;
     ++get_input().line;
 }
 
-inline bool Scanner::is_eof() const {
+inline bool Input::is_eof() const {
     return eof && cur > eof;
 }
 
-inline Input& Scanner::get_input() {
+inline InputFile& Input::get_input() {
     return *files[get_input_index()];
 }
 
-inline const Input& Scanner::get_cinput() const {
+inline const InputFile& Input::get_cinput() const {
     return *files[get_input_index()];
 }
 

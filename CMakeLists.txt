@@ -438,6 +438,7 @@ if (RE2C_BUILD_LIBS)
         lib/regfree.cc
         lib/stubs.cc
         src/parse/ast.cc
+        src/parse/input.cc
         src/options/opt.cc
         src/options/symtab.cc
         src/cfg/cfg.cc
@@ -483,6 +484,7 @@ if (RE2C_BUILD_LIBS)
         src/skeleton/maxpath.cc
         src/skeleton/skeleton.cc
         src/util/range.cc
+        src/util/file_utils.cc
         src/util/string_utils.cc
         $<TARGET_OBJECTS:libre2c_objects_autogen>
         $<TARGET_OBJECTS:re2c_objects_autogen_ver_to_vernum>

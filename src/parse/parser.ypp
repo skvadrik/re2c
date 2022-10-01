@@ -21,8 +21,8 @@ namespace re2c {
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s);
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&);
+    static void yyerror(Input& input, Ast&, Opt&, AstGrams&, const char* s);
+    static int yylex(YYSTYPE* yylval, Input& input, Ast& ast, Opt&, AstGrams&);
 }
 
 %}
@@ -30,11 +30,11 @@ extern "C" {
 %start spec
 
 %define api.pure full
-%lex-param {re2c::Scanner& input}
+%lex-param {re2c::Input& input}
 %lex-param {re2c::Ast& ast}
 %lex-param {re2c::Opt& opts}
 %lex-param {re2c::AstGrams& grams}
-%parse-param {re2c::Scanner& input}
+%parse-param {re2c::Input& input}
 %parse-param {re2c::Ast& ast}
 %parse-param {re2c::Opt& opts}
 %parse-param {re2c::AstGrams& grams}
@@ -92,7 +92,7 @@ def
     if (add_named_def(opts.symtab, $1, $2, input) != Ret::OK) YYABORT;
 }
 | name expr '/' {
-    input.msg.error(input.tok_loc(), "trailing contexts are not allowed in named definitions");
+    input.error_at_tok("trailing contexts are not allowed in named definitions");
     YYABORT;
 };
 
@@ -212,7 +212,7 @@ primary
 | TOKEN_ID {
     $$ = find_def(opts.symtab, $1);
     if ($$ == nullptr) {
-        input.msg.error(input.tok_loc(), "undefined symbol '%s'", $1);
+        input.error_at_tok("undefined symbol '%s'", $1);
         YYABORT;
     } else if (Ast::needs_wrap($$)) {
         $$ = ast.ref($$, $1);
@@ -226,19 +226,19 @@ primary
 #pragma GCC diagnostic pop
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s) {
-        input.msg.error(input.tok_loc(), "%s", s);
+    static void yyerror(Input& input, Ast&, Opt&, AstGrams&, const char* s) {
+        input.error_at_tok("%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&) {
+    static int yylex(YYSTYPE* yylval, Input& input, Ast& ast, Opt&, AstGrams&) {
         int token;
-        return input.scan(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
+        return input.lex_block(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
     }
 }
 
 namespace re2c {
 
-Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) {
+Ret parse(Input& input, Ast& ast, Opt& opts, AstGrams& grams) {
     return yyparse(input, ast, opts, grams) == 0 ? Ret::OK : Ret::FAIL;
 }
 

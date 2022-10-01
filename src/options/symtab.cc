@@ -9,7 +9,7 @@ const AstNode* find_def(const symtab_t& symtab, const char* name) {
     return i == symtab.end() ? nullptr : i->second;
 }
 
-Ret add_named_def(symtab_t& symtab, const char* name, const AstNode* ast, Scanner& lexer) {
+Ret add_named_def(symtab_t& symtab, const char* name, const AstNode* ast, Input& input) {
     symtab_t::iterator i = symtab.find(name);
     if (i == symtab.end()) {
         // Ok, a new named definition, add it.
@@ -28,13 +28,13 @@ Ret add_named_def(symtab_t& symtab, const char* name, const AstNode* ast, Scanne
     } else {
         // Fail, as the same name is redefined to a different AST (don't bother checking if the ASTs
         // are identical, as there is no known valid use case for that).
-        RET_FAIL(lexer.msg.error(lexer.tok_loc(), "name '%s' is already defined", name));
+        RET_FAIL(input.error_at_tok("name '%s' is already defined", name));
     }
 }
 
-Ret merge_symtab(symtab_t& symtab, const symtab_t& other, Scanner& lexer) {
+Ret merge_symtab(symtab_t& symtab, const symtab_t& other, Input& input) {
     for (const auto& i : other) {
-        CHECK_RET(add_named_def(symtab, i.first, i.second, lexer));
+        CHECK_RET(add_named_def(symtab, i.first, i.second, input));
     }
     return Ret::OK;
 }

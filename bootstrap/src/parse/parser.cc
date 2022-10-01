@@ -82,8 +82,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s);
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&);
+    static void yyerror(Input& input, Ast&, Opt&, AstGrams&, const char* s);
+    static int yylex(YYSTYPE* yylval, Input& input, Ast& ast, Opt&, AstGrams&);
 }
 
 
@@ -761,7 +761,7 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
@@ -783,7 +783,7 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
@@ -822,7 +822,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
+                 int yyrule, re2c::Input& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -884,7 +884,7 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Input& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
   YY_USE (yyvaluep);
   YY_USE (input);
@@ -910,7 +910,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (re2c::Scanner& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
+yyparse (re2c::Input& input, re2c::Ast& ast, re2c::Opt& opts, re2c::AstGrams& grams)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1193,7 +1193,7 @@ yyreduce:
   case 9: /* def: name expr '/'  */
 #line 94 "../src/parse/parser.ypp"
                 {
-    input.msg.error(input.tok_loc(), "trailing contexts are not allowed in named definitions");
+    input.error_at_tok("trailing contexts are not allowed in named definitions");
     YYABORT;
 }
 #line 1200 "src/parse/parser.cc"
@@ -1388,7 +1388,7 @@ yyreduce:
            {
     (yyval.regexp) = find_def(opts.symtab, (yyvsp[0].cstr));
     if ((yyval.regexp) == nullptr) {
-        input.msg.error(input.tok_loc(), "undefined symbol '%s'", (yyvsp[0].cstr));
+        input.error_at_tok("undefined symbol '%s'", (yyvsp[0].cstr));
         YYABORT;
     } else if (Ast::needs_wrap((yyval.regexp))) {
         (yyval.regexp) = ast.ref((yyval.regexp), (yyvsp[0].cstr));
@@ -1603,19 +1603,19 @@ yyreturnlab:
 #pragma GCC diagnostic pop
 
 extern "C" {
-    static void yyerror(Scanner& input, Ast&, Opt&, AstGrams&, const char* s) {
-        input.msg.error(input.tok_loc(), "%s", s);
+    static void yyerror(Input& input, Ast&, Opt&, AstGrams&, const char* s) {
+        input.error_at_tok("%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, Scanner& input, Ast& ast, Opt&, AstGrams&) {
+    static int yylex(YYSTYPE* yylval, Input& input, Ast& ast, Opt&, AstGrams&) {
         int token;
-        return input.scan(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
+        return input.lex_block(yylval, ast, token) == Ret::OK ? token : TOKEN_ERROR;
     }
 }
 
 namespace re2c {
 
-Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) {
+Ret parse(Input& input, Ast& ast, Opt& opts, AstGrams& grams) {
     return yyparse(input, ast, opts, grams) == 0 ? Ret::OK : Ret::FAIL;
 }
 

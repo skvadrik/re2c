@@ -12,17 +12,17 @@
 
 namespace re2c {
 
-Input::Input(size_t fidx)
+InputFile::InputFile(size_t fidx)
     : file(nullptr),
       name(),
       path(),
       escaped_name(),
-      so(Scanner::ENDPOS),
-      eo(Scanner::ENDPOS),
+      so(Input::ENDPOS),
+      eo(Input::ENDPOS),
       line(1),
       fidx(static_cast<uint32_t>(fidx)) {}
 
-Ret Input::open(const std::string& filename,
+Ret InputFile::open(const std::string& filename,
                 const std::string* parent,
                 const std::vector<std::string>& include_paths) {
     name = filename;
@@ -59,35 +59,35 @@ Ret Input::open(const std::string& filename,
     return Ret::OK;
 }
 
-Input::~Input() {
+InputFile::~InputFile() {
     if (file != nullptr && file != stdin) {
         fclose(file);
     }
 }
 
-const uint8_t* const Scanner::ENDPOS = reinterpret_cast<const uint8_t*>(UINT64_MAX);
+const uint8_t* const Input::ENDPOS = reinterpret_cast<const uint8_t*>(UINT64_MAX);
 
-Scanner::~Scanner() {
-    for (Input* in: files) {
+Input::~Input() {
+    for (InputFile* in: files) {
         delete in;
     }
 }
 
-size_t Scanner::get_input_index() const {
+size_t Input::get_input_index() const {
     // Find index of the current input file: the one corresponding to the buffer fragment that
     // contains the cursor.
     size_t i = files.size();
     DCHECK(i > 0);
     for (;;) {
         --i;
-        Input* in = files[i];
+        InputFile* in = files[i];
         if (i == 0 || (cur >= in->so && cur <= in->eo)) break;
     }
     return i;
 }
 
-Ret Scanner::open(const std::string& filename, const std::string* parent) {
-    Input* in = new Input(msg.filenames.size());
+Ret Input::open(const std::string& filename, const std::string* parent) {
+    InputFile* in = new InputFile(msg.filenames.size());
     files.push_back(in);
     CHECK_RET(in->open(filename, parent, globopts->include_paths));
     filedeps.insert(in->escaped_name);
@@ -95,7 +95,7 @@ Ret Scanner::open(const std::string& filename, const std::string* parent) {
     return Ret::OK;
 }
 
-Ret Scanner::include(const std::string& filename, uint8_t* at) {
+Ret Input::include(const std::string& filename, uint8_t* at) {
     // This function is called twice for each include file: first time when opening the file, and
     // second time when it has been fully read. The second time is needed to generate a line
     // directive marking the end of the include file and the continuation of the parent file. In
@@ -139,7 +139,7 @@ Ret Scanner::include(const std::string& filename, uint8_t* at) {
     // top). We want to break from the unreading cycle early, therefore we go in reverse order of
     // file offsets in buffer and break as soon as the end offset is less than cursor (current
     // position). `at` points at the start of include directive.
-    for (Input* in : files) {
+    for (InputFile* in : files) {
         if (in->so >= at) {
             // unread whole fragment
             fseek(in->file, static_cast<long>(in->so - in->eo), SEEK_CUR);
@@ -163,10 +163,10 @@ Ret Scanner::include(const std::string& filename, uint8_t* at) {
     return fill(BSIZE) ? Ret::OK : Ret::FAIL;
 }
 
-bool Scanner::read(size_t want) {
+bool Input::read(size_t want) {
     CHECK(!files.empty());
     for (size_t i = files.size(); i --> 0; ) {
-        Input* in = files[i];
+        InputFile* in = files[i];
         const size_t have = fread(lim, 1, want, in->file);
         in->so = lim;
         lim += have;
@@ -179,13 +179,13 @@ bool Scanner::read(size_t want) {
     return false;
 }
 
-void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs) {
+void Input::shift_ptrs_and_fpos(ptrdiff_t offs) {
     // shift buffer pointers
     shift_ptrs(offs);
 
     // shift file pointers
     for (size_t i = files.size(); i --> 0; ) {
-        Input* in = files[i];
+        InputFile* in = files[i];
         if (in->so == ENDPOS && in->eo == ENDPOS) break;
         CHECK(in->so != ENDPOS && in->eo != ENDPOS);
         in->so += offs;
@@ -193,7 +193,7 @@ void Scanner::shift_ptrs_and_fpos(ptrdiff_t offs) {
     }
 }
 
-void Scanner::pop_finished_files() {
+void Input::pop_finished_files() {
     // Pop all files that have been fully processed (file upper bound in buffer points before the
     // first character of current lexeme), except for the first (main) file which must always remain
     // at the bottom of the stack.
@@ -201,7 +201,7 @@ void Scanner::pop_finished_files() {
     CHECK(i > 0);
     for (;;) {
         --i;
-        Input* in = files[i];
+        InputFile* in = files[i];
         // Keep the file if the end equals token. It is crucial for the include files.
         if (i == 0 || in->eo >= tok) break;
         files.pop_back();
@@ -209,7 +209,7 @@ void Scanner::pop_finished_files() {
     }
 }
 
-bool Scanner::fill(size_t need) {
+bool Input::fill(size_t need) {
     if (eof) return false;
 
     pop_finished_files();
@@ -247,7 +247,7 @@ bool Scanner::fill(size_t need) {
     return true;
 }
 
-Ret Scanner::gen_dep_file() const {
+Ret Input::gen_dep_file() const {
     const std::string& fname = globopts->dep_file;
     if (fname.empty()) return Ret::OK;
 
@@ -264,25 +264,25 @@ Ret Scanner::gen_dep_file() const {
     return Ret::OK;
 }
 
-uint32_t Scanner::decode(const uint8_t* str) const {
+uint32_t Input::decode(const uint8_t* str) const {
     return globopts->input_encoding == Enc::Type::ASCII ? str[0] : utf8::decode_unsafe(str);
 }
 
-void Scanner::error_at(const loc_t& loc, const char* fmt, ...) const {
+void Input::error_at(const loc_t& loc, const char* fmt, ...) const {
     va_list args;
     va_start(args, fmt);
     msg.verror(loc, fmt, args);
     va_end(args);
 }
 
-void Scanner::error_at_cur(const char* fmt, ...) const {
+void Input::error_at_cur(const char* fmt, ...) const {
     va_list args;
     va_start(args, fmt);
     msg.verror(cur_loc(), fmt, args);
     va_end(args);
 }
 
-void Scanner::error_at_tok(const char* fmt, ...) const {
+void Input::error_at_tok(const char* fmt, ...) const {
     va_list args;
     va_start(args, fmt);
     msg.verror(tok_loc(), fmt, args);

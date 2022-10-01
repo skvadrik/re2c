@@ -15,7 +15,7 @@
 namespace re2c {
 
 class Msg;
-class Scanner;
+class Input;
 struct Opt;
 struct opt_t;
 struct SemAct;
@@ -211,9 +211,9 @@ class Ast {
 
 AstGram& find_or_add_gram(AstGrams& grams, const std::string& name);
 Ret use_block(
-    Scanner& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) NODISCARD;
+    Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) NODISCARD;
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
-Ret parse(Scanner& input, Ast& ast, Opt& opts, AstGrams& grams) NODISCARD;
+Ret parse(Input& input, Ast& ast, Opt& opts, AstGrams& grams) NODISCARD;
 
 } // namespace re2c
 

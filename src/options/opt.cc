@@ -399,7 +399,7 @@ Ret Opt::restore(const opt_t* opts) {
     return sync();
 }
 
-Ret Opt::merge(const opt_t* opts, Scanner& lexer) {
+Ret Opt::merge(const opt_t* opts, Input& input) {
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (!opts->is_default_##name) { \
@@ -410,7 +410,7 @@ Ret Opt::merge(const opt_t* opts, Scanner& lexer) {
 #undef MUTOPT1
 #undef MUTOPT
 
-    CHECK_RET(merge_symtab(symtab, opts->symtab, lexer));
+    CHECK_RET(merge_symtab(symtab, opts->symtab, input));
 
     diverge = true;
     return sync();

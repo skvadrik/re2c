@@ -124,7 +124,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     return Ret::OK;
 }
 
-Ret compile(Scanner& input, Output& output, Opt& opts) {
+Ret compile(Input& input, Output& output, Opt& opts) {
     Ast ast;
     const conopt_t* globopts = &opts.glob;
     OutAllocator& out_alc = output.allocator;
@@ -150,7 +150,7 @@ Ret compile(Scanner& input, Output& output, Opt& opts) {
     for (;;) {
         // parse everything up to the next re2c block
         InputBlock kind;
-        CHECK_RET(input.echo(output, block_name, kind));
+        CHECK_RET(input.lex_program(output, block_name, kind));
         if (kind == InputBlock::END) break;
 
         // parse the next re2c block

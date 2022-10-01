@@ -14,7 +14,7 @@ namespace re2c {
 #line 68 "../src/parse/lex.re"
 
 
-struct ScannerState {
+struct LexerState {
     enum class LexMode: uint32_t { NORMAL, FLEX_NAME };
 
     LexMode mode;
@@ -26,7 +26,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
 #line 76 "../src/parse/lex.re"
 
 
-    inline ScannerState()
+    inline LexerState()
         : mode(LexMode::NORMAL),
           BSIZE(8192),
           bot(new uint8_t[BSIZE + YYMAXFILL]),
@@ -46,7 +46,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         memset(lim, 0, YYMAXFILL);
     }
 
-    inline ~ScannerState() {
+    inline ~LexerState() {
         delete[] bot;
     }
 
@@ -65,7 +65,7 @@ if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; 
 
     }
 
-    FORBID_COPY(ScannerState);
+    FORBID_COPY(LexerState);
 };
 
 } // namespace re2c
