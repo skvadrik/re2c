@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"

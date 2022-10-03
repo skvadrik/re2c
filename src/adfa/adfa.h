@@ -9,7 +9,7 @@
 #include <vector>
 
 #include "src/constants.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/msg/location.h"
 #include "src/dfa/tcmd.h"
 #include "src/regexp/rule.h"
@@ -22,10 +22,8 @@
 namespace re2c {
 
 class Msg;
-struct Output;
 struct Tdfa;
 struct opt_t;
-struct Label;
 struct State;
 
 static constexpr size_t NOSAVE = std::numeric_limits<size_t>::max();

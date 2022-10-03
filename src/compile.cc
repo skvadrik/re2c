@@ -7,7 +7,7 @@
 #include <cctype>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/compile.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"

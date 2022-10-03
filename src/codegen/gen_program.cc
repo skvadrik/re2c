@@ -4,7 +4,7 @@
 #include <iomanip>
 
 #include "config.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"
@@ -310,6 +310,17 @@ void Output::gen_epilog() {
     if (opts->target == Target::SKELETON) {
         wdelay_stmt(0, emit_skeleton_epilog(*this));
     }
+}
+
+Scratchbuf& Scratchbuf::unchecked_label(const Label& l) {
+    CHECK(l.index != Label::NONE);
+    os << l.index;
+    return *this;
+}
+
+Scratchbuf& Scratchbuf::label(const Label& l) {
+    CHECK(l.used);
+    return unchecked_label(l);
 }
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {

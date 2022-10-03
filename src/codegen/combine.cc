@@ -1,5 +1,5 @@
 #include "config.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/options/opt.h"
 
 namespace re2c {

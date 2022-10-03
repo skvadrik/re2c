@@ -1,7 +1,7 @@
 #include <string.h>
 #include <algorithm>
 
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 

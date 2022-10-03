@@ -1,4 +1,4 @@
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 
 namespace re2c {
 

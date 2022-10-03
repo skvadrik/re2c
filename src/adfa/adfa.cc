@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/dfa/dfa.h"
 #include "src/dfa/tcmd.h"
 #include "src/options/opt.h"

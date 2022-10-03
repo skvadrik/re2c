@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/code.h"
+#include "src/codegen/output.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/util/check.h"
@@ -85,13 +85,6 @@ static CodeGoSw* code_gosw(
     }
 
     return go;
-}
-
-static CodeCmp* code_cmp(OutAllocator& alc, const char* cmp, uint32_t val) {
-    CodeCmp* x = alc.alloct<CodeCmp>(1);
-    x->cmp = cmp;
-    x->val = val;
-    return x;
 }
 
 static CodeGoIfB* code_goifb(OutAllocator& alc,
