@@ -297,30 +297,24 @@ void gen_code(Output& output, dfas_t& dfas) {
         const char* text;
         CodeList* program1 = code_list(alc);
         CodeCases* cases = code_cases(alc);
-        for (std::unique_ptr<Adfa>& dfa : dfas) {
-            const bool first = (dfa == first_dfa);
 
+        if (opts->storable_state) {
+            append(program1, code_newline(alc));
+        } else {
+            append(program1, code_yych_decl(alc));
+            append(program1, code_yyaccept_def(alc));
+        }
+        append(program1, code_yystate_def(alc));
+        if (is_cond_block && opts->cgoto) {
+            append(program1, code_cond_table(alc));
+        }
+
+        for (std::unique_ptr<Adfa>& dfa : dfas) {
             CodeList* bms = opts->bitmaps ? gen_bitmap(output, dfa->bitmap) : nullptr;
             have_bitmaps |= bms != nullptr;
 
-            if (first && opts->storable_state) {
-                append(program1, code_newline(alc));
-            }
-
-            if (first && !opts->storable_state) {
-                append(program1, code_yych_decl(alc));
-                append(program1, code_yyaccept_def(alc));
-            }
-            if (first) {
-                append(program1, code_yystate_def(alc));
-            }
-
             if (!is_cond_block && bms) {
                 append(program1, bms);
-            }
-
-            if (first && is_cond_block && opts->cgoto) {
-                append(program1, code_cond_table(alc));
             }
 
             if (opts->storable_state && !output.state_goto && !opts->loop_switch) {
@@ -335,7 +329,7 @@ void gen_code(Output& output, dfas_t& dfas) {
             }
 
             // user-defined start label
-            if (first && !opts->label_start.empty()) {
+            if (!opts->label_start.empty() && dfa == first_dfa) {
                 text = o.str(opts->label_start).flush();
                 append(program1, code_slabel(alc, text));
             }
@@ -374,6 +368,7 @@ void gen_code(Output& output, dfas_t& dfas) {
                 gen_dfa_as_switch_cases(output, *dfa, cases);
             }
         }
+
         if (opts->loop_switch) {
             wrap_dfas_in_loop_switch(output, program1, cases);
         }
