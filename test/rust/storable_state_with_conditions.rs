@@ -65,7 +65,6 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     'lex: loop {
         st.tok = st.cur;
     
-
 	let mut yystate : isize = st.state;
 	'yyl: loop {
 		match yystate {

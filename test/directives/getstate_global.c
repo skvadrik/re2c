@@ -25,7 +25,6 @@ switch (YYGETSTATE()) {
 
 // global block x (with start label)
 
-
 yy0:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -46,7 +45,6 @@ switch (YYGETSTATE()) {
 
 // global block y (no start label)
 
-
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
@@ -65,7 +63,6 @@ switch (YYGETSTATE()) {
 
 
 // local block z (no start label)
-
 
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

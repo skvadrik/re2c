@@ -2,7 +2,6 @@
 //go:generate re2go -f $INPUT -o $OUTPUT --loop-switch -i
 
 
-
 	yystate := YYGETSTATE
 yyl:
 	for {
@@ -35,7 +34,6 @@ yyl:
 			panic("internal lexer error")
 		}
 	}
-
 
 
 

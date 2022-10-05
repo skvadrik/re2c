@@ -5,7 +5,6 @@
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -31,7 +30,6 @@ yy3:
 
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy4;
@@ -59,7 +57,6 @@ yy7:
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -85,7 +82,6 @@ yy11:
 
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy12;
@@ -114,7 +110,6 @@ yy15:
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy16;
 		case 4: goto yyFillLabel4;
@@ -141,7 +136,6 @@ yy19:
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy20;
@@ -170,7 +164,6 @@ yy23:
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy24;
 		case 6: goto yyFillLabel6;
@@ -197,7 +190,6 @@ yy27:
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy28;
@@ -226,7 +218,6 @@ yy31:
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy32;
 		case 8: goto yyFillLabel8;
@@ -253,7 +244,6 @@ yy35:
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy36;
@@ -282,7 +272,6 @@ yy39:
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy40;
 		case 10: goto yyFillLabel10;
@@ -309,7 +298,6 @@ yy43:
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy44;

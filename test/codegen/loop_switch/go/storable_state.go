@@ -58,7 +58,6 @@ func lex(in *Input, recv *int) int {
 	var yych byte
 loop:
 	
-
 	yystate := in.state
 yyl:
 	for {

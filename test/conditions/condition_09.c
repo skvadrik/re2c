@@ -91,7 +91,6 @@ void scan(Scanner *s)
 		s->tok = s->cur;
 
 		{
-
 			static void *yyctable[4] = {
 				&&yyc_Normal,
 				&&yyc_Comment,

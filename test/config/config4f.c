@@ -26,7 +26,6 @@ char *scan(char *p)
 
 
 #line 29 "config/config4f.c"
-
 yy0:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -50,7 +49,7 @@ yy2:
 	YYSETSTATE(-1);
 #line 23 "config/config4f.re"
 	{ return NULL; }
-#line 54 "config/config4f.c"
+#line 53 "config/config4f.c"
 yy3:
 	++YYCURSOR;
 	YYSETSTATE(1);
@@ -74,7 +73,7 @@ yy4:
 	YYSETSTATE(-1);
 #line 22 "config/config4f.re"
 	{ return YYCURSOR; }
-#line 78 "config/config4f.c"
+#line 77 "config/config4f.c"
 #line 24 "config/config4f.re"
 
 }

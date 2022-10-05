@@ -3,7 +3,6 @@
 
 
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -56,7 +55,6 @@ yy6:
 
 // re2c:startlabel = ;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy7;
 		case 2: goto yyFillLabel2;
@@ -108,7 +106,6 @@ yy13:
 
 
 // re2c:startlabel = 0;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy14;
@@ -163,7 +160,6 @@ yy20:
 // re2c:startlabel = 0;
 // re2c:startlabel = ;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy21;
 		case 6: goto yyFillLabel6;
@@ -215,7 +211,6 @@ yy27:
 
 
 // re2c:startlabel = 1;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy28;
@@ -270,7 +265,6 @@ yy34:
 // re2c:startlabel = 1;
 // re2c:startlabel = ;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy35;
 		case 10: goto yyFillLabel10;
@@ -322,7 +316,6 @@ yy41:
 
 
 // re2c:startlabel = Lstart;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy42;
@@ -378,7 +371,6 @@ yy48:
 // re2c:startlabel = Lstart;
 // re2c:startlabel = ;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy49;
 		case 14: goto yyFillLabel14;
@@ -431,7 +423,6 @@ yy55:
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 0;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy56;
@@ -488,7 +479,6 @@ yy62:
 // re2c:startlabel = 0;
 // re2c:startlabel = ;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy63;
 		case 18: goto yyFillLabel18;
@@ -541,7 +531,6 @@ yy69:
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 1;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy70;
@@ -597,7 +586,6 @@ yy76:
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 1;
 // re2c:startlabel = ;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy77;

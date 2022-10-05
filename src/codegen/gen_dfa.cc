@@ -298,9 +298,7 @@ void gen_code(Output& output, dfas_t& dfas) {
         CodeList* program1 = code_list(alc);
         CodeCases* cases = code_cases(alc);
 
-        if (opts->storable_state) {
-            append(program1, code_newline(alc));
-        } else {
+        if (!opts->storable_state) {
             append(program1, code_yych_decl(alc));
             append(program1, code_yyaccept_def(alc));
         }

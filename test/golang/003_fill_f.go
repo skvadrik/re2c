@@ -83,7 +83,6 @@ func Lex(in *Input) (int, int) {
 
 	
 //line "golang/003_fill_f.go":86
-
 	switch (in.state) {
 	default:
 		goto yy0
@@ -121,7 +120,7 @@ yy2:
 		fmt.Println("end")
 		return lexEnd, 0
 	}
-//line "golang/003_fill_f.go":125
+//line "golang/003_fill_f.go":124
 yy3:
 	in.cursor += 1
 	in.state = -1
@@ -130,7 +129,7 @@ yy3:
 		fmt.Println("error")
 		return lexError, 0
 	}
-//line "golang/003_fill_f.go":134
+//line "golang/003_fill_f.go":133
 yy4:
 	in.cursor += 1
 	in.state = 1
@@ -151,7 +150,7 @@ yy5:
 	{
 		return lexSpace, 0
 	}
-//line "golang/003_fill_f.go":155
+//line "golang/003_fill_f.go":154
 yy6:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -176,7 +175,7 @@ yy7:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1, 0
 	}
-//line "golang/003_fill_f.go":180
+//line "golang/003_fill_f.go":179
 yy8:
 	in.cursor += 1
 	yych = YYCTYPE(in.data[in.cursor])
@@ -210,7 +209,7 @@ yy11:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2, 0
 	}
-//line "golang/003_fill_f.go":214
+//line "golang/003_fill_f.go":213
 //line "golang/003_fill_f.re":112
 
 }

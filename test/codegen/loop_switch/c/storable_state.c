@@ -51,7 +51,6 @@ static Status lex(Input *in, unsigned int *recv)
     char yych;
 loop:
     
-
 	int yystate = in->state;
 	for (;;) {
 		switch (yystate) {

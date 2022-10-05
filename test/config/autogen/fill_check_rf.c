@@ -3,7 +3,6 @@
 
 
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -29,7 +28,6 @@ yy3:
 
 // re2c:yyfill:check = 0;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy4;
 		case 1: goto yyFillLabel1;
@@ -54,7 +52,6 @@ yy7:
 
 
 // re2c:yyfill:check = 1;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy8;

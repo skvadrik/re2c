@@ -157,7 +157,6 @@ switch (YYGETSTATE()) {
 }
 
 
-
 yy0:
 yyFillLabel0:
 	in.yych = *in.cur;

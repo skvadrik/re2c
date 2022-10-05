@@ -90,7 +90,6 @@ void scan(Scanner *s)
 	{
 		s->tok = s->cur;
 
-
 yy0:
 		if (s->cond < 2) {
 			if (s->cond < 1) {

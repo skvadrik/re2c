@@ -2,7 +2,6 @@
 // re2c $INPUT -o $OUTPUT -fi --loop-switch
 
 
-
 	int yystate = YYGETSTATE();
 	for (;;) {
 		switch (yystate) {
@@ -31,7 +30,6 @@
 				continue;
 		}
 	}
-
 
 
 

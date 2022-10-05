@@ -72,7 +72,6 @@ void scan(Scanner *s)
 	{
 		s->tok = s->cur;
 
-
 		switch (s->state) {
 			default: goto yy0;
 			case 0: goto yyFillLabel0;

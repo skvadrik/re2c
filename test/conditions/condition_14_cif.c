@@ -90,7 +90,6 @@ void scan(Scanner *s)
 	{
 		s->tok = s->cur;
 
-
 yy0:
 		switch (s->cond) {
 			case EStateNormal: goto yyc_Normal;

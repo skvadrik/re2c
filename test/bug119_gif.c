@@ -2,7 +2,6 @@
 // re2c $INPUT -o $OUTPUT -gif
 
 {
-
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 	}

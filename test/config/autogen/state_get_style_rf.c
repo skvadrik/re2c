@@ -3,7 +3,6 @@
 
 
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -28,7 +27,6 @@ yy3:
 
 
 // re2c:api:style = free-form;
-
 
 	switch (YYGETSTATE) {
 		default: goto yy4;
@@ -55,7 +53,6 @@ yy7:
 
 // re2c:api:style = functions;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -80,7 +77,6 @@ yy11:
 
 
 // re2c:define:YYGETSTATE:naked = 0;
-
 
 	switch (YYGETSTATE()) {
 		default: goto yy12;
@@ -108,7 +104,6 @@ yy15:
 // re2c:define:YYGETSTATE:naked = 0;
 // re2c:api:style = free-form;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy16;
 		case 4: goto yyFillLabel4;
@@ -135,7 +130,6 @@ yy19:
 // re2c:define:YYGETSTATE:naked = 0;
 // re2c:api:style = functions;
 
-
 	switch (YYGETSTATE()) {
 		default: goto yy20;
 		case 5: goto yyFillLabel5;
@@ -160,7 +154,6 @@ yy23:
 
 
 // re2c:define:YYGETSTATE:naked = 1;
-
 
 	switch (YYGETSTATE) {
 		default: goto yy24;
@@ -188,7 +181,6 @@ yy27:
 // re2c:define:YYGETSTATE:naked = 1;
 // re2c:api:style = free-form;
 
-
 	switch (YYGETSTATE) {
 		default: goto yy28;
 		case 7: goto yyFillLabel7;
@@ -214,7 +206,6 @@ yy31:
 
 // re2c:define:YYGETSTATE:naked = 1;
 // re2c:api:style = functions;
-
 
 	switch (YYGETSTATE) {
 		default: goto yy32;
