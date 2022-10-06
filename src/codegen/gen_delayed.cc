@@ -378,53 +378,43 @@ LOCAL_NODISCARD(Ret gen_state_goto(CodegenCtxPass1& ctx, Code* code)) {
 }
 
 static void gen_yych_decl(const opt_t* opts, Code* code) {
-    if (opts->char_emit) {
-        code->kind = CodeKind::VAR;
-        code->var.type = VarType::YYCTYPE;
-        code->var.name = opts->var_char.c_str();
-        code->var.init = nullptr;
-    } else {
-        code->kind = CodeKind::EMPTY;
-    }
+    CHECK(!opts->storable_state && opts->char_emit);
+    code->kind = CodeKind::VAR;
+    code->var.type = VarType::YYCTYPE;
+    code->var.name = opts->var_char.c_str();
+    code->var.init = nullptr;
 }
 
 static void gen_yyaccept_def(const opt_t* opts, Code* code, bool used_yyaccept) {
-    if (used_yyaccept) {
-        code->kind = CodeKind::VAR;
-        code->var.type = VarType::UINT;
-        code->var.name = opts->var_accept.c_str();
-        code->var.init = "0";
-    } else {
-        code->kind = CodeKind::EMPTY;
-    }
+    CHECK(!opts->storable_state && used_yyaccept);
+    code->kind = CodeKind::VAR;
+    code->var.type = VarType::UINT;
+    code->var.name = opts->var_accept.c_str();
+    code->var.init = "0";
 }
 
 static void gen_yystate_def(CodegenCtxPass1& ctx, Code* code) {
     const opt_t* opts = ctx.block->opts;
     Scratchbuf& o = ctx.global->scratchbuf;
+    CHECK(opts->loop_switch);
 
-    if (opts->loop_switch) {
-        code->kind = CodeKind::VAR;
-        code->var.name = o.str(opts->var_state).flush();
-        if (opts->storable_state) {
-            // With storable state `yystate` should be initialized to YYGETSTATE. Since there is a
-            // -1 case, `yystate` should have a signed type. If conditions are also used, YYGETSTATE
-            // takes priority over YYGETCONDITION, because the lexer may be reentered after an
-            // YYFILL invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the
-            // final states.
-            code->var.type = VarType::INT;
-            code->var.init = o.str(output_state_get(opts)).flush();
-        } else if (opts->start_conditions) {
-            // Else with start conditions yystate should be initialized to YYGETCONDITION.
-            code->var.type = VarType::UINT;
-            code->var.init = o.str(output_cond_get(opts)).flush();
-        } else {
-            // Else it should be the start DFA state (always case 0 with --loop-switch).
-            code->var.type = VarType::UINT;
-            code->var.init = "0";
-        }
+    code->kind = CodeKind::VAR;
+    code->var.name = o.str(opts->var_state).flush();
+    if (opts->storable_state) {
+        // With storable state `yystate` should be initialized to YYGETSTATE. Since there is a
+        // -1 case, `yystate` should have a signed type. If conditions are also used, YYGETSTATE
+        // takes priority over YYGETCONDITION, because the lexer may be reentered after an YYFILL
+        // invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the final states.
+        code->var.type = VarType::INT;
+        code->var.init = o.str(output_state_get(opts)).flush();
+    } else if (opts->start_conditions) {
+        // Else with start conditions yystate should be initialized to YYGETCONDITION.
+        code->var.type = VarType::UINT;
+        code->var.init = o.str(output_cond_get(opts)).flush();
     } else {
-        code->kind = CodeKind::EMPTY;
+        // Else it should be the start DFA state (always case 0 with --loop-switch).
+        code->var.type = VarType::UINT;
+        code->var.init = "0";
     }
 }
 

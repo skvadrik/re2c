@@ -292,27 +292,35 @@ void gen_code(Output& output, dfas_t& dfas) {
         }
     } else {
         ind = output.block().opts->indent_top;
-        bool have_bitmaps = false;
+        bool local_decls = false;
 
         const char* text;
         CodeList* program1 = code_list(alc);
         CodeCases* cases = code_cases(alc);
 
-        if (!opts->storable_state) {
+        if (!opts->storable_state && opts->char_emit) {
             append(program1, code_yych_decl(alc));
-            append(program1, code_yyaccept_def(alc));
+            local_decls = true;
         }
-        append(program1, code_yystate_def(alc));
+        if (!opts->storable_state && oblock.used_yyaccept) {
+            append(program1, code_yyaccept_def(alc));
+            local_decls = true;
+        }
+        if (opts->loop_switch) {
+            append(program1, code_yystate_def(alc));
+            local_decls = true;
+        }
         if (is_cond_block && opts->cgoto) {
             append(program1, code_cond_table(alc));
+            local_decls = true;
         }
 
         for (std::unique_ptr<Adfa>& dfa : dfas) {
             CodeList* bms = opts->bitmaps ? gen_bitmap(output, dfa->bitmap) : nullptr;
-            have_bitmaps |= bms != nullptr;
 
             if (!is_cond_block && bms) {
                 append(program1, bms);
+                local_decls = true;
             }
 
             if (opts->storable_state && !output.state_goto && !opts->loop_switch) {
@@ -371,13 +379,11 @@ void gen_code(Output& output, dfas_t& dfas) {
             wrap_dfas_in_loop_switch(output, program1, cases);
         }
 
-        append(program, code_newline(alc));
+        append(program, code_newline(alc)); // the following #line info must start at zero indent
         append(program, code_line_info_output(alc));
 
-        if ((opts->storable_state && opts->cgoto)
-                || (!opts->storable_state && (oblock.used_yyaccept || opts->char_emit))
-                || (!is_cond_block && have_bitmaps)
-                || (is_cond_block && opts->cgoto)) {
+        if (local_decls) {
+            // Wrap local variable declarations in braces to avoid conflicts with the outer scope.
             append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
         } else {
             ind = std::max(ind, 1u);

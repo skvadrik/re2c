@@ -105,6 +105,7 @@ static enum con_status parse_con_req(struct con_state* c)
     struct mtag         *f1, *f2, *p1, *p2, *p3, *p4;
 
     
+{
 	int yystate = c->state;
 	for (;;) {
 		switch (yystate) {
@@ -2032,6 +2033,7 @@ static enum con_status parse_con_req(struct con_state* c)
 				continue;
 		}
 	}
+}
 
 }
 

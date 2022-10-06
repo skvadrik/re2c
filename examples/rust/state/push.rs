@@ -56,6 +56,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
     'lex: loop {
         st.tok = st.cur;
     
+{
 	let mut yystate : isize = st.state;
 	'yyl: loop {
 		match yystate {
@@ -175,6 +176,7 @@ fn lex(st: &mut State, recv: &mut usize) -> Status {
 			}
 		}
 	}
+}
 }
 }
 
