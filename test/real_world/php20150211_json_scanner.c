@@ -107,85 +107,84 @@ std:
 			&&yyc_STR_P1,
 			&&yyc_STR_P2,
 		};
+		static const unsigned char yybm_JS[] = {
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,  64,   0,   0,   0,  64,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			 64,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			128, 128, 128, 128, 128, 128, 128, 128, 
+			128, 128,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+			  0,   0,   0,   0,   0,   0,   0,   0, 
+		};
 		goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_JS:
+		yych = *YYCURSOR;
 		{
-			static const unsigned char yybm[] = {
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,  64,   0,   0,   0,  64,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				 64,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				128, 128, 128, 128, 128, 128, 128, 128, 
-				128, 128,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
-				  0,   0,   0,   0,   0,   0,   0,   0, 
+			static void *yytarget[256] = {
+				&&yy1,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy4,  &&yy7,  &&yy2,  &&yy2,  &&yy8,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy4,  &&yy2,  &&yy9,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy10, &&yy11, &&yy2,  &&yy2,
+				&&yy12, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
+				&&yy14, &&yy14, &&yy15, &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy16, &&yy2,  &&yy17, &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy18, &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy19, &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy20, &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy21, &&yy2,  &&yy22, &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2
 			};
-			yych = *YYCURSOR;
-			{
-				static void *yytarget[256] = {
-					&&yy1,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy4,  &&yy7,  &&yy2,  &&yy2,  &&yy8,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy4,  &&yy2,  &&yy9,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy10, &&yy11, &&yy2,  &&yy2,
-					&&yy12, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
-					&&yy14, &&yy14, &&yy15, &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy16, &&yy2,  &&yy17, &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy18, &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy19, &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy20, &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy21, &&yy2,  &&yy22, &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-					&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2
-				};
-				goto *yytarget[yych];
-			}
+			goto *yytarget[yych];
+		}
 yy1:
-			++YYCURSOR;
-			{
+		++YYCURSOR;
+		{
 		if (s->limit < s->cursor) {
 			return PHP_JSON_T_EOI;
 		} else {
@@ -194,55 +193,55 @@ yy1:
 		}
 	}
 yy2:
-			++YYCURSOR;
+		++YYCURSOR;
 yy3:
-			{
+		{
 		s->errcode = PHP_JSON_ERROR_SYNTAX;
 		return PHP_JSON_T_ERROR;
 	}
 yy4:
-			yych = *++YYCURSOR;
+		yych = *++YYCURSOR;
 yy5:
-			if (yybm[0+yych] & 64) {
-				goto yy4;
-			}
+		if (yybm_JS[0+yych] & 64) {
+			goto yy4;
+		}
 yy6:
-			{ goto std; }
+		{ goto std; }
 yy7:
-			++YYCURSOR;
-			goto yy6;
+		++YYCURSOR;
+		goto yy6;
 yy8:
-			yych = *++YYCURSOR;
-			if (yych == '\n') goto yy7;
-			goto yy5;
+		yych = *++YYCURSOR;
+		if (yych == '\n') goto yy7;
+		goto yy5;
 yy9:
-			++YYCURSOR;
-			{
+		++YYCURSOR;
+		{
 		s->str_start = s->cursor;
 		s->str_esc = 0;
 		PHP_JSON_CONDITION_SET(STR_P1);
 		PHP_JSON_CONDITION_GOTO(STR_P1);
 	}
 yy10:
-			++YYCURSOR;
-			{ return ','; }
+		++YYCURSOR;
+		{ return ','; }
 yy11:
-			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy3;
-			if (yych <= '0') goto yy12;
-			if (yych <= '9') goto yy14;
-			goto yy3;
+		yych = *++YYCURSOR;
+		if (yych <= '/') goto yy3;
+		if (yych <= '0') goto yy12;
+		if (yych <= '9') goto yy14;
+		goto yy3;
 yy12:
-			yyaccept = 0;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych <= 'D') {
-				if (yych == '.') goto yy23;
-			} else {
-				if (yych <= 'E') goto yy25;
-				if (yych == 'e') goto yy25;
-			}
+		yyaccept = 0;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 'D') {
+			if (yych == '.') goto yy23;
+		} else {
+			if (yych <= 'E') goto yy25;
+			if (yych == 'e') goto yy25;
+		}
 yy13:
-			{
+		{
 		zend_bool bigint = 0, negative = s->token[0] == '-';
 		size_t digits = (size_t) (s->cursor - s->token - negative);
 		if (digits >= PHP_JSON_INT_MAX_LENGTH) {
@@ -267,146 +266,145 @@ yy13:
 		}
 	}
 yy14:
-			yyaccept = 0;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yybm[0+yych] & 128) {
-				goto yy14;
-			}
-			if (yych <= 'D') {
-				if (yych == '.') goto yy23;
-				goto yy13;
-			} else {
-				if (yych <= 'E') goto yy25;
-				if (yych == 'e') goto yy25;
-				goto yy13;
-			}
+		yyaccept = 0;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yybm_JS[0+yych] & 128) {
+			goto yy14;
+		}
+		if (yych <= 'D') {
+			if (yych == '.') goto yy23;
+			goto yy13;
+		} else {
+			if (yych <= 'E') goto yy25;
+			if (yych == 'e') goto yy25;
+			goto yy13;
+		}
 yy15:
-			++YYCURSOR;
-			{ return ':'; }
+		++YYCURSOR;
+		{ return ':'; }
 yy16:
-			++YYCURSOR;
-			{ return '['; }
+		++YYCURSOR;
+		{ return '['; }
 yy17:
-			++YYCURSOR;
-			{ return ']'; }
+		++YYCURSOR;
+		{ return ']'; }
 yy18:
-			yyaccept = 1;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'a') goto yy26;
-			goto yy3;
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych == 'a') goto yy26;
+		goto yy3;
 yy19:
-			yyaccept = 1;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'u') goto yy27;
-			goto yy3;
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych == 'u') goto yy27;
+		goto yy3;
 yy20:
-			yyaccept = 1;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych == 'r') goto yy28;
-			goto yy3;
+		yyaccept = 1;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych == 'r') goto yy28;
+		goto yy3;
 yy21:
-			++YYCURSOR;
-			{ return '{'; }
+		++YYCURSOR;
+		{ return '{'; }
 yy22:
-			++YYCURSOR;
-			{ return '}'; }
+		++YYCURSOR;
+		{ return '}'; }
 yy23:
-			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy24;
-			if (yych <= '9') goto yy29;
+		yych = *++YYCURSOR;
+		if (yych <= '/') goto yy24;
+		if (yych <= '9') goto yy29;
 yy24:
-			YYCURSOR = YYMARKER;
-			if (yyaccept <= 1) {
-				if (yyaccept == 0) {
-					goto yy13;
-				} else {
-					goto yy3;
-				}
+		YYCURSOR = YYMARKER;
+		if (yyaccept <= 1) {
+			if (yyaccept == 0) {
+				goto yy13;
 			} else {
-				goto yy30;
+				goto yy3;
 			}
+		} else {
+			goto yy30;
+		}
 yy25:
-			yych = *++YYCURSOR;
-			if (yych <= ',') {
-				if (yych == '+') goto yy31;
-				goto yy24;
-			} else {
-				if (yych <= '-') goto yy31;
-				if (yych <= '/') goto yy24;
-				if (yych <= '9') goto yy32;
-				goto yy24;
-			}
+		yych = *++YYCURSOR;
+		if (yych <= ',') {
+			if (yych == '+') goto yy31;
+			goto yy24;
+		} else {
+			if (yych <= '-') goto yy31;
+			if (yych <= '/') goto yy24;
+			if (yych <= '9') goto yy32;
+			goto yy24;
+		}
 yy26:
-			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy33;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'l') goto yy33;
+		goto yy24;
 yy27:
-			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy34;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'l') goto yy34;
+		goto yy24;
 yy28:
-			yych = *++YYCURSOR;
-			if (yych == 'u') goto yy35;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'u') goto yy35;
+		goto yy24;
 yy29:
-			yyaccept = 2;
-			yych = *(YYMARKER = ++YYCURSOR);
-			if (yych <= 'D') {
-				if (yych <= '/') goto yy30;
-				if (yych <= '9') goto yy29;
-			} else {
-				if (yych <= 'E') goto yy25;
-				if (yych == 'e') goto yy25;
-			}
+		yyaccept = 2;
+		yych = *(YYMARKER = ++YYCURSOR);
+		if (yych <= 'D') {
+			if (yych <= '/') goto yy30;
+			if (yych <= '9') goto yy29;
+		} else {
+			if (yych <= 'E') goto yy25;
+			if (yych == 'e') goto yy25;
+		}
 yy30:
-			{
+		{
 		ZVAL_DOUBLE(&s->value, zend_strtod((char *) s->token, NULL));
 		return PHP_JSON_T_DOUBLE;
 	}
 yy31:
-			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy24;
-			if (yych >= ':') goto yy24;
+		yych = *++YYCURSOR;
+		if (yych <= '/') goto yy24;
+		if (yych >= ':') goto yy24;
 yy32:
-			yych = *++YYCURSOR;
-			if (yych <= '/') goto yy30;
-			if (yych <= '9') goto yy32;
-			goto yy30;
+		yych = *++YYCURSOR;
+		if (yych <= '/') goto yy30;
+		if (yych <= '9') goto yy32;
+		goto yy30;
 yy33:
-			yych = *++YYCURSOR;
-			if (yych == 's') goto yy36;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 's') goto yy36;
+		goto yy24;
 yy34:
-			yych = *++YYCURSOR;
-			if (yych == 'l') goto yy37;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'l') goto yy37;
+		goto yy24;
 yy35:
-			yych = *++YYCURSOR;
-			if (yych == 'e') goto yy38;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'e') goto yy38;
+		goto yy24;
 yy36:
-			yych = *++YYCURSOR;
-			if (yych == 'e') goto yy39;
-			goto yy24;
+		yych = *++YYCURSOR;
+		if (yych == 'e') goto yy39;
+		goto yy24;
 yy37:
-			++YYCURSOR;
-			{
+		++YYCURSOR;
+		{
 		ZVAL_NULL(&s->value);
 		return PHP_JSON_T_NUL;
 	}
 yy38:
-			++YYCURSOR;
-			{
+		++YYCURSOR;
+		{
 		ZVAL_TRUE(&s->value);
 		return PHP_JSON_T_TRUE;
 	}
 yy39:
-			++YYCURSOR;
-			{
+		++YYCURSOR;
+		{
 		ZVAL_FALSE(&s->value);
 		return PHP_JSON_T_FALSE;
 	}
-		}
 /* *********************************** */
 yyc_STR_P1:
 		yych = *YYCURSOR;

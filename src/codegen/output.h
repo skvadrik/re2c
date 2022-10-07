@@ -171,7 +171,8 @@ State* fallback_state_with_eof_rule(
         const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags);
 CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s);
 void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s);
-CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap);
+std::string bitmap_name(const opt_t* opts, const std::string& cond);
+CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
 
 void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);

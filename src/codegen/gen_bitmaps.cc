@@ -55,7 +55,13 @@ CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State
     return nullptr;
 }
 
-CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
+std::string bitmap_name(const opt_t* opts, const std::string& cond) {
+    return cond.empty()
+            ? opts->var_bitmaps
+            : opts->var_bitmaps + "_" + cond;
+}
+
+CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond) {
     if (!bitmap->states->head || !bitmap->used) return nullptr;
 
     uint32_t nmaps = 0;
@@ -72,9 +78,10 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap) {
 
     CodeList* stmts = code_list(alc);
 
+    const std::string& name = bitmap_name(opts, cond);
     text = opts->lang == Lang::C
-           ? o.cstr("static const unsigned char ").str(opts->var_bitmaps).cstr("[] = {").flush()
-           : o.str(opts->var_bitmaps).cstr(" := []byte{").flush();
+           ? o.cstr("static const unsigned char ").str(name).cstr("[] = {").flush()
+           : o.str(name).cstr(" := []byte{").flush();
     append(stmts, code_text(alc, text));
 
     CodeList* block = code_list(alc);

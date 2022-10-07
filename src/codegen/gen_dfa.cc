@@ -310,19 +310,21 @@ void gen_code(Output& output, dfas_t& dfas) {
             append(program1, code_yystate_def(alc));
             local_decls = true;
         }
-        if (is_cond_block && opts->cgoto) {
+        if (opts->cgoto && is_cond_block) {
             append(program1, code_cond_table(alc));
             local_decls = true;
         }
+        if (opts->bitmaps) {
+            for (std::unique_ptr<Adfa>& dfa : dfas) {
+                CodeList* bitmaps = gen_bitmap(output, dfa->bitmap, dfa->cond);
+                if (bitmaps) {
+                    append(program1, bitmaps);
+                    local_decls = true;
+                }
+            }
+        }
 
         for (std::unique_ptr<Adfa>& dfa : dfas) {
-            CodeList* bms = opts->bitmaps ? gen_bitmap(output, dfa->bitmap) : nullptr;
-
-            if (!is_cond_block && bms) {
-                append(program1, bms);
-                local_decls = true;
-            }
-
             if (opts->storable_state && !output.state_goto && !opts->loop_switch) {
                 append(program1,
                        code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
@@ -357,20 +359,10 @@ void gen_code(Output& output, dfas_t& dfas) {
             if (!opts->loop_switch) {
                 // In the goto/label mode, generate DFA states as blocks of code preceded with
                 // labels, and `goto` transitions between states.
-                CodeList* body = code_list(alc);
-                gen_dfa_as_blocks_with_labels(output, *dfa, body);
-                if (is_cond_block && bms) {
-                    CodeList* block = code_list(alc);
-                    append(block, bms);
-                    append(block, body);
-                    append(program1, code_block(alc, block, CodeBlock::Kind::WRAPPED));
-                } else {
-                    append(program1, body);
-                }
+                gen_dfa_as_blocks_with_labels(output, *dfa, program1);
             } else {
                 // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
                 // Merge DFAs for different conditions together in one switch.
-                DCHECK(!bms);
                 gen_dfa_as_switch_cases(output, *dfa, cases);
             }
         }

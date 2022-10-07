@@ -661,7 +661,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     }
 
     if (opts->bitmaps) {
-        append(block2, gen_bitmap(output, dfa.bitmap));
+        append(block2, gen_bitmap(output, dfa.bitmap, dfa.cond));
     }
     append(block2, code_textraw(alc, ""));
 

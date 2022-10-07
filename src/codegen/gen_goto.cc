@@ -102,9 +102,9 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
 
     const char* nonzero = opts->lang == Lang::C ? "" : " != 0";
 
-    const char* elif_cond = o.str(opts->var_bitmaps).cstr("[").u32(go->bitmap->offset).cstr("+")
-            .str(opts->var_char).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1)
-            .cstr(nonzero).flush();
+    const char* elif_cond = o.str(bitmap_name(opts, dfa.cond))
+            .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->var_char).cstr("]")
+            .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).cstr(nonzero).flush();
 
     CodeList* if_else = code_list(alc);
     const CodeJump jump = {go->bitmap->state, TCID0, false, false, false};
