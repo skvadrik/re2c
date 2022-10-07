@@ -324,22 +324,21 @@ void gen_code(Output& output, dfas_t& dfas) {
             }
         }
 
-        for (std::unique_ptr<Adfa>& dfa : dfas) {
-            if (opts->storable_state && !output.state_goto && !opts->loop_switch) {
-                append(program1,
-                       code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
-                output.state_goto = true;
-            }
+        if (opts->storable_state && !opts->loop_switch && !output.state_goto) {
+            append(program1, code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
+            output.state_goto = true;
+        }
 
+        // user-defined start label (one per block, not per every condition)
+        if (!opts->label_start.empty()) {
+            text = o.str(opts->label_start).flush();
+            append(program1, code_slabel(alc, text));
+        }
+
+        for (std::unique_ptr<Adfa>& dfa : dfas) {
             // start label
             if (dfa->start_label) {
                 append(program1, code_nlabel(alc, dfa->start_label));
-            }
-
-            // user-defined start label
-            if (!opts->label_start.empty() && dfa == first_dfa) {
-                text = o.str(opts->label_start).flush();
-                append(program1, code_slabel(alc, text));
             }
 
             if (is_cond_block && !opts->loop_switch) {

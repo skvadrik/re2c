@@ -322,8 +322,8 @@ yy41:
 		case 12: goto yyFillLabel12;
 		case 13: goto yyFillLabel13;
 	}
-yy42:
 Lstart:
+yy42:
 	switch (YYGETCONDITION()) {
 		case yycc1: goto yyc_c1;
 		case yycc2: goto yyc_c2;
@@ -429,8 +429,8 @@ yy55:
 		case 16: goto yyFillLabel16;
 		case 17: goto yyFillLabel17;
 	}
-yy56:
 Lstart:
+yy56:
 	switch (YYGETCONDITION()) {
 		case yycc1: goto yyc_c1;
 		case yycc2: goto yyc_c2;
@@ -537,8 +537,8 @@ yy69:
 		case 20: goto yyFillLabel20;
 		case 21: goto yyFillLabel21;
 	}
-yy70:
 Lstart:
+yy70:
 	switch (YYGETCONDITION()) {
 		case yycc1: goto yyc_c1;
 		case yycc2: goto yyc_c2;

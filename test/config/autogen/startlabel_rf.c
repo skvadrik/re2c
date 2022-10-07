@@ -160,8 +160,8 @@ yy23:
 		default: goto yy24;
 		case 6: goto yyFillLabel6;
 	}
-yy24:
 Lstart:
+yy24:
 	goto yy25;
 yy26:
 	++YYCURSOR;
@@ -187,8 +187,8 @@ yy27:
 		case 7: goto yyFillLabel7;
 	}
 yyNext:
-yy28:
 Lstart:
+yy28:
 	goto yy29;
 yy30:
 	++YYCURSOR;
@@ -214,8 +214,8 @@ yy31:
 		default: goto yy32;
 		case 8: goto yyFillLabel8;
 	}
-yy32:
 Lstart:
+yy32:
 	goto yy33;
 yy34:
 	++YYCURSOR;
@@ -242,8 +242,8 @@ yy35:
 		case 9: goto yyFillLabel9;
 	}
 yyNext:
-yy36:
 Lstart:
+yy36:
 	goto yy37;
 yy38:
 	++YYCURSOR;
@@ -269,8 +269,8 @@ yy39:
 		default: goto yy40;
 		case 10: goto yyFillLabel10;
 	}
-yy40:
 Lstart:
+yy40:
 	goto yy41;
 yy42:
 	++YYCURSOR;
@@ -297,8 +297,8 @@ yy43:
 		case 11: goto yyFillLabel11;
 	}
 yyNext:
-yy44:
 Lstart:
+yy44:
 	goto yy45;
 yy46:
 	++YYCURSOR;
