@@ -226,14 +226,13 @@ void gen_code(Output& output, dfas_t& dfas) {
             if (first) {
                 if (opts->label_start_force) {
                     // User-enforced start label.
-                    dfa->start_label = new_label(alc, output.label_counter++);
-                    dfa->start_label->used = true;
+                    oblock.start_label = new_label(alc, output.label_counter++);
+                    oblock.start_label->used = true;
                 } else if (opts->storable_state) {
                     // Start label is needed in `-f` mode: it points to state 0 (the beginning of
                     // block, before condition dispatch in `-c` mode).
-                    dfa->start_label = new_label(alc, output.label_counter++);
+                    oblock.start_label = new_label(alc, output.label_counter++);
                 }
-                oblock.start_label = dfa->start_label;
             }
             // Initial label points to the beginning of the DFA (after condition dispatch in `-c`
             // mode).
@@ -323,29 +322,25 @@ void gen_code(Output& output, dfas_t& dfas) {
                 }
             }
         }
-
         if (opts->storable_state && !opts->loop_switch && !output.state_goto) {
             append(program1, code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
             output.state_goto = true;
         }
-
-        // user-defined start label (one per block, not per every condition)
         if (!opts->label_start.empty()) {
+            // User-defined start label that should be used by user-defined code.
             text = o.str(opts->label_start).flush();
             append(program1, code_slabel(alc, text));
         }
+        if (oblock.start_label) {
+            // Numeric start label used by the generated code (user-defined one may not exist).
+            append(program1, code_nlabel(alc, oblock.start_label));
+        }
+        if (is_cond_block && !opts->loop_switch) {
+            append(program1, code_cond_goto(alc));
+        }
 
         for (std::unique_ptr<Adfa>& dfa : dfas) {
-            // start label
-            if (dfa->start_label) {
-                append(program1, code_nlabel(alc, dfa->start_label));
-            }
-
             if (is_cond_block && !opts->loop_switch) {
-                if (!output.cond_goto) {
-                    append(program1, code_cond_goto(alc));
-                    output.cond_goto = true;
-                }
                 if (opts->cond_div.length()) {
                     o.str(opts->cond_div);
                     argsubst(o.stream(), opts->cond_div_param, "cond", true, dfa->cond);

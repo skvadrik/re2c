@@ -148,7 +148,6 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             CHECK_RET(opts.restore(b->opts));
             output.state_goto = false;
         }
-        output.cond_goto = false;
         block_loc = input.tok_loc();
         CHECK_RET(parse(input, ast, opts, grams));
 

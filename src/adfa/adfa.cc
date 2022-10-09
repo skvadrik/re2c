@@ -74,7 +74,6 @@ Adfa::Adfa(Tdfa&& dfa,
       bitmap(nullptr),
       setup(su),
 
-      start_label(nullptr),
       initial_label(nullptr) {
 
     const size_t nstates = dfa.states.size();

@@ -69,7 +69,6 @@ Output::Output(Msg& msg)
       label_counter(0),
       state_goto(false),
       cond_enum_autogen(true),
-      cond_goto(false),
       warn_condition_order(true),
       need_header(false),
       done_mtag_defs(false),

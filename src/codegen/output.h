@@ -115,7 +115,7 @@ struct OutputBlock {
     size_t max_nmatch; // YYMAXNMATCH
 
     // Used in the state switch (with `-f --storable-state` option).
-    Label* start_label;          // label of the DFA start state
+    Label* start_label;          // start label of this block
     uint32_t fill_index;         // next free index in YYFILL state enumeration
     uint32_t fill_state;         // index of the most recent YYFILL state
     storable_states_t fill_goto; // transitions to YYFILL states
@@ -132,7 +132,6 @@ struct Output {
     uint32_t label_counter;
     bool state_goto;
     bool cond_enum_autogen; // true unless an explicit `types:re2c` directive is used
-    bool cond_goto;
     bool warn_condition_order;
     bool need_header;
     bool done_mtag_defs;

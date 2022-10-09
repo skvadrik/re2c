@@ -116,7 +116,6 @@ struct Adfa {
     CodeBitmap* bitmap;
     std::string setup;
 
-    Label* start_label;
     Label* initial_label;
 
     Adfa(Tdfa&& dfa,
