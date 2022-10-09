@@ -174,7 +174,7 @@ void Adfa::emit_dot(Output& output, CodeList* program) const {
     }
 }
 
-static inline BlockNameList* block_list_for_implicit_state_goto(
+static BlockNameList* block_list_for_implicit_state_goto(
         OutAllocator& alc, const OutputBlock& block) {
     BlockNameList* p = nullptr;
     if (block.kind == InputBlock::USE) {
@@ -292,10 +292,7 @@ void gen_code(Output& output, dfas_t& dfas) {
     } else {
         ind = output.block().opts->indent_top;
         bool local_decls = false;
-
-        const char* text;
         CodeList* program1 = code_list(alc);
-        CodeCases* cases = code_cases(alc);
 
         if (!opts->storable_state && opts->char_emit) {
             append(program1, code_yych_decl(alc));
@@ -305,64 +302,63 @@ void gen_code(Output& output, dfas_t& dfas) {
             append(program1, code_yyaccept_def(alc));
             local_decls = true;
         }
+
         if (opts->loop_switch) {
+            // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
+            // Merge DFAs for different conditions together in one switch.
             append(program1, code_yystate_def(alc));
             local_decls = true;
-        }
-        if (opts->cgoto && is_cond_block) {
-            append(program1, code_cond_table(alc));
-            local_decls = true;
-        }
-        if (opts->bitmaps) {
+
+            CodeCases* cases = code_cases(alc);
             for (std::unique_ptr<Adfa>& dfa : dfas) {
-                CodeList* bitmaps = gen_bitmap(output, dfa->bitmap, dfa->cond);
-                if (bitmaps) {
-                    append(program1, bitmaps);
-                    local_decls = true;
-                }
-            }
-        }
-        if (opts->storable_state && !opts->loop_switch && !output.state_goto) {
-            append(program1, code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
-            output.state_goto = true;
-        }
-        if (!opts->label_start.empty()) {
-            // User-defined start label that should be used by user-defined code.
-            text = o.str(opts->label_start).flush();
-            append(program1, code_slabel(alc, text));
-        }
-        if (oblock.start_label) {
-            // Numeric start label used by the generated code (user-defined one may not exist).
-            append(program1, code_nlabel(alc, oblock.start_label));
-        }
-        if (is_cond_block && !opts->loop_switch) {
-            append(program1, code_cond_goto(alc));
-        }
-
-        for (std::unique_ptr<Adfa>& dfa : dfas) {
-            if (is_cond_block && !opts->loop_switch) {
-                if (opts->cond_div.length()) {
-                    o.str(opts->cond_div);
-                    argsubst(o.stream(), opts->cond_div_param, "cond", true, dfa->cond);
-                    append(program1, code_textraw(alc, o.flush()));
-                }
-                text = o.str(opts->cond_label_prefix).str(dfa->cond).flush();
-                append(program1, code_slabel(alc, text));
-            }
-
-            if (!opts->loop_switch) {
-                // In the goto/label mode, generate DFA states as blocks of code preceded with
-                // labels, and `goto` transitions between states.
-                gen_dfa_as_blocks_with_labels(output, *dfa, program1);
-            } else {
-                // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
-                // Merge DFAs for different conditions together in one switch.
                 gen_dfa_as_switch_cases(output, *dfa, cases);
             }
-        }
-
-        if (opts->loop_switch) {
             wrap_dfas_in_loop_switch(output, program1, cases);
+
+        } else {
+            // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
+            // and `goto` transitions between states.
+            if (opts->cgoto && is_cond_block) {
+                append(program1, code_cond_table(alc));
+                local_decls = true;
+            }
+            if (opts->bitmaps) {
+                for (std::unique_ptr<Adfa>& dfa : dfas) {
+                    CodeList* bitmaps = gen_bitmap(output, dfa->bitmap, dfa->cond);
+                    if (bitmaps) {
+                        append(program1, bitmaps);
+                        local_decls = true;
+                    }
+                }
+            }
+            if (opts->storable_state && !output.state_goto) {
+                append(program1, code_state_goto(alc,
+                        block_list_for_implicit_state_goto(alc, oblock)));
+                output.state_goto = true;
+            }
+            if (!opts->label_start.empty()) {
+                // User-defined start label that should be used by user-defined code.
+                append(program1, code_slabel(alc, o.str(opts->label_start).flush()));
+            }
+            if (oblock.start_label) {
+                // Numeric start label used by the generated code (user-defined one may not exist).
+                append(program1, code_nlabel(alc, oblock.start_label));
+            }
+            if (is_cond_block) {
+                append(program1, code_cond_goto(alc));
+            }
+            for (std::unique_ptr<Adfa>& dfa : dfas) {
+                if (is_cond_block) {
+                    if (opts->cond_div.length()) {
+                        o.str(opts->cond_div);
+                        argsubst(o.stream(), opts->cond_div_param, "cond", true, dfa->cond);
+                        append(program1, code_textraw(alc, o.flush()));
+                    }
+                    o.str(opts->cond_label_prefix).str(dfa->cond);
+                    append(program1, code_slabel(alc, o.flush()));
+                }
+                gen_dfa_as_blocks_with_labels(output, *dfa, program1);
+            }
         }
 
         append(program, code_newline(alc)); // the following #line info must start at zero indent
