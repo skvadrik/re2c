@@ -4,6 +4,7 @@
 
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -24,10 +25,12 @@ yyFillLabel0:
 yy3:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy4;
 		case 1: goto yyFillLabel1;
@@ -49,11 +52,13 @@ yyFillLabel1:
 yy7:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = 0;
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -74,11 +79,13 @@ yyFillLabel2:
 yy11:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = 0;
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy12;
 		case 3: goto yyFillLabel3;
@@ -100,11 +107,13 @@ yyFillLabel3:
 yy15:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = 1;
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy16;
 		case 4: goto yyFillLabel4;
@@ -125,11 +134,13 @@ yyFillLabel4:
 yy19:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = 1;
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy20;
 		case 5: goto yyFillLabel5;
@@ -151,11 +162,13 @@ yyFillLabel5:
 yy23:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy24;
 		case 6: goto yyFillLabel6;
@@ -177,11 +190,13 @@ yyFillLabel6:
 yy27:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy28;
 		case 7: goto yyFillLabel7;
@@ -204,12 +219,14 @@ yyFillLabel7:
 yy31:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 0;
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy32;
 		case 8: goto yyFillLabel8;
@@ -231,12 +248,14 @@ yyFillLabel8:
 yy35:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 0;
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy36;
 		case 9: goto yyFillLabel9;
@@ -259,12 +278,14 @@ yyFillLabel9:
 yy39:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 1;
 // re2c:state:nextlabel = 0;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy40;
 		case 10: goto yyFillLabel10;
@@ -286,12 +307,14 @@ yyFillLabel10:
 yy43:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 // re2c:startlabel = Lstart;
 // re2c:startlabel = 1;
 // re2c:state:nextlabel = 1;
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy44;
 		case 11: goto yyFillLabel11;
@@ -314,6 +337,7 @@ yyFillLabel11:
 yy47:
 	YYSETSTATE(-1);
 	{ a }
+}
 
 
 config/autogen/startlabel_rf.re:3:7: warning: rule matches empty string [-Wmatch-empty-string]

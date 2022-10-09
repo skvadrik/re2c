@@ -290,24 +290,20 @@ void gen_code(Output& output, dfas_t& dfas) {
             }
         }
     } else {
-        ind = output.block().opts->indent_top;
-        bool local_decls = false;
+        ind = opts->indent_top;
         CodeList* program1 = code_list(alc);
 
         if (!opts->storable_state && opts->char_emit) {
             append(program1, code_yych_decl(alc));
-            local_decls = true;
         }
         if (!opts->storable_state && oblock.used_yyaccept) {
             append(program1, code_yyaccept_def(alc));
-            local_decls = true;
         }
 
         if (opts->loop_switch) {
             // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
             // Merge DFAs for different conditions together in one switch.
             append(program1, code_yystate_def(alc));
-            local_decls = true;
 
             CodeCases* cases = code_cases(alc);
             for (std::unique_ptr<Adfa>& dfa : dfas) {
@@ -320,15 +316,10 @@ void gen_code(Output& output, dfas_t& dfas) {
             // and `goto` transitions between states.
             if (opts->cgoto && is_cond_block) {
                 append(program1, code_cond_table(alc));
-                local_decls = true;
             }
             if (opts->bitmaps) {
                 for (std::unique_ptr<Adfa>& dfa : dfas) {
-                    CodeList* bitmaps = gen_bitmap(output, dfa->bitmap, dfa->cond);
-                    if (bitmaps) {
-                        append(program1, bitmaps);
-                        local_decls = true;
-                    }
+                    append(program1, gen_bitmap(output, dfa->bitmap, dfa->cond));
                 }
             }
             if (opts->storable_state && !output.state_goto) {
@@ -364,13 +355,8 @@ void gen_code(Output& output, dfas_t& dfas) {
         append(program, code_newline(alc)); // the following #line info must start at zero indent
         append(program, code_line_info_output(alc));
 
-        if (local_decls) {
-            // Wrap local variable declarations in braces to avoid conflicts with the outer scope.
-            append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
-        } else {
-            ind = std::max(ind, 1u);
-            append(program, program1);
-        }
+        // Wrap the block in braces, so that variable declarations have local scope.
+        append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
     }
 
     output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::Kind::RAW));

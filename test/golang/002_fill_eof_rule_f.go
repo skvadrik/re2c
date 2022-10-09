@@ -70,6 +70,7 @@ func Lex(in *Input) int {
 
 	
 //line "golang/002_fill_eof_rule_f.go":73
+{
 	switch (in.state) {
 	default:
 		goto yy0
@@ -122,7 +123,7 @@ yy2:
 		fmt.Println("error")
 		return lexError
 	}
-//line "golang/002_fill_eof_rule_f.go":126
+//line "golang/002_fill_eof_rule_f.go":127
 yy3:
 	in.cursor += 1
 yyFillLabel1:
@@ -143,7 +144,7 @@ yy4:
 	{
 		return lexSpace
 	}
-//line "golang/002_fill_eof_rule_f.go":147
+//line "golang/002_fill_eof_rule_f.go":148
 yy5:
 	in.cursor += 1
 	in.marker = in.cursor
@@ -168,7 +169,7 @@ yy6:
 		fmt.Printf("number-1: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber1
 	}
-//line "golang/002_fill_eof_rule_f.go":172
+//line "golang/002_fill_eof_rule_f.go":173
 yy7:
 	in.cursor += 1
 yyFillLabel3:
@@ -207,7 +208,7 @@ yy10:
 		fmt.Printf("number-2: %v\n", string(in.data[in.token:in.cursor]))
 		return lexNumber2
 	}
-//line "golang/002_fill_eof_rule_f.go":211
+//line "golang/002_fill_eof_rule_f.go":212
 yy11:
 	in.state = -1
 //line "golang/002_fill_eof_rule_f.re":85
@@ -215,7 +216,8 @@ yy11:
 		fmt.Println("end")
 		return lexEnd
 	}
-//line "golang/002_fill_eof_rule_f.go":219
+//line "golang/002_fill_eof_rule_f.go":220
+}
 //line "golang/002_fill_eof_rule_f.re":103
 
 }

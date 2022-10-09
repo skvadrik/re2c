@@ -25,6 +25,7 @@ switch (YYGETSTATE()) {
 
 // global block x (with start label)
 
+{
 yy0:
 	YYSETSTATE(0);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -32,6 +33,7 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
+}
 
 
 // unnamed global block (no rules, but changes fill label to 'Ly')
@@ -39,6 +41,7 @@ yyFillLabel0:
 
 // global block y (with start label)
 
+{
 yy2:
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -46,6 +49,7 @@ Ly1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
+}
 
 
 // unnamed global block (no rules, but changes fill label to 'L??')
@@ -53,12 +57,14 @@ Ly1:
 
 // local block z (no start label)
 
+{
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 Lz2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
+}
 
 
 // the same directives at the end of file (in different order)

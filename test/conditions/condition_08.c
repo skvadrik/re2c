@@ -72,260 +72,262 @@ void scan(Scanner *s)
 	{
 		s->tok = s->cur;
 
-		if (s->cond < 2) {
-			if (s->cond < 1) {
-				goto yyc_Normal;
+		{
+			if (s->cond < 2) {
+				if (s->cond < 1) {
+					goto yyc_Normal;
+				} else {
+					goto yyc_Comment;
+				}
 			} else {
-				goto yyc_Comment;
+				if (s->cond < 3) {
+					goto yyc_Skiptoeol;
+				} else {
+					goto yyc_String;
+				}
 			}
-		} else {
-			if (s->cond < 3) {
-				goto yyc_Skiptoeol;
-			} else {
-				goto yyc_String;
-			}
-		}
 /* *********************************** */
 yyc_Normal:
-		if ((s->lim - s->cur) < 4) if(fill(s, 4) >= 0) break;
-		s->yych = *s->cur;
-		if (s->yych <= '\'') {
-			if (s->yych == '"') goto yy2;
-			if (s->yych >= '\'') goto yy3;
-		} else {
-			if (s->yych <= '/') {
-				if (s->yych >= '/') goto yy4;
+			if ((s->lim - s->cur) < 4) if(fill(s, 4) >= 0) break;
+			s->yych = *s->cur;
+			if (s->yych <= '\'') {
+				if (s->yych == '"') goto yy2;
+				if (s->yych >= '\'') goto yy3;
 			} else {
-				if (s->yych == '?') goto yy5;
+				if (s->yych <= '/') {
+					if (s->yych >= '/') goto yy4;
+				} else {
+					if (s->yych == '?') goto yy5;
+				}
 			}
-		}
-		++s->cur;
+			++s->cur;
 yy1:
-		{
+			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 yy2:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc(*s->tok, stdout);
 				s->state = EStateString;
 				continue;
 			}
 yy3:
-		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '"') goto yy6;
-		if (s->yych == '\\') goto yy8;
-		goto yy1;
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '"') goto yy6;
+			if (s->yych == '\\') goto yy8;
+			goto yy1;
 yy4:
-		s->yych = *++s->cur;
-		if (s->yych == '*') goto yy9;
-		if (s->yych == '/') goto yy10;
-		goto yy1;
+			s->yych = *++s->cur;
+			if (s->yych == '*') goto yy9;
+			if (s->yych == '/') goto yy10;
+			goto yy1;
 yy5:
-		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '?') goto yy11;
-		goto yy1;
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '?') goto yy11;
+			goto yy1;
 yy6:
-		s->yych = *++s->cur;
-		if (s->yych == '\'') goto yy12;
+			s->yych = *++s->cur;
+			if (s->yych == '\'') goto yy12;
 yy7:
-		s->cur = s->tok;
-		goto yy1;
+			s->cur = s->tok;
+			goto yy1;
 yy8:
-		s->yych = *++s->cur;
-		if (s->yych == '"') goto yy6;
-		goto yy7;
+			s->yych = *++s->cur;
+			if (s->yych == '"') goto yy6;
+			goto yy7;
 yy9:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				s->cond = EStateComment;
 				goto yyc_Comment;
 			}
 yy10:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				s->cond = EStateSkiptoeol;
 				goto yyc_Skiptoeol;
 			}
 yy11:
-		s->yych = *++s->cur;
-		switch (s->yych) {
-			case '!': goto yy13;
-			case '\'': goto yy14;
-			case '(': goto yy15;
-			case ')': goto yy16;
-			case '-': goto yy17;
-			case '/': goto yy18;
-			case '<': goto yy19;
-			case '=': goto yy20;
-			case '>': goto yy21;
-			default: goto yy7;
-		}
+			s->yych = *++s->cur;
+			switch (s->yych) {
+				case '!': goto yy13;
+				case '\'': goto yy14;
+				case '(': goto yy15;
+				case ')': goto yy16;
+				case '-': goto yy17;
+				case '/': goto yy18;
+				case '<': goto yy19;
+				case '=': goto yy20;
+				case '>': goto yy21;
+				default: goto yy7;
+			}
 yy12:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputl("'\"'", 3, stdout);
 				continue;
 			}
 yy13:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('|', stdout);
 				continue;
 			}
 yy14:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('^', stdout);
 				continue;
 			}
 yy15:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('[', stdout);
 				continue;
 			}
 yy16:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc(']', stdout);
 				continue;
 			}
 yy17:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('~', stdout);
 				continue;
 			}
 yy18:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('\\', stdout);
 				continue;
 			}
 yy19:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('{', stdout);
 				continue;
 			}
 yy20:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('#', stdout);
 				continue;
 			}
 yy21:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc('}', stdout);
 				continue;
 			}
 /* *********************************** */
 yyc_Comment:
-		if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
-		s->yych = *s->cur;
-		if (s->yych == '*') goto yy24;
-		++s->cur;
+			if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+			s->yych = *s->cur;
+			if (s->yych == '*') goto yy24;
+			++s->cur;
 yy23:
-		{
+			{
 				goto yyc_Comment;
 			}
 yy24:
-		s->yych = *++s->cur;
-		if (s->yych != '/') goto yy23;
-		++s->cur;
-		{
+			s->yych = *++s->cur;
+			if (s->yych != '/') goto yy23;
+			++s->cur;
+			{
 				s->cond = EStateNormal;
 				continue;
 			}
 /* *********************************** */
 yyc_Skiptoeol:
-		if ((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
-		s->yych = *s->cur;
-		if (s->yych <= '>') {
-			if (s->yych == '\n') goto yy27;
-		} else {
-			if (s->yych <= '?') goto yy28;
-			if (s->yych == '\\') goto yy29;
-		}
-		++s->cur;
+			if ((s->lim - s->cur) < 5) if(fill(s, 5) >= 0) break;
+			s->yych = *s->cur;
+			if (s->yych <= '>') {
+				if (s->yych == '\n') goto yy27;
+			} else {
+				if (s->yych <= '?') goto yy28;
+				if (s->yych == '\\') goto yy29;
+			}
+			++s->cur;
 yy26:
-		{
+			{
 				goto yyc_Skiptoeol;
 			}
 yy27:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				s->cond = EStateNormal;
 				continue;
 			}
 yy28:
-		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '?') goto yy30;
-		goto yy26;
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '?') goto yy30;
+			goto yy26;
 yy29:
-		s->yych = *(s->tok = ++s->cur);
-		if (s->yych == '\n') goto yy32;
-		if (s->yych == '\r') goto yy33;
-		goto yy26;
+			s->yych = *(s->tok = ++s->cur);
+			if (s->yych == '\n') goto yy32;
+			if (s->yych == '\r') goto yy33;
+			goto yy26;
 yy30:
-		s->yych = *++s->cur;
-		if (s->yych == '/') goto yy34;
+			s->yych = *++s->cur;
+			if (s->yych == '/') goto yy34;
 yy31:
-		s->cur = s->tok;
-		goto yy26;
+			s->cur = s->tok;
+			goto yy26;
 yy32:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				goto yyc_Skiptoeol;
 			}
 yy33:
-		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy32;
-		goto yy31;
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy32;
+			goto yy31;
 yy34:
-		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy35;
-		if (s->yych == '\r') goto yy36;
-		goto yy31;
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy35;
+			if (s->yych == '\r') goto yy36;
+			goto yy31;
 yy35:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				goto yyc_Skiptoeol;
 			}
 yy36:
-		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy35;
-		goto yy31;
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy35;
+			goto yy31;
 /* *********************************** */
 yyc_String:
-		if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
-		s->yych = *s->cur;
-		if (s->yych == '"') goto yy39;
-		if (s->yych == '\\') goto yy40;
-		++s->cur;
+			if ((s->lim - s->cur) < 2) if(fill(s, 2) >= 0) break;
+			s->yych = *s->cur;
+			if (s->yych == '"') goto yy39;
+			if (s->yych == '\\') goto yy40;
+			++s->cur;
 yy38:
-		{
+			{
 				fputc(*s->tok, stdout);
 				continue;
 			}
 yy39:
-		++s->cur;
-		{
+			++s->cur;
+			{
 				fputc(*s->tok, stdout);
 				s->cond = EStateNormal;
 				continue;
 			}
 yy40:
-		s->yych = *++s->cur;
-		if (s->yych == '\n') goto yy38;
-		++s->cur;
-		{
+			s->yych = *++s->cur;
+			if (s->yych == '\n') goto yy38;
+			++s->cur;
+			{
 				fputl((const char*)s->tok, 2, stdout);
 				continue;
 			}
+		}
 
 	}
 }

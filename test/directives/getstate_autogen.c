@@ -9,6 +9,7 @@
 // expect a global state switch here that includes blocks
 // x, y and z (default case should go to start label of x).
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -22,24 +23,29 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
+}
 
 
 // global block y (no start label)
 
+{
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
+}
 
 
 // local block z (no start label)
 
+{
 	YYSETSTATE(2);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
+}
 

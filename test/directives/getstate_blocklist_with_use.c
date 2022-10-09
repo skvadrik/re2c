@@ -32,6 +32,7 @@ switch (YYGETSTATE()) {
 
 // use block (expect a local state switch for this block only)
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -43,20 +44,24 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ w }
+}
 
 
 // global block x (no start label)
 
+{
 	YYSETSTATE(1);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
+}
 
 
 // use block (expect a local state switch for this block only)
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy4;
 		case 2: goto yyFillLabel2;
@@ -68,10 +73,12 @@ yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ w }
+}
 
 
 // global block y (with start label)
 
+{
 yy6:
 	YYSETSTATE(3);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -79,10 +86,12 @@ yyFillLabel3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
+}
 
 
 // local block z (with start label)
 
+{
 yy8:
 	YYSETSTATE(4);
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -90,6 +99,7 @@ yyFillLabel4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
+}
 
 
 // the same directives at the end of file (in different order)

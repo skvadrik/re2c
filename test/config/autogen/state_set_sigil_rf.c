@@ -5,6 +5,7 @@
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -26,11 +27,13 @@ yy3:
 	++YYCURSOR;
 	state = @@;(-1);
 	{ a }
+}
 
 
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy4;
 		case 1: goto yyFillLabel1;
@@ -52,11 +55,13 @@ yy7:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -78,11 +83,13 @@ yy11:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy12;
 		case 3: goto yyFillLabel3;
@@ -104,12 +111,14 @@ yy15:
 	++YYCURSOR;
 	state = ÿ;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy16;
 		case 4: goto yyFillLabel4;
@@ -131,12 +140,14 @@ yy19:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy20;
 		case 5: goto yyFillLabel5;
@@ -158,12 +169,14 @@ yy23:
 	++YYCURSOR;
 	state = ÿ;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy24;
 		case 6: goto yyFillLabel6;
@@ -185,12 +198,14 @@ yy27:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = @@;
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy28;
 		case 7: goto yyFillLabel7;
@@ -212,12 +227,14 @@ yy31:
 	++YYCURSOR;
 	state = ÿ;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy32;
 		case 8: goto yyFillLabel8;
@@ -239,12 +256,14 @@ yy35:
 	++YYCURSOR;
 	state = @@;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = "ÿ";
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy36;
 		case 9: goto yyFillLabel9;
@@ -266,12 +285,14 @@ yy39:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = @@;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy40;
 		case 10: goto yyFillLabel10;
@@ -293,12 +314,14 @@ yy43:
 	++YYCURSOR;
 	state = @@;(-1);
 	{ a }
+}
 
 
 // re2c:define:YYSETSTATE@state = "ÿ";
 // re2c:api:sigil = @@;
 // re2c:define:YYSETSTATE = "state = ÿ;";
 
+{
 	switch (YYGETSTATE()) {
 		default: goto yy44;
 		case 11: goto yyFillLabel11;
@@ -320,5 +343,6 @@ yy47:
 	++YYCURSOR;
 	state = -1;(-1);
 	{ a }
+}
 
 

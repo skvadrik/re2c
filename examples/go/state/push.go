@@ -82,6 +82,7 @@ loop:
 	st.tok = st.cur
 	
 //line "go/state/push.go":85
+{
 yy0:
 yyFillLabel0:
 	yych = st.buf[st.cur]
@@ -101,7 +102,7 @@ yy3:
 	st.state = -1
 //line "go/state/push.re":72
 	{ return lexPacketBroken }
-//line "go/state/push.go":105
+//line "go/state/push.go":106
 yy4:
 	st.cur += 1
 	st.mar = st.cur
@@ -124,7 +125,7 @@ yy5:
 	st.state = -1
 //line "go/state/push.re":74
 	{ *recv = *recv + 1; goto loop }
-//line "go/state/push.go":128
+//line "go/state/push.go":129
 yy6:
 	st.cur += 1
 yyFillLabel2:
@@ -148,7 +149,8 @@ yy8:
 	st.state = -1
 //line "go/state/push.re":73
 	{ return lexEnd }
-//line "go/state/push.go":152
+//line "go/state/push.go":153
+}
 //line "go/state/push.re":75
 
 }

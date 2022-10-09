@@ -66,6 +66,7 @@ switch (st.state) {
         st.tok = st.cur;
     
 #line 69 "c/state/push.c"
+{
 yy0:
 yyFillLabel0:
 	yych = *st.cur;
@@ -109,7 +110,7 @@ yy3:
 	st.state = -1;
 #line 63 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 113 "c/state/push.c"
+#line 114 "c/state/push.c"
 yy4:
 	st.mar = ++st.cur;
 yyFillLabel1:
@@ -154,7 +155,7 @@ yy5:
 	st.state = -1;
 #line 65 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 158 "c/state/push.c"
+#line 159 "c/state/push.c"
 yy6:
 	++st.cur;
 yyFillLabel2:
@@ -201,7 +202,8 @@ yy8:
 	st.state = -1;
 #line 64 "c/state/push.re"
 	{ return END; }
-#line 205 "c/state/push.c"
+#line 206 "c/state/push.c"
+}
 #line 66 "c/state/push.re"
 
     }
