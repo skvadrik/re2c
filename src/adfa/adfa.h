@@ -132,7 +132,6 @@ struct Adfa {
     void reorder();
     void prepare(const opt_t* opts);
     Ret calc_stats(OutputBlock& out) NODISCARD;
-    void emit_dot(Output& output, CodeList* program) const;
 
   private:
     void add_state(State*, State*);

@@ -76,7 +76,7 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
+    Scratchbuf& buf = output.scratchbuf;
 
     // If DFA has transitions into the initial state and --eager-skip option is not used, then the
     // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
@@ -85,8 +85,8 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
     DCHECK(!opts->loop_switch);
     if (dfa.head->label->used && !opts->eager_skip) {
         dfa.initial_label->used = true;
-        o.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
-        append(stmts, code_stmt(alc, o.flush()));
+        buf.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
+        append(stmts, code_stmt(alc, buf.flush()));
     }
 
     for (State* s = dfa.head; s; s = s->next) {
@@ -143,37 +143,6 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     append(stmts, code_loop(alc, loop));
 }
 
-void Adfa::emit_dot(Output& output, CodeList* program) const {
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
-
-    if (!cond.empty()) {
-        text = o.str(cond).cstr(" -> ").label(*head->label).flush();
-        append(program, code_text(alc, text));
-    }
-
-    for (State* s = head; s; s = s->next) {
-        if (s->action.kind == Action::Kind::ACCEPT) {
-            uint32_t i = 0;
-            for (const AcceptTrans& a: *s->action.info.accepts) {
-                text = o.label(*s->label).cstr(" -> ").label(*a.state->label)
-                        .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]").flush();
-                append(program, code_text(alc, text));
-                ++i;
-            }
-        } else if (s->action.kind == Action::Kind::RULE) {
-            const SemAct* semact = rules[s->action.info.rule].semact;
-            if (!semact->autogen) {
-                text = o.label(*s->label).cstr(" [label=\"").str(msg.filenames[semact->loc.file])
-                        .cstr(":").u32(semact->loc.line).cstr("\"]").flush();
-                append(program, code_text(alc, text));
-            }
-        }
-        gen_go(output, *this, &s->go, s, program);
-    }
-}
-
 static BlockNameList* block_list_for_implicit_state_goto(
         OutAllocator& alc, const OutputBlock& block) {
     BlockNameList* p = nullptr;
@@ -191,17 +160,134 @@ static BlockNameList* block_list_for_implicit_state_goto(
     return p;
 }
 
-void gen_code(Output& output, dfas_t& dfas) {
-    OutputBlock& oblock = output.block();
-    const opt_t* opts = oblock.opts;
+static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
+    Scratchbuf& buf = output.scratchbuf;
+
+    append(code, code_text(alc, "digraph re2c {"));
+    append(code, code_cond_goto(alc));
+
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        if (!dfa->cond.empty()) {
+            buf.str(dfa->cond).cstr(" -> ").label(*dfa->head->label);
+            append(code, code_text(alc, buf.flush()));
+        }
+
+        for (State* s = dfa->head; s; s = s->next) {
+            if (s->action.kind == Action::Kind::ACCEPT) {
+                uint32_t i = 0;
+                for (const AcceptTrans& a: *s->action.info.accepts) {
+                    buf.label(*s->label).cstr(" -> ").label(*a.state->label)
+                            .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
+                    append(code, code_text(alc, buf.flush()));
+                    ++i;
+                }
+            } else if (s->action.kind == Action::Kind::RULE) {
+                const SemAct* semact = dfa->rules[s->action.info.rule].semact;
+                if (!semact->autogen) {
+                    buf.label(*s->label).cstr(" [label=\"")
+                            .str(output.msg.filenames[semact->loc.file])
+                            .cstr(":").u32(semact->loc.line).cstr("\"]");
+                    append(code, code_text(alc, buf.flush()));
+                }
+            }
+            gen_go(output, *dfa, &s->go, s, code);
+        }
+    }
+
+    append(code, code_text(alc, "}"));
+}
+
+static void gen_block_skeleton(Output& output, const Adfas& dfas, CodeList* code) {
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        emit_skeleton(output, code, *dfa);
+    }
+}
+
+static void gen_block_code(Output& output, const Adfas& dfas, CodeList* program) {
+    OutputBlock& oblock = output.block();
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const opt_t* opts = oblock.opts;
+
+    // All conditions are named, so it suffices to check the first DFA.
+    DCHECK(!dfas.empty());
+    const bool is_cond_block = !dfas.front()->cond.empty();
+
+    append(program, code_newline(alc)); // the following #line info must start at zero indent
+    append(program, code_line_info_output(alc));
+
+    CodeList* code = code_list(alc);
+
+    if (!opts->storable_state && opts->char_emit) {
+        append(code, code_yych_decl(alc));
+    }
+    if (!opts->storable_state && oblock.used_yyaccept) {
+        append(code, code_yyaccept_def(alc));
+    }
+
+    if (opts->loop_switch) {
+        // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
+        // Merge DFAs for different conditions together in one switch.
+        append(code, code_yystate_def(alc));
+
+        CodeCases* cases = code_cases(alc);
+        for (const std::unique_ptr<Adfa>& dfa : dfas) {
+            gen_dfa_as_switch_cases(output, *dfa, cases);
+        }
+        wrap_dfas_in_loop_switch(output, code, cases);
+
+    } else {
+        // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
+        // and `goto` transitions between states.
+        if (opts->cgoto && is_cond_block) {
+            append(code, code_cond_table(alc));
+        }
+        if (opts->bitmaps) {
+            for (const std::unique_ptr<Adfa>& dfa : dfas) {
+                append(code, gen_bitmap(output, dfa->bitmap, dfa->cond));
+            }
+        }
+        if (opts->storable_state && !output.state_goto) {
+            append(code, code_state_goto(alc, block_list_for_implicit_state_goto(alc, oblock)));
+            output.state_goto = true;
+        }
+        if (!opts->label_start.empty()) {
+            // User-defined start label that should be used by user-defined code.
+            append(code, code_slabel(alc, buf.str(opts->label_start).flush()));
+        }
+        if (oblock.start_label) {
+            // Numeric start label used by the generated code (user-defined one may not exist).
+            append(code, code_nlabel(alc, oblock.start_label));
+        }
+        if (is_cond_block) {
+            append(code, code_cond_goto(alc));
+        }
+        for (const std::unique_ptr<Adfa>& dfa : dfas) {
+            if (is_cond_block) {
+                if (opts->cond_div.length()) {
+                    buf.str(opts->cond_div);
+                    argsubst(buf.stream(), opts->cond_div_param, "cond", true, dfa->cond);
+                    append(code, code_textraw(alc, buf.flush()));
+                }
+                buf.str(opts->cond_label_prefix).str(dfa->cond);
+                append(code, code_slabel(alc, buf.flush()));
+            }
+            gen_dfa_as_blocks_with_labels(output, *dfa, code);
+        }
+    }
+
+    // Wrap the block in braces, so that variable declarations have local scope.
+    append(program, code_block(alc, code, CodeBlock::Kind::WRAPPED));
+}
+
+void gen_code(Output& output, Adfas& dfas) {
+    OutputBlock& oblock = output.block();
+    OutAllocator& alc = output.allocator;
+    const opt_t* opts = oblock.opts;
 
     if (dfas.empty()) return;
     const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
-
-    // All conditions are named, so it suffices to check the first DFA.
-    const bool is_cond_block = !first_dfa->cond.empty();
 
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         const bool first = (dfa == first_dfa);
@@ -274,87 +360,13 @@ void gen_code(Output& output, dfas_t& dfas) {
     }
 
     CodeList* program = code_list(alc);
-
     if (opts->target == Target::DOT) {
-        append(program, code_text(alc, "digraph re2c {"));
-        append(program, code_cond_goto(alc));
-        for (const std::unique_ptr<Adfa>& dfa : dfas) {
-            dfa->emit_dot(output, program);
-        }
-        append(program, code_text(alc, "}"));
+        gen_block_dot(output, dfas, program);
     } else if (opts->target == Target::SKELETON) {
-        for (const std::unique_ptr<Adfa>& dfa : dfas) {
-            emit_skeleton(output, program, *dfa);
-        }
+        gen_block_skeleton(output, dfas, program);
     } else {
-        CodeList* program1 = code_list(alc);
-
-        if (!opts->storable_state && opts->char_emit) {
-            append(program1, code_yych_decl(alc));
-        }
-        if (!opts->storable_state && oblock.used_yyaccept) {
-            append(program1, code_yyaccept_def(alc));
-        }
-
-        if (opts->loop_switch) {
-            // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
-            // Merge DFAs for different conditions together in one switch.
-            append(program1, code_yystate_def(alc));
-
-            CodeCases* cases = code_cases(alc);
-            for (std::unique_ptr<Adfa>& dfa : dfas) {
-                gen_dfa_as_switch_cases(output, *dfa, cases);
-            }
-            wrap_dfas_in_loop_switch(output, program1, cases);
-
-        } else {
-            // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
-            // and `goto` transitions between states.
-            if (opts->cgoto && is_cond_block) {
-                append(program1, code_cond_table(alc));
-            }
-            if (opts->bitmaps) {
-                for (std::unique_ptr<Adfa>& dfa : dfas) {
-                    append(program1, gen_bitmap(output, dfa->bitmap, dfa->cond));
-                }
-            }
-            if (opts->storable_state && !output.state_goto) {
-                append(program1, code_state_goto(alc,
-                        block_list_for_implicit_state_goto(alc, oblock)));
-                output.state_goto = true;
-            }
-            if (!opts->label_start.empty()) {
-                // User-defined start label that should be used by user-defined code.
-                append(program1, code_slabel(alc, o.str(opts->label_start).flush()));
-            }
-            if (oblock.start_label) {
-                // Numeric start label used by the generated code (user-defined one may not exist).
-                append(program1, code_nlabel(alc, oblock.start_label));
-            }
-            if (is_cond_block) {
-                append(program1, code_cond_goto(alc));
-            }
-            for (std::unique_ptr<Adfa>& dfa : dfas) {
-                if (is_cond_block) {
-                    if (opts->cond_div.length()) {
-                        o.str(opts->cond_div);
-                        argsubst(o.stream(), opts->cond_div_param, "cond", true, dfa->cond);
-                        append(program1, code_textraw(alc, o.flush()));
-                    }
-                    o.str(opts->cond_label_prefix).str(dfa->cond);
-                    append(program1, code_slabel(alc, o.flush()));
-                }
-                gen_dfa_as_blocks_with_labels(output, *dfa, program1);
-            }
-        }
-
-        append(program, code_newline(alc)); // the following #line info must start at zero indent
-        append(program, code_line_info_output(alc));
-
-        // Wrap the block in braces, so that variable declarations have local scope.
-        append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
+        gen_block_code(output, dfas, program);
     }
-
     output.wdelay_stmt(opts->indent_top, code_block(alc, program, CodeBlock::Kind::RAW));
 }
 

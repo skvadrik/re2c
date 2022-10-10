@@ -25,7 +25,7 @@ struct Opt;
 struct opt_t;
 struct OutputBlock;
 struct State;
-using dfas_t = std::vector<std::unique_ptr<Adfa>>;
+using Adfas = std::vector<std::unique_ptr<Adfa>>;
 
 class Scratchbuf {
     OutAllocator& alc;
@@ -179,7 +179,7 @@ void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmt
 void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid);
 void gen_goto(
         Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
-void gen_code(Output& output, dfas_t& dfas);
+void gen_code(Output& output, Adfas& dfas);
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);

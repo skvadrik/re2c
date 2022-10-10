@@ -49,7 +49,7 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
 }
 
 LOCAL_NODISCARD(Ret ast_to_dfa(
-        const AstGram& gram, Output& output, dfas_t& dfas, DfaAllocator& dfa_alc)) {
+        const AstGram& gram, Output& output, Adfas& dfas, DfaAllocator& dfa_alc)) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     const loc_t& loc = block.loc;
@@ -162,7 +162,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
 
             // compile AST to DFA
             DfaAllocator dfa_alc;
-            dfas_t dfas;
+            Adfas dfas;
             for (const AstGram& gram : grams) {
                 CHECK_RET(ast_to_dfa(gram, output, dfas, dfa_alc));
             }
