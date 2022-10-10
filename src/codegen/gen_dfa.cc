@@ -274,7 +274,6 @@ void gen_code(Output& output, dfas_t& dfas) {
     }
 
     CodeList* program = code_list(alc);
-    uint32_t ind = 0;
 
     if (opts->target == Target::DOT) {
         append(program, code_text(alc, "digraph re2c {"));
@@ -285,12 +284,9 @@ void gen_code(Output& output, dfas_t& dfas) {
         append(program, code_text(alc, "}"));
     } else if (opts->target == Target::SKELETON) {
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
-            if (output.skeletons.insert(dfa->name).second) {
-                emit_skeleton(output, program, *dfa);
-            }
+            emit_skeleton(output, program, *dfa);
         }
     } else {
-        ind = opts->indent_top;
         CodeList* program1 = code_list(alc);
 
         if (!opts->storable_state && opts->char_emit) {
@@ -359,7 +355,7 @@ void gen_code(Output& output, dfas_t& dfas) {
         append(program, code_block(alc, program1, CodeBlock::Kind::WRAPPED));
     }
 
-    output.wdelay_stmt(ind, code_block(alc, program, CodeBlock::Kind::RAW));
+    output.wdelay_stmt(opts->indent_top, code_block(alc, program, CodeBlock::Kind::RAW));
 }
 
 std::string vartag_name(

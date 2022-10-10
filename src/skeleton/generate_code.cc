@@ -739,6 +739,7 @@ static void emit_skeleton_undefs(Output& output, CodeList* code, Adfa& dfa) {
 }
 
 void emit_skeleton(Output& output, CodeList* code, Adfa& dfa) {
+    output.skeletons.insert(dfa.name);
     emit_skeleton_defines(output, code, dfa);
     emit_skeleton_function_action(output, code, dfa);
     emit_skeleton_stags(output, code, dfa);

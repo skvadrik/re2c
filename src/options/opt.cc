@@ -218,7 +218,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     if (glob.target == Target::SKELETON) {
         real.api = Api::CUSTOM;
         real.indent_str = "    ";
-        real.indent_top = 2;
+        real.indent_top = 0;
     }
     if (real.bitmaps || real.encoding.multibyte_cunit()) {
         real.nested_ifs = true;
