@@ -19,7 +19,9 @@
 
 #else // RE2C_DEBUG
 
-#define DCHECK(x)
+/* In non-debug mode we still produce a statement and use 'x'
+   to avoid complains about unused variables. */
+#define DCHECK(x) do {} while (false && (x))
 
 #endif // RE2C_DEBUG
 
