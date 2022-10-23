@@ -23,28 +23,8 @@ if(RE2C_REBUILD_PARSERS AND NOT RE2C_FOR_BUILD)
 endif()
 
 option(RE2C_REBUILD_DOCS "Regenerate manpage" OFF)
-if(RE2C_REBUILD_DOCS)
-    find_program(RST2MAN NAMES rst2man rst2man.py)
-    if(NOT RST2MAN)
-        message(FATAL_ERROR "rst2man (or rst2man.py) program is required for RE2C_REBUILD_DOCS")
-    endif()
-
-    # Windows does not have a native 'man' and 'sed' commands.
-    # Therefore, we are looking for the Cygwin versions of 'man' and 'sed'.
-    if (WIN32)
-        find_program(MAN_EXECUTABLE man)
-        if(NOT MAN_EXECUTABLE)
-            message(FATAL_ERROR "man program is required for RE2C_REBUILD_DOCS")
-        endif()
-
-        find_program(SED_EXECUTABLE sed)
-        if(NOT SED_EXECUTABLE)
-            message(FATAL_ERROR "sed program is required for RE2C_REBUILD_DOCS")
-        endif()
-    endif()
-endif()
-
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
+
 
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
@@ -57,6 +37,16 @@ find_package(Python3 COMPONENTS Interpreter)
 # starting from cmake 3.19 find_package can do version check, but we are on 3.12
 if(Python3_VERSION VERSION_LESS 3.7)
     message(FATAL_ERROR "python version 3.7 or higher is required")
+endif()
+if(RE2C_REBUILD_DOCS)
+    execute_process(
+        COMMAND "${Python3_EXECUTABLE}" -c "import docutils"
+        RESULT_VARIABLE EXIT_CODE
+        OUTPUT_QUIET
+    )
+    if (NOT ${EXIT_CODE} EQUAL 0)
+        message(FATAL_ERROR "python package docutils (needed for docs) not found")
+    endif()
 endif()
 
 # checks for C++ compiler flags
@@ -81,8 +71,9 @@ set(re2c_help_bootstrap       "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/hel
 set(re2c_manpage_c            "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
 set(re2c_manpage_go           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
 set(re2c_help                 "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
-set(re2c_genhelp              "${CMAKE_CURRENT_SOURCE_DIR}/build/gen_help.sh")
-set(re2c_splitman             "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.sh")
+set(re2c_rst2man              "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
+set(re2c_rst2txt              "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2txt.py")
+set(re2c_splitman             "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py")
 set(re2c_docs
     "${re2c_help}"
     "${re2c_manpage_c}"
