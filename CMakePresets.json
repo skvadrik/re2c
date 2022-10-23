@@ -257,10 +257,7 @@
     {
       "name": "windows-msvc-debug-ootree-full",
       "displayName": "Windows x86_64: MSVC / Debug / Out of tree (full)",
-      "inherits": ["default-full-configuration", "windows-msvc-debug-ootree-fast"],
-      "cacheVariables": {
-        "RE2C_REBUILD_DOCS": false
-      }
+      "inherits": ["default-full-configuration", "windows-msvc-debug-ootree-fast"]
     },
     {
       "name": "windows-msvc-debug-intree-fast",
@@ -277,10 +274,7 @@
     {
       "name": "windows-msvc-debug-intree-full",
       "displayName": "Windows x86_64: MSVC / Debug / In tree (full)",
-      "inherits": ["default-full-configuration", "windows-msvc-debug-intree-fast"],
-      "cacheVariables": {
-        "RE2C_REBUILD_DOCS": false
-      }
+      "inherits": ["default-full-configuration", "windows-msvc-debug-intree-fast"]
     },
     {
       "name": "windows-msvc-release-ootree-fast",
@@ -297,10 +291,7 @@
     {
       "name": "windows-msvc-release-ootree-full",
       "displayName": "Windows x86_64: MSVC / Release / Out of tree (full)",
-      "inherits": ["default-full-configuration", "windows-msvc-release-ootree-fast"],
-      "cacheVariables": {
-        "RE2C_REBUILD_DOCS": false
-      }
+      "inherits": ["default-full-configuration", "windows-msvc-release-ootree-fast"]
     }
   ],
   "buildPresets": [
