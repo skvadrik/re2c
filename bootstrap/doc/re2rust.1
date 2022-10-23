@@ -69,8 +69,8 @@ fn lex(s: &[u8]) \-> bool {
     let mut cursor = 0;
     /*!re2c
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK = "*s.get_unchecked(cursor)";
-        re2c:define:YYSKIP = "cursor += 1;";
+        re2c:define:YYPEEK = \(dq*s.get_unchecked(cursor)\(dq;
+        re2c:define:YYSKIP = \(dqcursor += 1;\(dq;
         re2c:yyfill:enable = 0;
 
         number = [1\-9][0\-9]*;
@@ -81,7 +81,7 @@ fn lex(s: &[u8]) \-> bool {
 }
 
 fn main() {
-    assert!(lex(b"1234\e0"));
+    assert!(lex(b\(dq1234\e0\(dq));
 }
 
 .ft P
@@ -139,7 +139,7 @@ fn lex(s: &[u8]) \-> bool {
             }
             3 => { return true; }
             _ => {
-                panic!("internal lexer error")
+                panic!(\(dqinternal lexer error\(dq)
             }
         }
     }
@@ -148,7 +148,7 @@ fn lex(s: &[u8]) \-> bool {
 }
 
 fn main() {
-    assert!(lex(b"1234\e0"));
+    assert!(lex(b\(dq1234\e0\(dq));
 }
 
 .ft P
@@ -307,18 +307,18 @@ then the API can be defined as follows:
 .nf
 .ft C
 /*!re2c
-  re2c:define:YYPEEK       = "*buffer.get_unchecked(cursor)";
-  re2c:define:YYSKIP       = "cursor += 1;";
-  re2c:define:YYBACKUP     = "marker = cursor;";
-  re2c:define:YYRESTORE    = "cursor = marker;";
-  re2c:define:YYBACKUPCTX  = "ctxmarker = cursor;";
-  re2c:define:YYRESTORECTX = "cursor = ctxmarker;";
-  re2c:define:YYRESTORETAG = "cursor = @@{tag};";
-  re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
-  re2c:define:YYSTAGP      = "@@{tag} = cursor;";
-  re2c:define:YYSTAGN      = "@@{tag} = NONE;";
-  re2c:define:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
-  re2c:define:YYSHIFTSTAG  = "@@{tag} = (@@{tag} as isize + @@{shift}) as usize;";
+  re2c:define:YYPEEK       = \(dq*buffer.get_unchecked(cursor)\(dq;
+  re2c:define:YYSKIP       = \(dqcursor += 1;\(dq;
+  re2c:define:YYBACKUP     = \(dqmarker = cursor;\(dq;
+  re2c:define:YYRESTORE    = \(dqcursor = marker;\(dq;
+  re2c:define:YYBACKUPCTX  = \(dqctxmarker = cursor;\(dq;
+  re2c:define:YYRESTORECTX = \(dqcursor = ctxmarker;\(dq;
+  re2c:define:YYRESTORETAG = \(dqcursor = @@{tag};\(dq;
+  re2c:define:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
+  re2c:define:YYSTAGP      = \(dq@@{tag} = cursor;\(dq;
+  re2c:define:YYSTAGN      = \(dq@@{tag} = NONE;\(dq;
+  re2c:define:YYSHIFT      = \(dqcursor = (cursor as isize + @@{shift}) as usize;\(dq;
+  re2c:define:YYSHIFTSTAG  = \(dq@@{tag} = (@@{tag} as isize + @@{shift}) as usize;\(dq;
 */
 .ft P
 .fi
@@ -397,14 +397,14 @@ although for some compilers like Tcc it also results in smaller binary size.
 This option is supported only for C.
 .TP
 .B \fB\-\-computed\-gotos \-g\fP
-Optimize conditional jumps using non\-standard "computed goto" extension
+Optimize conditional jumps using non\-standard \(dqcomputed goto\(dq extension
 (which must be supported by the compiler). re2c generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
 threshold can be configured with \fBcgoto:threshold\fP configuration. This
 option implies \fB\-\-bit\-vectors\fP\&. It is supported only for C.
 .TP
 .B \fB\-\-conditions \-\-start\-conditions \-c\fP
-Enable support of Flex\-like "conditions": multiple interrelated lexers
+Enable support of Flex\-like \(dqconditions\(dq: multiple interrelated lexers
 within one block. This is an alternative to manually specifying different
 re2c blocks connected with \fBgoto\fP or function calls.
 .TP
@@ -511,10 +511,10 @@ Enable submatch extraction with POSIX\-style capturing groups.
 Deprecated since version 2.2 (reusable blocks are allowed by default now).
 .TP
 .B \fB\-\-skeleton \-S\fP
-Ignore user\-defined interface code and generate a self\-contained "skeleton"
+Ignore user\-defined interface code and generate a self\-contained \(dqskeleton\(dq
 program. Additionally, generate input files with strings derived from the
 regular grammar and compressed match results that are used to verify
-"skeleton" behavior on all inputs. This option is useful for finding bugs
+\(dqskeleton\(dq behavior on all inputs. This option is useful for finding bugs
 in optimizations and code generation. This option is supported only for C.
 .TP
 .B \fB\-\-storable\-state \-f\fP
@@ -608,7 +608,7 @@ The output can be converted to an image with the help of Graphviz
 .B \fB\-\-dfa\-minimization <moore | table>\fP
 Internal option: DFA minimization algorithm used by re2c. The \fBmoore\fP
 option is the Moore algorithm (it is the default). The \fBtable\fP option is
-the "table filling" algorithm. Both algorithms should produce the same DFA
+the \(dqtable filling\(dq algorithm. Both algorithms should produce the same DFA
 up to states relabeling; table filling is simpler and much slower and serves
 as a reference implementation.
 .TP
@@ -632,8 +632,8 @@ debugging).
 .B \fB\-\-posix\-closure <gor1 | gtop>\fP
 Internal option: specify shortest\-path algorithm used for the construction of
 epsilon\-closure with POSIX disambiguation semantics: \fBgor1\fP (the default)
-stands for Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global
-topological order" algorithm.
+stands for Goldberg\-Radzik algorithm, and \fBgtop\fP stands for \(dqglobal
+topological order\(dq algorithm.
 .TP
 .B \fB\-\-posix\-prectable <complex | naive>\fP
 Internal option: specify the algorithm used to compute POSIX precedence
@@ -654,8 +654,8 @@ Internal option:
 specify whether the fixed\-tag optimization should be applied to all tags
 (\fBall\fP), none of them (\fBnone\fP), or only those in toplevel concatenation
 (\fBtoplevel\fP). The default is \fBall\fP\&.
-"Fixed" tags are those that are located within a fixed distance to some
-other tag (called "base"). In such cases only the base tag needs to be
+\(dqFixed\(dq tags are those that are located within a fixed distance to some
+other tag (called \(dqbase\(dq). In such cases only the base tag needs to be
 tracked, and the value of the fixed tag can be computed as the value of the
 base tag plus a static offset. For tags that are under alternative or
 repetition it is also necessary to check if the base tag has a no\-match
@@ -1116,7 +1116,7 @@ Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 Same as the \fB\-\-api\fP option.
 .TP
 .B \fBre2c:api:sigil\fP
-Specify the marker ("sigil") that is used for argument placeholders in the
+Specify the marker (\(dqsigil\(dq) that is used for argument placeholders in the
 API primitives. The default is \fB@@\fP\&. A placeholder starts with sigil
 followed by the argument name in curly braces. For example, if sigil is set
 to \fB$\fP, then placeholders will have the form \fB${name}\fP\&. Single\-argument
@@ -1356,7 +1356,7 @@ is relative.
 .TP
 .B \fBre2c:indent:string\fP
 Specifies the string used for indentation. The default is a single tab
-character \fB"\et"\fP\&. Indent string should contain whitespace characters only.
+character \fB\(dq\et\(dq\fP\&. Indent string should contain whitespace characters only.
 To disable indentation entirely, set this configuration to an empty string.
 .TP
 .B \fBre2c:indent:top\fP
@@ -1406,7 +1406,7 @@ Specifies the expression used for tag variables.
 By default re2c generates expressions of the form \fByyt<N>\fP\&. This might
 be inconvenient, for example if tag variables are defined as fields in a
 struct. All occurrences of \fB@@{tag}\fP or \fB@@\fP are replaced with the
-actual tag name. For example, \fBre2c:tags:expression = "s.@@";\fP results
+actual tag name. For example, \fBre2c:tags:expression = \(dqs.@@\(dq;\fP results
 in expressions of the form \fBs.yyt<N>\fP in the generated code.
 See also \fBre2c:api:sigil\fP configuration.
 .TP
@@ -1505,7 +1505,7 @@ This configuration can be overridden with \fBre2c:define:YYFILL:naked\fP or
 re2c uses the following syntax for regular expressions:
 .INDENT 0.0
 .IP \(bu 2
-\fB"foo"\fP case\-sensitive string literal
+\fB\(dqfoo\(dq\fP case\-sensitive string literal
 .IP \(bu 2
 \fB\(aqfoo\(aq\fP case\-insensitive string literal
 .IP \(bu 2
@@ -1535,7 +1535,7 @@ re2c uses the following syntax for regular expressions:
 .IP \(bu 2
 \fBR / S\fP lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
 .IP \(bu 2
-\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB"name"\fP in Flex compatibility mode)
+\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB\(dqname\(dq\fP in Flex compatibility mode)
 .IP \(bu 2
 \fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
 .IP \(bu 2
@@ -1560,7 +1560,7 @@ the lexer may fail to match any rule and come to a default state
 the lexer may reach the end of input
 .UNINDENT
 .sp
-The first two conditions terminate the lexer in a "natural" way: it comes to a
+The first two conditions terminate the lexer in a \(dqnatural\(dq way: it comes to a
 state with no outgoing transitions, and the matching automatically stops. The
 third condition, end of input, is different: it may happen in any state, and the
 lexer should be able to handle it. Checking for the end of input interrupts the
@@ -1574,7 +1574,7 @@ considerations and other factors. Here is a list of methods:
 \fBSentinel.\fP
 This method eliminates the need for the end of input checks altogether. It is
 simple and efficient, but limited to the case when there is a natural
-"sentinel" character that can never occur in valid input. This character may
+\(dqsentinel\(dq character that can never occur in valid input. This character may
 still occur in invalid input, but it should not be allowed by the regular
 expressions, except perhaps as the last character of a rule. The sentinel is
 appended at the end of input and serves as a stop signal: when the lexer reads
@@ -1591,7 +1591,7 @@ with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value
 This method is generic: it allows to handle any input without restrictions on
 the regular expressions. The idea is to reduce the number of end of input
 checks by performing them only on certain characters. Similar to the
-"sentinel" method, one of the characters is chosen as a "sentinel" and
+\(dqsentinel\(dq method, one of the characters is chosen as a \(dqsentinel\(dq and
 appended at the end of input. However, there is no restriction on where the
 sentinel may occur (in fact, any character can be chosen for a sentinel).
 When the lexer reads this character, it additionally performs a bounds check.
@@ -1608,8 +1608,8 @@ the sentinel). \fBYYFILL\fP is optional.
 .sp
 .IP \(bu 2
 \fBBounds checks with padding.\fP
-This method is generic, and it may be faster than the "sentinel with bounds
-checks" method, but it is also more complex. The idea is to partition DFA
+This method is generic, and it may be faster than the \(dqsentinel with bounds
+checks\(dq method, but it is also more complex. The idea is to partition DFA
 states into strongly connected components (SCCs) and generate a single check
 per SCC for enough characters to cover the longest non\-looping path in this
 SCC. This reduces the number of checks, but there is a problem with short
@@ -1663,8 +1663,8 @@ fn lex(s: &[u8]) \-> isize {
 
     \(aqlex: loop {/*!re2c
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK  = "*s.get_unchecked(cur)";
-        re2c:define:YYSKIP  = "cur += 1;";
+        re2c:define:YYPEEK  = \(dq*s.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP  = \(dqcur += 1;\(dq;
         re2c:yyfill:enable = 0;
 
         *      { return \-1; }
@@ -1675,9 +1675,9 @@ fn lex(s: &[u8]) \-> isize {
 }
 
 fn main() {
-    assert_eq!(lex(b"\ex00"), 0);
-    assert_eq!(lex(b"one two three\ex00"), 3);
-    assert_eq!(lex(b"f0ur\ex00"), \-1);
+    assert_eq!(lex(b\(dq\ex00\(dq), 0);
+    assert_eq!(lex(b\(dqone two three\ex00\(dq), 3);
+    assert_eq!(lex(b\(dqf0ur\ex00\(dq), \-1);
 }
 
 .ft P
@@ -1718,11 +1718,11 @@ fn lex(s: &[u8]) \-> isize {
 
     \(aqlex: loop {/*!re2c
         re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*s.get_unchecked(cur)";
-        re2c:define:YYSKIP     = "cur += 1;";
-        re2c:define:YYBACKUP   = "mar = cur;";
-        re2c:define:YYRESTORE  = "cur = mar;";
-        re2c:define:YYLESSTHAN = "cur >= lim";
+        re2c:define:YYPEEK     = \(dq*s.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP   = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE  = \(dqcur = mar;\(dq;
+        re2c:define:YYLESSTHAN = \(dqcur >= lim\(dq;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -1736,9 +1736,9 @@ fn lex(s: &[u8]) \-> isize {
 }
 
 fn main() {
-    assert_eq!(lex(b"\e0"), 0);
-    assert_eq!(lex(b"\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \e0"), 3);
-    assert_eq!(lex(b"\(aqunterminated\e\e\(aq\e0"), \-1);
+    assert_eq!(lex(b\(dq\e0\(dq), 0);
+    assert_eq!(lex(b\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \e0\(dq), 3);
+    assert_eq!(lex(b\(dq\(aqunterminated\e\e\(aq\e0\(dq), \-1);
 }
 
 .ft P
@@ -1754,7 +1754,7 @@ of input, where \fBYYMAXFILL\fP value is autogenerated with \fB/*!max:re2c*/\fP\
 is not necessary to use null for padding \-\-\- any characters can be used as long
 as they do not form a valid lexeme suffix (in this example padding should not
 contain single quotes, as they may be mistaken for a suffix of a single\-quoted
-string). There is a "stop" rule that matches the first padding character (null)
+string). There is a \(dqstop\(dq rule that matches the first padding character (null)
 and terminates the lexer (note that it checks if null is at the beginning of
 padding, otherwise it is a syntax error). Bounds checks are generated only in
 some states that are determined by the strongly connected components of the
@@ -1788,10 +1788,10 @@ fn lex(s: &[u8]) \-> isize {
 
     \(aqlex: loop {/*!re2c
         re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*buf.get_unchecked(cur)";
-        re2c:define:YYSKIP     = "cur += 1;";
-        re2c:define:YYFILL     = "return \-1;";
-        re2c:define:YYLESSTHAN = "cur + @@ > lim";
+        re2c:define:YYPEEK     = \(dq*buf.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1;\(dq;
+        re2c:define:YYFILL     = \(dqreturn \-1;\(dq;
+        re2c:define:YYLESSTHAN = \(dqcur + @@ > lim\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1806,10 +1806,10 @@ fn lex(s: &[u8]) \-> isize {
 }
 
 fn main() {
-    assert_eq!(lex(b""), 0);
-    assert_eq!(lex(b"\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "), 3);
-    assert_eq!(lex(b"\(aqunterminated\e\e\(aq"), \-1);
-    assert_eq!(lex(b"\(aqunexpected \e0 null"), \-1);
+    assert_eq!(lex(b\(dq\(dq), 0);
+    assert_eq!(lex(b\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq), 3);
+    assert_eq!(lex(b\(dq\(aqunterminated\e\e\(aq\(dq), \-1);
+    assert_eq!(lex(b\(dq\(aqunexpected \e0 null\(dq), \-1);
 }
 
 .ft P
@@ -1842,11 +1842,11 @@ fn lex(s: &[u8]) \-> isize {
 
     \(aqlex: loop {/*!re2c
         re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "if cur < lim {*s.get_unchecked(cur)} else {0}";
-        re2c:define:YYSKIP     = "cur += 1;";
-        re2c:define:YYBACKUP   = "mar = cur;";
-        re2c:define:YYRESTORE  = "cur = mar;";
-        re2c:define:YYLESSTHAN = "cur >= lim";
+        re2c:define:YYPEEK     = \(dqif cur < lim {*s.get_unchecked(cur)} else {0}\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP   = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE  = \(dqcur = mar;\(dq;
+        re2c:define:YYLESSTHAN = \(dqcur >= lim\(dq;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -1860,9 +1860,9 @@ fn lex(s: &[u8]) \-> isize {
 }
 
 fn main() {
-    assert_eq!(lex(b""), 0);
-    assert_eq!(lex(b"\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "), 3);
-    assert_eq!(lex(b"\(aqunterminated\e\e\(aq"), \-1);
+    assert_eq!(lex(b\(dq\(dq), 0);
+    assert_eq!(lex(b\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq), 3);
+    assert_eq!(lex(b\(dq\(aqunterminated\e\e\(aq\(dq), \-1);
 }
 
 .ft P
@@ -1998,7 +1998,7 @@ fn fill(st: &mut State) \-> Fill {
             st.eof = n == 0; // end of file
             st.buf[st.lim] = 0; // append sentinel
         }
-        Err(why) => panic!("cannot read from file: {}", why)
+        Err(why) => panic!(\(dqcannot read from file: {}\(dq, why)
     }
 
     return Fill::Ok;
@@ -2011,12 +2011,12 @@ fn lex(st: &mut State) \-> isize {
         st.tok = st.cur;
     /*!re2c
         re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP     = "st.cur += 1;";
-        re2c:define:YYBACKUP   = "st.mar = st.cur;";
-        re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-        re2c:define:YYFILL     = "fill(st) == Fill::Ok";
+        re2c:define:YYPEEK     = \(dq*st.buf.get_unchecked(st.cur)\(dq;
+        re2c:define:YYSKIP     = \(dqst.cur += 1;\(dq;
+        re2c:define:YYBACKUP   = \(dqst.mar = st.cur;\(dq;
+        re2c:define:YYRESTORE  = \(dqst.cur = st.mar;\(dq;
+        re2c:define:YYLESSTHAN = \(dqst.cur >= st.lim\(dq;
+        re2c:define:YYFILL     = \(dqfill(st) == Fill::Ok\(dq;
         re2c:eof = 0;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2029,15 +2029,15 @@ fn lex(st: &mut State) \-> isize {
 }
 
 fn main() {
-    let fname = "input";
-    let content = b"\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq ";
+    let fname = \(dqinput\(dq;
+    let content = b\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq;
 
     // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
     match File::create(fname) {
-        Err(why) => panic!("cannot open {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot open {}: {}\(dq, fname, why),
         Ok(mut file) => match file.write_all(&content.repeat(BUFSIZE)) {
-            Err(why) => panic!("cannot write to {}: {}", fname, why),
+            Err(why) => panic!(\(dqcannot write to {}: {}\(dq, fname, why),
             Ok(_) => {}
         }
     };
@@ -2045,7 +2045,7 @@ fn main() {
 
     // Reopen input file for reading.
     let file = match File::open(fname) {
-        Err(why) => panic!("cannot read file {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot read file {}: {}\(dq, fname, why),
         Ok(file) => file,
     };
 
@@ -2067,7 +2067,7 @@ fn main() {
 
     // Cleanup: remove input file.
     match std::fs::remove_file(fname) {
-        Err(why) => panic!("cannot remove {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot remove {}: {}\(dq, fname, why),
         Ok(_) => {}
     }
 }
@@ -2161,7 +2161,7 @@ fn fill(st: &mut State, need: usize) \-> Fill {
     // Fill free space at the end of buffer with new data from file.
     let n = match st.file.read(&mut st.buf[st.lim..BUFSIZE \- YYMAXFILL]) {
         Ok(n) => n,
-        Err(why) => panic!("cannot read from file: {}", why)
+        Err(why) => panic!(\(dqcannot read from file: {}\(dq, why)
     };
     st.lim += n;
 
@@ -2183,12 +2183,12 @@ fn lex(st: &mut State) \-> isize {
         st.tok = st.cur;
     /*!re2c
         re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP     = "st.cur += 1;";
-        re2c:define:YYBACKUP   = "st.mar = st.cur;";
-        re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYLESSTHAN = "st.lim \- st.cur < @@";
-        re2c:define:YYFILL     = "if fill(st, @@) != Fill::Ok { return \-1; }";
+        re2c:define:YYPEEK     = \(dq*st.buf.get_unchecked(st.cur)\(dq;
+        re2c:define:YYSKIP     = \(dqst.cur += 1;\(dq;
+        re2c:define:YYBACKUP   = \(dqst.mar = st.cur;\(dq;
+        re2c:define:YYRESTORE  = \(dqst.cur = st.mar;\(dq;
+        re2c:define:YYLESSTHAN = \(dqst.lim \- st.cur < @@\(dq;
+        re2c:define:YYFILL     = \(dqif fill(st, @@) != Fill::Ok { return \-1; }\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2203,15 +2203,15 @@ fn lex(st: &mut State) \-> isize {
 }
 
 fn main() {
-    let fname = "input";
-    let content = b"\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq ";
+    let fname = \(dqinput\(dq;
+    let content = b\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq;
 
     // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
     match File::create(fname) {
-        Err(why) => panic!("cannot open {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot open {}: {}\(dq, fname, why),
         Ok(mut file) => match file.write_all(&content.repeat(BUFSIZE)) {
-            Err(why) => panic!("cannot write to {}: {}", fname, why),
+            Err(why) => panic!(\(dqcannot write to {}: {}\(dq, fname, why),
             Ok(_) => {}
         }
     };
@@ -2219,7 +2219,7 @@ fn main() {
 
     // Reopen input file for reading.
     let file = match File::open(fname) {
-        Err(why) => panic!("cannot read file {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot read file {}: {}\(dq, fname, why),
         Ok(file) => file,
     };
 
@@ -2241,7 +2241,7 @@ fn main() {
 
     // Cleanup: remove input file.
     match std::fs::remove_file(fname) {
-        Err(why) => panic!("cannot remove {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot remove {}: {}\(dq, fname, why),
         Ok(_) => {}
     }
 }
@@ -2288,11 +2288,11 @@ struct State<\(aqa> {
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:yyfill:enable = 0;
     re2c:define:YYCTYPE   = u8;
-    re2c:define:YYPEEK    = "*st.str.get_unchecked(st.cur)";
-    re2c:define:YYSKIP    = "st.cur += 1;";
-    re2c:define:YYBACKUP  = "st.mar = st.cur;";
-    re2c:define:YYRESTORE = "st.cur = st.mar;";
-    re2c:define:YYSHIFT   = "st.cur = (st.cur as isize + @@) as usize;";
+    re2c:define:YYPEEK    = \(dq*st.str.get_unchecked(st.cur)\(dq;
+    re2c:define:YYSKIP    = \(dqst.cur += 1;\(dq;
+    re2c:define:YYBACKUP  = \(dqst.mar = st.cur;\(dq;
+    re2c:define:YYRESTORE = \(dqst.cur = st.mar;\(dq;
+    re2c:define:YYSHIFT   = \(dqst.cur = (st.cur as isize + @@) as usize;\(dq;
 */
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
@@ -2311,8 +2311,8 @@ fn parse_u32(s: & [u8]) \-> Option<u32> {
     let mut st = State {str: s, cur: 0, mar: 0, num: 0};
 /*!re2c
     \(aq0b\(aq / [01]        { return parse_bin(&mut st); }
-    "0"                { return parse_oct(&mut st); }
-    "" / [1\-9]         { return parse_dec(&mut st); }
+    \(dq0\(dq                { return parse_oct(&mut st); }
+    \(dq\(dq / [1\-9]         { return parse_dec(&mut st); }
     \(aq0x\(aq / [0\-9a\-fA\-F] { return parse_hex(&mut st); }
     *                  { return None; }
 */
@@ -2349,12 +2349,12 @@ fn parse_hex(st: &mut State) \-> Option<u32> {
 }
 
 fn main() {
-    assert_eq!(parse_u32(b"\e0"), None);
-    assert_eq!(parse_u32(b"1234567890\e0"), Some(1234567890));
-    assert_eq!(parse_u32(b"0b1101\e0"), Some(13));
-    assert_eq!(parse_u32(b"0x7Fe\e0"), Some(2046));
-    assert_eq!(parse_u32(b"0644\e0"), Some(420));
-    assert_eq!(parse_u32(b"9999999999\e0"), None);
+    assert_eq!(parse_u32(b\(dq\e0\(dq), None);
+    assert_eq!(parse_u32(b\(dq1234567890\e0\(dq), Some(1234567890));
+    assert_eq!(parse_u32(b\(dq0b1101\e0\(dq), Some(13));
+    assert_eq!(parse_u32(b\(dq0x7Fe\e0\(dq), Some(2046));
+    assert_eq!(parse_u32(b\(dq0644\e0\(dq), Some(420));
+    assert_eq!(parse_u32(b\(dq9999999999\e0\(dq), None);
 }
 
 .ft P
@@ -2402,16 +2402,16 @@ code.
 .TP
 .B \fB< > action\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string and executes the \fBaction\fP\&.
+and name \fB\(dq0\(dq\fP\&. It matches empty string and executes the \fBaction\fP\&.
 .TP
 .B \fB< > => cond action\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string, sets the current condition to
+and name \fB\(dq0\(dq\fP\&. It matches empty string, sets the current condition to
 \fBcond\fP and executes the \fBaction\fP\&.
 .TP
 .B \fB< > :=> cond\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string and immediately transitions to
+and name \fB\(dq0\(dq\fP\&. It matches empty string and immediately transitions to
 \fBcond\fP\&.
 .UNINDENT
 .UNINDENT
@@ -2469,18 +2469,18 @@ fn parse_u32(str: &[u8]) \-> Option<u32> {
 
     \(aqlex: loop {/*!re2c
         re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSHIFT   = "cur = (cur as isize + @@) as usize;";
-        re2c:define:YYGETCONDITION = "cond";
-        re2c:define:YYSETCONDITION = "cond = @@;";
+        re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
+        re2c:define:YYSHIFT   = \(dqcur = (cur as isize + @@) as usize;\(dq;
+        re2c:define:YYGETCONDITION = \(dqcond\(dq;
+        re2c:define:YYSETCONDITION = \(dqcond = @@;\(dq;
         re2c:yyfill:enable = 0;
 
         <INIT> \(aq0b\(aq / [01]        :=> BIN
-        <INIT> "0"                :=> OCT
-        <INIT> "" / [1\-9]         :=> DEC
+        <INIT> \(dq0\(dq                :=> OCT
+        <INIT> \(dq\(dq / [1\-9]         :=> DEC
         <INIT> \(aq0x\(aq / [0\-9a\-fA\-F] :=> HEX
         <INIT> * { return None; }
 
@@ -2498,12 +2498,12 @@ fn parse_u32(str: &[u8]) \-> Option<u32> {
 }
 
 fn main() {
-    assert_eq!(parse_u32(b"\e0"), None);
-    assert_eq!(parse_u32(b"1234567890\e0"), Some(1234567890));
-    assert_eq!(parse_u32(b"0b1101\e0"), Some(13));
-    assert_eq!(parse_u32(b"0x7Fe\e0"), Some(2046));
-    assert_eq!(parse_u32(b"0644\e0"), Some(420));
-    assert_eq!(parse_u32(b"9999999999\e0"), None);
+    assert_eq!(parse_u32(b\(dq\e0\(dq), None);
+    assert_eq!(parse_u32(b\(dq1234567890\e0\(dq), Some(1234567890));
+    assert_eq!(parse_u32(b\(dq0b1101\e0\(dq), Some(13));
+    assert_eq!(parse_u32(b\(dq0x7Fe\e0\(dq), Some(2046));
+    assert_eq!(parse_u32(b\(dq0644\e0\(dq), Some(420));
+    assert_eq!(parse_u32(b\(dq9999999999\e0\(dq), None);
 }
 
 .ft P
@@ -2514,17 +2514,17 @@ fn main() {
 .sp
 With \fB\-\-storable\-state\fP option re2c generates a lexer that can store
 its current state, return to the caller, and later resume operations exactly
-where it left off. The default mode of operation in re2c is a "pull" model,
-in which the lexer "pulls" more input whenever it needs it. This may be
+where it left off. The default mode of operation in re2c is a \(dqpull\(dq model,
+in which the lexer \(dqpulls\(dq more input whenever it needs it. This may be
 unacceptable in cases when the input becomes available piece by piece (for
 example, if the lexer is invoked by the parser, or if the lexer program
 communicates via a socket protocol with some other program that must wait for a
 reply from the lexer before it transmits the next message). Storable state
 feature is intended exactly for such cases: it allows one to generate lexers that
-work in a "push" model. When the lexer needs more input, it stores its state and
+work in a \(dqpush\(dq model. When the lexer needs more input, it stores its state and
 returns to the caller. Later, when more input becomes available, the caller
 resumes the lexer exactly where it stopped. There are a few changes necessary
-compared to the "pull" model:
+compared to the \(dqpull\(dq model:
 .INDENT 0.0
 .IP \(bu 2
 Define \fBYYSETSTATE()\fP and \fBYYGETSTATE(state)\fP primitives.
@@ -2551,9 +2551,9 @@ processing the lexeme at the end of buffer (which already is blocked due to
 the end\-of\-input condition).
 .UNINDENT
 .sp
-Here is an example of a "push" model lexer that simulates reading packets from a
+Here is an example of a \(dqpush\(dq model lexer that simulates reading packets from a
 socket. The lexer loops until it encounters the end of input and returns to the
-calling function. The calling function provides more input by "sending" the next
+calling function. The calling function provides more input by \(dqsending\(dq the next
 packet and resumes lexing. This process stops when all the packets have been
 sent, or when there is an error.
 .INDENT 0.0
@@ -2607,7 +2607,7 @@ fn fill(st: &mut State) \-> Status {
             st.lim += n;
             st.buf[st.lim] = 0; // append sentinel symbol
         },
-        Err(why) => panic!("cannot read from file: {}", why)
+        Err(why) => panic!(\(dqcannot read from file: {}\(dq, why)
     }
 
     return Status::Ready;
@@ -2619,15 +2619,15 @@ fn lex(st: &mut State, recv: &mut usize) \-> Status {
         st.tok = st.cur;
     /*!re2c
         re2c:eof = 0;
-        re2c:define:YYCTYPE    = "u8";
-        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP     = "st.cur += 1;";
-        re2c:define:YYBACKUP   = "st.mar = st.cur;";
-        re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@;";
-        re2c:define:YYFILL     = "return Status::Waiting;";
+        re2c:define:YYCTYPE    = \(dqu8\(dq;
+        re2c:define:YYPEEK     = \(dq*st.buf.get_unchecked(st.cur)\(dq;
+        re2c:define:YYSKIP     = \(dqst.cur += 1;\(dq;
+        re2c:define:YYBACKUP   = \(dqst.mar = st.cur;\(dq;
+        re2c:define:YYRESTORE  = \(dqst.cur = st.mar;\(dq;
+        re2c:define:YYLESSTHAN = \(dqst.cur >= st.lim\(dq;
+        re2c:define:YYGETSTATE = \(dqst.state\(dq;
+        re2c:define:YYSETSTATE = \(dqst.state = @@;\(dq;
+        re2c:define:YYFILL     = \(dqreturn Status::Waiting;\(dq;
 
         packet = [a\-z]+[;];
 
@@ -2638,14 +2638,14 @@ fn lex(st: &mut State, recv: &mut usize) \-> Status {
 }
 
 fn test(packets: Vec<&[u8]>, expect: Status) {
-    // Create a "socket" (open the same file for reading and writing).
-    let fname = "pipe";
+    // Create a \(dqsocket\(dq (open the same file for reading and writing).
+    let fname = \(dqpipe\(dq;
     let mut fw: File = match File::create(fname) {
-        Err(why) => panic!("cannot open {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot open {}: {}\(dq, fname, why),
         Ok(file) => file,
     };
     let fr: File = match File::open(fname) {
-        Err(why) => panic!("cannot read file {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot read file {}: {}\(dq, fname, why),
         Ok(file) => file,
     };
 
@@ -2672,27 +2672,27 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
     loop {
         status = lex(&mut state, &mut recv);
         if status == Status::End {
-            log!("done: got {} packets", recv);
+            log!(\(dqdone: got {} packets\(dq, recv);
             break;
         } else if status == Status::Waiting {
-            log!("waiting...");
+            log!(\(dqwaiting...\(dq);
             if send < packets.len() {
-                log!("sent packet {}", send);
+                log!(\(dqsent packet {}\(dq, send);
                 match fw.write_all(packets[send]) {
-                    Err(why) => panic!("cannot write to {}: {}", fname, why),
+                    Err(why) => panic!(\(dqcannot write to {}: {}\(dq, fname, why),
                     Ok(_) => send += 1,
                 }
             }
             status = fill(&mut state);
-            log!("queue: \(aq{}\(aq", String::from_utf8_lossy(&state.buf));
+            log!(\(dqqueue: \(aq{}\(aq\(dq, String::from_utf8_lossy(&state.buf));
             if status == Status::BigPacket {
-                log!("error: packet too big");
+                log!(\(dqerror: packet too big\(dq);
                 break;
             }
             assert_eq!(status, Status::Ready);
         } else {
             assert_eq!(status, Status::BadPacket);
-            log!("error: ill\-formed packet");
+            log!(\(dqerror: ill\-formed packet\(dq);
             break;
         }
     }
@@ -2703,16 +2703,16 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
 
     // Cleanup: remove input file.
     match std::fs::remove_file(fname) {
-        Err(why) => panic!("cannot remove {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot remove {}: {}\(dq, fname, why),
         Ok(_) => {}
     }
 }
 
 fn main() {
     test(vec![], Status::End);
-    test(vec![b"zero;", b"one;", b"two;", b"three;", b"four;"], Status::End);
-    test(vec![b"zer0;"], Status::BadPacket);
-    test(vec![b"goooooooooogle;"], Status::BigPacket);
+    test(vec![b\(dqzero;\(dq, b\(dqone;\(dq, b\(dqtwo;\(dq, b\(dqthree;\(dq, b\(dqfour;\(dq], Status::End);
+    test(vec![b\(dqzer0;\(dq], Status::BadPacket);
+    test(vec![b\(dqgoooooooooogle;\(dq], Status::BigPacket);
 }
 
 .ft P
@@ -2767,13 +2767,13 @@ blocks.
 enum Ans { Color, Fish, Dunno }
 
 /*!rules:re2c:colors
-    *                            { panic!("ah"); }
-    "red" | "salmon" | "magenta" { return Ans::Color; }
+    *                            { panic!(\(dqah\(dq); }
+    \(dqred\(dq | \(dqsalmon\(dq | \(dqmagenta\(dq { return Ans::Color; }
 */
 
 /*!rules:re2c:fish
-    *                            { panic!("oh"); }
-    "haddock" | "salmon" | "eel" { return Ans::Fish; }
+    *                            { panic!(\(dqoh\(dq); }
+    \(dqhaddock\(dq | \(dqsalmon\(dq | \(dqeel\(dq { return Ans::Fish; }
 */
 
 fn lex(str: &[u8]) \-> Ans {
@@ -2781,10 +2781,10 @@ fn lex(str: &[u8]) \-> Ans {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
 
         !use:fish;
         !use:colors;
@@ -2793,8 +2793,8 @@ fn lex(str: &[u8]) \-> Ans {
 }
 
 fn main() {
-    assert_eq!(lex(b"salmon"), Ans::Fish);
-    assert_eq!(lex(b"what?"), Ans::Dunno);
+    assert_eq!(lex(b\(dqsalmon\(dq), Ans::Fish);
+    assert_eq!(lex(b\(dqwhat?\(dq), Ans::Dunno);
 }
 
 .ft P
@@ -2814,12 +2814,12 @@ fn main() {
 // blocks add only encoding\-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-    re2c:define:YYSKIP    = "cur += 1;";
-    re2c:define:YYBACKUP  = "mar = cur;";
-    re2c:define:YYRESTORE = "cur = mar;";
+    re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+    re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+    re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+    re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
 
-    "∀x ∃y" { return Some(cur); }
+    \(dq∀x ∃y\(dq { return Some(cur); }
     *       { return None; }
 */
 
@@ -2879,7 +2879,7 @@ maximal value of \fByynmatch\fP among all rules. Note that re2c implements
 POSIX\-compliant disambiguation: each subexpression matches as long as possible,
 and subexpressions that start earlier in regular expression have priority over
 those starting later. Capturing groups are translated into s\-tags under the
-hood, therefore we use the word "tag" to describe them as well.
+hood, therefore we use the word \(dqtag\(dq to describe them as well.
 .sp
 With both \fB\-P \-\-posix\-captures\fP and \fBT \-\-tags\fP options re2c uses efficient
 submatch extraction algorithm described in the
@@ -2897,8 +2897,8 @@ determined by re2c. However, tag variables should be defined by the user as a
 part of the lexer state and updated by \fBYYFILL\fP, therefore re2c provides
 directives \fB/*!stags:re2c*/\fP and \fB/*!mtags:re2c*/\fP that can be used to
 declare, initialize and manipulate tag variables. These directives have two
-optional configurations: \fBformat = "@@";\fP (specifies the template where \fB@@\fP
-is substituted with the name of each tag variable), and \fBseparator = "";\fP
+optional configurations: \fBformat = \(dq@@\(dq;\fP (specifies the template where \fB@@\fP
+is substituted with the name of each tag variable), and \fBseparator = \(dq\(dq;\fP
 (specifies the piece of code used to join the generated pieces for different
 tag variables).
 .sp
@@ -2964,19 +2964,19 @@ fn parse(str: &[u8]) \-> Option<SemVer> {
 
     /*!re2c
         re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP      = "cur += 1;";
-        re2c:define:YYBACKUP    = "mar = cur;";
-        re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} \-= \-@@{shift}isize as usize;";
+        re2c:define:YYPEEK      = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP      = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP    = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE   = \(dqcur = mar;\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = cur;\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = NONE;\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} \-= \-@@{shift}isize as usize;\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
         num = [0\-9]+;
 
-        @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\ex00] {
+        @t1 num @t2 \(dq.\(dq @t3 num @t4 (\(dq.\(dq @t5 num)? [\ex00] {
             let major = s2n(&str[t1..t2]);
             let minor = s2n(&str[t3..t4]);
             let patch = if t5 != NONE {s2n(&str[t5..cur \- 1])} else {0};
@@ -2987,9 +2987,9 @@ fn parse(str: &[u8]) \-> Option<SemVer> {
 }
 
 fn main() {
-    assert_eq!(parse(b"23.34\e0"), Some(SemVer(23, 34, 0)));
-    assert_eq!(parse(b"1.2.99999\e0"), Some(SemVer(1, 2, 99999)));
-    assert_eq!(parse(b"1.a\e0"), None);
+    assert_eq!(parse(b\(dq23.34\e0\(dq), Some(SemVer(23, 34, 0)));
+    assert_eq!(parse(b\(dq1.2.99999\e0\(dq), Some(SemVer(1, 2, 99999)));
+    assert_eq!(parse(b\(dq1.a\e0\(dq), None);
 }
 
 .ft P
@@ -3026,7 +3026,7 @@ struct State {
     tok: usize,
     // Tag variables must be part of the lexer state passed to YYFILL.
     // They don\(aqt correspond to tags and should be autogenerated by re2c.
-    /*!stags:re2c format = "@@: usize,\en"; */
+    /*!stags:re2c format = \(dq@@: usize,\en\(dq; */
     eof: bool,
 }
 
@@ -3060,7 +3060,7 @@ fn fill(st: &mut State) \-> Fill {
     // Tag variables need to be shifted like other input positions. The check
     // for NONE is only needed if some tags are nested inside of alternative or
     // repetition, so that they can have NONE value.
-    /*!stags:re2c format = "if st.@@ != NONE { shift!(st.@@, st.tok); }\en"; */
+    /*!stags:re2c format = \(dqif st.@@ != NONE { shift!(st.@@, st.tok); }\en\(dq; */
     st.tok = 0;
 
     // Fill free space at the end of buffer with new data from file.
@@ -3070,7 +3070,7 @@ fn fill(st: &mut State) \-> Fill {
             st.eof = n == 0;
             st.buf[st.lim] = 0;
         }
-        Err(why) => panic!("cannot read from file: {}", why)
+        Err(why) => panic!(\(dqcannot read from file: {}\(dq, why)
     }
 
     return Fill::Ok;
@@ -3087,21 +3087,21 @@ fn parse(st: &mut State) \-> Option<Vec::<SemVer>> {
     /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP      = "st.cur += 1;";
-        re2c:define:YYBACKUP    = "st.mar = st.cur;";
-        re2c:define:YYRESTORE   = "st.cur = st.mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = st.cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} \-= \-@@{shift}isize as usize;";
-        re2c:define:YYLESSTHAN  = "st.cur >= st.lim";
-        re2c:define:YYFILL      = "fill(st) == Fill::Ok";
+        re2c:define:YYPEEK      = \(dq*st.buf.get_unchecked(st.cur)\(dq;
+        re2c:define:YYSKIP      = \(dqst.cur += 1;\(dq;
+        re2c:define:YYBACKUP    = \(dqst.mar = st.cur;\(dq;
+        re2c:define:YYRESTORE   = \(dqst.cur = st.mar;\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = st.cur;\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = NONE;\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} \-= \-@@{shift}isize as usize;\(dq;
+        re2c:define:YYLESSTHAN  = \(dqst.cur >= st.lim\(dq;
+        re2c:define:YYFILL      = \(dqfill(st) == Fill::Ok\(dq;
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
+        re2c:tags:expression = \(dqst.@@\(dq;
 
         num = [0\-9]+;
 
-        num @t1 "." @t2 num @t3 ("." @t4 num)? [\en] {
+        num @t1 \(dq.\(dq @t2 num @t3 (\(dq.\(dq @t4 num)? [\en] {
             let major = s2n(&st.buf[st.tok..t1]);
             let minor = s2n(&st.buf[t2..t3]);
             let patch = if t4 != NONE {s2n(&st.buf[t4..st.cur \- 1])} else {0};
@@ -3115,22 +3115,22 @@ fn parse(st: &mut State) \-> Option<Vec::<SemVer>> {
 }
 
 fn main() {
-    let fname = "input";
-    let verstr = b"1.22.333\en";
+    let fname = \(dqinput\(dq;
+    let verstr = b\(dq1.22.333\en\(dq;
     let expect = (0..BUFSIZE).map(|_| SemVer(1, 22, 333)).collect();
 
     // Prepare input file (make sure it exceeds buffer size).
     match File::create(fname) {
-        Err(why) => panic!("cannot open {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot open {}: {}\(dq, fname, why),
         Ok(mut file) => match file.write_all(&verstr.repeat(BUFSIZE)) {
-            Err(why) => panic!("cannot write to {}: {}", fname, why),
+            Err(why) => panic!(\(dqcannot write to {}: {}\(dq, fname, why),
             Ok(_) => {}
         }
     };
 
     // Reopen input file for reading.
     let file = match File::open(fname) {
-        Err(why) => panic!("cannot read file {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot read file {}: {}\(dq, fname, why),
         Ok(file) => file,
     };
 
@@ -3143,7 +3143,7 @@ fn main() {
         cur: lim,
         mar: lim,
         tok: lim,
-        /*!stags:re2c format = "@@: NONE,\en"; */
+        /*!stags:re2c format = \(dq@@: NONE,\en\(dq; */
         eof: false,
     };
 
@@ -3152,7 +3152,7 @@ fn main() {
 
     // Cleanup: remove input file.
     match std::fs::remove_file(fname) {
-        Err(why) => panic!("cannot remove {}: {}", fname, why),
+        Err(why) => panic!(\(dqcannot remove {}: {}\(dq, fname, why),
         Ok(_) => {}
     }
 }
@@ -3195,19 +3195,19 @@ fn parse(str: &[u8]) \-> Option<SemVer> {
 
     /*!re2c
         re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP      = "cur += 1;";
-        re2c:define:YYBACKUP    = "mar = cur;";
-        re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} \-= \-@@{shift}isize as usize;";
+        re2c:define:YYPEEK      = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP      = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP    = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE   = \(dqcur = mar;\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = cur;\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = NONE;\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} \-= \-@@{shift}isize as usize;\(dq;
         re2c:yyfill:enable = 0;
         re2c:posix\-captures = 1;
 
         num = [0\-9]+;
 
-        (num) "." (num) ("." num)? [\ex00] {
+        (num) \(dq.\(dq (num) (\(dq.\(dq num)? [\ex00] {
             // \(gayynmatch\(ga is the number of capturing groups
             assert_eq!(yynmatch, 4);
 
@@ -3225,9 +3225,9 @@ fn parse(str: &[u8]) \-> Option<SemVer> {
 }
 
 fn main() {
-    assert_eq!(parse(b"23.34\e0"), Some(SemVer(23, 34, 0)));
-    assert_eq!(parse(b"1.2.99999\e0"), Some(SemVer(1, 2, 99999)));
-    assert_eq!(parse(b"1.a\e0"), None);
+    assert_eq!(parse(b\(dq23.34\e0\(dq), Some(SemVer(23, 34, 0)));
+    assert_eq!(parse(b\(dq1.2.99999\e0\(dq), Some(SemVer(1, 2, 99999)));
+    assert_eq!(parse(b\(dq1.a\e0\(dq), None);
 }
 
 .ft P
@@ -3305,20 +3305,20 @@ fn parse(str: &[u8]) \-> Option<Ver> {
 
     /*!re2c
         re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSTAGP   = "@@ = cur;";
-        re2c:define:YYSTAGN   = "@@ = NONE;";
-        re2c:define:YYMTAGP   = "@@ = add_mtag(&mut mt, @@, cur);";
-        re2c:define:YYMTAGN   = "@@ = add_mtag(&mut mt, @@, NONE);";
+        re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
+        re2c:define:YYSTAGP   = \(dq@@ = cur;\(dq;
+        re2c:define:YYSTAGN   = \(dq@@ = NONE;\(dq;
+        re2c:define:YYMTAGP   = \(dq@@ = add_mtag(&mut mt, @@, cur);\(dq;
+        re2c:define:YYMTAGN   = \(dq@@ = add_mtag(&mut mt, @@, NONE);\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
         num = [0\-9]+;
 
-        @t1 num @t2 ("." #t3 num #t4)* [\ex00] {
+        @t1 num @t2 (\(dq.\(dq #t3 num #t4)* [\ex00] {
             let mut ver: Ver = Vec::new();
             ver.push(s2n(&str[t1..t2]));
             unwind(&mt, t3, t4, str, &mut ver);
@@ -3329,9 +3329,9 @@ fn parse(str: &[u8]) \-> Option<Ver> {
 }
 
 fn main() {
-    assert_eq!(parse(b"1\e0"), Some(vec![1]));
-    assert_eq!(parse(b"1.2.3.4.5.6.7\e0"), Some(vec![1, 2, 3, 4, 5, 6, 7]));
-    assert_eq!(parse(b"1.2.\e0"), None);
+    assert_eq!(parse(b\(dq1\e0\(dq), Some(vec![1]));
+    assert_eq!(parse(b\(dq1.2.3.4.5.6.7\e0\(dq), Some(vec![1, 2, 3, 4, 5, 6, 7]));
+    assert_eq!(parse(b\(dq1.2.\e0\(dq), None);
 }
 
 .ft P
@@ -3346,7 +3346,7 @@ the smallest unit of storage in the encoded text. A single code point may be
 represented with one or more code units. In a fixed\-length encoding all code
 points are represented with the same number of code units. In a variable\-length
 encoding code points may be represented with a different number of code units.
-Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily
+Note that the \(dqany\(dq rule \fB[^]\fP matches any code point, but not necessarily
 any code unit (the only way to match any code unit regardless of the encoding
 is the default rule \fB*\fP).
 The generated lexer works with a stream of code units: \fByych\fP stores a code
@@ -3400,19 +3400,19 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 .ft C
 // re2rust $INPUT \-o $OUTPUT \-\-utf8
 
-/*!include:re2c "unicode_categories.re" */
+/*!include:re2c \(dqunicode_categories.re\(dq */
 
 fn lex(str: &[u8]) \-> bool {
     let (mut cur, mut mar) = (0, 0);
     /*!re2c
         re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
         re2c:yyfill:enable = 0;
 
-        // Simplified "Unicode Identifier and Pattern Syntax"
+        // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
         // (see https://unicode.org/reports/tr31)
         id_start    = L | Nl | [$_];
         id_continue = id_start | Mn | Mc | Nd | Pc | [\eu200D\eu05F3];
@@ -3424,7 +3424,7 @@ fn lex(str: &[u8]) \-> bool {
 }
 
 fn main() {
-    assert!(lex("_Ыдентификатор\e0".as_bytes()));
+    assert!(lex(\(dq_Ыдентификатор\e0\(dq.as_bytes()));
 }
 
 .ft P
@@ -3472,7 +3472,7 @@ enum Num { Int, Float, NaN }
 .nf
 .ft C
 // floating\-point numbers
-frac  = [0\-9]* "." [0\-9]+ | [0\-9]+ ".";
+frac  = [0\-9]* \(dq.\(dq [0\-9]+ | [0\-9]+ \(dq.\(dq;
 exp   = \(aqe\(aq [+\-]? [0\-9]+;
 float = frac exp? | [0\-9]+ exp;
 
@@ -3490,7 +3490,7 @@ float { return Num::Float; }
 .ft C
 // re2rust $INPUT \-o $OUTPUT
 
-/*!include:re2c "definitions.rs" */
+/*!include:re2c \(dqdefinitions.rs\(dq */
 
 fn lex(str: &[u8]) \-> Num {
     let mut cur = 0;
@@ -3498,20 +3498,20 @@ fn lex(str: &[u8]) \-> Num {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYPEEK    = \(dq*str.get_unchecked(cur)\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1;\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur;\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
 
         *      { return Num::NaN; }
         number { return Num::Int; }
-        !include "extra_rules.re.inc";
+        !include \(dqextra_rules.re.inc\(dq;
     */
 }
 
 fn main() {
-    assert_eq!(lex(b"123\e0"), Num::Int);
-    assert_eq!(lex(b"123.4567\e0"), Num::Float);
+    assert_eq!(lex(b\(dq123\e0\(dq), Num::Int);
+    assert_eq!(lex(b\(dq123.4567\e0\(dq), Num::Float);
 }
 
 .ft P
@@ -3548,21 +3548,21 @@ use lexer::state::State; // the module is generated by re2c
 pub struct State<\(aqa> {
     pub str: &\(aqa [u8],
     pub cur: usize,
-    /*!stags:re2c format = "pub @@: usize,"; */
+    /*!stags:re2c format = \(dqpub @@: usize,\(dq; */
 }
 /*!header:re2c:off*/
 
 fn lex(st: &mut State) \-> usize {
     let t: usize;
     /*!re2c
-        re2c:header = "lexer/state.rs";
+        re2c:header = \(dqlexer/state.rs\(dq;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK  = "*st.str.get_unchecked(st.cur)";
-        re2c:define:YYSKIP  = "st.cur += 1;";
-        re2c:define:YYSTAGP = "@@ = st.cur;";
+        re2c:define:YYCTYPE = \(dqu8\(dq;
+        re2c:define:YYPEEK  = \(dq*st.str.get_unchecked(st.cur)\(dq;
+        re2c:define:YYSKIP  = \(dqst.cur += 1;\(dq;
+        re2c:define:YYSTAGP = \(dq@@ = st.cur;\(dq;
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
+        re2c:tags:expression = \(dqst.@@\(dq;
 
         [a]* @t [b]* { return t; }
     */
@@ -3570,9 +3570,9 @@ fn lex(st: &mut State) \-> usize {
 
 fn main() {
     let mut st = State {
-        str: b"ab\e0",
+        str: b\(dqab\e0\(dq,
         cur: 0,
-        /*!stags:re2c format = "@@: 0,"; */
+        /*!stags:re2c format = \(dq@@: 0,\(dq; */
     };
     assert_eq!(lex(&mut st), 1);
 }

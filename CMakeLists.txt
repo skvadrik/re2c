@@ -63,21 +63,24 @@ ac_check_headers("unistd.h")
 ac_check_headers("io.h")
 
 # docs (manpages and help)
-set(re2c_manpage_source       "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
-set(re2c_help_source          "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
-set(re2c_manpage_bootstrap_c  "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
-set(re2c_manpage_bootstrap_go "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2go.1")
-set(re2c_help_bootstrap       "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
-set(re2c_manpage_c            "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
-set(re2c_manpage_go           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
-set(re2c_help                 "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
-set(re2c_rst2man              "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
-set(re2c_rst2txt              "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2txt.py")
-set(re2c_splitman             "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py")
+set(re2c_manpage_source         "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
+set(re2c_help_source            "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
+set(re2c_manpage_bootstrap_c    "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
+set(re2c_manpage_bootstrap_go   "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2go.1")
+set(re2c_manpage_bootstrap_rust "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2rust.1")
+set(re2c_help_bootstrap         "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
+set(re2c_manpage_c              "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
+set(re2c_manpage_go             "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
+set(re2c_manpage_rust           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
+set(re2c_help                   "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
+set(re2c_rst2man                "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
+set(re2c_rst2txt                "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2txt.py")
+set(re2c_splitman               "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py")
 set(re2c_docs
     "${re2c_help}"
     "${re2c_manpage_c}"
     "$<$<BOOL:${RE2C_BUILD_RE2GO}>:${re2c_manpage_go}>"
+    "$<$<BOOL:${RE2C_BUILD_RE2RUST}>:${re2c_manpage_rust}>"
 )
 
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -320,8 +323,9 @@ set(re2c_docs_sources
     "examples/rust/submatch/02_mtags.re"
     "examples/rust/submatch/03_posix.re"
 )
-re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}"  "${re2c_manpage_bootstrap_c}"  "c")
-re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}" "${re2c_manpage_bootstrap_go}" "go")
+re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}"    "${re2c_manpage_bootstrap_c}"  "c")
+re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}"   "${re2c_manpage_bootstrap_go}" "go")
+re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_rust}" "${re2c_manpage_bootstrap_rust}" "rust")
 re2c_gen_help("${re2c_help_source}" "${re2c_help}" "${re2c_help_bootstrap}")
 add_custom_target(docs DEPENDS "${re2c_docs}")
 
@@ -336,7 +340,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     endif()
     if(RE2C_BUILD_RE2RUST)
         install(TARGETS re2rust RUNTIME DESTINATION bin)
-        # TODO: add docs for Rust.
+        install(FILES "${re2c_manpage_rust}" DESTINATION "share/man/man1")
     endif()
     install(FILES include/unicode_categories.re DESTINATION "${RE2C_STDLIB_DIR}")
 
