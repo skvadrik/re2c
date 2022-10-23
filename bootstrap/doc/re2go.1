@@ -70,19 +70,19 @@ func lex(str string) {
     var cursor int
     /*!re2c
         re2c:define:YYCTYPE = byte;
-        re2c:define:YYPEEK = "str[cursor]";
-        re2c:define:YYSKIP = "cursor += 1";
+        re2c:define:YYPEEK = \(dqstr[cursor]\(dq;
+        re2c:define:YYSKIP = \(dqcursor += 1\(dq;
         re2c:yyfill:enable = 0;
 
         number = [1\-9][0\-9]*;
 
         number { return }
-        *      { panic("error!") }
+        *      { panic(\(dqerror!\(dq) }
     */
 }
 
 func main() {
-    lex("1234\ex00")
+    lex(\(dq1234\ex00\(dq)
 }
 
 .ft P
@@ -115,7 +115,7 @@ func lex(str string) {
     }
 yy1:
     cursor += 1
-    { panic("error!") }
+    { panic(\(dqerror!\(dq) }
 yy2:
     cursor += 1
     yych = str[cursor]
@@ -132,7 +132,7 @@ yy3:
 }
 
 func main() {
-    lex("1234\ex00")
+    lex(\(dq1234\ex00\(dq)
 }
 
 .ft P
@@ -289,18 +289,18 @@ slice) \fBdata\fP as follows:
 .nf
 .ft C
 /*!re2c
-  re2c:define:YYPEEK       = "data[cursor]";
-  re2c:define:YYSKIP       = "cursor++";
-  re2c:define:YYBACKUP     = "marker = cursor";
-  re2c:define:YYRESTORE    = "cursor = marker";
-  re2c:define:YYBACKUPCTX  = "ctxmarker = cursor";
-  re2c:define:YYRESTORECTX = "cursor = ctxmarker";
-  re2c:define:YYRESTORETAG = "cursor = ${tag}";
-  re2c:define:YYLESSTHAN   = "limit \- cursor < @@{len}";
-  re2c:define:YYSTAGP      = "@@{tag} = cursor";
-  re2c:define:YYSTAGN      = "@@{tag} = \-1";
-  re2c:define:YYSHIFT      = "cursor += @@{shift}";
-  re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+  re2c:define:YYPEEK       = \(dqdata[cursor]\(dq;
+  re2c:define:YYSKIP       = \(dqcursor++\(dq;
+  re2c:define:YYBACKUP     = \(dqmarker = cursor\(dq;
+  re2c:define:YYRESTORE    = \(dqcursor = marker\(dq;
+  re2c:define:YYBACKUPCTX  = \(dqctxmarker = cursor\(dq;
+  re2c:define:YYRESTORECTX = \(dqcursor = ctxmarker\(dq;
+  re2c:define:YYRESTORETAG = \(dqcursor = ${tag}\(dq;
+  re2c:define:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
+  re2c:define:YYSTAGP      = \(dq@@{tag} = cursor\(dq;
+  re2c:define:YYSTAGN      = \(dq@@{tag} = \-1\(dq;
+  re2c:define:YYSHIFT      = \(dqcursor += @@{shift}\(dq;
+  re2c:define:YYSHIFTSTAG  = \(dq@@{tag} += @@{shift}\(dq;
 */
 .ft P
 .fi
@@ -381,14 +381,14 @@ although for some compilers like Tcc it also results in smaller binary size.
 This option is supported only for C.
 .TP
 .B \fB\-\-computed\-gotos \-g\fP
-Optimize conditional jumps using non\-standard "computed goto" extension
+Optimize conditional jumps using non\-standard \(dqcomputed goto\(dq extension
 (which must be supported by the compiler). re2c generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
 threshold can be configured with \fBcgoto:threshold\fP configuration. This
 option implies \fB\-\-bit\-vectors\fP\&. It is supported only for C.
 .TP
 .B \fB\-\-conditions \-\-start\-conditions \-c\fP
-Enable support of Flex\-like "conditions": multiple interrelated lexers
+Enable support of Flex\-like \(dqconditions\(dq: multiple interrelated lexers
 within one block. This is an alternative to manually specifying different
 re2c blocks connected with \fBgoto\fP or function calls.
 .TP
@@ -495,10 +495,10 @@ Enable submatch extraction with POSIX\-style capturing groups.
 Deprecated since version 2.2 (reusable blocks are allowed by default now).
 .TP
 .B \fB\-\-skeleton \-S\fP
-Ignore user\-defined interface code and generate a self\-contained "skeleton"
+Ignore user\-defined interface code and generate a self\-contained \(dqskeleton\(dq
 program. Additionally, generate input files with strings derived from the
 regular grammar and compressed match results that are used to verify
-"skeleton" behavior on all inputs. This option is useful for finding bugs
+\(dqskeleton\(dq behavior on all inputs. This option is useful for finding bugs
 in optimizations and code generation. This option is supported only for C.
 .TP
 .B \fB\-\-storable\-state \-f\fP
@@ -592,7 +592,7 @@ The output can be converted to an image with the help of Graphviz
 .B \fB\-\-dfa\-minimization <moore | table>\fP
 Internal option: DFA minimization algorithm used by re2c. The \fBmoore\fP
 option is the Moore algorithm (it is the default). The \fBtable\fP option is
-the "table filling" algorithm. Both algorithms should produce the same DFA
+the \(dqtable filling\(dq algorithm. Both algorithms should produce the same DFA
 up to states relabeling; table filling is simpler and much slower and serves
 as a reference implementation.
 .TP
@@ -616,8 +616,8 @@ debugging).
 .B \fB\-\-posix\-closure <gor1 | gtop>\fP
 Internal option: specify shortest\-path algorithm used for the construction of
 epsilon\-closure with POSIX disambiguation semantics: \fBgor1\fP (the default)
-stands for Goldberg\-Radzik algorithm, and \fBgtop\fP stands for "global
-topological order" algorithm.
+stands for Goldberg\-Radzik algorithm, and \fBgtop\fP stands for \(dqglobal
+topological order\(dq algorithm.
 .TP
 .B \fB\-\-posix\-prectable <complex | naive>\fP
 Internal option: specify the algorithm used to compute POSIX precedence
@@ -638,8 +638,8 @@ Internal option:
 specify whether the fixed\-tag optimization should be applied to all tags
 (\fBall\fP), none of them (\fBnone\fP), or only those in toplevel concatenation
 (\fBtoplevel\fP). The default is \fBall\fP\&.
-"Fixed" tags are those that are located within a fixed distance to some
-other tag (called "base"). In such cases only the base tag needs to be
+\(dqFixed\(dq tags are those that are located within a fixed distance to some
+other tag (called \(dqbase\(dq). In such cases only the base tag needs to be
 tracked, and the value of the fixed tag can be computed as the value of the
 base tag plus a static offset. For tags that are under alternative or
 repetition it is also necessary to check if the base tag has a no\-match
@@ -1100,7 +1100,7 @@ Used only with \fB\-P\fP \fB\-\-posix\-captures\fP option.
 Same as the \fB\-\-api\fP option.
 .TP
 .B \fBre2c:api:sigil\fP
-Specify the marker ("sigil") that is used for argument placeholders in the
+Specify the marker (\(dqsigil\(dq) that is used for argument placeholders in the
 API primitives. The default is \fB@@\fP\&. A placeholder starts with sigil
 followed by the argument name in curly braces. For example, if sigil is set
 to \fB$\fP, then placeholders will have the form \fB${name}\fP\&. Single\-argument
@@ -1340,7 +1340,7 @@ is relative.
 .TP
 .B \fBre2c:indent:string\fP
 Specifies the string used for indentation. The default is a single tab
-character \fB"\et"\fP\&. Indent string should contain whitespace characters only.
+character \fB\(dq\et\(dq\fP\&. Indent string should contain whitespace characters only.
 To disable indentation entirely, set this configuration to an empty string.
 .TP
 .B \fBre2c:indent:top\fP
@@ -1390,7 +1390,7 @@ Specifies the expression used for tag variables.
 By default re2c generates expressions of the form \fByyt<N>\fP\&. This might
 be inconvenient, for example if tag variables are defined as fields in a
 struct. All occurrences of \fB@@{tag}\fP or \fB@@\fP are replaced with the
-actual tag name. For example, \fBre2c:tags:expression = "s.@@";\fP results
+actual tag name. For example, \fBre2c:tags:expression = \(dqs.@@\(dq;\fP results
 in expressions of the form \fBs.yyt<N>\fP in the generated code.
 See also \fBre2c:api:sigil\fP configuration.
 .TP
@@ -1489,7 +1489,7 @@ This configuration can be overridden with \fBre2c:define:YYFILL:naked\fP or
 re2c uses the following syntax for regular expressions:
 .INDENT 0.0
 .IP \(bu 2
-\fB"foo"\fP case\-sensitive string literal
+\fB\(dqfoo\(dq\fP case\-sensitive string literal
 .IP \(bu 2
 \fB\(aqfoo\(aq\fP case\-insensitive string literal
 .IP \(bu 2
@@ -1519,7 +1519,7 @@ re2c uses the following syntax for regular expressions:
 .IP \(bu 2
 \fBR / S\fP lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
 .IP \(bu 2
-\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB"name"\fP in Flex compatibility mode)
+\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB\(dqname\(dq\fP in Flex compatibility mode)
 .IP \(bu 2
 \fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
 .IP \(bu 2
@@ -1544,7 +1544,7 @@ the lexer may fail to match any rule and come to a default state
 the lexer may reach the end of input
 .UNINDENT
 .sp
-The first two conditions terminate the lexer in a "natural" way: it comes to a
+The first two conditions terminate the lexer in a \(dqnatural\(dq way: it comes to a
 state with no outgoing transitions, and the matching automatically stops. The
 third condition, end of input, is different: it may happen in any state, and the
 lexer should be able to handle it. Checking for the end of input interrupts the
@@ -1558,7 +1558,7 @@ considerations and other factors. Here is a list of methods:
 \fBSentinel.\fP
 This method eliminates the need for the end of input checks altogether. It is
 simple and efficient, but limited to the case when there is a natural
-"sentinel" character that can never occur in valid input. This character may
+\(dqsentinel\(dq character that can never occur in valid input. This character may
 still occur in invalid input, but it should not be allowed by the regular
 expressions, except perhaps as the last character of a rule. The sentinel is
 appended at the end of input and serves as a stop signal: when the lexer reads
@@ -1575,7 +1575,7 @@ with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value
 This method is generic: it allows to handle any input without restrictions on
 the regular expressions. The idea is to reduce the number of end of input
 checks by performing them only on certain characters. Similar to the
-"sentinel" method, one of the characters is chosen as a "sentinel" and
+\(dqsentinel\(dq method, one of the characters is chosen as a \(dqsentinel\(dq and
 appended at the end of input. However, there is no restriction on where the
 sentinel may occur (in fact, any character can be chosen for a sentinel).
 When the lexer reads this character, it additionally performs a bounds check.
@@ -1592,8 +1592,8 @@ the sentinel). \fBYYFILL\fP is optional.
 .sp
 .IP \(bu 2
 \fBBounds checks with padding.\fP
-This method is generic, and it may be faster than the "sentinel with bounds
-checks" method, but it is also more complex. The idea is to partition DFA
+This method is generic, and it may be faster than the \(dqsentinel with bounds
+checks\(dq method, but it is also more complex. The idea is to partition DFA
 states into strongly connected components (SCCs) and generate a single check
 per SCC for enough characters to cover the longest non\-looping path in this
 SCC. This reduces the number of checks, but there is a problem with short
@@ -1649,8 +1649,8 @@ func lex(str string) int {
     for { /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = byte;
-        re2c:define:YYPEEK  = "str[cur]";
-        re2c:define:YYSKIP  = "cur += 1";
+        re2c:define:YYPEEK  = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP  = \(dqcur += 1\(dq;
 
         *      { return \-1 }
         [\ex00] { return count }
@@ -1661,10 +1661,10 @@ func lex(str string) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex("\e000"), 0)
-    assert_eq(lex("one two three\e000"), 3)
-    assert_eq(lex("f0ur\e000"), \-1)
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dq\e000\(dq), 0)
+    assert_eq(lex(\(dqone two three\e000\(dq), 3)
+    assert_eq(lex(\(dqf0ur\e000\(dq), \-1)
 }
 
 .ft P
@@ -1707,11 +1707,11 @@ func lex(str string) int {
     for { /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE    = byte;
-        re2c:define:YYPEEK     = "str[cur]";
-        re2c:define:YYSKIP     = "cur += 1";
-        re2c:define:YYBACKUP   = "mar = cur";
-        re2c:define:YYRESTORE  = "cur = mar";
-        re2c:define:YYLESSTHAN = "lim <= cur";
+        re2c:define:YYPEEK     = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP   = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE  = \(dqcur = mar\(dq;
+        re2c:define:YYLESSTHAN = \(dqlim <= cur\(dq;
         re2c:yyfill:enable = 0;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -1725,10 +1725,10 @@ func lex(str string) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex("\e000"), 0)
-    assert_eq(lex("\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \e000"), 3)
-    assert_eq(lex("\(aqunterminated\e\e\(aq\e000"), \-1)
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dq\e000\(dq), 0)
+    assert_eq(lex(\(dq\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \e000\(dq), 3)
+    assert_eq(lex(\(dq\(aqunterminated\e\e\(aq\e000\(dq), \-1)
 }
 
 .ft P
@@ -1744,7 +1744,7 @@ of input, where \fBYYMAXFILL\fP value is autogenerated with \fB/*!max:re2c*/\fP\
 is not necessary to use null for padding \-\-\- any characters can be used as long
 as they do not form a valid lexeme suffix (in this example padding should not
 contain single quotes, as they may be mistaken for a suffix of a single\-quoted
-string). There is a "stop" rule that matches the first padding character (null)
+string). There is a \(dqstop\(dq rule that matches the first padding character (null)
 and terminates the lexer (note that it checks if null is at the beginning of
 padding, otherwise it is a syntax error). Bounds checks are generated only in
 some states that are determined by the strongly connected components of the
@@ -1765,14 +1765,14 @@ section for an example that refills the input buffer with \fBYYFILL\fP\&.
 //go:generate re2go $INPUT \-o $OUTPUT
 package main
 
-import "strings"
+import \(dqstrings\(dq
 
 /*!max:re2c*/
 
 // Expects YYMAXFILL\-padded string.
 func lex(str string) int {
     // Pad string with YYMAXFILL zeroes at the end.
-    buf := str + strings.Repeat("\e000", YYMAXFILL)
+    buf := str + strings.Repeat(\(dq\e000\(dq, YYMAXFILL)
 
     var cur int
     lim := len(buf)
@@ -1780,10 +1780,10 @@ func lex(str string) int {
 
     for { /*!re2c
         re2c:define:YYCTYPE    = byte;
-        re2c:define:YYPEEK     = "buf[cur]";
-        re2c:define:YYSKIP     = "cur += 1";
-        re2c:define:YYLESSTHAN = "lim \- cur < @@";
-        re2c:define:YYFILL     = "return \-1";
+        re2c:define:YYPEEK     = \(dqbuf[cur]\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1\(dq;
+        re2c:define:YYLESSTHAN = \(dqlim \- cur < @@\(dq;
+        re2c:define:YYFILL     = \(dqreturn \-1\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1799,11 +1799,11 @@ func lex(str string) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex(""), 0)
-    assert_eq(lex("\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "), 3)
-    assert_eq(lex("\(aqunterminated\e\e\(aq"), \-1)
-    assert_eq(lex("\(aqunexpected \e000 null\e\e\(aq"), \-1)
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dq\(dq), 0)
+    assert_eq(lex(\(dq\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq), 3)
+    assert_eq(lex(\(dq\(aqunterminated\e\e\(aq\(dq), \-1)
+    assert_eq(lex(\(dq\(aqunexpected \e000 null\e\e\(aq\(dq), \-1)
 }
 
 .ft P
@@ -1829,7 +1829,7 @@ returns a fake sentinel character.
 //go:generate re2go $INPUT \-o $OUTPUT
 package main
 
-// Returns "fake" terminating null if cursor has reached limit.
+// Returns \(dqfake\(dq terminating null if cursor has reached limit.
 func peek(str string, cur int, lim int) byte {
     if cur >= lim {
         return 0 // fake null
@@ -1847,11 +1847,11 @@ func lex(str string) int {
     for { /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE    = byte;
-        re2c:define:YYLESSTHAN = "cur >= lim";
-        re2c:define:YYPEEK     = "peek(str, cur, lim)";
-        re2c:define:YYSKIP     = "cur += 1";
-        re2c:define:YYBACKUP   = "mar = cur";
-        re2c:define:YYRESTORE  = "cur = mar";
+        re2c:define:YYLESSTHAN = \(dqcur >= lim\(dq;
+        re2c:define:YYPEEK     = \(dqpeek(str, cur, lim)\(dq;
+        re2c:define:YYSKIP     = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP   = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE  = \(dqcur = mar\(dq;
         re2c:yyfill:enable = 0;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -1865,10 +1865,10 @@ func lex(str string) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex(""), 0)
-    assert_eq(lex("\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq "), 3)
-    assert_eq(lex("\(aqunterminated\e\e\(aq"), \-1)
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dq\(dq), 0)
+    assert_eq(lex(\(dq\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq), 3)
+    assert_eq(lex(\(dq\(aqunterminated\e\e\(aq\(dq), \-1)
 }
 
 .ft P
@@ -1968,8 +1968,8 @@ Here is an example of a program that reads input file \fBinput.txt\fP in chunks 
 package main
 
 import (
-    "os"
-    "strings"
+    \(dqos\(dq
+    \(dqstrings\(dq
 )
 
 const BUFSIZE int = 4096
@@ -2015,12 +2015,12 @@ func lex(in *Input) int {
     /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE    = byte;
-        re2c:define:YYPEEK     = "in.buf[in.cur]";
-        re2c:define:YYSKIP     = "in.cur += 1";
-        re2c:define:YYBACKUP   = "in.mar = in.cur";
-        re2c:define:YYRESTORE  = "in.cur = in.mar";
-        re2c:define:YYLESSTHAN = "in.lim <= in.cur";
-        re2c:define:YYFILL     = "fill(in) == 0";
+        re2c:define:YYPEEK     = \(dqin.buf[in.cur]\(dq;
+        re2c:define:YYSKIP     = \(dqin.cur += 1\(dq;
+        re2c:define:YYBACKUP   = \(dqin.mar = in.cur\(dq;
+        re2c:define:YYRESTORE  = \(dqin.cur = in.mar\(dq;
+        re2c:define:YYLESSTHAN = \(dqin.lim <= in.cur\(dq;
+        re2c:define:YYFILL     = \(dqfill(in) == 0\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2033,8 +2033,8 @@ func lex(in *Input) int {
 }
 
 func main() () {
-    fname := "input"
-    content := "\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq ";
+    fname := \(dqinput\(dq
+    content := \(dq\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq;
 
     // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
@@ -2056,7 +2056,7 @@ func main() () {
     }
 
     // Run the lexer.
-    if lex(in) != count { panic("error"); }
+    if lex(in) != count { panic(\(dqerror\(dq); }
 
     // Cleanup: remove input file.
     f.Close();
@@ -2119,8 +2119,8 @@ Here is an example of a program that reads input file \fBinput.txt\fP in chunks 
 package main
 
 import (
-    "os"
-    "strings"
+    \(dqos\(dq
+    \(dqstrings\(dq
 )
 
 /*!max:re2c*/
@@ -2168,10 +2168,10 @@ func lex(in *Input) int {
         in.tok = in.cur
     /*!re2c
         re2c:define:YYCTYPE    = byte;
-        re2c:define:YYPEEK     = "in.buf[in.cur]";
-        re2c:define:YYSKIP     = "in.cur += 1";
-        re2c:define:YYLESSTHAN = "in.lim\-in.cur < @@";
-        re2c:define:YYFILL     = "if r := fill(in, @@); r != 0 { return r }";
+        re2c:define:YYPEEK     = \(dqin.buf[in.cur]\(dq;
+        re2c:define:YYSKIP     = \(dqin.cur += 1\(dq;
+        re2c:define:YYLESSTHAN = \(dqin.lim\-in.cur < @@\(dq;
+        re2c:define:YYFILL     = \(dqif r := fill(in, @@); r != 0 { return r }\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2187,8 +2187,8 @@ func lex(in *Input) int {
 }
 
 func main() () {
-    fname := "input"
-    content := "\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq ";
+    fname := \(dqinput\(dq
+    content := \(dq\(aqqu\e000tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq;
 
     // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
@@ -2209,7 +2209,7 @@ func main() () {
     }
 
     // Run the lexer.
-    if lex(in) != count { panic("error"); }
+    if lex(in) != count { panic(\(dqerror\(dq); }
 
     // Cleanup: remove input file.
     f.Close();
@@ -2248,12 +2248,12 @@ blocks.
 //go:generate re2go $INPUT \-o $OUTPUT \-i
 package main
 
-import "errors"
+import \(dqerrors\(dq
 
 const u32Limit uint64 = 1<<32
 var (
-    eSyntax   = errors.New("syntax error")
-    eOverflow = errors.New("overflow error")
+    eSyntax   = errors.New(\(dqsyntax error\(dq)
+    eOverflow = errors.New(\(dqoverflow error\(dq)
 )
 
 func parse_u32(str string) (uint32, error) {
@@ -2270,17 +2270,17 @@ func parse_u32(str string) (uint32, error) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYSHIFT   = "cur += @@{shift}";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+        re2c:define:YYSHIFT   = \(dqcur += @@{shift}\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar\(dq;
 
-        end = "\ex00";
+        end = \(dq\ex00\(dq;
 
         \(aq0b\(aq / [01]        { goto bin }
-        "0"                { goto oct }
-        ""   / [1\-9]       { goto dec }
+        \(dq0\(dq                { goto oct }
+        \(dq\(dq   / [1\-9]       { goto dec }
         \(aq0x\(aq / [0\-9a\-fA\-F] { goto hex }
         *                  { goto err }
     */
@@ -2323,15 +2323,15 @@ err:
 func main() {
     test := func(num uint32, str string, err error) {
         if n, e := parse_u32(str); !(n == num && e == err) {
-            panic("error")
+            panic(\(dqerror\(dq)
         }
     }
-    test(1234567890, "1234567890\e000", nil)
-    test(13, "0b1101\e000", nil)
-    test(0x7fe, "0x007Fe\e000", nil)
-    test(0644, "0644\e000", nil)
-    test(0, "9999999999\e000", eOverflow)
-    test(0, "123??\e000", eSyntax)
+    test(1234567890, \(dq1234567890\e000\(dq, nil)
+    test(13, \(dq0b1101\e000\(dq, nil)
+    test(0x7fe, \(dq0x007Fe\e000\(dq, nil)
+    test(0644, \(dq0644\e000\(dq, nil)
+    test(0, \(dq9999999999\e000\(dq, eOverflow)
+    test(0, \(dq123??\e000\(dq, eSyntax)
 }
 
 .ft P
@@ -2379,16 +2379,16 @@ code.
 .TP
 .B \fB< > action\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string and executes the \fBaction\fP\&.
+and name \fB\(dq0\(dq\fP\&. It matches empty string and executes the \fBaction\fP\&.
 .TP
 .B \fB< > => cond action\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string, sets the current condition to
+and name \fB\(dq0\(dq\fP\&. It matches empty string, sets the current condition to
 \fBcond\fP and executes the \fBaction\fP\&.
 .TP
 .B \fB< > :=> cond\fP
 A rule that is merged to a special entry condition with number zero
-and name \fB"0"\fP\&. It matches empty string and immediately transitions to
+and name \fB\(dq0\(dq\fP\&. It matches empty string and immediately transitions to
 \fBcond\fP\&.
 .UNINDENT
 .UNINDENT
@@ -2430,11 +2430,11 @@ number of the initial condition generated with \fB/*!conditions:re2c*/\fP\&.
 //go:generate re2go \-c $INPUT \-o $OUTPUT \-i
 package main
 
-import "errors"
+import \(dqerrors\(dq
 
 var (
-    eSyntax   = errors.New("syntax error")
-    eOverflow = errors.New("overflow error")
+    eSyntax   = errors.New(\(dqsyntax error\(dq)
+    eOverflow = errors.New(\(dqoverflow error\(dq)
 )
 
 /*!conditions:re2c*/
@@ -2456,22 +2456,22 @@ func parse_u32(str string) (uint32, error) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE        = byte;
-        re2c:define:YYPEEK         = "str[cur]";
-        re2c:define:YYSKIP         = "cur += 1";
-        re2c:define:YYSHIFT        = "cur += @@{shift}";
-        re2c:define:YYBACKUP       = "mar = cur";
-        re2c:define:YYRESTORE      = "cur = mar";
-        re2c:define:YYGETCONDITION = "cond";
-        re2c:define:YYSETCONDITION = "cond = @@";
+        re2c:define:YYPEEK         = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP         = \(dqcur += 1\(dq;
+        re2c:define:YYSHIFT        = \(dqcur += @@{shift}\(dq;
+        re2c:define:YYBACKUP       = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE      = \(dqcur = mar\(dq;
+        re2c:define:YYGETCONDITION = \(dqcond\(dq;
+        re2c:define:YYSETCONDITION = \(dqcond = @@\(dq;
 
         <*> * { return 0, eSyntax }
 
         <init> \(aq0b\(aq / [01]        :=> bin
-        <init> "0"                :=> oct
-        <init> ""   / [1\-9]       :=> dec
+        <init> \(dq0\(dq                :=> oct
+        <init> \(dq\(dq   / [1\-9]       :=> dec
         <init> \(aq0x\(aq / [0\-9a\-fA\-F] :=> hex
 
-        <bin, oct, dec, hex> "\ex00" {
+        <bin, oct, dec, hex> \(dq\ex00\(dq {
             if result < u32Limit {
                 return uint32(result), nil
             } else {
@@ -2491,15 +2491,15 @@ func parse_u32(str string) (uint32, error) {
 func main() {
     test := func(num uint32, str string, err error) {
         if n, e := parse_u32(str); !(n == num && e == err) {
-            panic("error")
+            panic(\(dqerror\(dq)
         }
     }
-    test(1234567890, "1234567890\e000", nil)
-    test(13, "0b1101\e000", nil)
-    test(0x7fe, "0x007Fe\e000", nil)
-    test(0644, "0644\e000", nil)
-    test(0, "9999999999\e000", eOverflow)
-    test(0, "123??\e000", eSyntax)
+    test(1234567890, \(dq1234567890\e000\(dq, nil)
+    test(13, \(dq0b1101\e000\(dq, nil)
+    test(0x7fe, \(dq0x007Fe\e000\(dq, nil)
+    test(0644, \(dq0644\e000\(dq, nil)
+    test(0, \(dq9999999999\e000\(dq, eOverflow)
+    test(0, \(dq123??\e000\(dq, eSyntax)
 }
 
 .ft P
@@ -2510,17 +2510,17 @@ func main() {
 .sp
 With \fB\-\-storable\-state\fP option re2c generates a lexer that can store
 its current state, return to the caller, and later resume operations exactly
-where it left off. The default mode of operation in re2c is a "pull" model,
-in which the lexer "pulls" more input whenever it needs it. This may be
+where it left off. The default mode of operation in re2c is a \(dqpull\(dq model,
+in which the lexer \(dqpulls\(dq more input whenever it needs it. This may be
 unacceptable in cases when the input becomes available piece by piece (for
 example, if the lexer is invoked by the parser, or if the lexer program
 communicates via a socket protocol with some other program that must wait for a
 reply from the lexer before it transmits the next message). Storable state
 feature is intended exactly for such cases: it allows one to generate lexers that
-work in a "push" model. When the lexer needs more input, it stores its state and
+work in a \(dqpush\(dq model. When the lexer needs more input, it stores its state and
 returns to the caller. Later, when more input becomes available, the caller
 resumes the lexer exactly where it stopped. There are a few changes necessary
-compared to the "pull" model:
+compared to the \(dqpull\(dq model:
 .INDENT 0.0
 .IP \(bu 2
 Define \fBYYSETSTATE()\fP and \fBYYGETSTATE(state)\fP primitives.
@@ -2547,9 +2547,9 @@ processing the lexeme at the end of buffer (which already is blocked due to
 the end\-of\-input condition).
 .UNINDENT
 .sp
-Here is an example of a "push" model lexer that simulates reading packets from a
+Here is an example of a \(dqpush\(dq model lexer that simulates reading packets from a
 socket. The lexer loops until it encounters the end of input and returns to the
-calling function. The calling function provides more input by "sending" the next
+calling function. The calling function provides more input by \(dqsending\(dq the next
 packet and resumes lexing. This process stops when all the packets have been
 sent, or when there is an error.
 .INDENT 0.0
@@ -2561,8 +2561,8 @@ sent, or when there is an error.
 package main
 
 import (
-    "fmt"
-    "os"
+    \(dqfmt\(dq
+    \(dqos\(dq
 )
 
 // Use a small buffer to cover the case when a lexeme doesn\(aqt fit.
@@ -2617,14 +2617,14 @@ loop:
     st.tok = st.cur
     /*!re2c
         re2c:eof = 0;
-        re2c:define:YYPEEK     = "st.buf[st.cur]";
-        re2c:define:YYSKIP     = "st.cur += 1";
-        re2c:define:YYBACKUP   = "st.mar = st.cur";
-        re2c:define:YYRESTORE  = "st.cur = st.mar";
-        re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-        re2c:define:YYFILL     = "return lexWaitingForInput";
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@{state}";
+        re2c:define:YYPEEK     = \(dqst.buf[st.cur]\(dq;
+        re2c:define:YYSKIP     = \(dqst.cur += 1\(dq;
+        re2c:define:YYBACKUP   = \(dqst.mar = st.cur\(dq;
+        re2c:define:YYRESTORE  = \(dqst.cur = st.mar\(dq;
+        re2c:define:YYLESSTHAN = \(dqst.lim <= st.cur\(dq;
+        re2c:define:YYFILL     = \(dqreturn lexWaitingForInput\(dq;
+        re2c:define:YYGETSTATE = \(dqst.state\(dq;
+        re2c:define:YYSETSTATE = \(dqst.state = @@{state}\(dq;
 
         packet = [a\-z]+[;];
 
@@ -2635,8 +2635,8 @@ loop:
 }
 
 func test(expect int, packets []string) {
-    // Create a "socket" (open the same file for reading and writing).
-    fname := "pipe"
+    // Create a \(dqsocket\(dq (open the same file for reading and writing).
+    fname := \(dqpipe\(dq
     fw, _ := os.Create(fname)
     fr, _ := os.Open(fname)
 
@@ -2679,7 +2679,7 @@ func test(expect int, packets []string) {
 
     // Check results.
     if status != expect || (status == lexEnd && recv != send) {
-        panic(fmt.Sprintf("got %d, want %d", status, expect))
+        panic(fmt.Sprintf(\(dqgot %d, want %d\(dq, status, expect))
     }
 
     // Cleanup: remove input file.
@@ -2690,9 +2690,9 @@ func test(expect int, packets []string) {
 
 func main() {
     test(lexEnd, []string{})
-    test(lexEnd, []string{"zero;", "one;", "two;", "three;", "four;"})
-    test(lexPacketBroken, []string{"??;"})
-    test(lexPacketTooBig, []string{"looooooooooooong;"})
+    test(lexEnd, []string{\(dqzero;\(dq, \(dqone;\(dq, \(dqtwo;\(dq, \(dqthree;\(dq, \(dqfour;\(dq})
+    test(lexPacketBroken, []string{\(dq??;\(dq})
+    test(lexPacketTooBig, []string{\(dqlooooooooooooong;\(dq})
 }
 
 .ft P
@@ -2751,13 +2751,13 @@ const (
 )
 
 /*!rules:re2c:colors
-    *                            { panic("eh!") }
-    "red" | "salmon" | "magenta" { return Color }
+    *                            { panic(\(dqeh!\(dq) }
+    \(dqred\(dq | \(dqsalmon\(dq | \(dqmagenta\(dq { return Color }
 */
 
 /*!rules:re2c:fish
-    *                            { panic("oh!") }
-    "haddock" | "salmon" | "eel" { return Fish }
+    *                            { panic(\(dqoh!\(dq) }
+    \(dqhaddock\(dq | \(dqsalmon\(dq | \(dqeel\(dq { return Fish }
 */
 
 func lex(str string) int {
@@ -2765,10 +2765,10 @@ func lex(str string) int {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar\(dq;
 
         !use:fish;
         !use:colors;
@@ -2777,9 +2777,9 @@ func lex(str string) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex("salmon"), Fish);
-    assert_eq(lex("what?"), Dunno);
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dqsalmon\(dq), Fish);
+    assert_eq(lex(\(dqwhat?\(dq), Dunno);
 }
 
 .ft P
@@ -2800,12 +2800,12 @@ package main
 // blocks add only encoding\-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK    = "str[cur]";
-    re2c:define:YYSKIP    = "cur += 1";
-    re2c:define:YYBACKUP  = "mar = cur";
-    re2c:define:YYRESTORE = "cur = mar";
+    re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+    re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+    re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+    re2c:define:YYRESTORE = \(dqcur = mar\(dq;
 
-    "∀x ∃y" { return 0; }
+    \(dq∀x ∃y\(dq { return 0; }
     *       { return 1; }
 */
 
@@ -2826,7 +2826,7 @@ func lexUTF32(str []uint32) int {
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
     assert_eq(lexUTF8([]uint8{0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79}), 0)
     assert_eq(lexUTF32([]uint32{0x2200, 0x78, 0x20, 0x2203, 0x79}), 0)
 }
@@ -2863,7 +2863,7 @@ maximal value of \fByynmatch\fP among all rules. Note that re2c implements
 POSIX\-compliant disambiguation: each subexpression matches as long as possible,
 and subexpressions that start earlier in regular expression have priority over
 those starting later. Capturing groups are translated into s\-tags under the
-hood, therefore we use the word "tag" to describe them as well.
+hood, therefore we use the word \(dqtag\(dq to describe them as well.
 .sp
 With both \fB\-P \-\-posix\-captures\fP and \fBT \-\-tags\fP options re2c uses efficient
 submatch extraction algorithm described in the
@@ -2881,8 +2881,8 @@ determined by re2c. However, tag variables should be defined by the user as a
 part of the lexer state and updated by \fBYYFILL\fP, therefore re2c provides
 directives \fB/*!stags:re2c*/\fP and \fB/*!mtags:re2c*/\fP that can be used to
 declare, initialize and manipulate tag variables. These directives have two
-optional configurations: \fBformat = "@@";\fP (specifies the template where \fB@@\fP
-is substituted with the name of each tag variable), and \fBseparator = "";\fP
+optional configurations: \fBformat = \(dq@@\(dq;\fP (specifies the template where \fB@@\fP
+is substituted with the name of each tag variable), and \fBseparator = \(dq\(dq;\fP
 (specifies the piece of code used to join the generated pieces for different
 tag variables).
 .sp
@@ -2928,7 +2928,7 @@ See below for a more complex example that uses \fBYYFILL\fP\&.
 //go:generate re2go $INPUT \-o $OUTPUT
 package main
 
-import "reflect"
+import \(dqreflect\(dq
 
 type SemVer struct { major, minor, patch int }
 
@@ -2945,23 +2945,23 @@ func parse(str string) *SemVer {
     var t1, t2, t3, t4, t5 int
 
     // Autogenerated tag variables used by the lexer to track tag values.
-    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = "\en\et"; */
+    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = \(dq\en\et\(dq; */
 
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE     = byte;
-        re2c:define:YYPEEK      = "str[cur]";
-        re2c:define:YYSKIP      = "cur += 1";
-        re2c:define:YYBACKUP    = "mar = cur";
-        re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSTAGP     = "@@{tag} = cur";
-        re2c:define:YYSTAGN     = "@@{tag} = \-1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
+        re2c:define:YYPEEK      = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP      = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP    = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE   = \(dqcur = mar\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = cur\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = \-1\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} += @@{shift}\(dq;
         re2c:tags = 1;
 
         num = [0\-9]+;
 
-        @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\ex00] {
+        @t1 num @t2 \(dq.\(dq @t3 num @t4 (\(dq.\(dq @t5 num)? [\ex00] {
             major := s2n(str[t1:t2])
             minor := s2n(str[t3:t4])
             patch := 0
@@ -2974,11 +2974,11 @@ func parse(str string) *SemVer {
 
 func main() {
     assert_eq := func(x, y *SemVer) {
-        if !reflect.DeepEqual(x, y) { panic("error") }
+        if !reflect.DeepEqual(x, y) { panic(\(dqerror\(dq) }
     }
-    assert_eq(parse("23.34\e000"), &SemVer{23, 34, 0})
-    assert_eq(parse("1.2.9999\e000"), &SemVer{1, 2, 9999})
-    assert_eq(parse("1.a\e000"), nil)
+    assert_eq(parse(\(dq23.34\e000\(dq), &SemVer{23, 34, 0})
+    assert_eq(parse(\(dq1.2.9999\e000\(dq), &SemVer{1, 2, 9999})
+    assert_eq(parse(\(dq1.a\e000\(dq), nil)
 }
 
 .ft P
@@ -3002,9 +3002,9 @@ rather than the buffer, which may be the case with m\-tags.
 package main
 
 import (
-    "os"
-    "reflect"
-    "strings"
+    \(dqos\(dq
+    \(dqreflect\(dq
+    \(dqstrings\(dq
 )
 
 const BUFSIZE int = 4095
@@ -3018,7 +3018,7 @@ type Input struct {
     lim  int
     // Tag variables must be part of the lexer state passed to YYFILL.
     // They don\(aqt correspond to tags and should be autogenerated by re2c.
-    /*!stags:re2c format = "\et@@ int\en"; */
+    /*!stags:re2c format = \(dq\et@@ int\en\(dq; */
     eof  bool
 }
 
@@ -3044,7 +3044,7 @@ func fill(in *Input) int {
     // Tag variables need to be shifted like other input positions. The check
     // for \-1 is only needed if some tags are nested inside of alternative or
     // repetition, so that they can have \-1 value.
-    /*!stags:re2c format = "\etif in.@@ != \-1 { in.@@ \-= in.tok }\en"; */
+    /*!stags:re2c format = \(dq\etif in.@@ != \-1 { in.@@ \-= in.tok }\en\(dq; */
     in.tok = 0
 
     // Fill free space at the end of buffer with new data from file.
@@ -3069,20 +3069,20 @@ func parse(in *Input) []SemVer {
     /*!re2c
         re2c:eof = 0;
         re2c:define:YYCTYPE     = byte;
-        re2c:define:YYPEEK      = "in.buf[in.cur]";
-        re2c:define:YYSKIP      = "in.cur += 1";
-        re2c:define:YYBACKUP    = "in.mar = in.cur";
-        re2c:define:YYRESTORE   = "in.cur = in.mar";
-        re2c:define:YYLESSTHAN  = "in.lim <= in.cur";
-        re2c:define:YYFILL      = "fill(in) == 0";
-        re2c:define:YYSTAGP     = "@@{tag} = in.cur";
-        re2c:define:YYSTAGN     = "@@{tag} = \-1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
-        re2c:tags:expression    = "in.@@";
+        re2c:define:YYPEEK      = \(dqin.buf[in.cur]\(dq;
+        re2c:define:YYSKIP      = \(dqin.cur += 1\(dq;
+        re2c:define:YYBACKUP    = \(dqin.mar = in.cur\(dq;
+        re2c:define:YYRESTORE   = \(dqin.cur = in.mar\(dq;
+        re2c:define:YYLESSTHAN  = \(dqin.lim <= in.cur\(dq;
+        re2c:define:YYFILL      = \(dqfill(in) == 0\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = in.cur\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = \-1\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} += @@{shift}\(dq;
+        re2c:tags:expression    = \(dqin.@@\(dq;
 
         num = [0\-9]+;
 
-        num @t1 "." @t2 num @t3 ("." @t4 num)? [\en] {
+        num @t1 \(dq.\(dq @t2 num @t3 (\(dq.\(dq @t4 num)? [\en] {
             major := s2n(in.buf[in.tok:t1])
             minor := s2n(in.buf[t2:t3])
             patch := 0
@@ -3098,8 +3098,8 @@ func parse(in *Input) []SemVer {
 
 
 func main() () {
-    fname := "input"
-    content := "1.22.333\en";
+    fname := \(dqinput\(dq
+    content := \(dq1.22.333\en\(dq;
 
     expect := make([]SemVer, 0, BUFSIZE)
     for i := 0; i < BUFSIZE; i += 1 { expect = append(expect, SemVer{1, 22, 333}) }
@@ -3122,7 +3122,7 @@ func main() () {
     }
 
     // Run the lexer and check results.
-    if !reflect.DeepEqual(parse(in), expect) { panic("error"); }
+    if !reflect.DeepEqual(parse(in), expect) { panic(\(dqerror\(dq); }
 
     // Cleanup: remove input file.
     f.Close();
@@ -3143,7 +3143,7 @@ Here is an example of using POSIX capturing groups to parse semantic versions.
 //go:generate re2go $INPUT \-o $OUTPUT
 package main
 
-import "reflect"
+import \(dqreflect\(dq
 
 // Maximum number of capturing groups among all rules.
 /*!maxnmatch:re2c*/
@@ -3169,20 +3169,20 @@ func parse(str string) *SemVer {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE     = byte;
-        re2c:define:YYPEEK      = "str[cur]";
-        re2c:define:YYSKIP      = "cur += 1";
-        re2c:define:YYBACKUP    = "mar = cur";
-        re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSTAGP     = "@@{tag} = cur";
-        re2c:define:YYSTAGN     = "@@{tag} = \-1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
+        re2c:define:YYPEEK      = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP      = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP    = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE   = \(dqcur = mar\(dq;
+        re2c:define:YYSTAGP     = \(dq@@{tag} = cur\(dq;
+        re2c:define:YYSTAGN     = \(dq@@{tag} = \-1\(dq;
+        re2c:define:YYSHIFTSTAG = \(dq@@{tag} += @@{shift}\(dq;
         re2c:posix\-captures = 1;
 
         num = [0\-9]+;
 
-        (num) "." (num) ("." num)? [\ex00] {
+        (num) \(dq.\(dq (num) (\(dq.\(dq num)? [\ex00] {
             // \(gayynmatch\(ga is the number of capturing groups
-            if yynmatch != 4 { panic("expected 4 submatch groups") }
+            if yynmatch != 4 { panic(\(dqexpected 4 submatch groups\(dq) }
 
             // Even \(gayypmatch\(ga values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
@@ -3199,11 +3199,11 @@ func parse(str string) *SemVer {
 
 func main() {
     assert_eq := func(x, y *SemVer) {
-        if !reflect.DeepEqual(x, y) { panic("error") }
+        if !reflect.DeepEqual(x, y) { panic(\(dqerror\(dq) }
     }
-    assert_eq(parse("23.34\e000"), &SemVer{23, 34, 0})
-    assert_eq(parse("1.2.9999\e000"), &SemVer{1, 2, 9999})
-    assert_eq(parse("1.a\e000"), nil)
+    assert_eq(parse(\(dq23.34\e000\(dq), &SemVer{23, 34, 0})
+    assert_eq(parse(\(dq1.2.9999\e000\(dq), &SemVer{1, 2, 9999})
+    assert_eq(parse(\(dq1.a\e000\(dq), nil)
 }
 
 .ft P
@@ -3221,7 +3221,7 @@ components. Tag variables are stored in a trie.
 //go:generate re2go $INPUT \-o $OUTPUT
 package main
 
-import "reflect"
+import \(dqreflect\(dq
 
 const (
     mtagRoot int = \-1
@@ -3264,7 +3264,7 @@ func unwind(trie mtagTrie, x int, y int, str string) Ver {
 
     // Get tag values. Tag histories must have equal length.
     if x == mtagRoot || y == mtagRoot {
-        panic("tag histories have different length")
+        panic(\(dqtag histories have different length\(dq)
     }
     ex := trie[x].elem
     ey := trie[y].elem
@@ -3273,7 +3273,7 @@ func unwind(trie mtagTrie, x int, y int, str string) Ver {
         // Both tags are valid string indices, extract component.
         ver = append(ver, s2n(str[ex:ey]))
     } else if !(ex == tagNone && ey == tagNone) {
-        panic("both tags should be tagNone")
+        panic(\(dqboth tags should be tagNone\(dq)
     }
     return ver
 }
@@ -3286,25 +3286,25 @@ func parse(str string) []int {
     var t1, t2, t3, t4 int
 
     // Autogenerated tag variables used by the lexer to track tag values.
-    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = "\en\et"; */
-    /*!mtags:re2c format = "\et@@ := mtagRoot\en"; */
+    /*!stags:re2c format = \(aqvar @@ int\(aq; separator = \(dq\en\et\(dq; */
+    /*!mtags:re2c format = \(dq\et@@ := mtagRoot\en\(dq; */
 
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
-        re2c:define:YYSTAGP   = "@@ = cur";
-        re2c:define:YYSTAGN   = "@@ = tagNone";
-        re2c:define:YYMTAGP   = "@@ = add_mtag(&trie, @@, cur)";
-        re2c:define:YYMTAGN   = "@@ = add_mtag(&trie, @@, tagNone)";
+        re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar\(dq;
+        re2c:define:YYSTAGP   = \(dq@@ = cur\(dq;
+        re2c:define:YYSTAGN   = \(dq@@ = tagNone\(dq;
+        re2c:define:YYMTAGP   = \(dq@@ = add_mtag(&trie, @@, cur)\(dq;
+        re2c:define:YYMTAGN   = \(dq@@ = add_mtag(&trie, @@, tagNone)\(dq;
 
         num = [0\-9]+;
 
-        @t1 num @t2 ("." #t3 num #t4)* [\ex00] {
+        @t1 num @t2 (\(dq.\(dq #t3 num #t4)* [\ex00] {
             ver := make([]int, 0)
             ver = append(ver, s2n(str[t1:t2]))
             ver = append(ver, unwind(trie, t3, t4, str)...)
@@ -3316,11 +3316,11 @@ func parse(str string) []int {
 
 func main() {
     assert_eq := func(x, y []int) {
-        if !reflect.DeepEqual(x, y) { panic("error") }
+        if !reflect.DeepEqual(x, y) { panic(\(dqerror\(dq) }
     }
-    assert_eq(parse("1\e000"), []int{1})
-    assert_eq(parse("1.2.3.4.5.6.7\e000"), []int{1, 2, 3, 4, 5, 6, 7})
-    assert_eq(parse("1.\e000"), nil)
+    assert_eq(parse(\(dq1\e000\(dq), []int{1})
+    assert_eq(parse(\(dq1.2.3.4.5.6.7\e000\(dq), []int{1, 2, 3, 4, 5, 6, 7})
+    assert_eq(parse(\(dq1.\e000\(dq), nil)
 }
 
 .ft P
@@ -3335,7 +3335,7 @@ the smallest unit of storage in the encoded text. A single code point may be
 represented with one or more code units. In a fixed\-length encoding all code
 points are represented with the same number of code units. In a variable\-length
 encoding code points may be represented with a different number of code units.
-Note that the "any" rule \fB[^]\fP matches any code point, but not necessarily
+Note that the \(dqany\(dq rule \fB[^]\fP matches any code point, but not necessarily
 any code unit (the only way to match any code unit regardless of the encoding
 is the default rule \fB*\fP).
 The generated lexer works with a stream of code units: \fByych\fP stores a code
@@ -3390,19 +3390,19 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 //go:generate re2go $INPUT \-o $OUTPUT \-8 \-s \-i
 package main
 
-/*!include:re2c "unicode_categories.re" */
+/*!include:re2c \(dqunicode_categories.re\(dq */
 
 func lex(str string) int {
     var cur, mar int
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar\(dq;
 
-        // Simplified "Unicode Identifier and Pattern Syntax"
+        // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
         // (see https://unicode.org/reports/tr31)
         id_start    = L | Nl | [$_];
         id_continue = id_start | Mn | Mc | Nd | Pc | [\eu200D\eu05F3];
@@ -3414,8 +3414,8 @@ func lex(str string) int {
 }
 
 func main() {
-    if lex("_Ыдентификатор\e000") != 0 {
-        panic("error")
+    if lex(\(dq_Ыдентификатор\e000\(dq) != 0 {
+        panic(\(dqerror\(dq)
     }
 }
 
@@ -3466,7 +3466,7 @@ const (
 .nf
 .ft C
 // floating\-point numbers
-frac  = [0\-9]* "." [0\-9]+ | [0\-9]+ ".";
+frac  = [0\-9]* \(dq.\(dq [0\-9]+ | [0\-9]+ \(dq.\(dq;
 exp   = \(aqe\(aq [+\-]? [0\-9]+;
 float = frac exp? | [0\-9]+ exp;
 
@@ -3485,28 +3485,28 @@ float { return ResultOk }
 //go:generate re2go $INPUT \-o $OUTPUT \-i
 package main
 
-/*!include:re2c "definitions.go" */
+/*!include:re2c \(dqdefinitions.go\(dq */
 
 func lex(str string) int {
     var cur, mar int
     /*!re2c
         re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYPEEK    = \(dqstr[cur]\(dq;
+        re2c:define:YYSKIP    = \(dqcur += 1\(dq;
+        re2c:define:YYBACKUP  = \(dqmar = cur\(dq;
+        re2c:define:YYRESTORE = \(dqcur = mar\(dq;
         re2c:yyfill:enable    = 0;
 
         *      { return ResultFail }
         number { return ResultOk }
-        !include "extra_rules.re.inc";
+        !include \(dqextra_rules.re.inc\(dq;
     */
 }
 
 func main() {
-    assert_eq := func(x, y int) { if x != y { panic("error") } }
-    assert_eq(lex("123\e000"), ResultOk)
-    assert_eq(lex("123.4567\e000"), ResultOk)
+    assert_eq := func(x, y int) { if x != y { panic(\(dqerror\(dq) } }
+    assert_eq(lex(\(dq123\e000\(dq), ResultOk)
+    assert_eq(lex(\(dq123.4567\e000\(dq), ResultOk)
 }
 
 .ft P
@@ -3537,38 +3537,38 @@ grammar and is unknown to the programmer).
 //go:generate re2go $INPUT \-o $OUTPUT \-i \-\-header lexer/state.go
 package main
 
-import "./lexer" // the package is generated by re2c
+import \(dq./lexer\(dq // the package is generated by re2c
 
 /*!header:re2c:on*/
 package lexer
 
 type State struct {
     Data string
-    Cur /*!stags:re2c format=", @@"; */ int
+    Cur /*!stags:re2c format=\(dq, @@\(dq; */ int
 }
 /*!header:re2c:off*/
 
 func lex(st *lexer.State) int {
     var t int
     /*!re2c
-        re2c:header = "lexer/state.go";
+        re2c:header = \(dqlexer/state.go\(dq;
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE  = byte;
-        re2c:define:YYPEEK   = "st.Data[st.Cur]";
-        re2c:define:YYSKIP   = "st.Cur++";
-        re2c:define:YYSTAGP  = "@@ = st.Cur";
+        re2c:define:YYPEEK   = \(dqst.Data[st.Cur]\(dq;
+        re2c:define:YYSKIP   = \(dqst.Cur++\(dq;
+        re2c:define:YYSTAGP  = \(dq@@ = st.Cur\(dq;
         re2c:tags            = 1;
-        re2c:tags:expression = "st.@@";
-        re2c:tags:prefix     = "Tag";
+        re2c:tags:expression = \(dqst.@@\(dq;
+        re2c:tags:prefix     = \(dqTag\(dq;
 
         [a]* @t [b]* { return t }
     */
 }
 
 func main() {
-    st := &lexer.State{Data:"ab\ex00",}
+    st := &lexer.State{Data:\(dqab\ex00\(dq,}
     if lex(st) != 1 {
-        panic("error")
+        panic(\(dqerror\(dq)
     }
 }
 
