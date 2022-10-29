@@ -34,18 +34,21 @@ option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
 # checks for programs
 find_package(Python3 COMPONENTS Interpreter)
-# starting from cmake 3.19 find_package can do version check, but we are on 3.12
-if(Python3_VERSION VERSION_LESS 3.7)
-    message(FATAL_ERROR "python version 3.7 or higher is required")
+if(Python3_FOUND AND Python3_VERSION VERSION_GREATER_EQUAL 3.7)
+    set(PYTHON "${Python3_EXECUTABLE}")
 endif()
+
 if(RE2C_REBUILD_DOCS)
+    if(NOT PYTHON)
+        message(FATAL_ERROR "python version 3.7 or higher is required for RE2C_REBUILD_DOCS")
+    endif()
     execute_process(
-        COMMAND "${Python3_EXECUTABLE}" -c "import docutils"
+        COMMAND "${PYTHON}" -c "import docutils"
         RESULT_VARIABLE EXIT_CODE
         OUTPUT_QUIET
     )
     if (NOT ${EXIT_CODE} EQUAL 0)
-        message(FATAL_ERROR "python package docutils (needed for docs) not found")
+        message(FATAL_ERROR "python package docutils is required for RE2C_REBUILD_DOCS")
     endif()
 endif()
 
@@ -85,7 +88,6 @@ set(re2c_docs
 
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
-set(PYTHON "${Python3_EXECUTABLE}")
 
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
@@ -351,57 +353,59 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_CURRENT_BINARY_DIR}"
     )
 
-    # tests
-    add_custom_target(tests
-        DEPENDS "${RE2C_RUN_TESTS}"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}"
-    )
-    add_dependencies(tests re2c)
-    add_custom_target(vtests
-        DEPENDS "${RE2C_RUN_TESTS}"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}" --valgrind
-    )
-    add_dependencies(vtests re2c)
-    add_custom_target(wtests
-        DEPENDS "${RE2C_RUN_TESTS}"
-        WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
-        COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}" --wine -j1
-    )
-    add_dependencies(wtests re2c)
-    add_executable(re2c_test_range
-        src/test/range/test-impl.h
-        src/test/range/test.cc
-        src/test/range/test.h
-        src/util/range.cc
-        src/util/range.h
-    )
-    add_executable(re2c_test_s_to_n32_unsafe
-        src/test/s_to_n32_unsafe/test.cc
-        src/util/string_utils.cc
-    )
-    add_executable(re2c_test_ver_to_vernum
-        src/test/ver_to_vernum/test.cc
-        $<TARGET_OBJECTS:re2c_objects_autogen_ver_to_vernum>
-    )
-    add_executable(re2c_test_argsubst
-        src/test/argsubst/test.cc
-        src/codegen/helpers.cc
-    )
-    add_custom_target(check_re2c
-        COMMAND ./re2c_test_range
-        COMMAND ./re2c_test_s_to_n32_unsafe
-        COMMAND ./re2c_test_ver_to_vernum
-        COMMAND ./re2c_test_argsubst
-    )
-    add_dependencies(check_re2c
-        tests
-        re2c_test_range
-        re2c_test_s_to_n32_unsafe
-        re2c_test_ver_to_vernum
-        re2c_test_argsubst
-    )
+    # tests require Python
+    if(PYTHON)
+        add_custom_target(tests
+            DEPENDS "${RE2C_RUN_TESTS}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+            COMMAND "${PYTHON}" "${RE2C_RUN_TESTS}"
+        )
+        add_dependencies(tests re2c)
+        add_custom_target(vtests
+            DEPENDS "${RE2C_RUN_TESTS}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+            COMMAND "${PYTHON}" "${RE2C_RUN_TESTS}" --valgrind
+        )
+        add_dependencies(vtests re2c)
+        add_custom_target(wtests
+            DEPENDS "${RE2C_RUN_TESTS}"
+            WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+            COMMAND "${PYTHON}" "${RE2C_RUN_TESTS}" --wine -j1
+        )
+        add_dependencies(wtests re2c)
+        add_executable(re2c_test_range
+            src/test/range/test-impl.h
+            src/test/range/test.cc
+            src/test/range/test.h
+            src/util/range.cc
+            src/util/range.h
+        )
+        add_executable(re2c_test_s_to_n32_unsafe
+            src/test/s_to_n32_unsafe/test.cc
+            src/util/string_utils.cc
+        )
+        add_executable(re2c_test_ver_to_vernum
+            src/test/ver_to_vernum/test.cc
+            $<TARGET_OBJECTS:re2c_objects_autogen_ver_to_vernum>
+        )
+        add_executable(re2c_test_argsubst
+            src/test/argsubst/test.cc
+            src/codegen/helpers.cc
+        )
+        add_custom_target(check_re2c
+            COMMAND ./re2c_test_range
+            COMMAND ./re2c_test_s_to_n32_unsafe
+            COMMAND ./re2c_test_ver_to_vernum
+            COMMAND ./re2c_test_argsubst
+        )
+        add_dependencies(check_re2c
+            tests
+            re2c_test_range
+            re2c_test_s_to_n32_unsafe
+            re2c_test_ver_to_vernum
+            re2c_test_argsubst
+        )
+    endif()
 endif()
 
 if (RE2C_BUILD_LIBS)
@@ -536,7 +540,7 @@ if(RE2C_BUILD_BENCHMARKS)
 endif()
 
 # only add check target if toplevel project
-if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+if ((CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR) AND PYTHON)
     add_custom_target(check)
     add_dependencies(check check_re2c check_libre2c)
 endif()
