@@ -44,8 +44,8 @@ executable that will be used to regenerate the lexers.
 
 For changes that affect parsers (`.ypp` files), regeneration mode is configured
 with options `--enable-parsers` (Autotools) or `-DRE2C_REBUILD_PARSERS=ON`
-(CMake). In this case `bison` must be installed on the system, otherwise
-Autoconf or CMake will fail at cconfiguration stage.
+(CMake). In this case `bison` must be installed on the system. Otherwise
+Autoconf or CMake will fail at configuration stage.
 
 For changes that update documentation, it is necessary to rebuild the bootstrap
 manpages by reconfiguring and rebuilding re2c with options `--enable-docs`
