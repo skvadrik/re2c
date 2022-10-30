@@ -369,6 +369,11 @@ void Adfa::prepare(const opt_t* opts) {
         defstate->action.set_accept(&accepts);
     }
 
+    // Initial state is special in goto/label mode, but not in loop/switch mode.
+    if (!opts->loop_switch) {
+        head->action.set_initial();
+    }
+
     // Tag hoisting should be done after binding default arcs, which may introduce new tags.
     // See note [tag hoisting, skip hoisting and tunneling].
     if (!opts->eager_skip) {

@@ -325,10 +325,8 @@ void gen_code(Output& output, Code* code) {
                     oblock.start_label = new_label(alc, output.label_counter++);
                 }
             }
-            // Initial label points to the beginning of the DFA (after condition dispatch in `-c`
-            // mode).
+            // Initial label points to the start of the DFA (after condition dispatch in `-c`).
             dfa->initial_label = new_label(alc, output.label_counter++);
-            dfa->head->action.set_initial();
         } else {
             // In loop/switch mode the label of the first state is always used.
             dfa->head->label->used = true;
