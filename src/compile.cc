@@ -180,23 +180,26 @@ Ret compile(Input& input, Output& output, Opt& opts) {
 
     output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
 
-    // Early codegen phase.
+    // Early codegen phase that gathers whole-program information.
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
             output.set_current_block(b);
-            b->fill_index = output.total_fill_index;
+            gen_code_pass1(output);
+        }
+    }
+
+    // Main codegen phase.
+    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
+        for (OutputBlock* b : bs) {
+            output.set_current_block(b);
             if (b->kind == InputBlock::USE) {
                 output.state_goto = false;
             }
-            for (Code* x = b->code->head; x != nullptr; x = x->next) {
-                if (x->kind == CodeKind::DFAS) {
-                    gen_code(output, x);
-                }
-            }
-            output.total_fill_index = b->fill_index;
+            gen_code_pass2(output);
         }
-        output.set_current_block(nullptr);
     }
+
+    output.set_current_block(nullptr);
 
     output.gen_epilog();
 

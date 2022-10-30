@@ -281,13 +281,16 @@ static void gen_block_code(Output& output, const Adfas& dfas, CodeList* program)
     append(program, code_block(alc, code, CodeBlock::Kind::WRAPPED));
 }
 
-void gen_code(Output& output, Code* code) {
-    OutputBlock& oblock = output.block();
-    Adfas& dfas = oblock.dfas;
+void gen_code_pass1(Output& output) {
+    OutputBlock& block = output.block();
+    Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;
-    const opt_t* opts = oblock.opts;
+    const opt_t* opts = block.opts;
 
-    if (dfas.empty()) {
+    Code* code = block.code->head;
+    if (code->kind != CodeKind::DFAS) {
+        return;
+    } else if (dfas.empty()) {
         code->kind = CodeKind::EMPTY;
         return;
     }
@@ -317,12 +320,12 @@ void gen_code(Output& output, Code* code) {
             if (first) {
                 if (opts->label_start_force) {
                     // User-enforced start label.
-                    oblock.start_label = new_label(alc, output.label_counter++);
-                    oblock.start_label->used = true;
+                    block.start_label = new_label(alc, output.label_counter++);
+                    block.start_label->used = true;
                 } else if (opts->storable_state) {
                     // Start label is needed in `-f` mode: it points to state 0 (the beginning of
                     // block, before condition dispatch in `-c` mode).
-                    oblock.start_label = new_label(alc, output.label_counter++);
+                    block.start_label = new_label(alc, output.label_counter++);
                 }
             }
             // Initial label points to the start of the DFA (after condition dispatch in `-c`).
@@ -347,22 +350,35 @@ void gen_code(Output& output, Code* code) {
             if (s->label->used) s->label->index = output.label_counter++;
         }
 
-        // With loop/switch storable states need their own cases in the state switch, as they have
-        // some logic on top of transition to the state that invoked YYFILL. Give them continuous
-        // indices after the last state index.
-        if (opts->loop_switch && opts->storable_state) {
-            oblock.fill_index = output.label_counter;
-        }
-
         if (!dfa->cond.empty()) {
             // If loop/switch is used, condition numbers are the numeric indices of their initial
             // DFA state. Otherwise we do not assign explicit numbers, and conditions are implicitly
             // assigned consecutive numbers starting from zero.
-            oblock.conds.push_back({dfa->cond, opts->loop_switch ? dfa->head->label->index : 0});
+            block.conds.push_back({dfa->cond, opts->loop_switch ? dfa->head->label->index : 0});
         }
     }
 
-    CodeList* program = code_list(alc);
+    // With loop/switch storable states need their own cases in the state switch, as they have
+    // some logic on top of transition to the state that invoked YYFILL. Give them continuous
+    // indices after the last state index.
+    if (opts->loop_switch && opts->storable_state) {
+        block.fill_index = output.label_counter;
+    }
+}
+
+void gen_code_pass2(Output& output) {
+    OutputBlock& block = output.block();
+    Adfas& dfas = block.dfas;
+    const opt_t* opts = block.opts;
+
+    Code* code = block.code->head;
+    if (code->kind != CodeKind::DFAS) return;
+
+    if (!opts->loop_switch || !opts->storable_state) {
+        block.fill_index = output.total_fill_index;
+    }
+
+    CodeList* program = code_list(output.allocator);
     if (opts->target == Target::DOT) {
         gen_block_dot(output, dfas, program);
     } else if (opts->target == Target::SKELETON) {
@@ -370,6 +386,8 @@ void gen_code(Output& output, Code* code) {
     } else {
         gen_block_code(output, dfas, program);
     }
+
+    output.total_fill_index = block.fill_index;
 
     code->kind = CodeKind::BLOCK;
     code->block.kind = CodeBlock::Kind::RAW;
