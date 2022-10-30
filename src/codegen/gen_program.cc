@@ -45,7 +45,7 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
     : kind(kind),
       name(name),
       loc(loc),
-      fragments(),
+      code(nullptr),
       used_yyaccept(false),
       have_user_code(false),
       conds(),
@@ -103,27 +103,23 @@ void Output::set_current_block(OutputBlock* block) {
     current_block = block;
 }
 
-void Output::wraw(const uint8_t* s, const uint8_t* e, bool newline) {
+void Output::gen_raw(const uint8_t* s, const uint8_t* e, bool newline) {
     if (s != e && block().opts->target == Target::CODE) {
         // scan for non-whitespace characters
         bool& code = block().have_user_code;
         for (const uint8_t* p = s; !code && p < e; ++p) {
             code = !isspace(*p);
         }
-        wdelay_stmt(0, code_raw(allocator, s, static_cast<size_t>(e - s)));
+        gen_stmt(code_raw(allocator, s, static_cast<size_t>(e - s)));
     }
     if (newline && e > s && e[-1] != '\n') {
         // Insert newline unless the block ends in a newline.
-        wdelay_stmt(0, code_newline(allocator));
+        gen_stmt(code_newline(allocator));
     }
 }
 
-void Output::wdelay_stmt(uint32_t ind, Code* stmt) {
-    block().fragments.push_back({stmt, ind});
-}
-
-void Output::wdelay_dfas(Code* code) {
-    block().fragments.push_back({code, block().opts->indent_top});
+void Output::gen_stmt(Code* stmt) {
+    append(block().code, stmt);
 }
 
 Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) {
@@ -155,6 +151,8 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     OutputBlock* block = new OutputBlock(kind, name, loc);
     pblocks->push_back(block);
 
+    block->code = code_list(allocator);
+
     CHECK_RET(opts.snapshot(&block->opts));
 
     // start label hapens to be the only option that must be reset for each new block
@@ -184,8 +182,8 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
     // (e.g. start label of a block that is specified in a `getstate:re2c` directive).
     for (const OutputBlock* b : blocks) {
         CodegenCtxPass1 gctx = {&globalctx, b};
-        for (const OutputFragment& f : b->fragments) {
-            CHECK_RET(expand_pass_1(gctx, f.code));
+        for (Code* x = b->code->head; x != nullptr; x = x->next) {
+            CHECK_RET(expand_pass_1(gctx, x));
         }
     }
 
@@ -208,14 +206,14 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
     for (const OutputBlock* b : blocks) {
         CodegenCtxPass2 gctx = {allocator, scratchbuf, b->opts};
 
-        for (const OutputFragment& f : b->fragments) {
+        for (Code* x = b->code->head; x != nullptr; x = x->next) {
             std::ostringstream os;
-            RenderContext rctx = {os, b->opts, msg, f.indent, filename.c_str(), line_count};
+            RenderContext rctx{os, b->opts, msg, b->opts->indent_top, filename.c_str(), line_count};
 
-            expand_pass_2(gctx, f.code);
-            remove_empty(gctx, f.code);
-            combine(gctx, f.code);
-            render(rctx, f.code);
+            expand_pass_2(gctx, x);
+            remove_empty(gctx, x);
+            combine(gctx, x);
+            render(rctx, x);
             write_converting_newlines(os.str(), file);
         }
     }
@@ -252,8 +250,8 @@ Ret Output::emit() {
         if (opts->start_conditions && this->cond_enum_autogen) {
             // Old-style -t, --type-headers usage implies condition enum.
             header_mode(true);
-            wdelay_stmt(0, code_newline(allocator));
-            wdelay_stmt(0, code_fmt(allocator, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
+            gen_stmt(code_newline(allocator));
+            gen_stmt(code_fmt(allocator, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
             header_mode(false);
         }
         ctx.pblocks = &hblocks;
@@ -279,7 +277,7 @@ void Output::gen_version_time() {
     }
     scratchbuf.cstr(opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
 
-    wdelay_stmt(0, code_textraw(allocator, scratchbuf.flush()));
+    gen_stmt(code_textraw(allocator, scratchbuf.flush()));
 }
 
 Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
@@ -290,10 +288,10 @@ Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
     header_mode(false);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
     gen_version_time();
-    wdelay_stmt(0, code_line_info_input(allocator, loc));
+    gen_stmt(code_line_info_input(allocator, loc));
 
     if (block().opts->target == Target::SKELETON) {
-        wdelay_stmt(0, emit_skeleton_prolog(*this));
+        gen_stmt(emit_skeleton_prolog(*this));
     }
 
     return Ret::OK;
@@ -310,7 +308,7 @@ void Output::gen_epilog() {
     }
 
     if (opts->target == Target::SKELETON) {
-        wdelay_stmt(0, emit_skeleton_epilog(*this));
+        gen_stmt(emit_skeleton_epilog(*this));
     }
 }
 

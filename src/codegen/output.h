@@ -86,11 +86,6 @@ struct RenderContext {
     uint32_t& line;
 };
 
-struct OutputFragment {
-    Code* code;
-    uint32_t indent;
-};
-
 struct StartCond {
     std::string name;
     uint32_t number;
@@ -103,7 +98,7 @@ struct OutputBlock {
     InputBlock kind;
     std::string name;
     const loc_t loc;
-    std::vector<OutputFragment> fragments;
+    CodeList* code;
     bool used_yyaccept;
     bool have_user_code;
     StartConds conds;
@@ -156,10 +151,9 @@ struct Output {
     Ret new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) NODISCARD;
     void header_mode(bool on);
     bool in_header() const;
-    void wraw(const uint8_t* s, const uint8_t* e, bool newline = false);
+    void gen_raw(const uint8_t* s, const uint8_t* e, bool newline = false);
     void gen_version_time();
-    void wdelay_stmt(uint32_t ind, Code* code);
-    void wdelay_dfas(Code* code); 
+    void gen_stmt(Code* stmt);
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     Ret emit() NODISCARD;

@@ -136,13 +136,13 @@ loop:
             // recognize `%{` as a block start only on a new line, possibly preceded by whitespaces.
             goto loop;
         }
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         block_name.clear();
         RET_BLOCK(InputBlock::GLOBAL);
     }
 
     "/*!re2c" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         if (block_name == "local") {
             RET_FAIL(error_at_cur("ill-formed local block, expected `local:re2c`"));
@@ -151,42 +151,42 @@ loop:
     }
 
     "/*!local:re2c" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::LOCAL);
     }
 
     "/*!rules:re2c" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::RULES);
     }
 
     "/*!use:re2c" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::USE);
     }
 
     "/*!max:re2c" {
-        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, DCONF_FORMAT));
         goto next;
     }
 
     "/*!maxnmatch:re2c" {
-        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, DCONF_FORMAT));
         goto next;
     }
 
     "/*!stags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::STAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::STAGS, allow));
         goto next;
     }
 
     "/*!mtags:re2c" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, allow));
         goto next;
     }
 
@@ -194,7 +194,7 @@ loop:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, allow));
         goto next;
     }
 
@@ -207,12 +207,12 @@ loop:
                     "`getstate:re2c` is incompatible with the --loop-switch option, as it requires"
                     " cross-block transitions that are unsupported without the `goto` statement"));
         }
-        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
+        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, 0));
         goto next;
     }
 
     "/*!header:re2c:on" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         out.header_mode(true);
         out.need_header = true;
         CHECK_RET(lex_block_end(out));
@@ -220,9 +220,9 @@ loop:
     }
 
     "/*!header:re2c:off" {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         out.header_mode(false);
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
@@ -233,10 +233,10 @@ loop:
     }
 
     "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         goto next;
     }
     "/*!include:re2c" {
@@ -245,7 +245,7 @@ loop:
     }
 
     "/*!ignore:re2c" / ws_or_eoc {
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
         CHECK_RET(lex_block_end(out, true));
         goto next;
@@ -258,15 +258,15 @@ loop:
 
     eof {
         if (is_eof()) {
-            out.wraw(tok, ptr);
+            out.gen_raw(tok, ptr);
             RET_BLOCK(InputBlock::END);
         }
         goto loop;
     }
 
     linedir / lineinf {
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_newline(alc));
+        out.gen_raw(tok, ptr);
+        out.gen_stmt(code_newline(alc));
         CHECK_RET(set_sourceline());
         goto next;
     }
@@ -338,7 +338,7 @@ loop: /*!local:re2c
     }
     eoc {
         if (multiline) {
-            out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
+            out.gen_stmt(code_line_info_input(out.allocator, cur_loc()));
         }
         return Ret::OK;
     }
@@ -347,13 +347,13 @@ loop: /*!local:re2c
 */
 }
 
-Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
+Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
     std::string s;
 
-    out.wraw(tok, ptr, globopts->line_dirs);
+    out.gen_raw(tok, ptr, globopts->line_dirs);
     CHECK_RET(lex_name_list(alc, &blocks));
 
 loop: /*!local:re2c
@@ -386,9 +386,9 @@ loop: /*!local:re2c
     eol { next_line(); goto loop; }
 
     eoc {
-        out.wdelay_stmt(0, code_line_info_output(alc));
-        out.wdelay_stmt(indent, code_fmt(alc, kind, blocks, fmt, sep));
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_output(alc));
+        out.gen_stmt(code_fmt(alc, kind, blocks, fmt, sep));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         return Ret::OK;
     }
 */

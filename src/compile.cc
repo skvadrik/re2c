@@ -153,25 +153,26 @@ Ret compile(Input& input, Output& output, Opt& opts) {
 
         // start new output block with accumulated options
         CHECK_RET(output.new_block(opts, kind, block_name, block_loc));
+        OutputBlock& b = output.block();
 
         if (kind == InputBlock::RULES) {
             // Save AST and options for future use.
-            ast.blocks.add(block_name, output.block().opts, grams);
+            ast.blocks.add(block_name, b.opts, grams);
         } else {
             // Convert AST to a DFA for each condition.
-            CHECK_RET(check_and_merge_special_rules(grams, output.block().opts, output.msg, ast));
+            CHECK_RET(check_and_merge_special_rules(grams, b.opts, output.msg, ast));
             for (const AstGram& gram : grams) {
-                CHECK_RET(ast_to_dfa(gram, output, output.block().dfas, dfa_alc));
+                CHECK_RET(ast_to_dfa(gram, output, b.dfas, dfa_alc));
             }
-            output.wdelay_dfas(code_dfas(output.allocator));
+            output.gen_stmt(code_dfas(output.allocator));
         }
-        output.wdelay_stmt(0, code_line_info_input(output.allocator, input.cur_loc()));
+        output.gen_stmt(code_line_info_input(output.allocator, input.cur_loc()));
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.
         // Historically global is the default.
         if (kind == InputBlock::GLOBAL) {
-            accum_opts = output.block().opts;
+            accum_opts = b.opts;
         } else {
             CHECK_RET(opts.restore(accum_opts));
         }
@@ -187,9 +188,9 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             if (b->kind == InputBlock::USE) {
                 output.state_goto = false;
             }
-            for (OutputFragment& f : b->fragments) {
-                if (f.code->kind == CodeKind::DFAS) {
-                    gen_code(output, f.code);
+            for (Code* x = b->code->head; x != nullptr; x = x->next) {
+                if (x->kind == CodeKind::DFAS) {
+                    gen_code(output, x);
                 }
             }
             output.total_fill_index = b->fill_index;

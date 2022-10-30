@@ -110,7 +110,7 @@ yy1:
 #line 259 "../src/parse/lex.re"
 	{
         if (is_eof()) {
-            out.wraw(tok, ptr);
+            out.gen_raw(tok, ptr);
             RET_BLOCK(InputBlock::END);
         }
         goto loop;
@@ -223,7 +223,7 @@ yy15:
             // recognize `%{` as a block start only on a new line, possibly preceded by whitespaces.
             goto loop;
         }
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         block_name.clear();
         RET_BLOCK(InputBlock::GLOBAL);
     }
@@ -469,7 +469,7 @@ yy69:
 	++cur;
 #line 144 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         if (block_name == "local") {
             RET_FAIL(error_at_cur("ill-formed local block, expected `local:re2c`"));
@@ -579,8 +579,8 @@ yy89:
 	cur = yyt1;
 #line 267 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
-        out.wdelay_stmt(0, code_newline(alc));
+        out.gen_raw(tok, ptr);
+        out.gen_stmt(code_newline(alc));
         CHECK_RET(set_sourceline());
         goto next;
     }
@@ -743,7 +743,7 @@ yy126:
 	++cur;
 #line 171 "../src/parse/lex.re"
 	{
-        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, DCONF_FORMAT));
         goto next;
     }
 #line 750 "src/parse/lex.cc"
@@ -771,7 +771,7 @@ yy132:
 	++cur;
 #line 165 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::USE);
     }
@@ -836,7 +836,7 @@ yy147:
 	++cur;
 #line 153 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::LOCAL);
     }
@@ -850,7 +850,7 @@ yy149:
 #line 187 "../src/parse/lex.re"
 	{
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::MTAGS, allow));
         goto next;
     }
 #line 857 "src/parse/lex.cc"
@@ -858,7 +858,7 @@ yy150:
 	++cur;
 #line 159 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::RULES);
     }
@@ -868,7 +868,7 @@ yy151:
 #line 181 "../src/parse/lex.re"
 	{
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::STAGS, 0, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::STAGS, allow));
         goto next;
     }
 #line 875 "src/parse/lex.cc"
@@ -879,7 +879,7 @@ yy152:
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
-        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, opts->indent_top, allow));
+        CHECK_RET(lex_special_block(out, CodeKind::COND_ENUM, allow));
         goto next;
     }
 #line 886 "src/parse/lex.cc"
@@ -954,7 +954,7 @@ yy162:
 	cur = yyt1;
 #line 247 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
         CHECK_RET(lex_block_end(out, true));
         goto next;
@@ -992,7 +992,7 @@ yy167:
                     "`getstate:re2c` is incompatible with the --loop-switch option, as it requires"
                     " cross-block transitions that are unsupported without the `goto` statement"));
         }
-        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, opts->indent_top, 0));
+        CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, 0));
         goto next;
     }
 #line 999 "src/parse/lex.cc"
@@ -1028,7 +1028,7 @@ yy172:
 	++cur;
 #line 214 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         out.header_mode(true);
         out.need_header = true;
         CHECK_RET(lex_block_end(out));
@@ -1052,7 +1052,7 @@ yy174:
 	++cur;
 #line 176 "../src/parse/lex.re"
 	{
-        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, 0, DCONF_FORMAT));
+        CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, DCONF_FORMAT));
         goto next;
     }
 #line 1059 "src/parse/lex.cc"
@@ -1060,9 +1060,9 @@ yy175:
 	++cur;
 #line 222 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         out.header_mode(false);
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
@@ -1105,10 +1105,10 @@ yy178:
 	cur = yyt2;
 #line 235 "../src/parse/lex.re"
 	{
-        out.wraw(tok, ptr);
+        out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         goto next;
     }
 #line 1115 "src/parse/lex.cc"
@@ -1479,7 +1479,7 @@ yy202:
 #line 339 "../src/parse/lex.re"
 	{
         if (multiline) {
-            out.wdelay_stmt(0, code_line_info_input(out.allocator, cur_loc()));
+            out.gen_stmt(code_line_info_input(out.allocator, cur_loc()));
         }
         return Ret::OK;
     }
@@ -1489,13 +1489,13 @@ yy202:
 
 }
 
-Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t indent, uint32_t mask) {
+Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
     std::string s;
 
-    out.wraw(tok, ptr, globopts->line_dirs);
+    out.gen_raw(tok, ptr, globopts->line_dirs);
     CHECK_RET(lex_name_list(alc, &blocks));
 
 loop: 
@@ -1599,9 +1599,9 @@ yy211:
 	++cur;
 #line 388 "../src/parse/lex.re"
 	{
-        out.wdelay_stmt(0, code_line_info_output(alc));
-        out.wdelay_stmt(indent, code_fmt(alc, kind, blocks, fmt, sep));
-        out.wdelay_stmt(0, code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_output(alc));
+        out.gen_stmt(code_fmt(alc, kind, blocks, fmt, sep));
+        out.gen_stmt(code_line_info_input(alc, cur_loc()));
         return Ret::OK;
     }
 #line 1608 "src/parse/lex.cc"
