@@ -440,6 +440,10 @@ inline Code* code_backup(OutAllocator& alc) {
     return new_code(alc, CodeKind::BACKUP);
 }
 
+inline Code* code_dfas(OutAllocator& alc) {
+    return new_code(alc, CodeKind::DFAS);
+}
+
 inline Code* code_block(OutAllocator& alc, CodeList* stmts, CodeBlock::Kind kind) {
     Code* x = new_code(alc, CodeKind::BLOCK);
     x->block.kind = kind;

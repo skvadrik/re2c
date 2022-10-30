@@ -730,6 +730,7 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LABEL:
+    case CodeKind::DFAS:
         UNREACHABLE(); // must have been expanded before
     }
 }

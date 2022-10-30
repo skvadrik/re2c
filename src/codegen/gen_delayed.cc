@@ -668,6 +668,7 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK:
     case CodeKind::VAR:
     case CodeKind::ABORT:
+    case CodeKind::DFAS:
         break;
     }
     return Ret::OK;
@@ -747,6 +748,7 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK:
     case CodeKind::VAR:
     case CodeKind::ABORT:
+    case CodeKind::DFAS:
         break;
     }
 }

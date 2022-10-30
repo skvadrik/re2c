@@ -281,12 +281,17 @@ static void gen_block_code(Output& output, const Adfas& dfas, CodeList* program)
     append(program, code_block(alc, code, CodeBlock::Kind::WRAPPED));
 }
 
-void gen_code(Output& output, Adfas& dfas) {
+void gen_code(Output& output, Code* code) {
     OutputBlock& oblock = output.block();
+    Adfas& dfas = oblock.dfas;
     OutAllocator& alc = output.allocator;
     const opt_t* opts = oblock.opts;
 
-    if (dfas.empty()) return;
+    if (dfas.empty()) {
+        code->kind = CodeKind::EMPTY;
+        return;
+    }
+
     const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
 
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
@@ -367,7 +372,10 @@ void gen_code(Output& output, Adfas& dfas) {
     } else {
         gen_block_code(output, dfas, program);
     }
-    output.wdelay_stmt(opts->indent_top, code_block(alc, program, CodeBlock::Kind::RAW));
+
+    code->kind = CodeKind::BLOCK;
+    code->block.kind = CodeBlock::Kind::RAW;
+    code->block.stmts = program;
 }
 
 std::string vartag_name(

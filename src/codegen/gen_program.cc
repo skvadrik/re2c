@@ -4,6 +4,7 @@
 #include <iomanip>
 
 #include "config.h"
+#include "src/adfa/adfa.h"
 #include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
 #include "src/encoding/enc.h"
@@ -51,6 +52,7 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       stags(),
       mtags(),
       opts(nullptr),
+      dfas(),
       max_fill(1),
       max_nmatch(1),
       start_label(nullptr),
@@ -76,6 +78,7 @@ Output::Output(Msg& msg)
       skeletons(),
       allocator(),
       scratchbuf(allocator),
+      current_block(nullptr),
       total_fill_index(0),
       total_opts(nullptr) {}
 
@@ -93,7 +96,11 @@ bool Output::in_header() const {
 }
 
 OutputBlock& Output::block() {
-    return *pblocks->back();
+    return current_block == nullptr ? *pblocks->back() : *current_block;
+}
+
+void Output::set_current_block(OutputBlock* block) {
+    current_block = block;
 }
 
 void Output::wraw(const uint8_t* s, const uint8_t* e, bool newline) {
@@ -113,6 +120,10 @@ void Output::wraw(const uint8_t* s, const uint8_t* e, bool newline) {
 
 void Output::wdelay_stmt(uint32_t ind, Code* stmt) {
     block().fragments.push_back({stmt, ind});
+}
+
+void Output::wdelay_dfas(Code* code) {
+    block().fragments.push_back({code, block().opts->indent_top});
 }
 
 Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) {
@@ -146,18 +157,10 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
 
     CHECK_RET(opts.snapshot(&block->opts));
 
-    block->fill_index = total_fill_index;
-
     // start label hapens to be the only option that must be reset for each new block
     opts.reset_group_label_start();
 
     return Ret::OK;
-}
-
-void Output::gather_info_from_block() {
-    DCHECK(!pblocks->empty());
-    const OutputBlock* b = pblocks->back();
-    total_fill_index = b->fill_index;
 }
 
 static void fix_first_block_opts(const blocks_t& blocks) {

@@ -128,6 +128,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     Ast ast;
     std::string block_name;
     loc_t block_loc;
+    DfaAllocator dfa_alc;
 
     CHECK_RET(output.gen_prolog(opts, input.tok_loc()));
 
@@ -146,7 +147,6 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             if (b == nullptr) return Ret::FAIL;
             grams = b->grams;
             CHECK_RET(opts.restore(b->opts));
-            output.state_goto = false;
         }
         block_loc = input.tok_loc();
         CHECK_RET(parse(input, ast, opts, grams));
@@ -155,25 +155,17 @@ Ret compile(Input& input, Output& output, Opt& opts) {
         CHECK_RET(output.new_block(opts, kind, block_name, block_loc));
 
         if (kind == InputBlock::RULES) {
-            // save AST and options for future use
+            // Save AST and options for future use.
             ast.blocks.add(block_name, output.block().opts, grams);
         } else {
+            // Convert AST to a DFA for each condition.
             CHECK_RET(check_and_merge_special_rules(grams, output.block().opts, output.msg, ast));
-
-            // compile AST to DFA
-            DfaAllocator dfa_alc;
-            Adfas dfas;
             for (const AstGram& gram : grams) {
-                CHECK_RET(ast_to_dfa(gram, output, dfas, dfa_alc));
+                CHECK_RET(ast_to_dfa(gram, output, output.block().dfas, dfa_alc));
             }
-
-            // compile DFA to code
-            gen_code(output, dfas);
+            output.wdelay_dfas(code_dfas(output.allocator));
         }
         output.wdelay_stmt(0, code_line_info_input(output.allocator, input.cur_loc()));
-
-        // accumulate whole-program information from this block
-        output.gather_info_from_block();
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.
@@ -186,6 +178,24 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     }
 
     output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
+
+    // Early codegen phase.
+    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
+        for (OutputBlock* b : bs) {
+            output.set_current_block(b);
+            b->fill_index = output.total_fill_index;
+            if (b->kind == InputBlock::USE) {
+                output.state_goto = false;
+            }
+            for (OutputFragment& f : b->fragments) {
+                if (f.code->kind == CodeKind::DFAS) {
+                    gen_code(output, f.code);
+                }
+            }
+            output.total_fill_index = b->fill_index;
+        }
+        output.set_current_block(nullptr);
+    }
 
     output.gen_epilog();
 

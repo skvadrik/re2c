@@ -96,6 +96,7 @@ enum class CodeKind: uint32_t {
     TEXT,
     TEXT_RAW,
     RAW,
+    DFAS,
     LABEL,
     ABORT
 };

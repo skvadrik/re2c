@@ -67,6 +67,7 @@ void remove_empty(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK:
     case CodeKind::VAR:
     case CodeKind::ABORT:
+    case CodeKind::DFAS:
         break;
     }
 }

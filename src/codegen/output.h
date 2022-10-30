@@ -110,6 +110,7 @@ struct OutputBlock {
     tagnames_t stags;
     tagnames_t mtags;
     const opt_t* opts;
+    Adfas dfas;
 
     size_t max_fill;   // YYMAXFILL
     size_t max_nmatch; // YYMAXNMATCH
@@ -139,6 +140,7 @@ struct Output {
     std::set<std::string> skeletons;
     OutAllocator allocator;
     Scratchbuf scratchbuf;
+    OutputBlock* current_block;
 
     // YYFILL state index accumulated for all non-reuse blocks
     uint32_t total_fill_index;
@@ -149,14 +151,15 @@ struct Output {
     explicit Output(Msg& msg);
     ~Output();
     OutputBlock& block();
+    void set_current_block(OutputBlock* block);
     bool open();
     Ret new_block(Opt& opts, InputBlock kind, std::string name, const loc_t& loc) NODISCARD;
-    void gather_info_from_block();
     void header_mode(bool on);
     bool in_header() const;
     void wraw(const uint8_t* s, const uint8_t* e, bool newline = false);
     void gen_version_time();
     void wdelay_stmt(uint32_t ind, Code* code);
+    void wdelay_dfas(Code* code); 
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     Ret emit() NODISCARD;
@@ -179,7 +182,7 @@ void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmt
 void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid);
 void gen_goto(
         Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
-void gen_code(Output& output, Adfas& dfas);
+void gen_code(Output& output, Code* code);
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
