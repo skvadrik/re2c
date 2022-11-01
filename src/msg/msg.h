@@ -1,6 +1,7 @@
 #ifndef _RE2C_MSG_MSG_
 #define _RE2C_MSG_MSG_
 
+#include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <string>
