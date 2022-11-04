@@ -14,51 +14,70 @@ Sc:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x00000E3E) {
-		if (yych <= 0x0000060B) {
-			if (yych <= 0x000000A5) {
-				if (yych == '$') goto yy2;
-				if (yych >= 0x000000A2) goto yy2;
+	if (yych <= 0x000017DA) {
+		if (yych <= 0x000007FF) {
+			if (yych <= 0x0000058E) {
+				if (yych <= '$') {
+					if (yych >= '$') goto yy2;
+				} else {
+					if (yych <= 0x000000A1) goto yy1;
+					if (yych <= 0x000000A5) goto yy2;
+				}
 			} else {
-				if (yych == 0x0000058F) goto yy2;
-				if (yych >= 0x0000060B) goto yy2;
+				if (yych <= 0x0000060A) {
+					if (yych <= 0x0000058F) goto yy2;
+				} else {
+					if (yych <= 0x0000060B) goto yy2;
+					if (yych >= 0x000007FE) goto yy2;
+				}
 			}
 		} else {
-			if (yych <= 0x000009FB) {
-				if (yych <= 0x000009F1) goto yy1;
-				if (yych <= 0x000009F3) goto yy2;
-				if (yych >= 0x000009FB) goto yy2;
-			} else {
-				if (yych <= 0x00000AF1) {
-					if (yych >= 0x00000AF1) goto yy2;
+			if (yych <= 0x00000AF0) {
+				if (yych <= 0x000009F3) {
+					if (yych >= 0x000009F2) goto yy2;
 				} else {
-					if (yych == 0x00000BF9) goto yy2;
+					if (yych == 0x000009FB) goto yy2;
+				}
+			} else {
+				if (yych <= 0x00000BF9) {
+					if (yych <= 0x00000AF1) goto yy2;
+					if (yych >= 0x00000BF9) goto yy2;
+				} else {
+					if (yych == 0x00000E3F) goto yy2;
 				}
 			}
 		}
 	} else {
-		if (yych <= 0x0000FDFC) {
-			if (yych <= 0x0000209F) {
-				if (yych <= 0x00000E3F) goto yy2;
-				if (yych == 0x000017DB) goto yy2;
-			} else {
-				if (yych <= 0x0000A837) {
-					if (yych <= 0x000020BD) goto yy2;
+		if (yych <= 0x0000FF04) {
+			if (yych <= 0x0000A838) {
+				if (yych <= 0x0000209F) {
+					if (yych <= 0x000017DB) goto yy2;
 				} else {
-					if (yych <= 0x0000A838) goto yy2;
-					if (yych >= 0x0000FDFC) goto yy2;
+					if (yych <= 0x000020BF) goto yy2;
+					if (yych >= 0x0000A838) goto yy2;
+				}
+			} else {
+				if (yych <= 0x0000FE68) {
+					if (yych == 0x0000FDFC) goto yy2;
+				} else {
+					if (yych <= 0x0000FE69) goto yy2;
+					if (yych >= 0x0000FF04) goto yy2;
 				}
 			}
 		} else {
-			if (yych <= 0x0000FF04) {
-				if (yych == 0x0000FE69) goto yy2;
-				if (yych >= 0x0000FF04) goto yy2;
-			} else {
+			if (yych <= 0x00011FDC) {
 				if (yych <= 0x0000FFE1) {
 					if (yych >= 0x0000FFE0) goto yy2;
 				} else {
 					if (yych <= 0x0000FFE4) goto yy1;
 					if (yych <= 0x0000FFE6) goto yy2;
+				}
+			} else {
+				if (yych <= 0x0001E2FF) {
+					if (yych <= 0x00011FE0) goto yy2;
+					if (yych >= 0x0001E2FF) goto yy2;
+				} else {
+					if (yych == 0x0001ECB0) goto yy2;
 				}
 			}
 		}
@@ -67,17 +86,17 @@ yy1:
 	++YYCURSOR;
 #line 14 "encodings/unicode_group_Sc_u_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
-#line 71 "encodings/unicode_group_Sc_u_encoding_policy_fail.c"
+#line 90 "encodings/unicode_group_Sc_u_encoding_policy_fail.c"
 yy2:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sc_u_encoding_policy_fail.re"
 	{ goto Sc; }
-#line 76 "encodings/unicode_group_Sc_u_encoding_policy_fail.c"
+#line 95 "encodings/unicode_group_Sc_u_encoding_policy_fail.c"
 }
 #line 15 "encodings/unicode_group_Sc_u_encoding_policy_fail.re"
 
 }
-static const unsigned int chars_Sc [] = {0x24,0x24,  0xa2,0xa5,  0x58f,0x58f,  0x60b,0x60b,  0x9f2,0x9f3,  0x9fb,0x9fb,  0xaf1,0xaf1,  0xbf9,0xbf9,  0xe3f,0xe3f,  0x17db,0x17db,  0x20a0,0x20bd,  0xa838,0xa838,  0xfdfc,0xfdfc,  0xfe69,0xfe69,  0xff04,0xff04,  0xffe0,0xffe1,  0xffe5,0xffe6,  0x0,0x0};
+static const unsigned int chars_Sc [] = {0x24,0x24,  0xa2,0xa5,  0x58f,0x58f,  0x60b,0x60b,  0x7fe,0x7ff,  0x9f2,0x9f3,  0x9fb,0x9fb,  0xaf1,0xaf1,  0xbf9,0xbf9,  0xe3f,0xe3f,  0x17db,0x17db,  0x20a0,0x20bf,  0xa838,0xa838,  0xfdfc,0xfdfc,  0xfe69,0xfe69,  0xff04,0xff04,  0xffe0,0xffe1,  0xffe5,0xffe6,  0x11fdd,0x11fe0,  0x1e2ff,0x1e2ff,  0x1ecb0,0x1ecb0,  0x0,0x0};
 static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -89,7 +108,7 @@ static unsigned int encode_utf32 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	unsigned int * buffer_Sc = new unsigned int [53];
+	unsigned int * buffer_Sc = new unsigned int [63];
 	YYCTYPE * s = (YYCTYPE *) buffer_Sc;
 	unsigned int buffer_len = encode_utf32 (chars_Sc, sizeof (chars_Sc) / sizeof (unsigned int), buffer_Sc);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
