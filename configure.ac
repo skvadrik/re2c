@@ -13,6 +13,7 @@ AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE_TARNAME)
 AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 
+AM_PATH_PYTHON([3.7])
 
 # without this, --std=c++98 disables POSIX functions on Cygwin
 AC_USE_SYSTEM_EXTENSIONS
@@ -28,9 +29,8 @@ AM_CONDITIONAL([DEBUG], [test "x$enable_debug" = "xyes"])
 AC_ARG_ENABLE([docs], [AS_HELP_STRING([--enable-docs], [regenerate manpage])])
 AM_CONDITIONAL([REBUILD_DOCS], [test "x$enable_docs" = "xyes"])
 AM_COND_IF([REBUILD_DOCS], [
-    AC_CHECK_PROGS(RST2MAN, [rst2man rst2man.py], no)
-    AS_IF([test "x$RST2MAN" = "xno"], [
-        AC_MSG_ERROR([need rst2man or rst2man.py for --enable-docs])
+        AS_IF([$PYTHON -c "import docutils"], [], [
+           AC_MSG_ERROR([need docutils (python3 module) for --enable-docs])
     ])
 ])
 
@@ -100,7 +100,6 @@ AM_CONDITIONAL([REGEN_BENCHMARKS],
 
 
 # checks for programs
-AM_PATH_PYTHON([3.7])
 AC_PROG_CC # used in skeleton tests
 AC_PROG_CXX
 AC_PROG_INSTALL

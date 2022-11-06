@@ -380,36 +380,35 @@ bootstrap: all
 .PHONY: docs
 if REBUILD_DOCS
 docs: $(DOCS) $(re2c_GEN_HELP)
-GENHELP = $(top_srcdir)/build/gen_help.sh
-SPLITMAN = $(top_srcdir)/build/split_man.sh
+RST2TXT = $(top_srcdir)/build/rst2txt.py
+RST2MAN = $(top_srcdir)/build/rst2man.py
+SPLITMAN = $(top_srcdir)/build/split_man.py
 # generate manpage for C
-$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
+$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).c c \
-		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).c c \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_C) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).c
 # generate manpage for Go
-$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
+$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).go go \
-		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).go go \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_GO) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).go
 # generate manpage for Rust
-$(DOC_RUST): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN)
+$(DOC_RUST): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).rust rust \
-		&& $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).rust > $@ \
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).rust rust \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).rust > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_RUST) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).rust
 # generate help
-$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(GENHELP)
+$(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(RST2TXT)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(RST2MAN) $(top_builddir)/$(re2c_CUSTOM_HELP) > $@.1 \
-		&& $(GENHELP) $@.1 $@ \
-		&& cp $@ $(top_srcdir)/$(re2c_BOOT_HELP) \
-		&& rm $@.1
+	$(AM_V_GEN)$(PYTHON) $(RST2TXT) --variable-name=help $(top_builddir)/$(re2c_CUSTOM_HELP) $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_HELP)
 else
 docs: $(DOCS) $(re2c_GEN_HELP)
 	$(AM_V_at)echo "Reconfigure with --enable-docs to rebuild docs"
@@ -437,13 +436,13 @@ all-local: docs $(re2c_BOOT_PARSER)
 re2c_TESTSUITE = run_tests.py
 .PHONY: tests
 tests: all $(re2c_TESTSUITE)
-	$(top_builddir)/$(re2c_TESTSUITE)
+	$(PYTHON) $(top_builddir)/$(re2c_TESTSUITE)
 .PHONY: vtests
 vtests: all $(re2c_TESTSUITE)
-	$(top_builddir)/$(re2c_TESTSUITE) --valgrind
+	$(PYTHON) $(top_builddir)/$(re2c_TESTSUITE) --valgrind
 .PHONY: wtests
 wtests: all $(re2c_TESTSUITE)
-	$(top_builddir)/$(re2c_TESTSUITE) --wine -j1
+	$(PYTHON) $(top_builddir)/$(re2c_TESTSUITE) --wine -j1
 
 re2c_test_range_SOURCES = \
 	src/test/range/test-impl.h \
