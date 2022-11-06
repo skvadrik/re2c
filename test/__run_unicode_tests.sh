@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [[ $# -ne 2 ]]; then
-    echo "usage: ./unicode_groups.sh SRCDIR BLDDIR"
+    echo "usage: $0 SRCDIR BLDDIR"
     exit 1
 fi
 
@@ -27,10 +27,13 @@ for fre in encodings/unicode_{blocks,group_*}_{8,x,u}_encoding_policy_{ignore,su
     g++ -W -Wall -Wextra \
         -I $srcdir \
         -I $blddir \
-        -I $srcdir/src/encoding/utf8 \
-        -I $srcdir/src/encoding/utf16 \
-        $srcdir/src/encoding/utf8/utf8.cc \
-        $srcdir/src/encoding/utf16/utf16.cc \
+        -I $srcdir/src/encoding \
+        -I $srcdir/src/encoding \
+        $srcdir/src/encoding/range_suffix.cc \
+        $srcdir/src/encoding/utf8.cc \
+        $srcdir/src/encoding/utf16.cc \
+        $srcdir/src/regexp/regexp.cc \
+        $srcdir/src/util/range.cc \
         $fc \
         -o $fe
 

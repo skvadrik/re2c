@@ -14,100 +14,106 @@ Sk:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x1FBD) {
+	if (yych <= 0x1FBE) {
 		if (yych <= 0x02C5) {
 			if (yych <= 0x00AE) {
 				if (yych <= '_') {
-					if (yych == '^') goto yy2;
+					if (yych == '^') goto yy3;
 				} else {
-					if (yych <= '`') goto yy2;
-					if (yych == 0x00A8) goto yy2;
+					if (yych <= '`') goto yy3;
+					if (yych == 0x00A8) goto yy3;
 				}
 			} else {
 				if (yych <= 0x00B4) {
-					if (yych <= 0x00AF) goto yy2;
-					if (yych >= 0x00B4) goto yy2;
+					if (yych <= 0x00AF) goto yy3;
+					if (yych >= 0x00B4) goto yy3;
 				} else {
-					if (yych == 0x00B8) goto yy2;
-					if (yych >= 0x02C2) goto yy2;
+					if (yych == 0x00B8) goto yy3;
+					if (yych >= 0x02C2) goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0x02EE) {
 				if (yych <= 0x02E4) {
 					if (yych <= 0x02D1) goto yy1;
-					if (yych <= 0x02DF) goto yy2;
+					if (yych <= 0x02DF) goto yy3;
 				} else {
 					if (yych == 0x02EC) goto yy1;
-					if (yych <= 0x02ED) goto yy2;
+					if (yych <= 0x02ED) goto yy3;
 				}
 			} else {
-				if (yych <= 0x0375) {
-					if (yych <= 0x02FF) goto yy2;
-					if (yych >= 0x0375) goto yy2;
+				if (yych <= 0x0383) {
+					if (yych <= 0x02FF) goto yy3;
+					if (yych == 0x0375) goto yy3;
 				} else {
-					if (yych <= 0x0383) goto yy1;
-					if (yych <= 0x0385) goto yy2;
-					if (yych >= 0x1FBD) goto yy2;
+					if (yych <= 0x0385) goto yy3;
+					if (yych == 0x1FBD) goto yy3;
 				}
 			}
 		}
 	} else {
-		if (yych <= 0xA716) {
-			if (yych <= 0x1FEC) {
-				if (yych <= 0x1FCC) {
-					if (yych <= 0x1FBE) goto yy1;
-					if (yych <= 0x1FC1) goto yy2;
+		if (yych <= 0xA721) {
+			if (yych <= 0x1FEF) {
+				if (yych <= 0x1FCF) {
+					if (yych <= 0x1FC1) goto yy3;
+					if (yych >= 0x1FCD) goto yy3;
 				} else {
-					if (yych <= 0x1FCF) goto yy2;
 					if (yych <= 0x1FDC) goto yy1;
-					if (yych <= 0x1FDF) goto yy2;
+					if (yych <= 0x1FDF) goto yy3;
+					if (yych >= 0x1FED) goto yy3;
 				}
 			} else {
-				if (yych <= 0x1FFE) {
-					if (yych <= 0x1FEF) goto yy2;
-					if (yych >= 0x1FFD) goto yy2;
+				if (yych <= 0x309C) {
+					if (yych <= 0x1FFC) goto yy1;
+					if (yych <= 0x1FFE) goto yy3;
+					if (yych >= 0x309B) goto yy3;
 				} else {
-					if (yych <= 0x309A) goto yy1;
-					if (yych <= 0x309C) goto yy2;
-					if (yych >= 0xA700) goto yy2;
+					if (yych <= 0xA6FF) goto yy1;
+					if (yych <= 0xA716) goto yy3;
+					if (yych >= 0xA720) goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xFBB1) {
-				if (yych <= 0xA788) {
-					if (yych <= 0xA71F) goto yy1;
-					if (yych <= 0xA721) goto yy2;
+				if (yych <= 0xAB5A) {
+					if (yych <= 0xA788) goto yy1;
+					if (yych <= 0xA78A) goto yy3;
 				} else {
-					if (yych <= 0xA78A) goto yy2;
-					if (yych == 0xAB5B) goto yy2;
+					if (yych <= 0xAB5B) goto yy3;
+					if (yych == 0xD83C) goto yy4;
 				}
 			} else {
 				if (yych <= 0xFF3F) {
-					if (yych <= 0xFBC1) goto yy2;
-					if (yych == 0xFF3E) goto yy2;
+					if (yych <= 0xFBC1) goto yy3;
+					if (yych == 0xFF3E) goto yy3;
 				} else {
-					if (yych <= 0xFF40) goto yy2;
-					if (yych == 0xFFE3) goto yy2;
+					if (yych <= 0xFF40) goto yy3;
+					if (yych == 0xFFE3) goto yy3;
 				}
 			}
 		}
 	}
 yy1:
 	++YYCURSOR;
+yy2:
 #line 14 "encodings/unicode_group_Sk_x_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
-#line 101 "encodings/unicode_group_Sk_x_encoding_policy_fail.c"
-yy2:
+#line 102 "encodings/unicode_group_Sk_x_encoding_policy_fail.c"
+yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sk_x_encoding_policy_fail.re"
 	{ goto Sk; }
-#line 106 "encodings/unicode_group_Sk_x_encoding_policy_fail.c"
+#line 107 "encodings/unicode_group_Sk_x_encoding_policy_fail.c"
+yy4:
+	yych = *++YYCURSOR;
+	if (yych <= 0xDFFA) goto yy2;
+	if (yych <= 0xDFFF) goto yy3;
+	goto yy2;
 }
 #line 15 "encodings/unicode_group_Sk_x_encoding_policy_fail.re"
 
 }
-static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xab5b,0xab5b,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x0,0x0};
+static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xab5b,0xab5b,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x1f3fb,0x1f3ff,  0x0,0x0};
 static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -127,7 +133,7 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	unsigned int * buffer_Sk = new unsigned int [234];
+	unsigned int * buffer_Sk = new unsigned int [244];
 	YYCTYPE * s = (YYCTYPE *) buffer_Sk;
 	unsigned int buffer_len = encode_utf16 (chars_Sk, sizeof (chars_Sk) / sizeof (unsigned int), buffer_Sk);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
