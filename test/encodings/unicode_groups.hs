@@ -28,6 +28,7 @@ import           Data.CharSet.Unicode.Category       (Category(..), categories)
 import           Data.CharSet.Unicode.Block          (Block(..), blocks)
 import qualified Data.IntSet                   as IS (foldl')
 import qualified Data.List                     as L  (foldl', intercalate)
+import           Data.Sort                           (sortBy)
 import           Text.Printf                         (printf)
 
 
@@ -141,7 +142,8 @@ gen_categories cats =
                 (charset', _) = show_charset charset
             in name' ++ " = " ++ charset' ++ ";"
 
-        content = unlines $ ["/*!re2c"] ++ (map f cats) ++ ["*/"]
+        less (Category _ x _ _) (Category _ y _ _) = compare x y
+        content = unlines $ ["/*!re2c"] ++ (map f . sortBy less) cats ++ ["*/"]
 
     in  writeFile "unicode_categories.re.inc" content
 
