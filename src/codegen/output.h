@@ -112,8 +112,6 @@ struct OutputBlock {
 
     // Used in the state switch (with `-f --storable-state` option).
     Label* start_label;          // start label of this block
-    uint32_t fill_index;         // next free index in YYFILL state enumeration
-    uint32_t fill_state;         // index of the most recent YYFILL state
     storable_states_t fill_goto; // transitions to YYFILL states
 
     OutputBlock(InputBlock kind, const std::string& name, const loc_t& loc);
@@ -126,6 +124,7 @@ struct Output {
     blocks_t hblocks;  // .h file
     blocks_t* pblocks; // selector
     uint32_t label_counter;
+    uint32_t fill_label_counter;
     bool state_goto;
     bool cond_enum_autogen; // true unless an explicit `types:re2c` directive is used
     bool warn_condition_order;
@@ -136,9 +135,6 @@ struct Output {
     OutAllocator allocator;
     Scratchbuf scratchbuf;
     OutputBlock* current_block;
-
-    // YYFILL state index accumulated for all non-reuse blocks
-    uint32_t total_fill_index;
 
     // "final" options accumulated for all non-reuse blocks
     const opt_t* total_opts;
@@ -188,6 +184,7 @@ void remove_empty(CodegenCtxPass2& ctx, Code* code);
 void combine(CodegenCtxPass2& ctx, Code* code);
 void render(RenderContext& rctx, const Code* code);
 
+bool endstate(const State* s);
 bool consume(const State* s);
 void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
 std::string vartag_name(

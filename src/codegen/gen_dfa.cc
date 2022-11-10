@@ -356,11 +356,15 @@ void gen_code_pass1(Output& output) {
         }
     }
 
-    // With loop/switch storable states need their own cases in the state switch, as they have
-    // some logic on top of transition to the state that invoked YYFILL. Give them continuous
-    // indices after the last state index.
-    if (opts->loop_switch && opts->storable_state) {
-        block.fill_index = output.label_counter;
+    // In loop/switch mode storable states occupy continuous index range after the last state index.
+    // In goto/label mode they use separate global enumeration that starts from zero.
+    uint32_t& counter = opts->loop_switch ? output.label_counter : output.fill_label_counter;
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        for (State* s = dfa->head; s; s = s->next) {
+            if (s->fill_state == s) {
+                s->fill_label = new_label(alc, counter++);
+            }
+        }
     }
 }
 
@@ -372,10 +376,6 @@ void gen_code_pass2(Output& output) {
     Code* code = block.code->head;
     if (code->kind != CodeKind::DFAS) return;
 
-    if (!opts->loop_switch || !opts->storable_state) {
-        block.fill_index = output.total_fill_index;
-    }
-
     CodeList* program = code_list(output.allocator);
     if (opts->target == Target::DOT) {
         gen_block_dot(output, dfas, program);
@@ -384,8 +384,6 @@ void gen_code_pass2(Output& output) {
     } else {
         gen_block_code(output, dfas, program);
     }
-
-    output.total_fill_index = block.fill_index;
 
     code->kind = CodeKind::BLOCK;
     code->block.kind = CodeBlock::Kind::RAW;

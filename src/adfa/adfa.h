@@ -59,13 +59,17 @@ struct State {
     State* next;
     State* prev;
     Label* label; // labels are allocated in codegen as they live longer
+
+    State* fill_state;
+    Label* fill_label;
     size_t fill;
-    bool fallback;
 
     size_t rule;
     tcid_t rule_tags;
     tcid_t fall_tags;
+    bool fallback;
     bool is_base;
+
     CodeGo go;
     Action action;
 
@@ -185,11 +189,13 @@ inline State::State()
     : next(nullptr),
       prev(nullptr),
       label(nullptr),
+      fill_state(nullptr),
+      fill_label(nullptr),
       fill(0),
-      fallback(false),
       rule(Rule::NONE),
       rule_tags(TCID0),
       fall_tags(TCID0),
+      fallback(false),
       is_base(false),
       go(),
       action() {

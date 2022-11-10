@@ -192,6 +192,7 @@ void Adfa::split(State* s) {
     add_state(move, s);
     move->action.set_move();
     move->rule = s->rule;
+    move->fill_state = s->fill_state;
     move->fill = s->fill; // used by tunneling, ignored by codegen
     move->go = s->go;
     move->go.tags = TCID0; // drop hoisted tags
@@ -378,6 +379,16 @@ void Adfa::prepare(const opt_t* opts) {
     // See note [tag hoisting, skip hoisting and tunneling].
     if (!opts->eager_skip) {
         hoist_tags(opts);
+    }
+
+    // Find states that require an YYFILL label. Do this before splitting, as the move part of the
+    // split states needs to keep a pointer to the match part.
+    for (State* s = head; s; s = s->next) {
+        if (opts->fill_enable && consume(s) && !endstate(s) &&
+                (opts->fill_eof != NOEOF ||
+                (s->fill > 0 && (opts->storable_state || opts->loop_switch)))) {
+            s->fill_state = s;
+        }
     }
 
     // split ``base'' states into two parts

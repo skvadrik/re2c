@@ -35,7 +35,7 @@ static const char* gen_fill_label(Output& output, uint32_t index) {
     return o.str(opts->label_fill).u32(index).flush();
 }
 
-static bool endstate(const State* s) {
+bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
     // are final states (not all final states are 'end' states), but sometimes it be initial
     // non-accepting state, e.g. in case of rule '[]'.
@@ -368,7 +368,6 @@ static void gen_fill(
         Output& output, CodeList* stmts, const Adfa& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
-    const uint32_t fillidx = output.block().fill_index - 1;
     const size_t need = eof_rule ? 1 : from->fill;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -376,23 +375,23 @@ static void gen_fill(
     // YYLESSTHAN
     const char* less_than = gen_less_than(o, opts, need);
 
-    // Transition to YYFILL label from the initial state dispatch.
-    CodeList* goto_fill = code_list(alc);
-    if (!opts->loop_switch) {
-        const char* flabel = gen_fill_label(output, fillidx);
-        append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
-    } else {
-        const char* next = o.u32(output.block().fill_state).flush();
-        gen_continue_yyloop(output, goto_fill, next);
-    }
-
     CodeList* fill = code_list(alc);
+    CodeList* goto_fill = code_list(alc);
+    State* s = from->fill_state;
 
-    if (opts->storable_state) {
-        gen_state_set(output, eof_rule ? fill : stmts, o.u32(fillidx).flush());
-    }
-
+    // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
     if (opts->fill_enable) {
+        if (opts->loop_switch) {
+            const char* next = o.u32(s->label->index).flush();
+            gen_continue_yyloop(output, goto_fill, next);
+        } else if (opts->storable_state || eof_rule) {
+            const char* flabel = gen_fill_label(output, s->fill_label->index);
+            append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+        }
+        if (opts->storable_state) {
+            gen_state_set(output, eof_rule ? fill : stmts, o.u32(s->fill_label->index).flush());
+        }
+
         // With end-of-input rule $ there is no YYFILL argument and no parameter to replace.
         o.str(opts->api_fill);
         if (!eof_rule) {
@@ -428,8 +427,9 @@ static void gen_fill(
             append(fill, fallback);
         }
     }
+
     if (opts->storable_state) {
-        output.block().fill_goto[fillidx] = goto_fill;
+        output.block().fill_goto[s->fill_label->index] = goto_fill;
     }
 
     if (opts->fill_check && fill->head) {
@@ -444,17 +444,7 @@ static void gen_fill(
 void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa, const State* s) {
     const opt_t* opts = output.block().opts;
 
-    const bool need_fill = opts->fill_enable && !endstate(s);
-    const bool need_fill_on_trans = need_fill && opts->fill_eof != NOEOF;
-    const bool need_fill_in_state = need_fill && opts->fill_eof == NOEOF && s->fill > 0;
-    const bool need_fill_label = need_fill_on_trans || (need_fill_in_state && opts->storable_state);
-
-    if (need_fill_label) {
-        ++output.block().fill_index;
-        output.block().fill_state = s->label->index;
-    }
-
-    if (need_fill_in_state) {
+    if (opts->fill_enable && !endstate(s) && opts->fill_eof == NOEOF && s->fill > 0) {
         gen_fill(output, stmts, dfa, s, nullptr);
     }
 
@@ -466,8 +456,8 @@ void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa, const 
         gen_settags(output, stmts, dfa, s->go.tags);
     }
 
-    if (need_fill_label && !opts->loop_switch) {
-        const char* flabel = gen_fill_label(output, output.block().fill_index - 1);
+    if (s->fill_label != nullptr && !opts->loop_switch) {
+        const char* flabel = gen_fill_label(output, s->fill_label->index);
         append(stmts, code_slabel(output.allocator, flabel));
     }
 }

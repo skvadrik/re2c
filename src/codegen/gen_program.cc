@@ -56,8 +56,6 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       max_fill(1),
       max_nmatch(1),
       start_label(nullptr),
-      fill_index(0),
-      fill_state(0),
       fill_goto() {}
 
 OutputBlock::~OutputBlock() {
@@ -69,6 +67,7 @@ Output::Output(Msg& msg)
       hblocks(),
       pblocks(&cblocks),
       label_counter(0),
+      fill_label_counter(0),
       state_goto(false),
       cond_enum_autogen(true),
       warn_condition_order(true),
@@ -79,7 +78,6 @@ Output::Output(Msg& msg)
       allocator(),
       scratchbuf(allocator),
       current_block(nullptr),
-      total_fill_index(0),
       total_opts(nullptr) {}
 
 Output::~Output() {
