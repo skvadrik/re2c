@@ -188,6 +188,8 @@ void Adfa::add_state(State* s, State* next) {
 }
 
 void Adfa::split(State* s) {
+    // If a split state has a rule, both parts should keep it. Codegen checks it when generating
+    // fallback transition on YYFILL failure, either in state dispatch or on a regular transition.
     State* move = new State;
     add_state(move, s);
     move->action.set_move();
@@ -198,7 +200,6 @@ void Adfa::split(State* s) {
     move->go.tags = TCID0; // drop hoisted tags
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
-    s->rule = Rule::NONE;
     s->go.span_count = 1;
     s->go.span = allocate<Span>(1);
     s->go.span[0].ub = upper_char;

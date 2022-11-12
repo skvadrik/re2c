@@ -364,6 +364,40 @@ static CodeList* gen_fill_falllback(
     return fallback_trans;
 }
 
+CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to) {
+    const opt_t* opts = output.block().opts;
+    const bool eof_rule = opts->fill_eof != NOEOF;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& o = output.scratchbuf;
+
+    CodeList* goto_fill = code_list(alc);
+
+    if (opts->storable_state && eof_rule) {
+        // With storable state and end-of-input rule $ the initial state dispatch needs to handle
+        // YYFILL failure: if there is still not enough input, it must follow the fallback
+        // transition for the state that triggered YYFILL. Fallback transition is inlined in the
+        // state dispatch (as opposed to jumping to the corresponding DFA transition) because Go
+        // backend does not support jumping in the middle of a nested block.
+        CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
+        const char* less_than = gen_less_than(o, opts, 1 /*need*/);
+        append(goto_fill, code_if_then_else(alc, less_than, fallback, nullptr));
+    }
+
+    // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
+    if (opts->fill_enable) {
+        State* s = from->fill_state;
+        if (opts->loop_switch) {
+            const char* next = o.u32(s->label->index).flush();
+            gen_continue_yyloop(output, goto_fill, next);
+        } else if (opts->storable_state || eof_rule) {
+            const char* flabel = gen_fill_label(output, s->fill_label->index);
+            append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+        }
+    }
+
+    return goto_fill;
+}
+
 static void gen_fill(
         Output& output, CodeList* stmts, const Adfa& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
@@ -372,24 +406,12 @@ static void gen_fill(
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    // YYLESSTHAN
-    const char* less_than = gen_less_than(o, opts, need);
-
     CodeList* fill = code_list(alc);
-    CodeList* goto_fill = code_list(alc);
-    State* s = from->fill_state;
 
-    // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
     if (opts->fill_enable) {
-        if (opts->loop_switch) {
-            const char* next = o.u32(s->label->index).flush();
-            gen_continue_yyloop(output, goto_fill, next);
-        } else if (opts->storable_state || eof_rule) {
-            const char* flabel = gen_fill_label(output, s->fill_label->index);
-            append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
-        }
         if (opts->storable_state) {
-            gen_state_set(output, eof_rule ? fill : stmts, o.u32(s->fill_label->index).flush());
+            const char* next = o.u32(from->fill_state->fill_label->index).flush();
+            gen_state_set(output, eof_rule ? fill : stmts, next);
         }
 
         // With end-of-input rule $ there is no YYFILL argument and no parameter to replace.
@@ -406,33 +428,21 @@ static void gen_fill(
             // End-of-input rule $ without a storable state: check YYFILL return value. If it
             // succeeds (returns zero) then go to YYFILL label and rematch.
             if (!opts->fill_naked) o.cstr(" == 0");
-            append(fill, code_if_then_else(alc, o.flush(), goto_fill, nullptr));
+            const char* fill_check = o.flush();
+            CodeList* goto_rematch = gen_goto_after_fill(output, dfa, from, to);
+            append(fill, code_if_then_else(alc, fill_check, goto_rematch, nullptr));
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
             append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
         }
     }
 
-    if (eof_rule) {
-        CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
-        if (opts->storable_state) {
-            // With storable state and end-of-input rule $ the initial state dispatch needs to
-            // handle YYFILL failure: if there is still not enough input, it must follow the
-            // fallback transition for the state that triggered YYFILL. Fallback transition is
-            // inlined in the state dispatch (as opposed to jumping to the corresponding DFA
-            // transition) because Go backend does not support jumping in the middle of a nested
-            // block.
-            prepend(goto_fill, code_if_then_else(alc, less_than, fallback, nullptr));
-        } else {
-            append(fill, fallback);
-        }
-    }
-
-    if (opts->storable_state) {
-        output.block().fill_goto[s->fill_label->index] = goto_fill;
+    if (eof_rule && !opts->storable_state) {
+        append(fill, gen_fill_falllback(output, dfa, from, to));
     }
 
     if (opts->fill_check && fill->head) {
+        const char* less_than = gen_less_than(o, opts, need);
         CodeList* check_fill = code_list(alc);
         append(check_fill, code_if_then_else(alc, less_than, fill, nullptr));
         fill = check_fill;

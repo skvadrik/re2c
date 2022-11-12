@@ -170,6 +170,7 @@ void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
 void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts);
 void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid);
+CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to);
 void gen_goto(
         Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
 void gen_code_pass1(Output& output);

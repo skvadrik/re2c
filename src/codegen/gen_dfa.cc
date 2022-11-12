@@ -363,6 +363,11 @@ void gen_code_pass1(Output& output) {
         for (State* s = dfa->head; s; s = s->next) {
             if (s->fill_state == s) {
                 s->fill_label = new_label(alc, counter++);
+
+                if (opts->storable_state) {
+                    block.fill_goto[s->fill_label->index] =
+                            gen_goto_after_fill(output, *dfa, s, nullptr);
+                }
             }
         }
     }
