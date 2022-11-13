@@ -327,6 +327,73 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     return Ret::OK;
 }
 
+void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
+    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+
+    const char* fmt = code->fmt.format;
+    const char* sep = code->fmt.separator;
+    bool first = true;
+    for (const std::string& tag : tags) {
+        if (first) {
+            first = false;
+        } else if (sep != nullptr) {
+            buf.cstr(sep);
+        }
+        if (fmt != nullptr) {
+            std::ostringstream s(fmt);
+            argsubst(s, opts->api_sigil, "tag", true, tag);
+            buf.str(s.str());
+        }
+    }
+    if (opts->line_dirs) {
+        const std::string& s = buf.stream().str();
+        if (!s.empty() && *s.rbegin() != '\n') buf.cstr("\n");
+    }
+
+    code->kind = CodeKind::RAW;
+    code->raw.size = buf.stream().str().length();
+    code->raw.data = buf.flush();
+}
+
+static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, bool multival) {
+    for (OutputBlock* b : blocks) {
+        if (multival) {
+            tags.insert(b->mtags.begin(), b->mtags.end());
+        } else {
+            tags.insert(b->stags.begin(), b->stags.end());
+        }
+    }
+}
+
+LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
+    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+
+    OutputBlock& block = output.block();
+    Scratchbuf& buf = output.scratchbuf;
+    const opt_t* opts = block.opts;
+
+    if (opts->target != Target::CODE) {
+        code->kind = CodeKind::EMPTY;
+        return Ret::OK;
+    }
+
+    bool multival = (code->kind == CodeKind::MTAGS);
+
+    tagnames_t tags;
+    if (code->fmt.block_names == nullptr) {
+        // Gather tags from all blocks in the output and header files.
+        add_tags_from_blocks(output.cblocks, tags, multival);
+        add_tags_from_blocks(output.hblocks, tags, multival);
+    } else {
+        // Gather tags from the blocks on the list.
+        const char* directive = multival ? "mtags:re2c" : "stags:re2c";
+        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, directive));
+        add_tags_from_blocks(output.tmpblocks, tags, multival);
+    }
+    gen_tags(buf, opts, code, tags);
+    return Ret::OK;
+}
+
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
     OutputBlock& oblock = output.block();
     OutAllocator& alc = output.allocator;
@@ -525,7 +592,8 @@ Ret gen_code_pass2(Output& output) {
     const opt_t* opts = block.opts;
 
     for (Code* code = block.code->head; code != nullptr; code = code->next) {
-        if (code->kind == CodeKind::DFAS) {
+        switch (code->kind) {
+        case CodeKind::DFAS: {
             CodeList* program = code_list(output.allocator);
             if (opts->target == Target::DOT) {
                 gen_block_dot(output, dfas, program);
@@ -537,9 +605,17 @@ Ret gen_code_pass2(Output& output) {
             code->kind = CodeKind::BLOCK;
             code->block.kind = CodeBlock::Kind::RAW;
             code->block.stmts = program;
-
-        } else if (code->kind == CodeKind::STATE_GOTO) {
+            break;
+        }
+        case CodeKind::STATE_GOTO:
             CHECK_RET(gen_state_goto(output, code));
+            break;
+        case CodeKind::STAGS:
+        case CodeKind::MTAGS:
+            CHECK_RET(expand_tags_directive(output, code));
+            break;
+        default:
+            break;
         }
     }
 

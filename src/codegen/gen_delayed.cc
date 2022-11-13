@@ -44,69 +44,6 @@ static std::string output_state_get(const opt_t* opts) {
     return opts->api_state_get + (opts->state_get_naked ? "" : "()");
 }
 
-void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
-    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
-
-    const char* fmt = code->fmt.format;
-    const char* sep = code->fmt.separator;
-    bool first = true;
-    for (const std::string& tag : tags) {
-        if (first) {
-            first = false;
-        } else if (sep != nullptr) {
-            buf.cstr(sep);
-        }
-        if (fmt != nullptr) {
-            std::ostringstream s(fmt);
-            argsubst(s, opts->api_sigil, "tag", true, tag);
-            buf.str(s.str());
-        }
-    }
-    if (opts->line_dirs) {
-        const std::string& s = buf.stream().str();
-        if (!s.empty() && *s.rbegin() != '\n') buf.cstr("\n");
-    }
-
-    code->kind = CodeKind::RAW;
-    code->raw.size = buf.stream().str().length();
-    code->raw.data = buf.flush();
-}
-
-static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, bool multival) {
-    for (OutputBlock* b : blocks) {
-        if (multival) {
-            tags.insert(b->mtags.begin(), b->mtags.end());
-        } else {
-            tags.insert(b->stags.begin(), b->stags.end());
-        }
-    }
-}
-
-LOCAL_NODISCARD(Ret expand_tags_directive(CodegenCtxPass1& ctx, Code* code)) {
-    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
-    if (ctx.global->opts->target != Target::CODE) {
-        code->kind = CodeKind::EMPTY;
-        return Ret::OK;
-    }
-
-    Scratchbuf& buf = ctx.global->scratchbuf;
-    bool multival = (code->kind == CodeKind::MTAGS);
-
-    tagnames_t tags;
-    if (code->fmt.block_names == nullptr) {
-        // Gather tags from all blocks in the output and header files.
-        add_tags_from_blocks(ctx.global->cblocks, tags, multival);
-        add_tags_from_blocks(ctx.global->hblocks, tags, multival);
-    } else {
-        // Gather tags from the blocks on the list.
-        const char* directive = multival ? "mtags:re2c" : "stags:re2c";
-        CHECK_RET(find_blocks(ctx, code->fmt.block_names, ctx.global->tmpblocks, directive));
-        add_tags_from_blocks(ctx.global->tmpblocks, tags, multival);
-    }
-    gen_tags(buf, ctx.block->opts, code, tags);
-    return Ret::OK;
-}
-
 static void gen_cond_enum(Scratchbuf& buf,
                           OutAllocator& alc,
                           Code* code,
@@ -502,9 +439,6 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
         break;
     case CodeKind::LOOP:
         return expand_pass_1_list(ctx, code->loop);
-    case CodeKind::STAGS:
-    case CodeKind::MTAGS:
-        return expand_tags_directive(ctx, code);
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
         return gen_yymax(ctx, code);
@@ -558,6 +492,8 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     case CodeKind::DFAS:
         break;
     case CodeKind::STATE_GOTO:
+    case CodeKind::STAGS:
+    case CodeKind::MTAGS:
         UNREACHABLE();
         break;
     }
