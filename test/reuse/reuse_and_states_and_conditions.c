@@ -30,8 +30,10 @@ yy0:
 	}
 /* *********************************** */
 yyc_u:
-	SETSTATE_1(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_1(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -49,8 +51,10 @@ yy3:
 	goto yyc_v;
 /* *********************************** */
 yyc_v:
-	SETSTATE_1(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_1(1);
+		YYFILL(1);
+	}
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -88,8 +92,10 @@ yy7:
 	}
 /* *********************************** */
 yyc_a:
-	SETSTATE_REUSE_1(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_1(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -107,8 +113,10 @@ yy10:
 	goto yyc_b;
 /* *********************************** */
 yyc_b:
-	SETSTATE_REUSE_1(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_1(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -126,8 +134,10 @@ yy13:
 	goto yyc_a;
 /* *********************************** */
 yyc_c:
-	SETSTATE_REUSE_1(4);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_1(4);
+		YYFILL(1);
+	}
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -144,8 +154,10 @@ yy16:
 	{ c }
 /* *********************************** */
 yyc_d:
-	SETSTATE_REUSE_1(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_1(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -181,8 +193,10 @@ yy20:
 	}
 /* *********************************** */
 yyc_a:
-	SETSTATE_REUSE_2(6);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_2(6);
+		YYFILL(1);
+	}
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -200,8 +214,10 @@ yy23:
 	goto yyc_b;
 /* *********************************** */
 yyc_b:
-	SETSTATE_REUSE_2(7);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_2(7);
+		YYFILL(1);
+	}
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -219,8 +235,10 @@ yy26:
 	goto yyc_a;
 /* *********************************** */
 yyc_e:
-	SETSTATE_REUSE_2(8);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_2(8);
+		YYFILL(1);
+	}
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -233,8 +251,10 @@ yy28:
 	{ x }
 yy29:
 	++YYCURSOR;
-	SETSTATE_REUSE_2(9);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_REUSE_2(9);
+		YYFILL(1);
+	}
 yyFillLabel9:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -255,8 +275,10 @@ yy30:
 	}
 /* *********************************** */
 yyc_w:
-	SETSTATE_2(10);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		SETSTATE_2(10);
+		YYFILL(1);
+	}
 yyFillLabel10:
 	yych = *YYCURSOR;
 	switch (yych) {

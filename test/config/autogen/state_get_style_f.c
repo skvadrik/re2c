@@ -15,8 +15,10 @@
 		case 8: goto yyFillLabel8;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -37,8 +39,10 @@ yy3:
 // re2c:api:style = free-form;
 
 {
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL
+	}
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -59,8 +63,10 @@ yy7:
 // re2c:api:style = functions;
 
 {
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -81,8 +87,10 @@ yy11:
 // re2c:define:YYGETSTATE:naked = 0;
 
 {
-	YYSETSTATE(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -104,8 +112,10 @@ yy15:
 // re2c:api:style = free-form;
 
 {
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL
+	}
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -127,8 +137,10 @@ yy19:
 // re2c:api:style = functions;
 
 {
-	YYSETSTATE(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -149,8 +161,10 @@ yy23:
 // re2c:define:YYGETSTATE:naked = 1;
 
 {
-	YYSETSTATE(6);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(6);
+		YYFILL(1);
+	}
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -172,8 +186,10 @@ yy27:
 // re2c:api:style = free-form;
 
 {
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL
+	}
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -195,8 +211,10 @@ yy31:
 // re2c:api:style = functions;
 
 {
-	YYSETSTATE(8);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(8);
+		YYFILL(1);
+	}
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {

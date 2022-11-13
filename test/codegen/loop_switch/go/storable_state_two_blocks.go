@@ -8,8 +8,8 @@ yyl:
 	for {
 		switch (yystate) {
 		case -1,0:
-			YYSETSTATE
 			if (YYLESSTHAN) {
+				YYSETSTATE
 				YYFILL
 			}
 			yych = YYPEEK

@@ -135,8 +135,10 @@ echo:
 		case 35: goto yyFillLabel35;
 	}
 yy0:
-	YYSETSTATE(0);
-	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
+	if ((YYLIMIT - YYCURSOR) < 11) {
+		YYSETSTATE(0);
+		YYFILL(11);
+	}
 yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych <= ')') {
@@ -158,7 +160,7 @@ yy2:
 						RETURN(0);
 					}
 				}
-#line 162 "real_world/scanner_fs.c"
+#line 164 "real_world/scanner_fs.c"
 yy3:
 	++YYCURSOR;
 yy4:
@@ -167,7 +169,7 @@ yy4:
 	{
 					goto echo;
 				}
-#line 171 "real_world/scanner_fs.c"
+#line 173 "real_world/scanner_fs.c"
 yy5:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -177,7 +179,7 @@ yy5:
 					tok = pos = cursor; cline++;
 				  	goto echo;
 				}
-#line 181 "real_world/scanner_fs.c"
+#line 183 "real_world/scanner_fs.c"
 yy6:
 	yych = *++YYCURSOR;
 	if (yych == '/') goto yy8;
@@ -199,7 +201,7 @@ yy8:
 					tok = pos = cursor;
 					goto echo;
 				}
-#line 203 "real_world/scanner_fs.c"
+#line 205 "real_world/scanner_fs.c"
 yy9:
 	yych = *++YYCURSOR;
 	if (yych == '!') goto yy11;
@@ -248,7 +250,7 @@ yy19:
 					tok = cursor;
 					RETURN(1);
 				}
-#line 252 "real_world/scanner_fs.c"
+#line 254 "real_world/scanner_fs.c"
 yy20:
 	yych = *++YYCURSOR;
 	if (yych != 'e') goto yy10;
@@ -265,7 +267,7 @@ yy20:
 					ignore_eoc = true;
 					goto echo;
 				}
-#line 269 "real_world/scanner_fs.c"
+#line 271 "real_world/scanner_fs.c"
 }
 #line 145 "real_world/scanner_fs.re"
 
@@ -290,10 +292,12 @@ scan:
    		goto value;
     }
 
-#line 294 "real_world/scanner_fs.c"
+#line 296 "real_world/scanner_fs.c"
 {
-	YYSETSTATE(1);
-	if ((YYLIMIT - YYCURSOR) < 5) YYFILL(5);
+	if ((YYLIMIT - YYCURSOR) < 5) {
+		YYSETSTATE(1);
+		YYFILL(5);
+	}
 yyFillLabel1:
 	yych = *YYCURSOR;
 	if (yych <= '/') {
@@ -359,11 +363,13 @@ yy24:
 				  fatal(msg.str().c_str());
 				  goto scan;
 				}
-#line 363 "real_world/scanner_fs.c"
+#line 367 "real_world/scanner_fs.c"
 yy25:
 	++YYCURSOR;
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	yych = *YYCURSOR;
 	if (yych == '\t') goto yy25;
@@ -371,7 +377,7 @@ yyFillLabel2:
 	YYSETSTATE(-1);
 #line 235 "real_world/scanner_fs.re"
 	{ goto scan; }
-#line 375 "real_world/scanner_fs.c"
+#line 381 "real_world/scanner_fs.c"
 yy26:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -380,7 +386,7 @@ yy26:
 				  pos = cursor; cline++;
 				  goto scan;
 	    			}
-#line 384 "real_world/scanner_fs.c"
+#line 390 "real_world/scanner_fs.c"
 yy27:
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy26;
@@ -393,7 +399,7 @@ yy29:
 	YYSETSTATE(-1);
 #line 184 "real_world/scanner_fs.re"
 	{ fatal("unterminated string constant (missing \")"); }
-#line 397 "real_world/scanner_fs.c"
+#line 403 "real_world/scanner_fs.c"
 yy30:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -402,14 +408,14 @@ yy31:
 	YYSETSTATE(-1);
 #line 185 "real_world/scanner_fs.re"
 	{ fatal("unterminated string constant (missing ')"); }
-#line 406 "real_world/scanner_fs.c"
+#line 412 "real_world/scanner_fs.c"
 yy32:
 	++YYCURSOR;
 yy33:
 	YYSETSTATE(-1);
 #line 197 "real_world/scanner_fs.re"
 	{ RETURN(*tok); }
-#line 413 "real_world/scanner_fs.c"
+#line 419 "real_world/scanner_fs.c"
 yy34:
 	yych = *++YYCURSOR;
 	if (yych == '/') goto yy56;
@@ -418,7 +424,7 @@ yy35:
 #line 199 "real_world/scanner_fs.re"
 	{ yylval.op = *tok;
 				  RETURN(CLOSE); }
-#line 422 "real_world/scanner_fs.c"
+#line 428 "real_world/scanner_fs.c"
 yy36:
 	++YYCURSOR;
 	goto yy35;
@@ -430,15 +436,17 @@ yy37:
 				  yylval.regexp = mkDot();
 				  return RANGE;
 				}
-#line 434 "real_world/scanner_fs.c"
+#line 440 "real_world/scanner_fs.c"
 yy38:
 	yych = *++YYCURSOR;
 	if (yych == '*') goto yy57;
 	goto yy33;
 yy39:
 	++YYCURSOR;
-	YYSETSTATE(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	yych = *YYCURSOR;
 yy40:
@@ -456,7 +464,7 @@ yy41:
 	{ cur = cursor;
 				  yylval.symbol = Symbol::find(token());
 				  return ID; }
-#line 460 "real_world/scanner_fs.c"
+#line 468 "real_world/scanner_fs.c"
 yy42:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -467,7 +475,7 @@ yy43:
 	YYSETSTATE(-1);
 #line 195 "real_world/scanner_fs.re"
 	{ fatal("unterminated range (missing ])"); }
-#line 471 "real_world/scanner_fs.c"
+#line 479 "real_world/scanner_fs.c"
 yy44:
 	yych = *++YYCURSOR;
 	if (yych == 'e') goto yy63;
@@ -487,11 +495,13 @@ yy46:
 	{ depth = 1;
 				  goto code;
 				}
-#line 491 "real_world/scanner_fs.c"
+#line 499 "real_world/scanner_fs.c"
 yy47:
 	++YYCURSOR;
-	YYSETSTATE(4);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(4);
+		YYFILL(1);
+	}
 yyFillLabel4:
 	yych = *YYCURSOR;
 yy48:
@@ -536,19 +546,23 @@ yy50:
 	{ cur = cursor;
 				  yylval.regexp = strToRE(token());
 				  return STRING; }
-#line 540 "real_world/scanner_fs.c"
+#line 550 "real_world/scanner_fs.c"
 yy51:
 	++YYCURSOR;
-	YYSETSTATE(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy49;
 	goto yy47;
 yy52:
 	++YYCURSOR;
-	YYSETSTATE(6);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(6);
+		YYFILL(1);
+	}
 yyFillLabel6:
 	yych = *YYCURSOR;
 yy53:
@@ -567,11 +581,13 @@ yy54:
 	{ cur = cursor;
 				  yylval.regexp = strToCaseInsensitiveRE(token());
 				  return STRING; }
-#line 571 "real_world/scanner_fs.c"
+#line 585 "real_world/scanner_fs.c"
 yy55:
 	++YYCURSOR;
-	YYSETSTATE(7);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(7);
+		YYFILL(1);
+	}
 yyFillLabel7:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy49;
@@ -582,18 +598,20 @@ yy56:
 #line 173 "real_world/scanner_fs.re"
 	{ tok = cursor;
 				  RETURN(0); }
-#line 586 "real_world/scanner_fs.c"
+#line 602 "real_world/scanner_fs.c"
 yy57:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 #line 170 "real_world/scanner_fs.re"
 	{ depth = 1;
 				  goto comment; }
-#line 593 "real_world/scanner_fs.c"
+#line 609 "real_world/scanner_fs.c"
 yy58:
 	++YYCURSOR;
-	YYSETSTATE(8);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(8);
+		YYFILL(1);
+	}
 yyFillLabel8:
 	yych = *YYCURSOR;
 yy59:
@@ -607,8 +625,10 @@ yy59:
 	}
 yy60:
 	++YYCURSOR;
-	YYSETSTATE(9);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(9);
+		YYFILL(1);
+	}
 yyFillLabel9:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy49;
@@ -620,11 +640,13 @@ yy61:
 	{ cur = cursor;
 				  yylval.regexp = ranToRE(token());
 				  return RANGE; }
-#line 624 "real_world/scanner_fs.c"
+#line 644 "real_world/scanner_fs.c"
 yy62:
 	++YYCURSOR;
-	YYSETSTATE(10);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(10);
+		YYFILL(1);
+	}
 yyFillLabel10:
 	yych = *YYCURSOR;
 	if (yych <= '[') {
@@ -645,15 +667,17 @@ yy65:
 	YYSETSTATE(-1);
 #line 217 "real_world/scanner_fs.re"
 	{ fatal("illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"); }
-#line 649 "real_world/scanner_fs.c"
+#line 671 "real_world/scanner_fs.c"
 yy66:
 	yych = *++YYCURSOR;
 	if (yych == ',') goto yy72;
 	goto yy68;
 yy67:
 	++YYCURSOR;
-	YYSETSTATE(11);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) {
+		YYSETSTATE(11);
+		YYFILL(2);
+	}
 yyFillLabel11:
 	yych = *YYCURSOR;
 yy68:
@@ -667,8 +691,10 @@ yy68:
 	}
 yy69:
 	++YYCURSOR;
-	YYSETSTATE(12);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(12);
+		YYFILL(1);
+	}
 yyFillLabel12:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy49;
@@ -680,7 +706,7 @@ yy70:
 	{ cur = cursor;
 				  yylval.regexp = invToRE(token());
 				  return RANGE; }
-#line 684 "real_world/scanner_fs.c"
+#line 710 "real_world/scanner_fs.c"
 yy71:
 	yych = *++YYCURSOR;
 	if (yych == 'c') goto yy75;
@@ -699,7 +725,7 @@ yy73:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = atoi((char *)tok+1);
 				  RETURN(CLOSESIZE); }
-#line 703 "real_world/scanner_fs.c"
+#line 729 "real_world/scanner_fs.c"
 yy74:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -714,8 +740,10 @@ yy75:
 	goto yy40;
 yy76:
 	++YYCURSOR;
-	YYSETSTATE(13);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(13);
+		YYFILL(1);
+	}
 yyFillLabel13:
 	yych = *YYCURSOR;
 	if (yych <= '/') goto yy49;
@@ -728,7 +756,7 @@ yy77:
 #line 202 "real_world/scanner_fs.re"
 	{ yylval.op = '*';
 				  RETURN(CLOSE); }
-#line 732 "real_world/scanner_fs.c"
+#line 760 "real_world/scanner_fs.c"
 yy78:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -736,11 +764,13 @@ yy78:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = -1;
 				  RETURN(CLOSESIZE); }
-#line 740 "real_world/scanner_fs.c"
+#line 768 "real_world/scanner_fs.c"
 yy79:
 	++YYCURSOR;
-	YYSETSTATE(14);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(14);
+		YYFILL(1);
+	}
 yyFillLabel14:
 	yych = *YYCURSOR;
 	if (yych <= '@') goto yy49;
@@ -755,12 +785,14 @@ yy80:
 	{ yylval.extop.minsize = atoi((char *)tok+1);
 				  yylval.extop.maxsize = MAX(yylval.extop.minsize,atoi(strchr((char *)tok, ',')+1));
 				  RETURN(CLOSESIZE); }
-#line 759 "real_world/scanner_fs.c"
+#line 789 "real_world/scanner_fs.c"
 yy81:
 	yyaccept = 6;
 	YYMARKER = ++YYCURSOR;
-	YYSETSTATE(15);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(15);
+		YYFILL(1);
+	}
 yyFillLabel15:
 	yych = *YYCURSOR;
 	if (yych <= 'Z') {
@@ -787,17 +819,19 @@ yy82:
 				  yylval.str = new Str(token());
 				  return CONFIG;
 				}
-#line 791 "real_world/scanner_fs.c"
+#line 823 "real_world/scanner_fs.c"
 }
 #line 248 "real_world/scanner_fs.re"
 
 
 code:
 
-#line 798 "real_world/scanner_fs.c"
+#line 830 "real_world/scanner_fs.c"
 {
-	YYSETSTATE(16);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) {
+		YYSETSTATE(16);
+		YYFILL(2);
+	}
 yyFillLabel16:
 	yych = *YYCURSOR;
 	if (yych <= '&') {
@@ -820,7 +854,7 @@ yy86:
 	YYSETSTATE(-1);
 #line 264 "real_world/scanner_fs.re"
 	{ goto code; }
-#line 824 "real_world/scanner_fs.c"
+#line 858 "real_world/scanner_fs.c"
 yy87:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -829,7 +863,7 @@ yy87:
 				  pos = cursor; cline++;
 				  goto code;
 				}
-#line 833 "real_world/scanner_fs.c"
+#line 867 "real_world/scanner_fs.c"
 yy88:
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych == '\n') goto yy86;
@@ -844,7 +878,7 @@ yy90:
 #line 258 "real_world/scanner_fs.re"
 	{ ++depth;
 				  goto code; }
-#line 848 "real_world/scanner_fs.c"
+#line 882 "real_world/scanner_fs.c"
 yy91:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -855,11 +889,13 @@ yy91:
 					return CODE;
 				  }
 				  goto code; }
-#line 859 "real_world/scanner_fs.c"
+#line 893 "real_world/scanner_fs.c"
 yy92:
 	++YYCURSOR;
-	YYSETSTATE(17);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(17);
+		YYFILL(1);
+	}
 yyFillLabel17:
 	yych = *YYCURSOR;
 yy93:
@@ -875,16 +911,20 @@ yy94:
 	goto yy86;
 yy95:
 	++YYCURSOR;
-	YYSETSTATE(18);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(18);
+		YYFILL(1);
+	}
 yyFillLabel18:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy94;
 	goto yy92;
 yy96:
 	++YYCURSOR;
-	YYSETSTATE(19);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(19);
+		YYFILL(1);
+	}
 yyFillLabel19:
 	yych = *YYCURSOR;
 yy97:
@@ -896,8 +936,10 @@ yy97:
 		if (yych != '\\') goto yy96;
 	}
 	++YYCURSOR;
-	YYSETSTATE(20);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(20);
+		YYFILL(1);
+	}
 yyFillLabel20:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy94;
@@ -908,10 +950,12 @@ yyFillLabel20:
 
 comment:
 
-#line 912 "real_world/scanner_fs.c"
+#line 954 "real_world/scanner_fs.c"
 {
-	YYSETSTATE(21);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) {
+		YYSETSTATE(21);
+		YYFILL(2);
+	}
 yyFillLabel21:
 	yych = *YYCURSOR;
 	if (yych <= ')') {
@@ -926,7 +970,7 @@ yy100:
 #line 280 "real_world/scanner_fs.re"
 	{ if(cursor == eof) RETURN(0);
 				  goto comment; }
-#line 930 "real_world/scanner_fs.c"
+#line 974 "real_world/scanner_fs.c"
 yy101:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -935,7 +979,7 @@ yy101:
 				  tok = pos = cursor; cline++;
 				  goto comment;
 				}
-#line 939 "real_world/scanner_fs.c"
+#line 983 "real_world/scanner_fs.c"
 yy102:
 	yych = *++YYCURSOR;
 	if (yych == '/') goto yy104;
@@ -952,7 +996,7 @@ yy104:
 					goto scan;
 				    else
 					goto comment; }
-#line 956 "real_world/scanner_fs.c"
+#line 1000 "real_world/scanner_fs.c"
 yy105:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -960,17 +1004,19 @@ yy105:
 	{ ++depth;
 				  fatal("ambiguous /* found");
 				  goto comment; }
-#line 964 "real_world/scanner_fs.c"
+#line 1008 "real_world/scanner_fs.c"
 }
 #line 282 "real_world/scanner_fs.re"
 
 
 config:
 
-#line 971 "real_world/scanner_fs.c"
+#line 1015 "real_world/scanner_fs.c"
 {
-	YYSETSTATE(22);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(22);
+		YYFILL(1);
+	}
 yyFillLabel22:
 	yych = *YYCURSOR;
 	if (yych <= 0x1F) {
@@ -983,11 +1029,13 @@ yyFillLabel22:
 	YYSETSTATE(-1);
 #line 291 "real_world/scanner_fs.re"
 	{ fatal("missing '='"); }
-#line 987 "real_world/scanner_fs.c"
+#line 1033 "real_world/scanner_fs.c"
 yy108:
 	++YYCURSOR;
-	YYSETSTATE(23);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(23);
+		YYFILL(1);
+	}
 yyFillLabel23:
 	yych = *YYCURSOR;
 	if (yych == '\t') goto yy108;
@@ -995,11 +1043,13 @@ yyFillLabel23:
 	YYSETSTATE(-1);
 #line 286 "real_world/scanner_fs.re"
 	{ goto config; }
-#line 999 "real_world/scanner_fs.c"
+#line 1047 "real_world/scanner_fs.c"
 yy109:
 	++YYCURSOR;
-	YYSETSTATE(24);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(24);
+		YYFILL(1);
+	}
 yyFillLabel24:
 	yych = *YYCURSOR;
 	if (yych == '\t') goto yy109;
@@ -1010,17 +1060,19 @@ yyFillLabel24:
 				  cur = cursor;
 				  RETURN('='); 
 				}
-#line 1014 "real_world/scanner_fs.c"
+#line 1064 "real_world/scanner_fs.c"
 }
 #line 292 "real_world/scanner_fs.re"
 
 
 value:
 
-#line 1021 "real_world/scanner_fs.c"
+#line 1071 "real_world/scanner_fs.c"
 {
-	YYSETSTATE(25);
-	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
+	if ((YYLIMIT - YYCURSOR) < 2) {
+		YYSETSTATE(25);
+		YYFILL(2);
+	}
 yyFillLabel25:
 	yych = *YYCURSOR;
 	if (yych <= '&') {
@@ -1058,11 +1110,13 @@ yy112:
 				  iscfg = 0;
 				  return VALUE;
 				}
-#line 1062 "real_world/scanner_fs.c"
+#line 1114 "real_world/scanner_fs.c"
 yy113:
 	++YYCURSOR;
-	YYSETSTATE(26);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(26);
+		YYFILL(1);
+	}
 yyFillLabel26:
 	yych = *YYCURSOR;
 yy114:
@@ -1082,8 +1136,10 @@ yy114:
 	}
 yy115:
 	YYMARKER = ++YYCURSOR;
-	YYSETSTATE(27);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(27);
+		YYFILL(1);
+	}
 yyFillLabel27:
 	yych = *YYCURSOR;
 	if (yych <= ' ') {
@@ -1108,8 +1164,10 @@ yyFillLabel27:
 	}
 yy116:
 	YYMARKER = ++YYCURSOR;
-	YYSETSTATE(28);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(28);
+		YYFILL(1);
+	}
 yyFillLabel28:
 	yych = *YYCURSOR;
 	if (yych <= ' ') {
@@ -1158,11 +1216,13 @@ yy119:
 				  iscfg = 0;
 				  return NUMBER;
 				}
-#line 1162 "real_world/scanner_fs.c"
+#line 1220 "real_world/scanner_fs.c"
 yy120:
 	++YYCURSOR;
-	YYSETSTATE(29);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(29);
+		YYFILL(1);
+	}
 yyFillLabel29:
 	yych = *YYCURSOR;
 	if (yych <= 0x1F) {
@@ -1185,8 +1245,10 @@ yyFillLabel29:
 	}
 yy121:
 	++YYCURSOR;
-	YYSETSTATE(30);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(30);
+		YYFILL(1);
+	}
 yyFillLabel30:
 	yych = *YYCURSOR;
 	if (yych <= '!') {
@@ -1201,8 +1263,10 @@ yy122:
 	goto yy112;
 yy123:
 	YYMARKER = ++YYCURSOR;
-	YYSETSTATE(31);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(31);
+		YYFILL(1);
+	}
 yyFillLabel31:
 	yych = *YYCURSOR;
 	if (yych <= '\r') {
@@ -1225,8 +1289,10 @@ yyFillLabel31:
 	}
 yy124:
 	++YYCURSOR;
-	YYSETSTATE(32);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(32);
+		YYFILL(1);
+	}
 yyFillLabel32:
 	yych = *YYCURSOR;
 	if (yych <= '&') {
@@ -1239,8 +1305,10 @@ yyFillLabel32:
 	}
 yy125:
 	YYMARKER = ++YYCURSOR;
-	YYSETSTATE(33);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(33);
+		YYFILL(1);
+	}
 yyFillLabel33:
 	yych = *YYCURSOR;
 	if (yych <= '\r') {
@@ -1266,16 +1334,20 @@ yy126:
 	goto yy112;
 yy127:
 	++YYCURSOR;
-	YYSETSTATE(34);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(34);
+		YYFILL(1);
+	}
 yyFillLabel34:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy122;
 	goto yy121;
 yy128:
 	++YYCURSOR;
-	YYSETSTATE(35);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(35);
+		YYFILL(1);
+	}
 yyFillLabel35:
 	yych = *YYCURSOR;
 	if (yych == '\n') goto yy122;

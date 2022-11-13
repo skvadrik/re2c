@@ -9,8 +9,10 @@
 		case 0: goto yyFillLabel0;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -36,8 +38,10 @@ yy3:
 		case 1: goto yyFillLabel1;
 	}
 yy4:
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL
+	}
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -63,8 +67,10 @@ yy7:
 		case 2: goto yyFillLabel2;
 	}
 yy8:
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -90,8 +96,10 @@ yy11:
 		case 3: goto yyFillLabel3;
 	}
 yy12:
-	YYSETSTATE(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -118,8 +126,10 @@ yy15:
 		case 4: goto yyFillLabel4;
 	}
 yy16:
-	YYSETSTATE(4);
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(4);
+		YYFILL
+	}
 yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -146,8 +156,10 @@ yy19:
 		case 5: goto yyFillLabel5;
 	}
 yy20:
-	YYSETSTATE(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -173,8 +185,10 @@ yy23:
 		case 6: goto yyFillLabel6;
 	}
 yy24:
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL(1);
+	}
 yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -201,8 +215,10 @@ yy27:
 		case 7: goto yyFillLabel7;
 	}
 yy28:
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL
+	}
 yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -229,8 +245,10 @@ yy31:
 		case 8: goto yyFillLabel8;
 	}
 yy32:
-	YYSETSTATE
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE
+		YYFILL(1);
+	}
 yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {

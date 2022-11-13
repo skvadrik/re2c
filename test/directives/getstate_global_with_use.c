@@ -24,8 +24,10 @@ switch (YYGETSTATE()) {
 		case 0: goto yyFillLabel0;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -37,8 +39,10 @@ yyFillLabel0:
 
 {
 yy2:
-	YYSETSTATE(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
 yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -49,8 +53,10 @@ yyFillLabel1:
 // local block y (no start label)
 
 {
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -61,8 +67,10 @@ yyFillLabel2:
 // global block z that includes x (no start label)
 
 {
-	YYSETSTATE(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -73,8 +81,10 @@ yyFillLabel3:
 // unnamed local block (no start label)
 
 {
-	YYSETSTATE(4);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(4);
+		YYFILL(1);
+	}
 yyFillLabel4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -90,8 +100,10 @@ yyFillLabel4:
 		case 5: goto yyFillLabel5;
 	}
 yy10:
-	YYSETSTATE(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	++YYCURSOR;
 	YYSETSTATE(-1);

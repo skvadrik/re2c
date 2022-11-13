@@ -101,8 +101,10 @@ yy0:
 			goto *yyctable[s->cond];
 /* *********************************** */
 yyc_Normal:
-			s->state = 0;(0);
-			if ((s->lim - s->cur) < 4) if(fill(s, 4) == ~0) break;
+			if ((s->lim - s->cur) < 4) {
+				s->state = 0;(0);
+				if(fill(s, 4) == ~0) break;
+			}
 yyFillLabel0:
 			s->yych = *s->cur;
 			{
@@ -307,8 +309,10 @@ yy23:
 			}
 /* *********************************** */
 yyc_Comment:
-			s->state = 1;(1);
-			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) {
+				s->state = 1;(1);
+				if(fill(s, 2) == ~0) break;
+			}
 yyFillLabel1:
 			s->yych = *s->cur;
 			if (s->yych == '*') goto yy26;
@@ -329,8 +333,10 @@ yy26:
 			}
 /* *********************************** */
 yyc_Skiptoeol:
-			s->state = 2;(2);
-			if ((s->lim - s->cur) < 5) if(fill(s, 5) == ~0) break;
+			if ((s->lim - s->cur) < 5) {
+				s->state = 2;(2);
+				if(fill(s, 5) == ~0) break;
+			}
 yyFillLabel2:
 			s->yych = *s->cur;
 			{
@@ -440,8 +446,10 @@ yy41:
 			goto yy36;
 /* *********************************** */
 yyc_String:
-			s->state = 3;(3);
-			if ((s->lim - s->cur) < 2) if(fill(s, 2) == ~0) break;
+			if ((s->lim - s->cur) < 2) {
+				s->state = 3;(3);
+				if(fill(s, 2) == ~0) break;
+			}
 yyFillLabel3:
 			s->yych = *s->cur;
 			if (s->yych == '"') goto yy44;

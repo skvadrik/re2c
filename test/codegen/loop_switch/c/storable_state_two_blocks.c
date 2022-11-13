@@ -8,8 +8,10 @@
 		switch (yystate) {
 			case -1:
 			case 0:
-				YYSETSTATE(3);
-				if (YYLIMIT <= YYCURSOR) YYFILL(1);
+				if (YYLIMIT <= YYCURSOR) {
+					YYSETSTATE(3);
+					YYFILL(1);
+				}
 				yych = *YYCURSOR;
 				++YYCURSOR;
 				switch (yych) {

@@ -20,8 +20,10 @@ char *scan(char *p)
 		case 1: goto yyFillLabel1;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -42,11 +44,13 @@ yy2:
 	YYSETSTATE(-1);
 #line 15 "config/config4a.re"
 	{ return NULL; }
-#line 46 "config/config4a.c"
+#line 48 "config/config4a.c"
 yy3:
 	++YYCURSOR;
-	YYSETSTATE(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -66,7 +70,7 @@ yy4:
 	YYSETSTATE(-1);
 #line 14 "config/config4a.re"
 	{ return YYCURSOR; }
-#line 70 "config/config4a.c"
+#line 74 "config/config4a.c"
 }
 #line 16 "config/config4a.re"
 

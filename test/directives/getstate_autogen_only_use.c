@@ -14,8 +14,10 @@
 		case 0: goto yyFillLabel0;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -31,8 +33,10 @@ yyFillLabel0:
 		case 1: goto yyFillLabel1;
 	}
 yy2:
-	YYSETSTATE(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
 yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);

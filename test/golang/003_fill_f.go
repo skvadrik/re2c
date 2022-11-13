@@ -97,8 +97,8 @@ func Lex(in *Input) (int, int) {
 		goto yyFillLabel3
 	}
 yy0:
-	in.state = 0
 	if (in.limit-in.cursor < 1) {
+		in.state = 0
 		return lexNeedMoreInput, 1
 	}
 yyFillLabel0:
@@ -133,8 +133,8 @@ yy3:
 //line "golang/003_fill_f.go":134
 yy4:
 	in.cursor += 1
-	in.state = 1
 	if (in.limit-in.cursor < 1) {
+		in.state = 1
 		return lexNeedMoreInput, 1
 	}
 yyFillLabel1:
@@ -155,8 +155,8 @@ yy5:
 yy6:
 	in.cursor += 1
 	in.marker = in.cursor
-	in.state = 2
 	if (in.limit-in.cursor < 2) {
+		in.state = 2
 		return lexNeedMoreInput, 2
 	}
 yyFillLabel2:
@@ -191,8 +191,8 @@ yy9:
 	goto yy7
 yy10:
 	in.cursor += 1
-	in.state = 3
 	if (in.limit-in.cursor < 1) {
+		in.state = 3
 		return lexNeedMoreInput, 1
 	}
 yyFillLabel3:

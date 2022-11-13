@@ -19,8 +19,10 @@
 		case 5: goto yyFillLabel5;
 	}
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -36,8 +38,10 @@ yyFillLabel0:
 		case 1: goto yyFillLabel1;
 	}
 yy2:
-	YYSETSTATE(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
 yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -48,8 +52,10 @@ yyFillLabel1:
 // global block z that includes x (no start label)
 
 {
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -60,8 +66,10 @@ yyFillLabel2:
 // unnamed local block that includes x (no start label)
 
 {
-	YYSETSTATE(3);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(3);
+		YYFILL(1);
+	}
 yyFillLabel3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -77,8 +85,10 @@ yyFillLabel3:
 		case 4: goto yyFillLabel4;
 	}
 yy8:
-	YYSETSTATE(4);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(4);
+		YYFILL(1);
+	}
 yyFillLabel4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -89,8 +99,10 @@ yyFillLabel4:
 // unnamed global block (no start label)
 
 {
-	YYSETSTATE(5);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(5);
+		YYFILL(1);
+	}
 yyFillLabel5:
 	++YYCURSOR;
 	YYSETSTATE(-1);

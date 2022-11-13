@@ -27,8 +27,10 @@ switch (YYGETSTATE()) {
 
 {
 yy0:
-	YYSETSTATE(0);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
+	}
 yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -43,8 +45,10 @@ yyFillLabel0:
 
 {
 yy2:
-	YYSETSTATE(1);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
 Ly1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -58,8 +62,10 @@ Ly1:
 // local block z (no start label)
 
 {
-	YYSETSTATE(2);
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(2);
+		YYFILL(1);
+	}
 Lz2:
 	++YYCURSOR;
 	YYSETSTATE(-1);

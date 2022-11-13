@@ -28,8 +28,10 @@ char *scan(char *p)
 #line 29 "config/config4f.c"
 	{
 yy0:
-		YYSETSTATE(0);
-		if (YYLIMIT <= YYCURSOR) YYFILL(1);
+		if (YYLIMIT <= YYCURSOR) {
+			YYSETSTATE(0);
+			YYFILL(1);
+		}
 yyFillLabel0:
 		yych = *YYCURSOR;
 		switch (yych) {
@@ -50,11 +52,13 @@ yy2:
 		YYSETSTATE(-1);
 #line 23 "config/config4f.re"
 		{ return NULL; }
-#line 54 "config/config4f.c"
+#line 56 "config/config4f.c"
 yy3:
 		++YYCURSOR;
-		YYSETSTATE(1);
-		if (YYLIMIT <= YYCURSOR) YYFILL(1);
+		if (YYLIMIT <= YYCURSOR) {
+			YYSETSTATE(1);
+			YYFILL(1);
+		}
 yyFillLabel1:
 		yych = *YYCURSOR;
 		switch (yych) {
@@ -74,7 +78,7 @@ yy4:
 		YYSETSTATE(-1);
 #line 22 "config/config4f.re"
 		{ return YYCURSOR; }
-#line 78 "config/config4f.c"
+#line 82 "config/config4f.c"
 	}
 #line 24 "config/config4f.re"
 

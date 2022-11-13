@@ -410,8 +410,7 @@ static void gen_fill(
 
     if (opts->fill_enable) {
         if (opts->storable_state) {
-            const char* next = o.u32(from->fill_state->fill_label->index).flush();
-            gen_state_set(output, eof_rule ? fill : stmts, next);
+            gen_state_set(output, fill, o.u32(from->fill_state->fill_label->index).flush());
         }
 
         // With end-of-input rule $ there is no YYFILL argument and no parameter to replace.
@@ -443,12 +442,10 @@ static void gen_fill(
 
     if (opts->fill_check && fill->head) {
         const char* less_than = gen_less_than(o, opts, need);
-        CodeList* check_fill = code_list(alc);
-        append(check_fill, code_if_then_else(alc, less_than, fill, nullptr));
-        fill = check_fill;
+        append(stmts, code_if_then_else(alc, less_than, fill, nullptr));
+    } else {
+        append(stmts, fill);
     }
-
-    append(stmts, fill);
 }
 
 void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa, const State* s) {
