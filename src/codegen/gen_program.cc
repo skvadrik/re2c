@@ -66,6 +66,7 @@ Output::Output(Msg& msg)
     : cblocks(),
       hblocks(),
       pblocks(&cblocks),
+      tmpblocks(),
       label_counter(0),
       fill_label_counter(0),
       state_goto(false),

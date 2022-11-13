@@ -123,6 +123,7 @@ struct Output {
     blocks_t cblocks;  // .c file
     blocks_t hblocks;  // .h file
     blocks_t* pblocks; // selector
+    blocks_t tmpblocks;
     uint32_t label_counter;
     uint32_t fill_label_counter;
     bool state_goto;
@@ -174,7 +175,7 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
 void gen_goto(
         Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
 void gen_code_pass1(Output& output);
-void gen_code_pass2(Output& output);
+Ret gen_code_pass2(Output& output) NODISCARD;
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
