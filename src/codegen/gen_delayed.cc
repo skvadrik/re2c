@@ -36,55 +36,6 @@ LOCAL_NODISCARD(Ret find_blocks(CodegenCtxPass1& ctx,
     return Ret::OK;
 }
 
-static std::string output_cond_get(const opt_t* opts) {
-    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
-}
-
-static std::string output_state_get(const opt_t* opts) {
-    return opts->api_state_get + (opts->state_get_naked ? "" : "()");
-}
-
-static void gen_yych_decl(const opt_t* opts, Code* code) {
-    CHECK(!opts->storable_state && opts->char_emit);
-    code->kind = CodeKind::VAR;
-    code->var.type = VarType::YYCTYPE;
-    code->var.name = opts->var_char.c_str();
-    code->var.init = nullptr;
-}
-
-static void gen_yyaccept_def(const opt_t* opts, Code* code, bool used_yyaccept) {
-    CHECK(!opts->storable_state && used_yyaccept);
-    code->kind = CodeKind::VAR;
-    code->var.type = VarType::UINT;
-    code->var.name = opts->var_accept.c_str();
-    code->var.init = "0";
-}
-
-static void gen_yystate_def(CodegenCtxPass1& ctx, Code* code) {
-    const opt_t* opts = ctx.block->opts;
-    Scratchbuf& o = ctx.global->scratchbuf;
-    CHECK(opts->loop_switch);
-
-    code->kind = CodeKind::VAR;
-    code->var.name = o.str(opts->var_state).flush();
-    if (opts->storable_state) {
-        // With storable state `yystate` should be initialized to YYGETSTATE. Since there is a
-        // -1 case, `yystate` should have a signed type. If conditions are also used, YYGETSTATE
-        // takes priority over YYGETCONDITION, because the lexer may be reentered after an YYFILL
-        // invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the final states.
-        code->var.type = VarType::INT;
-        code->var.init = o.str(output_state_get(opts)).flush();
-    } else if (opts->start_conditions) {
-        // Else with start conditions yystate should be initialized to YYGETCONDITION.
-        code->var.type = VarType::UINT;
-        code->var.init = o.str(output_cond_get(opts)).flush();
-    } else {
-        // Else it should be the start DFA state (always case 0 with --loop-switch).
-        code->var.type = VarType::UINT;
-        code->var.init = "0";
-    }
-}
-
 static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind) {
     for (const OutputBlock* b : blocks) {
         max = std::max(max, kind == CodeKind::MAXFILL ? b->max_fill : b->max_nmatch);
@@ -190,15 +141,6 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
         return gen_yymax(ctx, code);
-    case CodeKind::YYCH:
-        gen_yych_decl(opts, code);
-        break;
-    case CodeKind::YYACCEPT:
-        gen_yyaccept_def(opts, code, ctx.block->used_yyaccept);
-        break;
-    case CodeKind::YYSTATE:
-        gen_yystate_def(ctx, code);
-        break;
     case CodeKind::COND_TABLE:
         gen_cond_table(ctx, code);
         break;
@@ -291,9 +233,6 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
-    case CodeKind::YYCH:
-    case CodeKind::YYACCEPT:
-    case CodeKind::YYSTATE:
     case CodeKind::COND_ENUM:
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:

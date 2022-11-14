@@ -8,6 +8,7 @@
 #include "src/msg/location.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
+#include "src/util/string_utils.h"
 
 namespace re2c {
 
@@ -408,16 +409,12 @@ inline Code* code_line_info_input(OutAllocator& alc, const loc_t& loc) {
     return x;
 }
 
-inline Code* code_yych_decl(OutAllocator& alc) {
-    return new_code(alc, CodeKind::YYCH);
-}
-
-inline Code* code_yyaccept_def(OutAllocator& alc) {
-    return new_code(alc, CodeKind::YYACCEPT);
-}
-
-inline Code* code_yystate_def(OutAllocator& alc) {
-    return new_code(alc, CodeKind::YYSTATE);
+inline Code* code_var(OutAllocator& alc, VarType type, const std::string& name, const char* init) {
+    Code* x = new_code(alc, CodeKind::VAR);
+    x->var.type = type;
+    x->var.name = copystr(name, alc);
+    x->var.init = init;
+    return x;
 }
 
 inline Code* code_line_info_output(OutAllocator& alc) {

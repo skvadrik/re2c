@@ -619,6 +619,33 @@ static CodeList* gen_cond_goto(Output& output) {
     return stmts;
 }
 
+static Code* gen_yystate_def(Output& output) {
+    Scratchbuf& buf = output.scratchbuf;
+    const opt_t* opts = output.block().opts;
+
+    CHECK(opts->loop_switch);
+
+    VarType type;
+    const char* init;
+    if (opts->storable_state) {
+        // With storable state `yystate` should be initialized to YYGETSTATE. Since there is a
+        // -1 case, `yystate` should have a signed type. If conditions are also used, YYGETSTATE
+        // takes priority over YYGETCONDITION, because the lexer may be reentered after an YYFILL
+        // invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the final states.
+        type = VarType::INT;
+        init = buf.str(output_state_get(opts)).flush();
+    } else if (opts->start_conditions) {
+        // Else with start conditions yystate should be initialized to YYGETCONDITION.
+        type = VarType::UINT;
+        init = buf.str(output_cond_get(opts)).flush();
+    } else {
+        // Else it should be the start DFA state (always case 0 with --loop-switch).
+        type = VarType::UINT;
+        init = "0";
+    }
+    return code_var(output.allocator, type, opts->var_state, init);
+}
+
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
     OutputBlock& oblock = output.block();
     OutAllocator& alc = output.allocator;
@@ -635,16 +662,16 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     CodeList* code = code_list(alc);
 
     if (!opts->storable_state && opts->char_emit) {
-        append(code, code_yych_decl(alc));
+        append(code, code_var(alc, VarType::YYCTYPE, opts->var_char, nullptr));
     }
     if (!opts->storable_state && oblock.used_yyaccept) {
-        append(code, code_yyaccept_def(alc));
+        append(code, code_var(alc, VarType::UINT, opts->var_accept, "0"));
     }
 
     if (opts->loop_switch) {
         // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
         // Merge DFAs for different conditions together in one switch.
-        append(code, code_yystate_def(alc));
+        append(code, gen_yystate_def(output));
 
         CodeCases* cases = code_cases(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {

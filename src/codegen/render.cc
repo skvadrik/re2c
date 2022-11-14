@@ -722,9 +722,6 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
-    case CodeKind::YYCH:
-    case CodeKind::YYACCEPT:
-    case CodeKind::YYSTATE:
     case CodeKind::COND_ENUM:
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
