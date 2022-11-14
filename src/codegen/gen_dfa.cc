@@ -394,6 +394,178 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
+static void gen_cond_enum(Scratchbuf& buf,
+                          OutAllocator& alc,
+                          Code* code,
+                          const opt_t* opts,
+                          const StartConds& conds) {
+    DCHECK(opts->target == Target::CODE);
+
+    if (conds.empty()) return;
+    const StartCond* first_cond = &conds.front();
+    const StartCond* last_cond = &conds.back();
+
+    if (code->fmt.format) {
+        const char* fmt = code->fmt.format;
+        const char* sep = code->fmt.separator;
+        uint32_t cond_number = 0;
+        for (const StartCond& cond : conds) {
+            if (sep != nullptr && &cond != first_cond) {
+                buf.cstr(sep);
+            }
+            std::ostringstream s(fmt);
+            // The main substitution (the one allowing unnamed sigil) must go last, or else it will
+            // erroneously substitute all the named ones.
+            size_t cid = opts->loop_switch ? cond.number : cond_number;
+            argsubst(s, opts->api_sigil, "num", false, cid);
+            argsubst(s, opts->api_sigil, "cond", true, cond.name);
+            buf.str(s.str());
+            ++cond_number;
+        }
+        buf.cstr("\n");
+
+        code->kind = CodeKind::RAW;
+        code->raw.size = buf.stream().str().length();
+        code->raw.data = buf.flush();
+    } else {
+        const char* start = nullptr, *end = nullptr;
+        CodeList* stmts = code_list(alc);
+        CodeList* block = code_list(alc);
+
+        if (opts->lang == Lang::C) {
+            start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
+            end = "};";
+            for (const StartCond& cond : conds) {
+                buf.str(cond.name);
+                if (opts->loop_switch) {
+                    buf.cstr(" = ").u32(cond.number);
+                }
+                if (&cond != last_cond) { // do not append comma after the last one
+                    buf.cstr(",");
+                }
+                append(block, code_text(alc, buf.flush()));
+            }
+        } else if (opts->lang == Lang::GO) {
+            start = buf.cstr("const (").flush();
+            end = ")";
+            for (const StartCond& cond : conds) {
+                buf.str(cond.name);
+                if (opts->loop_switch) {
+                    buf.cstr(" = ").u32(cond.number);
+                } else if (&cond == first_cond) {
+                    buf.cstr(" = iota");
+                }
+                append(block, code_text(alc, buf.flush()));
+            }
+        } else if (opts->lang == Lang::RUST) {
+            // For Rust generate standalone constants instead of enum to avoid casting to `yystate`
+            // type on each operation. With the loop/switch approach conditions are handled as
+            // regular states anyway, so the enum doesn't make much sense.
+            start = "";
+            end = "";
+            DCHECK(opts->loop_switch);
+            for (const StartCond& c : conds) {
+                buf.cstr("const ").str(c.name).cstr(": ")
+                        .cstr(opts->storable_state ? "isize" : "usize").cstr(" = ").u32(c.number);
+                append(block, code_stmt(alc, buf.flush()));
+            }
+        } else {
+            UNREACHABLE(); // no such language
+        }
+
+        append(stmts, code_text(alc, start));
+        append(stmts, code_block(alc, block, opts->lang == Lang::RUST
+                ? CodeBlock::Kind::RAW : CodeBlock::Kind::INDENTED));
+        append(stmts, code_text(alc, end));
+
+        code->kind = CodeKind::BLOCK;
+        code->block.kind = CodeBlock::Kind::RAW;
+        code->block.stmts = stmts;
+    }
+}
+
+LOCAL_NODISCARD(Ret add_condition_from_block(
+        const OutputBlock& block, StartConds& conds, StartCond cond)) {
+    // Condition prefix is specific to the block that defines it. If a few blocks define conditions
+    // with the same name, but a different prefix, they should have different enum entries.
+    cond.name = block.opts->cond_enum_prefix + cond.name;
+
+    for (const StartCond& c : conds) {
+        if (c.name == cond.name) {
+            if (c.number == cond.number) {
+                // A duplicate condition, it's not an error but don't add it.
+                return Ret::OK;
+            } else {
+                // An error: conditions with idetical names but different numbers.
+                RET_FAIL(error("cannot generate condition enumeration: conditon '%s' has "
+                               "different numbers in different blocks (use `re2c:condenumprefix` "
+                               "configuration to set per-block prefix)",
+                               cond.name.c_str()));
+            }
+        }
+    }
+
+    conds.push_back(cond);
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret add_conditions_from_blocks(const blocks_t& blocks, StartConds& conds)) {
+    for (const OutputBlock* block : blocks) {
+        for (const StartCond& cond : block->conds) {
+            CHECK_RET(add_condition_from_block(*block, conds, cond));
+        }
+    }
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
+    Scratchbuf& buf = output.scratchbuf;
+    OutAllocator& alc = output.allocator;
+
+    // Use global options accumulated across the whole file, as `types:re2c` may include conditions
+    // from a few different blocks, and it is not clear which block's options it should inherit.
+    const opt_t* globopts = output.total_opts;
+
+    if (globopts->target != Target::CODE) {
+        code->kind = CodeKind::EMPTY;
+        return Ret::OK;
+    }
+
+    StartConds conds;
+    if (code->fmt.block_names == nullptr) {
+        // Gather conditions from all blocks in the output and header files.
+        CHECK_RET(add_conditions_from_blocks(output.cblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(output.hblocks, conds));
+    } else {
+        // Gather conditions from the blocks on the list.
+        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "types:re2c"));
+        CHECK_RET(add_conditions_from_blocks(output.tmpblocks, conds));
+    }
+
+    // Do not generate empty condition enum. Some compilers or language standards allow it, but
+    // generally it's more likely to indicate an error in user code.
+    if (conds.empty()) {
+        code->kind = CodeKind::EMPTY;
+        return Ret::OK;
+    }
+
+    gen_cond_enum(buf, alc, code, globopts, conds);
+    return Ret::OK;
+}
+
+// Emit implicit condiiton enum in the header, if there is no explicit directive.
+void gen_implicit_cond_enum(Output& output) {
+    const opt_t* opts = output.total_opts;
+    OutAllocator& alc = output.allocator;
+
+    if (!opts->header_file.empty() && opts->start_conditions && output.cond_enum_autogen) {
+        output.header_mode(true);
+        output.gen_stmt(code_newline(alc));
+        output.gen_stmt(code_fmt(alc, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
+        output.header_mode(false);
+    }
+}
+
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
     OutputBlock& oblock = output.block();
     OutAllocator& alc = output.allocator;
@@ -613,6 +785,9 @@ Ret gen_code_pass2(Output& output) {
         case CodeKind::STAGS:
         case CodeKind::MTAGS:
             CHECK_RET(expand_tags_directive(output, code));
+            break;
+        case CodeKind::COND_ENUM:
+            CHECK_RET(expand_cond_enum(output, code));
             break;
         default:
             break;

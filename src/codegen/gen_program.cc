@@ -246,13 +246,6 @@ Ret Output::emit() {
 
     // Emit header file.
     if (!opts->header_file.empty() || need_header) {
-        if (opts->start_conditions && this->cond_enum_autogen) {
-            // Old-style -t, --type-headers usage implies condition enum.
-            header_mode(true);
-            gen_stmt(code_newline(allocator));
-            gen_stmt(code_fmt(allocator, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
-            header_mode(false);
-        }
         ctx.pblocks = &hblocks;
         CHECK_RET(emit_blocks(opts->header_file, ctx));
     }

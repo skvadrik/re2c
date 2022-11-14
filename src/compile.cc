@@ -187,6 +187,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             gen_code_pass1(output);
         }
     }
+    gen_implicit_cond_enum(output);
 
     // Main codegen phase.
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
