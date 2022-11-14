@@ -668,6 +668,58 @@ static Code* gen_yystate_def(Output& output) {
     return code_var(output.allocator, type, opts->var_state, init);
 }
 
+static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind) {
+    for (const OutputBlock* b : blocks) {
+        max = std::max(max, kind == CodeKind::MAXFILL ? b->max_fill : b->max_nmatch);
+    }
+    return max;
+}
+
+LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& buf = output.scratchbuf;
+
+    if (opts->target != Target::CODE) {
+        code->kind = CodeKind::EMPTY;
+        return Ret::OK;
+    }
+
+    CodeKind kind = code->kind;
+    const char* dirname = kind == CodeKind::MAXFILL ? "max:re2c" : "maxnmatch:re2c";
+    const char* varname = kind == CodeKind::MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
+
+    size_t max = 1;
+    if (code->fmt.block_names == nullptr) {
+        // Gather max value from all blocks in the output and header files.
+        max = max_among_blocks(output.cblocks, max, kind);
+        max = max_among_blocks(output.hblocks, max, kind);
+    } else {
+        // Maximum among the blocks listed in the directive.
+        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, dirname));
+        max = max_among_blocks(output.tmpblocks, max, kind);
+    }
+
+    if (code->fmt.format) {
+        std::ostringstream os(code->fmt.format);
+        argsubst(os, opts->api_sigil, "max", true, max);
+        code->text = buf.str(os.str()).flush();
+    } else {
+        switch (opts->lang) {
+        case Lang::C:
+            code->text = buf.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
+            break;
+        case Lang::GO:
+            code->text = buf.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
+            break;
+        case Lang::RUST:
+            code->text = buf.cstr("const ").cstr(varname).cstr(": usize = ").u64(max).flush();
+            break;
+        }
+    }
+    code->kind = (opts->lang == Lang::C) ? CodeKind::TEXT : CodeKind::STMT;
+    return Ret::OK;
+}
+
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
     OutputBlock& oblock = output.block();
     OutAllocator& alc = output.allocator;
@@ -934,6 +986,10 @@ Ret gen_code_pass2(Output& output) {
             break;
         case CodeKind::COND_ENUM:
             CHECK_RET(expand_cond_enum(output, code));
+            break;
+        case CodeKind::MAXFILL:
+        case CodeKind::MAXNMATCH:
+            CHECK_RET(gen_yymax(output, code));
             break;
         default:
             break;
