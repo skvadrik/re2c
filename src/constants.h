@@ -80,7 +80,6 @@ enum class CodeKind: uint32_t {
     LINE_INFO_INPUT,
     LINE_INFO_OUTPUT,
     COND_ENUM,
-    COND_GOTO,
     COND_TABLE,
     STATE_GOTO,
     STAGS,

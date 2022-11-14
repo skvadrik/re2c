@@ -137,99 +137,6 @@ LOCAL_NODISCARD(Ret gen_yymax(CodegenCtxPass1& ctx, Code* code)) {
     return Ret::OK;
 }
 
-// note [condition order]
-//
-// In theory re2c makes no guarantee about the order of conditions in the generated lexer. Users
-// should define condition type YYCONDTYPE and use values of this type with YYGETCONDITION and
-// YYSETCONDITION. This way code is independent of internal re2c condition numbering.
-//
-// However, it is possible to manually hardcode condition numbers and make re2c generate condition
-// dispatch without explicit use of condition names (nested `if` statements with `-b` or computed
-// `goto` table with `-g`). This code is syntactically valid (compiles), but unsafe:
-//     - change of re2c options may break compilation
-//     - change of internal re2c condition numbering may break runtime
-//
-// re2c has to preserve the existing numbering scheme.
-//
-// re2c warns about implicit assumptions about condition order, unless:
-//     - condition type is defined with 'types:re2c' or '-t, --type-header'
-//     - dispatch is independent of condition order: either it uses explicit condition names or
-//       there's only one condition and dispatch shrinks to unconditional jump
-
-static CodeList* gen_cond_goto_binary(CodegenCtxPass1& ctx, size_t lower, size_t upper) {
-    const opt_t* opts = ctx.block->opts;
-    OutAllocator& alc = ctx.global->allocator;
-    Scratchbuf& o = ctx.global->scratchbuf;
-
-    CodeList* stmts = code_list(alc);
-    if (lower == upper) {
-        o.cstr("goto ").str(opts->cond_label_prefix).str(ctx.block->conds[lower].name);
-        append(stmts, code_stmt(alc, o.flush()));
-    } else {
-        const size_t middle = lower + (upper - lower + 1) / 2;
-        CodeList* if_then = gen_cond_goto_binary(ctx, lower, middle - 1);
-        CodeList* if_else = gen_cond_goto_binary(ctx, middle, upper);
-        o.str(output_cond_get(opts)).cstr(" < ").u64(middle);
-        append(stmts, code_if_then_else(alc, o.flush(), if_then, if_else));
-    }
-    return stmts;
-}
-
-static void gen_cond_goto(CodegenCtxPass1& ctx, Code* code) {
-    const opt_t* opts = ctx.block->opts;
-    OutAllocator& alc = ctx.global->allocator;
-    Scratchbuf& o = ctx.global->scratchbuf;
-    const StartConds& conds = ctx.block->conds;
-    bool warn_cond_ord = ctx.global->warn_cond_ord;
-
-    DCHECK(!opts->loop_switch);
-
-    const size_t ncond = conds.size();
-    CodeList* stmts = code_list(alc);
-    const char* text;
-
-    if (opts->target == Target::DOT) {
-        for (const StartCond& cond : conds) {
-            text = o.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name)
-                    .cstr("\"]").flush();
-            append(stmts, code_text(alc, text));
-        }
-    } else {
-        if (opts->cgoto) {
-            text = o.cstr("goto *").str(opts->var_cond_table).cstr("[")
-                    .str(output_cond_get(opts)).cstr("]").flush();
-            append(stmts, code_stmt(alc, text));
-        } else if (opts->nested_ifs) {
-            warn_cond_ord &= ncond > 1;
-            append(stmts, gen_cond_goto_binary(ctx, 0, ncond - 1));
-        } else {
-            warn_cond_ord = false;
-
-            CodeCases* ccases = code_cases(alc);
-            for (const StartCond& cond : conds) {
-                CodeList* body = code_list(alc);
-                text = o.cstr("goto ").str(opts->cond_label_prefix).str(cond.name).flush();
-                append(body, code_stmt(alc, text));
-
-                text = o.str(opts->cond_enum_prefix).str(cond.name).flush();
-                append(ccases, code_case_string(alc, body, text));
-            }
-            text = o.str(output_cond_get(opts)).flush();
-            append(stmts, code_switch(alc, text, ccases));
-        }
-
-        // see note [condition order]
-        warn_cond_ord &= opts->header_file.empty();
-        if (warn_cond_ord) {
-            ctx.global->msg.warn.condition_order(ctx.block->loc);
-        }
-    }
-
-    code->kind = CodeKind::BLOCK;
-    code->block.kind = CodeBlock::Kind::RAW;
-    code->block.stmts = stmts;
-}
-
 static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
     const opt_t* opts = ctx.block->opts;
     OutAllocator& alc = ctx.global->allocator;
@@ -291,9 +198,6 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
         break;
     case CodeKind::YYSTATE:
         gen_yystate_def(ctx, code);
-        break;
-    case CodeKind::COND_GOTO:
-        gen_cond_goto(ctx, code);
         break;
     case CodeKind::COND_TABLE:
         gen_cond_table(ctx, code);
@@ -391,7 +295,6 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::YYACCEPT:
     case CodeKind::YYSTATE:
     case CodeKind::COND_ENUM:
-    case CodeKind::COND_GOTO:
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LINE_INFO_INPUT:

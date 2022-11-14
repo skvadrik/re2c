@@ -726,7 +726,6 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::YYACCEPT:
     case CodeKind::YYSTATE:
     case CodeKind::COND_ENUM:
-    case CodeKind::COND_GOTO:
     case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LABEL:

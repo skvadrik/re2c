@@ -143,50 +143,6 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     append(stmts, code_loop(alc, loop));
 }
 
-static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    append(code, code_text(alc, "digraph re2c {"));
-    append(code, code_cond_goto(alc));
-
-    for (const std::unique_ptr<Adfa>& dfa : dfas) {
-        if (!dfa->cond.empty()) {
-            buf.str(dfa->cond).cstr(" -> ").label(*dfa->head->label);
-            append(code, code_text(alc, buf.flush()));
-        }
-
-        for (State* s = dfa->head; s; s = s->next) {
-            if (s->action.kind == Action::Kind::ACCEPT) {
-                uint32_t i = 0;
-                for (const AcceptTrans& a: *s->action.info.accepts) {
-                    buf.label(*s->label).cstr(" -> ").label(*a.state->label)
-                            .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
-                    append(code, code_text(alc, buf.flush()));
-                    ++i;
-                }
-            } else if (s->action.kind == Action::Kind::RULE) {
-                const SemAct* semact = dfa->rules[s->action.info.rule].semact;
-                if (!semact->autogen) {
-                    buf.label(*s->label).cstr(" [label=\"")
-                            .str(output.msg.filenames[semact->loc.file])
-                            .cstr(":").u32(semact->loc.line).cstr("\"]");
-                    append(code, code_text(alc, buf.flush()));
-                }
-            }
-            gen_go(output, *dfa, &s->go, s, code);
-        }
-    }
-
-    append(code, code_text(alc, "}"));
-}
-
-static void gen_block_skeleton(Output& output, const Adfas& dfas, CodeList* code) {
-    for (const std::unique_ptr<Adfa>& dfa : dfas) {
-        emit_skeleton(output, code, *dfa);
-    }
-}
-
 static std::string output_state_get(const opt_t* opts) {
     return opts->api_state_get + (opts->state_get_naked ? "" : "()");
 }
@@ -566,6 +522,103 @@ void gen_implicit_cond_enum(Output& output) {
     }
 }
 
+static std::string output_cond_get(const opt_t* opts) {
+    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
+}
+
+// note [condition order]
+//
+// In theory re2c makes no guarantee about the order of conditions in the generated lexer. Users
+// should define condition type YYCONDTYPE and use values of this type with YYGETCONDITION and
+// YYSETCONDITION. This way code is independent of internal re2c condition numbering.
+//
+// However, it is possible to manually hardcode condition numbers and make re2c generate condition
+// dispatch without explicit use of condition names (nested `if` statements with `-b` or computed
+// `goto` table with `-g`). This code is syntactically valid (compiles), but unsafe:
+//     - change of re2c options may break compilation
+//     - change of internal re2c condition numbering may break runtime
+//
+// re2c has to preserve the existing numbering scheme.
+//
+// re2c warns about implicit assumptions about condition order, unless:
+//     - condition type is defined with 'types:re2c' or '-t, --type-header'
+//     - dispatch is independent of condition order: either it uses explicit condition names or
+//       there's only one condition and dispatch shrinks to unconditional jump
+
+static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper) {
+    OutputBlock& block = output.block();
+    const opt_t* opts = block.opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeList* stmts = code_list(alc);
+    if (lower == upper) {
+        buf.cstr("goto ").str(opts->cond_label_prefix).str(block.conds[lower].name);
+        append(stmts, code_stmt(alc, buf.flush()));
+    } else {
+        const size_t middle = lower + (upper - lower + 1) / 2;
+        CodeList* if_then = gen_cond_goto_binary(output, lower, middle - 1);
+        CodeList* if_else = gen_cond_goto_binary(output, middle, upper);
+        buf.str(output_cond_get(opts)).cstr(" < ").u64(middle);
+        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else));
+    }
+    return stmts;
+}
+
+static CodeList* gen_cond_goto(Output& output) {
+    OutputBlock& block = output.block();
+    const opt_t* opts = block.opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const StartConds& conds = block.conds;
+    bool warn_cond_ord = output.warn_condition_order;
+
+    DCHECK(!opts->loop_switch);
+
+    const size_t ncond = conds.size();
+    CodeList* stmts = code_list(alc);
+    const char* text;
+
+    if (opts->target == Target::DOT) {
+        for (const StartCond& cond : conds) {
+            text = buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name)
+                    .cstr("\"]").flush();
+            append(stmts, code_text(alc, text));
+        }
+    } else {
+        if (opts->cgoto) {
+            text = buf.cstr("goto *").str(opts->var_cond_table).cstr("[")
+                    .str(output_cond_get(opts)).cstr("]").flush();
+            append(stmts, code_stmt(alc, text));
+        } else if (opts->nested_ifs) {
+            warn_cond_ord &= ncond > 1;
+            append(stmts, gen_cond_goto_binary(output, 0, ncond - 1));
+        } else {
+            warn_cond_ord = false;
+
+            CodeCases* ccases = code_cases(alc);
+            for (const StartCond& cond : conds) {
+                CodeList* body = code_list(alc);
+                text = buf.cstr("goto ").str(opts->cond_label_prefix).str(cond.name).flush();
+                append(body, code_stmt(alc, text));
+
+                text = buf.str(opts->cond_enum_prefix).str(cond.name).flush();
+                append(ccases, code_case_string(alc, body, text));
+            }
+            text = buf.str(output_cond_get(opts)).flush();
+            append(stmts, code_switch(alc, text, ccases));
+        }
+
+        // see note [condition order]
+        warn_cond_ord &= opts->header_file.empty();
+        if (warn_cond_ord) {
+            output.msg.warn.condition_order(block.loc);
+        }
+    }
+
+    return stmts;
+}
+
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
     OutputBlock& oblock = output.block();
     OutAllocator& alc = output.allocator;
@@ -642,7 +695,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             append(code, code_nlabel(alc, oblock.start_label));
         }
         if (is_cond_block) {
-            append(code, code_cond_goto(alc));
+            append(code, gen_cond_goto(output));
         }
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             if (is_cond_block) {
@@ -662,6 +715,50 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     append(program, code_block(alc, code, CodeBlock::Kind::WRAPPED));
 
     return Ret::OK;
+}
+
+static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    append(code, code_text(alc, "digraph re2c {"));
+    append(code, gen_cond_goto(output));
+
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        if (!dfa->cond.empty()) {
+            buf.str(dfa->cond).cstr(" -> ").label(*dfa->head->label);
+            append(code, code_text(alc, buf.flush()));
+        }
+
+        for (State* s = dfa->head; s; s = s->next) {
+            if (s->action.kind == Action::Kind::ACCEPT) {
+                uint32_t i = 0;
+                for (const AcceptTrans& a: *s->action.info.accepts) {
+                    buf.label(*s->label).cstr(" -> ").label(*a.state->label)
+                            .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
+                    append(code, code_text(alc, buf.flush()));
+                    ++i;
+                }
+            } else if (s->action.kind == Action::Kind::RULE) {
+                const SemAct* semact = dfa->rules[s->action.info.rule].semact;
+                if (!semact->autogen) {
+                    buf.label(*s->label).cstr(" [label=\"")
+                            .str(output.msg.filenames[semact->loc.file])
+                            .cstr(":").u32(semact->loc.line).cstr("\"]");
+                    append(code, code_text(alc, buf.flush()));
+                }
+            }
+            gen_go(output, *dfa, &s->go, s, code);
+        }
+    }
+
+    append(code, code_text(alc, "}"));
+}
+
+static void gen_block_skeleton(Output& output, const Adfas& dfas, CodeList* code) {
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        emit_skeleton(output, code, *dfa);
+    }
 }
 
 void gen_code_pass1(Output& output) {
