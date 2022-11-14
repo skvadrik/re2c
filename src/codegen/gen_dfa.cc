@@ -619,6 +619,28 @@ static CodeList* gen_cond_goto(Output& output) {
     return stmts;
 }
 
+static CodeList* gen_cond_table(Output& output) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    const StartConds& conds = output.block().conds;
+
+    CodeList* code = code_list(alc);
+
+    buf.cstr("static void *").str(opts->var_cond_table).cstr("[").u64(conds.size()).cstr("] = {");
+    append(code, code_text(alc, buf.flush()));
+
+    CodeList* block = code_list(alc);
+    for (const StartCond& cond : conds) {
+        buf.cstr("&&").str(opts->cond_label_prefix).str(cond.name).cstr(",");
+        append(block, code_text(alc, buf.flush()));
+    }
+    append(code, code_block(alc, block, CodeBlock::Kind::INDENTED));
+
+    append(code, code_stmt(alc, "}"));
+    return code;
+}
+
 static Code* gen_yystate_def(Output& output) {
     Scratchbuf& buf = output.scratchbuf;
     const opt_t* opts = output.block().opts;
@@ -683,7 +705,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
         // and `goto` transitions between states.
         if (opts->cgoto && is_cond_block) {
-            append(code, code_cond_table(alc));
+            append(code, gen_cond_table(output));
         }
         if (opts->bitmaps) {
             for (const std::unique_ptr<Adfa>& dfa : dfas) {

@@ -723,7 +723,6 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:
-    case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LABEL:
     case CodeKind::DFAS:

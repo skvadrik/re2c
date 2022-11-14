@@ -88,31 +88,6 @@ LOCAL_NODISCARD(Ret gen_yymax(CodegenCtxPass1& ctx, Code* code)) {
     return Ret::OK;
 }
 
-static void gen_cond_table(CodegenCtxPass1& ctx, Code* code) {
-    const opt_t* opts = ctx.block->opts;
-    OutAllocator& alc = ctx.global->allocator;
-    const StartConds& conds = ctx.block->conds;
-    Scratchbuf& o = ctx.global->scratchbuf;
-
-    CodeList* stmts = code_list(alc);
-
-    o.cstr("static void *").str(opts->var_cond_table).cstr("[").u64(conds.size()).cstr("] = {");
-    append(stmts, code_text(alc, o.flush()));
-
-    CodeList* block = code_list(alc);
-    for (const StartCond& cond : conds) {
-        o.cstr("&&").str(opts->cond_label_prefix).str(cond.name).cstr(",");
-        append(block, code_text(alc, o.flush()));
-    }
-    append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
-
-    append(stmts, code_stmt(alc, "}"));
-
-    code->kind = CodeKind::BLOCK;
-    code->block.kind = CodeBlock::Kind::RAW;
-    code->block.stmts = stmts;
-}
-
 LOCAL_NODISCARD(Ret expand_pass_1_list(CodegenCtxPass1& ctx, CodeList* stmts)) {
     if (stmts) {
         for (Code* x = stmts->head; x; x = x->next) {
@@ -141,9 +116,6 @@ Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
         return gen_yymax(ctx, code);
-    case CodeKind::COND_TABLE:
-        gen_cond_table(ctx, code);
-        break;
     case CodeKind::LABEL:
         // Do nothing on the first pass (use information is not available yet, as the rest of the
         // first pass may generate some additional label uses, e.g. for a block start label in
@@ -234,7 +206,6 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:
-    case CodeKind::COND_TABLE:
     case CodeKind::STATE_GOTO:
     case CodeKind::LINE_INFO_INPUT:
     case CodeKind::LINE_INFO_OUTPUT:

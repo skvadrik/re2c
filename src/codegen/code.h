@@ -393,10 +393,6 @@ inline Code* code_fmt(OutAllocator& alc,
     return x;
 }
 
-inline Code* code_cond_table(OutAllocator& alc) {
-    return new_code(alc, CodeKind::COND_TABLE);
-}
-
 inline Code* code_state_goto(OutAllocator& alc, BlockNameList* blocks) {
     Code* x = new_code(alc, CodeKind::STATE_GOTO);
     x->block_names = blocks;
