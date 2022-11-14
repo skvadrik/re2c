@@ -160,31 +160,8 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     return Ret::OK;
 }
 
-static void fix_first_block_opts(const blocks_t& blocks) {
-    // If the initial block contains only whitespace and no user code, then re2c options specified
-    // in the first re2c block are also applied to the initial block.
-    if (blocks.size() >= 2) {
-        const OutputBlock* fst = blocks[0], *snd = blocks[1];
-        if (!fst->have_user_code) {
-            *const_cast<opt_t*>(fst->opts) = *snd->opts;
-        }
-    }
-}
-
 Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) {
     const blocks_t& blocks = *globalctx.pblocks;
-
-    fix_first_block_opts(blocks);
-
-    // First code generation pass: expand all delayed code blocks except labels. Labels need to wait
-    // until the next pass because the first pass may add transitions to previously unused labels
-    // (e.g. start label of a block that is specified in a `getstate:re2c` directive).
-    for (const OutputBlock* b : blocks) {
-        CodegenCtxPass1 gctx = {&globalctx, b};
-        for (Code* x = b->code->head; x != nullptr; x = x->next) {
-            CHECK_RET(expand_pass_1(gctx, x));
-        }
-    }
 
     FILE* file = nullptr, *temp = nullptr;
     std::string filename = fname, tempname = fname;
@@ -226,6 +203,17 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
         return Ret::FAIL;
     }
     return Ret::OK;
+}
+
+void fix_first_block_opts(const blocks_t& blocks) {
+    // If the initial block contains only whitespace and no user code, then re2c options specified
+    // in the first re2c block are also applied to the initial block.
+    if (blocks.size() >= 2) {
+        const OutputBlock* fst = blocks[0], *snd = blocks[1];
+        if (!fst->have_user_code) {
+            *const_cast<opt_t*>(fst->opts) = *snd->opts;
+        }
+    }
 }
 
 Ret Output::emit() {

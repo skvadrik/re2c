@@ -10,75 +10,6 @@
 
 namespace re2c {
 
-LOCAL_NODISCARD(Ret expand_pass_1_list(CodegenCtxPass1& ctx, CodeList* stmts)) {
-    if (stmts) {
-        for (Code* x = stmts->head; x; x = x->next) {
-            CHECK_RET(expand_pass_1(ctx, x));
-        }
-    }
-    return Ret::OK;
-}
-
-Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) {
-    const opt_t* opts = ctx.block->opts;
-    switch (code->kind) {
-    case CodeKind::BLOCK:
-        return expand_pass_1_list(ctx, code->block.stmts);
-    case CodeKind::IF_THEN_ELSE:
-        CHECK_RET(expand_pass_1_list(ctx, code->ifte.if_code));
-        CHECK_RET(expand_pass_1_list(ctx, code->ifte.else_code));
-        break;
-    case CodeKind::SWITCH:
-        for (CodeCase* x = code->swch.cases->head; x; x = x->next) {
-            CHECK_RET(expand_pass_1_list(ctx, x->body));
-        }
-        break;
-    case CodeKind::LOOP:
-        return expand_pass_1_list(ctx, code->loop);
-    case CodeKind::LABEL:
-        // Do nothing on the first pass (use information is not available yet, as the rest of the
-        // first pass may generate some additional label uses, e.g. for a block start label in
-        // `getstate:re2c`).
-        break;
-    case CodeKind::LINE_INFO_INPUT:
-    case CodeKind::LINE_INFO_OUTPUT:
-        // Although line directives are disabled for Rust, stubs confuse codegen into rendering
-        // oneline semantic actions as multiline, which triggers rustc warnings about redundant
-        // braces. We replace stubs with empty statements and rely on `remove_empty` pass.
-        if (opts->lang == Lang::RUST) code->kind = CodeKind::EMPTY;
-        break;
-    case CodeKind::EMPTY:
-    case CodeKind::FUNC:
-    case CodeKind::STMT:
-    case CodeKind::TEXT:
-    case CodeKind::RAW:
-    case CodeKind::TEXT_RAW:
-    case CodeKind::SKIP:
-    case CodeKind::PEEK:
-    case CodeKind::BACKUP:
-    case CodeKind::PEEK_SKIP:
-    case CodeKind::SKIP_PEEK:
-    case CodeKind::SKIP_BACKUP:
-    case CodeKind::BACKUP_SKIP:
-    case CodeKind::BACKUP_PEEK:
-    case CodeKind::BACKUP_PEEK_SKIP:
-    case CodeKind::SKIP_BACKUP_PEEK:
-    case CodeKind::VAR:
-    case CodeKind::ABORT:
-    case CodeKind::DFAS:
-        break;
-    case CodeKind::STATE_GOTO:
-    case CodeKind::STAGS:
-    case CodeKind::MTAGS:
-    case CodeKind::COND_ENUM:
-    case CodeKind::MAXFILL:
-    case CodeKind::MAXNMATCH:
-        UNREACHABLE();
-        break;
-    }
-    return Ret::OK;
-}
-
 static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {
     DCHECK(code->kind == CodeKind::LABEL);
     CodeLabel* label = &code->label;
@@ -122,14 +53,19 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::LABEL:
         gen_label(ctx.scratchbuf, ctx.opts, code);
         break;
+    case CodeKind::LINE_INFO_INPUT:
+    case CodeKind::LINE_INFO_OUTPUT:
+        // Although line directives are disabled for Rust, stubs confuse codegen into rendering
+        // oneline semantic actions as multiline, which triggers rustc warnings about redundant
+        // braces. We replace stubs with empty statements and rely on `remove_empty` pass.
+        if (ctx.opts->lang == Lang::RUST) code->kind = CodeKind::EMPTY;
+        break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:
     case CodeKind::STATE_GOTO:
-    case CodeKind::LINE_INFO_INPUT:
-    case CodeKind::LINE_INFO_OUTPUT:
     case CodeKind::EMPTY:
     case CodeKind::FUNC:
     case CodeKind::STMT:

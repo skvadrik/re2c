@@ -186,6 +186,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             output.set_current_block(b);
             gen_code_pass1(output);
         }
+        fix_first_block_opts(bs);
     }
     gen_implicit_cond_enum(output);
 

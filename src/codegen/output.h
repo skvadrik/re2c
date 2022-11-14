@@ -66,11 +66,6 @@ struct CodegenCtxGlobal {
     const bool warn_cond_ord;
 };
 
-struct CodegenCtxPass1 {
-    const CodegenCtxGlobal* global; // global part
-    const OutputBlock* block;       // block-local part
-};
-
 struct CodegenCtxPass2 {
     OutAllocator& allocator;
     Scratchbuf& scratchbuf;
@@ -181,7 +176,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
 
-Ret expand_pass_1(CodegenCtxPass1& ctx, Code* code) NODISCARD;
+void fix_first_block_opts(const blocks_t& blocks);
 void expand_pass_2(CodegenCtxPass2& ctx, Code* code);
 void remove_empty(CodegenCtxPass2& ctx, Code* code);
 void combine(CodegenCtxPass2& ctx, Code* code);
