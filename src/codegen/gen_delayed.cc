@@ -10,22 +10,6 @@
 
 namespace re2c {
 
-static void gen_label(Scratchbuf& o, const opt_t* opts, Code* code) {
-    DCHECK(code->kind == CodeKind::LABEL);
-    CodeLabel* label = &code->label;
-
-    if (label->kind == CodeLabel::Kind::SLABEL) {
-        code->kind = CodeKind::TEXT_RAW;
-        code->text = o.cstr(label->slabel).cstr(":").flush();
-    } else if (label->nlabel->used) {
-        DCHECK(label->nlabel->index != Label::NONE);
-        code->kind = CodeKind::TEXT_RAW;
-        code->text = o.str(opts->label_prefix).u32(label->nlabel->index).cstr(":").flush();
-    } else {
-        code->kind = CodeKind::EMPTY;
-    }
-}
-
 static void expand_pass_2_list(CodegenCtxPass2& ctx, CodeList* stmts) {
     if (!stmts) return;
     for (Code* x = stmts->head; x; x = x->next) {
@@ -49,9 +33,6 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
         break;
     case CodeKind::LOOP:
         expand_pass_2_list(ctx, code->loop);
-        break;
-    case CodeKind::LABEL:
-        gen_label(ctx.scratchbuf, ctx.opts, code);
         break;
     case CodeKind::LINE_INFO_INPUT:
     case CodeKind::LINE_INFO_OUTPUT:
@@ -85,6 +66,7 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
     case CodeKind::VAR:
     case CodeKind::ABORT:
     case CodeKind::DFAS:
+    case CodeKind::LABEL:
         break;
     }
 }

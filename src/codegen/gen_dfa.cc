@@ -83,8 +83,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
     // With --loop-switch that would be impossible, because there can be no transitions in the
     // middle of a state.
     DCHECK(!opts->loop_switch);
-    if (dfa.head->label->used && !opts->eager_skip) {
-        dfa.initial_label->used = true;
+    if (dfa.initial_label->used) {
         buf.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
         append(stmts, code_stmt(alc, buf.flush()));
     }
@@ -929,6 +928,10 @@ void gen_code_pass1(Output& output) {
         // Assign label indices (only to the labels that are used).
         for (State* s = dfa->head; s; s = s->next) {
             if (s->label->used) s->label->index = output.label_counter++;
+        }
+
+        if (dfa->head->label->used && !opts->eager_skip) {
+            dfa->initial_label->used = true;
         }
 
         if (!dfa->cond.empty()) {

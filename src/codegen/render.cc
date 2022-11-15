@@ -631,6 +631,17 @@ static void render_abort(RenderContext& rctx) {
     ++rctx.line;
 }
 
+static void render_label(RenderContext& rctx, const CodeLabel& label) {
+    if (label.kind == CodeLabel::Kind::SLABEL) {
+        rctx.os << label.slabel << ":" << std::endl;
+        ++rctx.line;
+    } else if (label.nlabel->used) {
+        DCHECK(label.nlabel->index != Label::NONE);
+        rctx.os << rctx.opts->label_prefix << label.nlabel->index << ":" << std::endl;
+        ++rctx.line;
+    }
+}
+
 void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -718,13 +729,15 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::VAR:
         render_var(rctx, &code->var);
         break;
+    case CodeKind::LABEL:
+        render_label(rctx, code->label);
+        break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:
     case CodeKind::STATE_GOTO:
-    case CodeKind::LABEL:
     case CodeKind::DFAS:
         UNREACHABLE(); // must have been expanded before
     }
