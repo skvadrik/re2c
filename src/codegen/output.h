@@ -66,12 +66,6 @@ struct CodegenCtxGlobal {
     const bool warn_cond_ord;
 };
 
-struct CodegenCtxPass2 {
-    OutAllocator& allocator;
-    Scratchbuf& scratchbuf;
-    const opt_t* opts;
-};
-
 struct RenderContext {
     std::ostringstream& os;
     const opt_t* opts;
@@ -177,7 +171,7 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
 
 void fix_first_block_opts(const blocks_t& blocks);
-void combine(CodegenCtxPass2& ctx, Code* code);
+void combine(Code* code, const opt_t* opts);
 void render(RenderContext& rctx, const Code* code);
 
 bool endstate(const State* s);

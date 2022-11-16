@@ -4,9 +4,9 @@
 
 namespace re2c {
 
-static void combine_code(CodegenCtxPass2& ctx, Code* code);
+static void combine_code(Code* code);
 
-static void combine_list(CodegenCtxPass2& ctx, CodeList* stmts) {
+static void combine_list(CodeList* stmts) {
     Code* x, *y, *z;
     for (x = stmts->head; x; ) {
         // have three statements ahead
@@ -54,23 +54,23 @@ static void combine_list(CodegenCtxPass2& ctx, CodeList* stmts) {
             }
         }
 
-        combine_code(ctx, x);
+        combine_code(x);
         x = x->next;
     }
 }
 
-void combine_code(CodegenCtxPass2& ctx, Code* code) {
+void combine_code(Code* code) {
     // don't recurse into other constructs because they have no skip/peek/backup
     if (code->kind == CodeKind::BLOCK) {
-        combine_list(ctx, code->block.stmts);
+        combine_list(code->block.stmts);
     }
 }
 
-void combine(CodegenCtxPass2& ctx, Code* code) {
+void combine(Code* code, const opt_t* opts) {
     // folding skip/peek/backup expressions is only possible with default input API
-    if (ctx.opts->api != Api::DEFAULT) return;
+    if (opts->api != Api::DEFAULT) return;
 
-    combine_code(ctx, code);
+    combine_code(code);
 }
 
 } // namespace re2c

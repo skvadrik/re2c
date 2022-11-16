@@ -180,13 +180,11 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
     // write the generated code to a file.
     unsigned int line_count = 1;
     for (const OutputBlock* b : blocks) {
-        CodegenCtxPass2 gctx = {allocator, scratchbuf, b->opts};
-
         for (Code* x = b->code->head; x != nullptr; x = x->next) {
             std::ostringstream os;
             RenderContext rctx{os, b->opts, msg, b->opts->indent_top, filename.c_str(), line_count};
 
-            combine(gctx, x);
+            combine(x, b->opts);
             render(rctx, x);
             write_converting_newlines(os.str(), file);
         }
