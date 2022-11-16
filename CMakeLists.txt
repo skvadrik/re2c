@@ -132,7 +132,6 @@ set(re2c_sources
     src/codegen/gen_program.cc
     src/codegen/gen_state.cc
     src/codegen/helpers.cc
-    src/codegen/remove_empty.cc
     src/codegen/render.cc
     src/options/opt.cc
     src/options/symtab.cc

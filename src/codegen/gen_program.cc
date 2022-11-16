@@ -186,7 +186,6 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
             std::ostringstream os;
             RenderContext rctx{os, b->opts, msg, b->opts->indent_top, filename.c_str(), line_count};
 
-            remove_empty(gctx, x);
             combine(gctx, x);
             render(rctx, x);
             write_converting_newlines(os.str(), file);
