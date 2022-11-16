@@ -195,6 +195,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
         for (OutputBlock* b : bs) {
             output.set_current_block(b);
             CHECK_RET(gen_code_pass2(output));
+            b->dfas.clear(); // DFAs are no longer used after this phase
         }
     }
 
