@@ -177,7 +177,6 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
 
 void fix_first_block_opts(const blocks_t& blocks);
-void expand_pass_2(CodegenCtxPass2& ctx, Code* code);
 void remove_empty(CodegenCtxPass2& ctx, Code* code);
 void combine(CodegenCtxPass2& ctx, Code* code);
 void render(RenderContext& rctx, const Code* code);

@@ -127,7 +127,6 @@ set(re2c_sources
     src/codegen/code_goto.cc
     src/codegen/combine.cc
     src/codegen/gen_bitmaps.cc
-    src/codegen/gen_delayed.cc
     src/codegen/gen_dfa.cc
     src/codegen/gen_goto.cc
     src/codegen/gen_program.cc
