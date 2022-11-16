@@ -166,7 +166,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             }
             output.gen_stmt(code_dfas(output.allocator));
         }
-        output.gen_stmt(code_line_info_input(output.allocator, input.cur_loc()));
+        output.gen_stmt(code_line_info_input(output.allocator, b.opts->lang, input.cur_loc()));
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.

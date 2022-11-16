@@ -36,11 +36,6 @@ void expand_pass_2(CodegenCtxPass2& ctx, Code* code) {
         break;
     case CodeKind::LINE_INFO_INPUT:
     case CodeKind::LINE_INFO_OUTPUT:
-        // Although line directives are disabled for Rust, stubs confuse codegen into rendering
-        // oneline semantic actions as multiline, which triggers rustc warnings about redundant
-        // braces. We replace stubs with empty statements and rely on `remove_empty` pass.
-        if (ctx.opts->lang == Lang::RUST) code->kind = CodeKind::EMPTY;
-        break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:

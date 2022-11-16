@@ -268,7 +268,7 @@ Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
     header_mode(false);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
     gen_version_time();
-    gen_stmt(code_line_info_input(allocator, loc));
+    gen_stmt(code_line_info_input(allocator, block().opts->lang, loc));
 
     if (block().opts->target == Target::SKELETON) {
         gen_stmt(emit_skeleton_prolog(*this));

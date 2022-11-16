@@ -730,7 +730,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     const bool is_cond_block = !dfas.front()->cond.empty();
 
     append(program, code_newline(alc)); // the following #line info must start at zero indent
-    append(program, code_line_info_output(alc));
+    append(program, code_line_info_output(alc, opts->lang));
 
     CodeList* code = code_list(alc);
 

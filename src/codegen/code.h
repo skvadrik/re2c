@@ -296,19 +296,21 @@ inline code_list_t<T>* new_code_list(OutAllocator& alc) {
 
 template<typename T>
 inline void append(code_list_t<T>* list, T* elem) {
-    DCHECK(elem);
-    *list->ptail = elem;
-    list->ptail = &elem->next;
+    if (elem != nullptr) {
+        *list->ptail = elem;
+        list->ptail = &elem->next;
+    }
 }
 
 template<typename T>
 inline void prepend(code_list_t<T>* list, T* elem) {
-    DCHECK(elem);
-    if (!list->head) {
-        list->ptail = &elem->next;
+    if (elem != nullptr) {
+        if (!list->head) {
+            list->ptail = &elem->next;
+        }
+        elem->next = list->head;
+        list->head = elem;
     }
-    elem->next = list->head;
-    list->head = elem;
 }
 
 template<typename T>
@@ -399,7 +401,10 @@ inline Code* code_state_goto(OutAllocator& alc, BlockNameList* blocks) {
     return x;
 }
 
-inline Code* code_line_info_input(OutAllocator& alc, const loc_t& loc) {
+inline Code* code_line_info_input(OutAllocator& alc, Lang lang, const loc_t& loc) {
+    // Rust has no line directives.
+    if (lang == Lang::RUST) return nullptr;
+
     Code* x = new_code(alc, CodeKind::LINE_INFO_INPUT);
     x->loc = loc;
     return x;
@@ -413,7 +418,10 @@ inline Code* code_var(OutAllocator& alc, VarType type, const std::string& name, 
     return x;
 }
 
-inline Code* code_line_info_output(OutAllocator& alc) {
+inline Code* code_line_info_output(OutAllocator& alc, Lang lang) {
+    // Rust has no line directives.
+    if (lang == Lang::RUST) return nullptr;
+
     return new_code(alc, CodeKind::LINE_INFO_OUTPUT);
 }
 

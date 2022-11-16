@@ -222,7 +222,7 @@ loop:
     "/*!header:re2c:off" {
         out.gen_raw(tok, ptr);
         out.header_mode(false);
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, globopts->lang, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
@@ -236,7 +236,7 @@ loop:
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, globopts->lang, cur_loc()));
         goto next;
     }
     "/*!include:re2c" {
@@ -338,7 +338,7 @@ loop: /*!local:re2c
     }
     eoc {
         if (multiline) {
-            out.gen_stmt(code_line_info_input(out.allocator, cur_loc()));
+            out.gen_stmt(code_line_info_input(out.allocator, globopts->lang, cur_loc()));
         }
         return Ret::OK;
     }
@@ -386,9 +386,9 @@ loop: /*!local:re2c
     eol { next_line(); goto loop; }
 
     eoc {
-        out.gen_stmt(code_line_info_output(alc));
+        out.gen_stmt(code_line_info_output(alc, globopts->lang));
         out.gen_stmt(code_fmt(alc, kind, blocks, fmt, sep));
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        out.gen_stmt(code_line_info_input(alc, globopts->lang, cur_loc()));
         return Ret::OK;
     }
 */
