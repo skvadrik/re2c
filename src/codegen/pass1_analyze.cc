@@ -10,6 +10,54 @@
 
 namespace re2c {
 
+// All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
+static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
+    const Span
+    *b1 = go1->span, *e1 = &b1[go1->span_count],
+     *b2 = go2->span, *e2 = &b2[go2->span_count];
+    uint32_t lb1 = 0, lb2 = 0;
+
+    for (;;) {
+        for (; b1 < e1 && b1->to != s1; ++b1) {
+            lb1 = b1->ub;
+        }
+        for (; b2 < e2 && b2->to != s2; ++b2) {
+            lb2 = b2->ub;
+        }
+        if (b1 == e1) {
+            return b2 == e2;
+        }
+        if (b2 == e2) {
+            return false;
+        }
+        // Еags are forbidden: transitions on different symbols might go to the same state, but
+        // they may have different tag sets.
+        if (lb1 != lb2
+                || b1->ub != b2->ub
+                || b1->tags != TCID0
+                || b2->tags != TCID0) {
+            return false;
+        }
+        ++b1;
+        ++b2;
+    }
+}
+
+static void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
+        if (matches(b->go, b->state, go, s)) return;
+    }
+    // bitmap list is constructed in reverse
+    prepend(bitmap->states, code_bmstate(alc, go, s));
+}
+
+static CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
+        if (b->state == s && matches(b->go, b->state, go, s)) return b;
+    }
+    return nullptr;
+}
+
 static CodeGoIf* code_goif(OutAllocator& alc,
                            CodeGoIf::Kind kind,
                            const Span* sp,
@@ -329,7 +377,7 @@ State* fallback_state_with_eof_rule(
     return fallback;
 }
 
-void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from) {
+static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from) {
     // Mark all states that are targets of `yyaccept` switch to as used.
     if (from->action.kind == Action::Kind::ACCEPT) {
         for (const AcceptTrans& a : *from->action.info.accepts) {
@@ -438,8 +486,106 @@ bool consume(const State* s) {
     return true;
 }
 
+void gen_code_pass1(Output& output) {
+    OutputBlock& block = output.block();
+    Adfas& dfas = block.dfas;
+    OutAllocator& alc = output.allocator;
+    const opt_t* opts = block.opts;
+
+    Code* code = block.code->head;
+    if (code->kind != CodeKind::DFAS) {
+        return;
+    } else if (dfas.empty()) {
+        code->kind = CodeKind::EMPTY;
+        return;
+    }
+
+    const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
+
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        const bool first = (dfa == first_dfa);
+
+        if (opts->bitmaps) {
+            dfa->bitmap = code_bitmap(alc, std::min(dfa->upper_char, 256u));
+            for (State* s = dfa->head; s; s = s->next) {
+                if (s->is_base) {
+                    DCHECK(s->next);
+                    insert_bitmap(alc, dfa->bitmap, &s->next->go, s);
+                }
+            }
+        }
+
+        // Allocate labels for DFA states, but do not assign indices yet: they will be assigned
+        // after the used label analysis only to the labels that are used.
+        for (State* s = dfa->head; s; s = s->next) {
+            s->label = new_label(alc, Label::NONE);
+        }
+
+        if (!opts->loop_switch) {
+            if (first) {
+                if (opts->label_start_force) {
+                    // User-enforced start label.
+                    block.start_label = new_label(alc, output.label_counter++);
+                    block.start_label->used = true;
+                } else if (opts->storable_state) {
+                    // Start label is needed in `-f` mode: it points to state 0 (the beginning of
+                    // block, before condition dispatch in `-c` mode).
+                    block.start_label = new_label(alc, output.label_counter++);
+                }
+            }
+            // Initial label points to the start of the DFA (after condition dispatch in `-c`).
+            dfa->initial_label = new_label(alc, output.label_counter++);
+        } else {
+            // In loop/switch mode the label of the first state is always used.
+            dfa->head->label->used = true;
+            // With loop/switch there are no labels, and each block has its own state switch where
+            // all conditions are joined. Restart state counter from zero so that cases start from
+            // zero. With skeleton conditions are separate.
+            if (first || opts->target == Target::SKELETON) output.label_counter = 0;
+        }
+
+        // Generate DFA transitions and perform used label analysis: for every transition mark its
+        // destination state label as used.
+        for (State* s = dfa->head; s; s = s->next) {
+            code_go(alc, *dfa, opts, s);
+        }
+
+        // Assign label indices (only to the labels that are used).
+        for (State* s = dfa->head; s; s = s->next) {
+            if (s->label->used) s->label->index = output.label_counter++;
+        }
+
+        if (dfa->head->label->used && !opts->eager_skip) {
+            dfa->initial_label->used = true;
+        }
+
+        if (!dfa->cond.empty()) {
+            // If loop/switch is used, condition numbers are the numeric indices of their initial
+            // DFA state. Otherwise we do not assign explicit numbers, and conditions are implicitly
+            // assigned consecutive numbers starting from zero.
+            block.conds.push_back({dfa->cond, opts->loop_switch ? dfa->head->label->index : 0});
+        }
+    }
+
+    // In loop/switch mode storable states occupy continuous index range after the last state index.
+    // In goto/label mode they use separate global enumeration that starts from zero.
+    uint32_t& counter = opts->loop_switch ? output.label_counter : output.fill_label_counter;
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        for (State* s = dfa->head; s; s = s->next) {
+            if (s->fill_state == s) {
+                s->fill_label = new_label(alc, counter++);
+
+                if (opts->storable_state) {
+                    block.fill_goto[s->fill_label->index] =
+                            gen_goto_after_fill(output, *dfa, s, nullptr);
+                }
+            }
+        }
+    }
+}
+
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
 constexpr uint32_t Label::NONE;
 constexpr uint32_t CodeGoCpTable::TABLE_SIZE;
 
-} // namespace re2c
+} // end namespace re2c

@@ -67,15 +67,12 @@ re2c_HDR = \
 	src/util/u32lim.h
 
 re2c_SRC = \
-	src/codegen/code_goto.cc \
-	src/codegen/combine.cc \
-	src/codegen/gen_bitmaps.cc \
-	src/codegen/gen_dfa.cc \
-	src/codegen/gen_goto.cc \
-	src/codegen/gen_program.cc \
-	src/codegen/gen_state.cc \
 	src/codegen/helpers.cc \
-	src/codegen/render.cc \
+	src/codegen/output.cc \
+	src/codegen/pass1_analyze.cc \
+	src/codegen/pass2_generate.cc \
+	src/codegen/pass3_fixup.cc \
+	src/codegen/pass4_render.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
 	src/nfa/re_to_nfa.cc \

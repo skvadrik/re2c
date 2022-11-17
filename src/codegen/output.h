@@ -148,40 +148,29 @@ struct Output {
 };
 
 void init_go(CodeGo* go);
-void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from);
+bool endstate(const State* s);
+bool consume(const State* s);
 State* fallback_state_with_eof_rule(
         const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags);
-CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s);
-void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s);
 std::string bitmap_name(const opt_t* opts, const std::string& cond);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
-
-void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
-void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts);
-void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid);
 CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to);
 void gen_implicit_cond_enum(Output& output);
-void gen_goto(
-        Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump);
-void gen_code_pass1(Output& output);
-Ret gen_code_pass2(Output& output) NODISCARD;
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
-
 void fix_first_block_opts(const blocks_t& blocks);
-void combine(Code* code, const opt_t* opts);
-void render(RenderContext& rctx, const Code* code);
-
-bool endstate(const State* s);
-bool consume(const State* s);
 void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
 std::string vartag_name(
         tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers);
 std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
 void gen_peek_expr(std::ostream& os, const opt_t* opts);
-void gen_yydebug(Output& output, const Label* label, CodeList* stmts);
+
+void gen_code_pass1(Output& output);
+Ret gen_code_pass2(Output& output) NODISCARD;
+void combine(Code* code, const opt_t* opts);
+void render(RenderContext& rctx, const Code* code);
 
 } // namespace re2c
 
