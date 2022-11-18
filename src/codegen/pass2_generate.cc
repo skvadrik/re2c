@@ -1997,7 +1997,7 @@ static void gen_block_skeleton(Output& output, const Adfas& dfas, CodeList* code
     }
 }
 
-Ret gen_code_pass2(Output& output) {
+Ret codegen_generate(Output& output) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
     const opt_t* opts = block.opts;

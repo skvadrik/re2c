@@ -184,7 +184,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
             output.set_current_block(b);
-            gen_code_pass1(output);
+            codegen_analyze(output);
         }
         fix_first_block_opts(bs);
     }
@@ -194,7 +194,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
             output.set_current_block(b);
-            CHECK_RET(gen_code_pass2(output));
+            CHECK_RET(codegen_generate(output));
             b->dfas.clear(); // DFAs are no longer used after this phase
         }
     }

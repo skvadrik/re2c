@@ -7,6 +7,8 @@
 
 namespace re2c {
 
+static void render(RenderContext& rctx, const Code* code);
+
 static uint32_t count_lines_text(const char* text) {
     DCHECK(text);
     uint32_t lc = 0;
@@ -642,7 +644,7 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
-void render(RenderContext& rctx, const Code* code) {
+static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
     const uint32_t ind = rctx.ind;
@@ -741,6 +743,12 @@ void render(RenderContext& rctx, const Code* code) {
     case CodeKind::DFAS:
         UNREACHABLE(); // must have been expanded before
     }
+}
+
+void codegen_render(const OutputBlock* block, RenderContext& rctx) {
+    rctx.opts = block->opts;
+    rctx.ind = block->opts->indent_top;
+    render_list(rctx, block->code);
 }
 
 } // namespace re2c

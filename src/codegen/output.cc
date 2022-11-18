@@ -178,17 +178,12 @@ Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& global
 
     // Second code generation pass: expand labels, combine/simplify statements, convert newlines,
     // write the generated code to a file.
-    unsigned int line_count = 1;
+    RenderContext rctx(msg, filename);
     for (const OutputBlock* b : blocks) {
-        for (Code* x = b->code->head; x != nullptr; x = x->next) {
-            std::ostringstream os;
-            RenderContext rctx{os, b->opts, msg, b->opts->indent_top, filename.c_str(), line_count};
-
-            combine(x, b->opts);
-            render(rctx, x);
-            write_converting_newlines(os.str(), file);
-        }
+        codegen_fixup(b);
+        codegen_render(b, rctx);
     }
+    write_converting_newlines(rctx.os.str(), file);
 
     fclose(file);
     if (temp && !overwrite_file(tempname.c_str(), fname.c_str())) {

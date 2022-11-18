@@ -66,11 +66,11 @@ void combine_code(Code* code) {
     }
 }
 
-void combine(Code* code, const opt_t* opts) {
-    // folding skip/peek/backup expressions is only possible with default input API
-    if (opts->api != Api::DEFAULT) return;
-
-    combine_code(code);
+void codegen_fixup(const OutputBlock* block) {
+    if (block->opts->api == Api::DEFAULT) {
+        // Folding skip/peek/backup expressions is only possible with default input API.
+        combine_list(block->code);
+    }
 }
 
 } // namespace re2c

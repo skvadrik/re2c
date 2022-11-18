@@ -486,7 +486,7 @@ bool consume(const State* s) {
     return true;
 }
 
-void gen_code_pass1(Output& output) {
+void codegen_analyze(Output& output) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;

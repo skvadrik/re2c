@@ -67,12 +67,16 @@ struct CodegenCtxGlobal {
 };
 
 struct RenderContext {
-    std::ostringstream& os;
-    const opt_t* opts;
+    std::ostringstream os;
     const Msg& msg;
+    const opt_t* opts;
+    const std::string& file;
+    uint32_t line;
     uint32_t ind;
-    const char* file;
-    uint32_t& line;
+
+    RenderContext(const Msg& msg, const std::string& file)
+        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
+    FORBID_COPY(RenderContext);
 };
 
 struct StartCond {
@@ -167,10 +171,10 @@ std::string vartag_name(
 std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
 void gen_peek_expr(std::ostream& os, const opt_t* opts);
 
-void gen_code_pass1(Output& output);
-Ret gen_code_pass2(Output& output) NODISCARD;
-void combine(Code* code, const opt_t* opts);
-void render(RenderContext& rctx, const Code* code);
+void codegen_analyze(Output& output);
+Ret codegen_generate(Output& output) NODISCARD;
+void codegen_fixup(const OutputBlock* block);
+void codegen_render(const OutputBlock* block, RenderContext& rctx);
 
 } // namespace re2c
 
