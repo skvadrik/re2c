@@ -160,9 +160,7 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     return Ret::OK;
 }
 
-Ret Output::emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) {
-    const blocks_t& blocks = *globalctx.pblocks;
-
+Ret Output::emit_blocks(const std::string& fname, const blocks_t& blocks) {
     FILE* file = nullptr, *temp = nullptr;
     std::string filename = fname, tempname = fname;
 
@@ -210,28 +208,16 @@ void fix_first_block_opts(const blocks_t& blocks) {
 Ret Output::emit() {
     CHECK_RET(msg.warn.check());
 
-    CodegenCtxGlobal ctx = {allocator,
-                            scratchbuf,
-                            msg,
-                            total_opts,
-                            cblocks,
-                            hblocks,
-                            /*pblocks*/ nullptr,
-                            /*tmpblocks*/ blocks_t(),
-                            warn_condition_order};
-
     // global options are last block's options
     const opt_t* opts = block().opts;
 
     // Emit header file.
     if (!opts->header_file.empty() || need_header) {
-        ctx.pblocks = &hblocks;
-        CHECK_RET(emit_blocks(opts->header_file, ctx));
+        CHECK_RET(emit_blocks(opts->header_file, hblocks));
     }
 
     // Emit output file.
-    ctx.pblocks = &cblocks;
-    return emit_blocks(opts->output_file, ctx);
+    return emit_blocks(opts->output_file, cblocks);
 }
 
 void Output::gen_version_time() {

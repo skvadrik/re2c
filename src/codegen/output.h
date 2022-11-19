@@ -54,18 +54,6 @@ using blocks_t = std::vector<OutputBlock*>;
 using blocks_citer_t = blocks_t::const_iterator;
 using tagnames_t = std::set<std::string>;
 
-struct CodegenCtxGlobal {
-    OutAllocator& allocator;
-    Scratchbuf& scratchbuf;
-    Msg& msg;
-    const opt_t* opts;
-    const blocks_t& cblocks;
-    const blocks_t& hblocks;
-    const blocks_t* pblocks;
-    mutable blocks_t tmpblocks; // temporary buffer for block lists in directives
-    const bool warn_cond_ord;
-};
-
 struct RenderContext {
     std::ostringstream os;
     const Msg& msg;
@@ -147,7 +135,7 @@ struct Output {
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     Ret emit() NODISCARD;
-    Ret emit_blocks(const std::string& fname, const CodegenCtxGlobal& globalctx) NODISCARD;
+    Ret emit_blocks(const std::string& fname, const blocks_t& blocks) NODISCARD;
     FORBID_COPY(Output);
 };
 
