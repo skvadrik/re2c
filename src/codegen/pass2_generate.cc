@@ -1559,19 +1559,6 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-// Emit implicit condiiton enum in the header, if there is no explicit directive.
-void gen_implicit_cond_enum(Output& output) {
-    const opt_t* opts = output.total_opts;
-    OutAllocator& alc = output.allocator;
-
-    if (!opts->header_file.empty() && opts->start_conditions && output.cond_enum_autogen) {
-        output.header_mode(true);
-        output.gen_stmt(code_newline(alc));
-        output.gen_stmt(code_fmt(alc, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
-        output.header_mode(false);
-    }
-}
-
 static std::string output_cond_get(const opt_t* opts) {
     return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
 }
@@ -1997,7 +1984,7 @@ static void gen_block_skeleton(Output& output, const Adfas& dfas, CodeList* code
     }
 }
 
-Ret codegen_generate(Output& output) {
+LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
     const opt_t* opts = block.opts;
@@ -2037,6 +2024,18 @@ Ret codegen_generate(Output& output) {
         }
     }
 
+    return Ret::OK;
+}
+
+Ret codegen_generate(Output& output) {
+    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
+        for (OutputBlock* b : bs) {
+            output.set_current_block(b);
+            CHECK_RET(codegen_generate_block(output));
+            b->dfas.clear(); // DFAs are no longer used after this phase
+        }
+    }
+    output.set_current_block(nullptr);
     return Ret::OK;
 }
 

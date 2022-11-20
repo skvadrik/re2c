@@ -486,7 +486,7 @@ bool consume(const State* s) {
     return true;
 }
 
-void codegen_analyze(Output& output) {
+static void codegen_analyze_block(Output& output) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;
@@ -582,6 +582,32 @@ void codegen_analyze(Output& output) {
             }
         }
     }
+}
+
+void codegen_analyze(Output& output) {
+    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
+        for (OutputBlock* b : bs) {
+            output.set_current_block(b);
+            codegen_analyze_block(output);
+        }
+
+        // If the first block contains only whitespace and no user code, then it should "inherit"
+        // options from the second block.
+        if (bs.size() > 1 && !bs[0]->have_user_code) {
+            *const_cast<opt_t*>(bs[0]->opts) = *bs[1]->opts;
+        }
+    }
+
+    // Generate implicit condiiton enum in the header, if there is no explicit directive.
+    const opt_t* opts = output.total_opts;
+    if (!opts->header_file.empty() && opts->start_conditions && output.cond_enum_autogen) {
+        output.header_mode(true);
+        output.gen_stmt(code_newline(output.allocator));
+        output.gen_stmt(code_fmt(output.allocator, CodeKind::COND_ENUM, nullptr, nullptr, nullptr));
+        output.header_mode(false);
+    }
+
+    output.set_current_block(nullptr);
 }
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).

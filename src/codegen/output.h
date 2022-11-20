@@ -134,8 +134,6 @@ struct Output {
     void gen_stmt(Code* stmt);
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
-    Ret emit() NODISCARD;
-    Ret emit_blocks(const std::string& fname, const blocks_t& blocks) NODISCARD;
     FORBID_COPY(Output);
 };
 
@@ -148,11 +146,9 @@ std::string bitmap_name(const opt_t* opts, const std::string& cond);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
 CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to);
-void gen_implicit_cond_enum(Output& output);
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
-void fix_first_block_opts(const blocks_t& blocks);
 void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
 std::string vartag_name(
         tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers);
@@ -161,8 +157,8 @@ void gen_peek_expr(std::ostream& os, const opt_t* opts);
 
 void codegen_analyze(Output& output);
 Ret codegen_generate(Output& output) NODISCARD;
-void codegen_fixup(const OutputBlock* block);
-void codegen_render(const OutputBlock* block, RenderContext& rctx);
+void codegen_fixup(Output& output);
+Ret codegen_render(Output& outptu) NODISCARD;
 
 } // namespace re2c
 

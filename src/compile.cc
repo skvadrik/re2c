@@ -84,6 +84,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     warn_undefined_control_flow(skeleton);
     if (opts->target == Target::SKELETON) {
         CHECK_RET(emit_data(skeleton));
+        output.skeletons.insert(name);
     }
 
     cutoff_dead_rules(dfa, opts, cond, msg);
@@ -178,30 +179,22 @@ Ret compile(Input& input, Output& output, Opt& opts) {
         }
     }
 
+    output.gen_epilog();
+
     output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
 
-    // Early codegen phase that gathers whole-program information.
-    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
-        for (OutputBlock* b : bs) {
-            output.set_current_block(b);
-            codegen_analyze(output);
-        }
-        fix_first_block_opts(bs);
-    }
-    gen_implicit_cond_enum(output);
+    // Early codegen pass that gathers whole-program information.
+    codegen_analyze(output);
 
-    // Main codegen phase.
-    for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
-        for (OutputBlock* b : bs) {
-            output.set_current_block(b);
-            CHECK_RET(codegen_generate(output));
-            b->dfas.clear(); // DFAs are no longer used after this phase
-        }
-    }
+    // Main codegen pass that generates code. After that we can release memory used for DFAs.
+    CHECK_RET(codegen_generate(output));
+    dfa_alc.clear();
 
-    output.set_current_block(nullptr);
+    // Late codegen pass that cleans up the generated code.
+    codegen_fixup(output);
 
-    output.gen_epilog();
+    // Rendering phase that prints the generated code into the output file.
+    CHECK_RET(codegen_render(output));
 
     return Ret::OK;
 }
