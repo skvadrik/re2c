@@ -21,8 +21,6 @@ static Ret main(int, char* argv[]) {
     Output output(msg);
     CHECK_RET(compile(input, output, opts));
 
-    CHECK_RET(msg.warn.check());
-
     CHECK_RET(input.gen_dep_file());
 
     if (globopts.verbose) fprintf(stderr, "re2c: success\n");

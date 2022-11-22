@@ -806,8 +806,6 @@ LOCAL_NODISCARD(Ret codegen_render_blocks(
 }
 
 Ret codegen_render(Output& output) {
-    CHECK_RET(output.msg.warn.check());
-
     const opt_t* opts = output.total_opts; // global options
 
     // Emit header file.
@@ -816,7 +814,11 @@ Ret codegen_render(Output& output) {
     }
 
     // Emit output file.
-    return codegen_render_blocks(output, opts->output_file, output.cblocks);
+    CHECK_RET(codegen_render_blocks(output, opts->output_file, output.cblocks));
+
+    // Check that the rendering pass did not generate any unexpected -Werror warnings.
+    CHECK(output.msg.warn.check() == Ret::OK);
+    return Ret::OK;
 }
 
 } // namespace re2c

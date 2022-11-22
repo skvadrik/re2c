@@ -193,7 +193,10 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     // Late codegen pass that cleans up the generated code.
     codegen_fixup(output);
 
-    // Rendering phase that prints the generated code into the output file.
+    // Check for -Werror warnings before writing output file(s).
+    CHECK_RET(output.msg.warn.check());
+
+    // Rendering pass that prints the generated code into the output file.
     CHECK_RET(codegen_render(output));
 
     return Ret::OK;
