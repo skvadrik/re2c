@@ -49,8 +49,16 @@
 
 namespace re2c {
 
+Ast::Ast(AstAllocator& ast_alc)
+    : ast_alc(ast_alc),
+      temp_chars(),
+      temp_ranges(),
+      temp_condlist(),
+      temp_blockname(),
+      blocks() {}
+
 AstNode* Ast::make(const loc_t& loc, AstKind kind, bool has_caps) {
-    AstNode* p = allocator.alloct<AstNode>(1);
+    AstNode* p = ast_alc.alloct<AstNode>(1);
     p->kind = kind;
     p->loc = loc;
     p->has_caps = has_caps;
@@ -63,7 +71,7 @@ const AstNode* Ast::nil(const loc_t& loc) {
 
 const AstNode* Ast::str(const loc_t& loc, bool icase) {
     AstNode* ast = make(loc, AstKind::STR, false);
-    ast->str.chars.init(temp_chars.data(), temp_chars.size(), allocator);
+    ast->str.chars.init(temp_chars.data(), temp_chars.size(), ast_alc);
     ast->str.icase = icase;
     temp_chars.clear();
     return ast;
@@ -71,7 +79,7 @@ const AstNode* Ast::str(const loc_t& loc, bool icase) {
 
 const AstNode* Ast::cls(const loc_t& loc, bool negated) {
     AstNode* ast = make(loc, AstKind::CLS, false);
-    ast->cls.ranges.init(temp_ranges.data(), temp_ranges.size(), allocator);
+    ast->cls.ranges.init(temp_ranges.data(), temp_ranges.size(), ast_alc);
     ast->cls.negated = negated;
     temp_ranges.clear();
     return ast;
@@ -140,7 +148,7 @@ const AstNode* Ast::ref(const AstNode* a, const char* n) {
 }
 
 const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen) {
-    SemAct* a = allocator.alloct<SemAct>(1);
+    SemAct* a = ast_alc.alloct<SemAct>(1);
     a->loc = loc;
     a->text = text;
     a->cond = cond;
@@ -149,7 +157,7 @@ const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond,
 }
 
 const char* Ast::cstr(const uint8_t* s, const uint8_t* e) {
-    return newcstr(s, e, allocator);
+    return newcstr(s, e, ast_alc);
 }
 
 bool Ast::needs_wrap(const AstNode* a) {

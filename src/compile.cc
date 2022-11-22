@@ -126,10 +126,12 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 }
 
 Ret compile(Input& input, Output& output, Opt& opts) {
-    Ast ast;
     std::string block_name;
     loc_t block_loc;
+    AstAllocator ast_alc;
     DfaAllocator dfa_alc;
+    OutAllocator& out_alc = output.allocator;
+    Ast ast(ast_alc);
 
     CHECK_RET(output.gen_prolog(opts, input.tok_loc()));
 
@@ -165,9 +167,9 @@ Ret compile(Input& input, Output& output, Opt& opts) {
             for (const AstGram& gram : grams) {
                 CHECK_RET(ast_to_dfa(gram, output, b.dfas, dfa_alc));
             }
-            output.gen_stmt(code_dfas(output.allocator));
+            output.gen_stmt(code_dfas(out_alc));
         }
-        output.gen_stmt(code_line_info_input(output.allocator, b.opts->lang, input.cur_loc()));
+        output.gen_stmt(code_line_info_input(out_alc, b.opts->lang, input.cur_loc()));
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.
@@ -189,6 +191,10 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     // Main codegen pass that generates code. After that we can release memory used for DFAs.
     CHECK_RET(codegen_generate(output));
     dfa_alc.clear();
+
+    // We cannot release AST memory before main codegen pass because of semantic actions and some
+    // other things that get allocated during parsing and need to live long enough for codegen.
+    ast_alc.clear();
 
     // Late codegen pass that cleans up the generated code.
     codegen_fixup(output);

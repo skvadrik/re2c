@@ -164,7 +164,7 @@ class Ast {
   private:
     // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
     // (which happens after parsing and processing the whole translation unit, but before codegen).
-    AstAllocator allocator;
+    AstAllocator& ast_alc;
 
     AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
 
@@ -184,7 +184,7 @@ class Ast {
     // Used to denote unbounded repetition (iteration, Kleene star).
     static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
 
-    Ast(): allocator(), temp_chars(), temp_ranges(), temp_condlist(), temp_blockname(), blocks() {}
+    explicit Ast(AstAllocator& ast_alc);
 
     // Methods for constructing individual AST nodes.
     const AstNode* nil(const loc_t& loc);
