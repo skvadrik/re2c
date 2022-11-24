@@ -47,7 +47,6 @@ re2c_HDR = \
 	src/regexp/regexp.h \
 	src/regexp/rule.h \
 	src/regexp/tag.h \
-	src/compile.h \
 	src/skeleton/mtag_trie.h \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
@@ -115,7 +114,6 @@ re2c_SRC = \
 	src/regexp/nullable.cc \
 	src/regexp/regexp.cc \
 	src/regexp/split_charset.cc \
-	src/compile.cc \
 	src/skeleton/control_flow.cc \
 	src/skeleton/generate_code.cc \
 	src/skeleton/generate_data.cc \

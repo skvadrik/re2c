@@ -114,14 +114,14 @@ struct Output {
     bool done_mtag_defs;
     Msg& msg;
     std::set<std::string> skeletons;
-    OutAllocator allocator;
+    OutAllocator& allocator;
     Scratchbuf scratchbuf;
     OutputBlock* current_block;
 
     // "final" options accumulated for all non-reuse blocks
     const opt_t* total_opts;
 
-    explicit Output(Msg& msg);
+    Output(OutAllocator& alc, Msg& msg);
     ~Output();
     OutputBlock& block();
     void set_current_block(OutputBlock* block);

@@ -38,7 +38,7 @@ OutputBlock::~OutputBlock() {
     delete opts;
 }
 
-Output::Output(Msg& msg)
+Output::Output(OutAllocator& alc, Msg& msg)
     : cblocks(),
       hblocks(),
       pblocks(&cblocks),
@@ -52,7 +52,7 @@ Output::Output(Msg& msg)
       done_mtag_defs(false),
       msg(msg),
       skeletons(),
-      allocator(),
+      allocator(alc),
       scratchbuf(allocator),
       current_block(nullptr),
       total_opts(nullptr) {}

@@ -172,7 +172,6 @@ set(re2c_sources
     src/regexp/nullable.cc
     src/regexp/regexp.cc
     src/regexp/split_charset.cc
-    src/compile.cc
     src/skeleton/control_flow.cc
     src/skeleton/generate_code.cc
     src/skeleton/generate_data.cc
