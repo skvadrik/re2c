@@ -49,8 +49,9 @@
 
 namespace re2c {
 
-Ast::Ast(AstAllocator& ast_alc)
+Ast::Ast(AstAllocator& ast_alc, OutAllocator& out_alc)
     : ast_alc(ast_alc),
+      out_alc(out_alc),
       temp_chars(),
       temp_ranges(),
       temp_condlist(),
@@ -148,7 +149,8 @@ const AstNode* Ast::ref(const AstNode* a, const char* n) {
 }
 
 const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen) {
-    SemAct* a = ast_alc.alloct<SemAct>(1);
+    // Semantic actions are used in codegen after AST is destroyed, so they use output allocator.
+    SemAct* a = out_alc.alloct<SemAct>(1);
     a->loc = loc;
     a->text = text;
     a->cond = cond;
@@ -156,8 +158,13 @@ const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond,
     return a;
 }
 
-const char* Ast::cstr(const uint8_t* s, const uint8_t* e) {
+const char* Ast::cstr_local(const uint8_t* s, const uint8_t* e) {
     return newcstr(s, e, ast_alc);
+}
+
+const char* Ast::cstr_global(const uint8_t* s, const uint8_t* e) {
+    // "Global" strings are used in codegen after AST is destroyed, so they use output allocator.
+    return newcstr(s, e, out_alc);
 }
 
 bool Ast::needs_wrap(const AstNode* a) {

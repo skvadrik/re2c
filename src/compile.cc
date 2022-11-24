@@ -131,7 +131,7 @@ Ret compile(Input& input, Output& output, Opt& opts) {
     AstAllocator ast_alc;
     DfaAllocator dfa_alc;
     OutAllocator& out_alc = output.allocator;
-    Ast ast(ast_alc);
+    Ast ast(ast_alc, out_alc);
 
     CHECK_RET(output.gen_prolog(opts, input.tok_loc()));
 
@@ -185,16 +185,14 @@ Ret compile(Input& input, Output& output, Opt& opts) {
 
     output.total_opts = accum_opts ? accum_opts : ast.blocks.last_opts();
 
+    ast_alc.clear(); // Release memory used for AST.
+
     // Early codegen pass that gathers whole-program information.
     codegen_analyze(output);
 
     // Main codegen pass that generates code. After that we can release memory used for DFAs.
     CHECK_RET(codegen_generate(output));
     dfa_alc.clear();
-
-    // We cannot release AST memory before main codegen pass because of semantic actions and some
-    // other things that get allocated during parsing and need to live long enough for codegen.
-    ast_alc.clear();
 
     // Late codegen pass that cleans up the generated code.
     codegen_fixup(output);

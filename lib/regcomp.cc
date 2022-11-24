@@ -49,7 +49,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     preg->flags = cflags;
 
     AstAllocator ast_alc;
-    Ast ast(ast_alc);
+    OutAllocator out_alc; // unused but required by AST constructor
+    Ast ast(ast_alc, out_alc);
     const AstNode* a = parse(pattern, ast);
 
     std::vector<AstRule> arv{AstRule{a, ast.sem_act(NOWHERE, nullptr, nullptr, false)}};

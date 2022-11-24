@@ -407,7 +407,7 @@ scan:
     ":=" { CHECK_RET(lex_code_indented(yylval, ast));  RET_TOK(TOKEN_CODE); }
 
     ":"? "=>" space* @p name {
-        yylval->cstr = ast.cstr(p, cur);
+        yylval->cstr = ast.cstr_global(p, cur);
         RET_TOK(tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT);
     }
 
@@ -424,7 +424,7 @@ scan:
     "[^" { CHECK_RET(lex_cls(ast, true,  yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
 
     [@#] name {
-        yylval->regexp = ast.tag(tok_loc(), ast.cstr(tok + 1, cur), tok[0] == '#');
+        yylval->regexp = ast.tag(tok_loc(), ast.cstr_global(tok + 1, cur), tok[0] == '#');
         RET_TOK(TOKEN_REGEXP);
     }
 
@@ -466,7 +466,7 @@ scan:
         if (!globopts->flex_syntax) {
             RET_FAIL(error_at_tok("curly braces for names only allowed with -F switch"));
         }
-        yylval->cstr = ast.cstr(tok + 1, cur - 1);
+        yylval->cstr = ast.cstr_local(tok + 1, cur - 1);
         RET_TOK(TOKEN_ID);
     }
 
@@ -476,12 +476,12 @@ scan:
         bool yes;
         CHECK_RET(lex_namedef_context_re2c(yes));
         if (!globopts->flex_syntax || yes) {
-            yylval->cstr = ast.cstr(tok, cur);
+            yylval->cstr = ast.cstr_local(tok, cur);
             RET_TOK(TOKEN_ID);
         }
         CHECK_RET(lex_namedef_context_flex(yes));
         if (yes) {
-            yylval->cstr = ast.cstr(tok, cur);
+            yylval->cstr = ast.cstr_local(tok, cur);
             mode = LexMode::FLEX_NAME;
             RET_TOK(TOKEN_FID);
         }
@@ -600,7 +600,7 @@ indent: /*!re2c
         while (isspace(tok[0])) ++tok;
         uint8_t* p = cur;
         while (p > tok && isspace(p[-1])) --p;
-        yylval->semact = ast.sem_act(loc, ast.cstr(tok, p), nullptr, false);
+        yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, p), nullptr, false);
         return Ret::OK;
     }
 */
@@ -612,7 +612,7 @@ Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
 code: /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval->semact = ast.sem_act(loc, ast.cstr(tok, cur), nullptr, false);
+            yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, cur), nullptr, false);
             return Ret::OK;
         }
         goto code;

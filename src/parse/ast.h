@@ -165,6 +165,9 @@ class Ast {
     // Allocator used for allocating AST nodes. All memory is freed when the allocator is destroyed
     // (which happens after parsing and processing the whole translation unit, but before codegen).
     AstAllocator& ast_alc;
+    // Output allocator is needed for long-lived objects that are allocated during parsing and need
+    // survive until the main codegen pass (e.g. semantic actions, condition names, tag names).
+    OutAllocator& out_alc;
 
     AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
 
@@ -184,7 +187,7 @@ class Ast {
     // Used to denote unbounded repetition (iteration, Kleene star).
     static constexpr uint32_t MANY = std::numeric_limits<uint32_t>::max();
 
-    explicit Ast(AstAllocator& ast_alc);
+    Ast(AstAllocator& ast_alc, OutAllocator& out_alc);
 
     // Methods for constructing individual AST nodes.
     const AstNode* nil(const loc_t& loc);
@@ -200,7 +203,11 @@ class Ast {
     const AstNode* cap(const AstNode* a);
     const AstNode* ref(const AstNode* a, const char* n);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
-    const char* cstr(const uint8_t* s, const uint8_t* e);
+
+    // Local and global strings differ in their lifetimes: local ones live during AST construction,
+    // while global ones are used much later in codegen (they use a different allocator).
+    const char* cstr_local(const uint8_t* s, const uint8_t* e);
+    const char* cstr_global(const uint8_t* s, const uint8_t* e);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`
