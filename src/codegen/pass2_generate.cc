@@ -1451,6 +1451,19 @@ static void gen_cond_enum(Scratchbuf& buf,
                 }
                 append(block, code_text(alc, buf.flush()));
             }
+        } else if (opts->lang == Lang::D) {
+            start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
+            end = "};";
+            for (const StartCond& cond : conds) {
+                buf.str(cond.name);
+                if (opts->loop_switch) {
+                    buf.cstr(" = ").u32(cond.number);
+                }
+                if (&cond != last_cond) { // do not append comma after the last one
+                    buf.cstr(",");
+                }
+                append(block, code_text(alc, buf.flush()));
+            }
         } else if (opts->lang == Lang::GO) {
             start = buf.cstr("const (").flush();
             end = ")";
@@ -1745,6 +1758,9 @@ LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
         case Lang::C:
             code->text = buf.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
             break;
+        case Lang::D:
+            code->text = buf.cstr("enum ").cstr(varname).cstr(" = ").u64(max).flush();
+            break;
         case Lang::GO:
             code->text = buf.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
             break;
@@ -1781,9 +1797,16 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     CodeList* stmts = code_list(alc);
 
     const std::string& name = bitmap_name(opts, cond);
-    text = opts->lang == Lang::C
-           ? o.cstr("static const unsigned char ").str(name).cstr("[] = {").flush()
-           : o.str(name).cstr(" := []byte{").flush();
+    switch(opts->lang){
+        case Lang::C:
+            text = o.cstr("static const unsigned char ").str(name).cstr("[] = {").flush();
+            break;
+        case Lang::D:
+            text = o.cstr("immutable char[] ").str(name).cstr(" = {").flush();
+            break;
+        default:
+            text = o.str(name).cstr(" := []byte{").flush();
+    }
     append(stmts, code_text(alc, text));
 
     CodeList* block = code_list(alc);

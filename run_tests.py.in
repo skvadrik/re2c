@@ -348,9 +348,11 @@ def run_test(test):
 
     with open(outx, mode='rb') as f:
         head = f.readline().decode('utf-8').strip()
-        # generate file extension (.c for C/C++, .go for Go, .rs for Rust)
+        # generate file extension (.c for C/C++, .d for D, .go for Go, .rs for Rust)
         if head.startswith("// re2c"):
             ext = "c"
+        elif head.startswith("// re2d"):
+            ext = "d"
         elif head.startswith("//go:generate re2go"):
             ext = "go"
         elif head.startswith("// re2rust"):
@@ -369,6 +371,7 @@ def run_test(test):
 
     # Prepare re2c flags
     switches = head
+    switches = switches.replace('re2d', 're2c --lang d')
     switches = switches.replace('re2go', 're2c --lang go')
     switches = switches.replace('re2rust', 're2c --lang rust')
     switches = RE2C_PATTERN.sub(r'\1', switches)

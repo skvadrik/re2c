@@ -11,6 +11,7 @@
       "hidden": true,
       "installDir": "${sourceDir}/install-2",
       "cacheVariables": {
+        "RE2C_BUILD_RE2D": true,
         "RE2C_BUILD_RE2GO": true,
         "RE2C_BUILD_RE2RUST": true,
         "RE2C_BUILD_LIBS": true,

@@ -25,7 +25,7 @@ endif()
 option(RE2C_REBUILD_DOCS "Regenerate manpage" OFF)
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
-
+option(RE2C_BUILD_RE2D "Build re2d executable (an alias for `re2c --lang d`)" ON)
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
 
@@ -66,10 +66,12 @@ ac_check_headers("io.h")
 set(re2c_manpage_source         "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
 set(re2c_help_source            "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
 set(re2c_manpage_bootstrap_c    "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2c.1")
+set(re2c_manpage_bootstrap_d   "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2d.1")
 set(re2c_manpage_bootstrap_go   "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2go.1")
 set(re2c_manpage_bootstrap_rust "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/doc/re2rust.1")
 set(re2c_help_bootstrap         "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
 set(re2c_manpage_c              "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
+set(re2c_manpage_d             "${CMAKE_CURRENT_BINARY_DIR}/doc/re2d.1")
 set(re2c_manpage_go             "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
 set(re2c_manpage_rust           "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
 set(re2c_help                   "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
@@ -79,6 +81,7 @@ set(re2c_splitman               "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py"
 set(re2c_docs
     "${re2c_help}"
     "${re2c_manpage_c}"
+    "$<$<BOOL:${RE2C_BUILD_RE2D}>:${re2c_manpage_d}>"
     "$<$<BOOL:${RE2C_BUILD_RE2GO}>:${re2c_manpage_go}>"
     "$<$<BOOL:${RE2C_BUILD_RE2RUST}>:${re2c_manpage_rust}>"
 )
@@ -190,6 +193,12 @@ set(re2c_sources
 # re2c
 add_executable(re2c ${re2c_sources})
 
+# re2d
+if (RE2C_BUILD_RE2D)
+    add_executable(re2d ${re2c_sources})
+    target_compile_definitions(re2d PUBLIC "RE2C_LANG=Lang::D")
+endif()
+
 # re2go
 if (RE2C_BUILD_RE2GO)
     add_executable(re2go ${re2c_sources})
@@ -272,6 +281,28 @@ set(re2c_docs_sources
     "examples/c/submatch/01_stags.re"
     "examples/c/submatch/02_mtags.re"
     "examples/c/submatch/03_posix.re"
+    "examples/d/01_basic.re"
+    "examples/d/01_basic.d"
+    "examples/d/conditions/parse_u32_blocks.re"
+    "examples/d/conditions/parse_u32_conditions.re"
+    "examples/d/encodings/unicode_identifier.re"
+    "examples/d/eof/01_sentinel.re"
+    "examples/d/eof/02_bounds_checking.re"
+    "examples/d/eof/03_eof_rule.re"
+    "examples/d/eof/05_generic_api_eof_rule.re"
+    "examples/d/fill/01_fill.re"
+    "examples/d/fill/02_fill.re"
+    "examples/d/headers/header.re"
+    "examples/d/headers/lexer/state.h"
+    "examples/d/includes/include.re"
+    "examples/d/includes/definitions.h"
+    "examples/d/reuse/reuse.re"
+    "examples/d/reuse/usedir.re"
+    "examples/d/state/push.re"
+    "examples/d/submatch/01_stags_fill.re"
+    "examples/d/submatch/01_stags.re"
+    "examples/d/submatch/02_mtags.re"
+    "examples/d/submatch/03_posix.re"
     "examples/go/01_basic.re"
     "examples/go/01_basic.go"
     "examples/go/conditions/parse_u32_blocks.re"
@@ -318,6 +349,7 @@ set(re2c_docs_sources
     "examples/rust/submatch/03_posix.re"
 )
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}"    "${re2c_manpage_bootstrap_c}"  "c")
+re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_d}"   "${re2c_manpage_bootstrap_d}" "d")
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}"   "${re2c_manpage_bootstrap_go}" "go")
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_rust}" "${re2c_manpage_bootstrap_rust}" "rust")
 re2c_gen_help("${re2c_help_source}" "${re2c_help}" "${re2c_help_bootstrap}")
@@ -328,6 +360,10 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
     # install
     install(TARGETS re2c RUNTIME DESTINATION bin)
     install(FILES "${re2c_manpage_c}" DESTINATION "share/man/man1")
+    if(RE2C_BUILD_RE2D)
+        install(TARGETS re2d RUNTIME DESTINATION bin)
+        install(FILES "${re2c_manpage_d}" DESTINATION "share/man/man1")
+    endif()
     if(RE2C_BUILD_RE2GO)
         install(TARGETS re2go RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")

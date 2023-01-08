@@ -157,6 +157,7 @@ BUILT_SOURCES = $(re2c_GEN_SRC)
 re2c_BOOT_PARSER = bootstrap/src/parse/parser.cc
 re2c_BOOT_PARSER_HDR = bootstrap/src/parse/parser.h
 re2c_BOOT_DOC_C = bootstrap/doc/re2c.1
+re2c_BOOT_DOC_D = bootstrap/doc/re2d.1
 re2c_BOOT_DOC_GO = bootstrap/doc/re2go.1
 re2c_BOOT_DOC_RUST = bootstrap/doc/re2rust.1
 re2c_BOOT_HELP = bootstrap/src/msg/help.cc
@@ -219,6 +220,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/synopsis.rst_ \
 	doc/manual/syntax/api1.rst_ \
 	doc/manual/syntax/api2_c.rst_ \
+	doc/manual/syntax/api2_d.rst_ \
 	doc/manual/syntax/api2_go.rst_ \
 	doc/manual/syntax/api2_rust.rst_ \
 	doc/manual/syntax/api3.rst_ \
@@ -248,6 +250,28 @@ re2c_SRC_DOC_EXT = \
 	examples/c/submatch/01_stags.re \
 	examples/c/submatch/02_mtags.re \
 	examples/c/submatch/03_posix.re \
+	examples/d/01_basic.re \
+	examples/d/01_basic.d \
+	examples/d/conditions/parse_u32_blocks.re \
+	examples/d/conditions/parse_u32_conditions.re \
+	examples/d/encodings/unicode_identifier.re \
+	examples/d/eof/01_sentinel.re \
+	examples/d/eof/02_bounds_checking.re \
+	examples/d/eof/03_eof_rule.re \
+	examples/d/eof/05_generic_api_eof_rule.re \
+	examples/d/fill/01_fill.re \
+	examples/d/fill/02_fill.re \
+	examples/d/headers/header.re \
+	examples/d/headers/lexer/state.h \
+	examples/d/includes/include.re \
+	examples/d/includes/definitions.h \
+	examples/d/reuse/reuse.re \
+	examples/d/reuse/usedir.re \
+	examples/d/state/push.re \
+	examples/d/submatch/01_stags_fill.re \
+	examples/d/submatch/01_stags.re \
+	examples/d/submatch/02_mtags.re \
+	examples/d/submatch/03_posix.re \
 	examples/go/01_basic.re \
 	examples/go/01_basic.go \
 	examples/go/conditions/parse_u32_blocks.re \
@@ -295,6 +319,11 @@ re2c_SRC_DOC_EXT = \
 
 DOC_C = doc/re2c.1
 DOCS = $(DOC_C)
+
+if WITH_DLANG
+DOCS_D = doc/re2d.1
+DOCS += $(DOC_D)
+endif
 
 if WITH_GOLANG
 DOC_GO = doc/re2go.1
@@ -383,6 +412,13 @@ $(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
 		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_C) \
 		&& rm $(top_builddir)/$(re2c_SRC_DOC).c
+# generate manpage for D
+$(DOC_D): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).d d \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).d > $@ \
+		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_D) \
+		&& rm $(top_builddir)/$(re2c_SRC_DOC).d
 # generate manpage for Go
 $(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -409,6 +445,10 @@ docs: $(DOCS) $(re2c_GEN_HELP)
 $(DOC_C): $(re2c_BOOT_DOC_C)
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_C) $@
+# copy bootstrap manpage for D
+$(DOC_D): $(re2c_BOOT_DOC_D)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_D) $@
 # copy bootstrap manpage for Go
 $(DOC_GO): $(re2c_BOOT_DOC_GO)
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -476,6 +516,14 @@ if WITH_LIBS
 ACLOCAL_AMFLAGS = -I m4
 lib_LTLIBRARIES =
 include $(top_srcdir)/Makefile.lib.am
+endif
+
+# re2d
+if WITH_DLANG
+bin_PROGRAMS += re2d
+re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D
+re2d_SOURCES = $(re2c_SOURCES)
+nodist_re2d_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2go

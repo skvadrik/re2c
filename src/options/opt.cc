@@ -244,7 +244,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
     if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
     if (is_default.cond_goto) {
-        real.cond_goto = "goto " + real.cond_goto_param + (glob.lang == Lang::C ? ";" : "");
+        real.cond_goto = "goto " + real.cond_goto_param + ((glob.lang == Lang::C || glob.lang == Lang::D) ? ";" : "");
     }
     // "startlabel" configuration exists in two variants: string and boolean, and the string one
     // overrides the boolean one
@@ -283,8 +283,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         if (real.cgoto) {
             RET_FAIL(error("-g, --computed-gotos option is not supported for non-C backends"));
         }
-        if (real.case_ranges) {
-            RET_FAIL(error("--case-ranges option is not supported for non-C backends"));
+        if (glob.lang != Lang::D && real.case_ranges) {
+            RET_FAIL(error("--case-ranges option is not supported for non-C/D backends"));
         }
     }
     if (real.fill_eof != NOEOF) {

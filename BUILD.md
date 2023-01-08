@@ -45,6 +45,9 @@ The configure script has many options (to see them all, run
   * `--enable-debug`
     Enable debug checks in the re2c source code. Also enables debug options.
 
+  * `--enable-dlang`
+    Build re2d (identical to `re2c --lang d`). This is on by default.
+
   * `--enable-golang`
     Build re2go (identical to `re2c --lang go`). This is on by default.
 
@@ -143,6 +146,9 @@ A simple build (objects are generated in a separate build directory):
 
 CMake supports a lot of configuration options. Here is the list of options
 specific to re2c:
+
+  * `-DRE2C_BUILD_RE2D=yes`
+    Build re2d executable (an alias to `re2c --lang d`). Enabled by default.
 
   * `-DRE2C_BUILD_RE2GO=yes`
     Build re2go executable (an alias to `re2c --lang go`). Enabled by default.
