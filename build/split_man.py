@@ -20,6 +20,11 @@ if lang == b'c':
     hdr_ext = b'h'
     lang_name = b'C'
     disclaimer = b'Note: examples are in C++ (but can be easily adapted to C).'
+elif lang == b'd':
+    src_ext = b'd'
+    hdr_ext = b'd'
+    lang_name = b'D'
+    disclaimer = b'Note: This manual is for D, but it refers to re2c as the general program.'
 elif lang == b'go':
     src_ext = b'go'
     hdr_ext = b'go'
