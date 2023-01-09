@@ -262,9 +262,9 @@ re2c_SRC_DOC_EXT = \
 	examples/d/fill/01_fill.re \
 	examples/d/fill/02_fill.re \
 	examples/d/headers/header.re \
-	examples/d/headers/lexer/state.h \
+	examples/d/headers/lexer/state.d \
 	examples/d/includes/include.re \
-	examples/d/includes/definitions.h \
+	examples/d/includes/definitions.d \
 	examples/d/reuse/reuse.re \
 	examples/d/reuse/usedir.re \
 	examples/d/state/push.re \
