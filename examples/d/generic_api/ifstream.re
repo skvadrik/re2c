@@ -1,10 +1,8 @@
-// re2c $INPUT -o $OUTPUT
-#include <cassert>
-#include <cstdio>
-#include <fstream>
-#include <sstream>
+// re2d $INPUT -o $OUTPUT
 
-static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
+
+
+void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     std::streampos mar;
     for (;;) {
     /*!re2c
@@ -23,7 +21,7 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     }
 }
 
-int main() {
+unittest{
     const char *fname = "input";
     const char s1[] = "Text\r\nwith\r\nnewlines.\r\n\r\n";
     const char s2[] = "Text\nwith\nnewlines.\n\n";
@@ -38,5 +36,8 @@ int main() {
     assert(out.str() == s2);
 
     remove(fname);
+}
+
+int main() {
     return 0;
 }
