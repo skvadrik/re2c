@@ -16,17 +16,16 @@ struct input_t {
     char *tok;
     bool eof;
 
-    FILE *const file;
+    FILE * file;
 
-    input_t(FILE *f)
-        : buf()
-        , lim(buf + SIZE)
-        , cur(lim)
-        , mar(lim)
-        , tok(lim)
-        , eof(false)
-        , file(f)
-    {}
+    this(FILE *f){
+        lim = buf.ptr + SIZE;
+        cur = lim;
+        mar = lim;
+        tok = lim;
+        file = f;
+    }
+
     bool fill(size_t need)
     {
         if (eof) {
@@ -42,7 +41,7 @@ struct input_t {
         mar -= free;
         tok -= free;
         lim += fread(lim, 1, free, file);
-        if (lim < buf + SIZE) {
+        if (lim < buf.ptr + SIZE) {
             eof = true;
             memset(lim, 0, YYMAXFILL);
             lim += YYMAXFILL;
@@ -53,64 +52,70 @@ struct input_t {
 
 /*!re2c re2c:define:YYCTYPE = "char"; */
 
-template<int base>
-static bool adddgt(unsigned long &u, unsigned long d)
+bool adddgt(ulong base)(ref ulong u, ulong d)
 {
-    if (u > (ULONG_MAX - d) / base) {
+    if (u > (ulong.max - d) / base) {
         return false;
     }
     u = u * base + d;
     return true;
 }
 
-static bool lex_oct(const unsigned char *s, const unsigned char *e, unsigned long &u)
+bool lex_oct(const(char) *s, const(char) *e, ref ulong u)
 {
     for (u = 0, ++s; s < e; ++s) {
-        if (!adddgt<8>(u, *s - 0x30u)) {
+        if (!adddgt!(8)(u, *s - 0x30u)) {
             return false;
         }
     }
     return true;
 }
 
-static bool lex_dec(const unsigned char *s, const unsigned char *e, unsigned long &u)
+bool lex_dec(const(char) *s, const(char) *e, ref ulong u)
 {
     for (u = 0; s < e; ++s) {
-        if (!adddgt<10>(u, *s - 0x30u)) {
+        if (!adddgt!(10)(u, *s - 0x30u)) {
             return false;
         }
     }
     return true;
 }
 
-static bool lex_hex(const unsigned char *s, const unsigned char *e, unsigned long &u)
+bool lex_hex(const(char) *s, const(char) *e, ref ulong u)
 {
     for (u = 0, s += 2; s < e;) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
-        *     { if (!adddgt<16>(u, s[-1] - 0x30u))      return false; continue; }
-        [a-f] { if (!adddgt<16>(u, s[-1] - 0x61u + 10)) return false; continue; }
-        [A-F] { if (!adddgt<16>(u, s[-1] - 0x41u + 10)) return false; continue; }
+        re2c:define:YYSKIP = 's++;';
+        re2c:define:YYPEEK = '*s';
+        *     { if (!adddgt!(16)(u, s[-1] - 0x30u))      return false; continue; }
+        [a-f] { if (!adddgt!(16)(u, s[-1] - 0x61u + 10)) return false; continue; }
+        [A-F] { if (!adddgt!(16)(u, s[-1] - 0x41u + 10)) return false; continue; }
     */
     }
     return true;
 }
 
-static bool lex_str(input_t &in, unsigned char q)
+bool lex_str(ref input_t inp, char q)
 {
     fprintf(stderr, "%c", q);
-    for (unsigned long u = q;; fprintf(stderr, "\\x%lx", u)) {
-        in.tok = in.cur;
+    for (ulong u = q;; fprintf(stderr, "\\x%lx", u)) {
+        inp.tok = inp.cur;
         /*!re2c
             re2c:yyfill:enable = 1;
-            re2c:define:YYCURSOR = in.cur;
-            re2c:define:YYMARKER = in.mar;
-            re2c:define:YYLIMIT = in.lim;
-            re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
+            re2c:define:YYCURSOR = inp.cur;
+            re2c:define:YYMARKER = inp.mar;
+            re2c:define:YYLIMIT = inp.lim;
+            re2c:define:YYPEEK = '*inp.cur';
+            re2c:define:YYSKIP = 'inp.cur++;';
+            re2c:define:YYBACKUP = 'inp.mar=inp.cur;';
+            re2c:define:YYLESSTHAN = 'inp.lim <= inp.cur';
+            re2c:define:YYRESTORE = 'inp.cur=inp.mar;';
+            re2c:define:YYFILL = "if (!inp.fill(@@)) return false;";
             re2c:define:YYFILL:naked = 1;
             *                    { return false; }
-            [^\n\\]              { u = in.tok[0]; if (u == q) break; continue; }
+            [^\n\\]              { u = inp.tok[0]; if (u == q) break; continue; }
             "\\a"                { u = '\a'; continue; }
             "\\b"                { u = '\b'; continue; }
             "\\f"                { u = '\f'; continue; }
@@ -122,17 +127,17 @@ static bool lex_str(input_t &in, unsigned char q)
             "\\'"                { u = '\''; continue; }
             "\\\""               { u = '"';  continue; }
             "\\?"                { u = '?';  continue; }
-            "\\" [0-7]{1,3}      { lex_oct(in.tok, in.cur, u); continue; }
-            "\\u" [0-9a-fA-F]{4} { lex_hex(in.tok, in.cur, u); continue; }
-            "\\U" [0-9a-fA-F]{8} { lex_hex(in.tok, in.cur, u); continue; }
-            "\\x" [0-9a-fA-F]+   { if (!lex_hex(in.tok, in.cur, u)) return false; continue; }
+            "\\" [0-7]{1,3}      { lex_oct(inp.tok, inp.cur, u); continue; }
+            "\\u" [0-9a-fA-F]{4} { lex_hex(inp.tok, inp.cur, u); continue; }
+            "\\U" [0-9a-fA-F]{8} { lex_hex(inp.tok, inp.cur, u); continue; }
+            "\\x" [0-9a-fA-F]+   { if (!lex_hex(inp.tok, inp.cur, u)) return false; continue; }
         */
     }
     fprintf(stderr, "%c", q);
     return true;
 }
 
-static bool lex_flt(const unsigned char *s)
+bool lex_flt(const(char) *s)
 {
     double d = 0;
     double x = 1;
@@ -140,6 +145,8 @@ static bool lex_flt(const unsigned char *s)
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCURSOR = s;
+        re2c:define:YYPEEK = '*s';
+        re2c:define:YYSKIP = 's++;';
     */
 mant_int:
     /*!re2c
@@ -166,24 +173,29 @@ exp:
 sfx:
     /*!re2c
         *     { goto end; }
-        [fF]  { if (d > FLT_MAX) return false; goto end; }
+        [fF]  { if (d > float.max) return false; goto end; }
     */
 end:
     fprintf(stderr, "%g", d);
     return true;
 }
 
-static bool lex(input_t &in)
+bool lex(ref input_t inp)
 {
-    unsigned long u;
+    ulong u;
     for (;;) {
-        in.tok = in.cur;
+        inp.tok = inp.cur;
         /*!re2c
             re2c:yyfill:enable = 1;
-            re2c:define:YYCURSOR = in.cur;
-            re2c:define:YYMARKER = in.mar;
-            re2c:define:YYLIMIT = in.lim;
-            re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
+            re2c:define:YYCURSOR = inp.cur;
+            re2c:define:YYMARKER = inp.mar;
+            re2c:define:YYLIMIT = inp.lim;
+            re2c:define:YYPEEK = '*inp.cur';
+            re2c:define:YYSKIP = '++inp.cur;';
+            re2c:define:YYBACKUP = 'inp.mar=inp.cur;';
+            re2c:define:YYLESSTHAN = 'inp.lim <= inp.cur';
+            re2c:define:YYRESTORE = 'inp.cur=inp.mar;';
+            re2c:define:YYFILL = "if (!inp.fill(@@)) return false;";
             re2c:define:YYFILL:naked = 1;
 
             end = "\x00";
@@ -191,7 +203,7 @@ static bool lex(input_t &in)
             *   { return false; }
             end {
                 fprintf(stderr, "\n");
-                return in.lim - in.tok == YYMAXFILL;
+                return inp.lim - inp.tok == YYMAXFILL;
             }
 
             // macros
@@ -205,22 +217,22 @@ static bool lex(input_t &in)
             wsp { fprintf(stderr, " "); continue; }
 
             // character and string literals
-            "L"? ['"] { if (!lex_str(in, in.cur[-1])) return false; continue; }
+            "L"? ['"] { if (!lex_str(inp, inp.cur[-1])) return false; continue; }
             "L"? "''" { return false; }
 
             // integer literals
             oct = "0" [0-7]*;
             dec = [1-9][0-9]*;
             hex = '0x' [0-9a-fA-F]+;
-            oct { if (!lex_oct(in.tok, in.cur, u)) return false; goto sfx; }
-            dec { if (!lex_dec(in.tok, in.cur, u)) return false; goto sfx; }
-            hex { if (!lex_hex(in.tok, in.cur, u)) return false; goto sfx; }
+            oct { if (!lex_oct(inp.tok, inp.cur, u)) return false; goto sfx; }
+            dec { if (!lex_dec(inp.tok, inp.cur, u)) return false; goto sfx; }
+            hex { if (!lex_hex(inp.tok, inp.cur, u)) return false; goto sfx; }
 
             // floating literals
             frc = [0-9]* "." [0-9]+ | [0-9]+ ".";
             exp = 'e' [+-]? [0-9]+;
             flt = (frc exp? | [0-9]+ exp) [fFlL]?;
-            flt { if (lex_flt(in.tok)) continue; return false; }
+            flt { if (lex_flt(inp.tok)) continue; return false; }
 
             // boolean literals
             "false" { fprintf(stderr, "false"); continue; }
@@ -342,19 +354,20 @@ static bool lex(input_t &in)
 
             // identifiers
             id = [a-zA-Z_][a-zA-Z_0-9]*;
-            id { fprintf(stderr, "%.*s", (int)(in.cur - in.tok), in.tok); continue; }
+            id { fprintf(stderr, "%.*s", cast(int)(inp.cur - inp.tok), inp.tok); continue; }
         */
 sfx:
         /*!re2c
-            ""          { if (u > INT_MAX)  return false; fprintf(stderr, "%d",  static_cast<int>(u));      continue; }
-            'u'         { if (u > UINT_MAX) return false; fprintf(stderr, "%u",  static_cast<unsigned>(u)); continue; }
-            'l'         { if (u > LONG_MAX) return false; fprintf(stderr, "%ld", static_cast<long>(u));     continue; }
+            ""          { if (u > int.max)  return false; fprintf(stderr, "%d",  cast(int)(u));      continue; }
+            'u'         { if (u > uint.max) return false; fprintf(stderr, "%u",  cast(uint)(u)); continue; }
+            'l'         { if (u > long.max) return false; fprintf(stderr, "%ld", cast(long)(u));     continue; }
             'ul' | 'lu' { fprintf(stderr, "%lu", u); continue; }
         */
     }
+    assert(0);
 }
 
-int main()
+unittest
 {
     const char *fname = "example.cpp";
     FILE *f;
@@ -362,31 +375,39 @@ int main()
     // prepare input file
     f = fopen(fname, "w");
     fprintf(f,
-        "#include<stdio.h>\n"
-        "\n"
-        "int main()\n"
-        "{\n"
-        "    int n;\n"
-        "    printf(\"Enter the number:\\n\");\n"
-        "    scanf(\"%%d\", &n);\n"
-        "\n"
-        "    int f = 1;\n"
-        "    for(int i = 1; i <= n; ++i) {\n"
-        "        f *= i;\n"
-        "    }\n"
-        "\n"
-        "    printf(\"Factorial of %%d is %%d\\n\", n, f);\n"
-        "    return 0;\n"
-        "}\n"
-        "\n");
+        `
+#include <stdio.h>
+
+int main()
+{
+    int n;
+    printf("Enter the number:\n");
+    scanf("%%d", &n);
+
+    int f = 1;
+    for(int i = 1; i <= n; ++i) {
+        f *= i;
+    }
+
+    printf("Factorial of %%d is %%d\n", n, f);
+    return 0;
+}
+        `);
     fclose(f);
 
     f = fopen(fname, "rb");
-    input_t in(f);
-    assert(lex(in));
+    input_t inp = input_t(f);
+    assert(lex(inp));
     fclose(f);
 
     // cleanup
     remove(fname);
-    return 0;
 }
+
+extern(C) void main()
+{
+    static foreach(u; __traits(getUnitTests, __traits(parent, main)))
+        u();
+}
+
+
