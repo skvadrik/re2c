@@ -1,19 +1,19 @@
-// re2c $INPUT -o $OUTPUT -i
-#include <assert.h>
-#include <float.h>
-#include <limits.h>
-#include <stdio.h>
-#include <string.h>
+// re2d $INPUT -o $OUTPUT -i
+
+import core.stdc.string;
+import core.stdc.stdio;
+
+
 
 /*!max:re2c*/
-static const size_t SIZE = 64 * 1024;
+enum SIZE = 64 * 1024;
 
 struct input_t {
-    unsigned char buf[SIZE + YYMAXFILL];
-    unsigned char *lim;
-    unsigned char *cur;
-    unsigned char *mar;
-    unsigned char *tok;
+    char[SIZE + YYMAXFILL] buf;
+    char *lim;
+    char *cur;
+    char *mar;
+    char *tok;
     bool eof;
 
     FILE *const file;
@@ -32,11 +32,11 @@ struct input_t {
         if (eof) {
             return false;
         }
-        const size_t free = tok - buf;
+        const size_t free = tok - buf.ptr;
         if (free < need) {
             return false;
         }
-        memmove(buf, tok, lim - tok);
+        memmove(buf.ptr, tok, lim - tok);
         lim -= free;
         cur -= free;
         mar -= free;
@@ -51,7 +51,7 @@ struct input_t {
     }
 };
 
-/*!re2c re2c:define:YYCTYPE = "unsigned char"; */
+/*!re2c re2c:define:YYCTYPE = "char"; */
 
 template<int base>
 static bool adddgt(unsigned long &u, unsigned long d)

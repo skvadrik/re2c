@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i
+// re2d $INPUT -o $OUTPUT -i
 
 /*!include:re2c "definitions.d" */
 

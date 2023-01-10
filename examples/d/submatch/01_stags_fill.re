@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT --tags
+// re2d $INPUT -o $OUTPUT --tags
 #include <assert.h>
 #include <stddef.h>
 #include <stdio.h>

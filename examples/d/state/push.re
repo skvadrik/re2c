@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -f
+// re2d $INPUT -o $OUTPUT -f
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>

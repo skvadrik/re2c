@@ -1,5 +1,5 @@
-// re2c $INPUT -o $OUTPUT
-#include <assert.h>
+// re2d $INPUT -o $OUTPUT
+
 #include <stddef.h>
 
 // Maximum number of capturing groups among all rules.

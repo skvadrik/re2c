@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT --input-encoding utf8
+// re2d $INPUT -o $OUTPUT --input-encoding utf8
 #include <assert.h>
 #include <stdint.h>
 

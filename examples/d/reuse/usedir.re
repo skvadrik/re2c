@@ -1,5 +1,5 @@
-// re2c $INPUT -o $OUTPUT
-#include <assert.h>
+// re2d $INPUT -o $OUTPUT
+
 
 // This example shows how to combine reusable re2c blocks: two blocks
 // ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
