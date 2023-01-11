@@ -36,13 +36,14 @@ static void render_line_info(
     if (!opts->line_dirs) return;
 
     switch (opts->lang) {
+    case Lang::C:
+    case Lang::D:
+        // C/C++ and D: #line <line-number> <filename>
+        o << "#line " << line << " \"" << fname << "\"\n";
+        break;
     case Lang::GO:
         // Go: //line <filename>:<line-number>
         o << "//line \"" << fname << "\":" << line << "\n";
-        break;
-    case Lang::C:
-        // C/C++: #line <line-number> <filename>
-        o << "#line " << line << " \"" << fname << "\"\n";
         break;
     case Lang::RUST:
         // For Rust line directives should be removed by `remove_empty` pass.
@@ -52,7 +53,7 @@ static void render_line_info(
 
 static bool oneline_if(const CodeIfTE* code, const opt_t* opts) {
     const Code* first = code->if_code->head;
-    return opts->lang == Lang::C // Go and Rust require braces
+    return (opts->lang == Lang::C || opts->lang == Lang::D) // Go and Rust require braces
            && code->oneline
            && code->else_code == nullptr
            && first
@@ -136,6 +137,18 @@ static const char* var_type_c(VarType type, const opt_t* opts) {
     return nullptr;
 }
 
+static const char* var_type_d(VarType type, const opt_t* opts) {
+    switch (type) {
+    case VarType::INT:
+        return "int";
+    case VarType::UINT:
+        return "uint";
+    case VarType::YYCTYPE:
+        return opts->api_char_type.c_str();
+    }
+    return nullptr;
+}
+
 static const char* var_type_go(VarType type, const opt_t* opts) {
     switch (type) {
     case VarType::INT:
@@ -168,6 +181,13 @@ static void render_var(RenderContext& rctx, const CodeVar* var) {
     switch (opts->lang) {
     case Lang::C:
         os << ind << var_type_c(var->type, opts) << " " << var->name;
+        if (var->init) os << " = " << var->init;
+        os << ";" << std::endl;
+        ++rctx.line;
+        break;
+
+    case Lang::D:
+        os << ind << var_type_d(var->type, opts) << " " << var->name;
         if (var->init) os << " = " << var->init;
         os << ";" << std::endl;
         ++rctx.line;
@@ -247,6 +267,21 @@ static void render_case_range(
         if (!last) {
             os << std::endl;
             ++rctx.line;
+        }
+        break;
+
+    case Lang::D:
+        os << "case ";
+        render_number(rctx, low, type);
+        if (low != upp) {
+            os << ": .. case ";
+            render_number(rctx, upp, type);
+        }
+        os << ":";
+        if (!last) {
+            os << std::endl;
+            os << indent(rctx.ind + 1, opts->indent_str) << "goto case;" << std::endl;
+            rctx.line += 2;
         }
         break;
 
@@ -447,6 +482,9 @@ static void render_loop(RenderContext& rctx, const CodeList* loop) {
     case Lang::C:
         os << indent(rctx.ind, opts->indent_str) << "for (;;)";
         break;
+    case Lang::D:
+        os << indent(rctx.ind, opts->indent_str) << "while (true)";
+        break;
     case Lang::GO:
         // In Go label is on a separate line with zero indent.
         if (!opts->label_loop.empty()) {
@@ -620,6 +658,7 @@ static void render_abort(RenderContext& rctx) {
     os << indent(rctx.ind, opts->indent_str);
     switch (opts->lang) {
     case Lang::C:
+    case Lang::D:
         DCHECK(opts->state_abort);
         os << "abort();";
         break;
