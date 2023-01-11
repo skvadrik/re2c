@@ -14,6 +14,7 @@ enum class Target: uint32_t {
 
 enum class Lang: uint32_t {
     C,
+    D,
     GO,
     RUST
 };
