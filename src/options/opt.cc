@@ -244,7 +244,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
     if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
     if (is_default.cond_goto) {
-        real.cond_goto = "goto " + real.cond_goto_param + ((glob.lang == Lang::C || glob.lang == Lang::D) ? ";" : "");
+        bool need_semi = (glob.lang == Lang::C || glob.lang == Lang::D);
+        real.cond_goto = "goto " + real.cond_goto_param + (need_semi ? ";" : "");
     }
     // "startlabel" configuration exists in two variants: string and boolean, and the string one
     // overrides the boolean one
@@ -271,20 +272,21 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         // In Go `continue` statements have labels, use it to avoid ambiguity.
         if (is_default.label_loop) real.label_loop = "yyl";
     }
-
     // errors
     if (glob.lang != Lang::C) {
         if (glob.target == Target::SKELETON) {
             RET_FAIL(error("skeleton is not supported for non-C backends"));
         }
-        if (real.api == Api::DEFAULT) {
-            RET_FAIL(error("pointer API is not supported for non-C backends"));
-        }
         if (real.cgoto) {
             RET_FAIL(error("-g, --computed-gotos option is not supported for non-C backends"));
         }
-        if (glob.lang != Lang::D && real.case_ranges) {
-            RET_FAIL(error("--case-ranges option is not supported for non-C/D backends"));
+    }
+    if (!(glob.lang == Lang::C || glob.lang == Lang::D)) {
+        if (real.case_ranges) {
+    	    RET_FAIL(error("--case-ranges option is supported only for C and D backends"));
+        }
+        if (real.api == Api::DEFAULT) {
+    	    RET_FAIL(error("pointer API is supported only for C and D backends"));
         }
     }
     if (real.fill_eof != NOEOF) {

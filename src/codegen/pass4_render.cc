@@ -37,11 +37,8 @@ static void render_line_info(
 
     switch (opts->lang) {
     case Lang::C:
-        // C/C++: #line <line-number> <filename>
-        o << "#line " << line << " \"" << fname << "\"\n";
-        break;
     case Lang::D:
-        // D: #line <line-number> <filename>
+        // C/C++ and D: #line <line-number> <filename>
         o << "#line " << line << " \"" << fname << "\"\n";
         break;
     case Lang::GO:
@@ -56,7 +53,7 @@ static void render_line_info(
 
 static bool oneline_if(const CodeIfTE* code, const opt_t* opts) {
     const Code* first = code->if_code->head;
-    return (opts->lang == Lang::C || opts->lang == Lang::D ) // Go and Rust require braces
+    return (opts->lang == Lang::C || opts->lang == Lang::D) // Go and Rust require braces
            && code->oneline
            && code->else_code == nullptr
            && first
@@ -279,16 +276,12 @@ static void render_case_range(
         if (low != upp) {
             os << ": .. case ";
             render_number(rctx, upp, type);
-        } else if (opts->debug && type == VarType::YYCTYPE && enc.type() == Enc::Type::EBCDIC) {
-            uint32_t c = enc.decode_unsafe(static_cast<uint32_t>(low));
-            if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
         }
         os << ":";
         if (!last) {
             os << std::endl;
             os << indent(rctx.ind + 1, opts->indent_str) << "goto case;" << std::endl;
             rctx.line += 2;
-            ++rctx.line;
         }
         break;
 
@@ -490,7 +483,7 @@ static void render_loop(RenderContext& rctx, const CodeList* loop) {
         os << indent(rctx.ind, opts->indent_str) << "for (;;)";
         break;
     case Lang::D:
-        os << indent(rctx.ind, opts->indent_str) << "while(true)";
+        os << indent(rctx.ind, opts->indent_str) << "while (true)";
         break;
     case Lang::GO:
         // In Go label is on a separate line with zero indent.
@@ -665,9 +658,6 @@ static void render_abort(RenderContext& rctx) {
     os << indent(rctx.ind, opts->indent_str);
     switch (opts->lang) {
     case Lang::C:
-        DCHECK(opts->state_abort);
-        os << "abort();";
-        break;
     case Lang::D:
         DCHECK(opts->state_abort);
         os << "abort();";

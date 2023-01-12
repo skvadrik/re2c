@@ -1438,20 +1438,7 @@ static void gen_cond_enum(Scratchbuf& buf,
         CodeList* stmts = code_list(alc);
         CodeList* block = code_list(alc);
 
-        if (opts->lang == Lang::C) {
-            start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
-            end = "};";
-            for (const StartCond& cond : conds) {
-                buf.str(cond.name);
-                if (opts->loop_switch) {
-                    buf.cstr(" = ").u32(cond.number);
-                }
-                if (&cond != last_cond) { // do not append comma after the last one
-                    buf.cstr(",");
-                }
-                append(block, code_text(alc, buf.flush()));
-            }
-        } else if (opts->lang == Lang::D) {
+        if (opts->lang == Lang::C || opts->lang == Lang::D) {
             start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
             end = "};";
             for (const StartCond& cond : conds) {
@@ -1797,15 +1784,17 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     CodeList* stmts = code_list(alc);
 
     const std::string& name = bitmap_name(opts, cond);
-    switch(opts->lang){
+    switch (opts->lang) {
         case Lang::C:
             text = o.cstr("static const unsigned char ").str(name).cstr("[] = {").flush();
             break;
         case Lang::D:
             text = o.cstr("immutable char[] ").str(name).cstr(" = {").flush();
             break;
-        default:
+        case Lang::GO:
+        case Lang::RUST:
             text = o.str(name).cstr(" := []byte{").flush();
+            break;
     }
     append(stmts, code_text(alc, text));
 

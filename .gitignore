@@ -43,3 +43,6 @@ stamp-h1
 benchmarks/**/run.py
 **/*.rst
 run_tests.py
+
+# Backup files.
+*~
