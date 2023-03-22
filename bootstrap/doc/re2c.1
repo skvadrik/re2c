@@ -798,7 +798,7 @@ An optional list of block names specifies which blocks should be included
 when computing the set of tag variables (if the list is empty, all blocks
 are included).
 There are two optional configurations: \fBformat\fP and \fBseparator\fP\&.
-Configuration \fBformat\fP specifies a template string where \fB@@(tag}\fP (or
+Configuration \fBformat\fP specifies a template string where \fB@@{tag}\fP (or
 \fB@@\fP for short) is replaced with the name of each tag variable.
 Configuration \fBseparator\fP specifies a piece of code used to join the
 generated \fBformat\fP pieces for different tag variables.
@@ -823,7 +823,7 @@ when computing the set of conditions (if the list is empty, all blocks are
 included).
 By default the generated code is an enumeration \fBYYCONDTYPE\fP\&. It can be
 customized with optional configurations \fBformat\fP and \fBseparator\fP\&.
-Configuration \fBformat\fP specifies a template string where \fB@@(cond}\fP (or
+Configuration \fBformat\fP specifies a template string where \fB@@{cond}\fP (or
 \fB@@\fP for short) is replaced with the name of each condition, and
 \fB@@{num}\fP is replaced with a numeric index of that condition.
 Configuration \fBseparator\fP specifies a piece of code used to join the
