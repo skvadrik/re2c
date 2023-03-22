@@ -75,7 +75,7 @@ sections.
     when computing the set of tag variables (if the list is empty, all blocks
     are included).
     There are two optional configurations: ``format`` and ``separator``.
-    Configuration ``format`` specifies a template string where ``@@(tag}`` (or
+    Configuration ``format`` specifies a template string where ``@@{tag}`` (or
     ``@@`` for short) is replaced with the name of each tag variable.
     Configuration ``separator`` specifies a piece of code used to join the
     generated ``format`` pieces for different tag variables.
@@ -100,7 +100,7 @@ sections.
     included).
     By default the generated code is an enumeration ``YYCONDTYPE``. It can be
     customized with optional configurations ``format`` and ``separator``.
-    Configuration ``format`` specifies a template string where ``@@(cond}`` (or
+    Configuration ``format`` specifies a template string where ``@@{cond}`` (or
     ``@@`` for short) is replaced with the name of each condition, and
     ``@@{num}`` is replaced with a numeric index of that condition.
     Configuration ``separator`` specifies a piece of code used to join the
