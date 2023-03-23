@@ -27,7 +27,7 @@ namespace re2c {
 
 class bitmaps_t;
 class Msg;
-class Output;
+struct Output;
 class path_t;
 struct Adfa;
 struct opt_t;
