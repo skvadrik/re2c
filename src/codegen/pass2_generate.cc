@@ -1207,7 +1207,7 @@ static OutputBlock* find_block_with_name(Output& output, const char* name) {
     return nullptr;
 }
 
-Ret find_blocks(
+static Ret find_blocks(
         Output& output, const BlockNameList* names, blocks_t& blocks, const char* directive) {
     blocks.clear();
     for (const BlockNameList* p = names; p; p = p->next) {
@@ -2019,7 +2019,7 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::MAXNMATCH:
             CHECK_RET(gen_yymax(output, code));
             break;
-        default:
+        case CodeKind::EMPTY:
             break;
         }
     }
