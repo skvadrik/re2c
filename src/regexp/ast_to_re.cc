@@ -142,17 +142,6 @@ LOCAL_NODISCARD(Regexp* insert_between_tags(RESpec& spec, Regexp* tags, Regexp* 
     return tags;
 }
 
-LOCAL_NODISCARD(Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast)) {
-    DCHECK(ast->kind == AstKind::REF);
-    if (spec.opts->tags_posix_syntax) {
-        RET_FAIL(spec.msg.error(ast->loc,
-                                "implicit grouping is forbidden with '--posix-captures' option, "
-                                "please wrap '%s' in capturing parenthesis",
-                                ast->ref.name));
-    }
-    return Ret::OK;
-}
-
 LOCAL_NODISCARD(Ret check_tags_used_once(
         RESpec& spec, const Rule& rule, const std::vector<Tag>& tags)) {
     std::set<std::string> names;
@@ -330,7 +319,6 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::REF:
-            CHECK_RET(check_misuse_of_named_def(spec, ast));
             x.ast = ast->ref.ast; // replace on stack
             break;
 
@@ -458,7 +446,6 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::REF:
-            CHECK_RET(check_misuse_of_named_def(spec, ast));
             x.ast = ast->ref.ast;
             break;
 
