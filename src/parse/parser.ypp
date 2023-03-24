@@ -218,7 +218,8 @@ primary
         $$ = ast.ref($$, $1);
     }
 }
-| '(' expr ')' { $$ = ast.cap($2); }
+| '('     expr ')' { $$ = ast.cap($2); }            // capturing group (in POSIX mode)
+| '(' '?' expr ')' { $$ = ast.ref($3, "<group>"); } // non-capturing group
 ;
 
 %%
