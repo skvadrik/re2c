@@ -97,7 +97,7 @@ LOCAL_NODISCARD(Regexp* capture_tags(
         }
         // dereference to avoid future check for non-parenthesized rerefences
         if (ast->kind == AstKind::REF) {
-            ast = ast->ref.ast;
+            ast = ast->ref;
         }
         *psub = ast;
     }
@@ -319,7 +319,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::REF:
-            x.ast = ast->ref.ast; // replace on stack
+            x.ast = ast->ref; // replace on stack
             break;
 
         case AstKind::DIFF:
@@ -446,7 +446,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::REF:
-            x.ast = ast->ref.ast;
+            x.ast = ast->ref;
             break;
 
         case AstKind::ALT:

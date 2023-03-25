@@ -1393,7 +1393,7 @@ yyreduce:
         input.error_at_tok("undefined symbol '%s'", (yyvsp[0].cstr));
         YYABORT;
     } else if (Ast::needs_wrap((yyval.regexp))) {
-        (yyval.regexp) = ast.ref((yyval.regexp), (yyvsp[0].cstr));
+        (yyval.regexp) = ast.ref((yyval.regexp));
     }
 }
 #line 1400 "src/parse/parser.cc"
@@ -1407,7 +1407,7 @@ yyreduce:
 
   case 44: /* primary: '(' '?' expr ')'  */
 #line 222 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.ref((yyvsp[-1].regexp), "<group>"); }
+                   { (yyval.regexp) = ast.ref((yyvsp[-1].regexp)); }
 #line 1412 "src/parse/parser.cc"
     break;
 

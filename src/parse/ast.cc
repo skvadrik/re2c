@@ -141,10 +141,9 @@ const AstNode* Ast::cap(const AstNode* a) {
     return ast;
 }
 
-const AstNode* Ast::ref(const AstNode* a, const char* n) {
+const AstNode* Ast::ref(const AstNode* a) {
     AstNode* ast = make(a->loc, AstKind::REF, a->has_caps);
-    ast->ref.ast = a;
-    ast->ref.name = n;
+    ast->ref = a;
     return ast;
 }
 

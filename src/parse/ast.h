@@ -93,10 +93,7 @@ struct AstNode {
             bool history;
         } tag;
         const AstNode* cap;
-        struct {
-            const AstNode* ast;
-            const char* name;
-        } ref;
+        const AstNode* ref;
     };
     loc_t loc;
     bool has_caps; // whether this AST has nested capturing groups
@@ -201,7 +198,7 @@ class Ast {
     const AstNode* diff(const AstNode* a1, const AstNode* a2);
     const AstNode* tag(const loc_t& loc, const char* n, bool h);
     const AstNode* cap(const AstNode* a);
-    const AstNode* ref(const AstNode* a, const char* n);
+    const AstNode* ref(const AstNode* a);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
 
     // Local and global strings differ in their lifetimes: local ones live during AST construction,
