@@ -22,11 +22,13 @@ yy3:
 	}
 yy4:
 	++YYCURSOR;
-	yynmatch = 2;
+	yynmatch = 3;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = YYCURSOR - 2;
 	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[4] = YYCURSOR - 1;
+	yypmatch[5] = YYCURSOR;
 	{}
 }
 
@@ -67,11 +69,13 @@ yy11:
 	}
 yy12:
 	++YYCURSOR;
-	yynmatch = 2;
+	yynmatch = 3;
 	yypmatch[0] = YYCURSOR - 4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = YYCURSOR - 4;
 	yypmatch[3] = YYCURSOR - 2;
+	yypmatch[4] = YYCURSOR - 2;
+	yypmatch[5] = YYCURSOR;
 	{}
 }
 
@@ -112,15 +116,17 @@ yy19:
 	}
 yy20:
 	++YYCURSOR;
-	yynmatch = 4;
+	yynmatch = 5;
 	yypmatch[0] = YYCURSOR - 4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = YYCURSOR - 4;
 	yypmatch[3] = YYCURSOR - 2;
 	yypmatch[4] = YYCURSOR - 3;
 	yypmatch[5] = YYCURSOR - 2;
-	yypmatch[6] = YYCURSOR - 1;
+	yypmatch[6] = YYCURSOR - 2;
 	yypmatch[7] = YYCURSOR;
+	yypmatch[8] = YYCURSOR - 1;
+	yypmatch[9] = YYCURSOR;
 	{}
 }
 
@@ -148,11 +154,13 @@ yy24:
 	}
 yy25:
 	++YYCURSOR;
-	yynmatch = 2;
+	yynmatch = 3;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = YYCURSOR - 2;
 	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[4] = YYCURSOR - 1;
+	yypmatch[5] = YYCURSOR;
 	{}
 }
 
@@ -197,17 +205,19 @@ yy31:
 	++YYCURSOR;
 	yyt2 = NULL;
 yy32:
-	yynmatch = 4;
+	yynmatch = 5;
 	yypmatch[5] = yyt1;
-	yypmatch[7] = yyt2;
+	yypmatch[9] = yyt2;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = YYCURSOR - 2;
 	yypmatch[3] = YYCURSOR - 1;
 	yypmatch[4] = yyt1;
 	if (yyt1 != NULL) yypmatch[4] -= 1;
-	yypmatch[6] = yyt2;
-	if (yyt2 != NULL) yypmatch[6] -= 1;
+	yypmatch[6] = YYCURSOR - 1;
+	yypmatch[7] = YYCURSOR;
+	yypmatch[8] = yyt2;
+	if (yyt2 != NULL) yypmatch[8] -= 1;
 	{}
 yy33:
 	++YYCURSOR;
@@ -223,18 +233,20 @@ yy33:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
-			yyt1 = yyt3 = YYCURSOR;
+			yyt1 = yyt4 = YYCURSOR;
 			goto yy36;
 		default:
-			yyt2 = yyt3 = NULL;
+			yyt2 = yyt3 = yyt4 = NULL;
 			yyt1 = YYCURSOR;
 			goto yy35;
 	}
 yy35:
-	yynmatch = 2;
+	yynmatch = 3;
 	yypmatch[0] = yyt1;
-	yypmatch[2] = yyt3;
+	yypmatch[2] = yyt4;
 	yypmatch[3] = yyt2;
+	yypmatch[4] = yyt3;
+	yypmatch[5] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	{}
 yy36:
@@ -244,6 +256,7 @@ yy36:
 	switch (yych) {
 		case 'a': goto yy37;
 		default:
+			yyt3 = NULL;
 			yyt2 = YYCURSOR;
 			goto yy35;
 	}
@@ -253,9 +266,10 @@ yy37:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
-			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy36;
 		default:
+			yyt3 = NULL;
 			yyt2 = YYCURSOR;
 			goto yy35;
 	}
@@ -277,17 +291,19 @@ yy37:
 			goto yy39;
 	}
 yy39:
-	yynmatch = 4;
+	yynmatch = 5;
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt5;
 	yypmatch[3] = yyt2;
 	yypmatch[5] = yyt3;
+	yypmatch[6] = yyt4;
 	yypmatch[7] = yyt4;
+	yypmatch[9] = yyt4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[4] = yyt3;
 	if (yyt3 != NULL) yypmatch[4] -= 2;
-	yypmatch[6] = yyt4;
-	if (yyt4 != NULL) yypmatch[6] -= 2;
+	yypmatch[8] = yyt4;
+	if (yyt4 != NULL) yypmatch[8] -= 2;
 	{}
 yy40:
 	++YYCURSOR;
@@ -315,5 +331,5 @@ yy41:
 	}
 }
 
-posix_captures/implicit_grouping4.re:35:11: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/implicit_grouping4.re:40:11: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_3.re:35:13: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_3.re:40:13: warning: rule matches empty string [-Wmatch-empty-string]

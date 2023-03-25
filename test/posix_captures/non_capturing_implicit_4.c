@@ -22,9 +22,11 @@ yy3:
 	}
 yy4:
 	++YYCURSOR;
-	yynmatch = 1;
+	yynmatch = 2;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = YYCURSOR - 2;
+	yypmatch[3] = YYCURSOR - 1;
 	{}
 }
 
@@ -65,9 +67,11 @@ yy11:
 	}
 yy12:
 	++YYCURSOR;
-	yynmatch = 1;
+	yynmatch = 2;
 	yypmatch[0] = YYCURSOR - 4;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = YYCURSOR - 4;
+	yypmatch[3] = YYCURSOR - 2;
 	{}
 }
 
@@ -108,13 +112,15 @@ yy19:
 	}
 yy20:
 	++YYCURSOR;
-	yynmatch = 3;
+	yynmatch = 4;
 	yypmatch[0] = YYCURSOR - 4;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 3;
+	yypmatch[2] = YYCURSOR - 4;
 	yypmatch[3] = YYCURSOR - 2;
-	yypmatch[4] = YYCURSOR - 1;
-	yypmatch[5] = YYCURSOR;
+	yypmatch[4] = YYCURSOR - 3;
+	yypmatch[5] = YYCURSOR - 2;
+	yypmatch[6] = YYCURSOR - 1;
+	yypmatch[7] = YYCURSOR;
 	{}
 }
 
@@ -142,9 +148,11 @@ yy24:
 	}
 yy25:
 	++YYCURSOR;
-	yynmatch = 1;
+	yynmatch = 2;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
+	yypmatch[2] = YYCURSOR - 2;
+	yypmatch[3] = YYCURSOR - 1;
 	{}
 }
 
@@ -189,15 +197,17 @@ yy31:
 	++YYCURSOR;
 	yyt2 = NULL;
 yy32:
-	yynmatch = 3;
-	yypmatch[3] = yyt1;
-	yypmatch[5] = yyt2;
+	yynmatch = 4;
+	yypmatch[5] = yyt1;
+	yypmatch[7] = yyt2;
 	yypmatch[0] = YYCURSOR - 2;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = yyt1;
-	if (yyt1 != NULL) yypmatch[2] -= 1;
-	yypmatch[4] = yyt2;
-	if (yyt2 != NULL) yypmatch[4] -= 1;
+	yypmatch[2] = YYCURSOR - 2;
+	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[4] = yyt1;
+	if (yyt1 != NULL) yypmatch[4] -= 1;
+	yypmatch[6] = yyt2;
+	if (yyt2 != NULL) yypmatch[6] -= 1;
 	{}
 yy33:
 	++YYCURSOR;
@@ -211,14 +221,20 @@ yy33:
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	yyt1 = YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy36;
-		default: goto yy35;
+		case 'a':
+			yyt1 = yyt3 = YYCURSOR;
+			goto yy36;
+		default:
+			yyt2 = yyt3 = NULL;
+			yyt1 = YYCURSOR;
+			goto yy35;
 	}
 yy35:
-	yynmatch = 1;
+	yynmatch = 2;
 	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt3;
+	yypmatch[3] = yyt2;
 	yypmatch[1] = YYCURSOR;
 	{}
 yy36:
@@ -226,8 +242,22 @@ yy36:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy36;
-		default: goto yy35;
+		case 'a': goto yy37;
+		default:
+			yyt2 = YYCURSOR;
+			goto yy35;
+	}
+yy37:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a':
+			yyt3 = YYCURSOR;
+			goto yy36;
+		default:
+			yyt2 = YYCURSOR;
+			goto yy35;
 	}
 }
 
@@ -239,35 +269,51 @@ yy36:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
+			yyt1 = yyt5 = YYCURSOR;
+			goto yy40;
+		default:
+			yyt2 = yyt3 = yyt4 = yyt5 = NULL;
 			yyt1 = YYCURSOR;
 			goto yy39;
-		default:
-			yyt2 = NULL;
-			yyt1 = YYCURSOR;
-			goto yy38;
 	}
-yy38:
-	yynmatch = 3;
-	yypmatch[0] = yyt1;
-	yypmatch[3] = yyt2;
-	yypmatch[5] = yyt2;
-	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 2;
-	yypmatch[4] = yyt2;
-	if (yyt2 != NULL) yypmatch[4] -= 2;
-	{}
 yy39:
+	yynmatch = 4;
+	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt5;
+	yypmatch[3] = yyt2;
+	yypmatch[5] = yyt3;
+	yypmatch[7] = yyt4;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[4] = yyt3;
+	if (yyt3 != NULL) yypmatch[4] -= 2;
+	yypmatch[6] = yyt4;
+	if (yyt4 != NULL) yypmatch[6] -= 2;
+	{}
+yy40:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy39;
+		case 'a': goto yy41;
 		default:
-			yyt2 = NULL;
-			goto yy38;
+			yyt3 = yyt4 = NULL;
+			yyt2 = YYCURSOR;
+			goto yy39;
+	}
+yy41:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a':
+			yyt5 = YYCURSOR;
+			goto yy40;
+		default:
+			yyt4 = NULL;
+			yyt2 = yyt3 = YYCURSOR;
+			goto yy39;
 	}
 }
 
-posix_captures/implicit_grouping1.re:35:9: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/implicit_grouping1.re:40:9: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_4.re:35:11: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_4.re:40:11: warning: rule matches empty string [-Wmatch-empty-string]

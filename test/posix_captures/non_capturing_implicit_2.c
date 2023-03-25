@@ -331,5 +331,5 @@ yy41:
 	}
 }
 
-posix_captures/implicit_grouping3.re:35:13: warning: rule matches empty string [-Wmatch-empty-string]
-posix_captures/implicit_grouping3.re:40:13: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_2.re:35:9: warning: rule matches empty string [-Wmatch-empty-string]
+posix_captures/non_capturing_implicit_2.re:40:9: warning: rule matches empty string [-Wmatch-empty-string]
