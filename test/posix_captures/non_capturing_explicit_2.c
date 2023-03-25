@@ -242,7 +242,7 @@ yy36:
 			yyt1 = YYCURSOR;
 			goto yy39;
 		default:
-			yyt2 = NULL;
+			yyt2 = yyt3 = NULL;
 			yyt1 = YYCURSOR;
 			goto yy38;
 	}
@@ -250,21 +250,32 @@ yy38:
 	yynmatch = 3;
 	yypmatch[0] = yyt1;
 	yypmatch[3] = yyt2;
-	yypmatch[5] = yyt2;
+	yypmatch[5] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
 	if (yyt2 != NULL) yypmatch[2] -= 2;
-	yypmatch[4] = yyt2;
-	if (yyt2 != NULL) yypmatch[4] -= 2;
+	yypmatch[4] = yyt3;
+	if (yyt3 != NULL) yypmatch[4] -= 2;
 	{}
 yy39:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
+		case 'a': goto yy40;
+		default:
+			yyt2 = yyt3 = NULL;
+			goto yy38;
+	}
+yy40:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
 		case 'a': goto yy39;
 		default:
-			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt2 = YYCURSOR;
 			goto yy38;
 	}
 }
