@@ -97,7 +97,7 @@ LOCAL_NODISCARD(Regexp* capture_tags(
         }
         // dereference to avoid future check for non-parenthesized rerefences
         if (ast->kind == AstKind::REF) {
-            ast = ast->ref.ast;
+            ast = ast->ref;
         }
         *psub = ast;
     }
@@ -140,17 +140,6 @@ LOCAL_NODISCARD(Regexp* insert_between_tags(RESpec& spec, Regexp* tags, Regexp* 
         tags->cat.re2 = re_cat(spec, re, tags->cat.re2);
     }
     return tags;
-}
-
-LOCAL_NODISCARD(Ret check_misuse_of_named_def(RESpec& spec, const AstNode* ast)) {
-    DCHECK(ast->kind == AstKind::REF);
-    if (spec.opts->tags_posix_syntax) {
-        RET_FAIL(spec.msg.error(ast->loc,
-                                "implicit grouping is forbidden with '--posix-captures' option, "
-                                "please wrap '%s' in capturing parenthesis",
-                                ast->ref.name));
-    }
-    return Ret::OK;
 }
 
 LOCAL_NODISCARD(Ret check_tags_used_once(
@@ -330,8 +319,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::REF:
-            CHECK_RET(check_misuse_of_named_def(spec, ast));
-            x.ast = ast->ref.ast; // replace on stack
+            x.ast = ast->ref; // replace on stack
             break;
 
         case AstKind::DIFF:
@@ -445,11 +433,11 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
         case AstKind::CAP:
             if (!opts->tags_posix_syntax) { // ordinary group, replace with subexpr on stack
                 x.ast = ast->cap;
-            } else { // POSIX capturing group
+            } else { // capturing group
                 if (x.succ == 0) { // 1st visit: push successor
                     ++x.succ;
                     x.re1 = capture_tags(spec, x, false, &ast, pncap);
-                    stack.emplace_back(ast,  x.height, x.in_iter);
+                    stack.emplace_back(ast, x.height, x.in_iter);
                 } else { // 2nd visit: return
                     re = insert_between_tags(spec, x.re1, re);
                     stack.pop_back();
@@ -458,8 +446,18 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::REF:
-            CHECK_RET(check_misuse_of_named_def(spec, ast));
-            x.ast = ast->ref.ast;
+            if (!opts->tags_posix_semantics) { // ordinary group, replace with subexpr on stack
+                x.ast = ast->ref;
+            } else { // non-capturing group
+                if (x.succ == 0) { // 1st visit: push successor
+                    ++x.succ;
+                    x.re1 = structural_tags(spec, x, ast->ref, pncap);
+                    stack.emplace_back(ast->ref, x.height, x.in_iter);
+                } else { // 2nd visit: return
+                    re = insert_between_tags(spec, x.re1, re);
+                    stack.pop_back();
+                }
+            }
             break;
 
         case AstKind::ALT:

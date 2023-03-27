@@ -167,6 +167,10 @@ opt_long: /*!local:re2c
     "utf16"  | "utf-16"     end { opts.set_encoding(Enc::Type::UTF16, true);  goto opt; }
     "utf8"   | "utf-8"      end { opts.set_encoding(Enc::Type::UTF8, true);   goto opt; }
 
+    "leftmost-captures" end {
+        opts.set_tags_posix_syntax(true);
+        goto opt;
+    }
     "posix-captures" end {
         opts.set_tags_posix_syntax(true);
         opts.set_tags_posix_semantics(true);
