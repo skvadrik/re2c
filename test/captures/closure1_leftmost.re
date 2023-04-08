@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i --posix-captures --fixed-tags toplevel
+// re2c $INPUT -o $OUTPUT -i --leftmost-captures --fixed-tags toplevel
 
 // In POSIX mode grous capture non-empty string: the first iteration consumes
 // all 'a's, and subsequent iterations are bypassed on the epsilon-transitions.
