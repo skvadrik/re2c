@@ -111,7 +111,7 @@ jobs:
           else
             BUILD_DIR="$(pwd)"
           fi
-          echo "::set-output name=BUILD_DIR::$BUILD_DIR"
+          echo "BUILD_DIR=$BUILD_DIR" >> $GITHUB_OUTPUT
 
       - name: Full Configure
         working-directory: ${{ steps.build-info.outputs.BUILD_DIR }}
