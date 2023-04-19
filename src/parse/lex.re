@@ -428,7 +428,7 @@ scan:
         RET_TOK(TOKEN_REGEXP);
     }
 
-    [*+?()|;/\\=$] { RET_TOK(*tok); }
+    [*+?!()|;/\\=$] { RET_TOK(*tok); }
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {

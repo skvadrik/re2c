@@ -219,7 +219,7 @@ primary
     }
 }
 | '('     expr ')' { $$ = ast.cap($2); } // capturing group (in POSIX mode)
-| '(' '?' expr ')' { $$ = ast.ref($3); } // non-capturing group
+| '(' '!' expr ')' { $$ = ast.ref($3); } // non-capturing group
 ;
 
 %%
