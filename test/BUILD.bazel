@@ -1,0 +1,82 @@
+load("//bazel:re2c.bzl", "re2c_gen_and_test")
+
+re2c_gen_and_test(
+    name = "case_ranges_re2c",
+    srcs = ["codegen/case_ranges.re"],
+    outs = ["case_ranges.c"],
+    golden = ["codegen/case_ranges.c"],
+    re2c_parse_first_line = True,
+    re2c_args = ["--no-version --no-generation-date"],
+)
+
+cc_library(
+    name = "case_ranges_cc",
+    srcs = ["case_ranges.c"],
+)
+
+filegroup(
+    name = "re2c_includes",
+    srcs = glob(["**/*.inc"]),
+)
+
+[
+    [
+        re2c_gen_and_test(
+            name = test + "_re2c",
+            srcs = [test + ".re"],
+            data = [":re2c_includes"],
+            outs = [test + ".re2c_gen.c"],
+            golden = [test + ".c"],
+            re2c_parse_first_line = True,
+            re2c_args = [
+                "--no-version",
+                "--no-generation-date",
+                "-W",
+            ],
+            # If location information is generated, then remove the directory.
+            # Similarly for errors we drop the directory.
+            # More generally, this BUILD file is located in the path 'test',
+            # so we need to drop the 'test/' sub dir and any prior sub dirs.
+            # Since that is fairly generic, we do so only if we find such
+            # strings at the beginning of the line (with an optional single
+            # space) or past a '"' character.
+            # Further, we look for filenames ending in (.c, .inc, .re).
+            # Last but not least in order to distinguish golden from result
+            # files, the latter are generated with the extension-prefix
+            # '.re2c_gen', so we need to drop that.
+            result_sed = 's,^([^"]*"| )?([^.]+/)?test/([^.]*[.])(re2c_gen[.])?(c|inc|re),\\1\\3\\5,g',
+        )
+    ] for test in [
+        test[:-2] for test in glob(["**/*.c"]) if not [
+            # Some tests have to be excluded here. They need additional re2c
+            # support this test setup cannot handle.
+            prefix for prefix in [
+                # Option --skeleton is not supported here.
+                "skeleton/",
+                # Option --header is not supported here.
+                "conditions/cond_enum_only_header.c",
+                "conditions/condition_05.c",
+                "conditions/condtype.c",
+                "conditions/cond_enum_header_and_directives.c",
+                "header/header_01.c",
+                "header/header_02.c",
+                "header/header_03.c",
+                # Options --dump-* are not supported here.
+                "debug/adfa.c",
+                "debug/cfg.c",
+                "debug/closure_stats_gor1.c",
+                "debug/dfa_det.c",
+                "debug/dfa_min.c",
+                "debug/dfa_raw.c",
+                "debug/dfa_tagopt.c",
+                "debug/interf.c",
+                "debug/nfa.c",
+                # Mising include lines: `output: input includes+`.
+                "include/include001.c",
+                "include/include002.c",
+                "include/include003.c",
+                "include/include004_inline.c",
+            ] if test.startswith(prefix)
+        ]
+    ]
+]

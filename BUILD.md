@@ -185,6 +185,73 @@ Cross-compile re2c for Windows using Mingw:
 There is a bunch of build scripts for specialized builds with Asan, Ubsan,
 GLIBCXX_DEBUG, etc. in the ``build`` subdirectory.
 
+Build (Bazel)
+-------------
+
+re2c can be used and developed using the https://bazel.build/. However this
+has no option to installing the generated tool or its documentation.
+
+re2c supports two modes of bazel integration:
+
+1) Using `BUILD.bazel` builds re2c using bazel's actual build support. This way
+   supports toolchains and with that any compiler or cross compilation
+   automatically. However, this version assumes some posix compliant functions
+   and headers.
+
+   Additonal requirements:
+
+   * bison must be installed and available as `bison`.
+
+   * some unix tools (bash, cat, diff, sed, which) are required.
+
+   * In order to rebuild the docuemntation
+   
+2) Using the alternative `BUILD.cmake.bazel` file will build re2c using its
+   cmake build support (`https://github.com/bazelbuild/rules_foreign_cc`).
+   This option is slower and intended for cases with an existing toolchain.
+
+The following is needed in the `WORKSPACE` file:
+
+```
+http_archive(
+    name = "re2c",
+    build_file = Label("//:third_party/re2c.BUILD"),
+    strip_prefix = "re2c-3.1",
+    urls = ["https://github.com/skvadrik/re2c/archive/refs/tags/3.1.tar.gz"],
+)
+```
+
+In order to build with cmake, the alternative `buildfile` has to be specified:
+
+```
+http_archive(
+    name = "re2c",
+    build_file = Label("//:third_party/re2c.BUILD"),
+    strip_prefix = "re2c-3.1",
+    urls = ["https://github.com/skvadrik/re2c/archive/refs/tags/3.1.tar.gz"],
+    build_file = "BULD.cmake.bazel",
+)
+```
+
+Then in the `BUILD.bazel` file re2c can be used by its `re2c_gen` function:
+
+```
+load("@re2c//:re2c.bzl", "re2c_gen")
+
+re2c_gen(
+    name = "rule_name",
+    srcs = ["input.re2c"],
+    outs = ["output.cc"],
+)
+```
+
+The `re2c_gen` rule requires a single `srcs` input file and a single `outs`
+output file. If additional files are required, for instance as includes, they
+can be specified in `data`. Arguments can be specified using `re2c_args`.
+
+If the re2c input file starts with the re2c invocation, then the invocation
+args can be parsed by setting `re2c_parse_first_line = True`. In that case the
+first line must start with `// re2c $INPUT -o $OUTPUT`.
 
 Test
 ----

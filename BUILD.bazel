@@ -1,0 +1,286 @@
+package(default_visibility = ["//visibility:private"])
+
+load("//bazel:bison.bzl", "bison_gen_and_test")
+load("//bazel:re2c.bzl", "re2c_gen_and_test")
+load("//bazel:rst2txt.bzl", "rst2txt")
+load("//bazel:util.bzl", "sed_args")
+
+genrule(
+    name = "re2c_config",
+    srcs = [
+        "CMakeLists.txt",
+        "//bazel:config.h",
+    ],
+    outs = ["config.h"],
+    cmd = """
+        cat $(location //:CMakeLists.txt) |\\
+            sed -rne 's/project\\(re2c VERSION ([^ ]+).*/#define PACKAGE_VERSION "\\1" RE2C_VERSION_SUFFIX/p' >> "$@"
+        cat $(location //bazel:config.h) >> "$@"
+    """,
+)
+
+cc_library(
+    name = "re2c_config_cc",
+    hdrs = ["config.h"],
+    defines = ["""RE2C_STDLIB_DIR='"$(BINDIR)/re2c.runfiles/re2c/include"'"""],
+    data = ["include/unicode_categories.re"],
+)
+
+cc_library(
+    name = "re2c_base_lib_cc",
+    includes = ["bootstrap"],
+    hdrs = [
+        "src/adfa/adfa.h",
+        "src/cfg/cfg.h",
+        "src/codegen/code.h",
+        "src/codegen/helpers.h",
+        "src/codegen/output.h",
+        "src/constants.h",
+        "src/debug/debug.h",
+        "src/dfa/closure_leftmost.h",
+        "src/dfa/closure_posix.h",
+        "src/dfa/determinization.h",
+        "src/dfa/dfa.h",
+        "src/dfa/posix_precedence.h",
+        "src/dfa/tag_history.h",
+        "src/dfa/tagver_table.h",
+        "src/dfa/tcmd.h",
+        "src/encoding/ebcdic.h",
+        "src/encoding/enc.h",
+        "src/encoding/range_suffix.h",
+        "src/encoding/utf16.h",
+        "src/encoding/utf8.h",
+        "src/msg/location.h",
+        "src/msg/msg.h",
+        "src/msg/ver_to_vernum.h",
+        "src/msg/warn.h",
+        "src/nfa/nfa.h",
+        "src/options/opt.h",
+        "src/options/symtab.h",
+        "src/parse/ast.h",
+        "src/regexp/regexp.h",
+        "src/regexp/rule.h",
+        "src/regexp/tag.h",
+        "src/skeleton/mtag_trie.h",
+        "src/skeleton/path.h",
+        "src/skeleton/skeleton.h",
+        "src/test/range/test.h",
+        "src/util/allocator.h",
+        "src/util/attribute.h",
+        "src/util/check.h",
+        "src/util/containers.h",
+        "src/util/file_utils.h",
+        "src/util/forbid_copy.h",
+        "src/util/hash32.h",
+        "src/util/range.h",
+        "src/util/string_utils.h",
+        "src/util/u32lim.h",
+    ],
+    srcs = [
+        "src/adfa/adfa.cc",
+        "src/cfg/cfg.cc",
+        "src/cfg/compact.cc",
+        "src/cfg/dce.cc",
+        "src/cfg/freeze.cc",
+        "src/cfg/interfere.cc",
+        "src/cfg/liveanal.cc",
+        "src/cfg/normalize.cc",
+        "src/cfg/optimize.cc",
+        "src/cfg/rename.cc",
+        "src/cfg/varalloc.cc",
+        "src/codegen/helpers.cc",
+        # "src/codegen/output.cc",  # PACKAGE_VERSON needs to become a function
+        "src/codegen/pass1_analyze.cc",
+        "src/codegen/pass2_generate.cc",
+        "src/codegen/pass3_fixup.cc",
+        "src/codegen/pass4_render.cc",
+        "src/debug/dump_adfa.cc",
+        "src/debug/dump_cfg.cc",
+        "src/debug/dump_dfa_tree.cc",
+        "src/debug/dump_dfa.cc",
+        "src/debug/dump_interf.cc",
+        "src/debug/dump_nfa.cc",
+        "src/dfa/closure.cc",
+        "src/dfa/dead_rules.cc",
+        "src/dfa/determinization.cc",
+        "src/dfa/fallback_tags.cc",
+        "src/dfa/fillpoints.cc",
+        "src/dfa/find_state.cc",
+        "src/dfa/minimization.cc",
+        "src/dfa/tagver_table.cc",
+        "src/dfa/tcmd.cc",
+        "src/encoding/ebcdic.cc",
+        "src/encoding/enc.cc",
+        "src/encoding/range_suffix.cc",
+        "src/encoding/utf16.cc",
+        "src/encoding/utf8.cc",
+        # "src/msg/msg.cc", # PACKAGE_VERSON needs to become a function
+        "src/msg/warn.cc",
+        "src/nfa/re_to_nfa.cc",
+        "src/parse/ast.cc",
+        "src/regexp/ast_to_re.cc",
+        "src/regexp/default_tags.cc",
+        "src/regexp/fixed_tags.cc",
+        "src/regexp/nullable.cc",
+        "src/regexp/regexp.cc",
+        "src/regexp/split_charset.cc",
+        "src/skeleton/control_flow.cc",
+        "src/skeleton/generate_code.cc",
+        "src/skeleton/generate_data.cc",
+        "src/skeleton/maxpath.cc",
+        "src/skeleton/skeleton.cc",
+        "src/util/file_utils.cc",
+        "src/util/range.cc",
+        "src/util/string_utils.cc",
+    ],
+    deps = ["re2c_config_cc"],
+)
+
+cc_library(
+    name = "re2c_bootstrap_cc",
+    includes = ["bootstrap"],
+    hdrs = [
+        "bootstrap/src/parse/lex.h",
+        "bootstrap/src/parse/parser.h",
+        "src/parse/input.h",
+        "src/util/nowarn_in_bison.h",
+    ],
+    srcs = [
+        "bootstrap/src/msg/help.cc",
+        "bootstrap/src/msg/ver_to_vernum.cc",
+        "bootstrap/src/options/parse_opts.cc",
+        "bootstrap/src/parse/lex_conf.cc",
+        "bootstrap/src/parse/lex.cc",
+        "bootstrap/src/parse/parser.cc",
+        "src/codegen/output.cc", # PACKAGE_VERSON needs to become a function
+        "src/msg/msg.cc", # PACKAGE_VERSON needs to become a function
+        "src/options/opt.cc",
+        "src/options/symtab.cc",
+        "src/parse/input.cc",
+    ],
+    defines = ["""RE2C_VERSION_SUFFIX='"-bootstrap"'"""],
+    deps = ["re2c_base_lib_cc"],
+)
+
+cc_binary(
+    name = "re2c_bootstrap",
+    srcs = ["src/main.cc"],
+    deps = [":re2c_bootstrap_cc"],
+    visibility = ["//visibility:private"],
+)
+
+_SED_REMOVE_DIR_IN_LINE = """s,^(#line.*").*(/[^/"]+")$$,\\1\\2,g"""
+
+bison_gen_and_test(
+    name = "parser_bison",
+    srcs = ["src/parse/parser.ypp"],
+    output = "src/parse/parser.cc",
+    defines = "src/parse/parser.h",
+    bison_args = ["--warnings"],
+    golden_output = "bootstrap/src/parse/parser.cc",
+    golden_defines = "bootstrap/src/parse/parser.h",
+    golden_sed = _SED_REMOVE_DIR_IN_LINE,
+    result_sed = sed_args(
+        _SED_REMOVE_DIR_IN_LINE,
+        """s,YY_YY_.*SRC_PARSE_PARSER,YY_YY_SRC_PARSE_PARSER,g""",
+    ),
+)
+
+_RE2C_REGEN_ARGS = [
+    "-b",
+    "-W",
+    "-Wno-match-empty-string",
+    "-Wno-nondeterministic-tags",
+    "--no-generation-date",
+]
+_RE2C_REGEN_GOLDEN_SED = _SED_REMOVE_DIR_IN_LINE
+_RE2C_REGEN_RESULT_SED = sed_args(
+    _SED_REMOVE_DIR_IN_LINE,
+    """s,-bootstrap,,g""",
+)
+_RE2C_REGEN_TOOL = ":re2c_bootstrap"
+
+
+re2c_gen_and_test(
+    name = "lex_re2c",
+    srcs = ["src/parse/lex.re"],
+    outs = [
+        "src/parse/lex.cc",
+        "src/parse/lex.h",
+    ],
+    golden = [
+        "bootstrap/src/parse/lex.cc",
+        "bootstrap/src/parse/lex.h",
+    ],
+    golden_sed = _RE2C_REGEN_GOLDEN_SED,
+    result_sed = _RE2C_REGEN_RESULT_SED,
+    re2c_args = _RE2C_REGEN_ARGS,
+    re2c_tool = _RE2C_REGEN_TOOL,
+)
+
+re2c_gen_and_test(
+    name = "lex_conf_re2c",
+    srcs = ["src/parse/lex_conf.re"],
+    outs = ["src/parse/lex_conf.cc"],
+    golden = ["bootstrap/src/parse/lex_conf.cc"],
+    golden_sed = _RE2C_REGEN_GOLDEN_SED,
+    result_sed = _RE2C_REGEN_RESULT_SED,
+    re2c_args = _RE2C_REGEN_ARGS,
+    re2c_tool = _RE2C_REGEN_TOOL,
+)
+
+re2c_gen_and_test(
+    name = "parse_opts_re2c",
+    srcs = ["src/options/parse_opts.re"],
+    outs = ["src/options/parse_opts.cc"],
+    golden = ["bootstrap/src/options/parse_opts.cc"],
+    golden_sed = _RE2C_REGEN_GOLDEN_SED,
+    result_sed = _RE2C_REGEN_RESULT_SED,
+    re2c_args = _RE2C_REGEN_ARGS,
+    re2c_tool = _RE2C_REGEN_TOOL,
+)
+
+re2c_gen_and_test(
+    name = "ver_to_vernum_re2c",
+    srcs = ["src/msg/ver_to_vernum.re"],
+    outs = ["src/msg/ver_to_vernum.cc"],
+    golden = ["bootstrap/src/msg/ver_to_vernum.cc"],
+    golden_sed = _RE2C_REGEN_GOLDEN_SED,
+    result_sed = _RE2C_REGEN_RESULT_SED,
+    re2c_args = _RE2C_REGEN_ARGS,
+    re2c_tool = _RE2C_REGEN_TOOL,
+)
+
+rst2txt()
+
+cc_library(
+    name = "re2c_regen_cc",
+    hdrs = [
+        "src/parse/lex.h",
+        "src/parse/parser.h",
+        "src/parse/input.h",
+        "src/util/nowarn_in_bison.h",
+    ],
+    srcs = [
+        "src/msg/help.cc",
+        "src/msg/ver_to_vernum.cc",
+        "src/options/parse_opts.cc",
+        "src/parse/lex_conf.cc",
+        "src/parse/lex.cc",
+        "src/parse/parser.cc",
+        "src/codegen/output.cc", # PACKAGE_VERSON needs to become a function
+        "src/msg/msg.cc", # PACKAGE_VERSON needs to become a function
+        "src/options/opt.cc",
+        "src/options/symtab.cc",
+        "src/parse/input.cc",
+    ],
+    defines = ["""RE2C_VERSION_SUFFIX='""'"""],
+    deps = ["re2c_base_lib_cc"],
+)
+
+cc_binary(
+    name = "re2c",
+    srcs = ["src/main.cc"],
+    deps = [":re2c_regen_cc"],
+    visibility = ["//visibility:public"],
+)

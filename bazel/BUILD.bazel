@@ -1,0 +1,38 @@
+package(default_visibility = ["//visibility:private"])
+
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+exports_files([
+    "config.h",
+    "diff_tests.sh",
+])
+
+bzl_library(
+    name = "bison_bzl",
+    srcs = ["bison.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "diff_test_bzl",
+    srcs = ["diff_test.bzl"],
+)
+
+bzl_library(
+    name = "re2c_bzl",
+    srcs = ["re2c.bzl"],
+    deps = [":diff_test.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+bzl_library(
+    name = "rst2txt_bzl",
+    srcs = ["rst2txt.bzl"],
+    deps = [":diff_test.bzl"],
+)
+
+bzl_library(
+    name = "util_bzl",
+    srcs = ["util.bzl"],
+    visibility = ["//visibility:public"],
+)

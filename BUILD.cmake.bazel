@@ -1,0 +1,43 @@
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "cmake")
+
+package(default_visibility = ["//visibility:private"])
+
+filegroup(
+    name = "re2c_srcs",
+    srcs = [
+        "CMakeLists.txt",
+        "doc/help.rst.in",
+        "include/unicode_categories.re",
+    ] + glob([
+        "bootstrap/lib/**",
+        "bootstrap/src/**",
+        "build/**",
+        "cmake/**",
+        "src/**",
+    ]),
+)
+
+cmake(
+    name = "re2c_cmake",
+    cache_entries = {
+        "CMAKE_C_FLAGS": "-fPIC",
+        "RE2C_BUILD_RE2GO": "no",
+        "RE2C_BUILD_RE2RUST": "no",
+        "RE2C_REBUILD_LEXERS": "no",
+        "RE2C_REBUILD_PARSERS": "no",
+        "RE2C_REBUILD_DOCS": "no",
+        "RE2C_BUILD_BENCHMARKS": "no",
+        "RE2C_REGEN_BENCHMARKS": "no",
+        "RE2C_BUILD_LIBS": "no",
+        "RE2C_INSTALL_FULL": "no",
+    },
+    lib_source = ":re2c_srcs",
+    out_binaries = ["re2c"],
+)
+
+filegroup(
+    name = "re2c",
+    srcs = [":re2c_cmake"],
+    output_group = "re2c",
+    visibility = ["//visibility:public"],
+)
