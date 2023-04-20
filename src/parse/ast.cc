@@ -135,15 +135,15 @@ const AstNode* Ast::tag(const loc_t& loc, const char* n, bool h) {
     return ast;
 }
 
-const AstNode* Ast::cap(const AstNode* a) {
-    AstNode* ast = make(a->loc, AstKind::CAP, true);
-    ast->cap = a;
-    return ast;
-}
-
-const AstNode* Ast::ref(const AstNode* a) {
-    AstNode* ast = make(a->loc, AstKind::REF, a->has_caps);
-    ast->ref = a;
+const AstNode* Ast::cap(const AstNode* a, bool capturing) {
+    AstNode* ast;
+    if (capturing) {
+      ast = make(a->loc, AstKind::CAP, true);
+      ast->cap = a;
+    } else {
+      ast = make(a->loc, AstKind::REF, a->has_caps);
+      ast->ref = a;
+    }
     return ast;
 }
 

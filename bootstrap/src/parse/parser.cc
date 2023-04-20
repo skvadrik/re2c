@@ -549,9 +549,9 @@ static const yytype_uint8 yyrline[] =
 {
        0,    76,    76,    77,    81,    85,    86,    87,    91,    94,
      100,   101,   104,   104,   107,   110,   113,   116,   122,   128,
-     134,   140,   147,   148,   153,   158,   159,   164,   165,   169,
-     170,   174,   176,   180,   181,   194,   200,   201,   205,   206,
-     207,   211,   212,   221,   222
+     134,   140,   147,   148,   153,   158,   159,   165,   166,   170,
+     171,   175,   177,   181,   182,   195,   201,   202,   206,   207,
+     208,   212,   213,   222,   223
 };
 #endif
 
@@ -1306,38 +1306,39 @@ yyreduce:
 
   case 25: /* trailexpr: expr  */
 #line 158 "../src/parse/parser.ypp"
-       { (yyval.regexp) = ast.cap((yyvsp[0].regexp)); }
+       { (yyval.regexp) = ast.cap((yyvsp[0].regexp), !opts.glob.invert_captures); }
 #line 1311 "src/parse/parser.cc"
     break;
 
   case 26: /* trailexpr: expr '/' expr  */
 #line 159 "../src/parse/parser.ypp"
                 {
-    (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp)), ast.cat(ast.tag(input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
+    (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp), !opts.glob.invert_captures),
+                 ast.cat(ast.tag(input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
 }
-#line 1319 "src/parse/parser.cc"
+#line 1320 "src/parse/parser.cc"
     break;
 
   case 28: /* expr: expr '|' diff  */
-#line 165 "../src/parse/parser.ypp"
+#line 166 "../src/parse/parser.ypp"
                 { (yyval.regexp) = ast.alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1325 "src/parse/parser.cc"
+#line 1326 "src/parse/parser.cc"
     break;
 
   case 30: /* diff: diff '\\' term  */
-#line 170 "../src/parse/parser.ypp"
+#line 171 "../src/parse/parser.ypp"
                  { (yyval.regexp) = ast.diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
-#line 1331 "src/parse/parser.cc"
+#line 1332 "src/parse/parser.cc"
     break;
 
   case 32: /* term: factor term  */
-#line 176 "../src/parse/parser.ypp"
+#line 177 "../src/parse/parser.ypp"
               { (yyval.regexp) = ast.cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
-#line 1337 "src/parse/parser.cc"
+#line 1338 "src/parse/parser.cc"
     break;
 
   case 34: /* factor: primary closes  */
-#line 181 "../src/parse/parser.ypp"
+#line 182 "../src/parse/parser.ypp"
                  {
     switch((yyvsp[0].op)) {
     case '*':
@@ -1351,69 +1352,69 @@ yyreduce:
         break;
     }
 }
-#line 1355 "src/parse/parser.cc"
+#line 1356 "src/parse/parser.cc"
     break;
 
   case 35: /* factor: primary TOKEN_CLOSESIZE  */
-#line 194 "../src/parse/parser.ypp"
+#line 195 "../src/parse/parser.ypp"
                           {
     (yyval.regexp) = ast.iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 }
-#line 1363 "src/parse/parser.cc"
+#line 1364 "src/parse/parser.cc"
     break;
 
   case 37: /* closes: closes close  */
-#line 201 "../src/parse/parser.ypp"
+#line 202 "../src/parse/parser.ypp"
                { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
-#line 1369 "src/parse/parser.cc"
+#line 1370 "src/parse/parser.cc"
     break;
 
   case 38: /* close: '*'  */
-#line 205 "../src/parse/parser.ypp"
+#line 206 "../src/parse/parser.ypp"
       { (yyval.op) = '*'; }
-#line 1375 "src/parse/parser.cc"
+#line 1376 "src/parse/parser.cc"
     break;
 
   case 39: /* close: '+'  */
-#line 206 "../src/parse/parser.ypp"
+#line 207 "../src/parse/parser.ypp"
       { (yyval.op) = '+'; }
-#line 1381 "src/parse/parser.cc"
+#line 1382 "src/parse/parser.cc"
     break;
 
   case 40: /* close: '?'  */
-#line 207 "../src/parse/parser.ypp"
+#line 208 "../src/parse/parser.ypp"
       { (yyval.op) = '?'; }
-#line 1387 "src/parse/parser.cc"
+#line 1388 "src/parse/parser.cc"
     break;
 
   case 42: /* primary: TOKEN_ID  */
-#line 212 "../src/parse/parser.ypp"
+#line 213 "../src/parse/parser.ypp"
            {
     (yyval.regexp) = find_def(opts.symtab, (yyvsp[0].cstr));
     if ((yyval.regexp) == nullptr) {
         input.error_at_tok("undefined symbol '%s'", (yyvsp[0].cstr));
         YYABORT;
     } else if (Ast::needs_wrap((yyval.regexp))) {
-        (yyval.regexp) = ast.ref((yyval.regexp));
+        (yyval.regexp) = ast.cap((yyval.regexp), false);
     }
 }
-#line 1401 "src/parse/parser.cc"
+#line 1402 "src/parse/parser.cc"
     break;
 
   case 43: /* primary: '(' expr ')'  */
-#line 221 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp)); }
-#line 1407 "src/parse/parser.cc"
+#line 222 "../src/parse/parser.ypp"
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), !opts.glob.invert_captures); }
+#line 1408 "src/parse/parser.cc"
     break;
 
   case 44: /* primary: '(' '!' expr ')'  */
-#line 222 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.ref((yyvsp[-1].regexp)); }
-#line 1413 "src/parse/parser.cc"
+#line 223 "../src/parse/parser.ypp"
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), opts.glob.invert_captures); }
+#line 1414 "src/parse/parser.cc"
     break;
 
 
-#line 1417 "src/parse/parser.cc"
+#line 1418 "src/parse/parser.cc"
 
       default: break;
     }
@@ -1606,7 +1607,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 225 "../src/parse/parser.ypp"
+#line 226 "../src/parse/parser.ypp"
 
 
 #pragma GCC diagnostic pop

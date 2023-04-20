@@ -197,8 +197,7 @@ class Ast {
     const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
     const AstNode* diff(const AstNode* a1, const AstNode* a2);
     const AstNode* tag(const loc_t& loc, const char* n, bool h);
-    const AstNode* cap(const AstNode* a);
-    const AstNode* ref(const AstNode* a);
+    const AstNode* cap(const AstNode* a, bool capturing);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
 
     // Local and global strings differ in their lifetimes: local ones live during AST construction,

@@ -74,8 +74,8 @@ factor
 
 primary
 : TOKEN_REGEXP
-| '(' ')'      { $$ = ast.cap(ast.nil(NOWHERE)); }
-| '(' expr ')' { $$ = ast.cap($2); }
+| '(' ')'      { $$ = ast.cap(ast.nil(NOWHERE), true); }
+| '(' expr ')' { $$ = ast.cap($2, true); }
 ;
 
 %%

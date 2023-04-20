@@ -150,6 +150,7 @@ opt_long: /*!local:re2c
     "skeleton"              end { globopts.target = Target::SKELETON; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;         goto opt; }
     "loop-switch"           end { globopts.loop_switch = true;        goto opt; }
+    "invert-captures"       end { globopts.invert_captures = true;    goto opt; }
 
     "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
     "debug-output"          end { opts.set_debug(true);              goto opt; }

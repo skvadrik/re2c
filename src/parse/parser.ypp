@@ -155,9 +155,10 @@ ccode
 };
 
 trailexpr
-: expr { $$ = ast.cap($1); }
+: expr { $$ = ast.cap($1, !opts.glob.invert_captures); }
 | expr '/' expr {
-    $$ = ast.cat(ast.cap($1), ast.cat(ast.tag(input.tok_loc(), nullptr, false), $3));
+    $$ = ast.cat(ast.cap($1, !opts.glob.invert_captures),
+                 ast.cat(ast.tag(input.tok_loc(), nullptr, false), $3));
 };
 
 expr
@@ -215,11 +216,11 @@ primary
         input.error_at_tok("undefined symbol '%s'", $1);
         YYABORT;
     } else if (Ast::needs_wrap($$)) {
-        $$ = ast.ref($$);
+        $$ = ast.cap($$, false);
     }
 }
-| '('     expr ')' { $$ = ast.cap($2); } // capturing group (in POSIX mode)
-| '(' '!' expr ')' { $$ = ast.ref($3); } // non-capturing group
+| '('     expr ')' { $$ = ast.cap($2, !opts.glob.invert_captures); }
+| '(' '!' expr ')' { $$ = ast.cap($3, opts.glob.invert_captures); }
 ;
 
 %%

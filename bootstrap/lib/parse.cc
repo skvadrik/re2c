@@ -1144,13 +1144,13 @@ yyreduce:
 
   case 13: /* primary: '(' ')'  */
 #line 77 "../lib/parse.ypp"
-               { (yyval.regexp) = ast.cap(ast.nil(NOWHERE)); }
+               { (yyval.regexp) = ast.cap(ast.nil(NOWHERE), true); }
 #line 1149 "lib/parse.cc"
     break;
 
   case 14: /* primary: '(' expr ')'  */
 #line 78 "../lib/parse.ypp"
-               { (yyval.regexp) = ast.cap((yyvsp[-1].regexp)); }
+               { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), true); }
 #line 1155 "lib/parse.cc"
     break;
 
