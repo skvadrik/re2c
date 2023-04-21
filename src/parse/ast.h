@@ -32,8 +32,7 @@ enum class AstKind: uint32_t {
     ITER, // generalized repetition of two nodes: x{n,m} or x{n,} or x{n} or x* or x+
     DIFF, // difference of two node (only applies to character classes)
     TAG,  // a tag, like @t (s-tag, single-valued tag) or #t (m-tag. multi-valued tag)
-    CAP,  // capturing group (submatch group)
-    REF   // non-capturing group
+    CAP   // capturing or non-capturing group
 };
 
 // A character (symbol) in the abstract syntax tree.
@@ -92,8 +91,10 @@ struct AstNode {
             const char* name;
             bool history;
         } tag;
-        const AstNode* cap;
-        const AstNode* ref;
+        struct {
+            const AstNode* ast;
+            bool capturing;
+        } cap;
     };
     loc_t loc;
     bool has_caps; // whether this AST has nested capturing groups
@@ -204,6 +205,8 @@ class Ast {
     // while global ones are used much later in codegen (they use a different allocator).
     const char* cstr_local(const uint8_t* s, const uint8_t* e);
     const char* cstr_global(const uint8_t* s, const uint8_t* e);
+
+    static bool is_capturing(const AstNode* a);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`

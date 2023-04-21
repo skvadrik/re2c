@@ -136,14 +136,9 @@ const AstNode* Ast::tag(const loc_t& loc, const char* n, bool h) {
 }
 
 const AstNode* Ast::cap(const AstNode* a, bool capturing) {
-    AstNode* ast;
-    if (capturing) {
-      ast = make(a->loc, AstKind::CAP, true);
-      ast->cap = a;
-    } else {
-      ast = make(a->loc, AstKind::REF, a->has_caps);
-      ast->ref = a;
-    }
+    AstNode* ast = make(a->loc, AstKind::CAP, capturing || a->has_caps);
+    ast->cap.ast = a;
+    ast->cap.capturing = capturing;
     return ast;
 }
 
@@ -166,6 +161,10 @@ const char* Ast::cstr_global(const uint8_t* s, const uint8_t* e) {
     return newcstr(s, e, out_alc);
 }
 
+bool Ast::is_capturing(const AstNode* a) {
+    return a->kind == AstKind::CAP && a->cap.capturing;
+}
+
 bool Ast::needs_wrap(const AstNode* a) {
     switch (a->kind) {
     case AstKind::ITER:
@@ -175,13 +174,13 @@ bool Ast::needs_wrap(const AstNode* a) {
     case AstKind::DOT:
     case AstKind::DEF:
     case AstKind::TAG:
-    case AstKind::CAP:
         return false;
     case AstKind::ALT:
     case AstKind::CAT:
     case AstKind::DIFF:
-    case AstKind::REF:
         return true;
+    case AstKind::CAP:
+        return !a->cap.capturing;
     }
     return false; // unreachable
 }

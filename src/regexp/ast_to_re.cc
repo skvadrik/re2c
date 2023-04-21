@@ -90,14 +90,14 @@ LOCAL_NODISCARD(Regexp* capture_tags(
     size_t ncap = *pncap, lcap = ncap;
 
     const AstNode* ast = *psub;
-    if (ast->kind == AstKind::CAP) {
+    if (Ast::is_capturing(ast)) {
         // save the range of repeated captures and collapse them: (...(R)...) -> (R)
-        for (ast = ast->cap; ast && ast->kind == AstKind::CAP; ast = ast->cap) {
+        for (ast = ast->cap.ast; ast && Ast::is_capturing(ast); ast = ast->cap.ast) {
             ++ncap;
         }
         // dereference to avoid future check for non-parenthesized rerefences
-        if (ast->kind == AstKind::REF) {
-            ast = ast->ref;
+        if (ast->kind == AstKind::CAP) { // non-capturing group
+            ast = ast->cap.ast;
         }
         *psub = ast;
     }
@@ -116,7 +116,7 @@ LOCAL_NODISCARD(Regexp* capture_tags(
 
 LOCAL_NODISCARD(Regexp* structural_tags(
         RESpec& spec, DfsAstToRe& x, const AstNode* sub, size_t* pncap)) {
-    if (sub->kind == AstKind::CAP) {
+    if (Ast::is_capturing(sub)) {
         // If this sub-AST is already a capture, no need for structural tags.
     } else if (spec.opts->tags_automatic) {
         // Full parsing: automatically add tags as if this sub-regexp was a capture.
@@ -314,12 +314,8 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (spec.opts->tags_posix_syntax) goto error;
-            x.ast = ast->cap; // replace on stack
-            break;
-
-        case AstKind::REF:
-            x.ast = ast->ref; // replace on stack
+            if (Ast::is_capturing(ast) && spec.opts->tags_posix_syntax) goto error;
+            x.ast = ast->cap.ast; // replace on stack
             break;
 
         case AstKind::DIFF:
@@ -380,7 +376,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
 
         const AstNode* ast = x.ast;
 
-        if (ast->kind != AstKind::CAP && ast->kind != AstKind::REF) ++x.height;
+        if (ast->kind != AstKind::CAP) ++x.height;
 
         switch (ast->kind) {
         case AstKind::NIL:
@@ -432,27 +428,17 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
 
         case AstKind::CAP:
             if (!opts->tags_posix_syntax) { // ordinary group, replace with subexpr on stack
-                x.ast = ast->cap;
-            } else { // capturing group
+                x.ast = ast->cap.ast;
+            } else { // capturing or non-capturing group
                 if (x.succ == 0) { // 1st visit: push successor
                     ++x.succ;
-                    x.re1 = capture_tags(spec, x, false, &ast, pncap);
-                    stack.emplace_back(ast, x.height, x.in_iter);
-                } else { // 2nd visit: return
-                    re = insert_between_tags(spec, x.re1, re);
-                    stack.pop_back();
-                }
-            }
-            break;
-
-        case AstKind::REF:
-            if (!opts->tags_posix_semantics) { // ordinary group, replace with subexpr on stack
-                x.ast = ast->ref;
-            } else { // non-capturing group
-                if (x.succ == 0) { // 1st visit: push successor
-                    ++x.succ;
-                    x.re1 = structural_tags(spec, x, ast->ref, pncap);
-                    stack.emplace_back(ast->ref, x.height, x.in_iter);
+                    if (Ast::is_capturing(ast)) {
+                        x.re1 = capture_tags(spec, x, false, &ast, pncap);
+                        stack.emplace_back(ast, x.height, x.in_iter);
+                    } else {
+                        x.re1 = structural_tags(spec, x, ast->cap.ast, pncap);
+                        stack.emplace_back(ast->cap.ast, x.height, x.in_iter);
+                    }
                 } else { // 2nd visit: return
                     re = insert_between_tags(spec, x.re1, re);
                     stack.pop_back();
@@ -500,7 +486,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                 ++x.succ;
                 const uint32_t m = ast->iter.max;
                 ast = ast->iter.ast;
-                if ((opts->tags_posix_semantics && ast->kind == AstKind::CAP)
+                if ((opts->tags_posix_semantics && Ast::is_capturing(ast))
                         || opts->tags_automatic) {
                     x.re1 = capture_tags(spec, x, m > 1, &ast, pncap);
                 }
