@@ -155,9 +155,9 @@ ccode
 };
 
 trailexpr
-: expr { $$ = ast.cap($1, !opts.glob.invert_captures); }
+: expr { $$ = ast.cap($1, CAPTURE_IF_NOT_INVERTED); }
 | expr '/' expr {
-    $$ = ast.cat(ast.cap($1, !opts.glob.invert_captures),
+    $$ = ast.cat(ast.cap($1, CAPTURE_IF_NOT_INVERTED),
                  ast.cat(ast.tag(input.tok_loc(), nullptr, false), $3));
 };
 
@@ -216,11 +216,11 @@ primary
         input.error_at_tok("undefined symbol '%s'", $1);
         YYABORT;
     } else if (Ast::needs_wrap($$)) {
-        $$ = ast.cap($$, false);
+        $$ = ast.cap($$, NO_CAPTURE);
     }
 }
-| '('     expr ')' { $$ = ast.cap($2, !opts.glob.invert_captures); }
-| '(' '!' expr ')' { $$ = ast.cap($3, opts.glob.invert_captures); }
+| '('     expr ')' { $$ = ast.cap($2, CAPTURE_IF_NOT_INVERTED); }
+| '(' '!' expr ')' { $$ = ast.cap($3, CAPTURE_IF_INVERTED); }
 ;
 
 %%

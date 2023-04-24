@@ -52,7 +52,6 @@ class Input;
     CONSTOPT(bool,      verbose, false) \
     CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
     CONSTOPT(bool,      line_dirs, true) \
-    CONSTOPT(bool,      invert_captures, false) \
     /* files */ \
     CONSTOPT(std::string,              source_file, "") \
     CONSTOPT(std::string,              output_file, "") \
@@ -168,6 +167,7 @@ class Input;
     MUTOPT(bool,        tags_posix_syntax, false) \
     MUTOPT(bool,        tags_posix_semantics, false) \
     MUTOPT(std::string, tags_prefix, "yyt") \
+    MUTOPT(bool,        invert_captures, false) \
     /* labels */ \
     MUTOPT(std::string, label_fill, "yyFillLabel") \
     MUTOPT(std::string, label_loop, "") \

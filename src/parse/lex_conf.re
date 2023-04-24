@@ -89,6 +89,7 @@ Ret Input::lex_conf(Opt& opts) {
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
     "tags:expression" { RET_CONF_STR(tags_expression); }
+    "invert-captures" { RET_CONF_BOOL(invert_captures); }
 
     "define:YYBACKUP"             { RET_CONF_STR(api_backup); }
     "define:YYBACKUPCTX"          { RET_CONF_STR(api_backup_ctx); }

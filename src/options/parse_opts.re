@@ -150,7 +150,6 @@ opt_long: /*!local:re2c
     "skeleton"              end { globopts.target = Target::SKELETON; goto opt; }
     "eager-skip"            end { globopts.eager_skip = true;         goto opt; }
     "loop-switch"           end { globopts.loop_switch = true;        goto opt; }
-    "invert-captures"       end { globopts.invert_captures = true;    goto opt; }
 
     "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
     "debug-output"          end { opts.set_debug(true);              goto opt; }
@@ -161,6 +160,7 @@ opt_long: /*!local:re2c
     "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }
     "tags"                  end { opts.set_tags(true);               goto opt; }
     "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
+    "invert-captures"       end { opts.set_invert_captures(true);    goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
     "utf32"  | "unicode"    end { opts.set_encoding(Enc::Type::UTF32, true);  goto opt; }

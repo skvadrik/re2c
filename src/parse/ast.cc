@@ -58,7 +58,7 @@ Ast::Ast(AstAllocator& ast_alc, OutAllocator& out_alc)
       temp_blockname(),
       blocks() {}
 
-AstNode* Ast::make(const loc_t& loc, AstKind kind, bool has_caps) {
+AstNode* Ast::make(const loc_t& loc, AstKind kind, uint8_t has_caps) {
     AstNode* p = ast_alc.alloct<AstNode>(1);
     p->kind = kind;
     p->loc = loc;
@@ -67,11 +67,11 @@ AstNode* Ast::make(const loc_t& loc, AstKind kind, bool has_caps) {
 }
 
 const AstNode* Ast::nil(const loc_t& loc) {
-    return make(loc, AstKind::NIL, false);
+    return make(loc, AstKind::NIL, NO_CAPTURE);
 }
 
 const AstNode* Ast::str(const loc_t& loc, bool icase) {
-    AstNode* ast = make(loc, AstKind::STR, false);
+    AstNode* ast = make(loc, AstKind::STR, NO_CAPTURE);
     ast->str.chars.init(temp_chars.data(), temp_chars.size(), ast_alc);
     ast->str.icase = icase;
     temp_chars.clear();
@@ -79,7 +79,7 @@ const AstNode* Ast::str(const loc_t& loc, bool icase) {
 }
 
 const AstNode* Ast::cls(const loc_t& loc, bool negated) {
-    AstNode* ast = make(loc, AstKind::CLS, false);
+    AstNode* ast = make(loc, AstKind::CLS, NO_CAPTURE);
     ast->cls.ranges.init(temp_ranges.data(), temp_ranges.size(), ast_alc);
     ast->cls.negated = negated;
     temp_ranges.clear();
@@ -87,17 +87,17 @@ const AstNode* Ast::cls(const loc_t& loc, bool negated) {
 }
 
 const AstNode* Ast::dot(const loc_t& loc) {
-    return make(loc, AstKind::DOT, false);
+    return make(loc, AstKind::DOT, NO_CAPTURE);
 }
 
 const AstNode* Ast::def(const loc_t& loc) {
-    return make(loc, AstKind::DEF, false);
+    return make(loc, AstKind::DEF, NO_CAPTURE);
 }
 
 const AstNode* Ast::alt(const AstNode* a1, const AstNode* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AstNode* ast = make(a1->loc, AstKind::ALT, a1->has_caps || a2->has_caps);
+    AstNode* ast = make(a1->loc, AstKind::ALT, a1->has_caps | a2->has_caps);
     ast->alt.ast1 = a1;
     ast->alt.ast2 = a2;
     return ast;
@@ -106,7 +106,7 @@ const AstNode* Ast::alt(const AstNode* a1, const AstNode* a2) {
 const AstNode* Ast::cat(const AstNode* a1, const AstNode* a2) {
     if (!a1) return a2;
     if (!a2) return a1;
-    AstNode* ast = make(a1->loc, AstKind::CAT, a1->has_caps || a2->has_caps);
+    AstNode* ast = make(a1->loc, AstKind::CAT, a1->has_caps | a2->has_caps);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
@@ -122,23 +122,23 @@ const AstNode* Ast::iter(const AstNode* a, uint32_t n, uint32_t m) {
 }
 
 const AstNode* Ast::diff(const AstNode* a1, const AstNode* a2) {
-    AstNode* ast = make(a1->loc, AstKind::DIFF, a1->has_caps || a2->has_caps);
+    AstNode* ast = make(a1->loc, AstKind::DIFF, a1->has_caps | a2->has_caps);
     ast->cat.ast1 = a1;
     ast->cat.ast2 = a2;
     return ast;
 }
 
 const AstNode* Ast::tag(const loc_t& loc, const char* n, bool h) {
-    AstNode* ast = make(loc, AstKind::TAG, false);
+    AstNode* ast = make(loc, AstKind::TAG, NO_CAPTURE);
     ast->tag.name = n;
     ast->tag.history = h;
     return ast;
 }
 
-const AstNode* Ast::cap(const AstNode* a, bool capturing) {
-    AstNode* ast = make(a->loc, AstKind::CAP, capturing || a->has_caps);
+const AstNode* Ast::cap(const AstNode* a, CaptureMode mode) {
+    AstNode* ast = make(a->loc, AstKind::CAP, mode | a->has_caps);
     ast->cap.ast = a;
-    ast->cap.capturing = capturing;
+    ast->cap.mode = mode;
     return ast;
 }
 
@@ -161,10 +161,6 @@ const char* Ast::cstr_global(const uint8_t* s, const uint8_t* e) {
     return newcstr(s, e, out_alc);
 }
 
-bool Ast::is_capturing(const AstNode* a) {
-    return a->kind == AstKind::CAP && a->cap.capturing;
-}
-
 bool Ast::needs_wrap(const AstNode* a) {
     switch (a->kind) {
     case AstKind::ITER:
@@ -174,13 +170,12 @@ bool Ast::needs_wrap(const AstNode* a) {
     case AstKind::DOT:
     case AstKind::DEF:
     case AstKind::TAG:
+    case AstKind::CAP:
         return false;
     case AstKind::ALT:
     case AstKind::CAT:
     case AstKind::DIFF:
         return true;
-    case AstKind::CAP:
-        return !a->cap.capturing;
     }
     return false; // unreachable
 }

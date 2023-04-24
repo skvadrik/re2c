@@ -83,6 +83,15 @@ LOCAL_NODISCARD(Regexp* fictive_tags(RESpec& spec, int32_t height)) {
     return re_cat(spec, t1, t2);
 }
 
+LOCAL_NODISCARD(bool is_capture_mode(uint8_t mode, const opt_t* opts)) {
+    return mode == CAPTURE ||
+        mode == (opts->invert_captures ? CAPTURE_IF_INVERTED : CAPTURE_IF_NOT_INVERTED);
+}
+
+LOCAL_NODISCARD(bool is_capture(const AstNode* a, const opt_t* opts)) {
+    return a->kind == AstKind::CAP && is_capture_mode(a->cap.mode, opts);
+}
+
 LOCAL_NODISCARD(Regexp* capture_tags(
         RESpec& spec, DfsAstToRe& x, bool orbit, const AstNode** psub, size_t* pncap)) {
     std::vector<Tag>& tags = spec.tags;
@@ -90,9 +99,9 @@ LOCAL_NODISCARD(Regexp* capture_tags(
     size_t ncap = *pncap, lcap = ncap;
 
     const AstNode* ast = *psub;
-    if (Ast::is_capturing(ast)) {
+    if (is_capture(ast, spec.opts)) {
         // save the range of repeated captures and collapse them: (...(R)...) -> (R)
-        for (ast = ast->cap.ast; ast && Ast::is_capturing(ast); ast = ast->cap.ast) {
+        for (ast = ast->cap.ast; ast && is_capture(ast, spec.opts); ast = ast->cap.ast) {
             ++ncap;
         }
         // dereference to avoid future check for non-parenthesized rerefences
@@ -116,12 +125,12 @@ LOCAL_NODISCARD(Regexp* capture_tags(
 
 LOCAL_NODISCARD(Regexp* structural_tags(
         RESpec& spec, DfsAstToRe& x, const AstNode* sub, size_t* pncap)) {
-    if (Ast::is_capturing(sub)) {
+    if (is_capture(sub, spec.opts)) {
         // If this sub-AST is already a capture, no need for structural tags.
     } else if (spec.opts->tags_automatic) {
         // Full parsing: automatically add tags as if this sub-regexp was a capture.
         return capture_tags(spec, x, false, &x.ast, pncap);
-    } else if (spec.opts->tags_posix_semantics && x.ast->has_caps) {
+    } else if (spec.opts->tags_posix_semantics && is_capture_mode(x.ast->has_caps, spec.opts)) {
         // POSIX submatch extraction: add fictive structural tags.
         // See note [POSIX subexpression hierarchy].
         return fictive_tags(spec, x.height);
@@ -314,7 +323,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (Ast::is_capturing(ast) && spec.opts->tags_posix_syntax) goto error;
+            if (is_capture(ast, spec.opts) && spec.opts->tags_posix_syntax) goto error;
             x.ast = ast->cap.ast; // replace on stack
             break;
 
@@ -432,7 +441,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             } else { // capturing or non-capturing group
                 if (x.succ == 0) { // 1st visit: push successor
                     ++x.succ;
-                    if (Ast::is_capturing(ast)) {
+                    if (is_capture(ast, opts)) {
                         x.re1 = capture_tags(spec, x, false, &ast, pncap);
                         stack.emplace_back(ast, x.height, x.in_iter);
                     } else {
@@ -486,8 +495,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                 ++x.succ;
                 const uint32_t m = ast->iter.max;
                 ast = ast->iter.ast;
-                if ((opts->tags_posix_semantics && Ast::is_capturing(ast))
-                        || opts->tags_automatic) {
+                if ((opts->tags_posix_semantics && is_capture(ast, opts)) || opts->tags_automatic) {
                     x.re1 = capture_tags(spec, x, m > 1, &ast, pncap);
                 }
                 if (m > 0) {

@@ -93,11 +93,14 @@ struct AstNode {
         } tag;
         struct {
             const AstNode* ast;
-            bool capturing;
+            CaptureMode mode;
         } cap;
     };
     loc_t loc;
-    bool has_caps; // whether this AST has nested capturing groups
+
+    // Whether this AST has nested capturing groups (a combination of `CaptureMode` bit flags
+    // accumulated from the nested regexp).
+    uint8_t has_caps;
 };
 
 // Semanic action associated with an AST for a regular expression.
@@ -167,7 +170,7 @@ class Ast {
     // survive until the main codegen pass (e.g. semantic actions, condition names, tag names).
     OutAllocator& out_alc;
 
-    AstNode* make(const loc_t& loc, AstKind kind, bool has_caps);
+    AstNode* make(const loc_t& loc, AstKind kind, uint8_t has_caps);
 
   public:
     // Temporary buffers for constructing character strings and classes in lexer/parser. Generally
@@ -198,15 +201,13 @@ class Ast {
     const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
     const AstNode* diff(const AstNode* a1, const AstNode* a2);
     const AstNode* tag(const loc_t& loc, const char* n, bool h);
-    const AstNode* cap(const AstNode* a, bool capturing);
+    const AstNode* cap(const AstNode* a, CaptureMode mode);
     const SemAct* sem_act(const loc_t& loc, const char* text, const char* cond, bool autogen);
 
     // Local and global strings differ in their lifetimes: local ones live during AST construction,
     // while global ones are used much later in codegen (they use a different allocator).
     const char* cstr_local(const uint8_t* s, const uint8_t* e);
     const char* cstr_global(const uint8_t* s, const uint8_t* e);
-
-    static bool is_capturing(const AstNode* a);
 
     // Whether this AST node must be wrapped in implicit parentheses to ensure correct operator
     // precedence. This happens with named definitions, for example `x = "a"|"aa"` used in `x "b"`

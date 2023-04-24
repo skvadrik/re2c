@@ -53,6 +53,15 @@ enum class Minimization: uint32_t {
     MOORE
 };
 
+// Whether a group is capturing or non-capturng depending on --invert-capture option and
+// `re2c:invert_captures` configuration.
+enum CaptureMode : uint8_t {
+    NO_CAPTURE              = 0, // 00
+    CAPTURE_IF_INVERTED     = 1, // 01
+    CAPTURE_IF_NOT_INVERTED = 2, // 10
+    CAPTURE                 = CAPTURE_IF_INVERTED | CAPTURE_IF_NOT_INVERTED
+};
+
 // Algorithm for construction of POSIX precedence table for disambiguation.
 // Complexity estimates are in terms of TNFA size (m) and the number of tags (t).
 enum class PosixPrectable: uint32_t {

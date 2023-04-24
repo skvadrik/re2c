@@ -1306,14 +1306,14 @@ yyreduce:
 
   case 25: /* trailexpr: expr  */
 #line 158 "../src/parse/parser.ypp"
-       { (yyval.regexp) = ast.cap((yyvsp[0].regexp), !opts.glob.invert_captures); }
+       { (yyval.regexp) = ast.cap((yyvsp[0].regexp), CAPTURE_IF_NOT_INVERTED); }
 #line 1311 "src/parse/parser.cc"
     break;
 
   case 26: /* trailexpr: expr '/' expr  */
 #line 159 "../src/parse/parser.ypp"
                 {
-    (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp), !opts.glob.invert_captures),
+    (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp), CAPTURE_IF_NOT_INVERTED),
                  ast.cat(ast.tag(input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
 }
 #line 1320 "src/parse/parser.cc"
@@ -1395,7 +1395,7 @@ yyreduce:
         input.error_at_tok("undefined symbol '%s'", (yyvsp[0].cstr));
         YYABORT;
     } else if (Ast::needs_wrap((yyval.regexp))) {
-        (yyval.regexp) = ast.cap((yyval.regexp), false);
+        (yyval.regexp) = ast.cap((yyval.regexp), NO_CAPTURE);
     }
 }
 #line 1402 "src/parse/parser.cc"
@@ -1403,13 +1403,13 @@ yyreduce:
 
   case 43: /* primary: '(' expr ')'  */
 #line 222 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), !opts.glob.invert_captures); }
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_NOT_INVERTED); }
 #line 1408 "src/parse/parser.cc"
     break;
 
   case 44: /* primary: '(' '!' expr ')'  */
 #line 223 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), opts.glob.invert_captures); }
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_INVERTED); }
 #line 1414 "src/parse/parser.cc"
     break;
 

@@ -2016,7 +2016,7 @@ yy409:
 	goto yy246;
 yy410:
 	++YYCURSOR;
-#line 162 "../src/options/parse_opts.re"
+#line 161 "../src/options/parse_opts.re"
 	{ opts.set_tags(true);               goto opt; }
 #line 2022 "src/options/parse_opts.cc"
 yy411:
@@ -2922,7 +2922,7 @@ yy629:
 	goto yy246;
 yy630:
 	++YYCURSOR;
-#line 163 "../src/options/parse_opts.re"
+#line 162 "../src/options/parse_opts.re"
 	{ opts.set_unsafe(false);            goto opt; }
 #line 2928 "src/options/parse_opts.cc"
 yy631:
@@ -3058,7 +3058,7 @@ yy662:
 	goto yy246;
 yy663:
 	++YYCURSOR;
-#line 159 "../src/options/parse_opts.re"
+#line 158 "../src/options/parse_opts.re"
 	{ opts.set_nested_ifs(true);         goto opt; }
 #line 3064 "src/options/parse_opts.cc"
 yy664:
@@ -3104,7 +3104,7 @@ yy673:
 	goto yy246;
 yy674:
 	++YYCURSOR;
-#line 155 "../src/options/parse_opts.re"
+#line 154 "../src/options/parse_opts.re"
 	{ opts.set_bitmaps(true);            goto opt; }
 #line 3110 "src/options/parse_opts.cc"
 yy675:
@@ -3117,7 +3117,7 @@ yy676:
 	goto yy246;
 yy677:
 	++YYCURSOR;
-#line 157 "../src/options/parse_opts.re"
+#line 156 "../src/options/parse_opts.re"
 	{ opts.set_case_ranges(true);        goto opt; }
 #line 3123 "src/options/parse_opts.cc"
 yy678:
@@ -3247,7 +3247,7 @@ yy707:
 	goto yy246;
 yy708:
 	++YYCURSOR;
-#line 156 "../src/options/parse_opts.re"
+#line 155 "../src/options/parse_opts.re"
 	{ opts.set_debug(true);              goto opt; }
 #line 3253 "src/options/parse_opts.cc"
 yy709:
@@ -3340,7 +3340,7 @@ yy729:
 	goto yy246;
 yy730:
 	++YYCURSOR;
-#line 161 "../src/options/parse_opts.re"
+#line 160 "../src/options/parse_opts.re"
 	{ opts.set_case_inverted(true);      goto opt; }
 #line 3346 "src/options/parse_opts.cc"
 yy731:
@@ -3420,7 +3420,7 @@ yy748:
 	goto yy246;
 yy749:
 	++YYCURSOR;
-#line 158 "../src/options/parse_opts.re"
+#line 157 "../src/options/parse_opts.re"
 	{ opts.set_cgoto(true);              goto opt; }
 #line 3426 "src/options/parse_opts.cc"
 yy750:
@@ -3506,8 +3506,8 @@ yy767:
 #line 3507 "src/options/parse_opts.cc"
 yy768:
 	++YYCURSOR;
-#line 153 "../src/options/parse_opts.re"
-	{ globopts.invert_captures = true;    goto opt; }
+#line 163 "../src/options/parse_opts.re"
+	{ opts.set_invert_captures(true);    goto opt; }
 #line 3512 "src/options/parse_opts.cc"
 yy769:
 	yych = *++YYCURSOR;
@@ -3533,7 +3533,7 @@ yy773:
 #line 3534 "src/options/parse_opts.cc"
 yy774:
 	++YYCURSOR;
-#line 160 "../src/options/parse_opts.re"
+#line 159 "../src/options/parse_opts.re"
 	{ opts.set_case_insensitive(true);   goto opt; }
 #line 3539 "src/options/parse_opts.cc"
 yy775:
