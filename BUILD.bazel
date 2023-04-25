@@ -1,0 +1,45 @@
+package(default_visibility = ["//visibility:private"])
+
+genrule(
+    name = "re2c_config",
+    srcs = [
+        "CMakeLists.txt",
+        "//bazel:re2c_config.h",
+    ],
+    outs = ["config.h"],
+    cmd = """
+        cat $(location //:CMakeLists.txt) |\\
+            sed -rne 's/project\\(re2c VERSION ([^ ]+).*/#define PACKAGE_VERSION "\\1-bootstrap"/p' >> "$@"
+        cat $(location //bazel:re2c_config.h) >> "$@"
+    """,
+)
+
+cc_library(
+    name = "re2c_config_cc",
+    hdrs = ["config.h"],
+    defines = ["""RE2C_STDLIB_DIR='"$(BINDIR)/re2c.runfiles/re2c/include"'"""],
+    data = ["include/unicode_categories.re"],
+)
+
+cc_library(
+    name = "re2c_bootstrap_cc",
+    includes = ["bootstrap"],
+    hdrs = glob([
+        "bootstrap/src/**/*.h",
+        "src/**/*.h",
+    ]),
+    srcs = glob([
+        "bootstrap/src/**/*.cc",
+        "src/**/*.cc",
+    ]),
+    deps = [
+        "re2c_config_cc",  # Needed for 're2c_config_cc' data files
+    ],
+)
+
+cc_binary(
+    name = "re2c",
+    srcs = ["src/main.cc"],
+    deps = [":re2c_bootstrap_cc"],
+    visibility = ["//visibility:public"],
+)
