@@ -11,6 +11,7 @@
 /m4
 /test_*
 /.build*
+/bazel-*
 
 # Ignore user defined CMake presets
 CMakeUserPresets.json
