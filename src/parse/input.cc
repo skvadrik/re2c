@@ -254,12 +254,13 @@ Ret Input::gen_dep_file(const std::string& header) const {
     FILE* file = fopen(fname.c_str(), "w");
     if (file == nullptr) RET_FAIL(error("cannot open dep file %s", fname.c_str()));
 
-    fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
-    for (const std::string& fdep : filedeps) {
-        fprintf(file, " %s", fdep.c_str());
-    }
+    fprintf(file, "%s", escape_backslashes(globopts->output_file).c_str());
     if (!header.empty()) {
         fprintf(file, " %s", header.c_str());
+    }
+    fprintf(file, ":");
+    for (const std::string& fdep : filedeps) {
+        fprintf(file, " %s", fdep.c_str());
     }
     fprintf(file, "\n");
 

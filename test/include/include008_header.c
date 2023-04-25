@@ -58,4 +58,4 @@ yy5:
 
 #line 5 "include/include008_header.re"
 
-include/include008_header.c: include/include008.re.b.inc include/include008.re.c.inc include/include008_header.re include/include008.h
+include/include008_header.c include/include008.h: include/include008.re.b.inc include/include008.re.c.inc include/include008_header.re
