@@ -247,7 +247,7 @@ bool Input::fill(size_t need) {
     return true;
 }
 
-Ret Input::gen_dep_file() const {
+Ret Input::gen_dep_file(const std::string& header) const {
     const std::string& fname = globopts->dep_file;
     if (fname.empty()) return Ret::OK;
 
@@ -257,6 +257,9 @@ Ret Input::gen_dep_file() const {
     fprintf(file, "%s:", escape_backslashes(globopts->output_file).c_str());
     for (const std::string& fdep : filedeps) {
         fprintf(file, " %s", fdep.c_str());
+    }
+    if (!header.empty()) {
+        fprintf(file, " %s", header.c_str());
     }
     fprintf(file, "\n");
 

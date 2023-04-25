@@ -68,7 +68,7 @@ class Input: private LexerState {
     loc_t cur_loc() const;
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
-    Ret gen_dep_file() const NODISCARD;
+    Ret gen_dep_file(const std::string& header) const NODISCARD;
     Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
     Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;

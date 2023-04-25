@@ -223,7 +223,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     out_alc.clear(); // Release memory used for codegen.
 
-    CHECK_RET(input.gen_dep_file());
+    CHECK_RET(input.gen_dep_file(output.total_opts->header_file));
 
     if (globopts.verbose) fprintf(stderr, "re2c: success\n");
     return Ret::OK;
