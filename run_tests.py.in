@@ -31,13 +31,9 @@ TOP_BUILDIR = '@top_builddir@'
 RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
 TYPE_HEADER_PATTERN1 = re.compile(r'--header[ \t]*')
 TYPE_HEADER_PATTERN2 = re.compile(r'.*--header[ \t]*([^ \t]*).*')
-START_OF_MESSAGE = b'^[a-z0-9_]+([\\\\/]+[a-z0-9_]+)+([.][a-z]+)+[(:]'
+FILEPATH = b'^[a-z0-9_]+([\\\\/]+[a-z0-9_]+)+([.][a-z]+)+'
 START_OF_LINEDIR = b'^(//|#)line '
-FILEPATH_CONTEXT_PATTERN = re.compile(b'('
-    + START_OF_MESSAGE
-    + b'|'
-    + START_OF_LINEDIR
-    + b')')
+FILEPATH_CONTEXT_PATTERN = re.compile(b'(' + START_OF_LINEDIR + b'|' + FILEPATH + b')')
 
 
 @dataclass
