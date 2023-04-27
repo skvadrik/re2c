@@ -357,12 +357,6 @@ def run_test(test):
     stem = os.path.splitext(outx)[0]
     outy = f'{stem}.{ext}'
 
-    # Known failure: on windows overflow-1.re fails due to small stack size.
-    if os.name == 'nt' and outx.endswith('overflow-1.re'):
-        if not _ctx.keep_temp_files:
-            remove(outx, outy)
-        return 0, 0, 0
-
     # Prepare re2c flags
     switches = head
     switches = switches.replace('re2go', 're2c --lang go')
