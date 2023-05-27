@@ -87,7 +87,7 @@ void make_step(pzsimctx_t& ctx, uint32_t sym) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->kind == TnfaState::Kind::RAN) {
             for (const Range* r = s->ran; r; r = r->next()) {
@@ -113,7 +113,7 @@ void make_final_step(pzsimctx_t& ctx) {
 
         s->clos = NOCLOS;
         s->arcidx = 0;
-        DCHECK(s->status == GorPass::NOPASS && s->active == 0);
+        DCHECK(s->status == GOR_NOPASS && s->active == 0);
 
         if (s->kind == TnfaState::Kind::FIN) {
             ctx.marker = ctx.cursor;

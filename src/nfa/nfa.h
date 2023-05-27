@@ -15,10 +15,10 @@ namespace re2c {
 struct clos_t;
 
 // Passes of Goldberg-Radzik shortest path algorithm.
-enum class GorPass: uint32_t {
-    NOPASS = 0u,
-    TOPSORT = 1u,
-    LINEAR = 2u
+enum GorPass {
+    GOR_NOPASS = 0u,
+    GOR_TOPSORT = 1u,
+    GOR_LINEAR = 2u
 };
 
 static constexpr uint32_t NOCLOS = ~0u;
@@ -85,7 +85,7 @@ struct Tnfa {
         s->kind = kind;
         s->rule = rule;
         s->clos = NOCLOS;
-        s->status = GorPass::NOPASS;
+        s->status = GOR_NOPASS;
         s->arcidx = 0;
         s->active = 0;
         s->indeg = 0;

@@ -65,13 +65,13 @@ void closure_posix_gor1(ctx_t& ctx) {
         // 1st pass: depth-first postorder traversal of admissible subgraph
         for (; !topsort.empty(); ) {
             TnfaState* q = topsort.back();
-            if (q->status == GorPass::LINEAR) {
+            if (q->status == GOR_LINEAR) {
                 topsort.pop_back();
             } else {
-                q->status = GorPass::TOPSORT;
+                q->status = GOR_TOPSORT;
                 DINCCOUNT_CLSCANS(ctx);
                 if (!scan(ctx, q, false)) {
-                    q->status = GorPass::LINEAR;
+                    q->status = GOR_LINEAR;
                     topsort.pop_back();
                     linear.push_back(q);
                 }
@@ -88,7 +88,7 @@ void closure_posix_gor1(ctx_t& ctx) {
                 DINCCOUNT_CLSCANS(ctx);
                 scan(ctx, q, true);
             }
-            q->status = GorPass::NOPASS;
+            q->status = GOR_NOPASS;
         }
     }
 }
@@ -154,7 +154,7 @@ bool relax_gor1(ctx_t& ctx, const typename ctx_t::conf_t& x) {
     const uint32_t idx = q->clos;
     int32_t p1, p2;
 
-    if (q->status == GorPass::TOPSORT) {
+    if (q->status == GOR_TOPSORT) {
         return false;
     }
 
@@ -167,7 +167,7 @@ bool relax_gor1(ctx_t& ctx, const typename ctx_t::conf_t& x) {
         return false;
     }
 
-    if (q->status == GorPass::NOPASS) {
+    if (q->status == GOR_NOPASS) {
         ctx.gor1_topsort.push_back(q);
         q->arcidx = 0;
         return true;
@@ -181,7 +181,7 @@ template<>
 inline void closure_cleanup<pdetctx_t>(TnfaState* q) {
     q->clos = NOCLOS;
     q->arcidx = 0;
-    DCHECK(q->status == GorPass::NOPASS && q->active == 0);
+    DCHECK(q->status == GOR_NOPASS && q->active == 0);
 }
 
 } // namespace re2c
