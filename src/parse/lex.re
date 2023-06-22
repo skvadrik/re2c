@@ -532,7 +532,19 @@ scan:
         goto scan;
     }
 
-    * { RET_FAIL(error_at_tok("unexpected character: '%c'", *tok)); }
+    * {
+        if (globopts->flex_syntax && globopts->input_encoding == Enc::Type::UTF8) {
+            // Try to lex this as a raw UTF-8 code point (not captured by the `name` rule above
+            // because it is restricted to alphanumeric ASCII characters and underscore).
+            --cur;
+            uint32_t c;
+            CHECK_RET(lex_cls_chr(c));
+            ast.temp_chars.push_back({c, tok_loc()});
+            yylval->regexp = ast.str(tok_loc(), false);
+            RET_TOK(TOKEN_REGEXP);
+        }
+        RET_FAIL(error_at_tok("unexpected character: '%c'", *tok));
+    }
 */
 }
 
