@@ -275,8 +275,7 @@
     is ``yyNext``.
 
 ``re2c:lookahead``, ``re2c:flags:lookahead``
-    Same as inverted ``--no-lookahead`` option, but can be configured on
-    per-block basis.
+    Deprecated (see the deprecated ``--no-lookahead`` option).
 
 ``re2c:nested-ifs``, ``re2c:flags:nested-ifs``, ``re2c:flags:s``
     Same as the ``--nested-ifs`` option, but can be configured on per-block

@@ -31,7 +31,7 @@ git fetch $remote \
         | tar -C src/ -xpf -; } \
     && { git archive --remote=. remotes/$remote/$branch benchmarks/json2pgfplot.py \
         | tar -C build/ --strip-components=1 -xpf -; } \
-    && { git archive --remote=. remotes/$remote/$branch build/split_man.sh \
+    && { git archive --remote=. remotes/$remote/$branch build/split_man.py \
         | tar -xpf -; } \
     && { git archive --remote=. remotes/$remote/$branch CHANGELOG \
         | tar -C src/releases/changelog/ -xpf -; } \

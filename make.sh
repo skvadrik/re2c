@@ -1,7 +1,7 @@
 #!/bin/sh
 
 for lang in {c,go,rust}; do
-    build/split_man.sh src/manual/manual.rst.in src/manual/manual_$lang.rst $lang
+    python3 build/split_man.py src/manual/manual.rst.in src/manual/manual_$lang.rst $lang
 done
 
 sphinx-build -b html src obj

@@ -82,7 +82,7 @@ loop:
 	st.tok = st.cur
 	
 //line "go/state/push.go":85
-
+{
 yy0:
 yyFillLabel0:
 	yych = st.buf[st.cur]
@@ -150,6 +150,7 @@ yy8:
 //line "go/state/push.re":73
 	{ return lexEnd }
 //line "go/state/push.go":153
+}
 //line "go/state/push.re":75
 
 }

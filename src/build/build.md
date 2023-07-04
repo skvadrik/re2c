@@ -5,14 +5,15 @@ How to build
 Dependencies
 ------------
 
-To build re2c from a release tarball one needs only a C++ compiler and
-optionally Python 3 to run the tests.
+To build re2c from a release tarball one needs only a C++ compiler and Python 3
+(for build-time scripts and for testing). Building on Windows additionally
+requires either CMake or a Mingw build environment.
 
 To develop re2c one also needs CMake or Autotools (both build systems are
-maintained). Other dependencies include Bison (to rebuild parsers), rst2man (to
-rebuild documentation) and Sphinx (to rebuild the website). Benchmarks also use
-google-benchmark, re2 and Java. A few helper scripts are written in Haskell, but
-they are not essential for re2c development.
+maintained). Other dependencies include Bison (to rebuild parsers), Python 3
+Docutils (to rebuild documentation) and Sphinx (to rebuild the website).
+Benchmarks also use Google-benchmark, re2 and Java. A few helper scripts are
+written in Haskell, but they are not essential for re2c development.
 
 re2c is a self-hosting lexer generator, meaning that parts of its source code
 are written in re2c (namely, all the source files that have a *.re* extension).
@@ -56,10 +57,10 @@ The configure script has many options (to see them all, run
     path.
 
   * `--enable-docs`
-    Enable regeneration of documentation (requires rst2man).
+    Enable regeneration of documentation (requires Python 3 Docutils).
 
   * `--enable-benchmarks`
-    Build benchmarks (requires google benchmarks library).
+    Build benchmarks (requires Google benchmarks library).
 
   * `--enable-benchmarks-regenerate`
     Regenerate C code for Ragel and Kleenex benchmarks (this will download and
@@ -83,6 +84,24 @@ GLIBCXX_DEBUG, etc. in the ``build`` subdirectory.
 
 Build (CMake)
 -------------
+
+re2c includes CMake presets for Linux, MacOS, and Windows. Use `cmake
+--list-presets` to see them.
+
+* The `-fast` presets have minimal dependencies and build re2c using
+  pre-generated manpages, lexers, and parsers.
+* The `-full` presets have additional prerequisites (Docutils, Bison, and a
+  pre-existing re2c binary) and re-generate the manpages, lexers, and parsers.
+
+If you just want to build re2c, use the `-release-ootree-fast` preset. The
+other presets are primarily of interest to developers.
+
+For example, to build the `windows-msvc-release-ootree-fast` preset:
+
+* CD to the root of the re2c folder (the folder containing this README).
+* Configure: `cmake --preset=windows-msvc-release-ootree-fast`
+* Build: `cmake --build --preset=windows-msvc-release-ootree-fast`
+* The binary will be in the `.build/<preset-name>` folder.
 
 CMake supports different build modes, which can be further customized with
 individual options. By default re2c builds with `-O2 -g` and does not set any
@@ -137,11 +156,15 @@ specific to re2c:
     This requires setting `-DRE2C_FOR_BUILD` to an existing re2c executable
     path.
 
+  * `-DRE2C_REBUILD_PARSERS=yes`
+    Enable regeneration of `parser.cc` and `parser.h` files (as opposed to
+    using bootstrap files). This requires an available Bison parser generator.
+
   * `-DRE2C_REBUILD_DOCS=yes`
-    Enable regeneration of documentation (requires rst2man).
+    Enable regeneration of documentation (requires Python 3 Docutils).
 
   * `-DRE2C_BUILD_BENCHMARKS=yes`
-    Build benchmarks (requires google benchmarks library).
+    Build benchmarks (requires Google benchmarks library).
 
   * `-DRE2C_REGEN_BENCHMARKS=yes`
     Regenerate C code for Ragel and Kleenex benchmarks (this will download and

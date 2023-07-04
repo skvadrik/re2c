@@ -10,11 +10,14 @@
     Internal option: make the generated lexer advance the input position
     eagerly -- immediately after reading the input symbol. This changes the
     default behavior when the input position is advanced lazily -- after
-    transition to the next state. This option is implied by ``--no-lookahead``.
+    transition to the next state.
 
 ``--no-lookahead``
-    Internal option: use TDFA(0) instead of TDFA(1).
-    This option has effect only with ``--tags`` or ``--posix-captures`` options.
+    Internal option, deprecated.
+    It used to enable TDFA(0) algorithm. Unlike TDFA(1), TDFA(0) algorithm does
+    not use one-symbol lookahead. It applies register operations to the incoming
+    transitions rather than the outgoing ones. Benchmarks showed that TDFA(0)
+    algorithm is less efficient than TDFA(1).
 
 ``--no-optimize-tags``
     Internal option: suppress optimization of tag variables (useful for
@@ -35,9 +38,10 @@
     ``complex`` and may be slightly faster in non-pathological cases.
 
 ``--stadfa``
-    Internal option:
-    use staDFA algorithm for submatch extraction. The main difference with TDFA
-    is that tag operations in staDFA are placed in states, not on transitions.
+    Internal option, deprecated.
+    It used to enable staDFA algorithm, which differs from TDFA in that register
+    operations are placed in states rather than on transitions. Benchmarks
+    showed that staDFA algorithm is less efficient than TDFA.
 
 ``--fixed-tags <none | toplevel | all>``
     Internal option:
