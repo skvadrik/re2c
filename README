@@ -1,19 +1,19 @@
-
 If you modify the website layout (directory structure), be sure to fix all links
-(including links on Wikipedia).
+(including links on Wikipedia: https://en.wikipedia.org/wiki/Re2c).
 
-To update website http://re2c.org:
+To update website http://re2c.org, on gh-pages-gen:
 
-  on gh-pages-gen:
-    - edit sources on gh-pages-gen
-    - test changes on localhost
-    - commit and puch changes on gh-pages-gen
-    - delete 'obj' subdirectory and rebuild from scratch
-    - be sure to rebuild if fixed 'atom.xml'
+- Run ./sync_with_branch.sh to sync with master branch that contains the core
+  documentation used to generate manpage and help message. Commit.
 
-  on gh-pages
-    - remove all files except '.git' subdirectory
-    - copy the contents of 'obj' subdirectory from gh-pages-gen to the root of gh-pages
-    - add and commit all files (even hidden, might be necessary to add manually)
-    - push
+- Edit sources. Test changes on localhost using ./make.sh (with no arguments it
+  builds and launches the website on localhost:8000). Reiterate. Commit.
 
+- Push changes (still on gh-pages-gen, does not affect re2c.org).
+
+- Run ./push_website.sh (it will wipe out obj/ and re2c.org/ subdirectories,
+  run ./make.sh with an argument to prevent launching, copy the new obj/ to
+  re2c.org/, init a git repository there and set upstream to gh-pages branch,
+  then commit and push). This will publish the new website (it will be updated
+  once the corresponding GitHub action completes, see the
+  https://github.com/skvadrik/re2c/actions dashboard).

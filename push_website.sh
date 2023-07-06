@@ -2,8 +2,11 @@
 
 set -x
 
-cd re2c.org \
-&& rm -rf .git \
+rm -rf re2c.org obj
+
+./make.sh nolaunch \
+&& cp -r obj re2c.org \
+&& cd re2c.org \
 && git init \
 && git remote add origin git@github.com:skvadrik/re2c.git \
 && git checkout -b gh-pages \
