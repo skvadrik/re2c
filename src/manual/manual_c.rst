@@ -57,6 +57,8 @@ Internal options are useful for experimenting with the algorithms used in re2c.
 Warnings
 ========
 
+See the :ref:`warnings page <detailed-warnings>` for detailed descriptions of individual warnings.
+
 Warnings can be invividually enabled, disabled and turned into an error.
 
 .. include:: /manual/warnings/warnings_general.rst_

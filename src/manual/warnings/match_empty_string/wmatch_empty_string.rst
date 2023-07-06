@@ -1,5 +1,5 @@
-[-Wmatch-empty-string]
---------------------------
+-Wmatch-empty-string
+--------------------
 
 ``[-Wmatch-empty-string]`` warns when a rule is nullable (matches an empty
 string). It was intended to prevent infinite looping in cases like the

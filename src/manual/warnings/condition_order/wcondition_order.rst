@@ -1,5 +1,5 @@
-[-Wcondition-order]
--------------------
+-Wcondition-order
+-----------------
 
 Some older re2c programs that use ``-c --conditions`` option rely on a fixed
 condition order instead of using ``/*!types:re2c*/`` directive or the

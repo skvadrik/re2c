@@ -1,5 +1,5 @@
-[-Wuseless-escape]
---------------------------
+-Wuseless-escape
+----------------
 
 Sometimes people escape characters that don't need to be escaped --- either
 because they (mistakenly) think that the character is special and must be

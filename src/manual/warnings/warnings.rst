@@ -1,3 +1,5 @@
+.. _detailed-warnings:
+
 ++++++++
 Warnings
 ++++++++
@@ -9,4 +11,5 @@ Warnings
 .. include:: /manual/warnings/swapped_range/wswapped_range.rst
 .. include:: /manual/warnings/empty_character_class/wempty_character_class.rst
 .. include:: /manual/warnings/match_empty_string/wmatch_empty_string.rst
+.. include:: /manual/warnings/nondeterministic_tags/wnondeterministic_tags.rst
 .. include:: /manual/warnings/sentinel_in_midrule/wsentinel_in_midrule.rst

@@ -1,5 +1,5 @@
-[-Wsentinel-in-midrule]
------------------------
+-Wsentinel-in-midrule
+---------------------
 
 When using sentinel method of checking for the end of input, it is easy to
 forget that the sentinel symbol must not be allowed in the middle of the rule.

@@ -1,5 +1,5 @@
-[-Wundefined-control-flow]
---------------------------
+-Wundefined-control-flow
+------------------------
 
 .. toctree::
     :hidden:

@@ -1,5 +1,5 @@
-[-Wunreachable-rules]
---------------------------
+-Wunreachable-rules
+-------------------
 
 Sometimes the input grammar contains rules that will never match. This can
 happen for two reasons. First, some rules may be shadowed by other rules that

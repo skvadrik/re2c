@@ -1,5 +1,5 @@
-[-Wempty-character-class]
---------------------------
+-Wempty-character-class
+-----------------------
 
 This warning is complementary to the
 ``--empty-class <match-empty | match-none | error>`` option.

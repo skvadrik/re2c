@@ -1,5 +1,5 @@
-[-Wswapped-range]
---------------------------
+-Wswapped-range
+---------------
 
 ``-Wswapped-range`` warning is reported in cases when a character class contains
 a range which lower bound is greater than the upper bound. For some strange
