@@ -51,7 +51,7 @@ extern int yydebug;
 #include "src/parse/ast.h"
 namespace re2c {
     struct AstNode;
-};
+}
 
 #line 57 "lib/parse.h"
 
