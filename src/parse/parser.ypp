@@ -4,7 +4,7 @@
 namespace re2c {
     struct AstNode;
     struct SemAct;
-};
+}
 }
 
 %{

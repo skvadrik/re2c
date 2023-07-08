@@ -52,7 +52,7 @@ extern int yydebug;
 namespace re2c {
     struct AstNode;
     struct SemAct;
-};
+}
 
 #line 58 "src/parse/parser.h"
 
