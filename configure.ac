@@ -15,7 +15,8 @@ AC_SUBST(PACKAGE_RELEASE, ${PACKAGE_RELEASE:-1})
 
 AM_PATH_PYTHON([3.7])
 
-# without this, --std=c++98 disables POSIX functions on Cygwin
+# without this, --std=c++11 disables POSIX functions on Cygwin and NetBSD
+# (alternatively we could use -std=gnu++11, as CMake does)
 AC_USE_SYSTEM_EXTENSIONS
 
 

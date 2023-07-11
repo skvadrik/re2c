@@ -49,9 +49,10 @@ if(RE2C_REBUILD_DOCS)
     endif()
 endif()
 
-# checks for C++ compiler flags
+# Use C++11 standard. Note that without `set(CMAKE_CXX_EXTENSIONS OFF)` this enables
+# -std=gnu++11, not -std=c++11. Extensions are needed to enable POSIX functions on
+# Cygwin and NetBSD.
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
 
 # needed for POSIX file API
