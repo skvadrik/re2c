@@ -746,7 +746,7 @@ static void render(RenderContext& rctx, const Code* code) {
     }
 }
 
-uint32_t write_converting_newlines(const std::string& str, FILE* f) {
+static uint32_t write_converting_newlines(const std::string& str, FILE* f) {
     const char* s = str.c_str(), *e = s + str.length();
     uint32_t lines = 0;
 
