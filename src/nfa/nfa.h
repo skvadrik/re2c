@@ -15,11 +15,13 @@ namespace re2c {
 struct clos_t;
 
 // Passes of Goldberg-Radzik shortest path algorithm.
-enum GorPass {
-    GOR_NOPASS = 0u,
-    GOR_TOPSORT = 1u,
-    GOR_LINEAR = 2u
-};
+//
+// This cannot be a `enum class` because it is used in a bitfield, which triggers compiler
+// warnings and errors on some toolchains, see https://github.com/skvadrik/re2c/issues/446.
+// It cannot be a plain `enum` defaulting to `int` as well because of -Wsigned-enum-bitfield.
+constexpr uint32_t GOR_NOPASS = 0u;
+constexpr uint32_t GOR_TOPSORT = 1u;
+constexpr uint32_t GOR_LINEAR = 2u;
 
 static constexpr uint32_t NOCLOS = ~0u;
 
@@ -33,7 +35,7 @@ struct TnfaState {
         tag_info_t tag;   // tag information (number and sign, only for TAG states)
     };
     uint32_t clos;        // GOR1: closure item for this stack
-    GorPass status  : 2;  // GOR1: status (values 0, 1, 2)
+    uint32_t status : 2;  // GOR1: status (values 0, 1, 2)
     uint32_t arcidx : 2;  // GOR1: index of the next transtion (maximum out-dergee is 2)
     uint32_t active : 1;  // GOR1: if the state is on stack (boolean)
     uint32_t indeg  : 27; // GOR1: in-degree (we are unlikely to have more than 2^27 states)
