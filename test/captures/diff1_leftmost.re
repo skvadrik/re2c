@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i --leftmost-captures --input custom
+// re2c $INPUT -o $OUTPUT -i --input custom
 // POSIX and leftmost policies produce different results.
 #include <stddef.h>
 #include <stdio.h>
@@ -19,6 +19,7 @@ static void lex(const char *s)
     /*!re2c
         re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
+        re2c:leftmost-captures = 1;
 
         * { printf("error\n"); return; }
         ("a" | "aa")* {
