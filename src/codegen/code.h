@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "src/constants.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
 #include "src/util/allocator.h"
