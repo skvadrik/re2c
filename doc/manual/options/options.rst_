@@ -89,9 +89,17 @@
     With ``utf8`` re2c handles input as UTF8-encoded and recognizes multibyte
     characters.
 
+``--invert-captures``
+    Invert the meaning of capturing and non-capturing groups. By default
+    ``(...)`` is capturing and ``(! ...)`` is non-capturing. With this option
+    ``(! ...)`` is capturing and ``(...)`` is non-capturing.
+
 ``--lang <c | go | rust>``
     Specify the output language. Supported languages are C, Go and Rust.
     The default is C for re2c, Go for re2go and Rust for re2rust.
+
+``--leftmost-captures``
+    Enable submatch extraction with leftmost greedy capturing groups.
 
 ``--location-format <gnu | msvc>``
     Specify location format in messages.

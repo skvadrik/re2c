@@ -442,9 +442,17 @@ sequence of code units is a sequence of standalone 1\-byte characters.
 With \fButf8\fP re2c handles input as UTF8\-encoded and recognizes multibyte
 characters.
 .TP
+.B \fB\-\-invert\-captures\fP
+Invert the meaning of capturing and non\-capturing groups. By default
+\fB(...)\fP is capturing and \fB(! ...)\fP is non\-capturing. With this option
+\fB(! ...)\fP is capturing and \fB(...)\fP is non\-capturing.
+.TP
 .B \fB\-\-lang <c | go | rust>\fP
 Specify the output language. Supported languages are C, Go and Rust.
 The default is C for re2c, Go for re2go and Rust for re2rust.
+.TP
+.B \fB\-\-leftmost\-captures\fP
+Enable submatch extraction with leftmost greedy capturing groups.
 .TP
 .B \fB\-\-location\-format <gnu | msvc>\fP
 Specify location format in messages.
@@ -1347,6 +1355,10 @@ To disable indentation entirely, set this configuration to an empty string.
 Specifies the minimum amount of indentation to use. The default value is
 zero. The value should be a non\-negative integer number.
 .TP
+.B \fBre2c:invert\-captures\fP
+Same as the \fB\-\-invert\-captures\fP option, but can be configured on per\-block
+basis.
+.TP
 .B \fBre2c:label:prefix\fP, \fBre2c:labelprefix\fP
 Specifies the prefix used for DFA state labels. The default is \fByy\fP\&.
 .TP
@@ -1370,6 +1382,10 @@ Specifies the name of the label marking the start of the lexer loop with
 Specifies the name of the optional label that follows \fBYYGETSTATE\fP switch
 in storable state mode (enabled with \fBre2c:state:nextlabel\fP). The default
 is \fByyNext\fP\&.
+.TP
+.B \fBre2c:leftmost\-captures\fP
+Same as the \fB\-\-leftmost\-captures\fP option, but can be configured on
+per\-block basis.
 .TP
 .B \fBre2c:lookahead\fP, \fBre2c:flags:lookahead\fP
 Deprecated (see the deprecated \fB\-\-no\-lookahead\fP option).
@@ -1511,7 +1527,13 @@ re2c uses the following syntax for regular expressions:
 .IP \(bu 2
 \fBR{n,m}\fP repetition of \fBR\fP from \fBn\fP to \fBm\fP times
 .IP \(bu 2
-\fB(R)\fP just \fBR\fP; parentheses are used to override precedence or for POSIX\-style submatch
+\fB(R)\fP just \fBR\fP; parentheses are used to override precedence.
+If submatch extraction is enabled, \fB(R)\fP is a capturing or a
+non\-capturing group depending on \fB\-\-invert\-captures\fP option.
+.IP \(bu 2
+\fB(!R)\fP
+If submatch extraction is enabled, \fB(!R)\fP is a non\-capturing or a
+capturing group depending on \fB\-\-invert\-captures\fP option.
 .IP \(bu 2
 \fBR S\fP concatenation: \fBR\fP followed by \fBS\fP
 .IP \(bu 2
@@ -1519,17 +1541,23 @@ re2c uses the following syntax for regular expressions:
 .IP \(bu 2
 \fBR / S\fP lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed
 .IP \(bu 2
-\fBname\fP the regular expression defined as \fBname\fP (or literal string \fB\(dqname\(dq\fP in Flex compatibility mode)
+\fBname\fP the regular expression defined as \fBname\fP (or literal string
+\fB\(dqname\(dq\fP in Flex compatibility mode)
 .IP \(bu 2
-\fB{name}\fP the regular expression defined as \fBname\fP in Flex compatibility mode
+\fB{name}\fP the regular expression defined as \fBname\fP in Flex
+compatibility mode
 .IP \(bu 2
-\fB@stag\fP an \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a variable named \fBstag\fP
+\fB@stag\fP an \fIs\-tag\fP: saves the last input position at which \fB@stag\fP
+matches in a variable named \fBstag\fP
 .IP \(bu 2
-\fB#mtag\fP an \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a variable named \fBmtag\fP
+\fB#mtag\fP an \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches
+in a variable named \fBmtag\fP
 .UNINDENT
 .sp
-Character classes and string literals may contain the following escape sequences:
-\fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP, octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and \fB\eUhhhhhhhh\fP\&.
+Character classes and string literals may contain the following escape
+sequences: \fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP,
+octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and
+\fB\eUhhhhhhhh\fP\&.
 .SH HANDLING THE END OF INPUT
 .sp
 One of the main problems for the lexer is to know when to stop.
