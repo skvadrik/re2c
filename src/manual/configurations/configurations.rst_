@@ -250,6 +250,10 @@
     Specifies the minimum amount of indentation to use. The default value is
     zero. The value should be a non-negative integer number.
 
+``re2c:invert-captures``
+    Same as the ``--invert-captures`` option, but can be configured on per-block
+    basis.
+
 ``re2c:label:prefix``, ``re2c:labelprefix``
     Specifies the prefix used for DFA state labels. The default is ``yy``.
 
@@ -273,6 +277,10 @@
     Specifies the name of the optional label that follows ``YYGETSTATE`` switch
     in storable state mode (enabled with ``re2c:state:nextlabel``). The default
     is ``yyNext``.
+
+``re2c:leftmost-captures``
+    Same as the ``--leftmost-captures`` option, but can be configured on
+    per-block basis.
 
 ``re2c:lookahead``, ``re2c:flags:lookahead``
     Deprecated (see the deprecated ``--no-lookahead`` option).
