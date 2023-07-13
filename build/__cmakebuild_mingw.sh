@@ -12,5 +12,6 @@ cmake .. \
     -DBUILD_SHARED_LIBS=no \
     -DCMAKE_EXE_LINKER_FLAGS="-static -static-libstdc++ -static-libgcc" \
     -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain-cross-mingw32-linux.cmake \
-    && cmake --build . -j$(nproc)
+    && cmake --build . -j$(nproc) \
+    && ../build/copy_wine_libs_on_nixos.sh
 cd ..
