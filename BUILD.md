@@ -52,9 +52,13 @@ The configure script has many options (to see them all, run
     Build re2rust (identical to `re2c --lang rust`). This is on by default.
 
   * `--enable-lexers`
-    Enable regeneration of *.re* files (as opposed to using bootstrap files).
-    This requires setting `RE2C_FOR_BUILD` to an existing re2c executable
-    path.
+    Enable regeneration of lexers from *.re* files (as opposed to using
+    pre-generated bootstrap files). This requires setting `RE2C_FOR_BUILD` to
+    an existing re2c executable path.
+
+  * `--enable-parsers`
+    Enable regeneration of parsers from *.ypp* files with bison (as opposed to
+    using pre-generated bootstrap files).
 
   * `--enable-docs`
     Enable regeneration of documentation (requires Python 3 Docutils).
@@ -152,13 +156,13 @@ specific to re2c:
     default.
 
   * `-DRE2C_REBUILD_LEXERS=yes`
-    Enable regeneration of *.re* files (as opposed to using bootstrap files).
-    This requires setting `-DRE2C_FOR_BUILD` to an existing re2c executable
-    path.
+    Enable regeneration of lexers from *.re* files (as opposed to using
+    pre-generated bootstrap files). This requires setting `-DRE2C_FOR_BUILD` to
+    an existing re2c executable path.
 
   * `-DRE2C_REBUILD_PARSERS=yes`
-    Enable regeneration of `parser.cc` and `parser.h` files (as opposed to
-    using bootstrap files). This requires an available Bison parser generator.
+    Enable regeneration of parsers from *.ypp* files with bison (as opposed to
+    using pre-generated bootstrap files).
 
   * `-DRE2C_REBUILD_DOCS=yes`
     Enable regeneration of documentation (requires Python 3 Docutils).
