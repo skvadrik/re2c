@@ -19,9 +19,11 @@
     re2c:tags = 0;
     re2c:flags:tags = 0;
     re2c:flags:T = 0;
+    re2c:leftmost-captures = 0;
     re2c:posix-captures = 0;
     re2c:flags:posix-captures = 0;
     re2c:flags:P = 0;
+    re2c:invert-captures = 0;
     re2c:tags:prefix = "";
     re2c:tags:expression = "";
 

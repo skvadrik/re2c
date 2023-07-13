@@ -80,7 +80,12 @@ Ret Input::lex_conf(Opt& opts) {
     "yyfill:parameter" { RET_CONF_BOOL(fill_param_enable); }
     "yyfill:check"     { RET_CONF_BOOL(fill_check); }
 
-    "flags:"? "tags"           | "flags:T" { RET_CONF_BOOL(tags); }
+    "flags:"? "tags" | "flags:T" { RET_CONF_BOOL(tags); }
+    "flags:"? "leftmost-captures" {
+        CHECK_RET(lex_conf_bool(b));
+        opts.set_tags_posix_syntax(b);
+        return Ret::OK;
+    }
     "flags:"? "posix-captures" | "flags:P" {
         CHECK_RET(lex_conf_bool(b));
         opts.set_tags_posix_syntax(b);
