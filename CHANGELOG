@@ -6,6 +6,104 @@ Changelog
 3.0x
 ----
 
+3.1 (2023-07-19)
+~~~~~~~~~~~~~~~~
+
+- Added capturing groups with leftmost greedy semantics:
+
+  + Enabled with ``--leftmost-captures`` option or ``re2c:leftmost_captures``
+    configuration
+    (`55de79d8 <https://github.com/skvadrik/re2c/commit/55de79d8>`_,
+    `3a98b543 <https://github.com/skvadrik/re2c/commit/3a98b543>`_).
+
+- Added non-capturing groups:
+
+  + Added new syntax ``(! ...)`` for non-capturing groups
+    (`1edd25d3 <https://github.com/skvadrik/re2c/commit/1edd25d3>`_,
+    `b813c9b4 <https://github.com/skvadrik/re2c/commit/b813c9b4>`_,
+    `338806b9 <https://github.com/skvadrik/re2c/commit/338806b9>`_).
+
+  + Added the ability to flip defaults: make ``(...)`` capturing and ``(! ...)``
+    non-capturing with ``--invert-captures`` option or ``re2c:invert_captures``
+    configuration
+    (`20030ff1 <https://github.com/skvadrik/re2c/commit/20030ff1>`_,
+    `ce756195 <https://github.com/skvadrik/re2c/commit/ce756195>`_).
+
+- Regenerated Unicode include header to support a newer standard
+  (`e3ec2597 <https://github.com/skvadrik/re2c/commit/e3ec2597>`_).
+
+- Published TDFA paper: https://arxiv.org/abs/2206.01398, co-authored with
+  Angelo Borsotti
+  (`fa94d9c7 <https://github.com/skvadrik/re2c/commit/fa94d9c7>`_).
+
+- Removed experimental algorithms that are superseded by TDFA(1) and
+  generally less efficient:
+
+  + Removed staDFA algorithm and deprecated ``--stadfa`` option
+    (`ac5c06cc <https://github.com/skvadrik/re2c/commit/ac5c06cc>`_).
+
+  + Removed TDFA(0) algorithm and deprecated ``--no-lookahead`` option
+    (`dc8f264a <https://github.com/skvadrik/re2c/commit/dc8f264a>`_).
+
+  + (libre2c) Removed backward-matching algorithm
+    (`27256be1 <https://github.com/skvadrik/re2c/commit/27256be1>`_).
+
+  + (libre2c) Removed Kuklewicz POSIX disambiguation algorithm
+    (`aa97b014 <https://github.com/skvadrik/re2c/commit/aa97b014>`_).
+
+  + (libre2c) Removed GTOP shortest path finding algorithm
+    (`511a030c <https://github.com/skvadrik/re2c/commit/511a030c>`_).
+
+- Bug fixes:
+
+  + Fixed parsing of raw UTF-8 characters in Flex compatibility mode
+    (`d87f86ed <https://github.com/skvadrik/re2c/commit/d87f86ed>`_).
+
+  + Added header file to the dependencies generated with ``--depfile`` option
+    (`f807f763 <https://github.com/skvadrik/re2c/commit/f807f763>`_
+    and `2dda36aa <https://github.com/skvadrik/re2c/commit/2dda36aa>`_).
+
+  + Fixed stack overflow on large regular expressions by rewriting recursive
+    functions in iterative form
+    (`46a9b4c4 <https://github.com/skvadrik/re2c/commit/46a9b4c4>`_,
+    `aaf68292 <https://github.com/skvadrik/re2c/commit/aaf68292>`_,
+    `02e5d797 <https://github.com/skvadrik/re2c/commit/02e5d797>`_,
+    `5fffb187 <https://github.com/skvadrik/re2c/commit/5fffb187>`_)
+    and limited stack to 256K on GithubActions CI
+    (`111ee5da <https://github.com/skvadrik/re2c/commit/111ee5da>`_).
+
+- Build system:
+
+  + Added minimal http://bazel.build integration
+    (`3205c867 <https://github.com/skvadrik/re2c/commit/3205c867>`_).
+
+  + Added configure option ``--enable-parsers`` that regenerates bison parsers
+    (`9e0dbd3c <https://github.com/skvadrik/re2c/commit/9e0dbd3c>`_).
+
+  + Added CMake option ``RE2C_REBUILD_PARSERS``
+    (`6e91c22d <https://github.com/skvadrik/re2c/commit/6e91c22d>`_).
+
+  + With CMake, fixed documentation generation on Windows.
+
+- Codebase improvements:
+
+  + Moved the entire codebase to C++11.
+  + Added uniform error handling (return codes are now properly checked and
+    returned to the caller).
+  + Reorganized codegen subsystem in four well-defined phases (analyze,
+    generate, fixup, render) and separated codegen from parsing phase.
+  + Improved memory allocation by using slab allocators instead of global free
+    lists.
+  + Moved to pure API for bison parsers.
+  + Unified code style.
+
+- Testing:
+
+  + Added ``--verbose`` flag to run_tests.py and suppressed verbose output by
+    default.
+  + Multiple improvements of continuous testing with GithubActions.
+
+
 3.0 (2022-01-27)
 ~~~~~~~~~~~~~~~~
 
