@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
 
 # checks for which there are no scripts yet
 echo 'RUNME: cppcheck --enable=all --inconclusive --std=posix --quiet --force -I. src/'
-echo "RUNME: uselex `find <objdir> -type f -name '*.o'`"
+echo 'RUNME: uselex `find <objdir> -type f -name '"'*.o'"'`'
 echo 'RUNME: configure CFLAGS="-ffunction-sections -fdata-sections" LDFLAGS="-Wl,--gc-sections -Wl,--print-gc-sections"'
 
 if [[ $# -ne 2 ]]; then
