@@ -38,7 +38,6 @@ libre2c_la_HDR = \
 	src/regexp/regexp.h \
 	src/regexp/rule.h \
 	src/regexp/tag.h \
-	src/compile.h \
 	src/skeleton/path.h \
 	src/skeleton/skeleton.h \
 	src/parse/ast.h \
