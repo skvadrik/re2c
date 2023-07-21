@@ -311,17 +311,28 @@ man_MANS = $(DOCS)
 # include files (stdlib)
 dist_stdlib_DATA = include/unicode_categories.re
 
+BAZELFILES := \
+	BUILD.bazel \
+	WORKSPACE \
+	bazel
+
 CMAKEFILES := \
 	CMakeLists.txt \
+	CMakePresets.json \
 	cmake
 
 EXTRA_DIST = \
 	$(re2c_BOOT) \
 	$(re2c_CUSTOM) \
 	$(re2c_SRC_DOC_EXT) \
+	$(BAZELFILES) \
 	$(CMAKEFILES) \
+	BUILD.md \
 	CHANGELOG \
+	CONTRIBUTING.md \
+	IDEAS.md \
 	LICENSE \
+	MAINTAINERS.md \
 	NO_WARRANTY \
 	README.md \
 	autogen.sh \
