@@ -53,6 +53,7 @@ endif()
 # -std=gnu++11, not -std=c++11. Extensions are needed to enable POSIX functions on
 # Cygwin and NetBSD.
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON) # fail if the C++ compiler does not support this standard
 set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
 
 # needed for POSIX file API
