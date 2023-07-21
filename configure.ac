@@ -124,13 +124,18 @@ AC_DEFUN([TRY_CXXFLAG], [
             AS_VAR_SET([TRY_CXXFLAG_RESULT], [yes])
             AS_VAR_SET([CXXFLAGSDEFAULT], ["$CXXFLAGSDEFAULT $1 $2"])
         ],
-        [AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])]
+        [
+            AS_VAR_SET([TRY_CXXFLAG_RESULT], [no])
+            AS_IF([test "x$3" = "xrequired"], [
+                AC_MSG_ERROR([C++ compiler flag $1 is required to build re2c])
+            ])
+        ]
     )
     AC_LANG_POP([C++])
     AS_VAR_SET([CXXFLAGS], ["$CXXFLAGS_BACKUP"])
     AC_MSG_RESULT([$TRY_CXXFLAG_RESULT])
 ])
-TRY_CXXFLAG([-std=c++11])
+TRY_CXXFLAG([-std=c++11], [], [required])
 TRY_CXXFLAG([-W])
 TRY_CXXFLAG([-Wall])
 TRY_CXXFLAG([-Wextra])
