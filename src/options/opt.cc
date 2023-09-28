@@ -13,6 +13,10 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
         glob.line_dirs = false;
     }
 
+    if (glob.syntax_file.empty()) {
+        RET_FAIL(error("no syntax file, cannot generate code"));
+    }
+
     if (glob.lang == Lang::RUST) {
         glob.loop_switch = true;
         // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862

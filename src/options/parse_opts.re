@@ -182,6 +182,7 @@ opt_long: /*!local:re2c
     "output"                end { NEXT_ARG("-o, --output",       opt_output); }
     "type-"? "header"       end { NEXT_ARG("-t, --header, --type-header", opt_header); }
     "depfile"               end { NEXT_ARG("--depfile",          opt_depfile); }
+    "syntax"                end { NEXT_ARG("--syntax",           opt_syntax); }
     "encoding-policy"       end { NEXT_ARG("--encoding-policy",  opt_encoding_policy); }
     "api" | "input"         end { NEXT_ARG("--api, --input",     opt_input); }
     "empty-class"           end { NEXT_ARG("--empty-class",      opt_empty_class); }
@@ -236,6 +237,11 @@ opt_header: /*!local:re2c
 opt_depfile: /*!local:re2c
     * { ERRARG("--depfile", "filename", *argv); }
     filename end { globopts.dep_file = *argv; goto opt; }
+*/
+
+opt_syntax: /*!local:re2c
+    * { ERRARG("--syntax", "filename", *argv); }
+    filename end { globopts.syntax_file = *argv; goto opt; }
 */
 
 opt_incpath: /*!local:re2c

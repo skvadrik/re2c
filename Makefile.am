@@ -21,6 +21,7 @@ re2c_HDR = \
 	src/constants.h \
 	src/codegen/code.h \
 	src/codegen/output.h \
+	src/codegen/syntax.h \
 	src/codegen/helpers.h \
 	src/options/opt.h \
 	src/options/symtab.h \
@@ -72,6 +73,7 @@ re2c_SRC = \
 	src/codegen/pass2_generate.cc \
 	src/codegen/pass3_fixup.cc \
 	src/codegen/pass4_render.cc \
+	src/codegen/syntax.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
 	src/nfa/re_to_nfa.cc \

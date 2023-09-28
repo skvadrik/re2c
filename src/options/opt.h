@@ -56,6 +56,7 @@ class Input;
     CONSTOPT(std::string,              source_file, "") \
     CONSTOPT(std::string,              output_file, "") \
     CONSTOPT(std::string,              dep_file, "") \
+    CONSTOPT(std::string,              syntax_file, "") \
     CONSTOPT(std::vector<std::string>, include_paths, std::vector<std::string>()) \
     /* internals */ \
     CONSTOPT(Minimization,   minimization, Minimization::MOORE) \

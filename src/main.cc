@@ -9,6 +9,7 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/output.h"
+#include "src/codegen/syntax.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/encoding/range_suffix.h"
@@ -144,6 +145,8 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));
+
+    parse_syntax_file(globopts.syntax_file.c_str());
 
     Output output(out_alc, msg);
 
