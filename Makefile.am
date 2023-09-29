@@ -142,6 +142,7 @@ re2c_GEN_SRC = \
 	$(re2c_GEN_LEX) \
 	$(re2c_GEN_PARSER) \
 	$(re2c_GEN_VER_TO_VERNUM) \
+	src/codegen/syntax_lexer.cc \
 	src/parse/lex_conf.cc \
 	src/options/parse_opts.cc
 re2c_GEN_HDR = \
@@ -169,6 +170,7 @@ re2c_BOOT = \
 	$(re2c_BOOT_HELP) \
 	$(re2c_BOOT_PARSER) \
 	$(re2c_BOOT_PARSER_HDR) \
+	bootstrap/src/codegen/syntax_lexer.cc \
 	bootstrap/src/parse/lex.cc \
 	bootstrap/src/parse/lex.h \
 	bootstrap/src/parse/lex_conf.cc \
@@ -181,6 +183,7 @@ re2c_CUSTOM_HELP = doc/help.rst
 re2c_CUSTOM = \
 	$(re2c_CUSTOM_PARSER) \
 	$(re2c_CUSTOM_HELP) \
+	src/codegen/syntax_lexer.re \
 	src/parse/lex.re \
 	src/parse/lex_conf.re \
 	src/options/parse_opts.re \
@@ -351,7 +354,7 @@ if REBUILD_LEXERS
 .re.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(RE2C_FOR_BUILD) $(RE2CFLAGS) -o $@ $<
-	$(AM_V_GEN)cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D);
+	$(AM_V_GEN)cp $(@:cc=[ch]*) $(top_srcdir)/bootstrap/$(@D)
 else
 # copy bootstrap files
 .re.cc:
@@ -365,12 +368,12 @@ if REBUILD_PARSERS
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(BISON) --warnings --output=$@ --defines=$(@:cc=h) $<
-	$(AM_V_GEN)cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D);
+	$(AM_V_GEN)cp $@ $(@:cc=h) $(top_srcdir)/bootstrap/$(@D)
 else
 # copy bootstrap files
 .ypp.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D);
+	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$(@:cc=*) $(@D)
 	$(AM_V_at)echo "Reconfigure with --enable-parsers to regenerate $@"
 endif
 
