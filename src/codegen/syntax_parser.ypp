@@ -1,0 +1,51 @@
+%{
+
+#include "src/codegen/syntax.h"
+#include "src/codegen/syntax_parser.h"
+#include "src/msg/msg.h"
+
+using namespace re2c;
+
+extern "C" {
+    static void yyerror(const char* s);
+    static int yylex(YYSTYPE* yylval);
+}
+
+%}
+
+%start spec
+
+%define api.pure full
+
+%union {
+    char op;
+    const char* str;
+};
+
+%token TOKEN_NAME
+
+%type <str> TOKEN_NAME
+
+%%
+
+spec : TOKEN_NAME;
+
+%%
+
+extern "C" {
+    static void yyerror(const char* s) {
+        error("%s", s);
+    }
+
+    static int yylex(YYSTYPE* yylval) {
+        return TOKEN_NAME;
+    }
+}
+
+namespace re2c {
+
+Ret parse_syntax_file() {
+    return yyparse() == 0 ? Ret::OK : Ret::FAIL;
+}
+
+} // namespace re2c

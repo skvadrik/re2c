@@ -146,7 +146,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
-    parse_syntax_file(globopts.syntax_file.c_str());
+    process_syntax_file(globopts.syntax_file);
 
     Output output(out_alc, msg);
 

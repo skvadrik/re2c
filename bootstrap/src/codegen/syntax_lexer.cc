@@ -4,6 +4,7 @@
 
 #include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
+#include "syntax_parser.h"
 
 namespace re2c {
 
@@ -12,15 +13,15 @@ Ret lex_syntax_file(const uint8_t* text) {
     const uint8_t* YYMARKER;
 
 
-#line 16 "src/codegen/syntax_lexer.cc"
+#line 17 "src/codegen/syntax_lexer.cc"
 {
 	uint8_t yych;
 	++YYCURSOR;
-#line 16 "../src/codegen/syntax_lexer.re"
-	{ RET_FAIL(error("syntax error in syntax file")); }
-#line 22 "src/codegen/syntax_lexer.cc"
-}
 #line 17 "../src/codegen/syntax_lexer.re"
+	{ RET_FAIL(error("syntax error in syntax file")); }
+#line 23 "src/codegen/syntax_lexer.cc"
+}
+#line 18 "../src/codegen/syntax_lexer.re"
 
     return Ret::OK;
 }

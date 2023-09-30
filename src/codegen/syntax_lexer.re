@@ -2,6 +2,7 @@
 
 #include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
+#include "syntax_parser.h"
 
 namespace re2c {
 

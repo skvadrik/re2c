@@ -5,9 +5,9 @@
 
 namespace re2c {
 
-Ret parse_syntax_file(const char* filepath) {
-    FILE *file = fopen(filepath, "rb");
-    if (!file) RET_FAIL(error("cannot open syntax file '%s'", filepath));
+Ret process_syntax_file(const std::string& filepath) {
+    FILE *file = fopen(filepath.c_str(), "rb");
+    if (!file) RET_FAIL(error("cannot open syntax file '%s'", filepath.c_str()));
 
     fclose(file);
     return Ret::OK;
