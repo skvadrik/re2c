@@ -31,15 +31,15 @@ switch =
 
 switch_case_single =
     "case " val ":" nl
-        [stmt: indent stmt nl]
+        [stmt: indent stmt nl];
 
 switch_case_range =
     "case " val{0} ".." val{-1} ":" nl
-        [stmt: indent stmt nl]
+        [stmt: indent stmt nl];
 
 switch_default =
     "default:" nl
-        [stmt: indent stmt nl]
+        [stmt: indent stmt nl];
 
 switch_case_single_oneline =
     "case " val ": " stmt nl;

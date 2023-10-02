@@ -9,11 +9,11 @@ local_var_defn =
     (init? "" : "#[allow(unused_assignments)]" nl)
     "let mut " name " : " type " = " (init? init : "0") nl;
 global_var_defn = "const " name ": " type " = " val nl;
-array_defn = ??;
+//array_defn = ??;
 type_int = "isize";
 type_uint = "usize";
 type_yyctype = ctype;
-type_yybm = ??;
+//type_yybm = ??;
 
 switch =
     "match " expr " {" nl

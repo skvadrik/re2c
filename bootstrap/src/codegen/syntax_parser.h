@@ -54,7 +54,11 @@ extern int yydebug;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    TOKEN_NAME = 258               /* TOKEN_NAME  */
+    TOKEN_NAME = 258,              /* TOKEN_NAME  */
+    TOKEN_NUMBER = 259,            /* TOKEN_NUMBER  */
+    TOKEN_STRING = 260,            /* TOKEN_STRING  */
+    TOKEN_CONFIG = 261,            /* TOKEN_CONFIG  */
+    TOKEN_ERROR = 262              /* TOKEN_ERROR  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -63,12 +67,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 20 "../src/codegen/syntax_parser.ypp"
+#line 23 "../src/codegen/syntax_parser.ypp"
 
-    char op;
     const char* str;
+    int32_t num;
 
-#line 72 "src/codegen/syntax_parser.h"
+#line 76 "src/codegen/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -79,7 +83,7 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (void);
+int yyparse (const uint8_t** cursor);
 
 
 #endif /* !YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED  */

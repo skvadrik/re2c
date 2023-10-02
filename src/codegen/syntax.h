@@ -4,13 +4,14 @@
 #include <stdint.h>
 #include <string>
 
+#include "src/codegen/syntax_parser.h"
 #include "src/constants.h"
 
 namespace re2c {
 
-Ret process_syntax_file(const std::string& filepath);
-Ret lex_syntax_file(const uint8_t* text);
-Ret parse_syntax_file();
+Ret process_syntax_file(const std::string& fname);
+int lex_syntax_file(YYSTYPE* yylval, const uint8_t** cursor);
+Ret parse_syntax_file(const uint8_t** cursor);
 
 } // namespace re2c
 

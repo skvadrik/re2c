@@ -1,4 +1,5 @@
 %{
+#include <stdint.h>
 
 #include "src/codegen/syntax.h"
 #include "src/codegen/syntax_parser.h"
@@ -7,8 +8,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(const char* s);
-    static int yylex(YYSTYPE* yylval);
+    static void yyerror(const uint8_t** cursor, const char* s);
+    static int yylex(YYSTYPE* yylval, const uint8_t** cursor);
 }
 
 %}
@@ -16,36 +17,70 @@ extern "C" {
 %start spec
 
 %define api.pure full
+%lex-param {const uint8_t** cursor}
+%parse-param {const uint8_t** cursor}
 
 %union {
-    char op;
     const char* str;
+    int32_t num;
 };
 
 %token TOKEN_NAME
+%token TOKEN_NUMBER
+%token TOKEN_STRING
+%token TOKEN_CONFIG
+%token TOKEN_ERROR
 
-%type <str> TOKEN_NAME
+%type <str> TOKEN_NAME TOKEN_STRING TOKEN_CONFIG
 
 %%
 
-spec : TOKEN_NAME;
+spec
+    : %empty
+    | spec config;
+
+config: TOKEN_CONFIG expr ';';
+
+expr
+    : %empty
+    | expr expr1;
+
+expr1
+    : opt
+    | list
+    | atom
+    | TOKEN_NUMBER;
+
+opt
+    : '(' TOKEN_NAME '?' expr ')'
+    | '(' TOKEN_NAME '?' expr ':' expr ')';
+
+list
+    : '[' TOKEN_NAME ':' expr ']'
+    | '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' expr ']';
+
+atom
+    : TOKEN_STRING
+    | TOKEN_NAME
+    | TOKEN_NAME '{' TOKEN_NUMBER '}'
+    | '(' expr ')';
 
 %%
 
 extern "C" {
-    static void yyerror(const char* s) {
+    static void yyerror(const uint8_t**, const char* s) {
         error("%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval) {
-        return TOKEN_NAME;
+    static int yylex(YYSTYPE* yylval, const uint8_t** cursor) {
+        return lex_syntax_file(yylval, cursor);
     }
 }
 
 namespace re2c {
 
-Ret parse_syntax_file() {
-    return yyparse() == 0 ? Ret::OK : Ret::FAIL;
+Ret parse_syntax_file(const uint8_t** cursor) {
+    return yyparse(cursor) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

@@ -69,6 +69,7 @@
 /* First part of user prologue.  */
 #line 1 "../src/codegen/syntax_parser.ypp"
 
+#include <stdint.h>
 
 #include "src/codegen/syntax.h"
 #include "src/codegen/syntax_parser.h"
@@ -77,12 +78,12 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(const char* s);
-    static int yylex(YYSTYPE* yylval);
+    static void yyerror(const uint8_t** cursor, const char* s);
+    static int yylex(YYSTYPE* yylval, const uint8_t** cursor);
 }
 
 
-#line 86 "src/codegen/syntax_parser.cc"
+#line 87 "src/codegen/syntax_parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -114,8 +115,27 @@ enum yysymbol_kind_t
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_TOKEN_NAME = 3,                 /* TOKEN_NAME  */
-  YYSYMBOL_YYACCEPT = 4,                   /* $accept  */
-  YYSYMBOL_spec = 5                        /* spec  */
+  YYSYMBOL_TOKEN_NUMBER = 4,               /* TOKEN_NUMBER  */
+  YYSYMBOL_TOKEN_STRING = 5,               /* TOKEN_STRING  */
+  YYSYMBOL_TOKEN_CONFIG = 6,               /* TOKEN_CONFIG  */
+  YYSYMBOL_TOKEN_ERROR = 7,                /* TOKEN_ERROR  */
+  YYSYMBOL_8_ = 8,                         /* ';'  */
+  YYSYMBOL_9_ = 9,                         /* '('  */
+  YYSYMBOL_10_ = 10,                       /* '?'  */
+  YYSYMBOL_11_ = 11,                       /* ')'  */
+  YYSYMBOL_12_ = 12,                       /* ':'  */
+  YYSYMBOL_13_ = 13,                       /* '['  */
+  YYSYMBOL_14_ = 14,                       /* ']'  */
+  YYSYMBOL_15_ = 15,                       /* '{'  */
+  YYSYMBOL_16_ = 16,                       /* '}'  */
+  YYSYMBOL_YYACCEPT = 17,                  /* $accept  */
+  YYSYMBOL_spec = 18,                      /* spec  */
+  YYSYMBOL_config = 19,                    /* config  */
+  YYSYMBOL_expr = 20,                      /* expr  */
+  YYSYMBOL_expr1 = 21,                     /* expr1  */
+  YYSYMBOL_opt = 22,                       /* opt  */
+  YYSYMBOL_list = 23,                      /* list  */
+  YYSYMBOL_atom = 24                       /* atom  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -441,21 +461,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  3
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   1
+#define YYLAST   68
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  4
+#define YYNTOKENS  17
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  2
+#define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  2
+#define YYNRULES  18
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  4
+#define YYNSTATES  40
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   258
+#define YYMAXUTOK   262
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -473,6 +493,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       9,    11,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,    12,     8,
+       2,     2,     2,    10,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,    13,     2,    14,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,    15,     2,    16,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -485,23 +514,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3
+       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
+       5,     6,     7
 };
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    31,    31
+       0,    39,    39,    40,    42,    45,    46,    49,    50,    51,
+      52,    55,    56,    59,    60,    63,    64,    65,    66
 };
 #endif
 
@@ -518,7 +540,9 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
 static const char *const yytname[] =
 {
   "\"end of file\"", "error", "\"invalid token\"", "TOKEN_NAME",
-  "$accept", "spec", YY_NULLPTR
+  "TOKEN_NUMBER", "TOKEN_STRING", "TOKEN_CONFIG", "TOKEN_ERROR", "';'",
+  "'('", "'?'", "')'", "':'", "'['", "']'", "'{'", "'}'", "$accept",
+  "spec", "config", "expr", "expr1", "opt", "list", "atom", YY_NULLPTR
 };
 
 static const char *
@@ -528,7 +552,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-4)
+#define YYPACT_NINF (-15)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -542,7 +566,10 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -4,     1,    -4
+     -15,     2,   -15,   -15,   -15,    37,   -14,   -15,   -15,   -15,
+       0,     4,   -15,   -15,   -15,   -15,    12,     7,    44,    -3,
+       3,   -15,   -15,   -15,    14,   -15,    26,     1,     9,   -15,
+     -15,   -15,    21,    55,    10,   -15,    22,   -15,    19,   -15
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -550,19 +577,22 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     2,     0,     1
+       2,     0,     1,     5,     3,     0,    16,    10,    15,     4,
+       5,     0,     6,     7,     8,     9,     0,     0,     0,     0,
+       0,     5,    18,     5,     0,    17,     0,     0,     0,    11,
+       5,    13,     0,     0,     0,    12,     0,     5,     0,    14
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -4,    -4
+     -15,   -15,   -15,   -10,   -15,   -15,   -15,   -15
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2
+       0,     1,     4,     5,    12,    13,    14,    15
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -570,31 +600,48 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     3
+      18,    16,     2,    17,     6,     7,     8,    19,     3,    23,
+      10,    26,    24,    27,    11,    31,    20,    21,    28,    25,
+      33,    32,     6,     7,     8,    34,    36,    38,    10,     6,
+       7,     8,    11,    39,    37,    10,     0,    29,    30,    11,
+       6,     7,     8,     0,     0,     9,    10,     6,     7,     8,
+      11,     0,     0,    10,     0,    22,     0,    11,     6,     7,
+       8,     0,     0,     0,    10,     0,    35,     0,    11
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     0
+      10,    15,     0,     3,     3,     4,     5,     3,     6,    12,
+       9,    21,    15,    23,    13,    14,     4,    10,     4,    16,
+      30,    12,     3,     4,     5,     4,    16,    37,     9,     3,
+       4,     5,    13,    14,    12,     9,    -1,    11,    12,    13,
+       3,     4,     5,    -1,    -1,     8,     9,     3,     4,     5,
+      13,    -1,    -1,     9,    -1,    11,    -1,    13,     3,     4,
+       5,    -1,    -1,    -1,     9,    -1,    11,    -1,    13
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     5,     0
+       0,    18,     0,     6,    19,    20,     3,     4,     5,     8,
+       9,    13,    21,    22,    23,    24,    15,     3,    20,     3,
+       4,    10,    11,    12,    15,    16,    20,    20,     4,    11,
+      12,    14,    12,    20,     4,    11,    16,    12,    20,    14
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     4,     5
+       0,    17,    18,    18,    19,    20,    20,    21,    21,    21,
+      21,    22,    22,    23,    23,    24,    24,    24,    24
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     1
+       0,     2,     0,     2,     3,     0,     2,     1,     1,     1,
+       1,     5,     7,     5,    10,     1,     1,     4,     3
 };
 
 
@@ -623,7 +670,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (YY_("syntax error: cannot back up")); \
+        yyerror (cursor, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -656,7 +703,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value); \
+                  Kind, Value, cursor); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -668,10 +715,11 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t** cursor)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
+  YY_USE (cursor);
   if (!yyvaluep)
     return;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -686,12 +734,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t** cursor)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, cursor);
   YYFPRINTF (yyo, ")");
 }
 
@@ -725,7 +773,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule)
+                 int yyrule, const uint8_t** cursor)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -738,7 +786,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)]);
+                       &yyvsp[(yyi + 1) - (yynrhs)], cursor);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -746,7 +794,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule); \
+    yy_reduce_print (yyssp, yyvsp, Rule, cursor); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -787,9 +835,10 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const uint8_t** cursor)
 {
   YY_USE (yyvaluep);
+  YY_USE (cursor);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
@@ -809,7 +858,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (void)
+yyparse (const uint8_t** cursor)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -976,7 +1025,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (&yylval);
+      yychar = yylex (&yylval, cursor);
     }
 
   if (yychar <= YYEOF)
@@ -1064,7 +1113,7 @@ yyreduce:
   switch (yyn)
     {
 
-#line 1068 "src/codegen/syntax_parser.cc"
+#line 1117 "src/codegen/syntax_parser.cc"
 
       default: break;
     }
@@ -1111,7 +1160,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (YY_("syntax error"));
+      yyerror (cursor, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1128,7 +1177,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval);
+                      yytoken, &yylval, cursor);
           yychar = YYEMPTY;
         }
     }
@@ -1184,7 +1233,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, cursor);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1222,7 +1271,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (YY_("memory exhausted"));
+  yyerror (cursor, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1237,7 +1286,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval);
+                  yytoken, &yylval, cursor);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1246,7 +1295,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, cursor);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1257,23 +1306,23 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 33 "../src/codegen/syntax_parser.ypp"
+#line 68 "../src/codegen/syntax_parser.ypp"
 
 
 extern "C" {
-    static void yyerror(const char* s) {
+    static void yyerror(const uint8_t**, const char* s) {
         error("%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval) {
-        return TOKEN_NAME;
+    static int yylex(YYSTYPE* yylval, const uint8_t** cursor) {
+        return lex_syntax_file(yylval, cursor);
     }
 }
 
 namespace re2c {
 
-Ret parse_syntax_file() {
-    return yyparse() == 0 ? Ret::OK : Ret::FAIL;
+Ret parse_syntax_file(const uint8_t** cursor) {
+    return yyparse(cursor) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c
