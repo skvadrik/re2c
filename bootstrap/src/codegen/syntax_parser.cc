@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "../src/codegen/syntax_parser.ypp"
+#line 9 "../src/codegen/syntax_parser.ypp"
 
 #include <stdint.h>
 
@@ -78,8 +78,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(const uint8_t** cursor, const char* s);
-    static int yylex(YYSTYPE* yylval, const uint8_t** cursor);
+    static void yyerror(SyntaxConfig& cfg, const char* s);
+    static int yylex(YYSTYPE* yylval, SyntaxConfig& cfg);
 }
 
 
@@ -522,8 +522,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    39,    39,    40,    42,    45,    46,    49,    50,    51,
-      52,    55,    56,    59,    60,    63,    64,    65,    66
+       0,    47,    47,    48,    50,    53,    54,    57,    58,    59,
+      60,    63,    64,    67,    68,    71,    72,    73,    74
 };
 #endif
 
@@ -670,7 +670,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (cursor, YY_("syntax error: cannot back up")); \
+        yyerror (cfg, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -703,7 +703,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value, cursor); \
+                  Kind, Value, cfg); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -715,11 +715,11 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t** cursor)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::SyntaxConfig& cfg)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
-  YY_USE (cursor);
+  YY_USE (cfg);
   if (!yyvaluep)
     return;
   YY_IGNORE_MAYBE_UNINITIALIZED_BEGIN
@@ -734,12 +734,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, const uint8_t** cursor)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::SyntaxConfig& cfg)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep, cursor);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, cfg);
   YYFPRINTF (yyo, ")");
 }
 
@@ -773,7 +773,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, const uint8_t** cursor)
+                 int yyrule, re2c::SyntaxConfig& cfg)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -786,7 +786,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)], cursor);
+                       &yyvsp[(yyi + 1) - (yynrhs)], cfg);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -794,7 +794,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule, cursor); \
+    yy_reduce_print (yyssp, yyvsp, Rule, cfg); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -835,10 +835,10 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, const uint8_t** cursor)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::SyntaxConfig& cfg)
 {
   YY_USE (yyvaluep);
-  YY_USE (cursor);
+  YY_USE (cfg);
   if (!yymsg)
     yymsg = "Deleting";
   YY_SYMBOL_PRINT (yymsg, yykind, yyvaluep, yylocationp);
@@ -858,7 +858,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (const uint8_t** cursor)
+yyparse (re2c::SyntaxConfig& cfg)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1025,7 +1025,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (&yylval, cursor);
+      yychar = yylex (&yylval, cfg);
     }
 
   if (yychar <= YYEOF)
@@ -1160,7 +1160,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (cursor, YY_("syntax error"));
+      yyerror (cfg, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1177,7 +1177,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval, cursor);
+                      yytoken, &yylval, cfg);
           yychar = YYEMPTY;
         }
     }
@@ -1233,7 +1233,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp, cursor);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, cfg);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1271,7 +1271,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (cursor, YY_("memory exhausted"));
+  yyerror (cfg, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1286,7 +1286,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval, cursor);
+                  yytoken, &yylval, cfg);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1295,7 +1295,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, cursor);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, cfg);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1306,23 +1306,23 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 68 "../src/codegen/syntax_parser.ypp"
+#line 76 "../src/codegen/syntax_parser.ypp"
 
 
 extern "C" {
-    static void yyerror(const uint8_t**, const char* s) {
+    static void yyerror(re2c::SyntaxConfig&, const char* s) {
         error("%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, const uint8_t** cursor) {
-        return lex_syntax_file(yylval, cursor);
+    static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cfg) {
+        return cfg.lex_token(yylval);
     }
 }
 
 namespace re2c {
 
-Ret parse_syntax_file(const uint8_t** cursor) {
-    return yyparse(cursor) == 0 ? Ret::OK : Ret::FAIL;
+Ret SyntaxConfig::parse() {
+    return yyparse(*this) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

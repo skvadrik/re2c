@@ -44,6 +44,16 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "../src/codegen/syntax_parser.ypp"
+
+
+namespace re2c {
+class SyntaxConfig;
+} // namespace re2c
+
+
+#line 57 "src/codegen/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -67,12 +77,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 23 "../src/codegen/syntax_parser.ypp"
+#line 31 "../src/codegen/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
 
-#line 76 "src/codegen/syntax_parser.h"
+#line 86 "src/codegen/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -83,7 +93,7 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (const uint8_t** cursor);
+int yyparse (re2c::SyntaxConfig& cfg);
 
 
 #endif /* !YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED  */

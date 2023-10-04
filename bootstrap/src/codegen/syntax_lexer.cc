@@ -12,12 +12,12 @@
 namespace re2c {
 
 #define RET_TOK(token) do { \
-    *cursor = YYCURSOR; \
+    cursor = YYCURSOR; \
     return token; \
 } while (0)
 
-int lex_syntax_file(YYSTYPE* yylval, const uint8_t** cursor) {
-    const uint8_t* YYCURSOR = *cursor;
+int SyntaxConfig::lex_token(YYSTYPE* yylval) {
+    const uint8_t* YYCURSOR = cursor;
     const uint8_t* YYMARKER;
 
 start: 
