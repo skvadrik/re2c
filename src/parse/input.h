@@ -132,7 +132,7 @@ inline Input::Input(const conopt_t* o, Msg& m)
       files(),
       filedeps(),
       globopts(o),
-      location(ATSTART) {}
+      location({1, 0, 1}) {} // file index 1 because 0 is reserved for syntax file
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;

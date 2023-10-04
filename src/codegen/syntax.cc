@@ -5,12 +5,14 @@
 
 namespace re2c {
 
-SyntaxConfig::SyntaxConfig(const std::string& fname)
+SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg)
     : fname(fname)
     , file(nullptr)
     , flen(0)
     , buffer(nullptr)
     , cursor(nullptr)
+    , msg(msg)
+    , loc({1, 0, 0}) // file index 0 is reserved for syntax file
 {}
 
 SyntaxConfig::~SyntaxConfig() {
@@ -19,6 +21,8 @@ SyntaxConfig::~SyntaxConfig() {
 }
 
 Ret SyntaxConfig::read() {
+    msg.filenames.push_back(fname);
+
     file = fopen(fname.c_str(), "rb");
     if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
 
@@ -40,8 +44,8 @@ Ret SyntaxConfig::read() {
     return Ret::OK;
 }
 
-Ret load_syntax_config(const std::string& fname) {
-    SyntaxConfig config(fname);
+Ret load_syntax_config(const std::string& fname, Msg& msg) {
+    SyntaxConfig config(fname, msg);
     CHECK_RET(config.read());
     CHECK_RET(config.parse());
     return Ret::OK;
