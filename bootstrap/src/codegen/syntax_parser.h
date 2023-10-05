@@ -67,8 +67,7 @@ class SyntaxConfig;
     TOKEN_NAME = 258,              /* TOKEN_NAME  */
     TOKEN_NUMBER = 259,            /* TOKEN_NUMBER  */
     TOKEN_STRING = 260,            /* TOKEN_STRING  */
-    TOKEN_CONFIG = 261,            /* TOKEN_CONFIG  */
-    TOKEN_ERROR = 262              /* TOKEN_ERROR  */
+    TOKEN_CONFIG = 261             /* TOKEN_CONFIG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -82,7 +81,7 @@ union YYSTYPE
     const char* str;
     int32_t num;
 
-#line 86 "src/codegen/syntax_parser.h"
+#line 85 "src/codegen/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

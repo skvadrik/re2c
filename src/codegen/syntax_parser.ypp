@@ -37,7 +37,6 @@ extern "C" {
 %token TOKEN_NUMBER
 %token TOKEN_STRING
 %token TOKEN_CONFIG
-%token TOKEN_ERROR
 
 %type <str> TOKEN_NAME TOKEN_STRING TOKEN_CONFIG
 
@@ -76,8 +75,8 @@ atom
 %%
 
 extern "C" {
-    static void yyerror(re2c::SyntaxConfig&, const char* s) {
-        error("%s", s);
+    static void yyerror(re2c::SyntaxConfig& cfg, const char* s) {
+        cfg.msg.error(cfg.cur_loc(), "%s", s);
     }
 
     static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cfg) {

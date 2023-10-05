@@ -14,24 +14,21 @@
 
     re2c:yyfill:enable = 0;
     re2c:define:YYCTYPE = uint8_t;
+    re2c:define:YYCURSOR = cur;
 */
 
 namespace re2c {
 
-#define RET_TOK(token) do { \
-    cursor = YYCURSOR; \
-    return token; \
-} while (0)
-
 int SyntaxConfig::lex_token(YYSTYPE* yylval) {
-    const uint8_t* YYCURSOR = cursor;
     const uint8_t* YYMARKER;
 
 start: /*!local:re2c
     eof {
-        RET_TOK(YYEOF);
+        return YYEOF;
     }
     eol | comment {
+        ++loc.line;
+        pos = cur;
         goto start;
     }
     space+ {
@@ -39,32 +36,30 @@ start: /*!local:re2c
     }
     name space* "=" {
         yylval->str = "<config>";
-        RET_TOK(TOKEN_CONFIG);
+        return TOKEN_CONFIG;
     }
     name {
         yylval->str = "<name>";
-        RET_TOK(TOKEN_NAME);
+        return TOKEN_NAME;
     }
     number {
         yylval->num = 123;
-        RET_TOK(TOKEN_NUMBER);
+        return TOKEN_NUMBER;
     }
     ["] ([^"\x00\n] | [\\]["])* ["] {
         yylval->str = "<string>";
-        RET_TOK(TOKEN_STRING);
+        return TOKEN_STRING;
     }
     [=?:;(){}[\]] {
-        RET_TOK(YYCURSOR[-1]);
+        return cur[-1];
     }
     * {
-        error("syntax error in syntax file");
-        RET_TOK(TOKEN_ERROR);
+        msg.error(cur_loc(), "unexpected character: '%c'", cur[-1]);
+        return YYerror;
     }
 */
 
-    RET_TOK(TOKEN_ERROR); // unreachable
+    return YYerror; // unreachable
 }
-
-#undef RET_TOK
 
 } // namespace re2c

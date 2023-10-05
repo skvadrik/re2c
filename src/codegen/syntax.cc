@@ -9,14 +9,15 @@ SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg)
     : fname(fname)
     , file(nullptr)
     , flen(0)
-    , buffer(nullptr)
-    , cursor(nullptr)
-    , msg(msg)
+    , buf(nullptr)
+    , cur(nullptr)
+    , pos(nullptr)
     , loc({1, 0, 0}) // file index 0 is reserved for syntax file
+    , msg(msg)
 {}
 
 SyntaxConfig::~SyntaxConfig() {
-    delete[] buffer;
+    delete[] buf;
     if (file) fclose(file);
 }
 
@@ -32,15 +33,15 @@ Ret SyntaxConfig::read() {
     fseek(file, 0, SEEK_SET);
 
     // allocate buffer
-    buffer = new uint8_t[flen + 1];
+    buf = new uint8_t[flen + 1];
 
     // read file contents into buffer and append terminating zero at the end
-    if (fread(buffer, 1, flen, file) != flen) {
+    if (fread(buf, 1, flen, file) != flen) {
         RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
     }
-    buffer[flen] = 0;
+    buf[flen] = 0;
 
-    cursor = buffer;
+    cur = pos = buf;
     return Ret::OK;
 }
 
