@@ -42,10 +42,6 @@ inline std::string getstr(const uint8_t* s, const uint8_t* e) {
     return std::string(reinterpret_cast<const char*>(s), static_cast<size_t>(e - s));
 }
 
-inline std::string* newstr(const uint8_t* s, const uint8_t* e) {
-    return new std::string(reinterpret_cast<const char*>(s), static_cast<size_t>(e - s));
-}
-
 template<typename allocator_t>
 inline const char* newcstr(const uint8_t* s, const uint8_t* e, allocator_t& alc) {
     const size_t n = static_cast<size_t>(e - s);
