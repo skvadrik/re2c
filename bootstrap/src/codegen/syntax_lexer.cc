@@ -5,17 +5,25 @@
 #include "src/codegen/syntax.h"
 #include "src/codegen/syntax_parser.h"
 #include "src/msg/msg.h"
+#include "src/util/string_utils.h"
 
-#line 18 "../src/codegen/syntax_lexer.re"
+#line 20 "../src/codegen/syntax_lexer.re"
 
 
 namespace re2c {
 
 int SyntaxConfig::lex_token(YYSTYPE* yylval) {
-    const uint8_t* YYMARKER;
-
-start: 
+    const uint8_t* YYMARKER, *p;
+    
 #line 19 "src/codegen/syntax_lexer.cc"
+const uint8_t* yyt1;
+#line 26 "../src/codegen/syntax_lexer.re"
+
+
+start:
+    tok = cur;
+
+#line 27 "src/codegen/syntax_lexer.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -103,39 +111,39 @@ start:
 	}
 yy1:
 	++cur;
-#line 26 "../src/codegen/syntax_lexer.re"
+#line 31 "../src/codegen/syntax_lexer.re"
 	{
         return YYEOF;
     }
-#line 111 "src/codegen/syntax_lexer.cc"
+#line 119 "src/codegen/syntax_lexer.cc"
 yy2:
 	++cur;
 yy3:
-#line 56 "../src/codegen/syntax_lexer.re"
+#line 65 "../src/codegen/syntax_lexer.re"
 	{
-        msg.error(cur_loc(), "unexpected character: '%c'", cur[-1]);
+        msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
         return YYerror;
     }
-#line 120 "src/codegen/syntax_lexer.cc"
+#line 128 "src/codegen/syntax_lexer.cc"
 yy4:
 	yych = *++cur;
 	if (yybm[0+yych] & 4) {
 		goto yy4;
 	}
-#line 34 "../src/codegen/syntax_lexer.re"
+#line 39 "../src/codegen/syntax_lexer.re"
 	{
         goto start;
     }
-#line 130 "src/codegen/syntax_lexer.cc"
+#line 138 "src/codegen/syntax_lexer.cc"
 yy5:
 	++cur;
-#line 29 "../src/codegen/syntax_lexer.re"
+#line 34 "../src/codegen/syntax_lexer.re"
 	{
         ++loc.line;
         pos = cur;
         goto start;
     }
-#line 139 "src/codegen/syntax_lexer.cc"
+#line 147 "src/codegen/syntax_lexer.cc"
 yy6:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++cur);
@@ -144,11 +152,11 @@ yy6:
 	goto yy14;
 yy7:
 	++cur;
-#line 53 "../src/codegen/syntax_lexer.re"
+#line 62 "../src/codegen/syntax_lexer.re"
 	{
         return cur[-1];
     }
-#line 152 "src/codegen/syntax_lexer.cc"
+#line 160 "src/codegen/syntax_lexer.cc"
 yy8:
 	yych = *++cur;
 	if (yybm[0+yych] & 8) {
@@ -165,12 +173,16 @@ yy10:
 	if (yybm[0+yych] & 8) {
 		goto yy10;
 	}
-#line 45 "../src/codegen/syntax_lexer.re"
+#line 50 "../src/codegen/syntax_lexer.re"
 	{
-        yylval->num = 123;
-        return TOKEN_NUMBER;
+        if (s_to_i32_unsafe(tok, cur, yylval->num)) {
+            return TOKEN_NUMBER;
+        } else {
+            msg.error(tok_loc(), "configuration value overflow");
+            return YYerror;
+        }
     }
-#line 174 "src/codegen/syntax_lexer.cc"
+#line 186 "src/codegen/syntax_lexer.cc"
 yy11:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++cur);
@@ -178,18 +190,27 @@ yy11:
 		goto yy11;
 	}
 	if (yych <= 0x1F) {
-		if (yych == '\t') goto yy20;
+		if (yych == '\t') {
+			yyt1 = cur;
+			goto yy20;
+		}
 	} else {
-		if (yych <= ' ') goto yy20;
-		if (yych == '=') goto yy21;
+		if (yych <= ' ') {
+			yyt1 = cur;
+			goto yy20;
+		}
+		if (yych == '=') {
+			yyt1 = cur;
+			goto yy21;
+		}
 	}
 yy12:
-#line 41 "../src/codegen/syntax_lexer.re"
+#line 46 "../src/codegen/syntax_lexer.re"
 	{
-        yylval->str = "<name>";
+        yylval->str = newcstr(tok, cur, alc);
         return TOKEN_NAME;
     }
-#line 193 "src/codegen/syntax_lexer.cc"
+#line 214 "src/codegen/syntax_lexer.cc"
 yy13:
 	yych = *++cur;
 yy14:
@@ -213,12 +234,12 @@ yy15:
 yy16:
 	++cur;
 yy17:
-#line 49 "../src/codegen/syntax_lexer.re"
+#line 58 "../src/codegen/syntax_lexer.re"
 	{
-        yylval->str = "<string>";
+        yylval->str = newcstr(tok + 1, cur - 1, alc);
         return TOKEN_STRING;
     }
-#line 222 "src/codegen/syntax_lexer.cc"
+#line 243 "src/codegen/syntax_lexer.cc"
 yy18:
 	yych = *++cur;
 	if (yybm[0+yych] & 32) {
@@ -245,12 +266,13 @@ yy20:
 	}
 yy21:
 	++cur;
-#line 37 "../src/codegen/syntax_lexer.re"
+	p = yyt1;
+#line 42 "../src/codegen/syntax_lexer.re"
 	{
-        yylval->str = "<config>";
+        yylval->str = newcstr(tok, p, alc);
         return TOKEN_CONFIG;
     }
-#line 254 "src/codegen/syntax_lexer.cc"
+#line 276 "src/codegen/syntax_lexer.cc"
 yy22:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++cur);
@@ -261,7 +283,7 @@ yy22:
 	if (yych <= '"') goto yy16;
 	goto yy18;
 }
-#line 60 "../src/codegen/syntax_lexer.re"
+#line 69 "../src/codegen/syntax_lexer.re"
 
 
     return YYerror; // unreachable

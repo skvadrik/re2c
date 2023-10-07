@@ -76,7 +76,7 @@ atom
 
 extern "C" {
     static void yyerror(re2c::SyntaxConfig& cfg, const char* s) {
-        cfg.msg.error(cfg.cur_loc(), "%s", s);
+        cfg.msg.error(cfg.tok_loc(), "%s", s);
     }
 
     static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cfg) {

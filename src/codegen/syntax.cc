@@ -5,12 +5,14 @@
 
 namespace re2c {
 
-SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg)
-    : fname(fname)
+SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg, OutAllocator& alc)
+    : alc(alc)
+    , fname(fname)
     , file(nullptr)
     , flen(0)
     , buf(nullptr)
     , cur(nullptr)
+    , tok(nullptr)
     , pos(nullptr)
     , loc({1, 0, 0}) // file index 0 is reserved for syntax file
     , msg(msg)
@@ -41,12 +43,12 @@ Ret SyntaxConfig::read() {
     }
     buf[flen] = 0;
 
-    cur = pos = buf;
+    cur = tok = pos = buf;
     return Ret::OK;
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg) {
-    SyntaxConfig config(fname, msg);
+Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc) {
+    SyntaxConfig config(fname, msg, alc);
     CHECK_RET(config.read());
     CHECK_RET(config.parse());
     return Ret::OK;

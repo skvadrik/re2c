@@ -3,6 +3,7 @@
 #include "src/codegen/syntax.h"
 #include "src/codegen/syntax_parser.h"
 #include "src/msg/msg.h"
+#include "src/util/string_utils.h"
 
 /*!re2c
     eof = [\x00];
@@ -15,14 +16,18 @@
     re2c:yyfill:enable = 0;
     re2c:define:YYCTYPE = uint8_t;
     re2c:define:YYCURSOR = cur;
+    re2c:tags = 1;
 */
 
 namespace re2c {
 
 int SyntaxConfig::lex_token(YYSTYPE* yylval) {
-    const uint8_t* YYMARKER;
+    const uint8_t* YYMARKER, *p;
+    /*!stags:re2c format = "const uint8_t* @@;"; */
 
-start: /*!local:re2c
+start:
+    tok = cur;
+/*!local:re2c
     eof {
         return YYEOF;
     }
@@ -34,27 +39,31 @@ start: /*!local:re2c
     space+ {
         goto start;
     }
-    name space* "=" {
-        yylval->str = "<config>";
+    name @p space* "=" {
+        yylval->str = newcstr(tok, p, alc);
         return TOKEN_CONFIG;
     }
     name {
-        yylval->str = "<name>";
+        yylval->str = newcstr(tok, cur, alc);
         return TOKEN_NAME;
     }
     number {
-        yylval->num = 123;
-        return TOKEN_NUMBER;
+        if (s_to_i32_unsafe(tok, cur, yylval->num)) {
+            return TOKEN_NUMBER;
+        } else {
+            msg.error(tok_loc(), "configuration value overflow");
+            return YYerror;
+        }
     }
     ["] ([^"\x00\n] | [\\]["])* ["] {
-        yylval->str = "<string>";
+        yylval->str = newcstr(tok + 1, cur - 1, alc);
         return TOKEN_STRING;
     }
     [=?:;(){}[\]] {
         return cur[-1];
     }
     * {
-        msg.error(cur_loc(), "unexpected character: '%c'", cur[-1]);
+        msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
         return YYerror;
     }
 */
