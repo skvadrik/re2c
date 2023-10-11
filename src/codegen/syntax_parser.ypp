@@ -46,31 +46,35 @@ spec
     : %empty
     | spec config;
 
-config: TOKEN_CONFIG expr ';';
+config
+    : TOKEN_CONFIG expr ';'
+    | TOKEN_CONFIG bool ';';
 
 expr
     : %empty
-    | expr expr1;
+    | expr1 expr;
 
 expr1
-    : opt
-    | list
-    | atom
-    | TOKEN_NUMBER;
+    : atom_expr
+    | cond_expr
+    | list_expr;
 
-opt
+cond_expr
     : '(' TOKEN_NAME '?' expr ')'
     | '(' TOKEN_NAME '?' expr ':' expr ')';
 
-list
+list_expr
     : '[' TOKEN_NAME ':' expr ']'
     | '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' expr ']';
 
-atom
+atom_expr
     : TOKEN_STRING
     | TOKEN_NAME
-    | TOKEN_NAME '{' TOKEN_NUMBER '}'
-    | '(' expr ')';
+    | TOKEN_NAME '{' TOKEN_NUMBER '}';
+
+bool
+    : TOKEN_NUMBER
+    | '(' TOKEN_NAME '?' bool ':' bool ')';
 
 %%
 
