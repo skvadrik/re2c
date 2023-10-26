@@ -47,10 +47,10 @@ Ret SyntaxConfig::read() {
     return Ret::OK;
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc) {
+Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx) {
     SyntaxConfig config(fname, msg, alc);
     CHECK_RET(config.read());
-    CHECK_RET(config.parse());
+    CHECK_RET(config.parse(stx));
     return Ret::OK;
 }
 

@@ -1,6 +1,14 @@
 %code requires {
 
+#include "src/util/list.h"
+
 namespace re2c {
+struct StxConf;
+using StxConfList = list_t<StxConf>;
+struct StxBool;
+struct StxExpr;
+using StxExprList = list_t<StxExpr>;
+class Stx;
 class SyntaxConfig;
 } // namespace re2c
 
@@ -16,21 +24,27 @@ class SyntaxConfig;
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(SyntaxConfig& cfg, const char* s);
-    static int yylex(YYSTYPE* yylval, SyntaxConfig& cfg);
+    static void yyerror(SyntaxConfig& cf, re2c::Stx&, const char* s);
+    static int yylex(YYSTYPE* yylval, SyntaxConfig& cf);
 }
 
 %}
 
-%start spec
+%start confs
 
 %define api.pure full
-%lex-param {re2c::SyntaxConfig& cfg}
-%parse-param {re2c::SyntaxConfig& cfg}
+%lex-param {re2c::SyntaxConfig& cf}
+%parse-param {re2c::SyntaxConfig& cf}
+%parse-param {re2c::Stx& stx}
 
 %union {
     const char* str;
     int32_t num;
+    re2c::StxConf* conf;
+    re2c::StxConfList* confs;
+    re2c::StxBool* bln;
+    re2c::StxExpr* expr;
+    re2c::StxExprList* exprs;
 };
 
 %token TOKEN_NAME
@@ -38,60 +52,67 @@ extern "C" {
 %token TOKEN_STRING
 %token TOKEN_CONFIG
 
-%type <str> TOKEN_NAME TOKEN_STRING TOKEN_CONFIG
+%type <str>   TOKEN_NAME TOKEN_STRING TOKEN_CONFIG
+%type <num>   TOKEN_NUMBER
+%type <conf>  conf
+%type <confs> confs
+%type <expr>  expr cond_expr list_expr
+%type <exprs> exprs
+%type <bln>   bool
 
 %%
 
-spec
-    : %empty
-    | spec config;
+confs
+: %empty     { $$ = stx.new_conf_list(); }
+| conf confs { prepend($2, $1); $$ = $2; };
 
-config
-    : TOKEN_CONFIG expr ';'
-    | TOKEN_CONFIG bool ';';
+conf
+: TOKEN_CONFIG exprs ';' { $$ = stx.make_conf_expr($1, $2); }
+| TOKEN_CONFIG bool  ';' { $$ = stx.make_conf_bool($1, $2); };
+
+exprs
+: %empty     { $$ = stx.new_expr_list(); }
+| expr exprs { prepend($2, $1); $$ = $2; };
 
 expr
-    : %empty
-    | expr1 expr;
-
-expr1
-    : atom_expr
-    | cond_expr
-    | list_expr;
+: TOKEN_STRING                    { $$ = stx.make_str($1); }
+| TOKEN_NAME                      { $$ = stx.make_var($1, -1); }
+| TOKEN_NAME '{' TOKEN_NUMBER '}' { $$ = stx.make_var($1, $3); }
+| cond_expr
+| list_expr;
 
 cond_expr
-    : '(' TOKEN_NAME '?' expr ')'
-    | '(' TOKEN_NAME '?' expr ':' expr ')';
+: '(' TOKEN_NAME '?' exprs ')'           { $$ = stx.make_cond($2, $4, nullptr); }
+| '(' TOKEN_NAME '?' exprs ':' exprs ')' { $$ = stx.make_cond($2, $4, $6); };
 
 list_expr
-    : '[' TOKEN_NAME ':' expr ']'
-    | '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' expr ']';
-
-atom_expr
-    : TOKEN_STRING
-    | TOKEN_NAME
-    | TOKEN_NAME '{' TOKEN_NUMBER '}';
+: '[' TOKEN_NAME ':' exprs ']' {
+    $$ = stx.make_list($2, 0, -1, $4);
+}
+| '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' exprs ']' {
+    $$ = stx.make_list($2, $4, $6, $9);
+};
 
 bool
-    : TOKEN_NUMBER
-    | '(' TOKEN_NAME '?' bool ':' bool ')';
+: TOKEN_NUMBER                         { $$ = stx.make_bool_num($1); }
+| '(' TOKEN_NAME '?' bool ':' bool ')' { $$ = stx.make_bool_cond($2, $4, $6); };
 
 %%
 
 extern "C" {
-    static void yyerror(re2c::SyntaxConfig& cfg, const char* s) {
-        cfg.msg.error(cfg.tok_loc(), "%s", s);
+    static void yyerror(re2c::SyntaxConfig& cf, re2c::Stx&, const char* s) {
+        cf.msg.error(cf.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cfg) {
-        return cfg.lex_token(yylval);
+    static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cf) {
+        return cf.lex_token(yylval);
     }
 }
 
 namespace re2c {
 
-Ret SyntaxConfig::parse() {
-    return yyparse(*this) == 0 ? Ret::OK : Ret::FAIL;
+Ret SyntaxConfig::parse(Stx& stx) {
+    return yyparse(*this, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c
