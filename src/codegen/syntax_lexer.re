@@ -21,7 +21,7 @@
 
 namespace re2c {
 
-int SyntaxConfig::lex_token(YYSTYPE* yylval) {
+int StxFile::lex_token(YYSTYPE* yylval) {
     const uint8_t* YYMARKER, *p;
     /*!stags:re2c format = "const uint8_t* @@;"; */
 

@@ -12,7 +12,7 @@
 
 namespace re2c {
 
-int SyntaxConfig::lex_token(YYSTYPE* yylval) {
+int StxFile::lex_token(YYSTYPE* yylval) {
     const uint8_t* YYMARKER, *p;
     
 #line 19 "src/codegen/syntax_lexer.cc"

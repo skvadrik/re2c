@@ -5,7 +5,7 @@
 
 namespace re2c {
 
-SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg, OutAllocator& alc)
+StxFile::StxFile(const std::string& fname, Msg& msg, OutAllocator& alc)
     : alc(alc)
     , fname(fname)
     , file(nullptr)
@@ -18,12 +18,12 @@ SyntaxConfig::SyntaxConfig(const std::string& fname, Msg& msg, OutAllocator& alc
     , msg(msg)
 {}
 
-SyntaxConfig::~SyntaxConfig() {
+StxFile::~StxFile() {
     delete[] buf;
     if (file) fclose(file);
 }
 
-Ret SyntaxConfig::read() {
+Ret StxFile::read() {
     msg.filenames.push_back(fname);
 
     file = fopen(fname.c_str(), "rb");
@@ -48,9 +48,9 @@ Ret SyntaxConfig::read() {
 }
 
 Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx) {
-    SyntaxConfig config(fname, msg, alc);
-    CHECK_RET(config.read());
-    CHECK_RET(config.parse(stx));
+    StxFile sf(fname, msg, alc);
+    CHECK_RET(sf.read());
+    CHECK_RET(sf.parse(stx));
     return Ret::OK;
 }
 

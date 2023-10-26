@@ -98,7 +98,7 @@ class Stx {
     StxExpr* make_list(const char* var, int32_t lbound, int32_t rbound, StxExprList* expr);
 };
 
-class SyntaxConfig {
+class StxFile {
     OutAllocator& alc;
     const std::string& fname;
     FILE* file;
@@ -113,14 +113,14 @@ class SyntaxConfig {
     Msg& msg;
 
   public:
-    SyntaxConfig(const std::string& fname, Msg& msg, OutAllocator& alc);
-    ~SyntaxConfig();
+    StxFile(const std::string& fname, Msg& msg, OutAllocator& alc);
+    ~StxFile();
     Ret read();
     Ret parse(Stx& stx);
     int lex_token(YYSTYPE* yylval);
     inline loc_t tok_loc() const;
 
-    FORBID_COPY(SyntaxConfig);
+    FORBID_COPY(StxFile);
 };
 
 inline Stx::Stx(OutAllocator& alc): alc(alc) {}
@@ -212,7 +212,7 @@ inline StxExpr* Stx::make_list(const char* var, int32_t lbound, int32_t rbound, 
 
 Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx);
 
-loc_t SyntaxConfig::tok_loc() const {
+loc_t StxFile::tok_loc() const {
     DCHECK(pos <= tok);
     return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
 }

@@ -57,7 +57,7 @@ struct StxBool;
 struct StxExpr;
 using StxExprList = list_t<StxExpr>;
 class Stx;
-class SyntaxConfig;
+class StxFile;
 } // namespace re2c
 
 
@@ -105,7 +105,7 @@ typedef union YYSTYPE YYSTYPE;
 
 
 
-int yyparse (re2c::SyntaxConfig& cf, re2c::Stx& stx);
+int yyparse (re2c::StxFile& sf, re2c::Stx& stx);
 
 
 #endif /* !YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED  */

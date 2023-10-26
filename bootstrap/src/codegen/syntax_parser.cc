@@ -78,8 +78,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(SyntaxConfig& cf, re2c::Stx&, const char* s);
-    static int yylex(YYSTYPE* yylval, SyntaxConfig& cf);
+    static void yyerror(StxFile& sf, re2c::Stx&, const char* s);
+    static int yylex(YYSTYPE* yylval, StxFile& sf);
 }
 
 
@@ -671,7 +671,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (cf, stx, YY_("syntax error: cannot back up")); \
+        yyerror (sf, stx, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -704,7 +704,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value, cf, stx); \
+                  Kind, Value, sf, stx); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -716,11 +716,11 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::SyntaxConfig& cf, re2c::Stx& stx)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::StxFile& sf, re2c::Stx& stx)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
-  YY_USE (cf);
+  YY_USE (sf);
   YY_USE (stx);
   if (!yyvaluep)
     return;
@@ -736,12 +736,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::SyntaxConfig& cf, re2c::Stx& stx)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::StxFile& sf, re2c::Stx& stx)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep, cf, stx);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, sf, stx);
   YYFPRINTF (yyo, ")");
 }
 
@@ -775,7 +775,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, re2c::SyntaxConfig& cf, re2c::Stx& stx)
+                 int yyrule, re2c::StxFile& sf, re2c::Stx& stx)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -788,7 +788,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)], cf, stx);
+                       &yyvsp[(yyi + 1) - (yynrhs)], sf, stx);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -796,7 +796,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule, cf, stx); \
+    yy_reduce_print (yyssp, yyvsp, Rule, sf, stx); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -837,10 +837,10 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::SyntaxConfig& cf, re2c::Stx& stx)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::StxFile& sf, re2c::Stx& stx)
 {
   YY_USE (yyvaluep);
-  YY_USE (cf);
+  YY_USE (sf);
   YY_USE (stx);
   if (!yymsg)
     yymsg = "Deleting";
@@ -861,7 +861,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (re2c::SyntaxConfig& cf, re2c::Stx& stx)
+yyparse (re2c::StxFile& sf, re2c::Stx& stx)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1028,7 +1028,7 @@ yybackup:
   if (yychar == YYEMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (&yylval, cf);
+      yychar = yylex (&yylval, sf);
     }
 
   if (yychar <= YYEOF)
@@ -1257,7 +1257,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (cf, stx, YY_("syntax error"));
+      yyerror (sf, stx, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1274,7 +1274,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval, cf, stx);
+                      yytoken, &yylval, sf, stx);
           yychar = YYEMPTY;
         }
     }
@@ -1330,7 +1330,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp, cf, stx);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, sf, stx);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1368,7 +1368,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (cf, stx, YY_("memory exhausted"));
+  yyerror (sf, stx, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1383,7 +1383,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval, cf, stx);
+                  yytoken, &yylval, sf, stx);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1392,7 +1392,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, cf, stx);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, sf, stx);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1407,18 +1407,18 @@ yyreturnlab:
 
 
 extern "C" {
-    static void yyerror(re2c::SyntaxConfig& cf, re2c::Stx&, const char* s) {
-        cf.msg.error(cf.tok_loc(), "%s", s);
+    static void yyerror(re2c::StxFile& sf, re2c::Stx&, const char* s) {
+        sf.msg.error(sf.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cf) {
-        return cf.lex_token(yylval);
+    static int yylex(YYSTYPE* yylval, re2c::StxFile& sf) {
+        return sf.lex_token(yylval);
     }
 }
 
 namespace re2c {
 
-Ret SyntaxConfig::parse(Stx& stx) {
+Ret StxFile::parse(Stx& stx) {
     return yyparse(*this, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 

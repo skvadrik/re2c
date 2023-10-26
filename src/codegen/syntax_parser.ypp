@@ -9,7 +9,7 @@ struct StxBool;
 struct StxExpr;
 using StxExprList = list_t<StxExpr>;
 class Stx;
-class SyntaxConfig;
+class StxFile;
 } // namespace re2c
 
 }
@@ -24,8 +24,8 @@ class SyntaxConfig;
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(SyntaxConfig& cf, re2c::Stx&, const char* s);
-    static int yylex(YYSTYPE* yylval, SyntaxConfig& cf);
+    static void yyerror(StxFile& sf, re2c::Stx&, const char* s);
+    static int yylex(YYSTYPE* yylval, StxFile& sf);
 }
 
 %}
@@ -33,8 +33,8 @@ extern "C" {
 %start confs
 
 %define api.pure full
-%lex-param {re2c::SyntaxConfig& cf}
-%parse-param {re2c::SyntaxConfig& cf}
+%lex-param {re2c::StxFile& sf}
+%parse-param {re2c::StxFile& sf}
 %parse-param {re2c::Stx& stx}
 
 %union {
@@ -100,18 +100,18 @@ bool
 %%
 
 extern "C" {
-    static void yyerror(re2c::SyntaxConfig& cf, re2c::Stx&, const char* s) {
-        cf.msg.error(cf.tok_loc(), "%s", s);
+    static void yyerror(re2c::StxFile& sf, re2c::Stx&, const char* s) {
+        sf.msg.error(sf.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, re2c::SyntaxConfig& cf) {
-        return cf.lex_token(yylval);
+    static int yylex(YYSTYPE* yylval, re2c::StxFile& sf) {
+        return sf.lex_token(yylval);
     }
 }
 
 namespace re2c {
 
-Ret SyntaxConfig::parse(Stx& stx) {
+Ret StxFile::parse(Stx& stx) {
     return yyparse(*this, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 
