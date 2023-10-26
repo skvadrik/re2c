@@ -10,7 +10,7 @@
 #include "src/msg/msg.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
-#include "src/util/list.h"
+#include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {

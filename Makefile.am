@@ -20,7 +20,6 @@ noinst_PROGRAMS =
 re2c_HDR = \
 	src/constants.h \
 	src/codegen/code.h \
-	src/codegen/list.h \
 	src/codegen/output.h \
 	src/codegen/syntax.h \
 	src/codegen/helpers.h \

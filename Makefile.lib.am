@@ -13,7 +13,6 @@ libre2c_la_HDR = \
 	lib/regoff_trie.h \
 	src/constants.h \
 	src/codegen/code.h \
-	src/codegen/list.h \
 	src/options/opt.h \
 	src/options/symtab.h \
 	src/adfa/adfa.h \

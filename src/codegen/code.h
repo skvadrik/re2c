@@ -9,7 +9,7 @@
 #include "src/msg/location.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
-#include "src/util/list.h"
+#include "src/util/containers.h"
 #include "src/util/string_utils.h"
 
 namespace re2c {

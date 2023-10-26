@@ -48,7 +48,7 @@ extern int yydebug;
 #line 1 "../src/codegen/syntax_parser.ypp"
 
 
-#include "src/util/list.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 struct StxConf;

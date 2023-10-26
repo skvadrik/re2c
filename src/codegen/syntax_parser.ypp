@@ -1,6 +1,6 @@
 %code requires {
 
-#include "src/util/list.h"
+#include "src/util/containers.h"
 
 namespace re2c {
 struct StxConf;
