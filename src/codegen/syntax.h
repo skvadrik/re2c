@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <string>
+#include <unordered_map>
 
 #include "src/codegen/syntax_parser.h"
 #include "src/constants.h"
@@ -73,20 +74,21 @@ struct StxConf {
         StxBool* bln;
         StxExprList* expr;
     };
-    StxConf* next;
 };
 
-using StxConfList = list_t<StxConf>;
+using confs_t = std::unordered_map<std::string, StxConf*>;
 
 class Stx {
     OutAllocator& alc;
+
     StxConf* make_conf(StxConfType type, const char* name);
     StxBool* make_bool(StxBoolType type);
     StxExpr* make_expr(StxExprType type);
 
   public:
+    confs_t confs;
+
     explicit Stx(OutAllocator& alc);
-    StxConfList* new_conf_list();
     StxExprList* new_expr_list();
     StxConf* make_conf_bool(const char* name, StxBool* bln);
     StxConf* make_conf_expr(const char* name, StxExprList* expr);
@@ -123,11 +125,7 @@ class StxFile {
     FORBID_COPY(StxFile);
 };
 
-inline Stx::Stx(OutAllocator& alc): alc(alc) {}
-
-inline StxConfList* Stx::new_conf_list() {
-    return new_list<StxConf, OutAllocator>(alc);
-}
+inline Stx::Stx(OutAllocator& alc): alc(alc), confs() {}
 
 inline StxExprList* Stx::new_expr_list() {
     return new_list<StxExpr, OutAllocator>(alc);
@@ -137,7 +135,6 @@ inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
     StxConf* x = alc.alloct<StxConf>(1);
     x->type = type;
     x->name = name;
-    x->next = nullptr;
     return x;
 }
 
