@@ -17,23 +17,20 @@ type_yyctype = ctype;
 
 switch =
     "match " expr " {" nl
-    [case: indent case nl]
+        [case: indent case]
     "}" nl;
 
-switch_case_single =
-    val " => {" nl
-    [stmt: indent stmt nl]
+switch_cases =
+    [case{0:-2}: case " |" nl]
+    case{-1} " => {" nl
+        [stmt: indent stmt nl]
     "}" nl;
 
-switch_case_range =
-    val{0} " ..= " val{-1} " {" nl
-    [stmt: indent stmt nl]
-    "}" nl;
+switch_case_single = val;
 
-switch_default =
-    "_ => {" nl
-    [stmt: indent stmt nl]
-    "}" nl;
+switch_case_range = val{0} " ..= " val{-1};
+
+switch_default = "_";
 
 loop =
     (label? label ": ") "loop {" nl

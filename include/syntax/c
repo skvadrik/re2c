@@ -26,29 +26,25 @@ if_then_else_oneline =
 
 switch =
     "switch (" expr ") {" nl
-        [case: indent case nl]
+        [case: indent case]
     "}" nl;
 
+switch_cases =
+    [case: case nl]
+    [stmt: indent stmt nl];
+
+switch_cases_oneline =
+    [case{0:-2}: case nl]
+    case{-1} stmt nl;
+
 switch_case_single =
-    "case " val ":" nl
-        [stmt: indent stmt nl];
+    "case " val ":";
 
 switch_case_range =
-    "case " val{0} ".." val{-1} ":" nl
-        [stmt: indent stmt nl];
+    "case " val{0} ".." val{-1} ":";
 
 switch_default =
-    "default:" nl
-        [stmt: indent stmt nl];
-
-switch_case_single_oneline =
-    "case " val ": " stmt nl;
-
-switch_case_range_oneline =
-    "case " val{0} ".." val{-1} ": " stmt nl;
-
-switch_default_oneline =
-    "default: " stmt nl;
+    "default:";
 
 loop =
     "for (;;) {" nl

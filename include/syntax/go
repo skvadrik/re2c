@@ -15,23 +15,21 @@ type_yybm = "byte";
 
 switch =
     "switch (" expr ") {" nl
-    [case: case nl]
+    [case: case]
     "}" nl;
 
-switch_case_single =
-    "case " val ":" nl
-    [stmt: indent stmt nl]
-    "}" nl;
+switch_cases =
+    [case{0:-2}:
+        case nl
+        indent "fallthrough" nl]
+    case{-1} nl
+    [stmt: indent stmt nl];
 
-switch_case_range =
-    "case " val{0} [val{1:-1}: "," val] ":" nl
-    [stmt: indent stmt nl]
-    "}" nl;
+switch_case_single = "case " val ":";
 
-switch_default =
-    "default:" nl
-    [stmt: indent stmt nl]
-    "}" nl;
+switch_case_range = "case " val{0} [val{1:-1}: "," val] ":";
+
+switch_default = "default:";
 
 loop =
     (label? label ":" nl)
