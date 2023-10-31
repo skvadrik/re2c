@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
+#include <vector>
 
 #include "src/codegen/syntax_parser.h"
 #include "src/constants.h"
@@ -79,7 +81,16 @@ struct StxConf {
 using confs_t = std::unordered_map<std::string, StxConf*>;
 
 class Stx {
+    using bool_confs_t = std::unordered_set<std::string>;
+    using conf2vars_t = std::unordered_map<std::string, std::vector<std::string>>;
+    using stack1_t = std::vector<std::pair<const StxBool*, uint8_t>>;
+    using stack2_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
+
     OutAllocator& alc;
+    bool_confs_t bool_confs;
+    conf2vars_t conf2vars;
+    stack1_t stack1;
+    stack2_t stack2;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxBool* make_bool(StxBoolType type);
@@ -89,6 +100,8 @@ class Stx {
     confs_t confs;
 
     explicit Stx(OutAllocator& alc);
+
+    // functions that construct AST when parsing syntax configurations
     StxExprList* new_expr_list();
     StxConf* make_conf_bool(const char* name, StxBool* bln);
     StxConf* make_conf_expr(const char* name, StxExprList* expr);
@@ -98,6 +111,10 @@ class Stx {
     StxExpr* make_var(const char* name, int32_t index);
     StxExpr* make_cond(const char* conf, StxExprList* expr_then, StxExprList* expr_else);
     StxExpr* make_list(const char* var, int32_t lbound, int32_t rbound, StxExprList* expr);
+
+    // functions that validate configuration and variable names in the AST
+    Ret validate_bool_conf(const StxConf* conf);
+    Ret validate_expr_conf(const StxConf* conf);
 };
 
 class StxFile {
@@ -120,12 +137,21 @@ class StxFile {
     Ret read();
     Ret parse(Stx& stx);
     int lex_token(YYSTYPE* yylval);
+    bool check_conf_name(const char* name) const;
     inline loc_t tok_loc() const;
 
     FORBID_COPY(StxFile);
 };
 
-inline Stx::Stx(OutAllocator& alc): alc(alc), confs() {}
+inline Stx::Stx(OutAllocator& alc)
+        : alc(alc)
+        , bool_confs()
+        , conf2vars()
+        , stack1()
+        , stack2()
+        , confs() {
+    bool_confs.insert("ebcdic");
+}
 
 inline StxExprList* Stx::new_expr_list() {
     return new_list<StxExpr, OutAllocator>(alc);

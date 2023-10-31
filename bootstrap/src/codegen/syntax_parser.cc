@@ -521,8 +521,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    63,    63,    64,    67,    68,    71,    72,    75,    76,
-      77,    78,    79,    82,    83,    86,    89,    94,    95
+       0,    63,    63,    64,    67,    71,    77,    78,    81,    82,
+      83,    84,    85,    88,    89,    92,    95,   100,   101
 };
 #endif
 
@@ -1123,88 +1123,94 @@ yyreduce:
 
   case 4: /* conf: TOKEN_CONFIG exprs ';'  */
 #line 67 "../src/codegen/syntax_parser.ypp"
-                         { (yyval.conf) = stx.make_conf_expr((yyvsp[-2].str), (yyvsp[-1].exprs)); }
-#line 1128 "src/codegen/syntax_parser.cc"
+                         {
+    (yyval.conf) = stx.make_conf_expr((yyvsp[-2].str), (yyvsp[-1].exprs));
+    if (stx.validate_expr_conf((yyval.conf)) == Ret::FAIL) { YYABORT; }
+}
+#line 1131 "src/codegen/syntax_parser.cc"
     break;
 
   case 5: /* conf: TOKEN_CONFIG bool ';'  */
-#line 68 "../src/codegen/syntax_parser.ypp"
-                         { (yyval.conf) = stx.make_conf_bool((yyvsp[-2].str), (yyvsp[-1].bln)); }
-#line 1134 "src/codegen/syntax_parser.cc"
-    break;
-
-  case 6: /* exprs: %empty  */
 #line 71 "../src/codegen/syntax_parser.ypp"
-             { (yyval.exprs) = stx.new_expr_list(); }
+                        {
+    (yyval.conf) = stx.make_conf_bool((yyvsp[-2].str), (yyvsp[-1].bln));
+    if (stx.validate_bool_conf((yyval.conf)) == Ret::FAIL) { YYABORT; }
+}
 #line 1140 "src/codegen/syntax_parser.cc"
     break;
 
-  case 7: /* exprs: expr exprs  */
-#line 72 "../src/codegen/syntax_parser.ypp"
-             { prepend((yyvsp[0].exprs), (yyvsp[-1].expr)); (yyval.exprs) = (yyvsp[0].exprs); }
+  case 6: /* exprs: %empty  */
+#line 77 "../src/codegen/syntax_parser.ypp"
+             { (yyval.exprs) = stx.new_expr_list(); }
 #line 1146 "src/codegen/syntax_parser.cc"
     break;
 
-  case 8: /* expr: TOKEN_STRING  */
-#line 75 "../src/codegen/syntax_parser.ypp"
-                                  { (yyval.expr) = stx.make_str((yyvsp[0].str)); }
+  case 7: /* exprs: expr exprs  */
+#line 78 "../src/codegen/syntax_parser.ypp"
+             { prepend((yyvsp[0].exprs), (yyvsp[-1].expr)); (yyval.exprs) = (yyvsp[0].exprs); }
 #line 1152 "src/codegen/syntax_parser.cc"
     break;
 
-  case 9: /* expr: TOKEN_NAME  */
-#line 76 "../src/codegen/syntax_parser.ypp"
-                                  { (yyval.expr) = stx.make_var((yyvsp[0].str), -1); }
+  case 8: /* expr: TOKEN_STRING  */
+#line 81 "../src/codegen/syntax_parser.ypp"
+                                  { (yyval.expr) = stx.make_str((yyvsp[0].str)); }
 #line 1158 "src/codegen/syntax_parser.cc"
     break;
 
-  case 10: /* expr: TOKEN_NAME '{' TOKEN_NUMBER '}'  */
-#line 77 "../src/codegen/syntax_parser.ypp"
-                                  { (yyval.expr) = stx.make_var((yyvsp[-3].str), (yyvsp[-1].num)); }
+  case 9: /* expr: TOKEN_NAME  */
+#line 82 "../src/codegen/syntax_parser.ypp"
+                                  { (yyval.expr) = stx.make_var((yyvsp[0].str), -1); }
 #line 1164 "src/codegen/syntax_parser.cc"
     break;
 
-  case 13: /* cond_expr: '(' TOKEN_NAME '?' exprs ')'  */
-#line 82 "../src/codegen/syntax_parser.ypp"
-                                         { (yyval.expr) = stx.make_cond((yyvsp[-3].str), (yyvsp[-1].exprs), nullptr); }
+  case 10: /* expr: TOKEN_NAME '{' TOKEN_NUMBER '}'  */
+#line 83 "../src/codegen/syntax_parser.ypp"
+                                  { (yyval.expr) = stx.make_var((yyvsp[-3].str), (yyvsp[-1].num)); }
 #line 1170 "src/codegen/syntax_parser.cc"
     break;
 
-  case 14: /* cond_expr: '(' TOKEN_NAME '?' exprs ':' exprs ')'  */
-#line 83 "../src/codegen/syntax_parser.ypp"
-                                         { (yyval.expr) = stx.make_cond((yyvsp[-5].str), (yyvsp[-3].exprs), (yyvsp[-1].exprs)); }
+  case 13: /* cond_expr: '(' TOKEN_NAME '?' exprs ')'  */
+#line 88 "../src/codegen/syntax_parser.ypp"
+                                         { (yyval.expr) = stx.make_cond((yyvsp[-3].str), (yyvsp[-1].exprs), nullptr); }
 #line 1176 "src/codegen/syntax_parser.cc"
     break;
 
+  case 14: /* cond_expr: '(' TOKEN_NAME '?' exprs ':' exprs ')'  */
+#line 89 "../src/codegen/syntax_parser.ypp"
+                                         { (yyval.expr) = stx.make_cond((yyvsp[-5].str), (yyvsp[-3].exprs), (yyvsp[-1].exprs)); }
+#line 1182 "src/codegen/syntax_parser.cc"
+    break;
+
   case 15: /* list_expr: '[' TOKEN_NAME ':' exprs ']'  */
-#line 86 "../src/codegen/syntax_parser.ypp"
+#line 92 "../src/codegen/syntax_parser.ypp"
                                {
     (yyval.expr) = stx.make_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].exprs));
 }
-#line 1184 "src/codegen/syntax_parser.cc"
+#line 1190 "src/codegen/syntax_parser.cc"
     break;
 
   case 16: /* list_expr: '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' exprs ']'  */
-#line 89 "../src/codegen/syntax_parser.ypp"
+#line 95 "../src/codegen/syntax_parser.ypp"
                                                                      {
     (yyval.expr) = stx.make_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].exprs));
 }
-#line 1192 "src/codegen/syntax_parser.cc"
-    break;
-
-  case 17: /* bool: TOKEN_NUMBER  */
-#line 94 "../src/codegen/syntax_parser.ypp"
-                                       { (yyval.bln) = stx.make_bool_num((yyvsp[0].num)); }
 #line 1198 "src/codegen/syntax_parser.cc"
     break;
 
-  case 18: /* bool: '(' TOKEN_NAME '?' bool ':' bool ')'  */
-#line 95 "../src/codegen/syntax_parser.ypp"
-                                       { (yyval.bln) = stx.make_bool_cond((yyvsp[-5].str), (yyvsp[-3].bln), (yyvsp[-1].bln)); }
+  case 17: /* bool: TOKEN_NUMBER  */
+#line 100 "../src/codegen/syntax_parser.ypp"
+                                       { (yyval.bln) = stx.make_bool_num((yyvsp[0].num)); }
 #line 1204 "src/codegen/syntax_parser.cc"
     break;
 
+  case 18: /* bool: '(' TOKEN_NAME '?' bool ':' bool ')'  */
+#line 101 "../src/codegen/syntax_parser.ypp"
+                                       { (yyval.bln) = stx.make_bool_cond((yyvsp[-5].str), (yyvsp[-3].bln), (yyvsp[-1].bln)); }
+#line 1210 "src/codegen/syntax_parser.cc"
+    break;
 
-#line 1208 "src/codegen/syntax_parser.cc"
+
+#line 1214 "src/codegen/syntax_parser.cc"
 
       default: break;
     }
@@ -1397,7 +1403,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 97 "../src/codegen/syntax_parser.ypp"
+#line 103 "../src/codegen/syntax_parser.ypp"
 
 
 extern "C" {

@@ -64,8 +64,14 @@ confs
 | conf confs { stx.confs[$1->name] = $1; };
 
 conf
-: TOKEN_CONFIG exprs ';' { $$ = stx.make_conf_expr($1, $2); }
-| TOKEN_CONFIG bool  ';' { $$ = stx.make_conf_bool($1, $2); };
+: TOKEN_CONFIG exprs ';' {
+    $$ = stx.make_conf_expr($1, $2);
+    if (stx.validate_expr_conf($$) == Ret::FAIL) { YYABORT; }
+}
+| TOKEN_CONFIG bool ';' {
+    $$ = stx.make_conf_bool($1, $2);
+    if (stx.validate_bool_conf($$) == Ret::FAIL) { YYABORT; }
+};
 
 exprs
 : %empty     { $$ = stx.new_expr_list(); }
