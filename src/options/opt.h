@@ -42,30 +42,30 @@ class Input;
 #endif
 
 #define RE2C_CONSTOPTS \
-    CONSTOPT1(Target,   target, Target::CODE) \
-    CONSTOPT(Lang,      lang, RE2C_LANG) \
-    CONSTOPT(bool,      date, true) \
-    CONSTOPT(bool,      version, true) \
-    CONSTOPT(bool,      start_conditions, false) \
-    CONSTOPT(bool,      storable_state, false) \
-    CONSTOPT(bool,      flex_syntax, false) \
-    CONSTOPT(bool,      verbose, false) \
+    CONSTOPT1(Target, target, Target::CODE) \
+    CONSTOPT(Lang, lang, RE2C_LANG) \
+    CONSTOPT(bool, date, true) \
+    CONSTOPT(bool, version, true) \
+    CONSTOPT(bool, start_conditions, false) \
+    CONSTOPT(bool, storable_state, false) \
+    CONSTOPT(bool, flex_syntax, false) \
+    CONSTOPT(bool, verbose, false) \
     CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
-    CONSTOPT(bool,      line_dirs, true) \
+    CONSTOPT(bool, line_dirs, true) \
     /* files */ \
-    CONSTOPT(std::string,              source_file, "") \
-    CONSTOPT(std::string,              output_file, "") \
-    CONSTOPT(std::string,              dep_file, "") \
-    CONSTOPT(std::string,              syntax_file, "") \
+    CONSTOPT(std::string, source_file, "") \
+    CONSTOPT(std::string, output_file, "") \
+    CONSTOPT(std::string, dep_file, "") \
+    CONSTOPT(std::string, syntax_file, "") \
     CONSTOPT(std::vector<std::string>, include_paths, std::vector<std::string>()) \
     /* internals */ \
-    CONSTOPT(Minimization,   minimization, Minimization::MOORE) \
+    CONSTOPT(Minimization, minimization, Minimization::MOORE) \
     CONSTOPT(PosixPrectable, posix_prectable, PosixPrectable::COMPLEX) \
-    CONSTOPT(FixedTags,      fixed_tags, FixedTags::ALL) \
-    CONSTOPT(bool,           optimize_tags, true) \
-    CONSTOPT(bool,           nested_negative_tags, true) \
-    CONSTOPT(bool,           eager_skip, false) \
-    CONSTOPT(bool,           loop_switch, false) \
+    CONSTOPT(FixedTags, fixed_tags, FixedTags::ALL) \
+    CONSTOPT(bool, optimize_tags, true) \
+    CONSTOPT(bool, nested_negative_tags, true) \
+    CONSTOPT(bool, eager_skip, false) \
+    CONSTOPT(bool, loop_switch, false) \
     /* debug */ \
     CONSTOPT(bool, dump_nfa, false) \
     CONSTOPT(bool, dump_dfa_raw, false) \
@@ -83,13 +83,13 @@ class Input;
     /* header file */ \
     MUTOPT1(std::string, header_file, "") \
     /* regular expressions */ \
-    MUTOPT(Enc,         encoding, Enc()) \
-    MUTOPT(bool,        case_insensitive, false) \
-    MUTOPT(bool,        case_inverted, false) \
-    MUTOPT(EmptyClass,  empty_class, EmptyClass::MATCH_EMPTY) \
+    MUTOPT(Enc,  encoding, Enc()) \
+    MUTOPT(bool, case_insensitive, false) \
+    MUTOPT(bool, case_inverted, false) \
+    MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
     /* input API */ \
-    MUTOPT(Api,         api, Api::DEFAULT) \
-    MUTOPT(ApiStyle,    api_style, ApiStyle::FUNCTIONS) \
+    MUTOPT(Api, api, Api::DEFAULT) \
+    MUTOPT(ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
     MUTOPT(std::string, api_char_type, "YYCTYPE") \
     MUTOPT(std::string, api_cursor, "YYCURSOR") \
@@ -126,28 +126,28 @@ class Input;
     MUTOPT(std::string, var_cond_table, "yyctable") \
     MUTOPT(std::string, var_state, "yystate") \
     /* code generation */ \
-    MUTOPT(bool,        bitmaps, false) \
-    MUTOPT(bool,        bitmaps_hex, false) \
-    MUTOPT(bool,        case_ranges, false) \
-    MUTOPT(bool,        cgoto, false) \
-    MUTOPT(uint32_t,    cgoto_threshold, 9) \
-    MUTOPT(bool,        nested_ifs, false) \
-    MUTOPT(bool,        unsafe, true) \
+    MUTOPT(bool, bitmaps, false) \
+    MUTOPT(bool, bitmaps_hex, false) \
+    MUTOPT(bool, case_ranges, false) \
+    MUTOPT(bool, cgoto, false) \
+    MUTOPT(uint32_t, cgoto_threshold, 9) \
+    MUTOPT(bool, nested_ifs, false) \
+    MUTOPT(bool, unsafe, true) \
     /* YYFILL */ \
-    MUTOPT(uint32_t,    fill_eof, NOEOF) \
-    MUTOPT(uint32_t,    fill_sentinel, NOEOF) \
-    MUTOPT(bool,        fill_enable, true) \
-    MUTOPT(bool,        fill_check, true) \
+    MUTOPT(uint32_t, fill_eof, NOEOF) \
+    MUTOPT(uint32_t, fill_sentinel, NOEOF) \
+    MUTOPT(bool, fill_enable, true) \
+    MUTOPT(bool, fill_check, true) \
     MUTOPT(std::string, fill_param, RE2C_SIGIL) \
-    MUTOPT(bool,        fill_param_enable, true) \
-    MUTOPT(bool,        fill_naked, false) \
+    MUTOPT(bool, fill_param_enable, true) \
+    MUTOPT(bool, fill_naked, false) \
     /* yych */ \
-    MUTOPT(bool,        char_emit, true) \
-    MUTOPT(bool,        char_conv, false) \
+    MUTOPT(bool, char_emit, true) \
+    MUTOPT(bool, char_conv, false) \
     /* conditions */ \
-    MUTOPT(bool,        cond_get_naked, false) \
+    MUTOPT(bool, cond_get_naked, false) \
     MUTOPT(std::string, cond_set_param, RE2C_SIGIL ) \
-    MUTOPT(bool,        cond_set_naked, false ) \
+    MUTOPT(bool, cond_set_naked, false ) \
     MUTOPT(std::string, cond_label_prefix, "yyc_") \
     MUTOPT(std::string, cond_enum_prefix, "yyc") \
     MUTOPT(std::string, cond_div, "/* *********************************** */") \
@@ -155,32 +155,32 @@ class Input;
     MUTOPT(std::string, cond_goto, "goto " RE2C_SIGIL ";") \
     MUTOPT(std::string, cond_goto_param, RE2C_SIGIL) \
     /* states */ \
-    MUTOPT(bool,        state_get_naked, false) \
+    MUTOPT(bool, state_get_naked, false) \
     MUTOPT(std::string, state_set_param, RE2C_SIGIL) \
-    MUTOPT(bool,        state_set_naked, false) \
-    MUTOPT(bool,        state_abort, false) \
-    MUTOPT(bool,        state_next, false) \
+    MUTOPT(bool, state_set_naked, false) \
+    MUTOPT(bool, state_abort, false) \
+    MUTOPT(bool, state_next, false) \
     /* tags */ \
-    MUTOPT(bool,        tags, false) \
+    MUTOPT(bool, tags, false) \
     MUTOPT(std::string, tags_expression, RE2C_SIGIL) \
-    MUTOPT(bool,        tags_automatic, false) \
-    MUTOPT(bool,        tags_history, false) \
-    MUTOPT(bool,        tags_posix_syntax, false) \
-    MUTOPT(bool,        tags_posix_semantics, false) \
+    MUTOPT(bool, tags_automatic, false) \
+    MUTOPT(bool, tags_history, false) \
+    MUTOPT(bool, tags_posix_syntax, false) \
+    MUTOPT(bool, tags_posix_semantics, false) \
     MUTOPT(std::string, tags_prefix, "yyt") \
-    MUTOPT(bool,        invert_captures, false) \
+    MUTOPT(bool, invert_captures, false) \
     /* labels */ \
     MUTOPT(std::string, label_fill, "yyFillLabel") \
     MUTOPT(std::string, label_loop, "") \
     MUTOPT(std::string, label_next, "yyNext") \
     MUTOPT(std::string, label_prefix, "yy") \
     MUTOPT(std::string, label_start, "") \
-    MUTOPT(bool,        label_start_force, false) \
+    MUTOPT(bool, label_start_force, false) \
     /* formatting */ \
-    MUTOPT(uint32_t,    indent_top, 0) \
+    MUTOPT(uint32_t, indent_top, 0) \
     MUTOPT(std::string, indent_str, "\t") \
     /* debug */ \
-    MUTOPT(bool,        debug, false) \
+    MUTOPT(bool, debug, false) \
     /* end */
 
 // Constant options.
