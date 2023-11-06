@@ -183,6 +183,22 @@ class Input;
     MUTOPT(bool, debug, false) \
     /* end */
 
+// conditionals in syntax files
+#define RE2C_STX_CONDS \
+    STX_COND("api_pointers", opts->api == Api::DEFAULT) \
+    STX_COND("api_generic", opts->api == Api::CUSTOM) \
+    STX_COND("api_style_functions", opts->api_style == ApiStyle::FUNCTIONS) \
+    STX_COND("api_style_freeform", opts->api_style == ApiStyle::FREEFORM) \
+    STX_COND("ebcdic", opts->encoding.type() == Enc::Type::EBCDIC) \
+    STX_COND("loop_switch", opts->loop_switch) \
+    STX_COND("date", opts->date) \
+    STX_COND("version", opts->version)
+
+// variables in syntax files
+#define RE2C_STX_VARS \
+    STX_VAR("nl", "\n") \
+    STX_VAR("indent", opts->indent_str)
+
 // Constant options.
 struct conopt_t {
 #define CONSTOPT1 CONSTOPT

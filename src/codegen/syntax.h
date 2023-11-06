@@ -2,6 +2,7 @@
 #define _RE2C_CODEGEN_SYNTAX_
 
 #include <stdint.h>
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
@@ -11,6 +12,7 @@
 #include "src/constants.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
 #include "src/util/containers.h"
@@ -81,20 +83,41 @@ struct StxConf {
 using confs_t = std::unordered_map<std::string, StxConf*>;
 
 class Stx {
-    using bool_confs_t = std::unordered_set<std::string>;
-    using conf2vars_t = std::unordered_map<std::string, std::vector<std::string>>;
+    struct allowed_conf_t {
+        std::vector<std::string> vars;
+        std::vector<std::string> list_vars;
+        std::vector<std::string> cond_vars;
+
+        allowed_conf_t(): vars(), list_vars(), cond_vars() {}
+        allowed_conf_t(
+            const std::vector<std::string>& vars,
+            const std::vector<std::string>& list_vars,
+            const std::vector<std::string>& cond_vars)
+                : vars(vars), list_vars(list_vars), cond_vars(cond_vars) {}
+    };
+
+    using allowed_confs_t = std::unordered_map<std::string, allowed_conf_t>;
+    using selector_t = std::function<bool(const opt_t*)>;
+    using allowed_conds_t = std::unordered_map<std::string, selector_t>;
+    using allowed_vars_t = std::unordered_set<std::string>;
     using stack1_t = std::vector<std::pair<const StxBool*, uint8_t>>;
     using stack2_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
 
     OutAllocator& alc;
-    bool_confs_t bool_confs;
-    conf2vars_t conf2vars;
+    allowed_confs_t allowed_confs;
+    allowed_conds_t allowed_conds;
+    allowed_vars_t allowed_vars;
     stack1_t stack1;
     stack2_t stack2;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxBool* make_bool(StxBoolType type);
     StxExpr* make_expr(StxExprType type);
+
+    Ret check_conf(const char* conf) const;
+    Ret check_cond(const char* conf, const char* cond) const;
+    Ret check_var(const char* conf, const char* var) const;
+    Ret check_list_var(const char* conf, const char* var) const;
 
   public:
     confs_t confs;
@@ -142,16 +165,6 @@ class StxFile {
 
     FORBID_COPY(StxFile);
 };
-
-inline Stx::Stx(OutAllocator& alc)
-        : alc(alc)
-        , bool_confs()
-        , conf2vars()
-        , stack1()
-        , stack2()
-        , confs() {
-    bool_confs.insert("ebcdic");
-}
 
 inline StxExprList* Stx::new_expr_list() {
     return new_list<StxExpr, OutAllocator>(alc);
