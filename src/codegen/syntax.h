@@ -22,11 +22,6 @@ namespace re2c {
 
 struct StxExpr;
 
-struct StxVar {
-    const char* name;
-    int32_t index; // nonnegative for list elements, -1 for standalone variables
-};
-
 struct StxCond {
     const char* conf; // condition is based on the value of this config
     StxExprList* then_expr;
@@ -46,7 +41,7 @@ struct StxExpr {
     StxExprType type;
     union {
         const char* str;
-        StxVar var;
+        const char* var;
         StxCond cond;
         StxList list;
     };
@@ -109,6 +104,7 @@ class Stx {
     allowed_vars_t allowed_vars;
     stack1_t stack1;
     stack2_t stack2;
+    std::vector<const StxExpr*> list_stack;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxBool* make_bool(StxBoolType type);
@@ -117,7 +113,6 @@ class Stx {
     Ret check_conf(const char* conf) const;
     Ret check_cond(const char* conf, const char* cond) const;
     Ret check_var(const char* conf, const char* var) const;
-    Ret check_list_var(const char* conf, const char* var) const;
 
   public:
     confs_t confs;
@@ -131,7 +126,7 @@ class Stx {
     StxBool* make_bool_num(int32_t num);
     StxBool* make_bool_cond(const char* conf, StxBool* then_bool, StxBool* else_bool);
     StxExpr* make_str(const char* str);
-    StxExpr* make_var(const char* name, int32_t index);
+    StxExpr* make_var(const char* name);
     StxExpr* make_cond(const char* conf, StxExprList* expr_then, StxExprList* expr_else);
     StxExpr* make_list(const char* var, int32_t lbound, int32_t rbound, StxExprList* expr);
 
@@ -222,10 +217,9 @@ inline StxExpr* Stx::make_str(const char* str) {
     return x;
 }
 
-inline StxExpr* Stx::make_var(const char* name, int32_t index) {
+inline StxExpr* Stx::make_var(const char* var) {
     StxExpr* x = make_expr(StxExprType::VAR);
-    x->var.name = name;
-    x->var.index = index;
+    x->var = var;
     return x;
 }
 

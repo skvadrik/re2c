@@ -11,6 +11,7 @@ Stx::Stx(OutAllocator& alc)
         , allowed_vars()
         , stack1()
         , stack2()
+        , list_stack()
         , confs() {
     allowed_confs["api"] = {
         {"pointers", "generic"}, {}, {}
@@ -132,20 +133,20 @@ Ret Stx::check_var(const char* conf, const char* var) const {
     // is this a known configuration-specific variable?
     auto i = allowed_confs.find(conf);
     CHECK(i != allowed_confs.end());
-    const std::vector<std::string>& vars = i->second.vars;
-    if (std::find(vars.begin(), vars.end(), var) != vars.end()) return Ret::OK;
+
+    // check non-list variables first
+    const std::vector<std::string>& v = i->second.vars;
+    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
+
+    // this may be a list var; in that case it must be on the list stack
+    const std::vector<std::string>& lv = i->second.list_vars;
+    for (const StxExpr* x : list_stack) {
+        if (strcmp(var, x->list.var) == 0) {
+            if (std::find(lv.begin(), lv.end(), var) != lv.end()) return Ret::OK;
+        }
+    }
 
     RET_FAIL(error("unknown variable '%s' in configuration '%s'", var, conf));
-}
-
-Ret Stx::check_list_var(const char* conf, const char* var) const {
-    // is this a known configuration-specific list variable?
-    auto i = allowed_confs.find(conf);
-    CHECK(i != allowed_confs.end());
-    const std::vector<std::string>& vars = i->second.list_vars;
-    if (std::find(vars.begin(), vars.end(), var) != vars.end()) return Ret::OK;
-
-    RET_FAIL(error("unknown list variable '%s' in configuration '%s'", var, conf));
 }
 
 // validate that all option names used in the given boolean configuration do exist
@@ -186,6 +187,7 @@ Ret Stx::validate_expr_conf(const StxConf* conf) {
     CHECK(conf->type == StxConfType::EXPR);
     CHECK_RET(check_conf(conf->name));
 
+    list_stack.clear();
     stack2_t& stack = stack2;
     stack.clear();
     for (const StxExpr* e = conf->expr->head; e != nullptr; e = e->next) {
@@ -202,7 +204,7 @@ Ret Stx::validate_expr_conf(const StxConf* conf) {
             // no option names to check here
             break;
         case StxExprType::VAR:
-            CHECK_RET(check_var(conf->name, x->var.name));
+            CHECK_RET(check_var(conf->name, x->var));
             break;
         case StxExprType::COND:
             if (n == 0) { // recurse into branches
@@ -221,12 +223,14 @@ Ret Stx::validate_expr_conf(const StxConf* conf) {
             break;
         case StxExprType::LIST:
             if (n == 0) { // recurse into list body
+                list_stack.push_back(x);
+                CHECK_RET(check_var(conf->name, x->list.var));
                 stack.push_back({x, 1});
                 for (const StxExpr* e = x->list.expr->head; e != nullptr; e = e->next) {
                     stack.push_back({e, 0});
                 }
             } else { // check variable name and return
-                CHECK_RET(check_list_var(conf->name, x->list.var));
+                list_stack.pop_back();
             }
             break;
         }

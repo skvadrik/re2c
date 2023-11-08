@@ -78,9 +78,8 @@ exprs
 | expr exprs { prepend($2, $1); $$ = $2; };
 
 expr
-: TOKEN_STRING                    { $$ = stx.make_str($1); }
-| TOKEN_NAME                      { $$ = stx.make_var($1, -1); }
-| TOKEN_NAME '{' TOKEN_NUMBER '}' { $$ = stx.make_var($1, $3); }
+: TOKEN_STRING { $$ = stx.make_str($1); }
+| TOKEN_NAME   { $$ = stx.make_var($1); }
 | cond_expr
 | list_expr;
 
@@ -91,6 +90,9 @@ cond_expr
 list_expr
 : '[' TOKEN_NAME ':' exprs ']' {
     $$ = stx.make_list($2, 0, -1, $4);
+}
+| '[' TOKEN_NAME '{' TOKEN_NUMBER '}' ':' exprs ']' {
+    $$ = stx.make_list($2, $4, $4, $7);
 }
 | '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' exprs ']' {
     $$ = stx.make_list($2, $4, $6, $9);
