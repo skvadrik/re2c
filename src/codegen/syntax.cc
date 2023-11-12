@@ -9,9 +9,9 @@ Stx::Stx(OutAllocator& alc)
         , allowed_confs()
         , allowed_conds()
         , allowed_vars()
-        , stack1()
-        , stack2()
-        , list_stack()
+        , stack_expr()
+        , stack_code()
+        , stack_code_list()
         , confs() {
     allowed_confs["api"] = {
         {"pointers", "generic"}, {}, {}
@@ -140,7 +140,7 @@ Ret Stx::check_var(const char* conf, const char* var) const {
 
     // this may be a list var; in that case it must be on the list stack
     const std::vector<std::string>& lv = i->second.list_vars;
-    for (const StxExpr* x : list_stack) {
+    for (const StxCode* x : stack_code_list) {
         if (strcmp(var, x->list.var) == 0) {
             if (std::find(lv.begin(), lv.end(), var) != lv.end()) return Ret::OK;
         }
@@ -149,31 +149,31 @@ Ret Stx::check_var(const char* conf, const char* var) const {
     RET_FAIL(error("unknown variable '%s' in configuration '%s'", var, conf));
 }
 
-// validate that all option names used in the given boolean configuration do exist
-Ret Stx::validate_bool_conf(const StxConf* conf) {
-    CHECK(conf->type == StxConfType::BOOL);
+// validate that all option names used in the given expression do exist
+Ret Stx::validate_conf_expr(const StxConf* conf) {
+    CHECK(conf->type == StxConfType::EXPR);
     CHECK_RET(check_conf(conf->name));
 
-    stack1_t& stack = stack1;
+    stack_expr_t& stack = stack_expr;
     stack.clear();
-    stack.push_back({conf->bln, 0});
+    stack.push_back({conf->expr, 0});
 
     while (!stack.empty()) {
-        const StxBool* b = stack.back().first;
+        const StxExpr* e = stack.back().first;
         uint8_t n = stack.back().second;
         stack.pop_back();
 
-        switch (b->type) {
-        case StxBoolType::NUM:
-            // no option names to check here
+        switch (e->type) {
+        case StxExprType::NAME:
+            CHECK_RET(check_var(conf->name, e->name));
             break;
-        case StxBoolType::COND:
+        case StxExprType::COND:
             if (n == 0) { // recurse into branches
-                stack.push_back({b, 1});
-                stack.push_back({b->cond.then_bool, 0});
-                stack.push_back({b->cond.else_bool, 0});
+                stack.push_back({e, 1});
+                stack.push_back({e->cond.then_expr, 0});
+                stack.push_back({e->cond.else_expr, 0});
             } else { // check conditional name and return
-                CHECK_RET(check_cond(conf->name, b->cond.conf));
+                CHECK_RET(check_cond(conf->name, e->cond.conf));
             }
             break;
         }
@@ -182,55 +182,67 @@ Ret Stx::validate_bool_conf(const StxConf* conf) {
     return Ret::OK;
 }
 
-// validate that all option and variable names used in the given expression do exist
-Ret Stx::validate_expr_conf(const StxConf* conf) {
-    CHECK(conf->type == StxConfType::EXPR);
+// validate that all option names used in the given list do exist
+Ret Stx::validate_conf_list(const StxConf* conf) {
+    CHECK(conf->type == StxConfType::LIST);
     CHECK_RET(check_conf(conf->name));
 
-    list_stack.clear();
-    stack2_t& stack = stack2;
+    for (const StxName* x = conf->list->head; x != nullptr; x = x->next) {
+        CHECK_RET(check_var(conf->name, x->name));
+    }
+
+    return Ret::OK;
+}
+
+// validate that all option and variable names used in the given code do exist
+Ret Stx::validate_conf_code(const StxConf* conf) {
+    CHECK(conf->type == StxConfType::CODE);
+    CHECK_RET(check_conf(conf->name));
+
+    stack_code_list.clear();
+    stack_code_t& stack = stack_code;
     stack.clear();
-    for (const StxExpr* e = conf->expr->head; e != nullptr; e = e->next) {
-        stack.push_back({e, 0});
+    for (const StxCode* x = conf->code->head; x != nullptr; x = x->next) {
+        stack.push_back({x, 0});
     }
 
     while (!stack.empty()) {
-        const StxExpr* x = stack.back().first;
+        const StxCode* x = stack.back().first;
         uint8_t n = stack.back().second;
         stack.pop_back();
 
         switch (x->type) {
-        case StxExprType::STR:
+        case StxCodeType::STR:
             // no option names to check here
             break;
-        case StxExprType::VAR:
+        case StxCodeType::VAR:
             CHECK_RET(check_var(conf->name, x->var));
             break;
-        case StxExprType::COND:
+        case StxCodeType::COND:
             if (n == 0) { // recurse into branches
                 stack.push_back({x, 1});
-                for (const StxExpr* e = x->cond.then_expr->head; e != nullptr; e = e->next) {
-                    stack.push_back({e, 0});
+                for (const StxCode* y = x->cond.then_code->head; y != nullptr; y = y->next) {
+                    stack.push_back({y, 0});
                 }
-                if (x->cond.else_expr != nullptr) {
-                    for (const StxExpr* e = x->cond.else_expr->head; e != nullptr; e = e->next) {
-                        stack.push_back({e, 0});
+                if (x->cond.else_code != nullptr) {
+                    for (const StxCode* y = x->cond.else_code->head; y != nullptr; y = y->next) {
+                        stack.push_back({y, 0});
                     }
                 }
             } else { // check conditional name and return
                 CHECK_RET(check_cond(conf->name, x->cond.conf));
             }
             break;
-        case StxExprType::LIST:
+        case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
-                list_stack.push_back(x);
+                stack_code_list.push_back(x);
                 CHECK_RET(check_var(conf->name, x->list.var));
                 stack.push_back({x, 1});
-                for (const StxExpr* e = x->list.expr->head; e != nullptr; e = e->next) {
-                    stack.push_back({e, 0});
+                for (const StxCode* y = x->list.code->head; y != nullptr; y = y->next) {
+                    stack.push_back({y, 0});
                 }
             } else { // check variable name and return
-                list_stack.pop_back();
+                stack_code_list.pop_back();
             }
             break;
         }

@@ -20,58 +20,62 @@
 
 namespace re2c {
 
-struct StxExpr;
+struct StxCode;
 
-struct StxCond {
+struct StxCodeCond {
     const char* conf; // condition is based on the value of this config
-    StxExprList* then_expr;
-    StxExprList* else_expr;
+    StxCodes* then_code;
+    StxCodes* else_code;
 };
 
-struct StxList {
+struct StxCodeList {
     const char* var;
     int32_t lbound;
     int32_t rbound;
-    StxExprList* expr;
+    StxCodes* code;
 };
 
-enum class StxExprType {STR, VAR, COND, LIST};
+enum class StxCodeType {STR, VAR, COND, LIST};
+
+struct StxCode {
+    StxCodeType type;
+    union {
+        const char* str;
+        const char* var;
+        StxCodeCond cond;
+        StxCodeList list;
+    };
+    StxCode* next;
+};
+
+enum class StxExprType {NAME, COND};
 
 struct StxExpr {
     StxExprType type;
     union {
-        const char* str;
-        const char* var;
-        StxCond cond;
-        StxList list;
-    };
-    StxExpr* next;
-};
-
-using StxExprList = list_t<StxExpr>;
-
-enum class StxBoolType {NUM, COND};
-
-struct StxBool {
-    StxBoolType type;
-    union {
-        int32_t num;
+        const char* name;
         struct {
             const char* conf;
-            StxBool* then_bool;
-            StxBool* else_bool;
+            StxExpr* then_expr;
+            StxExpr* else_expr;
         } cond;
     };
 };
 
-enum class StxConfType {BOOL, EXPR};
+struct StxName {
+    const char* name;
+    StxName* next;
+};
+
+enum class StxConfType {LIST, EXPR, CODE};
 
 struct StxConf {
     const char* name;
     StxConfType type;
     union {
-        StxBool* bln;
-        StxExprList* expr;
+        StxList* list;
+        StxExpr* expr;
+        StxCodes* code;
     };
 };
 
@@ -95,19 +99,20 @@ class Stx {
     using selector_t = std::function<bool(const opt_t*)>;
     using allowed_conds_t = std::unordered_map<std::string, selector_t>;
     using allowed_vars_t = std::unordered_set<std::string>;
-    using stack1_t = std::vector<std::pair<const StxBool*, uint8_t>>;
-    using stack2_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
+    using stack_expr_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
+    using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
+    using stack_code_list_t = std::vector<const StxCode*>;
 
     OutAllocator& alc;
     allowed_confs_t allowed_confs;
     allowed_conds_t allowed_conds;
     allowed_vars_t allowed_vars;
-    stack1_t stack1;
-    stack2_t stack2;
-    std::vector<const StxExpr*> list_stack;
+    stack_expr_t stack_expr;
+    stack_code_t stack_code;
+    stack_code_list_t stack_code_list;
 
     StxConf* make_conf(StxConfType type, const char* name);
-    StxBool* make_bool(StxBoolType type);
+    StxCode* make_code(StxCodeType type);
     StxExpr* make_expr(StxExprType type);
 
     Ret check_conf(const char* conf) const;
@@ -120,19 +125,23 @@ class Stx {
     explicit Stx(OutAllocator& alc);
 
     // functions that construct AST when parsing syntax configurations
-    StxExprList* new_expr_list();
-    StxConf* make_conf_bool(const char* name, StxBool* bln);
-    StxConf* make_conf_expr(const char* name, StxExprList* expr);
-    StxBool* make_bool_num(int32_t num);
-    StxBool* make_bool_cond(const char* conf, StxBool* then_bool, StxBool* else_bool);
-    StxExpr* make_str(const char* str);
-    StxExpr* make_var(const char* name);
-    StxExpr* make_cond(const char* conf, StxExprList* expr_then, StxExprList* expr_else);
-    StxExpr* make_list(const char* var, int32_t lbound, int32_t rbound, StxExprList* expr);
+    StxCodes* new_code_list();
+    StxList* new_name_list();
+    StxConf* make_conf_code(const char* name, StxCodes* code);
+    StxConf* make_conf_expr(const char* name, StxExpr* expr);
+    StxConf* make_conf_list(const char* name, StxList* list);
+    StxExpr* make_expr_name(const char* name);
+    StxExpr* make_expr_cond(const char* conf, StxExpr* then_expr, StxExpr* else_expr);
+    StxCode* make_code_str(const char* str);
+    StxCode* make_code_var(const char* name);
+    StxCode* make_code_cond(const char* conf, StxCodes* code_then, StxCodes* code_else);
+    StxCode* make_code_list(const char* var, int32_t lbound, int32_t rbound, StxCodes* code);
+    StxName* make_name(const char* name);
 
     // functions that validate configuration and variable names in the AST
-    Ret validate_bool_conf(const StxConf* conf);
-    Ret validate_expr_conf(const StxConf* conf);
+    Ret validate_conf_list(const StxConf* conf);
+    Ret validate_conf_expr(const StxConf* conf);
+    Ret validate_conf_code(const StxConf* conf);
 };
 
 class StxFile {
@@ -161,8 +170,12 @@ class StxFile {
     FORBID_COPY(StxFile);
 };
 
-inline StxExprList* Stx::new_expr_list() {
-    return new_list<StxExpr, OutAllocator>(alc);
+inline StxCodes* Stx::new_code_list() {
+    return new_list<StxCode, OutAllocator>(alc);
+}
+
+inline StxList* Stx::new_name_list() {
+    return new_list<StxName, OutAllocator>(alc);
 }
 
 inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
@@ -172,58 +185,44 @@ inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
     return x;
 }
 
-inline StxConf* Stx::make_conf_bool(const char* name, StxBool* bln) {
-    StxConf* x = make_conf(StxConfType::BOOL, name);
-    x->bln = bln;
-    return x;
-}
-
-inline StxConf* Stx::make_conf_expr(const char* name, StxExprList* expr) {
+inline StxConf* Stx::make_conf_expr(const char* name, StxExpr* expr) {
     StxConf* x = make_conf(StxConfType::EXPR, name);
     x->expr = expr;
     return x;
 }
 
-inline StxBool* Stx::make_bool(StxBoolType type) {
-    StxBool* x = alc.alloct<StxBool>(1);
-    x->type = type;
+inline StxConf* Stx::make_conf_list(const char* name, StxList* list) {
+    StxConf* x = make_conf(StxConfType::LIST, name);
+    x->list = list;
     return x;
 }
 
-inline StxBool* Stx::make_bool_num(int32_t num) {
-    StxBool* x = make_bool(StxBoolType::NUM);
-    x->num = num;
+inline StxConf* Stx::make_conf_code(const char* name, StxCodes* code) {
+    StxConf* x = make_conf(StxConfType::CODE, name);
+    x->code = code;
     return x;
 }
 
-inline StxBool* Stx::make_bool_cond(const char* conf, StxBool* then_bool, StxBool* else_bool) {
-    StxBool* x = make_bool(StxBoolType::COND);
-    x->cond.conf = conf;
-    x->cond.then_bool = then_bool;
-    x->cond.else_bool = else_bool;
+inline StxName* Stx::make_name(const char* name) {
+    StxName* x = alc.alloct<StxName>(1);
+    x->name = name;
+    x->next = nullptr;
     return x;
 }
 
 inline StxExpr* Stx::make_expr(StxExprType type) {
     StxExpr* x = alc.alloct<StxExpr>(1);
     x->type = type;
-    x->next = nullptr;
     return x;
 }
 
-inline StxExpr* Stx::make_str(const char* str) {
-    StxExpr* x = make_expr(StxExprType::STR);
-    x->str = str;
+inline StxExpr* Stx::make_expr_name(const char* name) {
+    StxExpr* x = make_expr(StxExprType::NAME);
+    x->name = name;
     return x;
 }
 
-inline StxExpr* Stx::make_var(const char* var) {
-    StxExpr* x = make_expr(StxExprType::VAR);
-    x->var = var;
-    return x;
-}
-
-inline StxExpr* Stx::make_cond(const char* conf, StxExprList* then_expr, StxExprList* else_expr) {
+inline StxExpr* Stx::make_expr_cond(const char* conf, StxExpr* then_expr, StxExpr* else_expr) {
     StxExpr* x = make_expr(StxExprType::COND);
     x->cond.conf = conf;
     x->cond.then_expr = then_expr;
@@ -231,12 +230,40 @@ inline StxExpr* Stx::make_cond(const char* conf, StxExprList* then_expr, StxExpr
     return x;
 }
 
-inline StxExpr* Stx::make_list(const char* var, int32_t lbound, int32_t rbound, StxExprList* expr) {
-    StxExpr* x = make_expr(StxExprType::LIST);
+inline StxCode* Stx::make_code(StxCodeType type) {
+    StxCode* x = alc.alloct<StxCode>(1);
+    x->type = type;
+    x->next = nullptr;
+    return x;
+}
+
+inline StxCode* Stx::make_code_str(const char* str) {
+    StxCode* x = make_code(StxCodeType::STR);
+    x->str = str;
+    return x;
+}
+
+inline StxCode* Stx::make_code_var(const char* var) {
+    StxCode* x = make_code(StxCodeType::VAR);
+    x->var = var;
+    return x;
+}
+
+inline StxCode* Stx::make_code_cond(const char* conf, StxCodes* then_code, StxCodes* else_code) {
+    StxCode* x = make_code(StxCodeType::COND);
+    x->cond.conf = conf;
+    x->cond.then_code = then_code;
+    x->cond.else_code = else_code;
+    return x;
+}
+
+inline StxCode* Stx::make_code_list(
+        const char* var, int32_t lbound, int32_t rbound, StxCodes* code) {
+    StxCode* x = make_code(StxCodeType::LIST);
     x->list.var = var;
     x->list.lbound = lbound;
     x->list.rbound = rbound;
-    x->list.expr = expr;
+    x->list.code = code;;
     return x;
 }
 

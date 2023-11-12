@@ -39,17 +39,21 @@ start:
     space+ {
         goto start;
     }
+    "code:" name @p space* "=" {
+        yylval->str = newcstr(tok, p, alc);
+        return STX_CONF_CODE;
+    }
     name @p space* "=" {
         yylval->str = newcstr(tok, p, alc);
-        return TOKEN_CONFIG;
+        return STX_CONF;
     }
     name {
         yylval->str = newcstr(tok, cur, alc);
-        return TOKEN_NAME;
+        return STX_NAME;
     }
     number {
         if (s_to_i32_unsafe(tok, cur, yylval->num)) {
-            return TOKEN_NUMBER;
+            return STX_NUMBER;
         } else {
             msg.error(tok_loc(), "configuration value overflow");
             return YYerror;
@@ -57,9 +61,9 @@ start:
     }
     ["] ([^"\x00\n] | [\\]["])* ["] {
         yylval->str = newcstr(tok + 1, cur - 1, alc);
-        return TOKEN_STRING;
+        return STX_STRING;
     }
-    [=?:;(){}[\]] {
+    [=?:;,(){}[\]] {
         return cur[-1];
     }
     * {

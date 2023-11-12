@@ -4,9 +4,11 @@
 
 namespace re2c {
 struct StxConf;
-struct StxBool;
+struct StxCode;
 struct StxExpr;
-using StxExprList = list_t<StxExpr>;
+struct StxName;
+using StxCodes = list_t<StxCode>;
+using StxList = list_t<StxName>;
 class Stx;
 class StxFile;
 } // namespace re2c
@@ -40,22 +42,25 @@ extern "C" {
     const char* str;
     int32_t num;
     re2c::StxConf* conf;
-    re2c::StxBool* bln;
     re2c::StxExpr* expr;
-    re2c::StxExprList* exprs;
+    re2c::StxList* list;
+    re2c::StxCode* code;
+    re2c::StxCodes* codes;
 };
 
-%token TOKEN_NAME
-%token TOKEN_NUMBER
-%token TOKEN_STRING
-%token TOKEN_CONFIG
+%token STX_NAME
+%token STX_NUMBER
+%token STX_STRING
+%token STX_CONF
+%token STX_CONF_CODE
 
-%type <str>   TOKEN_NAME TOKEN_STRING TOKEN_CONFIG
-%type <num>   TOKEN_NUMBER
-%type <conf>  conf
-%type <expr>  expr cond_expr list_expr
-%type <exprs> exprs
-%type <bln>   bool
+%type <str> STX_NAME STX_STRING STX_CONF STX_CONF_CODE
+%type <num> STX_NUMBER
+%type <conf> conf
+%type <expr> expr
+%type <list> list names
+%type <code> code_cond code_expr code_list
+%type <codes> code_exprs
 
 %%
 
@@ -64,43 +69,67 @@ confs
 | conf confs { stx.confs[$1->name] = $1; };
 
 conf
-: TOKEN_CONFIG exprs ';' {
-    $$ = stx.make_conf_expr($1, $2);
-    if (stx.validate_expr_conf($$) == Ret::FAIL) { YYABORT; }
+: STX_CONF_CODE code_exprs ';' {
+    $$ = stx.make_conf_code($1, $2);
+    if (stx.validate_conf_code($$) == Ret::FAIL) YYABORT;
 }
-| TOKEN_CONFIG bool ';' {
-    $$ = stx.make_conf_bool($1, $2);
-    if (stx.validate_bool_conf($$) == Ret::FAIL) { YYABORT; }
+| STX_CONF list ';' {
+    $$ = stx.make_conf_list($1, $2);
+    if (stx.validate_conf_list($$) == Ret::FAIL) YYABORT;
+}
+| STX_CONF expr ';' {
+    $$ = stx.make_conf_expr($1, $2);
+    if (stx.validate_conf_expr($$) == Ret::FAIL) YYABORT;
 };
 
-exprs
-: %empty     { $$ = stx.new_expr_list(); }
-| expr exprs { prepend($2, $1); $$ = $2; };
+// code expressions (for configurations that start with `code:`)
+
+code_exprs
+: %empty               { $$ = stx.new_code_list(); }
+| code_expr code_exprs { prepend($2, $1); $$ = $2; };
+
+code_expr
+: STX_STRING { $$ = stx.make_code_str($1); }
+| STX_NAME   { $$ = stx.make_code_var($1); }
+| code_cond
+| code_list;
+
+code_cond
+: '(' STX_NAME '?' code_exprs ')' {
+    $$ = stx.make_code_cond($2, $4, nullptr);
+}
+| '(' STX_NAME '?' code_exprs ':' code_exprs ')' {
+    $$ = stx.make_code_cond($2, $4, $6);
+};
+
+code_list
+: '[' STX_NAME ':' code_exprs ']' {
+    $$ = stx.make_code_list($2, 0, -1, $4);
+}
+| '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']' {
+    $$ = stx.make_code_list($2, $4, $4, $7);
+}
+| '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']' {
+    $$ = stx.make_code_list($2, $4, $6, $9);
+};
+
+// generic expressions (lists, conditional expressions, single words)
+
+list: '[' names ']' { $$ = $2; };
+
+names
+: STX_NAME {
+    $$ = stx.new_name_list();
+    prepend($$, stx.make_name($1));
+}
+| STX_NAME ',' names {
+    prepend($3, stx.make_name($1));
+    $$ = $3;
+};
 
 expr
-: TOKEN_STRING { $$ = stx.make_str($1); }
-| TOKEN_NAME   { $$ = stx.make_var($1); }
-| cond_expr
-| list_expr;
-
-cond_expr
-: '(' TOKEN_NAME '?' exprs ')'           { $$ = stx.make_cond($2, $4, nullptr); }
-| '(' TOKEN_NAME '?' exprs ':' exprs ')' { $$ = stx.make_cond($2, $4, $6); };
-
-list_expr
-: '[' TOKEN_NAME ':' exprs ']' {
-    $$ = stx.make_list($2, 0, -1, $4);
-}
-| '[' TOKEN_NAME '{' TOKEN_NUMBER '}' ':' exprs ']' {
-    $$ = stx.make_list($2, $4, $4, $7);
-}
-| '[' TOKEN_NAME '{' TOKEN_NUMBER ':' TOKEN_NUMBER '}' ':' exprs ']' {
-    $$ = stx.make_list($2, $4, $6, $9);
-};
-
-bool
-: TOKEN_NUMBER                         { $$ = stx.make_bool_num($1); }
-| '(' TOKEN_NAME '?' bool ':' bool ')' { $$ = stx.make_bool_cond($2, $4, $6); };
+: STX_NAME                           { $$ = stx.make_expr_name($1); }
+| '(' STX_NAME '?' expr ':' expr ')' { $$ = stx.make_expr_cond($2, $4, $6); };
 
 %%
 

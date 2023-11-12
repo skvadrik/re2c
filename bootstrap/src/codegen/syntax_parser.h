@@ -52,15 +52,17 @@ extern int yydebug;
 
 namespace re2c {
 struct StxConf;
-struct StxBool;
+struct StxCode;
 struct StxExpr;
-using StxExprList = list_t<StxExpr>;
+struct StxName;
+using StxCodes = list_t<StxCode>;
+using StxList = list_t<StxName>;
 class Stx;
 class StxFile;
 } // namespace re2c
 
 
-#line 64 "src/codegen/syntax_parser.h"
+#line 66 "src/codegen/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -71,10 +73,11 @@ class StxFile;
     YYEOF = 0,                     /* "end of file"  */
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
-    TOKEN_NAME = 258,              /* TOKEN_NAME  */
-    TOKEN_NUMBER = 259,            /* TOKEN_NUMBER  */
-    TOKEN_STRING = 260,            /* TOKEN_STRING  */
-    TOKEN_CONFIG = 261             /* TOKEN_CONFIG  */
+    STX_NAME = 258,                /* STX_NAME  */
+    STX_NUMBER = 259,              /* STX_NUMBER  */
+    STX_STRING = 260,              /* STX_STRING  */
+    STX_CONF = 261,                /* STX_CONF  */
+    STX_CONF_CODE = 262            /* STX_CONF_CODE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -83,16 +86,17 @@ class StxFile;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 39 "../src/codegen/syntax_parser.ypp"
+#line 41 "../src/codegen/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
     re2c::StxConf* conf;
-    re2c::StxBool* bln;
     re2c::StxExpr* expr;
-    re2c::StxExprList* exprs;
+    re2c::StxList* list;
+    re2c::StxCode* code;
+    re2c::StxCodes* codes;
 
-#line 96 "src/codegen/syntax_parser.h"
+#line 100 "src/codegen/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
