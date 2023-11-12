@@ -185,12 +185,20 @@ class Input;
 
 // conditionals in syntax files
 #define RE2C_STX_CONDS \
-    STX_COND("api_pointers", opts->api == Api::DEFAULT) \
-    STX_COND("api_generic", opts->api == Api::CUSTOM) \
-    STX_COND("api_style_functions", opts->api_style == ApiStyle::FUNCTIONS) \
-    STX_COND("api_style_freeform", opts->api_style == ApiStyle::FREEFORM) \
-    STX_COND("ebcdic", opts->encoding.type() == Enc::Type::EBCDIC) \
-    STX_COND("loop_switch", opts->loop_switch) \
+    STX_COND("api.pointers", opts->api == Api::DEFAULT) \
+    STX_COND("api.generic", opts->api == Api::CUSTOM) \
+    STX_COND("api_style.functions", opts->api_style == ApiStyle::FUNCTIONS) \
+    STX_COND("api_style.freeform", opts->api_style == ApiStyle::FREEFORM) \
+    STX_COND("encoding.ascii", opts->encoding.type() == Enc::Type::ASCII) \
+    STX_COND("encoding.ebcdic", opts->encoding.type() == Enc::Type::EBCDIC) \
+    STX_COND("encoding.ucs2", opts->encoding.type() == Enc::Type::UCS2) \
+    STX_COND("encoding.utf8", opts->encoding.type() == Enc::Type::UTF8) \
+    STX_COND("encoding.utf16", opts->encoding.type() == Enc::Type::UTF16) \
+    STX_COND("encoding.utf32", opts->encoding.type() == Enc::Type::UTF32) \
+    STX_COND("jump_model.goto_label", !opts->loop_switch) \
+    STX_COND("jump_model.loop_switch", opts->loop_switch) \
+    STX_COND("storable_state", opts->storable_state) \
+    STX_COND("unsafe", opts->unsafe) \
     STX_COND("date", opts->date) \
     STX_COND("version", opts->version)
 

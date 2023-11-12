@@ -9,7 +9,7 @@
     eof = [\x00];
     eol = "\n";
     space = [ \t];
-    name = [a-zA-Z_][a-zA-Z_0-9-]*;
+    name = [a-zA-Z_][a-zA-Z_0-9.-]*;
     number = [-]? [0-9]+;
     comment = "//" [^\x00\n]* eol;
 
@@ -63,7 +63,7 @@ start:
         yylval->str = newcstr(tok + 1, cur - 1, alc);
         return STX_STRING;
     }
-    [=?:;,(){}[\]] {
+    [?:;,(){}[\]] {
         return cur[-1];
     }
     * {

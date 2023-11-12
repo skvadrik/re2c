@@ -33,7 +33,7 @@ start:
 		160, 160, 160, 160, 160, 160, 160, 160, 
 		160, 160, 160, 160, 160, 160, 160, 160, 
 		164, 160, 128, 160, 160, 160, 160, 160, 
-		160, 160, 160, 160, 160, 176, 160, 160, 
+		160, 160, 160, 160, 160, 176, 176, 160, 
 		184, 184, 184, 184, 184, 184, 184, 184, 
 		184, 184, 160, 160, 160, 160, 160, 160, 
 		160, 176, 176, 176, 176, 176, 176, 176, 
@@ -65,55 +65,51 @@ start:
 	if (yybm[0+yych] & 4) {
 		goto yy4;
 	}
-	if (yych <= '=') {
-		if (yych <= '+') {
-			if (yych <= '!') {
+	if (yych <= '>') {
+		if (yych <= ')') {
+			if (yych <= '\n') {
 				if (yych <= 0x00) goto yy1;
 				if (yych <= 0x08) goto yy2;
-				if (yych <= '\n') goto yy5;
-				goto yy2;
+				goto yy5;
 			} else {
-				if (yych <= '"') goto yy6;
+				if (yych == '"') goto yy6;
 				if (yych <= '\'') goto yy2;
-				if (yych <= ')') goto yy7;
-				goto yy2;
+				goto yy7;
 			}
 		} else {
-			if (yych <= '/') {
+			if (yych <= '.') {
+				if (yych <= '+') goto yy2;
 				if (yych <= ',') goto yy7;
 				if (yych <= '-') goto yy8;
-				if (yych <= '.') goto yy2;
-				goto yy9;
+				goto yy2;
 			} else {
+				if (yych <= '/') goto yy9;
 				if (yych <= '9') goto yy10;
-				if (yych == '<') goto yy2;
-				goto yy7;
+				if (yych <= ';') goto yy7;
+				goto yy2;
 			}
 		}
 	} else {
-		if (yych <= '^') {
-			if (yych <= 'Z') {
-				if (yych == '?') goto yy7;
+		if (yych <= '_') {
+			if (yych <= '[') {
+				if (yych <= '?') goto yy7;
 				if (yych <= '@') goto yy2;
-				goto yy11;
+				if (yych <= 'Z') goto yy11;
+				goto yy7;
 			} else {
-				if (yych == '\\') goto yy2;
-				if (yych <= ']') goto yy7;
-				goto yy2;
+				if (yych == ']') goto yy7;
+				if (yych <= '^') goto yy2;
+				goto yy11;
 			}
 		} else {
-			if (yych <= 'c') {
-				if (yych == '`') goto yy2;
-				if (yych <= 'b') goto yy11;
-				goto yy14;
+			if (yych <= 'z') {
+				if (yych <= '`') goto yy2;
+				if (yych == 'c') goto yy14;
+				goto yy11;
 			} else {
-				if (yych <= '{') {
-					if (yych <= 'z') goto yy11;
-					goto yy7;
-				} else {
-					if (yych == '}') goto yy7;
-					goto yy2;
-				}
+				if (yych == '|') goto yy2;
+				if (yych <= '}') goto yy7;
+				goto yy2;
 			}
 		}
 	}
@@ -123,7 +119,7 @@ yy1:
 	{
         return YYEOF;
     }
-#line 127 "src/codegen/syntax_lexer.cc"
+#line 123 "src/codegen/syntax_lexer.cc"
 yy2:
 	++cur;
 yy3:
@@ -132,7 +128,7 @@ yy3:
         msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
         return YYerror;
     }
-#line 136 "src/codegen/syntax_lexer.cc"
+#line 132 "src/codegen/syntax_lexer.cc"
 yy4:
 	yych = *++cur;
 	if (yybm[0+yych] & 4) {
@@ -142,7 +138,7 @@ yy4:
 	{
         goto start;
     }
-#line 146 "src/codegen/syntax_lexer.cc"
+#line 142 "src/codegen/syntax_lexer.cc"
 yy5:
 	++cur;
 #line 34 "../src/codegen/syntax_lexer.re"
@@ -151,7 +147,7 @@ yy5:
         pos = cur;
         goto start;
     }
-#line 155 "src/codegen/syntax_lexer.cc"
+#line 151 "src/codegen/syntax_lexer.cc"
 yy6:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++cur);
@@ -164,7 +160,7 @@ yy7:
 	{
         return cur[-1];
     }
-#line 168 "src/codegen/syntax_lexer.cc"
+#line 164 "src/codegen/syntax_lexer.cc"
 yy8:
 	yych = *++cur;
 	if (yybm[0+yych] & 8) {
@@ -190,7 +186,7 @@ yy10:
             return YYerror;
         }
     }
-#line 194 "src/codegen/syntax_lexer.cc"
+#line 190 "src/codegen/syntax_lexer.cc"
 yy11:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++cur);
@@ -219,7 +215,7 @@ yy13:
         yylval->str = newcstr(tok, cur, alc);
         return STX_NAME;
     }
-#line 223 "src/codegen/syntax_lexer.cc"
+#line 219 "src/codegen/syntax_lexer.cc"
 yy14:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++cur);
@@ -253,7 +249,7 @@ yy19:
         yylval->str = newcstr(tok + 1, cur - 1, alc);
         return STX_STRING;
     }
-#line 257 "src/codegen/syntax_lexer.cc"
+#line 253 "src/codegen/syntax_lexer.cc"
 yy20:
 	yych = *++cur;
 	if (yybm[0+yych] & 32) {
@@ -286,7 +282,7 @@ yy23:
         yylval->str = newcstr(tok, p, alc);
         return STX_CONF;
     }
-#line 290 "src/codegen/syntax_lexer.cc"
+#line 286 "src/codegen/syntax_lexer.cc"
 yy24:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++cur);
@@ -327,8 +323,8 @@ yy27:
 			if (yych <= 0x1F) goto yy17;
 			yyt1 = cur;
 		} else {
-			if (yych == '-') goto yy27;
-			if (yych <= '/') goto yy17;
+			if (yych <= ',') goto yy17;
+			if (yych == '/') goto yy17;
 			goto yy27;
 		}
 	} else {
@@ -367,7 +363,7 @@ yy29:
         yylval->str = newcstr(tok, p, alc);
         return STX_CONF_CODE;
     }
-#line 371 "src/codegen/syntax_lexer.cc"
+#line 367 "src/codegen/syntax_lexer.cc"
 }
 #line 73 "../src/codegen/syntax_lexer.re"
 

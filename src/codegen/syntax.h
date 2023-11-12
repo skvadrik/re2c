@@ -82,20 +82,21 @@ struct StxConf {
 using confs_t = std::unordered_map<std::string, StxConf*>;
 
 class Stx {
-    struct allowed_conf_t {
+    struct code_conf_t {
         std::vector<std::string> vars;
         std::vector<std::string> list_vars;
         std::vector<std::string> cond_vars;
 
-        allowed_conf_t(): vars(), list_vars(), cond_vars() {}
-        allowed_conf_t(
+        code_conf_t(): vars(), list_vars(), cond_vars() {}
+        code_conf_t(
             const std::vector<std::string>& vars,
             const std::vector<std::string>& list_vars,
             const std::vector<std::string>& cond_vars)
                 : vars(vars), list_vars(list_vars), cond_vars(cond_vars) {}
     };
-
-    using allowed_confs_t = std::unordered_map<std::string, allowed_conf_t>;
+    using allowed_code_confs_t = std::unordered_map<std::string, code_conf_t>;
+    using allowed_list_confs_t = std::unordered_map<std::string, std::vector<std::string>>;
+    using allowed_word_confs_t = std::unordered_map<std::string, std::vector<std::string>>;
     using selector_t = std::function<bool(const opt_t*)>;
     using allowed_conds_t = std::unordered_map<std::string, selector_t>;
     using allowed_vars_t = std::unordered_set<std::string>;
@@ -104,7 +105,9 @@ class Stx {
     using stack_code_list_t = std::vector<const StxCode*>;
 
     OutAllocator& alc;
-    allowed_confs_t allowed_confs;
+    allowed_list_confs_t allowed_list_confs;
+    allowed_word_confs_t allowed_word_confs;
+    allowed_code_confs_t allowed_code_confs;
     allowed_conds_t allowed_conds;
     allowed_vars_t allowed_vars;
     stack_expr_t stack_expr;
@@ -115,8 +118,8 @@ class Stx {
     StxCode* make_code(StxCodeType type);
     StxExpr* make_expr(StxExprType type);
 
-    Ret check_conf(const char* conf) const;
-    Ret check_cond(const char* conf, const char* cond) const;
+    Ret check_cond(const char* conf, const char* cond, bool code) const;
+    Ret check_word(const char* conf, const char* word, bool list) const;
     Ret check_var(const char* conf, const char* var) const;
 
   public:
