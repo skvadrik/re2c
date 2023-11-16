@@ -8,8 +8,9 @@
 #include <vector>
 
 #include "src/adfa/adfa.h"
-#include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
+#include "src/codegen/output.h"
+#include "src/codegen/syntax.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
@@ -1400,8 +1401,64 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
+class GenEnum : public OutputCallback {
+    OutAllocator& alc;
+    Scratchbuf& buf;
+    const opt_t* opts;
+    const StartConds& conds;
+    int32_t lbound;
+    int32_t rbound;
+
+  public:
+    CodeList* code;
+
+    GenEnum(OutAllocator& alc, Scratchbuf& buf, const opt_t* opts, const StartConds& conds)
+            : alc(alc), buf(buf), opts(opts), conds(conds), lbound(0), rbound(0), code(nullptr) {
+        code = code_list(alc);
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            buf.str(opts->api_cond_type);
+        } else if (strcmp(var, "elem") == 0) {
+            buf.str(conds[static_cast<uint32_t>(lbound - 1)].name);
+        } else if (strcmp(var, "init") == 0) {
+            buf.u32(conds[static_cast<uint32_t>(lbound - 1)].number);
+        // TODO: handle global variables in a uniform way
+        } else if (strcmp(var, "nl") == 0) {
+            append(code, code_text(alc, buf.flush()));
+        } else if (strcmp(var, "indent") == 0) {
+            buf.str(opts->indent_str);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    void start_list(const char* var, int32_t lb, int32_t rb) override {
+        if (strcmp(var, "elem") == 0) {
+            int32_t sz = static_cast<int32_t>(conds.size());
+            lbound = lb < 0 ? (sz + lb) : lb;
+            rbound = rb < 0 ? (sz + rb) : rb;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "elem") == 0) {
+            return lbound++ <= rbound;
+        } else {
+            UNREACHABLE();
+        }
+        return false;
+    }
+
+    FORBID_COPY(GenEnum);
+};
+
 static void gen_cond_enum(Scratchbuf& buf,
                           OutAllocator& alc,
+                          Stx& stx,
                           Code* code,
                           const opt_t* opts,
                           const StartConds& conds) {
@@ -1409,7 +1466,6 @@ static void gen_cond_enum(Scratchbuf& buf,
 
     if (conds.empty()) return;
     const StartCond* first_cond = &conds.front();
-    const StartCond* last_cond = &conds.back();
 
     if (code->fmt.format) {
         const char* fmt = code->fmt.format;
@@ -1434,59 +1490,12 @@ static void gen_cond_enum(Scratchbuf& buf,
         code->raw.size = buf.stream().str().length();
         code->raw.data = buf.flush();
     } else {
-        const char* start = nullptr, *end = nullptr;
-        CodeList* stmts = code_list(alc);
-        CodeList* block = code_list(alc);
-
-        if (opts->lang == Lang::C) {
-            start = buf.cstr("enum ").str(opts->api_cond_type).cstr(" {").flush();
-            end = "};";
-            for (const StartCond& cond : conds) {
-                buf.str(cond.name);
-                if (opts->loop_switch) {
-                    buf.cstr(" = ").u32(cond.number);
-                }
-                if (&cond != last_cond) { // do not append comma after the last one
-                    buf.cstr(",");
-                }
-                append(block, code_text(alc, buf.flush()));
-            }
-        } else if (opts->lang == Lang::GO) {
-            start = buf.cstr("const (").flush();
-            end = ")";
-            for (const StartCond& cond : conds) {
-                buf.str(cond.name);
-                if (opts->loop_switch) {
-                    buf.cstr(" = ").u32(cond.number);
-                } else if (&cond == first_cond) {
-                    buf.cstr(" = iota");
-                }
-                append(block, code_text(alc, buf.flush()));
-            }
-        } else if (opts->lang == Lang::RUST) {
-            // For Rust generate standalone constants instead of enum to avoid casting to `yystate`
-            // type on each operation. With the loop/switch approach conditions are handled as
-            // regular states anyway, so the enum doesn't make much sense.
-            start = "";
-            end = "";
-            DCHECK(opts->loop_switch);
-            for (const StartCond& c : conds) {
-                buf.cstr("const ").str(c.name).cstr(": ")
-                        .cstr(opts->storable_state ? "isize" : "usize").cstr(" = ").u32(c.number);
-                append(block, code_stmt(alc, buf.flush()));
-            }
-        } else {
-            UNREACHABLE(); // no such language
-        }
-
-        append(stmts, code_text(alc, start));
-        append(stmts, code_block(alc, block, opts->lang == Lang::RUST
-                ? CodeBlock::Kind::RAW : CodeBlock::Kind::INDENTED));
-        append(stmts, code_text(alc, end));
+        GenEnum callback(alc, buf, opts, conds);
+        stx.gen_code(buf.stream(), opts, "code:cond_enum", callback);
 
         code->kind = CodeKind::BLOCK;
         code->block.kind = CodeBlock::Kind::RAW;
-        code->block.stmts = stmts;
+        code->block.stmts = callback.code;
     }
 }
 
@@ -1555,7 +1564,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
         return Ret::OK;
     }
 
-    gen_cond_enum(buf, alc, code, globopts, conds);
+    gen_cond_enum(buf, alc, output.stx, code, globopts, conds);
     return Ret::OK;
 }
 

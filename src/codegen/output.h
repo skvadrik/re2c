@@ -20,6 +20,7 @@ namespace re2c {
 
 // forward decls
 class Msg;
+class Stx;
 struct Adfa;
 struct Opt;
 struct opt_t;
@@ -101,6 +102,9 @@ struct OutputBlock {
 };
 
 struct Output {
+    OutAllocator& allocator;
+    Stx& stx;
+    Msg& msg;
     blocks_t cblocks;  // .c file
     blocks_t hblocks;  // .h file
     blocks_t* pblocks; // selector
@@ -112,16 +116,14 @@ struct Output {
     bool warn_condition_order;
     bool need_header;
     bool done_mtag_defs;
-    Msg& msg;
     std::set<std::string> skeletons;
-    OutAllocator& allocator;
     Scratchbuf scratchbuf;
     OutputBlock* current_block;
 
     // "final" options accumulated for all non-reuse blocks
     const opt_t* total_opts;
 
-    Output(OutAllocator& alc, Msg& msg);
+    Output(OutAllocator& alc, Stx& stx, Msg& msg);
     ~Output();
     OutputBlock& block();
     void set_current_block(OutputBlock* block);
@@ -135,6 +137,19 @@ struct Output {
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     FORBID_COPY(Output);
+};
+
+class OutputCallback {
+  public:
+    virtual void render_var(const char* var) = 0;
+    virtual void start_list(const char* /*var*/, int32_t /*lb*/, int32_t /*rb*/) {
+        UNREACHABLE();
+    }
+    virtual bool next_in_list(const char* /*var*/) {
+        UNREACHABLE();
+        return false;
+    }
+    virtual ~OutputCallback() = default;
 };
 
 void init_go(CodeGo* go);

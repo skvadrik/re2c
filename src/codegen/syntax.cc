@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <iostream>
 
+#include "src/codegen/output.h"
 #include "src/codegen/syntax.h"
 
 namespace re2c {
@@ -259,6 +261,59 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     }
 
     return Ret::OK;
+}
+
+void Stx::push_list_on_stack(const StxCode* x) {
+    if (x == nullptr) return;
+    push_list_on_stack(x->next);
+    stack_code.push_back({x, 0});
+}
+
+bool Stx::eval_cond(const char* cond, const opt_t* opts) {
+    return allowed_conds[cond](opts);
+}
+
+void Stx::gen_code(
+        std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback) {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs[name];
+    CHECK(conf->type == StxConfType::CODE);
+
+    stack_code_t& stack = stack_code;
+    stack.clear();
+    push_list_on_stack(conf->code->head);
+
+    while (!stack.empty()) {
+        const StxCode* x = stack.back().first;
+        int32_t n = stack.back().second;
+        stack.pop_back();
+
+        switch (x->type) {
+        case StxCodeType::STR:
+            os << x->str;
+            break;
+        case StxCodeType::VAR:
+            // TODO: unify handling of global vars
+            callback.render_var(x->var);
+            break;
+        case StxCodeType::COND:
+            if (eval_cond(x->cond.conf, opts)) {
+                push_list_on_stack(x->cond.then_code->head);
+            } else if (x->cond.else_code != nullptr) {
+                push_list_on_stack(x->cond.else_code->head);
+            }
+            break;
+        case StxCodeType::LIST:
+            if (n == 0) {
+                callback.start_list(x->list.var, x->list.lbound, x->list.rbound);
+                stack.push_back({x, 1});
+            } else if (callback.next_in_list(x->list.var)) {
+                stack.push_back({x, 1});
+                push_list_on_stack(x->list.code->head);
+            }
+            break;
+        }
+    }
 }
 
 StxFile::StxFile(const std::string& fname, Msg& msg, OutAllocator& alc)

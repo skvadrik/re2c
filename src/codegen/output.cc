@@ -38,8 +38,11 @@ OutputBlock::~OutputBlock() {
     delete opts;
 }
 
-Output::Output(OutAllocator& alc, Msg& msg)
-    : cblocks(),
+Output::Output(OutAllocator& alc, Stx& stx, Msg& msg)
+    : allocator(alc),
+      stx(stx),
+      msg(msg),
+      cblocks(),
       hblocks(),
       pblocks(&cblocks),
       tmpblocks(),
@@ -50,9 +53,8 @@ Output::Output(OutAllocator& alc, Msg& msg)
       warn_condition_order(true),
       need_header(false),
       done_mtag_defs(false),
-      msg(msg),
+
       skeletons(),
-      allocator(alc),
       scratchbuf(allocator),
       current_block(nullptr),
       total_opts(nullptr) {}

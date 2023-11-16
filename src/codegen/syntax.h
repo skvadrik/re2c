@@ -1,6 +1,7 @@
 #ifndef _RE2C_CODEGEN_SYNTAX_
 #define _RE2C_CODEGEN_SYNTAX_
 
+#include <iosfwd>
 #include <stdint.h>
 #include <functional>
 #include <string>
@@ -20,6 +21,7 @@
 
 namespace re2c {
 
+class OutputCallback;
 struct StxCode;
 
 struct StxCodeCond {
@@ -122,6 +124,9 @@ class Stx {
     Ret check_word(const char* conf, const char* word, bool list) const;
     Ret check_var(const char* conf, const char* var) const;
 
+    void push_list_on_stack(const StxCode* x);
+    bool eval_cond(const char* cond, const opt_t* opts);
+
   public:
     confs_t confs;
 
@@ -145,6 +150,8 @@ class Stx {
     Ret validate_conf_list(const StxConf* conf);
     Ret validate_conf_expr(const StxConf* conf);
     Ret validate_conf_code(const StxConf* conf);
+
+    void gen_code(std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback);
 };
 
 class StxFile {

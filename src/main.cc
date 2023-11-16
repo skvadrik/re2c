@@ -151,7 +151,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
-    Output output(out_alc, msg);
+    Output output(out_alc, stx, msg);
 
     Ast ast(ast_alc, out_alc);
 

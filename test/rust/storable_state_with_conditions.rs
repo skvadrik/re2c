@@ -6,12 +6,10 @@ use std::io::{Read, Write};
 
 const BUFSIZE: usize = 10;
 
-
 const YYC_INIT: isize = 0;
 const YYC_SPACES: isize = 6;
 const YYC_NUMBER: isize = 11;
 const YYC_WORD: isize = 16;
-
 
 
 const DEBUG: bool = false;
