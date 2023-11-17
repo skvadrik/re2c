@@ -319,7 +319,11 @@ endif
 man_MANS = $(DOCS)
 
 # include files (stdlib)
-dist_stdlib_DATA = include/unicode_categories.re
+dist_stdlib_DATA = \
+	include/syntax/c \
+	include/syntax/go \
+	include/syntax/rust \
+	include/unicode_categories.re
 
 BAZELFILES := \
 	BUILD.bazel \
