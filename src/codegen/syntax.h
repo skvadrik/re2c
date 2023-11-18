@@ -171,7 +171,7 @@ class StxFile {
   public:
     StxFile(const std::string& fname, Msg& msg, OutAllocator& alc);
     ~StxFile();
-    Ret read();
+    Ret read(Lang lang);
     Ret parse(Stx& stx);
     int lex_token(YYSTYPE* yylval);
     bool check_conf_name(const char* name) const;
@@ -277,12 +277,12 @@ inline StxCode* Stx::make_code_list(
     return x;
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx);
-
 loc_t StxFile::tok_loc() const {
     DCHECK(pos <= tok);
     return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
 }
+
+Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx, Lang lang);
 
 } // namespace re2c
 

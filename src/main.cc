@@ -146,7 +146,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     // Load syntax file before opening source files, as it must have file index 0.
     Stx stx(out_alc);
-    CHECK_RET(load_syntax_config(globopts.syntax_file, msg, out_alc, stx));
+    CHECK_RET(load_syntax_config(globopts.syntax_file, msg, out_alc, stx, globopts.lang));
 
     Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));

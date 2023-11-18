@@ -4,6 +4,10 @@
 #include "src/codegen/output.h"
 #include "src/codegen/syntax.h"
 
+extern const char* DEFAULT_SYNTAX_C;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_RUST;
+
 namespace re2c {
 
 Stx::Stx(OutAllocator& alc)
@@ -334,33 +338,52 @@ StxFile::~StxFile() {
     if (file) fclose(file);
 }
 
-Ret StxFile::read() {
+Ret StxFile::read(Lang lang) {
     msg.filenames.push_back(fname);
 
-    file = fopen(fname.c_str(), "rb");
-    if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
+    if (fname.empty()) {
+        // use the default syntax config that is provided as a string
+        const char* src = nullptr;
+        switch (lang) {
+            case Lang::C: src = DEFAULT_SYNTAX_C; break;
+            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
+        }
+        flen = strlen(src);
 
-    // get file size
-    fseek(file, 0, SEEK_END);
-    flen = static_cast<size_t>(ftell(file));
-    fseek(file, 0, SEEK_SET);
+        // allocate buffer
+        buf = new uint8_t[flen + 1];
 
-    // allocate buffer
-    buf = new uint8_t[flen + 1];
+        // fill in buffer from the config string
+        memcpy(buf, src, flen);
+        buf[flen] = 0;
+    } else {
+        // use the provided syntax file
+        file = fopen(fname.c_str(), "rb");
+        if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
 
-    // read file contents into buffer and append terminating zero at the end
-    if (fread(buf, 1, flen, file) != flen) {
-        RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
+        // get file size
+        fseek(file, 0, SEEK_END);
+        flen = static_cast<size_t>(ftell(file));
+        fseek(file, 0, SEEK_SET);
+
+        // allocate buffer
+        buf = new uint8_t[flen + 1];
+
+        // read file contents into buffer and append terminating zero at the end
+        if (fread(buf, 1, flen, file) != flen) {
+            RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
+        }
+        buf[flen] = 0;
     }
-    buf[flen] = 0;
 
     cur = tok = pos = buf;
     return Ret::OK;
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx) {
+Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx, Lang lang) {
     StxFile sf(fname, msg, alc);
-    CHECK_RET(sf.read());
+    CHECK_RET(sf.read(lang));
     CHECK_RET(sf.parse(stx));
     return Ret::OK;
 }
