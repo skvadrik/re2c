@@ -136,13 +136,13 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex_conf.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/options/parse_opts.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
     "${re2c_docs}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/ver_to_vernum.cc"
-)
-add_library(re2c_objects_autogen_syntax_c OBJECT
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
 )
 
 set(re2c_sources
@@ -220,28 +220,23 @@ re2c_bootstrap_parser(
     "src/codegen/syntax_parser.ypp"
     "src/codegen/syntax_parser.cc"
     "src/codegen/syntax_parser.h")
+
 re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
+re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
+re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
 
 # re2c
-add_executable(re2c ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_c>)
+add_executable(re2c ${re2c_sources})
 
 # re2go
 if (RE2C_BUILD_RE2GO)
-    re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
-    add_library(re2c_objects_autogen_syntax_go OBJECT
-        "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
-    )
-    add_executable(re2go ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_go>)
+    add_executable(re2go ${re2c_sources})
     target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
 endif()
 
 # re2rust
 if (RE2C_BUILD_RE2RUST)
-    re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
-    add_library(re2c_objects_autogen_syntax_rust OBJECT
-        "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
-    )
-    add_executable(re2rust ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_rust>)
+    add_executable(re2rust ${re2c_sources})
     target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
 endif()
 

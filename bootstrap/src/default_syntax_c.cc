@@ -1,4 +1,4 @@
-const char* DEFAULT_SYNTAX =
+const char* DEFAULT_SYNTAX_C =
     "api = [pointers, generic];\n"
     "api_style = [functions, freeform];\n"
     "jump_model = [goto_label, loop_switch];\n"

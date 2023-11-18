@@ -1,4 +1,4 @@
-const char* DEFAULT_SYNTAX =
+const char* DEFAULT_SYNTAX_RUST =
     "api = [generic];\n"
     "api_style = [freeform, functions];\n"
     "jump_model = [loop_switch];\n"

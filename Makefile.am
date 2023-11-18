@@ -145,8 +145,10 @@ re2c_GEN_SRC = \
 	src/codegen/syntax_lexer.cc \
 	src/codegen/syntax_parser.cc \
 	src/parse/lex_conf.cc \
-	src/options/parse_opts.cc
-	src/default_syntax_c.cc
+	src/options/parse_opts.cc \
+	src/default_syntax_c.cc \
+	src/default_syntax_go.cc \
+	src/default_syntax_rust.cc
 re2c_GEN_HDR = \
 	src/codegen/syntax_parser.h \
 	src/parse/lex.h \
@@ -154,7 +156,7 @@ re2c_GEN_HDR = \
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR)
-nodist_re2c_SOURCES = $(re2c_GEN) src/default_syntax_c.cc
+nodist_re2c_SOURCES = $(re2c_GEN)
 
 # custom rules create headers and must go before normal rules
 BUILT_SOURCES = $(re2c_GEN_SRC)
@@ -528,7 +530,7 @@ if WITH_GOLANG
 bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
 re2go_SOURCES = $(re2c_SOURCES)
-nodist_re2go_SOURCES = $(re2c_GEN) src/default_syntax_go.cc
+nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2rust
@@ -536,5 +538,5 @@ if WITH_RUST
 bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
 re2rust_SOURCES = $(re2c_SOURCES)
-nodist_re2rust_SOURCES = $(re2c_GEN) src/default_syntax_rust.cc
+nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
 endif
