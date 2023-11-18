@@ -36,6 +36,11 @@ AM_COND_IF([REBUILD_DOCS], [
 ])
 
 
+# --enable-syntax
+AC_ARG_ENABLE([syntax], [AS_HELP_STRING([--enable-syntax], [regenerate syntax files])])
+AM_CONDITIONAL([REBUILD_SYNTAX], [test "x$enable_syntax" = "xyes"])
+
+
 # --enable-lexers
 AC_ARG_ENABLE([lexers], [AS_HELP_STRING([--enable-lexers], [regenerate lexers])])
 AM_CONDITIONAL([REBUILD_LEXERS], [test "x$enable_lexers" = "xyes"])

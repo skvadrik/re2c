@@ -146,6 +146,7 @@ re2c_GEN_SRC = \
 	src/codegen/syntax_parser.cc \
 	src/parse/lex_conf.cc \
 	src/options/parse_opts.cc
+	src/default_syntax_c.cc
 re2c_GEN_HDR = \
 	src/codegen/syntax_parser.h \
 	src/parse/lex.h \
@@ -153,7 +154,7 @@ re2c_GEN_HDR = \
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR)
-nodist_re2c_SOURCES = $(re2c_GEN)
+nodist_re2c_SOURCES = $(re2c_GEN) src/default_syntax_c.cc
 
 # custom rules create headers and must go before normal rules
 BUILT_SOURCES = $(re2c_GEN_SRC)
@@ -179,7 +180,10 @@ re2c_BOOT = \
 	bootstrap/src/parse/lex.h \
 	bootstrap/src/parse/lex_conf.cc \
 	bootstrap/src/options/parse_opts.cc \
-	bootstrap/src/msg/ver_to_vernum.cc
+	bootstrap/src/msg/ver_to_vernum.cc \
+	bootstrap/src/default_syntax_c.cc \
+	bootstrap/src/default_syntax_go.cc \
+	bootstrap/src/default_syntax_rust.cc
 
 # custom sources
 re2c_CUSTOM_PARSER = src/parse/parser.ypp
@@ -358,6 +362,21 @@ CLEANFILES = \
 	$(re2c_GEN) \
 	$(DOCS)
 
+if REBUILD_SYNTAX
+STX2CPP = $(top_srcdir)/build/stx2cpp.py
+# generate C++ sources from syntax configs and update bootstrap files
+src/default_syntax_%.cc : $(top_srcdir)/include/syntax/% $(STX2CPP)
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)$(PYTHON) $(STX2CPP) $< $@
+	$(AM_V_GEN)cp -f $@ $(top_srcdir)/bootstrap/$@
+else
+# copy bootstrap files
+src/default_syntax_%.cc : bootstrap/src/default_syntax_%.cc
+	$(AM_V_at)$(MKDIR_P) $(@D)
+	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$@ $(@D)
+	$(AM_V_at)echo "Reconfigure with --enable-syntax to regenerate $@"
+endif
+
 if REBUILD_LEXERS
 # generate lexer and update bootstrap files
 .re.cc:
@@ -509,7 +528,7 @@ if WITH_GOLANG
 bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
 re2go_SOURCES = $(re2c_SOURCES)
-nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
+nodist_re2go_SOURCES = $(re2c_GEN) src/default_syntax_go.cc
 endif
 
 # re2rust
@@ -517,5 +536,5 @@ if WITH_RUST
 bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
 re2rust_SOURCES = $(re2c_SOURCES)
-nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
+nodist_re2rust_SOURCES = $(re2c_GEN) src/default_syntax_rust.cc
 endif
