@@ -6,6 +6,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 include(Re2cAutotoolsHelpers)
 include(Re2cBootstrapLexer)
 include(Re2cBootstrapParser)
+include(Re2cBootstrapSyntax)
 include(Re2cBuildType)
 include(Re2cGenDocs)
 include(Re2cCompilerFlags)
@@ -29,9 +30,9 @@ if(RE2C_REBUILD_PARSERS AND NOT RE2C_FOR_BUILD)
     find_package(BISON REQUIRED)
 endif()
 
+option(RE2C_REBUILD_SYNTAX "Regenerate default syntax files" OFF)
 option(RE2C_REBUILD_DOCS "Regenerate manpage" OFF)
 option(RE2C_BUILD_LIBS "Build libraries" OFF)
-
 
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
@@ -94,6 +95,9 @@ set(re2c_docs
     "$<$<BOOL:${RE2C_BUILD_RE2RUST}>:${re2c_manpage_rust}>"
 )
 
+# syntax files
+set(re2c_stx2cpp "${CMAKE_CURRENT_SOURCE_DIR}/build/stx2cpp.py")
+
 set(top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
 set(PYTHON "${Python3_EXECUTABLE}")
@@ -136,6 +140,9 @@ add_library(re2c_objects_autogen OBJECT
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/ver_to_vernum.cc"
+)
+add_library(re2c_objects_autogen_syntax_c OBJECT
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
 )
 
 set(re2c_sources
@@ -203,21 +210,6 @@ set(re2c_sources
     $<TARGET_OBJECTS:re2c_objects_autogen_ver_to_vernum>
 )
 
-# re2c
-add_executable(re2c ${re2c_sources})
-
-# re2go
-if (RE2C_BUILD_RE2GO)
-    add_executable(re2go ${re2c_sources})
-    target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
-endif()
-
-# re2rust
-if (RE2C_BUILD_RE2RUST)
-    add_executable(re2rust ${re2c_sources})
-    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
-endif()
-
 re2c_bootstrap_lexer("src/parse/lex.re" "src/parse/lex.cc" "src/parse/lex.h")
 re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/parser.h")
 re2c_bootstrap_lexer("src/parse/lex_conf.re" "src/parse/lex_conf.cc")
@@ -228,6 +220,30 @@ re2c_bootstrap_parser(
     "src/codegen/syntax_parser.ypp"
     "src/codegen/syntax_parser.cc"
     "src/codegen/syntax_parser.h")
+re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
+
+# re2c
+add_executable(re2c ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_c>)
+
+# re2go
+if (RE2C_BUILD_RE2GO)
+    re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
+    add_library(re2c_objects_autogen_syntax_go OBJECT
+        "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
+    )
+    add_executable(re2go ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_go>)
+    target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
+endif()
+
+# re2rust
+if (RE2C_BUILD_RE2RUST)
+    re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
+    add_library(re2c_objects_autogen_syntax_rust OBJECT
+        "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
+    )
+    add_executable(re2rust ${re2c_sources} $<TARGET_OBJECTS:re2c_objects_autogen_syntax_rust>)
+    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
+endif()
 
 # docs
 set(re2c_docs_sources
