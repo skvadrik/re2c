@@ -33,26 +33,23 @@ code:if_then_else_oneline =
     nl;
 
 code:switch =
-    "switch (" expr ") {" nl
-        [case: indent case]
-    "}" nl;
+    topindent "switch (" expr ") {" nl
+        indent [case: case] dedent
+    topindent "}" nl;
 
-code:switch_cases =
-    [case: case nl]
-    [stmt: indent stmt nl];
+code:switch_cases = (oneline
+    ? [case{0:-2}: case nl]
+      [case{-1}:   case " " [stmt: stmt]]
+    : [case: case nl]
+        indent [stmt: stmt] dedent);
 
-code:switch_cases_oneline =
-    [case{0:-2}: case nl]
-    [case{-1}:   case stmt nl];
-
-code:switch_case_single =
-    "case " val ":";
-
-code:switch_case_range =
-    "case " [val{0}: val] ".." [val{-1}: val] ":";
+code:switch_case_range = (case_ranges
+    ? topindent "case " [val{0}: val] (multival ? " ... " [val{-1}: val]) ":"
+    : [val{0:-2}: topindent "case " val ":" nl]
+      [val{-1}:   topindent "case " val ":"]);
 
 code:switch_case_default =
-    "default:";
+    topindent "default:";
 
 code:loop =
     "for (;;) {" nl

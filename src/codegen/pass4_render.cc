@@ -1,6 +1,7 @@
 #include "config.h"
-#include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
+#include "src/codegen/output.h"
+#include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/util/check.h"
@@ -9,6 +10,21 @@
 namespace re2c {
 
 static void render(RenderContext& rctx, const Code* code);
+
+static void render_global_var(RenderContext& rctx, const char* var) {
+    if (strcmp(var, "nl") == 0) {
+        rctx.os << std::endl;
+        ++rctx.line;
+    } else if (strcmp(var, "topindent") == 0) {
+        rctx.os << indent(rctx.ind, rctx.opts->indent_str);
+    } else if (strcmp(var, "indent") == 0) {
+        ++rctx.ind;
+    } else if (strcmp(var, "dedent") == 0) {
+        --rctx.ind;
+    } else {
+        UNREACHABLE();
+    }
+}
 
 static uint32_t count_lines_text(const char* text) {
     DCHECK(text);
@@ -195,14 +211,6 @@ static void render_var(RenderContext& rctx, const CodeVar* var) {
     }
 }
 
-static bool case_on_same_line(const CodeCase* code, const opt_t* opts) {
-    const Code* first = code->body->head;
-    return first
-           && first->next == nullptr
-           && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT)
-           && opts->lang != Lang::GO; // gofmt prefers cases on a new line
-}
-
 static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -224,156 +232,256 @@ static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     }
 }
 
-static void render_case_range(
-        RenderContext& rctx, int64_t low, int64_t upp, bool last, VarType type) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const Enc& enc = opts->encoding;
+class RenderSwitchCaseDefault : public OutputCallback {
+    RenderContext& rctx;
 
-    os << indent(rctx.ind, opts->indent_str);
+  public:
+    RenderSwitchCaseDefault(RenderContext& rctx): rctx(rctx) {}
 
-    switch (opts->lang) {
-    case Lang::C:
-        os << "case ";
-        render_number(rctx, low, type);
-        if (low != upp) {
-            os << " ... ";
-            render_number(rctx, upp, type);
-        } else if (opts->debug && type == VarType::YYCTYPE && enc.type() == Enc::Type::EBCDIC) {
-            uint32_t c = enc.decode_unsafe(static_cast<uint32_t>(low));
-            if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
-        }
-        os << ":";
-        if (!last) {
-            os << std::endl;
-            ++rctx.line;
-        }
-        break;
+    void render_var(const char* var) override {
+        render_global_var(rctx, var);
+    }
+};
 
-    case Lang::GO:
-        os << "case ";
-        render_number(rctx, low, type);
-        for (int64_t c = low + 1; c <= upp; ++c) {
-            os << ",";
-            render_number(rctx, c, type);
-        }
-        os << ":";
-        if (!last) {
-            os << std::endl;
-            os << indent(rctx.ind + 1, opts->indent_str) << "fallthrough" << std::endl;
-            rctx.line += 2;
-        }
-        break;
+class RenderSwitchCaseRange : public OutputCallback {
+    RenderContext& rctx;
+    const CodeCase* code;
+    size_t curr_range;
+    size_t curr_sym;
+    size_t last_sym;
+    size_t nsyms;
 
-    case Lang::RUST:
-        render_number(rctx, low, type);
-        if (low != upp) {
-            os << " ..= ";
-            render_number(rctx, upp, type);
+  public:
+    RenderSwitchCaseRange(RenderContext& rctx, const CodeCase* code, size_t nrange)
+            : rctx(rctx)
+            , code(code)
+            , curr_range(nrange)
+            , curr_sym(0)
+            , last_sym(0)
+            , nsyms(1) {
+        if (code->kind == CodeCase::Kind::RANGES) {
+            const int64_t* ranges = code->ranges->elems;
+            nsyms = static_cast<size_t>(ranges[2*curr_range + 1] - ranges[2*curr_range]);
         }
-        if (last) {
-            os << " =>";
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "val") == 0) {
+            switch (code->kind) {
+            case CodeCase::Kind::DEFAULT:
+                UNREACHABLE();
+                break;
+            case CodeCase::Kind::NUMBER:
+                rctx.os << code->number;
+                break;
+            case CodeCase::Kind::STRING:
+                rctx.os << code->string;
+                break;
+            case CodeCase::Kind::RANGES: {
+                DCHECK(curr_range < code->ranges->size && curr_sym < nsyms);
+                int64_t sym = code->ranges->elems[2*curr_range] + static_cast<int64_t>(curr_sym);
+                render_number(rctx, sym, code->ranges->type);
+                break;
+            }}
         } else {
-            os << " |" << std::endl;
-            ++rctx.line;
+            render_global_var(rctx, var);
         }
-        break;
-    }
-}
-
-static void render_case(RenderContext& rctx, const CodeCase* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const uint32_t ind = rctx.ind;
-    const Code* first = code->body->head;
-
-    const char* s_case, *s_then, *s_default;
-    if (opts->lang == Lang::RUST) {
-        s_case = "";
-        s_then = " =>";
-        s_default = "_";
-    } else {
-        s_case = "case ";
-        s_then = ":";
-        s_default = "default";
     }
 
-    switch (code->kind) {
-    case CodeCase::Kind::DEFAULT:
-        os << indent(ind, opts->indent_str) << s_default << s_then;
-        break;
-    case CodeCase::Kind::NUMBER:
-        os << indent(ind, opts->indent_str) << s_case << code->number << s_then;
-        break;
-    case CodeCase::Kind::STRING:
-        os << indent(ind, opts->indent_str) << s_case << code->string << s_then;
-        break;
-    case CodeCase::Kind::RANGES: {
-        const size_t nranges = code->ranges->size;
-        const int64_t* ranges = code->ranges->elems;
-        const VarType type = code->ranges->type;
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "val") == 0) {
+            return nsyms;
+        }
+        UNREACHABLE();
+        return 0;
+    }
 
-        for (uint32_t i = 0; i < nranges; ++i) {
-            const bool last = i == nranges - 1;
-            const int64_t low = ranges[2*i], upp = ranges[2*i + 1];
-            DCHECK(low < upp);
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "val") == 0) {
+            curr_sym = lbound;
+            last_sym = rbound;
+        } else {
+            UNREACHABLE();
+        }
+    }
 
-            if (opts->lang != Lang::C || opts->case_ranges) {
-                render_case_range(rctx, low, upp - 1, last, type);
-            } else {
-                for (int64_t c = low; c < upp; ++c) {
-                    render_case_range(rctx, c, c, last && c == upp - 1, type);
-                }
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "val") == 0) {
+            return ++curr_sym <= last_sym;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "multival") == 0) {
+            return nsyms > 1;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderSwitchCaseRange);
+};
+
+class RenderSwitchCaseBlock : public OutputCallback {
+    RenderContext& rctx;
+    const CodeCase* code;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmt = 0;
+    size_t curr_range;
+    size_t last_range;
+    size_t nranges;
+    bool oneline;
+
+  public:
+    RenderSwitchCaseBlock(RenderContext& rctx, const CodeCase* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nstmt(0)
+            , curr_range(0)
+            , last_range(0)
+            , nranges(code->kind == CodeCase::Kind::RANGES ? code->ranges->size : 1)
+            , oneline(false) {
+        const Code* head = code->body->head;
+        for (const Code* s = head; s; s = s->next) ++nstmt;
+        oneline = head != nullptr
+               && head->next == nullptr
+               && (head->kind == CodeKind::STMT || head->kind == CodeKind::TEXT);
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "case") == 0) {
+            switch (code->kind) {
+            case CodeCase::Kind::DEFAULT: {
+                RenderSwitchCaseDefault callback(rctx);
+                rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch_case_default", callback);
+                break;
             }
-        }
-        break;
-    }}
-
-    if (case_on_same_line(code, opts)) {
-        os << " " << first->text;
-        rctx.line += count_lines_text(first->text);
-        render_stmt_end(rctx, first->kind == CodeKind::STMT);
-    } else {
-        // For Rust wrap multi-line cases in braces.
-        if (opts->lang == Lang::RUST) os << " {";
-        os << std::endl;
-        ++rctx.line;
-        for (const Code* s = first; s; s = s->next) {
-            ++rctx.ind;
-            render(rctx, s);
-            --rctx.ind;
-        }
-        if (opts->lang == Lang::RUST) {
-            os << indent(rctx.ind, opts->indent_str) << "}" << std::endl;
-            ++rctx.line;
+            case CodeCase::Kind::NUMBER:
+            case CodeCase::Kind::STRING:
+            case CodeCase::Kind::RANGES: {
+                RenderSwitchCaseRange callback(rctx, code, curr_range);
+                rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch_case_range", callback);
+                break;
+            }}
+        } else if (strcmp(var, "stmt") == 0) {
+            if (oneline) {
+                rctx.os << curr_stmt->text;
+                render_stmt_end(rctx, curr_stmt->kind == CodeKind::STMT);
+            } else {
+                render(rctx, curr_stmt);
+            }
+        } else {
+            render_global_var(rctx, var);
         }
     }
-}
 
-static void render_switch(RenderContext& rctx, const CodeSwitch* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const uint32_t ind = rctx.ind;
-
-    os << indent(ind, opts->indent_str);
-    if (opts->lang == Lang::RUST) {
-        os << "match " << code->expr;
-    } else {
-        os << "switch (" << code->expr << ")";
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "case") == 0) {
+            return nranges;
+        } else if (strcmp(var, "stmt") == 0) {
+            return nstmt;
+        }
+        UNREACHABLE();
+        return 0;
     }
-    os << " {\n";
-    ++rctx.line;
 
-    // Do not indent switch cases for Go, as gofmt prefers them unindented.
-    if (opts->lang != Lang::GO) ++rctx.ind;
-    for (const CodeCase* c = code->cases->head; c; c = c->next) {
-        render_case(rctx, c);
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "case") == 0) {
+            curr_range = lbound;
+            last_range = rbound;
+        } else if (strcmp(var, "stmt") == 0) {
+            DCHECK(rbound < nstmt);
+            curr_stmt = code->body->head;
+            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
+            last_stmt = curr_stmt;
+            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+        } else {
+            UNREACHABLE();
+        }
     }
-    if (opts->lang != Lang::GO) --rctx.ind;
 
-    os << indent(ind, opts->indent_str) << "}\n";
-    ++rctx.line;
-}
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "case") == 0) {
+            return code->kind == CodeCase::Kind::RANGES && ++curr_range <= last_range;
+        } else if (strcmp(var, "stmt") == 0) {
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* var) {
+        if (strcmp(var, "oneline") == 0) {
+            return oneline;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderSwitchCaseBlock);
+};
+
+class RenderSwitch : public OutputCallback {
+    RenderContext& rctx;
+    const CodeSwitch* code;
+    const CodeCase* curr_case;
+    const CodeCase* last_case;
+    size_t ncases;
+
+  public:
+    RenderSwitch(RenderContext& rctx, const CodeSwitch* code)
+            : rctx(rctx), code(code), curr_case(nullptr), last_case(nullptr), ncases(0) {
+        for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "expr") == 0) {
+            rctx.os << code->expr;
+        } else if (strcmp(var, "case") == 0) {
+            RenderSwitchCaseBlock callback(rctx, curr_case);
+            rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch_cases", callback);
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "case") == 0) {
+            return ncases;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "case") == 0) {
+            DCHECK(rbound < ncases);
+            curr_case = code->cases->head;
+            for (size_t i = 0; i < lbound; ++i) curr_case = curr_case->next;
+            last_case = curr_case;
+            for (size_t i = lbound; i <= rbound; ++i) last_case = last_case->next;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "case") == 0) {
+            curr_case = curr_case->next;
+            return curr_case != last_case;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderSwitch);
+};
 
 static void render_arg(RenderContext& rctx, const CodeArg* arg) {
     std::ostringstream& os = rctx.os;
@@ -657,9 +765,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::IF_THEN_ELSE:
         render_if_then_else(rctx, &code->ifte);
         break;
-    case CodeKind::SWITCH:
-        render_switch(rctx, &code->swch);
+    case CodeKind::SWITCH: {
+        RenderSwitch callback(rctx, &code->swch);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch", callback);
         break;
+    }
     case CodeKind::BLOCK:
         render_block(rctx, &code->block);
         break;
@@ -786,7 +896,7 @@ LOCAL_NODISCARD(Ret codegen_render_blocks(
 
     // Second code generation pass: expand labels, combine/simplify statements, convert newlines,
     // write the generated code to a file.
-    RenderContext rctx(output.msg, filename);
+    RenderContext rctx(output.stx, output.msg, filename);
     for (const OutputBlock* b : blocks) {
         rctx.opts = b->opts;
         rctx.ind = b->opts->indent_top;

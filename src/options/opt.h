@@ -198,14 +198,17 @@ class Input;
     STX_COND("jump_model.goto_label", !opts->loop_switch) \
     STX_COND("jump_model.loop_switch", opts->loop_switch) \
     STX_COND("storable_state", opts->storable_state) \
+    STX_COND("case_ranges", opts->case_ranges) \
     STX_COND("unsafe", opts->unsafe) \
     STX_COND("date", opts->date) \
     STX_COND("version", opts->version)
 
 // variables in syntax files
 #define RE2C_STX_VARS \
-    STX_VAR("nl", "\n") \
-    STX_VAR("indent", opts->indent_str)
+    STX_VAR("nl") \
+    STX_VAR("indent") \
+    STX_VAR("dedent") \
+    STX_VAR("topindent")
 
 // Constant options.
 struct conopt_t {

@@ -56,6 +56,7 @@ using blocks_citer_t = blocks_t::const_iterator;
 using tagnames_t = std::set<std::string>;
 
 struct RenderContext {
+    Stx& stx;
     std::ostringstream os;
     const Msg& msg;
     const opt_t* opts;
@@ -63,8 +64,8 @@ struct RenderContext {
     uint32_t line;
     uint32_t ind;
 
-    RenderContext(const Msg& msg, const std::string& file)
-        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
+    RenderContext(Stx& stx, const Msg& msg, const std::string& file)
+        : stx(stx), os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
     FORBID_COPY(RenderContext);
 };
 

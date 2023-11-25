@@ -63,16 +63,10 @@ Stx::Stx(OutAllocator& alc)
         {"expr"}, {"case"}, {}
     };
     allowed_code_confs["code:switch_cases"] = {
-        {}, {"case", "stmt"}, {}
-    };
-    allowed_code_confs["code:switch_cases_oneline"] = {
-        {"stmt"}, {"case"}, {}
-    };
-    allowed_code_confs["code:switch_case_single"] = {
-        {"val"}, {}, {}
+        {}, {"case", "stmt"}, {"oneline"}
     };
     allowed_code_confs["code:switch_case_range"] = {
-        {}, {"val"}, {}
+        {}, {"val"}, {"multival"}
     };
     allowed_code_confs["code:switch_case_default"] = {};
     allowed_code_confs["code:loop"] = {
@@ -102,7 +96,7 @@ Stx::Stx(OutAllocator& alc)
     RE2C_STX_CONDS
 #undef STX_COND
 
-#define STX_VAR(name, selector) allowed_vars.insert(name);
+#define STX_VAR(name) allowed_vars.insert(name);
     RE2C_STX_VARS
 #undef STX_VAR
 }
