@@ -1406,14 +1406,20 @@ class GenEnum : public OutputCallback {
     Scratchbuf& buf;
     const opt_t* opts;
     const StartConds& conds;
-    int32_t lbound;
-    int32_t rbound;
+    size_t curr_cond;
+    size_t last_cond;
 
   public:
     CodeList* code;
 
     GenEnum(OutAllocator& alc, Scratchbuf& buf, const opt_t* opts, const StartConds& conds)
-            : alc(alc), buf(buf), opts(opts), conds(conds), lbound(0), rbound(0), code(nullptr) {
+            : alc(alc)
+            , buf(buf)
+            , opts(opts)
+            , conds(conds)
+            , curr_cond(0)
+            , last_cond(0)
+            , code(nullptr) {
         code = code_list(alc);
     }
 
@@ -1421,24 +1427,32 @@ class GenEnum : public OutputCallback {
         if (strcmp(var, "name") == 0) {
             buf.str(opts->api_cond_type);
         } else if (strcmp(var, "elem") == 0) {
-            buf.str(conds[static_cast<uint32_t>(lbound - 1)].name);
+            buf.str(conds[curr_cond].name);
         } else if (strcmp(var, "init") == 0) {
-            buf.u32(conds[static_cast<uint32_t>(lbound - 1)].number);
+            buf.u32(conds[curr_cond].number);
         // TODO: handle global variables in a uniform way
         } else if (strcmp(var, "nl") == 0) {
             append(code, code_text(alc, buf.flush()));
         } else if (strcmp(var, "indent") == 0) {
+            // TODO:  indent here means not what it means in render context
             buf.str(opts->indent_str);
         } else {
             UNREACHABLE();
         }
     }
 
-    void start_list(const char* var, int32_t lb, int32_t rb) override {
+    size_t get_list_size(const char* var) const override {
         if (strcmp(var, "elem") == 0) {
-            int32_t sz = static_cast<int32_t>(conds.size());
-            lbound = lb < 0 ? (sz + lb) : lb;
-            rbound = rb < 0 ? (sz + rb) : rb;
+            return conds.size();
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "elem") == 0) {
+            curr_cond = lbound;
+            last_cond = rbound;
         } else {
             UNREACHABLE();
         }
@@ -1446,7 +1460,7 @@ class GenEnum : public OutputCallback {
 
     bool next_in_list(const char* var) override {
         if (strcmp(var, "elem") == 0) {
-            return lbound++ <= rbound;
+            return ++curr_cond <= last_cond;
         } else {
             UNREACHABLE();
         }

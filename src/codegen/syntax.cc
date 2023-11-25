@@ -273,8 +273,19 @@ void Stx::push_list_on_stack(const StxCode* x) {
     stack_code.push_back({x, 0});
 }
 
-bool Stx::eval_cond(const char* cond, const opt_t* opts) {
-    return allowed_conds[cond](opts);
+bool Stx::eval_cond(const char* cond, const opt_t* opts, OutputCallback& callback) const {
+    auto i = allowed_conds.find(cond);
+    if (i != allowed_conds.end()) {
+        return i->second(opts);
+    } else {
+        return callback.eval_cond(cond);
+    }
+}
+
+static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rbound) {
+    lbound = lbound >= 0 ? lbound : (std::max(0, static_cast<int32_t>(size) + lbound));
+    rbound = rbound >= 0 ? rbound : (static_cast<int32_t>(size) + rbound);
+    return lbound <= rbound && rbound >= 0;
 }
 
 void Stx::gen_code(
@@ -301,7 +312,7 @@ void Stx::gen_code(
             callback.render_var(x->var);
             break;
         case StxCodeType::COND:
-            if (eval_cond(x->cond.conf, opts)) {
+            if (eval_cond(x->cond.conf, opts, callback)) {
                 push_list_on_stack(x->cond.then_code->head);
             } else if (x->cond.else_code != nullptr) {
                 push_list_on_stack(x->cond.else_code->head);
@@ -309,8 +320,14 @@ void Stx::gen_code(
             break;
         case StxCodeType::LIST:
             if (n == 0) {
-                callback.start_list(x->list.var, x->list.lbound, x->list.rbound);
-                stack.push_back({x, 1});
+                int32_t lbound = x->list.lbound;
+                int32_t rbound = x->list.rbound;
+                if (eval_list_bounds(callback.get_list_size(x->list.var), lbound, rbound)) {
+                    callback.start_list(
+                            x->list.var, static_cast<size_t>(lbound), static_cast<size_t>(rbound));
+                    stack.push_back({x, 1});
+                    push_list_on_stack(x->list.code->head);
+                }
             } else if (callback.next_in_list(x->list.var)) {
                 stack.push_back({x, 1});
                 push_list_on_stack(x->list.code->head);

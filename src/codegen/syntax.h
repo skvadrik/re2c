@@ -125,7 +125,7 @@ class Stx {
     Ret check_var(const char* conf, const char* var) const;
 
     void push_list_on_stack(const StxCode* x);
-    bool eval_cond(const char* cond, const opt_t* opts);
+    bool eval_cond(const char* cond, const opt_t* opts, OutputCallback& callback) const;
 
   public:
     confs_t confs;
