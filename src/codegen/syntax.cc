@@ -291,10 +291,10 @@ void Stx::gen_code(
     CHECK(conf->type == StxConfType::CODE);
 
     stack_code_t& stack = stack_code;
-    stack.clear();
+    size_t bottom = stack.size();
     push_list_on_stack(conf->code->head);
 
-    while (!stack.empty()) {
+    while (stack.size() != bottom) {
         const StxCode* x = stack.back().first;
         int32_t n = stack.back().second;
         stack.pop_back();
