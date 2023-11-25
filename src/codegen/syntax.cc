@@ -130,17 +130,13 @@ Ret Stx::check_var(const char* conf, const char* var) const {
     auto i = allowed_code_confs.find(conf);
     CHECK(i != allowed_code_confs.end());
 
-    // check non-list variables first
-    const std::vector<std::string>& v = i->second.vars;
-    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
-
     // this may be a list var; in that case it must be on the list stack
-    const std::vector<std::string>& lv = i->second.list_vars;
-    for (const StxCode* x : stack_code_list) {
-        if (strcmp(var, x->list.var) == 0) {
-            if (std::find(lv.begin(), lv.end(), var) != lv.end()) return Ret::OK;
-        }
-    }
+    bool is_list_var = std::find_if(stack_code_list.begin(), stack_code_list.end(),
+            [var](const StxCode* x) { return strcmp(var, x->list.var) == 0; })
+        != stack_code_list.end();
+
+    const std::vector<std::string>& v = is_list_var ? i->second.list_vars : i->second.vars;
+    if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
 
     RET_FAIL(error("unknown variable '%s' in configuration '%s'", var, conf));
 }
