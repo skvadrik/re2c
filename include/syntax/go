@@ -36,8 +36,7 @@ code:switch_cases =
     [case{0:-2}: topindent case nl
         indent topindent "fallthrough" dedent nl]
     [case{-1}: topindent case nl]
-        // `topindent` is needed in `oneline` case because re2c renders it in a special way
-        indent (oneline ? topindent) [stmt: stmt] dedent;
+        indent [stmt: stmt] dedent;
 
 code:switch_case_range = "case " [val{0}: val] [val{1:-1}: "," val] ":";
 

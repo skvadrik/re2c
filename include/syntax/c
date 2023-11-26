@@ -37,11 +37,13 @@ code:switch =
         indent [case: case] dedent
     topindent "}" nl;
 
-code:switch_cases = (oneline
-    ? [case{0:-2}: case nl]
-      [case{-1}:   case " " [stmt: stmt]]
-    : [case: case nl]
-        indent [stmt: stmt] dedent);
+code:switch_cases =
+    [case: case nl]
+        indent [stmt: stmt] dedent;
+
+code:switch_cases_oneline =
+    [case{0:-2}: case nl]
+    [case{-1}:   case " " [stmt: stmt]];
 
 code:switch_case_range = (case_ranges
     ? topindent "case " [val{0}: val] (multival ? " ... " [val{-1}: val]) ":"

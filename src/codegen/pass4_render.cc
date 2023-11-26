@@ -336,7 +336,7 @@ class RenderSwitchCaseBlock : public OutputCallback {
     bool oneline;
 
   public:
-    RenderSwitchCaseBlock(RenderContext& rctx, const CodeCase* code)
+    RenderSwitchCaseBlock(RenderContext& rctx, const CodeCase* code, bool oneline)
             : rctx(rctx)
             , code(code)
             , curr_stmt(nullptr)
@@ -345,12 +345,8 @@ class RenderSwitchCaseBlock : public OutputCallback {
             , curr_range(0)
             , last_range(0)
             , nranges(code->kind == CodeCase::Kind::RANGES ? code->ranges->size : 1)
-            , oneline(false) {
-        const Code* head = code->body->head;
-        for (const Code* s = head; s; s = s->next) ++nstmt;
-        oneline = head != nullptr
-               && head->next == nullptr
-               && (head->kind == CodeKind::STMT || head->kind == CodeKind::TEXT);
+            , oneline(oneline) {
+        for (const Code* s = code->body->head; s; s = s->next) ++nstmt;
     }
 
     void render_var(const char* var) override {
@@ -416,14 +412,6 @@ class RenderSwitchCaseBlock : public OutputCallback {
         return false;
     }
 
-    bool eval_cond(const char* var) {
-        if (strcmp(var, "oneline") == 0) {
-            return oneline;
-        }
-        UNREACHABLE();
-        return false;
-    }
-
     FORBID_COPY(RenderSwitchCaseBlock);
 };
 
@@ -433,10 +421,16 @@ class RenderSwitch : public OutputCallback {
     const CodeCase* curr_case;
     const CodeCase* last_case;
     size_t ncases;
+    const bool specialize_oneline;
 
   public:
     RenderSwitch(RenderContext& rctx, const CodeSwitch* code)
-            : rctx(rctx), code(code), curr_case(nullptr), last_case(nullptr), ncases(0) {
+            : rctx(rctx)
+            , code(code)
+            , curr_case(nullptr)
+            , last_case(nullptr)
+            , ncases(0)
+            , specialize_oneline(rctx.stx.have_conf("code:switch_cases_oneline")) {
         for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
     }
 
@@ -444,8 +438,14 @@ class RenderSwitch : public OutputCallback {
         if (strcmp(var, "expr") == 0) {
             rctx.os << code->expr;
         } else if (strcmp(var, "case") == 0) {
-            RenderSwitchCaseBlock callback(rctx, curr_case);
-            rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch_cases", callback);
+            const Code* s = curr_case->body->head;
+            bool oneline = specialize_oneline
+               && s != nullptr
+               && s->next == nullptr
+               && (s->kind == CodeKind::STMT || s->kind == CodeKind::TEXT);
+            const char* conf = oneline ? "code:switch_cases_oneline" : "code:switch_cases";
+            RenderSwitchCaseBlock callback(rctx, curr_case, oneline);
+            rctx.stx.gen_code(rctx.os, rctx.opts, conf, callback);
         } else {
             render_global_var(rctx, var);
         }

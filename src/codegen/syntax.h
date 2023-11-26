@@ -151,6 +151,7 @@ class Stx {
     Ret validate_conf_expr(const StxConf* conf);
     Ret validate_conf_code(const StxConf* conf);
 
+    bool have_conf(const char* name) const;
     void gen_code(std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback);
 };
 

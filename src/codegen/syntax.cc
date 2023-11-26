@@ -63,7 +63,10 @@ Stx::Stx(OutAllocator& alc)
         {"expr"}, {"case"}, {}
     };
     allowed_code_confs["code:switch_cases"] = {
-        {}, {"case", "stmt"}, {"oneline"}
+        {}, {"case", "stmt"}, {}
+    };
+    allowed_code_confs["code:switch_cases_oneline"] = {
+        {}, {"case", "stmt"}, {}
     };
     allowed_code_confs["code:switch_case_range"] = {
         {}, {"val"}, {"multival"}
@@ -255,6 +258,10 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     }
 
     return Ret::OK;
+}
+
+bool Stx::have_conf(const char* name) const {
+    return confs.find(name) != confs.end();
 }
 
 void Stx::push_list_on_stack(const StxCode* x) {
