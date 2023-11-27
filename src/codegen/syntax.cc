@@ -54,10 +54,8 @@ Stx::Stx(OutAllocator& alc)
         {"then_stmt", "else_stmt"},
         {"have_else_part", "have_else_cond"}
     };
-    allowed_code_confs["code:if_then_else_oneline"] = {
-        {"then_cond", "else_cond", "then_stmt", "else_stmt"},
-        {},
-        {"have_else_part", "have_else_cond"}
+    allowed_code_confs["code:if_then_oneline"] = {
+        {"then_cond"}, {"then_stmt"}, {}
     };
     allowed_code_confs["code:switch"] = {
         {"expr"}, {"case"}, {}

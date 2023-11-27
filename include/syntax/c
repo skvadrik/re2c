@@ -21,16 +21,13 @@ code:type_yyctype = type;
 code:type_yybm = "unsigned char";
 
 code:if_then_else =
-    "if (" then_cond ") {" nl
-        [then_stmt: indent then_stmt nl]
-    (have_else_part? "} else " (have_else_cond? "if (" else_cond ") ") "{" nl
-        [else_stmt: indent else_stmt nl])
-    "}" nl;
+    topindent "if (" then_cond ") {" nl
+        indent [then_stmt: then_stmt] dedent
+    (have_else_part? topindent "} else " (have_else_cond? "if (" else_cond ") ") "{" nl
+        indent [else_stmt: else_stmt] dedent)
+    topindent "}" nl;
 
-code:if_then_else_oneline =
-    "if (" then_cond ") " then_stmt
-    (have_else_part? " else " (have_else_cond? "(" else_cond ") ") else_stmt)
-    nl;
+code:if_then_oneline = topindent "if (" then_cond ") " [then_stmt: then_stmt];
 
 code:switch =
     topindent "switch (" expr ") {" nl

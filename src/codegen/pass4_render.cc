@@ -11,6 +11,13 @@ namespace re2c {
 
 static void render(RenderContext& rctx, const Code* code);
 
+static bool oneline_stmt_list(const CodeList* list) {
+    const Code* head = list->head;
+    return head != nullptr
+            && head->next == nullptr
+            && (head->kind == CodeKind::STMT || head->kind == CodeKind::TEXT);
+}
+
 static void render_global_var(RenderContext& rctx, const char* var) {
     if (strcmp(var, "nl") == 0) {
         rctx.os << std::endl;
@@ -20,6 +27,7 @@ static void render_global_var(RenderContext& rctx, const char* var) {
     } else if (strcmp(var, "indent") == 0) {
         ++rctx.ind;
     } else if (strcmp(var, "dedent") == 0) {
+        DCHECK(rctx.ind > 0);
         --rctx.ind;
     } else {
         UNREACHABLE();
@@ -64,58 +72,6 @@ static void render_line_info(
         // For Rust line directives should be removed by `remove_empty` pass.
         UNREACHABLE();
     }
-}
-
-static bool oneline_if(const CodeIfTE* code, const opt_t* opts) {
-    const Code* first = code->if_code->head;
-    return opts->lang == Lang::C // Go and Rust require braces
-           && code->oneline
-           && code->else_code == nullptr
-           && first
-           && first->next == nullptr
-           && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT);
-}
-
-static void render_if_nonl(RenderContext& rctx, const char* cond, const Code* then, bool oneline) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    if (cond) {
-        DCHECK(count_lines_text(cond) == 0);
-        bool wrap = opts->lang != Lang::RUST;
-        os << "if " << (wrap ? "(" : "") << cond << (wrap ? ")" : "")  << " ";
-    }
-
-    if (oneline) {
-        DCHECK(count_lines_text(then->text) == 0);
-        os << then->text;
-        if (then->kind == CodeKind::STMT) os << ";";
-    } else {
-        os << "{" << std::endl;
-        ++rctx.line;
-        for (const Code* s = then; s; s = s->next) {
-            ++rctx.ind;
-            render(rctx, s);
-            --rctx.ind;
-        }
-        os << indent(rctx.ind, opts->indent_str) << "}";
-    }
-}
-
-static void render_if_then_else(RenderContext& rctx, const CodeIfTE* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    bool oneline = oneline_if(code, opts);
-
-    os << indent(rctx.ind, opts->indent_str);
-    render_if_nonl(rctx, code->if_cond, code->if_code->head, oneline);
-    if (code->else_code) {
-        os << " else ";
-        render_if_nonl(rctx, code->else_cond, code->else_code->head, oneline);
-    }
-    os << std::endl;
-    ++rctx.line;
 }
 
 static void render_block(RenderContext& rctx, const CodeBlock* code) {
@@ -210,6 +166,100 @@ static void render_var(RenderContext& rctx, const CodeVar* var) {
         break;
     }
 }
+
+class RenderIfThenElse : public OutputCallback {
+    RenderContext& rctx;
+    const CodeIfTE* code;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nthen_stmts;
+    size_t nelse_stmts;
+    bool oneline;
+
+  public:
+    RenderIfThenElse(RenderContext& rctx, const CodeIfTE* code, bool oneline)
+            : rctx(rctx)
+            , code(code)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nthen_stmts(0)
+            , nelse_stmts(0)
+            , oneline(oneline) {
+        for (const Code* s = code->if_code->head; s; s = s->next) ++nthen_stmts;
+        if (code->else_code != nullptr) {
+            for (const Code* s = code->else_code->head; s; s = s->next) ++nelse_stmts;
+        }
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "then_cond") == 0) {
+            rctx.os << code->if_cond;
+        } else if (strcmp(var, "else_cond") == 0) {
+            rctx.os << code->else_cond;
+        } else if (strcmp(var, "then_stmt") == 0) {
+            if (oneline) {
+                rctx.os << curr_stmt->text;
+                render_stmt_end(rctx, curr_stmt->kind == CodeKind::STMT);
+            } else {
+                render(rctx, curr_stmt);
+            }
+        } else if (strcmp(var, "else_stmt") == 0) {
+            DCHECK(!oneline);
+            render(rctx, curr_stmt);
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "then_stmt") == 0) {
+            return nthen_stmts;
+        } else if (strcmp(var, "else_stmt") == 0) {
+            return nelse_stmts;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "then_stmt") == 0) {
+            DCHECK(rbound < nthen_stmts);
+            curr_stmt = code->if_code->head;
+            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
+            last_stmt = curr_stmt;
+            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+        } else if (strcmp(var, "else_stmt") == 0) {
+            DCHECK(rbound < nelse_stmts);
+            curr_stmt = code->else_code->head;
+            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
+            last_stmt = curr_stmt;
+            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "then_stmt") == 0 || strcmp(var, "else_stmt") == 0) {
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_else_part") == 0) {
+            return code->else_code != nullptr;
+        } else if (strcmp(cond, "have_else_cond") == 0) {
+            return code->else_cond != nullptr;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderIfThenElse);
+};
 
 static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     std::ostringstream& os = rctx.os;
@@ -329,7 +379,7 @@ class RenderSwitchCaseBlock : public OutputCallback {
     const CodeCase* code;
     const Code* curr_stmt;
     const Code* last_stmt;
-    size_t nstmt = 0;
+    size_t nstmt;
     size_t curr_range;
     size_t last_range;
     size_t nranges;
@@ -438,11 +488,7 @@ class RenderSwitch : public OutputCallback {
         if (strcmp(var, "expr") == 0) {
             rctx.os << code->expr;
         } else if (strcmp(var, "case") == 0) {
-            const Code* s = curr_case->body->head;
-            bool oneline = specialize_oneline
-               && s != nullptr
-               && s->next == nullptr
-               && (s->kind == CodeKind::STMT || s->kind == CodeKind::TEXT);
+            bool oneline = specialize_oneline && oneline_stmt_list(curr_case->body);
             const char* conf = oneline ? "code:switch_cases_oneline" : "code:switch_cases";
             RenderSwitchCaseBlock callback(rctx, curr_case, oneline);
             rctx.stx.gen_code(rctx.os, rctx.opts, conf, callback);
@@ -762,9 +808,16 @@ static void render(RenderContext& rctx, const Code* code) {
     switch (code->kind) {
     case CodeKind::EMPTY:
         break;
-    case CodeKind::IF_THEN_ELSE:
-        render_if_then_else(rctx, &code->ifte);
+    case CodeKind::IF_THEN_ELSE: {
+        bool oneline = code->ifte.oneline
+            && rctx.stx.have_conf("code:if_then_oneline")
+            && oneline_stmt_list(code->ifte.if_code)
+            && code->ifte.else_code == nullptr;
+        RenderIfThenElse callback(rctx, &code->ifte, oneline);
+        const char* conf = oneline ? "code:if_then_oneline" : "code:if_then_else";
+        rctx.stx.gen_code(rctx.os, rctx.opts, conf, callback);
         break;
+    }
     case CodeKind::SWITCH: {
         RenderSwitch callback(rctx, &code->swch);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:switch", callback);

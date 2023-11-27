@@ -12,11 +12,11 @@ label_indent = default;
 abort_requires_include = no;
 
 code:if_then_else =
-    "if " then_cond " {" nl
-        [then_stmt: indent then_stmt nl]
-    (have_else_part? "} else " (have_else_cond? "if " else_cond " ") "{" nl
-        [else_stmt: indent else_stmt nl])
-    "}" nl;
+    topindent "if " then_cond " {" nl
+        indent [then_stmt: then_stmt] dedent
+    (have_else_part? topindent "} else " (have_else_cond? "if " else_cond " ") "{" nl
+        indent [else_stmt: else_stmt] dedent)
+    topindent "}" nl;
 
 code:var_defn_local =
     (have_init? "" : "#[allow(unused_assignments)]" nl)
