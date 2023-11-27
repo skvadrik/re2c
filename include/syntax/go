@@ -8,7 +8,6 @@ case_ranges = unsupported;
 constants = upper_case;
 char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = no;
-label_indent = zero;
 abort_requires_include = no;
 
 code:var_defn_local = (have_init? name " := " init : "var " name " " type) nl;

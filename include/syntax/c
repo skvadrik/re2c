@@ -8,7 +8,6 @@ case_ranges = optional;
 constants = snake_case;
 char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = yes;
-label_indent = zero;
 abort_requires_include = yes;
 
 code:var_defn_local = type " " name (have_init? " = " init) ";" nl;

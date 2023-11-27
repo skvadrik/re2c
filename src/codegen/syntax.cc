@@ -33,7 +33,6 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["constants"] = {"snake_case", "upper_case"};
     allowed_word_confs["char_literals"] = {"hexadecimal", "symbolic"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
-    allowed_word_confs["label_indent"] = {"zero", "default"};
     allowed_word_confs["abort_requires_include"] = {"yes", "no"};
 
     allowed_code_confs["code:var_defn_local"] = {

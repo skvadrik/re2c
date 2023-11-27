@@ -9,7 +9,6 @@ const char* DEFAULT_SYNTAX_C =
     "constants = snake_case;\n"
     "char_literals = (encoding.ebcdic ? hexadecimal : symbolic);\n"
     "semicolons = yes;\n"
-    "label_indent = zero;\n"
     "abort_requires_include = yes;\n"
     "\n"
     "code:var_defn_local = type \" \" name (have_init? \" = \" init) \";\" nl;\n"

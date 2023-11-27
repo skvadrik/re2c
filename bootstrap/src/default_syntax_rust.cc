@@ -9,7 +9,6 @@ const char* DEFAULT_SYNTAX_RUST =
     "constants = snake_case;\n"
     "char_literals = (encoding.ebcdic ? hexadecimal : symbolic);\n"
     "semicolons = yes;\n"
-    "label_indent = default;\n"
     "abort_requires_include = no;\n"
     "\n"
     "code:if_then_else =\n"

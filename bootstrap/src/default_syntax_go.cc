@@ -9,7 +9,6 @@ const char* DEFAULT_SYNTAX_GO =
     "constants = upper_case;\n"
     "char_literals = (encoding.ebcdic ? hexadecimal : symbolic);\n"
     "semicolons = no;\n"
-    "label_indent = zero;\n"
     "abort_requires_include = no;\n"
     "\n"
     "code:var_defn_local = (have_init? name \" := \" init : \"var \" name \" \" type) nl;\n"
