@@ -20,7 +20,9 @@ Stx::Stx(OutAllocator& alc)
         , stack_expr()
         , stack_code()
         , stack_code_list()
-        , confs() {
+        , confs()
+        , have_oneline_if(false)
+        , have_oneline_switch(false) {
     allowed_list_confs["api"] = {"pointers", "generic"};
     allowed_list_confs["api_style"] = {"functions", "freeform"};
     allowed_list_confs["jump_model"] = {"goto_label", "loop_switch"};
@@ -332,6 +334,11 @@ void Stx::gen_code(
     }
 }
 
+void Stx::cache_conf_tests() {
+    have_oneline_if = have_conf("code:if_then_oneline");
+    have_oneline_switch = have_conf("code:switch_cases_oneline");
+}
+
 StxFile::StxFile(const std::string& fname, Msg& msg, OutAllocator& alc)
     : alc(alc)
     , fname(fname)
@@ -397,6 +404,9 @@ Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, St
     StxFile sf(fname, msg, alc);
     CHECK_RET(sf.read(lang));
     CHECK_RET(sf.parse(stx));
+
+    stx.cache_conf_tests();
+
     return Ret::OK;
 }
 

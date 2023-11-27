@@ -115,6 +115,8 @@ class Stx {
     stack_code_t stack_code;
     stack_code_list_t stack_code_list;
     confs_t confs;
+    bool have_oneline_if;
+    bool have_oneline_switch;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxCode* make_code(StxCodeType type);
@@ -126,6 +128,8 @@ class Stx {
 
     void push_list_on_stack(const StxCode* x);
     bool eval_cond(const char* cond, const opt_t* opts, OutputCallback& callback) const;
+
+    bool have_conf(const char* name) const;
 
   public:
     explicit Stx(OutAllocator& alc);
@@ -150,7 +154,11 @@ class Stx {
     Ret validate_conf_expr(const StxConf* conf);
     Ret validate_conf_code(const StxConf* conf);
 
-    bool have_conf(const char* name) const;
+    // functions that test for presence of specific configs (cached in class fields)
+    bool specialize_oneline_if() const;
+    bool specialize_oneline_switch() const;
+    void cache_conf_tests();
+
     void gen_code(std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback);
 };
 
@@ -277,9 +285,11 @@ inline StxCode* Stx::make_code_list(
     return x;
 }
 
-inline void Stx::add_conf(const char* name, const StxConf* conf) {
-    confs[name] = conf;
-}
+inline void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
+
+inline bool Stx::specialize_oneline_if() const { return have_oneline_if; }
+
+inline bool Stx::specialize_oneline_switch() const { return have_oneline_switch; }
 
 loc_t StxFile::tok_loc() const {
     DCHECK(pos <= tok);

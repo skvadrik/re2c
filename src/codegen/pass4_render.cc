@@ -471,7 +471,6 @@ class RenderSwitch : public OutputCallback {
     const CodeCase* curr_case;
     const CodeCase* last_case;
     size_t ncases;
-    const bool specialize_oneline;
 
   public:
     RenderSwitch(RenderContext& rctx, const CodeSwitch* code)
@@ -479,8 +478,7 @@ class RenderSwitch : public OutputCallback {
             , code(code)
             , curr_case(nullptr)
             , last_case(nullptr)
-            , ncases(0)
-            , specialize_oneline(rctx.stx.have_conf("code:switch_cases_oneline")) {
+            , ncases(0) {
         for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
     }
 
@@ -488,7 +486,8 @@ class RenderSwitch : public OutputCallback {
         if (strcmp(var, "expr") == 0) {
             rctx.os << code->expr;
         } else if (strcmp(var, "case") == 0) {
-            bool oneline = specialize_oneline && oneline_stmt_list(curr_case->body);
+            bool oneline = rctx.stx.specialize_oneline_switch()
+                    && oneline_stmt_list(curr_case->body);
             const char* conf = oneline ? "code:switch_cases_oneline" : "code:switch_cases";
             RenderSwitchCaseBlock callback(rctx, curr_case, oneline);
             rctx.stx.gen_code(rctx.os, rctx.opts, conf, callback);
@@ -809,8 +808,8 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::EMPTY:
         break;
     case CodeKind::IF_THEN_ELSE: {
-        bool oneline = code->ifte.oneline
-            && rctx.stx.have_conf("code:if_then_oneline")
+        bool oneline = rctx.stx.specialize_oneline_if()
+            && code->ifte.oneline
             && oneline_stmt_list(code->ifte.if_code)
             && code->ifte.else_code == nullptr;
         RenderIfThenElse callback(rctx, &code->ifte, oneline);
