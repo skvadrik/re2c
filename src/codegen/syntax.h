@@ -81,8 +81,6 @@ struct StxConf {
     };
 };
 
-using confs_t = std::unordered_map<std::string, StxConf*>;
-
 class Stx {
     struct code_conf_t {
         std::vector<std::string> vars;
@@ -105,6 +103,7 @@ class Stx {
     using stack_expr_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
     using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
     using stack_code_list_t = std::vector<const StxCode*>;
+    using confs_t = std::unordered_map<std::string, const StxConf*>;
 
     OutAllocator& alc;
     allowed_list_confs_t allowed_list_confs;
@@ -115,6 +114,7 @@ class Stx {
     stack_expr_t stack_expr;
     stack_code_t stack_code;
     stack_code_list_t stack_code_list;
+    confs_t confs;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxCode* make_code(StxCodeType type);
@@ -128,8 +128,6 @@ class Stx {
     bool eval_cond(const char* cond, const opt_t* opts, OutputCallback& callback) const;
 
   public:
-    confs_t confs;
-
     explicit Stx(OutAllocator& alc);
 
     // functions that construct AST when parsing syntax configurations
@@ -145,6 +143,7 @@ class Stx {
     StxCode* make_code_cond(const char* conf, StxCodes* code_then, StxCodes* code_else);
     StxCode* make_code_list(const char* var, int32_t lbound, int32_t rbound, StxCodes* code);
     StxName* make_name(const char* name);
+    void add_conf(const char* name, const StxConf* conf);
 
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);
@@ -276,6 +275,10 @@ inline StxCode* Stx::make_code_list(
     x->list.rbound = rbound;
     x->list.code = code;;
     return x;
+}
+
+inline void Stx::add_conf(const char* name, const StxConf* conf) {
+    confs[name] = conf;
 }
 
 loc_t StxFile::tok_loc() const {

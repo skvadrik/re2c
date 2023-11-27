@@ -66,7 +66,7 @@ extern "C" {
 
 confs
 : %empty
-| conf confs { stx.confs[$1->name] = $1; };
+| conf confs { stx.add_conf($1->name, $1); };
 
 conf
 : STX_CONF_CODE code_exprs ';' {

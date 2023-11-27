@@ -1127,7 +1127,7 @@ yyreduce:
     {
   case 3: /* confs: conf confs  */
 #line 69 "../src/codegen/syntax_parser.ypp"
-             { stx.confs[(yyvsp[-1].conf)->name] = (yyvsp[-1].conf); }
+             { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
 #line 1132 "src/codegen/syntax_parser.cc"
     break;
 
