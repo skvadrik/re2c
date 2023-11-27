@@ -18,6 +18,19 @@ static bool oneline_stmt_list(const CodeList* list) {
             && (head->kind == CodeKind::STMT || head->kind == CodeKind::TEXT);
 }
 
+template<typename Elem>
+static inline void find_list_bounds(
+        const Elem* head, size_t lbound, size_t rbound, const Elem** curr, const Elem** last) {
+    const Elem* e = head;
+    size_t i = 0;
+
+    for (; i < lbound; ++i) e = e->next;
+    *curr = e;
+
+    for (; i <= rbound; ++i) e = e->next;
+    *last = e;
+}
+
 static void render_global_var(RenderContext& rctx, const char* var) {
     if (strcmp(var, "nl") == 0) {
         rctx.os << std::endl;
@@ -224,16 +237,10 @@ class RenderIfThenElse : public OutputCallback {
     void start_list(const char* var, size_t lbound, size_t rbound) override {
         if (strcmp(var, "then_stmt") == 0) {
             DCHECK(rbound < nthen_stmts);
-            curr_stmt = code->if_code->head;
-            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
-            last_stmt = curr_stmt;
-            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+            find_list_bounds(code->if_code->head, lbound, rbound, &curr_stmt, &last_stmt);
         } else if (strcmp(var, "else_stmt") == 0) {
             DCHECK(rbound < nelse_stmts);
-            curr_stmt = code->else_code->head;
-            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
-            last_stmt = curr_stmt;
-            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+            find_list_bounds(code->else_code->head, lbound, rbound, &curr_stmt, &last_stmt);
         } else {
             UNREACHABLE();
         }
@@ -442,10 +449,7 @@ class RenderSwitchCaseBlock : public OutputCallback {
             last_range = rbound;
         } else if (strcmp(var, "stmt") == 0) {
             DCHECK(rbound < nstmt);
-            curr_stmt = code->body->head;
-            for (size_t i = 0; i < lbound; ++i) curr_stmt = curr_stmt->next;
-            last_stmt = curr_stmt;
-            for (size_t i = 0; i <= rbound; ++i) last_stmt = last_stmt->next;
+            find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
         } else {
             UNREACHABLE();
         }
@@ -507,10 +511,7 @@ class RenderSwitch : public OutputCallback {
     void start_list(const char* var, size_t lbound, size_t rbound) override {
         if (strcmp(var, "case") == 0) {
             DCHECK(rbound < ncases);
-            curr_case = code->cases->head;
-            for (size_t i = 0; i < lbound; ++i) curr_case = curr_case->next;
-            last_case = curr_case;
-            for (size_t i = lbound; i <= rbound; ++i) last_case = last_case->next;
+            find_list_bounds(code->cases->head, lbound, rbound, &curr_case, &last_case);
         } else {
             UNREACHABLE();
         }
