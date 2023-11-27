@@ -44,9 +44,9 @@ code:switch_case_default = "default:";
 
 code:loop =
     (have_label? label ":" nl)
-    "for {" nl
-        [stmt: indent stmt nl]
-    "}" nl;
+    topindent "for {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
 
 code:cond_enum =
     "const (" nl

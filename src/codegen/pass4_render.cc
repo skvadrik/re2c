@@ -529,6 +529,66 @@ class RenderSwitch : public OutputCallback {
     FORBID_COPY(RenderSwitch);
 };
 
+class RenderLoop : public OutputCallback {
+    RenderContext& rctx;
+    const CodeList* code;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmts;
+
+  public:
+    RenderLoop(RenderContext& rctx, const CodeList* code)
+            : rctx(rctx), code(code), curr_stmt(nullptr), last_stmt(nullptr), nstmts(0) {
+        for (const Code* s = code->head; s; s = s->next) ++nstmts;
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "label") == 0) {
+            rctx.os << rctx.opts->label_loop;
+        } else if (strcmp(var, "stmt") == 0) {
+            render(rctx, curr_stmt);
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "stmt") == 0) {
+            return nstmts;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "stmt") == 0) {
+            DCHECK(rbound < nstmts);
+            find_list_bounds(code->head, lbound, rbound, &curr_stmt, &last_stmt);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "stmt") == 0) {
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_label") == 0) {
+            return !rctx.opts->label_loop.empty();
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderLoop);
+};
+
 static void render_arg(RenderContext& rctx, const CodeArg* arg) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -590,40 +650,6 @@ static void render_func(RenderContext& rctx, const CodeFunc* func) {
     }
 
     os << func->semi << std::endl;
-    ++rctx.line;
-}
-
-static void render_loop(RenderContext& rctx, const CodeList* loop) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    switch (opts->lang) {
-    case Lang::C:
-        os << indent(rctx.ind, opts->indent_str) << "for (;;)";
-        break;
-    case Lang::GO:
-        // In Go label is on a separate line with zero indent.
-        if (!opts->label_loop.empty()) {
-            os << opts->label_loop << ":" << std::endl;
-            ++rctx.line;
-        }
-        os << indent(rctx.ind, opts->indent_str) << "for";
-        break;
-    case Lang::RUST:
-        os << indent(rctx.ind, opts->indent_str);
-        // In Rust label is on the same line, preceding the `loop` keyword.
-        if (!opts->label_loop.empty()) os << opts->label_loop << ": ";
-        os << "loop";
-        break;
-    }
-    os << " {" << std::endl;
-    ++rctx.line;
-
-    ++rctx.ind;
-    render_list(rctx, loop);
-    --rctx.ind;
-
-    os << indent(rctx.ind, opts->indent_str) << "}" << std::endl;
     ++rctx.line;
 }
 
@@ -829,9 +855,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::FUNC:
         render_func(rctx, &code->func);
         break;
-    case CodeKind::LOOP:
-        render_loop(rctx, code->loop);
+    case CodeKind::LOOP: {
+        RenderLoop callback(rctx, code->loop);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:loop", callback);
         break;
+    }
     case CodeKind::TEXT_RAW:
         os << code->text << std::endl;
         line += count_lines_text(code->text) + 1;

@@ -49,9 +49,9 @@ code:switch_case_range = [val{0}: val] (multival ? " ..= " [val{-1}: val]);
 code:switch_case_default = "_";
 
 code:loop =
-    (have_label? label ": ") "loop {" nl
-        [stmt: indent stmt nl]
-    "}" nl;
+    topindent (have_label? label ": ") "loop {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
 
 code:cond_enum = [elem: "const " elem ": " (storable_state? "isize" : "usize") " = " init ";" nl];
 

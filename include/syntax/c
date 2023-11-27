@@ -51,9 +51,9 @@ code:switch_case_default =
     topindent "default:";
 
 code:loop =
-    "for (;;) {" nl
-        [stmt: indent stmt nl]
-    "}" nl;
+    topindent "for (;;) {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
 
 code:cond_enum =
     "enum " name " {" nl
