@@ -142,7 +142,9 @@ struct Output {
 
 class OutputCallback {
   public:
-    virtual void render_var(const char* var) = 0;
+    virtual void render_var(const char* /*var*/) {
+        UNREACHABLE();
+    }
     virtual size_t get_list_size(const char* /*var*/) const {
         UNREACHABLE();
         return 0;

@@ -35,20 +35,17 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_requires_include"] = {"yes", "no"};
 
-    allowed_code_confs["code:var_defn_local"] = {
+    allowed_code_confs["code:var"] = {
         {"type", "name", "init"}, {}, {"have_init"}
     };
-    allowed_code_confs["code:var_defn_global"] = {
+    allowed_code_confs["code:const"] = {
         {"type", "name", "init"}, {}, {}
     };
-    allowed_code_confs["code:array_defn"] = {
+    allowed_code_confs["code:const_array"] = {
         {"type", "name", "init"}, {}, {}
     };
     allowed_code_confs["code:type_int"] = {};
     allowed_code_confs["code:type_uint"] = {};
-    allowed_code_confs["code:type_yyctype"] = {
-        {"type"}, {}, {}
-    };
     allowed_code_confs["code:type_yybm"] = {};
     allowed_code_confs["code:if_then_else"] = {
         {"then_cond", "else_cond"},

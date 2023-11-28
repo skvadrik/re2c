@@ -109,76 +109,45 @@ static void render_block(RenderContext& rctx, const CodeBlock* code) {
     }
 }
 
-static const char* var_type_c(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "int";
-    case VarType::UINT:
-        return "unsigned int";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
+class RenderVar : public OutputCallback {
+    RenderContext& rctx;
+    const CodeVar* code;
 
-static const char* var_type_go(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "int";
-    case VarType::UINT:
-        return "uint";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
+  public:
+    RenderVar(RenderContext& rctx, const CodeVar* code): rctx(rctx), code(code) {}
 
-static const char* var_type_rust(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "isize";
-    case VarType::UINT:
-        return "usize";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
-
-static void render_var(RenderContext& rctx, const CodeVar* var) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    const std::string& ind = indent(rctx.ind, opts->indent_str);
-    switch (opts->lang) {
-    case Lang::C:
-        os << ind << var_type_c(var->type, opts) << " " << var->name;
-        if (var->init) os << " = " << var->init;
-        os << ";" << std::endl;
-        ++rctx.line;
-        break;
-
-    case Lang::GO:
-        os << ind;
-        if (var->init) {
-            os << var->name << " := " << var->init;
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            rctx.os << code->name;
+        } else if (strcmp(var, "init") == 0) {
+            rctx.os << code->init;
+        } else if (strcmp(var, "type") == 0) {
+            OutputCallback callback; // dummy callback, these configurations have no variables
+            switch (code->type) {
+            case VarType::INT:
+                rctx.stx.gen_code(rctx.os, rctx.opts, "code:type_int", callback);
+                break;
+            case VarType::UINT:
+                rctx.stx.gen_code(rctx.os, rctx.opts, "code:type_uint", callback);
+                break;
+            case VarType::YYCTYPE:
+                rctx.os << rctx.opts->api_char_type;
+            }
         } else {
-            os << "var " << var->name << " " << var_type_go(var->type, opts);
+            render_global_var(rctx, var);
         }
-        os << std::endl;
-        ++rctx.line;
-        break;
-
-    case Lang::RUST:
-        // In Rust uninitialized variable is an error, but if the compiler is able to see that all
-        // paths overwrite the initial value, it warns about unused assignments.
-        if (!var->init) os << ind << "#[allow(unused_assignments)]" << std::endl;
-        os << ind << "let mut " << var->name << " : " << var_type_rust(var->type, opts) << " = "
-                << (var->init ? var->init : "0") << ";" << std::endl;
-        rctx.line += 2;
-        break;
     }
-}
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_init") == 0) {
+            return code->init != nullptr;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderVar);
+};
 
 class RenderIfThenElse : public OutputCallback {
     RenderContext& rctx;
@@ -920,9 +889,11 @@ static void render(RenderContext& rctx, const Code* code) {
         render_line_info(os, rctx.line + 1, rctx.file, opts);
         ++line;
         break;
-    case CodeKind::VAR:
-        render_var(rctx, &code->var);
+    case CodeKind::VAR: {
+        RenderVar callback(rctx, &code->var);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:var", callback);
         break;
+    }
     case CodeKind::LABEL:
         render_label(rctx, code->label);
         break;

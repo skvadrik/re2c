@@ -10,23 +10,24 @@ char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = yes;
 abort_requires_include = no;
 
+code:var =
+    // In Rust uninitialized variable is an error, but if the compiler is able to see
+    // that all paths overwrite the initial value, it warns about unused assignments.
+    (have_init? "" : topindent "#[allow(unused_assignments)]" nl)
+    topindent "let mut " name " : " type " = " (have_init? init : "0") ";" nl;
+code:const = topindent "const " name ": " type " = " init nl ";";
+// code:const_array = ??;
+
+code:type_int = "isize";
+code:type_uint = "usize";
+// code:type_yybm = ??;
+
 code:if_then_else =
     topindent "if " then_cond " {" nl
         indent [then_stmt: then_stmt] dedent
     (have_else_part? topindent "} else " (have_else_cond? "if " else_cond " ") "{" nl
         indent [else_stmt: else_stmt] dedent)
     topindent "}" nl;
-
-code:var_defn_local =
-    (have_init? "" : "#[allow(unused_assignments)]" nl)
-    "let mut " name " : " type " = " (have_init? init : "0") nl;
-code:var_defn_global = "const " name ": " type " = " init nl;
-// code:array_defn = ??;
-
-code:type_int = "isize";
-code:type_uint = "usize";
-code:type_yyctype = type;
-// code:type_yybm = ??;
 
 code:switch =
     topindent "match " expr " {" nl

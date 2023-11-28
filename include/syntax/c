@@ -10,13 +10,12 @@ char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = yes;
 abort_requires_include = yes;
 
-code:var_defn_local = type " " name (have_init? " = " init) ";" nl;
-code:var_defn_global = "#define " name " " init nl;
-code:array_defn = "static const " type " " name "[] = {" init "};" nl;
+code:var = topindent type " " name (have_init? " = " init) ";" nl;
+code:const = topindent "#define " name " " init nl;
+code:const_array = topindent "static const " type " " name "[] = {" init "};" nl;
 
 code:type_int = "int";
 code:type_uint = "unsigned int";
-code:type_yyctype = type;
 code:type_yybm = "unsigned char";
 
 code:if_then_else =
