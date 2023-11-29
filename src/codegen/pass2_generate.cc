@@ -702,50 +702,19 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     return stmts;
 }
 
-static uint32_t label_width(uint32_t label) {
-    uint32_t n = 0;
-    while (label /= 10) ++n;
-    return n;
-}
-
 static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
-    static constexpr size_t TABLE_WIDTH = 8;
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
 
-    uint32_t maxlabel = 0;
+    const char** elems = alc.alloct<const char*>(CodeGoCpTable::TABLE_SIZE);
     for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE; ++i) {
-        maxlabel = std::max(maxlabel, go->table[i]->label->index);
+        elems[i] = output.scratchbuf.cstr("&&").str(opts->label_prefix)
+                .u32(go->table[i]->label->index).flush();
     }
-    const uint32_t max_digits = label_width(maxlabel);
 
     CodeList* stmts = code_list(alc);
-
-    text = o.cstr("static void *").str(opts->var_cgoto_table).cstr("[256] = {").flush();
-    append(stmts, code_text(alc, text));
-
-    CodeList* block = code_list(alc);
-    for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE / TABLE_WIDTH; ++i) {
-        for (uint32_t j = 0; j < TABLE_WIDTH; ++j) {
-            const Label& l = *go->table[i * TABLE_WIDTH + j]->label;
-
-            o.cstr("&&").str(opts->label_prefix).label(l);
-            if (j < TABLE_WIDTH - 1) {
-                const std::string padding(max_digits - label_width(l.index) + 1, ' ');
-                o.cstr(",").str(padding);
-            } else if (i < CodeGoCpTable::TABLE_SIZE / TABLE_WIDTH - 1) {
-                o.cstr(",");
-            }
-        }
-        text = o.flush();
-        append(block, code_text(alc, text));
-    }
-    append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
-
-    append(stmts, code_stmt(alc, "}"));
-
+    append(stmts, code_table(alc, opts->var_cgoto_table.c_str(),
+            "void*", elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
     return stmts;
 }
 
@@ -913,16 +882,11 @@ static void emit_accept(
     if (opts->cgoto && nacc >= opts->cgoto_threshold && !have_tags) {
         CodeList* block = code_list(alc);
 
-        CodeList* table = code_list(alc);
-        text = o.cstr("static void *").str(opts->var_cgoto_table).cstr("[").u64(nacc).cstr("] = {")
-                .flush();
-        append(block, code_text(alc, text));
-        for (const AcceptTrans& a : acc) {
-            text = o.cstr("&&").str(opts->label_prefix).label(*a.state->label).cstr(",").flush();
-            append(table, code_text(alc, text));
+        const char** elems = alc.alloct<const char*>(nacc);
+        for (uint32_t i = 0; i < nacc; ++i) {
+            elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        append(block, code_block(alc, table, CodeBlock::Kind::INDENTED));
-        append(block, code_stmt(alc, "}"));
+        append(block, code_table(alc, opts->var_cgoto_table.c_str(), "void*", elems, nacc));
 
         text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_accept).cstr("]")
                 .flush();
@@ -1682,22 +1646,15 @@ static CodeList* gen_cond_goto(Output& output) {
 static CodeList* gen_cond_table(Output& output) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
     const StartConds& conds = output.block().conds;
 
     CodeList* code = code_list(alc);
-
-    buf.cstr("static void *").str(opts->var_cond_table).cstr("[").u64(conds.size()).cstr("] = {");
-    append(code, code_text(alc, buf.flush()));
-
-    CodeList* block = code_list(alc);
-    for (const StartCond& cond : conds) {
-        buf.cstr("&&").str(opts->cond_label_prefix).str(cond.name).cstr(",");
-        append(block, code_text(alc, buf.flush()));
+    const char** elems = alc.alloct<const char*>(conds.size());
+    for (size_t i = 0; i < conds.size(); ++i) {
+        elems[i] = output.scratchbuf.cstr("&&")
+                .str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    append(code, code_block(alc, block, CodeBlock::Kind::INDENTED));
-
-    append(code, code_stmt(alc, "}"));
+    append(code, code_table(alc, opts->var_cond_table.c_str(), "void*", elems, conds.size()));
     return code;
 }
 
@@ -1789,39 +1746,28 @@ std::string bitmap_name(const opt_t* opts, const std::string& cond) {
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond) {
     if (!bitmap->states->head || !bitmap->used) return nullptr;
 
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    static constexpr uint32_t WIDTH = 8;
+    const uint32_t nchars = bitmap->nchars;
     uint32_t nmaps = 0;
     for (CodeBmState* b = bitmap->states->head; b; b = b->next) ++nmaps;
 
-    static constexpr uint32_t WIDTH = 8;
-    const bool annotate = nmaps > WIDTH;
-    const uint32_t nchars = bitmap->nchars;
+    uint32_t nelems = nchars * ((nmaps + WIDTH - 1) / WIDTH);
+    const char** elems = alc.alloct<const char*>(nelems);
+    uint32_t* tmpbuf = alc.alloct<uint32_t>(nelems); // temporary buffer for bitmap generation
 
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
-
-    CodeList* stmts = code_list(alc);
-
-    const std::string& name = bitmap_name(opts, cond);
-    text = opts->lang == Lang::C
-           ? o.cstr("static const unsigned char ").str(name).cstr("[] = {").flush()
-           : o.str(name).cstr(" := []byte{").flush();
-    append(stmts, code_text(alc, text));
-
-    CodeList* block = code_list(alc);
-
-    uint32_t* buffer = new uint32_t[nchars];
+    // Generate bitmaps in a temporary buffer and store them as table elements.
     uint32_t bmidx = 0;
-
-    // Iterate while there are states that may use bitmaps.
     for (CodeBmState* b = bitmap->states->head; b; ++bmidx) {
         const uint32_t offset = bmidx * nchars;
 
         // For each state generate a table with one bit per character, denoting if there is a
         // transition on this charater to the destination state. Tables for up to 8 states are
         // overlayed and compressed in one bitmap.
-        memset(buffer, 0, nchars * sizeof(uint32_t));
+        memset(tmpbuf, 0, nchars * sizeof(uint32_t));
         for (uint32_t mask = 0x80; mask && b; mask >>= 1, b = b->next) {
             b->offset = offset;
             b->mask = mask;
@@ -1831,37 +1777,28 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
             for (; span < last; ++span) {
                 if (span->to == b->state) {
                     for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {
-                        buffer[c] |= mask;
+                        tmpbuf[c] |= mask;
                     }
                 }
                 c = span->ub;
             }
         }
 
-        // If there are multiple tables, annotate them with comments.
-        if (annotate) {
-            const uint32_t lowidx = bmidx * WIDTH + 1;
-            const uint32_t uppidx = std::min(nmaps, lowidx + 7);
-            text = o.cstr("/* table ").u32(lowidx).cstr(" .. ").u32(uppidx).cstr(": ").u32(offset)
-                    .cstr(" */").flush();
-            append(block, code_text(alc, text));
-        }
-
-        // Generate code for the table.
-        for (uint32_t c = 0; c < nchars; ) {
-            for (uint32_t u = c + WIDTH; c < u; ++c) {
-                o.yybm_char(buffer[c], opts, 3).cstr(", ");
+        for (uint32_t i = 0; i < nchars; ++i) {
+            if (opts->bitmaps_hex) {
+                print_hex(buf.stream(), tmpbuf[i], opts->encoding.cunit_size());
+            } else {
+                buf.u32(tmpbuf[i]);
             }
-            text = o.flush();
-            append(block, code_text(alc, text));
+            elems[bmidx * nchars + i] = buf.flush();
         }
     }
 
-    delete[] buffer;
+    const char *name = buf.str(bitmap_name(opts, cond)).flush();
+    const char* type = opts->lang == Lang::C ? "const unsigned char" : "byte";
 
-    append(stmts, code_block(alc, block, CodeBlock::Kind::INDENTED));
-    append(stmts, code_stmt(alc, "}"));
-
+    CodeList* stmts = code_list(alc);
+    append(stmts, code_table(alc, name, type, elems, nelems, /*tabulate*/ true));
     return stmts;
 }
 
@@ -2077,6 +2014,7 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::RAW:
         case CodeKind::LABEL:
         case CodeKind::ABORT:
+        case CodeKind::TABLE:
             break;
         }
     }

@@ -262,6 +262,14 @@ struct CodeLabel {
     };
 };
 
+struct CodeTable {
+    const char* name;
+    const char* type;
+    const char** elems;
+    size_t size;
+    bool tabulate;
+};
+
 struct Code {
     union {
         const char* text;
@@ -275,6 +283,7 @@ struct Code {
         CodeFmt fmt;
         CodeLabel label;
         CodeList* loop;
+        CodeTable* table;
         loc_t loc;
     };
 
@@ -537,6 +546,23 @@ inline CodeCmp* code_cmp(OutAllocator& alc, const char* cmp, uint32_t val) {
     CodeCmp* x = alc.alloct<CodeCmp>(1);
     x->cmp = cmp;
     x->val = val;
+    return x;
+}
+
+inline Code* code_table(
+        OutAllocator& alc,
+        const char* name,
+        const char* type,
+        const char** elems,
+        size_t size,
+        bool tabulate = false) {
+    Code* x = new_code(alc, CodeKind::TABLE);
+    CodeTable* t = x->table = alc.alloct<CodeTable>(1);
+    t->name = name;
+    t->type = type;
+    t->elems = elems;
+    t->size = size;
+    t->tabulate = tabulate;
     return x;
 }
 

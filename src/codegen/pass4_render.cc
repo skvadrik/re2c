@@ -794,6 +794,51 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
+static void render_table(RenderContext& rctx, const CodeTable* code) {
+    std::ostringstream& os = rctx.os;
+    const opt_t* opts = rctx.opts;
+
+    size_t width = 1;
+    size_t maxlen = 0;
+    if (code->tabulate) {
+        DCHECK(code->size % 8 == 0);
+        width = 8;
+        for (uint32_t i = 0; i < code->size; ++i) {
+            maxlen = std::max(maxlen, strlen(code->elems[i]));
+        }
+    }
+
+    os << indent(rctx.ind, opts->indent_str);
+    if (opts->lang == Lang::C) {
+        os << "static " << code->type << " " << code->name << "[" << code->size << "] = {\n";
+    } else {
+        DCHECK(opts->lang == Lang::GO);
+        os << code->name << " := []" << code->type << "{\n";
+    }
+    ++rctx.line;
+
+    ++rctx.ind;
+    for (size_t i = 0, rows = code->size / width; i < rows; ++i) {
+        os << indent(rctx.ind, opts->indent_str);
+        for (uint32_t j = 0; j < width; ++j) {
+            const char* e = code->elems[i * width + j];
+            if (code->tabulate) os << indent(static_cast<uint32_t>(maxlen - strlen(e)), " ");
+            os << e;
+            if (j < width - 1) {
+                os << ", ";
+            } else if (i < rows - 1 || opts->lang == Lang::GO) {
+                os << ",";
+            }
+        }
+        os << std::endl;
+        ++rctx.line;
+    }
+    --rctx.ind;
+
+    os << indent(rctx.ind, opts->indent_str) << "}";
+    render_stmt_end(rctx, true);
+}
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -896,6 +941,9 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::LABEL:
         render_label(rctx, code->label);
+        break;
+    case CodeKind::TABLE:
+        render_table(rctx, code->table);
         break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
