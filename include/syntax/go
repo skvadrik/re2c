@@ -11,8 +11,13 @@ semicolons = no;
 abort_requires_include = no;
 
 code:var = topindent (have_init? name " := " init : "var " name " " type) nl;
+
 code:const = topindent "var " name " " type " = " init nl;
-code:const_array = topindent name " := []" type "{" init "}" nl;
+
+code:const_array =
+    topindent name " := [" size "]" type "{" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "}" nl;
 
 code:type_int = "int";
 code:type_uint = "uint";

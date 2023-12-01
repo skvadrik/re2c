@@ -15,7 +15,9 @@ code:var =
     // that all paths overwrite the initial value, it warns about unused assignments.
     (have_init? "" : topindent "#[allow(unused_assignments)]" nl)
     topindent "let mut " name " : " type " = " (have_init? init : "0") ";" nl;
+
 code:const = topindent "const " name ": " type " = " init nl ";";
+
 // code:const_array = ??;
 
 code:type_int = "isize";

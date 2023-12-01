@@ -11,8 +11,15 @@ semicolons = yes;
 abort_requires_include = yes;
 
 code:var = topindent type " " name (have_init? " = " init) ";" nl;
+
 code:const = topindent "#define " name " " init nl;
-code:const_array = topindent "static const " type " " name "[] = {" init "};" nl;
+
+// TODO: make this just any array (not necessarily const) ? And `static` is also misplaced.
+code:const_array =
+    topindent "static const " type " " name "[" size "] = {" nl indent
+        [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+        [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem]     nl]
+    dedent topindent "};" nl;
 
 code:type_int = "int";
 code:type_uint = "unsigned int";

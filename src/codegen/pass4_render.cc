@@ -794,50 +794,89 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
-static void render_table(RenderContext& rctx, const CodeTable* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
+class RenderTable : public OutputCallback {
+    RenderContext& rctx;
+    const CodeTable* code;
+    const size_t ncols;
+    const size_t nrows;
+    size_t curr_col;
+    size_t last_col;
+    size_t curr_row;
+    size_t last_row;
+    size_t maxlen;
 
-    size_t width = 1;
-    size_t maxlen = 0;
-    if (code->tabulate) {
-        DCHECK(code->size % 8 == 0);
-        width = 8;
-        for (uint32_t i = 0; i < code->size; ++i) {
+  public:
+    RenderTable(RenderContext& rctx, const CodeTable* code)
+            : rctx(rctx)
+            , code(code)
+            , ncols(code->tabulate ? 8 : 1)
+            , nrows(code->size / ncols)
+            , curr_col(0)
+            , last_col(0)
+            , curr_row(0)
+            , last_row(0)
+            , maxlen(0) {
+        CHECK(nrows * ncols == code->size);
+
+        for (size_t i = 0; i < code->size; ++i) {
             maxlen = std::max(maxlen, strlen(code->elems[i]));
         }
     }
 
-    os << indent(rctx.ind, opts->indent_str);
-    if (opts->lang == Lang::C) {
-        os << "static const " << code->type << " " << code->name << "[" << code->size << "] = {\n";
-    } else {
-        DCHECK(opts->lang == Lang::GO);
-        os << code->name << " := [" << code->size << "]" << code->type << "{\n";
-    }
-    ++rctx.line;
-
-    ++rctx.ind;
-    for (size_t i = 0, rows = code->size / width; i < rows; ++i) {
-        os << indent(rctx.ind, opts->indent_str);
-        for (uint32_t j = 0; j < width; ++j) {
-            const char* e = code->elems[i * width + j];
-            if (code->tabulate) os << indent(static_cast<uint32_t>(maxlen - strlen(e)), " ");
-            os << e;
-            if (j < width - 1) {
-                os << ", ";
-            } else if (i < rows - 1 || opts->lang == Lang::GO) {
-                os << ",";
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            rctx.os << code->name;
+        } else if (strcmp(var, "type") == 0) {
+            rctx.os << code->type;
+        } else if (strcmp(var, "size") == 0) {
+            rctx.os << code->size;
+        } else if (strcmp(var, "elem") == 0) {
+            const char* e = code->elems[curr_row * ncols + curr_col];
+            if (code->tabulate) {
+                rctx.os << indent(static_cast<uint32_t>(maxlen - strlen(e)), " ");
             }
+            rctx.os << e;
+        } else {
+            render_global_var(rctx, var);
         }
-        os << std::endl;
-        ++rctx.line;
     }
-    --rctx.ind;
 
-    os << indent(rctx.ind, opts->indent_str) << "}";
-    render_stmt_end(rctx, true);
-}
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "row") == 0) {
+            return nrows;
+        } else if (strcmp(var, "elem") == 0) {
+            return ncols;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "row") == 0) {
+            DCHECK(rbound < nrows);
+            curr_row = lbound;
+            last_row = rbound;
+        } else if (strcmp(var, "elem") == 0) {
+            DCHECK(rbound < ncols);
+            curr_col = lbound;
+            last_col = rbound;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "row") == 0) {
+            return ++curr_row <= last_row;
+        } else if (strcmp(var, "elem") == 0) {
+            return ++curr_col <= last_col;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderTable);
+};
 
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
@@ -942,9 +981,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::LABEL:
         render_label(rctx, code->label);
         break;
-    case CodeKind::TABLE:
-        render_table(rctx, code->table);
+    case CodeKind::TABLE: {
+        RenderTable callback(rctx, code->table);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:const_array", callback);
         break;
+    }
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:
