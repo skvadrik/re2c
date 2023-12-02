@@ -714,7 +714,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_table(alc, opts->var_cgoto_table.c_str(),
-            "void*", elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
+            "static const void*", elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
     return stmts;
 }
 
@@ -886,7 +886,8 @@ static void emit_accept(
         for (uint32_t i = 0; i < nacc; ++i) {
             elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        append(block, code_table(alc, opts->var_cgoto_table.c_str(), "void*", elems, nacc));
+        append(block, code_table(
+                alc, opts->var_cgoto_table.c_str(), "static const void*", elems, nacc));
 
         text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_accept).cstr("]")
                 .flush();
@@ -1654,7 +1655,8 @@ static CodeList* gen_cond_table(Output& output) {
         elems[i] = output.scratchbuf.cstr("&&")
                 .str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    append(code, code_table(alc, opts->var_cond_table.c_str(), "void*", elems, conds.size()));
+    append(code, code_table(
+            alc, opts->var_cond_table.c_str(), "static const void*", elems, conds.size()));
     return code;
 }
 
@@ -1795,7 +1797,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     }
 
     const char *name = buf.str(bitmap_name(opts, cond)).flush();
-    const char* type = opts->lang == Lang::C ? "unsigned char" : "byte";
+    const char* type = opts->lang == Lang::C ? "static const unsigned char" : "byte";
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_table(alc, name, type, elems, nelems, /*tabulate*/ true));

@@ -18,7 +18,7 @@ code:var =
 
 code:const = topindent "const " name ": " type " = " init nl ";";
 
-// code:const_array = ??;
+// code:array = ??;
 
 code:type_int = "isize";
 code:type_uint = "usize";

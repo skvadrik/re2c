@@ -19,7 +19,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:const = topindent \"const \" name \": \" type \" = \" init nl \";\";\n"
     "\n"
-    "// code:const_array = ??;\n"
+    "// code:array = ??;\n"
     "\n"
     "code:type_int = \"isize\";\n"
     "code:type_uint = \"usize\";\n"

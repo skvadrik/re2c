@@ -15,7 +15,7 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:const = topindent \"var \" name \" \" type \" = \" init nl;\n"
     "\n"
-    "code:const_array =\n"
+    "code:array =\n"
     "    topindent name \" := [\" size \"]\" type \"{\" nl indent\n"
     "        [row: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"
     "    dedent topindent \"}\" nl;\n"

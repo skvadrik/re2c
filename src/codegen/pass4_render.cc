@@ -983,7 +983,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     case CodeKind::TABLE: {
         RenderTable callback(rctx, code->table);
-        rctx.stx.gen_code(rctx.os, rctx.opts, "code:const_array", callback);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:array", callback);
         break;
     }
     case CodeKind::STAGS:

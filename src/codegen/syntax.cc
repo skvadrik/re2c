@@ -41,7 +41,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:const"] = {
         {"type", "name", "init"}, {}, {}
     };
-    allowed_code_confs["code:const_array"] = {
+    allowed_code_confs["code:array"] = {
         {"type", "name", "size"}, {"row", "elem"}, {}
     };
     allowed_code_confs["code:type_int"] = {};
