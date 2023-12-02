@@ -49,7 +49,7 @@ loop:
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			 &&yy3,  &&yy3,  &&yy1,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,

@@ -773,7 +773,7 @@ loop:
         if (YYLESSTHAN(2)) YYFILL(2);
         yych = YYPEEK();
         {
-            static void* yytarget[256] = {
+            static const void* yytarget[256] = {
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
                 &&yy11, &&yy13, &&yy13, &&yy13, &&yy11, &&yy13, &&yy11, &&yy11,
                 &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,

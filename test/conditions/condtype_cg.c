@@ -10,7 +10,7 @@ int main ()
 #line 11 "conditions/condtype_cg.c"
 {
 	unsigned char yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_a,
 		&&yyc_b
 	};

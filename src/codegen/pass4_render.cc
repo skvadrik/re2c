@@ -810,10 +810,10 @@ static void render_table(RenderContext& rctx, const CodeTable* code) {
 
     os << indent(rctx.ind, opts->indent_str);
     if (opts->lang == Lang::C) {
-        os << "static " << code->type << " " << code->name << "[" << code->size << "] = {\n";
+        os << "static const " << code->type << " " << code->name << "[" << code->size << "] = {\n";
     } else {
         DCHECK(opts->lang == Lang::GO);
-        os << code->name << " := []" << code->type << "{\n";
+        os << code->name << " := [" << code->size << "]" << code->type << "{\n";
     }
     ++rctx.line;
 

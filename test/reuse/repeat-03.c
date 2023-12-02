@@ -13,7 +13,7 @@ void scan(unsigned char* in)
 
 {
 	YYCTYPE yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};
@@ -23,7 +23,7 @@ yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 			&&yy2, &&yy2, &&yy1, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 			&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
@@ -105,7 +105,7 @@ void scan(unsigned short* in)
 
 {
 	YYCTYPE yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};
@@ -115,7 +115,7 @@ yyc_r1:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13,
 			&&yy13, &&yy13, &&yy12, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13,
 			&&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13,

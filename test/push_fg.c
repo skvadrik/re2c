@@ -280,7 +280,7 @@ yy0:
 yyFillLabel0:
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
 			 &&yy3,  &&yy4,  &&yy5,  &&yy4,  &&yy4,  &&yy4,  &&yy3,  &&yy3,
 			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,

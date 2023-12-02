@@ -91,7 +91,7 @@ void scan(Scanner *s)
 		s->tok = s->cur;
 
 		{
-			static void* yyctable[4] = {
+			static const void* yyctable[4] = {
 				&&yyc_Normal,
 				&&yyc_Comment,
 				&&yyc_Skiptoeol,
@@ -108,7 +108,7 @@ yyc_Normal:
 yyFillLabel0:
 			s->yych = *s->cur;
 			{
-				static void* yytarget[256] = {
+				static const void* yytarget[256] = {
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
@@ -201,7 +201,7 @@ yy12:
 yy13:
 			s->yych = *++s->cur;
 			{
-				static void* yytarget[256] = {
+				static const void* yytarget[256] = {
 					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
 					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
 					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
@@ -340,7 +340,7 @@ yyc_Skiptoeol:
 yyFillLabel2:
 			s->yych = *s->cur;
 			{
-				static void* yytarget[256] = {
+				static const void* yytarget[256] = {
 					&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
 					&&yy28, &&yy28, &&yy30, &&yy28, &&yy28, &&yy31, &&yy28, &&yy28,
 					&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,

@@ -1089,7 +1089,7 @@ restart:
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
-	static void* yyctable[10] = {
+	static const void* yyctable[10] = {
 		&&yyc_ST_IN_SCRIPTING,
 		&&yyc_ST_LOOKING_FOR_PROPERTY,
 		&&yyc_ST_BACKQUOTE,
@@ -1346,7 +1346,7 @@ yyc_ST_IN_SCRIPTING:
 	YYFILL(16);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,
 			 &&yy1,  &&yy2,  &&yy2,  &&yy1,  &&yy1,  &&yy2,  &&yy1,  &&yy1,
 			 &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,
@@ -1594,7 +1594,7 @@ yy11:
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			 &&yy4, &&yy65,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
 			 &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,  &&yy4,
@@ -1685,7 +1685,7 @@ yy18:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21,
 			&&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21,
 			&&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21, &&yy21,
@@ -1819,7 +1819,7 @@ yy27:
 	YYDEBUG(27, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -1867,7 +1867,7 @@ yy29:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -1907,7 +1907,7 @@ yy30:
 	YYDEBUG(30, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -1947,7 +1947,7 @@ yy31:
 	YYDEBUG(31, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -1987,7 +1987,7 @@ yy32:
 	YYDEBUG(32, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2027,7 +2027,7 @@ yy33:
 	YYDEBUG(33, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2067,7 +2067,7 @@ yy34:
 	YYDEBUG(34, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2118,7 +2118,7 @@ yy37:
 	YYDEBUG(37, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2164,7 +2164,7 @@ yy39:
 	YYDEBUG(39, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2210,7 +2210,7 @@ yy41:
 	YYDEBUG(41, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2256,7 +2256,7 @@ yy43:
 	YYDEBUG(43, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2296,7 +2296,7 @@ yy44:
 	YYDEBUG(44, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2336,7 +2336,7 @@ yy45:
 	YYDEBUG(45, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -2462,7 +2462,7 @@ yy59:
 	YYFILL(1);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
 			&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
 			&&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60, &&yy60,
@@ -2534,7 +2534,7 @@ yy64:
 yy65:
 	YYDEBUG(65, *YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66,
 			&&yy66, &&yy64, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66,
 			&&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66, &&yy66,
@@ -2604,7 +2604,7 @@ yy68:
 	YYDEBUG(68, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
@@ -2965,7 +2965,7 @@ yy111:
 	YYDEBUG(111, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3005,7 +3005,7 @@ yy112:
 	YYDEBUG(112, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3051,7 +3051,7 @@ yy114:
 	YYDEBUG(114, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3137,7 +3137,7 @@ yy122:
 	YYDEBUG(122, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3223,7 +3223,7 @@ yy130:
 	YYDEBUG(130, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3297,7 +3297,7 @@ yy136:
 	YYDEBUG(136, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3343,7 +3343,7 @@ yy138:
 	YYDEBUG(138, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3401,7 +3401,7 @@ yy142:
 	YYDEBUG(142, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3484,7 +3484,7 @@ yy150:
 	YYDEBUG(150, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3718,7 +3718,7 @@ yy171:
 	YYFILL(2);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66, &&yy171,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
@@ -3904,7 +3904,7 @@ yy194:
 	YYDEBUG(194, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -3968,7 +3968,7 @@ yy199:
 	YYDEBUG(199, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200,
 			&&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200,
 			&&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200, &&yy200,
@@ -4084,7 +4084,7 @@ yy212:
 	YYDEBUG(212, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -4242,7 +4242,7 @@ yy230:
 	YYDEBUG(230, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -4402,7 +4402,7 @@ yy249:
 	YYFILL(2);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66, &&yy324,  &&yy66,  &&yy66, &&yy326,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
@@ -4528,7 +4528,7 @@ yy263:
 	YYDEBUG(263, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264,
 			&&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264,
 			&&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264, &&yy264,
@@ -4682,7 +4682,7 @@ yy281:
 	YYDEBUG(281, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
 			 &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,  &&yy36,
@@ -4972,7 +4972,7 @@ yy320:
 yy321:
 	YYDEBUG(321, *YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
@@ -5016,7 +5016,7 @@ yy322:
 yy323:
 	YYDEBUG(323, *YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
 			 &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,  &&yy66,
@@ -5259,7 +5259,7 @@ yy346:
 	YYDEBUG(346, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347,
 			&&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347,
 			&&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347, &&yy347,
@@ -5664,7 +5664,7 @@ yy399:
 	YYDEBUG(399, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400,
 			&&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400,
 			&&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400, &&yy400,
@@ -6056,7 +6056,7 @@ yy450:
 	YYDEBUG(450, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451,
 			&&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451,
 			&&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451, &&yy451,
@@ -6142,7 +6142,7 @@ yy458:
 	YYDEBUG(458, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459,
 			&&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459,
 			&&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459, &&yy459,
@@ -6735,7 +6735,7 @@ yyc_ST_LOOKING_FOR_PROPERTY:
 	YYFILL(2);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537,
 			&&yy537, &&yy539, &&yy539, &&yy537, &&yy537, &&yy539, &&yy537, &&yy537,
 			&&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537, &&yy537,
@@ -6880,7 +6880,7 @@ yy545:
 	YYDEBUG(545, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544,
 			&&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544,
 			&&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544, &&yy544,
@@ -7080,7 +7080,7 @@ yy560:
 	YYDEBUG(560, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558,
 			&&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558,
 			&&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558, &&yy558,
@@ -7284,7 +7284,7 @@ yy573:
 	YYDEBUG(573, *YYCURSOR);
 	yych = *++YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572,
 			&&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572,
 			&&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572, &&yy572,
@@ -7431,7 +7431,7 @@ yy587:
 	YYDEBUG(587, *YYCURSOR);
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586,
 			&&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586,
 			&&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586, &&yy586,
@@ -7501,7 +7501,7 @@ yyc_ST_VAR_OFFSET:
 	YYFILL(3);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593,
 			&&yy593, &&yy594, &&yy594, &&yy593, &&yy593, &&yy594, &&yy593, &&yy593,
 			&&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593, &&yy593,
@@ -7588,7 +7588,7 @@ yy598:
 	YYDEBUG(598, *YYCURSOR);
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599,
 			&&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599,
 			&&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599, &&yy599,
@@ -7678,7 +7678,7 @@ yy603:
 	YYFILL(1);
 	yych = *YYCURSOR;
 	{
-		static void* yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604,
 			&&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604,
 			&&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604, &&yy604,

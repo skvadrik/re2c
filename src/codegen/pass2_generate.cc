@@ -1795,7 +1795,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     }
 
     const char *name = buf.str(bitmap_name(opts, cond)).flush();
-    const char* type = opts->lang == Lang::C ? "const unsigned char" : "byte";
+    const char* type = opts->lang == Lang::C ? "unsigned char" : "byte";
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_table(alc, name, type, elems, nelems, /*tabulate*/ true));

@@ -12,7 +12,7 @@ void scan(unsigned char* in)
 
 {
 	YYCTYPE yych;
-	static void* yyctable[1] = {
+	static const void* yyctable[1] = {
 		&&yyc_c1
 	};
 	goto *yyctable[YYGETCONDITION()];

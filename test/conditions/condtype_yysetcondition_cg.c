@@ -24,7 +24,7 @@ int main ()
 #line 25 "conditions/condtype_yysetcondition_cg.c"
 {
 	unsigned char yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_b,
 		&&yyc_a
 	};

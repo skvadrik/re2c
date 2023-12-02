@@ -10,7 +10,7 @@ func Lex(str string) int {
 //line "golang/001_basic_b.go":11
 {
 	var yych byte
-	yybm := []byte{
+	yybm := [256]byte{
 		  0,   0,   0,   0,   0,   0,   0,   0,
 		  0,   0,   0,   0,   0,   0,   0,   0,
 		  0,   0,   0,   0,   0,   0,   0,   0,

@@ -84,7 +84,7 @@ func Lex(in *Input) (int, int) {
 	
 //line "golang/003_fill_bf.go":86
 {
-	yybm := []byte{
+	yybm := [256]byte{
 		  0,   0,   0,   0,   0,   0,   0,   0,
 		  0,   0,   0,   0,   0,   0,   0,   0,
 		  0,   0,   0,   0,   0,   0,   0,   0,

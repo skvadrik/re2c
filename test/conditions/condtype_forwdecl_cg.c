@@ -12,7 +12,7 @@ int main ()
 #line 13 "conditions/condtype_forwdecl_cg.c"
 {
 	unsigned char yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_a,
 		&&yyc_b
 	};

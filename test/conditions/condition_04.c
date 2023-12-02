@@ -5,7 +5,7 @@
 #line 6 "conditions/condition_04.c"
 {
 	YYCTYPE yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};

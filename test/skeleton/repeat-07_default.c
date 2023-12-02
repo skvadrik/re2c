@@ -159,7 +159,7 @@ loop:
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
         {
-            static void* yytarget[256] = {
+            static const void* yytarget[256] = {
                 &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,
                 &&yy1, &&yy1, &&yy2, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,
                 &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,
@@ -375,7 +375,7 @@ loop:
         yych = YYPEEK();
         if (yych & ~0xFF) {
         } else {
-            static void* yytarget[256] = {
+            static const void* yytarget[256] = {
                  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
                  &&yy9,  &&yy9, &&yy10,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
                  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
@@ -591,7 +591,7 @@ loop:
         yych = YYPEEK();
         if (yych & ~0xFF) {
         } else {
-            static void* yytarget[256] = {
+            static const void* yytarget[256] = {
                 &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
                 &&yy17, &&yy17, &&yy18, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,
                 &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17, &&yy17,

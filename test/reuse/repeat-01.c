@@ -13,7 +13,7 @@ void scan(unsigned char* in)
 
 {
 	unsigned char yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};
@@ -74,7 +74,7 @@ void scan(unsigned short* in)
 
 {
 	YYCTYPE yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};
@@ -135,7 +135,7 @@ void scan(unsigned int* in)
 
 {
 	YYCTYPE yych;
-	static void* yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
 		&&yyc_r2
 	};

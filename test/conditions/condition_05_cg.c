@@ -59,7 +59,7 @@ char scan(Scanner *s)
 #line 60 "conditions/condition_05_cg.c"
 		{
 			unsigned char yych;
-			static void* yyctable[2] = {
+			static const void* yyctable[2] = {
 				&&yyc_normal,
 				&&yyc_comment
 			};
