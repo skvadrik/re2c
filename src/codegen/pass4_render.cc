@@ -793,9 +793,9 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
-class RenderTable : public OutputCallback {
+class RenderArray : public OutputCallback {
     RenderContext& rctx;
-    const CodeTable* code;
+    const CodeArray* code;
     const size_t ncols;
     const size_t nrows;
     size_t curr_col;
@@ -805,7 +805,7 @@ class RenderTable : public OutputCallback {
     size_t maxlen;
 
   public:
-    RenderTable(RenderContext& rctx, const CodeTable* code)
+    RenderArray(RenderContext& rctx, const CodeArray* code)
             : rctx(rctx)
             , code(code)
             , ncols(code->tabulate ? 8 : 1)
@@ -874,7 +874,7 @@ class RenderTable : public OutputCallback {
         return false;
     }
 
-    FORBID_COPY(RenderTable);
+    FORBID_COPY(RenderArray);
 };
 
 static void render(RenderContext& rctx, const Code* code) {
@@ -977,14 +977,14 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:var", callback);
         break;
     }
-    case CodeKind::LABEL:
-        render_label(rctx, code->label);
-        break;
-    case CodeKind::TABLE: {
-        RenderTable callback(rctx, code->table);
+    case CodeKind::ARRAY: {
+        RenderArray callback(rctx, &code->array);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:array", callback);
         break;
     }
+    case CodeKind::LABEL:
+        render_label(rctx, code->label);
+        break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
     case CodeKind::MAXFILL:

@@ -716,7 +716,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_table(alc, opts->var_cgoto_table.c_str(),
+    append(stmts, code_array(alc, opts->var_cgoto_table.c_str(),
             type, elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
     return stmts;
 }
@@ -891,7 +891,7 @@ static void emit_accept(
         }
         output.stx.gen_str(o.stream(), opts, "code:type_yytarget");
         const char* type = o.flush();
-        append(block, code_table(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
+        append(block, code_array(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
 
         text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_accept).cstr("]")
                 .flush();
@@ -1661,7 +1661,7 @@ static CodeList* gen_cond_table(Output& output) {
     }
     output.stx.gen_str(buf.stream(), opts, "code:type_yytarget");
     const char* type = buf.flush();
-    append(code, code_table(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
+    append(code, code_array(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
 }
 
@@ -1807,7 +1807,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_table(alc, name, type, elems, nelems, /*tabulate*/ true));
+    append(stmts, code_array(alc, name, type, elems, nelems, /*tabulate*/ true));
     return stmts;
 }
 
@@ -2016,6 +2016,7 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::LINE_INFO_INPUT:
         case CodeKind::LINE_INFO_OUTPUT:
         case CodeKind::VAR:
+        case CodeKind::ARRAY:
         case CodeKind::STMT:
         case CodeKind::LOOP:
         case CodeKind::TEXT:
@@ -2023,7 +2024,6 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::RAW:
         case CodeKind::LABEL:
         case CodeKind::ABORT:
-        case CodeKind::TABLE:
             break;
         }
     }

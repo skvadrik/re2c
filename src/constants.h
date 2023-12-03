@@ -95,6 +95,7 @@ enum class CodeKind: uint32_t {
     MAXFILL,
     MAXNMATCH,
     VAR,
+    ARRAY,
     STMT,
     LOOP,
     TEXT,
@@ -102,8 +103,7 @@ enum class CodeKind: uint32_t {
     RAW,
     DFAS,
     LABEL,
-    ABORT,
-    TABLE
+    ABORT
 };
 
 // Types of variables in codegen (independent of the language language).
