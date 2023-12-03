@@ -23,7 +23,7 @@ code:array =
 code:type_int = "int";
 code:type_uint = "unsigned int";
 code:type_yybm = "static const unsigned char";
-//code:type_yytarget = "static const void*";
+code:type_yytarget = "static const void*";
 
 code:if_then_else =
     topindent "if (" then_cond ") {" nl

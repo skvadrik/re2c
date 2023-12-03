@@ -24,7 +24,7 @@ const char* DEFAULT_SYNTAX_C =
     "code:type_int = \"int\";\n"
     "code:type_uint = \"unsigned int\";\n"
     "code:type_yybm = \"static const unsigned char\";\n"
-    "//code:type_yytarget = \"static const void*\";\n"
+    "code:type_yytarget = \"static const void*\";\n"
     "\n"
     "code:if_then_else =\n"
     "    topindent \"if (\" then_cond \") {\" nl\n"

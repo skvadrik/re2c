@@ -22,6 +22,7 @@ code:array =
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_yybm = "byte";
+// code:type_yytarget
 
 code:if_then_else =
     topindent "if (" then_cond ") {" nl

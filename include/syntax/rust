@@ -18,11 +18,12 @@ code:var =
 
 code:const = topindent "const " name ": " type " = " init nl ";";
 
-// code:array = ??;
+// code:array
 
 code:type_int = "isize";
 code:type_uint = "usize";
-// code:type_yybm = ??;
+// code:type_yybm
+// code:type_yytarget
 
 code:if_then_else =
     topindent "if " then_cond " {" nl

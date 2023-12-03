@@ -23,6 +23,7 @@ const char* DEFAULT_SYNTAX_GO =
     "code:type_int = \"int\";\n"
     "code:type_uint = \"uint\";\n"
     "code:type_yybm = \"byte\";\n"
+    "// code:type_yytarget\n"
     "\n"
     "code:if_then_else =\n"
     "    topindent \"if (\" then_cond \") {\" nl\n"

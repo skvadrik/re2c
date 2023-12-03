@@ -47,6 +47,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:type_int"] = {};
     allowed_code_confs["code:type_uint"] = {};
     allowed_code_confs["code:type_yybm"] = {};
+    allowed_code_confs["code:type_yytarget"] = {};
     allowed_code_confs["code:if_then_else"] = {
         {"then_cond", "else_cond"},
         {"then_stmt", "else_stmt"},

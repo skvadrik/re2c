@@ -705,16 +705,20 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
 static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
 
     const char** elems = alc.alloct<const char*>(CodeGoCpTable::TABLE_SIZE);
     for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE; ++i) {
-        elems[i] = output.scratchbuf.cstr("&&").str(opts->label_prefix)
-                .u32(go->table[i]->label->index).flush();
+        elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
+
+    OutputCallback dummy;
+    output.stx.gen_code(buf.stream(), opts, "code:type_yytarget", dummy);
+    const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_table(alc, opts->var_cgoto_table.c_str(),
-            "static const void*", elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
+            type, elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
     return stmts;
 }
 
@@ -886,8 +890,10 @@ static void emit_accept(
         for (uint32_t i = 0; i < nacc; ++i) {
             elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        append(block, code_table(
-                alc, opts->var_cgoto_table.c_str(), "static const void*", elems, nacc));
+        OutputCallback dummy;
+        output.stx.gen_code(o.stream(), opts, "code:type_yytarget", dummy);
+        const char* type = o.flush();
+        append(block, code_table(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
 
         text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_accept).cstr("]")
                 .flush();
@@ -1647,16 +1653,18 @@ static CodeList* gen_cond_goto(Output& output) {
 static CodeList* gen_cond_table(Output& output) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
     const StartConds& conds = output.block().conds;
 
     CodeList* code = code_list(alc);
     const char** elems = alc.alloct<const char*>(conds.size());
     for (size_t i = 0; i < conds.size(); ++i) {
-        elems[i] = output.scratchbuf.cstr("&&")
-                .str(opts->cond_label_prefix).str(conds[i].name).flush();
+        elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    append(code, code_table(
-            alc, opts->var_cond_table.c_str(), "static const void*", elems, conds.size()));
+    OutputCallback dummy;
+    output.stx.gen_code(buf.stream(), opts, "code:type_yytarget", dummy);
+    const char* type = buf.flush();
+    append(code, code_table(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
 }
 
