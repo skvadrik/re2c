@@ -159,7 +159,9 @@ class Stx {
     bool specialize_oneline_switch() const;
     void cache_conf_tests();
 
+    // functions that generate code for a given syntax configuration
     void gen_code(std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback);
+    void gen_str(std::ostream& os, const opt_t* opts, const char* name);
 };
 
 class StxFile {

@@ -712,8 +712,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
 
-    OutputCallback dummy;
-    output.stx.gen_code(buf.stream(), opts, "code:type_yytarget", dummy);
+    output.stx.gen_str(buf.stream(), opts, "code:type_yytarget");
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
@@ -890,8 +889,7 @@ static void emit_accept(
         for (uint32_t i = 0; i < nacc; ++i) {
             elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        OutputCallback dummy;
-        output.stx.gen_code(o.stream(), opts, "code:type_yytarget", dummy);
+        output.stx.gen_str(o.stream(), opts, "code:type_yytarget");
         const char* type = o.flush();
         append(block, code_table(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
 
@@ -1661,8 +1659,7 @@ static CodeList* gen_cond_table(Output& output) {
     for (size_t i = 0; i < conds.size(); ++i) {
         elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    OutputCallback dummy;
-    output.stx.gen_code(buf.stream(), opts, "code:type_yytarget", dummy);
+    output.stx.gen_str(buf.stream(), opts, "code:type_yytarget");
     const char* type = buf.flush();
     append(code, code_table(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
@@ -1806,8 +1803,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
 
     const char *name = buf.str(bitmap_name(opts, cond)).flush();
 
-    OutputCallback dummy;
-    output.stx.gen_code(buf.stream(), opts, "code:type_yybm", dummy);
+    output.stx.gen_str(buf.stream(), opts, "code:type_yybm");
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);

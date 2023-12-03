@@ -331,6 +331,11 @@ void Stx::gen_code(
     }
 }
 
+void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
+    OutputCallback dummy;
+    gen_code(os, opts, name, dummy);
+}
+
 void Stx::cache_conf_tests() {
     have_oneline_if = have_conf("code:if_then_oneline");
     have_oneline_switch = have_conf("code:switch_cases_oneline");

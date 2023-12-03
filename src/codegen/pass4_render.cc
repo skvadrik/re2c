@@ -122,13 +122,12 @@ class RenderVar : public OutputCallback {
         } else if (strcmp(var, "init") == 0) {
             rctx.os << code->init;
         } else if (strcmp(var, "type") == 0) {
-            OutputCallback callback; // dummy callback, these configurations have no variables
             switch (code->type) {
             case VarType::INT:
-                rctx.stx.gen_code(rctx.os, rctx.opts, "code:type_int", callback);
+                rctx.stx.gen_str(rctx.os, rctx.opts, "code:type_int");
                 break;
             case VarType::UINT:
-                rctx.stx.gen_code(rctx.os, rctx.opts, "code:type_uint", callback);
+                rctx.stx.gen_str(rctx.os, rctx.opts, "code:type_uint");
                 break;
             case VarType::YYCTYPE:
                 rctx.os << rctx.opts->api_char_type;
