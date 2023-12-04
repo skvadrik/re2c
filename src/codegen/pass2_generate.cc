@@ -1439,12 +1439,12 @@ class GenEnum : public OutputCallback {
     FORBID_COPY(GenEnum);
 };
 
-static void gen_cond_enum(Scratchbuf& buf,
-                          OutAllocator& alc,
-                          Stx& stx,
-                          Code* code,
-                          const opt_t* opts,
-                          const StartConds& conds) {
+static void gen_cond_enum(
+        Scratchbuf& buf,
+        OutAllocator& alc,
+        Code* code,
+        const opt_t* opts,
+        const StartConds& conds) {
     DCHECK(opts->target == Target::CODE);
 
     if (conds.empty()) return;
@@ -1473,12 +1473,13 @@ static void gen_cond_enum(Scratchbuf& buf,
         code->raw.size = buf.stream().str().length();
         code->raw.data = buf.flush();
     } else {
-        GenEnum callback(alc, buf, opts, conds);
-        stx.gen_code(buf.stream(), opts, "code:cond_enum", callback);
-
-        code->kind = CodeKind::BLOCK;
-        code->block.kind = CodeBlock::Kind::RAW;
-        code->block.stmts = callback.code;
+        const char** ids = alc.alloct<const char*>(conds.size()), **i = ids;
+        uint32_t* nums = alc.alloct<uint32_t>(conds.size()), *j = nums;
+        for (const StartCond& cond : conds) {
+            *i++ = buf.str(cond.name).flush();
+            *j++ = cond.number;
+        }
+        init_code_enum(code, opts->api_cond_type.c_str(), conds.size(), ids, nums);
     }
 }
 
@@ -1547,7 +1548,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
         return Ret::OK;
     }
 
-    gen_cond_enum(buf, alc, output.stx, code, globopts, conds);
+    gen_cond_enum(buf, alc, code, globopts, conds);
     return Ret::OK;
 }
 
@@ -2017,6 +2018,7 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::LINE_INFO_OUTPUT:
         case CodeKind::VAR:
         case CodeKind::ARRAY:
+        case CodeKind::ENUM:
         case CodeKind::STMT:
         case CodeKind::LOOP:
         case CodeKind::TEXT:

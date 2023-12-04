@@ -270,6 +270,13 @@ struct CodeArray {
     bool tabulate;
 };
 
+struct CodeEnum {
+    const char* name;
+    size_t size;
+    const char** elem_ids;
+    const uint32_t* elem_nums;
+};
+
 struct Code {
     union {
         const char* text;
@@ -281,6 +288,7 @@ struct Code {
         CodeRaw raw;
         CodeVar var;
         CodeArray array;
+        CodeEnum enumr;
         CodeFmt fmt;
         CodeLabel label;
         CodeList* loop;
@@ -563,6 +571,15 @@ inline Code* code_array(
     x->array.size = size;
     x->array.tabulate = tabulate;
     return x;
+}
+
+inline void init_code_enum(
+        Code* x, const char* name, size_t size, const char** elem_ids, uint32_t* elem_nums) {
+    x->kind = CodeKind::ENUM;
+    x->enumr.name = name;
+    x->enumr.size = size;
+    x->enumr.elem_ids = elem_ids;
+    x->enumr.elem_nums = elem_nums;
 }
 
 } // namespace re2c

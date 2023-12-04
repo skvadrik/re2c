@@ -72,7 +72,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:loop"] = {
         {"label"}, {"stmt"}, {"have_label"}
     };
-    allowed_code_confs["code:cond_enum"] = {
+    allowed_code_confs["code:enum"] = {
         {"name", "init"}, {"elem"}, {}
     };
     allowed_code_confs["code:autogen_comment"] = {
@@ -302,7 +302,6 @@ void Stx::gen_code(
             os << x->str;
             break;
         case StxCodeType::VAR:
-            // TODO: unify handling of global vars
             callback.render_var(x->var);
             break;
         case StxCodeType::COND:

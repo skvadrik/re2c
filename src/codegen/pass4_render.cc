@@ -877,6 +877,57 @@ class RenderArray : public OutputCallback {
     FORBID_COPY(RenderArray);
 };
 
+class RenderEnum : public OutputCallback {
+    RenderContext& rctx;
+    const CodeEnum* code;
+    size_t curr_elem;
+    size_t last_elem;
+
+  public:
+    RenderEnum(RenderContext& rctx, const CodeEnum* code)
+            : rctx(rctx), code(code), curr_elem(0), last_elem(0) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            rctx.os << code->name;
+        } else if (strcmp(var, "elem") == 0) {
+            rctx.os << code->elem_ids[curr_elem];
+        } else if (strcmp(var, "init") == 0) {
+            rctx.os << code->elem_nums[curr_elem];
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "elem") == 0) {
+            return code->size;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "elem") == 0) {
+            curr_elem = lbound;
+            last_elem = rbound;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "elem") == 0) {
+            return ++curr_elem <= last_elem;
+        } else {
+            UNREACHABLE();
+        }
+        return false;
+    }
+
+    FORBID_COPY(RenderEnum);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -980,6 +1031,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::ARRAY: {
         RenderArray callback(rctx, &code->array);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:array", callback);
+        break;
+    }
+    case CodeKind::ENUM: {
+        RenderEnum callback(rctx, &code->enumr);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:enum", callback);
         break;
     }
     case CodeKind::LABEL:
