@@ -267,7 +267,7 @@ void Stx::push_list_on_stack(const StxCode* x) {
     stack_code.push_back({x, 0});
 }
 
-bool Stx::eval_cond(const char* cond, const opt_t* opts, OutputCallback& callback) const {
+bool Stx::eval_cond(const char* cond, const opt_t* opts, RenderCallback& callback) const {
     auto i = allowed_conds.find(cond);
     if (i != allowed_conds.end()) {
         return i->second(opts);
@@ -283,7 +283,7 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 }
 
 void Stx::gen_code(
-        std::ostream& os, const opt_t* opts, const char* name, OutputCallback& callback) {
+        std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs[name];
     CHECK(conf->type == StxConfType::CODE);
@@ -331,7 +331,7 @@ void Stx::gen_code(
 }
 
 void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
-    OutputCallback dummy;
+    RenderCallback dummy;
     gen_code(os, opts, name, dummy);
 }
 

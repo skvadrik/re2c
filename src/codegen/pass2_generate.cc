@@ -1370,7 +1370,7 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-class GenEnum : public OutputCallback {
+class GenEnum : public RenderCallback {
     OutAllocator& alc;
     Scratchbuf& buf;
     const opt_t* opts;

@@ -109,7 +109,7 @@ static void render_block(RenderContext& rctx, const CodeBlock* code) {
     }
 }
 
-class RenderVar : public OutputCallback {
+class RenderVar : public RenderCallback {
     RenderContext& rctx;
     const CodeVar* code;
 
@@ -148,7 +148,7 @@ class RenderVar : public OutputCallback {
     FORBID_COPY(RenderVar);
 };
 
-class RenderIfThenElse : public OutputCallback {
+class RenderIfThenElse : public RenderCallback {
     RenderContext& rctx;
     const CodeIfTE* code;
     const Code* curr_stmt;
@@ -257,7 +257,7 @@ static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     }
 }
 
-class RenderSwitchCaseDefault : public OutputCallback {
+class RenderSwitchCaseDefault : public RenderCallback {
     RenderContext& rctx;
 
   public:
@@ -268,7 +268,7 @@ class RenderSwitchCaseDefault : public OutputCallback {
     }
 };
 
-class RenderSwitchCaseRange : public OutputCallback {
+class RenderSwitchCaseRange : public RenderCallback {
     RenderContext& rctx;
     const CodeCase* code;
     size_t curr_range;
@@ -349,7 +349,7 @@ class RenderSwitchCaseRange : public OutputCallback {
     FORBID_COPY(RenderSwitchCaseRange);
 };
 
-class RenderSwitchCaseBlock : public OutputCallback {
+class RenderSwitchCaseBlock : public RenderCallback {
     RenderContext& rctx;
     const CodeCase* code;
     const Code* curr_stmt;
@@ -437,7 +437,7 @@ class RenderSwitchCaseBlock : public OutputCallback {
     FORBID_COPY(RenderSwitchCaseBlock);
 };
 
-class RenderSwitch : public OutputCallback {
+class RenderSwitch : public RenderCallback {
     RenderContext& rctx;
     const CodeSwitch* code;
     const CodeCase* curr_case;
@@ -497,7 +497,7 @@ class RenderSwitch : public OutputCallback {
     FORBID_COPY(RenderSwitch);
 };
 
-class RenderLoop : public OutputCallback {
+class RenderLoop : public RenderCallback {
     RenderContext& rctx;
     const CodeList* code;
     const Code* curr_stmt;
@@ -793,7 +793,7 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
-class RenderArray : public OutputCallback {
+class RenderArray : public RenderCallback {
     RenderContext& rctx;
     const CodeArray* code;
     const size_t ncols;
@@ -879,7 +879,7 @@ class RenderArray : public OutputCallback {
     FORBID_COPY(RenderArray);
 };
 
-class RenderEnum : public OutputCallback {
+class RenderEnum : public RenderCallback {
     RenderContext& rctx;
     const CodeEnum* code;
     size_t curr_elem;

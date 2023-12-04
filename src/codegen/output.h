@@ -69,6 +69,29 @@ struct RenderContext {
     FORBID_COPY(RenderContext);
 };
 
+class RenderCallback {
+  public:
+    virtual void render_var(const char* /*var*/) {
+        UNREACHABLE();
+    }
+    virtual size_t get_list_size(const char* /*var*/) const {
+        UNREACHABLE();
+        return 0;
+    }
+    virtual void start_list(const char* /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
+        UNREACHABLE();
+    }
+    virtual bool next_in_list(const char* /*var*/) {
+        UNREACHABLE();
+        return false;
+    }
+    virtual bool eval_cond(const char* /*cond*/) {
+        UNREACHABLE();
+        return false;
+    }
+    virtual ~RenderCallback() = default;
+};
+
 struct StartCond {
     std::string name;
     uint32_t number;
@@ -138,29 +161,6 @@ struct Output {
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     FORBID_COPY(Output);
-};
-
-class OutputCallback {
-  public:
-    virtual void render_var(const char* /*var*/) {
-        UNREACHABLE();
-    }
-    virtual size_t get_list_size(const char* /*var*/) const {
-        UNREACHABLE();
-        return 0;
-    }
-    virtual void start_list(const char* /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
-        UNREACHABLE();
-    }
-    virtual bool next_in_list(const char* /*var*/) {
-        UNREACHABLE();
-        return false;
-    }
-    virtual bool eval_cond(const char* /*cond*/) {
-        UNREACHABLE();
-        return false;
-    }
-    virtual ~OutputCallback() = default;
 };
 
 void init_go(CodeGo* go);
