@@ -21,6 +21,7 @@ code:array =
 
 code:type_int = "int";
 code:type_uint = "uint";
+// code:type_cond_enum
 code:type_yybm = "byte";
 // code:type_yytarget
 
@@ -54,8 +55,8 @@ code:loop =
 
 code:enum =
     "const (" nl indent
-        [elem{0}:    topindent elem " = " (jump_model.loop_switch ? init : "iota") nl]
-        [elem{1:-1}: topindent elem (jump_model.loop_switch ? " = " init) nl]
+        [elem{0}:    topindent elem " = " (have_init ? init : "iota") nl]
+        [elem{1:-1}: topindent elem (have_init ? " = " init) nl]
     dedent ")" nl;
 
 code:autogen_comment =

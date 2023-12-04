@@ -46,6 +46,7 @@ Stx::Stx(OutAllocator& alc)
     };
     allowed_code_confs["code:type_int"] = {};
     allowed_code_confs["code:type_uint"] = {};
+    allowed_code_confs["code:type_cond_enum"] = {};
     allowed_code_confs["code:type_yybm"] = {};
     allowed_code_confs["code:type_yytarget"] = {};
     allowed_code_confs["code:if_then_else"] = {
@@ -73,7 +74,7 @@ Stx::Stx(OutAllocator& alc)
         {"label"}, {"stmt"}, {"have_label"}
     };
     allowed_code_confs["code:enum"] = {
-        {"name", "init"}, {"elem"}, {}
+        {"name", "type", "init"}, {"elem"}, {"have_init"}
     };
     allowed_code_confs["code:autogen_comment"] = {
         {"version", "date"}, {}, {}

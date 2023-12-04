@@ -892,6 +892,8 @@ class RenderEnum : public RenderCallback {
     void render_var(const char* var) override {
         if (strcmp(var, "name") == 0) {
             rctx.os << code->name;
+        } else if (strcmp(var, "type") == 0) {
+            rctx.stx.gen_str(rctx.os, rctx.opts, "code:type_cond_enum");
         } else if (strcmp(var, "elem") == 0) {
             rctx.os << code->elem_ids[curr_elem];
         } else if (strcmp(var, "init") == 0) {
@@ -924,6 +926,14 @@ class RenderEnum : public RenderCallback {
         } else {
             UNREACHABLE();
         }
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_init") == 0) {
+            return code->elem_nums != nullptr;
+        }
+        UNREACHABLE();
         return false;
     }
 

@@ -1370,75 +1370,6 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-class GenEnum : public RenderCallback {
-    OutAllocator& alc;
-    Scratchbuf& buf;
-    const opt_t* opts;
-    const StartConds& conds;
-    size_t curr_cond;
-    size_t last_cond;
-
-  public:
-    CodeList* code;
-
-    GenEnum(OutAllocator& alc, Scratchbuf& buf, const opt_t* opts, const StartConds& conds)
-            : alc(alc)
-            , buf(buf)
-            , opts(opts)
-            , conds(conds)
-            , curr_cond(0)
-            , last_cond(0)
-            , code(nullptr) {
-        code = code_list(alc);
-    }
-
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
-            buf.str(opts->api_cond_type);
-        } else if (strcmp(var, "elem") == 0) {
-            buf.str(conds[curr_cond].name);
-        } else if (strcmp(var, "init") == 0) {
-            buf.u32(conds[curr_cond].number);
-        // TODO: handle global variables in a uniform way
-        } else if (strcmp(var, "nl") == 0) {
-            append(code, code_text(alc, buf.flush()));
-        } else if (strcmp(var, "indent") == 0) {
-            // TODO:  indent here means not what it means in render context
-            buf.str(opts->indent_str);
-        } else {
-            UNREACHABLE();
-        }
-    }
-
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "elem") == 0) {
-            return conds.size();
-        }
-        UNREACHABLE();
-        return 0;
-    }
-
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "elem") == 0) {
-            curr_cond = lbound;
-            last_cond = rbound;
-        } else {
-            UNREACHABLE();
-        }
-    }
-
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "elem") == 0) {
-            return ++curr_cond <= last_cond;
-        } else {
-            UNREACHABLE();
-        }
-        return false;
-    }
-
-    FORBID_COPY(GenEnum);
-};
-
 static void gen_cond_enum(
         Scratchbuf& buf,
         OutAllocator& alc,
@@ -1473,12 +1404,16 @@ static void gen_cond_enum(
         code->raw.size = buf.stream().str().length();
         code->raw.data = buf.flush();
     } else {
+        // prepare an array of enum member names
         const char** ids = alc.alloct<const char*>(conds.size()), **i = ids;
-        uint32_t* nums = alc.alloct<uint32_t>(conds.size()), *j = nums;
-        for (const StartCond& cond : conds) {
-            *i++ = buf.str(cond.name).flush();
-            *j++ = cond.number;
+        for (const StartCond& cond : conds) *i++ = buf.str(cond.name).flush();
+        // prepare an array of enum member numbers (only needed in loop/switch mode)
+        uint32_t* nums = nullptr;
+        if (opts->loop_switch) {
+            uint32_t* j = nums = alc.alloct<uint32_t>(conds.size());
+            for (const StartCond& cond : conds) *j++ = cond.number;
         }
+        // construct enum code item in place of the old code item
         init_code_enum(code, opts->api_cond_type.c_str(), conds.size(), ids, nums);
     }
 }
