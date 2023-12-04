@@ -76,8 +76,8 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:enum"] = {
         {"name", "type", "init"}, {"elem"}, {"have_init"}
     };
-    allowed_code_confs["code:autogen_comment"] = {
-        {"version", "date"}, {}, {}
+    allowed_code_confs["code:fingerprint"] = {
+        {"version", "date"}, {}, {"have_version", "have_date"}
     };
     allowed_code_confs["code:line_directive"] = {
         {"line", "file"}, {}, {}

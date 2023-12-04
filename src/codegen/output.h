@@ -156,7 +156,6 @@ struct Output {
     void header_mode(bool on);
     bool in_header() const;
     void gen_raw(const uint8_t* s, const uint8_t* e, bool newline = false);
-    void gen_version_time();
     void gen_stmt(Code* stmt);
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();

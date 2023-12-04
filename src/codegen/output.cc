@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <stdio.h>
-#include <time.h>
 #include <iomanip>
 
 #include "config.h"
@@ -138,31 +137,14 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     return Ret::OK;
 }
 
-void Output::gen_version_time() {
-    const opt_t* opts = block().opts;
-
-    scratchbuf.cstr(opts->lang == Lang::GO ? "// Code generated" : "/* Generated").cstr(" by re2c");
-    if (opts->version) {
-        scratchbuf.cstr(" " PACKAGE_VERSION);
-    }
-    if (opts->date) {
-        scratchbuf.cstr(" on ");
-        time_t now = time(nullptr);
-        scratchbuf.stream().write(ctime(&now), 24);
-    }
-    scratchbuf.cstr(opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
-
-    gen_stmt(code_textraw(allocator, scratchbuf.flush()));
-}
-
 Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
     header_mode(true);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
-    gen_version_time();
+    gen_stmt(code_fingerprint(allocator));
 
     header_mode(false);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
-    gen_version_time();
+    gen_stmt(code_fingerprint(allocator));
     gen_stmt(code_line_info_input(allocator, block().opts->lang, loc));
 
     if (block().opts->target == Target::SKELETON) {

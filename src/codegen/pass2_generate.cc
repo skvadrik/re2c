@@ -1934,33 +1934,8 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
         case CodeKind::MAXNMATCH:
             CHECK_RET(gen_yymax(output, code));
             break;
-        case CodeKind::EMPTY:
-        case CodeKind::IF_THEN_ELSE:
-        case CodeKind::SWITCH:
-        case CodeKind::BLOCK:
-        case CodeKind::FUNC:
-        case CodeKind::SKIP:
-        case CodeKind::PEEK:
-        case CodeKind::BACKUP:
-        case CodeKind::PEEK_SKIP:
-        case CodeKind::SKIP_PEEK:
-        case CodeKind::SKIP_BACKUP:
-        case CodeKind::BACKUP_SKIP:
-        case CodeKind::BACKUP_PEEK:
-        case CodeKind::BACKUP_PEEK_SKIP:
-        case CodeKind::SKIP_BACKUP_PEEK:
-        case CodeKind::LINE_INFO_INPUT:
-        case CodeKind::LINE_INFO_OUTPUT:
-        case CodeKind::VAR:
-        case CodeKind::ARRAY:
-        case CodeKind::ENUM:
-        case CodeKind::STMT:
-        case CodeKind::LOOP:
-        case CodeKind::TEXT:
-        case CodeKind::TEXT_RAW:
-        case CodeKind::RAW:
-        case CodeKind::LABEL:
-        case CodeKind::ABORT:
+        default:
+            // skip for now, leave the rest for the render phase
             break;
         }
     }

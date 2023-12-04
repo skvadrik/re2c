@@ -582,6 +582,10 @@ inline void init_code_enum(
     x->enumr.elem_nums = elem_nums;
 }
 
+inline Code* code_fingerprint(OutAllocator& alc) {
+    return new_code(alc, CodeKind::FINGERPRINT);
+}
+
 } // namespace re2c
 
 #endif // _RE2C_CODEGEN_CODE_

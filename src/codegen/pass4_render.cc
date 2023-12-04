@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "config.h"
 #include "src/codegen/helpers.h"
 #include "src/codegen/output.h"
@@ -940,6 +942,36 @@ class RenderEnum : public RenderCallback {
     FORBID_COPY(RenderEnum);
 };
 
+class RenderFingerprint : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderFingerprint(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "version") == 0) {
+            rctx.os << PACKAGE_VERSION;
+        } else if (strcmp(var, "date") == 0) {
+            time_t now = time(nullptr);
+            rctx.os.write(ctime(&now), 24);
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_version") == 0) {
+            return rctx.opts->version;
+        } else if (strcmp(cond, "have_date") == 0) {
+            return rctx.opts->date;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderFingerprint);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -1035,6 +1067,11 @@ static void render(RenderContext& rctx, const Code* code) {
         render_line_info(os, rctx.line + 1, rctx.file, opts);
         ++line;
         break;
+    case CodeKind::FINGERPRINT: {
+        RenderFingerprint callback(rctx);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:fingerprint", callback);
+        break;
+    }
     case CodeKind::VAR: {
         RenderVar callback(rctx, &code->var);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:var", callback);

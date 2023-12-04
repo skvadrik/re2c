@@ -88,6 +88,7 @@ enum class CodeKind: uint32_t {
     SKIP_BACKUP_PEEK,
     LINE_INFO_INPUT,
     LINE_INFO_OUTPUT,
+    FINGERPRINT,
     COND_ENUM,
     STATE_GOTO,
     STAGS,
