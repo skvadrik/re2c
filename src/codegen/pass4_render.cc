@@ -829,6 +829,8 @@ class RenderArray : public OutputCallback {
             rctx.os << code->type;
         } else if (strcmp(var, "size") == 0) {
             rctx.os << code->size;
+        } else if (strcmp(var, "row") == 0) {
+            // do nothing
         } else if (strcmp(var, "elem") == 0) {
             const char* e = code->elems[curr_row * ncols + curr_col];
             if (code->tabulate) {
