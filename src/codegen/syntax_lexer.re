@@ -8,6 +8,7 @@
 /*!re2c
     eof = [\x00];
     eol = "\n";
+    esc = "\\";
     space = [ \t];
     name = [a-zA-Z_][a-zA-Z_0-9.-]*;
     number = [-]? [0-9]+;
@@ -28,17 +29,13 @@ int StxFile::lex_token(YYSTYPE* yylval) {
 start:
     tok = cur;
 /*!local:re2c
-    eof {
-        return YYEOF;
-    }
+    eof { return YYEOF; }
     eol | comment {
         ++loc.line;
         pos = cur;
         goto start;
     }
-    space+ {
-        goto start;
-    }
+    space+ { goto start; }
     "code:" name @p space* "=" {
         yylval->str = newcstr(tok, p, alc);
         return STX_CONF_CODE;
@@ -59,19 +56,37 @@ start:
             return YYerror;
         }
     }
-    ["] ([^"\x00\n] | [\\]["])* ["] {
-        yylval->str = newcstr(tok + 1, cur - 1, alc);
-        return STX_STRING;
-    }
-    [?:;,(){}[\]] {
-        return cur[-1];
-    }
+    ["] { goto str; }
+    [?:;,(){}[\]] { return cur[-1]; }
     * {
         msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
         return YYerror;
     }
 */
 
+str: /*!local:re2c
+    esc esc         { tmp_str += '\\'; goto str; }
+    esc ["]         { tmp_str += '"'; goto str; }
+    esc [a]         { tmp_str += '\a'; goto str; }
+    esc [b]         { tmp_str += '\b'; goto str; }
+    esc [f]         { tmp_str += '\f'; goto str; }
+    esc [n]         { tmp_str += '\n'; goto str; }
+    esc [r]         { tmp_str += '\r'; goto str; }
+    esc [t]         { tmp_str += '\t'; goto str; }
+    esc [v]         { tmp_str += '\v'; goto str; }
+    esc [x][0-9]{2} { tmp_str += static_cast<char>(unesc_hex(cur - 4, cur)); goto str; }
+    [^"\\\x00\n]    { tmp_str += static_cast<char>(cur[-1]); goto str; }
+    ["] {
+        yylval->str = copystr(tmp_str, alc);
+        tmp_str.clear();
+        return STX_STRING;
+    }
+    * {
+        tok = cur - 1;
+        msg.error(tok_loc(), "syntax error in string literal");
+        return YYerror;
+    }
+*/
     return YYerror; // unreachable
 }
 

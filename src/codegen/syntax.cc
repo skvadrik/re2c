@@ -351,6 +351,7 @@ StxFile::StxFile(const std::string& fname, Msg& msg, OutAllocator& alc)
     , tok(nullptr)
     , pos(nullptr)
     , loc({1, 0, 0}) // file index 0 is reserved for syntax file
+    , tmp_str()
     , msg(msg)
 {}
 

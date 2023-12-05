@@ -174,6 +174,7 @@ class StxFile {
     const uint8_t* tok; // token start
     const uint8_t* pos; // line start (used for error reporting)
     loc_t loc;
+    std::string tmp_str;
 
   public:
     Msg& msg;
