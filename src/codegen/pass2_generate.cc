@@ -1660,9 +1660,9 @@ LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
     }
 
     if (code->fmt.format) {
-        std::ostringstream os(code->fmt.format);
-        argsubst(os, opts->api_sigil, "max", true, max);
-        code->text = buf.str(os.str()).flush();
+        buf.cstr(code->fmt.format);
+        argsubst(buf.stream(), opts->api_sigil, "max", true, max);
+        code->text = buf.flush();
     } else {
         switch (opts->lang) {
         case Lang::C:
