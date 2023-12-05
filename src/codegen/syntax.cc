@@ -361,9 +361,9 @@ StxFile::~StxFile() {
 }
 
 Ret StxFile::read(Lang lang) {
-    msg.filenames.push_back(fname);
-
     if (fname.empty()) {
+        msg.filenames.push_back("<default syntax file>");
+
         // use the default syntax config that is provided as a string
         const char* src = nullptr;
         switch (lang) {
@@ -380,6 +380,8 @@ Ret StxFile::read(Lang lang) {
         memcpy(buf, src, flen);
         buf[flen] = 0;
     } else {
+        msg.filenames.push_back(fname);
+
         // use the provided syntax file
         file = fopen(fname.c_str(), "rb");
         if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
