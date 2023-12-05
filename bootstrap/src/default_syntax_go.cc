@@ -66,7 +66,7 @@ const char* DEFAULT_SYNTAX_GO =
     "    (have_date? \" on \" date)\n"
     "    \", DO NOT EDIT.\" nl;\n"
     "\n"
-    "code:line_directive = \"//line \\\"\" file \"\\\":\" line nl;\n"
+    "code:line_info = \"//line \\\"\" file \"\\\":\" line nl;\n"
     "\n"
     "code:label = name;\n"
     "\n"

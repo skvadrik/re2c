@@ -70,25 +70,6 @@ static void render_list(RenderContext& rctx, const CodeList* code) {
     }
 }
 
-static void render_line_info(
-        std::ostream& o, uint32_t line, const std::string& fname, const opt_t* opts) {
-    if (!opts->line_dirs) return;
-
-    switch (opts->lang) {
-    case Lang::GO:
-        // Go: //line <filename>:<line-number>
-        o << "//line \"" << fname << "\":" << line << "\n";
-        break;
-    case Lang::C:
-        // C/C++: #line <line-number> <filename>
-        o << "#line " << line << " \"" << fname << "\"\n";
-        break;
-    case Lang::RUST:
-        // For Rust line directives should be removed by `remove_empty` pass.
-        UNREACHABLE();
-    }
-}
-
 static void render_block(RenderContext& rctx, const CodeBlock* code) {
     switch (code->kind) {
     case CodeBlock::Kind::WRAPPED:
@@ -972,6 +953,28 @@ class RenderFingerprint : public RenderCallback {
     FORBID_COPY(RenderFingerprint);
 };
 
+class RenderLineInfo : public RenderCallback {
+    RenderContext& rctx;
+    uint32_t line;
+    const std::string& file;
+
+  public:
+    RenderLineInfo(RenderContext& rctx, uint32_t line, const std::string& file)
+            : rctx(rctx), line(line), file(file) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "line") == 0) {
+            rctx.os << line;
+        } else if (strcmp(var, "file") == 0) {
+            rctx.os << file;
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    FORBID_COPY(RenderLineInfo);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -1060,12 +1063,16 @@ static void render(RenderContext& rctx, const Code* code) {
         render_skip_backup_peek(rctx);
         break;
     case CodeKind::LINE_INFO_INPUT:
-        render_line_info(os, code->loc.line, rctx.msg.filenames[code->loc.file], opts);
-        ++line;
+        if (rctx.opts->line_dirs) {
+            RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
+            rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
+        }
         break;
     case CodeKind::LINE_INFO_OUTPUT:
-        render_line_info(os, rctx.line + 1, rctx.file, opts);
-        ++line;
+        if (rctx.opts->line_dirs) {
+            RenderLineInfo callback(rctx, rctx.line + 1, rctx.file);
+            rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
+        }
         break;
     case CodeKind::FINGERPRINT: {
         RenderFingerprint callback(rctx);

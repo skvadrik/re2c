@@ -79,7 +79,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:fingerprint"] = {
         {"version", "date"}, {}, {"have_version", "have_date"}
     };
-    allowed_code_confs["code:line_directive"] = {
+    allowed_code_confs["code:line_info"] = {
         {"line", "file"}, {}, {}
     };
     allowed_code_confs["code:label"] = {

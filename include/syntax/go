@@ -65,7 +65,7 @@ code:fingerprint =
     (have_date? " on " date)
     ", DO NOT EDIT." nl;
 
-code:line_directive = "//line \"" file "\":" line nl;
+code:line_info = "//line \"" file "\":" line nl;
 
 code:label = name;
 
