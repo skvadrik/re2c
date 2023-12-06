@@ -13,7 +13,6 @@ char *scan(char *p)
 	char *q;
 
 #line 16 "config/config4b.c"
-{
 	switch (YYGETSTATE()) {
 		default:
 			abort();
@@ -46,7 +45,7 @@ yy2:
 	YYSETSTATE(-1);
 #line 15 "config/config4b.re"
 	{ return NULL; }
-#line 50 "config/config4b.c"
+#line 49 "config/config4b.c"
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) {
@@ -72,8 +71,7 @@ yy4:
 	YYSETSTATE(-1);
 #line 14 "config/config4b.re"
 	{ return YYCURSOR; }
-#line 76 "config/config4b.c"
-}
+#line 75 "config/config4b.c"
 #line 16 "config/config4b.re"
 
 }

@@ -157,7 +157,6 @@ switch (YYGETSTATE()) {
 }
 
 
-{
 yy0:
 yyFillLabel0:
 	in.yych = *in.cur;
@@ -561,7 +560,6 @@ yy27:
 yy28:
 	YYSETSTATE(-1);
 	{ printf("< EOF\n");                                return OK; }
-}
 
 }
 

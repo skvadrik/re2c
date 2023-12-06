@@ -31,7 +31,6 @@ switch (YYGETSTATE()) {
 
 // global block x (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(0);
 		YYFILL(1);
@@ -40,12 +39,10 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // global block y (with start label)
 
-{
 yy2:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(1);
@@ -55,12 +52,10 @@ yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
-}
 
 
 // local block z (with start label)
 
-{
 yy4:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(2);
@@ -70,7 +65,6 @@ yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
-}
 
 
 // the same directives at the end of file (in different order)

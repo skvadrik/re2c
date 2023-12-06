@@ -25,7 +25,6 @@ switch (YYGETSTATE()) {
 
 // global block x (with start label)
 
-{
 yy0:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(0);
@@ -35,7 +34,6 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // global `getstate:re2c` (should include x, y, z with start in x)
@@ -49,7 +47,6 @@ switch (YYGETSTATE()) {
 
 // global block y (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(1);
 		YYFILL(1);
@@ -58,7 +55,6 @@ yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
-}
 
 
 // global `getstate:re2c` (should include x, y, z with start in x)
@@ -72,7 +68,6 @@ switch (YYGETSTATE()) {
 
 // local block z (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(2);
 		YYFILL(1);
@@ -81,7 +76,6 @@ yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ z }
-}
 
 
 // global `getstate:re2c` (should include x, y, z with start in x)

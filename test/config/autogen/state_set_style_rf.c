@@ -3,7 +3,6 @@
 
 
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -27,12 +26,10 @@ yy3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ a }
-}
 
 
 // re2c:api:style = free-form;
 
-{
 	switch (YYGETSTATE) {
 		default: goto yy4;
 		case 1: goto yyFillLabel1;
@@ -56,12 +53,10 @@ yy7:
 	++YYCURSOR;
 	YYSETSTATE
 	{ a }
-}
 
 
 // re2c:api:style = functions;
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -85,12 +80,10 @@ yy11:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 0;
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy12;
 		case 3: goto yyFillLabel3;
@@ -114,13 +107,11 @@ yy15:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 0;
 // re2c:api:style = free-form;
 
-{
 	switch (YYGETSTATE) {
 		default: goto yy16;
 		case 4: goto yyFillLabel4;
@@ -144,13 +135,11 @@ yy19:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 0;
 // re2c:api:style = functions;
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy20;
 		case 5: goto yyFillLabel5;
@@ -174,12 +163,10 @@ yy23:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 1;
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy24;
 		case 6: goto yyFillLabel6;
@@ -203,13 +190,11 @@ yy27:
 	++YYCURSOR;
 	YYSETSTATE
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 1;
 // re2c:api:style = free-form;
 
-{
 	switch (YYGETSTATE) {
 		default: goto yy28;
 		case 7: goto yyFillLabel7;
@@ -233,13 +218,11 @@ yy31:
 	++YYCURSOR;
 	YYSETSTATE
 	{ a }
-}
 
 
 // re2c:define:YYSETSTATE:naked = 1;
 // re2c:api:style = functions;
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy32;
 		case 8: goto yyFillLabel8;
@@ -263,6 +246,5 @@ yy35:
 	++YYCURSOR;
 	YYSETSTATE
 	{ a }
-}
 
 

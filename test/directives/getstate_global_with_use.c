@@ -18,7 +18,6 @@ switch (YYGETSTATE()) {
 
 // use block (expect a local state switch for this block only)
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -32,12 +31,10 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // unnamed global block that includes x (has start label)
 
-{
 yy2:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(1);
@@ -47,12 +44,10 @@ yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // local block y (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(2);
 		YYFILL(1);
@@ -61,12 +56,10 @@ yyFillLabel2:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ y }
-}
 
 
 // global block z that includes x (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(3);
 		YYFILL(1);
@@ -75,12 +68,10 @@ yyFillLabel3:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // unnamed local block (no start label)
 
-{
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(4);
 		YYFILL(1);
@@ -89,12 +80,10 @@ yyFillLabel4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ ? }
-}
 
 
 // use block (expect a local state switch for this block only)
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy10;
 		case 5: goto yyFillLabel5;
@@ -108,5 +97,4 @@ yyFillLabel5:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 

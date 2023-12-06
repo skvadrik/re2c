@@ -8,7 +8,6 @@
 
 // expect local state switch for a use block
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -31,12 +30,10 @@ yyFillLabel0:
 yy3:
 	YYSETSTATE(-1);
 	{ return 1; }
-}
 
 
 // expect global implicit state switch for blocks 'b' and 'c'
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy4;
 		case 1: goto yyFillLabel1;
@@ -60,12 +57,10 @@ yyFillLabel1:
 yy7:
 	YYSETSTATE(-1);
 	{ return 2; }
-}
 
 
 // expect local state switch for a use block
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy8;
 		case 2: goto yyFillLabel2;
@@ -88,12 +83,10 @@ yyFillLabel2:
 yy11:
 	YYSETSTATE(-1);
 	{ return 1; }
-}
 
 
 // expect no state switch
 
-{
 	goto yy13;
 yy14:
 	++YYCURSOR;
@@ -111,7 +104,6 @@ yyFillLabel3:
 yy15:
 	YYSETSTATE(-1);
 	{ return 3; }
-}
 
 directives/getstate_autogen_use_before_normal.re:7:9: warning: rule matches empty string [-Wmatch-empty-string]
 directives/getstate_autogen_use_before_normal.re:15:9: warning: rule matches empty string [-Wmatch-empty-string]

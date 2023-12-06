@@ -26,60 +26,58 @@ char *scan(char *p)
 
 
 #line 29 "config/config4f.c"
-	{
 yy0:
-		if (YYLIMIT <= YYCURSOR) {
-			YYSETSTATE(0);
-			YYFILL(1);
-		}
-yyFillLabel0:
-		yych = *YYCURSOR;
-		switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9': goto yy3;
-			default: goto yy2;
-		}
-yy2:
-		++YYCURSOR;
-		YYSETSTATE(-1);
-#line 23 "config/config4f.re"
-		{ return NULL; }
-#line 56 "config/config4f.c"
-yy3:
-		++YYCURSOR;
-		if (YYLIMIT <= YYCURSOR) {
-			YYSETSTATE(1);
-			YYFILL(1);
-		}
-yyFillLabel1:
-		yych = *YYCURSOR;
-		switch (yych) {
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9': goto yy3;
-			default: goto yy4;
-		}
-yy4:
-		YYSETSTATE(-1);
-#line 22 "config/config4f.re"
-		{ return YYCURSOR; }
-#line 82 "config/config4f.c"
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(0);
+		YYFILL(1);
 	}
+yyFillLabel0:
+	yych = *YYCURSOR;
+	switch (yych) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy3;
+		default: goto yy2;
+	}
+yy2:
+	++YYCURSOR;
+	YYSETSTATE(-1);
+#line 23 "config/config4f.re"
+	{ return NULL; }
+#line 55 "config/config4f.c"
+yy3:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) {
+		YYSETSTATE(1);
+		YYFILL(1);
+	}
+yyFillLabel1:
+	yych = *YYCURSOR;
+	switch (yych) {
+		case '0':
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9': goto yy3;
+		default: goto yy4;
+	}
+yy4:
+	YYSETSTATE(-1);
+#line 22 "config/config4f.re"
+	{ return YYCURSOR; }
+#line 81 "config/config4f.c"
 #line 24 "config/config4f.re"
 
 }

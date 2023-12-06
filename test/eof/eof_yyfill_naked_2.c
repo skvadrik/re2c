@@ -3,7 +3,6 @@
 
 
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0:
@@ -42,11 +41,9 @@ yy3:
 yy4:
 	YYSETSTATE(-1);
 	{ return EOF; }
-}
 
 
 
-{
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -69,11 +66,9 @@ yy8:
 yy9:
 	YYSETSTATE(-1);
 	{ return EOF; }
-}
 
 
 
-{
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -96,11 +91,9 @@ yy13:
 yy14:
 	YYSETSTATE(-1);
 	{ return EOF; }
-}
 
 
 
-{
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -123,5 +116,4 @@ yy18:
 yy19:
 	YYSETSTATE(-1);
 	{ return EOF; }
-}
 

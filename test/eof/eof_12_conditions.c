@@ -24,7 +24,6 @@ loop:
     mrk = cur;
 
     
-{
 	switch (condition) {
 		case yycinit: goto yyc_init;
 		case yyccomment: goto yyc_comment;
@@ -136,7 +135,6 @@ yy20:
 	{ goto loop; }
 yy21:
 	{ return -1; }
-}
 
 }
 

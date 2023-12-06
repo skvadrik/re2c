@@ -8,7 +8,6 @@
 
 // use block (expect a local state switch for this block only)
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -22,12 +21,10 @@ yyFillLabel0:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 
 
 // use block (expect a local state switch for this block only)
 
-{
 	switch (YYGETSTATE()) {
 		default: goto yy2;
 		case 1: goto yyFillLabel1;
@@ -41,5 +38,4 @@ yyFillLabel1:
 	++YYCURSOR;
 	YYSETSTATE(-1);
 	{ x }
-}
 

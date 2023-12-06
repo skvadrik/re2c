@@ -13,7 +13,6 @@ char *scan(char *p)
 	char *q;
 
 #line 16 "config/config4a.c"
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -44,7 +43,7 @@ yy2:
 	YYSETSTATE(-1);
 #line 15 "config/config4a.re"
 	{ return NULL; }
-#line 48 "config/config4a.c"
+#line 47 "config/config4a.c"
 yy3:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) {
@@ -70,8 +69,7 @@ yy4:
 	YYSETSTATE(-1);
 #line 14 "config/config4a.re"
 	{ return YYCURSOR; }
-#line 74 "config/config4a.c"
-}
+#line 73 "config/config4a.c"
 #line 16 "config/config4a.re"
 
 }

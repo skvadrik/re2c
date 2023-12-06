@@ -27,7 +27,6 @@ int scan(char *p)
 start:
 
 #line 30 "bug1472770_f.c"
-{
 	switch (YYGETSTATE()) {
 		default: goto yy0;
 		case 0: goto yyFillLabel0;
@@ -55,7 +54,7 @@ yy3:
 	{
 		return n;
 	}
-#line 59 "bug1472770_f.c"
+#line 58 "bug1472770_f.c"
 yy4:
 	++YYCURSOR;
 	YYSETSTATE(-1);
@@ -64,8 +63,7 @@ yy4:
 		++n;
 		goto start;
 	}
-#line 68 "bug1472770_f.c"
-}
+#line 67 "bug1472770_f.c"
 #line 36 "bug1472770_f.re"
 
 }

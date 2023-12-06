@@ -1856,17 +1856,21 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     append(program, code_line_info_output(alc, opts->lang));
 
     CodeList* code = code_list(alc);
+    bool local_decls = false;
 
     if (!opts->storable_state && opts->char_emit) {
+        local_decls = true;
         append(code, code_var(alc, VarType::YYCTYPE, opts->var_char, nullptr));
     }
     if (!opts->storable_state && oblock.used_yyaccept) {
+        local_decls = true;
         append(code, code_var(alc, VarType::UINT, opts->var_accept, "0"));
     }
 
     if (opts->loop_switch) {
         // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
         // Merge DFAs for different conditions together in one switch.
+        local_decls = true;
         append(code, gen_yystate_def(output));
 
         CodeCases* cases = code_cases(alc);
@@ -1879,11 +1883,16 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
         // and `goto` transitions between states.
         if (opts->cgoto && is_cond_block) {
+            local_decls = true;
             append(code, gen_cond_table(output));
         }
         if (opts->bitmaps) {
             for (const std::unique_ptr<Adfa>& dfa : dfas) {
-                append(code, gen_bitmap(output, dfa->bitmap, dfa->cond));
+                CodeList* bitmap = gen_bitmap(output, dfa->bitmap, dfa->cond);
+                if (bitmap) {
+                    local_decls = true;
+                    append(code, bitmap);
+                }
             }
         }
         if (opts->storable_state) {
@@ -1935,7 +1944,8 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     }
 
     // Wrap the block in braces, so that variable declarations have local scope.
-    append(program, code_block(alc, code, CodeBlock::Kind::WRAPPED));
+    append(program, code_block(alc, code, local_decls ? CodeBlock::Kind::WRAPPED
+            : opts->indent_top == 0 ? CodeBlock::Kind::INDENTED : CodeBlock::Kind::RAW));
 
     return Ret::OK;
 }
