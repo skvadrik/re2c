@@ -17,7 +17,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "    (have_init? \"\" : topindent \"#[allow(unused_assignments)]\" nl)\n"
     "    topindent \"let mut \" name \" : \" type \" = \" (have_init? init : \"0\") \";\" nl;\n"
     "\n"
-    "code:const = topindent \"const \" name \": \" type \" = \" init nl \";\";\n"
+    "code:const = topindent \"const \" name \": \" type \" = \" init \";\" nl;\n"
     "\n"
     "// code:array\n"
     "\n"

@@ -5,20 +5,20 @@ import "fmt"
 import "os"
 
 /*!max:re2c*/
-var SIZE int = 11
+var SIZE uint = 11
 
 type YYCTYPE byte
 type Input struct {
 	file   *os.File
 	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
+	cursor uint
+	marker uint
+	token  uint
+	limit  uint
 	eof    bool
 }
 
-func fill(in *Input, need int) int {
+func fill(in *Input, need uint) int {
 	// End of input has already been reached, nothing to do.
 	if in.eof {
 		fmt.Println("fill error: unexpected EOF")
@@ -42,7 +42,7 @@ func fill(in *Input, need int) int {
 
 	// Read new data (as much as possible to fill the buffer).
 	n, _ := in.file.Read(in.data[in.limit:SIZE])
-	in.limit += n
+	in.limit += uint(n)
 	fmt.Printf("fill(%d): %v '%s'\n", need, in.data[:in.limit+1],
 		string(in.data[:in.limit]))
 
@@ -52,7 +52,7 @@ func fill(in *Input, need int) int {
 	// If end of input, add padding so that the lexer can read
 	// the remaining characters at the end of buffer.
 	if in.eof {
-		for i := 0; i < YYMAXFILL; i += 1 {
+		for i := uint(0); i < YYMAXFILL; i += 1 {
 			in.data[in.limit+i] = 0
 		}
 		in.limit += YYMAXFILL

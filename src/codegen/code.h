@@ -396,6 +396,13 @@ inline Code* code_var(OutAllocator& alc, VarType type, const char* name, const c
     return x;
 }
 
+inline void init_code_const(Code* x, VarType type, const char* name, const char* init) {
+    x->kind = CodeKind::CONST;
+    x->var.type = type;
+    x->var.name = name;
+    x->var.init = init;
+}
+
 inline Code* code_line_info_output(OutAllocator& alc, Lang lang) {
     // Rust has no line directives.
     if (lang == Lang::RUST) return nullptr;

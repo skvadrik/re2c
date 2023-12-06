@@ -8,15 +8,15 @@ import (
 	"strings"
 )
 
-const BUFSIZE int = 4096
+const BUFSIZE uint = 4096
 
 type Input struct {
 	file *os.File
 	buf  []byte
-	cur  int
-	mar  int
-	tok  int
-	lim  int
+	cur  uint
+	mar  uint
+	tok  uint
+	lim  uint
 	eof  bool
 }
 
@@ -35,7 +35,7 @@ func fill(in *Input) int {
 
 	// Fill free space at the end of buffer with new data from file.
 	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
-	in.lim += n
+	in.lim += uint(n)
 	in.buf[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
@@ -165,9 +165,9 @@ func main() () {
 	// Prepare input file: a few times the size of the buffer, containing
 	// strings with zeroes and escaped quotes.
 	f, _ := os.Create(fname)
-	f.WriteString(strings.Repeat(content, BUFSIZE))
+	f.WriteString(strings.Repeat(content, int(BUFSIZE)))
 	f.Seek(0, 0)
-	count := 3 * BUFSIZE // number of quoted strings written to file
+	count := 3 * int(BUFSIZE) // number of quoted strings written to file
 
 	// Prepare lexer state: all offsets are at the end of buffer.
 	in := &Input{

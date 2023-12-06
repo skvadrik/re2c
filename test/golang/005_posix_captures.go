@@ -6,7 +6,7 @@ package main
 import "reflect"
 
 //line "golang/005_posix_captures.go":9
-var YYMAXNMATCH int = 5
+var YYMAXNMATCH uint = 5
 //line "golang/005_posix_captures.re":6
 
 

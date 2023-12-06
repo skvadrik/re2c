@@ -1635,7 +1635,7 @@ static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind
     return max;
 }
 
-LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
+LOCAL_NODISCARD(Ret gen_yymax(Output& output, Code* code)) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
 
@@ -1663,20 +1663,10 @@ LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
         buf.cstr(code->fmt.format);
         argsubst(buf.stream(), opts->api_sigil, "max", true, max);
         code->text = buf.flush();
+        code->kind = CodeKind::TEXT;
     } else {
-        switch (opts->lang) {
-        case Lang::C:
-            code->text = buf.cstr("#define ").cstr(varname).cstr(" ").u64(max).flush();
-            break;
-        case Lang::GO:
-            code->text = buf.cstr("var ").cstr(varname).cstr(" int = ").u64(max).flush();
-            break;
-        case Lang::RUST:
-            code->text = buf.cstr("const ").cstr(varname).cstr(": usize = ").u64(max).flush();
-            break;
-        }
+        init_code_const(code, VarType::UINT, varname, buf.u64(max).flush());
     }
-    code->kind = (opts->lang == Lang::C) ? CodeKind::TEXT : CodeKind::STMT;
     return Ret::OK;
 }
 

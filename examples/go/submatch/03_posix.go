@@ -7,7 +7,7 @@ import "reflect"
 
 // Maximum number of capturing groups among all rules.
 //line "go/submatch/03_posix.go":10
-var YYMAXNMATCH int = 4
+var YYMAXNMATCH uint = 4
 //line "go/submatch/03_posix.re":7
 
 

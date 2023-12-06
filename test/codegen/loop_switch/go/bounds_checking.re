@@ -10,8 +10,8 @@ import (
 
 // Expects YYMAXFILL-padded string.
 func lex(str string) int {
-	var cursor int
-	limit := len(str)
+	var cursor uint
+	limit := uint(len(str))
 	count := 0
 loop:
 	/*!re2c
@@ -43,7 +43,7 @@ loop:
 
 // Pad string with YYMAXFILL zeroes at the end.
 func pad(str string) string {
-	return str + strings.Repeat("\000", YYMAXFILL)
+	return str + strings.Repeat("\000", int(YYMAXFILL))
 }
 
 func TestLex(t *testing.T) {

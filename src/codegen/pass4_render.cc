@@ -1084,6 +1084,11 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:var", callback);
         break;
     }
+    case CodeKind::CONST: {
+        RenderVar callback(rctx, &code->var); // same code item as for `CodeKind::VAR`
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:const", callback);
+        break;
+    }
     case CodeKind::ARRAY: {
         RenderArray callback(rctx, &code->array);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:array", callback);

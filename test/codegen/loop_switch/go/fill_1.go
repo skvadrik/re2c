@@ -8,15 +8,15 @@ import (
 )
 
 // Intentionally small to trigger buffer refill.
-const SIZE int = 16
+const SIZE uint = 16
 
 type Input struct {
 	file   *os.File
 	data   []byte
-	cursor int
-	marker int
-	token  int
-	limit  int
+	cursor uint
+	marker uint
+	token  uint
+	limit  uint
 	eof    bool
 }
 
@@ -42,7 +42,7 @@ func fill(in *Input) int {
 
 	// Read new data (as much as possible to fill the buffer).
 	n, _ := in.file.Read(in.data[in.limit:SIZE])
-	in.limit += n
+	in.limit += uint(n)
 	in.data[in.limit] = 0
 
 	// If read less than expected, this is the end of input.

@@ -6,14 +6,14 @@ package main
 import "strings"
 
 //line "go/eof/02_bounds_checking.go":9
-var YYMAXFILL int = 1
+var YYMAXFILL uint = 1
 //line "go/eof/02_bounds_checking.re":6
 
 
 // Expects YYMAXFILL-padded string.
 func lex(str string) int {
 	// Pad string with YYMAXFILL zeroes at the end.
-	buf := str + strings.Repeat("\000", YYMAXFILL)
+	buf := str + strings.Repeat("\000", int(YYMAXFILL))
 
 	var cur int
 	lim := len(buf)

@@ -96,6 +96,7 @@ enum class CodeKind: uint32_t {
     MAXFILL,
     MAXNMATCH,
     VAR,
+    CONST,
     ARRAY,
     ENUM,
     STMT,
