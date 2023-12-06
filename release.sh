@@ -21,6 +21,12 @@ then
     exit 1
 fi
 
+# check that examples work
+for lang in c go rust; do
+    ( cd examples/$lang && ./__run_all.sh \
+        || { echo "$lang examples failed"; exit 1; } )
+done
+
 # update version
 old="[0-9]+(\.[0-9]+)*(\.dev)?"
 new=$version
