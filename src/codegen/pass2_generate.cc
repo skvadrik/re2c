@@ -1625,7 +1625,7 @@ static Code* gen_yystate_def(Output& output) {
         type = VarType::UINT;
         init = "0";
     }
-    return code_var(output.allocator, type, opts->var_state, init);
+    return code_var(output.allocator, type, opts->var_state.c_str(), init);
 }
 
 static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind) {
@@ -1765,11 +1765,11 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
 
     if (!opts->storable_state && opts->char_emit) {
         local_decls = true;
-        append(code, code_var(alc, VarType::YYCTYPE, opts->var_char, nullptr));
+        append(code, code_var(alc, VarType::YYCTYPE, opts->var_char.c_str(), nullptr));
     }
     if (!opts->storable_state && oblock.used_yyaccept) {
         local_decls = true;
-        append(code, code_var(alc, VarType::UINT, opts->var_accept, "0"));
+        append(code, code_var(alc, VarType::UINT, opts->var_accept.c_str(), "0"));
     }
 
     if (opts->loop_switch) {

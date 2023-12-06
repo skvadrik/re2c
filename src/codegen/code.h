@@ -388,7 +388,7 @@ inline Code* code_line_info_input(OutAllocator& alc, Lang lang, const loc_t& loc
     return x;
 }
 
-inline Code* code_var(OutAllocator& alc, VarType type, const std::string& name, const char* init) {
+inline Code* code_var(OutAllocator& alc, VarType type, const char* name, const char* init) {
     Code* x = new_code(alc, CodeKind::VAR);
     x->var.type = type;
     x->var.name = copystr(name, alc);
