@@ -34,6 +34,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["char_literals"] = {"hexadecimal", "symbolic"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_requires_include"] = {"yes", "no"};
+    allowed_word_confs["implicit_conv_to_bool"] = {"yes", "no"};
 
     allowed_code_confs["code:var"] = {
         {"type", "name", "init"}, {}, {"have_init"}
@@ -84,9 +85,6 @@ Stx::Stx(OutAllocator& alc)
     };
     allowed_code_confs["code:label"] = {
         {"name"}, {}, {}
-    };
-    allowed_code_confs["code:bitmap_check"] = {
-        {"table", "offset", "char", "mask"}, {}, {}
     };
     allowed_code_confs["code:abort"] = {};
     allowed_code_confs["code:yypeek_expr"] = {

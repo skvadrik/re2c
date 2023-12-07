@@ -9,6 +9,7 @@ constants = upper_case;
 char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = no;
 abort_requires_include = no;
+implicit_conv_to_bool = no;
 
 code:var = topindent (have_init? name " := " init : "var " name " " type) nl;
 
