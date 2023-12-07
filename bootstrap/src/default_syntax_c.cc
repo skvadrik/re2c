@@ -77,6 +77,6 @@ const char* DEFAULT_SYNTAX_C =
     "code:abort = topindent \"abort();\" nl;\n"
     "\n"
     "code:yypeek_expr = (api.generic\n"
-    "    ? expr (api_style.functions ? \"()\")\n"
-    "    : \"*\" expr );\n"
+    "    ? peek (api_style.functions ? \"()\")\n"
+    "    : typecast \"*\" cursor );\n"
     ;

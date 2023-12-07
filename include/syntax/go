@@ -70,6 +70,4 @@ code:line_info = "//line \"" file "\":" line nl;
 
 code:abort = topindent "panic(\"internal lexer error\")" nl;
 
-code:yypeek_expr = (api.generic
-    ? expr (api_style.functions ? "()")
-    : "*" expr );
+code:yypeek_expr = peek (api_style.functions ? "()");

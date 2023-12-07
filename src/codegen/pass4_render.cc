@@ -621,27 +621,38 @@ static inline void yych_conv(std::ostream& os, const opt_t* opts) {
     }
 }
 
-void gen_peek_expr(std::ostream& os, const opt_t* opts) {
-    yych_conv(os, opts);
-    if (opts->api == Api::DEFAULT) {
-        os << "*" << opts->api_cursor;
-    } else if (opts->lang == Lang::RUST) {
-        if (opts->unsafe) os << "unsafe {";
-        os << opts->api_peek;
-        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
-        if (opts->unsafe) os << "}";
-    } else {
-        os << opts->api_peek;
-        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
+class RenderPeek : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderPeek(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "peek") == 0) {
+            rctx.os << rctx.opts->api_peek;
+        } else if (strcmp(var, "cursor") == 0) {
+            rctx.os << rctx.opts->api_cursor;
+        } else if (strcmp(var, "typecast") == 0) {
+            yych_conv(rctx.os, rctx.opts);
+        } else {
+            render_global_var(rctx, var);
+        }
     }
+};
+
+static void render_debug(RenderContext& rctx, const CodeLabel& code) {
+    rctx.os << indent(rctx.ind, rctx.opts->indent_str) << rctx.opts->api_debug
+            << "(" << code.nlabel->index << ", ";
+    RenderPeek callback(rctx);
+    rctx.stx.gen_code(rctx.os, rctx.opts, "code:yypeek_expr", callback);
+    rctx.os << ")";
+    render_stmt_end(rctx, true);
 }
 
 static void render_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    gen_peek_expr(os, opts);
+    rctx.os << indent(rctx.ind, rctx.opts->indent_str) << rctx.opts->var_char << " = ";
+    RenderPeek callback(rctx);
+    rctx.stx.gen_code(rctx.os, rctx.opts, "code:yypeek_expr", callback);
     render_stmt_end(rctx, true);
 }
 
@@ -1093,6 +1104,9 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::LABEL:
         render_label(rctx, code->label);
+        break;
+    case CodeKind::DEBUG:
+        render_debug(rctx, code->label); // same code item as for `CodeKind::LABEL`
         break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:

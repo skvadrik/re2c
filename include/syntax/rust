@@ -67,4 +67,4 @@ code:fingerprint =
 
 code:abort = topindent "panic!(\"internal lexer error\");" nl;
 
-code:yypeek_expr = (unsafe? "unsafe { " expr " }" : expr) (api_style.functions ? "()");
+code:yypeek_expr = (unsafe? "unsafe {" peek "}" : peek) (api_style.functions ? "()");

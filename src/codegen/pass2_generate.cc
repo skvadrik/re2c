@@ -924,17 +924,11 @@ static void emit_accept(
 }
 
 static void gen_yydebug(Output& output, const Label* label, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    Scratchbuf& buf = output.scratchbuf;
-
-    if (!opts->debug) return;
-
-    // The label may be unused but still have a valid index (one such example is the initial label
-    // in goto/label mode). It still needs an YYDEBUG statement.
-    buf.str(opts->api_debug).cstr("(").unchecked_label(*label).cstr(", ");
-    gen_peek_expr(buf.stream(), opts);
-    buf.cstr(")");
-    append(stmts, code_stmt(output.allocator, buf.flush()));
+    if (output.block().opts->debug) {
+        // The label may be unused but still have a valid index (one such example is the initial label
+        // in goto/label mode). It still needs an YYDEBUG statement.
+        append(stmts, code_debug(output.allocator, label));
+    }
 }
 
 static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx) {

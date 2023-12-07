@@ -71,7 +71,5 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:abort = topindent \"panic(\\\"internal lexer error\\\")\" nl;\n"
     "\n"
-    "code:yypeek_expr = (api.generic\n"
-    "    ? expr (api_style.functions ? \"()\")\n"
-    "    : \"*\" expr );\n"
+    "code:yypeek_expr = peek (api_style.functions ? \"()\");\n"
     ;

@@ -257,7 +257,7 @@ struct CodeLabel {
     } kind;
 
     union {
-        Label* nlabel;
+        const Label* nlabel;
         const char* slabel;
     };
 };
@@ -347,7 +347,7 @@ inline Code* code_newline(OutAllocator& alc) {
     return code_textraw(alc, "");
 }
 
-inline Code* code_nlabel(OutAllocator& alc, Label* label) {
+inline Code* code_nlabel(OutAllocator& alc, const Label* label) {
     Code* x = new_code(alc, CodeKind::LABEL);
     x->label.kind = CodeLabel::Kind::NLABEL;
     x->label.nlabel = label;
@@ -358,6 +358,13 @@ inline Code* code_slabel(OutAllocator& alc, const char* label) {
     Code* x = new_code(alc, CodeKind::LABEL);
     x->label.kind = CodeLabel::Kind::SLABEL;
     x->label.slabel = label;
+    return x;
+}
+
+inline Code* code_debug(OutAllocator& alc, const Label* label) {
+    Code* x = new_code(alc, CodeKind::DEBUG);
+    x->label.kind = CodeLabel::Kind::NLABEL;
+    x->label.nlabel = label;
     return x;
 }
 
