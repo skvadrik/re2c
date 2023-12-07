@@ -126,7 +126,7 @@ fn lex(s: &[u8]) -> isize {
 				continue 'yyl;
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

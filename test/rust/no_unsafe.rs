@@ -29,7 +29,7 @@
 			1 => {}
 			2 => {}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}
@@ -64,7 +64,7 @@
 			1 => {}
 			2 => {}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}
@@ -99,7 +99,7 @@
 			1 => {}
 			2 => {}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

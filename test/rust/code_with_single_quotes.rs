@@ -35,7 +35,7 @@
     }
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

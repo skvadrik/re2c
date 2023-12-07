@@ -53,7 +53,7 @@ fn lex(s: &[u8]) -> bool {
 			}
 			3 => { return true; }
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

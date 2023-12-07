@@ -367,7 +367,7 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

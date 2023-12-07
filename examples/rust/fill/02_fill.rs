@@ -143,7 +143,7 @@ fn lex(st: &mut State) -> isize {
 				continue 'yyl;
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

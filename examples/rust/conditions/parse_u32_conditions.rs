@@ -212,7 +212,7 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			22 => { add(&mut num, str, cur, 55, 16); continue 'lex; }
 			23 => { add(&mut num, str, cur, 87, 16); continue 'lex; }
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

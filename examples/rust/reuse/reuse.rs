@@ -155,7 +155,7 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 			}
 			12 => { return Some(cur); }
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}
@@ -222,7 +222,7 @@ fn lex_utf32(str: &[u32]) -> Option<usize> {
 				{ return Some(cur); }
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

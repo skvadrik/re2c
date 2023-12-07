@@ -287,7 +287,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 			}
 			11 => { return Some(vers); }
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}

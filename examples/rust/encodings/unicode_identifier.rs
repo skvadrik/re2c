@@ -9717,7 +9717,7 @@ fn lex(str: &[u8]) -> bool {
 				}
 			}
 			_ => {
-				panic!("internal lexer error")
+				panic!("internal lexer error");
 			}
 		}
 	}
