@@ -66,6 +66,6 @@ code:fingerprint =
 
 // code:bitmap_check (bitmaps not supported in Rust)
 
-code:abort_expr = "panic!(\"internal lexer error\")";
+code:abort = topindent "panic!(\"internal lexer error\")" nl;
 
 code:yypeek_expr = (unsafe? "unsafe { " expr " }" : expr) (api_style.functions ? "()");

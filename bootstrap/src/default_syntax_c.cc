@@ -75,7 +75,7 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "code:bitmap_check = table \"[\" offset \" + \" char \"] & \" mask;\n"
     "\n"
-    "code:abort_expr = \"abort()\";\n"
+    "code:abort = topindent \"abort();\" nl;\n"
     "\n"
     "code:yypeek_expr = (api.generic\n"
     "    ? expr (api_style.functions ? \"()\")\n"

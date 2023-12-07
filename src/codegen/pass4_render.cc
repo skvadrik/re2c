@@ -49,6 +49,17 @@ static void render_global_var(RenderContext& rctx, const char* var) {
     }
 }
 
+class RenderSimple : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderSimple(RenderContext& rctx): rctx(rctx) {}
+
+    virtual void render_var(const char* var) {
+        render_global_var(rctx, var);
+    }
+};
+
 static uint32_t count_lines_text(const char* text) {
     DCHECK(text);
     uint32_t lc = 0;
@@ -744,27 +755,6 @@ static void render_backup_peek_skip(RenderContext& rctx) {
     render_stmt_end(rctx, true);
 }
 
-static void render_abort(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    os << indent(rctx.ind, opts->indent_str);
-    switch (opts->lang) {
-    case Lang::C:
-        DCHECK(opts->state_abort);
-        os << "abort();";
-        break;
-    case Lang::GO:
-        os << "panic(\"internal lexer error\")";
-        break;
-    case Lang::RUST:
-        os << "panic!(\"internal lexer error\")";
-        break;
-    }
-    os << std::endl;
-    ++rctx.line;
-}
-
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
     if (label.kind == CodeLabel::Kind::SLABEL) {
         rctx.os << label.slabel << ":" << std::endl;
@@ -1029,9 +1019,11 @@ static void render(RenderContext& rctx, const Code* code) {
             if (code->raw.data[i] == '\n') ++line;
         }
         break;
-    case CodeKind::ABORT:
-        render_abort(rctx);
+    case CodeKind::ABORT: {
+        RenderSimple callback(rctx);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:abort", callback);
         break;
+    }
     case CodeKind::SKIP:
         render_skip(rctx);
         break;

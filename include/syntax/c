@@ -74,7 +74,7 @@ code:line_info = "#line " line " \"" file "\"" nl;
 
 code:bitmap_check = table "[" offset " + " char "] & " mask;
 
-code:abort_expr = "abort()";
+code:abort = topindent "abort();" nl;
 
 code:yypeek_expr = (api.generic
     ? expr (api_style.functions ? "()")

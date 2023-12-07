@@ -68,7 +68,7 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:line_info = \"//line \\\"\" file \"\\\":\" line nl;\n"
     "\n"
-    "code:abort_expr = \"panic(\\\"internal lexer error\\\")\";\n"
+    "code:abort = topindent \"panic(\\\"internal lexer error\\\")\" nl;\n"
     "\n"
     "code:yypeek_expr = (api.generic\n"
     "    ? expr (api_style.functions ? \"()\")\n"

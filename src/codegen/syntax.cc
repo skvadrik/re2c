@@ -88,7 +88,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:bitmap_check"] = {
         {"table", "offset", "char", "mask"}, {}, {}
     };
-    allowed_code_confs["code:abort_expr"] = {};
+    allowed_code_confs["code:abort"] = {};
     allowed_code_confs["code:yypeek_expr"] = {
         {"expr"}, {}, {}
     };

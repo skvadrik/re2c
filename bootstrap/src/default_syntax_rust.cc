@@ -67,7 +67,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "// code:bitmap_check (bitmaps not supported in Rust)\n"
     "\n"
-    "code:abort_expr = \"panic!(\\\"internal lexer error\\\")\";\n"
+    "code:abort = topindent \"panic!(\\\"internal lexer error\\\")\" nl;\n"
     "\n"
     "code:yypeek_expr = (unsafe? \"unsafe { \" expr \" }\" : expr) (api_style.functions ? \"()\");\n"
     ;
