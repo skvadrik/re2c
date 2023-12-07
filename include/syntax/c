@@ -72,8 +72,6 @@ code:fingerprint =
 
 code:line_info = "#line " line " \"" file "\"" nl;
 
-code:label = name;
-
 code:bitmap_check = table "[" offset " + " char "] & " mask;
 
 code:abort_expr = "abort()";

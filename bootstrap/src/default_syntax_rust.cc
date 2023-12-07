@@ -65,8 +65,6 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "// code:line_info (no line directives in Rust)\n"
     "\n"
-    "code:label = \"'\" name;\n"
-    "\n"
     "// code:bitmap_check (bitmaps not supported in Rust)\n"
     "\n"
     "code:abort_expr = \"panic!(\\\"internal lexer error\\\")\";\n"

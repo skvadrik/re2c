@@ -73,8 +73,6 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "code:line_info = \"#line \" line \" \\\"\" file \"\\\"\" nl;\n"
     "\n"
-    "code:label = name;\n"
-    "\n"
     "code:bitmap_check = table \"[\" offset \" + \" char \"] & \" mask;\n"
     "\n"
     "code:abort_expr = \"abort()\";\n"

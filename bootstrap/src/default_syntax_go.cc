@@ -68,8 +68,6 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:line_info = \"//line \\\"\" file \"\\\":\" line nl;\n"
     "\n"
-    "code:label = name;\n"
-    "\n"
     "code:abort_expr = \"panic(\\\"internal lexer error\\\")\";\n"
     "\n"
     "code:yypeek_expr = (api.generic\n"
