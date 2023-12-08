@@ -9,7 +9,7 @@ constants = snake_case;
 char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = yes;
 abort_requires_include = yes;
-implicit_conv_to_bool = yes;
+implicit_bool_conversion = yes;
 
 code:var = topindent type " " name (have_init? " = " init) ";" nl;
 

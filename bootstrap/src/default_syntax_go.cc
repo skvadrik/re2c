@@ -10,7 +10,7 @@ const char* DEFAULT_SYNTAX_GO =
     "char_literals = (encoding.ebcdic ? hexadecimal : symbolic);\n"
     "semicolons = no;\n"
     "abort_requires_include = no;\n"
-    "implicit_conv_to_bool = no;\n"
+    "implicit_bool_conversion = no;\n"
     "\n"
     "code:var = topindent (have_init? name \" := \" init : \"var \" name \" \" type) nl;\n"
     "\n"

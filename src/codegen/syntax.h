@@ -163,7 +163,9 @@ class Stx {
     void gen_code(std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback);
     void gen_str(std::ostream& os, const opt_t* opts, const char* name);
 
+    // functions that evaluate word configurations
     const char* eval_conf(const opt_t* opts, const char* name);
+    bool eval_bool_conf(const opt_t* opts, const char* name);
 };
 
 class StxFile {

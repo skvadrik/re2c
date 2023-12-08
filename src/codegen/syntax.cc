@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include <iostream>
 
 #include "src/codegen/output.h"
@@ -34,7 +35,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["char_literals"] = {"hexadecimal", "symbolic"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_requires_include"] = {"yes", "no"};
-    allowed_word_confs["implicit_conv_to_bool"] = {"yes", "no"};
+    allowed_word_confs["implicit_bool_conversion"] = {"yes", "no"};
 
     allowed_code_confs["code:var"] = {
         {"type", "name", "init"}, {}, {"have_init"}
@@ -353,6 +354,10 @@ const char* Stx::eval_conf(const opt_t* opts, const char* name) {
 
     UNREACHABLE();
     return nullptr;
+}
+
+bool Stx::eval_bool_conf(const opt_t* opts, const char* name) {
+    return strcmp(eval_conf(opts, name), "yes") == 0;
 }
 
 void Stx::cache_conf_tests() {

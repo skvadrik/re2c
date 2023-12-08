@@ -677,7 +677,8 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const char* nonzero = opts->lang == Lang::C ? "" : " != 0";
+    const char* nonzero =
+            output.stx.eval_bool_conf(opts, "implicit_bool_conversion") ? "" : " != 0";
 
     const char* elif_cond = o.str(bitmap_name(opts, dfa.cond))
             .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->var_char).cstr("]")

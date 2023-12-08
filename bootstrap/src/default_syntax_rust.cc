@@ -10,7 +10,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "char_literals = hexadecimal;\n"
     "semicolons = yes;\n"
     "abort_requires_include = no;\n"
-    "implicit_conv_to_bool = no;\n"
+    "implicit_bool_conversion = no;\n"
     "\n"
     "code:var =\n"
     "    // In Rust uninitialized variable is an error, but if the compiler is able to see\n"
