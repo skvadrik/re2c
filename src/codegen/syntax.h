@@ -127,7 +127,7 @@ class Stx {
     Ret check_var(const char* conf, const char* var) const;
 
     void push_list_on_stack(const StxCode* x);
-    bool eval_cond(const char* cond, const opt_t* opts, RenderCallback& callback) const;
+    bool eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const;
 
     bool have_conf(const char* name) const;
 
@@ -162,6 +162,8 @@ class Stx {
     // functions that generate code for a given syntax configuration
     void gen_code(std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback);
     void gen_str(std::ostream& os, const opt_t* opts, const char* name);
+
+    const char* eval_conf(const opt_t* opts, const char* name);
 };
 
 class StxFile {

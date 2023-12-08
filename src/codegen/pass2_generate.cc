@@ -596,7 +596,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     print_char_or_hex(buf.stream(),
                       cond->val,
                       opts->encoding.cunit_size(),
-                      opts->lang == Lang::RUST || opts->encoding.type() == Enc::Type::EBCDIC,
+                      strcmp(output.stx.eval_conf(opts, "char_literals"), "hexadecimal") == 0,
                       opts->target == Target::DOT);
     return buf.flush();
 }

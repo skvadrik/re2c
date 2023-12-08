@@ -230,27 +230,6 @@ class RenderIfThenElse : public RenderCallback {
     FORBID_COPY(RenderIfThenElse);
 };
 
-static void render_number(RenderContext& rctx, int64_t num, VarType type) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const Enc& enc = opts->encoding;
-    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::Type::EBCDIC;
-
-    switch (type) {
-    case VarType::UINT:
-        DCHECK(num >= 0);
-        os << static_cast<uint32_t>(num);
-        break;
-    case VarType::INT:
-        os << num;
-        break;
-    case VarType::YYCTYPE:
-        DCHECK(num >= 0);
-        print_char_or_hex(os, static_cast<uint32_t>(num), enc.cunit_size(), hex, /*dot*/ false);
-        break;
-    }
-}
-
 class RenderSwitchCaseDefault : public RenderCallback {
     RenderContext& rctx;
 
@@ -299,7 +278,23 @@ class RenderSwitchCaseRange : public RenderCallback {
             case CodeCase::Kind::RANGES: {
                 DCHECK(curr_range < code->ranges->size && curr_sym < nsyms);
                 int64_t sym = code->ranges->elems[2*curr_range] + static_cast<int64_t>(curr_sym);
-                render_number(rctx, sym, code->ranges->type);
+                switch (code->ranges->type) {
+                case VarType::UINT:
+                    DCHECK(sym >= 0);
+                    // fallthrough
+                case VarType::INT:
+                    rctx.os << sym;
+                    break;
+                case VarType::YYCTYPE:
+                    DCHECK(sym >= 0);
+                    print_char_or_hex(
+                        rctx.os,
+                        static_cast<uint32_t>(sym),
+                        rctx.opts->encoding.cunit_size(),
+                        strcmp(rctx.stx.eval_conf(rctx.opts, "char_literals"), "hexadecimal") == 0,
+                        /*dot*/ false);
+                    break;
+                }
                 break;
             }}
         } else {

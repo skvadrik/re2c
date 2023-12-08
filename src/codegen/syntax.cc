@@ -266,13 +266,15 @@ void Stx::push_list_on_stack(const StxCode* x) {
     stack_code.push_back({x, 0});
 }
 
-bool Stx::eval_cond(const char* cond, const opt_t* opts, RenderCallback& callback) const {
+bool Stx::eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const {
     auto i = allowed_conds.find(cond);
     if (i != allowed_conds.end()) {
         return i->second(opts);
-    } else {
-        return callback.eval_cond(cond);
+    } else if (callback != nullptr) {
+        return callback->eval_cond(cond);
     }
+    UNREACHABLE();
+    return false;
 }
 
 static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rbound) {
@@ -304,7 +306,7 @@ void Stx::gen_code(
             callback.render_var(x->var);
             break;
         case StxCodeType::COND:
-            if (eval_cond(x->cond.conf, opts, callback)) {
+            if (eval_cond(x->cond.conf, opts, &callback)) {
                 push_list_on_stack(x->cond.then_code->head);
             } else if (x->cond.else_code != nullptr) {
                 push_list_on_stack(x->cond.else_code->head);
@@ -332,6 +334,25 @@ void Stx::gen_code(
 void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
     RenderCallback dummy;
     gen_code(os, opts, name, dummy);
+}
+
+const char* Stx::eval_conf(const opt_t* opts, const char* name) {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs[name];
+    CHECK(conf->type == StxConfType::EXPR);
+
+    for (const StxExpr* x = conf->expr;;) {
+        switch (x->type) {
+        case StxExprType::NAME:
+            return x->name;
+        case StxExprType::COND:
+            x = eval_cond(x->cond.conf, opts, nullptr) ? x->cond.then_expr : x->cond.else_expr;
+            break;
+        }
+    }
+
+    UNREACHABLE();
+    return nullptr;
 }
 
 void Stx::cache_conf_tests() {
