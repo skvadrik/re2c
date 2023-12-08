@@ -70,7 +70,7 @@ static uint32_t count_lines_text(const char* text) {
 }
 
 static inline void render_stmt_end(RenderContext& rctx, bool semi) {
-    if (semi && rctx.opts->lang != Lang::GO) rctx.os << ";";
+    if (semi && strcmp(rctx.stx.eval_conf(rctx.opts, "semicolons"), "yes") == 0) rctx.os << ";";
     rctx.os << std::endl;
     ++rctx.line;
 }
