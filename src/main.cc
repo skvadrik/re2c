@@ -192,7 +192,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
             }
             output.gen_stmt(code_dfas(out_alc));
         }
-        output.gen_stmt(code_line_info_input(out_alc, b.opts->lang, input.cur_loc()));
+        output.gen_stmt(code_line_info_input(out_alc, input.cur_loc()));
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.

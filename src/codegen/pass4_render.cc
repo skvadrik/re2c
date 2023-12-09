@@ -1060,18 +1060,16 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK:
         render_skip_backup_peek(rctx);
         break;
-    case CodeKind::LINE_INFO_INPUT:
-        if (rctx.opts->line_dirs) {
-            RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
-            rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
-        }
+    case CodeKind::LINE_INFO_INPUT: {
+        RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
         break;
-    case CodeKind::LINE_INFO_OUTPUT:
-        if (rctx.opts->line_dirs) {
-            RenderLineInfo callback(rctx, rctx.line + 1, rctx.file);
-            rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
-        }
+    }
+    case CodeKind::LINE_INFO_OUTPUT: {
+        RenderLineInfo callback(rctx, rctx.line + 1, rctx.file);
+        rctx.stx.gen_code(rctx.os, rctx.opts, "code:line_info", callback);
         break;
+    }
     case CodeKind::FINGERPRINT: {
         RenderFingerprint callback(rctx);
         rctx.stx.gen_code(rctx.os, rctx.opts, "code:fingerprint", callback);

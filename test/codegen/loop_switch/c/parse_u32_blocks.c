@@ -45,8 +45,7 @@ static uint64_t parse_u32(const char *s)
 						yystate = 1;
 						continue;
 				}
-			case 1:
-				{ return ERROR; }
+			case 1: { return ERROR; }
 			case 2:
 				YYMARKER = s;
 				yych = *s;
@@ -65,8 +64,7 @@ static uint64_t parse_u32(const char *s)
 						yystate = 3;
 						continue;
 				}
-			case 3:
-				{ goto oct; }
+			case 3: { goto oct; }
 			case 4:
 				s -= 1;
 				{ goto dec; }
@@ -150,12 +148,9 @@ bin:
 						yystate = 2;
 						continue;
 				}
-			case 1:
-				{ return u; }
-			case 2:
-				{ return ERROR; }
-			case 3:
-				{ adddgt<2>(u, s[-1] - '0'); goto bin; }
+			case 1: { return u; }
+			case 2: { return ERROR; }
+			case 3: { adddgt<2>(u, s[-1] - '0'); goto bin; }
 		}
 	}
 }
@@ -188,12 +183,9 @@ oct:
 						yystate = 2;
 						continue;
 				}
-			case 1:
-				{ return u; }
-			case 2:
-				{ return ERROR; }
-			case 3:
-				{ adddgt<8>(u, s[-1] - '0'); goto oct; }
+			case 1: { return u; }
+			case 2: { return ERROR; }
+			case 3: { adddgt<8>(u, s[-1] - '0'); goto oct; }
 		}
 	}
 }
@@ -228,12 +220,9 @@ dec:
 						yystate = 2;
 						continue;
 				}
-			case 1:
-				{ return u; }
-			case 2:
-				{ return ERROR; }
-			case 3:
-				{ adddgt<10>(u, s[-1] - '0'); goto dec; }
+			case 1: { return u; }
+			case 2: { return ERROR; }
+			case 3: { adddgt<10>(u, s[-1] - '0'); goto dec; }
 		}
 	}
 }
@@ -284,16 +273,11 @@ hex:
 						yystate = 2;
 						continue;
 				}
-			case 1:
-				{ return u; }
-			case 2:
-				{ return ERROR; }
-			case 3:
-				{ adddgt<16>(u, s[-1] - '0');      goto hex; }
-			case 4:
-				{ adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
-			case 5:
-				{ adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
+			case 1: { return u; }
+			case 2: { return ERROR; }
+			case 3: { adddgt<16>(u, s[-1] - '0');      goto hex; }
+			case 4: { adddgt<16>(u, s[-1] - 'A' + 10); goto hex; }
+			case 5: { adddgt<16>(u, s[-1] - 'a' + 10); goto hex; }
 		}
 	}
 }

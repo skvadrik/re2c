@@ -38,8 +38,7 @@ loop:
 			case 1:
 				yystate = 2;
 				continue;
-			case 2:
-				{ return -1; }
+			case 2: { return -1; }
 			case 3:
 				yych = *YYCURSOR;
 				switch (yych) {
@@ -51,8 +50,7 @@ loop:
 						yystate = 4;
 						continue;
 				}
-			case 4:
-				{ goto loop; }
+			case 4: { goto loop; }
 			case 5:
 				YYMARKER = YYCURSOR;
 				yych = *YYCURSOR;
@@ -90,8 +88,7 @@ loop:
 						yystate = 6;
 						continue;
 				}
-			case 8:
-				{ ++count; goto loop; }
+			case 8: { ++count; goto loop; }
 			case 9:
 				yych = *YYCURSOR;
 				if (yych <= 0x00) {
@@ -106,8 +103,7 @@ loop:
 				++YYCURSOR;
 				yystate = 6;
 				continue;
-			case 10:
-				{ return count; }
+			case 10: { return count; }
 			case 11:
 				YYCURSOR = YYMARKER;
 				yystate = 2;

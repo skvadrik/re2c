@@ -55,8 +55,7 @@ loop:
 						yystate = 1;
 						continue;
 				}
-			case 1:
-				{ return ERROR; }
+			case 1: { return ERROR; }
 			case 2:
 				YYMARKER = s;
 				yych = *s;
@@ -157,12 +156,9 @@ loop:
 						yystate = 12;
 						continue;
 				}
-			case 11:
-				{ return u; }
-			case 12:
-				{ return ERROR; }
-			case 13:
-				{ adddgt<2> (u, s[-1] - '0');      goto loop; }
+			case 11: { return u; }
+			case 12: { return ERROR; }
+			case 13: { adddgt<2> (u, s[-1] - '0');      goto loop; }
 			case 14:
 				yych = *s;
 				++s;
@@ -186,12 +182,9 @@ loop:
 						yystate = 16;
 						continue;
 				}
-			case 15:
-				{ return u; }
-			case 16:
-				{ return ERROR; }
-			case 17:
-				{ adddgt<10>(u, s[-1] - '0');      goto loop; }
+			case 15: { return u; }
+			case 16: { return ERROR; }
+			case 17: { adddgt<10>(u, s[-1] - '0');      goto loop; }
 			case 18:
 				yych = *s;
 				++s;
@@ -231,16 +224,11 @@ loop:
 						yystate = 20;
 						continue;
 				}
-			case 19:
-				{ return u; }
-			case 20:
-				{ return ERROR; }
-			case 21:
-				{ adddgt<16>(u, s[-1] - '0');      goto loop; }
-			case 22:
-				{ adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
-			case 23:
-				{ adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
+			case 19: { return u; }
+			case 20: { return ERROR; }
+			case 21: { adddgt<16>(u, s[-1] - '0');      goto loop; }
+			case 22: { adddgt<16>(u, s[-1] - 'A' + 10); goto loop; }
+			case 23: { adddgt<16>(u, s[-1] - 'a' + 10); goto loop; }
 			case 24:
 				yych = *s;
 				++s;
@@ -262,12 +250,9 @@ loop:
 						yystate = 26;
 						continue;
 				}
-			case 25:
-				{ return u; }
-			case 26:
-				{ return ERROR; }
-			case 27:
-				{ adddgt<8> (u, s[-1] - '0');      goto loop; }
+			case 25: { return u; }
+			case 26: { return ERROR; }
+			case 27: { adddgt<8> (u, s[-1] - '0');      goto loop; }
 		}
 	}
 }

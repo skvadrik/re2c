@@ -33,8 +33,7 @@ static int lex_utf8(const uint8_t *YYCURSOR)
 			case 1:
 				yystate = 2;
 				continue;
-			case 2:
-				{ return 1; }
+			case 2: { return 1; }
 			case 3:
 				YYMARKER = YYCURSOR;
 				yych = *YYCURSOR;
@@ -128,8 +127,7 @@ static int lex_utf8(const uint8_t *YYCURSOR)
 						yystate = 5;
 						continue;
 				}
-			case 12:
-				{ return 0; }
+			case 12: { return 0; }
 		}
 	}
 }
@@ -154,8 +152,7 @@ static int lex_utf32(const uint32_t *YYCURSOR)
 				}
 				yystate = 1;
 				continue;
-			case 1:
-				{ return 1; }
+			case 1: { return 1; }
 			case 2:
 				YYMARKER = YYCURSOR;
 				yych = *YYCURSOR;

@@ -59,10 +59,8 @@ loop:
 						yystate = 2;
 						continue;
 				}
-			case 1:
-				{ return count; }
-			case 2:
-				{ return -1; }
+			case 1: { return count; }
+			case 2: { return -1; }
 			case 3:
 				yych = cur < lim ? *cur : 0;
 				switch (yych) {
@@ -74,8 +72,7 @@ loop:
 						yystate = 4;
 						continue;
 				}
-			case 4:
-				{ goto loop; }
+			case 4: { goto loop; }
 			case 5:
 				yych = cur < lim ? *cur : 0;
 				switch (yych) {
@@ -112,8 +109,7 @@ loop:
 						yystate = 6;
 						continue;
 				}
-			case 6:
-				{ ++count; goto loop; }
+			case 6: { ++count; goto loop; }
 		}
 	}
 }

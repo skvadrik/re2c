@@ -78,8 +78,7 @@ loop:
 			case 1:
 				yystate = 2;
 				continue;
-			case 2:
-				{ return -1; }
+			case 2: { return -1; }
 			case 3:
 				yych = *in->cur;
 				switch (yych) {
@@ -97,8 +96,7 @@ loop:
 						yystate = 4;
 						continue;
 				}
-			case 4:
-				{ goto loop; }
+			case 4: { goto loop; }
 			case 5:
 				in->mar = in->cur;
 				yych = *in->cur;
@@ -144,8 +142,7 @@ loop:
 						yystate = 6;
 						continue;
 				}
-			case 8:
-				{ ++count; goto loop; }
+			case 8: { ++count; goto loop; }
 			case 9:
 				yych = *in->cur;
 				if (yych <= 0x00) {
@@ -164,8 +161,7 @@ loop:
 				++in->cur;
 				yystate = 6;
 				continue;
-			case 10:
-				{ return count; }
+			case 10: { return count; }
 			case 11:
 				in->cur = in->mar;
 				yystate = 2;

@@ -20,8 +20,7 @@ int lex(const char *YYCURSOR) {       // C/C++ code
 						yystate = 1;
 						continue;
 				}
-			case 1:
-				{ return 1; }
+			case 1: { return 1; }
 			case 2:
 				yych = *YYCURSOR;
 				switch (yych) {
@@ -35,8 +34,7 @@ int lex(const char *YYCURSOR) {       // C/C++ code
 						yystate = 3;
 						continue;
 				}
-			case 3:
-				{ return 0; }
+			case 3: { return 0; }
 		}
 	}
 }

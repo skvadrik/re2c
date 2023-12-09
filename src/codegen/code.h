@@ -386,10 +386,7 @@ inline Code* code_state_goto(OutAllocator& alc, BlockNameList* blocks) {
     return x;
 }
 
-inline Code* code_line_info_input(OutAllocator& alc, Lang lang, const loc_t& loc) {
-    // Rust has no line directives.
-    if (lang == Lang::RUST) return nullptr;
-
+inline Code* code_line_info_input(OutAllocator& alc, const loc_t& loc) {
     Code* x = new_code(alc, CodeKind::LINE_INFO_INPUT);
     x->loc = loc;
     return x;
@@ -410,10 +407,7 @@ inline void init_code_const(Code* x, VarType type, const char* name, const char*
     x->var.init = init;
 }
 
-inline Code* code_line_info_output(OutAllocator& alc, Lang lang) {
-    // Rust has no line directives.
-    if (lang == Lang::RUST) return nullptr;
-
+inline Code* code_line_info_output(OutAllocator& alc) {
     return new_code(alc, CodeKind::LINE_INFO_OUTPUT);
 }
 
