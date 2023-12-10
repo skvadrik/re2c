@@ -493,7 +493,7 @@ static void codegen_analyze_block(Output& output) {
     const opt_t* opts = block.opts;
 
     Code* code = block.code->head;
-    if (code->kind != CodeKind::DFAS) {
+    if (code == nullptr || code->kind != CodeKind::DFAS) {
         return;
     } else if (dfas.empty()) {
         code->kind = CodeKind::EMPTY;

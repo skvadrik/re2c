@@ -1062,7 +1062,7 @@ yy175:
 	{
         out.gen_raw(tok, ptr);
         out.header_mode(false);
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
@@ -1108,7 +1108,7 @@ yy178:
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         goto next;
     }
 #line 1115 "src/parse/lex.cc"
@@ -1478,7 +1478,7 @@ yy202:
 	++cur;
 #line 340 "../src/parse/lex.re"
 	{
-        if (multiline) {
+        if (multiline && globopts->line_dirs) {
             out.gen_stmt(code_line_info_input(out.allocator, cur_loc()));
         }
         return Ret::OK;
@@ -1599,9 +1599,9 @@ yy211:
 	++cur;
 #line 389 "../src/parse/lex.re"
 	{
-        out.gen_stmt(code_line_info_output(alc));
+        if (globopts->line_dirs) out.gen_stmt(code_line_info_output(alc));
         out.gen_stmt(code_fmt(alc, kind, blocks, fmt, sep));
-        out.gen_stmt(code_line_info_input(alc, cur_loc()));
+        if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         return Ret::OK;
     }
 #line 1608 "src/parse/lex.cc"
