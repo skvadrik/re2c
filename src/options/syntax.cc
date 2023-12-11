@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "src/codegen/output.h"
-#include "src/codegen/syntax.h"
+#include "src/options/syntax.h"
 
 extern const char* DEFAULT_SYNTAX_C;
 extern const char* DEFAULT_SYNTAX_GO;

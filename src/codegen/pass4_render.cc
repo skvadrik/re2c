@@ -3,9 +3,9 @@
 #include "config.h"
 #include "src/codegen/helpers.h"
 #include "src/codegen/output.h"
-#include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/options/syntax.h"
 #include "src/util/check.h"
 #include "src/util/file_utils.h"
 

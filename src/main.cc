@@ -9,7 +9,6 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/output.h"
-#include "src/codegen/syntax.h"
 #include "src/debug/debug.h"
 #include "src/dfa/dfa.h"
 #include "src/encoding/range_suffix.h"
@@ -18,6 +17,7 @@
 #include "src/msg/warn.h"
 #include "src/nfa/nfa.h"
 #include "src/options/opt.h"
+#include "src/options/syntax.h"
 #include "src/parse/ast.h"
 #include "src/parse/input.h"
 #include "src/regexp/regexp.h"

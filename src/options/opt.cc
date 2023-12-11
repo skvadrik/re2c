@@ -1,6 +1,6 @@
-#include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/options/syntax.h"
 #include "src/parse/input.h"
 
 namespace re2c {

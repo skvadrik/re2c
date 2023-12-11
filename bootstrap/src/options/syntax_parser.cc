@@ -67,12 +67,12 @@
 
 
 /* First part of user prologue.  */
-#line 17 "../src/codegen/syntax_parser.ypp"
+#line 17 "../src/options/syntax_parser.ypp"
 
 #include <stdint.h>
 
-#include "src/codegen/syntax.h"
-#include "src/codegen/syntax_parser.h"
+#include "src/options/syntax.h"
+#include "src/options/syntax_parser.h"
 #include "src/msg/msg.h"
 
 using namespace re2c;
@@ -83,7 +83,7 @@ extern "C" {
 }
 
 
-#line 87 "src/codegen/syntax_parser.cc"
+#line 87 "src/options/syntax_parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1120,128 +1120,128 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* confs: conf confs  */
-#line 66 "../src/codegen/syntax_parser.ypp"
+#line 66 "../src/options/syntax_parser.ypp"
              { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
-#line 1126 "src/codegen/syntax_parser.cc"
+#line 1126 "src/options/syntax_parser.cc"
     break;
 
   case 4: /* conf: STX_CONF_CODE code_exprs ';'  */
-#line 69 "../src/codegen/syntax_parser.ypp"
+#line 69 "../src/options/syntax_parser.ypp"
                                {
     (yyval.conf) = stx.make_conf_code((yyvsp[-2].str), (yyvsp[-1].codes));
     if (stx.validate_conf_code((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1135 "src/codegen/syntax_parser.cc"
+#line 1135 "src/options/syntax_parser.cc"
     break;
 
   case 5: /* conf: STX_CONF list ';'  */
-#line 73 "../src/codegen/syntax_parser.ypp"
+#line 73 "../src/options/syntax_parser.ypp"
                     {
     (yyval.conf) = stx.make_conf_list((yyvsp[-2].str), (yyvsp[-1].list));
     if (stx.validate_conf_list((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1144 "src/codegen/syntax_parser.cc"
+#line 1144 "src/options/syntax_parser.cc"
     break;
 
   case 6: /* conf: STX_CONF STX_NAME ';'  */
-#line 77 "../src/codegen/syntax_parser.ypp"
+#line 77 "../src/options/syntax_parser.ypp"
                         {
     (yyval.conf) = stx.make_conf_word((yyvsp[-2].str), (yyvsp[-1].str));
     if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1153 "src/codegen/syntax_parser.cc"
+#line 1153 "src/options/syntax_parser.cc"
     break;
 
   case 7: /* code_exprs: %empty  */
-#line 85 "../src/codegen/syntax_parser.ypp"
+#line 85 "../src/options/syntax_parser.ypp"
                        { (yyval.codes) = stx.new_code_list(); }
-#line 1159 "src/codegen/syntax_parser.cc"
+#line 1159 "src/options/syntax_parser.cc"
     break;
 
   case 8: /* code_exprs: code_expr code_exprs  */
-#line 86 "../src/codegen/syntax_parser.ypp"
+#line 86 "../src/options/syntax_parser.ypp"
                        { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
-#line 1165 "src/codegen/syntax_parser.cc"
+#line 1165 "src/options/syntax_parser.cc"
     break;
 
   case 9: /* code_expr: STX_STRING  */
-#line 89 "../src/codegen/syntax_parser.ypp"
+#line 89 "../src/options/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
-#line 1171 "src/codegen/syntax_parser.cc"
+#line 1171 "src/options/syntax_parser.cc"
     break;
 
   case 10: /* code_expr: STX_NAME  */
-#line 90 "../src/codegen/syntax_parser.ypp"
+#line 90 "../src/options/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
-#line 1177 "src/codegen/syntax_parser.cc"
+#line 1177 "src/options/syntax_parser.cc"
     break;
 
   case 13: /* code_cond: '(' STX_NAME '?' code_exprs ')'  */
-#line 95 "../src/codegen/syntax_parser.ypp"
+#line 95 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_cond((yyvsp[-3].str), (yyvsp[-1].codes), nullptr);
 }
-#line 1185 "src/codegen/syntax_parser.cc"
+#line 1185 "src/options/syntax_parser.cc"
     break;
 
   case 14: /* code_cond: '(' STX_NAME '?' code_exprs ':' code_exprs ')'  */
-#line 98 "../src/codegen/syntax_parser.ypp"
+#line 98 "../src/options/syntax_parser.ypp"
                                                  {
     (yyval.code) = stx.make_code_cond((yyvsp[-5].str), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1193 "src/codegen/syntax_parser.cc"
+#line 1193 "src/options/syntax_parser.cc"
     break;
 
   case 15: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
-#line 103 "../src/codegen/syntax_parser.ypp"
+#line 103 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].codes));
 }
-#line 1201 "src/codegen/syntax_parser.cc"
+#line 1201 "src/options/syntax_parser.cc"
     break;
 
   case 16: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 106 "../src/codegen/syntax_parser.ypp"
+#line 106 "../src/options/syntax_parser.ypp"
                                                      {
     (yyval.code) = stx.make_code_list((yyvsp[-6].str), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1209 "src/codegen/syntax_parser.cc"
+#line 1209 "src/options/syntax_parser.cc"
     break;
 
   case 17: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 109 "../src/codegen/syntax_parser.ypp"
+#line 109 "../src/options/syntax_parser.ypp"
                                                                     {
     (yyval.code) = stx.make_code_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1217 "src/codegen/syntax_parser.cc"
+#line 1217 "src/options/syntax_parser.cc"
     break;
 
   case 18: /* list: '[' names ']'  */
-#line 115 "../src/codegen/syntax_parser.ypp"
+#line 115 "../src/options/syntax_parser.ypp"
                     { (yyval.list) = (yyvsp[-1].list); }
-#line 1223 "src/codegen/syntax_parser.cc"
+#line 1223 "src/options/syntax_parser.cc"
     break;
 
   case 19: /* names: STX_NAME  */
-#line 118 "../src/codegen/syntax_parser.ypp"
+#line 118 "../src/options/syntax_parser.ypp"
            {
     (yyval.list) = stx.new_name_list();
     prepend((yyval.list), stx.make_name((yyvsp[0].str)));
 }
-#line 1232 "src/codegen/syntax_parser.cc"
+#line 1232 "src/options/syntax_parser.cc"
     break;
 
   case 20: /* names: STX_NAME ',' names  */
-#line 122 "../src/codegen/syntax_parser.ypp"
+#line 122 "../src/options/syntax_parser.ypp"
                      {
     prepend((yyvsp[0].list), stx.make_name((yyvsp[-2].str)));
     (yyval.list) = (yyvsp[0].list);
 }
-#line 1241 "src/codegen/syntax_parser.cc"
+#line 1241 "src/options/syntax_parser.cc"
     break;
 
 
-#line 1245 "src/codegen/syntax_parser.cc"
+#line 1245 "src/options/syntax_parser.cc"
 
       default: break;
     }
@@ -1434,7 +1434,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 127 "../src/codegen/syntax_parser.ypp"
+#line 127 "../src/options/syntax_parser.ypp"
 
 
 extern "C" {

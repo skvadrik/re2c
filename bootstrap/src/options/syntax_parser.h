@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED
-# define YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED
+#ifndef YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
+# define YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -45,7 +45,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "../src/codegen/syntax_parser.ypp"
+#line 1 "../src/options/syntax_parser.ypp"
 
 
 #include "src/util/containers.h"
@@ -61,7 +61,7 @@ class StxFile;
 } // namespace re2c
 
 
-#line 65 "src/codegen/syntax_parser.h"
+#line 65 "src/options/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -85,7 +85,7 @@ class StxFile;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 40 "../src/codegen/syntax_parser.ypp"
+#line 40 "../src/options/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -94,7 +94,7 @@ union YYSTYPE
     re2c::StxCode* code;
     re2c::StxCodes* codes;
 
-#line 98 "src/codegen/syntax_parser.h"
+#line 98 "src/options/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
@@ -108,4 +108,4 @@ typedef union YYSTYPE YYSTYPE;
 int yyparse (re2c::StxFile& sf, re2c::Stx& stx);
 
 
-#endif /* !YY_YY_SRC_CODEGEN_SYNTAX_PARSER_H_INCLUDED  */
+#endif /* !YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED  */

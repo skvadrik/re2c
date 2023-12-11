@@ -9,11 +9,11 @@
 #include <unordered_set>
 #include <vector>
 
-#include "src/codegen/syntax_parser.h"
 #include "src/constants.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
+#include "src/options/syntax_parser.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
 #include "src/util/containers.h"
