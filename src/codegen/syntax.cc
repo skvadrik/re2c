@@ -18,7 +18,6 @@ Stx::Stx(OutAllocator& alc)
         , allowed_code_confs()
         , allowed_conds()
         , allowed_vars()
-        , stack_expr()
         , stack_code()
         , stack_code_list()
         , confs()
@@ -146,40 +145,15 @@ Ret Stx::check_word(const char* conf, const char* word, bool list) const {
     RET_FAIL(error("unknown value '%s' in configuration '%s'", word, conf));
 }
 
-// validate that all option names used in the given expression do exist
-Ret Stx::validate_conf_expr(const StxConf* conf) {
-    CHECK(conf->type == StxConfType::EXPR);
+// validate that the option name in the given configuration exists
+Ret Stx::validate_conf_word(const StxConf* conf) {
+    CHECK(conf->type == StxConfType::WORD);
 
     if (allowed_word_confs.find(conf->name) == allowed_word_confs.end()) {
         RET_FAIL(error("unknown configuration '%s'", conf->name));
     }
 
-    stack_expr_t& stack = stack_expr;
-    stack.clear();
-    stack.push_back({conf->expr, 0});
-
-    while (!stack.empty()) {
-        const StxExpr* e = stack.back().first;
-        uint8_t n = stack.back().second;
-        stack.pop_back();
-
-        switch (e->type) {
-        case StxExprType::NAME:
-            CHECK_RET(check_word(conf->name, e->name, /*list*/ false));
-            break;
-        case StxExprType::COND:
-            if (n == 0) { // recurse into branches
-                stack.push_back({e, 1});
-                stack.push_back({e->cond.then_expr, 0});
-                stack.push_back({e->cond.else_expr, 0});
-            } else { // check conditional name and return
-                CHECK_RET(check_cond(conf->name, e->cond.conf, /*code*/ false));
-            }
-            break;
-        }
-    }
-
-    return Ret::OK;
+    return check_word(conf->name, conf->word, /*list*/ false);
 }
 
 // validate that all option names used in the given list do exist
@@ -346,27 +320,15 @@ void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
     gen_code(os, opts, name, dummy);
 }
 
-const char* Stx::eval_conf(const opt_t* opts, const char* name) {
+const char* Stx::eval_conf(const char* name) {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs[name];
-    CHECK(conf->type == StxConfType::EXPR);
-
-    for (const StxExpr* x = conf->expr;;) {
-        switch (x->type) {
-        case StxExprType::NAME:
-            return x->name;
-        case StxExprType::COND:
-            x = eval_cond(x->cond.conf, opts, nullptr) ? x->cond.then_expr : x->cond.else_expr;
-            break;
-        }
-    }
-
-    UNREACHABLE();
-    return nullptr;
+    CHECK(conf->type == StxConfType::WORD);
+    return conf->word;
 }
 
-bool Stx::eval_bool_conf(const opt_t* opts, const char* name) {
-    return strcmp(eval_conf(opts, name), "yes") == 0;
+bool Stx::eval_bool_conf(const char* name) {
+    return strcmp(eval_conf(name), "yes") == 0;
 }
 
 void Stx::cache_conf_tests() {

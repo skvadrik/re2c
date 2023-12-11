@@ -45,8 +45,7 @@ static void fix_mutopt_defaults(mutopt_t& defaults, Stx& stx) {
     defaults.api_style = stx.first_in_list("api_style", "functions")
             ? ApiStyle::FUNCTIONS : ApiStyle::FREEFORM;
 
-    // TODO: don't crash if the configuration has a conditional
-    if (strcmp(stx.eval_conf(nullptr, "constants"), "upper_case") == 0) {
+    if (strcmp(stx.eval_conf("constants"), "upper_case") == 0) {
         defaults.cond_enum_prefix = "YYC_";
     }
 }

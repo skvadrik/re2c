@@ -595,7 +595,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
 
     bool dot = opts->target == Target::DOT;
     bool hex = opts->encoding.type() == Enc::Type::EBCDIC
-            || strcmp(output.stx.eval_conf(opts, "char_literals"), "hexadecimal") == 0;
+            || strcmp(output.stx.eval_conf("char_literals"), "hexadecimal") == 0;
 
     buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
     print_char_or_hex(buf.stream(), cond->val, opts->encoding.cunit_size(), hex, dot);
@@ -678,8 +678,7 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const char* nonzero =
-            output.stx.eval_bool_conf(opts, "implicit_bool_conversion") ? "" : " != 0";
+    const char* nonzero = output.stx.eval_bool_conf("implicit_bool_conversion") ? "" : " != 0";
 
     const char* elif_cond = o.str(bitmap_name(opts, dfa.cond))
             .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->var_char).cstr("]")

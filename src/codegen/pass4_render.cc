@@ -70,7 +70,7 @@ static uint32_t count_lines_text(const char* text) {
 }
 
 static inline void render_stmt_end(RenderContext& rctx, bool semi) {
-    if (semi && rctx.stx.eval_bool_conf(rctx.opts, "semicolons")) rctx.os << ";";
+    if (semi && rctx.stx.eval_bool_conf("semicolons")) rctx.os << ";";
     rctx.os << std::endl;
     ++rctx.line;
 }
@@ -288,8 +288,8 @@ class RenderSwitchCaseRange : public RenderCallback {
                 case VarType::YYCTYPE: {
                     DCHECK(sym >= 0);
                     Enc enc = rctx.opts->encoding;
-                    bool hex = enc.type() == Enc::Type::EBCDIC ||
-                        strcmp(rctx.stx.eval_conf(rctx.opts, "char_literals"), "hexadecimal") == 0;
+                    bool hex = enc.type() == Enc::Type::EBCDIC
+                        || strcmp(rctx.stx.eval_conf("char_literals"), "hexadecimal") == 0;
                     print_char_or_hex(
                         rctx.os, static_cast<uint32_t>(sym), enc.cunit_size(), hex, /*dot*/ false);
                     break;

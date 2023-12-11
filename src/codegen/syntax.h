@@ -50,33 +50,19 @@ struct StxCode {
     StxCode* next;
 };
 
-enum class StxExprType {NAME, COND};
-
-struct StxExpr {
-    StxExprType type;
-    union {
-        const char* name;
-        struct {
-            const char* conf;
-            StxExpr* then_expr;
-            StxExpr* else_expr;
-        } cond;
-    };
-};
-
 struct StxName {
     const char* name;
     StxName* next;
 };
 
-enum class StxConfType {LIST, EXPR, CODE};
+enum class StxConfType {LIST, WORD, CODE};
 
 struct StxConf {
     const char* name;
     StxConfType type;
     union {
         StxList* list;
-        StxExpr* expr;
+        const char* word;
         StxCodes* code;
     };
 };
@@ -100,7 +86,6 @@ class Stx {
     using selector_t = std::function<bool(const opt_t*)>;
     using allowed_conds_t = std::unordered_map<std::string, selector_t>;
     using allowed_vars_t = std::unordered_set<std::string>;
-    using stack_expr_t = std::vector<std::pair<const StxExpr*, uint8_t>>;
     using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
     using stack_code_list_t = std::vector<const StxCode*>;
     using confs_t = std::unordered_map<std::string, const StxConf*>;
@@ -111,7 +96,6 @@ class Stx {
     allowed_code_confs_t allowed_code_confs;
     allowed_conds_t allowed_conds;
     allowed_vars_t allowed_vars;
-    stack_expr_t stack_expr;
     stack_code_t stack_code;
     stack_code_list_t stack_code_list;
     confs_t confs;
@@ -120,7 +104,6 @@ class Stx {
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxCode* make_code(StxCodeType type);
-    StxExpr* make_expr(StxExprType type);
 
     Ret check_cond(const char* conf, const char* cond, bool code) const;
     Ret check_word(const char* conf, const char* word, bool list) const;
@@ -136,10 +119,8 @@ class Stx {
     StxCodes* new_code_list();
     StxList* new_name_list();
     StxConf* make_conf_code(const char* name, StxCodes* code);
-    StxConf* make_conf_expr(const char* name, StxExpr* expr);
+    StxConf* make_conf_word(const char* name, const char* word);
     StxConf* make_conf_list(const char* name, StxList* list);
-    StxExpr* make_expr_name(const char* name);
-    StxExpr* make_expr_cond(const char* conf, StxExpr* then_expr, StxExpr* else_expr);
     StxCode* make_code_str(const char* str);
     StxCode* make_code_var(const char* name);
     StxCode* make_code_cond(const char* conf, StxCodes* code_then, StxCodes* code_else);
@@ -152,7 +133,7 @@ class Stx {
 
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);
-    Ret validate_conf_expr(const StxConf* conf);
+    Ret validate_conf_word(const StxConf* conf);
     Ret validate_conf_code(const StxConf* conf);
 
     // functions that test for presence of specific configs (cached in class fields)
@@ -165,8 +146,8 @@ class Stx {
     void gen_str(std::ostream& os, const opt_t* opts, const char* name);
 
     // functions that evaluate word configurations
-    const char* eval_conf(const opt_t* opts, const char* name);
-    bool eval_bool_conf(const opt_t* opts, const char* name);
+    const char* eval_conf(const char* name);
+    bool eval_bool_conf(const char* name);
 };
 
 class StxFile {
@@ -211,9 +192,9 @@ inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
     return x;
 }
 
-inline StxConf* Stx::make_conf_expr(const char* name, StxExpr* expr) {
-    StxConf* x = make_conf(StxConfType::EXPR, name);
-    x->expr = expr;
+inline StxConf* Stx::make_conf_word(const char* name, const char* word) {
+    StxConf* x = make_conf(StxConfType::WORD, name);
+    x->word = word;
     return x;
 }
 
@@ -233,26 +214,6 @@ inline StxName* Stx::make_name(const char* name) {
     StxName* x = alc.alloct<StxName>(1);
     x->name = name;
     x->next = nullptr;
-    return x;
-}
-
-inline StxExpr* Stx::make_expr(StxExprType type) {
-    StxExpr* x = alc.alloct<StxExpr>(1);
-    x->type = type;
-    return x;
-}
-
-inline StxExpr* Stx::make_expr_name(const char* name) {
-    StxExpr* x = make_expr(StxExprType::NAME);
-    x->name = name;
-    return x;
-}
-
-inline StxExpr* Stx::make_expr_cond(const char* conf, StxExpr* then_expr, StxExpr* else_expr) {
-    StxExpr* x = make_expr(StxExprType::COND);
-    x->cond.conf = conf;
-    x->cond.then_expr = then_expr;
-    x->cond.else_expr = else_expr;
     return x;
 }
 

@@ -53,7 +53,6 @@ extern int yydebug;
 namespace re2c {
 struct StxConf;
 struct StxCode;
-struct StxExpr;
 struct StxName;
 using StxCodes = list_t<StxCode>;
 using StxList = list_t<StxName>;
@@ -62,7 +61,7 @@ class StxFile;
 } // namespace re2c
 
 
-#line 66 "src/codegen/syntax_parser.h"
+#line 65 "src/codegen/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
@@ -86,17 +85,16 @@ class StxFile;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 41 "../src/codegen/syntax_parser.ypp"
+#line 40 "../src/codegen/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
     re2c::StxConf* conf;
-    re2c::StxExpr* expr;
     re2c::StxList* list;
     re2c::StxCode* code;
     re2c::StxCodes* codes;
 
-#line 100 "src/codegen/syntax_parser.h"
+#line 98 "src/codegen/syntax_parser.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
