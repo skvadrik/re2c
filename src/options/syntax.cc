@@ -231,19 +231,6 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     return Ret::OK;
 }
 
-bool Stx::have_conf(const char* name) const {
-    return confs.find(name) != confs.end();
-}
-
-bool Stx::first_in_list(const char* name, const char* word) {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs[name];
-    CHECK(conf->type == StxConfType::LIST);
-
-    const StxName* x = conf->list->head;
-    return x && strcmp(x->name, word) == 0;
-}
-
 void Stx::push_list_on_stack(const StxCode* x) {
     if (x == nullptr) return;
     push_list_on_stack(x->next);
@@ -318,17 +305,6 @@ void Stx::gen_code(
 void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
     RenderCallback dummy;
     gen_code(os, opts, name, dummy);
-}
-
-const char* Stx::eval_conf(const char* name) {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs[name];
-    CHECK(conf->type == StxConfType::WORD);
-    return conf->word;
-}
-
-bool Stx::eval_bool_conf(const char* name) {
-    return strcmp(eval_conf(name), "yes") == 0;
 }
 
 void Stx::cache_conf_tests() {

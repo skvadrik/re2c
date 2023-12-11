@@ -260,6 +260,30 @@ inline bool Stx::specialize_oneline_if() const { return have_oneline_if; }
 
 inline bool Stx::specialize_oneline_switch() const { return have_oneline_switch; }
 
+inline bool Stx::have_conf(const char* name) const {
+    return confs.find(name) != confs.end();
+}
+
+inline bool Stx::first_in_list(const char* name, const char* word) {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs[name];
+    CHECK(conf->type == StxConfType::LIST);
+
+    const StxName* x = conf->list->head;
+    return x && strcmp(x->name, word) == 0;
+}
+
+inline const char* Stx::eval_conf(const char* name) {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs[name];
+    CHECK(conf->type == StxConfType::WORD);
+    return conf->word;
+}
+
+inline bool Stx::eval_bool_conf(const char* name) {
+    return strcmp(eval_conf(name), "yes") == 0;
+}
+
 loc_t StxFile::tok_loc() const {
     DCHECK(pos <= tok);
     return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
