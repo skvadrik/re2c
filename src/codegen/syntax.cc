@@ -24,7 +24,7 @@ Stx::Stx(OutAllocator& alc)
         , confs()
         , have_oneline_if(false)
         , have_oneline_switch(false) {
-    allowed_list_confs["api"] = {"pointers", "generic"};
+    allowed_list_confs["api"] = {"default", "generic"};
     allowed_list_confs["api_style"] = {"functions", "freeform"};
     allowed_list_confs["jump_model"] = {"goto_label", "loop_switch"};
     allowed_list_confs["target"] = {"code", "dot", "skeleton"};
@@ -261,6 +261,15 @@ bool Stx::have_conf(const char* name) const {
     return confs.find(name) != confs.end();
 }
 
+bool Stx::first_in_list(const char* name, const char* word) {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs[name];
+    CHECK(conf->type == StxConfType::LIST);
+
+    const StxName* x = conf->list->head;
+    return x && strcmp(x->name, word) == 0;
+}
+
 void Stx::push_list_on_stack(const StxCode* x) {
     if (x == nullptr) return;
     push_list_on_stack(x->next);
@@ -429,9 +438,9 @@ Ret StxFile::read(Lang lang) {
     return Ret::OK;
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx, Lang lang) {
-    StxFile sf(fname, msg, alc);
-    CHECK_RET(sf.read(lang));
+Ret load_syntax_config(Stx& stx, conopt_t& globopts, Msg& msg, OutAllocator& alc) {
+    StxFile sf(globopts.syntax_file, msg, alc);
+    CHECK_RET(sf.read(globopts.lang));
     CHECK_RET(sf.parse(stx));
 
     stx.cache_conf_tests();

@@ -31,8 +31,9 @@ namespace re2c {
 // configurations until the whole block has been parsed. Immutable options, on the other hand, are
 // accessible for reading all the time (the parser itself depends on them).
 
-class Msg;
 class Input;
+class Msg;
+class Stx;
 
 #define RE2C_SIGIL "@@"
 
@@ -43,7 +44,7 @@ class Input;
 
 #define RE2C_CONSTOPTS \
     CONSTOPT1(Target, target, Target::CODE) \
-    CONSTOPT(Lang, lang, RE2C_LANG) \
+    CONSTOPT(Lang, lang, RE2C_LANG) /* TODO: remove lang from options */ \
     CONSTOPT(bool, date, true) \
     CONSTOPT(bool, version, true) \
     CONSTOPT(bool, start_conditions, false) \
@@ -341,7 +342,7 @@ struct Opt {
   public:
     Opt(const conopt_t& globopts, Msg& msg);
     Ret snapshot(const opt_t** opts) NODISCARD;
-    Ret fix_global_and_defaults() NODISCARD;
+    Ret fix_global_and_defaults(Stx& stx) NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
     Ret merge(const opt_t* opts, Input& input) NODISCARD;
 

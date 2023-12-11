@@ -1,3 +1,4 @@
+#include "src/codegen/syntax.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/input.h"
@@ -5,7 +6,7 @@
 namespace re2c {
 
 // This function should only change global options.
-LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
+LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     if (glob.target == Target::DOT) {
         glob.line_dirs = false;
     } else if (glob.target == Target::SKELETON) {
@@ -13,11 +14,9 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
         glob.line_dirs = false;
     }
 
-    if (glob.lang == Lang::RUST) {
-        glob.loop_switch = true;
-        // No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862
-        glob.line_dirs = false;
-    }
+    if (!stx.have_conf("code:line_info")) glob.line_dirs = false;
+
+    if (stx.first_in_list("jump_model", "loop_switch")) glob.loop_switch = true;
 
     // append directory separator '/' to all paths that do not have it
     for (std::string& p : glob.include_paths) {
@@ -40,14 +39,15 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     return Ret::OK;
 }
 
-// This function should only change mutable option defaults (based on the global options).
-static void fix_mutopt_defaults(const conopt_t& glob, mutopt_t& defaults) {
-    // For the Go and Rust backends generic API is set by default, because the default C API with
-    // pointers doesn't work (there is no pointer arithmetics in Go, and in Rust it is different
-    // enough from C). Use freeform generic API by default to make it less restrictive.
-    if (glob.lang != Lang::C) {
-        defaults.api = Api::CUSTOM;
-        defaults.api_style = ApiStyle::FREEFORM;
+// This should only change mutable option defaults (based on the global options / syntax file).
+static void fix_mutopt_defaults(mutopt_t& defaults, Stx& stx) {
+    defaults.api = stx.first_in_list("api", "default") ? Api::DEFAULT : Api::CUSTOM;
+    defaults.api_style = stx.first_in_list("api_style", "functions")
+            ? ApiStyle::FUNCTIONS : ApiStyle::FREEFORM;
+
+    // TODO: don't crash if the configuration has a conditional
+    if (strcmp(stx.eval_conf(nullptr, "constants"), "upper_case") == 0) {
+        defaults.cond_enum_prefix = "YYC_";
     }
 }
 
@@ -263,8 +263,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         real.cond_goto_param = defaults.cond_goto_param;
     }
     if (glob.lang == Lang::RUST) {
-        // In Rust constants should be uppercase.
-        if (is_default.cond_enum_prefix) real.cond_enum_prefix = "YYC_";
         // In Rust `continue` statements have labels, use it to avoid ambiguity.
         if (is_default.label_loop) real.label_loop = "'yyl";
     } else if (glob.lang == Lang::GO) {
@@ -338,12 +336,12 @@ Opt::Opt(const conopt_t& globopts, Msg& msg)
       real(),
       diverge(true) {}
 
-Ret Opt::fix_global_and_defaults() {
+Ret Opt::fix_global_and_defaults(Stx& stx) {
     // Allow to modify only the global options.
-    CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob)));
+    CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob), stx));
 
-    // Allow to modify only the mutable option defaults (based on the global options).
-    fix_mutopt_defaults(glob, const_cast<mutopt_t&>(defaults));
+    // Allow to modify only the mutable option defaults (based on the global options / syntax file).
+    fix_mutopt_defaults(const_cast<mutopt_t&>(defaults), stx);
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.

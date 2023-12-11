@@ -5,7 +5,7 @@ target = [code, dot];
 
 computed_goto = unsupported;
 case_ranges = unsupported;
-constants = upper_case;
+constants = snake_case;
 char_literals = (encoding.ebcdic ? hexadecimal : symbolic);
 semicolons = no;
 abort_requires_include = no;

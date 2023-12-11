@@ -129,8 +129,6 @@ class Stx {
     void push_list_on_stack(const StxCode* x);
     bool eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const;
 
-    bool have_conf(const char* name) const;
-
   public:
     explicit Stx(OutAllocator& alc);
 
@@ -148,6 +146,9 @@ class Stx {
     StxCode* make_code_list(const char* var, int32_t lbound, int32_t rbound, StxCodes* code);
     StxName* make_name(const char* name);
     void add_conf(const char* name, const StxConf* conf);
+
+    bool have_conf(const char* name) const;
+    bool first_in_list(const char* conf, const char* word);
 
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);
@@ -303,7 +304,7 @@ loc_t StxFile::tok_loc() const {
     return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
 }
 
-Ret load_syntax_config(const std::string& fname, Msg& msg, OutAllocator& alc, Stx& stx, Lang lang);
+Ret load_syntax_config(Stx& stx, conopt_t& globopts, Msg& msg, OutAllocator& alc);
 
 } // namespace re2c
 

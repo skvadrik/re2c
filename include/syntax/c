@@ -1,4 +1,4 @@
-api = [pointers, generic];
+api = [default, generic];
 api_style = [functions, freeform];
 jump_model = [goto_label, loop_switch];
 target = [code, dot, skeleton];

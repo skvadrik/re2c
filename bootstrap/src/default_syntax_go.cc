@@ -6,7 +6,7 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "computed_goto = unsupported;\n"
     "case_ranges = unsupported;\n"
-    "constants = upper_case;\n"
+    "constants = snake_case;\n"
     "char_literals = (encoding.ebcdic ? hexadecimal : symbolic);\n"
     "semicolons = no;\n"
     "abort_requires_include = no;\n"

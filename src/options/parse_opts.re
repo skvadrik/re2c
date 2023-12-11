@@ -304,7 +304,7 @@ end:
     if (globopts.source_file.empty()) {
         RET_FAIL(error("no source file"));
     }
-    return opts.fix_global_and_defaults();
+    return Ret::OK;
 }
 
 #undef NEXT_ARG
