@@ -302,11 +302,7 @@ struct opt_t {
     , symtab(symtab)
     {}
 
-    ~opt_t() {}
-    opt_t(const opt_t& opt) = default;
-    opt_t& operator=(const opt_t& opt) = default;
-    opt_t(opt_t&& opt) = default;
-    opt_t& operator=(opt_t&& opt) = default;
+    FORBID_COPY(opt_t);
 };
 
 // Options management.

@@ -590,12 +590,6 @@ void codegen_analyze(Output& output) {
             output.set_current_block(b);
             codegen_analyze_block(output);
         }
-
-        // If the first block contains only whitespace and no user code, then it should "inherit"
-        // options from the second block.
-        if (bs.size() > 1 && !bs[0]->have_user_code) {
-            *const_cast<opt_t*>(bs[0]->opts) = *bs[1]->opts;
-        }
     }
 
     // Generate implicit condiiton enum in the header, if there is no explicit directive.
