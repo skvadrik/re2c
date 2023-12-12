@@ -20,7 +20,6 @@ namespace re2c {
 
 // forward decls
 class Msg;
-class Stx;
 struct Adfa;
 struct Opt;
 struct opt_t;
@@ -56,7 +55,6 @@ using blocks_citer_t = blocks_t::const_iterator;
 using tagnames_t = std::set<std::string>;
 
 struct RenderContext {
-    Stx& stx;
     std::ostringstream os;
     const Msg& msg;
     const opt_t* opts;
@@ -64,8 +62,8 @@ struct RenderContext {
     uint32_t line;
     uint32_t ind;
 
-    RenderContext(Stx& stx, const Msg& msg, const std::string& file)
-        : stx(stx), os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
+    RenderContext(const Msg& msg, const std::string& file)
+        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
     FORBID_COPY(RenderContext);
 };
 
@@ -127,7 +125,6 @@ struct OutputBlock {
 
 struct Output {
     OutAllocator& allocator;
-    Stx& stx;
     Msg& msg;
     blocks_t cblocks;  // .c file
     blocks_t hblocks;  // .h file
@@ -147,7 +144,7 @@ struct Output {
     // "final" options accumulated for all non-reuse blocks
     const opt_t* total_opts;
 
-    Output(OutAllocator& alc, Stx& stx, Msg& msg);
+    Output(OutAllocator& alc, Msg& msg);
     ~Output();
     OutputBlock& block();
     void set_current_block(OutputBlock* block);

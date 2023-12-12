@@ -12,7 +12,6 @@
 #include "src/constants.h"
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
-#include "src/options/opt.h"
 #include "src/options/syntax_parser.h"
 #include "src/util/allocator.h"
 #include "src/util/check.h"
@@ -23,6 +22,9 @@ namespace re2c {
 
 class RenderCallback;
 struct StxCode;
+struct StxName;
+struct conopt_t;
+struct opt_t;
 
 struct StxCodeCond {
     const char* conf; // condition is based on the value of this config
@@ -114,6 +116,8 @@ class Stx {
 
   public:
     explicit Stx(OutAllocator& alc);
+
+    Ret load_config(conopt_t& globopts, Msg& msg);
 
     // functions that construct AST when parsing syntax configurations
     StxCodes* new_code_list();
@@ -288,8 +292,6 @@ loc_t StxFile::tok_loc() const {
     DCHECK(pos <= tok);
     return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
 }
-
-Ret load_syntax_config(Stx& stx, conopt_t& globopts, Msg& msg, OutAllocator& alc);
 
 } // namespace re2c
 

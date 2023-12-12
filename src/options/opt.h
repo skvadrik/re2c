@@ -9,6 +9,7 @@
 #include "src/constants.h"
 #include "src/encoding/enc.h"
 #include "src/options/symtab.h"
+#include "src/options/syntax.h"
 #include "src/util/attribute.h"
 #include "src/util/forbid_copy.h"
 
@@ -281,10 +282,14 @@ struct opt_t {
 #undef MUTOPT1
 #undef MUTOPT
 
+    Stx& stx;
     symtab_t symtab;
 
-    opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def,
-          const symtab_t& symtab)
+    opt_t(Stx& stx,
+            const conopt_t& con,
+            const mutopt_t& mut,
+            const mutdef_t& def,
+            const symtab_t& symtab)
 #define CONSTOPT1(type, name, value) : name(con.name)
 #define CONSTOPT(type, name, value)  , name(con.name)
     RE2C_CONSTOPTS
@@ -299,6 +304,7 @@ struct opt_t {
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+    , stx(stx)
     , symtab(symtab)
     {}
 
@@ -310,6 +316,7 @@ struct Opt {
   public:
     const conopt_t& glob;
     symtab_t symtab;
+    Stx stx;
     Msg& msg;
 
   private:
@@ -336,9 +343,9 @@ struct Opt {
     bool diverge;
 
   public:
-    Opt(const conopt_t& globopts, Msg& msg);
+    Opt(OutAllocator& alc, const conopt_t& globopts, Msg& msg);
     Ret snapshot(const opt_t** opts) NODISCARD;
-    Ret fix_global_and_defaults(Stx& stx) NODISCARD;
+    Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
     Ret merge(const opt_t* opts, Input& input) NODISCARD;
 

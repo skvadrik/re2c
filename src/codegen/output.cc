@@ -37,9 +37,8 @@ OutputBlock::~OutputBlock() {
     delete opts;
 }
 
-Output::Output(OutAllocator& alc, Stx& stx, Msg& msg)
+Output::Output(OutAllocator& alc, Msg& msg)
     : allocator(alc),
-      stx(stx),
       msg(msg),
       cblocks(),
       hblocks(),

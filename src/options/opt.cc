@@ -325,9 +325,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     return Ret::OK;
 }
 
-Opt::Opt(const conopt_t& globopts, Msg& msg)
+Opt::Opt(OutAllocator& alc, const conopt_t& globopts, Msg& msg)
     : glob(globopts),
       symtab(),
+      stx(alc),
       msg(msg),
       defaults(),
       is_default(),
@@ -335,7 +336,7 @@ Opt::Opt(const conopt_t& globopts, Msg& msg)
       real(),
       diverge(true) {}
 
-Ret Opt::fix_global_and_defaults(Stx& stx) {
+Ret Opt::fix_global_and_defaults() {
     // Allow to modify only the global options.
     CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob), stx));
 
@@ -377,7 +378,7 @@ Ret Opt::sync() {
 
 Ret Opt::snapshot(const opt_t** opts) {
     CHECK_RET(sync());
-    *opts = new opt_t(glob, real, is_default, symtab);
+    *opts = new opt_t(stx, glob, real, is_default, symtab);
     return Ret::OK;
 }
 

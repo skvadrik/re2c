@@ -4624,6 +4624,13 @@ end:
     if (globopts.source_file.empty()) {
         RET_FAIL(error("no source file"));
     }
+
+    // Load syntax file (it must have file index 0).
+    CHECK_RET(opts.stx.load_config(globopts, msg));
+
+    // Set option defaults.
+    CHECK_RET(opts.fix_global_and_defaults());
+
     return Ret::OK;
 }
 

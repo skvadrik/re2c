@@ -35,11 +35,13 @@ using namespace re2c::libre2c;
 #define CHECK_RET(x) do { if (x != Ret::OK) return 1; } while(0)
 
 int regcomp(regex_t* preg, const char* pattern, int cflags) {
+    AstAllocator ast_alc;
+    OutAllocator out_alc;
     conopt_t globopts;
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
     globopts.flex_syntax = true;
     Msg msg;
-    Opt opts(globopts, msg);
+    Opt opts(out_alc, globopts, msg);
     opts.set_tags_history((cflags & REG_SUBHIST) != 0);
     opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);
     opts.set_tags_posix_syntax(true);
@@ -48,8 +50,6 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     CHECK_RET(opts.snapshot(&opt));
     preg->flags = cflags;
 
-    AstAllocator ast_alc;
-    OutAllocator out_alc; // unused but required by AST constructor
     Ast ast(ast_alc, out_alc);
     const AstNode* a = parse(pattern, ast);
 

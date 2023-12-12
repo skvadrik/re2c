@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "src/codegen/output.h"
+#include "src/options/opt.h"
 #include "src/options/syntax.h"
 
 extern const char* DEFAULT_SYNTAX_C;
@@ -376,13 +377,11 @@ Ret StxFile::read(Lang lang) {
     return Ret::OK;
 }
 
-Ret load_syntax_config(Stx& stx, conopt_t& globopts, Msg& msg, OutAllocator& alc) {
+Ret Stx::load_config(conopt_t& globopts, Msg& msg) {
     StxFile sf(globopts.syntax_file, msg, alc);
     CHECK_RET(sf.read(globopts.lang));
-    CHECK_RET(sf.parse(stx));
-
-    stx.cache_conf_tests();
-
+    CHECK_RET(sf.parse(*this));
+    cache_conf_tests();
     return Ret::OK;
 }
 
