@@ -170,7 +170,7 @@ class StxFile {
     ~StxFile();
     Ret read(Lang lang);
     Ret parse(Stx& stx);
-    int lex_token(YYSTYPE* yylval);
+    int lex_token(STX_STYPE* yylval);
     bool check_conf_name(const char* name) const;
     inline loc_t tok_loc() const;
 

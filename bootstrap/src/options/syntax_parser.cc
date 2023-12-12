@@ -63,8 +63,14 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-
-
+/* Substitute the type names.  */
+#define YYSTYPE         STX_STYPE
+/* Substitute the variable and function names.  */
+#define yyparse         stx_parse
+#define yylex           stx_lex
+#define yyerror         stx_error
+#define yydebug         stx_debug
+#define yynerrs         stx_nerrs
 
 /* First part of user prologue.  */
 #line 17 "../src/options/syntax_parser.ypp"
@@ -79,11 +85,11 @@ using namespace re2c;
 
 extern "C" {
     static void yyerror(StxFile& sf, re2c::Stx&, const char* s);
-    static int yylex(YYSTYPE* yylval, StxFile& sf);
+    static int yylex(STX_STYPE* yylval, StxFile& sf);
 }
 
 
-#line 87 "src/options/syntax_parser.cc"
+#line 93 "src/options/syntax_parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -404,7 +410,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined STX_STYPE_IS_TRIVIAL && STX_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -520,20 +526,20 @@ static const yytype_int8 yytranslate[] =
        5,     6,     7
 };
 
-#if YYDEBUG
+#if STX_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    65,    65,    66,    69,    73,    77,    85,    86,    89,
-      90,    91,    92,    95,    98,   103,   106,   109,   115,   118,
-     122
+       0,    66,    66,    67,    70,    74,    78,    86,    87,    90,
+      91,    92,    93,    96,    99,   104,   107,   110,   116,   119,
+     123
 };
 #endif
 
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if YYDEBUG || 0
+#if STX_DEBUG || 0
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -653,7 +659,7 @@ static const yytype_int8 yyr2[] =
 enum { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = YYEMPTY)
+#define yyclearin       (yychar = STX_EMPTY)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -665,7 +671,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == YYEMPTY)                                        \
+    if (yychar == STX_EMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -681,12 +687,12 @@ enum { YYENOMEM = -2 };
   while (0)
 
 /* Backward compatibility with an undocumented macro.
-   Use YYerror or YYUNDEF. */
-#define YYERRCODE YYUNDEF
+   Use STX_error or STX_UNDEF. */
+#define YYERRCODE STX_UNDEF
 
 
 /* Enable debugging if requested.  */
-#if YYDEBUG
+#if STX_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -806,12 +812,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !YYDEBUG */
+#else /* !STX_DEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !YYDEBUG */
+#endif /* !STX_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -919,7 +925,7 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = YYEMPTY; /* Cause a token to be read.  */
+  yychar = STX_EMPTY; /* Cause a token to be read.  */
 
   goto yysetstate;
 
@@ -1029,25 +1035,25 @@ yybackup:
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == YYEMPTY)
+  if (yychar == STX_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, sf);
     }
 
-  if (yychar <= YYEOF)
+  if (yychar <= STX_EOF)
     {
-      yychar = YYEOF;
+      yychar = STX_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == YYerror)
+  else if (yychar == STX_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
          lookahead, it is too special and may lead us to an endless
          loop in error recovery. */
-      yychar = YYUNDEF;
+      yychar = STX_UNDEF;
       yytoken = YYSYMBOL_YYerror;
       goto yyerrlab1;
     }
@@ -1084,7 +1090,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   /* Discard the shifted token.  */
-  yychar = YYEMPTY;
+  yychar = STX_EMPTY;
   goto yynewstate;
 
 
@@ -1120,128 +1126,128 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* confs: conf confs  */
-#line 66 "../src/options/syntax_parser.ypp"
+#line 67 "../src/options/syntax_parser.ypp"
              { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
-#line 1126 "src/options/syntax_parser.cc"
+#line 1132 "src/options/syntax_parser.cc"
     break;
 
   case 4: /* conf: STX_CONF_CODE code_exprs ';'  */
-#line 69 "../src/options/syntax_parser.ypp"
+#line 70 "../src/options/syntax_parser.ypp"
                                {
     (yyval.conf) = stx.make_conf_code((yyvsp[-2].str), (yyvsp[-1].codes));
     if (stx.validate_conf_code((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1135 "src/options/syntax_parser.cc"
+#line 1141 "src/options/syntax_parser.cc"
     break;
 
   case 5: /* conf: STX_CONF list ';'  */
-#line 73 "../src/options/syntax_parser.ypp"
+#line 74 "../src/options/syntax_parser.ypp"
                     {
     (yyval.conf) = stx.make_conf_list((yyvsp[-2].str), (yyvsp[-1].list));
     if (stx.validate_conf_list((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1144 "src/options/syntax_parser.cc"
+#line 1150 "src/options/syntax_parser.cc"
     break;
 
   case 6: /* conf: STX_CONF STX_NAME ';'  */
-#line 77 "../src/options/syntax_parser.ypp"
+#line 78 "../src/options/syntax_parser.ypp"
                         {
     (yyval.conf) = stx.make_conf_word((yyvsp[-2].str), (yyvsp[-1].str));
     if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1153 "src/options/syntax_parser.cc"
-    break;
-
-  case 7: /* code_exprs: %empty  */
-#line 85 "../src/options/syntax_parser.ypp"
-                       { (yyval.codes) = stx.new_code_list(); }
 #line 1159 "src/options/syntax_parser.cc"
     break;
 
-  case 8: /* code_exprs: code_expr code_exprs  */
+  case 7: /* code_exprs: %empty  */
 #line 86 "../src/options/syntax_parser.ypp"
-                       { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
+                       { (yyval.codes) = stx.new_code_list(); }
 #line 1165 "src/options/syntax_parser.cc"
     break;
 
-  case 9: /* code_expr: STX_STRING  */
-#line 89 "../src/options/syntax_parser.ypp"
-             { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
+  case 8: /* code_exprs: code_expr code_exprs  */
+#line 87 "../src/options/syntax_parser.ypp"
+                       { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
 #line 1171 "src/options/syntax_parser.cc"
     break;
 
-  case 10: /* code_expr: STX_NAME  */
+  case 9: /* code_expr: STX_STRING  */
 #line 90 "../src/options/syntax_parser.ypp"
-             { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
+             { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
 #line 1177 "src/options/syntax_parser.cc"
     break;
 
+  case 10: /* code_expr: STX_NAME  */
+#line 91 "../src/options/syntax_parser.ypp"
+             { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
+#line 1183 "src/options/syntax_parser.cc"
+    break;
+
   case 13: /* code_cond: '(' STX_NAME '?' code_exprs ')'  */
-#line 95 "../src/options/syntax_parser.ypp"
+#line 96 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_cond((yyvsp[-3].str), (yyvsp[-1].codes), nullptr);
 }
-#line 1185 "src/options/syntax_parser.cc"
+#line 1191 "src/options/syntax_parser.cc"
     break;
 
   case 14: /* code_cond: '(' STX_NAME '?' code_exprs ':' code_exprs ')'  */
-#line 98 "../src/options/syntax_parser.ypp"
+#line 99 "../src/options/syntax_parser.ypp"
                                                  {
     (yyval.code) = stx.make_code_cond((yyvsp[-5].str), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1193 "src/options/syntax_parser.cc"
+#line 1199 "src/options/syntax_parser.cc"
     break;
 
   case 15: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
-#line 103 "../src/options/syntax_parser.ypp"
+#line 104 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].codes));
 }
-#line 1201 "src/options/syntax_parser.cc"
+#line 1207 "src/options/syntax_parser.cc"
     break;
 
   case 16: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 106 "../src/options/syntax_parser.ypp"
+#line 107 "../src/options/syntax_parser.ypp"
                                                      {
     (yyval.code) = stx.make_code_list((yyvsp[-6].str), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1209 "src/options/syntax_parser.cc"
+#line 1215 "src/options/syntax_parser.cc"
     break;
 
   case 17: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 109 "../src/options/syntax_parser.ypp"
+#line 110 "../src/options/syntax_parser.ypp"
                                                                     {
     (yyval.code) = stx.make_code_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1217 "src/options/syntax_parser.cc"
-    break;
-
-  case 18: /* list: '[' names ']'  */
-#line 115 "../src/options/syntax_parser.ypp"
-                    { (yyval.list) = (yyvsp[-1].list); }
 #line 1223 "src/options/syntax_parser.cc"
     break;
 
+  case 18: /* list: '[' names ']'  */
+#line 116 "../src/options/syntax_parser.ypp"
+                    { (yyval.list) = (yyvsp[-1].list); }
+#line 1229 "src/options/syntax_parser.cc"
+    break;
+
   case 19: /* names: STX_NAME  */
-#line 118 "../src/options/syntax_parser.ypp"
+#line 119 "../src/options/syntax_parser.ypp"
            {
     (yyval.list) = stx.new_name_list();
     prepend((yyval.list), stx.make_name((yyvsp[0].str)));
 }
-#line 1232 "src/options/syntax_parser.cc"
+#line 1238 "src/options/syntax_parser.cc"
     break;
 
   case 20: /* names: STX_NAME ',' names  */
-#line 122 "../src/options/syntax_parser.ypp"
+#line 123 "../src/options/syntax_parser.ypp"
                      {
     prepend((yyvsp[0].list), stx.make_name((yyvsp[-2].str)));
     (yyval.list) = (yyvsp[0].list);
 }
-#line 1241 "src/options/syntax_parser.cc"
+#line 1247 "src/options/syntax_parser.cc"
     break;
 
 
-#line 1245 "src/options/syntax_parser.cc"
+#line 1251 "src/options/syntax_parser.cc"
 
       default: break;
     }
@@ -1283,7 +1289,7 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == STX_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -1296,17 +1302,17 @@ yyerrlab:
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= YYEOF)
+      if (yychar <= STX_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == YYEOF)
+          if (yychar == STX_EOF)
             YYABORT;
         }
       else
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, sf, stx);
-          yychar = YYEMPTY;
+          yychar = STX_EMPTY;
         }
     }
 
@@ -1408,7 +1414,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != YYEMPTY)
+  if (yychar != STX_EMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */
@@ -1434,7 +1440,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 127 "../src/options/syntax_parser.ypp"
+#line 128 "../src/options/syntax_parser.ypp"
 
 
 extern "C" {
@@ -1442,7 +1448,7 @@ extern "C" {
         sf.msg.error(sf.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, re2c::StxFile& sf) {
+    static int yylex(STX_STYPE* yylval, re2c::StxFile& sf) {
         return sf.lex_token(yylval);
     }
 }

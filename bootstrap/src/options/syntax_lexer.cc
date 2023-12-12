@@ -12,7 +12,7 @@
 
 namespace re2c {
 
-int StxFile::lex_token(YYSTYPE* yylval) {
+int StxFile::lex_token(STX_STYPE* yylval) {
     const uint8_t* YYMARKER, *p;
     
 #line 19 "src/options/syntax_lexer.cc"
@@ -116,7 +116,7 @@ start:
 yy1:
 	++cur;
 #line 32 "../src/options/syntax_lexer.re"
-	{ return YYEOF; }
+	{ return STX_EOF; }
 #line 121 "src/options/syntax_lexer.cc"
 yy2:
 	++cur;
@@ -124,7 +124,7 @@ yy3:
 #line 61 "../src/options/syntax_lexer.re"
 	{
         msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
-        return YYerror;
+        return STX_error;
     }
 #line 130 "src/options/syntax_lexer.cc"
 yy4:
@@ -176,7 +176,7 @@ yy10:
             return STX_NUMBER;
         } else {
             msg.error(tok_loc(), "configuration value overflow");
-            return YYerror;
+            return STX_error;
         }
     }
 #line 183 "src/options/syntax_lexer.cc"
@@ -339,7 +339,7 @@ yy25:
 	{
         tok = cur - 1;
         msg.error(tok_loc(), "syntax error in string literal");
-        return YYerror;
+        return STX_error;
     }
 #line 345 "src/options/syntax_lexer.cc"
 yy26:
@@ -457,7 +457,8 @@ yy39:
 }
 #line 89 "../src/options/syntax_lexer.re"
 
-    return YYerror; // unreachable
+    UNREACHABLE();
+    return STX_error; // unreachable
 }
 
 } // namespace re2c

@@ -22,14 +22,14 @@
 
 namespace re2c {
 
-int StxFile::lex_token(YYSTYPE* yylval) {
+int StxFile::lex_token(STX_STYPE* yylval) {
     const uint8_t* YYMARKER, *p;
     /*!stags:re2c format = "const uint8_t* @@;"; */
 
 start:
     tok = cur;
 /*!local:re2c
-    eof { return YYEOF; }
+    eof { return STX_EOF; }
     eol | comment {
         ++loc.line;
         pos = cur;
@@ -53,14 +53,14 @@ start:
             return STX_NUMBER;
         } else {
             msg.error(tok_loc(), "configuration value overflow");
-            return YYerror;
+            return STX_error;
         }
     }
     ["] { goto str; }
     [?:;,(){}[\]] { return cur[-1]; }
     * {
         msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
-        return YYerror;
+        return STX_error;
     }
 */
 
@@ -84,10 +84,11 @@ str: /*!local:re2c
     * {
         tok = cur - 1;
         msg.error(tok_loc(), "syntax error in string literal");
-        return YYerror;
+        return STX_error;
     }
 */
-    return YYerror; // unreachable
+    UNREACHABLE();
+    return STX_error; // unreachable
 }
 
 } // namespace re2c

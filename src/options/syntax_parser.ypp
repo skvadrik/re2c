@@ -25,7 +25,7 @@ using namespace re2c;
 
 extern "C" {
     static void yyerror(StxFile& sf, re2c::Stx&, const char* s);
-    static int yylex(YYSTYPE* yylval, StxFile& sf);
+    static int yylex(STX_STYPE* yylval, StxFile& sf);
 }
 
 %}
@@ -33,6 +33,7 @@ extern "C" {
 %start confs
 
 %define api.pure full
+%define api.prefix {stx_}
 %lex-param {re2c::StxFile& sf}
 %parse-param {re2c::StxFile& sf}
 %parse-param {re2c::Stx& stx}
@@ -131,7 +132,7 @@ extern "C" {
         sf.msg.error(sf.tok_loc(), "%s", s);
     }
 
-    static int yylex(YYSTYPE* yylval, re2c::StxFile& sf) {
+    static int yylex(STX_STYPE* yylval, re2c::StxFile& sf) {
         return sf.lex_token(yylval);
     }
 }

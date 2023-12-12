@@ -35,14 +35,22 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
-# define YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
+#ifndef YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
+# define YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
 /* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
+#ifndef STX_DEBUG
+# if defined YYDEBUG
 #if YYDEBUG
-extern int yydebug;
+#   define STX_DEBUG 1
+#  else
+#   define STX_DEBUG 0
+#  endif
+# else /* ! defined YYDEBUG */
+#  define STX_DEBUG 0
+# endif /* ! defined YYDEBUG */
+#endif  /* ! defined STX_DEBUG */
+#if STX_DEBUG
+extern int stx_debug;
 #endif
 /* "%code requires" blocks.  */
 #line 1 "../src/options/syntax_parser.ypp"
@@ -61,31 +69,31 @@ class StxFile;
 } // namespace re2c
 
 
-#line 65 "src/options/syntax_parser.h"
+#line 73 "src/options/syntax_parser.h"
 
 /* Token kinds.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
+#ifndef STX_TOKENTYPE
+# define STX_TOKENTYPE
+  enum stx_tokentype
   {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
+    STX_EMPTY = -2,
+    STX_EOF = 0,                   /* "end of file"  */
+    STX_error = 256,               /* error  */
+    STX_UNDEF = 257,               /* "invalid token"  */
     STX_NAME = 258,                /* STX_NAME  */
     STX_NUMBER = 259,              /* STX_NUMBER  */
     STX_STRING = 260,              /* STX_STRING  */
     STX_CONF = 261,                /* STX_CONF  */
     STX_CONF_CODE = 262            /* STX_CONF_CODE  */
   };
-  typedef enum yytokentype yytoken_kind_t;
+  typedef enum stx_tokentype stx_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
+#if ! defined STX_STYPE && ! defined STX_STYPE_IS_DECLARED
+union STX_STYPE
 {
-#line 40 "../src/options/syntax_parser.ypp"
+#line 41 "../src/options/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -94,18 +102,18 @@ union YYSTYPE
     re2c::StxCode* code;
     re2c::StxCodes* codes;
 
-#line 98 "src/options/syntax_parser.h"
+#line 106 "src/options/syntax_parser.h"
 
 };
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
+typedef union STX_STYPE STX_STYPE;
+# define STX_STYPE_IS_TRIVIAL 1
+# define STX_STYPE_IS_DECLARED 1
 #endif
 
 
 
 
-int yyparse (re2c::StxFile& sf, re2c::Stx& stx);
+int stx_parse (re2c::StxFile& sf, re2c::Stx& stx);
 
 
-#endif /* !YY_YY_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED  */
+#endif /* !YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED  */
