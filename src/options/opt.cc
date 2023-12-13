@@ -16,7 +16,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
 
     if (!stx.have_conf("code:line_info")) glob.line_dirs = false;
 
-    if (stx.first_in_list("jump_model", "loop_switch")) glob.loop_switch = true;
+    if (strcmp(stx.list_conf_head("jump_model"), "loop_switch") == 0) glob.loop_switch = true;
 
     // append directory separator '/' to all paths that do not have it
     for (std::string& p : glob.include_paths) {
@@ -41,11 +41,11 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
 
 // This should only change mutable option defaults (based on the global options / syntax file).
 static void fix_mutopt_defaults(mutopt_t& defaults, Stx& stx) {
-    defaults.api = stx.first_in_list("api", "default") ? Api::DEFAULT : Api::CUSTOM;
-    defaults.api_style = stx.first_in_list("api_style", "functions")
+    defaults.api = strcmp(stx.list_conf_head("api"), "default") == 0 ? Api::DEFAULT : Api::CUSTOM;
+    defaults.api_style = strcmp(stx.list_conf_head("api_style"), "functions") == 0
             ? ApiStyle::FUNCTIONS : ApiStyle::FREEFORM;
 
-    if (strcmp(stx.eval_conf("constants"), "upper_case") == 0) {
+    if (strcmp(stx.eval_word_conf("constants"), "upper_case") == 0) {
         defaults.cond_enum_prefix = "YYC_";
     }
 }

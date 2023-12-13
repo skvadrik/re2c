@@ -230,10 +230,6 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
 
 void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
 
-bool Stx::specialize_oneline_if() const { return have_oneline_if; }
-
-bool Stx::specialize_oneline_switch() const { return have_oneline_switch; }
-
 bool Stx::have_conf(const char* name) const {
     return confs.find(name) != confs.end();
 }
@@ -243,16 +239,16 @@ void Stx::cache_conf_tests() {
     have_oneline_switch = have_conf("code:switch_cases_oneline");
 }
 
-bool Stx::first_in_list(const char* name, const char* word) const {
+const char* Stx::list_conf_head(const char* name) const {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs.find(name)->second;
     CHECK(conf->type == StxConfType::LIST);
 
     const StxName* x = conf->list->head;
-    return x && strcmp(x->name, word) == 0;
+    return x ? x->name : nullptr;
 }
 
-const char* Stx::eval_conf(const char* name) const {
+const char* Stx::eval_word_conf(const char* name) const {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs.find(name)->second;
     CHECK(conf->type == StxConfType::WORD);
@@ -260,7 +256,7 @@ const char* Stx::eval_conf(const char* name) const {
 }
 
 bool Stx::eval_bool_conf(const char* name) const {
-    return strcmp(eval_conf(name), "yes") == 0;
+    return strcmp(eval_word_conf(name), "yes") == 0;
 }
 
 void Stx::push_list_on_stack(const StxCode* x) const {
@@ -286,7 +282,7 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
     return lbound <= rbound && rbound >= 0;
 }
 
-void Stx::gen_code(
+void Stx::eval_code_conf(
         std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs.find(name)->second;
@@ -334,9 +330,9 @@ void Stx::gen_code(
     }
 }
 
-void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) const {
+void Stx::eval_code_conf(std::ostream& os, const opt_t* opts, const char* name) const {
     RenderCallback dummy;
-    gen_code(os, opts, name, dummy);
+    eval_code_conf(os, opts, name, dummy);
 }
 
 } // namespace re2c

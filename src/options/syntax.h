@@ -139,27 +139,24 @@ class Stx {
     StxName* make_name(const char* name);
     void add_conf(const char* name, const StxConf* conf);
 
-    bool have_conf(const char* name) const;
-    bool first_in_list(const char* conf, const char* word) const;
-
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);
     Ret validate_conf_word(const StxConf* conf);
     Ret validate_conf_code(const StxConf* conf);
 
-    // functions that test for presence of specific configs (cached in class fields)
-    bool specialize_oneline_if() const;
-    bool specialize_oneline_switch() const;
+    // functions related to configuration checks
+    bool have_conf(const char* name) const;
     void cache_conf_tests();
 
-    // functions that generate code for a given syntax configuration
-    void gen_code(
-            std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const;
-    void gen_str(std::ostream& os, const opt_t* opts, const char* name) const;
-
-    // functions that evaluate word configurations
-    const char* eval_conf(const char* name) const;
+    // functions that check or evaluate configurations
+    const char* list_conf_head(const char* name) const;
+    const char* eval_word_conf(const char* name) const;
     bool eval_bool_conf(const char* name) const;
+    void eval_code_conf(std::ostream& os, const opt_t* opts, const char* name) const;
+    void eval_code_conf(
+            std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const;
+
+    friend class opt_t;
 };
 
 } // namespace re2c

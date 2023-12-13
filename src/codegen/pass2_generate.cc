@@ -595,7 +595,7 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
 
     bool dot = opts->target == Target::DOT;
     bool hex = opts->encoding.type() == Enc::Type::EBCDIC
-            || strcmp(opts->stx.eval_conf("char_literals"), "hexadecimal") == 0;
+            || strcmp(opts->eval_word_conf("char_literals"), "hexadecimal") == 0;
 
     buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
     print_char_or_hex(buf.stream(), cond->val, opts->encoding.cunit_size(), hex, dot);
@@ -678,7 +678,7 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const char* nonzero = opts->stx.eval_bool_conf("implicit_bool_conversion") ? "" : " != 0";
+    const char* nonzero = opts->eval_bool_conf("implicit_bool_conversion") ? "" : " != 0";
 
     const char* elif_cond = o.str(bitmap_name(opts, dfa.cond))
             .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->var_char).cstr("]")
@@ -713,7 +713,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
 
-    opts->stx.gen_str(buf.stream(), opts, "code:type_yytarget");
+    opts->eval_code_conf(buf.stream(), "code:type_yytarget");
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
@@ -890,7 +890,7 @@ static void emit_accept(
         for (uint32_t i = 0; i < nacc; ++i) {
             elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        opts->stx.gen_str(o.stream(), opts, "code:type_yytarget");
+        opts->eval_code_conf(o.stream(), "code:type_yytarget");
         const char* type = o.flush();
         append(block, code_array(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
 
@@ -1590,7 +1590,7 @@ static CodeList* gen_cond_table(Output& output) {
     for (size_t i = 0; i < conds.size(); ++i) {
         elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    opts->stx.gen_str(buf.stream(), opts, "code:type_yytarget");
+    opts->eval_code_conf(buf.stream(), "code:type_yytarget");
     const char* type = buf.flush();
     append(code, code_array(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
@@ -1724,7 +1724,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
 
     const char *name = buf.str(bitmap_name(opts, cond)).flush();
 
-    opts->stx.gen_str(buf.stream(), opts, "code:type_yybm");
+    opts->eval_code_conf(buf.stream(), "code:type_yybm");
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);

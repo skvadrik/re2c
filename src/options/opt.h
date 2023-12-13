@@ -267,6 +267,10 @@ struct mutdef_t {
 
 // Union of constant and mutable options and default flags.
 struct opt_t {
+  private:
+    const Stx& stx;
+
+  public:
 #define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
@@ -281,8 +285,6 @@ struct opt_t {
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
-
-    const Stx& stx;
     symtab_t symtab;
 
     opt_t(const Stx& stx,
@@ -290,8 +292,9 @@ struct opt_t {
             const mutopt_t& mut,
             const mutdef_t& def,
             const symtab_t& symtab)
-#define CONSTOPT1(type, name, value) : name(con.name)
-#define CONSTOPT(type, name, value)  , name(con.name)
+    : stx(stx)
+#define CONSTOPT1 CONSTOPT
+#define CONSTOPT(type, name, value) , name(con.name)
     RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
@@ -304,9 +307,24 @@ struct opt_t {
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
-    , stx(stx)
     , symtab(symtab)
     {}
+
+    // forward methods from `Stx` to make them easier to use from codegen
+    inline void eval_code_conf(std::ostream& os, const char* name, RenderCallback& callback) const {
+        stx.eval_code_conf(os, this, name, callback);
+    }
+    inline void eval_code_conf(std::ostream& os, const char* name) const {
+        stx.eval_code_conf(os, this, name);
+    }
+    inline const char* eval_word_conf(const char* name) const {
+        return stx.eval_word_conf(name);
+    }
+    inline bool eval_bool_conf(const char* name) const {
+        return stx.eval_bool_conf(name);
+    }
+    bool specialize_oneline_if() const { return stx.have_oneline_if; }
+    bool specialize_oneline_switch() const { return stx.have_oneline_switch; }
 
     FORBID_COPY(opt_t);
 };
