@@ -282,10 +282,10 @@ struct opt_t {
 #undef MUTOPT1
 #undef MUTOPT
 
-    Stx& stx;
+    const Stx& stx;
     symtab_t symtab;
 
-    opt_t(Stx& stx,
+    opt_t(const Stx& stx,
             const conopt_t& con,
             const mutopt_t& mut,
             const mutdef_t& def,

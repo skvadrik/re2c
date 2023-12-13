@@ -19,11 +19,11 @@ Stx::Stx(OutAllocator& alc)
         , allowed_code_confs()
         , allowed_conds()
         , allowed_vars()
-        , stack_code()
-        , stack_code_list()
         , confs()
         , have_oneline_if(false)
-        , have_oneline_switch(false) {
+        , have_oneline_switch(false)
+        , stack_code()
+        , stack_code_list() {
     allowed_list_confs["api"] = {"default", "generic"};
     allowed_list_confs["api_style"] = {"functions", "freeform"};
     allowed_list_confs["jump_model"] = {"goto_label", "loop_switch"};
@@ -232,7 +232,7 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     return Ret::OK;
 }
 
-void Stx::push_list_on_stack(const StxCode* x) {
+void Stx::push_list_on_stack(const StxCode* x) const {
     if (x == nullptr) return;
     push_list_on_stack(x->next);
     stack_code.push_back({x, 0});
@@ -256,9 +256,9 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 }
 
 void Stx::gen_code(
-        std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) {
+        std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const {
     DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs[name];
+    const StxConf* conf = confs.find(name)->second;
     CHECK(conf->type == StxConfType::CODE);
 
     stack_code_t& stack = stack_code;
@@ -303,7 +303,7 @@ void Stx::gen_code(
     }
 }
 
-void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) {
+void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) const {
     RenderCallback dummy;
     gen_code(os, opts, name, dummy);
 }

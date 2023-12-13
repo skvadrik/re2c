@@ -93,16 +93,22 @@ class Stx {
     using confs_t = std::unordered_map<std::string, const StxConf*>;
 
     OutAllocator& alc;
+
     allowed_list_confs_t allowed_list_confs;
     allowed_word_confs_t allowed_word_confs;
     allowed_code_confs_t allowed_code_confs;
     allowed_conds_t allowed_conds;
     allowed_vars_t allowed_vars;
-    stack_code_t stack_code;
-    stack_code_list_t stack_code_list;
+
     confs_t confs;
+
     bool have_oneline_if;
     bool have_oneline_switch;
+
+    // stacks are placed here to avoid reallocating them every time
+    // (they can be mutated when evaluating configurations in a constant syntax object)
+    mutable stack_code_t stack_code;
+    mutable stack_code_list_t stack_code_list;
 
     StxConf* make_conf(StxConfType type, const char* name);
     StxCode* make_code(StxCodeType type);
@@ -111,7 +117,7 @@ class Stx {
     Ret check_word(const char* conf, const char* word, bool list) const;
     Ret check_var(const char* conf, const char* var) const;
 
-    void push_list_on_stack(const StxCode* x);
+    void push_list_on_stack(const StxCode* x) const;
     bool eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const;
 
   public:
@@ -133,7 +139,7 @@ class Stx {
     void add_conf(const char* name, const StxConf* conf);
 
     bool have_conf(const char* name) const;
-    bool first_in_list(const char* conf, const char* word);
+    bool first_in_list(const char* conf, const char* word) const;
 
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);
@@ -146,12 +152,13 @@ class Stx {
     void cache_conf_tests();
 
     // functions that generate code for a given syntax configuration
-    void gen_code(std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback);
-    void gen_str(std::ostream& os, const opt_t* opts, const char* name);
+    void gen_code(
+            std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const;
+    void gen_str(std::ostream& os, const opt_t* opts, const char* name) const;
 
     // functions that evaluate word configurations
-    const char* eval_conf(const char* name);
-    bool eval_bool_conf(const char* name);
+    const char* eval_conf(const char* name) const;
+    bool eval_bool_conf(const char* name) const;
 };
 
 class StxFile {
@@ -268,23 +275,23 @@ inline bool Stx::have_conf(const char* name) const {
     return confs.find(name) != confs.end();
 }
 
-inline bool Stx::first_in_list(const char* name, const char* word) {
+inline bool Stx::first_in_list(const char* name, const char* word) const {
     DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs[name];
+    const StxConf* conf = confs.find(name)->second;
     CHECK(conf->type == StxConfType::LIST);
 
     const StxName* x = conf->list->head;
     return x && strcmp(x->name, word) == 0;
 }
 
-inline const char* Stx::eval_conf(const char* name) {
+inline const char* Stx::eval_conf(const char* name) const {
     DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs[name];
+    const StxConf* conf = confs.find(name)->second;
     CHECK(conf->type == StxConfType::WORD);
     return conf->word;
 }
 
-inline bool Stx::eval_bool_conf(const char* name) {
+inline bool Stx::eval_bool_conf(const char* name) const {
     return strcmp(eval_conf(name), "yes") == 0;
 }
 
