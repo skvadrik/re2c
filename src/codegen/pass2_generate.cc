@@ -1148,8 +1148,8 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
-    if (opts->state_abort || opts->lang != Lang::C) {
-        // Do not abort by default in C/C++ as it requires including a header.
+    if (opts->state_abort || !opts->eval_bool_conf("abort_requires_include")) {
+        // Generate abort in default case unless it requires an include.
         CodeList* abort = code_list(alc);
         append(abort, code_abort(alc));
         append(cases, code_case_default(alc, abort));
