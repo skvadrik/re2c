@@ -9,6 +9,7 @@
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
+#include "src/options/syntax_parser.h"
 
 namespace re2c {
 
@@ -306,7 +307,7 @@ end:
     }
 
     // Load syntax file (it must have file index 0).
-    CHECK_RET(opts.stx.load_config(globopts, msg));
+    CHECK_RET(load_syntax_config(globopts, opts.stx, msg));
 
     // Set option defaults.
     CHECK_RET(opts.fix_global_and_defaults());

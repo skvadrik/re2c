@@ -467,6 +467,7 @@ if (RE2C_BUILD_LIBS)
         src/parse/input.cc
         src/options/opt.cc
         src/options/symtab.cc
+        src/options/syntax.cc
         src/cfg/cfg.cc
         src/cfg/compact.cc
         src/cfg/dce.cc

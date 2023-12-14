@@ -1,7 +1,6 @@
 #include <stdint.h>
 
 #include "src/msg/msg.h"
-#include "src/options/syntax.h"
 #include "src/options/syntax_parser.h"
 #include "src/util/string_utils.h"
 

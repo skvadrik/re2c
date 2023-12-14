@@ -6,10 +6,6 @@
 #include "src/options/opt.h"
 #include "src/options/syntax.h"
 
-extern const char* DEFAULT_SYNTAX_C;
-extern const char* DEFAULT_SYNTAX_GO;
-extern const char* DEFAULT_SYNTAX_RUST;
-
 namespace re2c {
 
 Stx::Stx(OutAllocator& alc)
@@ -232,6 +228,41 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     return Ret::OK;
 }
 
+void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
+
+bool Stx::specialize_oneline_if() const { return have_oneline_if; }
+
+bool Stx::specialize_oneline_switch() const { return have_oneline_switch; }
+
+bool Stx::have_conf(const char* name) const {
+    return confs.find(name) != confs.end();
+}
+
+void Stx::cache_conf_tests() {
+    have_oneline_if = have_conf("code:if_then_oneline");
+    have_oneline_switch = have_conf("code:switch_cases_oneline");
+}
+
+bool Stx::first_in_list(const char* name, const char* word) const {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs.find(name)->second;
+    CHECK(conf->type == StxConfType::LIST);
+
+    const StxName* x = conf->list->head;
+    return x && strcmp(x->name, word) == 0;
+}
+
+const char* Stx::eval_conf(const char* name) const {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs.find(name)->second;
+    CHECK(conf->type == StxConfType::WORD);
+    return conf->word;
+}
+
+bool Stx::eval_bool_conf(const char* name) const {
+    return strcmp(eval_conf(name), "yes") == 0;
+}
+
 void Stx::push_list_on_stack(const StxCode* x) const {
     if (x == nullptr) return;
     push_list_on_stack(x->next);
@@ -306,83 +337,6 @@ void Stx::gen_code(
 void Stx::gen_str(std::ostream& os, const opt_t* opts, const char* name) const {
     RenderCallback dummy;
     gen_code(os, opts, name, dummy);
-}
-
-void Stx::cache_conf_tests() {
-    have_oneline_if = have_conf("code:if_then_oneline");
-    have_oneline_switch = have_conf("code:switch_cases_oneline");
-}
-
-StxFile::StxFile(const std::string& fname, Msg& msg, OutAllocator& alc)
-    : alc(alc)
-    , fname(fname)
-    , file(nullptr)
-    , flen(0)
-    , buf(nullptr)
-    , cur(nullptr)
-    , tok(nullptr)
-    , pos(nullptr)
-    , loc({1, 0, 0}) // file index 0 is reserved for syntax file
-    , tmp_str()
-    , msg(msg)
-{}
-
-StxFile::~StxFile() {
-    delete[] buf;
-    if (file) fclose(file);
-}
-
-Ret StxFile::read(Lang lang) {
-    if (fname.empty()) {
-        msg.filenames.push_back("<default syntax file>");
-
-        // use the default syntax config that is provided as a string
-        const char* src = nullptr;
-        switch (lang) {
-            case Lang::C: src = DEFAULT_SYNTAX_C; break;
-            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
-            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
-        }
-        flen = strlen(src);
-
-        // allocate buffer
-        buf = new uint8_t[flen + 1];
-
-        // fill in buffer from the config string
-        memcpy(buf, src, flen);
-        buf[flen] = 0;
-    } else {
-        msg.filenames.push_back(fname);
-
-        // use the provided syntax file
-        file = fopen(fname.c_str(), "rb");
-        if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
-
-        // get file size
-        fseek(file, 0, SEEK_END);
-        flen = static_cast<size_t>(ftell(file));
-        fseek(file, 0, SEEK_SET);
-
-        // allocate buffer
-        buf = new uint8_t[flen + 1];
-
-        // read file contents into buffer and append terminating zero at the end
-        if (fread(buf, 1, flen, file) != flen) {
-            RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
-        }
-        buf[flen] = 0;
-    }
-
-    cur = tok = pos = buf;
-    return Ret::OK;
-}
-
-Ret Stx::load_config(conopt_t& globopts, Msg& msg) {
-    StxFile sf(globopts.syntax_file, msg, alc);
-    CHECK_RET(sf.read(globopts.lang));
-    CHECK_RET(sf.parse(*this));
-    cache_conf_tests();
-    return Ret::OK;
 }
 
 } // namespace re2c

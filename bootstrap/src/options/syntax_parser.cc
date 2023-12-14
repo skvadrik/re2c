@@ -73,13 +73,11 @@
 #define yynerrs         stx_nerrs
 
 /* First part of user prologue.  */
-#line 17 "../src/options/syntax_parser.ypp"
+#line 47 "../src/options/syntax_parser.ypp"
 
-#include <stdint.h>
 
-#include "src/options/syntax.h"
+#include "src/options/opt.h"
 #include "src/options/syntax_parser.h"
-#include "src/msg/msg.h"
 
 using namespace re2c;
 
@@ -89,7 +87,7 @@ extern "C" {
 }
 
 
-#line 93 "src/options/syntax_parser.cc"
+#line 91 "src/options/syntax_parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -528,11 +526,11 @@ static const yytype_int8 yytranslate[] =
 
 #if STX_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    67,    70,    74,    78,    86,    87,    90,
-      91,    92,    93,    96,    99,   104,   107,   110,   116,   119,
-     123
+       0,    94,    94,    95,    98,   102,   106,   114,   115,   118,
+     119,   120,   121,   124,   127,   132,   135,   138,   144,   147,
+     151
 };
 #endif
 
@@ -1126,128 +1124,128 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* confs: conf confs  */
-#line 67 "../src/options/syntax_parser.ypp"
+#line 95 "../src/options/syntax_parser.ypp"
              { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
-#line 1132 "src/options/syntax_parser.cc"
+#line 1130 "src/options/syntax_parser.cc"
     break;
 
   case 4: /* conf: STX_CONF_CODE code_exprs ';'  */
-#line 70 "../src/options/syntax_parser.ypp"
+#line 98 "../src/options/syntax_parser.ypp"
                                {
     (yyval.conf) = stx.make_conf_code((yyvsp[-2].str), (yyvsp[-1].codes));
     if (stx.validate_conf_code((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1141 "src/options/syntax_parser.cc"
+#line 1139 "src/options/syntax_parser.cc"
     break;
 
   case 5: /* conf: STX_CONF list ';'  */
-#line 74 "../src/options/syntax_parser.ypp"
+#line 102 "../src/options/syntax_parser.ypp"
                     {
     (yyval.conf) = stx.make_conf_list((yyvsp[-2].str), (yyvsp[-1].list));
     if (stx.validate_conf_list((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1150 "src/options/syntax_parser.cc"
+#line 1148 "src/options/syntax_parser.cc"
     break;
 
   case 6: /* conf: STX_CONF STX_NAME ';'  */
-#line 78 "../src/options/syntax_parser.ypp"
+#line 106 "../src/options/syntax_parser.ypp"
                         {
     (yyval.conf) = stx.make_conf_word((yyvsp[-2].str), (yyvsp[-1].str));
     if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1159 "src/options/syntax_parser.cc"
+#line 1157 "src/options/syntax_parser.cc"
     break;
 
   case 7: /* code_exprs: %empty  */
-#line 86 "../src/options/syntax_parser.ypp"
+#line 114 "../src/options/syntax_parser.ypp"
                        { (yyval.codes) = stx.new_code_list(); }
-#line 1165 "src/options/syntax_parser.cc"
+#line 1163 "src/options/syntax_parser.cc"
     break;
 
   case 8: /* code_exprs: code_expr code_exprs  */
-#line 87 "../src/options/syntax_parser.ypp"
+#line 115 "../src/options/syntax_parser.ypp"
                        { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
-#line 1171 "src/options/syntax_parser.cc"
+#line 1169 "src/options/syntax_parser.cc"
     break;
 
   case 9: /* code_expr: STX_STRING  */
-#line 90 "../src/options/syntax_parser.ypp"
+#line 118 "../src/options/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
-#line 1177 "src/options/syntax_parser.cc"
+#line 1175 "src/options/syntax_parser.cc"
     break;
 
   case 10: /* code_expr: STX_NAME  */
-#line 91 "../src/options/syntax_parser.ypp"
+#line 119 "../src/options/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
-#line 1183 "src/options/syntax_parser.cc"
+#line 1181 "src/options/syntax_parser.cc"
     break;
 
   case 13: /* code_cond: '(' STX_NAME '?' code_exprs ')'  */
-#line 96 "../src/options/syntax_parser.ypp"
+#line 124 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_cond((yyvsp[-3].str), (yyvsp[-1].codes), nullptr);
 }
-#line 1191 "src/options/syntax_parser.cc"
+#line 1189 "src/options/syntax_parser.cc"
     break;
 
   case 14: /* code_cond: '(' STX_NAME '?' code_exprs ':' code_exprs ')'  */
-#line 99 "../src/options/syntax_parser.ypp"
+#line 127 "../src/options/syntax_parser.ypp"
                                                  {
     (yyval.code) = stx.make_code_cond((yyvsp[-5].str), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1199 "src/options/syntax_parser.cc"
+#line 1197 "src/options/syntax_parser.cc"
     break;
 
   case 15: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
-#line 104 "../src/options/syntax_parser.ypp"
+#line 132 "../src/options/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].codes));
 }
-#line 1207 "src/options/syntax_parser.cc"
+#line 1205 "src/options/syntax_parser.cc"
     break;
 
   case 16: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 107 "../src/options/syntax_parser.ypp"
+#line 135 "../src/options/syntax_parser.ypp"
                                                      {
     (yyval.code) = stx.make_code_list((yyvsp[-6].str), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1215 "src/options/syntax_parser.cc"
+#line 1213 "src/options/syntax_parser.cc"
     break;
 
   case 17: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 110 "../src/options/syntax_parser.ypp"
+#line 138 "../src/options/syntax_parser.ypp"
                                                                     {
     (yyval.code) = stx.make_code_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1223 "src/options/syntax_parser.cc"
+#line 1221 "src/options/syntax_parser.cc"
     break;
 
   case 18: /* list: '[' names ']'  */
-#line 116 "../src/options/syntax_parser.ypp"
+#line 144 "../src/options/syntax_parser.ypp"
                     { (yyval.list) = (yyvsp[-1].list); }
-#line 1229 "src/options/syntax_parser.cc"
+#line 1227 "src/options/syntax_parser.cc"
     break;
 
   case 19: /* names: STX_NAME  */
-#line 119 "../src/options/syntax_parser.ypp"
+#line 147 "../src/options/syntax_parser.ypp"
            {
     (yyval.list) = stx.new_name_list();
     prepend((yyval.list), stx.make_name((yyvsp[0].str)));
 }
-#line 1238 "src/options/syntax_parser.cc"
+#line 1236 "src/options/syntax_parser.cc"
     break;
 
   case 20: /* names: STX_NAME ',' names  */
-#line 123 "../src/options/syntax_parser.ypp"
+#line 151 "../src/options/syntax_parser.ypp"
                      {
     prepend((yyvsp[0].list), stx.make_name((yyvsp[-2].str)));
     (yyval.list) = (yyvsp[0].list);
 }
-#line 1247 "src/options/syntax_parser.cc"
+#line 1245 "src/options/syntax_parser.cc"
     break;
 
 
-#line 1251 "src/options/syntax_parser.cc"
+#line 1249 "src/options/syntax_parser.cc"
 
       default: break;
     }
@@ -1440,7 +1438,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 128 "../src/options/syntax_parser.ypp"
+#line 156 "../src/options/syntax_parser.ypp"
 
 
 extern "C" {
@@ -1453,10 +1451,166 @@ extern "C" {
     }
 }
 
+extern const char* DEFAULT_SYNTAX_C;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_RUST;
+
 namespace re2c {
 
-Ret StxFile::parse(Stx& stx) {
-    return yyparse(*this, stx) == 0 ? Ret::OK : Ret::FAIL;
+inline StxCodes* Stx::new_code_list() {
+    return new_list<StxCode, OutAllocator>(alc);
+}
+
+inline StxList* Stx::new_name_list() {
+    return new_list<StxName, OutAllocator>(alc);
+}
+
+inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
+    StxConf* x = alc.alloct<StxConf>(1);
+    x->type = type;
+    x->name = name;
+    return x;
+}
+
+inline StxConf* Stx::make_conf_word(const char* name, const char* word) {
+    StxConf* x = make_conf(StxConfType::WORD, name);
+    x->word = word;
+    return x;
+}
+
+inline StxConf* Stx::make_conf_list(const char* name, StxList* list) {
+    StxConf* x = make_conf(StxConfType::LIST, name);
+    x->list = list;
+    return x;
+}
+
+inline StxConf* Stx::make_conf_code(const char* name, StxCodes* code) {
+    StxConf* x = make_conf(StxConfType::CODE, name);
+    x->code = code;
+    return x;
+}
+
+inline StxName* Stx::make_name(const char* name) {
+    StxName* x = alc.alloct<StxName>(1);
+    x->name = name;
+    x->next = nullptr;
+    return x;
+}
+
+inline StxCode* Stx::make_code(StxCodeType type) {
+    StxCode* x = alc.alloct<StxCode>(1);
+    x->type = type;
+    x->next = nullptr;
+    return x;
+}
+
+inline StxCode* Stx::make_code_str(const char* str) {
+    StxCode* x = make_code(StxCodeType::STR);
+    x->str = str;
+    return x;
+}
+
+inline StxCode* Stx::make_code_var(const char* var) {
+    StxCode* x = make_code(StxCodeType::VAR);
+    x->var = var;
+    return x;
+}
+
+inline StxCode* Stx::make_code_cond(const char* conf, StxCodes* then_code, StxCodes* else_code) {
+    StxCode* x = make_code(StxCodeType::COND);
+    x->cond.conf = conf;
+    x->cond.then_code = then_code;
+    x->cond.else_code = else_code;
+    return x;
+}
+
+inline StxCode* Stx::make_code_list(
+        const char* var, int32_t lbound, int32_t rbound, StxCodes* code) {
+    StxCode* x = make_code(StxCodeType::LIST);
+    x->list.var = var;
+    x->list.lbound = lbound;
+    x->list.rbound = rbound;
+    x->list.code = code;;
+    return x;
+}
+
+StxFile::StxFile(OutAllocator& alc, const std::string& fname, Msg& msg)
+    : alc(alc)
+    , fname(fname)
+    , file(nullptr)
+    , flen(0)
+    , buf(nullptr)
+    , cur(nullptr)
+    , tok(nullptr)
+    , pos(nullptr)
+    , loc({1, 0, 0}) // file index 0 is reserved for syntax file
+    , tmp_str()
+    , msg(msg)
+{}
+
+StxFile::~StxFile() {
+    delete[] buf;
+    if (file) fclose(file);
+}
+
+loc_t StxFile::tok_loc() const {
+    DCHECK(pos <= tok);
+    return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
+}
+
+Ret StxFile::read(Lang lang) {
+    if (fname.empty()) {
+        msg.filenames.push_back("<default syntax file>");
+
+        // use the default syntax config that is provided as a string
+        const char* src = nullptr;
+        switch (lang) {
+            case Lang::C: src = DEFAULT_SYNTAX_C; break;
+            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
+        }
+        flen = strlen(src);
+
+        // allocate buffer
+        buf = new uint8_t[flen + 1];
+
+        // fill in buffer from the config string
+        memcpy(buf, src, flen);
+        buf[flen] = 0;
+    } else {
+        msg.filenames.push_back(fname);
+
+        // use the provided syntax file
+        file = fopen(fname.c_str(), "rb");
+        if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
+
+        // get file size
+        fseek(file, 0, SEEK_END);
+        flen = static_cast<size_t>(ftell(file));
+        fseek(file, 0, SEEK_SET);
+
+        // allocate buffer
+        buf = new uint8_t[flen + 1];
+
+        // read file contents into buffer and append terminating zero at the end
+        if (fread(buf, 1, flen, file) != flen) {
+            RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
+        }
+        buf[flen] = 0;
+    }
+
+    cur = tok = pos = buf;
+    return Ret::OK;
+}
+
+Ret load_syntax_config(const conopt_t& globopts, Stx& stx, Msg& msg) {
+    StxFile sf(stx.alc, globopts.syntax_file, msg);
+    CHECK_RET(sf.read(globopts.lang));
+    if (yyparse(sf, stx) != 0) return Ret::FAIL;
+
+    stx.cache_conf_tests();
+
+    return Ret::OK;
 }
 
 } // namespace re2c

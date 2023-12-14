@@ -72,6 +72,7 @@ libre2c_la_SRC = \
 	src/parse/input.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
+	src/options/syntax.cc \
 	src/cfg/cfg.cc \
 	src/cfg/compact.cc \
 	src/cfg/dce.cc \
