@@ -32,7 +32,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* sourc
 #define ERRARG(opt, exp, arg) \
     RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
 
-Ret parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) {
+LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& globopts, char** argv, Msg& msg)) {
     char* YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
@@ -302,15 +302,21 @@ opt_fixed_tags: /*!local:re2c
 */
 
 end:
-    if (globopts.source_file.empty()) {
+    return Ret::OK;
+}
+
+Ret Opt::parse(char** argv) {
+    CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg));
+
+    if (glob.source_file.empty()) {
         RET_FAIL(error("no source file"));
     }
 
     // Load syntax file (it must have file index 0).
-    CHECK_RET(load_syntax_config(globopts, opts.stx, msg));
+    CHECK_RET(load_syntax_config(glob, stx, msg));
 
     // Set option defaults.
-    CHECK_RET(opts.fix_global_and_defaults());
+    CHECK_RET(fix_global_and_defaults());
 
     return Ret::OK;
 }

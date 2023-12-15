@@ -325,10 +325,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     return Ret::OK;
 }
 
-Opt::Opt(OutAllocator& alc, const conopt_t& globopts, Msg& msg)
-    : glob(globopts),
+Opt::Opt(OutAllocator& alc, Msg& msg)
+    : stx(alc),
+      glob(stx),
       symtab(),
-      stx(alc),
       msg(msg),
       defaults(),
       is_default(),

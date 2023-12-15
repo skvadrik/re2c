@@ -43,6 +43,7 @@ class Stx;
 #define RE2C_LANG Lang::C
 #endif
 
+// TODO: remove CONSTOPT1
 #define RE2C_CONSTOPTS \
     CONSTOPT1(Target, target, Target::CODE) \
     CONSTOPT(Lang, lang, RE2C_LANG) /* TODO: remove lang from options */ \
@@ -214,15 +215,20 @@ class Stx;
 
 // Constant options.
 struct conopt_t {
+  private:
+    const Stx& stx;
+
+  public:
 #define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
 
-    conopt_t()
-#define CONSTOPT1(type, name, value) : name(value)
-#define CONSTOPT(type, name, value)  , name(value)
+    conopt_t(const Stx& stx)
+        : stx(stx)
+#define CONSTOPT1 CONSTOPT
+#define CONSTOPT(type, name, value) , name(value)
     RE2C_CONSTOPTS
 #undef CONSTOPT1
 #undef CONSTOPT
@@ -332,9 +338,9 @@ struct opt_t {
 // Options management.
 struct Opt {
   public:
-    const conopt_t& glob;
-    symtab_t symtab;
     Stx stx;
+    const conopt_t glob;
+    symtab_t symtab;
     Msg& msg;
 
   private:
@@ -361,7 +367,9 @@ struct Opt {
     bool diverge;
 
   public:
-    Opt(OutAllocator& alc, const conopt_t& globopts, Msg& msg);
+    Opt(OutAllocator& alc, Msg& msg);
+    const conopt_t& global() const { return glob; }
+    Ret parse(char** argv);
     Ret snapshot(const opt_t** opts) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;

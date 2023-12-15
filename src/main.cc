@@ -140,9 +140,9 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     // Options. This includes global immutable options inherited from command-line arguments,
     // configurations specified in the syntax file and mutable options that may be changed by
     // configurations in each block as the input program is parsed.
-    conopt_t globopts;
-    Opt opts(out_alc, globopts, msg);
-    CHECK_RET(parse_opts(argv, globopts, opts, msg));
+    Opt opts(out_alc, msg);
+    CHECK_RET(opts.parse(argv));
+    const conopt_t& globopts = opts.global();
 
     Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));

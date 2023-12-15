@@ -37,17 +37,23 @@ using namespace re2c::libre2c;
 int regcomp(regex_t* preg, const char* pattern, int cflags) {
     AstAllocator ast_alc;
     OutAllocator out_alc;
-    conopt_t globopts;
-    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
-    globopts.flex_syntax = true;
+
     Msg msg;
-    Opt opts(out_alc, globopts, msg);
+
+    Opt opts(out_alc, msg);
+
+    conopt_t& globopts = const_cast<conopt_t&>(opts.global());
+    globopts.flex_syntax = true;
+    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
+
     opts.set_tags_history((cflags & REG_SUBHIST) != 0);
     opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);
     opts.set_tags_posix_syntax(true);
     opts.set_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
+
     const opt_t* opt;
     CHECK_RET(opts.snapshot(&opt));
+
     preg->flags = cflags;
 
     Ast ast(ast_alc, out_alc);
