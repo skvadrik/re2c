@@ -49,6 +49,7 @@ namespace re2c {
     linedir    = eol space* "#" space* "line" space+;
     lineinf    = lineno (space+ dstring)? eol;
     esc        = "\\";
+    oct_digit  = [0-7];
     hex_digit  = [0-9a-fA-F];
     esc_hex    = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
     esc_oct    = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
@@ -599,12 +600,12 @@ Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: /*!re2c
-    eol  { next_line(); goto indent; }
-    "//" { CHECK_RET(lex_cpp_comment()); goto indent; }
-    "/*" { CHECK_RET(lex_c_comment()); goto code; }
-    ["'] { CHECK_RET(try_lex_string_in_code(cur[-1])); goto code; }
-    [{}] { RET_FAIL(error_at_cur("Curly braces are not allowed after ':='")); }
-    *    { goto code; }
+    eol   { next_line(); goto indent; }
+    "//"  { CHECK_RET(lex_cpp_comment()); goto indent; }
+    "/*"  { CHECK_RET(lex_c_comment()); goto code; }
+    ["'`] { CHECK_RET(try_lex_literal_in_code(cur[-1])); goto code; }
+    [{}]  { RET_FAIL(error_at_cur("Curly braces are not allowed after ':='")); }
+    *     { goto code; }
 */
 indent: /*!re2c
     "" / ws { goto code; } // indent after newline => still in semantic action
@@ -635,45 +636,50 @@ code: /*!re2c
     eol               { next_line(); goto code; }
     "/*"              { CHECK_RET(lex_c_comment()); goto code; }
     "//"              { CHECK_RET(lex_cpp_comment()); goto code; }
-    ["']              { CHECK_RET(try_lex_string_in_code(cur[-1])); goto code; }
+    ["'`]             { CHECK_RET(try_lex_literal_in_code(cur[-1])); goto code; }
     *                 { goto code; }
 */
 }
 
-Ret Input::try_lex_string_in_code(uint8_t quote) {
-    // We need to lex string literals in code blocks because they may contain closing brace symbol
-    // that would otherwise be erroneously lexed as a real closing brace.
-    //
-    // However, single quote in Rust may be either the beginning of a char literal as in `\u{1F600}`
-    // or a standalone one as in `'label`. In the latter case trying to lex a generic string literal
-    // will consume a fragment of the file until the next single quote (if any) and result in either
-    // a spurios parse error, or incorrect generated code. Therefore in Rust we try to lex a char
-    // literal, or else consume the quote.
+Ret Input::try_lex_literal_in_code(uint8_t quote) {
+    // We need to lex string and char literals in code blocks because they may contain closing
+    // brace or newline that would otherwise be erroneously lexed as block terminator symbols.
+    if (quote == '"') {
+loop_dquote: /*!re2c
+        ["]       { return Ret::OK; }
+        esc [\\"] { goto loop_dquote; }
+        eol       { next_line(); goto loop_dquote; }
+        *         { goto loop_dquote; }
+    */
+    } else if (quote == '`' && globopts->lang == Lang::GO) {
+loop_backtick: /*!re2c
+        [`] { return Ret::OK; }
+        eol { next_line(); goto loop_backtick; }
+        *   { goto loop_backtick; }
+    */
+    } else if (quote == '\'') {
+        // Single-quoted char literals may contain closing curly brace, e.g. '}'.
+        // We must lex all possible forms (not only those with a closing brace), as otherwise we
+        // might erroneously lex the closing single quote as the beginning of another literal, e.g.
+        // in 'a'}'b' we would recognize '}' as a literal rather than the closing brace of a block.
+    /*!local:re2c
+        re2c:flags:utf-8 = 1;
 
-    if (globopts->lang != Lang::RUST || quote != '\'') {
-        return lex_string(quote);
+        // Generalized rules for single-quoted char literals (covering various languages).
+        esc [ux][{] hex_digit+ [}]['] | // hex escape \u{X...X}
+        esc [x] hex_digit{2}      ['] | // 2-byte hex escape
+        esc [u] hex_digit{4}      ['] | // 4-byte hex escape \uXXXX
+        esc [U] hex_digit{8}      ['] | // 8-byte hex escape \UXXXXXXXX
+        esc [o][{] oct_digit+ [}] ['] | // octal escape \o{X...X}
+        esc oct_digit{3}          ['] | // octal escape \XXX
+        esc ['\\?abfnrtv0]        ['] | // special escape sequences
+        [^]                       ['] { // any UTF-8 encoded Unicode symbol, unescaped
+            return Ret::OK;
+        }
+        "" { return globopts->lang == Lang::RUST ? Ret::OK : Ret::FAIL; }
+    */
     }
-
-    // Rust spec (literals): https://doc.rust-lang.org/reference/tokens.html#literals
-    // Rust spec (input encoding): https://doc.rust-lang.org/reference/input-format.html
-/*!local:re2c
-    re2c:flags:utf-8 = 1;
-
-    esc [u][{] hex_digit+ [}]['] | // Unicode hex escapes
-    esc [x] hex_digit+       ['] | // 2-byte hex escapes
-    esc ['"\\nrt0]           ['] | // ASCII/byte/quote escapes
-    [^]                      ['] | // any UTF-8 encoded Unicode symbol, unescaped
-    "" { return Ret::OK; }         // standalone single quote
-*/
-}
-
-Ret Input::lex_string(uint8_t delim) {
-loop: /*!re2c
-    ["']       { if (cur[-1] == delim) return Ret::OK; else goto loop; }
-    esc [\\"'] { goto loop; }
-    eol        { next_line(); goto loop; }
-    *          { goto loop; }
-*/
+    return Ret::FAIL;
 }
 
 Ret Input::lex_c_comment() {

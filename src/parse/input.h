@@ -101,13 +101,12 @@ class Input: private LexerState {
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
     Ret lex_code_indented(YYSTYPE* yylval, Ast& ast) NODISCARD;
     Ret lex_code_in_braces(YYSTYPE* yylval, Ast& ast) NODISCARD;
-    Ret try_lex_string_in_code(uint8_t quote) NODISCARD;
+    Ret try_lex_literal_in_code(uint8_t quote) NODISCARD;
     Ret lex_c_comment() NODISCARD;
     Ret lex_cpp_comment() NODISCARD;
     Ret lex_namedef_context_re2c(bool& yes) NODISCARD;
     Ret lex_namedef_context_flex(bool& yes) NODISCARD;
     Ret lex_clist(Ast& ast, int& token) NODISCARD;
-    Ret lex_string(uint8_t delim) NODISCARD;
     Ret lex_cls_chr(uint32_t& c) NODISCARD;
     Ret lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) NODISCARD;
     Ret lex_cls(Ast& ast, bool neg, const AstNode*&) NODISCARD;
