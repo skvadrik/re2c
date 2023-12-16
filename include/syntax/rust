@@ -10,6 +10,8 @@ char_literals = hexadecimal;
 semicolons = yes;
 abort_requires_include = no;
 implicit_bool_conversion = no;
+backtick_quoted_strings = no;
+standalone_single_quotes = yes;
 
 code:var =
     // In Rust uninitialized variable is an error, but if the compiler is able to see

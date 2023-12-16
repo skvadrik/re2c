@@ -3433,7 +3433,7 @@ yy380:
 }
 #line 653 "../src/parse/lex.re"
 
-    } else if (quote == '`' && globopts->lang == Lang::GO) {
+    } else if (quote == '`' && globopts->eval_bool_conf("backtick_quoted_strings")) {
 loop_backtick: 
 #line 3439 "src/parse/lex.cc"
 {
@@ -3533,7 +3533,7 @@ yy385:
 	}
 yy387:
 #line 679 "../src/parse/lex.re"
-	{ return globopts->lang == Lang::RUST ? Ret::OK : Ret::FAIL; }
+	{ return globopts->eval_bool_conf("standalone_single_quotes") ? Ret::OK : Ret::FAIL; }
 #line 3538 "src/parse/lex.cc"
 yy388:
 	yych = *++cur;

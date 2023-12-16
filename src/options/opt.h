@@ -233,6 +233,15 @@ struct conopt_t {
 #undef CONSTOPT1
 #undef CONSTOPT
     {}
+
+    // forward methods from `Stx` to make them easier to use from lexer
+    inline const char* eval_word_conf(const char* name) const {
+        return stx.eval_word_conf(name);
+    }
+    inline bool eval_bool_conf(const char* name) const {
+        return stx.eval_bool_conf(name);
+    }
+
     FORBID_COPY(conopt_t);
 };
 

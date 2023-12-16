@@ -651,7 +651,7 @@ loop_dquote: /*!re2c
         eol       { next_line(); goto loop_dquote; }
         *         { goto loop_dquote; }
     */
-    } else if (quote == '`' && globopts->lang == Lang::GO) {
+    } else if (quote == '`' && globopts->eval_bool_conf("backtick_quoted_strings")) {
 loop_backtick: /*!re2c
         [`] { return Ret::OK; }
         eol { next_line(); goto loop_backtick; }
@@ -676,7 +676,7 @@ loop_backtick: /*!re2c
         [^]                       ['] { // any UTF-8 encoded Unicode symbol, unescaped
             return Ret::OK;
         }
-        "" { return globopts->lang == Lang::RUST ? Ret::OK : Ret::FAIL; }
+        "" { return globopts->eval_bool_conf("standalone_single_quotes") ? Ret::OK : Ret::FAIL; }
     */
     }
     return Ret::FAIL;

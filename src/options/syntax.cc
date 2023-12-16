@@ -32,6 +32,8 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_requires_include"] = {"yes", "no"};
     allowed_word_confs["implicit_bool_conversion"] = {"yes", "no"};
+    allowed_word_confs["backtick_quoted_strings"] = {"yes", "no"};
+    allowed_word_confs["standalone_single_quotes"] = {"yes", "no"};
 
     allowed_code_confs["code:var"] = {
         {"type", "name", "init"}, {}, {"have_init"}

@@ -10,6 +10,8 @@ char_literals = symbolic;
 semicolons = yes;
 abort_requires_include = yes;
 implicit_bool_conversion = yes;
+backtick_quoted_strings = no;
+standalone_single_quotes = no;
 
 code:var = topindent type " " name (have_init? " = " init) ";" nl;
 

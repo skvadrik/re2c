@@ -11,6 +11,8 @@ const char* DEFAULT_SYNTAX_C =
     "semicolons = yes;\n"
     "abort_requires_include = yes;\n"
     "implicit_bool_conversion = yes;\n"
+    "backtick_quoted_strings = no;\n"
+    "standalone_single_quotes = no;\n"
     "\n"
     "code:var = topindent type \" \" name (have_init? \" = \" init) \";\" nl;\n"
     "\n"
