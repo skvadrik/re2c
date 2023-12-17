@@ -65,7 +65,8 @@ LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
-LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
+LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
+                               const conopt_t& glob,
                                const mutopt_t& defaults,
                                const mutdef_t& is_default,
                                mutopt_t& real)) {
@@ -276,10 +277,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     }
 
     // errors
+    if (real.api == Api::DEFAULT && !stx.list_conf_find("api", "default")) {
+        RET_FAIL(error("default API is not supported for this backend"));
+    }
     if (glob.lang != Lang::C) {
-        if (real.api == Api::DEFAULT) {
-            RET_FAIL(error("pointer API is not supported for non-C backends"));
-        }
         if (real.cgoto) {
             RET_FAIL(error("-g, --computed-gotos option is not supported for non-C backends"));
         }
@@ -372,7 +373,7 @@ Ret Opt::sync() {
 
     // Fix the real mutable options (based on the global options, mutable option defaults and
     // default flags), but do not change user-defined options or default flags.
-    CHECK_RET(fix_mutopt(glob, defaults, is_default, real));
+    CHECK_RET(fix_mutopt(stx, glob, defaults, is_default, real));
 
     diverge = false;
 
