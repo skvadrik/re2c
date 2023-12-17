@@ -152,6 +152,7 @@ class Stx {
     const char* list_conf_head(const char* name) const;
     const char* eval_word_conf(const char* name) const;
     bool eval_bool_conf(const char* name) const;
+    Ret eval_str_conf(const char* name, std::string& str) const;
     void eval_code_conf(std::ostream& os, const opt_t* opts, const char* name) const;
     void eval_code_conf(
             std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const;

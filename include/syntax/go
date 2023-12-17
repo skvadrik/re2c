@@ -56,6 +56,9 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
+// In Go `continue` statements have labels, use it to avoid ambiguity.
+code:loop_label = "yyl";
+
 code:enum =
     "const (" nl indent
         [elem{0}:    topindent elem " = " (have_init ? init : "iota") nl]

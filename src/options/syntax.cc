@@ -73,6 +73,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:loop"] = {
         {"label"}, {"stmt"}, {"have_label"}
     };
+    allowed_code_confs["code:loop_label"] = {};
     allowed_code_confs["code:enum"] = {
         {"name", "type", "init"}, {"elem"}, {"have_init"}
     };
@@ -259,6 +260,24 @@ const char* Stx::eval_word_conf(const char* name) const {
 
 bool Stx::eval_bool_conf(const char* name) const {
     return strcmp(eval_word_conf(name), "yes") == 0;
+}
+
+Ret Stx::eval_str_conf(const char* name, std::string& str) const{
+    if (confs.find(name) == confs.end()) {
+        str.clear(); // default value is empty
+        return Ret::OK;
+    }
+
+    const StxConf* conf = confs.find(name)->second;
+    CHECK(conf->type == StxConfType::CODE);
+
+    const StxCode* x = conf->code->head;
+    if (x && x->type == StxCodeType::STR && !x->next) {
+        str = x->str;
+        return Ret::OK;
+    } else {
+        RET_FAIL(error("configuration '%s' must have string value", conf->name));
+    }
 }
 
 void Stx::push_list_on_stack(const StxCode* x) const {

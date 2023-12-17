@@ -40,7 +40,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
 }
 
 // This should only change mutable option defaults (based on the global options / syntax file).
-static void fix_mutopt_defaults(mutopt_t& defaults, Stx& stx) {
+LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
     defaults.api = strcmp(stx.list_conf_head("api"), "default") == 0 ? Api::DEFAULT : Api::CUSTOM;
     defaults.api_style = strcmp(stx.list_conf_head("api_style"), "functions") == 0
             ? ApiStyle::FUNCTIONS : ApiStyle::FREEFORM;
@@ -48,6 +48,10 @@ static void fix_mutopt_defaults(mutopt_t& defaults, Stx& stx) {
     if (strcmp(stx.eval_word_conf("constants"), "upper_case") == 0) {
         defaults.cond_enum_prefix = "YYC_";
     }
+
+    CHECK_RET(stx.eval_str_conf("code:loop_label", defaults.label_loop));
+
+    return Ret::OK;
 }
 
 // This function should only change real mutable options (based on the global options, default
@@ -261,13 +265,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
         real.cond_goto = defaults.cond_goto;
         real.cond_goto_param = defaults.cond_goto_param;
     }
-    if (glob.lang == Lang::RUST) {
-        // In Rust `continue` statements have labels, use it to avoid ambiguity.
-        if (is_default.label_loop) real.label_loop = "'yyl";
-    } else if (glob.lang == Lang::GO) {
-        // In Go `continue` statements have labels, use it to avoid ambiguity.
-        if (is_default.label_loop) real.label_loop = "yyl";
-    }
 
     // errors
     if (glob.lang != Lang::C) {
@@ -341,7 +338,7 @@ Ret Opt::fix_global_and_defaults() {
     CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob), stx));
 
     // Allow to modify only the mutable option defaults (based on the global options / syntax file).
-    fix_mutopt_defaults(const_cast<mutopt_t&>(defaults), stx);
+    CHECK_RET(fix_mutopt_defaults(const_cast<mutopt_t&>(defaults), stx));
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.

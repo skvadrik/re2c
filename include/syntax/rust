@@ -60,6 +60,9 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
+// In Rust `continue` statements have labels, use it to avoid ambiguity.
+code:loop_label = "'yyl";
+
 code:enum = [elem: topindent "const " elem ": " type " = " init ";" nl];
 
 code:fingerprint =
