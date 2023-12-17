@@ -251,6 +251,17 @@ const char* Stx::list_conf_head(const char* name) const {
     return x ? x->name : nullptr;
 }
 
+bool Stx::list_conf_find(const char* name, const char* elem) const {
+    DCHECK(confs.find(name) != confs.end());
+    const StxConf* conf = confs.find(name)->second;
+    CHECK(conf->type == StxConfType::LIST);
+
+    for (const StxName* x = conf->list->head; x; x = x->next) {
+        if (strcmp(x->name, elem) == 0) return true;
+    }
+    return false;
+}
+
 const char* Stx::eval_word_conf(const char* name) const {
     DCHECK(confs.find(name) != confs.end());
     const StxConf* conf = confs.find(name)->second;

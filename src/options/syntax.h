@@ -150,6 +150,7 @@ class Stx {
 
     // functions that check or evaluate configurations
     const char* list_conf_head(const char* name) const;
+    bool list_conf_find(const char* name, const char* elem) const;
     const char* eval_word_conf(const char* name) const;
     bool eval_bool_conf(const char* name) const;
     Ret eval_str_conf(const char* name, std::string& str) const;

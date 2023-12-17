@@ -37,6 +37,10 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         RET_FAIL(error("cannot generate dep file, output file not specified"));
     }
 
+    if (glob.target == Target::SKELETON && !stx.list_conf_find("target", "skeleton")) {
+        RET_FAIL(error("skeleton is not supported for this backend"));
+    }
+
     return Ret::OK;
 }
 
@@ -273,9 +277,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
 
     // errors
     if (glob.lang != Lang::C) {
-        if (glob.target == Target::SKELETON) {
-            RET_FAIL(error("skeleton is not supported for non-C backends"));
-        }
         if (real.api == Api::DEFAULT) {
             RET_FAIL(error("pointer API is not supported for non-C backends"));
         }
