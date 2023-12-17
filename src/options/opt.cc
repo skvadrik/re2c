@@ -2,6 +2,7 @@
 #include "src/options/opt.h"
 #include "src/options/syntax.h"
 #include "src/parse/input.h"
+#include "src/util/string_utils.h"
 
 namespace re2c {
 
@@ -50,6 +51,9 @@ LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
     }
 
     CHECK_RET(stx.eval_str_conf("code:loop_label", defaults.label_loop));
+
+    const char* semi = stx.eval_bool_conf("semicolons") ? ";" : "";
+    defaults.cond_goto = "goto " + defaults.api_sigil + semi;
 
     return Ret::OK;
 }
@@ -247,7 +251,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(const conopt_t& glob,
     if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
     if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
     if (is_default.cond_goto) {
-        real.cond_goto = "goto " + real.cond_goto_param + (glob.lang == Lang::C ? ";" : "");
+        real.cond_goto = defaults.cond_goto;
+        strrreplace(real.cond_goto, defaults.cond_goto_param, real.cond_goto_param);
     }
     // "startlabel" configuration exists in two variants: string and boolean, and the string one
     // overrides the boolean one

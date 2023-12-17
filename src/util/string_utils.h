@@ -15,21 +15,7 @@ uint32_t unesc_oct(const uint8_t* s, const uint8_t* s_end);
 std::string escape_backslashes(const std::string& str);
 bool s_to_u32_unsafe(const uint8_t* s, const uint8_t* s_end, uint32_t& number) NODISCARD;
 bool s_to_i32_unsafe(const uint8_t* s, const uint8_t* s_end, int32_t& number) NODISCARD;
-
-template<typename type_t>
-void strrreplace(std::string& s, const std::string& s1, const type_t& v) {
-    std::ostringstream sv;
-    sv << v;
-    const std::string& s2 = sv.str();
-    const size_t l1 = s1.length(), l2 = s2.length();
-    if (l1 != 0) {
-        std::string::size_type pos = s.find(s1);
-        while (pos != std::string::npos) {
-            s.replace(pos, l1, s2);
-            pos = s.find(s1, pos + l2);
-        }
-    }
-}
+void strrreplace(std::string& s, const std::string& s1, const std::string& s2);
 
 template<typename T>
 std::string to_string(const T& v) {
@@ -59,8 +45,7 @@ inline const char* copystr(const std::string& s, allocator_t& alc) {
     return p;
 }
 
-inline constexpr uint8_t operator "" _u8(char c) noexcept
-{
+inline constexpr uint8_t operator "" _u8(char c) noexcept {
     return static_cast<uint8_t>(c);
 }
 
