@@ -283,11 +283,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
     if (real.cgoto && strcmp(stx.eval_word_conf("computed_goto"), "unsupported") == 0) {
         RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
     }
-    if (glob.lang != Lang::C) {
-        if (real.case_ranges) {
-            RET_FAIL(error("--case-ranges option is not supported for non-C backends"));
-        }
+    if (real.case_ranges && strcmp(stx.eval_word_conf("case_ranges"), "unsupported") == 0) {
+        RET_FAIL(error("--case-ranges option is not supported for this backend"));
     }
+    // TODO: check bitmaps and other optional features
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.cgoto) {
             RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "
