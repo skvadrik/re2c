@@ -32,7 +32,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* sourc
 #define ERRARG(opt, exp, arg) \
     RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
 
-LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& globopts, char** argv, Msg& msg)) {
+LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& globopts, char** argv, Msg& msg, Lang* lang)) {
     char* YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
@@ -220,9 +220,9 @@ opt_long: /*!local:re2c
 
 opt_lang: /*!local:re2c
     * { ERRARG("--lang", "c | go | rust", *argv); }
-    "c"    end { globopts.lang = Lang::C;    goto opt; }
-    "go"   end { globopts.lang = Lang::GO;   goto opt; }
-    "rust" end { globopts.lang = Lang::RUST; goto opt; }
+    "c"    end { *lang = Lang::C;    goto opt; }
+    "go"   end { *lang = Lang::GO;   goto opt; }
+    "rust" end { *lang = Lang::RUST; goto opt; }
 */
 
 opt_output: /*!local:re2c
@@ -306,14 +306,15 @@ end:
 }
 
 Ret Opt::parse(char** argv) {
-    CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg));
+    Lang lang = Lang::C;
+    CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
 
     if (glob.source_file.empty()) {
         RET_FAIL(error("no source file"));
     }
 
     // Load syntax file (it must have file index 0).
-    CHECK_RET(load_syntax_config(glob, stx, msg));
+    CHECK_RET(load_syntax_config(stx, glob.syntax_file, lang, msg));
 
     // Set option defaults.
     CHECK_RET(fix_global_and_defaults());

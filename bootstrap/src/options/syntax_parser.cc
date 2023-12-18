@@ -1603,9 +1603,9 @@ Ret StxFile::read(Lang lang) {
     return Ret::OK;
 }
 
-Ret load_syntax_config(const conopt_t& globopts, Stx& stx, Msg& msg) {
-    StxFile sf(stx.alc, globopts.syntax_file, msg);
-    CHECK_RET(sf.read(globopts.lang));
+Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg) {
+    StxFile sf(stx.alc, config, msg);
+    CHECK_RET(sf.read(lang));
     if (yyparse(sf, stx) != 0) return Ret::FAIL;
 
     stx.cache_conf_tests();

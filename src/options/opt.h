@@ -46,7 +46,6 @@ class Stx;
 // TODO: remove CONSTOPT1
 #define RE2C_CONSTOPTS \
     CONSTOPT1(Target, target, Target::CODE) \
-    CONSTOPT(Lang, lang, RE2C_LANG) /* TODO: remove lang from options */ \
     CONSTOPT(bool, date, true) \
     CONSTOPT(bool, version, true) \
     CONSTOPT(bool, start_conditions, false) \

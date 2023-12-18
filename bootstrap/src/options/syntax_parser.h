@@ -94,7 +94,7 @@ class StxFile {
     FORBID_COPY(StxFile);
 };
 
-Ret load_syntax_config(const conopt_t& globopts, Stx& stx, Msg& msg);
+Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg);
 
 } // namespace re2c
 
