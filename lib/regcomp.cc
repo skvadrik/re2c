@@ -39,10 +39,10 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     OutAllocator out_alc;
 
     Msg msg;
-
     Opt opts(out_alc, msg);
 
     conopt_t& globopts = const_cast<conopt_t&>(opts.global());
+    globopts.target = re2c::Target::CODE;
     globopts.flex_syntax = true;
     globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
 
@@ -50,6 +50,8 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);
     opts.set_tags_posix_syntax(true);
     opts.set_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
+
+    CHECK_RET(opts.fix_global_and_defaults());
 
     const opt_t* opt;
     CHECK_RET(opts.snapshot(&opt));

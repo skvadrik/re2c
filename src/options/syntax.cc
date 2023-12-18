@@ -243,30 +243,36 @@ void Stx::cache_conf_tests() {
 }
 
 const char* Stx::list_conf_head(const char* name) const {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs.find(name)->second;
-    CHECK(conf->type == StxConfType::LIST);
-
-    const StxName* x = conf->list->head;
-    return x ? x->name : nullptr;
+    auto i = confs.find(name);
+    if (i != confs.end()) {
+        const StxConf* c = i->second;
+        CHECK(c->type == StxConfType::LIST);
+        const StxName* x = c->list->head;
+        if (x) return x->name;
+    }
+    return DEFAULT_EMPTY;
 }
 
 bool Stx::list_conf_find(const char* name, const char* elem) const {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs.find(name)->second;
-    CHECK(conf->type == StxConfType::LIST);
-
-    for (const StxName* x = conf->list->head; x; x = x->next) {
-        if (strcmp(x->name, elem) == 0) return true;
+    auto i = confs.find(name);
+    if (i != confs.end()) {
+        const StxConf* c = i->second;
+        CHECK(c->type == StxConfType::LIST);
+        for (const StxName* x = c->list->head; x; x = x->next) {
+            if (strcmp(x->name, elem) == 0) return true;
+        }
     }
     return false;
 }
 
 const char* Stx::eval_word_conf(const char* name) const {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs.find(name)->second;
-    CHECK(conf->type == StxConfType::WORD);
-    return conf->word;
+    auto i = confs.find(name);
+    if (i != confs.end()) {
+        const StxConf* c = i->second;
+        CHECK(c->type == StxConfType::WORD);
+        return c->word;
+    }
+    return DEFAULT_EMPTY;
 }
 
 bool Stx::eval_bool_conf(const char* name) const {
@@ -274,20 +280,21 @@ bool Stx::eval_bool_conf(const char* name) const {
 }
 
 Ret Stx::eval_str_conf(const char* name, std::string& str) const{
-    if (confs.find(name) == confs.end()) {
-        str.clear(); // default value is empty
+    auto i = confs.find(name);
+    if (i == confs.end()) {
+        str = DEFAULT_EMPTY;
         return Ret::OK;
     }
 
-    const StxConf* conf = confs.find(name)->second;
-    CHECK(conf->type == StxConfType::CODE);
+    const StxConf* c = i->second;
+    CHECK(c->type == StxConfType::CODE);
 
-    const StxCode* x = conf->code->head;
+    const StxCode* x = c->code->head;
     if (x && x->type == StxCodeType::STR && !x->next) {
         str = x->str;
         return Ret::OK;
     } else {
-        RET_FAIL(error("configuration '%s' must have string value", conf->name));
+        RET_FAIL(error("configuration '%s' must have string value", c->name));
     }
 }
 
@@ -316,13 +323,15 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 
 void Stx::eval_code_conf(
         std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const {
-    DCHECK(confs.find(name) != confs.end());
-    const StxConf* conf = confs.find(name)->second;
-    CHECK(conf->type == StxConfType::CODE);
+    auto i = confs.find(name);
+    if (i == confs.end()) return; // if configuration is not defined, do nothing
+
+    const StxConf* c = i->second;
+    CHECK(c->type == StxConfType::CODE);
 
     stack_code_t& stack = stack_code;
     size_t bottom = stack.size();
-    push_list_on_stack(conf->code->head);
+    push_list_on_stack(c->code->head);
 
     while (stack.size() != bottom) {
         const StxCode* x = stack.back().first;

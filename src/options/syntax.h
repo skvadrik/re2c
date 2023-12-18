@@ -93,6 +93,8 @@ class Stx {
     using stack_code_list_t = std::vector<const StxCode*>;
     using confs_t = std::unordered_map<std::string, const StxConf*>;
 
+    constexpr static const char* DEFAULT_EMPTY = ""; // default value for undefined configurations
+
   public:
     OutAllocator& alc;
 
