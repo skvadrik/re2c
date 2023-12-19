@@ -63,7 +63,7 @@ yy3:
 	cursor += 1
 	marker = cursor
 	yych = str[cursor]
-	if (yybm[0+yych] & 128 != 0) {
+	if ((yybm[0+yych] & 128) != 0) {
 		goto yy5
 	}
 	if (yych >= 0x01) {
@@ -79,7 +79,7 @@ yy4:
 yy5:
 	cursor += 1
 	yych = str[cursor]
-	if (yybm[0+yych] & 128 != 0) {
+	if ((yybm[0+yych] & 128) != 0) {
 		goto yy5
 	}
 	if (yych <= 0x00) {

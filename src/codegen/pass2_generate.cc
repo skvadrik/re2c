@@ -678,11 +678,12 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const char* nonzero = opts->eval_bool_conf("implicit_bool_conversion") ? "" : " != 0";
-
-    const char* elif_cond = o.str(bitmap_name(opts, dfa.cond))
-            .cstr("[").u32(go->bitmap->offset).cstr("+").str(opts->var_char).cstr("]")
-            .cstr(" & ").yybm_char(go->bitmap->mask, opts, 1).cstr(nonzero).flush();
+    bool need_compare = !opts->eval_bool_conf("implicit_bool_conversion");
+    if (need_compare) o.cstr("(");
+    o.str(bitmap_name(opts, dfa.cond)).cstr("[").u32(go->bitmap->offset).cstr("+")
+            .str(opts->var_char).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1);
+    if (need_compare) o.cstr(") != 0");
+    const char* elif_cond = o.flush();
 
     CodeList* if_else = code_list(alc);
     const CodeJump jump = {go->bitmap->state, TCID0, false, false, false};
@@ -690,7 +691,10 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
 
     CodeList* stmts = code_list(alc);
     if (go->hgo != nullptr) {
-        const char* if_cond = o.str(opts->var_char).cstr(" & ~0xFF").cstr(nonzero).flush();
+        if (need_compare) o.cstr("(");
+        o.str(opts->var_char).cstr(" & ~0xFF");
+        if (need_compare) o.cstr(") != 0");
+        const char* if_cond = o.flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     } else {

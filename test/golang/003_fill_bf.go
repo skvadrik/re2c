@@ -137,7 +137,7 @@ yy0:
 	}
 yyFillLabel0:
 	yych = YYCTYPE(in.data[in.cursor])
-	if (yybm[0+yych] & 64 != 0) {
+	if ((yybm[0+yych] & 64) != 0) {
 		goto yy4
 	}
 	if (yych <= 0x00) {
@@ -176,7 +176,7 @@ yy4:
 	}
 yyFillLabel1:
 	yych = YYCTYPE(in.data[in.cursor])
-	if (yybm[0+yych] & 64 != 0) {
+	if ((yybm[0+yych] & 64) != 0) {
 		goto yy4
 	}
 	in.state = -1
@@ -194,7 +194,7 @@ yy5:
 	}
 yyFillLabel2:
 	yych = YYCTYPE(in.data[in.cursor])
-	if (yybm[0+yych] & 128 != 0) {
+	if ((yybm[0+yych] & 128) != 0) {
 		goto yy5
 	}
 	if (yych == '-') {
