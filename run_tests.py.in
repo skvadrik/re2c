@@ -299,7 +299,7 @@ def copy_tests(tests, dst):  # type: (list, str) -> None
 def clean_test_tree(path):  # type: (str) -> None
     """Clean the test tree from the not needed files."""
     files = set([str(f) for f in Path(path).rglob('*.*')])
-    for ext in ['re', 'c', 'h', 'go', 'rs', 'inc']:
+    for ext in ['re', 'c', 'h', 'go', 'rs', 'd', 'inc']:
         files -= set([str(f) for f in Path(path).rglob(f'*.{ext}')])
 
     remove(*[f for f in files if os.path.isfile(f)])
@@ -351,6 +351,8 @@ def run_test(test):
             ext = "go"
         elif head.startswith("// re2rust"):
             ext = "rs"
+        elif head.startswith("// re2d"):
+            ext = "d"
         else:
             ext = "??"
 
@@ -361,6 +363,7 @@ def run_test(test):
     switches = head
     switches = switches.replace('re2go', 're2c --lang go')
     switches = switches.replace('re2rust', 're2c --lang rust')
+    switches = switches.replace('re2d', 're2c --lang d')
     switches = RE2C_PATTERN.sub(r'\1', switches)
     switches = switches.replace('$INPUT', outx)
     switches = switches.replace('$OUTPUT', outy)

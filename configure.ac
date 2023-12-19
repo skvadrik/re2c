@@ -84,6 +84,11 @@ AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
 
 
+# --enable-dlang
+AC_ARG_ENABLE([dlang], [AS_HELP_STRING([--enable-dlang], [build re2d executable])])
+AM_CONDITIONAL([WITH_DLANG], [test "x$enable_golang" != "xno"])
+
+
 # --enable-benchmarks
 AC_ARG_ENABLE([benchmarks], [AS_HELP_STRING([--enable-benchmarks],
     [build benchmarks])])

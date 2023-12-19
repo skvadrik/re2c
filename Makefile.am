@@ -147,6 +147,7 @@ re2c_GEN_SRC = \
 	src/options/syntax_parser.cc \
 	src/parse/lex_conf.cc \
 	src/default_syntax_c.cc \
+	src/default_syntax_d.cc \
 	src/default_syntax_go.cc \
 	src/default_syntax_rust.cc
 re2c_GEN_HDR = \
@@ -184,6 +185,7 @@ re2c_BOOT = \
 	bootstrap/src/parse/lex_conf.cc \
 	bootstrap/src/msg/ver_to_vernum.cc \
 	bootstrap/src/default_syntax_c.cc \
+	bootstrap/src/default_syntax_d.cc \
 	bootstrap/src/default_syntax_go.cc \
 	bootstrap/src/default_syntax_rust.cc
 
@@ -531,6 +533,14 @@ bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2d
+if WITH_DLANG
+bin_PROGRAMS += re2d
+re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D
+re2d_SOURCES = $(re2c_SOURCES)
+nodist_re2d_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2rust

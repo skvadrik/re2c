@@ -36,6 +36,7 @@ option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
+option(RE2C_BUILD_RE2D "Build re2d executable (an alias for `re2c --lang d`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
@@ -137,6 +138,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex_conf.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
     "${re2c_docs}"
@@ -220,6 +222,7 @@ re2c_bootstrap_parser("src/options/syntax_parser.ypp" "src/options/syntax_parser
     "src/options/syntax_parser.h")
 
 re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
+re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.cc")
 re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
 
@@ -236,6 +239,12 @@ endif()
 if (RE2C_BUILD_RE2RUST)
     add_executable(re2rust ${re2c_sources})
     target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
+endif()
+
+# re2d
+if (RE2C_BUILD_RE2D)
+    add_executable(re2d ${re2c_sources})
+    target_compile_definitions(re2d PUBLIC "RE2C_LANG=Lang::D")
 endif()
 
 # docs
@@ -366,8 +375,12 @@ if(RE2C_IS_ROOT_PROJECT)
         install(TARGETS re2rust RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_rust}" DESTINATION "share/man/man1")
     endif()
+    if(RE2C_BUILD_RE2D)
+        install(TARGETS re2d RUNTIME DESTINATION bin)
+    endif()
     install(FILES
         include/syntax/c
+        include/syntax/d
         include/syntax/go
         include/syntax/rust
         include/unicode_categories.re
