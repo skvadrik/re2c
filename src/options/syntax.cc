@@ -77,6 +77,9 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:enum"] = {
         {"name", "type", "init"}, {"elem"}, {"have_init"}
     };
+    allowed_code_confs["code:enum_elem"] = {
+        {"name", "type"}, {}, {}
+    };
     allowed_code_confs["code:fingerprint"] = {
         {"version", "date"}, {}, {"have_version", "have_date"}
     };

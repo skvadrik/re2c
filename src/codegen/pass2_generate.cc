@@ -936,6 +936,35 @@ static void gen_yydebug(Output& output, const Label* label, CodeList* stmts) {
     }
 }
 
+class GenEnumElem : public RenderCallback {
+    std::ostream& os;
+    const std::string& type;
+    const std::string& name;
+
+  public:
+    GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
+        : os(os), type(type), name(name) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "type") == 0) {
+            os << type;
+        } else if (strcmp(var, "name") == 0) {
+            os << name;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    FORBID_COPY(GenEnumElem);
+};
+
+const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
+    const std::string& cond = opts->cond_enum_prefix + name;
+    GenEnumElem callback(buf.stream(), opts->api_cond_type, cond);
+    opts->eval_code_conf(buf.stream(), "code:enum_elem", callback);
+    return buf.flush();
+}
+
 static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx) {
     const opt_t* opts = output.block().opts;
     const Rule& rule = dfa.rules[rule_idx];
@@ -953,7 +982,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     // Condition in the semantic action is the one set with => or :=> rule.
     const char* cond = semact->cond == nullptr ? dfa.cond.c_str() : semact->cond;
     // Next condition is either the one specified in semantic action, or the current one.
-    const char* next_cond = o.str(opts->cond_enum_prefix).cstr(cond).flush();
+    const char* next_cond = gen_cond_enum_elem(o, opts, cond);
     // Next state is normally -1 (the initial storable state corresponding to no YYFILL invocation),
     // but in the loop/switch mode conditions and storable states are both implemented via
     // `yystate`, so the next state is the next condition.
@@ -1566,7 +1595,7 @@ static CodeList* gen_cond_goto(Output& output) {
                 text = buf.cstr("goto ").str(opts->cond_label_prefix).str(cond.name).flush();
                 append(body, code_stmt(alc, text));
 
-                text = buf.str(opts->cond_enum_prefix).str(cond.name).flush();
+                text = gen_cond_enum_elem(buf, opts, cond.name);
                 append(ccases, code_case_string(alc, body, text));
             }
             text = buf.str(output_cond_get(opts)).flush();
