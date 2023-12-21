@@ -1181,8 +1181,7 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
-    if (opts->state_abort || !opts->eval_bool_conf("abort_requires_include")) {
-        // Generate abort in default case unless it requires an include.
+    if (opts->state_abort || opts->eval_bool_conf("abort_in_default_case")) {
         CodeList* abort = code_list(alc);
         append(abort, code_abort(alc));
         append(cases, code_case_default(alc, abort));
@@ -1597,6 +1596,11 @@ static CodeList* gen_cond_goto(Output& output) {
 
                 text = gen_cond_enum_elem(buf, opts, cond.name);
                 append(ccases, code_case_string(alc, body, text));
+            }
+            if (opts->eval_bool_conf("abort_in_default_case")) {
+                CodeList* abort = code_list(alc);
+                append(abort, code_abort(alc));
+                append(ccases, code_case_default(alc, abort));
             }
             text = buf.str(output_cond_get(opts)).flush();
             append(stmts, code_switch(alc, text, ccases));

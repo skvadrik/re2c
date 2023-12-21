@@ -32,6 +32,8 @@ func Lex(str string) int {
 		goto yyc_hex
 	case yycoct:
 		goto yyc_oct
+	default:
+		panic("internal lexer error")
 	}
 /* *********************************** */
 yyc_init:

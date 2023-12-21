@@ -46,6 +46,8 @@ func parse_u32(str string) (uint32, error) {
 		goto yyc_hex
 	case yycoct:
 		goto yyc_oct
+	default:
+		panic("internal lexer error")
 	}
 /* *********************************** */
 yyc_init:
