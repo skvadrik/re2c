@@ -306,7 +306,7 @@ end:
 }
 
 Ret Opt::parse(char** argv) {
-    Lang lang = Lang::C;
+    Lang lang = RE2C_LANG;
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
 
     if (glob.source_file.empty()) {
