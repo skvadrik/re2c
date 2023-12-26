@@ -622,7 +622,9 @@ class RenderPeek : public RenderCallback {
     RenderPeek(RenderContext& rctx): rctx(rctx) {}
 
     void render_var(const char* var) override {
-        if (strcmp(var, "peek") == 0) {
+        if (strcmp(var, "var") == 0) {
+            rctx.os << rctx.opts->var_char;
+        } else if (strcmp(var, "yypeek") == 0) {
             rctx.os << rctx.opts->api_peek;
         } else if (strcmp(var, "cursor") == 0) {
             rctx.os << rctx.opts->api_cursor;
@@ -633,13 +635,6 @@ class RenderPeek : public RenderCallback {
         }
     }
 };
-
-static void render_peek(RenderContext& rctx) {
-    rctx.os << indent(rctx.ind, rctx.opts->indent_str) << rctx.opts->var_char << " = ";
-    RenderPeek callback(rctx);
-    rctx.opts->eval_code_conf(rctx.os, "code:yypeek_expr", callback);
-    render_stmt_end(rctx, true);
-}
 
 static void render_skip(RenderContext& rctx) {
     std::ostringstream& os = rctx.os;
@@ -1023,9 +1018,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SKIP:
         render_skip(rctx);
         break;
-    case CodeKind::PEEK:
-        render_peek(rctx);
+    case CodeKind::PEEK: {
+        RenderPeek callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yypeek", callback);
         break;
+    }
     case CodeKind::BACKUP:
         render_backup(rctx);
         break;

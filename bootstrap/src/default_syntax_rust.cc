@@ -76,5 +76,9 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:abort = topindent \"panic!(\\\"internal lexer error\\\");\" nl;\n"
     "\n"
-    "code:yypeek_expr = (unsafe? \"unsafe {\" peek \"}\" : peek) (api_style.functions ? \"()\");\n"
+    "code:yypeek =\n"
+    "    topindent var \" = \"\n"
+    "        (unsafe? \"unsafe {\" yypeek \"}\" : yypeek)\n"
+    "        (api_style.functions ? \"()\")\n"
+    "        \";\" nl;\n"
     ;

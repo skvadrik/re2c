@@ -90,8 +90,8 @@ Stx::Stx(OutAllocator& alc)
         {"name"}, {}, {}
     };
     allowed_code_confs["code:abort"] = {};
-    allowed_code_confs["code:yypeek_expr"] = {
-        {"peek", "cursor", "typecast"}, {}, {}
+    allowed_code_confs["code:yypeek"] = {
+        {"var", "yypeek", "cursor", "typecast"}, {}, {}
     };
 
 #define STX_COND(name, selector) allowed_conds[name] = [](const opt_t* opts) { return selector; };

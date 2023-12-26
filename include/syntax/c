@@ -79,6 +79,8 @@ code:line_info = "#line " line " \"" file "\"" nl;
 
 code:abort = topindent "abort();" nl;
 
-code:yypeek_expr = (api.generic
-    ? peek (api_style.functions ? "()")
-    : typecast "*" cursor );
+code:yypeek =
+    topindent var " = " (api.generic
+        ? yypeek (api_style.functions ? "()")
+        : typecast "*" cursor
+    ) ";" nl;

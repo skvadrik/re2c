@@ -80,7 +80,9 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "code:abort = topindent \"abort();\" nl;\n"
     "\n"
-    "code:yypeek_expr = (api.generic\n"
-    "    ? peek (api_style.functions ? \"()\")\n"
-    "    : typecast \"*\" cursor );\n"
+    "code:yypeek =\n"
+    "    topindent var \" = \" (api.generic\n"
+    "        ? yypeek (api_style.functions ? \"()\")\n"
+    "        : typecast \"*\" cursor\n"
+    "    ) \";\" nl;\n"
     ;
