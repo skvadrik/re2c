@@ -77,4 +77,6 @@ code:line_info = "//line \"" file "\":" line nl;
 
 code:abort = topindent "panic(\"internal lexer error\")" nl;
 
+code:yydebug = topindent yydebug "(" state ", " char ")" nl;
+
 code:yypeek = topindent var " = " yypeek (api_style.functions ? "()") nl;

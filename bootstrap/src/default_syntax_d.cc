@@ -78,6 +78,8 @@ const char* DEFAULT_SYNTAX_D =
     "\n"
     "code:abort = topindent \"assert(false);\" nl;\n"
     "\n"
+    "code:yydebug = topindent yydebug \"(\" state \", \" char \");\" nl;\n"
+    "\n"
     "code:yypeek =\n"
     "    topindent var \" = \" (api.generic\n"
     "        ? yypeek (api_style.functions ? \"()\")\n"

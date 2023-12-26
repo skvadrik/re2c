@@ -77,6 +77,8 @@ code:line_info = "#line " line " \"" file "\"" nl;
 
 code:abort = topindent "assert(false);" nl;
 
+code:yydebug = topindent yydebug "(" state ", " char ");" nl;
+
 code:yypeek =
     topindent var " = " (api.generic
         ? yypeek (api_style.functions ? "()")

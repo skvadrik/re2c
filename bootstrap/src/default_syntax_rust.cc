@@ -76,6 +76,8 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:abort = topindent \"panic!(\\\"internal lexer error\\\");\" nl;\n"
     "\n"
+    "code:yydebug = topindent yydebug \"(\" state \", \" char \");\" nl;\n"
+    "\n"
     "code:yypeek =\n"
     "    topindent var \" = \"\n"
     "        (unsafe? \"unsafe {\" yypeek \"}\" : yypeek)\n"

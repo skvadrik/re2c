@@ -90,6 +90,9 @@ Stx::Stx(OutAllocator& alc)
         {"name"}, {}, {}
     };
     allowed_code_confs["code:abort"] = {};
+    allowed_code_confs["code:yydebug"] = {
+        {"yydebug", "state", "char"}, {}, {}
+    };
     allowed_code_confs["code:yypeek"] = {
         {"var", "yypeek", "cursor", "typecast"}, {}, {}
     };

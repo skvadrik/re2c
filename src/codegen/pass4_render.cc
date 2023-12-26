@@ -615,6 +615,28 @@ static inline void yych_conv(std::ostream& os, const opt_t* opts) {
     }
 }
 
+class RenderDebug : public RenderCallback {
+    RenderContext& rctx;
+    const CodeDebug* code;
+
+  public:
+    RenderDebug(RenderContext& rctx, const CodeDebug* code): rctx(rctx), code(code) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "yydebug") == 0) {
+            rctx.os << rctx.opts->api_debug;
+        } else if (strcmp(var, "state") == 0) {
+            rctx.os << code->state;
+        } else if (strcmp(var, "char") == 0) {
+            rctx.os << rctx.opts->var_char;
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    FORBID_COPY(RenderDebug);
+};
+
 class RenderPeek : public RenderCallback {
     RenderContext& rctx;
 
@@ -1013,6 +1035,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::ABORT: {
         RenderSimple callback(rctx);
         rctx.opts->eval_code_conf(rctx.os, "code:abort", callback);
+        break;
+    }
+    case CodeKind::DEBUG: {
+        RenderDebug callback(rctx, &code->debug);
+        rctx.opts->eval_code_conf(rctx.os, "code:yydebug", callback);
         break;
     }
     case CodeKind::SKIP:

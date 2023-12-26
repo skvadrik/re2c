@@ -1,5 +1,7 @@
-//go:generate re2go $INPUT -o $OUTPUT 
+//go:generate re2go $INPUT -o $OUTPUT -d
 package main
+
+import "fmt"
 
 type YYCTYPE byte
 
@@ -11,6 +13,7 @@ func Lex(str string) int {
 	YYSKIP := func() { cursor++ }
 	YYBACKUP := func() { marker = cursor }
 	YYRESTORE := func() { cursor = marker }
+	YYDEBUG := func() { fmt.Printf("Lex: char '%c'\n", data[cursor]); }
 
 	/*!re2c
 	re2c:yyfill:enable = 0;

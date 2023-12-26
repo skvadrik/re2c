@@ -1,5 +1,7 @@
-//go:generate re2go $INPUT -o $OUTPUT 
+//go:generate re2go $INPUT -o $OUTPUT -d
 package main
+
+import "fmt"
 
 func Lex(str string) int {
 	var cursor, marker int
@@ -11,6 +13,7 @@ func Lex(str string) int {
 	re2c:define:YYSKIP = "cursor += 1";
 	re2c:define:YYBACKUP  = "marker = cursor";
 	re2c:define:YYRESTORE = "cursor = marker";
+	re2c:define:YYDEBUG = "fmt.Printf(\"Lex: char '%c' int state %u\\n\", @@{char}, @@{state});";
 
 	end = [\x00];
 

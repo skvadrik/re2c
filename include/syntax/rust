@@ -75,6 +75,8 @@ code:fingerprint =
 
 code:abort = topindent "panic!(\"internal lexer error\");" nl;
 
+code:yydebug = topindent yydebug "(" state ", " char ");" nl;
+
 code:yypeek =
     topindent var " = "
         (unsafe? "unsafe {" yypeek "}" : yypeek)

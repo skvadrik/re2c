@@ -54,6 +54,7 @@ fn fill(st: &mut State) -> Status {
 }
 
 fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
+    #[allow(unused_assignments)]
     let mut yych: u8 = 0;
     'lex: loop {
         st.tok = st.cur;

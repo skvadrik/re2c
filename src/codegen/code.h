@@ -277,6 +277,10 @@ struct CodeEnum {
     const uint32_t* elem_nums;
 };
 
+struct CodeDebug {
+    uint32_t state;
+};
+
 struct Code {
     union {
         const char* text;
@@ -291,6 +295,7 @@ struct Code {
         CodeEnum enumr;
         CodeFmt fmt;
         CodeLabel label;
+        CodeDebug debug;
         CodeList* loop;
         loc_t loc;
     };
@@ -402,6 +407,12 @@ inline void init_code_const(Code* x, VarType type, const char* name, const char*
 
 inline Code* code_line_info_output(OutAllocator& alc) {
     return new_code(alc, CodeKind::LINE_INFO_OUTPUT);
+}
+
+inline Code* code_debug(OutAllocator& alc, uint32_t state) {
+    Code* x = new_code(alc, CodeKind::DEBUG);
+    x->debug.state = state;
+    return x;
 }
 
 inline Code* code_skip(OutAllocator& alc) {

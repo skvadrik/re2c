@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT --no-unsafe
+// re2rust $INPUT -o $OUTPUT --no-unsafe -d
 
 // Have to use Cell for cursor, otherwise borrow checker does not allow
 // to have closures YYPEEK (that does immutable borrow of cursor) and
@@ -10,6 +10,7 @@ fn lex(s: &[u8]) -> bool {
     let cur = Cell::new(0);
     let YYPEEK = || unsafe { *s.get_unchecked(cur.get()) };
     let YYSKIP = || { cur.set(cur.get() + 1); };
+    let YYDEBUG = || { format!("lex: char '{}'", YYPEEK()); };
 
 /*!re2c
     re2c:api:style = functions;

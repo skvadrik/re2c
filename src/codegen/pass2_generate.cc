@@ -931,13 +931,25 @@ static void emit_accept(
 static void gen_debug(Output& output, const Label* label, CodeList* stmts) {
     if (!output.block().opts->debug) return;
 
-    // The label may be unused but still have a valid index (one such example is the initial label
-    // in goto/label mode). It still needs an YYDEBUG statement.
+    OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
     const opt_t* opts = output.block().opts;
-    buf.str(opts->api_debug)
-            .cstr("(").unchecked_label(*label).cstr(", ").str(opts->var_char).cstr(")");
-    append(stmts, code_stmt(output.allocator, buf.flush()));
+
+    // The label may be unused but still have a valid index (one such example is the initial label
+    // in goto/label mode). It still needs an YYDEBUG statement.
+    const uint32_t state = label->index;
+
+    if (opts->api == Api::DEFAULT) {
+        append(stmts, code_debug(alc, state));
+    } else if (opts->api_style == ApiStyle::FREEFORM) {
+        buf.str(opts->api_debug);
+        argsubst(buf.stream(), opts->api_sigil, "state", false, state);
+        argsubst(buf.stream(), opts->api_sigil, "char", false, opts->var_char);
+        append(stmts, code_text(alc, buf.flush()));
+    } else {
+        buf.str(opts->api_debug).cstr("()");
+        append(stmts, code_stmt(alc, buf.flush()));
+    }
 }
 
 class GenEnumElem : public RenderCallback {
