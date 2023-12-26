@@ -634,15 +634,6 @@ class RenderPeek : public RenderCallback {
     }
 };
 
-static void render_debug(RenderContext& rctx, const CodeLabel& code) {
-    rctx.os << indent(rctx.ind, rctx.opts->indent_str) << rctx.opts->api_debug
-            << "(" << code.nlabel->index << ", ";
-    RenderPeek callback(rctx);
-    rctx.opts->eval_code_conf(rctx.os, "code:yypeek_expr", callback);
-    rctx.os << ")";
-    render_stmt_end(rctx, true);
-}
-
 static void render_peek(RenderContext& rctx) {
     rctx.os << indent(rctx.ind, rctx.opts->indent_str) << rctx.opts->var_char << " = ";
     RenderPeek callback(rctx);
@@ -1096,9 +1087,6 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::LABEL:
         render_label(rctx, code->label);
-        break;
-    case CodeKind::DEBUG:
-        render_debug(rctx, code->label); // same code item as for `CodeKind::LABEL`
         break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:

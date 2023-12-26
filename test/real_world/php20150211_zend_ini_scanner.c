@@ -636,9 +636,9 @@ restart:
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_INITIAL:
-	YYDEBUG(0, *YYCURSOR);
 	YYFILL(5);
 	yych = *YYCURSOR;
+	YYDEBUG(0, yych);
 	{
 		static const void* yytarget[256] = {
 			 &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,
@@ -677,12 +677,12 @@ yyc_INITIAL:
 		goto *yytarget[yych];
 	}
 yy1:
-	YYDEBUG(1, *YYCURSOR);
+	YYDEBUG(1, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
 yy2:
-	YYDEBUG(2, *YYCURSOR);
+	YYDEBUG(2, yych);
 	{
 		static const void* yytarget[256] = {
 			 &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,  &&yy1,
@@ -721,7 +721,7 @@ yy2:
 		goto *yytarget[yych];
 	}
 yy3:
-	YYDEBUG(3, *YYCURSOR);
+	YYDEBUG(3, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get option name */
 	/* Eat leading whitespace */
@@ -733,7 +733,7 @@ yy3:
 	RETURN_TOKEN(TC_LABEL, yytext, yyleng);
 }
 yy4:
-	YYDEBUG(4, *YYCURSOR);
+	YYDEBUG(4, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -775,29 +775,29 @@ yy4:
 		goto *yytarget[yych];
 	}
 yy5:
-	YYDEBUG(5, *YYCURSOR);
+	YYDEBUG(5, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	/* eat whitespace */
 	goto restart;
 }
 yy6:
-	YYDEBUG(6, *YYCURSOR);
+	YYDEBUG(6, yych);
 	++YYCURSOR;
 yy7:
-	YYDEBUG(7, *YYCURSOR);
+	YYDEBUG(7, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	SCNG(lineno)++;
 	return END_OF_LINE;
 }
 yy8:
-	YYDEBUG(8, *YYCURSOR);
+	YYDEBUG(8, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy6;
 	goto yy7;
 yy9:
-	YYDEBUG(9, *YYCURSOR);
+	YYDEBUG(9, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -839,14 +839,14 @@ yy9:
 		goto *yytarget[yych];
 	}
 yy10:
-	YYDEBUG(10, *YYCURSOR);
+	YYDEBUG(10, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Disallow these chars outside option values */
 	return yytext[0];
 }
 yy11:
-	YYDEBUG(11, *YYCURSOR);
+	YYDEBUG(11, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -856,7 +856,7 @@ yy11:
 	if (yych <= '\n') goto yy20;
 	goto yy22;
 yy12:
-	YYDEBUG(12, *YYCURSOR);
+	YYDEBUG(12, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -872,13 +872,13 @@ yy12:
 	return '=';
 }
 yy13:
-	YYDEBUG(13, *YYCURSOR);
+	YYDEBUG(13, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'A') goto yy23;
 	if (yych == 'a') goto yy23;
 	goto yy2;
 yy14:
-	YYDEBUG(14, *YYCURSOR);
+	YYDEBUG(14, yych);
 	yych = *++YYCURSOR;
 	{
 		static const void* yytarget[256] = {
@@ -918,7 +918,7 @@ yy14:
 		goto *yytarget[yych];
 	}
 yy15:
-	YYDEBUG(15, *YYCURSOR);
+	YYDEBUG(15, yych);
 	yych = *++YYCURSOR;
 	{
 		static const void* yytarget[256] = {
@@ -958,19 +958,19 @@ yy15:
 		goto *yytarget[yych];
 	}
 yy16:
-	YYDEBUG(16, *YYCURSOR);
+	YYDEBUG(16, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'R') goto yy30;
 	if (yych == 'r') goto yy30;
 	goto yy2;
 yy17:
-	YYDEBUG(17, *YYCURSOR);
+	YYDEBUG(17, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'E') goto yy31;
 	if (yych == 'e') goto yy31;
 	goto yy2;
 yy18:
-	YYDEBUG(18, *YYCURSOR);
+	YYDEBUG(18, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Section start */
@@ -983,7 +983,7 @@ yy18:
 	return TC_SECTION;
 }
 yy19:
-	YYDEBUG(19, *YYCURSOR);
+	YYDEBUG(19, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1003,10 +1003,10 @@ yy19:
 	RETURN_TOKEN(TC_OFFSET, yytext, yyleng);
 }
 yy20:
-	YYDEBUG(20, *YYCURSOR);
+	YYDEBUG(20, yych);
 	++YYCURSOR;
 yy21:
-	YYDEBUG(21, *YYCURSOR);
+	YYDEBUG(21, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Comment */
 	BEGIN(INITIAL);
@@ -1014,18 +1014,18 @@ yy21:
 	return END_OF_LINE;
 }
 yy22:
-	YYDEBUG(22, *YYCURSOR);
+	YYDEBUG(22, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy20;
 	goto yy21;
 yy23:
-	YYDEBUG(23, *YYCURSOR);
+	YYDEBUG(23, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'L') goto yy32;
 	if (yych == 'l') goto yy32;
 	goto yy2;
 yy24:
-	YYDEBUG(24, *YYCURSOR);
+	YYDEBUG(24, yych);
 	yych = *++YYCURSOR;
 	{
 		static const void* yytarget[256] = {
@@ -1065,25 +1065,25 @@ yy24:
 		goto *yytarget[yych];
 	}
 yy25:
-	YYDEBUG(25, *YYCURSOR);
+	YYDEBUG(25, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* FALSE value (when used outside option value/offset this causes parse error!)*/
 	RETURN_TOKEN(BOOL_FALSE, "", 0);
 }
 yy26:
-	YYDEBUG(26, *YYCURSOR);
+	YYDEBUG(26, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'L') goto yy36;
 	if (yych == 'l') goto yy36;
 	goto yy2;
 yy27:
-	YYDEBUG(27, *YYCURSOR);
+	YYDEBUG(27, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'F') goto yy34;
 	if (yych == 'f') goto yy34;
 	goto yy2;
 yy28:
-	YYDEBUG(28, *YYCURSOR);
+	YYDEBUG(28, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1125,31 +1125,31 @@ yy28:
 		goto *yytarget[yych];
 	}
 yy29:
-	YYDEBUG(29, *YYCURSOR);
+	YYDEBUG(29, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* TRUE value (when used outside option value/offset this causes parse error!) */
 	RETURN_TOKEN(BOOL_TRUE, "1", 1);
 }
 yy30:
-	YYDEBUG(30, *YYCURSOR);
+	YYDEBUG(30, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'U') goto yy38;
 	if (yych == 'u') goto yy38;
 	goto yy2;
 yy31:
-	YYDEBUG(31, *YYCURSOR);
+	YYDEBUG(31, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'S') goto yy28;
 	if (yych == 's') goto yy28;
 	goto yy2;
 yy32:
-	YYDEBUG(32, *YYCURSOR);
+	YYDEBUG(32, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'S') goto yy35;
 	if (yych == 's') goto yy35;
 	goto yy2;
 yy33:
-	YYDEBUG(33, *YYCURSOR);
+	YYDEBUG(33, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1157,7 +1157,7 @@ yy33:
 	if (yych == ' ') goto yy33;
 	goto yy25;
 yy34:
-	YYDEBUG(34, *YYCURSOR);
+	YYDEBUG(34, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1199,19 +1199,19 @@ yy34:
 		goto *yytarget[yych];
 	}
 yy35:
-	YYDEBUG(35, *YYCURSOR);
+	YYDEBUG(35, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'E') goto yy34;
 	if (yych == 'e') goto yy34;
 	goto yy2;
 yy36:
-	YYDEBUG(36, *YYCURSOR);
+	YYDEBUG(36, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'L') goto yy39;
 	if (yych == 'l') goto yy39;
 	goto yy2;
 yy37:
-	YYDEBUG(37, *YYCURSOR);
+	YYDEBUG(37, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1219,13 +1219,13 @@ yy37:
 	if (yych == ' ') goto yy37;
 	goto yy29;
 yy38:
-	YYDEBUG(38, *YYCURSOR);
+	YYDEBUG(38, yych);
 	yych = *++YYCURSOR;
 	if (yych == 'E') goto yy28;
 	if (yych == 'e') goto yy28;
 	goto yy2;
 yy39:
-	YYDEBUG(39, *YYCURSOR);
+	YYDEBUG(39, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1267,13 +1267,13 @@ yy39:
 		goto *yytarget[yych];
 	}
 yy40:
-	YYDEBUG(40, *YYCURSOR);
+	YYDEBUG(40, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	RETURN_TOKEN(NULL_NULL, "", 0);
 }
 yy41:
-	YYDEBUG(41, *YYCURSOR);
+	YYDEBUG(41, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1282,9 +1282,9 @@ yy41:
 	goto yy40;
 /* *********************************** */
 yyc_ST_OFFSET:
-	YYDEBUG(42, *YYCURSOR);
 	YYFILL(2);
 	yych = *YYCURSOR;
+	YYDEBUG(42, yych);
 	{
 		static const void* yytarget[256] = {
 			&&yy43, &&yy43, &&yy43, &&yy43, &&yy43, &&yy43, &&yy43, &&yy43,
@@ -1323,13 +1323,13 @@ yyc_ST_OFFSET:
 		goto *yytarget[yych];
 	}
 yy43:
-	YYDEBUG(43, *YYCURSOR);
+	YYDEBUG(43, yych);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
 yy44:
-	YYDEBUG(44, *YYCURSOR);
+	YYDEBUG(44, yych);
 	if (yybm_ST_OFFSET[0+yych] & 4) {
 		goto yy43;
 	}
@@ -1338,13 +1338,13 @@ yy44:
 	if (yych <= ';') goto yy45;
 	if (yych <= '\\') goto yy57;
 yy45:
-	YYDEBUG(45, *YYCURSOR);
+	YYDEBUG(45, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get rest as section/offset value */
 	RETURN_TOKEN(TC_STRING, yytext, yyleng);
 }
 yy46:
-	YYDEBUG(46, *YYCURSOR);
+	YYDEBUG(46, yych);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1387,16 +1387,16 @@ yy46:
 		goto *yytarget[yych];
 	}
 yy47:
-	YYDEBUG(47, *YYCURSOR);
+	YYDEBUG(47, yych);
 	++YYCURSOR;
 yy48:
-	YYDEBUG(48, *YYCURSOR);
+	YYDEBUG(48, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return 0;
 }
 yy49:
-	YYDEBUG(49, *YYCURSOR);
+	YYDEBUG(49, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Double quoted '"' string start */
@@ -1404,7 +1404,7 @@ yy49:
 	return '"';
 }
 yy50:
-	YYDEBUG(50, *YYCURSOR);
+	YYDEBUG(50, yych);
 	yych = *++YYCURSOR;
 	if (yych <= '\\') {
 		if (yych <= 0x00) goto yy48;
@@ -1415,21 +1415,21 @@ yy50:
 		goto yy43;
 	}
 yy51:
-	YYDEBUG(51, *YYCURSOR);
+	YYDEBUG(51, yych);
 	yych = *++YYCURSOR;
 	if (yybm_ST_OFFSET[0+yych] & 128) {
 		goto yy63;
 	}
 	goto yy48;
 yy52:
-	YYDEBUG(52, *YYCURSOR);
+	YYDEBUG(52, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') goto yy44;
 	if (yych <= '9') goto yy64;
 	goto yy44;
 yy53:
-	YYDEBUG(53, *YYCURSOR);
+	YYDEBUG(53, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1472,13 +1472,13 @@ yy53:
 		goto *yytarget[yych];
 	}
 yy54:
-	YYDEBUG(54, *YYCURSOR);
+	YYDEBUG(54, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get number option value as string */
 	RETURN_TOKEN(TC_NUMBER, yytext, yyleng);
 }
 yy55:
-	YYDEBUG(55, *YYCURSOR);
+	YYDEBUG(55, yych);
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1521,18 +1521,18 @@ yy55:
 		goto *yytarget[yych];
 	}
 yy56:
-	YYDEBUG(56, *YYCURSOR);
+	YYDEBUG(56, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get constant option value */
 	RETURN_TOKEN(TC_CONSTANT, yytext, yyleng);
 }
 yy57:
-	YYDEBUG(57, *YYCURSOR);
+	YYDEBUG(57, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	goto yy43;
 yy58:
-	YYDEBUG(58, *YYCURSOR);
+	YYDEBUG(58, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of section or an option offset */
@@ -1540,7 +1540,7 @@ yy58:
 	return ']';
 }
 yy59:
-	YYDEBUG(59, *YYCURSOR);
+	YYDEBUG(59, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1552,7 +1552,7 @@ yy59:
 		if (yych != '{') goto yy43;
 	}
 yy60:
-	YYDEBUG(60, *YYCURSOR);
+	YYDEBUG(60, yych);
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
 		if (yyaccept == 0) {
@@ -1564,7 +1564,7 @@ yy60:
 		goto yy56;
 	}
 yy61:
-	YYDEBUG(61, *YYCURSOR);
+	YYDEBUG(61, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1573,7 +1573,7 @@ yy61:
 	}
 	goto yy43;
 yy62:
-	YYDEBUG(62, *YYCURSOR);
+	YYDEBUG(62, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable start */
@@ -1581,7 +1581,7 @@ yy62:
 	return TC_DOLLAR_CURLY;
 }
 yy63:
-	YYDEBUG(63, *YYCURSOR);
+	YYDEBUG(63, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1590,7 +1590,7 @@ yy63:
 	}
 	goto yy65;
 yy64:
-	YYDEBUG(64, *YYCURSOR);
+	YYDEBUG(64, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1633,7 +1633,7 @@ yy64:
 		goto *yytarget[yych];
 	}
 yy65:
-	YYDEBUG(65, *YYCURSOR);
+	YYDEBUG(65, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Raw string */
@@ -1646,9 +1646,9 @@ yy65:
 }
 /* *********************************** */
 yyc_ST_SECTION_VALUE:
-	YYDEBUG(66, *YYCURSOR);
 	YYFILL(2);
 	yych = *YYCURSOR;
+	YYDEBUG(66, yych);
 	{
 		static const void* yytarget[256] = {
 			&&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67, &&yy67,
@@ -1687,13 +1687,13 @@ yyc_ST_SECTION_VALUE:
 		goto *yytarget[yych];
 	}
 yy67:
-	YYDEBUG(67, *YYCURSOR);
+	YYDEBUG(67, yych);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
 yy68:
-	YYDEBUG(68, *YYCURSOR);
+	YYDEBUG(68, yych);
 	if (yybm_ST_SECTION_VALUE[0+yych] & 4) {
 		goto yy67;
 	}
@@ -1702,13 +1702,13 @@ yy68:
 	if (yych <= ';') goto yy69;
 	if (yych <= '\\') goto yy81;
 yy69:
-	YYDEBUG(69, *YYCURSOR);
+	YYDEBUG(69, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get rest as section/offset value */
 	RETURN_TOKEN(TC_STRING, yytext, yyleng);
 }
 yy70:
-	YYDEBUG(70, *YYCURSOR);
+	YYDEBUG(70, yych);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1751,16 +1751,16 @@ yy70:
 		goto *yytarget[yych];
 	}
 yy71:
-	YYDEBUG(71, *YYCURSOR);
+	YYDEBUG(71, yych);
 	++YYCURSOR;
 yy72:
-	YYDEBUG(72, *YYCURSOR);
+	YYDEBUG(72, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return 0;
 }
 yy73:
-	YYDEBUG(73, *YYCURSOR);
+	YYDEBUG(73, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Double quoted '"' string start */
@@ -1768,7 +1768,7 @@ yy73:
 	return '"';
 }
 yy74:
-	YYDEBUG(74, *YYCURSOR);
+	YYDEBUG(74, yych);
 	yych = *++YYCURSOR;
 	if (yych <= '\\') {
 		if (yych <= 0x00) goto yy72;
@@ -1779,21 +1779,21 @@ yy74:
 		goto yy67;
 	}
 yy75:
-	YYDEBUG(75, *YYCURSOR);
+	YYDEBUG(75, yych);
 	yych = *++YYCURSOR;
 	if (yybm_ST_SECTION_VALUE[0+yych] & 128) {
 		goto yy88;
 	}
 	goto yy72;
 yy76:
-	YYDEBUG(76, *YYCURSOR);
+	YYDEBUG(76, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') goto yy68;
 	if (yych <= '9') goto yy89;
 	goto yy68;
 yy77:
-	YYDEBUG(77, *YYCURSOR);
+	YYDEBUG(77, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1836,13 +1836,13 @@ yy77:
 		goto *yytarget[yych];
 	}
 yy78:
-	YYDEBUG(78, *YYCURSOR);
+	YYDEBUG(78, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get number option value as string */
 	RETURN_TOKEN(TC_NUMBER, yytext, yyleng);
 }
 yy79:
-	YYDEBUG(79, *YYCURSOR);
+	YYDEBUG(79, yych);
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -1885,18 +1885,18 @@ yy79:
 		goto *yytarget[yych];
 	}
 yy80:
-	YYDEBUG(80, *YYCURSOR);
+	YYDEBUG(80, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get constant option value */
 	RETURN_TOKEN(TC_CONSTANT, yytext, yyleng);
 }
 yy81:
-	YYDEBUG(81, *YYCURSOR);
+	YYDEBUG(81, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	goto yy67;
 yy82:
-	YYDEBUG(82, *YYCURSOR);
+	YYDEBUG(82, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -1909,7 +1909,7 @@ yy82:
 		if (yych == ' ') goto yy82;
 	}
 yy83:
-	YYDEBUG(83, *YYCURSOR);
+	YYDEBUG(83, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of section */
 	BEGIN(INITIAL);
@@ -1917,7 +1917,7 @@ yy83:
 	return ']';
 }
 yy84:
-	YYDEBUG(84, *YYCURSOR);
+	YYDEBUG(84, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1929,7 +1929,7 @@ yy84:
 		if (yych != '{') goto yy67;
 	}
 yy85:
-	YYDEBUG(85, *YYCURSOR);
+	YYDEBUG(85, yych);
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
 		if (yyaccept == 0) {
@@ -1941,7 +1941,7 @@ yy85:
 		goto yy80;
 	}
 yy86:
-	YYDEBUG(86, *YYCURSOR);
+	YYDEBUG(86, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1950,7 +1950,7 @@ yy86:
 	}
 	goto yy67;
 yy87:
-	YYDEBUG(87, *YYCURSOR);
+	YYDEBUG(87, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable start */
@@ -1958,7 +1958,7 @@ yy87:
 	return TC_DOLLAR_CURLY;
 }
 yy88:
-	YYDEBUG(88, *YYCURSOR);
+	YYDEBUG(88, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -1967,7 +1967,7 @@ yy88:
 	}
 	goto yy92;
 yy89:
-	YYDEBUG(89, *YYCURSOR);
+	YYDEBUG(89, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -2010,16 +2010,16 @@ yy89:
 		goto *yytarget[yych];
 	}
 yy90:
-	YYDEBUG(90, *YYCURSOR);
+	YYDEBUG(90, yych);
 	++YYCURSOR;
 	goto yy83;
 yy91:
-	YYDEBUG(91, *YYCURSOR);
+	YYDEBUG(91, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy90;
 	goto yy83;
 yy92:
-	YYDEBUG(92, *YYCURSOR);
+	YYDEBUG(92, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Raw string */
@@ -2032,9 +2032,9 @@ yy92:
 }
 /* *********************************** */
 yyc_ST_VALUE:
-	YYDEBUG(93, *YYCURSOR);
 	YYFILL(6);
 	yych = *YYCURSOR;
+	YYDEBUG(93, yych);
 	{
 		static const void* yytarget[256] = {
 			 &&yy94,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,
@@ -2073,23 +2073,23 @@ yyc_ST_VALUE:
 		goto *yytarget[yych];
 	}
 yy94:
-	YYDEBUG(94, *YYCURSOR);
+	YYDEBUG(94, yych);
 	++YYCURSOR;
 yy95:
-	YYDEBUG(95, *YYCURSOR);
+	YYDEBUG(95, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of option value (if EOF is reached before EOL */
 	BEGIN(INITIAL);
 	return END_OF_LINE;
 }
 yy96:
-	YYDEBUG(96, *YYCURSOR);
+	YYDEBUG(96, yych);
 	yyaccept = 0;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
 yy97:
-	YYDEBUG(97, *YYCURSOR);
+	YYDEBUG(97, yych);
 	{
 		static const void* yytarget[256] = {
 			 &&yy98,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,  &&yy96,
@@ -2128,13 +2128,13 @@ yy97:
 		goto *yytarget[yych];
 	}
 yy98:
-	YYDEBUG(98, *YYCURSOR);
+	YYDEBUG(98, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get everything else as option/offset value */
 	RETURN_TOKEN(TC_STRING, yytext, yyleng);
 }
 yy99:
-	YYDEBUG(99, *YYCURSOR);
+	YYDEBUG(99, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -2176,16 +2176,16 @@ yy99:
 		goto *yytarget[yych];
 	}
 yy100:
-	YYDEBUG(100, *YYCURSOR);
+	YYDEBUG(100, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	RETURN_TOKEN(TC_WHITESPACE, yytext, yyleng);
 }
 yy101:
-	YYDEBUG(101, *YYCURSOR);
+	YYDEBUG(101, yych);
 	++YYCURSOR;
 yy102:
-	YYDEBUG(102, *YYCURSOR);
+	YYDEBUG(102, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of option value */
 	BEGIN(INITIAL);
@@ -2193,12 +2193,12 @@ yy102:
 	return END_OF_LINE;
 }
 yy103:
-	YYDEBUG(103, *YYCURSOR);
+	YYDEBUG(103, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy101;
 	goto yy102;
 yy104:
-	YYDEBUG(104, *YYCURSOR);
+	YYDEBUG(104, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -2209,7 +2209,7 @@ yy104:
 	return yytext[0];
 }
 yy105:
-	YYDEBUG(105, *YYCURSOR);
+	YYDEBUG(105, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Double quoted '"' string start */
@@ -2217,7 +2217,7 @@ yy105:
 	return '"';
 }
 yy106:
-	YYDEBUG(106, *YYCURSOR);
+	YYDEBUG(106, yych);
 	yych = *++YYCURSOR;
 	if (yych <= '\\') {
 		if (yych <= 0x00) goto yy95;
@@ -2228,21 +2228,21 @@ yy106:
 		goto yy96;
 	}
 yy107:
-	YYDEBUG(107, *YYCURSOR);
+	YYDEBUG(107, yych);
 	yych = *++YYCURSOR;
 	if (yybm_ST_VALUE[0+yych] & 64) {
 		goto yy124;
 	}
 	goto yy95;
 yy108:
-	YYDEBUG(108, *YYCURSOR);
+	YYDEBUG(108, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
 	if (yych <= '/') goto yy97;
 	if (yych <= '9') goto yy125;
 	goto yy97;
 yy109:
-	YYDEBUG(109, *YYCURSOR);
+	YYDEBUG(109, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -2285,13 +2285,13 @@ yy109:
 		goto *yytarget[yych];
 	}
 yy110:
-	YYDEBUG(110, *YYCURSOR);
+	YYDEBUG(110, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get number option value as string */
 	RETURN_TOKEN(TC_NUMBER, yytext, yyleng);
 }
 yy111:
-	YYDEBUG(111, *YYCURSOR);
+	YYDEBUG(111, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -2301,7 +2301,7 @@ yy111:
 	if (yych <= '\n') goto yy126;
 	goto yy128;
 yy112:
-	YYDEBUG(112, *YYCURSOR);
+	YYDEBUG(112, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Make = used in option value to trigger error */
@@ -2310,7 +2310,7 @@ yy112:
 	return END_OF_LINE;
 }
 yy113:
-	YYDEBUG(113, *YYCURSOR);
+	YYDEBUG(113, yych);
 	yyaccept = 2;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -2353,13 +2353,13 @@ yy113:
 		goto *yytarget[yych];
 	}
 yy114:
-	YYDEBUG(114, *YYCURSOR);
+	YYDEBUG(114, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Get constant option value */
 	RETURN_TOKEN(TC_CONSTANT, yytext, yyleng);
 }
 yy115:
-	YYDEBUG(115, *YYCURSOR);
+	YYDEBUG(115, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2400,7 +2400,7 @@ yy115:
 		goto *yytarget[yych];
 	}
 yy116:
-	YYDEBUG(116, *YYCURSOR);
+	YYDEBUG(116, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2441,7 +2441,7 @@ yy116:
 		goto *yytarget[yych];
 	}
 yy117:
-	YYDEBUG(117, *YYCURSOR);
+	YYDEBUG(117, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2482,7 +2482,7 @@ yy117:
 		goto *yytarget[yych];
 	}
 yy118:
-	YYDEBUG(118, *YYCURSOR);
+	YYDEBUG(118, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2523,7 +2523,7 @@ yy118:
 		goto *yytarget[yych];
 	}
 yy119:
-	YYDEBUG(119, *YYCURSOR);
+	YYDEBUG(119, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2564,7 +2564,7 @@ yy119:
 		goto *yytarget[yych];
 	}
 yy120:
-	YYDEBUG(120, *YYCURSOR);
+	YYDEBUG(120, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -2576,7 +2576,7 @@ yy120:
 		if (yych != '{') goto yy96;
 	}
 yy121:
-	YYDEBUG(121, *YYCURSOR);
+	YYDEBUG(121, yych);
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
@@ -2600,7 +2600,7 @@ yy121:
 		}
 	}
 yy122:
-	YYDEBUG(122, *YYCURSOR);
+	YYDEBUG(122, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -2609,7 +2609,7 @@ yy122:
 	}
 	goto yy96;
 yy123:
-	YYDEBUG(123, *YYCURSOR);
+	YYDEBUG(123, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable start */
@@ -2617,7 +2617,7 @@ yy123:
 	return TC_DOLLAR_CURLY;
 }
 yy124:
-	YYDEBUG(124, *YYCURSOR);
+	YYDEBUG(124, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -2626,7 +2626,7 @@ yy124:
 	}
 	goto yy139;
 yy125:
-	YYDEBUG(125, *YYCURSOR);
+	YYDEBUG(125, yych);
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;
 	YYFILL(1);
@@ -2669,10 +2669,10 @@ yy125:
 		goto *yytarget[yych];
 	}
 yy126:
-	YYDEBUG(126, *YYCURSOR);
+	YYDEBUG(126, yych);
 	++YYCURSOR;
 yy127:
-	YYDEBUG(127, *YYCURSOR);
+	YYDEBUG(127, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Comment */
 	BEGIN(INITIAL);
@@ -2680,12 +2680,12 @@ yy127:
 	return END_OF_LINE;
 }
 yy128:
-	YYDEBUG(128, *YYCURSOR);
+	YYDEBUG(128, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy126;
 	goto yy127;
 yy129:
-	YYDEBUG(129, *YYCURSOR);
+	YYDEBUG(129, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2726,7 +2726,7 @@ yy129:
 		goto *yytarget[yych];
 	}
 yy130:
-	YYDEBUG(130, *YYCURSOR);
+	YYDEBUG(130, yych);
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2767,13 +2767,13 @@ yy130:
 		goto *yytarget[yych];
 	}
 yy131:
-	YYDEBUG(131, *YYCURSOR);
+	YYDEBUG(131, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* FALSE value (when used outside option value/offset this causes parse error!)*/
 	RETURN_TOKEN(BOOL_FALSE, "", 0);
 }
 yy132:
-	YYDEBUG(132, *YYCURSOR);
+	YYDEBUG(132, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2814,7 +2814,7 @@ yy132:
 		goto *yytarget[yych];
 	}
 yy133:
-	YYDEBUG(133, *YYCURSOR);
+	YYDEBUG(133, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2855,7 +2855,7 @@ yy133:
 		goto *yytarget[yych];
 	}
 yy134:
-	YYDEBUG(134, *YYCURSOR);
+	YYDEBUG(134, yych);
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2896,13 +2896,13 @@ yy134:
 		goto *yytarget[yych];
 	}
 yy135:
-	YYDEBUG(135, *YYCURSOR);
+	YYDEBUG(135, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* TRUE value (when used outside option value/offset this causes parse error!) */
 	RETURN_TOKEN(BOOL_TRUE, "1", 1);
 }
 yy136:
-	YYDEBUG(136, *YYCURSOR);
+	YYDEBUG(136, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2943,7 +2943,7 @@ yy136:
 		goto *yytarget[yych];
 	}
 yy137:
-	YYDEBUG(137, *YYCURSOR);
+	YYDEBUG(137, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -2984,7 +2984,7 @@ yy137:
 		goto *yytarget[yych];
 	}
 yy138:
-	YYDEBUG(138, *YYCURSOR);
+	YYDEBUG(138, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -2995,7 +2995,7 @@ yy138:
 	if (yych == '\\') goto yy122;
 	goto yy96;
 yy139:
-	YYDEBUG(139, *YYCURSOR);
+	YYDEBUG(139, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Raw string */
@@ -3007,7 +3007,7 @@ yy139:
 	RETURN_TOKEN(TC_RAW, yytext, yyleng);
 }
 yy140:
-	YYDEBUG(140, *YYCURSOR);
+	YYDEBUG(140, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3048,7 +3048,7 @@ yy140:
 		goto *yytarget[yych];
 	}
 yy141:
-	YYDEBUG(141, *YYCURSOR);
+	YYDEBUG(141, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3056,7 +3056,7 @@ yy141:
 	if (yych == ' ') goto yy141;
 	goto yy131;
 yy142:
-	YYDEBUG(142, *YYCURSOR);
+	YYDEBUG(142, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3097,7 +3097,7 @@ yy142:
 		goto *yytarget[yych];
 	}
 yy143:
-	YYDEBUG(143, *YYCURSOR);
+	YYDEBUG(143, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3138,7 +3138,7 @@ yy143:
 		goto *yytarget[yych];
 	}
 yy144:
-	YYDEBUG(144, *YYCURSOR);
+	YYDEBUG(144, yych);
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3179,7 +3179,7 @@ yy144:
 		goto *yytarget[yych];
 	}
 yy145:
-	YYDEBUG(145, *YYCURSOR);
+	YYDEBUG(145, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3187,7 +3187,7 @@ yy145:
 	if (yych == ' ') goto yy145;
 	goto yy135;
 yy146:
-	YYDEBUG(146, *YYCURSOR);
+	YYDEBUG(146, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3228,7 +3228,7 @@ yy146:
 		goto *yytarget[yych];
 	}
 yy147:
-	YYDEBUG(147, *YYCURSOR);
+	YYDEBUG(147, yych);
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
 	{
@@ -3269,13 +3269,13 @@ yy147:
 		goto *yytarget[yych];
 	}
 yy148:
-	YYDEBUG(148, *YYCURSOR);
+	YYDEBUG(148, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	RETURN_TOKEN(NULL_NULL, "", 0);
 }
 yy149:
-	YYDEBUG(149, *YYCURSOR);
+	YYDEBUG(149, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3284,16 +3284,16 @@ yy149:
 	goto yy148;
 /* *********************************** */
 yyc_ST_SECTION_RAW:
-	YYDEBUG(150, *YYCURSOR);
 	YYFILL(1);
 	yych = *YYCURSOR;
+	YYDEBUG(150, yych);
 	if (yybm_ST_SECTION_RAW[0+yych] & 64) {
 		goto yy151;
 	}
 	if (yych <= '\r') goto yy152;
 	goto yy153;
 yy151:
-	YYDEBUG(151, *YYCURSOR);
+	YYDEBUG(151, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3305,14 +3305,14 @@ yy151:
 	RETURN_TOKEN(TC_RAW, yytext, yyleng);
 }
 yy152:
-	YYDEBUG(152, *YYCURSOR);
+	YYDEBUG(152, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return 0;
 }
 yy153:
-	YYDEBUG(153, *YYCURSOR);
+	YYDEBUG(153, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -3323,7 +3323,7 @@ yy153:
 	if (yych <= '\n') goto yy155;
 	if (yych == '\r') goto yy156;
 yy154:
-	YYDEBUG(154, *YYCURSOR);
+	YYDEBUG(154, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of section */
 	BEGIN(INITIAL);
@@ -3331,24 +3331,24 @@ yy154:
 	return ']';
 }
 yy155:
-	YYDEBUG(155, *YYCURSOR);
+	YYDEBUG(155, yych);
 	++YYCURSOR;
 	goto yy154;
 yy156:
-	YYDEBUG(156, *YYCURSOR);
+	YYDEBUG(156, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy155;
 	goto yy154;
 /* *********************************** */
 yyc_ST_DOUBLE_QUOTES:
-	YYDEBUG(157, *YYCURSOR);
 	YYFILL(2);
 	yych = *YYCURSOR;
+	YYDEBUG(157, yych);
 	if (yych == '"') goto yy159;
 	if (yych == '$') goto yy160;
 	++YYCURSOR;
 yy158:
-	YYDEBUG(158, *YYCURSOR);
+	YYDEBUG(158, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Escape double quoted string contents */
 	if (YYCURSOR > YYLIMIT) {
@@ -3386,7 +3386,7 @@ yy158:
 	return TC_QUOTED_STRING;
 }
 yy159:
-	YYDEBUG(159, *YYCURSOR);
+	YYDEBUG(159, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3399,7 +3399,7 @@ yy159:
 	return '"';
 }
 yy160:
-	YYDEBUG(160, *YYCURSOR);
+	YYDEBUG(160, yych);
 	yych = *++YYCURSOR;
 	if (yych != '{') goto yy158;
 	++YYCURSOR;
@@ -3410,9 +3410,9 @@ yy160:
 }
 /* *********************************** */
 yyc_ST_VARNAME:
-	YYDEBUG(161, *YYCURSOR);
 	YYFILL(1);
 	yych = *YYCURSOR;
+	YYDEBUG(161, yych);
 	{
 		static const void* yytarget[256] = {
 			&&yy162, &&yy162, &&yy162, &&yy162, &&yy162, &&yy162, &&yy162, &&yy162,
@@ -3451,7 +3451,7 @@ yyc_ST_VARNAME:
 		goto *yytarget[yych];
 	}
 yy162:
-	YYDEBUG(162, *YYCURSOR);
+	YYDEBUG(162, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
@@ -3493,7 +3493,7 @@ yy162:
 		goto *yytarget[yych];
 	}
 yy163:
-	YYDEBUG(163, *YYCURSOR);
+	YYDEBUG(163, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable name */
 	/* Eat leading whitespace */
@@ -3505,14 +3505,14 @@ yy163:
 	RETURN_TOKEN(TC_VARNAME, yytext, yyleng);
 }
 yy164:
-	YYDEBUG(164, *YYCURSOR);
+	YYDEBUG(164, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return 0;
 }
 yy165:
-	YYDEBUG(165, *YYCURSOR);
+	YYDEBUG(165, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Variable end */
@@ -3521,9 +3521,9 @@ yy165:
 }
 /* *********************************** */
 yyc_ST_RAW:
-	YYDEBUG(166, *YYCURSOR);
 	YYFILL(3);
 	yych = *YYCURSOR;
+	YYDEBUG(166, yych);
 	{
 		static const void* yytarget[256] = {
 			&&yy167, &&yy168, &&yy168, &&yy168, &&yy168, &&yy168, &&yy168, &&yy168,
@@ -3562,7 +3562,7 @@ yyc_ST_RAW:
 		goto *yytarget[yych];
 	}
 yy167:
-	YYDEBUG(167, *YYCURSOR);
+	YYDEBUG(167, yych);
 	++YYCURSOR;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of option value (if EOF is reached before EOL */
@@ -3570,10 +3570,10 @@ yy167:
 	return END_OF_LINE;
 }
 yy168:
-	YYDEBUG(168, *YYCURSOR);
+	YYDEBUG(168, yych);
 	++YYCURSOR;
 yy169:
-	YYDEBUG(169, *YYCURSOR);
+	YYDEBUG(169, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Raw value, only used when SCNG(scanner_mode) == ZEND_INI_SCANNER_RAW. */
 	unsigned char *sc = NULL;
@@ -3612,7 +3612,7 @@ end_raw_value_chars:
 	RETURN_TOKEN(TC_RAW, yytext, yyleng);
 }
 yy170:
-	YYDEBUG(170, *YYCURSOR);
+	YYDEBUG(170, yych);
 	yych = *++YYCURSOR;
 	{
 		static const void* yytarget[256] = {
@@ -3652,10 +3652,10 @@ yy170:
 		goto *yytarget[yych];
 	}
 yy171:
-	YYDEBUG(171, *YYCURSOR);
+	YYDEBUG(171, yych);
 	++YYCURSOR;
 yy172:
-	YYDEBUG(172, *YYCURSOR);
+	YYDEBUG(172, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* End of option value */
 	BEGIN(INITIAL);
@@ -3663,12 +3663,12 @@ yy172:
 	return END_OF_LINE;
 }
 yy173:
-	YYDEBUG(173, *YYCURSOR);
+	YYDEBUG(173, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy171;
 	goto yy172;
 yy174:
-	YYDEBUG(174, *YYCURSOR);
+	YYDEBUG(174, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
@@ -3678,12 +3678,12 @@ yy174:
 	if (yych <= '\n') goto yy178;
 	goto yy180;
 yy175:
-	YYDEBUG(175, *YYCURSOR);
+	YYDEBUG(175, yych);
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
 yy176:
-	YYDEBUG(176, *YYCURSOR);
+	YYDEBUG(176, yych);
 	if (yybm_ST_RAW[0+yych] & 128) {
 		goto yy175;
 	}
@@ -3695,17 +3695,17 @@ yy176:
 		if (yych == ';') goto yy174;
 	}
 yy177:
-	YYDEBUG(177, *YYCURSOR);
+	YYDEBUG(177, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	/* eat whitespace */
 	goto restart;
 }
 yy178:
-	YYDEBUG(178, *YYCURSOR);
+	YYDEBUG(178, yych);
 	++YYCURSOR;
 yy179:
-	YYDEBUG(179, *YYCURSOR);
+	YYDEBUG(179, yych);
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{ /* Comment */
 	BEGIN(INITIAL);
@@ -3713,7 +3713,7 @@ yy179:
 	return END_OF_LINE;
 }
 yy180:
-	YYDEBUG(180, *YYCURSOR);
+	YYDEBUG(180, yych);
 	yych = *++YYCURSOR;
 	if (yych == '\n') goto yy178;
 	goto yy179;

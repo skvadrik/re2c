@@ -361,13 +361,6 @@ inline Code* code_slabel(OutAllocator& alc, const char* label) {
     return x;
 }
 
-inline Code* code_debug(OutAllocator& alc, const Label* label) {
-    Code* x = new_code(alc, CodeKind::DEBUG);
-    x->label.kind = CodeLabel::Kind::NLABEL;
-    x->label.nlabel = label;
-    return x;
-}
-
 inline Code* code_fmt(OutAllocator& alc,
                       CodeKind kind,
                       BlockNameList* blocks,

@@ -22,9 +22,9 @@ int scan(char *s, int l)
 
 		{
 			YYCTYPE yych;
-			YYDEBUG(0, *YYCURSOR);
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 			yych = *YYCURSOR;
+			YYDEBUG(0, yych);
 			switch (yych) {
 				case 0x00: goto yy1;
 				case 0x4E: goto yy3;
@@ -42,23 +42,23 @@ int scan(char *s, int l)
 				default: goto yy2;
 			}
 yy1:
-			YYDEBUG(1, *YYCURSOR);
+			YYDEBUG(1, yych);
 			++YYCURSOR;
 			{ printf("EOF\n");	return 0; }
 yy2:
-			YYDEBUG(2, *YYCURSOR);
+			YYDEBUG(2, yych);
 			++YYCURSOR;
 			{ printf("ERR\n");	return 1; }
 yy3:
-			YYDEBUG(3, *YYCURSOR);
+			YYDEBUG(3, yych);
 			++YYCURSOR;
 			{ printf("+\n");	continue; }
 yy4:
-			YYDEBUG(4, *YYCURSOR);
+			YYDEBUG(4, yych);
 			++YYCURSOR;
 			{ printf("-\n");	continue; }
 yy5:
-			YYDEBUG(5, *YYCURSOR);
+			YYDEBUG(5, yych);
 			yych = *++YYCURSOR;
 			switch (yych) {
 				case 0xF0:
@@ -74,10 +74,10 @@ yy5:
 				default: goto yy6;
 			}
 yy6:
-			YYDEBUG(6, *YYCURSOR);
+			YYDEBUG(6, yych);
 			{ printf("Num\n");	continue; }
 yy7:
-			YYDEBUG(7, *YYCURSOR);
+			YYDEBUG(7, yych);
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -95,10 +95,10 @@ yy7:
 				default: goto yy8;
 			}
 yy8:
-			YYDEBUG(8, *YYCURSOR);
+			YYDEBUG(8, yych);
 			{ printf("Num\n");	continue; }
 yy9:
-			YYDEBUG(9, *YYCURSOR);
+			YYDEBUG(9, yych);
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
@@ -116,7 +116,7 @@ yy9:
 				default: goto yy10;
 			}
 yy10:
-			YYDEBUG(10, *YYCURSOR);
+			YYDEBUG(10, yych);
 			{ printf("Oct\n");	continue; }
 		}
 

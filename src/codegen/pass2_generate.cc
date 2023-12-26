@@ -928,12 +928,16 @@ static void emit_accept(
     append(stmts, code_switch(alc, text, cases));
 }
 
-static void gen_yydebug(Output& output, const Label* label, CodeList* stmts) {
-    if (output.block().opts->debug) {
-        // The label may be unused but still have a valid index (one such example is the initial label
-        // in goto/label mode). It still needs an YYDEBUG statement.
-        append(stmts, code_debug(output.allocator, label));
-    }
+static void gen_debug(Output& output, const Label* label, CodeList* stmts) {
+    if (!output.block().opts->debug) return;
+
+    // The label may be unused but still have a valid index (one such example is the initial label
+    // in goto/label mode). It still needs an YYDEBUG statement.
+    Scratchbuf& buf = output.scratchbuf;
+    const opt_t* opts = output.block().opts;
+    buf.str(opts->api_debug)
+            .cstr("(").unchecked_label(*label).cstr(", ").str(opts->var_char).cstr(")");
+    append(stmts, code_stmt(output.allocator, buf.flush()));
 }
 
 class GenEnumElem : public RenderCallback {
@@ -1053,12 +1057,12 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
             append(stmts, code_skip(alc));
         }
         append(stmts, code_nlabel(alc, dfa.initial_label));
-        gen_yydebug(output, dfa.initial_label, stmts);
         gen_fill_and_label(output, stmts, dfa, s);
         if (backup) {
             append(stmts, code_backup(alc));
         }
         gen_peek(alc, s, stmts);
+        gen_debug(output, dfa.initial_label, stmts);
         break;
     }
     case Action::Kind::SAVE:
@@ -1093,7 +1097,7 @@ static void emit_state(Output& output, const State* state, CodeList* stmts) {
         append(stmts, code_nlabel(output.allocator, state->label));
     }
     if (state->action.kind != Action::Kind::INITIAL) {
-        gen_yydebug(output, state->label, stmts);
+        gen_debug(output, state->label, stmts);
     }
 }
 
