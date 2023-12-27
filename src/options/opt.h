@@ -43,9 +43,8 @@ class Stx;
 #define RE2C_LANG Lang::C
 #endif
 
-// TODO: remove CONSTOPT1
 #define RE2C_CONSTOPTS \
-    CONSTOPT1(Target, target, Target::CODE) \
+    CONSTOPT(Target, target, Target::CODE) \
     CONSTOPT(bool, date, true) \
     CONSTOPT(bool, version, true) \
     CONSTOPT(bool, start_conditions, false) \
@@ -218,18 +217,14 @@ struct conopt_t {
     const Stx& stx;
 
   public:
-#define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
-#undef CONSTOPT1
 #undef CONSTOPT
 
     conopt_t(const Stx& stx)
         : stx(stx)
-#define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) , name(value)
     RE2C_CONSTOPTS
-#undef CONSTOPT1
 #undef CONSTOPT
     {}
 
@@ -285,10 +280,8 @@ struct opt_t {
     const Stx& stx;
 
   public:
-#define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
-#undef CONSTOPT1
 #undef CONSTOPT
 
 #define MUTOPT1 MUTOPT
@@ -307,10 +300,8 @@ struct opt_t {
             const mutdef_t& def,
             const symtab_t& symtab)
     : stx(stx)
-#define CONSTOPT1 CONSTOPT
 #define CONSTOPT(type, name, value) , name(con.name)
     RE2C_CONSTOPTS
-#undef CONSTOPT1
 #undef CONSTOPT
 
 #define MUTOPT1 MUTOPT
