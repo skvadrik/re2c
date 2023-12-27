@@ -29,6 +29,12 @@ enum class ApiStyle: uint32_t {
     FREEFORM
 };
 
+enum class CodeModel: uint32_t {
+    GOTO_LABEL,
+    LOOP_SWITCH,
+    REC_FUNC
+};
+
 enum class FixedTags: uint32_t {
     NONE,
     TOPLEVEL,

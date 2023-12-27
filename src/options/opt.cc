@@ -19,8 +19,16 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         glob.set_default_line_dirs(false);
     }
 
-    if (strcmp(stx.list_conf_head("jump_model"), "loop_switch") == 0) {
-        glob.set_default_loop_switch(true);
+    // Set code model based on syntax file unless it is explicitly passed as an option.
+    if (glob.is_default_code_model) {
+        const char* code_model = stx.list_conf_head("code_model");
+        if (strcmp(code_model, "goto_label") == 0) {
+            glob.set_default_code_model(CodeModel::GOTO_LABEL);
+        } else if (strcmp(code_model, "loop_switch") == 0) {
+            glob.set_default_code_model(CodeModel::LOOP_SWITCH);
+        } else if (strcmp(code_model, "rec_func") == 0) {
+            glob.set_default_code_model(CodeModel::REC_FUNC);
+        }
     }
 
     // append directory separator '/' to all paths that do not have it
@@ -31,9 +39,10 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         }
     }
 
-    if (glob.loop_switch) {
-        // for loop-switch enable eager-skip always (not only in cases when YYFILL labels are used)
-        // to avoid special handling of initial state when there are transitions into it.
+    if (glob.code_model != CodeModel::GOTO_LABEL) {
+        // In loop/switch or rec/func mode enable eager-skip always (not only in cases when YYFILL
+        // labels are used) to avoid special handling of initial state when there are transitions
+        // into it.
         glob.set_default_eager_skip(true);
     }
 
@@ -178,7 +187,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
         real.label_fill = defaults.label_fill;
         real.label_next = defaults.label_next;
     }
-    if (!glob.storable_state && !glob.loop_switch) {
+    if (!glob.storable_state && glob.code_model == CodeModel::GOTO_LABEL) {
         real.state_abort = defaults.state_abort;
     }
     if (real.tags_posix_semantics) {
@@ -271,8 +280,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
     if (real.fill_naked) {
         real.fill_param_enable = false;
     }
-    if (glob.loop_switch) {
-        // With --loop-switch there is no `goto`.
+    if (glob.code_model != CodeModel::GOTO_LABEL) {
+        // In code models other than goto/label there is no `goto`.
         real.var_cond_table = defaults.var_cond_table;
         real.cond_div = defaults.cond_div;
         real.cond_div_param = defaults.cond_div_param;
@@ -319,13 +328,13 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
         // the lexer is resumed from the wrong program point.
         RET_FAIL(error("storable state requires YYFILL to be enabled"));
     }
-    if (glob.loop_switch) {
+    if (glob.code_model != CodeModel::GOTO_LABEL) {
         if (real.cgoto) {
-            RET_FAIL(error("cannot combine loop switch and computed gotos"));
+            RET_FAIL(error("computed gotos are not supported in this code model"));
         }
         if (real.bitmaps) {
             // TODO: generate bitmaps before the joined loop/switch for all conditions.
-            RET_FAIL(error("bitmaps with loop switch are not supported"));
+            RET_FAIL(error("bitmaps are not supported in this code model"));
         }
     }
 

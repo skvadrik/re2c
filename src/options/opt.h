@@ -66,7 +66,7 @@ class Stx;
     CONSTOPT(bool, optimize_tags, true) \
     CONSTOPT(bool, nested_negative_tags, true) \
     CONSTOPT(bool, eager_skip, false) \
-    CONSTOPT(bool, loop_switch, false) \
+    CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
     /* debug */ \
     CONSTOPT(bool, dump_nfa, false) \
     CONSTOPT(bool, dump_dfa_raw, false) \
@@ -196,8 +196,9 @@ class Stx;
     STX_COND("encoding.utf8", opts->encoding.type() == Enc::Type::UTF8) \
     STX_COND("encoding.utf16", opts->encoding.type() == Enc::Type::UTF16) \
     STX_COND("encoding.utf32", opts->encoding.type() == Enc::Type::UTF32) \
-    STX_COND("jump_model.goto_label", !opts->loop_switch) \
-    STX_COND("jump_model.loop_switch", opts->loop_switch) \
+    STX_COND("code_model.goto_label", opts->code_model == CodeModel::GOTO_LABEL) \
+    STX_COND("code_model.loop_switch", opts->code_model == CodeModel::LOOP_SWITCH) \
+    STX_COND("code_model.rec_func", opts->code_model == CodeModel::REC_FUNC) \
     STX_COND("storable_state", opts->storable_state) \
     STX_COND("case_ranges", opts->case_ranges) \
     STX_COND("unsafe", opts->unsafe) \

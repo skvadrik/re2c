@@ -1,7 +1,7 @@
 const char* DEFAULT_SYNTAX_D =
     "api = [generic];\n"
     "api_style = [freeform, functions];\n"
-    "jump_model = [goto_label, loop_switch];\n"
+    "code_model = [goto_label, loop_switch, rec_func];\n"
     "target = [code, dot];\n"
     "\n"
     "computed_goto = unsupported;\n"

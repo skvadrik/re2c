@@ -169,11 +169,12 @@ static void add_branch(CodeGoIfL* go,
     b.jump.tags = sp.tags;
     b.jump.skip = skip && consume(sp.to);
     b.jump.eof = is_eof(eof, sp.ub);
-    // TODO: support transition elision with --loop-switch option. This requires used-label analysis
-    // before the start of code generation phase, because in Rust there is no fallthrough between
-    // cases and we can only elide a transition if we can elide the whole case, which is only
-    // possible if there are no other transitions into this state (so its label is unused).
-    b.jump.elide = !opts->loop_switch && !to;
+    // TODO: support transition elision in loop/switch and rec/func modes. This requires used-label
+    // analysis before the start of code generation phase, because in some languages (Rust) there is
+    // no fallthrough between cases and we can only elide a transition if we can elide the whole
+    // case, which is only possible if there are no other transitions into this state (so its label
+    // is unused).
+    b.jump.elide = opts->code_model == CodeModel::GOTO_LABEL && !to;
 }
 
 static CodeGoIfL* code_goifl(OutAllocator& alc,
@@ -521,7 +522,7 @@ static void codegen_analyze_block(Output& output) {
             s->label = new_label(alc, Label::NONE);
         }
 
-        if (!opts->loop_switch) {
+        if (opts->code_model == CodeModel::GOTO_LABEL) {
             if (first) {
                 if (opts->label_start_force) {
                     // User-enforced start label.
@@ -560,16 +561,18 @@ static void codegen_analyze_block(Output& output) {
         }
 
         if (!dfa->cond.empty()) {
-            // If loop/switch is used, condition numbers are the numeric indices of their initial
-            // DFA state. Otherwise we do not assign explicit numbers, and conditions are implicitly
-            // assigned consecutive numbers starting from zero.
-            block.conds.push_back({dfa->cond, opts->loop_switch ? dfa->head->label->index : 0});
+            // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
+            // initial DFA state. Otherwise we do not assign explicit numbers, and conditions are
+            // implicitly assigned consecutive numbers starting from zero.
+            block.conds.push_back({dfa->cond,
+                    opts->code_model == CodeModel::GOTO_LABEL ? 0 : dfa->head->label->index});
         }
     }
 
-    // In loop/switch mode storable states occupy continuous index range after the last state index.
-    // In goto/label mode they use separate global enumeration that starts from zero.
-    uint32_t& counter = opts->loop_switch ? output.label_counter : output.fill_label_counter;
+    // In loop/switch or rec/func mode storable states occupy continuous index range after the last
+    // state index. In goto/label mode they use separate global enumeration that starts from zero.
+    uint32_t& counter = opts->code_model == CodeModel::GOTO_LABEL
+            ? output.fill_label_counter : output.label_counter;
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         for (State* s = dfa->head; s; s = s->next) {
             if (s->fill_state == s) {

@@ -371,8 +371,8 @@ void Adfa::prepare(const opt_t* opts) {
         defstate->action.set_accept(&accepts);
     }
 
-    // Initial state is special in goto/label mode, but not in loop/switch mode.
-    if (!opts->loop_switch) {
+    // Initial state is special only in goto/label mode.
+    if (opts->code_model == CodeModel::GOTO_LABEL) {
         head->action.set_initial();
     }
 
@@ -387,7 +387,8 @@ void Adfa::prepare(const opt_t* opts) {
     for (State* s = head; s; s = s->next) {
         if (opts->fill_enable && consume(s) && !endstate(s) &&
                 (opts->fill_eof != NOEOF ||
-                (s->fill > 0 && (opts->storable_state || opts->loop_switch)))) {
+                (s->fill > 0 &&
+                        (opts->storable_state || opts->code_model != CodeModel::GOTO_LABEL)))) {
             s->fill_state = s;
         }
     }

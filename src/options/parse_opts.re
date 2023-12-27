@@ -150,7 +150,9 @@ opt_long: /*!local:re2c
     "no-version"            end { global.set_version(false);           goto opt; }
     "skeleton"              end { global.set_target(Target::SKELETON); goto opt; }
     "eager-skip"            end { global.set_eager_skip(true);         goto opt; }
-    "loop-switch"           end { global.set_loop_switch(true);        goto opt; }
+    "goto-label"            end { global.set_code_model(CodeModel::GOTO_LABEL);  goto opt; }
+    "loop-switch"           end { global.set_code_model(CodeModel::LOOP_SWITCH); goto opt; }
+    "recursive-functions"   end { global.set_code_model(CodeModel::REC_FUNC);    goto opt; }
 
     "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
     "debug-output"          end { opts.set_debug(true);              goto opt; }
