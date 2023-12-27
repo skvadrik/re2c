@@ -42,9 +42,9 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     Opt opts(out_alc, msg);
 
     conopt_t& globopts = const_cast<conopt_t&>(opts.global());
-    globopts.target = re2c::Target::CODE;
-    globopts.flex_syntax = true;
-    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
+    globopts.set_target(re2c::Target::CODE);
+    globopts.set_flex_syntax(true);
+    globopts.set_nested_negative_tags(!(cflags & (REG_NFA | REG_MULTIPASS)));
 
     opts.set_tags_history((cflags & REG_SUBHIST) != 0);
     opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);

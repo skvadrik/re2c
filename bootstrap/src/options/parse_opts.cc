@@ -20,11 +20,11 @@ static inline bool next(char*& arg, char**& argv) {
     return arg != nullptr;
 }
 
-LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* source)) {
-    if (!globopts.source_file.empty()) {
-        RET_FAIL(error("multiple source files: %s, %s", globopts.source_file.c_str(), source));
+LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& global, const char* source)) {
+    if (!global.source_file.empty()) {
+        RET_FAIL(error("multiple source files: %s, %s", global.source_file.c_str(), source));
     }
-    globopts.source_file = source;
+    global.set_source_file(source);
     return Ret::OK;
 }
 
@@ -34,7 +34,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* sourc
 #define ERRARG(opt, exp, arg) \
     RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
 
-LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& globopts, char** argv, Msg& msg, Lang* lang)) {
+LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& global, char** argv, Msg& msg, Lang* lang)) {
     char* YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
@@ -111,12 +111,12 @@ yy3:
 yy4:
 	++YYCURSOR;
 #line 62 "../src/options/parse_opts.re"
-	{ CHECK_RET(set_source_file(globopts, *argv));     goto opt; }
+	{ CHECK_RET(set_source_file(global, *argv));     goto opt; }
 #line 116 "src/options/parse_opts.cc"
 yy5:
 	++YYCURSOR;
 #line 61 "../src/options/parse_opts.re"
-	{ CHECK_RET(set_source_file(globopts, "<stdin>")); goto opt; }
+	{ CHECK_RET(set_source_file(global, "<stdin>")); goto opt; }
 #line 121 "src/options/parse_opts.cc"
 yy6:
 	yych = *++YYCURSOR;
@@ -144,7 +144,7 @@ yy9:
         // the remaining args are non-options, so they must be input files (re2c expects exactly
         // one input file)
         for (char *f; next(f, argv); ) {
-            CHECK_RET(set_source_file(globopts, f));
+            CHECK_RET(set_source_file(global, f));
         }
         goto end;
     }
@@ -1041,12 +1041,12 @@ yy198:
 yy199:
 	++YYCURSOR;
 #line 98 "../src/options/parse_opts.re"
-	{ globopts.target = Target::DOT;      goto opt_short; }
+	{ global.set_target(Target::DOT);      goto opt_short; }
 #line 1046 "src/options/parse_opts.cc"
 yy200:
 	++YYCURSOR;
 #line 100 "../src/options/parse_opts.re"
-	{ globopts.flex_syntax = true;        goto opt_short; }
+	{ global.set_flex_syntax(true);        goto opt_short; }
 #line 1051 "src/options/parse_opts.cc"
 yy201:
 	yych = *++YYCURSOR;
@@ -1066,7 +1066,7 @@ yy202:
 yy203:
 	++YYCURSOR;
 #line 102 "../src/options/parse_opts.re"
-	{ globopts.target = Target::SKELETON; goto opt_short; }
+	{ global.set_target(Target::SKELETON); goto opt_short; }
 #line 1071 "src/options/parse_opts.cc"
 yy204:
 	++YYCURSOR;
@@ -1086,7 +1086,7 @@ yy206:
 yy207:
 	++YYCURSOR;
 #line 97 "../src/options/parse_opts.re"
-	{ globopts.start_conditions = true;   goto opt_short; }
+	{ global.set_start_conditions(true);   goto opt_short; }
 #line 1091 "src/options/parse_opts.cc"
 yy208:
 	++YYCURSOR;
@@ -1101,7 +1101,7 @@ yy209:
 yy210:
 	++YYCURSOR;
 #line 99 "../src/options/parse_opts.re"
-	{ globopts.storable_state = true;     goto opt_short; }
+	{ global.set_storable_state(true);     goto opt_short; }
 #line 1106 "src/options/parse_opts.cc"
 yy211:
 	++YYCURSOR;
@@ -1111,7 +1111,7 @@ yy211:
 yy212:
 	++YYCURSOR;
 #line 101 "../src/options/parse_opts.re"
-	{ globopts.line_dirs = false;         goto opt_short; }
+	{ global.set_line_dirs(false);         goto opt_short; }
 #line 1116 "src/options/parse_opts.cc"
 yy213:
 	yych = *++YYCURSOR;
@@ -2642,7 +2642,7 @@ yy562:
 yy563:
 	++YYCURSOR;
 #line 147 "../src/options/parse_opts.re"
-	{ globopts.verbose = true;            goto opt; }
+	{ global.set_verbose(true);            goto opt; }
 #line 2647 "src/options/parse_opts.cc"
 yy564:
 	++YYCURSOR;
@@ -2692,7 +2692,7 @@ yy574:
 yy575:
 	++YYCURSOR;
 #line 216 "../src/options/parse_opts.re"
-	{ globopts.dump_cfg = true;           goto opt; }
+	{ global.set_dump_cfg(true);           goto opt; }
 #line 2697 "src/options/parse_opts.cc"
 yy576:
 	yych = *++YYCURSOR;
@@ -2714,7 +2714,7 @@ yy578:
 yy579:
 	++YYCURSOR;
 #line 209 "../src/options/parse_opts.re"
-	{ globopts.dump_nfa = true;           goto opt; }
+	{ global.set_dump_nfa(true);           goto opt; }
 #line 2719 "src/options/parse_opts.cc"
 yy580:
 	yych = *++YYCURSOR;
@@ -2723,7 +2723,7 @@ yy580:
 yy581:
 	++YYCURSOR;
 #line 144 "../src/options/parse_opts.re"
-	{ globopts.target = Target::DOT;      goto opt; }
+	{ global.set_target(Target::DOT);      goto opt; }
 #line 2728 "src/options/parse_opts.cc"
 yy582:
 	yych = *++YYCURSOR;
@@ -2813,7 +2813,7 @@ yy602:
 yy603:
 	++YYCURSOR;
 #line 151 "../src/options/parse_opts.re"
-	{ globopts.target = Target::SKELETON; goto opt; }
+	{ global.set_target(Target::SKELETON); goto opt; }
 #line 2818 "src/options/parse_opts.cc"
 yy604:
 	yych = *++YYCURSOR;
@@ -2858,7 +2858,7 @@ yy613:
 yy614:
 	++YYCURSOR;
 #line 215 "../src/options/parse_opts.re"
-	{ globopts.dump_adfa = true;          goto opt; }
+	{ global.set_dump_adfa(true);          goto opt; }
 #line 2863 "src/options/parse_opts.cc"
 yy615:
 	yych = *++YYCURSOR;
@@ -3001,7 +3001,7 @@ yy648:
 yy649:
 	++YYCURSOR;
 #line 143 "../src/options/parse_opts.re"
-	{ globopts.start_conditions = true;   goto opt; }
+	{ global.set_start_conditions(true);   goto opt; }
 #line 3006 "src/options/parse_opts.cc"
 yy650:
 	yych = *++YYCURSOR;
@@ -3042,7 +3042,7 @@ yy658:
 yy659:
 	++YYCURSOR;
 #line 152 "../src/options/parse_opts.re"
-	{ globopts.eager_skip = true;         goto opt; }
+	{ global.set_eager_skip(true);         goto opt; }
 #line 3047 "src/options/parse_opts.cc"
 yy660:
 	yych = *++YYCURSOR;
@@ -3105,7 +3105,7 @@ yy673:
 yy674:
 	++YYCURSOR;
 #line 150 "../src/options/parse_opts.re"
-	{ globopts.version = false;           goto opt; }
+	{ global.set_version(false);           goto opt; }
 #line 3110 "src/options/parse_opts.cc"
 yy675:
 	yych = *++YYCURSOR;
@@ -3184,7 +3184,7 @@ yy692:
 yy693:
 	++YYCURSOR;
 #line 217 "../src/options/parse_opts.re"
-	{ globopts.dump_interf = true;        goto opt; }
+	{ global.set_dump_interf(true);        goto opt; }
 #line 3189 "src/options/parse_opts.cc"
 yy694:
 	++YYCURSOR;
@@ -3198,7 +3198,7 @@ yy695:
 yy696:
 	++YYCURSOR;
 #line 146 "../src/options/parse_opts.re"
-	{ globopts.flex_syntax = true;        goto opt; }
+	{ global.set_flex_syntax(true);        goto opt; }
 #line 3203 "src/options/parse_opts.cc"
 yy697:
 	yych = *++YYCURSOR;
@@ -3219,7 +3219,7 @@ yy700:
 yy701:
 	++YYCURSOR;
 #line 153 "../src/options/parse_opts.re"
-	{ globopts.loop_switch = true;        goto opt; }
+	{ global.set_loop_switch(true);        goto opt; }
 #line 3224 "src/options/parse_opts.cc"
 yy702:
 	yych = *++YYCURSOR;
@@ -3286,17 +3286,17 @@ yy716:
 yy717:
 	++YYCURSOR;
 #line 212 "../src/options/parse_opts.re"
-	{ globopts.dump_dfa_det = true;       goto opt; }
+	{ global.set_dump_dfa_det(true);       goto opt; }
 #line 3291 "src/options/parse_opts.cc"
 yy718:
 	++YYCURSOR;
 #line 214 "../src/options/parse_opts.re"
-	{ globopts.dump_dfa_min = true;       goto opt; }
+	{ global.set_dump_dfa_min(true);       goto opt; }
 #line 3296 "src/options/parse_opts.cc"
 yy719:
 	++YYCURSOR;
 #line 211 "../src/options/parse_opts.re"
-	{ globopts.dump_dfa_raw = true;       goto opt; }
+	{ global.set_dump_dfa_raw(true);       goto opt; }
 #line 3301 "src/options/parse_opts.cc"
 yy720:
 	yych = *++YYCURSOR;
@@ -3387,7 +3387,7 @@ yy740:
 yy741:
 	++YYCURSOR;
 #line 210 "../src/options/parse_opts.re"
-	{ globopts.dump_dfa_tree = true;      goto opt; }
+	{ global.set_dump_dfa_tree(true);      goto opt; }
 #line 3392 "src/options/parse_opts.cc"
 yy742:
 	yych = *++YYCURSOR;
@@ -3412,7 +3412,7 @@ yy746:
 yy747:
 	++YYCURSOR;
 #line 148 "../src/options/parse_opts.re"
-	{ globopts.line_dirs = false;         goto opt; }
+	{ global.set_line_dirs(false);         goto opt; }
 #line 3417 "src/options/parse_opts.cc"
 yy748:
 	yych = *++YYCURSOR;
@@ -3505,7 +3505,7 @@ yy767:
 yy768:
 	++YYCURSOR;
 #line 145 "../src/options/parse_opts.re"
-	{ globopts.storable_state = true;     goto opt; }
+	{ global.set_storable_state(true);     goto opt; }
 #line 3510 "src/options/parse_opts.cc"
 yy769:
 	yych = *++YYCURSOR;
@@ -3522,7 +3522,7 @@ yy771:
 yy772:
 	++YYCURSOR;
 #line 213 "../src/options/parse_opts.re"
-	{ globopts.dump_dfa_tagopt = true;    goto opt; }
+	{ global.set_dump_dfa_tagopt(true);    goto opt; }
 #line 3527 "src/options/parse_opts.cc"
 yy773:
 	++YYCURSOR;
@@ -3581,7 +3581,7 @@ yy784:
 yy785:
 	++YYCURSOR;
 #line 201 "../src/options/parse_opts.re"
-	{ globopts.optimize_tags = false; goto opt; }
+	{ global.set_optimize_tags(false); goto opt; }
 #line 3586 "src/options/parse_opts.cc"
 yy786:
 	yych = *++YYCURSOR;
@@ -3602,12 +3602,12 @@ yy788:
 yy789:
 	++YYCURSOR;
 #line 218 "../src/options/parse_opts.re"
-	{ globopts.dump_closure_stats = true; goto opt; }
+	{ global.set_dump_closure_stats(true); goto opt; }
 #line 3607 "src/options/parse_opts.cc"
 yy790:
 	++YYCURSOR;
 #line 149 "../src/options/parse_opts.re"
-	{ globopts.date = false;              goto opt; }
+	{ global.set_date(false);              goto opt; }
 #line 3612 "src/options/parse_opts.cc"
 }
 #line 219 "../src/options/parse_opts.re"
@@ -3739,7 +3739,7 @@ yy807:
 	}
 	++YYCURSOR;
 #line 231 "../src/options/parse_opts.re"
-	{ globopts.output_file = *argv; goto opt; }
+	{ global.set_output_file(*argv); goto opt; }
 #line 3744 "src/options/parse_opts.cc"
 }
 #line 232 "../src/options/parse_opts.re"
@@ -3857,7 +3857,7 @@ yy813:
 	}
 	++YYCURSOR;
 #line 241 "../src/options/parse_opts.re"
-	{ globopts.dep_file = *argv; goto opt; }
+	{ global.set_dep_file(*argv); goto opt; }
 #line 3862 "src/options/parse_opts.cc"
 }
 #line 242 "../src/options/parse_opts.re"
@@ -3916,7 +3916,7 @@ yy816:
 	}
 	++YYCURSOR;
 #line 246 "../src/options/parse_opts.re"
-	{ globopts.syntax_file = *argv; goto opt; }
+	{ global.set_syntax_file(*argv); goto opt; }
 #line 3921 "src/options/parse_opts.cc"
 }
 #line 247 "../src/options/parse_opts.re"
@@ -3974,11 +3974,11 @@ yy819:
 		goto yy819;
 	}
 	++YYCURSOR;
-#line 251 "../src/options/parse_opts.re"
-	{ globopts.include_paths.push_back(*argv); goto opt; }
+#line 252 "../src/options/parse_opts.re"
+	{ const_cast<std::vector<std::string>&>(global.include_paths).push_back(*argv); goto opt; }
 #line 3980 "src/options/parse_opts.cc"
 }
-#line 252 "../src/options/parse_opts.re"
+#line 253 "../src/options/parse_opts.re"
 
 
 opt_encoding_policy: 
@@ -3994,7 +3994,7 @@ opt_encoding_policy:
 	}
 	++YYCURSOR;
 yy821:
-#line 255 "../src/options/parse_opts.re"
+#line 256 "../src/options/parse_opts.re"
 	{ ERRARG("--encoding-policy", "ignore | substitute | fail", *argv); }
 #line 4000 "src/options/parse_opts.cc"
 yy822:
@@ -4049,7 +4049,7 @@ yy834:
 	goto yy826;
 yy835:
 	++YYCURSOR;
-#line 258 "../src/options/parse_opts.re"
+#line 259 "../src/options/parse_opts.re"
 	{ opts.set_encoding_policy(Enc::Policy::FAIL);       goto opt; }
 #line 4055 "src/options/parse_opts.cc"
 yy836:
@@ -4070,7 +4070,7 @@ yy839:
 	goto yy826;
 yy840:
 	++YYCURSOR;
-#line 256 "../src/options/parse_opts.re"
+#line 257 "../src/options/parse_opts.re"
 	{ opts.set_encoding_policy(Enc::Policy::IGNORE);     goto opt; }
 #line 4076 "src/options/parse_opts.cc"
 yy841:
@@ -4083,11 +4083,11 @@ yy841:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy826;
 	++YYCURSOR;
-#line 257 "../src/options/parse_opts.re"
+#line 258 "../src/options/parse_opts.re"
 	{ opts.set_encoding_policy(Enc::Policy::SUBSTITUTE); goto opt; }
 #line 4089 "src/options/parse_opts.cc"
 }
-#line 259 "../src/options/parse_opts.re"
+#line 260 "../src/options/parse_opts.re"
 
 
 opt_input: 
@@ -4101,7 +4101,7 @@ opt_input:
 yy843:
 	++YYCURSOR;
 yy844:
-#line 262 "../src/options/parse_opts.re"
+#line 263 "../src/options/parse_opts.re"
 	{ ERRARG("--api, --input", "default | custom", *argv); }
 #line 4107 "src/options/parse_opts.cc"
 yy845:
@@ -4156,18 +4156,18 @@ yy857:
 	goto yy848;
 yy858:
 	++YYCURSOR;
-#line 264 "../src/options/parse_opts.re"
+#line 265 "../src/options/parse_opts.re"
 	{ opts.set_api(Api::CUSTOM);  goto opt; }
 #line 4162 "src/options/parse_opts.cc"
 yy859:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy848;
 	++YYCURSOR;
-#line 263 "../src/options/parse_opts.re"
+#line 264 "../src/options/parse_opts.re"
 	{ opts.set_api(Api::DEFAULT); goto opt; }
 #line 4169 "src/options/parse_opts.cc"
 }
-#line 265 "../src/options/parse_opts.re"
+#line 266 "../src/options/parse_opts.re"
 
 
 opt_empty_class: 
@@ -4179,7 +4179,7 @@ opt_empty_class:
 	if (yych == 'm') goto yy863;
 	++YYCURSOR;
 yy861:
-#line 268 "../src/options/parse_opts.re"
+#line 269 "../src/options/parse_opts.re"
 	{ ERRARG("--empty-class", "match-empty | match-none | error", *argv); }
 #line 4185 "src/options/parse_opts.cc"
 yy862:
@@ -4226,7 +4226,7 @@ yy872:
 	goto yy865;
 yy873:
 	++YYCURSOR;
-#line 271 "../src/options/parse_opts.re"
+#line 272 "../src/options/parse_opts.re"
 	{ opts.set_empty_class(EmptyClass::ERROR);       goto opt; }
 #line 4232 "src/options/parse_opts.cc"
 yy874:
@@ -4272,16 +4272,16 @@ yy883:
 	goto yy865;
 yy884:
 	++YYCURSOR;
-#line 270 "../src/options/parse_opts.re"
+#line 271 "../src/options/parse_opts.re"
 	{ opts.set_empty_class(EmptyClass::MATCH_NONE);  goto opt; }
 #line 4278 "src/options/parse_opts.cc"
 yy885:
 	++YYCURSOR;
-#line 269 "../src/options/parse_opts.re"
+#line 270 "../src/options/parse_opts.re"
 	{ opts.set_empty_class(EmptyClass::MATCH_EMPTY); goto opt; }
 #line 4283 "src/options/parse_opts.cc"
 }
-#line 272 "../src/options/parse_opts.re"
+#line 273 "../src/options/parse_opts.re"
 
 
 opt_location_format: 
@@ -4293,7 +4293,7 @@ opt_location_format:
 	if (yych == 'm') goto yy889;
 	++YYCURSOR;
 yy887:
-#line 275 "../src/options/parse_opts.re"
+#line 276 "../src/options/parse_opts.re"
 	{ ERRARG("--location-format", "gnu | msvc", *argv); }
 #line 4299 "src/options/parse_opts.cc"
 yy888:
@@ -4324,18 +4324,18 @@ yy894:
 	goto yy891;
 yy895:
 	++YYCURSOR;
-#line 276 "../src/options/parse_opts.re"
+#line 277 "../src/options/parse_opts.re"
 	{ msg.locfmt = LOCFMT_GNU;  goto opt; }
 #line 4330 "src/options/parse_opts.cc"
 yy896:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy891;
 	++YYCURSOR;
-#line 277 "../src/options/parse_opts.re"
+#line 278 "../src/options/parse_opts.re"
 	{ msg.locfmt = LOCFMT_MSVC; goto opt; }
 #line 4337 "src/options/parse_opts.cc"
 }
-#line 278 "../src/options/parse_opts.re"
+#line 279 "../src/options/parse_opts.re"
 
 
 opt_input_encoding: 
@@ -4347,7 +4347,7 @@ opt_input_encoding:
 	if (yych == 'u') goto yy900;
 	++YYCURSOR;
 yy898:
-#line 281 "../src/options/parse_opts.re"
+#line 282 "../src/options/parse_opts.re"
 	{ ERRARG("--input-encoding", "ascii | utf8 ", *argv); }
 #line 4353 "src/options/parse_opts.cc"
 yy899:
@@ -4390,16 +4390,16 @@ yy908:
 	goto yy902;
 yy909:
 	++YYCURSOR;
-#line 283 "../src/options/parse_opts.re"
-	{ globopts.input_encoding = Enc::Type::UTF8;  goto opt; }
+#line 284 "../src/options/parse_opts.re"
+	{ global.set_input_encoding(Enc::Type::UTF8);  goto opt; }
 #line 4396 "src/options/parse_opts.cc"
 yy910:
 	++YYCURSOR;
-#line 282 "../src/options/parse_opts.re"
-	{ globopts.input_encoding = Enc::Type::ASCII; goto opt; }
+#line 283 "../src/options/parse_opts.re"
+	{ global.set_input_encoding(Enc::Type::ASCII); goto opt; }
 #line 4401 "src/options/parse_opts.cc"
 }
-#line 284 "../src/options/parse_opts.re"
+#line 285 "../src/options/parse_opts.re"
 
 
 opt_minimization: 
@@ -4411,7 +4411,7 @@ opt_minimization:
 	if (yych == 't') goto yy914;
 	++YYCURSOR;
 yy912:
-#line 287 "../src/options/parse_opts.re"
+#line 288 "../src/options/parse_opts.re"
 	{ ERRARG("--dfa-minimization", "table | moore", *argv); }
 #line 4417 "src/options/parse_opts.cc"
 yy913:
@@ -4458,16 +4458,16 @@ yy923:
 	goto yy916;
 yy924:
 	++YYCURSOR;
-#line 289 "../src/options/parse_opts.re"
-	{ globopts.minimization = Minimization::MOORE; goto opt; }
+#line 290 "../src/options/parse_opts.re"
+	{ global.set_minimization(Minimization::MOORE); goto opt; }
 #line 4464 "src/options/parse_opts.cc"
 yy925:
 	++YYCURSOR;
-#line 288 "../src/options/parse_opts.re"
-	{ globopts.minimization = Minimization::TABLE; goto opt; }
+#line 289 "../src/options/parse_opts.re"
+	{ global.set_minimization(Minimization::TABLE); goto opt; }
 #line 4469 "src/options/parse_opts.cc"
 }
-#line 290 "../src/options/parse_opts.re"
+#line 291 "../src/options/parse_opts.re"
 
 
 opt_posix_prectable: 
@@ -4479,7 +4479,7 @@ opt_posix_prectable:
 	if (yych == 'n') goto yy929;
 	++YYCURSOR;
 yy927:
-#line 293 "../src/options/parse_opts.re"
+#line 294 "../src/options/parse_opts.re"
 	{ ERRARG("--posix-prectable", "naive | complex", *argv); }
 #line 4485 "src/options/parse_opts.cc"
 yy928:
@@ -4530,18 +4530,18 @@ yy939:
 	goto yy931;
 yy940:
 	++YYCURSOR;
-#line 294 "../src/options/parse_opts.re"
-	{ globopts.posix_prectable = PosixPrectable::NAIVE;   goto opt; }
+#line 295 "../src/options/parse_opts.re"
+	{ global.set_posix_prectable(PosixPrectable::NAIVE);   goto opt; }
 #line 4536 "src/options/parse_opts.cc"
 yy941:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy931;
 	++YYCURSOR;
-#line 295 "../src/options/parse_opts.re"
-	{ globopts.posix_prectable = PosixPrectable::COMPLEX; goto opt; }
+#line 296 "../src/options/parse_opts.re"
+	{ global.set_posix_prectable(PosixPrectable::COMPLEX); goto opt; }
 #line 4543 "src/options/parse_opts.cc"
 }
-#line 296 "../src/options/parse_opts.re"
+#line 297 "../src/options/parse_opts.re"
 
 
 opt_fixed_tags: 
@@ -4557,7 +4557,7 @@ opt_fixed_tags:
 	}
 	++YYCURSOR;
 yy943:
-#line 299 "../src/options/parse_opts.re"
+#line 300 "../src/options/parse_opts.re"
 	{ ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
 #line 4563 "src/options/parse_opts.cc"
 yy944:
@@ -4600,8 +4600,8 @@ yy953:
 	goto yy948;
 yy954:
 	++YYCURSOR;
-#line 302 "../src/options/parse_opts.re"
-	{ globopts.fixed_tags = FixedTags::ALL;      goto opt; }
+#line 303 "../src/options/parse_opts.re"
+	{ global.set_fixed_tags(FixedTags::ALL);      goto opt; }
 #line 4606 "src/options/parse_opts.cc"
 yy955:
 	yych = *++YYCURSOR;
@@ -4613,8 +4613,8 @@ yy956:
 	goto yy948;
 yy957:
 	++YYCURSOR;
-#line 300 "../src/options/parse_opts.re"
-	{ globopts.fixed_tags = FixedTags::NONE;     goto opt; }
+#line 301 "../src/options/parse_opts.re"
+	{ global.set_fixed_tags(FixedTags::NONE);     goto opt; }
 #line 4619 "src/options/parse_opts.cc"
 yy958:
 	yych = *++YYCURSOR;
@@ -4626,11 +4626,11 @@ yy958:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy948;
 	++YYCURSOR;
-#line 301 "../src/options/parse_opts.re"
-	{ globopts.fixed_tags = FixedTags::TOPLEVEL; goto opt; }
+#line 302 "../src/options/parse_opts.re"
+	{ global.set_fixed_tags(FixedTags::TOPLEVEL); goto opt; }
 #line 4632 "src/options/parse_opts.cc"
 }
-#line 303 "../src/options/parse_opts.re"
+#line 304 "../src/options/parse_opts.re"
 
 
 end:

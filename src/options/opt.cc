@@ -9,18 +9,22 @@ namespace re2c {
 // This function should only change global options.
 LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     if (glob.target == Target::DOT) {
-        glob.line_dirs = false;
+        glob.set_default_line_dirs(false);
     } else if (glob.target == Target::SKELETON) {
-        glob.storable_state = false;
-        glob.line_dirs = false;
+        glob.set_default_storable_state(false);
+        glob.set_default_line_dirs(false);
     }
 
-    if (!stx.have_conf("code:line_info")) glob.line_dirs = false;
+    if (!stx.have_conf("code:line_info")) {
+        glob.set_default_line_dirs(false);
+    }
 
-    if (strcmp(stx.list_conf_head("jump_model"), "loop_switch") == 0) glob.loop_switch = true;
+    if (strcmp(stx.list_conf_head("jump_model"), "loop_switch") == 0) {
+        glob.set_default_loop_switch(true);
+    }
 
     // append directory separator '/' to all paths that do not have it
-    for (std::string& p : glob.include_paths) {
+    for (std::string& p : const_cast<std::vector<std::string>&>(glob.include_paths)) {
         const char c = p.empty() ? 0 : *p.rbegin();
         if (c != '/' && c != '\\') {
             p.push_back('/');
@@ -30,7 +34,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     if (glob.loop_switch) {
         // for loop-switch enable eager-skip always (not only in cases when YYFILL labels are used)
         // to avoid special handling of initial state when there are transitions into it.
-        glob.eager_skip = true;
+        glob.set_default_eager_skip(true);
     }
 
     if (!glob.dep_file.empty() && glob.output_file.empty()) {

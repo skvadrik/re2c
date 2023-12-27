@@ -217,7 +217,13 @@ struct conopt_t {
     const Stx& stx;
 
   public:
-#define CONSTOPT(type, name, value) type name;
+    // Global options are public (for easier read access), but constant (to avoid
+    // accidental write access, as this should be done by `set_*` methods that correctly
+    // update `is_default_*` status).
+#define CONSTOPT(type, name, value) const type name;
+    RE2C_CONSTOPTS
+#undef CONSTOPT
+#define CONSTOPT(type, name, value) bool is_default_##name;
     RE2C_CONSTOPTS
 #undef CONSTOPT
 
@@ -226,7 +232,22 @@ struct conopt_t {
 #define CONSTOPT(type, name, value) , name(value)
     RE2C_CONSTOPTS
 #undef CONSTOPT
+#define CONSTOPT(type, name, value) , is_default_##name(true)
+    RE2C_CONSTOPTS
+#undef CONSTOPT
     {}
+
+#define CONSTOPT(type, name, value) \
+    void set_##name(type val) { \
+        const_cast<type&>(name) = val; \
+        is_default_##name = false; \
+    } \
+    void set_default_##name(type val) { \
+        const_cast<type&>(name) = val; \
+        is_default_##name = true; \
+    }
+    RE2C_CONSTOPTS
+#undef CONSTOPT
 
     // forward methods from `Stx` to make them easier to use from lexer
     inline const char* eval_word_conf(const char* name) const {

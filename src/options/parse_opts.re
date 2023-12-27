@@ -18,11 +18,11 @@ static inline bool next(char*& arg, char**& argv) {
     return arg != nullptr;
 }
 
-LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* source)) {
-    if (!globopts.source_file.empty()) {
-        RET_FAIL(error("multiple source files: %s, %s", globopts.source_file.c_str(), source));
+LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& global, const char* source)) {
+    if (!global.source_file.empty()) {
+        RET_FAIL(error("multiple source files: %s, %s", global.source_file.c_str(), source));
     }
-    globopts.source_file = source;
+    global.set_source_file(source);
     return Ret::OK;
 }
 
@@ -32,7 +32,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& globopts, const char* sourc
 #define ERRARG(opt, exp, arg) \
     RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
 
-LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& globopts, char** argv, Msg& msg, Lang* lang)) {
+LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& global, char** argv, Msg& msg, Lang* lang)) {
     char* YYCURSOR, *YYMARKER;
     Warn::option_t option;
 
@@ -53,13 +53,13 @@ opt:
         // the remaining args are non-options, so they must be input files (re2c expects exactly
         // one input file)
         for (char *f; next(f, argv); ) {
-            CHECK_RET(set_source_file(globopts, f));
+            CHECK_RET(set_source_file(global, f));
         }
         goto end;
     }
 
-    "-"      end { CHECK_RET(set_source_file(globopts, "<stdin>")); goto opt; }
-    filename end { CHECK_RET(set_source_file(globopts, *argv));     goto opt; }
+    "-"      end { CHECK_RET(set_source_file(global, "<stdin>")); goto opt; }
+    filename end { CHECK_RET(set_source_file(global, *argv));     goto opt; }
 
     "-"  { goto opt_short; }
     "--" { goto opt_long; }
@@ -94,12 +94,12 @@ opt_short: /*!local:re2c
     "v"  { return version(); }
     "V"  { return vernum(); }
 
-    "c" { globopts.start_conditions = true;   goto opt_short; }
-    "D" { globopts.target = Target::DOT;      goto opt_short; }
-    "f" { globopts.storable_state = true;     goto opt_short; }
-    "F" { globopts.flex_syntax = true;        goto opt_short; }
-    "i" { globopts.line_dirs = false;         goto opt_short; }
-    "S" { globopts.target = Target::SKELETON; goto opt_short; }
+    "c" { global.set_start_conditions(true);   goto opt_short; }
+    "D" { global.set_target(Target::DOT);      goto opt_short; }
+    "f" { global.set_storable_state(true);     goto opt_short; }
+    "F" { global.set_flex_syntax(true);        goto opt_short; }
+    "i" { global.set_line_dirs(false);         goto opt_short; }
+    "S" { global.set_target(Target::SKELETON); goto opt_short; }
 
     "b" { opts.set_bitmaps(true);         goto opt_short; }
     "d" { opts.set_debug(true);           goto opt_short; }
@@ -140,17 +140,17 @@ opt_long: /*!local:re2c
     "version"               end { return version(); }
     "vernum"                end { return vernum(); }
 
-    "start-"? "conditions"  end { globopts.start_conditions = true;   goto opt; }
-    "emit-dot"              end { globopts.target = Target::DOT;      goto opt; }
-    "storable-state"        end { globopts.storable_state = true;     goto opt; }
-    "flex-syntax"           end { globopts.flex_syntax = true;        goto opt; }
-    "verbose"               end { globopts.verbose = true;            goto opt; }
-    "no-debug-info"         end { globopts.line_dirs = false;         goto opt; }
-    "no-generation-date"    end { globopts.date = false;              goto opt; }
-    "no-version"            end { globopts.version = false;           goto opt; }
-    "skeleton"              end { globopts.target = Target::SKELETON; goto opt; }
-    "eager-skip"            end { globopts.eager_skip = true;         goto opt; }
-    "loop-switch"           end { globopts.loop_switch = true;        goto opt; }
+    "start-"? "conditions"  end { global.set_start_conditions(true);   goto opt; }
+    "emit-dot"              end { global.set_target(Target::DOT);      goto opt; }
+    "storable-state"        end { global.set_storable_state(true);     goto opt; }
+    "flex-syntax"           end { global.set_flex_syntax(true);        goto opt; }
+    "verbose"               end { global.set_verbose(true);            goto opt; }
+    "no-debug-info"         end { global.set_line_dirs(false);         goto opt; }
+    "no-generation-date"    end { global.set_date(false);              goto opt; }
+    "no-version"            end { global.set_version(false);           goto opt; }
+    "skeleton"              end { global.set_target(Target::SKELETON); goto opt; }
+    "eager-skip"            end { global.set_eager_skip(true);         goto opt; }
+    "loop-switch"           end { global.set_loop_switch(true);        goto opt; }
 
     "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
     "debug-output"          end { opts.set_debug(true);              goto opt; }
@@ -198,7 +198,7 @@ opt_long: /*!local:re2c
     "dfa-minimization"      end { NEXT_ARG("--dfa-minimization", opt_minimization); }
     "posix-prectable"       end { NEXT_ARG("--posix-prectable",  opt_posix_prectable); }
     "fixed-tags"            end { NEXT_ARG("--fixed-tags",       opt_fixed_tags); }
-    "no-optimize-tags"      end { globopts.optimize_tags = false; goto opt; }
+    "no-optimize-tags"      end { global.set_optimize_tags(false); goto opt; }
 
     // removed
     "no-lookahead"          end { RET_FAIL(error("TDFA(0) algorithm was deprecated and removed")); }
@@ -206,16 +206,16 @@ opt_long: /*!local:re2c
     "stadfa"                end { RET_FAIL(error("staDFA algorithm was deprecated and removed")); }
 
     // debug options
-    "dump-nfa"              end { globopts.dump_nfa = true;           goto opt; }
-    "dump-dfa-tree"         end { globopts.dump_dfa_tree = true;      goto opt; }
-    "dump-dfa-raw"          end { globopts.dump_dfa_raw = true;       goto opt; }
-    "dump-dfa-det"          end { globopts.dump_dfa_det = true;       goto opt; }
-    "dump-dfa-tagopt"       end { globopts.dump_dfa_tagopt = true;    goto opt; }
-    "dump-dfa-min"          end { globopts.dump_dfa_min = true;       goto opt; }
-    "dump-adfa"             end { globopts.dump_adfa = true;          goto opt; }
-    "dump-cfg"              end { globopts.dump_cfg = true;           goto opt; }
-    "dump-interf"           end { globopts.dump_interf = true;        goto opt; }
-    "dump-closure-stats"    end { globopts.dump_closure_stats = true; goto opt; }
+    "dump-nfa"              end { global.set_dump_nfa(true);           goto opt; }
+    "dump-dfa-tree"         end { global.set_dump_dfa_tree(true);      goto opt; }
+    "dump-dfa-raw"          end { global.set_dump_dfa_raw(true);       goto opt; }
+    "dump-dfa-det"          end { global.set_dump_dfa_det(true);       goto opt; }
+    "dump-dfa-tagopt"       end { global.set_dump_dfa_tagopt(true);    goto opt; }
+    "dump-dfa-min"          end { global.set_dump_dfa_min(true);       goto opt; }
+    "dump-adfa"             end { global.set_dump_adfa(true);          goto opt; }
+    "dump-cfg"              end { global.set_dump_cfg(true);           goto opt; }
+    "dump-interf"           end { global.set_dump_interf(true);        goto opt; }
+    "dump-closure-stats"    end { global.set_dump_closure_stats(true); goto opt; }
 */
 
 opt_lang: /*!local:re2c
@@ -228,7 +228,7 @@ opt_lang: /*!local:re2c
 
 opt_output: /*!local:re2c
     * { ERRARG("-o, --output", "filename", *argv); }
-    filename end { globopts.output_file = *argv; goto opt; }
+    filename end { global.set_output_file(*argv); goto opt; }
 */
 
 opt_header: /*!local:re2c
@@ -238,17 +238,18 @@ opt_header: /*!local:re2c
 
 opt_depfile: /*!local:re2c
     * { ERRARG("--depfile", "filename", *argv); }
-    filename end { globopts.dep_file = *argv; goto opt; }
+    filename end { global.set_dep_file(*argv); goto opt; }
 */
 
 opt_syntax: /*!local:re2c
     * { ERRARG("--syntax", "filename", *argv); }
-    filename end { globopts.syntax_file = *argv; goto opt; }
+    filename end { global.set_syntax_file(*argv); goto opt; }
 */
 
 opt_incpath: /*!local:re2c
     * { ERRARG("-I", "filename", *argv); }
-    filename end { globopts.include_paths.push_back(*argv); goto opt; }
+    filename end
+        { const_cast<std::vector<std::string>&>(global.include_paths).push_back(*argv); goto opt; }
 */
 
 opt_encoding_policy: /*!local:re2c
@@ -279,27 +280,27 @@ opt_location_format: /*!local:re2c
 
 opt_input_encoding: /*!local:re2c
     * { ERRARG("--input-encoding", "ascii | utf8 ", *argv); }
-    "ascii" end { globopts.input_encoding = Enc::Type::ASCII; goto opt; }
-    "utf8"  end { globopts.input_encoding = Enc::Type::UTF8;  goto opt; }
+    "ascii" end { global.set_input_encoding(Enc::Type::ASCII); goto opt; }
+    "utf8"  end { global.set_input_encoding(Enc::Type::UTF8);  goto opt; }
 */
 
 opt_minimization: /*!local:re2c
     * { ERRARG("--dfa-minimization", "table | moore", *argv); }
-    "table" end { globopts.minimization = Minimization::TABLE; goto opt; }
-    "moore" end { globopts.minimization = Minimization::MOORE; goto opt; }
+    "table" end { global.set_minimization(Minimization::TABLE); goto opt; }
+    "moore" end { global.set_minimization(Minimization::MOORE); goto opt; }
 */
 
 opt_posix_prectable: /*!local:re2c
     * { ERRARG("--posix-prectable", "naive | complex", *argv); }
-    "naive"   end { globopts.posix_prectable = PosixPrectable::NAIVE;   goto opt; }
-    "complex" end { globopts.posix_prectable = PosixPrectable::COMPLEX; goto opt; }
+    "naive"   end { global.set_posix_prectable(PosixPrectable::NAIVE);   goto opt; }
+    "complex" end { global.set_posix_prectable(PosixPrectable::COMPLEX); goto opt; }
 */
 
 opt_fixed_tags: /*!local:re2c
     * { ERRARG("--fixed-tags", "none | toplevel | all", *argv); }
-    "none"     end { globopts.fixed_tags = FixedTags::NONE;     goto opt; }
-    "toplevel" end { globopts.fixed_tags = FixedTags::TOPLEVEL; goto opt; }
-    "all"      end { globopts.fixed_tags = FixedTags::ALL;      goto opt; }
+    "none"     end { global.set_fixed_tags(FixedTags::NONE);     goto opt; }
+    "toplevel" end { global.set_fixed_tags(FixedTags::TOPLEVEL); goto opt; }
+    "all"      end { global.set_fixed_tags(FixedTags::ALL);      goto opt; }
 */
 
 end:
