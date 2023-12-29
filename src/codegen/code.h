@@ -247,7 +247,7 @@ using CodeArgs = list_t<CodeArg>;
 struct CodeFunc {
     CodeArgs* args;
     const char* name;
-    const char* semi;
+    bool semi;
 };
 
 struct CodeLabel {
@@ -517,7 +517,7 @@ inline CodeArgs* code_args(OutAllocator& alc) {
     return new_list<CodeArg>(alc);
 }
 
-inline Code* code_func(OutAllocator& alc, const char* name, CodeArgs* args, const char* semi) {
+inline Code* code_func(OutAllocator& alc, const char* name, CodeArgs* args, bool semi) {
     Code* x = new_code(alc, CodeKind::FUNC);
     x->func.args = args;
     x->func.name = name;
@@ -526,10 +526,10 @@ inline Code* code_func(OutAllocator& alc, const char* name, CodeArgs* args, cons
 }
 
 inline Code* code_fdecl(OutAllocator& alc, const char* name, CodeArgs* args) {
-    return code_func(alc, name, args, "");
+    return code_func(alc, name, args, /*semi*/ false);
 }
 
-inline Code* code_fcall(OutAllocator& alc, const char* name, CodeArgs* args, const char* semi) {
+inline Code* code_fcall(OutAllocator& alc, const char* name, CodeArgs* args, bool semi = true) {
     return code_func(alc, name, args, semi);
 }
 

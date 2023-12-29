@@ -605,8 +605,7 @@ static void render_func(RenderContext& rctx, const CodeFunc* func) {
         --rctx.ind;
     }
 
-    os << func->semi << std::endl;
-    ++rctx.line;
+    render_stmt_end(rctx, func->semi);
 }
 
 static inline void yych_conv(std::ostream& os, const opt_t* opts) {
