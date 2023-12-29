@@ -237,6 +237,14 @@ struct CodeRaw {
     size_t size;
 };
 
+struct CodeParam {
+    const char* name;
+    const char* type;
+    CodeParam* next;
+};
+
+using CodeParams = list_t<CodeParam>;
+
 struct CodeArg {
     const char* arg;
     CodeArg* next;
@@ -244,10 +252,16 @@ struct CodeArg {
 
 using CodeArgs = list_t<CodeArg>;
 
-struct CodeFunc {
-    CodeArgs* args;
+struct CodeFnDef {
     const char* name;
-    bool semi;
+    const char* type;
+    CodeParams* params;
+    CodeList* body;
+};
+
+struct CodeFnCall {
+    const char* name;
+    CodeArgs* args;
 };
 
 struct CodeLabel {
@@ -288,7 +302,8 @@ struct Code {
         CodeIfTE ifte;
         CodeSwitch swch;
         CodeBlock block;
-        CodeFunc func;
+        CodeFnDef fndef;
+        CodeFnCall fncall;
         CodeRaw raw;
         CodeVar var;
         CodeArray array;
@@ -506,6 +521,18 @@ inline CodeCases* code_cases(OutAllocator& alc) {
     return new_list<CodeCase>(alc);
 }
 
+inline CodeParam* code_param(OutAllocator& alc, const char* name, const char* type) {
+    CodeParam* x = alc.alloct<CodeParam>(1);
+    x->name = name;
+    x->type = type;
+    x->next = nullptr;
+    return x;
+}
+
+inline CodeParams* code_params(OutAllocator& alc) {
+    return new_list<CodeParam>(alc);
+}
+
 inline CodeArg* code_arg(OutAllocator& alc, const char* arg) {
     CodeArg* x = alc.alloct<CodeArg>(1);
     x->arg = arg;
@@ -517,20 +544,21 @@ inline CodeArgs* code_args(OutAllocator& alc) {
     return new_list<CodeArg>(alc);
 }
 
-inline Code* code_func(OutAllocator& alc, const char* name, CodeArgs* args, bool semi) {
-    Code* x = new_code(alc, CodeKind::FUNC);
-    x->func.args = args;
-    x->func.name = name;
-    x->func.semi = semi;
+inline Code* code_fndef(
+        OutAllocator& alc, const char* name, const char* type, CodeParams* params, CodeList* body) {
+    Code* x = new_code(alc, CodeKind::FNDEF);
+    x->fndef.name = name;
+    x->fndef.type = type;
+    x->fndef.params = params;
+    x->fndef.body = body;
     return x;
 }
 
-inline Code* code_fdecl(OutAllocator& alc, const char* name, CodeArgs* args) {
-    return code_func(alc, name, args, /*semi*/ false);
-}
-
-inline Code* code_fcall(OutAllocator& alc, const char* name, CodeArgs* args, bool semi = true) {
-    return code_func(alc, name, args, semi);
+inline Code* code_fncall(OutAllocator& alc, const char* name, CodeArgs* args) {
+    Code* x = new_code(alc, CodeKind::FNCALL);
+    x->fncall.name = name;
+    x->fncall.args = args;
+    return x;
 }
 
 inline Code* code_switch(OutAllocator& alc, const char* expr, CodeCases* cases) {

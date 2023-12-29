@@ -5,13 +5,7 @@
 #include <stdlib.h> /* malloc, free */
 #include <string.h> /* memcpy */
 
-static void *read_file
-    ( const char *fname
-    , size_t unit
-    , size_t padding
-    , size_t *pfsize
-    )
-{
+static void* read_file(const char* fname, size_t unit, size_t padding, size_t* pfsize) {
     void *buffer = NULL;
     size_t fsize = 0;
 
@@ -58,15 +52,7 @@ error:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line125
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line125(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -74,43 +60,31 @@ static int action_line125
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line125: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line125: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line125: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line125: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line125(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line125(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line125: not enough keys\n");
     return 1;
 }
 
-int lex_line125()
-{
+int lex_line125() {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -123,23 +97,13 @@ int lex_line125()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line125.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line125.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line125.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line125.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -260,15 +224,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line313
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line313(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -276,43 +232,31 @@ static int action_line313
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line313: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line313: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line313: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line313: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line313(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line313(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line313: not enough keys\n");
     return 1;
 }
 
-int lex_line313()
-{
+int lex_line313() {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -325,23 +269,13 @@ int lex_line313()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line313.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line313.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line313.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line313.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -450,15 +384,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line320
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line320(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -466,43 +392,31 @@ static int action_line320
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line320: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line320: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line320: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line320: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line320(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line320(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line320: not enough keys\n");
     return 1;
 }
 
-int lex_line320()
-{
+int lex_line320() {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -515,23 +429,13 @@ int lex_line320()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line320.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line320.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line320.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line320.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -638,15 +542,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line330
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line330(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -654,43 +550,31 @@ static int action_line330
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line330: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line330: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line330: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line330: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line330(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line330(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line330: not enough keys\n");
     return 1;
 }
 
-int lex_line330()
-{
+int lex_line330() {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -703,23 +587,13 @@ int lex_line330()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line330.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line330.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line330.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line330.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -876,15 +750,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line339
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line339(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -892,43 +758,31 @@ static int action_line339
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line339: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line339: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line339: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line339: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line339(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line339(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line339: not enough keys\n");
     return 1;
 }
 
-int lex_line339()
-{
+int lex_line339() {
     const size_t padding = 1; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -941,23 +795,13 @@ int lex_line339()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line339.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line339.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line339.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line339.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -1068,15 +912,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line346
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line346(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -1084,43 +920,31 @@ static int action_line346
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line346: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line346: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line346: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line346: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line346(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line346(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line346: not enough keys\n");
     return 1;
 }
 
-int lex_line346()
-{
+int lex_line346() {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -1133,23 +957,13 @@ int lex_line346()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line346.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line346.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line346.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line346.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -1275,15 +1089,7 @@ end:
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
 
-static int action_line354
-    ( unsigned *pkix
-    , const YYKEYTYPE *keys
-    , const YYCTYPE *start
-    , const YYCTYPE *token
-    , const YYCTYPE **cursor
-    , YYKEYTYPE rule_act
-    )
-{
+static int action_line354(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
     const long pos = token - start;
     const long len_act = *cursor - token;
@@ -1291,43 +1097,31 @@ static int action_line354
     const YYKEYTYPE rule_exp = keys[kix + 2];
     *pkix = kix + 3;
     if (rule_exp == 255) {
-        fprintf
-            ( stderr
-            , "warning: lex_line354: control flow is undefined"
-                " for input at position %ld, rerun re2c with '-W'\n"
-            , pos
-            );
+        fprintf(stderr,
+            "warning: lex_line354: control flow is undefined"
+            " for input at position %ld, rerun re2c with '-W'\n");
     }
     if (len_act == len_exp && rule_act == rule_exp) {
         const YYKEYTYPE offset = keys[kix];
         *cursor = token + offset;
         return 0;
     } else {
-        fprintf
-            ( stderr
-            , "error: lex_line354: at position %ld (key %u):\n"
-                "\texpected: match length %ld, rule %u\n"
-                "\tactual:   match length %ld, rule %u\n"
-            , pos
-            , kix
-            , len_exp
-            , rule_exp
-            , len_act
-            , rule_act
-            );
+        fprintf(stderr,
+            "error: lex_line354: at position %ld (key %u):\n"
+            "\texpected: match length %ld, rule %u\n"
+            "\tactual:   match length %ld, rule %u\n",
+            pos, kix, len_exp, rule_exp, len_act, rule_act);
         return 1;
     }
 }
 
-static int check_key_count_line354(unsigned have, unsigned used, unsigned need)
-{
+static int check_key_count_line354(unsigned have, unsigned used, unsigned need) {
     if (used + need <= have) return 0;
     fprintf(stderr, "error: lex_line354: not enough keys\n");
     return 1;
 }
 
-int lex_line354()
-{
+int lex_line354() {
     const size_t padding = 2; /* YYMAXFILL */
     int status = 0;
     size_t input_len = 0;
@@ -1340,23 +1134,13 @@ int lex_line354()
     const YYCTYPE *eof = NULL;
     unsigned int i = 0;
 
-    input = (YYCTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line354.input"
-        , sizeof (YYCTYPE)
-        , padding
-        , &input_len
-        );
+    input = (YYCTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line354.input", sizeof (YYCTYPE), padding, &input_len);
     if (input == NULL) {
         status = 1;
         goto end;
     }
 
-    keys = (YYKEYTYPE *) read_file
-        ( "skeleton/php20150211_url_scanner_ex.c.line354.keys"
-        , sizeof (YYKEYTYPE)
-        , 0
-        , &keys_count
-        );
+    keys = (YYKEYTYPE *) read_file("skeleton/php20150211_url_scanner_ex.c.line354.keys", sizeof (YYKEYTYPE), 0, &keys_count);
     if (keys == NULL) {
         status = 1;
         goto end;
@@ -1506,8 +1290,7 @@ end:
 #undef YYLESSTHAN
 #undef YYFILL
 
-int main()
-{
+int main() {
     if (lex_line125() != 0) {
         return 1;
     }

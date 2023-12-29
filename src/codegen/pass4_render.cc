@@ -545,68 +545,146 @@ class RenderLoop : public RenderCallback {
     FORBID_COPY(RenderLoop);
 };
 
-static void render_arg(RenderContext& rctx, const CodeArg* arg) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
+class RenderFnDef : public RenderCallback {
+    RenderContext& rctx;
+    const CodeFnDef* code;
+    const CodeParam* curr_arg;
+    const CodeParam* last_arg;
+    size_t nargs;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmts;
 
-    const char* s = arg->arg, *p = s;
-    for (; *s; ++s) {
-        // remove unescaped newlines and render on a new line
-        if (*s == '\n') {
-            os.write(p, s - p);
-            p = s + 1;
-            os << std::endl << indent(rctx.ind + 1, opts->indent_str);
-            ++rctx.line;
-        }
-    }
-    os.write(p, s - p);
-}
-
-static void render_func(RenderContext& rctx, const CodeFunc* func) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const CodeArg* first = func->args->head;
-
-    os << indent(rctx.ind, opts->indent_str) << func->name;
-    ++rctx.line;
-
-    // Estimate total length of function call (in characters). Arguments are rendered on one line if
-    // the total length does not exceed 80 characters (including indentation and the text preceding
-    // the list of arguments) , otherwise each argument and the closing parenthesis are rendered on
-    // a new line.
-    size_t total = rctx.ind * opts->indent_str.length() + strlen(func->name);
-    for (const CodeArg* a = first; a; a = a->next) {
-        total += strlen(a->arg) + 2; // +2 for ", "
+  public:
+    RenderFnDef(RenderContext& rctx, const CodeFnDef* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_arg(nullptr)
+            , last_arg(nullptr)
+            , nargs(0)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nstmts(0) {
+        for (const CodeParam* p = code->params->head; p; p = p->next) ++nargs;
+        for (const Code* s = code->body->head; s; s = s->next) ++nstmts;
     }
 
-    if (total < 80) {
-        os << "(";
-        for (const CodeArg* a = first; a; a = a->next) {
-            if (a != first) os << ", ";
-            render_arg(rctx, a);
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            rctx.os << code->name;
+        } else if (strcmp(var, "type") == 0) {
+            rctx.os << code->type;
+        } else if (strcmp(var, "argname") == 0) {
+            rctx.os << curr_arg->name;
+        } else if (strcmp(var, "argtype") == 0) {
+            rctx.os << curr_arg->type;
+        } else if (strcmp(var, "stmt") == 0) {
+            render(rctx, curr_stmt);
+        } else {
+            render_global_var(rctx, var);
         }
-        os << ")";
-    } else {
-        ++rctx.ind;
-
-        // An argument may be broken into multiple lines by inserting unescaped newline characters
-        // in the argument string. The text after each newline is "hanged after" the the argument
-        // (rendered on the next line with one extra level of indentation).
-        os << std::endl;
-        for (const CodeArg* a = first; a; a = a->next) {
-            const char* sep = a == first ? "( " : ", ";
-            os << indent(rctx.ind, opts->indent_str) << sep;
-            render_arg(rctx, a);
-            os << std::endl;
-            ++rctx.line;
-        }
-        os << indent(rctx.ind, opts->indent_str) << ")";
-
-        --rctx.ind;
     }
 
-    render_stmt_end(rctx, func->semi);
-}
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "arg") == 0) {
+            return nargs;
+        } else if (strcmp(var, "stmt") == 0) {
+            return nstmts;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "arg") == 0) {
+            DCHECK(rbound < nargs);
+            find_list_bounds(code->params->head, lbound, rbound, &curr_arg, &last_arg);
+        } else if (strcmp(var, "stmt") == 0) {
+            DCHECK(rbound < nstmts);
+            find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "arg") == 0) {
+            curr_arg = curr_arg->next;
+            return curr_arg != last_arg;
+        } else if (strcmp(var, "stmt") == 0) {
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_type") == 0) {
+            return code->type != nullptr;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderFnDef);
+};
+
+class RenderFnCall : public RenderCallback {
+    RenderContext& rctx;
+    const CodeFnCall* code;
+    const CodeArg* curr_arg;
+    const CodeArg* last_arg;
+    size_t nargs;
+
+  public:
+    RenderFnCall(RenderContext& rctx, const CodeFnCall* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_arg(nullptr)
+            , last_arg(nullptr)
+            , nargs(0) {
+        for (const CodeArg* a = code->args->head; a; a = a->next) ++nargs;
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "name") == 0) {
+            rctx.os << code->name;
+        } else if (strcmp(var, "arg") == 0) {
+            rctx.os << curr_arg->arg;
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "arg") == 0) {
+            return nargs;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "arg") == 0) {
+            DCHECK(rbound < nargs);
+            find_list_bounds(code->args->head, lbound, rbound, &curr_arg, &last_arg);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "arg") == 0) {
+            curr_arg = curr_arg->next;
+            return curr_arg != last_arg;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderFnCall);
+};
 
 static inline void yych_conv(std::ostream& os, const opt_t* opts) {
     if (opts->char_conv) {
@@ -1004,9 +1082,18 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::BLOCK:
         render_block(rctx, &code->block);
         break;
-    case CodeKind::FUNC:
-        render_func(rctx, &code->func);
+    case CodeKind::FNDEF: {
+        RenderFnDef callback(rctx, &code->fndef);
+        rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
         break;
+    }
+    case CodeKind::FNCALL: {
+        rctx.os << indent(rctx.ind, opts->indent_str);
+        RenderFnCall callback(rctx, &code->fncall);
+        rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
+        render_stmt_end(rctx, true);
+        break;
+    }
     case CodeKind::LOOP: {
         RenderLoop callback(rctx, code->loop);
         rctx.opts->eval_code_conf(rctx.os, "code:loop", callback);
