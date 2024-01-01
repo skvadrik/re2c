@@ -682,7 +682,73 @@ class RenderFnCall : public RenderCallback {
         return false;
     }
 
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_args") == 0) {
+            return nargs > 0;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
     FORBID_COPY(RenderFnCall);
+};
+
+class RenderRecFuncs : public RenderCallback {
+    RenderContext& rctx;
+    const CodeRecFuncs* code;
+    const Code* curr_fndef;
+    const Code* last_fndef;
+    size_t nfuncs;
+
+  public:
+    RenderRecFuncs(RenderContext& rctx, const CodeRecFuncs* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_fndef(nullptr)
+            , last_fndef(nullptr)
+            , nfuncs(0) {
+        for (const Code* x = code->fndefs->head; x; x = x->next) ++nfuncs;
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "fndef") == 0) {
+            RenderFnDef callback(rctx, &curr_fndef->fndef);
+            rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
+        } else if (strcmp(var, "fncall") == 0) {
+            RenderFnCall callback(rctx, &code->fncall->fncall);
+            rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "fndef") == 0) {
+            return nfuncs;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "fndef") == 0) {
+            DCHECK(rbound < nfuncs);
+            find_list_bounds(code->fndefs->head, lbound, rbound, &curr_fndef, &last_fndef);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "fndef") == 0) {
+            curr_fndef = curr_fndef->next;
+            return curr_fndef != last_fndef;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderRecFuncs);
 };
 
 static inline void yych_conv(std::ostream& os, const opt_t* opts) {
@@ -1091,6 +1157,11 @@ static void render(RenderContext& rctx, const Code* code) {
         RenderFnCall callback(rctx, &code->fncall);
         rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
         render_stmt_end(rctx, true);
+        break;
+    }
+    case CodeKind::REC_FUNCS: {
+        RenderRecFuncs callback(rctx, &code->rfuncs);
+        rctx.opts->eval_code_conf(rctx.os, "code:recursive_functions", callback);
         break;
     }
     case CodeKind::LOOP: {

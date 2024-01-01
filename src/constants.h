@@ -115,7 +115,8 @@ enum class CodeKind: uint32_t {
     DFAS,
     LABEL,
     ABORT,
-    DEBUG
+    DEBUG,
+    REC_FUNCS
 };
 
 // Types of variables in codegen (independent of the language language).

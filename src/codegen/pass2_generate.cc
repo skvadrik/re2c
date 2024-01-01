@@ -38,13 +38,25 @@ static const char* gen_fill_label(Output& output, uint32_t index) {
     return o.str(opts->label_fill).u32(index).flush();
 }
 
-static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
+static bool omit_peek(const State* s) {
     // Do not generate YYPEEK statement in case `yych` is overwritten before it is used. This may
-    // happen if there is a single transition which does not require matching on `yych` (one
-    // exception is a transition to a move state, which doesn't have its own YYPEEK and relies on
-    // the previous value of `yych`).
-    bool omit_peek = s->go.span_count == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE;
-    if (!omit_peek) append(stmts, code_peek(alc));
+    // happen if this is a "move" state (which doesn't have its own YYPEEK and relies on the
+    // previous value of `yych`), or if this state has a single transition that goes to a non-"move"
+    // state (a single transition does not require matching on `yych`). Such states are added by
+    // the tunneling optimisation which attempts to compress DFA by factoring out common parts of
+    // similar states.
+    return s->action.kind == Action::Kind::MOVE
+            || (s->go.span_count == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE);
+}
+
+static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
+    if (!omit_peek(s)) append(stmts, code_peek(alc));
+}
+
+static bool need_yych_arg(const State* s) {
+    // In rec/func mode `yych` should be passed as an argument only to those state-functions that
+    // don't have YYPEEK (otherwise YYPEEK would immediately overwrite the argument).
+    return omit_peek(s) && !endstate(s);
 }
 
 static void gen_state_set(Output& output, CodeList* stmts, const char* fillidx) {
@@ -439,12 +451,19 @@ static CodeList* gen_fill_falllback(
         gen_settags(output, fallback_trans, dfa, falltags);
 
         // go to fallback state
-        if (opts->code_model == CodeModel::GOTO_LABEL) {
+        switch (opts->code_model) {
+        case CodeModel::GOTO_LABEL:
             buf.cstr("goto ").str(opts->label_prefix).label(*fallback->label);
             append(fallback_trans, code_stmt(alc, buf.flush()));
-        } else {
-            const char* next = buf.label(*fallback->label).flush();
-            gen_continue_yyloop(output, fallback_trans, next);
+            break;
+        case CodeModel::LOOP_SWITCH:
+            buf.label(*fallback->label);
+            gen_continue_yyloop(output, fallback_trans, buf.flush());
+            break;
+        case CodeModel::REC_FUNC:
+            buf.str(opts->label_prefix).u32(fallback->label->index);
+            append(fallback_trans, code_fncall(alc, buf.flush(), code_args(alc)));
+            break;
         }
     } else {
         // Transition can be elided, because control flow "falls through" to an identical
@@ -476,15 +495,21 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
     // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
     if (opts->fill_enable) {
         State* s = from->fill_state;
-        if (opts->code_model == CodeModel::REC_FUNC) {
-            UNREACHABLE();
-        } else if (opts->code_model == CodeModel::LOOP_SWITCH) {
-            const char* next = o.u32(s->label->index).flush();
-            gen_continue_yyloop(output, goto_fill, next);
-        } else if (opts->storable_state || eof_rule) {
-            DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
-            const char* flabel = gen_fill_label(output, s->fill_label->index);
-            append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+        switch (opts->code_model) {
+        case CodeModel::GOTO_LABEL:
+            if (opts->storable_state || eof_rule) {
+                const char* flabel = gen_fill_label(output, s->fill_label->index);
+                append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+            }
+            break;
+        case CodeModel::LOOP_SWITCH:
+            o.u32(s->label->index);
+            gen_continue_yyloop(output, goto_fill, o.flush());
+            break;
+        case CodeModel::REC_FUNC:
+            o.str(opts->label_prefix).u32(s->label->index);
+            append(goto_fill, code_fncall(alc, o.flush(), code_args(alc)));
+            break;
         }
     }
 
@@ -579,14 +604,30 @@ static void gen_goto(
     }
 
     if (!jump.elide) {
-        if (opts->code_model == CodeModel::GOTO_LABEL) {
+        switch (opts->code_model) {
+        case CodeModel::GOTO_LABEL:
             o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
             append(stmts, code_stmt(alc, o.flush()));
-        } else if (jump.to->label->used) {
-            const char* next = o.label(*jump.to->label).flush();
-            gen_continue_yyloop(output, stmts, next);
+            break;
+        case CodeModel::LOOP_SWITCH:
+            if (jump.to->label->used) {
+                o.label(*jump.to->label);
+                gen_continue_yyloop(output, stmts, o.flush());
+            }
+            break;
+        case CodeModel::REC_FUNC:
+            if (jump.to->label->used) {
+                CodeArgs* args = code_args(alc);
+                if (need_yych_arg(jump.to)) {
+                    append(args, code_arg(alc, opts->var_char.c_str()));
+                }
+                o.str(opts->label_prefix).u32(jump.to->label->index);
+                append(stmts, code_fncall(alc, o.flush(), args));
+            }
+            break;
         }
     } else {
+        DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
         // Goto can be elided, because control flow "falls through" to the correct DFA state. This
         // usually happens for the last statement in a sequence of "linear if" statements.
     }
@@ -1033,19 +1074,27 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         if (opts->line_dirs) append(stmts, code_line_info_input(alc, semact->loc));
         append(stmts, code_text(alc, o.cstr(semact->text).flush()));
         if (opts->line_dirs) append(stmts, code_line_info_output(alc));
-    } else if (opts->code_model == CodeModel::LOOP_SWITCH) {
-        // Autogenerated action for the :=> rule, loop/switch mode: set `yystate` to the initial
-        // state of the next condition and continue to the head of the loop.
-        gen_continue_yyloop(output, stmts, next_cond);
-    } else if (opts->code_model == CodeModel::REC_FUNC) {
-        // Autogenerated action for the :=> rule, func/rec mode
-        UNREACHABLE();
     } else {
-        // Autogenerated action for the :=> rule, goto/label mode: emit `cond:goto` configuration
-        // with `cond:goto@cond` replaced by the next condition label.
-        o.str(opts->cond_goto);
-        argsubst(o.stream(), opts->cond_goto_param, "cond", true, opts->cond_label_prefix + cond);
-        append(stmts, code_text(alc, o.flush()));
+        // Autogenerated action for the :=> rule.
+        switch (opts->code_model) {
+        case CodeModel::GOTO_LABEL:
+            // goto/label mode: emit `cond:goto` configuration with `cond:goto@cond` replaced by
+            // the next condition label
+            o.str(opts->cond_goto);
+            argsubst(
+                o.stream(), opts->cond_goto_param, "cond", true, opts->cond_label_prefix + cond);
+            append(stmts, code_text(alc, o.flush()));
+            break;
+        case CodeModel::LOOP_SWITCH:
+            // loop/switch mode: set `yystate` to the initial state of the next condition and
+            // continue to the head of the loop.
+            gen_continue_yyloop(output, stmts, next_cond);
+            break;
+        case CodeModel::REC_FUNC:
+            // func/rec mode: emit function call to the start of the next condition
+            append(stmts, code_fncall(alc, next_cond, code_args(alc)));
+            break;
+        }
     }
 }
 
@@ -1211,6 +1260,40 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     }
     append(loop, code_switch(alc, opts->var_state.c_str(), cases));
     append(stmts, code_loop(alc, loop));
+}
+
+void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeList* funcs = code_list(alc);
+    for (State* s = dfa.head; s;) {
+        DCHECK(s->label->index != Label::NONE);
+        const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
+
+        CodeParams* params = code_params(alc);
+        if (need_yych_arg(s)) {
+            append(params, code_param(alc, opts->var_char.c_str(), "char"));
+        }
+
+        // Emit this state and the following state(s) that don't have transitions into them
+        // (such states may be added by the tunneling pass).
+        CodeList* body = code_list(alc);
+        do {
+            emit_state(output, s, body);
+            emit_action(output, dfa, s, body);
+            gen_go(output, dfa, &s->go, s, body);
+            s = s->next;
+        } while (s && !s->label->used);
+
+        append(funcs, code_fndef(alc, f, /*type*/ nullptr, params, body));
+    }
+
+    const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
+    Code* fncall = code_fncall(alc, f0, code_args(alc));
+
+    append(stmts, code_recursive_functions(alc, funcs, fncall));
 }
 
 static std::string output_state_get(const opt_t* opts) {
@@ -1880,19 +1963,24 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             }
             gen_dfa_as_blocks_with_labels(output, *dfa, code);
         }
-    } else {
-        if (opts->code_model == CodeModel::LOOP_SWITCH) {
-            // In the loop/switch or rec/func mode append all DFA states as cases of the `yystate`
-            // switch. Merge DFAs for different conditions together in one switch.
-            local_decls = true;
-            append(code, gen_yystate_def(output));
-        }
+    } else if (opts->code_model == CodeModel::LOOP_SWITCH) {
+        // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
+        // Merge DFAs for different conditions together in one switch.
+        local_decls = true;
+        append(code, gen_yystate_def(output));
 
         CodeCases* cases = code_cases(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_switch_cases(output, *dfa, cases);
         }
         wrap_dfas_in_loop_switch(output, code, cases);
+    } else {
+        DCHECK(opts->code_model == CodeModel::REC_FUNC);
+        // In the rec/func mode DFA states are separate co-recursive functions (closures) that
+        // tail-call other state functions or themselves.
+        for (const std::unique_ptr<Adfa>& dfa : dfas) {
+            gen_dfa_as_recursive_functions(output, *dfa, code);
+        }
     }
 
     // Wrap the block in braces, so that variable declarations have local scope.
