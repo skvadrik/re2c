@@ -17,7 +17,9 @@ static bool oneline_stmt_list(const CodeList* list) {
     const Code* head = list->head;
     return head != nullptr
             && head->next == nullptr
-            && (head->kind == CodeKind::STMT || head->kind == CodeKind::TEXT);
+            && (head->kind == CodeKind::STMT
+                    || head->kind == CodeKind::TEXT
+                    || head->kind == CodeKind::FNCALL);
 }
 
 template<typename Elem>
@@ -73,6 +75,13 @@ static inline void render_stmt_end(RenderContext& rctx, bool semi) {
     if (semi && rctx.opts->eval_bool_conf("semicolons")) rctx.os << ";";
     rctx.os << std::endl;
     ++rctx.line;
+}
+
+static void render_maybe_oneline(RenderContext& rctx, const Code* code, bool oneline) {
+    uint32_t ind = rctx.ind; // backup indent
+    rctx.ind = oneline ? 0 : rctx.ind;
+    render(rctx, code);
+    rctx.ind = ind; // restore indent
 }
 
 static void render_list(RenderContext& rctx, const CodeList* code) {
@@ -172,12 +181,7 @@ class RenderIfThenElse : public RenderCallback {
         } else if (strcmp(var, "else_cond") == 0) {
             rctx.os << code->else_cond;
         } else if (strcmp(var, "then_stmt") == 0) {
-            if (oneline) {
-                rctx.os << curr_stmt->text;
-                render_stmt_end(rctx, curr_stmt->kind == CodeKind::STMT);
-            } else {
-                render(rctx, curr_stmt);
-            }
+            render_maybe_oneline(rctx, curr_stmt, oneline);
         } else if (strcmp(var, "else_stmt") == 0) {
             DCHECK(!oneline);
             render(rctx, curr_stmt);
@@ -378,12 +382,7 @@ class RenderSwitchCaseBlock : public RenderCallback {
                 break;
             }}
         } else if (strcmp(var, "stmt") == 0) {
-            if (oneline) {
-                rctx.os << curr_stmt->text;
-                render_stmt_end(rctx, curr_stmt->kind == CodeKind::STMT);
-            } else {
-                render(rctx, curr_stmt);
-            }
+            render_maybe_oneline(rctx, curr_stmt, oneline);
         } else {
             render_global_var(rctx, var);
         }
