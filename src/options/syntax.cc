@@ -22,7 +22,7 @@ Stx::Stx(OutAllocator& alc)
         , stack_code_list() {
     allowed_list_confs["api"] = {"default", "generic"};
     allowed_list_confs["api_style"] = {"functions", "freeform"};
-    allowed_list_confs["code_model"] = {"goto_label", "loop_switch", "rec_func"};
+    allowed_list_confs["code_model"] = {"goto_label", "loop_switch", "recursive_functions"};
     allowed_list_confs["target"] = {"code", "dot", "skeleton"};
 
     allowed_word_confs["computed_goto"] = {"enabled", "optional", "unsupported"};

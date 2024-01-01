@@ -26,7 +26,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
             glob.set_default_code_model(CodeModel::GOTO_LABEL);
         } else if (strcmp(code_model, "loop_switch") == 0) {
             glob.set_default_code_model(CodeModel::LOOP_SWITCH);
-        } else if (strcmp(code_model, "rec_func") == 0) {
+        } else if (strcmp(code_model, "recursive_functions") == 0) {
             glob.set_default_code_model(CodeModel::REC_FUNC);
         }
     }

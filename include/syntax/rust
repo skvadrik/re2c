@@ -1,6 +1,6 @@
 api = [generic];
 api_style = [freeform, functions];
-code_model = [loop_switch, rec_func];
+code_model = [loop_switch, recursive_functions];
 target = [code, dot];
 
 computed_goto = unsupported;
