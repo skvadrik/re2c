@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "src/codegen/helpers.h"
+#include "src/options/opt.h"
 
 namespace re2c {
 
@@ -79,13 +80,16 @@ void print_hex(std::ostream& o, uint32_t c, uint32_t szcunit) {
     o << hex(c >> 4u) << hex(c);
 }
 
-void print_char_or_hex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot) {
-    if (!hex && (is_print(c) || is_space(c))) {
+void print_char_or_hex(std::ostream& o, uint32_t c, const opt_t* opts) {
+    const char* fmt = opts->eval_word_conf("yyctype_literals");
+    if (strcmp(fmt, "char") == 0
+            && (is_print(c) || is_space(c))
+            && opts->encoding.type() != Enc::Type::EBCDIC) {
         o << '\'';
-        print_char(o, c, dot);
+        print_char(o, c, opts->target == Target::DOT);
         o << '\'';
     } else {
-        print_hex(o, c, szcunit);
+        print_hex(o, c, opts->encoding.cunit_size());
     }
 }
 

@@ -9,9 +9,11 @@
 
 namespace re2c {
 
+struct opt_t;
+
 bool is_print(uint32_t c);
 void print_hex(std::ostream& o, uint32_t c, uint32_t szcunit);
-void print_char_or_hex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot);
+void print_char_or_hex(std::ostream& o, uint32_t c, const opt_t* opts);
 void print_span(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot);
 
 template<typename T>

@@ -289,15 +289,11 @@ class RenderSwitchCaseRange : public RenderCallback {
                 case VarType::INT:
                     rctx.os << sym;
                     break;
-                case VarType::YYCTYPE: {
+                case VarType::YYCTYPE:
                     DCHECK(sym >= 0);
-                    Enc enc = rctx.opts->encoding;
-                    bool hex = enc.type() == Enc::Type::EBCDIC
-                        || strcmp(rctx.opts->eval_word_conf("char_literals"), "hexadecimal") == 0;
-                    print_char_or_hex(
-                        rctx.os, static_cast<uint32_t>(sym), enc.cunit_size(), hex, /*dot*/ false);
+                    print_char_or_hex(rctx.os, static_cast<uint32_t>(sym), rctx.opts);
                     break;
-                }}
+                }
                 break;
             }}
         } else {

@@ -637,12 +637,8 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
 
-    bool dot = opts->target == Target::DOT;
-    bool hex = opts->encoding.type() == Enc::Type::EBCDIC
-            || strcmp(opts->eval_word_conf("char_literals"), "hexadecimal") == 0;
-
     buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
-    print_char_or_hex(buf.stream(), cond->val, opts->encoding.cunit_size(), hex, dot);
+    print_char_or_hex(buf.stream(), cond->val, opts);
     return buf.flush();
 }
 
