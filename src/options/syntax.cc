@@ -28,7 +28,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["computed_goto"] = {"enabled", "optional", "unsupported"};
     allowed_word_confs["case_ranges"] = {"enabled", "optional", "unsupported"};
     allowed_word_confs["constants"] = {"snake_case", "upper_case"};
-    allowed_word_confs["char_literals"] = {"hexadecimal", "symbolic"};
+    allowed_word_confs["yyctype_literals"] = {"char", "hex"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_in_default_case"] = {"yes", "no"};
     allowed_word_confs["implicit_bool_conversion"] = {"yes", "no"};
