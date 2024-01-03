@@ -431,7 +431,6 @@ if(RE2C_BUILD_TESTS)
     )
     add_executable(re2c_test_argsubst
         src/test/argsubst/test.cc
-        src/codegen/helpers.cc
     )
     add_custom_target(check_re2c
         COMMAND ./re2c_test_range
