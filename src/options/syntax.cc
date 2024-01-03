@@ -50,12 +50,10 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:type_yybm"] = {};
     allowed_code_confs["code:type_yytarget"] = {};
     allowed_code_confs["code:if_then_else"] = {
-        {"then_cond", "else_cond"},
-        {"then_stmt", "else_stmt"},
-        {"have_else_part", "have_else_cond"}
+        {"cond"}, {"branch", "stmt"}, {"have_cond"}
     };
-    allowed_code_confs["code:if_then_oneline"] = {
-        {"then_cond"}, {"then_stmt"}, {}
+    allowed_code_confs["code:if_then_else_oneline"] = {
+        {"cond"}, {"branch", "stmt"}, {"have_cond"}
     };
     allowed_code_confs["code:switch"] = {
         {"expr"}, {"case"}, {}
@@ -253,7 +251,7 @@ bool Stx::have_conf(const char* name) const {
 }
 
 void Stx::cache_conf_tests() {
-    have_oneline_if = have_conf("code:if_then_oneline");
+    have_oneline_if = have_conf("code:if_then_else_oneline");
     have_oneline_switch = have_conf("code:switch_cases_oneline");
 }
 

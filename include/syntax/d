@@ -30,13 +30,15 @@ code:type_yybm = "immutable char";
 // code:type_yytarget
 
 code:if_then_else =
-    topindent "if (" then_cond ") {" nl
-        indent [then_stmt: then_stmt] dedent
-    (have_else_part? topindent "} else " (have_else_cond? "if (" else_cond ") ") "{" nl
-        indent [else_stmt: else_stmt] dedent)
+    [branch{0}: topindent "if (" cond ") {" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent "} else " (have_cond? "if (" cond ") ") "{" nl
+        indent [stmt: stmt] dedent]
     topindent "}" nl;
 
-code:if_then_oneline = topindent "if (" then_cond ") " [then_stmt: then_stmt];
+code:if_then_else_oneline =
+    [branch{0}:    topindent "if (" cond ") " [stmt: stmt]]
+    [branch{1:-1}: topindent "else " (have_cond? "if (" cond ") ") [stmt: stmt]];
 
 code:switch =
     topindent "switch (" expr ") {" nl

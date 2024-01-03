@@ -153,67 +153,71 @@ class RenderVar : public RenderCallback {
 
 class RenderIfThenElse : public RenderCallback {
     RenderContext& rctx;
-    const CodeIfTE* code;
+    const CodeIfThenElse* code;
+    const CodeBranch* curr_branch;
+    const CodeBranch* last_branch;
+    size_t nbranches;
     const Code* curr_stmt;
     const Code* last_stmt;
-    size_t nthen_stmts;
-    size_t nelse_stmts;
+    size_t nstmts;
     bool oneline;
 
   public:
-    RenderIfThenElse(RenderContext& rctx, const CodeIfTE* code, bool oneline)
+    RenderIfThenElse(RenderContext& rctx, const CodeIfThenElse* code, bool oneline)
             : rctx(rctx)
             , code(code)
+            , curr_branch(nullptr)
+            , last_branch(nullptr)
+            , nbranches(0)
             , curr_stmt(nullptr)
             , last_stmt(nullptr)
-            , nthen_stmts(0)
-            , nelse_stmts(0)
+            , nstmts(0)
             , oneline(oneline) {
-        for (const Code* s = code->if_code->head; s; s = s->next) ++nthen_stmts;
-        if (code->else_code != nullptr) {
-            for (const Code* s = code->else_code->head; s; s = s->next) ++nelse_stmts;
-        }
+        for (const CodeBranch* b = code->branches->head; b; b = b->next) ++nbranches;
     }
 
     void render_var(const char* var) override {
-        if (strcmp(var, "then_cond") == 0) {
-            rctx.os << code->if_cond;
-        } else if (strcmp(var, "else_cond") == 0) {
-            rctx.os << code->else_cond;
-        } else if (strcmp(var, "then_stmt") == 0) {
+        if (strcmp(var, "cond") == 0) {
+            rctx.os << curr_branch->cond;
+        } else if (strcmp(var, "stmt") == 0) {
             render_maybe_oneline(rctx, curr_stmt, oneline);
-        } else if (strcmp(var, "else_stmt") == 0) {
-            DCHECK(!oneline);
-            render(rctx, curr_stmt);
         } else {
             render_global_var(rctx, var);
         }
     }
 
     size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "then_stmt") == 0) {
-            return nthen_stmts;
-        } else if (strcmp(var, "else_stmt") == 0) {
-            return nelse_stmts;
+        if (strcmp(var, "branch") == 0) {
+            return nbranches;
+        } else if (strcmp(var, "stmt") == 0) {
+            size_t n = 0;
+            if (curr_branch->code != nullptr) {
+                for (const Code* s = curr_branch->code->head; s; s = s->next) ++n;
+            }
+            const_cast<size_t&>(nstmts) = n;
+            return nstmts;
         }
         UNREACHABLE();
         return 0;
     }
 
     void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "then_stmt") == 0) {
-            DCHECK(rbound < nthen_stmts);
-            find_list_bounds(code->if_code->head, lbound, rbound, &curr_stmt, &last_stmt);
-        } else if (strcmp(var, "else_stmt") == 0) {
-            DCHECK(rbound < nelse_stmts);
-            find_list_bounds(code->else_code->head, lbound, rbound, &curr_stmt, &last_stmt);
+        if (strcmp(var, "branch") == 0) {
+            DCHECK(rbound < nbranches);
+            find_list_bounds(code->branches->head, lbound, rbound, &curr_branch, &last_branch);
+        } else if (strcmp(var, "stmt") == 0) {
+            DCHECK(rbound < nstmts);
+            find_list_bounds(curr_branch->code->head, lbound, rbound, &curr_stmt, &last_stmt);
         } else {
             UNREACHABLE();
         }
     }
 
     bool next_in_list(const char* var) override {
-        if (strcmp(var, "then_stmt") == 0 || strcmp(var, "else_stmt") == 0) {
+        if (strcmp(var, "branch") == 0) {
+            curr_branch = curr_branch->next;
+            return curr_branch != last_branch;
+        } else if (strcmp(var, "stmt") == 0) {
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
         }
@@ -222,10 +226,8 @@ class RenderIfThenElse : public RenderCallback {
     }
 
     bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_else_part") == 0) {
-            return code->else_code != nullptr;
-        } else if (strcmp(cond, "have_else_cond") == 0) {
-            return code->else_cond != nullptr;
+        if (strcmp(cond, "have_cond") == 0) {
+            return curr_branch->cond != nullptr;
         }
         UNREACHABLE();
         return false;
@@ -1126,12 +1128,13 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::EMPTY:
         break;
     case CodeKind::IF_THEN_ELSE: {
+        const CodeBranch* b = code->ifte.branches->head;
         bool oneline = rctx.opts->specialize_oneline_if()
             && code->ifte.oneline
-            && oneline_stmt_list(code->ifte.if_code)
-            && code->ifte.else_code == nullptr;
+            && oneline_stmt_list(b->code)
+            && b->next == nullptr;
         RenderIfThenElse callback(rctx, &code->ifte, oneline);
-        const char* conf = oneline ? "code:if_then_oneline" : "code:if_then_else";
+        const char* conf = oneline ? "code:if_then_else_oneline" : "code:if_then_else";
         rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;
     }

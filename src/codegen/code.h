@@ -172,11 +172,16 @@ struct CodeGo {
     };
 };
 
-struct CodeIfTE {
-    const char* if_cond;
-    const char* else_cond;
-    CodeList* if_code;
-    CodeList* else_code;
+struct CodeBranch {
+    const char* cond;
+    CodeList* code;
+    CodeBranch* next;
+};
+
+using CodeBranches = list_t<CodeBranch>;
+
+struct CodeIfThenElse {
+    CodeBranches* branches;
     bool oneline;
 };
 
@@ -304,7 +309,7 @@ struct Code {
     union {
         const char* text;
         BlockNameList* block_names;
-        CodeIfTE ifte;
+        CodeIfThenElse ifte;
         CodeSwitch swch;
         CodeBlock block;
         CodeFnDef fndef;
@@ -459,16 +464,27 @@ inline Code* code_block(OutAllocator& alc, CodeList* stmts, CodeBlock::Kind kind
     return x;
 }
 
+inline CodeBranch* code_branch(OutAllocator& alc, const char* cond, CodeList* code) {
+    CodeBranch* x = alc.alloct<CodeBranch>(1);
+    x->cond = cond;
+    x->code = code;
+    x->next = nullptr;
+    return x;
+}
+
+inline CodeBranches* code_branches(OutAllocator& alc) {
+    return new_list<CodeBranch>(alc);
+}
+
 inline Code* code_if_then_else(OutAllocator& alc,
                                const char* if_cond,
                                CodeList* if_code,
                                CodeList* else_code,
                                bool oneline = true) {
     Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
-    x->ifte.if_cond = if_cond;
-    x->ifte.else_cond = nullptr;
-    x->ifte.if_code = if_code;
-    x->ifte.else_code = else_code;
+    CodeBranches* bs = x->ifte.branches = code_branches(alc);
+    append(bs, code_branch(alc, if_cond, if_code));
+    if (else_code) append(bs, code_branch(alc, nullptr, else_code));
     x->ifte.oneline = oneline;
     return x;
 }
@@ -478,8 +494,11 @@ inline Code* code_if_then_elif(OutAllocator& alc,
                                CodeList* if_code,
                                const char* else_cond,
                                CodeList* else_code) {
-    Code* x = code_if_then_else(alc, if_cond, if_code, else_code, false);
-    x->ifte.else_cond = else_cond;
+    Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
+    CodeBranches* bs = x->ifte.branches = code_branches(alc);
+    append(bs, code_branch(alc, if_cond, if_code));
+    append(bs, code_branch(alc, else_cond, else_code));
+    x->ifte.oneline = false;
     return x;
 }
 
