@@ -782,7 +782,7 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
     if (go->hgo != nullptr) {
         text = o.str(opts->var_char).cstr(" & ~0xFF").flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
-        append(stmts, code_if_then_else(alc, text, if_then, if_else, false));
+        append(stmts, code_if_then_else(alc, text, if_then, if_else));
     } else {
         append(stmts, code_block(alc, if_else, CodeBlock::Kind::WRAPPED));
     }
