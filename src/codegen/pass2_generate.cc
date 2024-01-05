@@ -1655,7 +1655,7 @@ static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper
         CodeList* if_then = gen_cond_goto_binary(output, lower, middle - 1);
         CodeList* if_else = gen_cond_goto_binary(output, middle, upper);
         buf.str(output_cond_get(opts)).cstr(" < ").u64(middle);
-        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else, false));
+        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else));
     }
     return stmts;
 }

@@ -278,31 +278,19 @@
 	};
 	if (YYGETCONDITION() < 4) {
 		if (YYGETCONDITION() < 2) {
-			if (YYGETCONDITION() < 1) {
-				goto yyc_INITIAL;
-			} else {
-				goto yyc_ST_OFFSET;
-			}
+			if (YYGETCONDITION() < 1) goto yyc_INITIAL;
+			else goto yyc_ST_OFFSET;
 		} else {
-			if (YYGETCONDITION() < 3) {
-				goto yyc_ST_SECTION_VALUE;
-			} else {
-				goto yyc_ST_VALUE;
-			}
+			if (YYGETCONDITION() < 3) goto yyc_ST_SECTION_VALUE;
+			else goto yyc_ST_VALUE;
 		}
 	} else {
 		if (YYGETCONDITION() < 6) {
-			if (YYGETCONDITION() < 5) {
-				goto yyc_ST_SECTION_RAW;
-			} else {
-				goto yyc_ST_DOUBLE_QUOTES;
-			}
+			if (YYGETCONDITION() < 5) goto yyc_ST_SECTION_RAW;
+			else goto yyc_ST_DOUBLE_QUOTES;
 		} else {
-			if (YYGETCONDITION() < 7) {
-				goto yyc_ST_VARNAME;
-			} else {
-				goto yyc_ST_RAW;
-			}
+			if (YYGETCONDITION() < 7) goto yyc_ST_VARNAME;
+			else goto yyc_ST_RAW;
 		}
 	}
 /* *********************************** */

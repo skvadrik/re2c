@@ -139,11 +139,8 @@ void scan(Scanner *s)
 				  0,   0,   0,   0,   0,   0,   0,   0,
 				  0,   0,   0,   0,   0,   0,   0,   0
 			};
-			if (cond < 1) {
-				goto yyc_R1;
-			} else {
-				goto yyc_R2;
-			}
+			if (cond < 1) goto yyc_R1;
+			else goto yyc_R2;
 /* *********************************** */
 yyc_R1:
 			if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }

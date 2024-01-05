@@ -12,11 +12,8 @@ int main ()
 #line 13 "conditions/condtype_forwdecl.c"
 {
 	unsigned char yych;
-	if (YYGETCONDITION() < 1) {
-		goto yyc_a;
-	} else {
-		goto yyc_b;
-	}
+	if (YYGETCONDITION() < 1) goto yyc_a;
+	else goto yyc_b;
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
@@ -25,7 +22,7 @@ yy1:
 	++YYCURSOR;
 #line 13 "conditions/condtype_forwdecl.re"
 	{}
-#line 29 "conditions/condtype_forwdecl.c"
+#line 26 "conditions/condtype_forwdecl.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -34,14 +31,14 @@ yy3:
 	++YYCURSOR;
 #line 14 "conditions/condtype_forwdecl.re"
 	{}
-#line 38 "conditions/condtype_forwdecl.c"
+#line 35 "conditions/condtype_forwdecl.c"
 }
 #line 15 "conditions/condtype_forwdecl.re"
 
 	return 0;
 }
 
-#line 45 "conditions/condtype_forwdecl.c"
+#line 42 "conditions/condtype_forwdecl.c"
 enum cond_t : int {
 	yyca,
 	yycb

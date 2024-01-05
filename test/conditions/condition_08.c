@@ -73,17 +73,11 @@ void scan(Scanner *s)
 		s->tok = s->cur;
 
 		if (s->cond < 2) {
-			if (s->cond < 1) {
-				goto yyc_Normal;
-			} else {
-				goto yyc_Comment;
-			}
+			if (s->cond < 1) goto yyc_Normal;
+			else goto yyc_Comment;
 		} else {
-			if (s->cond < 3) {
-				goto yyc_Skiptoeol;
-			} else {
-				goto yyc_String;
-			}
+			if (s->cond < 3) goto yyc_Skiptoeol;
+			else goto yyc_String;
 		}
 /* *********************************** */
 yyc_Normal:

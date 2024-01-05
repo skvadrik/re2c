@@ -35,11 +35,8 @@ int scan(char *s, int l)
 		{
 			YYCTYPE yych;
 			unsigned int yyaccept = 0;
-			if (YYGETCONDITION() < 1) {
-				goto yyc_INITIAL;
-			} else {
-				goto yyc_ST_VALUE;
-			}
+			if (YYGETCONDITION() < 1) goto yyc_INITIAL;
+			else goto yyc_ST_VALUE;
 /* *********************************** */
 yyc_INITIAL:
 			if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
