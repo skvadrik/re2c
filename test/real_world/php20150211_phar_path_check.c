@@ -87,11 +87,8 @@ loop:
 	}
 yy1:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy6;
-	} else {
-		goto yy4;
-	}
+	if (yyaccept == 0) goto yy6;
+	else goto yy4;
 yy2:
 	++YYCURSOR;
 	{

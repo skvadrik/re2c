@@ -165,11 +165,8 @@ loop:
         }
 yy1:
         YYRESTORE();
-        if (yyaccept == 0) {
-            goto yy6;
-        } else {
-            goto yy4;
-        }
+        if (yyaccept == 0) goto yy6;
+        else goto yy4;
 yy2:
         YYSKIP();
         status = check_key_count_line44(keys_count, i, 3)

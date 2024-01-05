@@ -410,11 +410,8 @@ yy9:
 	if (yych <= '9') goto yy14;
 yy10:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy3;
-	} else {
-		goto yy7;
-	}
+	if (yyaccept == 0) goto yy3;
+	else goto yy7;
 yy11:
 	yych = *++YYCURSOR;
 	{

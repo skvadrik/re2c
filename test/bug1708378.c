@@ -258,20 +258,14 @@ yy19:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy2;
-			} else {
-				goto yy476;
-			}
+			if (yyaccept == 0) goto yy2;
+			else goto yy476;
 		} else {
 			goto yy868;
 		}
 	} else {
-		if (yyaccept == 3) {
-			goto yy922;
-		} else {
-			goto yy1231;
-		}
+		if (yyaccept == 3) goto yy922;
+		else goto yy1231;
 	}
 yy20:
 	yych = *++YYCURSOR;

@@ -164,11 +164,8 @@ yy8:
 yy9:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy4;
-		} else {
-			goto yy2;
-		}
+		if (yyaccept == 0) goto yy4;
+		else goto yy2;
 	} else {
 		goto yy13;
 	}
@@ -974,31 +971,19 @@ yy120:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 3) {
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy97;
-			} else {
-				goto yy100;
-			}
+			if (yyaccept == 0) goto yy97;
+			else goto yy100;
 		} else {
-			if (yyaccept == 2) {
-				goto yy103;
-			} else {
-				goto yy105;
-			}
+			if (yyaccept == 2) goto yy103;
+			else goto yy105;
 		}
 	} else {
 		if (yyaccept <= 5) {
-			if (yyaccept == 4) {
-				goto yy115;
-			} else {
-				goto yy118;
-			}
+			if (yyaccept == 4) goto yy115;
+			else goto yy118;
 		} else {
-			if (yyaccept == 6) {
-				goto yy144;
-			} else {
-				goto yy173;
-			}
+			if (yyaccept == 6) goto yy144;
+			else goto yy173;
 		}
 	}
 yy121:
@@ -1772,11 +1757,8 @@ yy199:
 yy200:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy191;
-		} else {
-			goto yy189;
-		}
+		if (yyaccept == 0) goto yy191;
+		else goto yy189;
 	} else {
 		goto yy197;
 	}

@@ -7314,11 +7314,8 @@ yy749:
 yy750:
 	p = marker;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy742;
-		} else {
-			goto yy740;
-		}
+		if (yyaccept == 0) goto yy742;
+		else goto yy740;
 	} else {
 		goto yy756;
 	}
@@ -7658,17 +7655,11 @@ yy774:
 yy775:
 	p = marker;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy768;
-		} else {
-			goto yy777;
-		}
+		if (yyaccept == 0) goto yy768;
+		else goto yy777;
 	} else {
-		if (yyaccept == 2) {
-			goto yy782;
-		} else {
-			goto yy787;
-		}
+		if (yyaccept == 2) goto yy782;
+		else goto yy787;
 	}
 yy776:
 	++p;

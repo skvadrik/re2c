@@ -247,11 +247,8 @@ yy30:
 	}
 yy31:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy29;
-	} else {
-		goto yy33;
-	}
+	if (yyaccept == 0) goto yy29;
+	else goto yy33;
 yy32:
 	yyaccept = 1;
 	YYMARKER = ++YYCURSOR;

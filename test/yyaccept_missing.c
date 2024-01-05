@@ -128,11 +128,8 @@ yy9:
 			if (yych <= 'z') goto yy11;
 yy10:
 			YYCURSOR = YYMARKER;
-			if (yyaccept == 0) {
-				goto yy7;
-			} else {
-				goto yy12;
-			}
+			if (yyaccept == 0) goto yy7;
+			else goto yy12;
 yy11:
 			yyaccept = 1;
 			YYMARKER = ++YYCURSOR;

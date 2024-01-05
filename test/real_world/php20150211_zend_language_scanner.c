@@ -2575,21 +2575,15 @@ yy66:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy4;
-			} else {
-				goto yy19;
-			}
+			if (yyaccept == 0) goto yy4;
+			else goto yy19;
 		} else {
 			goto yy28;
 		}
 	} else {
 		if (yyaccept <= 4) {
-			if (yyaccept == 3) {
-				goto yy85;
-			} else {
-				goto yy88;
-			}
+			if (yyaccept == 3) goto yy85;
+			else goto yy88;
 		} else {
 			goto yy95;
 		}

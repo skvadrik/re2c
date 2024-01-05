@@ -163,17 +163,11 @@ yy11:
 yy12:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy3;
-		} else {
-			goto yy104;
-		}
+		if (yyaccept == 0) goto yy3;
+		else goto yy104;
 	} else {
-		if (yyaccept == 2) {
-			goto yy118;
-		} else {
-			goto yy120;
-		}
+		if (yyaccept == 2) goto yy118;
+		else goto yy120;
 	}
 yy13:
 	++YYCURSOR;
@@ -832,7 +826,7 @@ yy104:
 	{
 		return "dsl";
 	}
-#line 836 "bug1479044_b.c"
+#line 830 "bug1479044_b.c"
 yy105:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -990,7 +984,7 @@ yy118:
 	{
 		return "resnet";
 	}
-#line 994 "bug1479044_b.c"
+#line 988 "bug1479044_b.c"
 yy119:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -1024,7 +1018,7 @@ yy120:
 	{
 		return "edu";
 	}
-#line 1028 "bug1479044_b.c"
+#line 1022 "bug1479044_b.c"
 }
 #line 41 "bug1479044_b.re"
 

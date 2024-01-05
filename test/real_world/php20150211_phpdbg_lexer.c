@@ -520,20 +520,14 @@ yy26:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy5;
-			} else {
-				goto yy12;
-			}
+			if (yyaccept == 0) goto yy5;
+			else goto yy12;
 		} else {
 			goto yy45;
 		}
 	} else {
-		if (yyaccept == 3) {
-			goto yy47;
-		} else {
-			goto yy73;
-		}
+		if (yyaccept == 3) goto yy47;
+		else goto yy73;
 	}
 yy27:
 	YYDEBUG(27, yych);

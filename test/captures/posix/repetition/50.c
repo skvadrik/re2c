@@ -27,11 +27,8 @@ yy2:
 	}
 yy3:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy1;
-	} else {
-		goto yy7;
-	}
+	if (yyaccept == 0) goto yy1;
+	else goto yy7;
 yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);

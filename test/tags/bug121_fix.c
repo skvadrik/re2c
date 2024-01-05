@@ -33,11 +33,8 @@ yy4:
 	}
 yy5:
 	YYRESTORE();
-	if (yyaccept == 0) {
-		goto yy2;
-	} else {
-		goto yy7;
-	}
+	if (yyaccept == 0) goto yy2;
+	else goto yy7;
 yy6:
 	yyaccept = 1;
 	YYSKIP();

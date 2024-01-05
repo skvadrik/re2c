@@ -1555,11 +1555,8 @@ yy60:
 	YYDEBUG(60, yych);
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy45;
-		} else {
-			goto yy54;
-		}
+		if (yyaccept == 0) goto yy45;
+		else goto yy54;
 	} else {
 		goto yy56;
 	}
@@ -1932,11 +1929,8 @@ yy85:
 	YYDEBUG(85, yych);
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 1) {
-		if (yyaccept == 0) {
-			goto yy69;
-		} else {
-			goto yy78;
-		}
+		if (yyaccept == 0) goto yy69;
+		else goto yy78;
 	} else {
 		goto yy80;
 	}
@@ -2580,21 +2574,15 @@ yy121:
 	YYCURSOR = YYMARKER;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy98;
-			} else {
-				goto yy110;
-			}
+			if (yyaccept == 0) goto yy98;
+			else goto yy110;
 		} else {
 			goto yy114;
 		}
 	} else {
 		if (yyaccept <= 4) {
-			if (yyaccept == 3) {
-				goto yy131;
-			} else {
-				goto yy135;
-			}
+			if (yyaccept == 3) goto yy131;
+			else goto yy135;
 		} else {
 			goto yy148;
 		}

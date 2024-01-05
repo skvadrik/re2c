@@ -878,7 +878,7 @@ static CodeList* emit_accept_binary(Output& output,
                 .flush();
         CodeList* if_then = emit_accept_binary(output, dfa, acc, l, m);
         CodeList* if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
-        append(stmts, code_if_then_else(alc, if_cond, if_then, if_else, false));
+        append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
     } else {
         const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);

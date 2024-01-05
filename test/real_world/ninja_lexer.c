@@ -300,11 +300,8 @@ yy21:
 	if (yych == '\n') goto yy20;
 yy22:
 	p = q;
-	if (yyaccept == 0) {
-		goto yy7;
-	} else {
-		goto yy3;
-	}
+	if (yyaccept == 0) goto yy7;
+	else goto yy3;
 yy23:
 	yych = *++p;
 yy24:

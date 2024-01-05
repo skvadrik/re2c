@@ -147,11 +147,8 @@ yy19:
 	}
 yy20:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy14;
-	} else {
-		goto yy17;
-	}
+	if (yyaccept == 0) goto yy14;
+	else goto yy17;
 yy21:
 	{ return 0; }
 }
@@ -188,11 +185,8 @@ yy24:
 	}
 yy25:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy23;
-	} else {
-		goto yy27;
-	}
+	if (yyaccept == 0) goto yy23;
+	else goto yy27;
 yy26:
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -267,11 +261,8 @@ yy36:
 	}
 yy37:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy31;
-	} else {
-		goto yy34;
-	}
+	if (yyaccept == 0) goto yy31;
+	else goto yy34;
 yy38:
 	{ return 0; }
 }

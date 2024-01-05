@@ -2163,25 +2163,16 @@ yy50:
 		if (yyaccept <= 6) {
 			if (yyaccept <= 3) {
 				if (yyaccept <= 1) {
-					if (yyaccept == 0) {
-						goto yy5;
-					} else {
-						goto yy3;
-					}
+					if (yyaccept == 0) goto yy5;
+					else goto yy3;
 				} else {
-					if (yyaccept == 2) {
-						goto yy16;
-					} else {
-						goto yy70;
-					}
+					if (yyaccept == 2) goto yy16;
+					else goto yy70;
 				}
 			} else {
 				if (yyaccept <= 5) {
-					if (yyaccept == 4) {
-						goto yy187;
-					} else {
-						goto yy192;
-					}
+					if (yyaccept == 4) goto yy187;
+					else goto yy192;
 				} else {
 					goto yy250;
 				}
@@ -2189,25 +2180,16 @@ yy50:
 		} else {
 			if (yyaccept <= 10) {
 				if (yyaccept <= 8) {
-					if (yyaccept == 7) {
-						goto yy269;
-					} else {
-						goto yy124;
-					}
+					if (yyaccept == 7) goto yy269;
+					else goto yy124;
 				} else {
-					if (yyaccept == 9) {
-						goto yy298;
-					} else {
-						goto yy351;
-					}
+					if (yyaccept == 9) goto yy298;
+					else goto yy351;
 				}
 			} else {
 				if (yyaccept <= 12) {
-					if (yyaccept == 11) {
-						goto yy353;
-					} else {
-						goto yy357;
-					}
+					if (yyaccept == 11) goto yy353;
+					else goto yy357;
 				} else {
 					goto yy437;
 				}
@@ -2217,25 +2199,16 @@ yy50:
 		if (yyaccept <= 20) {
 			if (yyaccept <= 17) {
 				if (yyaccept <= 15) {
-					if (yyaccept == 14) {
-						goto yy468;
-					} else {
-						goto yy575;
-					}
+					if (yyaccept == 14) goto yy468;
+					else goto yy575;
 				} else {
-					if (yyaccept == 16) {
-						goto yy578;
-					} else {
-						goto yy614;
-					}
+					if (yyaccept == 16) goto yy578;
+					else goto yy614;
 				}
 			} else {
 				if (yyaccept <= 19) {
-					if (yyaccept == 18) {
-						goto yy655;
-					} else {
-						goto yy766;
-					}
+					if (yyaccept == 18) goto yy655;
+					else goto yy766;
 				} else {
 					goto yy499;
 				}
@@ -2243,21 +2216,15 @@ yy50:
 		} else {
 			if (yyaccept <= 23) {
 				if (yyaccept <= 22) {
-					if (yyaccept == 21) {
-						goto yy794;
-					} else {
-						goto yy846;
-					}
+					if (yyaccept == 21) goto yy794;
+					else goto yy846;
 				} else {
 					goto yy851;
 				}
 			} else {
 				if (yyaccept <= 25) {
-					if (yyaccept == 24) {
-						goto yy890;
-					} else {
-						goto yy935;
-					}
+					if (yyaccept == 24) goto yy890;
+					else goto yy935;
 				} else {
 					goto yy1006;
 				}
@@ -2662,7 +2629,7 @@ yy70:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 2666 "real_world/parse_date_b.c"
+#line 2633 "real_world/parse_date_b.c"
 yy71:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
@@ -3019,7 +2986,7 @@ yy96:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3023 "real_world/parse_date_b.c"
+#line 2990 "real_world/parse_date_b.c"
 yy97:
 	++YYCURSOR;
 	goto yy16;
@@ -3572,7 +3539,7 @@ yy124:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 3576 "real_world/parse_date_b.c"
+#line 3543 "real_world/parse_date_b.c"
 yy125:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy276;
@@ -4944,7 +4911,7 @@ yy187:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 4948 "real_world/parse_date_b.c"
+#line 4915 "real_world/parse_date_b.c"
 yy188:
 	yyaccept = 4;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -5007,7 +4974,7 @@ yy192:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 5011 "real_world/parse_date_b.c"
+#line 4978 "real_world/parse_date_b.c"
 yy193:
 	yyaccept = 5;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -5202,7 +5169,7 @@ yy217:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 5206 "real_world/parse_date_b.c"
+#line 5173 "real_world/parse_date_b.c"
 yy218:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -5449,7 +5416,7 @@ yy245:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 5453 "real_world/parse_date_b.c"
+#line 5420 "real_world/parse_date_b.c"
 yy246:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy58;
@@ -5523,7 +5490,7 @@ yy250:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 5527 "real_world/parse_date_b.c"
+#line 5494 "real_world/parse_date_b.c"
 yy251:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -6001,7 +5968,7 @@ yy269:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 6005 "real_world/parse_date_b.c"
+#line 5972 "real_world/parse_date_b.c"
 yy270:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -6674,7 +6641,7 @@ yy298:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 6678 "real_world/parse_date_b.c"
+#line 6645 "real_world/parse_date_b.c"
 yy299:
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -7639,7 +7606,7 @@ yy351:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 7643 "real_world/parse_date_b.c"
+#line 7610 "real_world/parse_date_b.c"
 yy352:
 	yyaccept = 11;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -7709,7 +7676,7 @@ yy353:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 7713 "real_world/parse_date_b.c"
+#line 7680 "real_world/parse_date_b.c"
 yy354:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -7764,7 +7731,7 @@ yy357:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 7768 "real_world/parse_date_b.c"
+#line 7735 "real_world/parse_date_b.c"
 yy358:
 	yyaccept = 3;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -8785,7 +8752,7 @@ yy437:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 8789 "real_world/parse_date_b.c"
+#line 8756 "real_world/parse_date_b.c"
 yy438:
 	yyaccept = 13;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -9311,7 +9278,7 @@ yy468:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 9315 "real_world/parse_date_b.c"
+#line 9282 "real_world/parse_date_b.c"
 yy469:
 	yyaccept = 14;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -9658,7 +9625,7 @@ yy499:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 9662 "real_world/parse_date_b.c"
+#line 9629 "real_world/parse_date_b.c"
 yy500:
 	yych = *++YYCURSOR;
 	if (yych <= 'U') {
@@ -10263,7 +10230,7 @@ yy575:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 10267 "real_world/parse_date_b.c"
+#line 10234 "real_world/parse_date_b.c"
 yy576:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy575;
@@ -10306,7 +10273,7 @@ yy578:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 10310 "real_world/parse_date_b.c"
+#line 10277 "real_world/parse_date_b.c"
 yy579:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -10582,7 +10549,7 @@ yy614:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 10586 "real_world/parse_date_b.c"
+#line 10553 "real_world/parse_date_b.c"
 yy615:
 	yych = *++YYCURSOR;
 	if (yych == 'R') goto yy738;
@@ -10676,7 +10643,7 @@ yy630:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 10680 "real_world/parse_date_b.c"
+#line 10647 "real_world/parse_date_b.c"
 yy631:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy192;
@@ -10872,7 +10839,7 @@ yy655:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 10876 "real_world/parse_date_b.c"
+#line 10843 "real_world/parse_date_b.c"
 yy656:
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -11742,7 +11709,7 @@ yy766:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 11746 "real_world/parse_date_b.c"
+#line 11713 "real_world/parse_date_b.c"
 yy767:
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -11926,7 +11893,7 @@ yy782:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 11930 "real_world/parse_date_b.c"
+#line 11897 "real_world/parse_date_b.c"
 yy783:
 	yych = *++YYCURSOR;
 	if (yych == 'G') goto yy861;
@@ -12009,7 +11976,7 @@ yy794:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 12013 "real_world/parse_date_b.c"
+#line 11980 "real_world/parse_date_b.c"
 yy795:
 	yych = *++YYCURSOR;
 	if (yych == 'T') goto yy870;
@@ -12589,7 +12556,7 @@ yy846:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 12593 "real_world/parse_date_b.c"
+#line 12560 "real_world/parse_date_b.c"
 yy847:
 	yyaccept = 22;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -12669,7 +12636,7 @@ yy851:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 12673 "real_world/parse_date_b.c"
+#line 12640 "real_world/parse_date_b.c"
 yy852:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy50;
@@ -12731,7 +12698,7 @@ yy860:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 12735 "real_world/parse_date_b.c"
+#line 12702 "real_world/parse_date_b.c"
 yy861:
 	yych = *++YYCURSOR;
 	if (yych == 'H') goto yy916;
@@ -12769,7 +12736,7 @@ yy866:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 12773 "real_world/parse_date_b.c"
+#line 12740 "real_world/parse_date_b.c"
 yy867:
 	yyaccept = 16;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -12955,7 +12922,7 @@ yy890:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 12959 "real_world/parse_date_b.c"
+#line 12926 "real_world/parse_date_b.c"
 yy891:
 	yyaccept = 24;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13232,7 +13199,7 @@ yy917:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 13236 "real_world/parse_date_b.c"
+#line 13203 "real_world/parse_date_b.c"
 yy918:
 	yych = *++YYCURSOR;
 	if (yych <= '/') goto yy866;
@@ -13360,7 +13327,7 @@ yy935:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13364 "real_world/parse_date_b.c"
+#line 13331 "real_world/parse_date_b.c"
 yy936:
 	yyaccept = 25;
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -13867,7 +13834,7 @@ yy1006:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 13871 "real_world/parse_date_b.c"
+#line 13838 "real_world/parse_date_b.c"
 yy1007:
 	yych = *++YYCURSOR;
 	if (yych != '0') goto yy1006;
@@ -14001,7 +13968,7 @@ yy1027:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 14005 "real_world/parse_date_b.c"
+#line 13972 "real_world/parse_date_b.c"
 yy1028:
 	yych = *++YYCURSOR;
 	if (yych <= '5') {
@@ -14072,7 +14039,7 @@ yy1037:
 
 }
 
-#line 14076 "real_world/parse_date_b.c"
+#line 14043 "real_world/parse_date_b.c"
 #define YYMAXFILL 26
 #line 1415 "real_world/parse_date_b.re"
 
