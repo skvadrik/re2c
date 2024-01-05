@@ -153,7 +153,7 @@ class RenderVar : public RenderCallback {
 
 class RenderIfThenElse : public RenderCallback {
     RenderContext& rctx;
-    const CodeIfThenElse* code;
+    const CodeBranches* code;
     const CodeBranch* curr_branch;
     const CodeBranch* last_branch;
     size_t nbranches;
@@ -163,7 +163,7 @@ class RenderIfThenElse : public RenderCallback {
     bool oneline;
 
   public:
-    RenderIfThenElse(RenderContext& rctx, const CodeIfThenElse* code, bool oneline)
+    RenderIfThenElse(RenderContext& rctx, const CodeBranches* code, bool oneline)
             : rctx(rctx)
             , code(code)
             , curr_branch(nullptr)
@@ -173,7 +173,7 @@ class RenderIfThenElse : public RenderCallback {
             , last_stmt(nullptr)
             , nstmts(0)
             , oneline(oneline) {
-        for (const CodeBranch* b = code->branches->head; b; b = b->next) ++nbranches;
+        for (const CodeBranch* b = code->head; b; b = b->next) ++nbranches;
     }
 
     void render_var(const char* var) override {
@@ -204,7 +204,7 @@ class RenderIfThenElse : public RenderCallback {
     void start_list(const char* var, size_t lbound, size_t rbound) override {
         if (strcmp(var, "branch") == 0) {
             DCHECK(rbound < nbranches);
-            find_list_bounds(code->branches->head, lbound, rbound, &curr_branch, &last_branch);
+            find_list_bounds(code->head, lbound, rbound, &curr_branch, &last_branch);
         } else if (strcmp(var, "stmt") == 0) {
             DCHECK(rbound < nstmts);
             find_list_bounds(curr_branch->code->head, lbound, rbound, &curr_stmt, &last_stmt);
@@ -1128,11 +1128,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::EMPTY:
         break;
     case CodeKind::IF_THEN_ELSE: {
-        bool oneline = rctx.opts->specialize_oneline_if() && code->ifte.oneline;
-        for (const CodeBranch* b = code->ifte.branches->head; oneline && b; b = b->next) {
+        bool oneline = rctx.opts->specialize_oneline_if();
+        for (const CodeBranch* b = code->ifte->head; oneline && b; b = b->next) {
             oneline = oneline && oneline_stmt_list(b->code);
         }
-        RenderIfThenElse callback(rctx, &code->ifte, oneline);
+        RenderIfThenElse callback(rctx, code->ifte, oneline);
         const char* conf = oneline ? "code:if_then_else_oneline" : "code:if_then_else";
         rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;

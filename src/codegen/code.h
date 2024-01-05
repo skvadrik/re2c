@@ -180,11 +180,6 @@ struct CodeBranch {
 
 using CodeBranches = list_t<CodeBranch>;
 
-struct CodeIfThenElse {
-    CodeBranches* branches;
-    bool oneline;
-};
-
 struct CodeCase {
     enum class Kind: uint32_t {
         RANGES,
@@ -309,7 +304,7 @@ struct Code {
     union {
         const char* text;
         BlockNameList* block_names;
-        CodeIfThenElse ifte;
+        CodeBranches* ifte;
         CodeSwitch swch;
         CodeBlock block;
         CodeFnDef fndef;
@@ -476,16 +471,12 @@ inline CodeBranches* code_branches(OutAllocator& alc) {
     return new_list<CodeBranch>(alc);
 }
 
-inline Code* code_if_then_else(OutAllocator& alc,
-                               const char* if_cond,
-                               CodeList* if_code,
-                               CodeList* else_code,
-                               bool oneline = true) {
+inline Code* code_if_then_else(
+        OutAllocator& alc, const char* if_cond, CodeList* if_code, CodeList* else_code) {
     Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
-    CodeBranches* bs = x->ifte.branches = code_branches(alc);
-    append(bs, code_branch(alc, if_cond, if_code));
-    if (else_code) append(bs, code_branch(alc, nullptr, else_code));
-    x->ifte.oneline = oneline;
+    x->ifte = code_branches(alc);
+    append(x->ifte, code_branch(alc, if_cond, if_code));
+    if (else_code) append(x->ifte, code_branch(alc, nullptr, else_code));
     return x;
 }
 
@@ -495,10 +486,9 @@ inline Code* code_if_then_elif(OutAllocator& alc,
                                const char* else_cond,
                                CodeList* else_code) {
     Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
-    CodeBranches* bs = x->ifte.branches = code_branches(alc);
-    append(bs, code_branch(alc, if_cond, if_code));
-    append(bs, code_branch(alc, else_cond, else_code));
-    x->ifte.oneline = true;
+    x->ifte = code_branches(alc);
+    append(x->ifte, code_branch(alc, if_cond, if_code));
+    append(x->ifte, code_branch(alc, else_cond, else_code));
     return x;
 }
 
