@@ -54,11 +54,8 @@ yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy4:
-	if (yych & ~0xFF) {
-		goto yy3;
-	} else if (yybm[0+yych] & 64) {
-		goto yy3;
-	}
+	if (yych & ~0xFF) goto yy3;
+	else if (yybm[0+yych] & 64) goto yy3;
 	if (yych <= '0') goto yy5;
 	YYCURSOR = YYMARKER;
 	if (yyaccept == 0) goto yy1;
@@ -68,11 +65,8 @@ yy5:
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yych & ~0xFF) {
-		goto yy3;
-	} else if (yybm[0+yych] & 64) {
-		goto yy3;
-	}
+	if (yych & ~0xFF) goto yy3;
+	else if (yybm[0+yych] & 64) goto yy3;
 	if (yych <= '0') goto yy5;
 yy6:
 	{ action }

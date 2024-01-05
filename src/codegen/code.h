@@ -498,7 +498,7 @@ inline Code* code_if_then_elif(OutAllocator& alc,
     CodeBranches* bs = x->ifte.branches = code_branches(alc);
     append(bs, code_branch(alc, if_cond, if_code));
     append(bs, code_branch(alc, else_cond, else_code));
-    x->ifte.oneline = false;
+    x->ifte.oneline = true;
     return x;
 }
 
