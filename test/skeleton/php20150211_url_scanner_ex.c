@@ -11,9 +11,7 @@ static void* read_file(const char* fname, size_t unit, size_t padding, size_t* p
 
     /* open file */
     FILE *f = fopen(fname, "rb");
-    if (f == NULL) {
-        goto error;
-    }
+    if (f == NULL) goto error;
 
     /* get file size */
     fseek(f, 0, SEEK_END);
@@ -22,14 +20,10 @@ static void* read_file(const char* fname, size_t unit, size_t padding, size_t* p
 
     /* allocate memory for file and padding */
     buffer = malloc(unit * (fsize + padding));
-    if (buffer == NULL) {
-        goto error;
-    }
+    if (buffer == NULL) goto error;
 
     /* read the whole file in memory */
-    if (fread(buffer, unit, fsize, f) != fsize) {
-        goto error;
-    }
+    if (fread(buffer, unit, fsize, f) != fsize) goto error;
 
     fclose(f);
     *pfsize = fsize;
@@ -38,9 +32,7 @@ static void* read_file(const char* fname, size_t unit, size_t padding, size_t* p
 error:
     fprintf(stderr, "error: cannot read file '%s'\n", fname);
     free(buffer);
-    if (f != NULL) {
-        fclose(f);
-    }
+    if (f != NULL) fclose(f);
     return NULL;
 }
 
@@ -1265,27 +1257,13 @@ end:
 #undef YYFILL
 
 int main() {
-    if (lex_line125() != 0) {
-        return 1;
-    }
-    if (lex_line313() != 0) {
-        return 1;
-    }
-    if (lex_line320() != 0) {
-        return 1;
-    }
-    if (lex_line330() != 0) {
-        return 1;
-    }
-    if (lex_line339() != 0) {
-        return 1;
-    }
-    if (lex_line346() != 0) {
-        return 1;
-    }
-    if (lex_line354() != 0) {
-        return 1;
-    }
+    if (lex_line125() != 0) return 1;
+    if (lex_line313() != 0) return 1;
+    if (lex_line320() != 0) return 1;
+    if (lex_line330() != 0) return 1;
+    if (lex_line339() != 0) return 1;
+    if (lex_line346() != 0) return 1;
+    if (lex_line354() != 0) return 1;
     return 0;
 }
   #:?#:?#:?		#

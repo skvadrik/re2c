@@ -65,7 +65,7 @@ Code* emit_skeleton_prolog(Output& output) {
     append(block, code_stmt(alc, "FILE *f = fopen(fname, \"rb\")"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, "f == NULL", if_code, nullptr, false));
+    append(block, code_if_then_else(alc, "f == NULL", if_code, nullptr));
 
     append(block, code_newline(alc));
 
@@ -80,7 +80,7 @@ Code* emit_skeleton_prolog(Output& output) {
     append(block, code_stmt(alc, "buffer = malloc(unit * (fsize + padding))"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, "buffer == NULL", if_code, nullptr, false));
+    append(block, code_if_then_else(alc, "buffer == NULL", if_code, nullptr));
 
     append(block, code_newline(alc));
 
@@ -88,7 +88,7 @@ Code* emit_skeleton_prolog(Output& output) {
     if_cond = "fread(buffer, unit, fsize, f) != fsize";
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "goto error"));
-    append(block, code_if_then_else(alc, if_cond, if_code, nullptr, false));
+    append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
 
     append(block, code_newline(alc));
 
@@ -103,7 +103,7 @@ Code* emit_skeleton_prolog(Output& output) {
     append(block, code_stmt(alc, "free(buffer)"));
     if_code = code_list(alc);
     append(if_code, code_stmt(alc, "fclose(f)"));
-    append(block, code_if_then_else(alc, "f != NULL", if_code, nullptr, false));
+    append(block, code_if_then_else(alc, "f != NULL", if_code, nullptr));
     append(block, code_stmt(alc, "return NULL"));
 
     append(code, code_fndef(alc, "read_file", "static void*", params, block));
@@ -679,16 +679,16 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
             .cstr(": unused input strings left at position %ld\\n\", pos)").flush();
     append(if1_code, code_stmt(alc, text));
-    append(if_code, code_if_then_else(alc, "cursor != eof", if1_code, nullptr, false));
+    append(if_code, code_if_then_else(alc, "cursor != eof", if1_code, nullptr));
 
     if1_code = code_list(alc);
     append(if1_code, code_stmt(alc, "status = 1"));
     text = o.cstr("fprintf(stderr, \"error: lex_").str(dfa.name)
             .cstr(": unused keys left after %u keys\\n\", i)").flush();
     append(if1_code, code_stmt(alc, text));
-    append(if_code, code_if_then_else(alc, "i != keys_count", if1_code, nullptr, false));
+    append(if_code, code_if_then_else(alc, "i != keys_count", if1_code, nullptr));
 
-    append(block, code_if_then_else(alc, "status == 0", if_code, nullptr, false));
+    append(block, code_if_then_else(alc, "status == 0", if_code, nullptr));
 
     append(block, code_textraw(alc, ""));
     append(block, code_slabel(alc, "end"));
@@ -749,7 +749,7 @@ Code* emit_skeleton_epilog(Output& output) {
         const char* if_cond = o.cstr("lex_").str(s).cstr("() != 0").flush();
         CodeList* if_code = code_list(alc);
         append(if_code, code_stmt(alc, "return 1"));
-        append(stmts, code_if_then_else(alc, if_cond, if_code, nullptr, false));
+        append(stmts, code_if_then_else(alc, if_cond, if_code, nullptr));
     }
     append(stmts, code_stmt(alc, "return 0"));
 
