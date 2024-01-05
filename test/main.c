@@ -136,12 +136,10 @@ yy7:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy7;
-			}
+			if (yybm[0+yych] & 128) goto yy7;
 #line 94 "main.re"
 			{ continue; }
-#line 145 "main.c"
+#line 143 "main.c"
 yy8:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -151,7 +149,7 @@ yy8:
 yy9:
 #line 95 "main.re"
 			{ continue; }
-#line 155 "main.c"
+#line 153 "main.c"
 		}
 #line 100 "main.re"
 
@@ -174,7 +172,7 @@ int scan(char *pzStrToScan, size_t lenStrToScan)
 	for(;;)
 	{
 
-#line 178 "main.c"
+#line 176 "main.c"
 		{
 			YYCTYPE yych;
 			static const unsigned char yybm[256] = {
@@ -231,23 +229,23 @@ yy11:
 			++YYCURSOR;
 #line 125 "main.re"
 			{ printf("EOF\n");                           return 0; }
-#line 235 "main.c"
+#line 233 "main.c"
 yy12:
 			++YYCURSOR;
 yy13:
 #line 126 "main.re"
 			{ printf("ERR\n"); strcat(gTestBuf, "ERR "); return 1; }
-#line 241 "main.c"
+#line 239 "main.c"
 yy14:
 			++YYCURSOR;
 #line 123 "main.re"
 			{ printf("+\n");   strcat(gTestBuf, "+ ");   continue; }
-#line 246 "main.c"
+#line 244 "main.c"
 yy15:
 			++YYCURSOR;
 #line 124 "main.re"
 			{ printf("-\n");   strcat(gTestBuf, "- ");   continue; }
-#line 251 "main.c"
+#line 249 "main.c"
 yy16:
 			yych = *++YYCURSOR;
 			if (yych <= '/') goto yy13;
@@ -257,12 +255,10 @@ yy17:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy17;
-			}
+			if (yybm[0+yych] & 128) goto yy17;
 #line 121 "main.re"
 			{ printf("Num\n"); strcat(gTestBuf, "Num "); continue; }
-#line 266 "main.c"
+#line 262 "main.c"
 yy18:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -272,7 +268,7 @@ yy18:
 yy19:
 #line 122 "main.re"
 			{ printf("Oct\n"); strcat(gTestBuf, "Oct "); continue; }
-#line 276 "main.c"
+#line 272 "main.c"
 		}
 #line 127 "main.re"
 

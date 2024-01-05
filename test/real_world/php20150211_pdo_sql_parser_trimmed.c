@@ -116,9 +116,7 @@ yy2:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy3:
-	if (yybm[256+yych] & 32) {
-		goto yy2;
-	}
+	if (yybm[256+yych] & 32) goto yy2;
 	{ RET(PDO_PARSER_TEXT); }
 yy4:
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -139,26 +137,20 @@ yy8:
 	goto yy3;
 yy9:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 4) {
-		goto yy21;
-	}
+	if (yybm[0+yych] & 4) goto yy21;
 	if (yych <= '/') goto yy5;
 	if (yych <= ':') goto yy22;
 	goto yy5;
 yy10:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 16) {
-		goto yy24;
-	}
+	if (yybm[0+yych] & 16) goto yy24;
 	{ RET(PDO_PARSER_BIND_POS); }
 yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy12:
-	if (yybm[256+yych] & 64) {
-		goto yy11;
-	}
+	if (yybm[256+yych] & 64) goto yy11;
 	if (yych <= 0x00) goto yy13;
 	if (yych <= '"') goto yy14;
 	goto yy15;
@@ -179,9 +171,7 @@ yy16:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy17:
-	if (yybm[256+yych] & 128) {
-		goto yy16;
-	}
+	if (yybm[256+yych] & 128) goto yy16;
 	if (yych <= 0x00) goto yy13;
 	if (yych >= '(') goto yy18;
 	++YYCURSOR;
@@ -196,9 +186,7 @@ yy19:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 1) {
-		goto yy19;
-	}
+	if (yybm[0+yych] & 1) goto yy19;
 	if (yych <= 0x00) goto yy25;
 	if (yych <= '\r') goto yy2;
 	goto yy25;
@@ -206,9 +194,7 @@ yy20:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 2) {
-		goto yy20;
-	}
+	if (yybm[0+yych] & 2) goto yy20;
 	if (yych <= '\'') goto yy27;
 	if (yych <= '*') goto yy28;
 	goto yy27;
@@ -216,43 +202,33 @@ yy21:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 4) {
-		goto yy21;
-	}
+	if (yybm[0+yych] & 4) goto yy21;
 	{ RET(PDO_PARSER_BIND); }
 yy22:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 8) {
-		goto yy22;
-	}
+	if (yybm[0+yych] & 8) goto yy22;
 yy23:
 	{ RET(PDO_PARSER_TEXT); }
 yy24:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 16) {
-		goto yy24;
-	}
+	if (yybm[0+yych] & 16) goto yy24;
 	goto yy23;
 yy25:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 32) {
-		goto yy25;
-	}
+	if (yybm[0+yych] & 32) goto yy25;
 yy26:
 	{ RET(PDO_PARSER_TEXT); }
 yy27:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 64) {
-		goto yy27;
-	}
+	if (yybm[0+yych] & 64) goto yy27;
 	goto yy29;
 yy28:
 	++YYCURSOR;
@@ -304,9 +280,7 @@ yy29:
 	goto yy27;
 yy30:
 	yych = *++YYCURSOR;
-	if (yybm[256+yych] & 32) {
-		goto yy2;
-	}
+	if (yybm[256+yych] & 32) goto yy2;
 	goto yy26;
 yy31:
 	++YYCURSOR;

@@ -400,9 +400,7 @@ yy7:
 	}
 yy8:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy13;
-	}
+	if (yybm[0+yych] & 128) goto yy13;
 	goto yy3;
 yy9:
 	yych = *++YYCURSOR;
@@ -461,9 +459,7 @@ yy13:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy13;
-	}
+	if (yybm[0+yych] & 128) goto yy13;
 	{
 		DEBUG_OUTPUT("recurrences");
 		TIMELIB_INIT;

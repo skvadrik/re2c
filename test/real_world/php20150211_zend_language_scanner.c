@@ -1399,9 +1399,7 @@ yy2:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 4) {
-		goto yy2;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 4) goto yy2;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	HANDLE_NEWLINES(yytext, yyleng);
@@ -1770,9 +1768,7 @@ yy20:
 	yych = *YYCURSOR;
 yy21:
 	YYDEBUG(21, yych);
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 8) {
-		goto yy20;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 8) goto yy20;
 	if (yych <= 'D') {
 		if (yych == '.') goto yy84;
 		goto yy19;
@@ -2110,9 +2106,7 @@ yy35:
 	yych = *YYCURSOR;
 yy36:
 	YYDEBUG(36, yych);
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	goto yy28;
 yy37:
 	YYDEBUG(37, yych);
@@ -2813,9 +2807,7 @@ yy89:
 yy90:
 	YYDEBUG(90, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 64) {
-		goto yy167;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 64) goto yy167;
 	goto yy66;
 yy91:
 	YYDEBUG(91, yych);
@@ -2832,9 +2824,7 @@ yy91:
 yy92:
 	YYDEBUG(92, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 128) {
-		goto yy170;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 128) goto yy170;
 	goto yy66;
 yy93:
 	YYDEBUG(93, yych);
@@ -2937,9 +2927,7 @@ yy107:
 yy108:
 	YYDEBUG(108, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_AS;
@@ -3090,9 +3078,7 @@ yy115:
 yy116:
 	YYDEBUG(116, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_DO;
@@ -3200,9 +3186,7 @@ yy127:
 yy128:
 	YYDEBUG(128, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_IF;
@@ -3280,9 +3264,7 @@ yy134:
 yy135:
 	YYDEBUG(135, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_LOGICAL_OR;
@@ -3626,9 +3608,7 @@ yy167:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 64) {
-		goto yy167;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 64) goto yy167;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	char *bin = yytext + 2; /* Skip "0b" */
@@ -3675,9 +3655,7 @@ yy170:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 128) {
-		goto yy170;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 128) goto yy170;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	char *hex = yytext + 2; /* Skip "0x" */
@@ -3787,9 +3765,7 @@ yy177:
 yy178:
 	YYDEBUG(178, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_LOGICAL_AND;
@@ -3869,9 +3845,7 @@ yy189:
 yy190:
 	YYDEBUG(190, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_EXIT;
@@ -4067,9 +4041,7 @@ yy210:
 yy211:
 	YYDEBUG(211, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_NEW;
@@ -4165,9 +4137,7 @@ yy220:
 yy221:
 	YYDEBUG(221, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_TRY;
@@ -4181,9 +4151,7 @@ yy222:
 yy223:
 	YYDEBUG(223, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_USE;
@@ -4191,9 +4159,7 @@ yy223:
 yy224:
 	YYDEBUG(224, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_VAR;
@@ -4207,9 +4173,7 @@ yy225:
 yy226:
 	YYDEBUG(226, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_LOGICAL_XOR;
@@ -4459,9 +4423,7 @@ yy253:
 yy254:
 	YYDEBUG(254, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CASE;
@@ -4511,9 +4473,7 @@ yy261:
 yy262:
 	YYDEBUG(262, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ECHO;
@@ -4603,9 +4563,7 @@ yy270:
 yy271:
 	YYDEBUG(271, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_EVAL;
@@ -4613,9 +4571,7 @@ yy271:
 yy272:
 	YYDEBUG(272, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_EXIT;
@@ -4653,9 +4609,7 @@ yy277:
 yy278:
 	YYDEBUG(278, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_GOTO;
@@ -4727,9 +4681,7 @@ yy283:
 yy284:
 	YYDEBUG(284, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_LIST;
@@ -5112,9 +5064,7 @@ yy327:
 yy328:
 	YYDEBUG(328, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ARRAY;
@@ -5122,9 +5072,7 @@ yy328:
 yy329:
 	YYDEBUG(329, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_BREAK;
@@ -5138,9 +5086,7 @@ yy330:
 yy331:
 	YYDEBUG(331, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CATCH;
@@ -5148,9 +5094,7 @@ yy331:
 yy332:
 	YYDEBUG(332, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CLASS;
@@ -5158,9 +5102,7 @@ yy332:
 yy333:
 	YYDEBUG(333, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CLONE;
@@ -5168,9 +5110,7 @@ yy333:
 yy334:
 	YYDEBUG(334, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CONST;
@@ -5202,9 +5142,7 @@ yy338:
 yy339:
 	YYDEBUG(339, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_EMPTY;
@@ -5224,9 +5162,7 @@ yy341:
 yy342:
 	YYDEBUG(342, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ENDIF;
@@ -5346,9 +5282,7 @@ yy355:
 yy356:
 	YYDEBUG(356, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ISSET;
@@ -5362,9 +5296,7 @@ yy357:
 yy358:
 	YYDEBUG(358, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_PRINT;
@@ -5414,9 +5346,7 @@ yy365:
 yy366:
 	YYDEBUG(366, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_THROW;
@@ -5424,9 +5354,7 @@ yy366:
 yy367:
 	YYDEBUG(367, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_TRAIT;
@@ -5434,9 +5362,7 @@ yy367:
 yy368:
 	YYDEBUG(368, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_UNSET;
@@ -5444,9 +5370,7 @@ yy368:
 yy369:
 	YYDEBUG(369, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_WHILE;
@@ -5454,9 +5378,7 @@ yy369:
 yy370:
 	YYDEBUG(370, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_YIELD;
@@ -5641,9 +5563,7 @@ yy396:
 yy397:
 	YYDEBUG(397, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ELSEIF;
@@ -5739,9 +5659,7 @@ yy406:
 yy407:
 	YYDEBUG(407, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_GLOBAL;
@@ -5797,9 +5715,7 @@ yy415:
 yy416:
 	YYDEBUG(416, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_PUBLIC;
@@ -5813,9 +5729,7 @@ yy417:
 yy418:
 	YYDEBUG(418, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_RETURN;
@@ -5823,9 +5737,7 @@ yy418:
 yy419:
 	YYDEBUG(419, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_STATIC;
@@ -5833,9 +5745,7 @@ yy419:
 yy420:
 	YYDEBUG(420, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_SWITCH;
@@ -5963,9 +5873,7 @@ yy438:
 yy439:
 	YYDEBUG(439, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_DECLARE;
@@ -5973,9 +5881,7 @@ yy439:
 yy440:
 	YYDEBUG(440, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_DEFAULT;
@@ -6007,9 +5913,7 @@ yy444:
 yy445:
 	YYDEBUG(445, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_EXTENDS;
@@ -6017,9 +5921,7 @@ yy445:
 yy446:
 	YYDEBUG(446, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_FINALLY;
@@ -6027,9 +5929,7 @@ yy446:
 yy447:
 	YYDEBUG(447, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_FOREACH;
@@ -6119,9 +6019,7 @@ yy455:
 yy456:
 	YYDEBUG(456, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_PRIVATE;
@@ -6186,9 +6084,7 @@ yy460:
 yy461:
 	YYDEBUG(461, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_DIR;
@@ -6249,9 +6145,7 @@ yy470:
 yy471:
 	YYDEBUG(471, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ABSTRACT;
@@ -6259,9 +6153,7 @@ yy471:
 yy472:
 	YYDEBUG(472, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
  return T_CALLABLE;
@@ -6269,9 +6161,7 @@ yy472:
 yy473:
 	YYDEBUG(473, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CONTINUE;
@@ -6297,9 +6187,7 @@ yy476:
 yy477:
 	YYDEBUG(477, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ENDWHILE;
@@ -6307,9 +6195,7 @@ yy477:
 yy478:
 	YYDEBUG(478, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_FUNCTION;
@@ -6370,9 +6256,7 @@ yy487:
 yy488:
 	YYDEBUG(488, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_FILE;
@@ -6392,9 +6276,7 @@ yy490:
 yy491:
 	YYDEBUG(491, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_LINE;
@@ -6430,9 +6312,7 @@ yy496:
 yy497:
 	YYDEBUG(497, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ENDSWITCH;
@@ -6458,9 +6338,7 @@ yy500:
 yy501:
 	YYDEBUG(501, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
         return T_INSTEADOF;
@@ -6468,9 +6346,7 @@ yy501:
 yy502:
 	YYDEBUG(502, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_INTERFACE;
@@ -6478,9 +6354,7 @@ yy502:
 yy503:
 	YYDEBUG(503, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_NAMESPACE;
@@ -6488,9 +6362,7 @@ yy503:
 yy504:
 	YYDEBUG(504, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_PROTECTED;
@@ -6504,9 +6376,7 @@ yy505:
 yy506:
 	YYDEBUG(506, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_CLASS_C;
@@ -6537,9 +6407,7 @@ yy510:
 yy511:
 	YYDEBUG(511, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_TRAIT_C;
@@ -6547,9 +6415,7 @@ yy511:
 yy512:
 	YYDEBUG(512, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ENDDECLARE;
@@ -6557,9 +6423,7 @@ yy512:
 yy513:
 	YYDEBUG(513, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_ENDFOREACH;
@@ -6567,9 +6431,7 @@ yy513:
 yy514:
 	YYDEBUG(514, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_IMPLEMENTS;
@@ -6583,9 +6445,7 @@ yy515:
 yy516:
 	YYDEBUG(516, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_INSTANCEOF;
@@ -6610,9 +6470,7 @@ yy519:
 yy520:
 	YYDEBUG(520, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_METHOD_C;
@@ -6654,9 +6512,7 @@ yy526:
 yy527:
 	YYDEBUG(527, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_INCLUDE_ONCE;
@@ -6664,9 +6520,7 @@ yy527:
 yy528:
 	YYDEBUG(528, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_REQUIRE_ONCE;
@@ -6674,9 +6528,7 @@ yy528:
 yy529:
 	YYDEBUG(529, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_FUNC_C;
@@ -6701,9 +6553,7 @@ yy532:
 yy533:
 	YYDEBUG(533, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_NS_C;
@@ -6716,9 +6566,7 @@ yy534:
 yy535:
 	YYDEBUG(535, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) {
-		goto yy35;
-	}
+	if (yybm_ST_IN_SCRIPTING[0+yych] & 16) goto yy35;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	return T_HALT_COMPILER;
@@ -6781,9 +6629,7 @@ yy539:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_LOOKING_FOR_PROPERTY[0+yych] & 64) {
-		goto yy539;
-	}
+	if (yybm_ST_LOOKING_FOR_PROPERTY[0+yych] & 64) goto yy539;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	HANDLE_NEWLINES(yytext, yyleng);
@@ -6799,9 +6645,7 @@ yy541:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_LOOKING_FOR_PROPERTY[0+yych] & 128) {
-		goto yy541;
-	}
+	if (yybm_ST_LOOKING_FOR_PROPERTY[0+yych] & 128) goto yy541;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	yy_pop_state();
@@ -6928,9 +6772,7 @@ yy548:
 	YYMARKER = ++YYCURSOR;
 	YYFILL(3);
 	yych = *YYCURSOR;
-	if (yybm_ST_BACKQUOTE[0+yych] & 128) {
-		goto yy548;
-	}
+	if (yybm_ST_BACKQUOTE[0+yych] & 128) goto yy548;
 	if (yych == '-') goto yy552;
 	if (yych <= '@') goto yy549;
 	if (yych <= '[') goto yy554;
@@ -7120,9 +6962,7 @@ yy562:
 	YYMARKER = ++YYCURSOR;
 	YYFILL(3);
 	yych = *YYCURSOR;
-	if (yybm_ST_DOUBLE_QUOTES[0+yych] & 128) {
-		goto yy562;
-	}
+	if (yybm_ST_DOUBLE_QUOTES[0+yych] & 128) goto yy562;
 	if (yych == '-') goto yy566;
 	if (yych <= '@') goto yy563;
 	if (yych <= '[') goto yy568;
@@ -7324,9 +7164,7 @@ yy575:
 	YYMARKER = ++YYCURSOR;
 	YYFILL(3);
 	yych = *YYCURSOR;
-	if (yybm_ST_HEREDOC[0+yych] & 128) {
-		goto yy575;
-	}
+	if (yybm_ST_HEREDOC[0+yych] & 128) goto yy575;
 	if (yych == '-') goto yy579;
 	if (yych <= '@') goto yy576;
 	if (yych <= '[') goto yy581;
@@ -7468,9 +7306,7 @@ yy588:
 	yych = *YYCURSOR;
 yy589:
 	YYDEBUG(589, yych);
-	if (yybm_ST_LOOKING_FOR_VARNAME[0+yych] & 128) {
-		goto yy588;
-	}
+	if (yybm_ST_LOOKING_FOR_VARNAME[0+yych] & 128) goto yy588;
 	if (yych <= '@') goto yy590;
 	if (yych <= '[') goto yy591;
 	if (yych == '}') goto yy591;
@@ -7641,18 +7477,14 @@ yy600:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 16) {
-		goto yy600;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 16) goto yy600;
 	goto yy599;
 yy601:
 	YYDEBUG(601, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 32) {
-		goto yy601;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 32) goto yy601;
 	yyleng = YYCURSOR - SCNG(yy_text);
 	{
 	zend_copy_value(zendlval, yytext, yyleng);
@@ -7732,9 +7564,7 @@ yy606:
 yy607:
 	YYDEBUG(607, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 64) {
-		goto yy610;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 64) goto yy610;
 yy608:
 	YYDEBUG(608, yych);
 	YYCURSOR = YYMARKER;
@@ -7742,27 +7572,21 @@ yy608:
 yy609:
 	YYDEBUG(609, yych);
 	yych = *++YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 128) {
-		goto yy611;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 128) goto yy611;
 	goto yy608;
 yy610:
 	YYDEBUG(610, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 64) {
-		goto yy610;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 64) goto yy610;
 	goto yy606;
 yy611:
 	YYDEBUG(611, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_ST_VAR_OFFSET[0+yych] & 128) {
-		goto yy611;
-	}
+	if (yybm_ST_VAR_OFFSET[0+yych] & 128) goto yy611;
 	goto yy606;
 /* *********************************** */
 yyc_INITIAL:

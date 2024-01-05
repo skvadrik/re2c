@@ -54,12 +54,10 @@ yy1:
 yy2:
 	++cursor;
 	yych = s[cursor];
-	if ((yybm[0+yych] & 128) != 0) {
-		goto yy2;
-	}
+	if ((yybm[0+yych] & 128) != 0) goto yy2;
 #line 13 "dlang/01_basic_b.re"
 	{ return true; }
-#line 63 "dlang/01_basic_b.d"
+#line 61 "dlang/01_basic_b.d"
 }
 #line 15 "dlang/01_basic_b.re"
 

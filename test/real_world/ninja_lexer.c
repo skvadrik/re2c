@@ -161,9 +161,7 @@ Lexer::Token Lexer::ReadToken() {
 		128, 128, 128, 128, 128, 128, 128, 128
 	};
 	yych = *p;
-	if (yybm[0+yych] & 32) {
-		goto yy6;
-	}
+	if (yybm[0+yych] & 32) goto yy6;
 	if (yych <= '^') {
 		if (yych <= ',') {
 			if (yych <= '\f') {
@@ -235,9 +233,7 @@ yy5:
 yy6:
 	yyaccept = 0;
 	yych = *(q = ++p);
-	if (yybm[0+yych] & 32) {
-		goto yy6;
-	}
+	if (yybm[0+yych] & 32) goto yy6;
 	if (yych <= '\f') {
 		if (yych == '\n') goto yy4;
 	} else {
@@ -254,9 +250,7 @@ yy8:
 yy9:
 	yych = *++p;
 yy10:
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = IDENT;    break; }
 yy11:
 	++p;
@@ -305,9 +299,7 @@ yy22:
 yy23:
 	yych = *++p;
 yy24:
-	if (yybm[0+yych] & 128) {
-		goto yy23;
-	}
+	if (yybm[0+yych] & 128) goto yy23;
 	if (yych <= 0x00) goto yy22;
 	++p;
 	{ continue; }
@@ -376,15 +368,11 @@ yy40:
 	goto yy10;
 yy41:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = POOL;     break; }
 yy42:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = RULE;     break; }
 yy43:
 	yych = *++p;
@@ -392,9 +380,7 @@ yy43:
 	goto yy10;
 yy44:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = BUILD;    break; }
 yy45:
 	yych = *++p;
@@ -422,23 +408,17 @@ yy50:
 	goto yy10;
 yy51:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = DEFAULT;  break; }
 yy52:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = INCLUDE;  break; }
 yy53:
 	yych = *++p;
 	if (yych != 'a') goto yy10;
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 64) goto yy9;
 	{ token = SUBNINJA; break; }
 }
 
@@ -502,9 +482,7 @@ void Lexer::EatWhitespace() {
 		  0,   0,   0,   0,   0,   0,   0,   0
 	};
 	yych = *p;
-	if (yybm[0+yych] & 128) {
-		goto yy58;
-	}
+	if (yybm[0+yych] & 128) goto yy58;
 	if (yych <= 0x00) goto yy55;
 	if (yych == '$') goto yy59;
 	goto yy56;
@@ -517,9 +495,7 @@ yy57:
 	{ break; }
 yy58:
 	yych = *++p;
-	if (yybm[0+yych] & 128) {
-		goto yy58;
-	}
+	if (yybm[0+yych] & 128) goto yy58;
 	{ continue; }
 yy59:
 	yych = *(q = ++p);
@@ -585,9 +561,7 @@ bool Lexer::ReadIdent(string* out) {
 		  0,   0,   0,   0,   0,   0,   0,   0
 	};
 	yych = *p;
-	if (yybm[0+yych] & 128) {
-		goto yy64;
-	}
+	if (yybm[0+yych] & 128) goto yy64;
 	++p;
 	{
       last_token_ = start;
@@ -595,9 +569,7 @@ bool Lexer::ReadIdent(string* out) {
     }
 yy64:
 	yych = *++p;
-	if (yybm[0+yych] & 128) {
-		goto yy64;
-	}
+	if (yybm[0+yych] & 128) goto yy64;
 	{
       out->assign(start, p - start);
       break;
@@ -655,9 +627,7 @@ bool Lexer::ReadEvalString(EvalString* eval, bool path, string* err) {
 		 16,  16,  16,  16,  16,  16,  16,  16
 	};
 	yych = *p;
-	if (yybm[0+yych] & 16) {
-		goto yy67;
-	}
+	if (yybm[0+yych] & 16) goto yy67;
 	if (yych <= '\r') {
 		if (yych <= 0x00) goto yy66;
 		if (yych <= '\n') goto yy68;
@@ -675,9 +645,7 @@ yy66:
     }
 yy67:
 	yych = *++p;
-	if (yybm[0+yych] & 16) {
-		goto yy67;
-	}
+	if (yybm[0+yych] & 16) goto yy67;
 	{
       eval->AddText(StringPiece(start, p - start));
       continue;
@@ -704,9 +672,7 @@ yy69:
     }
 yy70:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy78;
-	}
+	if (yybm[0+yych] & 64) goto yy78;
 	if (yych <= ' ') {
 		if (yych <= '\f') {
 			if (yych == '\n') goto yy74;
@@ -743,9 +709,7 @@ yy73:
     }
 yy74:
 	yych = *++p;
-	if (yybm[0+yych] & 32) {
-		goto yy74;
-	}
+	if (yybm[0+yych] & 32) goto yy74;
 	{
       continue;
     }
@@ -767,9 +731,7 @@ yy77:
     }
 yy78:
 	yych = *++p;
-	if (yybm[0+yych] & 64) {
-		goto yy78;
-	}
+	if (yybm[0+yych] & 64) goto yy78;
 	{
       eval->AddSpecial(StringPiece(start + 1, p - start - 1));
       continue;
@@ -782,9 +744,7 @@ yy79:
     }
 yy80:
 	yych = *(q = ++p);
-	if (yybm[0+yych] & 128) {
-		goto yy82;
-	}
+	if (yybm[0+yych] & 128) goto yy82;
 	goto yy73;
 yy81:
 	yych = *++p;
@@ -794,9 +754,7 @@ yy81:
     }
 yy82:
 	yych = *++p;
-	if (yybm[0+yych] & 128) {
-		goto yy82;
-	}
+	if (yybm[0+yych] & 128) goto yy82;
 	if (yych == '}') goto yy83;
 	p = q;
 	goto yy73;

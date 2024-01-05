@@ -900,9 +900,7 @@ yy4:
 	YYDEBUG(4, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 8) {
-		goto yy49;
-	}
+	if (yybm[0+yych] & 8) goto yy49;
 	if (yych <= '/') goto yy5;
 	if (yych <= '9') goto yy51;
 yy5:
@@ -911,7 +909,7 @@ yy5:
 	{
 		goto std;
 	}
-#line 915 "real_world/parse_date_db.c"
+#line 913 "real_world/parse_date_db.c"
 yy6:
 	YYDEBUG(6, yych);
 	yych = *++YYCURSOR;
@@ -924,9 +922,7 @@ yy7:
 	YYDEBUG(7, yych);
 	yyaccept = 1;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 8) {
-		goto yy49;
-	}
+	if (yybm[0+yych] & 8) goto yy49;
 	if (yych <= '/') goto yy3;
 	if (yych <= '1') goto yy52;
 	if (yych <= '2') goto yy53;
@@ -1257,7 +1253,7 @@ yy16:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIMEZONE;
 	}
-#line 1261 "real_world/parse_date_db.c"
+#line 1257 "real_world/parse_date_db.c"
 yy17:
 	YYDEBUG(17, yych);
 	yych = *++YYCURSOR;
@@ -2242,9 +2238,7 @@ yy49:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 8) {
-		goto yy49;
-	}
+	if (yybm[0+yych] & 8) goto yy49;
 	if (yych <= '/') goto yy50;
 	if (yych <= '9') goto yy51;
 yy50:
@@ -2327,9 +2321,7 @@ yy51:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 11) YYFILL(11);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 16) {
-		goto yy51;
-	}
+	if (yybm[0+yych] & 16) goto yy51;
 	if (yych <= 'W') {
 		if (yych <= 'F') {
 			if (yych <= ' ') {
@@ -2857,7 +2849,7 @@ yy69:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 2861 "real_world/parse_date_db.c"
+#line 2853 "real_world/parse_date_db.c"
 yy70:
 	YYDEBUG(70, yych);
 	yych = *++YYCURSOR;
@@ -3256,7 +3248,7 @@ yy96:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 3260 "real_world/parse_date_db.c"
+#line 3252 "real_world/parse_date_db.c"
 yy97:
 	YYDEBUG(97, yych);
 	++YYCURSOR;
@@ -3799,9 +3791,7 @@ yy120:
 	yych = *YYCURSOR;
 yy121:
 	YYDEBUG(121, yych);
-	if (yybm[0+yych] & 32) {
-		goto yy120;
-	}
+	if (yybm[0+yych] & 32) goto yy120;
 	if (yych <= '/') goto yy50;
 	if (yych <= '2') goto yy122;
 	if (yych <= '3') goto yy124;
@@ -3828,7 +3818,7 @@ yy123:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_TEXT;
 	}
-#line 3832 "real_world/parse_date_db.c"
+#line 3822 "real_world/parse_date_db.c"
 yy124:
 	YYDEBUG(124, yych);
 	yyaccept = 4;
@@ -5248,9 +5238,7 @@ yy180:
 	YYDEBUG(180, yych);
 	yyaccept = 2;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 16) {
-		goto yy51;
-	}
+	if (yybm[0+yych] & 16) goto yy51;
 	if (yych <= 'W') {
 		if (yych <= 'F') {
 			if (yych <= ' ') {
@@ -5449,7 +5437,7 @@ yy194:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME24_WITH_ZONE;
 	}
-#line 5453 "real_world/parse_date_db.c"
+#line 5441 "real_world/parse_date_db.c"
 yy195:
 	YYDEBUG(195, yych);
 	yyaccept = 5;
@@ -5526,7 +5514,7 @@ yy199:
 		TIMELIB_DEINIT;
 		return TIMELIB_AMERICAN;
 	}
-#line 5530 "real_world/parse_date_db.c"
+#line 5518 "real_world/parse_date_db.c"
 yy200:
 	YYDEBUG(200, yych);
 	yyaccept = 6;
@@ -5755,7 +5743,7 @@ yy224:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL;
 	}
-#line 5759 "real_world/parse_date_db.c"
+#line 5747 "real_world/parse_date_db.c"
 yy225:
 	YYDEBUG(225, yych);
 	yyaccept = 3;
@@ -6139,7 +6127,7 @@ yy256:
 		TIMELIB_DEINIT;
 		return TIMELIB_AGO;
 	}
-#line 6143 "real_world/parse_date_db.c"
+#line 6131 "real_world/parse_date_db.c"
 yy257:
 	YYDEBUG(257, yych);
 	yyaccept = 2;
@@ -6703,7 +6691,7 @@ yy275:
 		TIMELIB_DEINIT;
 		return TIMELIB_WEEKDAY;
 	}
-#line 6707 "real_world/parse_date_db.c"
+#line 6695 "real_world/parse_date_db.c"
 yy276:
 	YYDEBUG(276, yych);
 	yyaccept = 2;
@@ -6857,9 +6845,7 @@ yy281:
 	yych = *YYCURSOR;
 yy282:
 	YYDEBUG(282, yych);
-	if (yybm[0+yych] & 64) {
-		goto yy281;
-	}
+	if (yybm[0+yych] & 64) goto yy281;
 	if (yych <= '2') {
 		if (yych <= '/') goto yy123;
 		if (yych <= '1') goto yy426;
@@ -7506,7 +7492,7 @@ yy305:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 7510 "real_world/parse_date_db.c"
+#line 7496 "real_world/parse_date_db.c"
 yy306:
 	YYDEBUG(306, yych);
 	yyaccept = 2;
@@ -8573,7 +8559,7 @@ yy360:
 		TIMELIB_DEINIT;
 		return TIMELIB_GNU_NOCOLON;
 	}
-#line 8577 "real_world/parse_date_db.c"
+#line 8563 "real_world/parse_date_db.c"
 yy361:
 	YYDEBUG(361, yych);
 	yyaccept = 11;
@@ -8634,7 +8620,7 @@ yy362:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 8638 "real_world/parse_date_db.c"
+#line 8624 "real_world/parse_date_db.c"
 yy363:
 	YYDEBUG(363, yych);
 	yyaccept = 3;
@@ -8705,7 +8691,7 @@ yy366:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 8709 "real_world/parse_date_db.c"
+#line 8695 "real_world/parse_date_db.c"
 yy367:
 	YYDEBUG(367, yych);
 	yyaccept = 3;
@@ -9105,7 +9091,7 @@ yy391:
 		TIMELIB_DEINIT;
 		return TIMELIB_TIME12;
 	}
-#line 9109 "real_world/parse_date_db.c"
+#line 9095 "real_world/parse_date_db.c"
 yy392:
 	YYDEBUG(392, yych);
 	yych = *++YYCURSOR;
@@ -9274,9 +9260,7 @@ yy408:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy566;
-	}
+	if (yybm[0+yych] & 128) goto yy566;
 	goto yy50;
 yy409:
 	YYDEBUG(409, yych);
@@ -10162,7 +10146,7 @@ yy450:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 10166 "real_world/parse_date_db.c"
+#line 10150 "real_world/parse_date_db.c"
 yy451:
 	YYDEBUG(451, yych);
 	yyaccept = 13;
@@ -10923,7 +10907,7 @@ yy482:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_FULL_POINTED;
 	}
-#line 10927 "real_world/parse_date_db.c"
+#line 10911 "real_world/parse_date_db.c"
 yy483:
 	YYDEBUG(483, yych);
 	yyaccept = 14;
@@ -10954,7 +10938,7 @@ yy484:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 10958 "real_world/parse_date_db.c"
+#line 10942 "real_world/parse_date_db.c"
 yy485:
 	YYDEBUG(485, yych);
 	yyaccept = 14;
@@ -11287,7 +11271,7 @@ yy513:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 11291 "real_world/parse_date_db.c"
+#line 11275 "real_world/parse_date_db.c"
 yy514:
 	YYDEBUG(514, yych);
 	yych = *++YYCURSOR;
@@ -11767,9 +11751,7 @@ yy566:
 	YYMARKER = ++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy566;
-	}
+	if (yybm[0+yych] & 128) goto yy566;
 	if (yych == '/') goto yy259;
 	if (yych == '_') goto yy259;
 	goto yy16;
@@ -12303,7 +12285,7 @@ yy589:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NO_DAY;
 	}
-#line 12307 "real_world/parse_date_db.c"
+#line 12289 "real_world/parse_date_db.c"
 yy590:
 	YYDEBUG(590, yych);
 	yych = *++YYCURSOR;
@@ -12351,7 +12333,7 @@ yy592:
 		TIMELIB_DEINIT;
 		return TIMELIB_SHORTDATE_WITH_TIME;
 	}
-#line 12355 "real_world/parse_date_db.c"
+#line 12337 "real_world/parse_date_db.c"
 yy593:
 	YYDEBUG(593, yych);
 	yyaccept = 16;
@@ -13296,7 +13278,7 @@ yy631:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 13300 "real_world/parse_date_db.c"
+#line 13282 "real_world/parse_date_db.c"
 yy632:
 	YYDEBUG(632, yych);
 	yych = *++YYCURSOR;
@@ -13834,7 +13816,7 @@ yy674:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_NOCOLON;
 	}
-#line 13838 "real_world/parse_date_db.c"
+#line 13820 "real_world/parse_date_db.c"
 yy675:
 	YYDEBUG(675, yych);
 	yyaccept = 18;
@@ -14045,9 +14027,7 @@ yy678:
 	YYDEBUG(678, yych);
 	yyaccept = 18;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 16) {
-		goto yy51;
-	}
+	if (yybm[0+yych] & 16) goto yy51;
 	if (yych <= 'W') {
 		if (yych <= 'F') {
 			if (yych <= ' ') {
@@ -16276,9 +16256,7 @@ yy834:
 	YYDEBUG(834, yych);
 	yyaccept = 19;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 16) {
-		goto yy51;
-	}
+	if (yybm[0+yych] & 16) goto yy51;
 	if (yych <= 'W') {
 		if (yych <= 'F') {
 			if (yych <= ' ') {
@@ -16334,7 +16312,7 @@ yy835:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_YEARDAY;
 	}
-#line 16338 "real_world/parse_date_db.c"
+#line 16316 "real_world/parse_date_db.c"
 yy836:
 	YYDEBUG(836, yych);
 	yyaccept = 19;
@@ -16629,7 +16607,7 @@ yy851:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 16633 "real_world/parse_date_db.c"
+#line 16611 "real_world/parse_date_db.c"
 yy852:
 	YYDEBUG(852, yych);
 	yych = *++YYCURSOR;
@@ -17052,7 +17030,7 @@ yy906:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 17056 "real_world/parse_date_db.c"
+#line 17034 "real_world/parse_date_db.c"
 yy907:
 	YYDEBUG(907, yych);
 	yych = *++YYCURSOR;
@@ -17784,7 +17762,7 @@ yy968:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_DATE;
 	}
-#line 17788 "real_world/parse_date_db.c"
+#line 17766 "real_world/parse_date_db.c"
 yy969:
 	YYDEBUG(969, yych);
 	yyaccept = 22;
@@ -17833,9 +17811,7 @@ yy972:
 	YYDEBUG(972, yych);
 	yyaccept = 23;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm[0+yych] & 16) {
-		goto yy51;
-	}
+	if (yybm[0+yych] & 16) goto yy51;
 	if (yych <= 'W') {
 		if (yych <= 'F') {
 			if (yych <= ' ') {
@@ -17898,7 +17874,7 @@ yy973:
 		TIMELIB_DEINIT;
 		return TIMELIB_DATE_NOCOLON;
 	}
-#line 17902 "real_world/parse_date_db.c"
+#line 17878 "real_world/parse_date_db.c"
 yy974:
 	YYDEBUG(974, yych);
 	yych = *++YYCURSOR;
@@ -17969,7 +17945,7 @@ yy982:
 		TIMELIB_DEINIT;
 		return TIMELIB_ISO_WEEK;
 	}
-#line 17973 "real_world/parse_date_db.c"
+#line 17949 "real_world/parse_date_db.c"
 yy983:
 	YYDEBUG(983, yych);
 	yych = *++YYCURSOR;
@@ -18013,7 +17989,7 @@ yy988:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 18017 "real_world/parse_date_db.c"
+#line 17993 "real_world/parse_date_db.c"
 yy989:
 	YYDEBUG(989, yych);
 	yyaccept = 16;
@@ -18250,7 +18226,7 @@ yy1014:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 18254 "real_world/parse_date_db.c"
+#line 18230 "real_world/parse_date_db.c"
 yy1015:
 	YYDEBUG(1015, yych);
 	yyaccept = 24;
@@ -18554,7 +18530,7 @@ yy1041:
 		TIMELIB_DEINIT;
 		return TIMELIB_PG_TEXT;
 	}
-#line 18558 "real_world/parse_date_db.c"
+#line 18534 "real_world/parse_date_db.c"
 yy1042:
 	YYDEBUG(1042, yych);
 	yych = *++YYCURSOR;
@@ -18700,7 +18676,7 @@ yy1059:
 		TIMELIB_DEINIT;
 		return TIMELIB_RELATIVE;
 	}
-#line 18704 "real_world/parse_date_db.c"
+#line 18680 "real_world/parse_date_db.c"
 yy1060:
 	YYDEBUG(1060, yych);
 	yyaccept = 25;
@@ -19313,7 +19289,7 @@ yy1131:
 		TIMELIB_DEINIT;
 		return TIMELIB_XMLRPC_SOAP;
 	}
-#line 19317 "real_world/parse_date_db.c"
+#line 19293 "real_world/parse_date_db.c"
 yy1132:
 	YYDEBUG(1132, yych);
 	yych = *++YYCURSOR;
@@ -19513,7 +19489,7 @@ yy1155:
 		TIMELIB_DEINIT;
 		return TIMELIB_CLF;
 	}
-#line 19517 "real_world/parse_date_db.c"
+#line 19493 "real_world/parse_date_db.c"
 yy1156:
 	YYDEBUG(1156, yych);
 	yych = *++YYCURSOR;
@@ -19594,7 +19570,7 @@ yy1165:
 
 }
 
-#line 19598 "real_world/parse_date_db.c"
+#line 19574 "real_world/parse_date_db.c"
 #define YYMAXFILL 29
 #line 1448 "real_world/parse_date_db.re"
 

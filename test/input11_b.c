@@ -77,22 +77,18 @@ yy5:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 0x20) {
-		goto yy5;
-	}
+	if (yybm[0+yych] & 0x20) goto yy5;
 	goto yy4;
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy7:
-	if (yybm[0+yych] & 0x40) {
-		goto yy6;
-	}
+	if (yybm[0+yych] & 0x40) goto yy6;
 yy8:
 #line 13 "input11_b.re"
 	{ return 1; }
-#line 96 "input11_b.c"
+#line 92 "input11_b.c"
 yy9:
 	yych = *++YYCURSOR;
 	if (yych != 'e') goto yy7;
@@ -117,12 +113,10 @@ yy11:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 0x80) {
-		goto yy11;
-	}
+	if (yybm[0+yych] & 0x80) goto yy11;
 #line 12 "input11_b.re"
 	{ return 0; }
-#line 126 "input11_b.c"
+#line 120 "input11_b.c"
 }
 #line 18 "input11_b.re"
 

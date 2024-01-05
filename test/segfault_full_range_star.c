@@ -43,9 +43,7 @@ yy1:
 yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy1;
-	}
+	if (yybm[0+yych] & 128) goto yy1;
 }
 
 segfault_full_range_star.re:3:6: warning: rule matches empty string [-Wmatch-empty-string]

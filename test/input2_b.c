@@ -41,17 +41,13 @@
 	};
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy2;
-	}
+	if (yybm[0+yych] & 128) goto yy2;
 yy1:
 yy2:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy2;
-	}
+	if (yybm[0+yych] & 128) goto yy2;
 	if (yych <= '`') goto yy1;
 	if (yych >= 'c') goto yy1;
 	yych = *++YYCURSOR;
@@ -59,7 +55,7 @@ yy2:
 	++YYCURSOR;
 #line 4 "input2_b.re"
 	{ return 1; }
-#line 63 "input2_b.c"
+#line 59 "input2_b.c"
 }
 #line 6 "input2_b.re"
 

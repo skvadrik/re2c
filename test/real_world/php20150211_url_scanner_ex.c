@@ -156,9 +156,7 @@ scan:
 	};
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy1;
-	}
+	if (yybm[0+yych] & 128) goto yy1;
 	if (yych <= '#') goto yy2;
 	if (yych <= ':') goto yy3;
 	goto yy4;
@@ -166,9 +164,7 @@ yy1:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy1;
-	}
+	if (yybm[0+yych] & 128) goto yy1;
 	{ goto scan; }
 yy2:
 	++YYCURSOR;
@@ -402,17 +398,13 @@ state_plain:
 	};
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy6;
-	}
+	if (yybm[0+yych] & 128) goto yy6;
 	goto yy7;
 yy6:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy6;
-	}
+	if (yybm[0+yych] & 128) goto yy6;
 	{ passthru(STD_ARGS); goto state_plain; }
 yy7:
 	++YYCURSOR;
@@ -461,18 +453,14 @@ state_tag:
 	};
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 128) goto yy9;
 	++YYCURSOR;
 	{ passthru(STD_ARGS); goto state_plain_begin; }
 yy9:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy9;
-	}
+	if (yybm[0+yych] & 128) goto yy9;
 	{ handle_tag(STD_ARGS); /* Sets STATE */; passthru(STD_ARGS); if (STATE == STATE_PLAIN) goto state_plain; else goto state_next_arg; }
 }
 
@@ -566,9 +554,7 @@ yy13:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy13;
-	}
+	if (yybm[0+yych] & 128) goto yy13;
 	{ passthru(STD_ARGS); goto state_next_arg; }
 yy14:
 	yych = *++YYCURSOR;
@@ -634,9 +620,7 @@ yy19:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy19;
-	}
+	if (yybm[0+yych] & 128) goto yy19;
 	{ passthru(STD_ARGS); handle_arg(STD_ARGS); STATE = STATE_BEFORE_VAL; goto state_before_val; }
 }
 
@@ -695,9 +679,7 @@ yy23:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy23;
-	}
+	if (yybm[0+yych] & 128) goto yy23;
 	{ passthru(STD_ARGS); STATE = STATE_VAL; goto state_val; }
 yy24:
 	++YYCURSOR;
@@ -752,9 +734,7 @@ state_val:
 	};
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 32) {
-		goto yy26;
-	}
+	if (yybm[0+yych] & 32) goto yy26;
 	if (yych <= ' ') goto yy27;
 	if (yych <= '"') goto yy29;
 	if (yych <= '\'') goto yy30;
@@ -763,9 +743,7 @@ yy26:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 32) {
-		goto yy26;
-	}
+	if (yybm[0+yych] & 32) goto yy26;
 	{ handle_val(STD_ARGS, 0, ' '); goto state_next_arg_begin; }
 yy27:
 	++YYCURSOR;
@@ -784,9 +762,7 @@ yy31:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy32:
-	if (yybm[0+yych] & 64) {
-		goto yy31;
-	}
+	if (yybm[0+yych] & 64) goto yy31;
 	if (yych <= '"') goto yy34;
 yy33:
 	YYCURSOR = YYMARKER;
@@ -799,9 +775,7 @@ yy35:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 yy36:
-	if (yybm[0+yych] & 128) {
-		goto yy35;
-	}
+	if (yybm[0+yych] & 128) goto yy35;
 	if (yych >= '(') goto yy33;
 	++YYCURSOR;
 	{ handle_val(STD_ARGS, 1, '\''); goto state_next_arg_begin; }

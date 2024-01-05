@@ -101,9 +101,7 @@ yy5:
 yyc_ST_VALUE:
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *(YYMARKER = YYCURSOR);
-			if (yybm_ST_VALUE[0+yych] & 128) {
-				goto yy8;
-			}
+			if (yybm_ST_VALUE[0+yych] & 128) goto yy8;
 			if (yych == '$') goto yy9;
 yy7:
 			{
@@ -114,9 +112,7 @@ yy8:
 			++YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
 			yych = *YYCURSOR;
-			if (yybm_ST_VALUE[0+yych] & 128) {
-				goto yy8;
-			}
+			if (yybm_ST_VALUE[0+yych] & 128) goto yy8;
 			goto yy7;
 yy9:
 			++YYCURSOR;

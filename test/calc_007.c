@@ -105,9 +105,7 @@ int scan(char *s)
 				  0,   0,   0,   0,   0,   0,   0,   0
 			};
 			yych = *YYCURSOR;
-			if (yybm[0+yych] & 64) {
-				goto yy3;
-			}
+			if (yybm[0+yych] & 64) goto yy3;
 			if (yych <= ',') {
 				if (yych <= 0x00) goto yy1;
 				if (yych == '+') goto yy4;
@@ -126,30 +124,28 @@ yy1:
 			++YYCURSOR;
 #line 86 "calc_007.re"
 			{ res = depth == 1 ? 0 : 2;	break; }
-#line 130 "calc_007.c"
+#line 128 "calc_007.c"
 yy2:
 			++YYCURSOR;
 #line 87 "calc_007.re"
 			{ res = 1; 					continue; }
-#line 135 "calc_007.c"
+#line 133 "calc_007.c"
 yy3:
 			yych = *++YYCURSOR;
-			if (yybm[0+yych] & 64) {
-				goto yy3;
-			}
+			if (yybm[0+yych] & 64) goto yy3;
 #line 81 "calc_007.re"
 			{ continue; }
-#line 143 "calc_007.c"
+#line 139 "calc_007.c"
 yy4:
 			++YYCURSOR;
 #line 84 "calc_007.re"
 			{ res = stack_add();		continue; }
-#line 148 "calc_007.c"
+#line 144 "calc_007.c"
 yy5:
 			++YYCURSOR;
 #line 85 "calc_007.re"
 			{ res = stack_sub();		continue; }
-#line 153 "calc_007.c"
+#line 149 "calc_007.c"
 yy6:
 			yych = *++YYCURSOR;
 			if (yych <= '/') goto yy7;
@@ -157,12 +153,10 @@ yy6:
 yy7:
 #line 83 "calc_007.re"
 			{ res = push_num(t, p, 10); continue; }
-#line 161 "calc_007.c"
+#line 157 "calc_007.c"
 yy8:
 			yych = *++YYCURSOR;
-			if (yybm[0+yych] & 128) {
-				goto yy8;
-			}
+			if (yybm[0+yych] & 128) goto yy8;
 			goto yy7;
 yy9:
 			yych = *++YYCURSOR;
@@ -171,7 +165,7 @@ yy9:
 yy10:
 #line 82 "calc_007.re"
 			{ res = push_num(t, p, 8);	continue; }
-#line 175 "calc_007.c"
+#line 169 "calc_007.c"
 		}
 #line 88 "calc_007.re"
 

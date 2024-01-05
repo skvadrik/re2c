@@ -738,7 +738,7 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     } else {
-        append(stmts, code_if_then_else(alc, elif_cond, if_else, nullptr, false));
+        append(stmts, code_if_then_else(alc, elif_cond, if_else, nullptr));
     }
     if (go->lgo != nullptr) {
         append(stmts, gen_goswif(output, dfa, go->lgo, from));

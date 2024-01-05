@@ -145,9 +145,7 @@ void scan(Scanner *s)
 yyc_R1:
 			if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 			yych = *s->cur;
-			if (yybm_R1[0+yych] & 128) {
-				goto yy1;
-			}
+			if (yybm_R1[0+yych] & 128) goto yy1;
 			++s->cur;
 			{
 					continue;
@@ -156,9 +154,7 @@ yy1:
 			++s->cur;
 			if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 			yych = *s->cur;
-			if (yybm_R1[0+yych] & 128) {
-				goto yy1;
-			}
+			if (yybm_R1[0+yych] & 128) goto yy1;
 			{
 					continue;
 				}
@@ -166,9 +162,7 @@ yy1:
 yyc_R2:
 			if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 			yych = *s->cur;
-			if (yybm_R2[0+yych] & 128) {
-				goto yy3;
-			}
+			if (yybm_R2[0+yych] & 128) goto yy3;
 			++s->cur;
 			{
 					continue;
@@ -177,9 +171,7 @@ yy3:
 			++s->cur;
 			if (s->lim <= s->cur) { if(fill(s, 1) >= 0) break; }
 			yych = *s->cur;
-			if (yybm_R2[0+yych] & 128) {
-				goto yy3;
-			}
+			if (yybm_R2[0+yych] & 128) goto yy3;
 			{
 					continue;
 				}

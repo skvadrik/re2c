@@ -653,9 +653,7 @@ yy14:
 }
 yy15:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy28;
-	}
+	if (yybm[0+yych] & 128) goto yy28;
 	if (yych == '+') goto yy27;
 yy16:
 	YYCURSOR = YYMARKER;
@@ -775,17 +773,13 @@ yy26:
 	goto yy16;
 yy27:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy28;
-	}
+	if (yybm[0+yych] & 128) goto yy28;
 	goto yy16;
 yy28:
 	++YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) {
-		goto yy28;
-	}
+	if (yybm[0+yych] & 128) goto yy28;
 	if (yych <= '/') goto yy16;
 	if (yych <= ':') goto yy50;
 	goto yy16;

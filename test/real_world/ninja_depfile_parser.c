@@ -102,9 +102,7 @@ bool DepfileParser::Parse(string* content, string* err) {
         128, 128, 128, 128, 128, 128, 128, 128
       };
       yych = *in;
-      if (yybm[0+yych] & 128) {
-        goto yy5;
-      }
+      if (yybm[0+yych] & 128) goto yy5;
       if (yych <= '\r') {
         if (yych <= '\t') {
           if (yych >= 0x01) goto yy1;
@@ -148,9 +146,7 @@ yy4:
       goto yy2;
 yy5:
       yych = *++in;
-      if (yybm[0+yych] & 128) {
-        goto yy5;
-      }
+      if (yybm[0+yych] & 128) goto yy5;
 yy6:
       {
         // Got a span of plain text.

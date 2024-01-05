@@ -202,9 +202,7 @@ yy3:
 yy4:
 		yych = *++YYCURSOR;
 yy5:
-		if (yybm_JS[0+yych] & 64) {
-			goto yy4;
-		}
+		if (yybm_JS[0+yych] & 64) goto yy4;
 yy6:
 		{ goto std; }
 yy7:
@@ -268,9 +266,7 @@ yy13:
 yy14:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yybm_JS[0+yych] & 128) {
-			goto yy14;
-		}
+		if (yybm_JS[0+yych] & 128) goto yy14;
 		if (yych <= 'D') {
 			if (yych == '.') goto yy23;
 			goto yy13;

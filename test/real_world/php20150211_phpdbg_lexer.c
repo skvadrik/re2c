@@ -249,9 +249,7 @@ yy3:
 	yych = *YYCURSOR;
 yy4:
 	YYDEBUG(4, yych);
-	if (yybm_NORMAL[0+yych] & 2) {
-		goto yy3;
-	}
+	if (yybm_NORMAL[0+yych] & 2) goto yy3;
 	if (yych >= '$') goto yy25;
 yy5:
 	YYDEBUG(5, yych);
@@ -267,9 +265,7 @@ yy6:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_NORMAL[0+yych] & 4) {
-		goto yy6;
-	}
+	if (yybm_NORMAL[0+yych] & 4) goto yy6;
 	if (yych <= 0x00) goto yy1;
 	if (yych <= 0x08) goto yy7;
 	if (yych <= '\n') goto yy8;
@@ -286,9 +282,7 @@ yy8:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_NORMAL[0+yych] & 4) {
-		goto yy6;
-	}
+	if (yybm_NORMAL[0+yych] & 4) goto yy6;
 	if (yych <= 0x00) goto yy1;
 	if (yych <= 0x08) goto yy2;
 	if (yych <= '\n') goto yy8;
@@ -304,9 +298,7 @@ yy10:
 	YYDEBUG(10, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm_NORMAL[0+yych] & 16) {
-		goto yy11;
-	}
+	if (yybm_NORMAL[0+yych] & 16) goto yy11;
 	if (yych == 'r') goto yy27;
 	goto yy4;
 yy11:
@@ -574,9 +566,7 @@ yy28:
 	YYDEBUG(28, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm_NORMAL[0+yych] & 64) {
-		goto yy46;
-	}
+	if (yybm_NORMAL[0+yych] & 64) goto yy46;
 	goto yy4;
 yy29:
 	YYDEBUG(29, yych);
@@ -1005,9 +995,7 @@ yy69:
 	YYDEBUG(69, yych);
 	yyaccept = 0;
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm_NORMAL[0+yych] & 128) {
-		goto yy72;
-	}
+	if (yybm_NORMAL[0+yych] & 128) goto yy72;
 	goto yy4;
 yy70:
 	YYDEBUG(70, yych);
@@ -1154,9 +1142,7 @@ yy79:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_PRE_RAW[0+yych] & 32) {
-		goto yy83;
-	}
+	if (yybm_PRE_RAW[0+yych] & 32) goto yy83;
 	if (yych <= 0x00) goto yy82;
 	if (yych <= 0x08) goto yy80;
 	if (yych <= '\n') goto yy79;
@@ -1182,9 +1168,7 @@ yy83:
 	yych = *YYCURSOR;
 yy84:
 	YYDEBUG(84, yych);
-	if (yybm_PRE_RAW[0+yych] & 32) {
-		goto yy83;
-	}
+	if (yybm_PRE_RAW[0+yych] & 32) goto yy83;
 	if (yych <= 0x00) goto yy82;
 	if (yych <= 0x08) goto yy85;
 	if (yych <= '\n') goto yy79;
@@ -1201,9 +1185,7 @@ yy86:
 	++YYCURSOR;
 	YYFILL(2);
 	yych = *YYCURSOR;
-	if (yybm_PRE_RAW[0+yych] & 64) {
-		goto yy86;
-	}
+	if (yybm_PRE_RAW[0+yych] & 64) goto yy86;
 	if (yych <= '.') {
 		if (yych <= ',') goto yy87;
 		if (yych <= '-') goto yy88;
@@ -1219,18 +1201,14 @@ yy87:
 yy88:
 	YYDEBUG(88, yych);
 	yych = *++YYCURSOR;
-	if (yybm_PRE_RAW[0+yych] & 128) {
-		goto yy89;
-	}
+	if (yybm_PRE_RAW[0+yych] & 128) goto yy89;
 	goto yy87;
 yy89:
 	YYDEBUG(89, yych);
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_PRE_RAW[0+yych] & 128) {
-		goto yy89;
-	}
+	if (yybm_PRE_RAW[0+yych] & 128) goto yy89;
 	yyleng = (size_t) YYCURSOR - (size_t) yytext;
 	{
 	char *text = yytext + 2;
@@ -1247,9 +1225,7 @@ yy90:
 	YYFILL(1);
 	yych = *YYCURSOR;
 	YYDEBUG(90, yych);
-	if (yybm_RAW[0+yych] & 32) {
-		goto yy91;
-	}
+	if (yybm_RAW[0+yych] & 32) goto yy91;
 	if (yych <= 0x00) goto yy92;
 	if (yych <= 0x08) goto yy94;
 	if (yych <= '\n') goto yy95;
@@ -1268,9 +1244,7 @@ yy94:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_RAW[0+yych] & 64) {
-		goto yy94;
-	}
+	if (yybm_RAW[0+yych] & 64) goto yy94;
 	yyleng = (size_t) YYCURSOR - (size_t) yytext;
 	{
 	phpdbg_init_param(yylval, STR_PARAM);
@@ -1283,9 +1257,7 @@ yy95:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_RAW[0+yych] & 128) {
-		goto yy95;
-	}
+	if (yybm_RAW[0+yych] & 128) goto yy95;
 	if (yych <= '\f') {
 		if (yych <= 0x00) goto yy92;
 		if (yych != '\t') goto yy93;
@@ -1298,9 +1270,7 @@ yy96:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_RAW[0+yych] & 128) {
-		goto yy95;
-	}
+	if (yybm_RAW[0+yych] & 128) goto yy95;
 	if (yych <= '\f') {
 		if (yych <= 0x00) goto yy92;
 		if (yych == '\t') goto yy96;
@@ -1386,9 +1356,7 @@ yy101:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_INITIAL[0+yych] & 64) {
-		goto yy108;
-	}
+	if (yybm_INITIAL[0+yych] & 64) goto yy108;
 	if (yych <= 0x00) goto yy107;
 	if (yych <= 0x08) goto yy102;
 	if (yych <= '\n') goto yy101;
@@ -1419,9 +1387,7 @@ yy105:
 yy106:
 	YYDEBUG(106, yych);
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yybm_INITIAL[0+yych] & 128) {
-		goto yy115;
-	}
+	if (yybm_INITIAL[0+yych] & 128) goto yy115;
 	if (yych == 'U') goto yy113;
 	if (yych == 'u') goto yy113;
 	goto yy99;
@@ -1436,9 +1402,7 @@ yy108:
 	yych = *YYCURSOR;
 yy109:
 	YYDEBUG(109, yych);
-	if (yybm_INITIAL[0+yych] & 64) {
-		goto yy108;
-	}
+	if (yybm_INITIAL[0+yych] & 64) goto yy108;
 	if (yych <= 0x00) goto yy107;
 	if (yych <= 0x08) goto yy110;
 	if (yych <= '\n') goto yy101;
@@ -1487,9 +1451,7 @@ yy115:
 	++YYCURSOR;
 	YYFILL(1);
 	yych = *YYCURSOR;
-	if (yybm_INITIAL[0+yych] & 128) {
-		goto yy115;
-	}
+	if (yybm_INITIAL[0+yych] & 128) goto yy115;
 	yyleng = (size_t) YYCURSOR - (size_t) yytext;
 	{
 	YYSETCONDITION(PRE_RAW);
@@ -1519,9 +1481,7 @@ yy117:
 yy118:
 	YYDEBUG(118, yych);
 	yych = *++YYCURSOR;
-	if (yybm_INITIAL[0+yych] & 128) {
-		goto yy115;
-	}
+	if (yybm_INITIAL[0+yych] & 128) goto yy115;
 	goto yy112;
 yy119:
 	YYDEBUG(119, yych);

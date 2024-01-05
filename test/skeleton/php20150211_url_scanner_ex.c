@@ -156,9 +156,7 @@ loop:
 
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy1;
-        }
+        if (yybm[0+yych] & 128) goto yy1;
         if (yych <= '#') goto yy2;
         if (yych <= ':') goto yy3;
         goto yy4;
@@ -166,9 +164,7 @@ yy1:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy1;
-        }
+        if (yybm[0+yych] & 128) goto yy1;
         status = check_key_count_line125(keys_count, i, 3)
              || action_line125(&i, keys, input, token, &cursor, 3);
         goto loop;
@@ -328,17 +324,13 @@ loop:
 
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy6;
-        }
+        if (yybm[0+yych] & 128) goto yy6;
         goto yy7;
 yy6:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy6;
-        }
+        if (yybm[0+yych] & 128) goto yy6;
         status = check_key_count_line313(keys_count, i, 3)
              || action_line313(&i, keys, input, token, &cursor, 1);
         goto loop;
@@ -488,9 +480,7 @@ loop:
 
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy9;
-        }
+        if (yybm[0+yych] & 128) goto yy9;
         YYSKIP();
         status = check_key_count_line320(keys_count, i, 3)
              || action_line320(&i, keys, input, token, &cursor, 1);
@@ -499,9 +489,7 @@ yy9:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy9;
-        }
+        if (yybm[0+yych] & 128) goto yy9;
         status = check_key_count_line320(keys_count, i, 3)
              || action_line320(&i, keys, input, token, &cursor, 0);
         goto loop;
@@ -693,9 +681,7 @@ yy13:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy13;
-        }
+        if (yybm[0+yych] & 128) goto yy13;
         status = check_key_count_line330(keys_count, i, 3)
              || action_line330(&i, keys, input, token, &cursor, 1);
         goto loop;
@@ -867,9 +853,7 @@ yy19:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy19;
-        }
+        if (yybm[0+yych] & 128) goto yy19;
         status = check_key_count_line339(keys_count, i, 3)
              || action_line339(&i, keys, input, token, &cursor, 0);
         goto loop;
@@ -1034,9 +1018,7 @@ yy23:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 128) {
-            goto yy23;
-        }
+        if (yybm[0+yych] & 128) goto yy23;
         status = check_key_count_line346(keys_count, i, 3)
              || action_line346(&i, keys, input, token, &cursor, 0);
         goto loop;
@@ -1194,9 +1176,7 @@ loop:
 
         if (YYLESSTHAN(2)) YYFILL(2);
         yych = YYPEEK();
-        if (yybm[0+yych] & 32) {
-            goto yy26;
-        }
+        if (yybm[0+yych] & 32) goto yy26;
         if (yych <= ' ') goto yy27;
         if (yych <= '"') goto yy29;
         if (yych <= '\'') goto yy30;
@@ -1205,9 +1185,7 @@ yy26:
         YYSKIP();
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
-        if (yybm[0+yych] & 32) {
-            goto yy26;
-        }
+        if (yybm[0+yych] & 32) goto yy26;
         status = check_key_count_line354(keys_count, i, 3)
              || action_line354(&i, keys, input, token, &cursor, 2);
         goto loop;
@@ -1234,9 +1212,7 @@ yy31:
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
 yy32:
-        if (yybm[0+yych] & 64) {
-            goto yy31;
-        }
+        if (yybm[0+yych] & 64) goto yy31;
         if (yych <= '"') goto yy34;
 yy33:
         YYRESTORE();
@@ -1251,9 +1227,7 @@ yy35:
         if (YYLESSTHAN(1)) YYFILL(1);
         yych = YYPEEK();
 yy36:
-        if (yybm[0+yych] & 128) {
-            goto yy35;
-        }
+        if (yybm[0+yych] & 128) goto yy35;
         if (yych >= '(') goto yy33;
         YYSKIP();
         status = check_key_count_line354(keys_count, i, 3)
