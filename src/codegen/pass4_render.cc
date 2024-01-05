@@ -1128,11 +1128,10 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::EMPTY:
         break;
     case CodeKind::IF_THEN_ELSE: {
-        const CodeBranch* b = code->ifte.branches->head;
-        bool oneline = rctx.opts->specialize_oneline_if()
-            && code->ifte.oneline
-            && oneline_stmt_list(b->code)
-            && b->next == nullptr;
+        bool oneline = rctx.opts->specialize_oneline_if() && code->ifte.oneline;
+        for (const CodeBranch* b = code->ifte.branches->head; oneline && b; b = b->next) {
+            oneline = oneline && oneline_stmt_list(b->code);
+        }
         RenderIfThenElse callback(rctx, &code->ifte, oneline);
         const char* conf = oneline ? "code:if_then_else_oneline" : "code:if_then_else";
         rctx.opts->eval_code_conf(rctx.os, conf, callback);

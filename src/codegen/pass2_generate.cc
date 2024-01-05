@@ -878,7 +878,7 @@ static CodeList* emit_accept_binary(Output& output,
                 .flush();
         CodeList* if_then = emit_accept_binary(output, dfa, acc, l, m);
         CodeList* if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
-        append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
+        append(stmts, code_if_then_else(alc, if_cond, if_then, if_else, false));
     } else {
         const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);
@@ -1655,7 +1655,7 @@ static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper
         CodeList* if_then = gen_cond_goto_binary(output, lower, middle - 1);
         CodeList* if_else = gen_cond_goto_binary(output, middle, upper);
         buf.str(output_cond_get(opts)).cstr(" < ").u64(middle);
-        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else));
+        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else, false));
     }
     return stmts;
 }
