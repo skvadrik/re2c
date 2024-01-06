@@ -603,31 +603,26 @@ static void gen_goto(
         append(stmts, code_skip(alc));
     }
 
-    if (!jump.elide) {
+    if (!jump.elide && jump.to->label->used) {
         switch (opts->code_model) {
         case CodeModel::GOTO_LABEL:
             o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
             append(stmts, code_stmt(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
-            if (jump.to->label->used) {
-                o.label(*jump.to->label);
-                gen_continue_yyloop(output, stmts, o.flush());
-            }
+            o.label(*jump.to->label);
+            gen_continue_yyloop(output, stmts, o.flush());
             break;
-        case CodeModel::REC_FUNC:
-            if (jump.to->label->used) {
-                CodeArgs* args = code_args(alc);
-                if (need_yych_arg(jump.to)) {
-                    append(args, code_arg(alc, opts->var_char.c_str()));
-                }
-                o.str(opts->label_prefix).u32(jump.to->label->index);
-                append(stmts, code_fncall(alc, o.flush(), args));
+        case CodeModel::REC_FUNC: {
+            CodeArgs* args = code_args(alc);
+            if (need_yych_arg(jump.to)) {
+                append(args, code_arg(alc, opts->var_char.c_str()));
             }
+            o.str(opts->label_prefix).u32(jump.to->label->index);
+            append(stmts, code_fncall(alc, o.flush(), args));
             break;
-        }
+        }}
     } else {
-        DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
         // Goto can be elided, because control flow "falls through" to the correct DFA state. This
         // usually happens for the last statement in a sequence of "linear if" statements.
     }
