@@ -189,31 +189,37 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
     x->branches = alc.alloct<CodeGoIfL::Branch>(n);
     x->def = eof == NOEOF ? nullptr : next;
 
+    // In rec/func mode transition can only be elideed if there is a single branch.
+    // Otherwise an IF/ELSE-IF.../ELSE is needed, where every branch ends in a tailcall
+    // (in functional languages it is an expression and early returns are not possible).
+    bool may_elide = opts->code_model != CodeModel::REC_FUNC || n == 1;
+
     for (;;) {
-        if (n == 1 && s[0].to == next) {
+        if (n == 1 && s[0].to == next && may_elide) {
             add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
             break;
         } else if (n == 1) {
             add_branch(x, nullptr, s[0].to, next, s[0], skip, eof, opts);
             break;
-        } else if (n == 2 && s[0].to == next) {
+        } else if (n == 2 && s[0].to == next && may_elide) {
             CodeCmp* cmp = code_cmp(alc, ">=", s[0].ub);
             add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
             add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
             break;
         } else if (n == 3
-                   && s[1].to == next
-                   && s[1].ub - s[0].ub == 1
-                   && s[2].to == s[0].to
-                   && s[2].tags == s[0].tags) {
+                && s[1].to == next
+                && s[1].ub - s[0].ub == 1
+                && s[2].to == s[0].to
+                && s[2].tags == s[0].tags
+                && may_elide) {
             CodeCmp* cmp = code_cmp(alc, "!=", s[0].ub);
             add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
             add_branch(x, nullptr, nullptr, next, s[1], skip, eof, opts);
             break;
         } else if (n >= 3
-                   && s[1].ub - s[0].ub == 1
-                   && s[2].to == s[0].to
-                   && s[2].tags == s[0].tags) {
+                && s[1].ub - s[0].ub == 1
+                && s[2].to == s[0].to
+                && s[2].tags == s[0].tags) {
             CodeCmp* cmp = code_cmp(alc, "==", s[0].ub);
             add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
             n -= 2;
