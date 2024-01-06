@@ -684,19 +684,44 @@ static CodeList* gen_goifb(
 static CodeList* gen_goifl(
         Output& output, const Adfa& dfa, const CodeGoIfL* go, const State* from) {
     OutAllocator& alc = output.allocator;
+    const opt_t* opts = output.block().opts;
+
     CodeList* stmts = code_list(alc);
-    for (uint32_t i = 0; i < go->nbranches; ++i) {
-        const CodeGoIfL::Branch& b = go->branches[i];
-        const CodeCmp* cond = b.cond;
-        if (cond) {
-            const char* if_cond = gen_cond(output, cond);
-            CodeList* if_then = code_list(alc);
-            gen_goto(output, dfa, if_then, from, b.jump);
-            append(stmts, code_if_then_else(alc, if_cond, if_then, nullptr));
+    const CodeGoIfL::Branch* b = go->branches, *e = b + go->nbranches;
+
+    if (opts->code_model != CodeModel::REC_FUNC) {
+        // In goto/label and loop/switch modes generate a sequence of IF statements.
+        // It is possible to use IF/ELSE-IF.../ELSE instead, but this would prevent folding YYSKIP
+        // in the last unconditional branch with the following YYPEEK, as in `yych = *++YYCURSOR`.
+        for (; b != e; ++b) {
+            if (b->cond) {
+                const char* cond = gen_cond(output, b->cond);
+                CodeList* then = code_list(alc);
+                gen_goto(output, dfa, then, from, b->jump);
+                append(stmts, code_if_then_else(alc, cond, then, nullptr));
+            } else {
+                DCHECK(b + 1 == e); // the last one
+                gen_goto(output, dfa, stmts, from, b->jump);
+            }
+        }
+    } else {
+        // In rec/func mode generate one IF/ELSE-IF.../ELSE statement.
+        // In functional languages IF/ELSE is usually an expression where both branches must
+        // have the same type, and early return from an IF is allowed only for void functions.
+        if (go->nbranches == 1 && b->cond == nullptr) {
+            gen_goto(output, dfa, stmts, from, b->jump);
         } else {
-            gen_goto(output, dfa, stmts, from, b.jump);
+            Code* ifte = code_if_then_else(alc);
+            for (; b != e; ++b) {
+                const char* cond = b->cond ? gen_cond(output, b->cond) : nullptr;
+                CodeList* then = code_list(alc);
+                gen_goto(output, dfa, then, from, b->jump);
+                append(ifte->ifte, code_branch(alc, cond, then));
+            }
+            append(stmts, ifte);
         }
     }
+
     return stmts;
 }
 

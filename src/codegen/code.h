@@ -471,6 +471,12 @@ inline CodeBranches* code_branches(OutAllocator& alc) {
     return new_list<CodeBranch>(alc);
 }
 
+inline Code* code_if_then_else(OutAllocator& alc) {
+    Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
+    x->ifte = code_branches(alc);
+    return x;
+}
+
 inline Code* code_if_then_else(
         OutAllocator& alc, const char* if_cond, CodeList* if_code, CodeList* else_code) {
     Code* x = new_code(alc, CodeKind::IF_THEN_ELSE);
