@@ -212,7 +212,7 @@ template<typename T>
 inline void append(list_t<T>* list1, list_t<T>* list2) {
     if (list2 && list2->head) {
         *list1->ptail = list2->head;
-        for (; *(list1->ptail); list1->ptail = &(*list1->ptail)->next);
+        list1->ptail = list2->ptail;
     }
 }
 
