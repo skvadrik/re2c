@@ -486,6 +486,9 @@ vtests: all $(re2c_TESTSUITE)
 wtests: all $(re2c_TESTSUITE)
 	$(PYTHON) $(top_builddir)/$(re2c_TESTSUITE) --wine -j1
 
+re2c_test_list_SOURCES = \
+	src/test/list/test.cc
+
 re2c_test_range_SOURCES = \
 	src/test/range/test-impl.h \
 	src/test/range/test.cc \
@@ -505,6 +508,7 @@ re2c_test_argsubst_SOURCES = \
 	src/test/argsubst/test.cc
 
 check_PROGRAMS = \
+	re2c_test_list \
 	re2c_test_range \
 	re2c_test_s_to_n32_unsafe \
 	re2c_test_ver_to_vernum \

@@ -213,6 +213,21 @@ inline void append(list_t<T>* list1, list_t<T>* list2) {
     if (list2 && list2->head) {
         *list1->ptail = list2->head;
         list1->ptail = list2->ptail;
+        // for safety, clear the old list
+        list2->head = nullptr;
+        list2->ptail = &list2->head;
+    }
+}
+
+template<typename T>
+inline void prepend(list_t<T>* list1, list_t<T>* list2) {
+    if (list2 && list2->head) {
+        *list2->ptail = list1->head;
+        if (!list1->head) list1->ptail = list2->ptail;
+        list1->head = list2->head;
+        // for safety, clear the old list
+        list2->head = nullptr;
+        list2->ptail = &list2->head;
     }
 }
 

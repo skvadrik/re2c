@@ -414,6 +414,9 @@ if(RE2C_BUILD_TESTS)
         COMMAND "${Python3_EXECUTABLE}" "${RE2C_RUN_TESTS}" --wine -j1
     )
     add_dependencies(wtests re2c)
+    add_executable(re2c_test_list
+        src/test/list/test.cc
+    )
     add_executable(re2c_test_range
         src/test/range/test-impl.h
         src/test/range/test.cc
@@ -433,6 +436,7 @@ if(RE2C_BUILD_TESTS)
         src/test/argsubst/test.cc
     )
     add_custom_target(check_re2c
+        COMMAND ./re2c_test_list
         COMMAND ./re2c_test_range
         COMMAND ./re2c_test_s_to_n32_unsafe
         COMMAND ./re2c_test_ver_to_vernum
