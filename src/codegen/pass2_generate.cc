@@ -517,12 +517,32 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
 }
 
 static void gen_fill(
-        Output& output, CodeList* stmts, const Adfa& dfa, const State* from, const State* to) {
+        Output& output,
+        CodeList* stmts,
+        CodeList* tail,
+        const Adfa& dfa,
+        const State* from,
+        const State* to) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
     const size_t need = eof_rule ? 1 : from->fill;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
+
+    // In rec/func mode, generate a single IF/ELSE statement.
+    // In goto/label and loop/switch modes, generte IF followed by the second transition
+    // (note that it may be elided, so we don't want an ELSE branch).
+    auto gen_if = [&](const char* cond, CodeList* trans1, CodeList* trans2, CodeList* code) {
+        if (opts->code_model == CodeModel::REC_FUNC) {
+            append(code, code_if_then_else(alc, cond, trans1, trans2));
+        } else {
+            append(code, code_if_then_else(alc, cond, trans1, nullptr));
+            append(code, trans2);
+        }
+    };
+
+    CodeList* fallback = eof_rule && !opts->storable_state
+            ? gen_fill_falllback(output, dfa, from, to) : nullptr;
 
     CodeList* fill = code_list(alc);
 
@@ -546,23 +566,22 @@ static void gen_fill(
             // succeeds (returns zero) then go to YYFILL label and rematch.
             if (!opts->fill_naked) o.cstr(" == 0");
             const char* fill_check = o.flush();
-            CodeList* goto_rematch = gen_goto_after_fill(output, dfa, from, to);
-            append(fill, code_if_then_else(alc, fill_check, goto_rematch, nullptr));
+            CodeList* rematch = gen_goto_after_fill(output, dfa, from, to);
+            gen_if(fill_check, rematch, fallback, fill);
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
             append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
         }
-    }
-
-    if (eof_rule && !opts->storable_state) {
-        append(fill, gen_fill_falllback(output, dfa, from, to));
+    } else {
+        append(fill, fallback);
     }
 
     if (opts->fill_check && fill->head) {
         const char* less_than = gen_less_than(o, opts, need);
-        append(stmts, code_if_then_else(alc, less_than, fill, nullptr));
+        gen_if(less_than, fill, tail, stmts);
     } else {
         append(stmts, fill);
+        append(stmts, tail);
     }
 }
 
@@ -570,7 +589,7 @@ static void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa,
     const opt_t* opts = output.block().opts;
 
     if (opts->fill_enable && !endstate(s) && opts->fill_eof == NOEOF && s->fill > 0) {
-        gen_fill(output, stmts, dfa, s, nullptr);
+        gen_fill(output, stmts, nullptr, dfa, s, nullptr);
     }
 
     if (opts->fill_eof != NOEOF) {
@@ -593,25 +612,23 @@ static void gen_goto(
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    if (jump.eof) {
-        gen_fill(output, stmts, dfa, from, jump.to);
-    }
+    CodeList* transition = code_list(alc);
 
-    gen_settags(output, stmts, dfa, jump.tags);
+    gen_settags(output, transition, dfa, jump.tags);
 
     if (jump.skip) {
-        append(stmts, code_skip(alc));
+        append(transition, code_skip(alc));
     }
 
     if (!jump.elide && jump.to->label->used) {
         switch (opts->code_model) {
         case CodeModel::GOTO_LABEL:
             o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
-            append(stmts, code_stmt(alc, o.flush()));
+            append(transition, code_stmt(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
             o.label(*jump.to->label);
-            gen_continue_yyloop(output, stmts, o.flush());
+            gen_continue_yyloop(output, transition, o.flush());
             break;
         case CodeModel::REC_FUNC: {
             CodeArgs* args = code_args(alc);
@@ -619,12 +636,18 @@ static void gen_goto(
                 append(args, code_arg(alc, opts->var_char.c_str()));
             }
             o.str(opts->label_prefix).u32(jump.to->label->index);
-            append(stmts, code_fncall(alc, o.flush(), args));
+            append(transition, code_fncall(alc, o.flush(), args));
             break;
         }}
     } else {
         // Goto can be elided, because control flow "falls through" to the correct DFA state. This
         // usually happens for the last statement in a sequence of "linear if" statements.
+    }
+
+    if (jump.eof) {
+        gen_fill(output, stmts, transition, dfa, from, jump.to);
+    } else {
+        append(stmts, transition);
     }
 }
 
