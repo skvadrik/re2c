@@ -261,7 +261,7 @@ struct CodeFnDef {
 
 struct CodeRecFuncs {
     CodeList* fndefs;
-    Code* fncall;
+    Code* start;
 };
 
 struct CodeFnCall {
@@ -582,10 +582,10 @@ inline Code* code_fncall(OutAllocator& alc, const char* name, CodeArgs* args) {
     return x;
 }
 
-inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs, Code* fncall) {
+inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs, Code* start) {
     Code* x = new_code(alc, CodeKind::REC_FUNCS);
     x->rfuncs.fndefs = fndefs;
-    x->rfuncs.fncall = fncall;
+    x->rfuncs.start = start;
     return x;
 }
 

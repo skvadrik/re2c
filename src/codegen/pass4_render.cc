@@ -712,9 +712,8 @@ class RenderRecFuncs : public RenderCallback {
         if (strcmp(var, "fndef") == 0) {
             RenderFnDef callback(rctx, &curr_fndef->fndef);
             rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
-        } else if (strcmp(var, "fncall") == 0) {
-            RenderFnCall callback(rctx, &code->fncall->fncall);
-            rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
+        } else if (strcmp(var, "start") == 0) {
+            render(rctx, code->start);
         } else {
             render_global_var(rctx, var);
         }

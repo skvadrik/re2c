@@ -59,6 +59,10 @@ static bool need_yych_arg(const State* s) {
     return omit_peek(s) && !endstate(s);
 }
 
+const char* fn_name_for_cond(Scratchbuf& buf, const std::string& cond) {
+    return buf.cstr("yyfn").str(cond).flush();
+}
+
 static void gen_state_set(Output& output, CodeList* stmts, const char* fillidx) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -1131,7 +1135,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
             break;
         case CodeModel::REC_FUNC:
             // func/rec mode: emit function call to the start of the next condition
-            append(stmts, code_fncall(alc, next_cond, code_args(alc)));
+            append(stmts, code_fncall(alc, fn_name_for_cond(o, cond), code_args(alc)));
             break;
         }
     }
@@ -1301,12 +1305,11 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     append(stmts, code_loop(alc, loop));
 }
 
-void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* stmts) {
+void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* funcs) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    CodeList* funcs = code_list(alc);
     for (State* s = dfa.head; s;) {
         DCHECK(s->label->index != Label::NONE);
         const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
@@ -1326,13 +1329,45 @@ void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* s
             s = s->next;
         } while (s && !s->label->used);
 
-        append(funcs, code_fndef(alc, f, /*type*/ nullptr, params, body));
+        append(funcs, code_fndef(alc, f, nullptr, params, body));
     }
 
-    const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
-    Code* fncall = code_fncall(alc, f0, code_args(alc));
+    if (!dfa.cond.empty()) {
+        CodeList* body = code_list(alc);
+        const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
+        append(body, code_fncall(alc, f0, code_args(alc)));
+        append(funcs, code_fndef(
+                alc, fn_name_for_cond(buf, dfa.cond), nullptr, code_params(alc), body));
+    }
+}
 
-    append(stmts, code_recursive_functions(alc, funcs, fncall));
+static std::string output_cond_get(const opt_t* opts) {
+    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
+}
+
+static Code* gen_yystart(Output& output, const Adfa& dfa) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    DCHECK(opts->code_model == CodeModel::REC_FUNC);
+
+    CodeList* code = code_list(alc);
+    if (dfa.cond.empty()) {
+        // emit function call to the start state of the block
+        const char* start_fn_name = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
+        append(code, code_fncall(alc, start_fn_name, code_args(alc)));
+    } else {
+        // emit a switch on conditions with a function call to the start state of each condition
+        CodeCases* cases = code_cases(alc);
+        for (const StartCond& cond : output.block().conds) {
+            CodeList* body = code_list(alc);
+            append(body, code_fncall(alc, fn_name_for_cond(buf, cond.name), code_args(alc)));
+            append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
+        }
+        append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+    }
+    return code_fndef(alc, "yystart", /*type*/ nullptr, code_params(alc), code);
 }
 
 static std::string output_state_get(const opt_t* opts) {
@@ -1660,10 +1695,6 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-static std::string output_cond_get(const opt_t* opts) {
-    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
-}
-
 // note [condition order]
 //
 // In theory re2c makes no guarantee about the order of conditions in the generated lexer. Users
@@ -1761,7 +1792,6 @@ static CodeList* gen_cond_goto(Output& output) {
 
     return stmts;
 }
-
 static CodeList* gen_cond_table(Output& output) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -2017,9 +2047,14 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         DCHECK(opts->code_model == CodeModel::REC_FUNC);
         // In the rec/func mode DFA states are separate co-recursive functions (closures) that
         // tail-call other state functions or themselves.
+        CodeList* funcs = code_list(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
-            gen_dfa_as_recursive_functions(output, *dfa, code);
+            gen_dfa_as_recursive_functions(output, *dfa, funcs);
         }
+        append(funcs, gen_yystart(output, *dfas.front()));
+
+        Code* start = code_fncall(alc, "yystart", code_args(alc));
+        append(code, code_recursive_functions(alc, funcs, start));
     }
 
     // Wrap the block in braces, so that variable declarations have local scope.

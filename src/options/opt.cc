@@ -66,6 +66,7 @@ LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
     if (strcmp(stx.eval_word_conf("constants"), "upper_case") == 0) {
         defaults.cond_enum_prefix = "YYC_";
     }
+    // TODO: defaults for all API names and prefixes.
 
     CHECK_RET(stx.eval_str_conf("code:loop_label", defaults.label_loop));
 
