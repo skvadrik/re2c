@@ -528,27 +528,43 @@ static void codegen_analyze_block(Output& output) {
             s->label = new_label(alc, Label::NONE);
         }
 
-        if (opts->code_model == CodeModel::GOTO_LABEL) {
+        switch (opts->code_model) {
+        case CodeModel::GOTO_LABEL:
             if (first) {
                 if (opts->label_start_force) {
                     // User-enforced start label.
                     block.start_label = new_label(alc, output.label_counter++);
                     block.start_label->used = true;
                 } else if (opts->storable_state) {
-                    // Start label is needed in `-f` mode: it points to state 0 (the beginning of
-                    // block, before condition dispatch in `-c` mode).
+                    // Start label is needed with storable states: it points to the first state of
+                    // a block (before condition dispatch if conditions are used).
                     block.start_label = new_label(alc, output.label_counter++);
                 }
             }
             // Initial label points to the start of the DFA (after condition dispatch in `-c`).
             dfa->initial_label = new_label(alc, output.label_counter++);
-        } else {
-            // In loop/switch mode the label of the first state is always used.
+            break;
+        case CodeModel::LOOP_SWITCH:
+            // First state label is always used, as there are no jumps in the middle of a case.
             dfa->head->label->used = true;
             // With loop/switch there are no labels, and each block has its own state switch where
             // all conditions are joined. Restart state counter from zero so that cases start from
             // zero. With skeleton conditions are separate.
             if (first || opts->target == Target::SKELETON) output.label_counter = 0;
+            break;
+        case CodeModel::REC_FUNC:
+            // First state label is always used, as there are no jumps in the middle of a function.
+            dfa->head->label->used = true;
+            if (first) {
+                if (!dfa->cond.empty()) {
+                    // Condition dispatch is a separate function named after the start label.
+                    block.start_label = new_label(alc, output.label_counter++);
+                } else if (opts->storable_state) {
+                    // No conditions => storable states use first state label as a start label.
+                    block.start_label = dfa->head->label;
+                }
+            }
+            break;
         }
 
         // Generate DFA transitions and perform used label analysis: for every transition mark its
@@ -575,10 +591,10 @@ static void codegen_analyze_block(Output& output) {
         }
     }
 
-    // In loop/switch or rec/func mode storable states occupy continuous index range after the last
-    // state index. In goto/label mode they use separate global enumeration that starts from zero.
-    uint32_t& counter = opts->code_model == CodeModel::GOTO_LABEL
-            ? output.fill_label_counter : output.label_counter;
+    // In loop/switch mode storable states occupy continuous index range after the last state index.
+    // In goto/label and rec/func modes they use separate global enumeration that starts from zero.
+    uint32_t& counter = opts->code_model == CodeModel::LOOP_SWITCH
+            ? output.label_counter : output.fill_label_counter;
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         for (State* s = dfa->head; s; s = s->next) {
             if (s->fill_state == s) {

@@ -477,13 +477,51 @@ static CodeList* gen_fill_falllback(
     return fallback_trans;
 }
 
+static void gen_if(
+        OutAllocator& alc,
+        const opt_t* opts,
+        const char* cond,
+        CodeList* trans1,
+        CodeList* trans2,
+        CodeList* code) {
+    if (opts->code_model == CodeModel::REC_FUNC) {
+        // In rec/func mode, generate a single IF/ELSE statement.
+        append(code, code_if_then_else(alc, cond, trans1, trans2));
+    } else {
+        // In goto/label and loop/switch modes, generte IF followed by the second transition
+        // (note that it may be elided, so we don't want an ELSE branch).
+        append(code, code_if_then_else(alc, cond, trans1, nullptr));
+        append(code, trans2);
+    }
+}
+
 CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    CodeList* goto_fill = code_list(alc);
+    DCHECK(opts->fill_enable);
+
+    // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
+    CodeList* resume = code_list(alc);
+    State* s = from->fill_state;
+    switch (opts->code_model) {
+    case CodeModel::GOTO_LABEL:
+        if (opts->storable_state || eof_rule) {
+            const char* flabel = gen_fill_label(output, s->fill_label->index);
+            append(resume, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+        }
+        break;
+    case CodeModel::LOOP_SWITCH:
+        o.u32(s->label->index);
+        gen_continue_yyloop(output, resume, o.flush());
+        break;
+    case CodeModel::REC_FUNC:
+        o.str(opts->label_prefix).u32(s->label->index);
+        append(resume, code_fncall(alc, o.flush(), code_args(alc)));
+        break;
+    }
 
     if (opts->storable_state && eof_rule) {
         // With storable state and end-of-input rule $ the initial state dispatch needs to handle
@@ -491,33 +529,14 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
         // transition for the state that triggered YYFILL. Fallback transition is inlined in the
         // state dispatch (as opposed to jumping to the corresponding DFA transition) because Go
         // backend does not support jumping in the middle of a nested block.
+        CodeList* fallback_or_resume = code_list(alc);
         CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
-        const char* less_than = gen_less_than(o, opts, 1 /*need*/);
-        append(goto_fill, code_if_then_else(alc, less_than, fallback, nullptr));
+        const char* less_than = gen_less_than(o, opts, 1);
+        gen_if(alc, opts, less_than, fallback, resume, fallback_or_resume);
+        return fallback_or_resume;
+    } else {
+        return resume;
     }
-
-    // Transition to YYFILL label from the initial state dispatch or after YYFILL on transition.
-    if (opts->fill_enable) {
-        State* s = from->fill_state;
-        switch (opts->code_model) {
-        case CodeModel::GOTO_LABEL:
-            if (opts->storable_state || eof_rule) {
-                const char* flabel = gen_fill_label(output, s->fill_label->index);
-                append(goto_fill, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
-            }
-            break;
-        case CodeModel::LOOP_SWITCH:
-            o.u32(s->label->index);
-            gen_continue_yyloop(output, goto_fill, o.flush());
-            break;
-        case CodeModel::REC_FUNC:
-            o.str(opts->label_prefix).u32(s->label->index);
-            append(goto_fill, code_fncall(alc, o.flush(), code_args(alc)));
-            break;
-        }
-    }
-
-    return goto_fill;
 }
 
 static void gen_fill(
@@ -532,18 +551,6 @@ static void gen_fill(
     const size_t need = eof_rule ? 1 : from->fill;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-
-    // In rec/func mode, generate a single IF/ELSE statement.
-    // In goto/label and loop/switch modes, generte IF followed by the second transition
-    // (note that it may be elided, so we don't want an ELSE branch).
-    auto gen_if = [&](const char* cond, CodeList* trans1, CodeList* trans2, CodeList* code) {
-        if (opts->code_model == CodeModel::REC_FUNC) {
-            append(code, code_if_then_else(alc, cond, trans1, trans2));
-        } else {
-            append(code, code_if_then_else(alc, cond, trans1, nullptr));
-            append(code, trans2);
-        }
-    };
 
     CodeList* fallback = eof_rule && !opts->storable_state
             ? gen_fill_falllback(output, dfa, from, to) : nullptr;
@@ -571,7 +578,7 @@ static void gen_fill(
             if (!opts->fill_naked) o.cstr(" == 0");
             const char* fill_check = o.flush();
             CodeList* rematch = gen_goto_after_fill(output, dfa, from, to);
-            gen_if(fill_check, rematch, fallback, fill);
+            gen_if(alc, opts, fill_check, rematch, fallback, fill);
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
             append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
@@ -582,7 +589,7 @@ static void gen_fill(
 
     if (opts->fill_check && fill->head) {
         const char* less_than = gen_less_than(o, opts, need);
-        gen_if(less_than, fill, tail, stmts);
+        gen_if(alc, opts, less_than, fill, tail, stmts);
     } else {
         append(stmts, fill);
         append(stmts, tail);
@@ -1091,7 +1098,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         // Next state is normally -1 (the initial storable state corresponding to no YYFILL
         // invocation), but in the loop/switch and rec/func mode conditions and storable states are
         // both implemented via `yystate`, so the next state is the next condition.
-        const char* next_state = (dfa.cond.empty() || opts->code_model == CodeModel::GOTO_LABEL)
+        const char* next_state = (dfa.cond.empty() || opts->code_model != CodeModel::LOOP_SWITCH)
                 ? "-1" : next_cond;
         // Generate YYSETSTATE in the final state. This is needed because the user may enclose the
         // lexer in an outer loop that goes via YYGETSTATE switch (it may happen if `getstate:re2c`
@@ -1101,7 +1108,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         gen_state_set(output, stmts, next_state);
     }
 
-    if (cond != dfa.cond && (opts->code_model == CodeModel::GOTO_LABEL || !opts->storable_state)) {
+    if (cond != dfa.cond && !(opts->code_model == CodeModel::LOOP_SWITCH && opts->storable_state)) {
         // Omit YYSETCONDITION if the current condition is the same as the new one. Also omit it if
         // both storable state and conditions are used in loop/switch or func/rec mode: only one of
         // YYGETSTATE and YYGETCONDITION can be used to initialize `yystate`, and it must be
@@ -1345,29 +1352,26 @@ static std::string output_cond_get(const opt_t* opts) {
     return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
 }
 
-static Code* gen_yystart(Output& output, const Adfa& dfa) {
+static Code* gen_cond_func(Output& output) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
     DCHECK(opts->code_model == CodeModel::REC_FUNC);
 
-    CodeList* code = code_list(alc);
-    if (dfa.cond.empty()) {
-        // emit function call to the start state of the block
-        const char* start_fn_name = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
-        append(code, code_fncall(alc, start_fn_name, code_args(alc)));
-    } else {
-        // emit a switch on conditions with a function call to the start state of each condition
-        CodeCases* cases = code_cases(alc);
-        for (const StartCond& cond : output.block().conds) {
-            CodeList* body = code_list(alc);
-            append(body, code_fncall(alc, fn_name_for_cond(buf, cond.name), code_args(alc)));
-            append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
-        }
-        append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+    // emit a switch on conditions with a function call to the start state of each condition
+    CodeCases* cases = code_cases(alc);
+    for (const StartCond& cond : output.block().conds) {
+        CodeList* body = code_list(alc);
+        append(body, code_fncall(alc, fn_name_for_cond(buf, cond.name), code_args(alc)));
+        append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
-    return code_fndef(alc, "yystart", /*type*/ nullptr, code_params(alc), code);
+
+    CodeList* code = code_list(alc);
+    append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+
+    buf.str(opts->label_prefix).u32(output.block().start_label->index);
+    return code_fndef(alc, buf.flush(), /*type*/ nullptr, code_params(alc), code);
 }
 
 static std::string output_state_get(const opt_t* opts) {
@@ -1418,9 +1422,8 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
         return Ret::OK;
     }
 
-    // Loop/switch and rec/func modes is handled differently (by appending special cases to the
-    // state switch).
-    DCHECK(globopts->code_model == CodeModel::GOTO_LABEL);
+    // Loop/switch mode is handled differently (by appending special cases to the state switch).
+    DCHECK(globopts->code_model != CodeModel::LOOP_SWITCH);
 
     Scratchbuf& o = output.scratchbuf;
     OutAllocator& alc = output.allocator;
@@ -1480,8 +1483,14 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     lstart->used = true;
 
     CodeList* goto_start = code_list(alc);
-    text = o.cstr("goto ").str(bstart->opts->label_prefix).u32(lstart->index).flush();
-    append(goto_start, code_stmt(alc, text));
+    if (globopts->code_model == CodeModel::GOTO_LABEL) {
+        o.cstr("goto ").str(bstart->opts->label_prefix).u32(lstart->index);
+        append(goto_start, code_stmt(alc, o.flush()));
+    } else {
+        DCHECK(globopts->code_model == CodeModel::REC_FUNC);
+        o.str(bstart->opts->label_prefix).u32(lstart->index);
+        append(goto_start, code_fncall(alc, o.flush(), code_args(alc)));
+    }
 
     if (globopts->state_abort) {
         // case -1: goto <start label>;
@@ -1509,6 +1518,33 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     code->block.kind = CodeBlock::Kind::RAW;
     code->block.stmts = stmts;
     return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, Code** code)) {
+    OutputBlock& block = output.block();
+    OutAllocator& alc = output.allocator;
+
+    BlockNameList* block_list = nullptr;
+    if (block.kind == InputBlock::USE) {
+        // For a use block, always generate a local state switch. Link the block to the state
+        // switch by the autogenerated block name. Note that it is impossible for the user to do so
+        // with a `getstate:re2c` directive, as use blocks do not have a user-defined name and
+        // cannot be referenced.
+        block_list = alc.alloct<BlockNameList>(1);
+        block_list->name = copystr(block.name, alc);
+        block_list->next = nullptr;
+    } else if (!output.state_goto) {
+        // For a non-use block, generate a state switch only if it wasn't generated before.
+        // Null block list means that the autogenerated state switch should include all non-use
+        // blocks in the file.
+        output.state_goto = true;
+    } else {
+        *code = nullptr; // don't generate anything, there is an explicit `getstate:re2c`
+        return Ret::OK;
+    }
+
+    *code = code_state_goto(alc, block_list);
+    return gen_state_goto(output, *code);
 }
 
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
@@ -1987,27 +2023,9 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             }
         }
         if (opts->storable_state) {
-            if (oblock.kind == InputBlock::USE) {
-                // For a use block, always generate a local state switch. Link the block to the
-                // state switch by the autogenerated block name. Note that it is impossible for the
-                // user to do so with a `getstate:re2c` directive, as use blocks do not have a
-                // user-defined name and cannot be referenced.
-                BlockNameList* p = nullptr;
-                p = alc.alloct<BlockNameList>(1);
-                p->name = copystr(oblock.name, alc);
-                p->next = nullptr;
-                Code* x = code_state_goto(alc, p);
-                CHECK_RET(gen_state_goto(output, x));
-                append(code, x);
-            } else if (!output.state_goto) {
-                // For a non-use block, generate a state switch only if it wasn't generated before.
-                // Null block list means that the autogenerated state switch should include all
-                // non-use blocks in the file.
-                Code* x = code_state_goto(alc, nullptr);
-                CHECK_RET(gen_state_goto(output, x));
-                append(code, x);
-                output.state_goto = true;
-            }
+            Code* state_goto;
+            CHECK_RET(gen_state_goto_implicit(output, &state_goto));
+            append(code, state_goto);
         }
         if (!opts->label_start.empty()) {
             // User-defined start label that should be used by user-defined code.
@@ -2051,9 +2069,19 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_recursive_functions(output, *dfa, funcs);
         }
-        append(funcs, gen_yystart(output, *dfas.front()));
-
-        Code* start = code_fncall(alc, "yystart", code_args(alc));
+        if (is_cond_block) {
+            append(funcs, gen_cond_func(output));
+        }
+        Code* start = nullptr;
+        if (opts->storable_state) {
+            CHECK_RET(gen_state_goto_implicit(output, &start));
+        } else if (is_cond_block) {
+            buf.str(opts->label_prefix).u32(oblock.start_label->index);
+            start = code_fncall(alc, buf.flush(), code_args(alc));
+        } else {
+            buf.str(opts->label_prefix).u32(dfas.front()->head->label->index);
+            start = code_fncall(alc, buf.flush(), code_args(alc));
+        }
         append(code, code_recursive_functions(alc, funcs, start));
     }
 

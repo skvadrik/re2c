@@ -713,6 +713,7 @@ class RenderRecFuncs : public RenderCallback {
             RenderFnDef callback(rctx, &curr_fndef->fndef);
             rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
         } else if (strcmp(var, "start") == 0) {
+            CHECK(code->start != nullptr);
             render(rctx, code->start);
         } else {
             render_global_var(rctx, var);
@@ -740,6 +741,14 @@ class RenderRecFuncs : public RenderCallback {
         if (strcmp(var, "fndef") == 0) {
             curr_fndef = curr_fndef->next;
             return curr_fndef != last_fndef;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(const char* cond) override {
+        if (strcmp(cond, "have_start") == 0) {
+            return code->start != nullptr;
         }
         UNREACHABLE();
         return false;

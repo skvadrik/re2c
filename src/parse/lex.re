@@ -203,10 +203,10 @@ loop:
         out.state_goto = true;
         if (!opts->storable_state) {
             RET_FAIL(error_at_cur("`getstate:re2c` without `-f --storable-state` option"));
-        } else if (opts->code_model != CodeModel::GOTO_LABEL) {
+        } else if (opts->code_model == CodeModel::LOOP_SWITCH) {
             RET_FAIL(error_at_cur(
-                    "`getstate:re2c` is incompatible with this code model, as it requires"
-                    " cross-block transitions that are unsupported without the `goto` statement"));
+                    "`getstate:re2c` is incompatible with --loop-switch code model, it requires"
+                    " cross-block `goto` transitions or function calls"));
         }
         CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, 0));
         goto next;
