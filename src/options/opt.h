@@ -118,6 +118,7 @@ class Stx;
     MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
+    MUTOPT(std::vector<std::string>, api_function, {}) \
     MUTOPT(std::string, api_debug, "YYDEBUG") \
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \

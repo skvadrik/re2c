@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string>
+#include <vector>
 
 #include "src/encoding/enc.h"
 #include "src/msg/msg.h"
@@ -57,6 +58,7 @@ Ret Input::lex_conf(Opt& opts) {
     int32_t n;
     uint32_t u;
     std::string s;
+    std::vector<std::string> v;
 
     tok = cur;
 /*!local:re2c
@@ -131,6 +133,18 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYSKIP"               { RET_CONF_STR(api_skip); }
     "define:YYSTAGN"              { RET_CONF_STR(api_stag_neg); }
     "define:YYSTAGP"              { RET_CONF_STR(api_stag_pos); }
+
+    "define:YYFN" {
+        CHECK_RET(lex_conf_list(v));
+        if (v.size() < 2 || v.size() % 2 != 0) {
+            RET_FAIL(error_at_tok(
+                "`re2c:define:YYFN` value should be a list of 2*(N+1) strings, where the first"
+                " element is function name, second element is return type, and the remaining 2*N"
+                " elements are type and name of each argument (if any)"));
+        }
+        opts.set_api_function(v);
+        return Ret::OK;
+    }
 
     "variable:"  "yyctable"        { RET_CONF_STR(var_cond_table); }
     "variable:"  "yyaccept"        { RET_CONF_STR(var_accept); }
@@ -281,29 +295,52 @@ inline Ret Input::lex_conf_bool(bool& b) {
     return Ret::OK;
 }
 
+Ret Input::lex_conf_string_quoted(uint8_t quote, std::string& s) {
+    AstChar c;
+    bool stop;
+    s.clear();
+    for (;;) {
+        CHECK_RET(lex_str_chr(quote, c, stop));
+        if (stop) return Ret::OK;
+        if (c.chr > 0xFF) {
+            RET_FAIL(error_at(c.loc, "multibyte character in configuration string: 0x%X", c.chr));
+        }
+        s += static_cast<char>(c.chr);
+    }
+}
+
 Ret Input::lex_conf_string(std::string& s) {
     CHECK_RET(lex_conf_assign());
-    s.clear();
     tok = cur;
 /*!local:re2c
-    ['"] {
-        const uint8_t quote = tok[0];
-        AstChar c;
-        bool stop;
-        for (;;) {
-            CHECK_RET(lex_str_chr(quote, c, stop)); 
-            if (stop) {
-                goto end;
-            } else if (c.chr > 0xFF) {
-                RET_FAIL(error_at(
-                        c.loc, "multibyte character in configuration string: 0x%X", c.chr));
-            } else {
-                s += static_cast<char>(c.chr);
-            }
-        }
-    }
+    ['"]  { CHECK_RET(lex_conf_string_quoted(tok[0], s)); goto end; }
     naked { s.assign(tok, cur); goto end; }
-    ""    { goto end; }
+    ""    { s.clear(); goto end; }
+*/
+end:
+    return lex_conf_semicolon();
+}
+
+Ret Input::lex_conf_list(std::vector<std::string>& v) {
+    CHECK_RET(lex_conf_assign());
+    v.clear();
+    std::string s;
+/*!local:re2c
+    "[" space* "]" { goto end; }
+    "["            { goto loop; }
+    *              { RET_FAIL(error_at_cur("expected a list starting with '['")); }
+*/
+loop:
+/*!local:re2c
+    ['"] { CHECK_RET(lex_conf_string_quoted(cur[-1], s)); goto next; }
+    *    { RET_FAIL(error_at_cur("expected a string")); }
+*/
+next:
+    v.push_back(s);
+/*!local:re2c
+    "]"               { goto end; }
+    space* "," space* { goto loop; }
+    *                 { RET_FAIL(error_at_cur("syntax error in configuration list")); }
 */
 end:
     return lex_conf_semicolon();

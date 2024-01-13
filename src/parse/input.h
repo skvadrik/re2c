@@ -121,7 +121,9 @@ class Input: private LexerState {
     Ret lex_conf_number(int32_t& n) NODISCARD;
     Ret lex_conf_bool(bool& b) NODISCARD;
     Ret lex_conf_eof(uint32_t& u) NODISCARD;
+    Ret lex_conf_string_quoted(uint8_t quote, std::string& s) NODISCARD;
     Ret lex_conf_string(std::string& s) NODISCARD;
+    Ret lex_conf_list(std::vector<std::string>& v) NODISCARD;
 
     FORBID_COPY(Input);
 };

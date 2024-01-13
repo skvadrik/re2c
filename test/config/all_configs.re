@@ -37,6 +37,7 @@
     re2c:define:YYFILL = "";
     re2c:define:YYFILL@len = "";
     re2c:define:YYFILL:naked = 0;
+    re2c:define:YYFN = ["name", "type"];
     re2c:define:YYGETCONDITION = "";
     re2c:define:YYGETCONDITION:naked = 0;
     re2c:define:YYGETSTATE = "";
