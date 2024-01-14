@@ -1614,7 +1614,7 @@ yyreturnlab:
 
 extern "C" {
     static void yyerror(Input& input, Ast&, Opt&, AstGrams&, const char* s) {
-        input.error_at_tok("%s", s);
+        input.error_at_cur("%s", s);
     }
 
     static int yylex(YYSTYPE* yylval, Input& input, Ast& ast, Opt&, AstGrams&) {

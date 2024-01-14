@@ -60,7 +60,6 @@ Ret Input::lex_conf(Opt& opts) {
     std::string s;
     std::vector<std::string> v;
 
-    tok = cur;
 /*!local:re2c
     "api" | "flags:input" { return lex_conf_input(opts); }
     "api:style"           { return lex_conf_api_style(opts); }

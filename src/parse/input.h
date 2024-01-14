@@ -59,6 +59,10 @@ class Input: private LexerState {
     std::vector<InputFile*> files;
     std::set<std::string> filedeps;
     const conopt_t* globopts;
+
+    // This is needed to save `tok` locaton to be used in `tok_loc()` later.
+    // We cannot find it in the same way as for `cur` and `cur_loc()` because line number
+    // and line start `pos` are only updated for `cur`.
     loc_t location;
 
   public:
@@ -138,13 +142,12 @@ inline Input::Input(const conopt_t* o, Msg& m)
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;
-    ptrdiff_t padding = 0;
     if (is_eof()) { // if this is the end, roll back to the beginning of YYMAXFILL padding
-        while (cur[padding] == 0) --padding;
-        ++padding; // point at the first null, not at the last valid character
+        while (*p == 0) --p;
+        ++p; // point at the first null, not at the last valid character
     }
     DCHECK(p >= pos);
-    uint32_t c = static_cast<uint32_t>(cur - pos + padding);
+    uint32_t c = static_cast<uint32_t>(p - pos);
 
     const InputFile& in = get_cinput();
     return {in.line, c, in.fidx};
