@@ -1254,134 +1254,8 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
     first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
 
-void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    // If DFA has transitions into the initial state and --eager-skip option is not used, then the
-    // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
-    // In loop/switch or func/rec mode that would be impossible, because there can be no transitions
-    // to the middle of a state.
-    DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
-    if (dfa.initial_label->used) {
-        buf.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
-        append(stmts, code_stmt(alc, buf.flush()));
-    }
-
-    for (State* s = dfa.head; s; s = s->next) {
-        emit_state(output, s, stmts);
-        emit_action(output, dfa, s, stmts);
-        gen_go(output, dfa, &s->go, s, stmts);
-    }
-}
-
-void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
-    OutAllocator& alc = output.allocator;
-
-    DCHECK(output.block().opts->code_model != CodeModel::GOTO_LABEL);
-
-    for (State* s = dfa.head; s; s = s->next) {
-        CodeList* body = code_list(alc);
-
-        // Emit current state.
-        emit_state(output, s, body);
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
-        uint32_t label = s->label->index;
-        DCHECK(label != Label::NONE);
-
-        // As long as the following state has no incoming transitions (its label is unused),
-        // generate it as a continuation of the current state. This avoids looping through the
-        // `yystate` switch only to return to the next case.
-        while (s->next && !s->next->label->used) {
-            s = s->next;
-            emit_state(output, s, body);
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
-        }
-
-        append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
-    }
-}
-
-void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-
-    DCHECK(opts->code_model != CodeModel::GOTO_LABEL);
-
-    CodeList* loop = code_list(alc);
-    gen_storable_state_cases(output, cases);
-    if (opts->state_abort || opts->eval_bool_conf("abort_in_default_case")) {
-        CodeList* abort = code_list(alc);
-        append(abort, code_abort(alc));
-        append(cases, code_case_default(alc, abort));
-    }
-    append(loop, code_switch(alc, opts->var_state.c_str(), cases));
-    append(stmts, code_loop(alc, loop));
-}
-
-void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* funcs) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    for (State* s = dfa.head; s;) {
-        DCHECK(s->label->index != Label::NONE);
-        const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
-
-        CodeParams* params = code_params(alc);
-        if (need_yych_arg(s)) {
-            append(params, code_param(alc, opts->var_char.c_str(), "char"));
-        }
-
-        // Emit this state and the following state(s) that don't have transitions into them
-        // (such states may be added by the tunneling pass).
-        CodeList* body = code_list(alc);
-        do {
-            emit_state(output, s, body);
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
-            s = s->next;
-        } while (s && !s->label->used);
-
-        append(funcs, code_fndef(alc, f, nullptr, params, body));
-    }
-
-    if (!dfa.cond.empty()) {
-        CodeList* body = code_list(alc);
-        const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
-        append(body, gen_fncall(output, f0));
-        append(funcs, code_fndef(
-                alc, fn_name_for_cond(buf, dfa.cond), nullptr, code_params(alc), body));
-    }
-}
-
 static std::string output_cond_get(const opt_t* opts) {
     return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
-}
-
-static Code* gen_cond_func(Output& output) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    DCHECK(opts->code_model == CodeModel::REC_FUNC);
-
-    // emit a switch on conditions with a function call to the start state of each condition
-    CodeCases* cases = code_cases(alc);
-    for (const StartCond& cond : output.block().conds) {
-        CodeList* body = code_list(alc);
-        append(body, gen_fncall(output, fn_name_for_cond(buf, cond.name)));
-        append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
-    }
-
-    CodeList* code = code_list(alc);
-    append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
-
-    buf.str(opts->label_prefix).u32(output.block().start_label->index);
-    return code_fndef(alc, buf.flush(), /*type*/ nullptr, code_params(alc), code);
 }
 
 static std::string output_state_get(const opt_t* opts) {
@@ -1989,6 +1863,132 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     CodeList* stmts = code_list(alc);
     append(stmts, code_array(alc, name, type, elems, nelems, /*tabulate*/ true));
     return stmts;
+}
+
+void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    // If DFA has transitions into the initial state and --eager-skip option is not used, then the
+    // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
+    // In loop/switch or func/rec mode that would be impossible, because there can be no transitions
+    // to the middle of a state.
+    DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
+    if (dfa.initial_label->used) {
+        buf.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
+        append(stmts, code_stmt(alc, buf.flush()));
+    }
+
+    for (State* s = dfa.head; s; s = s->next) {
+        emit_state(output, s, stmts);
+        emit_action(output, dfa, s, stmts);
+        gen_go(output, dfa, &s->go, s, stmts);
+    }
+}
+
+void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
+    OutAllocator& alc = output.allocator;
+
+    DCHECK(output.block().opts->code_model != CodeModel::GOTO_LABEL);
+
+    for (State* s = dfa.head; s; s = s->next) {
+        CodeList* body = code_list(alc);
+
+        // Emit current state.
+        emit_state(output, s, body);
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
+        uint32_t label = s->label->index;
+        DCHECK(label != Label::NONE);
+
+        // As long as the following state has no incoming transitions (its label is unused),
+        // generate it as a continuation of the current state. This avoids looping through the
+        // `yystate` switch only to return to the next case.
+        while (s->next && !s->next->label->used) {
+            s = s->next;
+            emit_state(output, s, body);
+            emit_action(output, dfa, s, body);
+            gen_go(output, dfa, &s->go, s, body);
+        }
+
+        append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
+    }
+}
+
+void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+
+    DCHECK(opts->code_model != CodeModel::GOTO_LABEL);
+
+    CodeList* loop = code_list(alc);
+    gen_storable_state_cases(output, cases);
+    if (opts->state_abort || opts->eval_bool_conf("abort_in_default_case")) {
+        CodeList* abort = code_list(alc);
+        append(abort, code_abort(alc));
+        append(cases, code_case_default(alc, abort));
+    }
+    append(loop, code_switch(alc, opts->var_state.c_str(), cases));
+    append(stmts, code_loop(alc, loop));
+}
+
+void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* funcs) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    for (State* s = dfa.head; s;) {
+        DCHECK(s->label->index != Label::NONE);
+        const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
+
+        CodeParams* params = code_params(alc);
+        if (need_yych_arg(s)) {
+            append(params, code_param(alc, opts->var_char.c_str(), "char"));
+        }
+
+        // Emit this state and the following state(s) that don't have transitions into them
+        // (such states may be added by the tunneling pass).
+        CodeList* body = code_list(alc);
+        do {
+            emit_state(output, s, body);
+            emit_action(output, dfa, s, body);
+            gen_go(output, dfa, &s->go, s, body);
+            s = s->next;
+        } while (s && !s->label->used);
+
+        append(funcs, code_fndef(alc, f, nullptr, params, body));
+    }
+
+    if (!dfa.cond.empty()) {
+        CodeList* body = code_list(alc);
+        const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
+        append(body, gen_fncall(output, f0));
+        append(funcs, code_fndef(
+                alc, fn_name_for_cond(buf, dfa.cond), nullptr, code_params(alc), body));
+    }
+}
+
+static Code* gen_cond_func(Output& output) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    DCHECK(opts->code_model == CodeModel::REC_FUNC);
+
+    // emit a switch on conditions with a function call to the start state of each condition
+    CodeCases* cases = code_cases(alc);
+    for (const StartCond& cond : output.block().conds) {
+        CodeList* body = code_list(alc);
+        append(body, gen_fncall(output, fn_name_for_cond(buf, cond.name)));
+        append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
+    }
+
+    CodeList* code = code_list(alc);
+    append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+
+    buf.str(opts->label_prefix).u32(output.block().start_label->index);
+    return code_fndef(alc, buf.flush(), /*type*/ nullptr, code_params(alc), code);
 }
 
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
