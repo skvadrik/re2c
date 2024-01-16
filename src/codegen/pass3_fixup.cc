@@ -68,7 +68,7 @@ void combine_code(Code* code) {
         combine_list(code->fndef.body);
         break;
     case CodeKind::REC_FUNCS:
-        combine_list(code->rfuncs.fndefs);
+        combine_list(code->rfuncs);
         break;
     default:
         // don't recurse into other constructs because they have no skip/peek/backup

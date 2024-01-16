@@ -693,28 +693,25 @@ class RenderFnCall : public RenderCallback {
 
 class RenderRecFuncs : public RenderCallback {
     RenderContext& rctx;
-    const CodeRecFuncs* code;
+    const CodeList* fndefs;
     const Code* curr_fndef;
     const Code* last_fndef;
     size_t nfuncs;
 
   public:
-    RenderRecFuncs(RenderContext& rctx, const CodeRecFuncs* code)
+    RenderRecFuncs(RenderContext& rctx, const CodeList* fndefs)
             : rctx(rctx)
-            , code(code)
+            , fndefs(fndefs)
             , curr_fndef(nullptr)
             , last_fndef(nullptr)
             , nfuncs(0) {
-        for (const Code* x = code->fndefs->head; x; x = x->next) ++nfuncs;
+        for (const Code* x = fndefs->head; x; x = x->next) ++nfuncs;
     }
 
     void render_var(const char* var) override {
         if (strcmp(var, "fndef") == 0) {
             RenderFnDef callback(rctx, &curr_fndef->fndef);
             rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
-        } else if (strcmp(var, "start") == 0) {
-            CHECK(code->start != nullptr);
-            render(rctx, code->start);
         } else {
             render_global_var(rctx, var);
         }
@@ -731,7 +728,7 @@ class RenderRecFuncs : public RenderCallback {
     void start_list(const char* var, size_t lbound, size_t rbound) override {
         if (strcmp(var, "fndef") == 0) {
             DCHECK(rbound < nfuncs);
-            find_list_bounds(code->fndefs->head, lbound, rbound, &curr_fndef, &last_fndef);
+            find_list_bounds(fndefs->head, lbound, rbound, &curr_fndef, &last_fndef);
         } else {
             UNREACHABLE();
         }
@@ -741,14 +738,6 @@ class RenderRecFuncs : public RenderCallback {
         if (strcmp(var, "fndef") == 0) {
             curr_fndef = curr_fndef->next;
             return curr_fndef != last_fndef;
-        }
-        UNREACHABLE();
-        return false;
-    }
-
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_start") == 0) {
-            return code->start != nullptr;
         }
         UNREACHABLE();
         return false;
@@ -1166,7 +1155,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::REC_FUNCS: {
-        RenderRecFuncs callback(rctx, &code->rfuncs);
+        RenderRecFuncs callback(rctx, code->rfuncs);
         rctx.opts->eval_code_conf(rctx.os, "code:recursive_functions", callback);
         break;
     }

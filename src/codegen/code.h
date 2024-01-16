@@ -259,11 +259,6 @@ struct CodeFnDef {
     CodeList* body;
 };
 
-struct CodeRecFuncs {
-    CodeList* fndefs;
-    Code* start;
-};
-
 struct CodeFnCall {
     const char* name;
     CodeArgs* args;
@@ -309,7 +304,6 @@ struct Code {
         CodeBlock block;
         CodeFnDef fndef;
         CodeFnCall fncall;
-        CodeRecFuncs rfuncs;
         CodeRaw raw;
         CodeVar var;
         CodeArray array;
@@ -318,6 +312,7 @@ struct Code {
         CodeLabel label;
         CodeDebug debug;
         CodeList* loop;
+        CodeList* rfuncs;
         loc_t loc;
     };
 
@@ -565,6 +560,15 @@ inline CodeArgs* code_args(OutAllocator& alc) {
     return new_list<CodeArg>(alc);
 }
 
+inline void init_code_fndef(
+        Code* x, const char* name, const char* type, CodeParams* params, CodeList* body) {
+    x->kind = CodeKind::FNDEF;
+    x->fndef.name = name;
+    x->fndef.type = type;
+    x->fndef.params = params;
+    x->fndef.body = body;
+}
+
 inline Code* code_fndef(
         OutAllocator& alc, const char* name, const char* type, CodeParams* params, CodeList* body) {
     Code* x = new_code(alc, CodeKind::FNDEF);
@@ -582,10 +586,9 @@ inline Code* code_fncall(OutAllocator& alc, const char* name, CodeArgs* args) {
     return x;
 }
 
-inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs, Code* start) {
+inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs) {
     Code* x = new_code(alc, CodeKind::REC_FUNCS);
-    x->rfuncs.fndefs = fndefs;
-    x->rfuncs.start = start;
+    x->rfuncs = fndefs;
     return x;
 }
 

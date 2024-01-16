@@ -433,15 +433,31 @@ static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* nex
 static Code* gen_fncall(Output& output, const char* name, bool need_yych = false) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    const std::vector<std::string>& fn = opts->api_function;
 
     CodeArgs* args = code_args(alc);
-    for (size_t i = 2; i < opts->api_function.size(); i += 2) {
-        append(args, code_arg(alc, opts->api_function[i].c_str()));
+    for (size_t i = 2; i < fn.size(); i += 2) {
+        append(args, code_arg(alc, fn[i].c_str()));
     }
     if (need_yych) {
         append(args, code_arg(alc, opts->var_char.c_str()));
     }
     return code_fncall(alc, name, args);
+}
+
+LOCAL_NODISCARD(CodeParams* gen_params(Output& output, bool need_yych)) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    const std::vector<std::string>& fn = opts->api_function;
+
+    CodeParams* params = code_params(alc);
+    for (size_t i = 2; i < fn.size(); i += 2) {
+        append(params, code_param(alc, fn[i].c_str(), fn[i + 1].c_str()));
+    }
+    if (need_yych) {
+        append(params, code_param(alc, opts->var_char.c_str(), opts->api_char_type.c_str()));
+    }
+    return params;
 }
 
 static CodeList* gen_fill_falllback(
@@ -1398,13 +1414,23 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
         append(stmts, code_textraw(alc, text));
     }
 
-    code->kind = CodeKind::BLOCK;
-    code->block.kind = CodeBlock::Kind::RAW;
-    code->block.stmts = stmts;
+    if (globopts->code_model == CodeModel::REC_FUNC) {
+        // In rec/func mode this should be a function that tail-calls state functions.
+        const char* name = globopts->api_function[0].c_str();
+        const char* retn_type = globopts->api_function[1].c_str();
+        CodeParams* params = gen_params(output, false);
+        init_code_fndef(code, name, retn_type, params, stmts);
+    } else {
+        // In goto/label and loop/switch mode state dispatch is block of code.
+        code->kind = CodeKind::BLOCK;
+        code->block.kind = CodeBlock::Kind::RAW;
+        code->block.stmts = stmts;
+    }
+
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, Code** code)) {
+LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, CodeList* code)) {
     OutputBlock& block = output.block();
     OutAllocator& alc = output.allocator;
 
@@ -1423,12 +1449,14 @@ LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, Code** code)) {
         // blocks in the file.
         output.state_goto = true;
     } else {
-        *code = nullptr; // don't generate anything, there is an explicit `getstate:re2c`
+        // don't generate anything, there is an explicit `getstate:re2c`
         return Ret::OK;
     }
 
-    *code = code_state_goto(alc, block_list);
-    return gen_state_goto(output, *code);
+    Code* state_goto = code_state_goto(alc, block_list);
+    CHECK_RET(gen_state_goto(output, state_goto));
+    append(code, state_goto);
+    return Ret::OK;
 }
 
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
@@ -1933,19 +1961,18 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     append(stmts, code_loop(alc, loop));
 }
 
-void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* funcs) {
+static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* code) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
+
+    const char* retn_type = opts->api_function[1].c_str();
 
     for (State* s = dfa.head; s;) {
         DCHECK(s->label->index != Label::NONE);
         const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
 
-        CodeParams* params = code_params(alc);
-        if (need_yych_arg(s)) {
-            append(params, code_param(alc, opts->var_char.c_str(), "char"));
-        }
+        CodeParams* params = gen_params(output, need_yych_arg(s));
 
         // Emit this state and the following state(s) that don't have transitions into them
         // (such states may be added by the tunneling pass).
@@ -1957,24 +1984,31 @@ void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, CodeList* f
             s = s->next;
         } while (s && !s->label->used);
 
-        append(funcs, code_fndef(alc, f, nullptr, params, body));
+        append(code, code_fndef(alc, f, retn_type, params, body));
     }
 
     if (!dfa.cond.empty()) {
+        const char* name = fn_name_for_cond(buf, dfa.cond);
+        CodeParams* params = gen_params(output, false);
+
         CodeList* body = code_list(alc);
         const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
         append(body, gen_fncall(output, f0));
-        append(funcs, code_fndef(
-                alc, fn_name_for_cond(buf, dfa.cond), nullptr, code_params(alc), body));
+
+        append(code, code_fndef(alc, name, retn_type, params, body));
     }
 }
 
-static Code* gen_cond_func(Output& output) {
+LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
     DCHECK(opts->code_model == CodeModel::REC_FUNC);
+
+    const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();
+    const char* retn_type = opts->api_function[1].c_str();
+    CodeParams* params = gen_params(output, false);
 
     // emit a switch on conditions with a function call to the start state of each condition
     CodeCases* cases = code_cases(alc);
@@ -1983,12 +2017,36 @@ static Code* gen_cond_func(Output& output) {
         append(body, gen_fncall(output, fn_name_for_cond(buf, cond.name)));
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
+    CodeList* body = code_list(alc);
+    append(body, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
 
-    CodeList* code = code_list(alc);
-    append(code, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+    return code_fndef(alc, name, retn_type, params, body);
+}
 
-    buf.str(opts->label_prefix).u32(output.block().start_label->index);
-    return code_fndef(alc, buf.flush(), /*type*/ nullptr, code_params(alc), code);
+LOCAL_NODISCARD(Ret gen_start_function(Output& output, const Adfa& dfa, CodeList* code)) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+    bool is_cond_block = !dfa.cond.empty();
+
+    if (is_cond_block) {
+        append(code, gen_cond_func(output));
+    }
+
+    if (opts->storable_state) {
+        return gen_state_goto_implicit(output, code);
+    } else{
+        const char* name = opts->api_function[0].c_str();
+        const char* retn_type = opts->api_function[1].c_str();
+        CodeParams* params = gen_params(output, false);
+
+        CodeList* body = code_list(alc);
+        const Label* l = is_cond_block ? output.block().start_label : dfa.head->label;
+        append(body, gen_fncall(output, buf.str(opts->label_prefix).u32(l->index).flush()));
+
+        append(code, code_fndef(alc, name, retn_type, params, body));
+        return Ret::OK;
+    }
 }
 
 LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* program)) {
@@ -2033,9 +2091,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             }
         }
         if (opts->storable_state) {
-            Code* state_goto;
-            CHECK_RET(gen_state_goto_implicit(output, &state_goto));
-            append(code, state_goto);
+            CHECK_RET(gen_state_goto_implicit(output, code));
         }
         if (!opts->label_start.empty()) {
             // User-defined start label that should be used by user-defined code.
@@ -2073,32 +2129,21 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         wrap_dfas_in_loop_switch(output, code, cases);
     } else {
         DCHECK(opts->code_model == CodeModel::REC_FUNC);
-        // In the rec/func mode DFA states are separate co-recursive functions (closures) that
-        // tail-call other state functions or themselves.
+        // In the rec/func mode DFA states are separate co-recursive functions that tail-call
+        // other state functions or themselves.
         CodeList* funcs = code_list(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_recursive_functions(output, *dfa, funcs);
         }
-        if (is_cond_block) {
-            append(funcs, gen_cond_func(output));
-        }
-        Code* start = nullptr;
-        if (opts->storable_state) {
-            CHECK_RET(gen_state_goto_implicit(output, &start));
-        } else if (is_cond_block) {
-            buf.str(opts->label_prefix).u32(oblock.start_label->index);
-            start = gen_fncall(output, buf.flush());
-        } else {
-            buf.str(opts->label_prefix).u32(dfas.front()->head->label->index);
-            start = gen_fncall(output, buf.flush());
-        }
-        append(code, code_recursive_functions(alc, funcs, start));
+        CHECK_RET(gen_start_function(output, *dfas[0], funcs));
+        append(code, code_recursive_functions(alc, funcs));
     }
 
-    // Wrap the block in braces, so that variable declarations have local scope.
+    // If needed, wrap the block in braces, so that variable declarations have local scope.
     CHECK(!local_decls || opts->code_model != CodeModel::REC_FUNC);
     append(program, code_block(alc, code, local_decls ? CodeBlock::Kind::WRAPPED
-            : opts->indent_top == 0 ? CodeBlock::Kind::INDENTED : CodeBlock::Kind::RAW));
+            : opts->indent_top > 0 || opts->code_model == CodeModel::REC_FUNC
+                    ? CodeBlock::Kind::RAW : CodeBlock::Kind::INDENTED));
 
     return Ret::OK;
 }

@@ -85,7 +85,7 @@ Stx::Stx(OutAllocator& alc)
         {"name"}, {"arg"}, {"have_args"}
     };
     allowed_code_confs["code:recursive_functions"] = {
-        {"start"}, {"fndef"}, {"have_start"}
+        {}, {"fndef"}, {}
     };
     allowed_code_confs["code:fingerprint"] = {
         {"version", "date"}, {}, {"have_version", "have_date"}

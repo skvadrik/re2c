@@ -73,6 +73,9 @@ LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
     const char* semi = stx.eval_bool_conf("semicolons") ? ";" : "";
     defaults.cond_goto = "goto " + defaults.api_sigil + semi;
 
+    // Codegen assumes there are at least two elements (function name and return type).
+    defaults.api_function = {"YYFN[0]", "YYFN[1]"};
+
     return Ret::OK;
 }
 
