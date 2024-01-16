@@ -58,8 +58,6 @@ func lex(st *State, recv *int) int {
 	
 //line "go/state/push.go":60
 switch (st.state) {
-default:
-	goto yy0
 case 0:
 	if (st.lim <= st.cur) {
 		goto yy8
@@ -75,6 +73,8 @@ case 2:
 		goto yy7
 	}
 	goto yyFillLabel2
+default:
+	goto yy0
 }
 //line "go/state/push.re":56
 

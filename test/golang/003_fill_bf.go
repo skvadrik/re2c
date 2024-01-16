@@ -119,8 +119,6 @@ func Lex(in *Input) (int, uint) {
 		  0,   0,   0,   0,   0,   0,   0,   0,
 	}
 	switch (in.state) {
-	default:
-		goto yy0
 	case 0:
 		goto yyFillLabel0
 	case 1:
@@ -129,6 +127,8 @@ func Lex(in *Input) (int, uint) {
 		goto yyFillLabel2
 	case 3:
 		goto yyFillLabel3
+	default:
+		goto yy0
 	}
 yy0:
 	if (in.limit-in.cursor < 1) {

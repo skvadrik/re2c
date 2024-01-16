@@ -1509,10 +1509,10 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
         // default: abort
         CodeList* abort = code_list(alc);
         append(abort, code_abort(alc));
-        prepend(cases, code_case_default(alc, abort));
+        append(cases, code_case_default(alc, abort));
     } else {
         // default: goto <start label>;
-        prepend(cases, code_case_default(alc, goto_start));
+        append(cases, code_case_default(alc, goto_start));
     }
 
     CodeList* stmts = code_list(alc);

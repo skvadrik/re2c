@@ -11,11 +11,11 @@
 // including blocks y, z and the unnamed blocks)
 
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 2: goto yyFillLabel2;
 		case 3: goto yyFillLabel3;
 		case 5: goto yyFillLabel5;
+		default: goto yy0;
 	}
 yy0:
 	if (YYLIMIT <= YYCURSOR) {
@@ -31,8 +31,8 @@ yyFillLabel0:
 // use block (expect a local state switch for this block only)
 
 	switch (YYGETSTATE()) {
-		default: goto yy2;
 		case 1: goto yyFillLabel1;
+		default: goto yy2;
 	}
 yy2:
 	if (YYLIMIT <= YYCURSOR) {
@@ -72,8 +72,8 @@ yyFillLabel3:
 // use block (expect a local state switch for this block only)
 
 	switch (YYGETSTATE()) {
-		default: goto yy8;
 		case 4: goto yyFillLabel4;
+		default: goto yy8;
 	}
 yy8:
 	if (YYLIMIT <= YYCURSOR) {

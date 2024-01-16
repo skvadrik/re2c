@@ -14,11 +14,11 @@ char *scan(char *p)
 
 #line 16 "config/config4b.c"
 	switch (YYGETSTATE()) {
-		default:
-			abort();
 		case -1: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
+		default:
+			abort();
 	}
 yy0:
 	if (YYLIMIT <= YYCURSOR) {

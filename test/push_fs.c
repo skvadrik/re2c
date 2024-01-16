@@ -21,10 +21,10 @@ start:
     
 #line 23 "push_fs.c"
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
 		case 2: goto yyFillLabel2;
+		default: goto yy0;
 	}
 yy0:
 	if ((YYLIMIT - YYCURSOR) < 7) {

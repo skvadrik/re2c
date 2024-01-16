@@ -71,8 +71,6 @@ func Lex(in *Input) int {
 	
 //line "golang/002_fill_eof_rule_f.go":73
 	switch (in.state) {
-	default:
-		goto yy0
 	case 0:
 		if (in.limit-in.cursor < 1) {
 			goto yy11
@@ -98,6 +96,8 @@ func Lex(in *Input) int {
 			goto yy10
 		}
 		goto yyFillLabel4
+	default:
+		goto yy0
 	}
 yy0:
 yyFillLabel0:

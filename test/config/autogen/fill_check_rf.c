@@ -4,8 +4,8 @@
 
 
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
+		default: goto yy0;
 	}
 yy0:
 	if (YYLIMIT <= YYCURSOR) {
@@ -31,8 +31,8 @@ yy3:
 // re2c:yyfill:check = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy4;
 		case 1: goto yyFillLabel1;
+		default: goto yy4;
 	}
 yy4:
 	YYSETSTATE(1);
@@ -56,8 +56,8 @@ yy7:
 // re2c:yyfill:check = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy8;
 		case 2: goto yyFillLabel2;
+		default: goto yy8;
 	}
 yy8:
 	if (YYLIMIT <= YYCURSOR) {

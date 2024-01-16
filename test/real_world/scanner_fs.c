@@ -95,7 +95,6 @@ echo:
 
 #line 97 "real_world/scanner_fs.c"
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
 		case 2: goto yyFillLabel2;
@@ -132,6 +131,7 @@ echo:
 		case 33: goto yyFillLabel33;
 		case 34: goto yyFillLabel34;
 		case 35: goto yyFillLabel35;
+		default: goto yy0;
 	}
 yy0:
 	if ((YYLIMIT - YYCURSOR) < 11) {

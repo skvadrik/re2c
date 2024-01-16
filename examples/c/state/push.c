@@ -48,7 +48,6 @@ static Status lex(State &st, unsigned int *recv) {
     
 #line 50 "c/state/push.c"
 switch (st.state) {
-	default: goto yy0;
 	case 0:
 		if (st.lim <= st.cur) goto yy8;
 		goto yyFillLabel0;
@@ -58,6 +57,7 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
+	default: goto yy0;
 }
 #line 46 "c/state/push.re"
 

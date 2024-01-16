@@ -47,7 +47,6 @@ private Status lex(ref State st, uint* recv) {
     
 #line 49 "d/state/push.d"
 switch (st.state) {
-	default: goto yy0;
 	case 0:
 		if (st.lim <= st.cur) goto yy8;
 		goto yyFillLabel0;
@@ -57,6 +56,7 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
+	default: goto yy0;
 }
 #line 45 "d/state/push.re"
 

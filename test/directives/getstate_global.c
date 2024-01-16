@@ -4,10 +4,10 @@
 
 // global `getstate:re2c` (should include x, y, z with start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
+	default: goto yy0;
 }
 
 
@@ -16,10 +16,10 @@ switch (YYGETSTATE()) {
 
 // global `getstate:re2c` (should include x, y, z with start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
+	default: goto yy0;
 }
 
 
@@ -38,10 +38,10 @@ yyFillLabel0:
 
 // global `getstate:re2c` (should include x, y, z with start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
+	default: goto yy0;
 }
 
 
@@ -59,10 +59,10 @@ yyFillLabel1:
 
 // global `getstate:re2c` (should include x, y, z with start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
+	default: goto yy0;
 }
 
 
@@ -80,9 +80,9 @@ yyFillLabel2:
 
 // global `getstate:re2c` (should include x, y, z with start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto yyFillLabel1;
 	case 2: goto yyFillLabel2;
+	default: goto yy0;
 }
 
