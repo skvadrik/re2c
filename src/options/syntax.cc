@@ -84,6 +84,9 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:fncall"] = {
         {"name"}, {"arg"}, {"have_args"}
     };
+    allowed_code_confs["code:tailcall"] = {
+        {"name"}, {"arg"}, {"have_args"}
+    };
     allowed_code_confs["code:recursive_functions"] = {
         {}, {"fndef"}, {}
     };

@@ -262,6 +262,7 @@ struct CodeFnDef {
 struct CodeFnCall {
     const char* name;
     CodeArgs* args;
+    bool tailcall;
 };
 
 struct CodeLabel {
@@ -579,11 +580,17 @@ inline Code* code_fndef(
     return x;
 }
 
-inline Code* code_fncall(OutAllocator& alc, const char* name, CodeArgs* args) {
+inline Code* code_fncall(
+        OutAllocator& alc, const char* name, CodeArgs* args, bool tailcall = false) {
     Code* x = new_code(alc, CodeKind::FNCALL);
     x->fncall.name = name;
     x->fncall.args = args;
+    x->fncall.tailcall = tailcall;
     return x;
+}
+
+inline Code* code_tailcall(OutAllocator& alc, const char* name, CodeArgs* args) {
+    return code_fncall(alc, name, args, true);
 }
 
 inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs) {

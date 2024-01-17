@@ -1147,13 +1147,17 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
         break;
     }
-    case CodeKind::FNCALL: {
-        rctx.os << indent(rctx.ind, opts->indent_str);
-        RenderFnCall callback(rctx, &code->fncall);
-        rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
-        render_stmt_end(rctx, true);
+    case CodeKind::FNCALL:
+        if (code->fncall.tailcall) { // `code:fncall` may be used as an expression
+            RenderFnCall callback(rctx, &code->fncall);
+            rctx.opts->eval_code_conf(rctx.os, "code:tailcall", callback);
+        } else { // `code:tailcall` is always a statement
+            rctx.os << indent(rctx.ind, opts->indent_str);
+            RenderFnCall callback(rctx, &code->fncall);
+            rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
+            render_stmt_end(rctx, true);
+        }
         break;
-    }
     case CodeKind::REC_FUNCS: {
         RenderRecFuncs callback(rctx, code->rfuncs);
         rctx.opts->eval_code_conf(rctx.os, "code:recursive_functions", callback);

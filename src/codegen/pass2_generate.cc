@@ -430,7 +430,7 @@ static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* nex
     append(stmts, code_stmt(alc, buf.flush()));
 }
 
-static Code* gen_fncall(Output& output, const char* name, bool need_yych = false) {
+static Code* gen_tailcall(Output& output, const char* name, bool need_yych = false) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     const std::vector<std::string>& fn = opts->api_function;
@@ -442,7 +442,7 @@ static Code* gen_fncall(Output& output, const char* name, bool need_yych = false
     if (need_yych) {
         append(args, code_arg(alc, opts->var_char.c_str()));
     }
-    return code_fncall(alc, name, args);
+    return code_tailcall(alc, name, args);
 }
 
 LOCAL_NODISCARD(CodeParams* gen_params(Output& output, bool need_yych)) {
@@ -496,7 +496,7 @@ static CodeList* gen_fill_falllback(
             break;
         case CodeModel::REC_FUNC:
             buf.str(opts->label_prefix).u32(fallback->label->index);
-            append(fallback_trans, gen_fncall(output, buf.flush()));
+            append(fallback_trans, gen_tailcall(output, buf.flush()));
             break;
         }
     } else {
@@ -549,7 +549,7 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
         break;
     case CodeModel::REC_FUNC:
         o.str(opts->label_prefix).u32(s->label->index);
-        append(resume, gen_fncall(output, o.flush()));
+        append(resume, gen_tailcall(output, o.flush()));
         break;
     }
 
@@ -673,7 +673,7 @@ static void gen_goto(
             break;
         case CodeModel::REC_FUNC:
             o.str(opts->label_prefix).u32(jump.to->label->index);
-            append(transition, gen_fncall(output, o.flush(), need_yych_arg(jump.to)));
+            append(transition, gen_tailcall(output, o.flush(), need_yych_arg(jump.to)));
             break;
         }
     } else {
@@ -1168,7 +1168,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
             break;
         case CodeModel::REC_FUNC:
             // func/rec mode: emit function call to the start of the next condition
-            append(stmts, gen_fncall(output, fn_name_for_cond(o, cond)));
+            append(stmts, gen_tailcall(output, fn_name_for_cond(o, cond)));
             break;
         }
     }
@@ -1389,7 +1389,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     } else {
         DCHECK(globopts->code_model == CodeModel::REC_FUNC);
         o.str(bstart->opts->label_prefix).u32(lstart->index);
-        append(goto_start, gen_fncall(output, o.flush()));
+        append(goto_start, gen_tailcall(output, o.flush()));
     }
 
     if (globopts->state_abort) {
@@ -1993,7 +1993,7 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
 
         CodeList* body = code_list(alc);
         const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
-        append(body, gen_fncall(output, f0));
+        append(body, gen_tailcall(output, f0));
 
         append(code, code_fndef(alc, name, retn_type, params, body));
     }
@@ -2014,7 +2014,7 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     CodeCases* cases = code_cases(alc);
     for (const StartCond& cond : output.block().conds) {
         CodeList* body = code_list(alc);
-        append(body, gen_fncall(output, fn_name_for_cond(buf, cond.name)));
+        append(body, gen_tailcall(output, fn_name_for_cond(buf, cond.name)));
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
     CodeList* body = code_list(alc);
@@ -2042,7 +2042,7 @@ LOCAL_NODISCARD(Ret gen_start_function(Output& output, const Adfa& dfa, CodeList
 
         CodeList* body = code_list(alc);
         const Label* l = is_cond_block ? output.block().start_label : dfa.head->label;
-        append(body, gen_fncall(output, buf.str(opts->label_prefix).u32(l->index).flush()));
+        append(body, gen_tailcall(output, buf.str(opts->label_prefix).u32(l->index).flush()));
 
         append(code, code_fndef(alc, name, retn_type, params, body));
         return Ret::OK;
