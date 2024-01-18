@@ -78,6 +78,9 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:enum_elem"] = {
         {"name", "type"}, {}, {}
     };
+    allowed_code_confs["code:fndecl"] = {
+        {"name", "type", "argname", "argtype"}, {"arg"}, {"have_type"}
+    };
     allowed_code_confs["code:fndef"] = {
         {"name", "type", "argname", "argtype"}, {"arg", "stmt"}, {"have_type"}
     };
@@ -88,7 +91,7 @@ Stx::Stx(OutAllocator& alc)
         {"name"}, {"arg"}, {"have_args"}
     };
     allowed_code_confs["code:recursive_functions"] = {
-        {}, {"fndef"}, {}
+        {"fndecl", "fndef"}, {"fn"}, {}
     };
     allowed_code_confs["code:fingerprint"] = {
         {"version", "date"}, {}, {"have_version", "have_date"}

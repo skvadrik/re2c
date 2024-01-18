@@ -693,24 +693,27 @@ class RenderFnCall : public RenderCallback {
 
 class RenderRecFuncs : public RenderCallback {
     RenderContext& rctx;
-    const CodeList* fndefs;
-    const Code* curr_fndef;
-    const Code* last_fndef;
+    const CodeList* fns;
+    const Code* curr_fn;
+    const Code* last_fn;
     size_t nfuncs;
 
   public:
-    RenderRecFuncs(RenderContext& rctx, const CodeList* fndefs)
+    RenderRecFuncs(RenderContext& rctx, const CodeList* fns)
             : rctx(rctx)
-            , fndefs(fndefs)
-            , curr_fndef(nullptr)
-            , last_fndef(nullptr)
+            , fns(fns)
+            , curr_fn(nullptr)
+            , last_fn(nullptr)
             , nfuncs(0) {
-        for (const Code* x = fndefs->head; x; x = x->next) ++nfuncs;
+        for (const Code* x = fns->head; x; x = x->next) ++nfuncs;
     }
 
     void render_var(const char* var) override {
-        if (strcmp(var, "fndef") == 0) {
-            RenderFnDef callback(rctx, &curr_fndef->fndef);
+        if (strcmp(var, "fndecl") == 0) {
+            RenderFnDef callback(rctx, &curr_fn->fndef);
+            rctx.opts->eval_code_conf(rctx.os, "code:fndecl", callback);
+        } else if (strcmp(var, "fndef") == 0) {
+            RenderFnDef callback(rctx, &curr_fn->fndef);
             rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
         } else {
             render_global_var(rctx, var);
@@ -718,7 +721,7 @@ class RenderRecFuncs : public RenderCallback {
     }
 
     size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "fndef") == 0) {
+        if (strcmp(var, "fn") == 0) {
             return nfuncs;
         }
         UNREACHABLE();
@@ -726,18 +729,18 @@ class RenderRecFuncs : public RenderCallback {
     }
 
     void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "fndef") == 0) {
+        if (strcmp(var, "fn") == 0) {
             DCHECK(rbound < nfuncs);
-            find_list_bounds(fndefs->head, lbound, rbound, &curr_fndef, &last_fndef);
+            find_list_bounds(fns->head, lbound, rbound, &curr_fn, &last_fn);
         } else {
             UNREACHABLE();
         }
     }
 
     bool next_in_list(const char* var) override {
-        if (strcmp(var, "fndef") == 0) {
-            curr_fndef = curr_fndef->next;
-            return curr_fndef != last_fndef;
+        if (strcmp(var, "fn") == 0) {
+            curr_fn = curr_fn->next;
+            return curr_fn != last_fn;
         }
         UNREACHABLE();
         return false;

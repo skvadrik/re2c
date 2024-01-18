@@ -74,6 +74,12 @@ code:enum =
 
 code:enum_elem = name;
 
+code:fndecl =
+    topindent type " " name "("
+        [arg{0:-2}: argtype " " argname ", "]
+        [arg{-1}:   argtype " " argname]
+    ");" nl;
+
 code:fndef =
     topindent type " " name "("
         [arg{0:-2}: argtype " " argname ", "]
