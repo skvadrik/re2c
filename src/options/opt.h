@@ -199,7 +199,7 @@ class Stx;
     STX_COND("encoding.utf32", opts->encoding.type() == Enc::Type::UTF32) \
     STX_COND("code_model.goto_label", opts->code_model == CodeModel::GOTO_LABEL) \
     STX_COND("code_model.loop_switch", opts->code_model == CodeModel::LOOP_SWITCH) \
-    STX_COND("code_model.rec_func", opts->code_model == CodeModel::REC_FUNC) \
+    STX_COND("code_model.recursive_functions", opts->code_model == CodeModel::REC_FUNC) \
     STX_COND("storable_state", opts->storable_state) \
     STX_COND("case_ranges", opts->case_ranges) \
     STX_COND("unsafe", opts->unsafe) \

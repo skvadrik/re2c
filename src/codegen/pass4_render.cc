@@ -763,7 +763,7 @@ class RenderDebug : public RenderCallback {
     RenderDebug(RenderContext& rctx, const CodeDebug* code): rctx(rctx), code(code) {}
 
     void render_var(const char* var) override {
-        if (strcmp(var, "yydebug") == 0) {
+        if (strcmp(var, "debug") == 0) {
             rctx.os << rctx.opts->api_debug;
         } else if (strcmp(var, "state") == 0) {
             rctx.os << code->state;
@@ -777,136 +777,37 @@ class RenderDebug : public RenderCallback {
     FORBID_COPY(RenderDebug);
 };
 
-class RenderPeek : public RenderCallback {
+// One callback class is used for all combinations of YYSKIP, YYPEEK and YYBACKUP primitives,
+// as they all have very similar variables. This should not cause variable misuse, as the variables
+// for each configuration are checked after parsing syntax file.
+class RenderSkipPeekBackup : public RenderCallback {
     RenderContext& rctx;
 
   public:
-    RenderPeek(RenderContext& rctx): rctx(rctx) {}
+    RenderSkipPeekBackup(RenderContext& rctx): rctx(rctx) {}
 
     void render_var(const char* var) override {
-        if (strcmp(var, "var") == 0) {
+        if (strcmp(var, "char") == 0) {
             rctx.os << rctx.opts->var_char;
-        } else if (strcmp(var, "yypeek") == 0) {
-            rctx.os << rctx.opts->api_peek;
+        } else if (strcmp(var, "ctype") == 0) {
+            rctx.os << rctx.opts->api_char_type;
         } else if (strcmp(var, "cursor") == 0) {
             rctx.os << rctx.opts->api_cursor;
+        } else if (strcmp(var, "marker") == 0) {
+            rctx.os << rctx.opts->api_marker;
         } else if (strcmp(var, "typecast") == 0) {
             yych_conv(rctx.os, rctx.opts);
+        } else if (strcmp(var, "peek") == 0) {
+            rctx.os << rctx.opts->api_peek;
+        } else if (strcmp(var, "skip") == 0) {
+            rctx.os << rctx.opts->api_skip;
+        } else if (strcmp(var, "backup") == 0) {
+            rctx.os << rctx.opts->api_backup;
         } else {
             render_global_var(rctx, var);
         }
     }
 };
-
-static void render_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    os << indent(rctx.ind, opts->indent_str);
-    if (opts->api == Api::CUSTOM) {
-        os << opts->api_skip;
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            os << "()";
-            render_stmt_end(rctx, true);
-        } else {
-            render_stmt_end(rctx, false);
-        }
-    } else {
-        os << "++" << opts->api_cursor;
-        render_stmt_end(rctx, true);
-    }
-}
-
-static void render_backup(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    os << indent(rctx.ind, opts->indent_str);
-    if (opts->api == Api::CUSTOM) {
-        os << opts->api_backup;
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            os << "()";
-            render_stmt_end(rctx, true);
-        } else {
-            render_stmt_end(rctx, false);
-        }
-    } else {
-        os << opts->api_marker << " = " << opts->api_cursor;
-        render_stmt_end(rctx, true);
-    }
-}
-
-static void render_skip_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*++" << opts->api_cursor;
-    render_stmt_end(rctx, true);
-}
-
-static void render_peek_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*" << opts->api_cursor << "++";
-    render_stmt_end(rctx, true);
-}
-
-static void render_skip_backup(RenderContext& rctx) {
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    rctx.os << indent(rctx.ind, opts->indent_str) << opts->api_marker << " = ++" << opts->api_cursor;
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_skip(RenderContext& rctx) {
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    rctx.os << indent(rctx.ind, opts->indent_str) << opts->api_marker << " = " << opts->api_cursor
-            << "++";
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = " << opts->api_cursor << ")";
-    render_stmt_end(rctx, true);
-}
-
-static void render_skip_backup_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = ++" << opts->api_cursor << ")";
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_peek_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = " << opts->api_cursor << "++)";
-    render_stmt_end(rctx, true);
-}
 
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
     if (label.kind == CodeLabel::Kind::SLABEL) {
@@ -1200,38 +1101,56 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.opts->eval_code_conf(rctx.os, "code:yydebug", callback);
         break;
     }
-    case CodeKind::SKIP:
-        render_skip(rctx);
+    case CodeKind::SKIP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yyskip", callback);
         break;
+    }
     case CodeKind::PEEK: {
-        RenderPeek callback(rctx);
+        RenderSkipPeekBackup callback(rctx);
         rctx.opts->eval_code_conf(rctx.os, "code:yypeek", callback);
         break;
     }
-    case CodeKind::BACKUP:
-        render_backup(rctx);
+    case CodeKind::BACKUP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yybackup", callback);
         break;
-    case CodeKind::PEEK_SKIP:
-        render_peek_skip(rctx);
+    }
+    case CodeKind::PEEK_SKIP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yypeek_skip", callback);
         break;
-    case CodeKind::SKIP_PEEK:
-        render_skip_peek(rctx);
+    }
+    case CodeKind::SKIP_PEEK: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_peek", callback);
         break;
-    case CodeKind::SKIP_BACKUP:
-        render_skip_backup(rctx);
+    }
+    case CodeKind::SKIP_BACKUP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_backup", callback);
         break;
-    case CodeKind::BACKUP_SKIP:
-        render_backup_skip(rctx);
+    }
+    case CodeKind::BACKUP_SKIP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_skip", callback);
         break;
-    case CodeKind::BACKUP_PEEK:
-        render_backup_peek(rctx);
+    }
+    case CodeKind::BACKUP_PEEK: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_peek", callback);
         break;
-    case CodeKind::BACKUP_PEEK_SKIP:
-        render_backup_peek_skip(rctx);
+    }
+    case CodeKind::BACKUP_PEEK_SKIP: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_peek_skip", callback);
         break;
-    case CodeKind::SKIP_BACKUP_PEEK:
-        render_skip_backup_peek(rctx);
+    }
+    case CodeKind::SKIP_BACKUP_PEEK: {
+        RenderSkipPeekBackup callback(rctx);
+        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_backup_peek", callback);
         break;
+    }
     case CodeKind::LINE_INFO_INPUT: {
         RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
         rctx.opts->eval_code_conf(rctx.os, "code:line_info", callback);

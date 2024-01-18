@@ -104,10 +104,37 @@ Stx::Stx(OutAllocator& alc)
     };
     allowed_code_confs["code:abort"] = {};
     allowed_code_confs["code:yydebug"] = {
-        {"yydebug", "state", "char"}, {}, {}
+        {"debug", "state", "char"}, {}, {}
     };
     allowed_code_confs["code:yypeek"] = {
-        {"var", "yypeek", "cursor", "typecast"}, {}, {}
+        {"char", "ctype", "peek", "cursor", "typecast"}, {}, {}
+    };
+    allowed_code_confs["code:yyskip"] = {
+        {"skip", "cursor"}, {}, {}
+    };
+    allowed_code_confs["code:yybackup"] = {
+        {"backup", "cursor", "marker"}, {}, {}
+    };
+    allowed_code_confs["code:yyskip_peek"] = {
+        {"char", "ctype", "cursor", "typecast"}, {}, {}
+    };
+    allowed_code_confs["code:yypeek_skip"] = {
+        {"char", "ctype", "cursor", "typecast"}, {}, {}
+    };
+    allowed_code_confs["code:yyskip_backup"] = {
+        {"cursor", "marker"}, {}, {}
+    };
+    allowed_code_confs["code:yybackup_skip"] = {
+        {"cursor", "marker"}, {}, {}
+    };
+    allowed_code_confs["code:yybackup_peek"] = {
+        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
+    };
+    allowed_code_confs["code:yyskip_backup_peek"] = {
+        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
+    };
+    allowed_code_confs["code:yybackup_peek_skip"] = {
+        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
     };
 
 #define STX_COND(name, selector) allowed_conds[name] = [](const opt_t* opts) { return selector; };

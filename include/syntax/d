@@ -93,10 +93,22 @@ code:line_info = "#line " line " \"" file "\"" nl;
 
 code:abort = topindent "assert(false);" nl;
 
-code:yydebug = topindent yydebug "(" state ", " char ");" nl;
+code:yydebug = topindent debug "(" state ", " char ");" nl;
 
 code:yypeek =
-    topindent var " = " (api.generic
-        ? yypeek (api_style.functions ? "()")
+    topindent (code_model.recursive_functions ? ctype " ") char " = " (api.generic
+        ? peek (api_style.functions ? "()")
         : typecast "*" cursor
     ) ";" nl;
+
+code:yyskip =
+    topindent (api.generic
+        ? skip (api_style.functions ? "();")
+        : "++" cursor ";"
+    ) nl;
+
+code:yybackup =
+    topindent (api.generic
+        ? backup (api_style.functions ? "();")
+        : marker " = " cursor ";"
+    ) nl;
