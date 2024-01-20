@@ -54,6 +54,10 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         RET_FAIL(error("skeleton is not supported for this backend"));
     }
 
+    if (glob.target == Target::SKELETON && glob.code_model == CodeModel::REC_FUNC) {
+        RET_FAIL(error("skeleton is not supported for --recursive-functions model"));
+    }
+
     return Ret::OK;
 }
 

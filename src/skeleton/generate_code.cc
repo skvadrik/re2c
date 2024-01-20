@@ -656,15 +656,22 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     }
     append(block2, code_textraw(alc, ""));
 
-    if (opts->code_model == CodeModel::GOTO_LABEL) {
+    switch (opts->code_model) {
+    case CodeModel::GOTO_LABEL:
         gen_dfa_as_blocks_with_labels(output, dfa, block2);
-    } else {
-        // In loop/switch or rec/func models there are no labels, and each block has its own state
-        // switch. Restart state counter from zero so that cases start from zero.
+        break;
+    case CodeModel::LOOP_SWITCH: {
+        // In loop/switch mode there are no labels, and each block has its own state switch.
+        // Restart state counter from zero so that cases start from zero.
         output.label_counter = 0;
         CodeCases* cases = code_cases(alc);
         gen_dfa_as_switch_cases(output, dfa, cases);
         wrap_dfas_in_loop_switch(output, block2, cases);
+        break;
+    }
+    case CodeModel::REC_FUNC:
+        UNREACHABLE();
+        break;
     }
     append(block2, code_textraw(alc, ""));
 
