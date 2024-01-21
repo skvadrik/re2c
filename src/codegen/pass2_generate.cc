@@ -1208,8 +1208,7 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
     }
     case Action::Kind::SAVE:
         if (dfa.accepts.size() > 1) {
-            text = o.str(opts->var_accept).cstr(" = ").u64(s->action.info.save).flush();
-            append(stmts, code_stmt(alc, text));
+            append(stmts, code_accept(alc, static_cast<uint32_t>(s->action.info.save)));
         }
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));

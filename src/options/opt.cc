@@ -187,7 +187,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
     if (!glob.storable_state) {
         real.api_state_get = defaults.api_state_get;
         real.api_state_set = defaults.api_state_set;
-        real.var_accept = defaults.var_accept;
         real.state_next = defaults.state_next;
         real.state_get_naked = defaults.state_get_naked;
         real.state_set_param = defaults.state_set_param;

@@ -91,6 +91,8 @@ code:line_info = "//line \"" file "\":" line nl;
 
 code:abort = topindent "panic(\"internal lexer error\")" nl;
 
+code:yyaccept = topindent var " = " num nl;
+
 code:yydebug = topindent debug "(" state ", " char ")" nl;
 
 code:yypeek = topindent char (code_model.recursive_functions ? " := " : " = ")

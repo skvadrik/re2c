@@ -115,6 +115,7 @@ enum class CodeKind: uint32_t {
     DFAS,
     LABEL,
     ABORT,
+    ACCEPT,
     DEBUG,
     REC_FUNCS
 };

@@ -104,6 +104,8 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "code:abort = topindent \"abort();\" nl;\n"
     "\n"
+    "code:yyaccept = topindent var \" = \" num \";\" nl;\n"
+    "\n"
     "code:yydebug = topindent debug \"(\" state \", \" char \");\" nl;\n"
     "\n"
     "code:yypeek =\n"

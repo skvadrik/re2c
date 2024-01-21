@@ -755,6 +755,24 @@ static inline void yych_conv(std::ostream& os, const opt_t* opts) {
     }
 }
 
+class RenderAccept : public RenderCallback {
+    RenderContext& rctx;
+    uint32_t accept;
+
+  public:
+    RenderAccept(RenderContext& rctx, uint32_t accept): rctx(rctx), accept(accept) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "var") == 0) {
+            rctx.os << rctx.opts->var_accept;
+        } else if (strcmp(var, "num") == 0) {
+            rctx.os << accept;
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+};
+
 class RenderDebug : public RenderCallback {
     RenderContext& rctx;
     const CodeDebug* code;
@@ -1094,6 +1112,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::ABORT: {
         RenderSimple callback(rctx);
         rctx.opts->eval_code_conf(rctx.os, "code:abort", callback);
+        break;
+    }
+    case CodeKind::ACCEPT: {
+        RenderAccept callback(rctx, code->accept);
+        rctx.opts->eval_code_conf(rctx.os, "code:yyaccept", callback);
         break;
     }
     case CodeKind::DEBUG: {
