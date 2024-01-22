@@ -171,7 +171,7 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
-void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
+void expand_fintags(const Tag& tag, std::vector<std::string>& fintags, const opt_t* opts);
 std::string vartag_name(
         tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers);
 std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
