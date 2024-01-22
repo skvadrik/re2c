@@ -172,7 +172,7 @@ static enum con_status parse_con_req(struct con_state* c)
     */
 }
 
-int feed(struct con_state* c, const unsigned char* chunk, int len)
+int feed(struct con_state* c, const unsigned char* chunk, size_t len)
 {
     const size_t shift = c->tok - c->buf;
     const size_t free = c->buf_size - (c->lim - c->tok);

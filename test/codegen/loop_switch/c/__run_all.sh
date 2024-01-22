@@ -1,7 +1,7 @@
 root_dir=$(pwd)
 
 for f in $(find -name '*.re'); do
-    grep -q 'int main()' $f || continue # skip incomplete tests
+    grep -q 'int main' $f || continue # skip incomplete tests
 
     echo $f
     cd $(dirname $f)
