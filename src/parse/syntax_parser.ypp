@@ -47,7 +47,7 @@ Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg
 %{
 
 #include "src/options/opt.h"
-#include "src/options/syntax_parser.h"
+#include "src/parse/syntax_parser.h"
 
 using namespace re2c;
 

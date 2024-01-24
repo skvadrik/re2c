@@ -9,7 +9,7 @@
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
-#include "src/options/syntax_parser.h"
+#include "src/parse/syntax_parser.h"
 
 namespace re2c {
 

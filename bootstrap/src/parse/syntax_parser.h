@@ -35,8 +35,8 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
-# define YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED
+#ifndef YY_STX_SRC_PARSE_SYNTAX_PARSER_H_INCLUDED
+# define YY_STX_SRC_PARSE_SYNTAX_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef STX_DEBUG
 # if defined YYDEBUG
@@ -53,7 +53,7 @@
 extern int stx_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "../src/options/syntax_parser.ypp"
+#line 1 "../src/parse/syntax_parser.ypp"
 
 
 #include <stdint.h>
@@ -99,7 +99,7 @@ Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg
 } // namespace re2c
 
 
-#line 103 "src/options/syntax_parser.h"
+#line 103 "src/parse/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef STX_TOKENTYPE
@@ -123,7 +123,7 @@ Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg
 #if ! defined STX_STYPE && ! defined STX_STYPE_IS_DECLARED
 union STX_STYPE
 {
-#line 69 "../src/options/syntax_parser.ypp"
+#line 69 "../src/parse/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -132,7 +132,7 @@ union STX_STYPE
     re2c::StxCode* code;
     re2c::StxCodes* codes;
 
-#line 136 "src/options/syntax_parser.h"
+#line 136 "src/parse/syntax_parser.h"
 
 };
 typedef union STX_STYPE STX_STYPE;
@@ -146,4 +146,4 @@ typedef union STX_STYPE STX_STYPE;
 int stx_parse (re2c::StxFile& sf, re2c::Stx& stx);
 
 
-#endif /* !YY_STX_SRC_OPTIONS_SYNTAX_PARSER_H_INCLUDED  */
+#endif /* !YY_STX_SRC_PARSE_SYNTAX_PARSER_H_INCLUDED  */

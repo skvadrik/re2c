@@ -130,13 +130,13 @@ include_directories(. "${CMAKE_CURRENT_BINARY_DIR}")
 # as its dependencies get built multiple times, which ruins parallel builds.
 add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/options/parse_opts.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/options/syntax_lexer.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/options/syntax_parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/parser.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/lex_conf.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/parse/syntax_lexer.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/parse/syntax_parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
@@ -217,9 +217,9 @@ re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/pa
 re2c_bootstrap_lexer("src/parse/lex_conf.re" "src/parse/lex_conf.cc")
 re2c_bootstrap_lexer("src/options/parse_opts.re" "src/options/parse_opts.cc")
 re2c_bootstrap_lexer("src/msg/ver_to_vernum.re" "src/msg/ver_to_vernum.cc")
-re2c_bootstrap_lexer("src/options/syntax_lexer.re" "src/options/syntax_lexer.cc")
-re2c_bootstrap_parser("src/options/syntax_parser.ypp" "src/options/syntax_parser.cc"
-    "src/options/syntax_parser.h")
+re2c_bootstrap_lexer("src/parse/syntax_lexer.re" "src/parse/syntax_lexer.cc")
+re2c_bootstrap_parser("src/parse/syntax_parser.ypp" "src/parse/syntax_parser.cc"
+    "src/parse/syntax_parser.h")
 
 re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
 re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.cc")
