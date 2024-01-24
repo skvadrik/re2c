@@ -167,7 +167,8 @@ State* fallback_state_with_eof_rule(
 std::string bitmap_name(const opt_t* opts, const std::string& cond);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
-CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to);
+CodeList* gen_goto_after_fill(
+        Output& output, const Adfa& dfa, const State* from, const CodeJump* jump);
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);

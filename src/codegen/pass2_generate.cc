@@ -472,7 +472,7 @@ static CodeParams* gen_params(OutAllocator& alc, const opt_t* opts, bool need_yy
 }
 
 static CodeList* gen_fill_falllback(
-        Output& output, const Adfa& dfa, const State* from, const State* to) {
+        Output& output, const Adfa& dfa, const State* from, const CodeJump* jump) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
@@ -491,11 +491,14 @@ static CodeList* gen_fill_falllback(
     }
 
     CodeList* fallback_trans = code_list(alc);
-    if (fallback != to || opts->storable_state ||
-            // Fallback transition is part of an IF/THEN/ELSE statement. In rec/func mode both THEN
-            // and ELSE must end in a tailcall, therefore elisiion is forbidden (except if YYFILL is
+    if (jump && fallback == jump->to && falltags == jump->tags && !jump->skip &&
+            // Fallback transition is part of an IF/THEN/ELSE statement. In rec/func mode both
+            // branches must end in a tailcall, therefore elision is forbidden (unless YYFILL is
             // disabled, then the whole IF/THEN/ELSE can be replaced with a tailcall to to-state).
-            (opts->code_model == CodeModel::REC_FUNC && opts->fill_enable)) {
+            !(opts->code_model == CodeModel::REC_FUNC && opts->fill_enable)) {
+        // Transition can be elided, because control flow falls through to another transition
+        // with the same destination state, tags and no YYSKIP.
+    } else {
         // tag actions on the fallback transition
         gen_settags(output, fallback_trans, dfa, falltags);
 
@@ -514,10 +517,6 @@ static CodeList* gen_fill_falllback(
             append(fallback_trans, gen_tailcall(alc, opts, buf.flush()));
             break;
         }
-    } else {
-        // Transition can be elided, because control flow "falls through" to an identical
-        // transition. Tags and skip (if present) are elided as well, because the next transition
-        // covers them.
     }
     return fallback_trans;
 }
@@ -541,7 +540,8 @@ static void gen_if(
     }
 }
 
-CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to) {
+CodeList* gen_goto_after_fill(
+        Output& output, const Adfa& dfa, const State* from, const CodeJump* jump) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
     OutAllocator& alc = output.allocator;
@@ -576,7 +576,7 @@ CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from
         // state dispatch (as opposed to jumping to the corresponding DFA transition) because Go
         // backend does not support jumping in the middle of a nested block.
         CodeList* fallback_or_resume = code_list(alc);
-        CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
+        CodeList* fallback = gen_fill_falllback(output, dfa, from, jump);
         const char* less_than = gen_less_than(o, opts, 1);
         gen_if(alc, opts, less_than, fallback, resume, fallback_or_resume);
         return fallback_or_resume;
@@ -591,7 +591,7 @@ static void gen_fill(
         CodeList* tail,
         const Adfa& dfa,
         const State* from,
-        const State* to) {
+        const CodeJump* jump) {
     const opt_t* opts = output.block().opts;
     const bool eof_rule = opts->fill_eof != NOEOF;
     const size_t need = eof_rule ? 1 : from->fill;
@@ -619,15 +619,15 @@ static void gen_fill(
             // succeeds (returns zero) then go to YYFILL label and rematch.
             if (!opts->fill_naked) o.cstr(" == 0");
             const char* fill_check = o.flush();
-            CodeList* rematch = gen_goto_after_fill(output, dfa, from, to);
-            CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
+            CodeList* rematch = gen_goto_after_fill(output, dfa, from, jump);
+            CodeList* fallback = gen_fill_falllback(output, dfa, from, jump);
             gen_if(alc, opts, fill_check, rematch, fallback, fill);
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
             append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
         }
     } else if (eof_rule && !opts->storable_state) {
-        append(fill, gen_fill_falllback(output, dfa, from, to));
+        append(fill, gen_fill_falllback(output, dfa, from, jump));
     }
 
     if (opts->fill_check && fill->head) {
@@ -696,7 +696,7 @@ static void gen_goto(
     }
 
     if (jump.eof) {
-        gen_fill(output, stmts, transition, dfa, from, jump.to);
+        gen_fill(output, stmts, transition, dfa, from, &jump);
     } else {
         append(stmts, transition);
     }
