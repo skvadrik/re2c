@@ -491,7 +491,11 @@ static CodeList* gen_fill_falllback(
     }
 
     CodeList* fallback_trans = code_list(alc);
-    if (fallback != to || opts->storable_state) {
+    if (fallback != to || opts->storable_state ||
+            // Fallback transition is part of an IF/THEN/ELSE statement. In rec/func mode both THEN
+            // and ELSE must end in a tailcall, therefore elisiion is forbidden (except if YYFILL is
+            // disabled, then the whole IF/THEN/ELSE can be replaced with a tailcall to to-state).
+            (opts->code_model == CodeModel::REC_FUNC && opts->fill_enable)) {
         // tag actions on the fallback transition
         gen_settags(output, fallback_trans, dfa, falltags);
 
@@ -527,6 +531,7 @@ static void gen_if(
         CodeList* code) {
     if (opts->code_model == CodeModel::REC_FUNC) {
         // In rec/func mode, generate a single IF/ELSE statement.
+        // There are valid cases when ELSE is empty, e.g. YYFILL without EOF rule $.
         append(code, code_if_then_else(alc, cond, trans1, trans2));
     } else {
         // In goto/label and loop/switch modes, generte IF followed by the second transition
@@ -593,11 +598,7 @@ static void gen_fill(
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    CodeList* fallback = eof_rule && !opts->storable_state
-            ? gen_fill_falllback(output, dfa, from, to) : nullptr;
-
     CodeList* fill = code_list(alc);
-
     if (opts->fill_enable) {
         if (opts->storable_state) {
             gen_state_set(output, fill, o.u32(from->fill_state->fill_label->index).flush());
@@ -619,13 +620,14 @@ static void gen_fill(
             if (!opts->fill_naked) o.cstr(" == 0");
             const char* fill_check = o.flush();
             CodeList* rematch = gen_goto_after_fill(output, dfa, from, to);
+            CodeList* fallback = gen_fill_falllback(output, dfa, from, to);
             gen_if(alc, opts, fill_check, rematch, fallback, fill);
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
             append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
         }
-    } else {
-        append(fill, fallback);
+    } else if (eof_rule && !opts->storable_state) {
+        append(fill, gen_fill_falllback(output, dfa, from, to));
     }
 
     if (opts->fill_check && fill->head) {
@@ -690,6 +692,7 @@ static void gen_goto(
     } else {
         // Goto can be elided, because control flow "falls through" to the correct DFA state. This
         // usually happens for the last statement in a sequence of "linear if" statements.
+        // Elision happens even in rec/func mode due to split states (tunneling optimization).
     }
 
     if (jump.eof) {
