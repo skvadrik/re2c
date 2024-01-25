@@ -1,8 +1,16 @@
 #include <stdint.h>
 
 #include "src/msg/msg.h"
+#include "src/parse/input.h"
 #include "src/parse/syntax_parser.h"
 #include "src/util/string_utils.h"
+
+#define YYFILL(n) do { \
+    if (!fill(n)) { \
+        error_at_cur("unexpected end of input in configuration"); \
+        return STX_error; \
+    } \
+} while(0)
 
 /*!re2c
     eof = [\x00];
@@ -13,25 +21,26 @@
     number = [-]? [0-9]+;
     comment = "//" [^\x00\n]* eol;
 
-    re2c:yyfill:enable = 0;
     re2c:define:YYCTYPE = uint8_t;
     re2c:define:YYCURSOR = cur;
+    re2c:define:YYMARKER = mar;
+    re2c:define:YYLIMIT = lim;
     re2c:tags = 1;
 */
 
 namespace re2c {
 
-int StxFile::lex_token(STX_STYPE* yylval) {
-    const uint8_t* YYMARKER, *p;
+int Input::lex_syntax_token(STX_STYPE* yylval) {
+    const uint8_t* p;
     /*!stags:re2c format = "const uint8_t* @@;"; */
 
 start:
     tok = cur;
+    location = cur_loc();
 /*!local:re2c
     eof { return STX_EOF; }
     eol | comment {
-        ++loc.line;
-        pos = cur;
+        next_line();
         goto start;
     }
     space+ { goto start; }

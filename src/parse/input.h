@@ -19,6 +19,8 @@
 #include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
+union STX_STYPE;
+
 namespace re2c {
 
 class Ast;
@@ -30,6 +32,7 @@ struct BlockNameList;
 struct conopt_t;
 struct opt_t;
 struct Opt;
+class Stx;
 
 struct InputFile {
     FILE* file;
@@ -54,6 +57,8 @@ class Input: private LexerState {
   public:
     static const uint8_t* const ENDPOS;
 
+    OutAllocator& alc;
+
   private:
     Msg& msg;
     std::vector<InputFile*> files;
@@ -65,23 +70,31 @@ class Input: private LexerState {
     // and line start `pos` are only updated for `cur`.
     loc_t location;
 
+    std::string tmp_str; // temporary string to avoid reallocations
+
   public:
-    Input(const conopt_t* o, Msg& m);
+    Input(OutAllocator& alc, const conopt_t* o, Msg& m);
     ~Input();
-    const loc_t& tok_loc() const;
-    loc_t cur_loc() const;
+
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
+    Ret load_syntax_config(Stx& stx, Lang& lang);
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file(const std::string& header) const NODISCARD;
+
     Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
     Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
+    int lex_syntax_token(STX_STYPE* yylval);
 
+    const loc_t& tok_loc() const;
+    loc_t cur_loc() const;
     void error_at(const loc_t& loc, const char* fmt, ...) const RE2C_ATTR((format(printf, 3, 4)));
     void error_at_cur(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
     void error_at_tok(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
 
   private:
+    void reset();
+
     bool read(size_t want) NODISCARD;
     bool fill(size_t need) NODISCARD;
     void shift_ptrs_and_fpos(ptrdiff_t offs);
@@ -132,13 +145,15 @@ class Input: private LexerState {
     FORBID_COPY(Input);
 };
 
-inline Input::Input(const conopt_t* o, Msg& m)
+inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
     : LexerState(),
+      alc(alc),
       msg(m),
       files(),
       filedeps(),
       globopts(o),
-      location({1, 0, 1}) {} // file index 1 because 0 is reserved for syntax file
+      location(ATSTART),
+      tmp_str() {}
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;
@@ -177,6 +192,8 @@ inline InputFile& Input::get_input() {
 inline const InputFile& Input::get_cinput() const {
     return *files[get_input_index()];
 }
+
+Ret parse_syntax_config(Input& in, Stx& stx);
 
 } // namespace re2c
 

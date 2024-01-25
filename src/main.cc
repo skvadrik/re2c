@@ -30,8 +30,7 @@ static std::string make_name(Output& output, const std::string& cond, const loc_
     std::string name;
 
     // if the block is included from another file, prepend filename for disambiguation
-    // (file index 0 is for syntax file, file index 1 is for the first source file)
-    if (loc.file > 1) {
+    if (loc.file > 0) {
         name += output.msg.filenames[loc.file];
         for (size_t i = 0; i < name.length(); ++i) {
             if (!std::isalnum(static_cast<unsigned char>(name[i]))) name[i] = '_';
@@ -141,10 +140,10 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     // configurations specified in the syntax file and mutable options that may be changed by
     // configurations in each block as the input program is parsed.
     Opt opts(out_alc, msg);
-    CHECK_RET(opts.parse(argv));
     const conopt_t& globopts = opts.global();
+    Input input(out_alc, &globopts, msg);
+    CHECK_RET(opts.parse(argv, input));
 
-    Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
     Output output(out_alc, msg);

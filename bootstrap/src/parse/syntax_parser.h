@@ -56,50 +56,10 @@ extern int stx_debug;
 #line 1 "../src/parse/syntax_parser.ypp"
 
 
-#include <stdint.h>
-
 #include "src/options/syntax.h"
-#include "src/util/allocator.h"
-#include "src/util/containers.h"
-
-union STX_STYPE;
-
-namespace re2c {
-
-struct conopt_t;
-
-class StxFile {
-    OutAllocator& alc;
-    const std::string& fname;
-    FILE* file;
-    size_t flen;
-    uint8_t* buf;
-    const uint8_t* cur; // current lexer position
-    const uint8_t* tok; // token start
-    const uint8_t* pos; // line start (used for error reporting)
-    loc_t loc;
-    std::string tmp_str;
-
-  public:
-    Msg& msg;
-
-  public:
-    StxFile(OutAllocator& alc, const std::string& fname, Msg& msg);
-    ~StxFile();
-    Ret read(Lang lang);
-    int lex_token(STX_STYPE* yylval);
-    bool check_conf_name(const char* name) const;
-    loc_t tok_loc() const;
-
-    FORBID_COPY(StxFile);
-};
-
-Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg);
-
-} // namespace re2c
 
 
-#line 103 "src/parse/syntax_parser.h"
+#line 63 "src/parse/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef STX_TOKENTYPE
@@ -123,7 +83,7 @@ Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg
 #if ! defined STX_STYPE && ! defined STX_STYPE_IS_DECLARED
 union STX_STYPE
 {
-#line 69 "../src/parse/syntax_parser.ypp"
+#line 30 "../src/parse/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -132,7 +92,7 @@ union STX_STYPE
     re2c::StxCode* code;
     re2c::StxCodes* codes;
 
-#line 136 "src/parse/syntax_parser.h"
+#line 96 "src/parse/syntax_parser.h"
 
 };
 typedef union STX_STYPE STX_STYPE;
@@ -143,7 +103,7 @@ typedef union STX_STYPE STX_STYPE;
 
 
 
-int stx_parse (re2c::StxFile& sf, re2c::Stx& stx);
+int stx_parse (re2c::Input& in, re2c::Stx& stx);
 
 
 #endif /* !YY_STX_SRC_PARSE_SYNTAX_PARSER_H_INCLUDED  */

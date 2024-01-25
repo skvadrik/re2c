@@ -50,6 +50,13 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         delete[] bot;
     }
 
+    inline void reset_ptrs() {
+        // reset lexer back to its initial state
+        cur = mar = ctx = tok = ptr = pos = lim = bot + BSIZE;
+        memset(lim, 0, YYMAXFILL);
+        eof = nullptr;
+    }
+
     inline void shift_ptrs(ptrdiff_t offs) {
         lim += offs;
         cur += offs;
@@ -59,9 +66,9 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         ptr += offs;
         pos += offs;
         
-#line 63 "src/parse/lex.h"
+#line 70 "src/parse/lex.h"
 if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; }
-#line 107 "../src/parse/lex.re"
+#line 114 "../src/parse/lex.re"
 
     }
 

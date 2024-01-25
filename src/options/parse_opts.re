@@ -9,7 +9,7 @@
 #include "src/msg/msg.h"
 #include "src/msg/warn.h"
 #include "src/options/opt.h"
-#include "src/parse/syntax_parser.h"
+#include "src/parse/input.h"
 
 namespace re2c {
 
@@ -309,7 +309,7 @@ end:
     return Ret::OK;
 }
 
-Ret Opt::parse(char** argv) {
+Ret Opt::parse(char** argv, Input& input) {
     Lang lang = RE2C_LANG;
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
 
@@ -318,7 +318,7 @@ Ret Opt::parse(char** argv) {
     }
 
     // Load syntax file (it must have file index 0).
-    CHECK_RET(load_syntax_config(stx, glob.syntax_file, lang, msg));
+    CHECK_RET(input.load_syntax_config(stx, lang));
 
     // Set option defaults.
     CHECK_RET(fix_global_and_defaults());

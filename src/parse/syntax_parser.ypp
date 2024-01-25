@@ -1,59 +1,20 @@
 %code requires {
 
-#include <stdint.h>
-
 #include "src/options/syntax.h"
-#include "src/util/allocator.h"
-#include "src/util/containers.h"
-
-union STX_STYPE;
-
-namespace re2c {
-
-struct conopt_t;
-
-class StxFile {
-    OutAllocator& alc;
-    const std::string& fname;
-    FILE* file;
-    size_t flen;
-    uint8_t* buf;
-    const uint8_t* cur; // current lexer position
-    const uint8_t* tok; // token start
-    const uint8_t* pos; // line start (used for error reporting)
-    loc_t loc;
-    std::string tmp_str;
-
-  public:
-    Msg& msg;
-
-  public:
-    StxFile(OutAllocator& alc, const std::string& fname, Msg& msg);
-    ~StxFile();
-    Ret read(Lang lang);
-    int lex_token(STX_STYPE* yylval);
-    bool check_conf_name(const char* name) const;
-    loc_t tok_loc() const;
-
-    FORBID_COPY(StxFile);
-};
-
-Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg);
-
-} // namespace re2c
 
 }
 
 %{
 
 #include "src/options/opt.h"
+#include "src/parse/input.h"
 #include "src/parse/syntax_parser.h"
 
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(StxFile& sf, re2c::Stx&, const char* s);
-    static int yylex(STX_STYPE* yylval, StxFile& sf);
+    static void yyerror(Input& in, re2c::Stx&, const char* s);
+    static int yylex(STX_STYPE* yylval, Input& in);
 }
 
 %}
@@ -62,8 +23,8 @@ extern "C" {
 
 %define api.pure full
 %define api.prefix {stx_}
-%lex-param {re2c::StxFile& sf}
-%parse-param {re2c::StxFile& sf}
+%lex-param {re2c::Input& in}
+%parse-param {re2c::Input& in}
 %parse-param {re2c::Stx& stx}
 
 %union {
@@ -156,19 +117,14 @@ names
 %%
 
 extern "C" {
-    static void yyerror(re2c::StxFile& sf, re2c::Stx&, const char* s) {
-        sf.msg.error(sf.tok_loc(), "%s", s);
+    static void yyerror(re2c::Input& in, re2c::Stx&, const char* s) {
+        in.error_at_tok("%s", s);
     }
 
-    static int yylex(STX_STYPE* yylval, re2c::StxFile& sf) {
-        return sf.lex_token(yylval);
+    static int yylex(STX_STYPE* yylval, re2c::Input& in) {
+        return in.lex_syntax_token(yylval);
     }
 }
-
-extern const char* DEFAULT_SYNTAX_C;
-extern const char* DEFAULT_SYNTAX_GO;
-extern const char* DEFAULT_SYNTAX_RUST;
-extern const char* DEFAULT_SYNTAX_D;
 
 namespace re2c {
 
@@ -245,88 +201,12 @@ inline StxCode* Stx::make_code_list(
     x->list.var = var;
     x->list.lbound = lbound;
     x->list.rbound = rbound;
-    x->list.code = code;;
+    x->list.code = code;
     return x;
 }
 
-StxFile::StxFile(OutAllocator& alc, const std::string& fname, Msg& msg)
-    : alc(alc)
-    , fname(fname)
-    , file(nullptr)
-    , flen(0)
-    , buf(nullptr)
-    , cur(nullptr)
-    , tok(nullptr)
-    , pos(nullptr)
-    , loc({1, 0, 0}) // file index 0 is reserved for syntax file
-    , tmp_str()
-    , msg(msg)
-{}
-
-StxFile::~StxFile() {
-    delete[] buf;
-    if (file) fclose(file);
-}
-
-loc_t StxFile::tok_loc() const {
-    DCHECK(pos <= tok);
-    return {loc.line, static_cast<uint32_t>(tok - pos), loc.file};
-}
-
-Ret StxFile::read(Lang lang) {
-    if (fname.empty()) {
-        msg.filenames.push_back("<default syntax file>");
-
-        // use the default syntax config that is provided as a string
-        const char* src = nullptr;
-        switch (lang) {
-            case Lang::C: src = DEFAULT_SYNTAX_C; break;
-            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
-            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
-            case Lang::D: src = DEFAULT_SYNTAX_D; break;
-        }
-        flen = strlen(src);
-
-        // allocate buffer
-        buf = new uint8_t[flen + 1];
-
-        // fill in buffer from the config string
-        memcpy(buf, src, flen);
-        buf[flen] = 0;
-    } else {
-        msg.filenames.push_back(fname);
-
-        // use the provided syntax file
-        file = fopen(fname.c_str(), "rb");
-        if (!file) RET_FAIL(error("cannot open syntax file '%s'", fname.c_str()));
-
-        // get file size
-        fseek(file, 0, SEEK_END);
-        flen = static_cast<size_t>(ftell(file));
-        fseek(file, 0, SEEK_SET);
-
-        // allocate buffer
-        buf = new uint8_t[flen + 1];
-
-        // read file contents into buffer and append terminating zero at the end
-        if (fread(buf, 1, flen, file) != flen) {
-            RET_FAIL(error("cannot read syntax file '%s'", fname.c_str()));
-        }
-        buf[flen] = 0;
-    }
-
-    cur = tok = pos = buf;
-    return Ret::OK;
-}
-
-Ret load_syntax_config(Stx& stx, const std::string& config, Lang& lang, Msg& msg) {
-    StxFile sf(stx.alc, config, msg);
-    CHECK_RET(sf.read(lang));
-    if (yyparse(sf, stx) != 0) return Ret::FAIL;
-
-    stx.cache_conf_tests();
-
-    return Ret::OK;
+Ret parse_syntax_config(Input& in, Stx& stx) {
+    return yyparse(in, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

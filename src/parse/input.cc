@@ -7,8 +7,14 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/input.h"
+#include "src/parse/syntax_parser.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
+
+extern const char* DEFAULT_SYNTAX_C;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_RUST;
+extern const char* DEFAULT_SYNTAX_D;
 
 namespace re2c {
 
@@ -73,6 +79,18 @@ Input::~Input() {
     }
 }
 
+void Input::reset() {
+    reset_ptrs();
+
+    for (InputFile* in: files) {
+        delete in;
+    }
+    files.clear();
+    msg.filenames.clear();
+
+    location = ATSTART;
+}
+
 size_t Input::get_input_index() const {
     // Find index of the current input file: the one corresponding to the buffer fragment that
     // contains the cursor.
@@ -84,6 +102,48 @@ size_t Input::get_input_index() const {
         if (i == 0 || (cur >= in->so && cur <= in->eo)) break;
     }
     return i;
+}
+
+Ret Input::load_syntax_config(Stx& stx, Lang& lang) {
+    if (!globopts->syntax_file.empty()) {
+        CHECK_RET(open(globopts->syntax_file, nullptr));
+    } else {
+        // use the default syntax config that is provided as a string
+
+        InputFile* in = new InputFile(0);
+        files.push_back(in);
+        msg.filenames.push_back("<default syntax file>");
+
+        const char* src = nullptr;
+        switch (lang) {
+            case Lang::C: src = DEFAULT_SYNTAX_C; break;
+            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
+            case Lang::D: src = DEFAULT_SYNTAX_D; break;
+        }
+
+        size_t flen = strlen(src);
+
+        // TODO: use the maximum of all YYMAXFlLL values
+        if (flen + YYMAXFILL > BSIZE) {
+            delete[] bot;
+            BSIZE = flen;
+            bot = new uint8_t[BSIZE + YYMAXFILL];
+        }
+
+        // fill in buffer from the config string
+        memcpy(bot, src, flen);
+        memset(bot + flen, 0, YYMAXFILL);
+
+        cur = mar = ctx = tok = ptr = pos = bot;
+        lim = bot + flen + YYMAXFILL;
+    }
+
+    CHECK_RET(parse_syntax_config(*this, stx));
+    stx.cache_conf_tests();
+
+    reset(); // clean up before lexing source files
+    return Ret::OK;
 }
 
 Ret Input::open(const std::string& filename, const std::string* parent) {

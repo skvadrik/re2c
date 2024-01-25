@@ -96,6 +96,13 @@ struct LexerState {
         delete[] bot;
     }
 
+    inline void reset_ptrs() {
+        // reset lexer back to its initial state
+        cur = mar = ctx = tok = ptr = pos = lim = bot + BSIZE;
+        memset(lim, 0, YYMAXFILL);
+        eof = nullptr;
+    }
+
     inline void shift_ptrs(ptrdiff_t offs) {
         lim += offs;
         cur += offs;

@@ -3,26 +3,35 @@
 #include <stdint.h>
 
 #include "src/msg/msg.h"
+#include "src/parse/input.h"
 #include "src/parse/syntax_parser.h"
 #include "src/util/string_utils.h"
 
-#line 20 "../src/parse/syntax_lexer.re"
+#define YYFILL(n) do { \
+    if (!fill(n)) { \
+        error_at_cur("unexpected end of input in configuration"); \
+        return STX_error; \
+    } \
+} while(0)
+
+#line 29 "../src/parse/syntax_lexer.re"
 
 
 namespace re2c {
 
-int StxFile::lex_token(STX_STYPE* yylval) {
-    const uint8_t* YYMARKER, *p;
+int Input::lex_syntax_token(STX_STYPE* yylval) {
+    const uint8_t* p;
     
-#line 18 "src/parse/syntax_lexer.cc"
+#line 26 "src/parse/syntax_lexer.cc"
 const uint8_t* yyt1;
-#line 26 "../src/parse/syntax_lexer.re"
+#line 35 "../src/parse/syntax_lexer.re"
 
 
 start:
     tok = cur;
+    location = cur_loc();
 
-#line 26 "src/parse/syntax_lexer.cc"
+#line 35 "src/parse/syntax_lexer.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -60,6 +69,7 @@ start:
 		128, 128, 128, 128, 128, 128, 128, 128, 
 		128, 128, 128, 128, 128, 128, 128, 128, 
 	};
+	if ((lim - cur) < 6) YYFILL(6);
 	yych = *cur;
 	if (yybm[0+yych] & 16) {
 		goto yy4;
@@ -114,45 +124,46 @@ start:
 	}
 yy1:
 	++cur;
-#line 31 "../src/parse/syntax_lexer.re"
+#line 41 "../src/parse/syntax_lexer.re"
 	{ return STX_EOF; }
-#line 120 "src/parse/syntax_lexer.cc"
+#line 130 "src/parse/syntax_lexer.cc"
 yy2:
 	++cur;
 yy3:
-#line 60 "../src/parse/syntax_lexer.re"
+#line 69 "../src/parse/syntax_lexer.re"
 	{
         msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
         return STX_error;
     }
-#line 129 "src/parse/syntax_lexer.cc"
+#line 139 "src/parse/syntax_lexer.cc"
 yy4:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yybm[0+yych] & 16) {
 		goto yy4;
 	}
-#line 37 "../src/parse/syntax_lexer.re"
+#line 46 "../src/parse/syntax_lexer.re"
 	{ goto start; }
-#line 137 "src/parse/syntax_lexer.cc"
+#line 149 "src/parse/syntax_lexer.cc"
 yy5:
 	++cur;
-#line 32 "../src/parse/syntax_lexer.re"
+#line 42 "../src/parse/syntax_lexer.re"
 	{
-        ++loc.line;
-        pos = cur;
+        next_line();
         goto start;
     }
-#line 146 "src/parse/syntax_lexer.cc"
+#line 157 "src/parse/syntax_lexer.cc"
 yy6:
 	++cur;
-#line 58 "../src/parse/syntax_lexer.re"
+#line 67 "../src/parse/syntax_lexer.re"
 	{ goto str; }
-#line 151 "src/parse/syntax_lexer.cc"
+#line 162 "src/parse/syntax_lexer.cc"
 yy7:
 	++cur;
-#line 59 "../src/parse/syntax_lexer.re"
+#line 68 "../src/parse/syntax_lexer.re"
 	{ return cur[-1]; }
-#line 156 "src/parse/syntax_lexer.cc"
+#line 167 "src/parse/syntax_lexer.cc"
 yy8:
 	yych = *++cur;
 	if (yybm[0+yych] & 32) {
@@ -161,15 +172,17 @@ yy8:
 	goto yy3;
 yy9:
 	yyaccept = 0;
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych == '/') goto yy15;
 	goto yy3;
 yy10:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yybm[0+yych] & 32) {
 		goto yy10;
 	}
-#line 50 "../src/parse/syntax_lexer.re"
+#line 59 "../src/parse/syntax_lexer.re"
 	{
         if (s_to_i32_unsafe(tok, cur, yylval->num)) {
             return STX_NUMBER;
@@ -178,10 +191,12 @@ yy10:
             return STX_error;
         }
     }
-#line 182 "src/parse/syntax_lexer.cc"
+#line 195 "src/parse/syntax_lexer.cc"
 yy11:
 	yyaccept = 1;
-	yych = *(YYMARKER = ++cur);
+	mar = ++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 yy12:
 	if (yybm[0+yych] & 64) {
 		goto yy11;
@@ -202,32 +217,36 @@ yy12:
 		}
 	}
 yy13:
-#line 46 "../src/parse/syntax_lexer.re"
+#line 55 "../src/parse/syntax_lexer.re"
 	{
         yylval->str = newcstr(tok, cur, alc);
         return STX_NAME;
     }
-#line 211 "src/parse/syntax_lexer.cc"
+#line 226 "src/parse/syntax_lexer.cc"
 yy14:
 	yyaccept = 1;
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych == 'o') goto yy19;
 	goto yy12;
 yy15:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yybm[0+yych] & 128) {
 		goto yy15;
 	}
 	if (yych >= 0x01) goto yy5;
 yy16:
-	cur = YYMARKER;
+	cur = mar;
 	if (yyaccept == 0) {
 		goto yy3;
 	} else {
 		goto yy13;
 	}
 yy17:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy17;
 		goto yy16;
@@ -238,21 +257,21 @@ yy17:
 yy18:
 	++cur;
 	p = yyt1;
-#line 42 "../src/parse/syntax_lexer.re"
+#line 51 "../src/parse/syntax_lexer.re"
 	{
         yylval->str = newcstr(tok, p, alc);
         return STX_CONF;
     }
-#line 247 "src/parse/syntax_lexer.cc"
+#line 266 "src/parse/syntax_lexer.cc"
 yy19:
 	yyaccept = 1;
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych != 'd') goto yy12;
 	yyaccept = 1;
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych != 'e') goto yy12;
 	yyaccept = 1;
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych != ':') goto yy12;
 	yych = *++cur;
 	if (yych <= '^') {
@@ -263,7 +282,9 @@ yy19:
 		if (yych >= '{') goto yy16;
 	}
 yy20:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yych <= '9') {
 		if (yych <= ' ') {
 			if (yych == '\t') {
@@ -297,7 +318,9 @@ yy20:
 		}
 	}
 yy21:
-	yych = *++cur;
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yych <= 0x1F) {
 		if (yych == '\t') goto yy21;
 		goto yy16;
@@ -308,20 +331,21 @@ yy21:
 yy22:
 	++cur;
 	p = yyt1;
-#line 38 "../src/parse/syntax_lexer.re"
+#line 47 "../src/parse/syntax_lexer.re"
 	{
         yylval->str = newcstr(tok, p, alc);
         return STX_CONF_CODE;
     }
-#line 317 "src/parse/syntax_lexer.cc"
+#line 340 "src/parse/syntax_lexer.cc"
 }
-#line 64 "../src/parse/syntax_lexer.re"
+#line 73 "../src/parse/syntax_lexer.re"
 
 
 str: 
-#line 323 "src/parse/syntax_lexer.cc"
+#line 346 "src/parse/syntax_lexer.cc"
 {
 	uint8_t yych;
+	if ((lim - cur) < 4) YYFILL(4);
 	yych = *cur;
 	if (yych <= '!') {
 		if (yych <= 0x00) goto yy24;
@@ -334,29 +358,29 @@ str:
 yy24:
 	++cur;
 yy25:
-#line 83 "../src/parse/syntax_lexer.re"
+#line 92 "../src/parse/syntax_lexer.re"
 	{
         tok = cur - 1;
         msg.error(tok_loc(), "syntax error in string literal");
         return STX_error;
     }
-#line 344 "src/parse/syntax_lexer.cc"
+#line 368 "src/parse/syntax_lexer.cc"
 yy26:
 	++cur;
-#line 77 "../src/parse/syntax_lexer.re"
+#line 86 "../src/parse/syntax_lexer.re"
 	{ tmp_str += static_cast<char>(cur[-1]); goto str; }
-#line 349 "src/parse/syntax_lexer.cc"
+#line 373 "src/parse/syntax_lexer.cc"
 yy27:
 	++cur;
-#line 78 "../src/parse/syntax_lexer.re"
+#line 87 "../src/parse/syntax_lexer.re"
 	{
         yylval->str = copystr(tmp_str, alc);
         tmp_str.clear();
         return STX_STRING;
     }
-#line 358 "src/parse/syntax_lexer.cc"
+#line 382 "src/parse/syntax_lexer.cc"
 yy28:
-	yych = *(YYMARKER = ++cur);
+	yych = *(mar = ++cur);
 	if (yych <= 'm') {
 		if (yych <= '`') {
 			if (yych <= '"') {
@@ -395,66 +419,66 @@ yy28:
 		}
 	}
 	++cur;
-#line 68 "../src/parse/syntax_lexer.re"
+#line 77 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '"'; goto str; }
-#line 401 "src/parse/syntax_lexer.cc"
+#line 425 "src/parse/syntax_lexer.cc"
 yy29:
 	++cur;
-#line 67 "../src/parse/syntax_lexer.re"
+#line 76 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\\'; goto str; }
-#line 406 "src/parse/syntax_lexer.cc"
+#line 430 "src/parse/syntax_lexer.cc"
 yy30:
 	++cur;
-#line 69 "../src/parse/syntax_lexer.re"
+#line 78 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\a'; goto str; }
-#line 411 "src/parse/syntax_lexer.cc"
+#line 435 "src/parse/syntax_lexer.cc"
 yy31:
 	++cur;
-#line 70 "../src/parse/syntax_lexer.re"
+#line 79 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\b'; goto str; }
-#line 416 "src/parse/syntax_lexer.cc"
+#line 440 "src/parse/syntax_lexer.cc"
 yy32:
 	++cur;
-#line 71 "../src/parse/syntax_lexer.re"
+#line 80 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\f'; goto str; }
-#line 421 "src/parse/syntax_lexer.cc"
+#line 445 "src/parse/syntax_lexer.cc"
 yy33:
 	++cur;
-#line 72 "../src/parse/syntax_lexer.re"
+#line 81 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\n'; goto str; }
-#line 426 "src/parse/syntax_lexer.cc"
+#line 450 "src/parse/syntax_lexer.cc"
 yy34:
 	++cur;
-#line 73 "../src/parse/syntax_lexer.re"
+#line 82 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\r'; goto str; }
-#line 431 "src/parse/syntax_lexer.cc"
+#line 455 "src/parse/syntax_lexer.cc"
 yy35:
 	++cur;
-#line 74 "../src/parse/syntax_lexer.re"
+#line 83 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\t'; goto str; }
-#line 436 "src/parse/syntax_lexer.cc"
+#line 460 "src/parse/syntax_lexer.cc"
 yy36:
 	++cur;
-#line 75 "../src/parse/syntax_lexer.re"
+#line 84 "../src/parse/syntax_lexer.re"
 	{ tmp_str += '\v'; goto str; }
-#line 441 "src/parse/syntax_lexer.cc"
+#line 465 "src/parse/syntax_lexer.cc"
 yy37:
 	yych = *++cur;
 	if (yych <= '/') goto yy38;
 	if (yych <= '9') goto yy39;
 yy38:
-	cur = YYMARKER;
+	cur = mar;
 	goto yy25;
 yy39:
 	yych = *++cur;
 	if (yych <= '/') goto yy38;
 	if (yych >= ':') goto yy38;
 	++cur;
-#line 76 "../src/parse/syntax_lexer.re"
+#line 85 "../src/parse/syntax_lexer.re"
 	{ tmp_str += static_cast<char>(unesc_hex(cur - 4, cur)); goto str; }
-#line 456 "src/parse/syntax_lexer.cc"
+#line 480 "src/parse/syntax_lexer.cc"
 }
-#line 88 "../src/parse/syntax_lexer.re"
+#line 97 "../src/parse/syntax_lexer.re"
 
     UNREACHABLE();
     return STX_error; // unreachable

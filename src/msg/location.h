@@ -12,6 +12,7 @@ struct loc_t {
 };
 
 static constexpr loc_t NOWHERE = {~0u, ~0u, ~0u};
+static constexpr loc_t ATSTART = {1, 0, 0};
 
 enum locfmt_t {
     LOCFMT_GNU,

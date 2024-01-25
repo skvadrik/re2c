@@ -391,7 +391,7 @@ struct Opt {
   public:
     Opt(OutAllocator& alc, Msg& msg);
     const conopt_t& global() const { return glob; }
-    Ret parse(char** argv);
+    Ret parse(char** argv, Input& input);
     Ret snapshot(const opt_t** opts) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;
