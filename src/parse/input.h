@@ -193,8 +193,6 @@ inline const InputFile& Input::get_cinput() const {
     return *files[get_input_index()];
 }
 
-Ret parse_syntax_config(Input& in, Opt& opts, Stx& stx);
-
 } // namespace re2c
 
 #endif // _RE2C_AST_INPUT_
