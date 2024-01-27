@@ -83,7 +83,7 @@ extern int stx_debug;
 #if ! defined STX_STYPE && ! defined STX_STYPE_IS_DECLARED
 union STX_STYPE
 {
-#line 30 "../src/parse/syntax_parser.ypp"
+#line 32 "../src/parse/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -103,7 +103,7 @@ typedef union STX_STYPE STX_STYPE;
 
 
 
-int stx_parse (re2c::Input& in, re2c::Stx& stx);
+int stx_parse (re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx);
 
 
 #endif /* !YY_STX_SRC_PARSE_SYNTAX_PARSER_H_INCLUDED  */

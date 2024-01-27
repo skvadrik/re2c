@@ -104,7 +104,7 @@ size_t Input::get_input_index() const {
     return i;
 }
 
-Ret Input::load_syntax_config(Stx& stx, Lang& lang) {
+Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {
     if (!globopts->syntax_file.empty()) {
         CHECK_RET(open(globopts->syntax_file, nullptr));
     } else {
@@ -139,7 +139,7 @@ Ret Input::load_syntax_config(Stx& stx, Lang& lang) {
         lim = bot + flen + YYMAXFILL;
     }
 
-    CHECK_RET(parse_syntax_config(*this, stx));
+    CHECK_RET(parse_syntax_config(*this, opts, stx));
     stx.cache_conf_tests();
 
     reset(); // clean up before lexing source files

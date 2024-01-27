@@ -77,14 +77,14 @@ class Input: private LexerState {
     ~Input();
 
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
-    Ret load_syntax_config(Stx& stx, Lang& lang);
+    Ret load_syntax_config(Opt& opts, Stx& stx, Lang& lang);
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file(const std::string& header) const NODISCARD;
 
     Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
     Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
-    int lex_syntax_token(STX_STYPE* yylval);
+    Ret lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token);
 
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
@@ -193,7 +193,7 @@ inline const InputFile& Input::get_cinput() const {
     return *files[get_input_index()];
 }
 
-Ret parse_syntax_config(Input& in, Stx& stx);
+Ret parse_syntax_config(Input& in, Opt& opts, Stx& stx);
 
 } // namespace re2c
 

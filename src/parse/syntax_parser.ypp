@@ -13,8 +13,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Input& in, re2c::Stx&, const char* s);
-    static int yylex(STX_STYPE* yylval, Input& in);
+    static void yyerror(Input& in, Opt& opts, Stx& stx, const char* s);
+    static int yylex(STX_STYPE* yylval, Input& in, Opt& opts);
 }
 
 %}
@@ -24,7 +24,9 @@ extern "C" {
 %define api.pure full
 %define api.prefix {stx_}
 %lex-param {re2c::Input& in}
+%lex-param {re2c::Opt& opts}
 %parse-param {re2c::Input& in}
+%parse-param {re2c::Opt& opts}
 %parse-param {re2c::Stx& stx}
 
 %union {
@@ -117,12 +119,13 @@ names
 %%
 
 extern "C" {
-    static void yyerror(re2c::Input& in, re2c::Stx&, const char* s) {
+    static void yyerror(re2c::Input& in, Opt&, Stx&, const char* s) {
         in.error_at_tok("%s", s);
     }
 
-    static int yylex(STX_STYPE* yylval, re2c::Input& in) {
-        return in.lex_syntax_token(yylval);
+    static int yylex(STX_STYPE* yylval, re2c::Input& in, Opt& opts) {
+        int token;
+        return in.lex_syntax_token(yylval, opts, token) == Ret::OK ? token : STX_error;
     }
 }
 
@@ -205,8 +208,8 @@ inline StxCode* Stx::make_code_list(
     return x;
 }
 
-Ret parse_syntax_config(Input& in, Stx& stx) {
-    return yyparse(in, stx) == 0 ? Ret::OK : Ret::FAIL;
+Ret parse_syntax_config(Input& in, Opt& opts, Stx& stx) {
+    return yyparse(in, opts, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c

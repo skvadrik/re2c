@@ -6,10 +6,7 @@
 #include "src/util/string_utils.h"
 
 #define YYFILL(n) do { \
-    if (!fill(n)) { \
-        error_at_cur("unexpected end of input in configuration"); \
-        return STX_error; \
-    } \
+    if (!fill(n)) RET_FAIL(error_at_cur("unexpected end of input in configuration")); \
 } while(0)
 
 /*!re2c
@@ -30,7 +27,9 @@
 
 namespace re2c {
 
-int Input::lex_syntax_token(STX_STYPE* yylval) {
+#define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
+
+Ret Input::lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token) {
     const uint8_t* p;
     /*!stags:re2c format = "const uint8_t* @@;"; */
 
@@ -38,38 +37,37 @@ start:
     tok = cur;
     location = cur_loc();
 /*!local:re2c
-    eof { return STX_EOF; }
+    eof { RET_TOK(STX_EOF); }
     eol | comment {
         next_line();
         goto start;
     }
     space+ { goto start; }
+    "conf:" {
+        CHECK_RET(lex_conf(opts));
+        goto start;
+    }
     "code:" name @p space* "=" {
         yylval->str = newcstr(tok, p, alc);
-        return STX_CONF_CODE;
+        RET_TOK(STX_CONF_CODE);
     }
     name @p space* "=" {
         yylval->str = newcstr(tok, p, alc);
-        return STX_CONF;
+        RET_TOK(STX_CONF);
     }
     name {
         yylval->str = newcstr(tok, cur, alc);
-        return STX_NAME;
+        RET_TOK(STX_NAME);
     }
     number {
         if (s_to_i32_unsafe(tok, cur, yylval->num)) {
-            return STX_NUMBER;
-        } else {
-            msg.error(tok_loc(), "configuration value overflow");
-            return STX_error;
+            RET_TOK(STX_NUMBER);
         }
+        RET_FAIL(error_at_tok("configuration value overflow"));
     }
     ["] { goto str; }
-    [?:;,(){}[\]] { return cur[-1]; }
-    * {
-        msg.error(tok_loc(), "unexpected character: '%c'", cur[-1]);
-        return STX_error;
-    }
+    [?:;,(){}[\]] { RET_TOK(cur[-1]); }
+    * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */
 
 str: /*!local:re2c
@@ -87,16 +85,17 @@ str: /*!local:re2c
     ["] {
         yylval->str = copystr(tmp_str, alc);
         tmp_str.clear();
-        return STX_STRING;
+        RET_TOK(STX_STRING);
     }
     * {
         tok = cur - 1;
-        msg.error(tok_loc(), "syntax error in string literal");
-        return STX_error;
+        RET_FAIL(error_at_tok("syntax error in string literal"));
     }
 */
     UNREACHABLE();
-    return STX_error; // unreachable
+    return Ret::FAIL; // unreachable
 }
+
+#undef RET_TOK
 
 } // namespace re2c

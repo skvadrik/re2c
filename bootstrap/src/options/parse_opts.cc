@@ -4764,7 +4764,7 @@ Ret Opt::parse(char** argv, Input& input) {
     }
 
     // Load syntax file (it must have file index 0).
-    CHECK_RET(input.load_syntax_config(stx, lang));
+    CHECK_RET(input.load_syntax_config(*this, stx, lang));
 
     // Set option defaults.
     CHECK_RET(fix_global_and_defaults());

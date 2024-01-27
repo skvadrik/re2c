@@ -83,8 +83,8 @@
 using namespace re2c;
 
 extern "C" {
-    static void yyerror(Input& in, re2c::Stx&, const char* s);
-    static int yylex(STX_STYPE* yylval, Input& in);
+    static void yyerror(Input& in, Opt& opts, Stx& stx, const char* s);
+    static int yylex(STX_STYPE* yylval, Input& in, Opt& opts);
 }
 
 
@@ -529,9 +529,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    55,    55,    56,    59,    63,    67,    75,    76,    79,
-      80,    81,    82,    85,    88,    93,    96,    99,   105,   108,
-     112
+       0,    57,    57,    58,    61,    65,    69,    77,    78,    81,
+      82,    83,    84,    87,    90,    95,    98,   101,   107,   110,
+     114
 };
 #endif
 
@@ -680,7 +680,7 @@ enum { YYENOMEM = -2 };
       }                                                           \
     else                                                          \
       {                                                           \
-        yyerror (in, stx, YY_("syntax error: cannot back up")); \
+        yyerror (in, opts, stx, YY_("syntax error: cannot back up")); \
         YYERROR;                                                  \
       }                                                           \
   while (0)
@@ -713,7 +713,7 @@ do {                                                                      \
     {                                                                     \
       YYFPRINTF (stderr, "%s ", Title);                                   \
       yy_symbol_print (stderr,                                            \
-                  Kind, Value, in, stx); \
+                  Kind, Value, in, opts, stx); \
       YYFPRINTF (stderr, "\n");                                           \
     }                                                                     \
 } while (0)
@@ -725,11 +725,12 @@ do {                                                                      \
 
 static void
 yy_symbol_value_print (FILE *yyo,
-                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& in, re2c::Stx& stx)
+                       yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx)
 {
   FILE *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (in);
+  YY_USE (opts);
   YY_USE (stx);
   if (!yyvaluep)
     return;
@@ -745,12 +746,12 @@ yy_symbol_value_print (FILE *yyo,
 
 static void
 yy_symbol_print (FILE *yyo,
-                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& in, re2c::Stx& stx)
+                 yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx)
 {
   YYFPRINTF (yyo, "%s %s (",
              yykind < YYNTOKENS ? "token" : "nterm", yysymbol_name (yykind));
 
-  yy_symbol_value_print (yyo, yykind, yyvaluep, in, stx);
+  yy_symbol_value_print (yyo, yykind, yyvaluep, in, opts, stx);
   YYFPRINTF (yyo, ")");
 }
 
@@ -784,7 +785,7 @@ do {                                                            \
 
 static void
 yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
-                 int yyrule, re2c::Input& in, re2c::Stx& stx)
+                 int yyrule, re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx)
 {
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
@@ -797,7 +798,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
       YYFPRINTF (stderr, "   $%d = ", yyi + 1);
       yy_symbol_print (stderr,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
-                       &yyvsp[(yyi + 1) - (yynrhs)], in, stx);
+                       &yyvsp[(yyi + 1) - (yynrhs)], in, opts, stx);
       YYFPRINTF (stderr, "\n");
     }
 }
@@ -805,7 +806,7 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp,
 # define YY_REDUCE_PRINT(Rule)          \
 do {                                    \
   if (yydebug)                          \
-    yy_reduce_print (yyssp, yyvsp, Rule, in, stx); \
+    yy_reduce_print (yyssp, yyvsp, Rule, in, opts, stx); \
 } while (0)
 
 /* Nonzero means print parse trace.  It is left uninitialized so that
@@ -846,10 +847,11 @@ int yydebug;
 
 static void
 yydestruct (const char *yymsg,
-            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Input& in, re2c::Stx& stx)
+            yysymbol_kind_t yykind, YYSTYPE *yyvaluep, re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx)
 {
   YY_USE (yyvaluep);
   YY_USE (in);
+  YY_USE (opts);
   YY_USE (stx);
   if (!yymsg)
     yymsg = "Deleting";
@@ -870,7 +872,7 @@ yydestruct (const char *yymsg,
 `----------*/
 
 int
-yyparse (re2c::Input& in, re2c::Stx& stx)
+yyparse (re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx)
 {
 /* Lookahead token kind.  */
 int yychar;
@@ -1037,7 +1039,7 @@ yybackup:
   if (yychar == STX_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
-      yychar = yylex (&yylval, in);
+      yychar = yylex (&yylval, in, opts);
     }
 
   if (yychar <= STX_EOF)
@@ -1125,128 +1127,128 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* confs: conf confs  */
-#line 56 "../src/parse/syntax_parser.ypp"
+#line 58 "../src/parse/syntax_parser.ypp"
              { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
-#line 1131 "src/parse/syntax_parser.cc"
+#line 1133 "src/parse/syntax_parser.cc"
     break;
 
   case 4: /* conf: STX_CONF_CODE code_exprs ';'  */
-#line 59 "../src/parse/syntax_parser.ypp"
+#line 61 "../src/parse/syntax_parser.ypp"
                                {
     (yyval.conf) = stx.make_conf_code((yyvsp[-2].str), (yyvsp[-1].codes));
     if (stx.validate_conf_code((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1140 "src/parse/syntax_parser.cc"
+#line 1142 "src/parse/syntax_parser.cc"
     break;
 
   case 5: /* conf: STX_CONF list ';'  */
-#line 63 "../src/parse/syntax_parser.ypp"
+#line 65 "../src/parse/syntax_parser.ypp"
                     {
     (yyval.conf) = stx.make_conf_list((yyvsp[-2].str), (yyvsp[-1].list));
     if (stx.validate_conf_list((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1149 "src/parse/syntax_parser.cc"
+#line 1151 "src/parse/syntax_parser.cc"
     break;
 
   case 6: /* conf: STX_CONF STX_NAME ';'  */
-#line 67 "../src/parse/syntax_parser.ypp"
+#line 69 "../src/parse/syntax_parser.ypp"
                         {
     (yyval.conf) = stx.make_conf_word((yyvsp[-2].str), (yyvsp[-1].str));
     if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1158 "src/parse/syntax_parser.cc"
+#line 1160 "src/parse/syntax_parser.cc"
     break;
 
   case 7: /* code_exprs: %empty  */
-#line 75 "../src/parse/syntax_parser.ypp"
+#line 77 "../src/parse/syntax_parser.ypp"
                        { (yyval.codes) = stx.new_code_list(); }
-#line 1164 "src/parse/syntax_parser.cc"
+#line 1166 "src/parse/syntax_parser.cc"
     break;
 
   case 8: /* code_exprs: code_expr code_exprs  */
-#line 76 "../src/parse/syntax_parser.ypp"
+#line 78 "../src/parse/syntax_parser.ypp"
                        { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
-#line 1170 "src/parse/syntax_parser.cc"
+#line 1172 "src/parse/syntax_parser.cc"
     break;
 
   case 9: /* code_expr: STX_STRING  */
-#line 79 "../src/parse/syntax_parser.ypp"
+#line 81 "../src/parse/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
-#line 1176 "src/parse/syntax_parser.cc"
+#line 1178 "src/parse/syntax_parser.cc"
     break;
 
   case 10: /* code_expr: STX_NAME  */
-#line 80 "../src/parse/syntax_parser.ypp"
+#line 82 "../src/parse/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
-#line 1182 "src/parse/syntax_parser.cc"
+#line 1184 "src/parse/syntax_parser.cc"
     break;
 
   case 13: /* code_cond: '(' STX_NAME '?' code_exprs ')'  */
-#line 85 "../src/parse/syntax_parser.ypp"
+#line 87 "../src/parse/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_cond((yyvsp[-3].str), (yyvsp[-1].codes), nullptr);
 }
-#line 1190 "src/parse/syntax_parser.cc"
+#line 1192 "src/parse/syntax_parser.cc"
     break;
 
   case 14: /* code_cond: '(' STX_NAME '?' code_exprs ':' code_exprs ')'  */
-#line 88 "../src/parse/syntax_parser.ypp"
+#line 90 "../src/parse/syntax_parser.ypp"
                                                  {
     (yyval.code) = stx.make_code_cond((yyvsp[-5].str), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1198 "src/parse/syntax_parser.cc"
+#line 1200 "src/parse/syntax_parser.cc"
     break;
 
   case 15: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
-#line 93 "../src/parse/syntax_parser.ypp"
+#line 95 "../src/parse/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].codes));
 }
-#line 1206 "src/parse/syntax_parser.cc"
+#line 1208 "src/parse/syntax_parser.cc"
     break;
 
   case 16: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 96 "../src/parse/syntax_parser.ypp"
+#line 98 "../src/parse/syntax_parser.ypp"
                                                      {
     (yyval.code) = stx.make_code_list((yyvsp[-6].str), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1214 "src/parse/syntax_parser.cc"
+#line 1216 "src/parse/syntax_parser.cc"
     break;
 
   case 17: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 99 "../src/parse/syntax_parser.ypp"
+#line 101 "../src/parse/syntax_parser.ypp"
                                                                     {
     (yyval.code) = stx.make_code_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1222 "src/parse/syntax_parser.cc"
+#line 1224 "src/parse/syntax_parser.cc"
     break;
 
   case 18: /* list: '[' names ']'  */
-#line 105 "../src/parse/syntax_parser.ypp"
+#line 107 "../src/parse/syntax_parser.ypp"
                     { (yyval.list) = (yyvsp[-1].list); }
-#line 1228 "src/parse/syntax_parser.cc"
+#line 1230 "src/parse/syntax_parser.cc"
     break;
 
   case 19: /* names: STX_NAME  */
-#line 108 "../src/parse/syntax_parser.ypp"
+#line 110 "../src/parse/syntax_parser.ypp"
            {
     (yyval.list) = stx.new_name_list();
     prepend((yyval.list), stx.make_name((yyvsp[0].str)));
 }
-#line 1237 "src/parse/syntax_parser.cc"
+#line 1239 "src/parse/syntax_parser.cc"
     break;
 
   case 20: /* names: STX_NAME ',' names  */
-#line 112 "../src/parse/syntax_parser.ypp"
+#line 114 "../src/parse/syntax_parser.ypp"
                      {
     prepend((yyvsp[0].list), stx.make_name((yyvsp[-2].str)));
     (yyval.list) = (yyvsp[0].list);
 }
-#line 1246 "src/parse/syntax_parser.cc"
+#line 1248 "src/parse/syntax_parser.cc"
     break;
 
 
-#line 1250 "src/parse/syntax_parser.cc"
+#line 1252 "src/parse/syntax_parser.cc"
 
       default: break;
     }
@@ -1293,7 +1295,7 @@ yyerrlab:
   if (!yyerrstatus)
     {
       ++yynerrs;
-      yyerror (in, stx, YY_("syntax error"));
+      yyerror (in, opts, stx, YY_("syntax error"));
     }
 
   if (yyerrstatus == 3)
@@ -1310,7 +1312,7 @@ yyerrlab:
       else
         {
           yydestruct ("Error: discarding",
-                      yytoken, &yylval, in, stx);
+                      yytoken, &yylval, in, opts, stx);
           yychar = STX_EMPTY;
         }
     }
@@ -1366,7 +1368,7 @@ yyerrlab1:
 
 
       yydestruct ("Error: popping",
-                  YY_ACCESSING_SYMBOL (yystate), yyvsp, in, stx);
+                  YY_ACCESSING_SYMBOL (yystate), yyvsp, in, opts, stx);
       YYPOPSTACK (1);
       yystate = *yyssp;
       YY_STACK_PRINT (yyss, yyssp);
@@ -1404,7 +1406,7 @@ yyabortlab:
 | yyexhaustedlab -- YYNOMEM (memory exhaustion) comes here.  |
 `-----------------------------------------------------------*/
 yyexhaustedlab:
-  yyerror (in, stx, YY_("memory exhausted"));
+  yyerror (in, opts, stx, YY_("memory exhausted"));
   yyresult = 2;
   goto yyreturnlab;
 
@@ -1419,7 +1421,7 @@ yyreturnlab:
          user semantic actions for why this is necessary.  */
       yytoken = YYTRANSLATE (yychar);
       yydestruct ("Cleanup: discarding lookahead",
-                  yytoken, &yylval, in, stx);
+                  yytoken, &yylval, in, opts, stx);
     }
   /* Do not reclaim the symbols of the rule whose action triggered
      this YYABORT or YYACCEPT.  */
@@ -1428,7 +1430,7 @@ yyreturnlab:
   while (yyssp != yyss)
     {
       yydestruct ("Cleanup: popping",
-                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, in, stx);
+                  YY_ACCESSING_SYMBOL (+*yyssp), yyvsp, in, opts, stx);
       YYPOPSTACK (1);
     }
 #ifndef yyoverflow
@@ -1439,16 +1441,17 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 117 "../src/parse/syntax_parser.ypp"
+#line 119 "../src/parse/syntax_parser.ypp"
 
 
 extern "C" {
-    static void yyerror(re2c::Input& in, re2c::Stx&, const char* s) {
+    static void yyerror(re2c::Input& in, Opt&, Stx&, const char* s) {
         in.error_at_tok("%s", s);
     }
 
-    static int yylex(STX_STYPE* yylval, re2c::Input& in) {
-        return in.lex_syntax_token(yylval);
+    static int yylex(STX_STYPE* yylval, re2c::Input& in, Opt& opts) {
+        int token;
+        return in.lex_syntax_token(yylval, opts, token) == Ret::OK ? token : STX_error;
     }
 }
 
@@ -1531,8 +1534,8 @@ inline StxCode* Stx::make_code_list(
     return x;
 }
 
-Ret parse_syntax_config(Input& in, Stx& stx) {
-    return yyparse(in, stx) == 0 ? Ret::OK : Ret::FAIL;
+Ret parse_syntax_config(Input& in, Opt& opts, Stx& stx) {
+    return yyparse(in, opts, stx) == 0 ? Ret::OK : Ret::FAIL;
 }
 
 } // namespace re2c
