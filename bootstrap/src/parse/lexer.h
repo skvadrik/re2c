@@ -9,9 +9,9 @@
 
 namespace re2c {
 
-#line 13 "src/parse/lex.h"
+#line 13 "src/parse/lexer.h"
 #define YYMAXFILL 18
-#line 69 "../src/parse/lex.re"
+#line 69 "../src/parse/lexer.re"
 
 
 struct LexerState {
@@ -21,9 +21,9 @@ struct LexerState {
     size_t BSIZE;
     uint8_t* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     
-#line 25 "src/parse/lex.h"
+#line 25 "src/parse/lexer.h"
 uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
-#line 77 "../src/parse/lex.re"
+#line 77 "../src/parse/lexer.re"
 
 
     inline LexerState()
@@ -39,9 +39,9 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
           pos(lim),
           eof(nullptr)
           
-#line 43 "src/parse/lex.h"
+#line 43 "src/parse/lexer.h"
 , yyt1(lim), yyt2(lim), yyt3(lim)
-#line 91 "../src/parse/lex.re"
+#line 91 "../src/parse/lexer.re"
  {
         memset(lim, 0, YYMAXFILL);
     }
@@ -66,9 +66,9 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         ptr += offs;
         pos += offs;
         
-#line 70 "src/parse/lex.h"
+#line 70 "src/parse/lexer.h"
 if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; }
-#line 114 "../src/parse/lex.re"
+#line 114 "../src/parse/lexer.re"
 
     }
 

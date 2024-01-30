@@ -13,7 +13,7 @@
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
 #include "src/parse/input.h"
-#include "src/parse/lex.h"
+#include "src/parse/lexer.h"
 #include "src/regexp/rule.h"
 #include "src/util/check.h"
 #include "src/util/string_utils.h"
@@ -24,7 +24,7 @@ namespace re2c {
 // Global re2c configurations and definitions.
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
-    re2c:flags:type-header = "lex.h";
+    re2c:flags:type-header = "lexer.h";
     re2c:flags:tags = 1;
     re2c:api:style = free-form;
 

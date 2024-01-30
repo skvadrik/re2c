@@ -12,7 +12,7 @@
 #include "src/encoding/enc.h"
 #include "src/encoding/utf8.h"
 #include "src/msg/location.h"
-#include "src/parse/lex.h"
+#include "src/parse/lexer.h"
 #include "src/parse/parser.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
