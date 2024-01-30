@@ -359,7 +359,6 @@ Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
-    std::string s;
 
     out.gen_raw(tok, ptr, globopts->line_dirs);
     CHECK_RET(lex_name_list(alc, &blocks));
@@ -375,8 +374,8 @@ loop: /*!local:re2c
         if ((mask & DCONF_FORMAT) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'format'"));
         }
-        CHECK_RET(lex_conf_string(s));
-        fmt = copystr(s, alc);
+        CHECK_RET(lex_conf_string());
+        fmt = copystr(tmp_str, alc);
         goto loop;
     }
 
@@ -384,8 +383,8 @@ loop: /*!local:re2c
         if ((mask & DCONF_SEPARATOR) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'separator'"));
         }
-        CHECK_RET(lex_conf_string(s));
-        sep = copystr(s, alc);
+        CHECK_RET(lex_conf_string());
+        sep = copystr(tmp_str, alc);
         goto loop;
     }
 

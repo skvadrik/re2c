@@ -1,0 +1,80 @@
+%{
+
+#include "src/parse/input.h"
+#include "src/parse/conf_parser.h"
+
+using namespace re2c;
+
+extern "C" {
+    static void yyerror(Input& in, const char* s);
+    static int yylex(CONF_STYPE* yylval, Input& in);
+}
+
+%}
+
+%start conf
+
+%define api.pure full
+%define api.prefix {conf_}
+%lex-param {re2c::Input& in}
+%parse-param {re2c::Input& in}
+
+%union {
+    const char* str;
+    int32_t num;
+    bool bln;
+    std::vector<std::string>* list;
+};
+
+%token CONF_NUMBER
+%token CONF_STRING
+%token CONF_OPTION
+
+%type <str> CONF_STRING str
+%type <num> CONF_NUMBER num
+%type <bln> CONF_OPTION
+%type <list> list elems
+
+%%
+
+conf
+: '=' num  { in.save_conf_num($2); }
+| '=' str  { in.save_conf_str($2); }
+| '=' list { in.save_conf_list($2); };
+
+num
+: CONF_NUMBER { $$ = $1; }
+| '(' CONF_OPTION '?' num ':' num ')' { $$ = $2 ? $4 : $6; };
+
+str
+: CONF_STRING
+| '(' CONF_OPTION '?' str ':' str ')' { $$ = $2 ? $4 : $6; };
+
+list
+: '[' ']'       { $$ = in.get_tmp_list(); }
+| '[' elems ']' { $$ = $2; };
+
+elems
+: CONF_STRING           { $$ = in.get_tmp_list(); $$->push_back($1); }
+| elems ',' CONF_STRING { $$ = $1; $$->push_back($3); };
+
+%%
+
+extern "C" {
+    static void yyerror(re2c::Input& in, const char* s) {
+        in.error_at_tok("%s", s);
+    }
+
+    static int yylex(CONF_STYPE* yylval, re2c::Input& in) {
+        int token;
+        return in.lex_conf_token(yylval, token) == Ret::OK ? token : CONF_error;
+    }
+}
+
+namespace re2c {
+
+Ret Input::parse_conf() {
+    return conf_parse(*this) == 0 ? Ret::OK : Ret::FAIL;
+}
+
+} // namespace re2c

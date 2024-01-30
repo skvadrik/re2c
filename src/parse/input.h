@@ -19,6 +19,7 @@
 #include "src/util/check.h"
 #include "src/util/forbid_copy.h"
 
+union CONF_STYPE;
 union STX_STYPE;
 
 namespace re2c {
@@ -70,7 +71,10 @@ class Input: private LexerState {
     // and line start `pos` are only updated for `cur`.
     loc_t location;
 
-    std::string tmp_str; // temporary string to avoid reallocations
+    enum class ConfKind { STR, NUM, LIST } conf_kind;
+    std::string tmp_str;
+    int32_t tmp_num;
+    std::vector<std::string> tmp_list;
 
   public:
     Input(OutAllocator& alc, const conopt_t* o, Msg& m);
@@ -85,12 +89,18 @@ class Input: private LexerState {
     Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
     Ret lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token);
+    Ret lex_conf_token(CONF_STYPE* yylval, int& token);
 
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
     void error_at(const loc_t& loc, const char* fmt, ...) const RE2C_ATTR((format(printf, 3, 4)));
     void error_at_cur(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
     void error_at_tok(const char* fmt, ...) const RE2C_ATTR((format(printf, 2, 3)));
+
+    void save_conf_num(int32_t num);
+    void save_conf_str(const char* str);
+    void save_conf_list(std::vector<std::string>* list);
+    std::vector<std::string>* get_tmp_list();
 
   private:
     void reset();
@@ -135,12 +145,13 @@ class Input: private LexerState {
     Ret lex_conf_api_style(Opt& opts) NODISCARD;
     Ret lex_conf_assign() NODISCARD;
     Ret lex_conf_semicolon() NODISCARD;
-    Ret lex_conf_number(int32_t& n) NODISCARD;
-    Ret lex_conf_bool(bool& b) NODISCARD;
-    Ret lex_conf_eof(uint32_t& u) NODISCARD;
-    Ret lex_conf_string_quoted(uint8_t quote, std::string& s) NODISCARD;
-    Ret lex_conf_string(std::string& s) NODISCARD;
-    Ret lex_conf_list(std::vector<std::string>& v) NODISCARD;
+    Ret lex_conf_number() NODISCARD;
+    Ret lex_conf_bool() NODISCARD;
+    Ret lex_conf_string_quoted(uint8_t quote) NODISCARD;
+    Ret lex_conf_string_legacy() NODISCARD;
+    Ret lex_conf_string() NODISCARD;
+    Ret lex_conf_list() NODISCARD;
+    Ret parse_conf();
 
     FORBID_COPY(Input);
 };
@@ -153,7 +164,10 @@ inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
       filedeps(),
       globopts(o),
       location(ATSTART),
-      tmp_str() {}
+      conf_kind(),
+      tmp_str(),
+      tmp_num(),
+      tmp_list() {}
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;
@@ -191,6 +205,26 @@ inline InputFile& Input::get_input() {
 
 inline const InputFile& Input::get_cinput() const {
     return *files[get_input_index()];
+}
+
+inline void Input::save_conf_num(int32_t num) {
+    conf_kind = ConfKind::NUM;
+    tmp_num = num;
+}
+
+inline void Input::save_conf_str(const char* str) {
+    conf_kind = ConfKind::STR;
+    tmp_str = str;
+}
+
+inline void Input::save_conf_list(std::vector<std::string>* list) {
+    conf_kind = ConfKind::LIST;
+    CHECK(list == &tmp_list); // `tmp_list` already contains list
+}
+
+inline std::vector<std::string>* Input::get_tmp_list() {
+    tmp_list.clear();
+    return &tmp_list;
 }
 
 } // namespace re2c

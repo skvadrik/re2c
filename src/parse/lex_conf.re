@@ -6,6 +6,7 @@
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/ast.h"
+#include "src/parse/conf_parser.h"
 #include "src/parse/input.h"
 #include "src/util/file_utils.h"
 #include "src/util/string_utils.h"
@@ -15,29 +16,37 @@ namespace re2c {
 #define YYFILL(n) if (!fill(n)) RET_FAIL(error_at_cur("unexpected end of input in configuration"))
 
 #define RET_CONF_BOOL(conf) do { \
-    CHECK_RET(lex_conf_bool(b)); \
-    opts.set_##conf(b); \
+    CHECK_RET(lex_conf_bool()); \
+    opts.set_##conf(tmp_num != 0); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_STR(conf) do { \
-    CHECK_RET(lex_conf_string(s)); \
-    opts.set_##conf(s); \
+    CHECK_RET(lex_conf_string()); \
+    opts.set_##conf(tmp_str); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_ENC(enc) do { \
-    CHECK_RET(lex_conf_bool(b)); \
-    opts.set_encoding(enc, b); \
+    CHECK_RET(lex_conf_bool()); \
+    opts.set_encoding(enc, tmp_num != 0); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_NUM_NONNEG(conf) do { \
-    CHECK_RET(lex_conf_number(n)); \
-    if (n < 0) RET_FAIL(error_at_cur("expected nonnegative value in configuration")); \
-    opts.set_##conf(static_cast<uint32_t>(n)); \
+    CHECK_RET(lex_conf_number()); \
+    if (tmp_num < 0) RET_FAIL(error_at_cur("expected nonnegative value in configuration")); \
+    opts.set_##conf(static_cast<uint32_t>(tmp_num)); \
     return Ret::OK; \
 } while(0)
+
+#define RET_CONF_EOF(conf) do { \
+    CHECK_RET(lex_conf_number()); \
+    opts.set_##conf(tmp_num < 0 ? NOEOF : static_cast<uint32_t>(tmp_num)); \
+    return Ret::OK; \
+} while(0)
+
+#define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
 /*!re2c
     re2c:define:YYCTYPE     = uint8_t;
@@ -46,20 +55,19 @@ namespace re2c {
     re2c:define:YYMARKER    = mar;
     re2c:define:YYCTXMARKER = ctx;
 
+    eof         = [\x00];
+    eol         = [\n];
     space       = [ \t];
+    semi        = [;];
+    quotes      = ['"];
+    special     = [:?,()[\]=];
+    naked_char  = [^] \ (eof | eol | space | semi);
+    naked       = (naked_char \ quotes) naked_char*;
     conf_assign = space* "=" space*;
-    naked_char  = [^\x00\n] \ (space | [;]);
-    naked       = (naked_char \ ['"]) naked_char*;
     number      = "0" | ("-"? [1-9] [0-9]*);
 */
 
 Ret Input::lex_conf(Opt& opts) {
-    bool b;
-    int32_t n;
-    uint32_t u;
-    std::string s;
-    std::vector<std::string> v;
-
 /*!local:re2c
     "api" | "flags:input" { return lex_conf_input(opts); }
     "api:style"           { return lex_conf_api_style(opts); }
@@ -67,30 +75,26 @@ Ret Input::lex_conf(Opt& opts) {
 
     // header filename in configuration is relative to the output file directory
     "header" | "flags:type-header" | "flags:t" {
-        CHECK_RET(lex_conf_string(s));
+        CHECK_RET(lex_conf_string());
         std::string path(opts.glob.output_file);
         get_dir(path);
-        opts.set_header_file(path + s);
+        opts.set_header_file(path + tmp_str);
         return Ret::OK;
     }
 
-    "eof"      { CHECK_RET(lex_conf_eof(u)); opts.set_fill_eof(u);      return Ret::OK; }
-    "sentinel" { CHECK_RET(lex_conf_eof(u)); opts.set_fill_sentinel(u); return Ret::OK; }
+    "eof"      { RET_CONF_EOF(fill_eof); }
+    "sentinel" { RET_CONF_EOF(fill_sentinel); }
 
     "yyfill:enable"    { RET_CONF_BOOL(fill_enable); }
     "yyfill:parameter" { RET_CONF_BOOL(fill_param_enable); }
     "yyfill:check"     { RET_CONF_BOOL(fill_check); }
 
-    "flags:"? "tags" | "flags:T" { RET_CONF_BOOL(tags); }
-    "flags:"? "leftmost-captures" {
-        CHECK_RET(lex_conf_bool(b));
-        opts.set_tags_posix_syntax(b);
-        return Ret::OK;
-    }
+    "flags:"? "tags" | "flags:T"  { RET_CONF_BOOL(tags); }
+    "flags:"? "leftmost-captures" { RET_CONF_BOOL(tags_posix_syntax); }
     "flags:"? "posix-captures" | "flags:P" {
-        CHECK_RET(lex_conf_bool(b));
-        opts.set_tags_posix_syntax(b);
-        opts.set_tags_posix_semantics(b);
+        CHECK_RET(lex_conf_bool());
+        opts.set_tags_posix_syntax(tmp_num != 0);
+        opts.set_tags_posix_semantics(tmp_num != 0);
         return Ret::OK;
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
@@ -134,14 +138,14 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYSTAGP"              { RET_CONF_STR(api_stag_pos); }
 
     "define:YYFN" {
-        CHECK_RET(lex_conf_list(v));
-        if (v.size() < 2 || v.size() % 2 != 0) {
+        CHECK_RET(lex_conf_list());
+        if (tmp_list.size() < 2 || tmp_list.size() % 2 != 0) {
             RET_FAIL(error_at_tok(
                 "`re2c:define:YYFN` value should be a list of 2*(N+1) strings, where the first"
                 " element is function name, second element is return type, and the remaining 2*N"
                 " elements are type and name of each argument (if any)"));
         }
-        opts.set_api_function(v);
+        opts.set_api_function(tmp_list);
         return Ret::OK;
     }
 
@@ -154,7 +158,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"? "yych:emit"       { RET_CONF_BOOL(char_emit); }
     "variable:"  "yybm"            { RET_CONF_STR(var_bitmaps); }
     "variable:"? "yybm:hex"        { RET_CONF_BOOL(bitmaps_hex); }
-    "variable:"  "yystable"        { return lex_conf_string(s); } // deprecated
+    "variable:"  "yystable"        { return lex_conf_string(); } // deprecated
 
     "cond:prefix" | "condprefix"         { RET_CONF_STR(cond_label_prefix); }
     "cond:enumprefix" | "condenumprefix" { RET_CONF_STR(cond_enum_prefix); }
@@ -272,84 +276,109 @@ Ret Input::lex_conf_semicolon() {
 */
 }
 
-Ret Input::lex_conf_number(int32_t& n) {
-    CHECK_RET(lex_conf_assign());
-    tok = cur;
-/*!local:re2c
-    *      { RET_FAIL(error_at_cur("bad configuration value (expected number)")); }
-    number {
-        n = 0;
-        if (!s_to_i32_unsafe (tok, cur, n)) {
-            RET_FAIL(error_at_cur("configuration value overflow"));
-        }
-        return lex_conf_semicolon();
+Ret Input::lex_conf_number() {
+    CHECK_RET(parse_conf());
+    if (conf_kind != ConfKind::NUM) {
+        RET_FAIL(error_at_tok("configuration value should be a number"));
     }
-*/
-}
-
-inline Ret Input::lex_conf_bool(bool& b) {
-    int32_t n;
-    CHECK_RET(lex_conf_number(n));
-    b = n != 0;
     return Ret::OK;
 }
 
-Ret Input::lex_conf_string_quoted(uint8_t quote, std::string& s) {
+inline Ret Input::lex_conf_bool() {
+    CHECK_RET(parse_conf());
+    if (conf_kind != ConfKind::NUM) {
+        RET_FAIL(error_at_tok("configuration value should be a boolean value 0 or 1"));
+    }
+    return Ret::OK;
+}
+
+// Historically re2c allowed raw (unquoted) strings containing special symbols as configuration
+// values in source files. In syntax files this is not allowed, as it would conflict with other
+// parts of grammar (e.g. parentheses and question mark are used for conditionals). Therefore we
+// have a legacy method for string configurations in source files.
+Ret Input::lex_conf_string_legacy() {
+    CHECK_RET(lex_conf_assign());
+    tok = cur;
+/*!local:re2c
+    quotes { CHECK_RET(lex_conf_string_quoted(tok[0])); goto end; }
+    naked  { tmp_str.assign(tok, cur); goto end; }
+    ""     { tmp_str.clear(); goto end; }
+*/
+end:
+    return lex_conf_semicolon();
+}
+
+Ret Input::lex_conf_string() {
+    if (msg.filenames[0] == globopts->source_file) {
+        return lex_conf_string_legacy();
+    }
+
+    CHECK_RET(parse_conf());
+    if (conf_kind != ConfKind::STR) {
+        RET_FAIL(error_at_tok("configuration value should be a string"));
+    }
+    return Ret::OK;
+}
+
+Ret Input::lex_conf_list() {
+    CHECK_RET(parse_conf());
+    if (conf_kind != ConfKind::LIST) {
+        RET_FAIL(error_at_tok("configuration value should be a list"));
+    }
+    return Ret::OK;
+}
+
+Ret Input::lex_conf_string_quoted(uint8_t quote) {
     AstChar c;
     bool stop;
-    s.clear();
+    tmp_str.clear();
     for (;;) {
         CHECK_RET(lex_str_chr(quote, c, stop));
         if (stop) return Ret::OK;
         if (c.chr > 0xFF) {
             RET_FAIL(error_at(c.loc, "multibyte character in configuration string: 0x%X", c.chr));
         }
-        s += static_cast<char>(c.chr);
+        tmp_str += static_cast<char>(c.chr);
     }
 }
 
-Ret Input::lex_conf_string(std::string& s) {
-    CHECK_RET(lex_conf_assign());
+Ret Input::lex_conf_token(CONF_STYPE* yylval, int& token) {
+start:
     tok = cur;
 /*!local:re2c
-    ['"]  { CHECK_RET(lex_conf_string_quoted(tok[0], s)); goto end; }
-    naked { s.assign(tok, cur); goto end; }
-    ""    { s.clear(); goto end; }
+    semi {
+        RET_TOK(CONF_EOF);
+    }
+    eof {
+        RET_FAIL(error_at_cur("unexpected end of input in configuration"));
+    }
+    eol {
+        next_line();
+        goto start;
+    }
+    special {
+        RET_TOK(cur[-1]);
+    }
+    space+ {
+        goto start;
+    }
+    number {
+        if (!s_to_i32_unsafe(tok, cur, yylval->num)) {
+            RET_FAIL(error_at_cur("configuration value overflow"));
+        }
+        RET_TOK(CONF_NUMBER);
+    }
+    quotes {
+        CHECK_RET(lex_conf_string_quoted(cur[-1]));
+        yylval->str = copystr(tmp_str, alc);
+        RET_TOK(CONF_STRING);
+    }
+    * {
+        RET_FAIL(error_at_cur("unexpected character: '%c'", cur[-1]));
+    }
 */
-end:
-    return lex_conf_semicolon();
-}
-
-Ret Input::lex_conf_list(std::vector<std::string>& v) {
-    CHECK_RET(lex_conf_assign());
-    v.clear();
-    std::string s;
-/*!local:re2c
-    "[" space* "]" { goto end; }
-    "["            { goto loop; }
-    *              { RET_FAIL(error_at_cur("expected a list starting with '['")); }
-*/
-loop:
-/*!local:re2c
-    ['"] { CHECK_RET(lex_conf_string_quoted(cur[-1], s)); goto next; }
-    *    { RET_FAIL(error_at_cur("expected a string")); }
-*/
-next:
-    v.push_back(s);
-/*!local:re2c
-    "]"               { goto end; }
-    space* "," space* { goto loop; }
-    *                 { RET_FAIL(error_at_cur("syntax error in configuration list")); }
-*/
-end:
-    return lex_conf_semicolon();
-}
-
-Ret Input::lex_conf_eof(uint32_t& u) {
-    int32_t n;
-    CHECK_RET(lex_conf_number(n));
-    u = n < 0 ? NOEOF : static_cast<uint32_t>(n);
-    return Ret::OK;
+    UNREACHABLE();
+    return Ret::FAIL; // unreachable
 }
 
 #undef YYFILL
@@ -357,5 +386,6 @@ Ret Input::lex_conf_eof(uint32_t& u) {
 #undef RET_CONF_STR
 #undef RET_CONF_ENC
 #undef RET_CONF_NUM_NONNEG
+#undef RET_TOK
 
 } // end namespace re2c

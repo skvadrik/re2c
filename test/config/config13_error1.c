@@ -1,1 +1,1 @@
-config/config13_error1.re:4:24: error: expected a list starting with '['
+config/config13_error1.re:4:4: error: configuration value should be a list

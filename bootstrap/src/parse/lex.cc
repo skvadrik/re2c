@@ -1493,13 +1493,12 @@ Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
     OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
-    std::string s;
 
     out.gen_raw(tok, ptr, globopts->line_dirs);
     CHECK_RET(lex_name_list(alc, &blocks));
 
 loop: 
-#line 1503 "src/parse/lex.cc"
+#line 1502 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -1557,13 +1556,13 @@ loop:
 	}
 	++cur;
 yy204:
-#line 368 "../src/parse/lex.re"
+#line 367 "../src/parse/lex.re"
 	{
         RET_FAIL(error_at_cur(
                 "ill-formed directive: expected optional configurations followed by the end of"
                 " block `*" "/`"));
     }
-#line 1567 "src/parse/lex.cc"
+#line 1566 "src/parse/lex.cc"
 yy205:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -1571,14 +1570,14 @@ yy205:
 	if (yybm[0+yych] & 128) {
 		goto yy205;
 	}
-#line 392 "../src/parse/lex.re"
+#line 391 "../src/parse/lex.re"
 	{ goto loop; }
-#line 1577 "src/parse/lex.cc"
+#line 1576 "src/parse/lex.cc"
 yy206:
 	++cur;
-#line 394 "../src/parse/lex.re"
+#line 393 "../src/parse/lex.re"
 	{ next_line(); goto loop; }
-#line 1582 "src/parse/lex.cc"
+#line 1581 "src/parse/lex.cc"
 yy207:
 	yych = *++cur;
 	if (yych == '\n') goto yy206;
@@ -1597,14 +1596,14 @@ yy210:
 	goto yy204;
 yy211:
 	++cur;
-#line 396 "../src/parse/lex.re"
+#line 395 "../src/parse/lex.re"
 	{
         if (globopts->line_dirs) out.gen_stmt(code_line_info_output(alc));
         out.gen_stmt(code_fmt(alc, kind, blocks, fmt, sep));
         if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         return Ret::OK;
     }
-#line 1608 "src/parse/lex.cc"
+#line 1607 "src/parse/lex.cc"
 yy212:
 	yych = *++cur;
 	if (yych == 'r') goto yy215;
@@ -1641,16 +1640,16 @@ yy220:
 	goto yy213;
 yy221:
 	++cur;
-#line 374 "../src/parse/lex.re"
+#line 373 "../src/parse/lex.re"
 	{
         if ((mask & DCONF_FORMAT) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'format'"));
         }
-        CHECK_RET(lex_conf_string(s));
-        fmt = copystr(s, alc);
+        CHECK_RET(lex_conf_string());
+        fmt = copystr(tmp_str, alc);
         goto loop;
     }
-#line 1654 "src/parse/lex.cc"
+#line 1653 "src/parse/lex.cc"
 yy222:
 	yych = *++cur;
 	if (yych != 't') goto yy213;
@@ -1659,18 +1658,18 @@ yy222:
 	yych = *++cur;
 	if (yych != 'r') goto yy213;
 	++cur;
-#line 383 "../src/parse/lex.re"
+#line 382 "../src/parse/lex.re"
 	{
         if ((mask & DCONF_SEPARATOR) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'separator'"));
         }
-        CHECK_RET(lex_conf_string(s));
-        sep = copystr(s, alc);
+        CHECK_RET(lex_conf_string());
+        sep = copystr(tmp_str, alc);
         goto loop;
     }
-#line 1672 "src/parse/lex.cc"
+#line 1671 "src/parse/lex.cc"
 }
-#line 402 "../src/parse/lex.re"
+#line 401 "../src/parse/lex.re"
 
 }
 
@@ -1682,7 +1681,7 @@ scan:
     tok = cur;
     location = cur_loc();
 
-#line 1686 "src/parse/lex.cc"
+#line 1685 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -1795,7 +1794,7 @@ scan:
 yy224:
 	++cur;
 yy225:
-#line 543 "../src/parse/lex.re"
+#line 542 "../src/parse/lex.re"
 	{
         if (globopts->flex_syntax && globopts->input_encoding == Enc::Type::UTF8) {
             // Try to lex this as a raw UTF-8 code point (not captured by the `name` rule above
@@ -1809,7 +1808,7 @@ yy225:
         }
         RET_FAIL(error_at_tok("unexpected character: '%c'", *tok));
     }
-#line 1813 "src/parse/lex.cc"
+#line 1812 "src/parse/lex.cc"
 yy226:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -1817,9 +1816,9 @@ yy226:
 	if (yybm[0+yych] & 16) {
 		goto yy226;
 	}
-#line 530 "../src/parse/lex.re"
+#line 529 "../src/parse/lex.re"
 	{ goto scan; }
-#line 1823 "src/parse/lex.cc"
+#line 1822 "src/parse/lex.cc"
 yy227:
 	yyaccept = 0;
 	yych = *(mar = ++cur);
@@ -1830,7 +1829,7 @@ yy227:
 		if (yych == '#') goto yy251;
 	}
 yy228:
-#line 534 "../src/parse/lex.re"
+#line 533 "../src/parse/lex.re"
 	{
         next_line();
         if (mode == LexMode::FLEX_NAME) {
@@ -1839,7 +1838,7 @@ yy228:
         }
         goto scan;
     }
-#line 1843 "src/parse/lex.cc"
+#line 1842 "src/parse/lex.cc"
 yy229:
 	yych = *++cur;
 	if (yych == '\n') goto yy227;
@@ -1850,14 +1849,14 @@ yy230:
 	if (yych == 'i') goto yy252;
 	if (yych == 'u') goto yy253;
 yy231:
-#line 439 "../src/parse/lex.re"
+#line 438 "../src/parse/lex.re"
 	{ RET_TOK(*tok); }
-#line 1856 "src/parse/lex.cc"
+#line 1855 "src/parse/lex.cc"
 yy232:
 	++cur;
-#line 430 "../src/parse/lex.re"
+#line 429 "../src/parse/lex.re"
 	{ CHECK_RET(lex_str(ast, '"',   yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
-#line 1861 "src/parse/lex.cc"
+#line 1860 "src/parse/lex.cc"
 yy233:
 	yych = *++cur;
 	if (yych <= '^') {
@@ -1878,18 +1877,18 @@ yy235:
 	goto yy225;
 yy236:
 	++cur;
-#line 429 "../src/parse/lex.re"
+#line 428 "../src/parse/lex.re"
 	{ CHECK_RET(lex_str(ast, '\'',  yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
-#line 1884 "src/parse/lex.cc"
+#line 1883 "src/parse/lex.cc"
 yy237:
 	yych = *++cur;
 	if (yych == '/') goto yy256;
 	goto yy231;
 yy238:
 	++cur;
-#line 528 "../src/parse/lex.re"
+#line 527 "../src/parse/lex.re"
 	{ yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
-#line 1893 "src/parse/lex.cc"
+#line 1892 "src/parse/lex.cc"
 yy239:
 	yych = *++cur;
 	if (yych == '*') goto yy257;
@@ -1901,9 +1900,9 @@ yy240:
 	goto yy225;
 yy241:
 	++cur;
-#line 422 "../src/parse/lex.re"
+#line 421 "../src/parse/lex.re"
 	{ return lex_clist(ast, token); }
-#line 1907 "src/parse/lex.cc"
+#line 1906 "src/parse/lex.cc"
 yy242:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
@@ -1917,7 +1916,7 @@ yy244:
 	if (yybm[0+yych] & 32) {
 		goto yy243;
 	}
-#line 483 "../src/parse/lex.re"
+#line 482 "../src/parse/lex.re"
 	{
         bool yes;
         CHECK_RET(lex_namedef_context_re2c(yes));
@@ -1938,13 +1937,13 @@ yy244:
         yylval->regexp = ast.str(tok_loc(), false);
         RET_TOK(TOKEN_REGEXP);
     }
-#line 1942 "src/parse/lex.cc"
+#line 1941 "src/parse/lex.cc"
 yy245:
 	yych = *++cur;
 	if (yych == '^') goto yy262;
-#line 431 "../src/parse/lex.re"
+#line 430 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cls(ast, false, yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
-#line 1948 "src/parse/lex.cc"
+#line 1947 "src/parse/lex.cc"
 yy246:
 	yych = *++cur;
 	if (yych == 'e') goto yy263;
@@ -1967,9 +1966,9 @@ yy247:
 		}
 	}
 yy248:
-#line 414 "../src/parse/lex.re"
+#line 413 "../src/parse/lex.re"
 	{ CHECK_RET(lex_code_in_braces(yylval, ast)); RET_TOK(TOKEN_CODE); }
-#line 1973 "src/parse/lex.cc"
+#line 1972 "src/parse/lex.cc"
 yy249:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2044,35 +2043,35 @@ yy254:
 		}
 	}
 yy255:
-#line 434 "../src/parse/lex.re"
+#line 433 "../src/parse/lex.re"
 	{
         yylval->regexp = ast.tag(tok_loc(), ast.cstr_global(tok + 1, cur), tok[0] == '#');
         RET_TOK(TOKEN_REGEXP);
     }
-#line 2053 "src/parse/lex.cc"
+#line 2052 "src/parse/lex.cc"
 yy256:
 	++cur;
-#line 427 "../src/parse/lex.re"
+#line 426 "../src/parse/lex.re"
 	{ tok = cur; RET_TOK(0); }
-#line 2058 "src/parse/lex.cc"
+#line 2057 "src/parse/lex.cc"
 yy257:
 	++cur;
-#line 425 "../src/parse/lex.re"
+#line 424 "../src/parse/lex.re"
 	{ CHECK_RET(lex_c_comment());   goto scan; }
-#line 2063 "src/parse/lex.cc"
+#line 2062 "src/parse/lex.cc"
 yy258:
 	++cur;
-#line 424 "../src/parse/lex.re"
+#line 423 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cpp_comment()); goto scan; }
-#line 2068 "src/parse/lex.cc"
+#line 2067 "src/parse/lex.cc"
 yy259:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
 	if (yych == '>') goto yy261;
 yy260:
-#line 415 "../src/parse/lex.re"
+#line 414 "../src/parse/lex.re"
 	{ CHECK_RET(lex_code_indented(yylval, ast));  RET_TOK(TOKEN_CODE); }
-#line 2076 "src/parse/lex.cc"
+#line 2075 "src/parse/lex.cc"
 yy261:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2105,9 +2104,9 @@ yy261:
 	}
 yy262:
 	++cur;
-#line 432 "../src/parse/lex.re"
+#line 431 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cls(ast, true,  yylval->regexp)); RET_TOK(TOKEN_REGEXP); }
-#line 2111 "src/parse/lex.cc"
+#line 2110 "src/parse/lex.cc"
 yy263:
 	yych = *++cur;
 	if (yych == '2') goto yy273;
@@ -2115,12 +2114,12 @@ yy263:
 yy264:
 	++cur;
 yy265:
-#line 468 "../src/parse/lex.re"
+#line 467 "../src/parse/lex.re"
 	{
         RET_FAIL(error_at_tok(
                 "illegal closure form, use '{n}', '{n,}', '{n,m}' where n and m are numbers"));
     }
-#line 2124 "src/parse/lex.cc"
+#line 2123 "src/parse/lex.cc"
 yy266:
 	++cur;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2186,12 +2185,12 @@ yy271:
 	}
 yy272:
 	p = yyt1;
-#line 417 "../src/parse/lex.re"
+#line 416 "../src/parse/lex.re"
 	{
         yylval->cstr = ast.cstr_global(p, cur);
         RET_TOK(tok[0] == ':' ? TOKEN_CJUMP : TOKEN_CNEXT);
     }
-#line 2195 "src/parse/lex.cc"
+#line 2194 "src/parse/lex.cc"
 yy273:
 	yych = *++cur;
 	if (yych == 'c') goto yy281;
@@ -2205,7 +2204,7 @@ yy274:
 	goto yy265;
 yy275:
 	++cur;
-#line 441 "../src/parse/lex.re"
+#line 440 "../src/parse/lex.re"
 	{
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
             RET_FAIL(error_at_tok("repetition count overflow"));
@@ -2213,10 +2212,10 @@ yy275:
         yylval->bounds.max = yylval->bounds.min;
         RET_TOK(TOKEN_CLOSESIZE);
     }
-#line 2217 "src/parse/lex.cc"
+#line 2216 "src/parse/lex.cc"
 yy276:
 	++cur;
-#line 473 "../src/parse/lex.re"
+#line 472 "../src/parse/lex.re"
 	{
         if (!globopts->flex_syntax) {
             RET_FAIL(error_at_tok("curly braces for names only allowed with -F switch"));
@@ -2224,7 +2223,7 @@ yy276:
         yylval->cstr = ast.cstr_local(tok + 1, cur - 1);
         RET_TOK(TOKEN_ID);
     }
-#line 2228 "src/parse/lex.cc"
+#line 2227 "src/parse/lex.cc"
 yy277:
 	yych = *++cur;
 	if (yych == 'n') goto yy284;
@@ -2238,14 +2237,14 @@ yy279:
 	yych = *(mar = ++cur);
 	if (yych == ':') goto yy286;
 yy280:
-#line 521 "../src/parse/lex.re"
+#line 520 "../src/parse/lex.re"
 	{
         RET_FAIL(error_at_tok(
                 "ill-formed use directive: expected `!use` followed by a colon, a block name,"
                 " optional spaces, a semicolon, and finally a space, a newline, or the end of"
                 " block"));
     }
-#line 2249 "src/parse/lex.cc"
+#line 2248 "src/parse/lex.cc"
 yy281:
 	yych = *++cur;
 	if (yych == ':') goto yy287;
@@ -2260,7 +2259,7 @@ yy282:
 	goto yy250;
 yy283:
 	++cur;
-#line 460 "../src/parse/lex.re"
+#line 459 "../src/parse/lex.re"
 	{
         if (!s_to_u32_unsafe (tok + 1, cur - 2, yylval->bounds.min)) {
             RET_FAIL(error_at_tok("repetition lower bound overflow"));
@@ -2268,7 +2267,7 @@ yy283:
         yylval->bounds.max = std::numeric_limits<uint32_t>::max();
         RET_TOK(TOKEN_CLOSESIZE);
     }
-#line 2272 "src/parse/lex.cc"
+#line 2271 "src/parse/lex.cc"
 yy284:
 	yych = *++cur;
 	if (yych == 'e') goto yy289;
@@ -2296,13 +2295,13 @@ yy286:
 	}
 yy287:
 	++cur;
-#line 481 "../src/parse/lex.re"
+#line 480 "../src/parse/lex.re"
 	{ RET_TOK(TOKEN_CONF); }
-#line 2302 "src/parse/lex.cc"
+#line 2301 "src/parse/lex.cc"
 yy288:
 	++cur;
 	p = yyt1;
-#line 449 "../src/parse/lex.re"
+#line 448 "../src/parse/lex.re"
 	{
         if (!s_to_u32_unsafe(tok + 1, p, yylval->bounds.min)) {
             RET_FAIL(error_at_tok("repetition lower bound overflow"));
@@ -2313,7 +2312,7 @@ yy288:
         }
         RET_TOK(TOKEN_CLOSESIZE);
     }
-#line 2317 "src/parse/lex.cc"
+#line 2316 "src/parse/lex.cc"
 yy289:
 	yych = *++cur;
 	if (yych <= '0') goto yy293;
@@ -2443,27 +2442,27 @@ yy298:
 	if (yych == '\t') goto yy305;
 	if (yych == ' ') goto yy305;
 yy299:
-#line 508 "../src/parse/lex.re"
+#line 507 "../src/parse/lex.re"
 	{
         RET_FAIL(error_at_tok(
                 "ill-formed include directive: expected `!include` followed by spaces, a"
                 " double-quoted file path, optional spaces, a semicolon, and finally a space, a"
                 " newline, or the end of block"));
     }
-#line 2454 "src/parse/lex.cc"
+#line 2453 "src/parse/lex.cc"
 yy300:
 	++cur;
 	x = yyt1;
 	y = yyt2;
 	cur = yyt3;
-#line 515 "../src/parse/lex.re"
+#line 514 "../src/parse/lex.re"
 	{
         // Save the name of the used block in a temporary buffer (ensure it is empty).
         CHECK(ast.temp_blockname.empty());
         ast.temp_blockname.assign(x, y);
         RET_TOK(TOKEN_BLOCK);
     }
-#line 2467 "src/parse/lex.cc"
+#line 2466 "src/parse/lex.cc"
 yy301:
 	yych = *++cur;
 	if (yych == '/') goto yy300;
@@ -2483,9 +2482,9 @@ yy302:
 yy303:
 	++cur;
 	cur = yyt1;
-#line 532 "../src/parse/lex.re"
+#line 531 "../src/parse/lex.re"
 	{ CHECK_RET(set_sourceline()); RET_TOK(TOKEN_LINE_INFO); }
-#line 2489 "src/parse/lex.cc"
+#line 2488 "src/parse/lex.cc"
 yy304:
 	yych = *++cur;
 	if (yych == '\n') goto yy303;
@@ -2604,18 +2603,18 @@ yy314:
 	x = yyt1;
 	y = yyt2;
 	cur = yyt3;
-#line 504 "../src/parse/lex.re"
+#line 503 "../src/parse/lex.re"
 	{
         CHECK_RET(include(getstr(x + 1, y - 1), tok));
         goto scan;
     }
-#line 2613 "src/parse/lex.cc"
+#line 2612 "src/parse/lex.cc"
 yy315:
 	yych = *++cur;
 	if (yych == '/') goto yy314;
 	goto yy250;
 }
-#line 556 "../src/parse/lex.re"
+#line 555 "../src/parse/lex.re"
 
 }
 
@@ -2623,7 +2622,7 @@ yy315:
 
 Ret Input::lex_namedef_context_re2c(bool& yes) {
 
-#line 2627 "src/parse/lex.cc"
+#line 2626 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -2678,9 +2677,9 @@ Ret Input::lex_namedef_context_re2c(bool& yes) {
 		}
 	}
 yy317:
-#line 564 "../src/parse/lex.re"
+#line 563 "../src/parse/lex.re"
 	{ yes = false; return Ret::OK; }
-#line 2684 "src/parse/lex.cc"
+#line 2683 "src/parse/lex.cc"
 yy318:
 	++cur;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2697,17 +2696,17 @@ yy320:
 	if (yych == '>') goto yy319;
 	++cur;
 	cur = yyt1;
-#line 563 "../src/parse/lex.re"
+#line 562 "../src/parse/lex.re"
 	{ yes = true;  return Ret::OK; }
-#line 2703 "src/parse/lex.cc"
+#line 2702 "src/parse/lex.cc"
 }
-#line 565 "../src/parse/lex.re"
+#line 564 "../src/parse/lex.re"
 
 }
 
 Ret Input::lex_namedef_context_flex(bool& yes) {
 
-#line 2711 "src/parse/lex.cc"
+#line 2710 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -2754,9 +2753,9 @@ Ret Input::lex_namedef_context_flex(bool& yes) {
 		yyt1 = cur;
 		goto yy322;
 	}
-#line 572 "../src/parse/lex.re"
+#line 571 "../src/parse/lex.re"
 	{ yes = false; return Ret::OK; }
-#line 2760 "src/parse/lex.cc"
+#line 2759 "src/parse/lex.cc"
 yy322:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2771,17 +2770,17 @@ yy322:
 		if (yych == '{') goto yy323;
 	}
 	cur = yyt1;
-#line 571 "../src/parse/lex.re"
+#line 570 "../src/parse/lex.re"
 	{ yes = true;  return Ret::OK; }
-#line 2777 "src/parse/lex.cc"
+#line 2776 "src/parse/lex.cc"
 yy323:
 	++cur;
 	cur = yyt1;
-#line 570 "../src/parse/lex.re"
+#line 569 "../src/parse/lex.re"
 	{ yes = false; return Ret::OK; }
-#line 2783 "src/parse/lex.cc"
+#line 2782 "src/parse/lex.cc"
 }
-#line 573 "../src/parse/lex.re"
+#line 572 "../src/parse/lex.re"
 
 }
 
@@ -2791,7 +2790,7 @@ Ret Input::lex_clist(Ast& ast, int& token) {
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
     CHECK(cl.empty());
 
-#line 2795 "src/parse/lex.cc"
+#line 2794 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -2841,30 +2840,30 @@ yy324:
 	if (yych <= '!') goto yy327;
 	if (yych == '>') goto yy328;
 yy326:
-#line 584 "../src/parse/lex.re"
+#line 583 "../src/parse/lex.re"
 	{ goto cond; }
-#line 2847 "src/parse/lex.cc"
+#line 2846 "src/parse/lex.cc"
 yy327:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
 	yych = *cur;
 	if (yych == '\t') goto yy327;
 	if (yych == ' ') goto yy327;
-#line 582 "../src/parse/lex.re"
+#line 581 "../src/parse/lex.re"
 	{ token = TOKEN_CSETUP; goto cond; }
-#line 2856 "src/parse/lex.cc"
+#line 2855 "src/parse/lex.cc"
 yy328:
 	++cur;
-#line 583 "../src/parse/lex.re"
+#line 582 "../src/parse/lex.re"
 	{ token = TOKEN_CZERO;  goto end; }
-#line 2861 "src/parse/lex.cc"
+#line 2860 "src/parse/lex.cc"
 }
-#line 585 "../src/parse/lex.re"
+#line 584 "../src/parse/lex.re"
 
 cond:
     tok = cur;
 
-#line 2868 "src/parse/lex.cc"
+#line 2867 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -2916,14 +2915,14 @@ cond:
 	}
 yy330:
 	++cur;
-#line 591 "../src/parse/lex.re"
+#line 590 "../src/parse/lex.re"
 	{ goto error; }
-#line 2922 "src/parse/lex.cc"
+#line 2921 "src/parse/lex.cc"
 yy331:
 	++cur;
-#line 590 "../src/parse/lex.re"
+#line 589 "../src/parse/lex.re"
 	{ if (!cl.empty()) goto error; cl.insert("*"); goto next; }
-#line 2927 "src/parse/lex.cc"
+#line 2926 "src/parse/lex.cc"
 yy332:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -2931,14 +2930,14 @@ yy332:
 	if (yybm[0+yych] & 128) {
 		goto yy332;
 	}
-#line 589 "../src/parse/lex.re"
+#line 588 "../src/parse/lex.re"
 	{ cl.insert(getstr(tok, cur)); goto next; }
-#line 2937 "src/parse/lex.cc"
+#line 2936 "src/parse/lex.cc"
 }
-#line 592 "../src/parse/lex.re"
+#line 591 "../src/parse/lex.re"
 
 next: 
-#line 2942 "src/parse/lex.cc"
+#line 2941 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -2989,9 +2988,9 @@ next:
 	}
 	++cur;
 yy334:
-#line 596 "../src/parse/lex.re"
+#line 595 "../src/parse/lex.re"
 	{ goto error; }
-#line 2995 "src/parse/lex.cc"
+#line 2994 "src/parse/lex.cc"
 yy335:
 	yych = *(mar = ++cur);
 	if (yych <= ' ') {
@@ -3013,14 +3012,14 @@ yy336:
 	if (yybm[0+yych] & 128) {
 		goto yy336;
 	}
-#line 594 "../src/parse/lex.re"
+#line 593 "../src/parse/lex.re"
 	{ goto cond; }
-#line 3019 "src/parse/lex.cc"
+#line 3018 "src/parse/lex.cc"
 yy337:
 	++cur;
-#line 595 "../src/parse/lex.re"
+#line 594 "../src/parse/lex.re"
 	{ goto end; }
-#line 3024 "src/parse/lex.cc"
+#line 3023 "src/parse/lex.cc"
 yy338:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3038,7 +3037,7 @@ yy338:
 	cur = mar;
 	goto yy334;
 }
-#line 597 "../src/parse/lex.re"
+#line 596 "../src/parse/lex.re"
 
 end:
     // semantic value `yylval` is implicitly passed in temporary condition list
@@ -3052,7 +3051,7 @@ Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     tok = cur;
 code: 
-#line 3056 "src/parse/lex.cc"
+#line 3055 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3079,23 +3078,23 @@ code:
 	}
 	++cur;
 yy340:
-#line 615 "../src/parse/lex.re"
+#line 614 "../src/parse/lex.re"
 	{ goto code; }
-#line 3085 "src/parse/lex.cc"
+#line 3084 "src/parse/lex.cc"
 yy341:
 	++cur;
-#line 610 "../src/parse/lex.re"
+#line 609 "../src/parse/lex.re"
 	{ next_line(); goto indent; }
-#line 3090 "src/parse/lex.cc"
+#line 3089 "src/parse/lex.cc"
 yy342:
 	yych = *++cur;
 	if (yych == '\n') goto yy341;
 	goto yy340;
 yy343:
 	++cur;
-#line 613 "../src/parse/lex.re"
+#line 612 "../src/parse/lex.re"
 	{ CHECK_RET(try_lex_literal_in_code(cur[-1])); goto code; }
-#line 3099 "src/parse/lex.cc"
+#line 3098 "src/parse/lex.cc"
 yy344:
 	yych = *++cur;
 	if (yych == '*') goto yy346;
@@ -3103,24 +3102,24 @@ yy344:
 	goto yy340;
 yy345:
 	++cur;
-#line 614 "../src/parse/lex.re"
+#line 613 "../src/parse/lex.re"
 	{ RET_FAIL(error_at_cur("Curly braces are not allowed after ':='")); }
-#line 3109 "src/parse/lex.cc"
+#line 3108 "src/parse/lex.cc"
 yy346:
 	++cur;
-#line 612 "../src/parse/lex.re"
+#line 611 "../src/parse/lex.re"
 	{ CHECK_RET(lex_c_comment()); goto code; }
-#line 3114 "src/parse/lex.cc"
+#line 3113 "src/parse/lex.cc"
 yy347:
 	++cur;
-#line 611 "../src/parse/lex.re"
+#line 610 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cpp_comment()); goto indent; }
-#line 3119 "src/parse/lex.cc"
+#line 3118 "src/parse/lex.cc"
 }
-#line 616 "../src/parse/lex.re"
+#line 615 "../src/parse/lex.re"
 
 indent: 
-#line 3124 "src/parse/lex.cc"
+#line 3123 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3133,7 +3132,7 @@ indent:
 		if (yych == ' ') goto yy350;
 	}
 yy349:
-#line 619 "../src/parse/lex.re"
+#line 618 "../src/parse/lex.re"
 	{
         while (isspace(tok[0])) ++tok;
         uint8_t* p = cur;
@@ -3141,15 +3140,15 @@ yy349:
         yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, p), nullptr, false);
         return Ret::OK;
     }
-#line 3145 "src/parse/lex.cc"
+#line 3144 "src/parse/lex.cc"
 yy350:
 	++cur;
 	cur -= 1;
-#line 618 "../src/parse/lex.re"
+#line 617 "../src/parse/lex.re"
 	{ goto code; }
-#line 3151 "src/parse/lex.cc"
+#line 3150 "src/parse/lex.cc"
 }
-#line 626 "../src/parse/lex.re"
+#line 625 "../src/parse/lex.re"
 
 }
 
@@ -3157,7 +3156,7 @@ Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
     const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: 
-#line 3161 "src/parse/lex.cc"
+#line 3160 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -3218,9 +3217,9 @@ code:
 	}
 	++cur;
 yy352:
-#line 647 "../src/parse/lex.re"
+#line 646 "../src/parse/lex.re"
 	{ goto code; }
-#line 3224 "src/parse/lex.cc"
+#line 3223 "src/parse/lex.cc"
 yy353:
 	yych = *(mar = ++cur);
 	if (yybm[0+yych] & 32) {
@@ -3228,18 +3227,18 @@ yy353:
 	}
 	if (yych == '#') goto yy362;
 yy354:
-#line 643 "../src/parse/lex.re"
+#line 642 "../src/parse/lex.re"
 	{ next_line(); goto code; }
-#line 3234 "src/parse/lex.cc"
+#line 3233 "src/parse/lex.cc"
 yy355:
 	yych = *++cur;
 	if (yych == '\n') goto yy353;
 	goto yy352;
 yy356:
 	++cur;
-#line 646 "../src/parse/lex.re"
+#line 645 "../src/parse/lex.re"
 	{ CHECK_RET(try_lex_literal_in_code(cur[-1])); goto code; }
-#line 3243 "src/parse/lex.cc"
+#line 3242 "src/parse/lex.cc"
 yy357:
 	yych = *++cur;
 	if (yych == '*') goto yy363;
@@ -3247,12 +3246,12 @@ yy357:
 	goto yy352;
 yy358:
 	++cur;
-#line 641 "../src/parse/lex.re"
+#line 640 "../src/parse/lex.re"
 	{ ++depth; goto code; }
-#line 3253 "src/parse/lex.cc"
+#line 3252 "src/parse/lex.cc"
 yy359:
 	++cur;
-#line 633 "../src/parse/lex.re"
+#line 632 "../src/parse/lex.re"
 	{
         if (--depth == 0) {
             yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, cur), nullptr, false);
@@ -3260,7 +3259,7 @@ yy359:
         }
         goto code;
     }
-#line 3264 "src/parse/lex.cc"
+#line 3263 "src/parse/lex.cc"
 yy360:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3286,14 +3285,14 @@ yy362:
 	}
 yy363:
 	++cur;
-#line 644 "../src/parse/lex.re"
+#line 643 "../src/parse/lex.re"
 	{ CHECK_RET(lex_c_comment()); goto code; }
-#line 3292 "src/parse/lex.cc"
+#line 3291 "src/parse/lex.cc"
 yy364:
 	++cur;
-#line 645 "../src/parse/lex.re"
+#line 644 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cpp_comment()); goto code; }
-#line 3297 "src/parse/lex.cc"
+#line 3296 "src/parse/lex.cc"
 yy365:
 	yych = *++cur;
 	if (yych != 'i') goto yy361;
@@ -3350,9 +3349,9 @@ yy369:
 yy370:
 	++cur;
 	cur = yyt1;
-#line 642 "../src/parse/lex.re"
+#line 641 "../src/parse/lex.re"
 	{ CHECK_RET(set_sourceline()); goto code; }
-#line 3356 "src/parse/lex.cc"
+#line 3355 "src/parse/lex.cc"
 yy371:
 	yych = *++cur;
 	if (yych == '\n') goto yy370;
@@ -3378,7 +3377,7 @@ yy373:
 	if (yych == '\n') goto yy361;
 	goto yy372;
 }
-#line 648 "../src/parse/lex.re"
+#line 647 "../src/parse/lex.re"
 
 }
 
@@ -3387,7 +3386,7 @@ Ret Input::try_lex_literal_in_code(uint8_t quote) {
     // brace or newline that would otherwise be erroneously lexed as block terminator symbols.
     if (quote == '"') {
 loop_dquote: 
-#line 3391 "src/parse/lex.cc"
+#line 3390 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3404,38 +3403,38 @@ loop_dquote:
 	}
 	++cur;
 yy375:
-#line 659 "../src/parse/lex.re"
+#line 658 "../src/parse/lex.re"
 	{ goto loop_dquote; }
-#line 3410 "src/parse/lex.cc"
+#line 3409 "src/parse/lex.cc"
 yy376:
 	++cur;
-#line 658 "../src/parse/lex.re"
+#line 657 "../src/parse/lex.re"
 	{ next_line(); goto loop_dquote; }
-#line 3415 "src/parse/lex.cc"
+#line 3414 "src/parse/lex.cc"
 yy377:
 	yych = *++cur;
 	if (yych == '\n') goto yy376;
 	goto yy375;
 yy378:
 	++cur;
-#line 656 "../src/parse/lex.re"
+#line 655 "../src/parse/lex.re"
 	{ return Ret::OK; }
-#line 3424 "src/parse/lex.cc"
+#line 3423 "src/parse/lex.cc"
 yy379:
 	yych = *++cur;
 	if (yych == '"') goto yy380;
 	if (yych != '\\') goto yy375;
 yy380:
 	++cur;
-#line 657 "../src/parse/lex.re"
+#line 656 "../src/parse/lex.re"
 	{ goto loop_dquote; }
-#line 3433 "src/parse/lex.cc"
+#line 3432 "src/parse/lex.cc"
 }
-#line 660 "../src/parse/lex.re"
+#line 659 "../src/parse/lex.re"
 
     } else if (quote == '`' && globopts->eval_bool_conf("backtick_quoted_strings")) {
 loop_backtick: 
-#line 3439 "src/parse/lex.cc"
+#line 3438 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3448,25 +3447,25 @@ loop_backtick:
 	}
 	++cur;
 yy382:
-#line 665 "../src/parse/lex.re"
+#line 664 "../src/parse/lex.re"
 	{ goto loop_backtick; }
-#line 3454 "src/parse/lex.cc"
+#line 3453 "src/parse/lex.cc"
 yy383:
 	++cur;
-#line 664 "../src/parse/lex.re"
+#line 663 "../src/parse/lex.re"
 	{ next_line(); goto loop_backtick; }
-#line 3459 "src/parse/lex.cc"
+#line 3458 "src/parse/lex.cc"
 yy384:
 	yych = *++cur;
 	if (yych == '\n') goto yy383;
 	goto yy382;
 yy385:
 	++cur;
-#line 663 "../src/parse/lex.re"
+#line 662 "../src/parse/lex.re"
 	{ return Ret::OK; }
-#line 3468 "src/parse/lex.cc"
+#line 3467 "src/parse/lex.cc"
 }
-#line 666 "../src/parse/lex.re"
+#line 665 "../src/parse/lex.re"
 
     } else if (quote == '\'') {
         // Single-quoted char literals may contain closing curly brace, e.g. '}'.
@@ -3474,7 +3473,7 @@ yy385:
         // might erroneously lex the closing single quote as the beginning of another literal, e.g.
         // in 'a'}'b' we would recognize '}' as a literal rather than the closing brace of a block.
     
-#line 3478 "src/parse/lex.cc"
+#line 3477 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -3532,9 +3531,9 @@ yy385:
 		}
 	}
 yy387:
-#line 686 "../src/parse/lex.re"
+#line 685 "../src/parse/lex.re"
 	{ return globopts->eval_bool_conf("standalone_single_quotes") ? Ret::OK : Ret::FAIL; }
-#line 3538 "src/parse/lex.cc"
+#line 3537 "src/parse/lex.cc"
 yy388:
 	yych = *++cur;
 	if (yych == '\'') goto yy397;
@@ -3620,11 +3619,11 @@ yy396:
 yy397:
 	++cur;
 yy398:
-#line 683 "../src/parse/lex.re"
+#line 682 "../src/parse/lex.re"
 	{ // any UTF-8 encoded Unicode symbol, unescaped
             return Ret::OK;
         }
-#line 3628 "src/parse/lex.cc"
+#line 3627 "src/parse/lex.cc"
 yy399:
 	yych = *++cur;
 	if (yych == '\'') goto yy397;
@@ -3805,7 +3804,7 @@ yy418:
 		goto yy389;
 	}
 }
-#line 687 "../src/parse/lex.re"
+#line 686 "../src/parse/lex.re"
 
     }
     return Ret::FAIL;
@@ -3813,7 +3812,7 @@ yy418:
 
 Ret Input::lex_c_comment() {
 loop: 
-#line 3817 "src/parse/lex.cc"
+#line 3816 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3826,14 +3825,14 @@ loop:
 	}
 	++cur;
 yy420:
-#line 696 "../src/parse/lex.re"
+#line 695 "../src/parse/lex.re"
 	{ goto loop; }
-#line 3832 "src/parse/lex.cc"
+#line 3831 "src/parse/lex.cc"
 yy421:
 	++cur;
-#line 695 "../src/parse/lex.re"
+#line 694 "../src/parse/lex.re"
 	{ next_line(); goto loop; }
-#line 3837 "src/parse/lex.cc"
+#line 3836 "src/parse/lex.cc"
 yy422:
 	yych = *++cur;
 	if (yych == '\n') goto yy421;
@@ -3842,17 +3841,17 @@ yy423:
 	yych = *++cur;
 	if (yych != '/') goto yy420;
 	++cur;
-#line 694 "../src/parse/lex.re"
+#line 693 "../src/parse/lex.re"
 	{ return Ret::OK; }
-#line 3848 "src/parse/lex.cc"
+#line 3847 "src/parse/lex.cc"
 }
-#line 697 "../src/parse/lex.re"
+#line 696 "../src/parse/lex.re"
 
 }
 
 Ret Input::lex_cpp_comment() {
 loop: 
-#line 3856 "src/parse/lex.cc"
+#line 3855 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -3861,20 +3860,20 @@ loop:
 	if (yych == '\r') goto yy427;
 	++cur;
 yy425:
-#line 703 "../src/parse/lex.re"
+#line 702 "../src/parse/lex.re"
 	{ goto loop; }
-#line 3867 "src/parse/lex.cc"
+#line 3866 "src/parse/lex.cc"
 yy426:
 	++cur;
-#line 702 "../src/parse/lex.re"
+#line 701 "../src/parse/lex.re"
 	{ next_line(); return Ret::OK; }
-#line 3872 "src/parse/lex.cc"
+#line 3871 "src/parse/lex.cc"
 yy427:
 	yych = *++cur;
 	if (yych == '\n') goto yy426;
 	goto yy425;
 }
-#line 704 "../src/parse/lex.re"
+#line 703 "../src/parse/lex.re"
 
 }
 
@@ -3885,34 +3884,34 @@ Ret Input::lex_cls(Ast& ast, bool neg, const AstNode*& a) {
 fst:
     tok = cur;
 
-#line 3889 "src/parse/lex.cc"
+#line 3888 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
 	yych = *cur;
 	if (yych == ']') goto yy429;
-#line 715 "../src/parse/lex.re"
+#line 714 "../src/parse/lex.re"
 	{ CHECK_RET(lex_cls_chr(l)); goto snd; }
-#line 3897 "src/parse/lex.cc"
+#line 3896 "src/parse/lex.cc"
 yy429:
 	++cur;
-#line 714 "../src/parse/lex.re"
+#line 713 "../src/parse/lex.re"
 	{ a = ast.cls(loc0, neg); return Ret::OK; }
-#line 3902 "src/parse/lex.cc"
+#line 3901 "src/parse/lex.cc"
 }
-#line 716 "../src/parse/lex.re"
+#line 715 "../src/parse/lex.re"
 
 snd: 
-#line 3907 "src/parse/lex.cc"
+#line 3906 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	if ((lim - cur) < 2) if (!fill(2)) RET_FAIL(error_at_cur("unexpected end of input"));
 	yych = *(mar = cur);
 	if (yych == '-') goto yy432;
 yy431:
-#line 718 "../src/parse/lex.re"
+#line 717 "../src/parse/lex.re"
 	{ u = l; goto add; }
-#line 3916 "src/parse/lex.cc"
+#line 3915 "src/parse/lex.cc"
 yy432:
 	yych = *++cur;
 	if (yych != ']') goto yy433;
@@ -3921,7 +3920,7 @@ yy432:
 yy433:
 	++cur;
 	cur -= 1;
-#line 719 "../src/parse/lex.re"
+#line 718 "../src/parse/lex.re"
 	{
         CHECK_RET(lex_cls_chr(u));
         if (l > u) {
@@ -3930,9 +3929,9 @@ yy433:
         }
         goto add;
     }
-#line 3934 "src/parse/lex.cc"
+#line 3933 "src/parse/lex.cc"
 }
-#line 727 "../src/parse/lex.re"
+#line 726 "../src/parse/lex.re"
 
 add:
     ast.temp_ranges.push_back(AstRange(l, u, loc));
@@ -3943,11 +3942,11 @@ add:
 Ret Input::lex_cls_chr(uint32_t& c) {
     tok = cur;
     const loc_t& loc = cur_loc();
-#line 762 "../src/parse/lex.re"
+#line 761 "../src/parse/lex.re"
 
     if (globopts->input_encoding == Enc::Type::ASCII) {
         
-#line 3951 "src/parse/lex.cc"
+#line 3950 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -3961,14 +3960,14 @@ Ret Input::lex_cls_chr(uint32_t& c) {
 	}
 	++cur;
 yy435:
-#line 744 "../src/parse/lex.re"
+#line 743 "../src/parse/lex.re"
 	{ c = decode(tok); return Ret::OK; }
-#line 3967 "src/parse/lex.cc"
+#line 3966 "src/parse/lex.cc"
 yy436:
 	++cur;
-#line 738 "../src/parse/lex.re"
+#line 737 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "newline in character class")); }
-#line 3972 "src/parse/lex.cc"
+#line 3971 "src/parse/lex.cc"
 yy437:
 	yych = *++cur;
 	if (yych == '\n') goto yy436;
@@ -4027,37 +4026,37 @@ yy438:
 		}
 	}
 yy439:
-#line 741 "../src/parse/lex.re"
+#line 740 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in escape sequence")); }
-#line 4033 "src/parse/lex.cc"
+#line 4032 "src/parse/lex.cc"
 yy440:
 	++cur;
 yy441:
-#line 757 "../src/parse/lex.re"
+#line 756 "../src/parse/lex.re"
 	{
         msg.warn.useless_escape(loc, tok, cur);
         c = decode(tok + 1);
         return Ret::OK;
     }
-#line 4043 "src/parse/lex.cc"
+#line 4042 "src/parse/lex.cc"
 yy442:
 	yych = *++cur;
 	if (yych == '\n') goto yy436;
 	goto yy441;
 yy443:
 	++cur;
-#line 755 "../src/parse/lex.re"
+#line 754 "../src/parse/lex.re"
 	{ c = '-'_u8; return Ret::OK; }
-#line 4052 "src/parse/lex.cc"
+#line 4051 "src/parse/lex.cc"
 yy444:
 	yyaccept = 0;
 	yych = *(mar = ++cur);
 	if (yych <= '/') goto yy445;
 	if (yych <= '7') goto yy460;
 yy445:
-#line 740 "../src/parse/lex.re"
+#line 739 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in octal escape sequence")); }
-#line 4061 "src/parse/lex.cc"
+#line 4060 "src/parse/lex.cc"
 yy446:
 	++cur;
 	goto yy445;
@@ -4073,9 +4072,9 @@ yy447:
 		if (yych <= 'f') goto yy462;
 	}
 yy448:
-#line 739 "../src/parse/lex.re"
+#line 738 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in hexadecimal escape sequence")); }
-#line 4079 "src/parse/lex.cc"
+#line 4078 "src/parse/lex.cc"
 yy449:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
@@ -4091,49 +4090,49 @@ yy449:
 	}
 yy450:
 	++cur;
-#line 754 "../src/parse/lex.re"
+#line 753 "../src/parse/lex.re"
 	{ c = '\\'_u8; return Ret::OK; }
-#line 4097 "src/parse/lex.cc"
+#line 4096 "src/parse/lex.cc"
 yy451:
 	++cur;
-#line 756 "../src/parse/lex.re"
+#line 755 "../src/parse/lex.re"
 	{ c = ']'_u8; return Ret::OK; }
-#line 4102 "src/parse/lex.cc"
+#line 4101 "src/parse/lex.cc"
 yy452:
 	++cur;
-#line 747 "../src/parse/lex.re"
+#line 746 "../src/parse/lex.re"
 	{ c = '\a'_u8; return Ret::OK; }
-#line 4107 "src/parse/lex.cc"
+#line 4106 "src/parse/lex.cc"
 yy453:
 	++cur;
-#line 748 "../src/parse/lex.re"
+#line 747 "../src/parse/lex.re"
 	{ c = '\b'_u8; return Ret::OK; }
-#line 4112 "src/parse/lex.cc"
+#line 4111 "src/parse/lex.cc"
 yy454:
 	++cur;
-#line 749 "../src/parse/lex.re"
+#line 748 "../src/parse/lex.re"
 	{ c = '\f'_u8; return Ret::OK; }
-#line 4117 "src/parse/lex.cc"
+#line 4116 "src/parse/lex.cc"
 yy455:
 	++cur;
-#line 750 "../src/parse/lex.re"
+#line 749 "../src/parse/lex.re"
 	{ c = '\n'_u8; return Ret::OK; }
-#line 4122 "src/parse/lex.cc"
+#line 4121 "src/parse/lex.cc"
 yy456:
 	++cur;
-#line 751 "../src/parse/lex.re"
+#line 750 "../src/parse/lex.re"
 	{ c = '\r'_u8; return Ret::OK; }
-#line 4127 "src/parse/lex.cc"
+#line 4126 "src/parse/lex.cc"
 yy457:
 	++cur;
-#line 752 "../src/parse/lex.re"
+#line 751 "../src/parse/lex.re"
 	{ c = '\t'_u8; return Ret::OK; }
-#line 4132 "src/parse/lex.cc"
+#line 4131 "src/parse/lex.cc"
 yy458:
 	++cur;
-#line 753 "../src/parse/lex.re"
+#line 752 "../src/parse/lex.re"
 	{ c = '\v'_u8; return Ret::OK; }
-#line 4137 "src/parse/lex.cc"
+#line 4136 "src/parse/lex.cc"
 yy459:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
@@ -4196,9 +4195,9 @@ yy464:
 	}
 yy465:
 	++cur;
-#line 746 "../src/parse/lex.re"
+#line 745 "../src/parse/lex.re"
 	{ c = unesc_oct(tok, cur); return Ret::OK; }
-#line 4202 "src/parse/lex.cc"
+#line 4201 "src/parse/lex.cc"
 yy466:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4225,9 +4224,9 @@ yy467:
 	}
 yy468:
 	++cur;
-#line 745 "../src/parse/lex.re"
+#line 744 "../src/parse/lex.re"
 	{ c = unesc_hex(tok, cur); return Ret::OK; }
-#line 4231 "src/parse/lex.cc"
+#line 4230 "src/parse/lex.cc"
 yy469:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4251,11 +4250,11 @@ yy470:
 		goto yy461;
 	}
 }
-#line 764 "../src/parse/lex.re"
+#line 763 "../src/parse/lex.re"
 
     } else {
         
-#line 4259 "src/parse/lex.cc"
+#line 4258 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -4284,14 +4283,14 @@ yy470:
 yy472:
 	++cur;
 yy473:
-#line 744 "../src/parse/lex.re"
+#line 743 "../src/parse/lex.re"
 	{ c = decode(tok); return Ret::OK; }
-#line 4290 "src/parse/lex.cc"
+#line 4289 "src/parse/lex.cc"
 yy474:
 	++cur;
-#line 738 "../src/parse/lex.re"
+#line 737 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "newline in character class")); }
-#line 4295 "src/parse/lex.cc"
+#line 4294 "src/parse/lex.cc"
 yy475:
 	yych = *++cur;
 	if (yych == '\n') goto yy474;
@@ -4381,15 +4380,15 @@ yy476:
 		}
 	}
 yy477:
-#line 741 "../src/parse/lex.re"
+#line 740 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in escape sequence")); }
-#line 4387 "src/parse/lex.cc"
+#line 4386 "src/parse/lex.cc"
 yy478:
 	++cur;
 yy479:
-#line 742 "../src/parse/lex.re"
+#line 741 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error")); }
-#line 4393 "src/parse/lex.cc"
+#line 4392 "src/parse/lex.cc"
 yy480:
 	yych = *++cur;
 	if (yych <= 0x7F) goto yy479;
@@ -4428,31 +4427,31 @@ yy485:
 yy486:
 	++cur;
 yy487:
-#line 757 "../src/parse/lex.re"
+#line 756 "../src/parse/lex.re"
 	{
         msg.warn.useless_escape(loc, tok, cur);
         c = decode(tok + 1);
         return Ret::OK;
     }
-#line 4438 "src/parse/lex.cc"
+#line 4437 "src/parse/lex.cc"
 yy488:
 	yych = *++cur;
 	if (yych == '\n') goto yy474;
 	goto yy487;
 yy489:
 	++cur;
-#line 755 "../src/parse/lex.re"
+#line 754 "../src/parse/lex.re"
 	{ c = '-'_u8; return Ret::OK; }
-#line 4447 "src/parse/lex.cc"
+#line 4446 "src/parse/lex.cc"
 yy490:
 	yyaccept = 2;
 	yych = *(mar = ++cur);
 	if (yych <= '/') goto yy491;
 	if (yych <= '7') goto yy515;
 yy491:
-#line 740 "../src/parse/lex.re"
+#line 739 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in octal escape sequence")); }
-#line 4456 "src/parse/lex.cc"
+#line 4455 "src/parse/lex.cc"
 yy492:
 	++cur;
 	goto yy491;
@@ -4468,9 +4467,9 @@ yy493:
 		if (yych <= 'f') goto yy516;
 	}
 yy494:
-#line 739 "../src/parse/lex.re"
+#line 738 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(loc, "syntax error in hexadecimal escape sequence")); }
-#line 4474 "src/parse/lex.cc"
+#line 4473 "src/parse/lex.cc"
 yy495:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
@@ -4486,49 +4485,49 @@ yy495:
 	}
 yy496:
 	++cur;
-#line 754 "../src/parse/lex.re"
+#line 753 "../src/parse/lex.re"
 	{ c = '\\'_u8; return Ret::OK; }
-#line 4492 "src/parse/lex.cc"
+#line 4491 "src/parse/lex.cc"
 yy497:
 	++cur;
-#line 756 "../src/parse/lex.re"
+#line 755 "../src/parse/lex.re"
 	{ c = ']'_u8; return Ret::OK; }
-#line 4497 "src/parse/lex.cc"
+#line 4496 "src/parse/lex.cc"
 yy498:
 	++cur;
-#line 747 "../src/parse/lex.re"
+#line 746 "../src/parse/lex.re"
 	{ c = '\a'_u8; return Ret::OK; }
-#line 4502 "src/parse/lex.cc"
+#line 4501 "src/parse/lex.cc"
 yy499:
 	++cur;
-#line 748 "../src/parse/lex.re"
+#line 747 "../src/parse/lex.re"
 	{ c = '\b'_u8; return Ret::OK; }
-#line 4507 "src/parse/lex.cc"
+#line 4506 "src/parse/lex.cc"
 yy500:
 	++cur;
-#line 749 "../src/parse/lex.re"
+#line 748 "../src/parse/lex.re"
 	{ c = '\f'_u8; return Ret::OK; }
-#line 4512 "src/parse/lex.cc"
+#line 4511 "src/parse/lex.cc"
 yy501:
 	++cur;
-#line 750 "../src/parse/lex.re"
+#line 749 "../src/parse/lex.re"
 	{ c = '\n'_u8; return Ret::OK; }
-#line 4517 "src/parse/lex.cc"
+#line 4516 "src/parse/lex.cc"
 yy502:
 	++cur;
-#line 751 "../src/parse/lex.re"
+#line 750 "../src/parse/lex.re"
 	{ c = '\r'_u8; return Ret::OK; }
-#line 4522 "src/parse/lex.cc"
+#line 4521 "src/parse/lex.cc"
 yy503:
 	++cur;
-#line 752 "../src/parse/lex.re"
+#line 751 "../src/parse/lex.re"
 	{ c = '\t'_u8; return Ret::OK; }
-#line 4527 "src/parse/lex.cc"
+#line 4526 "src/parse/lex.cc"
 yy504:
 	++cur;
-#line 753 "../src/parse/lex.re"
+#line 752 "../src/parse/lex.re"
 	{ c = '\v'_u8; return Ret::OK; }
-#line 4532 "src/parse/lex.cc"
+#line 4531 "src/parse/lex.cc"
 yy505:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
@@ -4639,9 +4638,9 @@ yy518:
 	}
 yy519:
 	++cur;
-#line 746 "../src/parse/lex.re"
+#line 745 "../src/parse/lex.re"
 	{ c = unesc_oct(tok, cur); return Ret::OK; }
-#line 4645 "src/parse/lex.cc"
+#line 4644 "src/parse/lex.cc"
 yy520:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4668,9 +4667,9 @@ yy521:
 	}
 yy522:
 	++cur;
-#line 745 "../src/parse/lex.re"
+#line 744 "../src/parse/lex.re"
 	{ c = unesc_hex(tok, cur); return Ret::OK; }
-#line 4674 "src/parse/lex.cc"
+#line 4673 "src/parse/lex.cc"
 yy523:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4694,7 +4693,7 @@ yy524:
 		goto yy507;
 	}
 }
-#line 766 "../src/parse/lex.re"
+#line 765 "../src/parse/lex.re"
 
     }
 }
@@ -4703,11 +4702,11 @@ Ret Input::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
     tok = cur;
     stop = false;
     ast.loc = cur_loc();
-#line 797 "../src/parse/lex.re"
+#line 796 "../src/parse/lex.re"
 
     if (globopts->input_encoding == Enc::Type::ASCII) {
         
-#line 4711 "src/parse/lex.cc"
+#line 4710 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -4721,14 +4720,14 @@ Ret Input::lex_str_chr(uint8_t quote, AstChar& ast, bool& stop) {
 	}
 	++cur;
 yy526:
-#line 781 "../src/parse/lex.re"
+#line 780 "../src/parse/lex.re"
 	{ ast.chr = decode(tok); stop = (tok[0] == quote); return Ret::OK; }
-#line 4727 "src/parse/lex.cc"
+#line 4726 "src/parse/lex.cc"
 yy527:
 	++cur;
-#line 775 "../src/parse/lex.re"
+#line 774 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "newline in character string")); }
-#line 4732 "src/parse/lex.cc"
+#line 4731 "src/parse/lex.cc"
 yy528:
 	yych = *++cur;
 	if (yych == '\n') goto yy527;
@@ -4782,19 +4781,19 @@ yy529:
 		}
 	}
 yy530:
-#line 778 "../src/parse/lex.re"
+#line 777 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in escape sequence")); }
-#line 4788 "src/parse/lex.cc"
+#line 4787 "src/parse/lex.cc"
 yy531:
 	++cur;
 yy532:
-#line 792 "../src/parse/lex.re"
+#line 791 "../src/parse/lex.re"
 	{
         ast.chr = decode(tok + 1);
         if (tok[1] != quote) msg.warn.useless_escape(ast.loc, tok, cur);
         return Ret::OK;
     }
-#line 4798 "src/parse/lex.cc"
+#line 4797 "src/parse/lex.cc"
 yy533:
 	yych = *++cur;
 	if (yych == '\n') goto yy527;
@@ -4805,9 +4804,9 @@ yy534:
 	if (yych <= '/') goto yy535;
 	if (yych <= '7') goto yy549;
 yy535:
-#line 777 "../src/parse/lex.re"
+#line 776 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in octal escape sequence")); }
-#line 4811 "src/parse/lex.cc"
+#line 4810 "src/parse/lex.cc"
 yy536:
 	++cur;
 	goto yy535;
@@ -4823,9 +4822,9 @@ yy537:
 		if (yych <= 'f') goto yy551;
 	}
 yy538:
-#line 776 "../src/parse/lex.re"
+#line 775 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in hexadecimal escape sequence")); }
-#line 4829 "src/parse/lex.cc"
+#line 4828 "src/parse/lex.cc"
 yy539:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
@@ -4841,44 +4840,44 @@ yy539:
 	}
 yy540:
 	++cur;
-#line 791 "../src/parse/lex.re"
+#line 790 "../src/parse/lex.re"
 	{ ast.chr = '\\'_u8; return Ret::OK; }
-#line 4847 "src/parse/lex.cc"
+#line 4846 "src/parse/lex.cc"
 yy541:
 	++cur;
-#line 784 "../src/parse/lex.re"
+#line 783 "../src/parse/lex.re"
 	{ ast.chr = '\a'_u8; return Ret::OK; }
-#line 4852 "src/parse/lex.cc"
+#line 4851 "src/parse/lex.cc"
 yy542:
 	++cur;
-#line 785 "../src/parse/lex.re"
+#line 784 "../src/parse/lex.re"
 	{ ast.chr = '\b'_u8; return Ret::OK; }
-#line 4857 "src/parse/lex.cc"
+#line 4856 "src/parse/lex.cc"
 yy543:
 	++cur;
-#line 786 "../src/parse/lex.re"
+#line 785 "../src/parse/lex.re"
 	{ ast.chr = '\f'_u8; return Ret::OK; }
-#line 4862 "src/parse/lex.cc"
+#line 4861 "src/parse/lex.cc"
 yy544:
 	++cur;
-#line 787 "../src/parse/lex.re"
+#line 786 "../src/parse/lex.re"
 	{ ast.chr = '\n'_u8; return Ret::OK; }
-#line 4867 "src/parse/lex.cc"
+#line 4866 "src/parse/lex.cc"
 yy545:
 	++cur;
-#line 788 "../src/parse/lex.re"
+#line 787 "../src/parse/lex.re"
 	{ ast.chr = '\r'_u8; return Ret::OK; }
-#line 4872 "src/parse/lex.cc"
+#line 4871 "src/parse/lex.cc"
 yy546:
 	++cur;
-#line 789 "../src/parse/lex.re"
+#line 788 "../src/parse/lex.re"
 	{ ast.chr = '\t'_u8; return Ret::OK; }
-#line 4877 "src/parse/lex.cc"
+#line 4876 "src/parse/lex.cc"
 yy547:
 	++cur;
-#line 790 "../src/parse/lex.re"
+#line 789 "../src/parse/lex.re"
 	{ ast.chr = '\v'_u8; return Ret::OK; }
-#line 4882 "src/parse/lex.cc"
+#line 4881 "src/parse/lex.cc"
 yy548:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
@@ -4941,9 +4940,9 @@ yy553:
 	}
 yy554:
 	++cur;
-#line 783 "../src/parse/lex.re"
+#line 782 "../src/parse/lex.re"
 	{ ast.chr = unesc_oct(tok, cur); return Ret::OK; }
-#line 4947 "src/parse/lex.cc"
+#line 4946 "src/parse/lex.cc"
 yy555:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4970,9 +4969,9 @@ yy556:
 	}
 yy557:
 	++cur;
-#line 782 "../src/parse/lex.re"
+#line 781 "../src/parse/lex.re"
 	{ ast.chr = unesc_hex(tok, cur); return Ret::OK; }
-#line 4976 "src/parse/lex.cc"
+#line 4975 "src/parse/lex.cc"
 yy558:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -4996,11 +4995,11 @@ yy559:
 		goto yy550;
 	}
 }
-#line 799 "../src/parse/lex.re"
+#line 798 "../src/parse/lex.re"
 
     } else {
         
-#line 5004 "src/parse/lex.cc"
+#line 5003 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	unsigned int yyaccept = 0;
@@ -5029,14 +5028,14 @@ yy559:
 yy561:
 	++cur;
 yy562:
-#line 781 "../src/parse/lex.re"
+#line 780 "../src/parse/lex.re"
 	{ ast.chr = decode(tok); stop = (tok[0] == quote); return Ret::OK; }
-#line 5035 "src/parse/lex.cc"
+#line 5034 "src/parse/lex.cc"
 yy563:
 	++cur;
-#line 775 "../src/parse/lex.re"
+#line 774 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "newline in character string")); }
-#line 5040 "src/parse/lex.cc"
+#line 5039 "src/parse/lex.cc"
 yy564:
 	yych = *++cur;
 	if (yych == '\n') goto yy563;
@@ -5119,15 +5118,15 @@ yy565:
 		}
 	}
 yy566:
-#line 778 "../src/parse/lex.re"
+#line 777 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in escape sequence")); }
-#line 5125 "src/parse/lex.cc"
+#line 5124 "src/parse/lex.cc"
 yy567:
 	++cur;
 yy568:
-#line 779 "../src/parse/lex.re"
+#line 778 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error")); }
-#line 5131 "src/parse/lex.cc"
+#line 5130 "src/parse/lex.cc"
 yy569:
 	yych = *++cur;
 	if (yych <= 0x7F) goto yy568;
@@ -5166,13 +5165,13 @@ yy574:
 yy575:
 	++cur;
 yy576:
-#line 792 "../src/parse/lex.re"
+#line 791 "../src/parse/lex.re"
 	{
         ast.chr = decode(tok + 1);
         if (tok[1] != quote) msg.warn.useless_escape(ast.loc, tok, cur);
         return Ret::OK;
     }
-#line 5176 "src/parse/lex.cc"
+#line 5175 "src/parse/lex.cc"
 yy577:
 	yych = *++cur;
 	if (yych == '\n') goto yy563;
@@ -5183,9 +5182,9 @@ yy578:
 	if (yych <= '/') goto yy579;
 	if (yych <= '7') goto yy602;
 yy579:
-#line 777 "../src/parse/lex.re"
+#line 776 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in octal escape sequence")); }
-#line 5189 "src/parse/lex.cc"
+#line 5188 "src/parse/lex.cc"
 yy580:
 	++cur;
 	goto yy579;
@@ -5201,9 +5200,9 @@ yy581:
 		if (yych <= 'f') goto yy603;
 	}
 yy582:
-#line 776 "../src/parse/lex.re"
+#line 775 "../src/parse/lex.re"
 	{ RET_FAIL(error_at(ast.loc, "syntax error in hexadecimal escape sequence")); }
-#line 5207 "src/parse/lex.cc"
+#line 5206 "src/parse/lex.cc"
 yy583:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
@@ -5219,44 +5218,44 @@ yy583:
 	}
 yy584:
 	++cur;
-#line 791 "../src/parse/lex.re"
+#line 790 "../src/parse/lex.re"
 	{ ast.chr = '\\'_u8; return Ret::OK; }
-#line 5225 "src/parse/lex.cc"
+#line 5224 "src/parse/lex.cc"
 yy585:
 	++cur;
-#line 784 "../src/parse/lex.re"
+#line 783 "../src/parse/lex.re"
 	{ ast.chr = '\a'_u8; return Ret::OK; }
-#line 5230 "src/parse/lex.cc"
+#line 5229 "src/parse/lex.cc"
 yy586:
 	++cur;
-#line 785 "../src/parse/lex.re"
+#line 784 "../src/parse/lex.re"
 	{ ast.chr = '\b'_u8; return Ret::OK; }
-#line 5235 "src/parse/lex.cc"
+#line 5234 "src/parse/lex.cc"
 yy587:
 	++cur;
-#line 786 "../src/parse/lex.re"
+#line 785 "../src/parse/lex.re"
 	{ ast.chr = '\f'_u8; return Ret::OK; }
-#line 5240 "src/parse/lex.cc"
+#line 5239 "src/parse/lex.cc"
 yy588:
 	++cur;
-#line 787 "../src/parse/lex.re"
+#line 786 "../src/parse/lex.re"
 	{ ast.chr = '\n'_u8; return Ret::OK; }
-#line 5245 "src/parse/lex.cc"
+#line 5244 "src/parse/lex.cc"
 yy589:
 	++cur;
-#line 788 "../src/parse/lex.re"
+#line 787 "../src/parse/lex.re"
 	{ ast.chr = '\r'_u8; return Ret::OK; }
-#line 5250 "src/parse/lex.cc"
+#line 5249 "src/parse/lex.cc"
 yy590:
 	++cur;
-#line 789 "../src/parse/lex.re"
+#line 788 "../src/parse/lex.re"
 	{ ast.chr = '\t'_u8; return Ret::OK; }
-#line 5255 "src/parse/lex.cc"
+#line 5254 "src/parse/lex.cc"
 yy591:
 	++cur;
-#line 790 "../src/parse/lex.re"
+#line 789 "../src/parse/lex.re"
 	{ ast.chr = '\v'_u8; return Ret::OK; }
-#line 5260 "src/parse/lex.cc"
+#line 5259 "src/parse/lex.cc"
 yy592:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
@@ -5367,9 +5366,9 @@ yy605:
 	}
 yy606:
 	++cur;
-#line 783 "../src/parse/lex.re"
+#line 782 "../src/parse/lex.re"
 	{ ast.chr = unesc_oct(tok, cur); return Ret::OK; }
-#line 5373 "src/parse/lex.cc"
+#line 5372 "src/parse/lex.cc"
 yy607:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -5396,9 +5395,9 @@ yy608:
 	}
 yy609:
 	++cur;
-#line 782 "../src/parse/lex.re"
+#line 781 "../src/parse/lex.re"
 	{ ast.chr = unesc_hex(tok, cur); return Ret::OK; }
-#line 5402 "src/parse/lex.cc"
+#line 5401 "src/parse/lex.cc"
 yy610:
 	yych = *++cur;
 	if (yych <= '@') {
@@ -5422,7 +5421,7 @@ yy611:
 		goto yy594;
 	}
 }
-#line 801 "../src/parse/lex.re"
+#line 800 "../src/parse/lex.re"
 
     }
 }
@@ -5445,7 +5444,7 @@ Ret Input::set_sourceline() {
 sourceline:
     tok = cur;
 
-#line 5449 "src/parse/lex.cc"
+#line 5448 "src/parse/lex.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -5503,20 +5502,20 @@ sourceline:
 		}
 	}
 	++cur;
-#line 842 "../src/parse/lex.re"
+#line 841 "../src/parse/lex.re"
 	{ --cur; return Ret::OK; }
-#line 5509 "src/parse/lex.cc"
+#line 5508 "src/parse/lex.cc"
 yy613:
 	++cur;
 yy614:
-#line 843 "../src/parse/lex.re"
+#line 842 "../src/parse/lex.re"
 	{ goto sourceline; }
-#line 5515 "src/parse/lex.cc"
+#line 5514 "src/parse/lex.cc"
 yy615:
 	++cur;
-#line 841 "../src/parse/lex.re"
+#line 840 "../src/parse/lex.re"
 	{ pos = tok = cur; return Ret::OK; }
-#line 5520 "src/parse/lex.cc"
+#line 5519 "src/parse/lex.cc"
 yy616:
 	yych = *++cur;
 	if (yych == '\n') goto yy615;
@@ -5533,7 +5532,7 @@ yy618:
 	if (yybm[0+yych] & 64) {
 		goto yy618;
 	}
-#line 823 "../src/parse/lex.re"
+#line 822 "../src/parse/lex.re"
 	{
         uint32_t l;
         if (!s_to_u32_unsafe(tok, cur, l)) {
@@ -5542,7 +5541,7 @@ yy618:
         set_line(l);
         goto sourceline;
     }
-#line 5546 "src/parse/lex.cc"
+#line 5545 "src/parse/lex.cc"
 yy619:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -5559,7 +5558,7 @@ yy621:
 	goto yy614;
 yy622:
 	++cur;
-#line 832 "../src/parse/lex.re"
+#line 831 "../src/parse/lex.re"
 	{
         InputFile &in = get_input();
         std::string &name = in.escaped_name;
@@ -5568,7 +5567,7 @@ yy622:
         msg.filenames.push_back(name);
         goto sourceline;
     }
-#line 5572 "src/parse/lex.cc"
+#line 5571 "src/parse/lex.cc"
 yy623:
 	++cur;
 	if (lim <= cur) if (!fill(1)) RET_FAIL(error_at_cur("unexpected end of input"));
@@ -5577,7 +5576,7 @@ yy623:
 	if (yych == '\n') goto yy621;
 	goto yy619;
 }
-#line 844 "../src/parse/lex.re"
+#line 843 "../src/parse/lex.re"
 
 }
 
