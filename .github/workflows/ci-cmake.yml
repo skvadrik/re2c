@@ -135,9 +135,9 @@ jobs:
         id: build-info
         run: |
           if echo "${{ matrix.name }}" | grep -q "ootree"; then
-            BUILD_DIR="$(pwd)/.build/${{ matrix.name }}-full"
+            BUILD_DIR="${{ github.workspace }}/.build/${{ matrix.name }}-full"
           else
-            BUILD_DIR="$(pwd)"
+            BUILD_DIR="${{ github.workspace }}"
           fi
           echo "BUILD_DIR=$BUILD_DIR" >> $GITHUB_OUTPUT
 
