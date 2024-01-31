@@ -76,6 +76,8 @@ class Input: private LexerState {
     int32_t tmp_num;
     std::vector<std::string> tmp_list;
 
+    bool in_syntax_file;
+
   public:
     Input(OutAllocator& alc, const conopt_t* o, Msg& m);
     ~Input();
@@ -167,7 +169,8 @@ inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
       conf_kind(),
       tmp_str(),
       tmp_num(),
-      tmp_list() {}
+      tmp_list(),
+      in_syntax_file(false) {}
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;

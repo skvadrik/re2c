@@ -4528,7 +4528,7 @@ end:
 }
 
 Ret Input::lex_conf_string() {
-    if (msg.filenames[0] == globopts->source_file) {
+    if (!in_syntax_file) {
         return lex_conf_string_legacy();
     }
 

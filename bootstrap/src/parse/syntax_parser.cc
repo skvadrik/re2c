@@ -1540,6 +1540,7 @@ inline StxCode* Stx::make_code_list(
 }
 
 Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {
+    in_syntax_file = true;
     if (!globopts->syntax_file.empty()) {
         CHECK_RET(open(globopts->syntax_file, nullptr));
     } else {
@@ -1577,6 +1578,7 @@ Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {
     if (yyparse(*this, opts, stx) != 0) return Ret::FAIL;
     stx.cache_conf_tests();
 
+    in_syntax_file = false;
     reset(); // clean up before lexing source files
     return Ret::OK;
 }
