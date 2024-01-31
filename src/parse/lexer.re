@@ -21,6 +21,8 @@
 
 namespace re2c {
 
+/*!max:re2c format = "size_t LexerState::maxfill_main() { return @@; }"; */
+
 // Global re2c configurations and definitions.
 /*!re2c
     // source code is in ASCII, but re2c assumes unsigned chars
@@ -66,8 +68,6 @@ namespace re2c {
 
 namespace re2c {
 
-/*!max:re2c*/
-
 struct LexerState {
     enum class LexMode: uint32_t { NORMAL, FLEX_NAME };
 
@@ -79,7 +79,7 @@ struct LexerState {
     inline LexerState()
         : mode(LexMode::NORMAL),
           BSIZE(8192),
-          bot(new uint8_t[BSIZE + YYMAXFILL]),
+          bot(new uint8_t[BSIZE + maxfill()]),
           lim(bot + BSIZE),
           cur(lim),
           mar(lim),
@@ -89,7 +89,7 @@ struct LexerState {
           pos(lim),
           eof(nullptr)
           /*!stags:re2c format = ", @@(lim)"; */ {
-        memset(lim, 0, YYMAXFILL);
+        memset(lim, 0, maxfill());
     }
 
     inline ~LexerState() {
@@ -99,7 +99,7 @@ struct LexerState {
     inline void reset_ptrs() {
         // reset lexer back to its initial state
         cur = mar = ctx = tok = ptr = pos = lim = bot + BSIZE;
-        memset(lim, 0, YYMAXFILL);
+        memset(lim, 0, maxfill());
         eof = nullptr;
     }
 
@@ -113,6 +113,15 @@ struct LexerState {
         pos += offs;
         /*!stags:re2c format = "if (@@) { @@ += offs; }"; */
     }
+
+    static size_t maxfill() {
+        return std::max(maxfill_main(), std::max(maxfill_conf(), maxfill_syntax()));
+    }
+
+  private:
+    static size_t maxfill_main();
+    static size_t maxfill_conf();
+    static size_t maxfill_syntax();
 
     FORBID_COPY(LexerState);
 };

@@ -27,6 +27,8 @@
 
 namespace re2c {
 
+/*!max:re2c format = "size_t LexerState::maxfill_syntax() { return @@; }"; */
+
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
 Ret Input::lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token) {

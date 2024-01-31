@@ -13,6 +13,8 @@
 
 namespace re2c {
 
+/*!max:re2c format = "size_t LexerState::maxfill_conf() { return @@; }"; */
+
 #define YYFILL(n) if (!fill(n)) RET_FAIL(error_at_cur("unexpected end of input in configuration"))
 
 #define RET_CONF_BOOL(conf) do { \

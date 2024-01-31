@@ -234,18 +234,18 @@ Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {
         size_t flen = strlen(src);
 
         // TODO: use the maximum of all YYMAXFlLL values
-        if (flen + YYMAXFILL > BSIZE) {
+        if (flen + maxfill() > BSIZE) {
             delete[] bot;
             BSIZE = flen;
-            bot = new uint8_t[BSIZE + YYMAXFILL];
+            bot = new uint8_t[BSIZE + maxfill()];
         }
 
         // fill in buffer from the config string
         memcpy(bot, src, flen);
-        memset(bot + flen, 0, YYMAXFILL);
+        memset(bot + flen, 0, maxfill());
 
         cur = mar = ctx = tok = ptr = pos = bot;
-        lim = bot + flen + YYMAXFILL;
+        lim = bot + flen + maxfill();
     }
 
     if (yyparse(*this, opts, stx) != 0) return Ret::FAIL;

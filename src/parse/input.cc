@@ -235,7 +235,7 @@ bool Input::fill(size_t need) {
         shift_ptrs_and_fpos(-static_cast<ptrdiff_t>(free));
     } else {
         BSIZE += std::max(BSIZE, need);
-        uint8_t* buf = new uint8_t[BSIZE + YYMAXFILL];
+        uint8_t* buf = new uint8_t[BSIZE + maxfill()];
         if (buf == nullptr) {
             error("out of memory");
             return false;
@@ -252,8 +252,8 @@ bool Input::fill(size_t need) {
     CHECK(lim + free <= bot + BSIZE);
     if (!read(free)) {
         eof = lim;
-        memset(lim, 0, YYMAXFILL);
-        lim += YYMAXFILL;
+        memset(lim, 0, maxfill());
+        lim += maxfill();
     }
 
     return true;

@@ -9,11 +9,6 @@
 
 namespace re2c {
 
-#line 13 "src/parse/lexer.h"
-#define YYMAXFILL 18
-#line 69 "../src/parse/lexer.re"
-
-
 struct LexerState {
     enum class LexMode: uint32_t { NORMAL, FLEX_NAME };
 
@@ -21,7 +16,7 @@ struct LexerState {
     size_t BSIZE;
     uint8_t* bot, *lim, *cur, *mar, *ctx, *tok, *ptr, *pos, *eof;
     
-#line 25 "src/parse/lexer.h"
+#line 20 "src/parse/lexer.h"
 uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
 #line 77 "../src/parse/lexer.re"
 
@@ -29,7 +24,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
     inline LexerState()
         : mode(LexMode::NORMAL),
           BSIZE(8192),
-          bot(new uint8_t[BSIZE + YYMAXFILL]),
+          bot(new uint8_t[BSIZE + maxfill()]),
           lim(bot + BSIZE),
           cur(lim),
           mar(lim),
@@ -39,11 +34,11 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
           pos(lim),
           eof(nullptr)
           
-#line 43 "src/parse/lexer.h"
+#line 38 "src/parse/lexer.h"
 , yyt1(lim), yyt2(lim), yyt3(lim)
 #line 91 "../src/parse/lexer.re"
  {
-        memset(lim, 0, YYMAXFILL);
+        memset(lim, 0, maxfill());
     }
 
     inline ~LexerState() {
@@ -53,7 +48,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
     inline void reset_ptrs() {
         // reset lexer back to its initial state
         cur = mar = ctx = tok = ptr = pos = lim = bot + BSIZE;
-        memset(lim, 0, YYMAXFILL);
+        memset(lim, 0, maxfill());
         eof = nullptr;
     }
 
@@ -66,11 +61,20 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         ptr += offs;
         pos += offs;
         
-#line 70 "src/parse/lexer.h"
+#line 65 "src/parse/lexer.h"
 if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; }
 #line 114 "../src/parse/lexer.re"
 
     }
+
+    static size_t maxfill() {
+        return std::max(maxfill_main(), std::max(maxfill_conf(), maxfill_syntax()));
+    }
+
+  private:
+    static size_t maxfill_main();
+    static size_t maxfill_conf();
+    static size_t maxfill_syntax();
 
     FORBID_COPY(LexerState);
 };
