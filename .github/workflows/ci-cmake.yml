@@ -171,7 +171,11 @@ jobs:
           # use a different name per job.
           name: test-${{ matrix.name }}
           # Tests run in a temporary directory that has a name test_<timestamp>.
-          path: ${{ steps.build-info.outputs.BUILD_DIR }}/test_[0-9]*
+          # Provide both relative and absolute paths. Absolute path should work for all builds,
+          # but it doesn't work on Windows. Relative path works for in-tree Windows builds.
+          path: |
+            test_[0-9]*
+            ${{ steps.build-info.outputs.BUILD_DIR }}/test_[0-9]*
           # Artifacts are retained for 90 days by default.
           # In fact, we don't need such long period.
           retention-days: 30
