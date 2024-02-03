@@ -27,8 +27,16 @@ struct opt_t;
 using StxCodes = list_t<StxCode>;
 using StxList = list_t<StxName>;
 
+struct StxOpt {
+    bool is_local;
+    union {
+        StxGOpt gopt;
+        StxLOpt lopt;
+    };
+};
+
 struct StxCodeCond {
-    const char* conf; // condition is based on the value of this config
+    StxOpt* opt;
     StxCodes* then_code;
     StxCodes* else_code;
 };
@@ -74,20 +82,19 @@ class Stx {
     struct code_conf_t {
         std::vector<std::string> vars;
         std::vector<std::string> list_vars;
-        std::vector<std::string> cond_vars;
+        std::vector<StxLOpt> cond_vars;
 
         code_conf_t(): vars(), list_vars(), cond_vars() {}
         code_conf_t(
             const std::vector<std::string>& vars,
             const std::vector<std::string>& list_vars,
-            const std::vector<std::string>& cond_vars)
-                : vars(vars), list_vars(list_vars), cond_vars(cond_vars) {}
+            const std::vector<StxLOpt>& conds)
+                : vars(vars), list_vars(list_vars), cond_vars(conds) {}
     };
     using allowed_code_confs_t = std::unordered_map<std::string, code_conf_t>;
     using allowed_list_confs_t = std::unordered_map<std::string, std::vector<std::string>>;
     using allowed_word_confs_t = std::unordered_map<std::string, std::vector<std::string>>;
     using selector_t = std::function<bool(const opt_t*)>;
-    using allowed_conds_t = std::unordered_map<std::string, selector_t>;
     using allowed_vars_t = std::unordered_set<std::string>;
     using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
     using stack_code_list_t = std::vector<const StxCode*>;
@@ -102,7 +109,6 @@ class Stx {
     allowed_list_confs_t allowed_list_confs;
     allowed_word_confs_t allowed_word_confs;
     allowed_code_confs_t allowed_code_confs;
-    allowed_conds_t allowed_conds;
     allowed_vars_t allowed_vars;
 
     confs_t confs;
@@ -118,12 +124,11 @@ class Stx {
     StxConf* make_conf(StxConfType type, const char* name);
     StxCode* make_code(StxCodeType type);
 
-    Ret check_cond(const char* conf, const char* cond, bool code) const;
+    Ret check_cond(const char* conf, StxLOpt opt) const;
     Ret check_word(const char* conf, const char* word, bool list) const;
     Ret check_var(const char* conf, const char* var) const;
 
     void push_list_on_stack(const StxCode* x) const;
-    bool eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const;
 
   public:
     explicit Stx(OutAllocator& alc);
@@ -136,9 +141,11 @@ class Stx {
     StxConf* make_conf_list(const char* name, StxList* list);
     StxCode* make_code_str(const char* str);
     StxCode* make_code_var(const char* name);
-    StxCode* make_code_cond(const char* conf, StxCodes* code_then, StxCodes* code_else);
+    StxCode* make_code_cond(StxOpt* opt, StxCodes* code_then, StxCodes* code_else);
     StxCode* make_code_list(const char* var, int32_t lbound, int32_t rbound, StxCodes* code);
     StxName* make_name(const char* name);
+    StxOpt* make_opt_global(StxGOpt opt);
+    StxOpt* make_opt_local(StxLOpt opt);
     void add_conf(const char* name, const StxConf* conf);
 
     // functions that validate configuration and variable names in the AST

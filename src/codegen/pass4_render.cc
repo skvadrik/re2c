@@ -140,8 +140,8 @@ class RenderVar : public RenderCallback {
         }
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_init") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_INIT) {
             return code->init != nullptr;
         }
         UNREACHABLE();
@@ -225,8 +225,8 @@ class RenderIfThenElse : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_cond") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_COND) {
             return curr_branch->cond != nullptr;
         }
         UNREACHABLE();
@@ -328,8 +328,8 @@ class RenderSwitchCaseRange : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "multival") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::MULTIVAL) {
             return nsyms > 1;
         }
         UNREACHABLE();
@@ -531,14 +531,6 @@ class RenderLoop : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_label") == 0) {
-            return !rctx.opts->label_loop.empty();
-        }
-        UNREACHABLE();
-        return false;
-    }
-
     FORBID_COPY(RenderLoop);
 };
 
@@ -616,8 +608,8 @@ class RenderFnDef : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_type") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_TYPE) {
             return code->type != nullptr;
         }
         UNREACHABLE();
@@ -680,8 +672,8 @@ class RenderFnCall : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_args") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_ARGS) {
             return nargs > 0;
         }
         UNREACHABLE();
@@ -974,8 +966,8 @@ class RenderEnum : public RenderCallback {
         return false;
     }
 
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_init") == 0) {
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_INIT) {
             return code->elem_nums != nullptr;
         }
         UNREACHABLE();
@@ -1000,16 +992,6 @@ class RenderFingerprint : public RenderCallback {
         } else {
             render_global_var(rctx, var);
         }
-    }
-
-    bool eval_cond(const char* cond) override {
-        if (strcmp(cond, "have_version") == 0) {
-            return rctx.opts->version;
-        } else if (strcmp(cond, "have_date") == 0) {
-            return rctx.opts->date;
-        }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderFingerprint);

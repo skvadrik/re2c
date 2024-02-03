@@ -1,5 +1,6 @@
 %code requires {
 
+#include "src/constants.h"
 #include "src/options/syntax.h"
 
 }
@@ -36,16 +37,24 @@ extern "C" {
     re2c::StxList* list;
     re2c::StxCode* code;
     re2c::StxCodes* codes;
+    re2c::StxOpt* opt;
+    re2c::StxGOpt gopt;
+    re2c::StxLOpt lopt;
 };
 
 %token STX_NAME
 %token STX_NUMBER
 %token STX_STRING
+%token STX_GOPT
+%token STX_LOPT
 %token STX_CONF
 %token STX_CONF_CODE
 
 %type <str> STX_NAME STX_STRING STX_CONF STX_CONF_CODE
 %type <num> STX_NUMBER
+%type <gopt> STX_GOPT
+%type <lopt> STX_LOPT
+%type <opt> cond
 %type <conf> conf
 %type <list> list names
 %type <code> code_cond code_expr code_list
@@ -84,12 +93,16 @@ code_expr
 | code_list;
 
 code_cond
-: '(' STX_NAME '?' code_exprs ')' {
-    $$ = stx.make_code_cond($2, $4, nullptr);
+: cond '?' code_exprs ')' {
+    $$ = stx.make_code_cond($1, $3, nullptr);
 }
-| '(' STX_NAME '?' code_exprs ':' code_exprs ')' {
-    $$ = stx.make_code_cond($2, $4, $6);
+| cond '?' code_exprs ':' code_exprs ')' {
+    $$ = stx.make_code_cond($1, $3, $5);
 };
+
+cond
+: STX_GOPT { $$ = stx.make_opt_global($1); }
+| STX_LOPT { $$ = stx.make_opt_local($1); };
 
 code_list
 : '[' STX_NAME ':' code_exprs ']' {
@@ -195,9 +208,23 @@ inline StxCode* Stx::make_code_var(const char* var) {
     return x;
 }
 
-inline StxCode* Stx::make_code_cond(const char* conf, StxCodes* then_code, StxCodes* else_code) {
+inline StxOpt* Stx::make_opt_global(StxGOpt opt) {
+    StxOpt* x = alc.alloct<StxOpt>(1);
+    x->is_local = false;
+    x->gopt = opt;
+    return x;
+}
+
+inline StxOpt* Stx::make_opt_local(StxLOpt opt) {
+    StxOpt* x = alc.alloct<StxOpt>(1);
+    x->is_local = true;
+    x->lopt = opt;
+    return x;
+}
+
+inline StxCode* Stx::make_code_cond(StxOpt* opt, StxCodes* then_code, StxCodes* else_code) {
     StxCode* x = make_code(StxCodeType::COND);
-    x->cond.conf = conf;
+    x->cond.opt = opt;
     x->cond.then_code = then_code;
     x->cond.else_code = else_code;
     return x;

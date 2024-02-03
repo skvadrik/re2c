@@ -45,13 +45,14 @@ class Stx;
 
 #define RE2C_CONSTOPTS \
     CONSTOPT(Target, target, Target::CODE) \
+    CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
+    CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
     CONSTOPT(bool, date, true) \
     CONSTOPT(bool, version, true) \
     CONSTOPT(bool, start_conditions, false) \
     CONSTOPT(bool, storable_state, false) \
     CONSTOPT(bool, flex_syntax, false) \
     CONSTOPT(bool, verbose, false) \
-    CONSTOPT(Enc::Type, input_encoding, Enc::Type::ASCII) \
     CONSTOPT(bool, line_dirs, true) \
     /* files */ \
     CONSTOPT(std::string, source_file, "") \
@@ -66,7 +67,6 @@ class Stx;
     CONSTOPT(bool, optimize_tags, true) \
     CONSTOPT(bool, nested_negative_tags, true) \
     CONSTOPT(bool, eager_skip, false) \
-    CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
     /* debug */ \
     CONSTOPT(bool, dump_nfa, false) \
     CONSTOPT(bool, dump_dfa_raw, false) \
@@ -118,8 +118,8 @@ class Stx;
     MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
-    MUTOPT(std::vector<std::string>, api_function, {}) \
     MUTOPT(std::string, api_debug, "YYDEBUG") \
+    MUTOPT(std::vector<std::string>, api_function, {}) \
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \
     MUTOPT(std::string, var_bitmaps, "yybm") \
@@ -184,27 +184,6 @@ class Stx;
     /* debug */ \
     MUTOPT(bool, debug, false) \
     /* end */
-
-// conditionals in syntax files
-#define RE2C_STX_CONDS \
-    STX_COND("api.pointers", opts->api == Api::DEFAULT) \
-    STX_COND("api.generic", opts->api == Api::CUSTOM) \
-    STX_COND("api_style.functions", opts->api_style == ApiStyle::FUNCTIONS) \
-    STX_COND("api_style.freeform", opts->api_style == ApiStyle::FREEFORM) \
-    STX_COND("encoding.ascii", opts->encoding.type() == Enc::Type::ASCII) \
-    STX_COND("encoding.ebcdic", opts->encoding.type() == Enc::Type::EBCDIC) \
-    STX_COND("encoding.ucs2", opts->encoding.type() == Enc::Type::UCS2) \
-    STX_COND("encoding.utf8", opts->encoding.type() == Enc::Type::UTF8) \
-    STX_COND("encoding.utf16", opts->encoding.type() == Enc::Type::UTF16) \
-    STX_COND("encoding.utf32", opts->encoding.type() == Enc::Type::UTF32) \
-    STX_COND("code_model.goto_label", opts->code_model == CodeModel::GOTO_LABEL) \
-    STX_COND("code_model.loop_switch", opts->code_model == CodeModel::LOOP_SWITCH) \
-    STX_COND("code_model.recursive_functions", opts->code_model == CodeModel::REC_FUNC) \
-    STX_COND("storable_state", opts->storable_state) \
-    STX_COND("case_ranges", opts->case_ranges) \
-    STX_COND("unsafe", opts->unsafe) \
-    STX_COND("date", opts->date) \
-    STX_COND("version", opts->version)
 
 // variables in syntax files
 #define RE2C_STX_VARS \

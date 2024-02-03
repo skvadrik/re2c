@@ -50,6 +50,8 @@ namespace re2c {
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
+#define RET_OPT(b) do { token = CONF_OPTION; yylval->opt = (b); return Ret::OK; } while(0)
+
 /*!re2c
     re2c:define:YYCTYPE     = uint8_t;
     re2c:define:YYCURSOR    = cur;
@@ -375,10 +377,29 @@ start:
         yylval->str = copystr(tmp_str, alc);
         RET_TOK(CONF_STRING);
     }
+    "" / [a-z] {
+        goto opt;
+    }
     * {
         RET_FAIL(error_at_cur("unexpected character: '%c'", cur[-1]));
     }
 */
+
+opt:
+    tok = cur;
+    // A subset of options is exported for use in `conf:*` configurations in syntax files.
+    // Only constant options should be allowed here, as they will be used before the input file is
+    // parsed and mutable options (block-level configurations) are known.
+    //
+    // These options are part of the syntax file API and should not be removed or changed.
+/*!local:re2c
+    "code_model.goto_label"          { RET_OPT(globopts->code_model == CodeModel::GOTO_LABEL); }
+    "code_model.loop_switch"         { RET_OPT(globopts->code_model == CodeModel::LOOP_SWITCH); }
+    "code_model.recursive_functions" { RET_OPT(globopts->code_model == CodeModel::REC_FUNC); }
+
+    * { RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+*/
+
     UNREACHABLE();
     return Ret::FAIL; // unreachable
 }
@@ -389,5 +410,6 @@ start:
 #undef RET_CONF_ENC
 #undef RET_CONF_NUM_NONNEG
 #undef RET_TOK
+#undef RET_OPT
 
 } // end namespace re2c

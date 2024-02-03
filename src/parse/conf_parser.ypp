@@ -22,7 +22,7 @@ extern "C" {
 %union {
     const char* str;
     int32_t num;
-    bool bln;
+    bool opt;
     std::vector<std::string>* list;
 };
 
@@ -32,7 +32,7 @@ extern "C" {
 
 %type <str> CONF_STRING str
 %type <num> CONF_NUMBER num
-%type <bln> CONF_OPTION
+%type <opt> CONF_OPTION
 %type <list> list elems
 
 %%

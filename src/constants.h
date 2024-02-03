@@ -140,6 +140,31 @@ static constexpr size_t MAX_NFA_STATES = 1000 * 1000 * 100;
 static constexpr size_t MAX_DFA_STATES = 1000 * 100;
 static constexpr size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
 
+enum class StxGOpt {
+    API_DEFAULT,
+    API_CUSTOM,
+    API_STYLE_FUNCTIONS,
+    API_STYLE_FREEFORM,
+    CODE_MODEL_GOTO_LABEL,
+    CODE_MODEL_LOOP_SWITCH,
+    CODE_MODEL_REC_FUNC,
+    START_CONDITIONS,
+    STORABLE_STATE,
+    DATE,
+    VER,
+    CASE_RANGES,
+    UNSAFE,
+    LOOP_LABEL
+};
+
+enum class StxLOpt {
+    HAVE_INIT,
+    HAVE_COND,
+    HAVE_TYPE,
+    HAVE_ARGS,
+    MULTIVAL
+};
+
 enum class Ret: uint32_t {
     OK,   // all good
     EXIT, // all good, but exit immediately (used for options like help or version)

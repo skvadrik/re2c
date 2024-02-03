@@ -83,7 +83,7 @@ class RenderCallback {
         UNREACHABLE();
         return false;
     }
-    virtual bool eval_cond(const char* /*cond*/) {
+    virtual bool eval_cond(StxLOpt /*opt*/) {
         UNREACHABLE();
         return false;
     }

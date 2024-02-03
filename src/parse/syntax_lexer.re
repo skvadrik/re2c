@@ -1,6 +1,7 @@
 #include <stdint.h>
 
 #include "src/msg/msg.h"
+#include "src/options/opt.h"
 #include "src/parse/input.h"
 #include "src/parse/syntax_parser.h"
 #include "src/util/string_utils.h"
@@ -30,6 +31,9 @@ namespace re2c {
 /*!max:re2c format = "size_t LexerState::maxfill_syntax() { return @@; }"; */
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
+
+#define RET_GOPT(b) do { token = STX_GOPT; yylval->gopt = b; return Ret::OK; } while(0)
+#define RET_LOPT(b) do { token = STX_LOPT; yylval->lopt = b; return Ret::OK; } while(0)
 
 Ret Input::lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token) {
     const uint8_t* p;
@@ -68,7 +72,8 @@ start:
         RET_FAIL(error_at_tok("configuration value overflow"));
     }
     ["] { goto str; }
-    [?:;,(){}[\]] { RET_TOK(cur[-1]); }
+    [(] space* { goto opt; }
+    [?:;,){}[\]] { RET_TOK(cur[-1]); }
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */
 
@@ -94,10 +99,50 @@ str: /*!local:re2c
         RET_FAIL(error_at_tok("syntax error in string literal"));
     }
 */
+
+opt:
+    tok = cur;
+/*!local:re2c
+    // Global conditionals.
+    //
+    // A subset of options is exported for use in `code:*` configurations in syntax files.
+    // Both constant and mutable options are allowed here, as they are used during codegen,
+    // when block-level options are already known.
+    //
+    // These options are part of the syntax file API and should not be removed or changed.
+
+    "api.pointers"                   { RET_GOPT(StxGOpt::API_DEFAULT); }
+    "api.generic"                    { RET_GOPT(StxGOpt::API_CUSTOM); }
+    "api_style.functions"            { RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
+    "api_style.freeform"             { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
+    "code_model.goto_label"          { RET_GOPT(StxGOpt::CODE_MODEL_GOTO_LABEL); }
+    "code_model.loop_switch"         { RET_GOPT(StxGOpt::CODE_MODEL_LOOP_SWITCH); }
+    "code_model.recursive_functions" { RET_GOPT(StxGOpt::CODE_MODEL_REC_FUNC); }
+    "start_conditions"               { RET_GOPT(StxGOpt::START_CONDITIONS); }
+    "storable_state"                 { RET_GOPT(StxGOpt::STORABLE_STATE); }
+    "date"                           { RET_GOPT(StxGOpt::DATE); }
+    "version"                        { RET_GOPT(StxGOpt::VER); }
+    "case_ranges"                    { RET_GOPT(StxGOpt::CASE_RANGES); }
+    "unsafe"                         { RET_GOPT(StxGOpt::UNSAFE); }
+    "loop_label"                     { RET_GOPT(StxGOpt::LOOP_LABEL); }
+
+    // Local conditionals.
+
+    "have_init"    { RET_LOPT(StxLOpt::HAVE_INIT); }
+    "have_cond"    { RET_LOPT(StxLOpt::HAVE_COND); }
+    "have_type"    { RET_LOPT(StxLOpt::HAVE_TYPE); }
+    "have_args"    { RET_LOPT(StxLOpt::HAVE_ARGS); }
+    "multival"     { RET_LOPT(StxLOpt::MULTIVAL); }
+
+    * { RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+*/
+
     UNREACHABLE();
     return Ret::FAIL; // unreachable
 }
 
 #undef RET_TOK
+#undef RET_GOPT
+#undef RET_LOPT
 
 } // namespace re2c

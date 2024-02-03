@@ -77,7 +77,7 @@ union CONF_STYPE
 
     const char* str;
     int32_t num;
-    bool bln;
+    bool opt;
     std::vector<std::string>* list;
 
 #line 84 "src/parse/conf_parser.h"

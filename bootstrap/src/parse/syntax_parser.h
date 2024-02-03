@@ -56,10 +56,11 @@ extern int stx_debug;
 #line 1 "../src/parse/syntax_parser.ypp"
 
 
+#include "src/constants.h"
 #include "src/options/syntax.h"
 
 
-#line 63 "src/parse/syntax_parser.h"
+#line 64 "src/parse/syntax_parser.h"
 
 /* Token kinds.  */
 #ifndef STX_TOKENTYPE
@@ -73,8 +74,10 @@ extern int stx_debug;
     STX_NAME = 258,                /* STX_NAME  */
     STX_NUMBER = 259,              /* STX_NUMBER  */
     STX_STRING = 260,              /* STX_STRING  */
-    STX_CONF = 261,                /* STX_CONF  */
-    STX_CONF_CODE = 262            /* STX_CONF_CODE  */
+    STX_GOPT = 261,                /* STX_GOPT  */
+    STX_LOPT = 262,                /* STX_LOPT  */
+    STX_CONF = 263,                /* STX_CONF  */
+    STX_CONF_CODE = 264            /* STX_CONF_CODE  */
   };
   typedef enum stx_tokentype stx_token_kind_t;
 #endif
@@ -83,7 +86,7 @@ extern int stx_debug;
 #if ! defined STX_STYPE && ! defined STX_STYPE_IS_DECLARED
 union STX_STYPE
 {
-#line 32 "../src/parse/syntax_parser.ypp"
+#line 33 "../src/parse/syntax_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -91,8 +94,11 @@ union STX_STYPE
     re2c::StxList* list;
     re2c::StxCode* code;
     re2c::StxCodes* codes;
+    re2c::StxOpt* opt;
+    re2c::StxGOpt gopt;
+    re2c::StxLOpt lopt;
 
-#line 96 "src/parse/syntax_parser.h"
+#line 102 "src/parse/syntax_parser.h"
 
 };
 typedef union STX_STYPE STX_STYPE;

@@ -1130,13 +1130,13 @@ yyreduce:
 
   case 6: /* num: '(' CONF_OPTION '?' num ':' num ')'  */
 #line 47 "../src/parse/conf_parser.ypp"
-                                      { (yyval.num) = (yyvsp[-5].bln) ? (yyvsp[-3].num) : (yyvsp[-1].num); }
+                                      { (yyval.num) = (yyvsp[-5].opt) ? (yyvsp[-3].num) : (yyvsp[-1].num); }
 #line 1135 "src/parse/conf_parser.cc"
     break;
 
   case 8: /* str: '(' CONF_OPTION '?' str ':' str ')'  */
 #line 51 "../src/parse/conf_parser.ypp"
-                                      { (yyval.str) = (yyvsp[-5].bln) ? (yyvsp[-3].str) : (yyvsp[-1].str); }
+                                      { (yyval.str) = (yyvsp[-5].opt) ? (yyvsp[-3].str) : (yyvsp[-1].str); }
 #line 1141 "src/parse/conf_parser.cc"
     break;
 

@@ -13,7 +13,6 @@ Stx::Stx(OutAllocator& alc)
         , allowed_list_confs()
         , allowed_word_confs()
         , allowed_code_confs()
-        , allowed_conds()
         , allowed_vars()
         , confs()
         , have_oneline_if(false)
@@ -36,7 +35,7 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["standalone_single_quotes"] = {"yes", "no"};
 
     allowed_code_confs["code:var"] = {
-        {"type", "name", "init"}, {}, {"have_init"}
+        {"type", "name", "init"}, {}, {StxLOpt::HAVE_INIT}
     };
     allowed_code_confs["code:const"] = {
         {"type", "name", "init"}, {}, {}
@@ -50,10 +49,10 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:type_yybm"] = {};
     allowed_code_confs["code:type_yytarget"] = {};
     allowed_code_confs["code:if_then_else"] = {
-        {"cond"}, {"branch", "stmt"}, {"have_cond"}
+        {"cond"}, {"branch", "stmt"}, {StxLOpt::HAVE_COND}
     };
     allowed_code_confs["code:if_then_else_oneline"] = {
-        {"cond"}, {"branch", "stmt"}, {"have_cond"}
+        {"cond"}, {"branch", "stmt"}, {StxLOpt::HAVE_COND}
     };
     allowed_code_confs["code:switch"] = {
         {"expr"}, {"case"}, {}
@@ -65,36 +64,36 @@ Stx::Stx(OutAllocator& alc)
         {}, {"case", "stmt"}, {}
     };
     allowed_code_confs["code:switch_case_range"] = {
-        {}, {"val"}, {"multival"}
+        {}, {"val"}, {StxLOpt::MULTIVAL}
     };
     allowed_code_confs["code:switch_case_default"] = {};
     allowed_code_confs["code:loop"] = {
-        {"label"}, {"stmt"}, {"have_label"}
+        {"label"}, {"stmt"}, {}
     };
     allowed_code_confs["code:loop_label"] = {};
     allowed_code_confs["code:enum"] = {
-        {"name", "type", "init"}, {"elem"}, {"have_init"}
+        {"name", "type", "init"}, {"elem"}, {StxLOpt::HAVE_INIT}
     };
     allowed_code_confs["code:enum_elem"] = {
         {"name", "type"}, {}, {}
     };
     allowed_code_confs["code:fndecl"] = {
-        {"name", "type", "argname", "argtype"}, {"arg"}, {"have_type"}
+        {"name", "type", "argname", "argtype"}, {"arg"}, {StxLOpt::HAVE_TYPE}
     };
     allowed_code_confs["code:fndef"] = {
-        {"name", "type", "argname", "argtype"}, {"arg", "stmt"}, {"have_type"}
+        {"name", "type", "argname", "argtype"}, {"arg", "stmt"}, {StxLOpt::HAVE_TYPE}
     };
     allowed_code_confs["code:fncall"] = {
-        {"name"}, {"arg"}, {"have_args"}
+        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS}
     };
     allowed_code_confs["code:tailcall"] = {
-        {"name"}, {"arg"}, {"have_args"}
+        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS}
     };
     allowed_code_confs["code:recursive_functions"] = {
         {"fndecl", "fndef"}, {"fn"}, {}
     };
     allowed_code_confs["code:fingerprint"] = {
-        {"version", "date"}, {}, {"have_version", "have_date"}
+        {"version", "date"}, {}, {}
     };
     allowed_code_confs["code:line_info"] = {
         {"line", "file"}, {}, {}
@@ -140,28 +139,19 @@ Stx::Stx(OutAllocator& alc)
         {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
     };
 
-#define STX_COND(name, selector) allowed_conds[name] = [](const opt_t* opts) { return selector; };
-    RE2C_STX_CONDS
-#undef STX_COND
-
 #define STX_VAR(name) allowed_vars.insert(name);
     RE2C_STX_VARS
 #undef STX_VAR
 }
 
-Ret Stx::check_cond(const char* conf, const char* cond, bool code) const {
-    // is this a global conditional?
-    if (allowed_conds.find(cond) != allowed_conds.end()) return Ret::OK;
+// is this a known configuration-specific conditional?
+Ret Stx::check_cond(const char* conf, StxLOpt opt) const {
+    auto i = allowed_code_confs.find(conf);
+    CHECK(i != allowed_code_confs.end());
+    const std::vector<StxLOpt>& conds = i->second.cond_vars;
+    if (std::find(conds.begin(), conds.end(), opt) != conds.end()) return Ret::OK;
 
-    if (code) {
-        // is this a known configuration-specific conditional?
-        auto i = allowed_code_confs.find(conf);
-        CHECK(i != allowed_code_confs.end());
-        const std::vector<std::string>& conds = i->second.cond_vars;
-        if (std::find(conds.begin(), conds.end(), cond) != conds.end()) return Ret::OK;
-    }
-
-    RET_FAIL(error("unknown conditional '%s' in configuration '%s'", cond, conf));
+    RET_FAIL(error("unknown conditional in configuration '%s'", conf));
 }
 
 Ret Stx::check_var(const char* conf, const char* var) const {
@@ -258,8 +248,9 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
                         stack.push_back({y, 0});
                     }
                 }
-            } else { // check conditional name and return
-                CHECK_RET(check_cond(conf->name, x->cond.conf, /*code*/ true));
+            } else if (x->cond.opt->is_local) {
+                // no need to check global conditionals, as they are filtered in the lexer
+                CHECK_RET(check_cond(conf->name, x->cond.opt->lopt));
             }
             break;
         case StxCodeType::LIST:
@@ -353,12 +344,41 @@ void Stx::push_list_on_stack(const StxCode* x) const {
     stack_code.push_back({x, 0});
 }
 
-bool Stx::eval_cond(const char* cond, const opt_t* opts, RenderCallback* callback) const {
-    auto i = allowed_conds.find(cond);
-    if (i != allowed_conds.end()) {
-        return i->second(opts);
-    } else if (callback != nullptr) {
-        return callback->eval_cond(cond);
+static bool eval_cond(const StxOpt* cond, const opt_t* opts, RenderCallback* callback) {
+    if (cond->is_local) {
+        DCHECK(callback != nullptr);
+        return callback->eval_cond(cond->lopt);
+    } else {
+        switch (cond->gopt) {
+        case StxGOpt::API_DEFAULT:
+            return opts->api == Api::DEFAULT;
+        case StxGOpt::API_CUSTOM:
+            return opts->api == Api::CUSTOM;
+        case StxGOpt::API_STYLE_FUNCTIONS:
+            return opts->api_style == ApiStyle::FUNCTIONS;
+        case StxGOpt::API_STYLE_FREEFORM:
+            return opts->api_style == ApiStyle::FREEFORM;
+        case StxGOpt::CODE_MODEL_GOTO_LABEL:
+            return opts->code_model == CodeModel::GOTO_LABEL;
+        case StxGOpt::CODE_MODEL_LOOP_SWITCH:
+            return opts->code_model == CodeModel::LOOP_SWITCH;
+        case StxGOpt::CODE_MODEL_REC_FUNC:
+            return opts->code_model == CodeModel::REC_FUNC;
+        case StxGOpt::START_CONDITIONS:
+            return opts->start_conditions;
+        case StxGOpt::STORABLE_STATE:
+            return opts->storable_state;
+        case StxGOpt::DATE:
+            return opts->date;
+        case StxGOpt::VER:
+            return opts->version;
+        case StxGOpt::CASE_RANGES:
+            return opts->case_ranges;
+        case StxGOpt::UNSAFE:
+            return opts->unsafe;
+        case StxGOpt::LOOP_LABEL:
+            return !opts->label_loop.empty();
+        }
     }
     UNREACHABLE();
     return false;
@@ -395,7 +415,7 @@ void Stx::eval_code_conf(
             callback.render_var(x->var);
             break;
         case StxCodeType::COND:
-            if (eval_cond(x->cond.conf, opts, &callback)) {
+            if (eval_cond(x->cond.opt, opts, &callback)) {
                 push_list_on_stack(x->cond.then_code->head);
             } else if (x->cond.else_code != nullptr) {
                 push_list_on_stack(x->cond.else_code->head);
