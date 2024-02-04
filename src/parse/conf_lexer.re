@@ -80,9 +80,11 @@ Ret Input::lex_conf(Opt& opts) {
     // header filename in configuration is relative to the output file directory
     "header" | "flags:type-header" | "flags:t" {
         CHECK_RET(lex_conf_string());
-        std::string path(opts.glob.output_file);
-        get_dir(path);
-        opts.set_header_file(path + tmp_str);
+        if (!tmp_str.empty()) {
+            std::string path(opts.glob.output_file);
+            get_dir(path);
+            opts.set_header_file(path + tmp_str);
+        }
         return Ret::OK;
     }
 
