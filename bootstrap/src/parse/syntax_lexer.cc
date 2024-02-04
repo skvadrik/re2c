@@ -164,7 +164,7 @@ yy5:
 yy6:
 	++cur;
 #line 74 "../src/parse/syntax_lexer.re"
-	{ goto str; }
+	{ tmp_str.clear(); goto str; }
 #line 169 "src/parse/syntax_lexer.cc"
 yy7:
 	++cur;

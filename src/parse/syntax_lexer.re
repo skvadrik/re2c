@@ -71,7 +71,7 @@ start:
         }
         RET_FAIL(error_at_tok("configuration value overflow"));
     }
-    ["] { goto str; }
+    ["] { tmp_str.clear(); goto str; }
     [(] space* { goto opt; }
     [?:;,){}[\]] { RET_TOK(cur[-1]); }
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }

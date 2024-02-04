@@ -439,14 +439,19 @@ Ret Opt::merge(const opt_t* opts, Input& input) {
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
-void Opt::set_##name(const type &arg) \
-{ \
+void Opt::init_##name(const type &arg) { \
+    if (is_default.name) { \
+        user.name = arg; \
+        const_cast<mutopt_t&>(defaults).name = arg; \
+    } \
+    diverge = true; \
+} \
+void Opt::set_##name(const type &arg) { \
     user.name = arg; \
     is_default.name = false; \
     diverge = true; \
 } \
-void Opt::reset_##name() \
-{ \
+void Opt::reset_##name() { \
     user.name = defaults.name; \
     is_default.name = true; \
     diverge = true; \
@@ -455,6 +460,17 @@ RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
 
+void Opt::init_encoding(Enc::Type type, bool on) {
+    if (is_default.encoding) {
+        if (on) {
+            user.encoding.set(type);
+        } else {
+            user.encoding.unset(type);
+        }
+    }
+    diverge = true;
+}
+
 void Opt::set_encoding(Enc::Type type, bool on) {
     if (on) {
         user.encoding.set(type);
@@ -462,6 +478,13 @@ void Opt::set_encoding(Enc::Type type, bool on) {
         user.encoding.unset(type);
     }
     is_default.encoding = false;
+    diverge = true;
+}
+
+void Opt::init_encoding_policy(Enc::Policy p) {
+    if (is_default.encoding) {
+        user.encoding.set_policy(p);
+    }
     diverge = true;
 }
 

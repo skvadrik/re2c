@@ -378,11 +378,14 @@ struct Opt {
 
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
+    void init_##name(const type &arg); \
     void set_##name(const type &arg); \
     void reset_##name();
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+    void init_encoding(Enc::Type type, bool on);
+    void init_encoding_policy(Enc::Policy p);
     void set_encoding(Enc::Type type, bool on);
     void set_encoding_policy(Enc::Policy p);
 

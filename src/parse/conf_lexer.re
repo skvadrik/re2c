@@ -17,34 +17,47 @@ namespace re2c {
 
 #define YYFILL(n) if (!fill(n)) RET_FAIL(error_at_cur("unexpected end of input in configuration"))
 
+// In syntax file mode do not overwrite user-defined options.
+#define SETOPT(opt, val) do { \
+    if (in_syntax_file) { \
+        opts.init_##opt(val); \
+    } else { \
+        opts.set_##opt(val); \
+    } \
+} while (0)
+
 #define RET_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool()); \
-    opts.set_##conf(tmp_num != 0); \
+    SETOPT(conf, tmp_num != 0); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_STR(conf) do { \
     CHECK_RET(lex_conf_string()); \
-    opts.set_##conf(tmp_str); \
+    SETOPT(conf, tmp_str); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_ENC(enc) do { \
     CHECK_RET(lex_conf_bool()); \
-    opts.set_encoding(enc, tmp_num != 0); \
+    if (in_syntax_file) { \
+        opts.init_encoding(enc, tmp_num != 0); \
+    } else { \
+        opts.set_encoding(enc, tmp_num != 0); \
+    } \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_NUM_NONNEG(conf) do { \
     CHECK_RET(lex_conf_number()); \
     if (tmp_num < 0) RET_FAIL(error_at_cur("expected nonnegative value in configuration")); \
-    opts.set_##conf(static_cast<uint32_t>(tmp_num)); \
+    SETOPT(conf, static_cast<uint32_t>(tmp_num)); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_EOF(conf) do { \
     CHECK_RET(lex_conf_number()); \
-    opts.set_##conf(tmp_num < 0 ? NOEOF : static_cast<uint32_t>(tmp_num)); \
+    SETOPT(conf, tmp_num < 0 ? NOEOF : static_cast<uint32_t>(tmp_num)); \
     return Ret::OK; \
 } while(0)
 
@@ -83,7 +96,7 @@ Ret Input::lex_conf(Opt& opts) {
         if (!tmp_str.empty()) {
             std::string path(opts.glob.output_file);
             get_dir(path);
-            opts.set_header_file(path + tmp_str);
+            SETOPT(header_file, path + tmp_str);
         }
         return Ret::OK;
     }
@@ -99,8 +112,8 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "leftmost-captures" { RET_CONF_BOOL(tags_posix_syntax); }
     "flags:"? "posix-captures" | "flags:P" {
         CHECK_RET(lex_conf_bool());
-        opts.set_tags_posix_syntax(tmp_num != 0);
-        opts.set_tags_posix_semantics(tmp_num != 0);
+        SETOPT(tags_posix_syntax, tmp_num != 0);
+        SETOPT(tags_posix_semantics, tmp_num != 0);
         return Ret::OK;
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
@@ -151,7 +164,7 @@ Ret Input::lex_conf(Opt& opts) {
                 " element is function name, second element is return type, and the remaining 2*N"
                 " elements are type and name of each argument (if any)"));
         }
-        opts.set_api_function(tmp_list);
+        SETOPT(api_function, tmp_list);
         return Ret::OK;
     }
 
@@ -219,9 +232,9 @@ Ret Input::lex_conf_encoding_policy(Opt& opts) {
         RET_FAIL(error_at_cur(
                 "bad configuration value (expected: 'ignore', 'substitute', 'fail')"));
     }
-    "ignore"     { opts.set_encoding_policy(Enc::Policy::IGNORE);     goto end; }
-    "substitute" { opts.set_encoding_policy(Enc::Policy::SUBSTITUTE); goto end; }
-    "fail"       { opts.set_encoding_policy(Enc::Policy::FAIL);       goto end; }
+    "ignore"     { SETOPT(encoding_policy, Enc::Policy::IGNORE);     goto end; }
+    "substitute" { SETOPT(encoding_policy, Enc::Policy::SUBSTITUTE); goto end; }
+    "fail"       { SETOPT(encoding_policy, Enc::Policy::FAIL);       goto end; }
 */
 end:
     return lex_conf_semicolon();
@@ -233,8 +246,8 @@ Ret Input::lex_conf_input(Opt& opts) {
     * {
         RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom')"));
     }
-    "default" { opts.set_api(Api::DEFAULT); goto end; }
-    "custom"  { opts.set_api(Api::CUSTOM);  goto end; }
+    "default" { SETOPT(api, Api::DEFAULT); goto end; }
+    "custom"  { SETOPT(api, Api::CUSTOM);  goto end; }
 */
 end:
     return lex_conf_semicolon();
@@ -247,9 +260,9 @@ Ret Input::lex_conf_empty_class(Opt& opts) {
         RET_FAIL(error_at_cur(
                 "bad configuration value (expected: 'match-empty', 'match-none', 'error')"));
     }
-    "match-empty" { opts.set_empty_class(EmptyClass::MATCH_EMPTY); goto end; }
-    "match-none"  { opts.set_empty_class(EmptyClass::MATCH_NONE);  goto end; }
-    "error"       { opts.set_empty_class(EmptyClass::ERROR);       goto end; }
+    "match-empty" { SETOPT(empty_class, EmptyClass::MATCH_EMPTY); goto end; }
+    "match-none"  { SETOPT(empty_class, EmptyClass::MATCH_NONE);  goto end; }
+    "error"       { SETOPT(empty_class, EmptyClass::ERROR);       goto end; }
 */
 end:
     return lex_conf_semicolon();
@@ -261,8 +274,8 @@ Ret Input::lex_conf_api_style(Opt& opts) {
     * {
         RET_FAIL(error_at_cur("bad configuration value (expected: 'functions', 'free-form')"));
     }
-    "functions" { opts.set_api_style(ApiStyle::FUNCTIONS); goto end; }
-    "free-form" { opts.set_api_style(ApiStyle::FREEFORM);  goto end; }
+    "functions" { SETOPT(api_style, ApiStyle::FUNCTIONS); goto end; }
+    "free-form" { SETOPT(api_style, ApiStyle::FREEFORM);  goto end; }
 */
 end:
     return lex_conf_semicolon();
