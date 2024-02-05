@@ -46,10 +46,10 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     globopts.set_flex_syntax(true);
     globopts.set_nested_negative_tags(!(cflags & (REG_NFA | REG_MULTIPASS)));
 
-    opts.set_tags_history((cflags & REG_SUBHIST) != 0);
-    opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);
-    opts.set_tags_posix_syntax(true);
-    opts.set_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
+    opts.init_tags_history((cflags & REG_SUBHIST) != 0);
+    opts.init_tags_automatic((cflags & REG_AUTOTAGS) != 0);
+    opts.init_tags_posix_syntax(true);
+    opts.init_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
 
     CHECK_RET(opts.fix_global_and_defaults());
 

@@ -5,7 +5,6 @@ target = [code, dot];
 
 computed_goto = unsupported;
 case_ranges = unsupported;
-constants = upper_case;
 yyctype_literals = hex;
 semicolons = yes;
 abort_in_default_case = yes;
@@ -13,8 +12,8 @@ implicit_bool_conversion = no;
 backtick_quoted_strings = no;
 standalone_single_quotes = yes;
 
-conf:api = default;
-conf:api:style = functions;
+conf:api = custom;
+conf:api:style = free-form;
 conf:api:sigil = "@@";
 conf:header = "";
 conf:eof = -1;
@@ -75,10 +74,10 @@ conf:variable:yybm = "yybm";
 conf:variable:yybm:hex = 0;
 conf:variable:yystable = ""; // deprecated
 conf:cond:prefix = "yyc_";
-conf:cond:enumprefix = "yyc";
+conf:cond:enumprefix = "YYC_";
 conf:cond:divider = "/* *********************************** */";
 conf:cond:divider@cond = "@@";
-conf:cond:goto = "goto @@;";
+conf:cond:goto = "";
 conf:cond:goto@cond = "@@";
 conf:state:abort = 0;
 conf:state:nextlabel = 0;
@@ -102,7 +101,7 @@ conf:indent:string = "\t";
 conf:indent:top = 0;
 conf:label:prefix = "yy";
 conf:label:yyfill = "yyFillLabel";
-conf:label:yyloop = "";
+conf:label:yyloop = "'yyl"; // In Rust `continue` statements have labels, use it to avoid ambiguity.
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
@@ -152,9 +151,6 @@ code:loop =
     topindent (loop_label? label ": ") "loop {" nl
         indent [stmt: stmt] dedent
     topindent "}" nl;
-
-// In Rust `continue` statements have labels, use it to avoid ambiguity.
-code:loop_label = "'yyl";
 
 code:enum = [elem: topindent "const " elem ": " type " = " init ";" nl];
 

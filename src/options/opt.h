@@ -89,7 +89,7 @@ class Stx;
     MUTOPT(bool, case_inverted, false) \
     MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
     /* input API */ \
-    MUTOPT(Api, api, Api::DEFAULT) \
+    MUTOPT(Api, api, Api::CUSTOM) \
     MUTOPT(ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
     MUTOPT(std::string, api_char_type, "YYCTYPE") \

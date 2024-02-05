@@ -26,7 +26,6 @@ Stx::Stx(OutAllocator& alc)
 
     allowed_word_confs["computed_goto"] = {"enabled", "optional", "unsupported"};
     allowed_word_confs["case_ranges"] = {"enabled", "optional", "unsupported"};
-    allowed_word_confs["constants"] = {"snake_case", "upper_case"};
     allowed_word_confs["yyctype_literals"] = {"char", "hex"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
     allowed_word_confs["abort_in_default_case"] = {"yes", "no"};
@@ -70,7 +69,6 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:loop"] = {
         {"label"}, {"stmt"}, {}
     };
-    allowed_code_confs["code:loop_label"] = {};
     allowed_code_confs["code:enum"] = {
         {"name", "type", "init"}, {"elem"}, {StxLOpt::HAVE_INIT}
     };

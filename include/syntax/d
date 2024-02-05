@@ -5,7 +5,6 @@ target = [code, dot];
 
 computed_goto = unsupported;
 case_ranges = optional;
-constants = snake_case;
 yyctype_literals = char;
 semicolons = yes;
 abort_in_default_case = yes;
@@ -13,8 +12,8 @@ implicit_bool_conversion = no;
 backtick_quoted_strings = no;
 standalone_single_quotes = no;
 
-conf:api = default;
-conf:api:style = functions;
+conf:api = custom;
+conf:api:style = free-form;
 conf:api:sigil = "@@";
 conf:header = "";
 conf:eof = -1;

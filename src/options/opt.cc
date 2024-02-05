@@ -61,28 +61,6 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     return Ret::OK;
 }
 
-// This should only change mutable option defaults (based on the global options / syntax file).
-LOCAL_NODISCARD(Ret fix_mutopt_defaults(mutopt_t& defaults, Stx& stx)) {
-    defaults.api = strcmp(stx.list_conf_head("api"), "default") == 0 ? Api::DEFAULT : Api::CUSTOM;
-    defaults.api_style = strcmp(stx.list_conf_head("api_style"), "functions") == 0
-            ? ApiStyle::FUNCTIONS : ApiStyle::FREEFORM;
-
-    if (strcmp(stx.eval_word_conf("constants"), "upper_case") == 0) {
-        defaults.cond_enum_prefix = "YYC_";
-    }
-    // TODO: defaults for all API names and prefixes.
-
-    CHECK_RET(stx.eval_str_conf("code:loop_label", defaults.label_loop));
-
-    const char* semi = stx.eval_bool_conf("semicolons") ? ";" : "";
-    defaults.cond_goto = "goto " + defaults.api_sigil + semi;
-
-    // Codegen assumes there are at least two elements (function name and return type).
-    defaults.api_function = {"YYFN[0]", "YYFN[1]"};
-
-    return Ret::OK;
-}
-
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
@@ -362,9 +340,6 @@ Opt::Opt(OutAllocator& alc, Msg& msg)
 Ret Opt::fix_global_and_defaults() {
     // Allow to modify only the global options.
     CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob), stx));
-
-    // Allow to modify only the mutable option defaults (based on the global options / syntax file).
-    CHECK_RET(fix_mutopt_defaults(const_cast<mutopt_t&>(defaults), stx));
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.

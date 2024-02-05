@@ -5,7 +5,6 @@ target = [code, dot, skeleton];
 
 computed_goto = optional;
 case_ranges = optional;
-constants = snake_case;
 yyctype_literals = char;
 semicolons = yes;
 abort_in_default_case = no; // `abort()` requires include

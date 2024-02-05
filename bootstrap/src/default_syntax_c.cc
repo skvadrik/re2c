@@ -6,7 +6,6 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "computed_goto = optional;\n"
     "case_ranges = optional;\n"
-    "constants = snake_case;\n"
     "yyctype_literals = char;\n"
     "semicolons = yes;\n"
     "abort_in_default_case = no; // `abort()` requires include\n"
