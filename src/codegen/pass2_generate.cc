@@ -63,6 +63,12 @@ const char* fn_name_for_cond(Scratchbuf& buf, const std::string& cond) {
     return buf.cstr("yyfn").str(cond).flush();
 }
 
+static CodeList* gen_abort(OutAllocator& alc) {
+    CodeList* abort = code_list(alc);
+    append(abort, code_abort(alc));
+    return abort;
+}
+
 static void gen_state_set(Output& output, CodeList* stmts, const char* fillidx) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -1417,11 +1423,8 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     if (opts->state_abort) {
         // case -1: goto <start label>;
         prepend(cases, code_case_number(alc, goto_start, -1));
-
         // default: abort
-        CodeList* abort = code_list(alc);
-        append(abort, code_abort(alc));
-        append(cases, code_case_default(alc, abort));
+        append(cases, code_case_default(alc, gen_abort(alc)));
     } else {
         // default: goto <start label>;
         append(cases, code_case_default(alc, goto_start));
@@ -1743,9 +1746,7 @@ static CodeList* gen_cond_goto(Output& output) {
                 append(ccases, code_case_string(alc, body, text));
             }
             if (opts->cond_abort) {
-                CodeList* abort = code_list(alc);
-                append(abort, code_abort(alc));
-                append(ccases, code_case_default(alc, abort));
+                append(ccases, code_case_default(alc, gen_abort(alc)));
             }
             text = buf.str(output_cond_get(opts)).flush();
             append(stmts, code_switch(alc, text, ccases));
@@ -1973,9 +1974,7 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
     if (opts->state_abort) {
-        CodeList* abort = code_list(alc);
-        append(abort, code_abort(alc));
-        append(cases, code_case_default(alc, abort));
+        append(cases, code_case_default(alc, gen_abort(alc)));
     }
     append(loop, code_switch(alc, opts->var_state.c_str(), cases));
     append(stmts, code_loop(alc, loop));
@@ -2038,9 +2037,7 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
     if (opts->cond_abort) {
-        CodeList* abort = code_list(alc);
-        append(abort, code_abort(alc));
-        append(cases, code_case_default(alc, abort));
+        append(cases, code_case_default(alc, gen_abort(alc)));
     }
     CodeList* body = code_list(alc);
     append(body, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
