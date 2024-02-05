@@ -179,6 +179,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"? "yybm:hex"        { RET_CONF_BOOL(bitmaps_hex); }
     "variable:"  "yystable"        { return lex_conf_string(); } // deprecated
 
+    "cond:abort"                         { RET_CONF_BOOL(cond_abort); }
     "cond:prefix" | "condprefix"         { RET_CONF_STR(cond_label_prefix); }
     "cond:enumprefix" | "condenumprefix" { RET_CONF_STR(cond_enum_prefix); }
     "cond:divider"                       { RET_CONF_STR(cond_div); }

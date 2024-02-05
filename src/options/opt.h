@@ -147,6 +147,7 @@ class Stx;
     MUTOPT(bool, char_emit, true) \
     MUTOPT(bool, char_conv, false) \
     /* conditions */ \
+    MUTOPT(bool, cond_abort, false) \
     MUTOPT(bool, cond_get_naked, false) \
     MUTOPT(std::string, cond_set_param, RE2C_SIGIL ) \
     MUTOPT(bool, cond_set_naked, false ) \

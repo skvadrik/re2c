@@ -28,7 +28,6 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["case_ranges"] = {"enabled", "optional", "unsupported"};
     allowed_word_confs["yyctype_literals"] = {"char", "hex"};
     allowed_word_confs["semicolons"] = {"yes", "no"};
-    allowed_word_confs["abort_in_default_case"] = {"yes", "no"};
     allowed_word_confs["implicit_bool_conversion"] = {"yes", "no"};
     allowed_word_confs["backtick_quoted_strings"] = {"yes", "no"};
     allowed_word_confs["standalone_single_quotes"] = {"yes", "no"};

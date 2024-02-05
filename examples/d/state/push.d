@@ -47,6 +47,7 @@ private Status lex(ref State st, uint* recv) {
     
 #line 49 "d/state/push.d"
 switch (st.state) {
+	case -1: goto yy0;
 	case 0:
 		if (st.lim <= st.cur) goto yy8;
 		goto yyFillLabel0;
@@ -56,7 +57,8 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
-	default: goto yy0;
+	default:
+		assert(false);
 }
 #line 45 "d/state/push.re"
 
@@ -64,7 +66,7 @@ switch (st.state) {
     for (;;) {
         st.tok = st.cur;
     
-#line 68 "d/state/push.d"
+#line 70 "d/state/push.d"
 yy0:
 yyFillLabel0:
 	yych = *st.cur;
@@ -83,7 +85,7 @@ yy3:
 	st.state = -1;
 #line 63 "d/state/push.re"
 	{ return Status.BAD_PACKET; }
-#line 87 "d/state/push.d"
+#line 89 "d/state/push.d"
 yy4:
 	++st.cur;
 	st.mar = st.cur;
@@ -104,7 +106,7 @@ yy5:
 	st.state = -1;
 #line 65 "d/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 108 "d/state/push.d"
+#line 110 "d/state/push.d"
 yy6:
 	++st.cur;
 yyFillLabel2:
@@ -126,7 +128,7 @@ yy8:
 	st.state = -1;
 #line 64 "d/state/push.re"
 	{ return Status.END; }
-#line 130 "d/state/push.d"
+#line 132 "d/state/push.d"
 #line 66 "d/state/push.re"
 
     }

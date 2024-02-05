@@ -121,6 +121,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
         real.fill_param = defaults.fill_param;
         real.fill_param_enable = defaults.fill_param_enable;
         real.fill_naked = defaults.fill_naked;
+        real.cond_abort = defaults.cond_abort;
         real.cond_get_naked = defaults.cond_get_naked;
         real.cond_set_param = defaults.cond_set_param;
         real.cond_set_naked = defaults.cond_set_naked;
@@ -152,6 +153,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
         real.api_cond_get = defaults.api_cond_get;
         real.api_cond_set = defaults.api_cond_set;
         real.var_cond_table = defaults.var_cond_table;
+        real.cond_abort = defaults.cond_abort;
         real.cond_get_naked = defaults.cond_get_naked;
         real.cond_set_param = defaults.cond_set_param;
         real.cond_set_naked = defaults.cond_set_naked;

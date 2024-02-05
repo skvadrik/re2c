@@ -1742,7 +1742,7 @@ static CodeList* gen_cond_goto(Output& output) {
                 text = gen_cond_enum_elem(buf, opts, cond.name);
                 append(ccases, code_case_string(alc, body, text));
             }
-            if (opts->eval_bool_conf("abort_in_default_case")) {
+            if (opts->cond_abort) {
                 CodeList* abort = code_list(alc);
                 append(abort, code_abort(alc));
                 append(ccases, code_case_default(alc, abort));
@@ -1972,7 +1972,7 @@ void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases)
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
-    if (opts->state_abort || opts->eval_bool_conf("abort_in_default_case")) {
+    if (opts->state_abort) {
         CodeList* abort = code_list(alc);
         append(abort, code_abort(alc));
         append(cases, code_case_default(alc, abort));
@@ -2036,6 +2036,11 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
         CodeList* body = code_list(alc);
         append(body, gen_tailcall(alc, opts, fn_name_for_cond(buf, cond.name)));
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
+    }
+    if (opts->cond_abort) {
+        CodeList* abort = code_list(alc);
+        append(abort, code_abort(alc));
+        append(cases, code_case_default(alc, abort));
     }
     CodeList* body = code_list(alc);
     append(body, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
