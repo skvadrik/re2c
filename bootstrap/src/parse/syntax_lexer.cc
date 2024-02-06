@@ -545,7 +545,7 @@ yy48:
 	++cur;
 yy49:
 #line 137 "../src/parse/syntax_lexer.re"
-	{ RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+	{ RET_FAIL(error_at_cur("unknown option")); }
 #line 550 "src/parse/syntax_lexer.cc"
 yy50:
 	yych = *(mar = ++cur);

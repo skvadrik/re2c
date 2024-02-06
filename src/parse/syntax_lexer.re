@@ -134,7 +134,7 @@ opt:
     "have_args"    { RET_LOPT(StxLOpt::HAVE_ARGS); }
     "multival"     { RET_LOPT(StxLOpt::MULTIVAL); }
 
-    * { RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+    * { RET_FAIL(error_at_cur("unknown option")); }
 */
 
     UNREACHABLE();

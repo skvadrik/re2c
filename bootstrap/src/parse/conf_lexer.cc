@@ -4803,7 +4803,7 @@ opt:
 	++cur;
 yy836:
 #line 416 "../src/parse/conf_lexer.re"
-	{ RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+	{ RET_FAIL(error_at_cur("unknown option")); }
 #line 4808 "src/parse/conf_lexer.cc"
 yy837:
 	yych = *(mar = ++cur);

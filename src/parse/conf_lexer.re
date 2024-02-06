@@ -413,7 +413,7 @@ opt:
     "code_model.loop_switch"         { RET_OPT(globopts->code_model == CodeModel::LOOP_SWITCH); }
     "code_model.recursive_functions" { RET_OPT(globopts->code_model == CodeModel::REC_FUNC); }
 
-    * { RET_FAIL(error_at_cur("unknown option '%.*s'", int(cur - tok), tok)); }
+    * { RET_FAIL(error_at_cur("unknown option")); }
 */
 
     UNREACHABLE();
