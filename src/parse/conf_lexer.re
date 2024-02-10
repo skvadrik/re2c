@@ -108,6 +108,8 @@ Ret Input::lex_conf(Opt& opts) {
     "yyfill:parameter" { RET_CONF_BOOL(fill_param_enable); }
     "yyfill:check"     { RET_CONF_BOOL(fill_check); }
 
+    "yyfn:sep" { RET_CONF_STR(fn_sep); }
+
     "flags:"? "tags" | "flags:T"  { RET_CONF_BOOL(tags); }
     "flags:"? "leftmost-captures" { RET_CONF_BOOL(tags_posix_syntax); }
     "flags:"? "posix-captures" | "flags:P" {
@@ -155,16 +157,12 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYSKIP"               { RET_CONF_STR(api_skip); }
     "define:YYSTAGN"              { RET_CONF_STR(api_stag_neg); }
     "define:YYSTAGP"              { RET_CONF_STR(api_stag_pos); }
-
     "define:YYFN" {
         CHECK_RET(lex_conf_list());
-        if (tmp_list.size() < 2 || tmp_list.size() % 2 != 0) {
-            RET_FAIL(error_at_tok(
-                "`re2c:define:YYFN` value should be a list of 2*(N+1) strings, where the first"
-                " element is function name, second element is return type, and the remaining 2*N"
-                " elements are type and name of each argument (if any)"));
+        if (tmp_list.size() < 1) {
+            RET_FAIL(error_at_tok("`re2c:define:YYFN` value should be a nonempty list of strings"));
         }
-        SETOPT(api_function, tmp_list);
+        SETOPT(api_fn, tmp_list);
         return Ret::OK;
     }
 

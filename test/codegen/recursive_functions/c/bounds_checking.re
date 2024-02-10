@@ -14,7 +14,7 @@ struct State {
 /*!re2c
     re2c:api:style = free-form;
     re2c:define:YYCTYPE  = char;
-    re2c:define:YYFN     = ["lex", "int", "st", "State&"];
+    re2c:define:YYFN     = ["lex;int", "st;State&"];
     re2c:define:YYCURSOR = "st.cur";
     re2c:define:YYLIMIT  = "st.lim";
     re2c:define:YYFILL   = "return -1;";

@@ -2,15 +2,14 @@
 #include <assert.h>
 
 /*!re2c
-re2c:define:YYFN = ["lex", "int", "YYCURSOR", "const char*", "count", "int"];
-re2c:define:YYCTYPE = char;
-re2c:yyfill:enable = 0;
+    re2c:define:YYFN = ["lex;int", "YYCURSOR;const char*", "count;int"];
+    re2c:define:YYCTYPE = char;
+    re2c:yyfill:enable = 0;
 
-*      { return -1; }
-[\x00] { return count; }
-[a-z]+ { return lex(YYCURSOR, ++count); }
-[ ]+   { return lex(YYCURSOR, count); }
-
+    *      { return -1; }
+    [\x00] { return count; }
+    [a-z]+ { return lex(YYCURSOR, ++count); }
+    [ ]+   { return lex(YYCURSOR, count); }
 */
 
 int main()

@@ -49,7 +49,7 @@ static Status fill(Input *in) {
 /*!re2c
     re2c:eof = 0;
     re2c:api:style = free-form;
-    re2c:define:YYFN       = ["lex", "static Status", "in", "Input*"];
+    re2c:define:YYFN       = ["lex;static Status", "in;Input*"];
     re2c:define:YYCTYPE    = "char";
     re2c:define:YYCURSOR   = "in->cur";
     re2c:define:YYMARKER   = "in->mar";

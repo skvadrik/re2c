@@ -4,7 +4,7 @@
 
 /*!re2c
     re2c:define:YYCTYPE = char;
-    re2c:define:YYFN    = ["lex", "int", "YYCURSOR", "const char*"];
+    re2c:define:YYFN    = ["lex;int", "YYCURSOR;const char*"];
     re2c:yyfill:enable  = 0;
 
     alpha = [a-zA-Z];

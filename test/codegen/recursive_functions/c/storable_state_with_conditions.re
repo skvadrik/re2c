@@ -91,7 +91,7 @@ static void mtag(struct mtag** pmt, const unsigned char* b, const unsigned char*
     re2c:tags:expression   = "c->@@";
     re2c:variable:yyaccept = "c->accept";
     re2c:define:YYCTYPE    = "unsigned char";
-    re2c:define:YYFN       = ["parse_con_req", "static enum con_status", "c", "struct con_state*"];
+    re2c:define:YYFN       = ["parse_con_req;static enum con_status", "c;struct con_state*"];
     re2c:define:YYCURSOR   = "c->cur";
     re2c:define:YYMARKER   = "c->mar";
     re2c:define:YYLIMIT    = "c->lim";

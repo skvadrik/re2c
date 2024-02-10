@@ -493,7 +493,70 @@ bool consume(const State* s) {
     return true;
 }
 
-static void codegen_analyze_block(Output& output) {
+// In rec-func mode we can precompute common YYFN parts.
+// This should be done for each block (with block-level configurations YYFN and `fn:sep`)
+// and once for the whole program (with whole-program configurations).
+//
+// This has to de done during the "analyze" pass because fallback transitions may be generated
+// during this phase (in storable states mode).
+LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, const opt_t* opts)) {
+    if (opts->code_model != CodeModel::REC_FUNC) return Ret::OK;
+
+    const size_t skip = opts->fn_sep.length();
+
+    const char* name, *type, *spec;
+    auto split = [&](const std::string& s) -> Ret {
+        size_t p1 = s.find(opts->fn_sep);
+        size_t p2 = s.find(opts->fn_sep, p1 + skip);
+
+        if (p1 == std::string::npos) {
+            RET_FAIL(error("failed to find separator '%s' in `define:YYFN` element '%s'",
+                    opts->fn_sep.c_str(), s.c_str()));
+        }
+
+        name = newcstr(s.data(), s.data() + p1, alc);
+        if (p2  == std::string::npos) {
+            type = newcstr(s.data() + p1 + skip, s.data() + s.length(), alc);
+            spec = nullptr;
+        } else {
+            type = newcstr(s.data() + p1 + skip, s.data() + p2, alc);
+            spec = newcstr(s.data() + p2 + skip, s.data() + s.length(), alc);
+        }
+
+        return Ret::OK;
+    };
+
+    CodeFnCommon* f = alc.alloct<CodeFnCommon>(1);
+
+    DCHECK(!opts->api_fn.empty());
+    CHECK_RET(split(opts->api_fn[0]));
+    f->name = name;
+    f->type = type;
+
+    f->params = code_params(alc);
+    f->params_yych = code_params(alc);
+    f->args = code_args(alc);
+    f->args_yych = code_args(alc);
+
+    for (size_t i = 1; i < opts->api_fn.size(); ++i) {
+        CHECK_RET(split(opts->api_fn[i]));
+
+        append(f->params, code_param(alc, name, type, spec));
+        append(f->params_yych, code_param(alc, name, type, spec));
+
+        append(f->args, code_arg(alc, name));
+        append(f->args_yych, code_arg(alc, name));
+    }
+
+    append(f->params_yych,
+            code_param(alc, opts->var_char.c_str(), opts->api_char_type.c_str(), nullptr));
+    append(f->args_yych, code_arg(alc, opts->var_char.c_str()));
+
+    *fn_common = f;
+    return Ret::OK;
+}
+
+LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;
@@ -501,11 +564,13 @@ static void codegen_analyze_block(Output& output) {
 
     Code* code = block.code->head;
     if (code == nullptr || code->kind != CodeKind::DFAS) {
-        return;
+        return Ret::OK;
     } else if (dfas.empty()) {
         code->kind = CodeKind::EMPTY;
-        return;
+        return Ret::OK;
     }
+
+    CHECK_RET(gen_fn_common(output.allocator, &block.fn_common, opts));
 
     const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
 
@@ -607,13 +672,17 @@ static void codegen_analyze_block(Output& output) {
             }
         }
     }
+
+    return Ret::OK;
 }
 
-void codegen_analyze(Output& output) {
+Ret codegen_analyze(Output& output) {
+    CHECK_RET(gen_fn_common(output.allocator, &output.fn_common, output.total_opts));
+
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
             output.set_current_block(b);
-            codegen_analyze_block(output);
+            CHECK_RET(codegen_analyze_block(output));
         }
     }
 
@@ -627,6 +696,7 @@ void codegen_analyze(Output& output) {
     }
 
     output.set_current_block(nullptr);
+    return Ret::OK;
 }
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).

@@ -118,6 +118,9 @@ struct OutputBlock {
     Label* start_label;          // start label of this block
     storable_states_t fill_goto; // transitions to YYFILL states
 
+    // precomputed YYFN parts with block-level options (in rec/func mode)
+    CodeFnCommon* fn_common;
+
     OutputBlock(InputBlock kind, const std::string& name, const loc_t& loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
@@ -141,8 +144,11 @@ struct Output {
     Scratchbuf scratchbuf;
     OutputBlock* current_block;
 
-    // "final" options accumulated for all non-reuse blocks
+    // whole-program options accumulated for all non-reuse blocks
     const opt_t* total_opts;
+
+    // precomputed YYFN parts with whole-program options (in rec/func mode)
+    CodeFnCommon* fn_common;
 
     Output(OutAllocator& alc, Msg& msg);
     ~Output();
@@ -178,7 +184,7 @@ std::string vartag_name(
 std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
 void gen_peek_expr(std::ostream& os, const opt_t* opts);
 
-void codegen_analyze(Output& output);
+Ret codegen_analyze(Output& output) NODISCARD;
 Ret codegen_generate(Output& output) NODISCARD;
 void codegen_fixup(Output& output);
 Ret codegen_render(Output& outptu) NODISCARD;

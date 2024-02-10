@@ -10,7 +10,7 @@ struct State {
 
 /*!re2c
     re2c:define:YYCTYPE  = char;
-    re2c:define:YYFN     = ["lex", "int", "st", "State&"];
+    re2c:define:YYFN     = ["lex;int", "st;State&"];
     re2c:define:YYCURSOR = "st.cur";
     re2c:define:YYMARKER = "st.mar";
     re2c:define:YYLIMIT  = "st.lim";

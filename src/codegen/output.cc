@@ -31,7 +31,9 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       max_fill(1),
       max_nmatch(1),
       start_label(nullptr),
-      fill_goto() {}
+      fill_goto(),
+      fn_common(nullptr)
+    {}
 
 OutputBlock::~OutputBlock() {
     delete opts;
@@ -51,11 +53,12 @@ Output::Output(OutAllocator& alc, Msg& msg)
       warn_condition_order(true),
       need_header(false),
       done_mtag_defs(false),
-
       skeletons(),
       scratchbuf(allocator),
       current_block(nullptr),
-      total_opts(nullptr) {}
+      total_opts(nullptr),
+      fn_common(nullptr)
+    {}
 
 Output::~Output() {
     for (OutputBlock* b : cblocks) delete b;

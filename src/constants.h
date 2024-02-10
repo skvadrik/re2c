@@ -162,6 +162,7 @@ enum class StxLOpt {
     HAVE_COND,
     HAVE_TYPE,
     HAVE_ARGS,
+    HAVE_ARGMODS,
     MULTIVAL
 };
 

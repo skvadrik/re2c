@@ -9,29 +9,31 @@
 
 // block x
 /*!re2c:x
-    re2c:define:YYFN = ["lex_x", "void", "x", "T"];
+    re2c:define:YYFN = ["lex_x|void", "x|T"];
+    re2c:yyfn:sep = "|";
     [x] { x }
     *   { * }
 */
 
 // block (no name)
 /*!re2c
-    re2c:define:YYFN = ["lex_y", "void", "y", "T"];
+    re2c:define:YYFN = ["lex_y|void", "y|T"];
     [y] { y }
     *   { y }
 */
 
 // block z
 /*!local:re2c:z
-    re2c:define:YYFN = ["lex_z", "void", "z", "T"];
+    re2c:define:YYFN = ["lex_z###void", "z###T"];
     re2c:state:abort = 1;
+    re2c:yyfn:sep = "###";
     <c1,c2> [z] { z }
     <*>     *   { * }
 */
 
 // block w
 /*!re2c:w
-    re2c:define:YYFN = ["lex_w", "void", "w", "T"];
+    re2c:define:YYFN = ["lex_w|void", "w|T"];
     [w] { w }
     *   { * }
 */
@@ -43,5 +45,5 @@
 /*!getstate:re2c:w:z*/
 
 /*!re2c
-    re2c:define:YYFN = ["lex", "void", "q", "T"];
+    re2c:define:YYFN = ["lex|void", "q|T"];
 */

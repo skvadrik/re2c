@@ -206,7 +206,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     ast_alc.clear(); // Release memory used for AST.
 
     // Early codegen pass that gathers whole-program information.
-    codegen_analyze(output);
+    CHECK_RET(codegen_analyze(output));
 
     // Main codegen pass that generates code.
     CHECK_RET(codegen_generate(output));

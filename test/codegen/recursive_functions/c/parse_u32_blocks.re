@@ -28,7 +28,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["lex_bin", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex_bin;uint64_t", "st;State&"];
 
     end   { return st.num; }
     [01]  { adddgt<2>(st.num, st.cur[-1] - '0'); return lex_bin(st); }
@@ -36,7 +36,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["lex_oct", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex_oct;uint64_t", "st;State&"];
 
     end   { return st.num; }
     [0-7] { adddgt<8>(st.num, st.cur[-1] - '0'); return lex_oct(st); }
@@ -44,7 +44,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["lex_dec", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex_dec;uint64_t", "st;State&"];
 
     end   { return st.num; }
     [0-9] { adddgt<10>(st.num, st.cur[-1] - '0'); return lex_dec(st); }
@@ -52,7 +52,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["lex_hex", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex_hex;uint64_t", "st;State&"];
 
     end   { return st.num; }
     [0-9] { adddgt<16>(st.num, st.cur[-1] - '0');      return lex_hex(st); }
@@ -62,7 +62,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["lex_main", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex_main;uint64_t", "st;State&"];
 
     '0b' / [01]        { return lex_bin(st); }
     "0"                { return lex_oct(st); }

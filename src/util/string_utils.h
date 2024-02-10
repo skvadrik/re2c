@@ -28,8 +28,9 @@ inline std::string getstr(const uint8_t* s, const uint8_t* e) {
     return std::string(reinterpret_cast<const char*>(s), static_cast<size_t>(e - s));
 }
 
-template<typename allocator_t>
-inline const char* newcstr(const uint8_t* s, const uint8_t* e, allocator_t& alc) {
+template<typename T, typename allocator_t>
+inline const char* newcstr(const T* s, const T* e, allocator_t& alc) {
+    static_assert(sizeof(T) == 1, "`newcstr` function only works for 1-byte types");
     const size_t n = static_cast<size_t>(e - s);
     char* p = alc.template alloct<char>(n + 1);
     memcpy(p, s, n);

@@ -24,7 +24,7 @@ template<int BASE> static void adddgt(uint64_t &u, unsigned int d)
 /*!re2c
     re2c:yyfill:enable = 0;
     re2c:api:style = free-form;
-    re2c:define:YYFN = ["lex", "uint64_t", "st", "State&"];
+    re2c:define:YYFN = ["lex;uint64_t", "st;State&"];
     re2c:define:YYCTYPE = char;
     re2c:define:YYCURSOR = st.cur;
     re2c:define:YYMARKER = st.mar;

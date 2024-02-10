@@ -1,5 +1,5 @@
-// re2c $INPUT -o $OUTPUT
+// re2c $INPUT -o $OUTPUT --recursive-functions
 
 /*!re2c
-    re2c:define:YYFN = ["name", "type", "argname1"];
+    re2c:define:YYFN = ["name"];
 */

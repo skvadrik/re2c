@@ -75,10 +75,14 @@ Stx::Stx(OutAllocator& alc)
         {"name", "type"}, {}, {}
     };
     allowed_code_confs["code:fndecl"] = {
-        {"name", "type", "argname", "argtype"}, {"arg"}, {StxLOpt::HAVE_TYPE}
+        {"name", "type", "argname", "argtype", "argmods"},
+        {"arg"},
+        {StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}
     };
     allowed_code_confs["code:fndef"] = {
-        {"name", "type", "argname", "argtype"}, {"arg", "stmt"}, {StxLOpt::HAVE_TYPE}
+        {"name", "type", "argname", "argtype", "argmods"},
+        {"arg", "stmt"},
+        {StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}
     };
     allowed_code_confs["code:fncall"] = {
         {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS}

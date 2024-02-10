@@ -567,6 +567,9 @@ class RenderFnDef : public RenderCallback {
             rctx.os << curr_arg->name;
         } else if (strcmp(var, "argtype") == 0) {
             rctx.os << curr_arg->type;
+        } else if (strcmp(var, "argmods") == 0) {
+            DCHECK(curr_arg->mods != nullptr) ;
+            rctx.os << curr_arg->mods;
         } else if (strcmp(var, "stmt") == 0) {
             render(rctx, curr_stmt);
         } else {
@@ -609,11 +612,15 @@ class RenderFnDef : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_TYPE) {
+        switch (opt) {
+        case StxLOpt::HAVE_TYPE:
             return code->type != nullptr;
+        case StxLOpt::HAVE_ARGMODS:
+            return curr_arg->mods != nullptr;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderFnDef);

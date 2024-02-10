@@ -37,6 +37,7 @@ class Msg;
 class Stx;
 
 #define RE2C_SIGIL "@@"
+#define RE2C_YYFN_SEP ";"
 
 // default backend is C
 #ifndef RE2C_LANG
@@ -119,7 +120,8 @@ class Stx;
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
     MUTOPT(std::string, api_debug, "YYDEBUG") \
-    MUTOPT(std::vector<std::string>, api_function, {}) \
+    MUTOPT(std::vector<std::string>, api_fn, \
+            {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \
     MUTOPT(std::string, var_bitmaps, "yybm") \
@@ -172,6 +174,8 @@ class Stx;
     MUTOPT(bool, tags_posix_semantics, false) \
     MUTOPT(std::string, tags_prefix, "yyt") \
     MUTOPT(bool, invert_captures, false) \
+    /* functions */ \
+    MUTOPT(std::string, fn_sep, ";") \
     /* labels */ \
     MUTOPT(std::string, label_fill, "yyFillLabel") \
     MUTOPT(std::string, label_loop, "") \

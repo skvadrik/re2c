@@ -240,6 +240,7 @@ struct CodeRaw {
 struct CodeParam {
     const char* name;
     const char* type;
+    const char* mods;
     CodeParam* next;
 };
 
@@ -255,13 +256,13 @@ using CodeArgs = list_t<CodeArg>;
 struct CodeFnDef {
     const char* name;
     const char* type;
-    CodeParams* params;
+    const CodeParams* params; // shared between different function definitions
     CodeList* body;
 };
 
 struct CodeFnCall {
     const char* name;
-    CodeArgs* args;
+    const CodeArgs* args; // shared between different function calls
     bool tailcall;
 };
 
@@ -320,6 +321,17 @@ struct Code {
 
     CodeKind kind;
     Code* next;
+};
+
+// YYFN name, type, attributes and params/args (they are common for all function definitions/calls,
+// so they can be precomputed for each block options and once for whole-program options).
+struct CodeFnCommon {
+    const char* name;
+    const char* type;
+    CodeParams* params = nullptr;
+    CodeParams* params_yych = nullptr; // same as `params`, but with `yych` at the end
+    CodeArgs* args = nullptr;
+    CodeArgs* args_yych = nullptr; // same as `args`, but with `yych` at the end
 };
 
 inline Code* new_code(OutAllocator& alc, CodeKind kind) {
@@ -545,10 +557,12 @@ inline CodeCases* code_cases(OutAllocator& alc) {
     return new_list<CodeCase>(alc);
 }
 
-inline CodeParam* code_param(OutAllocator& alc, const char* name, const char* type) {
+inline CodeParam* code_param(
+        OutAllocator& alc, const char* name, const char* type, const char* mods = nullptr) {
     CodeParam* x = alc.alloct<CodeParam>(1);
     x->name = name;
     x->type = type;
+    x->mods = mods;
     x->next = nullptr;
     return x;
 }

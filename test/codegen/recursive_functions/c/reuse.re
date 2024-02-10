@@ -22,7 +22,7 @@ struct State8 {
 };
 
 /*!use:re2c
-    re2c:define:YYFN = ["lex_utf8", "int", "st", "State8&"];
+    re2c:define:YYFN = ["lex_utf8;int", "st;State8&"];
     re2c:define:YYCTYPE = uint8_t;
     re2c:flags:8 = 1;
 */
@@ -33,7 +33,7 @@ struct State32 {
 };
 
 /*!use:re2c
-    re2c:define:YYFN = ["lex_utf32", "int", "st", "State32&"];
+    re2c:define:YYFN = ["lex_utf32;int", "st;State32&"];
     re2c:define:YYCTYPE = uint32_t;
     re2c:flags:8 = 0;
     re2c:flags:u = 1;

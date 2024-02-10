@@ -27,6 +27,8 @@
     re2c:tags:prefix = "";
     re2c:tags:expression = "";
 
+    re2c:yyfn:sep = ";";
+
     re2c:define:YYBACKUP = "";
     re2c:define:YYBACKUPCTX = "";
     re2c:define:YYCONDTYPE = "";
@@ -37,7 +39,7 @@
     re2c:define:YYFILL = "";
     re2c:define:YYFILL@len = "";
     re2c:define:YYFILL:naked = 0;
-    re2c:define:YYFN = ["name", "type"];
+    re2c:define:YYFN = ["name;type"];
     re2c:define:YYGETCONDITION = "";
     re2c:define:YYGETCONDITION:naked = 0;
     re2c:define:YYGETSTATE = "";
