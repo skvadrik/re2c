@@ -40,7 +40,7 @@ fn fill(st: &mut State) -> Status {
     }
     st.lim -= shift;
     st.cur -= shift;
-    st.mar = st.mar.overflowing_sub(free).0; // underflow ok if marker is unused
+    st.mar = st.mar.overflowing_sub(shift).0; // underflow ok if marker is unused
     st.tok -= shift;
 
     // Fill free space at the end of buffer with new data.

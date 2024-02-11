@@ -161,7 +161,7 @@ code:fndef =
     topindent "fn " name "("
         [arg{0:-2}: (have_argmods? argmods " ") argname ": " argtype ", "]
         [arg{-1}:   (have_argmods? argmods " ") argname ": " argtype]
-    ") ->" (have_type ? " " type) " {" nl
+    ")" (have_type ? " -> " type) " {" nl
         indent [stmt: stmt] dedent
     "}" nl;
 
