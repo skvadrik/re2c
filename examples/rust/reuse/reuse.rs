@@ -34,7 +34,7 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return None; }
+			2 => { return None; },
 			3 => {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -153,7 +153,7 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 					}
 				}
 			}
-			12 => { return Some(cur); }
+			12 => { return Some(cur); },
 			_ => {
 				panic!("internal lexer error");
 			}
@@ -183,7 +183,7 @@ fn lex_utf32(str: &[u32]) -> Option<usize> {
 				yystate = 1;
 				continue 'yyl;
 			}
-			1 => { return None; }
+			1 => { return None; },
 			2 => {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};

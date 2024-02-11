@@ -510,12 +510,12 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			1 => { input.eof = true; return Ok(None); }
+			1 => { input.eof = true; return Ok(None); },
 			2 => {
 				yystate = 3;
 				continue 'yyl;
 			}
-			3 => { return input.error("bad character") }
+			3 => { return input.error("bad character") },
 			4 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -532,8 +532,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			5 => { return input.token(TName::Whitespace) }
-			6 => { return input.token(TName::Newline) }
+			5 => { return input.token(TName::Whitespace) },
+			6 => { return input.token(TName::Newline) },
 			7 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -548,7 +548,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			8 => { return input.token(TName::LNot) }
+			8 => { return input.token(TName::LNot) },
 			9 => {
 				yyaccept = 0;
 				input.marker = input.cursor;
@@ -610,7 +610,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 			}
 			10 => {
         return input.error("unterminated string")
-    }
+    },
 			11 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -625,7 +625,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			12 => { return input.token(TName::Mod) }
+			12 => { return input.token(TName::Mod) },
 			13 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -645,7 +645,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			14 => { return input.token(TName::Amper) }
+			14 => { return input.token(TName::Amper) },
 			15 => {
 				yyaccept = 1;
 				input.marker = input.cursor;
@@ -664,8 +664,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			16 => { return input.token(TName::OParen) }
-			17 => { return input.token(TName::CParen) }
+			16 => { return input.token(TName::OParen) },
+			17 => { return input.token(TName::CParen) },
 			18 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -680,7 +680,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			19 => { return input.token(TName::Aster) }
+			19 => { return input.token(TName::Aster) },
 			20 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -700,8 +700,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			21 => { return input.token(TName::Add) }
-			22 => { return input.token(TName::Comma) }
+			21 => { return input.token(TName::Add) },
+			22 => { return input.token(TName::Comma) },
 			23 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -726,7 +726,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			24 => { return input.token(TName::Sub) }
+			24 => { return input.token(TName::Sub) },
 			25 => {
 				yyaccept = 2;
 				input.marker = input.cursor;
@@ -748,7 +748,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			26 => { return input.token(TName::Dot) }
+			26 => { return input.token(TName::Dot) },
 			27 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -773,7 +773,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			28 => { return input.token(TName::Div) }
+			28 => { return input.token(TName::Div) },
 			29 => {
 				yyaccept = 3;
 				input.marker = input.cursor;
@@ -791,7 +791,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			30 => { return input.token(TName::IntConst) }
+			30 => { return input.token(TName::IntConst) },
 			31 => {
 				yyaccept = 4;
 				input.marker = input.cursor;
@@ -835,9 +835,9 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			32 => { return input.token(TName::IntConst) }
-			33 => { return input.token(TName::Colon) }
-			34 => { return input.token(TName::Semi) }
+			32 => { return input.token(TName::IntConst) },
+			33 => { return input.token(TName::Colon) },
+			34 => { return input.token(TName::Semi) },
 			35 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -857,7 +857,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			36 => { return input.token(TName::LT) }
+			36 => { return input.token(TName::LT) },
 			37 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -872,7 +872,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			38 => { return input.token(TName::Asgn) }
+			38 => { return input.token(TName::Asgn) },
 			39 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -892,8 +892,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			40 => { return input.token(TName::GT) }
-			41 => { return input.token(TName::Ques) }
+			40 => { return input.token(TName::GT) },
+			41 => { return input.token(TName::Ques) },
 			42 => {
 				yych = input.data[input.cursor];
 				yystate = 43;
@@ -915,7 +915,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			44 => { return input.check_type() }
+			44 => { return input.check_type() },
 			45 => {
 				yyaccept = 5;
 				input.marker = input.cursor;
@@ -937,8 +937,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			46 => { return input.token(TName::OBrack) }
-			47 => { return input.token(TName::CBrack) }
+			46 => { return input.token(TName::OBrack) },
+			47 => { return input.token(TName::CBrack) },
 			48 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -953,7 +953,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			49 => { return input.token(TName::BXor) }
+			49 => { return input.token(TName::BXor) },
 			50 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -1280,7 +1280,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			66 => { return input.token(TName::OBrace) }
+			66 => { return input.token(TName::OBrace) },
 			67 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -1300,10 +1300,10 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			68 => { return input.token(TName::BOr) }
-			69 => { return input.token(TName::CBrace) }
-			70 => { return input.token(TName::BNot) }
-			71 => { return input.token(TName::NEq) }
+			68 => { return input.token(TName::BOr) },
+			69 => { return input.token(TName::CBrace) },
+			70 => { return input.token(TName::BNot) },
+			71 => { return input.token(TName::NEq) },
 			72 => {
 				yyaccept = 6;
 				input.marker = input.cursor;
@@ -1339,7 +1339,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 			}
 			73 => {
         return input.token(TName::StringLiteral)
-    }
+    },
 			74 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -1514,9 +1514,9 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			82 => { return input.token(TName::ModAsgn) }
-			83 => { return input.token(TName::LAnd) }
-			84 => { return input.token(TName::BAndAsgn) }
+			82 => { return input.token(TName::ModAsgn) },
+			83 => { return input.token(TName::LAnd) },
+			84 => { return input.token(TName::BAndAsgn) },
 			85 => {
 				yyaccept = 7;
 				input.marker = input.cursor;
@@ -1582,7 +1582,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 			}
 			87 => {
         return input.error("unterminated character constant")
-    }
+    },
 			88 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -1696,12 +1696,12 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			95 => { return input.token(TName::MulAsgn) }
-			96 => { return input.token(TName::Incr) }
-			97 => { return input.token(TName::AddAsgn) }
-			98 => { return input.token(TName::Decr) }
-			99 => { return input.token(TName::SubAsgn) }
-			100 => { return input.token(TName::Arrow) }
+			95 => { return input.token(TName::MulAsgn) },
+			96 => { return input.token(TName::Incr) },
+			97 => { return input.token(TName::AddAsgn) },
+			98 => { return input.token(TName::Decr) },
+			99 => { return input.token(TName::SubAsgn) },
+			100 => { return input.token(TName::Arrow) },
 			101 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -1746,7 +1746,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			103 => { return input.token(TName::FloatConst) }
+			103 => { return input.token(TName::FloatConst) },
 			104 => {
 				yyaccept = 9;
 				input.marker = input.cursor;
@@ -1801,7 +1801,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 			}
 			105 => {
         return input.error("unterminated comment")
-    }
+    },
 			106 => {
 				yyaccept = 10;
 				input.marker = input.cursor;
@@ -1849,8 +1849,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			107 => { return input.token(TName::Comment) }
-			108 => { return input.token(TName::DivAsgn) }
+			107 => { return input.token(TName::Comment) },
+			108 => { return input.token(TName::DivAsgn) },
 			109 => {
 				yyaccept = 11;
 				input.marker = input.cursor;
@@ -1881,7 +1881,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			110 => { return input.token(TName::FloatConst) }
+			110 => { return input.token(TName::FloatConst) },
 			111 => {
 				yyaccept = 3;
 				input.marker = input.cursor;
@@ -2132,10 +2132,10 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			123 => { return input.token(TName::LShift) }
-			124 => { return input.token(TName::LE) }
-			125 => { return input.token(TName::Eq) }
-			126 => { return input.token(TName::GE) }
+			123 => { return input.token(TName::LShift) },
+			124 => { return input.token(TName::LE) },
+			125 => { return input.token(TName::Eq) },
+			126 => { return input.token(TName::GE) },
 			127 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2150,7 +2150,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			128 => { return input.token(TName::RShift) }
+			128 => { return input.token(TName::RShift) },
 			129 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2167,7 +2167,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			130 => { return input.token(TName::BXorAsgn) }
+			130 => { return input.token(TName::BXorAsgn) },
 			131 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2392,7 +2392,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			146 => { return input.token(TName::Do) }
+			146 => { return input.token(TName::Do) },
 			147 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2494,7 +2494,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			154 => { return input.token(TName::If) }
+			154 => { return input.token(TName::If) },
 			155 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2698,8 +2698,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			167 => { return input.token(TName::BOrAsgn) }
-			168 => { return input.token(TName::LOr) }
+			167 => { return input.token(TName::BOrAsgn) },
+			168 => { return input.token(TName::LOr) },
 			169 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2806,7 +2806,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			173 => { return input.token(TName::IntConst) }
+			173 => { return input.token(TName::IntConst) },
 			174 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -2823,7 +2823,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			175 => { return input.token(TName::Ellipsis) }
+			175 => { return input.token(TName::Ellipsis) },
 			176 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -3132,7 +3132,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			195 => { return input.token(TName::FloatConst) }
+			195 => { return input.token(TName::FloatConst) },
 			196 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -3239,7 +3239,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			202 => { return input.token(TName::IntConst) }
+			202 => { return input.token(TName::IntConst) },
 			203 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -3287,8 +3287,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			207 => { return input.token(TName::LSAsgn) }
-			208 => { return input.token(TName::RSAsgn) }
+			207 => { return input.token(TName::LSAsgn) },
+			208 => { return input.token(TName::RSAsgn) },
 			209 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -3591,7 +3591,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			230 => { return input.token(TName::For) }
+			230 => { return input.token(TName::For) },
 			231 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -3637,7 +3637,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			234 => { return input.token(TName::Int) }
+			234 => { return input.token(TName::Int) },
 			235 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4075,7 +4075,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 			}
 			262 => {
         return input.token(TName::Comment)
-    }
+    },
 			263 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4379,7 +4379,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			283 => { return input.token(TName::Auto) }
+			283 => { return input.token(TName::Auto) },
 			284 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4411,7 +4411,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			286 => { return input.token(TName::Case) }
+			286 => { return input.token(TName::Case) },
 			287 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4429,7 +4429,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			288 => { return input.token(TName::Char) }
+			288 => { return input.token(TName::Char) },
 			289 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4503,7 +4503,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			294 => { return input.token(TName::Else) }
+			294 => { return input.token(TName::Else) },
 			295 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4521,7 +4521,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			296 => { return input.token(TName::Enum) }
+			296 => { return input.token(TName::Enum) },
 			297 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4567,7 +4567,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			300 => { return input.token(TName::Goto) }
+			300 => { return input.token(TName::Goto) },
 			301 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4599,7 +4599,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			303 => { return input.token(TName::Long) }
+			303 => { return input.token(TName::Long) },
 			304 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4785,7 +4785,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			317 => { return input.token(TName::Void) }
+			317 => { return input.token(TName::Void) },
 			318 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -4977,7 +4977,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			328 => { return input.token(TName::FloatConst) }
+			328 => { return input.token(TName::FloatConst) },
 			329 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5051,7 +5051,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			334 => { return input.token(TName::Bool) }
+			334 => { return input.token(TName::Bool) },
 			335 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5153,7 +5153,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			342 => { return input.token(TName::Break) }
+			342 => { return input.token(TName::Break) },
 			343 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5171,7 +5171,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			344 => { return input.token(TName::Const) }
+			344 => { return input.token(TName::Const) },
 			345 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5245,7 +5245,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			350 => { return input.token(TName::Float) }
+			350 => { return input.token(TName::Float) },
 			351 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5319,7 +5319,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			356 => { return input.token(TName::Short) }
+			356 => { return input.token(TName::Short) },
 			357 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5421,7 +5421,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			364 => { return input.token(TName::Union) }
+			364 => { return input.token(TName::Union) },
 			365 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5467,7 +5467,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			368 => { return input.token(TName::While) }
+			368 => { return input.token(TName::While) },
 			369 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5504,7 +5504,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			371 => { return input.token(TName::FloatConst) }
+			371 => { return input.token(TName::FloatConst) },
 			372 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5541,7 +5541,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			374 => { return input.token(TName::FloatConst) }
+			374 => { return input.token(TName::FloatConst) },
 			375 => {
 				yystate = 328;
 				continue 'yyl;
@@ -5708,7 +5708,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			387 => { return input.token(TName::Double) }
+			387 => { return input.token(TName::Double) },
 			388 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5726,7 +5726,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			389 => { return input.token(TName::Extern) }
+			389 => { return input.token(TName::Extern) },
 			390 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5744,7 +5744,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			391 => { return input.token(TName::Inline) }
+			391 => { return input.token(TName::Inline) },
 			392 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5790,7 +5790,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			395 => { return input.token(TName::Return) }
+			395 => { return input.token(TName::Return) },
 			396 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5808,7 +5808,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			397 => { return input.token(TName::Signed) }
+			397 => { return input.token(TName::Signed) },
 			398 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5826,7 +5826,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			399 => { return input.token(TName::Sizeof) }
+			399 => { return input.token(TName::Sizeof) },
 			400 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5844,7 +5844,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			401 => { return input.token(TName::Static) }
+			401 => { return input.token(TName::Static) },
 			402 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5862,7 +5862,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			403 => { return input.token(TName::Struct) }
+			403 => { return input.token(TName::Struct) },
 			404 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5880,7 +5880,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			405 => { return input.token(TName::Switch) }
+			405 => { return input.token(TName::Switch) },
 			406 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -5976,7 +5976,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			414 => { return input.token(TName::Atomic) }
+			414 => { return input.token(TName::Atomic) },
 			415 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6092,7 +6092,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			423 => { return input.token(TName::Default) }
+			423 => { return input.token(TName::Default) },
 			424 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6138,7 +6138,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			427 => { return input.token(TName::Typedef) }
+			427 => { return input.token(TName::Typedef) },
 			428 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6184,7 +6184,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			431 => { return input.token(TName::Alignas) }
+			431 => { return input.token(TName::Alignas) },
 			432 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6202,7 +6202,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			433 => { return input.token(TName::Alignof) }
+			433 => { return input.token(TName::Alignof) },
 			434 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6220,7 +6220,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			435 => { return input.token(TName::Complex) }
+			435 => { return input.token(TName::Complex) },
 			436 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6238,7 +6238,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			437 => { return input.token(TName::Generic) }
+			437 => { return input.token(TName::Generic) },
 			438 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6312,7 +6312,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			443 => { return input.token(TName::Continue) }
+			443 => { return input.token(TName::Continue) },
 			444 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6330,7 +6330,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			445 => { return input.token(TName::Register) }
+			445 => { return input.token(TName::Register) },
 			446 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6348,7 +6348,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			447 => { return input.token(TName::Restrict) }
+			447 => { return input.token(TName::Restrict) },
 			448 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6366,7 +6366,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			449 => { return input.token(TName::Unsigned) }
+			449 => { return input.token(TName::Unsigned) },
 			450 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6384,7 +6384,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			451 => { return input.token(TName::Volatile) }
+			451 => { return input.token(TName::Volatile) },
 			452 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6416,7 +6416,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			454 => { return input.token(TName::Noreturn) }
+			454 => { return input.token(TName::Noreturn) },
 			455 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6462,7 +6462,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			458 => { return input.token(TName::Imaginary) }
+			458 => { return input.token(TName::Imaginary) },
 			459 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6578,7 +6578,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			467 => { return input.token(TName::ThreadLocal) }
+			467 => { return input.token(TName::ThreadLocal) },
 			468 => {
 				yych = input.data[input.cursor];
 				match yych {
@@ -6596,7 +6596,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 					}
 				}
 			}
-			469 => { return input.token(TName::StaticAssert) }
+			469 => { return input.token(TName::StaticAssert) },
 			_ => {
 				panic!("internal lexer error");
 			}

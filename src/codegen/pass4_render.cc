@@ -22,6 +22,13 @@ static bool oneline_stmt_list(const CodeList* list) {
                     || head->kind == CodeKind::FNCALL);
 }
 
+static void render_nl(RenderContext& rctx) {
+    if (!rctx.oneline_mode) {
+        rctx.os << std::endl;
+        ++rctx.line;
+    }
+}
+
 template<typename Elem>
 static inline void find_list_bounds(
         const Elem* head, size_t lbound, size_t rbound, const Elem** curr, const Elem** last) {
@@ -37,8 +44,7 @@ static inline void find_list_bounds(
 
 static void render_global_var(RenderContext& rctx, const char* var) {
     if (strcmp(var, "nl") == 0) {
-        rctx.os << std::endl;
-        ++rctx.line;
+        render_nl(rctx);
     } else if (strcmp(var, "topindent") == 0) {
         rctx.os << indent(rctx.ind, rctx.opts->indent_str);
     } else if (strcmp(var, "indent") == 0) {
@@ -73,15 +79,22 @@ static uint32_t count_lines_text(const char* text) {
 
 static inline void render_stmt_end(RenderContext& rctx, bool semi) {
     if (semi && rctx.opts->eval_bool_conf("semicolons")) rctx.os << ";";
-    rctx.os << std::endl;
-    ++rctx.line;
+    render_nl(rctx);
 }
 
 static void render_maybe_oneline(RenderContext& rctx, const Code* code, bool oneline) {
-    uint32_t ind = rctx.ind; // backup indent
+    // backup mode and indent
+    bool mode = rctx.oneline_mode;
+    uint32_t ind = rctx.ind;
+
+    rctx.oneline_mode = oneline;
     rctx.ind = oneline ? 0 : rctx.ind;
+
     render(rctx, code);
-    rctx.ind = ind; // restore indent
+
+    // restore mode and indent
+    rctx.oneline_mode = mode;
+    rctx.ind = ind;
 }
 
 static void render_list(RenderContext& rctx, const CodeList* code) {
@@ -1089,8 +1102,9 @@ static void render(RenderContext& rctx, const Code* code) {
         render_stmt_end(rctx, true);
         break;
     case CodeKind::TEXT:
-        os << indent(ind, opts->indent_str) << code->text << std::endl;
-        line += count_lines_text(code->text) + 1;
+        os << indent(ind, opts->indent_str) << code->text;
+        line += count_lines_text(code->text);
+        render_stmt_end(rctx, false);
         break;
     case CodeKind::RAW:
         os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));

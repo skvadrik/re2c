@@ -161,7 +161,7 @@ fn lex(str: &[u8]) -> bool {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return false; }
+			2 => { return false; },
 			3 => {
 				yyaccept = 0;
 				mar = cur;
@@ -342,7 +342,7 @@ fn lex(str: &[u8]) -> bool {
 					}
 				}
 			}
-			4 => { return true; }
+			4 => { return true; },
 			5 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {

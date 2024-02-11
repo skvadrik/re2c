@@ -49,8 +49,8 @@ fn lex(s: &[u8]) -> isize {
 			1 => {
             // Check that it is the sentinel, not some unexpected null.
             return if cur == s.len() + 1 { count } else { -1 }
-        }
-			2 => { return -1; }
+        },
+			2 => { return -1; },
 			3 => {
 				if cur + 1 > lim {
 					return -1;
@@ -68,7 +68,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			4 => { continue 'lex; }
+			4 => { continue 'lex; },
 			5 => {
 				if cur + 1 > lim {
 					return -1;
@@ -90,7 +90,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			6 => { count += 1; continue 'lex; }
+			6 => { count += 1; continue 'lex; },
 			7 => {
 				if cur + 1 > lim {
 					return -1;

@@ -46,7 +46,7 @@ fn lex(str: &[u8]) -> Num {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return Num::NaN; }
+			2 => { return Num::NaN; },
 			3 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
@@ -115,7 +115,7 @@ fn lex(str: &[u8]) -> Num {
 					}
 				}
 			}
-			6 => { return Num::Int; }
+			6 => { return Num::Int; },
 			7 => {
 				yyaccept = 2;
 				mar = cur;
@@ -138,7 +138,7 @@ fn lex(str: &[u8]) -> Num {
 					}
 				}
 			}
-			8 => { return Num::Float; }
+			8 => { return Num::Float; },
 			9 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {

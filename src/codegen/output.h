@@ -61,9 +61,10 @@ struct RenderContext {
     const std::string& file;
     uint32_t line;
     uint32_t ind;
+    bool oneline_mode;
 
     RenderContext(const Msg& msg, const std::string& file)
-        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
+        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0), oneline_mode(false) {}
     FORBID_COPY(RenderContext);
 };
 

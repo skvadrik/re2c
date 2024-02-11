@@ -59,7 +59,7 @@ fn lex(str: &[u8]) -> Ans {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return Ans::Dunno; }
+			2 => { return Ans::Dunno; },
 			3 => {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};
@@ -210,7 +210,7 @@ fn lex(str: &[u8]) -> Ans {
 					}
 				}
 			}
-			14 => { return Ans::Fish; }
+			14 => { return Ans::Fish; },
 			15 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {
@@ -239,7 +239,7 @@ fn lex(str: &[u8]) -> Ans {
 					}
 				}
 			}
-			17 => { return Ans::Color; }
+			17 => { return Ans::Color; },
 			18 => {
 				yych = unsafe {*str.get_unchecked(cur)};
 				match yych {

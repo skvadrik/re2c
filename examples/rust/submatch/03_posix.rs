@@ -54,7 +54,7 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return None; }
+			2 => { return None; },
 			3 => {
 				mar = cur;
 				yych = unsafe {*str.get_unchecked(cur)};

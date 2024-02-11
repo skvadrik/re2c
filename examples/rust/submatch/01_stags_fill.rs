@@ -114,7 +114,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return None; }
+			2 => { return None; },
 			3 => {
 				st.mar = st.cur;
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
@@ -285,7 +285,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 					}
 				}
 			}
-			11 => { return Some(vers); }
+			11 => { return Some(vers); },
 			_ => {
 				panic!("internal lexer error");
 			}

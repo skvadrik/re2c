@@ -37,8 +37,8 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			1 => { return count; }
-			2 => { return -1; }
+			1 => { return count; },
+			2 => { return -1; },
 			3 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
@@ -53,7 +53,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			4 => { continue 'lex; }
+			4 => { continue 'lex; },
 			5 => {
 				yych = unsafe {*s.get_unchecked(cur)};
 				match yych {
@@ -68,7 +68,7 @@ fn lex(s: &[u8]) -> isize {
 					}
 				}
 			}
-			6 => { count += 1; continue 'lex; }
+			6 => { count += 1; continue 'lex; },
 			_ => {
 				panic!("internal lexer error");
 			}

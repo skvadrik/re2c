@@ -89,7 +89,7 @@ fn lex(st: &mut State) -> isize {
 				yystate = 2;
 				continue 'yyl;
 			}
-			2 => { return -1; }
+			2 => { return -1; },
 			3 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				match yych {
@@ -110,7 +110,7 @@ fn lex(st: &mut State) -> isize {
 					}
 				}
 			}
-			4 => { continue 'lex; }
+			4 => { continue 'lex; },
 			5 => {
 				st.mar = st.cur;
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
@@ -162,7 +162,7 @@ fn lex(st: &mut State) -> isize {
 					}
 				}
 			}
-			8 => { count += 1; continue 'lex; }
+			8 => { count += 1; continue 'lex; },
 			9 => {
 				yych = unsafe {*st.buf.get_unchecked(st.cur)};
 				if yych <= 0x00 {
@@ -182,7 +182,7 @@ fn lex(st: &mut State) -> isize {
 				yystate = 6;
 				continue 'yyl;
 			}
-			10 => { return count; }
+			10 => { return count; },
 			11 => {
 				st.cur = st.mar;
 				yystate = 2;

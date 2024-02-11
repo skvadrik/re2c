@@ -92,8 +92,8 @@ fn lex(st: &mut State) -> isize {
 			1 => {
             // Check that it is the sentinel, not some unexpected null.
             return if st.tok == st.lim - YYMAXFILL { count } else { -1 }
-        }
-			2 => { return -1; }
+        },
+			2 => { return -1; },
 			3 => {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }
@@ -111,7 +111,7 @@ fn lex(st: &mut State) -> isize {
 					}
 				}
 			}
-			4 => { continue 'lex; }
+			4 => { continue 'lex; },
 			5 => {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }
@@ -133,7 +133,7 @@ fn lex(st: &mut State) -> isize {
 					}
 				}
 			}
-			6 => { count += 1; continue 'lex; }
+			6 => { count += 1; continue 'lex; },
 			7 => {
 				if st.lim - st.cur < 1 {
 					if fill(st, 1) != Fill::Ok { return -1; }

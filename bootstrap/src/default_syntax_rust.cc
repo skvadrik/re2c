@@ -143,7 +143,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:switch_cases_oneline =\n"
     "    [case{0:-2}: topindent case \" |\" nl]\n"
-    "    [case{-1}:   topindent case \" => \" [stmt: stmt]];\n"
+    "    [case{-1}:   topindent case \" => \" [stmt: stmt] \",\" nl];\n"
     "\n"
     "code:switch_case_range = [val{0}: val] (multival ? \" ..= \" [val{-1}: val]);\n"
     "\n"
