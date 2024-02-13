@@ -56,7 +56,7 @@ static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
 static bool need_yych_arg(const State* s) {
     // In rec/func mode `yych` should be passed as an argument only to those state-functions that
     // don't have YYPEEK (otherwise YYPEEK would immediately overwrite the argument).
-    return omit_peek(s) && !endstate(s);
+    return omit_peek(s) && s->go.span_count > 1 && !endstate(s);
 }
 
 const char* fn_name_for_cond(Scratchbuf& buf, const std::string& cond) {
