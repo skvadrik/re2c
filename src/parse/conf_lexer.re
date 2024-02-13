@@ -74,7 +74,7 @@ namespace re2c {
 
     eof         = [\x00];
     eol         = [\n];
-    space       = [ \t];
+    space       = [ \t\r];
     semi        = [;];
     quotes      = ['"];
     special     = [:?,()[\]=];
