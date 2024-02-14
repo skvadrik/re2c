@@ -85,10 +85,10 @@ Stx::Stx(OutAllocator& alc)
         {StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}
     };
     allowed_code_confs["code:fncall"] = {
-        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS}
+        {"name", "retval"}, {"arg"}, {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
     };
-    allowed_code_confs["code:tailcall"] = {
-        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS}
+    allowed_code_confs["code:tailcall"] = { // no `retval` as it won't be used anyway
+        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
     };
     allowed_code_confs["code:recursive_functions"] = {
         {"fndecl", "fndef"}, {"fn"}, {}

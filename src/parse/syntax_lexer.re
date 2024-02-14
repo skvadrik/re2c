@@ -133,6 +133,7 @@ opt:
     "have_type"    { RET_LOPT(StxLOpt::HAVE_TYPE); }
     "have_args"    { RET_LOPT(StxLOpt::HAVE_ARGS); }
     "have_argmods" { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
+    "have_retval"  { RET_LOPT(StxLOpt::HAVE_RETVAL); }
     "multival"     { RET_LOPT(StxLOpt::MULTIVAL); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }

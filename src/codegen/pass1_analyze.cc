@@ -502,27 +502,26 @@ bool consume(const State* s) {
 LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, const opt_t* opts)) {
     if (opts->code_model != CodeModel::REC_FUNC) return Ret::OK;
 
-    const size_t skip = opts->fn_sep.length();
+    const char* name, *type, *mods;
 
-    const char* name, *type, *spec;
     auto split = [&](const std::string& s) -> Ret {
-        size_t p1 = s.find(opts->fn_sep);
-        size_t p2 = s.find(opts->fn_sep, p1 + skip);
-
-        if (p1 == std::string::npos) {
-            RET_FAIL(error("failed to find separator '%s' in `define:YYFN` element '%s'",
-                    opts->fn_sep.c_str(), s.c_str()));
+        std::vector<std::string> parts;
+        for (size_t p1 = 0;;) {
+            size_t p2 = s.find(opts->fn_sep, p1);
+            if (p2 == std::string::npos) {
+                parts.push_back(s.substr(p1, s.length() - p1));
+                break;
+            } else {
+                parts.push_back(s.substr(p1, p2 - p1));
+                p1 = p2 + opts->fn_sep.length();
+            }
         }
-
-        name = newcstr(s.data(), s.data() + p1, alc);
-        if (p2  == std::string::npos) {
-            type = newcstr(s.data() + p1 + skip, s.data() + s.length(), alc);
-            spec = nullptr;
-        } else {
-            type = newcstr(s.data() + p1 + skip, s.data() + p2, alc);
-            spec = newcstr(s.data() + p2 + skip, s.data() + s.length(), alc);
+        name = copystr(parts[0], alc);
+        type = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
+        mods = parts.size() > 2 ? copystr(parts[2], alc) : nullptr;
+        if (parts.size() > 3) {
+            RET_FAIL(error("`define:YYFN` element '%s' has too many parts", s.c_str()));
         }
-
         return Ret::OK;
     };
 
@@ -532,6 +531,7 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     CHECK_RET(split(opts->api_fn[0]));
     f->name = name;
     f->type = type;
+    // TODO: do we want to support modifiers (attributes?) for the whole function?
 
     f->params = code_params(alc);
     f->params_yych = code_params(alc);
@@ -540,9 +540,12 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
 
     for (size_t i = 1; i < opts->api_fn.size(); ++i) {
         CHECK_RET(split(opts->api_fn[i]));
+        if (type == nullptr) {
+            RET_FAIL(error("missing type in `define:YYFN` element '%s'", opts->api_fn[i].c_str()));
+        }
 
-        append(f->params, code_param(alc, name, type, spec));
-        append(f->params_yych, code_param(alc, name, type, spec));
+        append(f->params, code_param(alc, name, type, mods));
+        append(f->params_yych, code_param(alc, name, type, mods));
 
         append(f->args, code_arg(alc, name));
         append(f->args_yych, code_arg(alc, name));

@@ -659,6 +659,8 @@ class RenderFnCall : public RenderCallback {
     void render_var(const char* var) override {
         if (strcmp(var, "name") == 0) {
             rctx.os << code->name;
+        } else if (strcmp(var, "retval") == 0) {
+            rctx.os << code->retval;
         } else if (strcmp(var, "arg") == 0) {
             rctx.os << curr_arg->arg;
         } else {
@@ -693,11 +695,15 @@ class RenderFnCall : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_ARGS) {
+        switch (opt) {
+        case StxLOpt::HAVE_ARGS:
             return nargs > 0;
+        case StxLOpt::HAVE_RETVAL:
+            return code->retval != nullptr;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderFnCall);
@@ -1071,17 +1077,12 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
         break;
     }
-    case CodeKind::FNCALL:
-        if (code->fncall.tailcall) { // `code:fncall` may be used as an expression
-            RenderFnCall callback(rctx, &code->fncall);
-            rctx.opts->eval_code_conf(rctx.os, "code:tailcall", callback);
-        } else { // `code:tailcall` is always a statement
-            rctx.os << indent(rctx.ind, opts->indent_str);
-            RenderFnCall callback(rctx, &code->fncall);
-            rctx.opts->eval_code_conf(rctx.os, "code:fncall", callback);
-            render_stmt_end(rctx, true);
-        }
+    case CodeKind::FNCALL: {
+        RenderFnCall callback(rctx, &code->fncall);
+        const char* conf = code->fncall.tailcall ? "code:tailcall" : "code:fncall";
+        rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;
+    }
     case CodeKind::REC_FUNCS: {
         RenderRecFuncs callback(rctx, code->rfuncs);
         rctx.opts->eval_code_conf(rctx.os, "code:recursive_functions", callback);

@@ -491,11 +491,12 @@ static CodeList* gen_fill_falllback(
             buf.label(*fallback->label);
             gen_continue_yyloop(output, fallback_trans, buf.flush());
             break;
-        case CodeModel::REC_FUNC:
+        case CodeModel::REC_FUNC: {
+            const CodeFnCommon* fn = output.block().fn_common;
             buf.str(opts->label_prefix).u32(fallback->label->index);
-            append(fallback_trans, code_tailcall(alc, buf.flush(), output.block().fn_common->args));
+            append(fallback_trans, code_tailcall(alc, buf.flush(), fn->args, fn->type != nullptr));
             break;
-        }
+        }}
     }
     return fallback_trans;
 }
@@ -542,11 +543,12 @@ CodeList* gen_goto_after_fill(
         o.u32(s->label->index);
         gen_continue_yyloop(output, resume, o.flush());
         break;
-    case CodeModel::REC_FUNC:
+    case CodeModel::REC_FUNC: {
+        const CodeFnCommon* fn = output.block().fn_common;
         o.str(opts->label_prefix).u32(s->label->index);
-        append(resume, code_tailcall(alc, o.flush(), output.block().fn_common->args));
+        append(resume, code_tailcall(alc, o.flush(), fn->args, fn->type != nullptr));
         break;
-    }
+    }}
 
     if (opts->storable_state && eof_rule) {
         // With storable state and end-of-input rule $ the initial state dispatch needs to handle
@@ -641,8 +643,7 @@ static void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa,
 
 static void gen_goto(
         Output& output, const Adfa& dfa, CodeList* stmts, const State* from, const CodeJump& jump) {
-    OutputBlock& block = output.block();
-    const opt_t* opts = block.opts;
+    const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
@@ -664,12 +665,13 @@ static void gen_goto(
             o.label(*jump.to->label);
             gen_continue_yyloop(output, transition, o.flush());
             break;
-        case CodeModel::REC_FUNC:
+        case CodeModel::REC_FUNC: {
+            const CodeFnCommon* fn = output.block().fn_common;
+            CodeArgs* args = need_yych_arg(jump.to) ? fn->args_yych : fn->args;
             o.str(opts->label_prefix).u32(jump.to->label->index);
-            append(transition, code_tailcall(alc, o.flush(),
-                    need_yych_arg(jump.to) ? block.fn_common->args_yych : block.fn_common->args));
+            append(transition, code_tailcall(alc, o.flush(), args, fn->type != nullptr));
             break;
-        }
+        }}
     } else {
         // Goto can be elided, because control flow "falls through" to the correct DFA state. This
         // usually happens for the last statement in a sequence of "linear if" statements.
@@ -1161,12 +1163,13 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
             // continue to the head of the loop.
             gen_continue_yyloop(output, stmts, next_cond);
             break;
-        case CodeModel::REC_FUNC:
+        case CodeModel::REC_FUNC: {
             // func/rec mode: emit function call to the start of the next condition
+            const CodeFnCommon* fn = output.block().fn_common;
             append(stmts, code_tailcall(
-                    alc, fn_name_for_cond(o, cond), output.block().fn_common->args));
+                    alc, fn_name_for_cond(o, cond), fn->args, fn->type != nullptr));
             break;
-        }
+        }}
     }
 }
 
@@ -1389,7 +1392,8 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     case CodeModel::REC_FUNC:
         // always use first block options here as this is a block-level function
         o.str(bstart->opts->label_prefix).u32(lstart->index);
-        append(goto_start, code_tailcall(alc, o.flush(), bstart->fn_common->args));
+        append(goto_start, code_tailcall(
+                alc, o.flush(), bstart->fn_common->args, bstart->fn_common->type != nullptr));
         break;
     case CodeModel::LOOP_SWITCH:
         // Loop/switch mode is handled differently (special cases go in the `yystate` switch).
@@ -1984,7 +1988,7 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
 
         CodeList* body = code_list(alc);
         const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
-        append(body, code_tailcall(alc, f0, fn->args));
+        append(body, code_tailcall(alc, f0, fn->args, fn->type != nullptr));
 
         append(code, code_fndef(alc, name, fn->type, fn->params, body));
     }
@@ -2005,7 +2009,8 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     for (const StartCond& cond : output.block().conds) {
         CodeList* body = code_list(alc);
         const char* name = fn_name_for_cond(buf, cond.name);
-        append(body, code_tailcall(alc, name, output.block().fn_common->args));
+        const CodeFnCommon* fn = output.block().fn_common;
+        append(body, code_tailcall(alc, name, fn->args, fn->type != nullptr));
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
     if (opts->cond_abort) {
@@ -2034,7 +2039,7 @@ LOCAL_NODISCARD(Ret gen_start_function(Output& output, const Adfa& dfa, CodeList
         CodeList* body = code_list(alc);
         const Label* l = is_cond_block ? output.block().start_label : dfa.head->label;
         const char* name = buf.str(opts->label_prefix).u32(l->index).flush();
-        append(body, code_tailcall(alc, name, fn->args));
+        append(body, code_tailcall(alc, name, fn->args, fn->type != nullptr));
 
         append(code, code_fndef(alc, fn->name, fn->type, fn->params, body));
         return Ret::OK;

@@ -262,6 +262,7 @@ struct CodeFnDef {
 
 struct CodeFnCall {
     const char* name;
+    const char* retval;
     const CodeArgs* args; // shared between different function calls
     bool tailcall;
 };
@@ -602,16 +603,23 @@ inline Code* code_fndef(
 }
 
 inline Code* code_fncall(
-        OutAllocator& alc, const char* name, CodeArgs* args, bool tailcall = false) {
+        OutAllocator& alc,
+        const char* name,
+        const char* retval,
+        CodeArgs* args,
+        bool tailcall = false) {
     Code* x = new_code(alc, CodeKind::FNCALL);
     x->fncall.name = name;
+    x->fncall.retval = retval;
     x->fncall.args = args;
     x->fncall.tailcall = tailcall;
     return x;
 }
 
-inline Code* code_tailcall(OutAllocator& alc, const char* name, CodeArgs* args) {
-    return code_fncall(alc, name, args, true);
+inline Code* code_tailcall(OutAllocator& alc, const char* name, CodeArgs* args, bool have_retval) {
+    // tailcall returns immediately so the `retval` string won't be used
+    const char* retval = have_retval ? "<unused-retval>" : nullptr;
+    return code_fncall(alc, name, retval, args, true);
 }
 
 inline Code* code_recursive_functions(OutAllocator& alc, CodeList* fndefs) {

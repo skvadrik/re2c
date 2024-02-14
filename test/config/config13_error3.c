@@ -1,1 +1,1 @@
-re2c: error: failed to find separator ';' in `define:YYFN` element 'name'
+re2c: error: missing type in `define:YYFN` element 'arg1'

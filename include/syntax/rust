@@ -165,7 +165,7 @@ code:fndef =
         indent [stmt: stmt] dedent
     "}" nl;
 
-code:fncall = name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")";
+code:fncall = topindent name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
 code:tailcall = topindent name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
