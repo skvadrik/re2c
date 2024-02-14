@@ -78,6 +78,10 @@ AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
 AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
 
+# --enable-v
+AC_ARG_ENABLE([v], [AS_HELP_STRING([--enable-v], [build re2v executable])])
+AM_CONDITIONAL([WITH_V], [test "x$enable_v" != "xno"])
+
 
 # --enable-benchmarks
 AC_ARG_ENABLE([benchmarks], [AS_HELP_STRING([--enable-benchmarks],

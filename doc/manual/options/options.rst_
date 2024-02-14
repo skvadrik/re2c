@@ -94,8 +94,8 @@
     ``(...)`` is capturing and ``(! ...)`` is non-capturing. With this option
     ``(! ...)`` is capturing and ``(...)`` is non-capturing.
 
-``--lang <c | go | rust>``
-    Specify the output language. Supported languages are C, Go and Rust.
+``--lang <c | go | rust | v>``
+    Specify the output language. Supported languages are C, Go, Rust and V.
     The default is C for re2c, Go for re2go and Rust for re2rust.
 
 ``--leftmost-captures``

@@ -164,6 +164,7 @@ re2c_BOOT = \
 	$(re2c_BOOT_DOC_C) \
 	$(re2c_BOOT_DOC_GO) \
 	$(re2c_BOOT_DOC_RUST) \
+	$(re2c_BOOT_DOC_V) \
 	$(re2c_BOOT_HELP) \
 	$(re2c_BOOT_PARSER) \
 	$(re2c_BOOT_PARSER_HDR) \
@@ -501,6 +502,14 @@ endif
 if WITH_RUST
 bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
+re2rust_SOURCES = $(re2c_SOURCES)
+nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2v
+if WITH_V
+bin_PROGRAMS += re2v
+re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::V
 re2rust_SOURCES = $(re2c_SOURCES)
 nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
 endif

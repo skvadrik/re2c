@@ -73,6 +73,7 @@ jobs:
             -DRE2C_BUILD_LIBS=ON \
             -DRE2C_BUILD_RE2GO=OFF \
             -DRE2C_BUILD_RE2RUST=OFF \
+            -DRE2C_BUILD_RE2V=OFF \
             -DRE2C_BUILD_BENCHMARKS=ON \
             -DCMAKE_CXX_FLAGS="-O3"
 

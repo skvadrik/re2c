@@ -37,6 +37,7 @@ static void render_line_info(
 
     switch (opts->lang) {
     case Lang::GO:
+    case Lang::V:
         // Go: //line <filename>:<line-number>
         o << "//line \"" << fname << "\":" << line << "\n";
         break;
@@ -105,12 +106,14 @@ static void render_if_then_else(RenderContext& rctx, const CodeIfTE* code) {
 static void render_block(RenderContext& rctx, const CodeBlock* code) {
     switch (code->kind) {
     case CodeBlock::Kind::WRAPPED:
-        rctx.os << indent(rctx.ind, rctx.opts->indent_str) << "{" << std::endl;
+        if (rctx.opts->lang != Lang::V)
+            rctx.os << indent(rctx.ind, rctx.opts->indent_str) << "{" << std::endl;
         ++rctx.line;
         ++rctx.ind;
         render_list(rctx, code->stmts);
         --rctx.ind;
-        rctx.os << indent(rctx.ind, rctx.opts->indent_str) << "}" << std::endl;
+        if (rctx.opts->lang != Lang::V)
+            rctx.os << indent(rctx.ind, rctx.opts->indent_str) << "}" << std::endl;
         ++rctx.line;
         break;
     case CodeBlock::Kind::INDENTED:
@@ -160,6 +163,17 @@ static const char* var_type_rust(VarType type, const opt_t* opts) {
     return nullptr;
 }
 
+static const char* var_type_v(VarType type, const opt_t* opts) {
+    switch (type) {
+    case VarType::INT:
+    case VarType::UINT:
+        return "0";
+    case VarType::YYCTYPE:
+        return opts->api_char_type.c_str();
+    }
+    return nullptr;
+}
+
 static void render_var(RenderContext& rctx, const CodeVar* var) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -192,6 +206,17 @@ static void render_var(RenderContext& rctx, const CodeVar* var) {
                 << (var->init ? var->init : "0") << ";" << std::endl;
         rctx.line += 2;
         break;
+
+    case Lang::V:
+        os << ind;
+        if (var->init) {
+            os << var->name << " = " << var->init;
+        } else {
+            os << "mut " << var->name << " := " << var_type_v(var->type, opts) << "{}";
+        }
+        os << std::endl;
+        ++rctx.line;
+        break;
     }
 }
 
@@ -200,14 +225,15 @@ static bool case_on_same_line(const CodeCase* code, const opt_t* opts) {
     return first
            && first->next == nullptr
            && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT)
-           && opts->lang != Lang::GO; // gofmt prefers cases on a new line
+           && opts->lang != Lang::GO
+           && opts->lang != Lang::V; // gofmt prefers cases on a new line
 }
 
 static void render_number(RenderContext& rctx, int64_t num, VarType type) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
     const Enc& enc = opts->encoding;
-    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::Type::EBCDIC;
+    bool hex = opts->lang == Lang::RUST || opts->lang == Lang::V || enc.type() == Enc::Type::EBCDIC;
 
     switch (type) {
     case VarType::UINT:
@@ -278,6 +304,14 @@ static void render_case_range(
             ++rctx.line;
         }
         break;
+
+    case Lang::V:
+        render_number(rctx, low, type);
+        if (low != upp) {
+            os << "...";
+            render_number(rctx, upp, type);
+        }
+        break;
     }
 }
 
@@ -292,6 +326,10 @@ static void render_case(RenderContext& rctx, const CodeCase* code) {
         s_case = "";
         s_then = " =>";
         s_default = "_";
+    } else if (opts->lang == Lang::V) {
+        s_case = "";
+        s_then = "";
+        s_default = "else";
     } else {
         s_case = "case ";
         s_then = ":";
@@ -335,7 +373,7 @@ static void render_case(RenderContext& rctx, const CodeCase* code) {
         render_stmt_end(rctx, first->kind == CodeKind::STMT);
     } else {
         // For Rust wrap multi-line cases in braces.
-        if (opts->lang == Lang::RUST) os << " {";
+        if (opts->lang == Lang::RUST || opts->lang == Lang::V) os << " {";
         os << std::endl;
         ++rctx.line;
         for (const Code* s = first; s; s = s->next) {
@@ -343,7 +381,7 @@ static void render_case(RenderContext& rctx, const CodeCase* code) {
             render(rctx, s);
             --rctx.ind;
         }
-        if (opts->lang == Lang::RUST) {
+        if (opts->lang == Lang::RUST || opts->lang == Lang::V) {
             os << indent(rctx.ind, opts->indent_str) << "}" << std::endl;
             ++rctx.line;
         }
@@ -356,7 +394,7 @@ static void render_switch(RenderContext& rctx, const CodeSwitch* code) {
     const uint32_t ind = rctx.ind;
 
     os << indent(ind, opts->indent_str);
-    if (opts->lang == Lang::RUST) {
+    if (opts->lang == Lang::RUST || opts->lang == Lang::V) {
         os << "match " << code->expr;
     } else {
         os << "switch (" << code->expr << ")";
@@ -448,6 +486,7 @@ static void render_loop(RenderContext& rctx, const CodeList* loop) {
         os << indent(rctx.ind, opts->indent_str) << "for (;;)";
         break;
     case Lang::GO:
+    case Lang::V:
         // In Go label is on a separate line with zero indent.
         if (!opts->label_loop.empty()) {
             os << opts->label_loop << ":" << std::endl;
@@ -624,6 +663,7 @@ static void render_abort(RenderContext& rctx) {
         os << "abort();";
         break;
     case Lang::GO:
+    case Lang::V:
         os << "panic(\"internal lexer error\")";
         break;
     case Lang::RUST:
