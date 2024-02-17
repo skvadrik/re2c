@@ -1436,9 +1436,3 @@ fn main() {
     test(vec![], ConStatus::End);
     test(vec![b"ap", b"plication/j", b"son;", b" charset=\"", b"utf\\\"-8\"\r", b"\n", b""], ConStatus::End);
 }
-codegen/recursive_functions/rust/storable_state_with_conditions.re:161:37: warning: tag 'p1' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/rust/storable_state_with_conditions.re:161:37: warning: tag 'p2' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/rust/storable_state_with_conditions.re:161:37: warning: tag 'p3' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/rust/storable_state_with_conditions.re:161:37: warning: tag 'p4' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/rust/storable_state_with_conditions.re:176:38: warning: tag 'f1' in condition 'header' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/rust/storable_state_with_conditions.re:176:38: warning: tag 'f2' in condition 'header' has 3rd degree of nondeterminism [-Wnondeterministic-tags]

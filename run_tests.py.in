@@ -380,7 +380,7 @@ def run_test(test):
     )
 
     # enable warnings globally
-    switches = f'{switches} -W --no-version --no-generation-date'
+    switches = f'-W {switches} --no-version --no-generation-date'
 
     # normal tests
     if not _ctx.skeleton:

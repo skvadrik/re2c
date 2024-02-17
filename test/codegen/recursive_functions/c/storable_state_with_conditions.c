@@ -2077,9 +2077,3 @@ finally:
     if (rc) fprintf(stderr, "Error exit: %d\n", rc);
     return rc;
 }
-codegen/recursive_functions/c/storable_state_with_conditions.re:134:37: warning: tag 'p1' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/c/storable_state_with_conditions.re:134:37: warning: tag 'p2' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/c/storable_state_with_conditions.re:134:37: warning: tag 'p3' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/c/storable_state_with_conditions.re:134:37: warning: tag 'p4' in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/c/storable_state_with_conditions.re:156:38: warning: tag 'f1' in condition 'header' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/recursive_functions/c/storable_state_with_conditions.re:156:38: warning: tag 'f2' in condition 'header' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
