@@ -16,7 +16,7 @@ func yy0(str string, cur int) {
 }
 
 func yy1(str string, cur int) {
-	{ panic("error!"); }
+	panic("error!");
 }
 
 func yy2(str string, cur int) {
@@ -32,7 +32,7 @@ func yy2(str string, cur int) {
 }
 
 func yy3(str string, cur int) {
-	{ return }
+	return
 }
 
 func lex(str string, cur int) {

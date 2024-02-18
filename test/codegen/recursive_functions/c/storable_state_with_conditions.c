@@ -251,7 +251,7 @@ static enum con_status yy2(struct con_state* c) {
 
 static enum con_status yy3(struct con_state* c) {
 	c->state = -1;
-	{ return CON_STATUS_ERROR; }
+	return CON_STATUS_ERROR;
 }
 
 static enum con_status yy4(struct con_state* c) {
@@ -736,7 +736,7 @@ static enum con_status yy14(struct con_state* c) {
 	c->p3 = c->yytm5;
 	c->p4 = c->yytm6;
 	c->state = -1;
-	{
+	
         struct mtag*    pname_start = c->p1;
         struct mtag*    pname_end   = c->p2;
         struct mtag*    pval_start  = c->p3;
@@ -756,7 +756,7 @@ static enum con_status yy14(struct con_state* c) {
         }
 
         return CON_STATUS_DONE;
-    }
+
 }
 
 static enum con_status yy15(struct con_state* c) {
@@ -1219,7 +1219,7 @@ static enum con_status yy21(struct con_state* c) {
 
 static enum con_status yy22(struct con_state* c) {
 	c->state = -1;
-	{ return CON_STATUS_END; }
+	return CON_STATUS_END;
 }
 
 static enum con_status yyfnmedia_type(struct con_state* c) {
@@ -1283,7 +1283,7 @@ static enum con_status yy24(struct con_state* c) {
 
 static enum con_status yy25(struct con_state* c) {
 	c->state = -1;
-	{ return CON_STATUS_ERROR; }
+	return CON_STATUS_ERROR;
 }
 
 static enum con_status yy26(struct con_state* c) {
@@ -1697,7 +1697,7 @@ static enum con_status yy38(struct con_state* c) {
 	c->f1 = c->yytm1;
 	c->f2 = c->yytm3;
 	c->state = -1;
-	{
+	
         struct mtag*    fold_start  = c->f1;
         struct mtag*    fold_end    = c->f2;
 
@@ -1708,7 +1708,7 @@ static enum con_status yy38(struct con_state* c) {
         }
 
         return CON_STATUS_DONE;
-    }
+
 }
 
 static enum con_status yy39(struct con_state* c) {
@@ -1860,7 +1860,7 @@ static enum con_status yy43(struct con_state* c) {
 
 static enum con_status yy44(struct con_state* c) {
 	c->state = -1;
-	{ return CON_STATUS_END; }
+	return CON_STATUS_END;
 }
 
 static enum con_status yyfnheader(struct con_state* c) {

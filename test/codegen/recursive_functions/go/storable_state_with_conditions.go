@@ -171,7 +171,7 @@ func yy2(st *State) int {
 
 func yy3(st *State) int {
 	st.state = -1
-	{ return lexBadPacket }
+	return lexBadPacket
 }
 
 func yy4(st *State) int {
@@ -423,7 +423,7 @@ func yy14(st *State) int {
 	st.p3 = st.yytm5
 	st.p4 = st.yytm6
 	st.state = -1
-	{
+	
 		if debug {fmt.Printf("media type: %v\n", string(st.data[st.l1:st.l2]))}
 
 		pnames := unwind(st.trie, st.p1, st.p2, st.data)
@@ -434,7 +434,7 @@ func yy14(st *State) int {
 
 		st.tok = st.cur
 		return lex(st)
-	}
+
 }
 
 func yy15(st *State) int {
@@ -671,7 +671,7 @@ func yy21(st *State) int {
 
 func yy22(st *State) int {
 	st.state = -1
-	{ return lexEnd }
+	return lexEnd
 }
 
 func yyfnmedia_type(st *State) int {
@@ -711,7 +711,7 @@ func yy24(st *State) int {
 
 func yy25(st *State) int {
 	st.state = -1
-	{ return lexBadPacket }
+	return lexBadPacket
 }
 
 func yy26(st *State) int {
@@ -1002,13 +1002,13 @@ func yy38(st *State) int {
 	st.f1 = st.yytm1
 	st.f2 = st.yytm3
 	st.state = -1
-	{
+	
 		folds := unwind(st.trie, st.f1, st.f2, st.data)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
 		st.tok = st.cur
 		return lex(st)
-	}
+
 }
 
 func yy39(st *State) int {
@@ -1119,7 +1119,7 @@ func yy43(st *State) int {
 
 func yy44(st *State) int {
 	st.state = -1
-	{ return lexEnd }
+	return lexEnd
 }
 
 func yyfnheader(st *State) int {

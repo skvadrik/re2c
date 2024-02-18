@@ -21,12 +21,12 @@ void yy0(X x) {
 
 void yy1(X x) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy2(X x) {
 	YYSETSTATE(-1);
-	{ a }
+	a
 }
 
 void lex_y(Y y) {
@@ -68,17 +68,17 @@ void yy3(Y y) {
 
 void yy4(Y y) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy5(Y y) {
 	YYSETSTATE(-1);
-	{ b }
+	b
 }
 
 void yy6(Y y) {
 	YYSETSTATE(-1);
-	{ $ }
+	$
 }
 
 

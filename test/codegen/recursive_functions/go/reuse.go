@@ -24,7 +24,7 @@ func yy1(str []uint8, cur uint, mar uint) int {
 }
 
 func yy2(str []uint8, cur uint, mar uint) int {
-	{ return 1; }
+	return 1;
 }
 
 func yy3(str []uint8, cur uint, mar uint) int {
@@ -122,7 +122,7 @@ func yy11(str []uint8, cur uint, mar uint) int {
 }
 
 func yy12(str []uint8, cur uint, mar uint) int {
-	{ return 0; }
+	return 0;
 }
 
 func lexUTF8(str []uint8, cur uint, mar uint) int {
@@ -147,7 +147,7 @@ func yy14(str []uint32, cur uint, mar uint) int {
 }
 
 func yy15(str []uint32, cur uint, mar uint) int {
-	{ return 1; }
+	return 1;
 }
 
 func yy16(str []uint32, cur uint, mar uint) int {
@@ -197,7 +197,7 @@ func yy20(str []uint32, cur uint, mar uint) int {
 }
 
 func yy21(str []uint32, cur uint, mar uint) int {
-	{ return 0; }
+	return 0;
 }
 
 func lexUTF32(str []uint32, cur uint, mar uint) int {

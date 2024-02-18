@@ -33,7 +33,7 @@ func yy0(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy1(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy2(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -56,12 +56,12 @@ func yy2(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy3(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return lex_oct(str, cur, mar, result) }
+	return lex_oct(str, cur, mar, result)
 }
 
 func yy4(str string, cur int, mar int, result uint64) (uint64, error) {
 	cur += -1
-	{ return lex_dec(str, cur, mar, result) }
+	return lex_dec(str, cur, mar, result)
 }
 
 func yy5(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -97,12 +97,12 @@ func yy7(str string, cur int, mar int, result uint64) (uint64, error) {
 
 func yy8(str string, cur int, mar int, result uint64) (uint64, error) {
 	cur += -1
-	{ return lex_bin(str, cur, mar, result) }
+	return lex_bin(str, cur, mar, result)
 }
 
 func yy9(str string, cur int, mar int, result uint64) (uint64, error) {
 	cur += -1
-	{ return lex_hex(str, cur, mar, result) }
+	return lex_hex(str, cur, mar, result)
 }
 
 func lex(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -126,15 +126,15 @@ func yy10(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy11(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return result, nil }
+	return result, nil
 }
 
 func yy12(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy13(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(2, str[cur-1]-'0', result); return lex_bin(str, cur, mar, result) }
+	result = adddgt(2, str[cur-1]-'0', result); return lex_bin(str, cur, mar, result)
 }
 
 func lex_bin(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -158,15 +158,15 @@ func yy14(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy15(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return result, nil }
+	return result, nil
 }
 
 func yy16(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy17(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(8, str[cur-1]-'0', result); return lex_oct(str, cur, mar, result) }
+	result = adddgt(8, str[cur-1]-'0', result); return lex_oct(str, cur, mar, result)
 }
 
 func lex_oct(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -190,15 +190,15 @@ func yy18(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy19(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return result, nil }
+	return result, nil
 }
 
 func yy20(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy21(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(10, str[cur-1]-'0', result); return lex_dec(str, cur, mar, result) }
+	result = adddgt(10, str[cur-1]-'0', result); return lex_dec(str, cur, mar, result)
 }
 
 func lex_dec(str string, cur int, mar int, result uint64) (uint64, error) {
@@ -226,23 +226,23 @@ func yy22(str string, cur int, mar int, result uint64) (uint64, error) {
 }
 
 func yy23(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return result, nil }
+	return result, nil
 }
 
 func yy24(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy25(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(16, str[cur-1]-'0', result);    return lex_hex(str, cur, mar, result) }
+	result = adddgt(16, str[cur-1]-'0', result);    return lex_hex(str, cur, mar, result)
 }
 
 func yy26(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(16, str[cur-1]-'A'+10, result); return lex_hex(str, cur, mar, result) }
+	result = adddgt(16, str[cur-1]-'A'+10, result); return lex_hex(str, cur, mar, result)
 }
 
 func yy27(str string, cur int, mar int, result uint64) (uint64, error) {
-	{ result = adddgt(16, str[cur-1]-'a'+10, result); return lex_hex(str, cur, mar, result) }
+	result = adddgt(16, str[cur-1]-'a'+10, result); return lex_hex(str, cur, mar, result)
 }
 
 func lex_hex(str string, cur int, mar int, result uint64) (uint64, error) {

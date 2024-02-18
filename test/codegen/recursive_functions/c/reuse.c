@@ -44,7 +44,7 @@ int yy1(State8& st) {
 }
 
 int yy2(State8& st) {
-	{ return 1; }
+	return 1;
 }
 
 int yy3(State8& st) {
@@ -133,7 +133,7 @@ int yy11(State8& st) {
 }
 
 int yy12(State8& st) {
-	{ return 0; }
+	return 0;
 }
 
 int lex_utf8(State8& st) {
@@ -170,7 +170,7 @@ int yy14(State32& st) {
 }
 
 int yy15(State32& st) {
-	{ return 1; }
+	return 1;
 }
 
 int yy16(State32& st) {
@@ -219,7 +219,7 @@ int yy20(State32& st) {
 }
 
 int yy21(State32& st) {
-	{ return 0; }
+	return 0;
 }
 
 int lex_utf32(State32& st) {

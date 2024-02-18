@@ -41,7 +41,7 @@ fn yy0(_st: &mut State) -> Option<u32> {
 }
 
 fn yy1(_st: &mut State) -> Option<u32> {
-	{ None }
+	None
 }
 
 fn yy2(_st: &mut State) -> Option<u32> {
@@ -63,12 +63,12 @@ fn yy2(_st: &mut State) -> Option<u32> {
 }
 
 fn yy3(_st: &mut State) -> Option<u32> {
-	{ parse_oct(_st) }
+	parse_oct(_st)
 }
 
 fn yy4(_st: &mut State) -> Option<u32> {
 	_st.cur = (_st.cur as isize + -1) as usize;
-	{ parse_dec(_st) }
+	parse_dec(_st)
 }
 
 fn yy5(_st: &mut State) -> Option<u32> {
@@ -102,12 +102,12 @@ fn yy7(_st: &mut State) -> Option<u32> {
 
 fn yy8(_st: &mut State) -> Option<u32> {
 	_st.cur = (_st.cur as isize + -1) as usize;
-	{ parse_bin(_st) }
+	parse_bin(_st)
 }
 
 fn yy9(_st: &mut State) -> Option<u32> {
 	_st.cur = (_st.cur as isize + -1) as usize;
-	{ parse_hex(_st) }
+	parse_hex(_st)
 }
 
 fn parse_start(_st: &mut State) -> Option<u32> {
@@ -127,11 +127,11 @@ fn yy10(_st: &mut State) -> Option<u32> {
 }
 
 fn yy11(_st: &mut State) -> Option<u32> {
-	{ return maybe!(_st.num); }
+	return maybe!(_st.num);
 }
 
 fn yy12(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 2); parse_bin(_st) }
+	add(_st, 48, 2); parse_bin(_st)
 }
 
 fn parse_bin(_st: &mut State) -> Option<u32> {
@@ -151,11 +151,11 @@ fn yy13(_st: &mut State) -> Option<u32> {
 }
 
 fn yy14(_st: &mut State) -> Option<u32> {
-	{ return maybe!(_st.num); }
+	return maybe!(_st.num);
 }
 
 fn yy15(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 8); parse_oct(_st) }
+	add(_st, 48, 8); parse_oct(_st)
 }
 
 fn parse_oct(_st: &mut State) -> Option<u32> {
@@ -175,11 +175,11 @@ fn yy16(_st: &mut State) -> Option<u32> {
 }
 
 fn yy17(_st: &mut State) -> Option<u32> {
-	{ return maybe!(_st.num); }
+	return maybe!(_st.num);
 }
 
 fn yy18(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 10); parse_dec(_st) }
+	add(_st, 48, 10); parse_dec(_st)
 }
 
 fn parse_dec(_st: &mut State) -> Option<u32> {
@@ -201,19 +201,19 @@ fn yy19(_st: &mut State) -> Option<u32> {
 }
 
 fn yy20(_st: &mut State) -> Option<u32> {
-	{ return maybe!(_st.num); }
+	return maybe!(_st.num);
 }
 
 fn yy21(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 16); parse_hex(_st) }
+	add(_st, 48, 16); parse_hex(_st)
 }
 
 fn yy22(_st: &mut State) -> Option<u32> {
-	{ add(_st, 55, 16); parse_hex(_st) }
+	add(_st, 55, 16); parse_hex(_st)
 }
 
 fn yy23(_st: &mut State) -> Option<u32> {
-	{ add(_st, 87, 16); parse_hex(_st) }
+	add(_st, 87, 16); parse_hex(_st)
 }
 
 fn parse_hex(_st: &mut State) -> Option<u32> {

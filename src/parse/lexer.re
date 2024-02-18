@@ -640,7 +640,18 @@ Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
 code: /*!re2c
     "}" {
         if (--depth == 0) {
-            yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, cur), nullptr, false);
+            const uint8_t* p = tok, *q = cur - 1;
+
+            // In rec/func mode, strip curly braces and the adjacent whitespace.
+            // (it won't cause any name collisions because the code is in a separate function).
+            // This is needed for languages that don't use curly braces for compound statements.
+            if (globopts->code_model == CodeModel::REC_FUNC) {
+                ++p; --q; // skip '{' and '}'
+                for (; p <= q && (*p == ' ' || *p == '\t'); ++p);
+                for (; p <= q && (*q == ' ' || *q == '\t'); --q);
+            }
+
+            yylval->semact = ast.sem_act(loc, ast.cstr_global(p, q + 1), nullptr, false);
             return Ret::OK;
         }
         goto code;

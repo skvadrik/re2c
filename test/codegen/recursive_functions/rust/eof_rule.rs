@@ -49,7 +49,7 @@ fn yy1(_st: &mut State) -> isize {
 }
 
 fn yy2(_st: &mut State) -> isize {
-	{ return -1; }
+	return -1;
 }
 
 fn yy3(_st: &mut State) -> isize {
@@ -64,7 +64,7 @@ fn yy3(_st: &mut State) -> isize {
 }
 
 fn yy4(_st: &mut State) -> isize {
-	{ return lex_loop(_st); }
+	return lex_loop(_st);
 }
 
 fn yy5(_st: &mut State) -> isize {
@@ -109,7 +109,7 @@ fn yy7(_st: &mut State, yych: u8) -> isize {
 }
 
 fn yy8(_st: &mut State) -> isize {
-	{ _st.count += 1; return lex_loop(_st); }
+	_st.count += 1; return lex_loop(_st);
 }
 
 fn yy9(_st: &mut State) -> isize {
@@ -128,7 +128,7 @@ fn yy9(_st: &mut State) -> isize {
 }
 
 fn yy10(_st: &mut State) -> isize {
-	{ return _st.count; }
+	return _st.count;
 }
 
 fn yy11(_st: &mut State) -> isize {

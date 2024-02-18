@@ -82,7 +82,7 @@ static int yy1(Input* in, int count) {
 }
 
 static int yy2(Input* in, int count) {
-	{ return -1; }
+	return -1;
 }
 
 static int yy3(Input* in, int count) {
@@ -102,7 +102,7 @@ static int yy3(Input* in, int count) {
 }
 
 static int yy4(Input* in, int count) {
-	{ return lex_loop(in, count); }
+	return lex_loop(in, count);
 }
 
 static int yy5(Input* in, int count) {
@@ -145,7 +145,7 @@ static int yy7(Input* in, int count, char yych) {
 }
 
 static int yy8(Input* in, int count) {
-	{ return lex_loop(in, count + 1); }
+	return lex_loop(in, count + 1);
 }
 
 static int yy9(Input* in, int count) {
@@ -165,7 +165,7 @@ static int yy9(Input* in, int count) {
 }
 
 static int yy10(Input* in, int count) {
-	{ return count; }
+	return count;
 }
 
 static int yy11(Input* in, int count) {

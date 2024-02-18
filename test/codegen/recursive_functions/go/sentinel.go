@@ -20,11 +20,11 @@ func yy0(str string, cur int, count int) int {
 }
 
 func yy1(str string, cur int, count int) int {
-	{ return count }
+	return count
 }
 
 func yy2(str string, cur int, count int) int {
-	{ return -1 }
+	return -1
 }
 
 func yy3(str string, cur int, count int) int {
@@ -39,7 +39,7 @@ func yy3(str string, cur int, count int) int {
 }
 
 func yy4(str string, cur int, count int) int {
-	{ return lex(str, cur, count) }
+	return lex(str, cur, count)
 }
 
 func yy5(str string, cur int, count int) int {
@@ -54,7 +54,7 @@ func yy5(str string, cur int, count int) int {
 }
 
 func yy6(str string, cur int, count int) int {
-	{ count += 1; return lex(str, cur, count) }
+	count += 1; return lex(str, cur, count)
 }
 
 func lex(str string, cur int, count int) int {

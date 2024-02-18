@@ -43,7 +43,7 @@ fn yy1(_st: &mut State) -> Option<u32> {
 }
 
 fn yy2(_st: &mut State) -> Option<u32> {
-	{ return None; }
+	return None;
 }
 
 fn yy3(_st: &mut State) -> Option<u32> {
@@ -130,13 +130,13 @@ fn yy11(_st: &mut State) -> Option<u32> {
 }
 
 fn yy12(_st: &mut State) -> Option<u32> {
-	{
+	
         return if _st.num < ERROR { Some(_st.num as u32) } else { None };
-    }
+
 }
 
 fn yy13(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 2);  return yyfnBIN(_st); }
+	add(_st, 48, 2);  return yyfnBIN(_st);
 }
 
 fn yyfnBIN(_st: &mut State) -> Option<u32> {
@@ -153,13 +153,13 @@ fn yy14(_st: &mut State) -> Option<u32> {
 }
 
 fn yy15(_st: &mut State) -> Option<u32> {
-	{
+	
         return if _st.num < ERROR { Some(_st.num as u32) } else { None };
-    }
+
 }
 
 fn yy16(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 8);  return yyfnOCT(_st); }
+	add(_st, 48, 8);  return yyfnOCT(_st);
 }
 
 fn yyfnOCT(_st: &mut State) -> Option<u32> {
@@ -176,13 +176,13 @@ fn yy17(_st: &mut State) -> Option<u32> {
 }
 
 fn yy18(_st: &mut State) -> Option<u32> {
-	{
+	
         return if _st.num < ERROR { Some(_st.num as u32) } else { None };
-    }
+
 }
 
 fn yy19(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 10); return yyfnDEC(_st); }
+	add(_st, 48, 10); return yyfnDEC(_st);
 }
 
 fn yyfnDEC(_st: &mut State) -> Option<u32> {
@@ -201,21 +201,21 @@ fn yy20(_st: &mut State) -> Option<u32> {
 }
 
 fn yy21(_st: &mut State) -> Option<u32> {
-	{
+	
         return if _st.num < ERROR { Some(_st.num as u32) } else { None };
-    }
+
 }
 
 fn yy22(_st: &mut State) -> Option<u32> {
-	{ add(_st, 48, 16); return yyfnHEX(_st); }
+	add(_st, 48, 16); return yyfnHEX(_st);
 }
 
 fn yy23(_st: &mut State) -> Option<u32> {
-	{ add(_st, 55, 16); return yyfnHEX(_st); }
+	add(_st, 55, 16); return yyfnHEX(_st);
 }
 
 fn yy24(_st: &mut State) -> Option<u32> {
-	{ add(_st, 87, 16); return yyfnHEX(_st); }
+	add(_st, 87, 16); return yyfnHEX(_st);
 }
 
 fn yyfnHEX(_st: &mut State) -> Option<u32> {

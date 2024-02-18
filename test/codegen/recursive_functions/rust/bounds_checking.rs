@@ -27,11 +27,11 @@ fn yy0(_st: &mut State) -> i32 {
 }
 
 fn yy1(_st: &mut State) -> i32 {
-	{ return if _st.cur + YYMAXFILL - 1 == _st.lim { _st.count } else { -1 }; }
+	return if _st.cur + YYMAXFILL - 1 == _st.lim { _st.count } else { -1 };
 }
 
 fn yy2(_st: &mut State) -> i32 {
-	{ return -1; }
+	return -1;
 }
 
 fn yy3(_st: &mut State) -> i32 {
@@ -49,7 +49,7 @@ fn yy3(_st: &mut State) -> i32 {
 }
 
 fn yy4(_st: &mut State) -> i32 {
-	{ return lex(_st); }
+	return lex(_st);
 }
 
 fn yy5(_st: &mut State) -> i32 {
@@ -66,7 +66,7 @@ fn yy5(_st: &mut State) -> i32 {
 }
 
 fn yy6(_st: &mut State) -> i32 {
-	{ _st.count += 1; return lex(_st); }
+	_st.count += 1; return lex(_st);
 }
 
 fn yy7(_st: &mut State) -> i32 {

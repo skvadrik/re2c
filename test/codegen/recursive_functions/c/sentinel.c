@@ -48,11 +48,11 @@ int yy0(const char* YYCURSOR, int count) {
 }
 
 int yy1(const char* YYCURSOR, int count) {
-	{ return count; }
+	return count;
 }
 
 int yy2(const char* YYCURSOR, int count) {
-	{ return -1; }
+	return -1;
 }
 
 int yy3(const char* YYCURSOR, int count) {
@@ -66,7 +66,7 @@ int yy3(const char* YYCURSOR, int count) {
 }
 
 int yy4(const char* YYCURSOR, int count) {
-	{ return lex(YYCURSOR, count); }
+	return lex(YYCURSOR, count);
 }
 
 int yy5(const char* YYCURSOR, int count) {
@@ -105,7 +105,7 @@ int yy5(const char* YYCURSOR, int count) {
 }
 
 int yy6(const char* YYCURSOR, int count) {
-	{ return lex(YYCURSOR, ++count); }
+	return lex(YYCURSOR, ++count);
 }
 
 int lex(const char* YYCURSOR, int count) {

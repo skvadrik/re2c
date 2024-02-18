@@ -36,11 +36,11 @@ int yy0(State& st) {
 }
 
 int yy1(State& st) {
-	{ return st.cur + YYMAXFILL - 1 == st.lim ? st.count : -1; }
+	return st.cur + YYMAXFILL - 1 == st.lim ? st.count : -1;
 }
 
 int yy2(State& st) {
-	{ return -1; }
+	return -1;
 }
 
 int yy3(State& st) {
@@ -55,7 +55,7 @@ int yy3(State& st) {
 }
 
 int yy4(State& st) {
-	{ return lex(st); }
+	return lex(st);
 }
 
 int yy5(State& st) {
@@ -69,7 +69,7 @@ int yy5(State& st) {
 }
 
 int yy6(State& st) {
-	{ ++st.count; return lex(st); }
+	++st.count; return lex(st);
 }
 
 int yy7(State& st) {

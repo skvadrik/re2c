@@ -35,7 +35,7 @@ func yy1(st *State) int {
 }
 
 func yy2(st *State) int {
-	{ return -1 }
+	return -1
 }
 
 func yy3(st *State) int {
@@ -50,7 +50,7 @@ func yy3(st *State) int {
 }
 
 func yy4(st *State) int {
-	{ return do_lex(st) }
+	return do_lex(st)
 }
 
 func yy5(st *State) int {
@@ -92,7 +92,7 @@ func yy7(st *State, yych byte) int {
 }
 
 func yy8(st *State) int {
-	{ st.count += 1; return do_lex(st) }
+	st.count += 1; return do_lex(st)
 }
 
 func yy9(st *State) int {
@@ -111,7 +111,7 @@ func yy9(st *State) int {
 }
 
 func yy10(st *State) int {
-	{ return st.count }
+	return st.count
 }
 
 func yy11(st *State) int {

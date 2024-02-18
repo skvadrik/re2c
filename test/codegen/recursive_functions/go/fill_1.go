@@ -73,7 +73,7 @@ func yy1(in *Input) int {
 }
 
 func yy2(in *Input) int {
-	{ return -1 }
+	return -1
 }
 
 func yy3(in *Input) int {
@@ -96,7 +96,7 @@ func yy3(in *Input) int {
 }
 
 func yy4(in *Input) int {
-	{ return lex_loop(in) }
+	return lex_loop(in)
 }
 
 func yy5(in *Input) int {
@@ -146,7 +146,7 @@ func yy7(in *Input, yych byte) int {
 }
 
 func yy8(in *Input) int {
-	{ in.count += 1; return lex_loop(in) }
+	in.count += 1; return lex_loop(in)
 }
 
 func yy9(in *Input) int {
@@ -169,7 +169,7 @@ func yy9(in *Input) int {
 }
 
 func yy10(in *Input) int {
-	{ return in.count }
+	return in.count
 }
 
 func yy11(in *Input) int {

@@ -48,7 +48,7 @@ int yy1(State& st) {
 }
 
 int yy2(State& st) {
-	{ return -1; }
+	return -1;
 }
 
 int yy3(State& st) {
@@ -62,7 +62,7 @@ int yy3(State& st) {
 }
 
 int yy4(State& st) {
-	{ return lex(st); }
+	return lex(st);
 }
 
 int yy5(State& st) {
@@ -103,7 +103,7 @@ int yy7(State& st, char yych) {
 }
 
 int yy8(State& st) {
-	{ ++st.count; return lex(st); }
+	++st.count; return lex(st);
 }
 
 int yy9(State& st) {
@@ -122,7 +122,7 @@ int yy9(State& st) {
 }
 
 int yy10(State& st) {
-	{ return st.count; }
+	return st.count;
 }
 
 int yy11(State& st) {

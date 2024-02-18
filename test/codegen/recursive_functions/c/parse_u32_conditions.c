@@ -84,7 +84,7 @@ uint64_t yy1(State& st) {
 }
 
 uint64_t yy2(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy3(State& st) {
@@ -187,15 +187,15 @@ uint64_t yy11(State& st) {
 }
 
 uint64_t yy12(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy13(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy14(State& st) {
-	{ adddgt<2> (st.num, st.cur[-1] - '0'); return yyfnbin(st); }
+	adddgt<2> (st.num, st.cur[-1] - '0'); return yyfnbin(st);
 }
 
 uint64_t yyfnbin(State& st) {
@@ -221,15 +221,15 @@ uint64_t yy15(State& st) {
 }
 
 uint64_t yy16(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy17(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy18(State& st) {
-	{ adddgt<10>(st.num, st.cur[-1] - '0'); return yyfndec(st); }
+	adddgt<10>(st.num, st.cur[-1] - '0'); return yyfndec(st);
 }
 
 uint64_t yyfndec(State& st) {
@@ -267,23 +267,23 @@ uint64_t yy19(State& st) {
 }
 
 uint64_t yy20(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy21(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy22(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - '0');      return lex(st); }
+	adddgt<16>(st.num, st.cur[-1] - '0');      return lex(st);
 }
 
 uint64_t yy23(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - 'A' + 10); return lex(st); }
+	adddgt<16>(st.num, st.cur[-1] - 'A' + 10); return lex(st);
 }
 
 uint64_t yy24(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - 'a' + 10); return lex(st); }
+	adddgt<16>(st.num, st.cur[-1] - 'a' + 10); return lex(st);
 }
 
 uint64_t yyfnhex(State& st) {
@@ -307,15 +307,15 @@ uint64_t yy25(State& st) {
 }
 
 uint64_t yy26(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy27(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy28(State& st) {
-	{ adddgt<8> (st.num, st.cur[-1] - '0'); return yyfnoct(st); }
+	adddgt<8> (st.num, st.cur[-1] - '0'); return yyfnoct(st);
 }
 
 uint64_t yyfnoct(State& st) {

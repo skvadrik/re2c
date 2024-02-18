@@ -74,14 +74,14 @@ fn yy0(_st: &mut State) -> isize {
 }
 
 fn yy1(_st: &mut State) -> isize {
-	{
+	
         // Check that it is the sentinel, not some unexpected null.
         return if _st.tok == _st.lim - YYMAXFILL { _st.count } else { -1 }
-    }
+
 }
 
 fn yy2(_st: &mut State) -> isize {
-	{ return -1; }
+	return -1;
 }
 
 fn yy3(_st: &mut State) -> isize {
@@ -99,7 +99,7 @@ fn yy3(_st: &mut State) -> isize {
 }
 
 fn yy4(_st: &mut State) -> isize {
-	{ return lex_loop(_st); }
+	return lex_loop(_st);
 }
 
 fn yy5(_st: &mut State) -> isize {
@@ -116,7 +116,7 @@ fn yy5(_st: &mut State) -> isize {
 }
 
 fn yy6(_st: &mut State) -> isize {
-	{ _st.count += 1; return lex_loop(_st); }
+	_st.count += 1; return lex_loop(_st);
 }
 
 fn yy7(_st: &mut State) -> isize {

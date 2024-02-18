@@ -160,7 +160,7 @@ fn yy2(st: &mut ConState) -> ConStatus {
 
 fn yy3(st: &mut ConState) -> ConStatus {
 	st.state = -1;
-	{ return ConStatus::BadPacket; }
+	return ConStatus::BadPacket;
 }
 
 fn yy4(st: &mut ConState) -> ConStatus {
@@ -391,7 +391,7 @@ fn yy14(st: &mut ConState) -> ConStatus {
 	st.p3 = st.yytm5;
 	st.p4 = st.yytm6;
 	st.state = -1;
-	{
+	
         log!("media type: {}", String::from_utf8_lossy(&st.buf[st.l1..st.l2]));
 
         let mut pnames: Vec::<String> = Vec::new();
@@ -404,7 +404,7 @@ fn yy14(st: &mut ConState) -> ConStatus {
 
         st.tok = st.cur;
         return lex(st);
-    }
+
 }
 
 fn yy15(st: &mut ConState) -> ConStatus {
@@ -633,7 +633,7 @@ fn yy21(st: &mut ConState) -> ConStatus {
 
 fn yy22(st: &mut ConState) -> ConStatus {
 	st.state = -1;
-	{ return ConStatus::End; }
+	return ConStatus::End;
 }
 
 fn yyfnmedia_type(st: &mut ConState) -> ConStatus {
@@ -673,7 +673,7 @@ fn yy24(st: &mut ConState) -> ConStatus {
 
 fn yy25(st: &mut ConState) -> ConStatus {
 	st.state = -1;
-	{ return ConStatus::BadPacket; }
+	return ConStatus::BadPacket;
 }
 
 fn yy26(st: &mut ConState) -> ConStatus {
@@ -972,14 +972,14 @@ fn yy38(st: &mut ConState) -> ConStatus {
 	st.f1 = st.yytm1;
 	st.f2 = st.yytm3;
 	st.state = -1;
-	{
+	
         let mut folds: Vec::<String> = Vec::new();
         unwind(&mut st.mtag_trie, st.f1, st.f2, &st.buf, &mut folds);
         log!("folds: {:?}", folds);
 
         st.tok = st.cur;
         return lex(st);
-    }
+
 }
 
 fn yy39(st: &mut ConState) -> ConStatus {
@@ -1095,7 +1095,7 @@ fn yy43(st: &mut ConState) -> ConStatus {
 
 fn yy44(st: &mut ConState) -> ConStatus {
 	st.state = -1;
-	{ return ConStatus::End; }
+	return ConStatus::End;
 }
 
 fn yyfnheader(st: &mut ConState) -> ConStatus {

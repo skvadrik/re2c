@@ -50,12 +50,12 @@ void yy0(T x) {
 
 void yy1(T x) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy2(T x) {
 	YYSETSTATE(-1);
-	{ x }
+	x
 }
 
 
@@ -80,12 +80,12 @@ void yy3(T y) {
 
 void yy4(T y) {
 	YYSETSTATE(-1);
-	{ y }
+	y
 }
 
 void yy5(T y) {
 	YYSETSTATE(-1);
-	{ y }
+	y
 }
 
 
@@ -116,12 +116,12 @@ void yy7(T z) {
 
 void yy8(T z) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy9(T z) {
 	YYSETSTATE(-1);
-	{ z }
+	z
 }
 
 void yyfnc1(T z) {
@@ -142,12 +142,12 @@ void yy10(T z) {
 
 void yy11(T z) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy12(T z) {
 	YYSETSTATE(-1);
-	{ z }
+	z
 }
 
 void yyfnc2(T z) {
@@ -185,12 +185,12 @@ void yy13(T w) {
 
 void yy14(T w) {
 	YYSETSTATE(-1);
-	{ * }
+	*
 }
 
 void yy15(T w) {
 	YYSETSTATE(-1);
-	{ w }
+	w
 }
 
 

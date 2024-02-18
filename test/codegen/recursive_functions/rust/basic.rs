@@ -13,7 +13,7 @@ fn yy0(_str: &[u8], mut _cur: usize) {
 }
 
 fn yy1(_str: &[u8], mut _cur: usize) {
-	{ panic!("garbage!"); }
+	panic!("garbage!");
 }
 
 fn yy2(_str: &[u8], mut _cur: usize) {
@@ -30,7 +30,7 @@ fn yy2(_str: &[u8], mut _cur: usize) {
 }
 
 fn yy3(_str: &[u8], mut _cur: usize) {
-	{ return; }
+	return;
 }
 
 fn lex(_str: &[u8], mut _cur: usize) {

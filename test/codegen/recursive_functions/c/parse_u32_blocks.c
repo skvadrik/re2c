@@ -39,15 +39,15 @@ uint64_t yy0(State& st) {
 }
 
 uint64_t yy1(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy2(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy3(State& st) {
-	{ adddgt<2>(st.num, st.cur[-1] - '0'); return lex_bin(st); }
+	adddgt<2>(st.num, st.cur[-1] - '0'); return lex_bin(st);
 }
 
 uint64_t lex_bin(State& st) {
@@ -80,15 +80,15 @@ uint64_t yy4(State& st) {
 }
 
 uint64_t yy5(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy6(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy7(State& st) {
-	{ adddgt<8>(st.num, st.cur[-1] - '0'); return lex_oct(st); }
+	adddgt<8>(st.num, st.cur[-1] - '0'); return lex_oct(st);
 }
 
 uint64_t lex_oct(State& st) {
@@ -123,15 +123,15 @@ uint64_t yy8(State& st) {
 }
 
 uint64_t yy9(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy10(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy11(State& st) {
-	{ adddgt<10>(st.num, st.cur[-1] - '0'); return lex_dec(st); }
+	adddgt<10>(st.num, st.cur[-1] - '0'); return lex_dec(st);
 }
 
 uint64_t lex_dec(State& st) {
@@ -180,23 +180,23 @@ uint64_t yy12(State& st) {
 }
 
 uint64_t yy13(State& st) {
-	{ return st.num; }
+	return st.num;
 }
 
 uint64_t yy14(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy15(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - '0');      return lex_hex(st); }
+	adddgt<16>(st.num, st.cur[-1] - '0');      return lex_hex(st);
 }
 
 uint64_t yy16(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - 'A' + 10); return lex_hex(st); }
+	adddgt<16>(st.num, st.cur[-1] - 'A' + 10); return lex_hex(st);
 }
 
 uint64_t yy17(State& st) {
-	{ adddgt<16>(st.num, st.cur[-1] - 'a' + 10); return lex_hex(st); }
+	adddgt<16>(st.num, st.cur[-1] - 'a' + 10); return lex_hex(st);
 }
 
 uint64_t lex_hex(State& st) {
@@ -236,7 +236,7 @@ uint64_t yy18(State& st) {
 }
 
 uint64_t yy19(State& st) {
-	{ return ERROR; }
+	return ERROR;
 }
 
 uint64_t yy20(State& st) {
@@ -255,12 +255,12 @@ uint64_t yy20(State& st) {
 }
 
 uint64_t yy21(State& st) {
-	{ return lex_oct(st); }
+	return lex_oct(st);
 }
 
 uint64_t yy22(State& st) {
 	st.cur -= 1;
-	{ return lex_dec(st); }
+	return lex_dec(st);
 }
 
 uint64_t yy23(State& st) {
@@ -312,12 +312,12 @@ uint64_t yy25(State& st) {
 
 uint64_t yy26(State& st) {
 	st.cur -= 1;
-	{ return lex_bin(st); }
+	return lex_bin(st);
 }
 
 uint64_t yy27(State& st) {
 	st.cur -= 1;
-	{ return lex_hex(st); }
+	return lex_hex(st);
 }
 
 uint64_t lex_main(State& st) {

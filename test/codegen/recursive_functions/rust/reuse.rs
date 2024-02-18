@@ -21,7 +21,7 @@ fn yy1(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
 }
 
 fn yy2(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
-	{ return None; }
+	return None;
 }
 
 fn yy3(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
@@ -119,7 +119,7 @@ fn yy11(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
 }
 
 fn yy12(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
-	{ return Some(_cur); }
+	return Some(_cur);
 }
 
 fn lex_utf8(_str: &[u8], mut _cur: usize, mut _mar: usize) -> Option<usize> {
@@ -144,7 +144,7 @@ fn yy14(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {
 }
 
 fn yy15(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {
-	{ return None; }
+	return None;
 }
 
 fn yy16(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {
@@ -194,7 +194,7 @@ fn yy20(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {
 }
 
 fn yy21(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {
-	{ return Some(_cur); }
+	return Some(_cur);
 }
 
 fn lex_utf32(_str: &[u32], mut _cur: usize, mut _mar: usize) -> Option<usize> {

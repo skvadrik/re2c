@@ -50,7 +50,7 @@ func yy1(st *State) (uint32, error) {
 }
 
 func yy2(st *State) (uint32, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy3(st *State) (uint32, error) {
@@ -144,21 +144,21 @@ func yy11(st *State) (uint32, error) {
 }
 
 func yy12(st *State) (uint32, error) {
-	{
+	
 		if st.result < u32Limit {
 			return uint32(st.result), nil
 		} else {
 			return 0, eOverflow
 		}
-	}
+
 }
 
 func yy13(st *State) (uint32, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy14(st *State) (uint32, error) {
-	{ add(st, 2, '0');     return yyfnbin(st) }
+	add(st, 2, '0');     return yyfnbin(st)
 }
 
 func yyfnbin(st *State) (uint32, error) {
@@ -179,21 +179,21 @@ func yy15(st *State) (uint32, error) {
 }
 
 func yy16(st *State) (uint32, error) {
-	{
+	
 		if st.result < u32Limit {
 			return uint32(st.result), nil
 		} else {
 			return 0, eOverflow
 		}
-	}
+
 }
 
 func yy17(st *State) (uint32, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy18(st *State) (uint32, error) {
-	{ add(st, 10, '0');    return yyfndec(st) }
+	add(st, 10, '0');    return yyfndec(st)
 }
 
 func yyfndec(st *State) (uint32, error) {
@@ -218,29 +218,29 @@ func yy19(st *State) (uint32, error) {
 }
 
 func yy20(st *State) (uint32, error) {
-	{
+	
 		if st.result < u32Limit {
 			return uint32(st.result), nil
 		} else {
 			return 0, eOverflow
 		}
-	}
+
 }
 
 func yy21(st *State) (uint32, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy22(st *State) (uint32, error) {
-	{ add(st, 16, '0');    return yyfnhex(st) }
+	add(st, 16, '0');    return yyfnhex(st)
 }
 
 func yy23(st *State) (uint32, error) {
-	{ add(st, 16, 'A'-10); return yyfnhex(st) }
+	add(st, 16, 'A'-10); return yyfnhex(st)
 }
 
 func yy24(st *State) (uint32, error) {
-	{ add(st, 16, 'a'-10); return yyfnhex(st) }
+	add(st, 16, 'a'-10); return yyfnhex(st)
 }
 
 func yyfnhex(st *State) (uint32, error) {
@@ -261,21 +261,21 @@ func yy25(st *State) (uint32, error) {
 }
 
 func yy26(st *State) (uint32, error) {
-	{
+	
 		if st.result < u32Limit {
 			return uint32(st.result), nil
 		} else {
 			return 0, eOverflow
 		}
-	}
+
 }
 
 func yy27(st *State) (uint32, error) {
-	{ return 0, eSyntax }
+	return 0, eSyntax
 }
 
 func yy28(st *State) (uint32, error) {
-	{ add(st, 8, '0');     return yyfnoct(st) }
+	add(st, 8, '0');     return yyfnoct(st)
 }
 
 func yyfnoct(st *State) (uint32, error) {

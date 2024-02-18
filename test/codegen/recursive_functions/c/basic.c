@@ -20,7 +20,7 @@ int yy0(const char* YYCURSOR) {
 }
 
 int yy1(const char* YYCURSOR) {
-	{ return 1; }
+	return 1;
 }
 
 int yy2(const char* YYCURSOR) {
@@ -36,7 +36,7 @@ int yy2(const char* YYCURSOR) {
 }
 
 int yy3(const char* YYCURSOR) {
-	{ return 0; }
+	return 0;
 }
 
 int lex(const char* YYCURSOR) {

@@ -106,7 +106,7 @@ static Status yy1(Input* in) {
 
 static Status yy2(Input* in) {
 	in->state = -1;
-	{ return BAD_PACKET; }
+	return BAD_PACKET;
 }
 
 static Status yy3(Input* in) {
@@ -155,7 +155,7 @@ static Status yy3(Input* in) {
 
 static Status yy4(Input* in) {
 	in->state = -1;
-	{ ++in->packets; in->tok = in->cur; return lex(in); }
+	++in->packets; in->tok = in->cur; return lex(in);
 }
 
 static Status yy5(Input* in) {
@@ -209,7 +209,7 @@ static Status yy6(Input* in) {
 
 static Status yy7(Input* in) {
 	in->state = -1;
-	{ return END; }
+	return END;
 }
 
 static Status lex(Input* in) {
