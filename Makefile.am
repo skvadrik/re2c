@@ -146,6 +146,7 @@ re2c_GEN_SRC = \
 	src/default_syntax_c.cc \
 	src/default_syntax_d.cc \
 	src/default_syntax_go.cc \
+	src/default_syntax_ocaml.cc \
 	src/default_syntax_rust.cc
 re2c_GEN_HDR = \
 	src/options/parser.h \
@@ -185,6 +186,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_c.cc \
 	bootstrap/src/default_syntax_d.cc \
 	bootstrap/src/default_syntax_go.cc \
+	bootstrap/src/default_syntax_ocaml.cc \
 	bootstrap/src/default_syntax_rust.cc
 
 # custom sources
@@ -327,7 +329,9 @@ man_MANS = $(DOCS)
 # include files (stdlib)
 dist_stdlib_DATA = \
 	include/syntax/c \
+	include/syntax/d \
 	include/syntax/go \
+	include/syntax/ocaml \
 	include/syntax/rust \
 	include/unicode_categories.re
 
@@ -530,6 +534,14 @@ lib_LTLIBRARIES =
 include $(top_srcdir)/Makefile.lib.am
 endif
 
+# re2d
+if WITH_DLANG
+bin_PROGRAMS += re2d
+re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D
+re2d_SOURCES = $(re2c_SOURCES)
+nodist_re2d_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
 # re2go
 if WITH_GOLANG
 bin_PROGRAMS += re2go
@@ -538,12 +550,12 @@ re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
-# re2d
-if WITH_DLANG
-bin_PROGRAMS += re2d
-re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D
-re2d_SOURCES = $(re2c_SOURCES)
-nodist_re2d_SOURCES = $(nodist_re2c_SOURCES)
+# re2ocaml
+if WITH_OCAML
+bin_PROGRAMS += re2ocaml
+re2ocaml_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::OCAML
+re2ocaml_SOURCES = $(re2c_SOURCES)
+nodist_re2ocaml_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2rust

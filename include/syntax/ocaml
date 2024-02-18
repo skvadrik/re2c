@@ -1,0 +1,193 @@
+api = [generic];
+api_style = [freeform, functions];
+code_model = [recursive_functions];
+target = [code, dot];
+
+computed_goto = unsupported;
+case_ranges = unsupported;
+yyctype_literals = hex;
+semicolons = no;
+implicit_bool_conversion = no;
+backtick_quoted_strings = no;
+standalone_single_quotes = yes; // TODO: what about identifiers?
+
+conf:api = custom;
+conf:api:style = free-form;
+conf:api:sigil = "@@";
+conf:header = "";
+conf:eof = -1;
+conf:sentinel = -1;
+conf:yyfill:enable = 1;
+conf:yyfill:parameter = 1;
+conf:yyfill:check = 1;
+conf:tags = 0;
+conf:leftmost-captures = 0;
+conf:posix-captures = 0;
+conf:tags:prefix = "yyt";
+conf:tags:expression = "@@";
+conf:invert-captures = 0;
+conf:define:YYBACKUP = "YYBACKUP";
+conf:define:YYBACKUPCTX = "YYBACKUPCTX";
+conf:define:YYCONDTYPE = "yycondtype";
+conf:define:YYCTYPE = "yyctype";
+conf:define:YYCTXMARKER = "YYCTXMARKER";
+conf:define:YYCURSOR = "YYCURSOR";
+conf:define:YYDEBUG = "YYDEBUG";
+conf:define:YYFILL = "YYFILL";
+conf:define:YYFILL@len = "@@";
+conf:define:YYFILL:naked = 0;
+conf:define:YYGETCONDITION = "YYGETCONDITION";
+conf:define:YYGETCONDITION:naked = 0;
+conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYGETSTATE:naked = 0;
+conf:define:YYLESSTHAN = "YYLESSTHAN";
+conf:define:YYLIMIT = "YYLIMIT";
+conf:define:YYMARKER = "YYMARKER";
+conf:define:YYMTAGN = "YYMTAGN";
+conf:define:YYMTAGP = "YYMTAGP";
+conf:define:YYPEEK = "YYPEEK";
+conf:define:YYRESTORE = "YYRESTORE";
+conf:define:YYRESTORECTX = "YYRESTORECTX";
+conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETCONDITION = "YYSETCONDITION";
+conf:define:YYSETCONDITION@cond = "@@";
+conf:define:YYSETCONDITION:naked = 0;
+conf:define:YYSETSTATE = "YYSETSTATE";
+conf:define:YYSETSTATE:naked = 0;
+conf:define:YYSETSTATE@state = "@@";
+conf:define:YYSHIFT = "YYSHIFT";
+conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
+conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
+conf:define:YYSKIP = "YYSKIP";
+conf:define:YYSTAGN = "YYSTAGN";
+conf:define:YYSTAGP = "YYSTAGP";
+conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+conf:yyfn:sep = ";";
+conf:variable:yyctable = "yyctable";
+conf:variable:yyaccept = "yyaccept";
+conf:variable:yytarget = "yytarget";
+conf:variable:yystate = "yystate";
+conf:variable:yych = "yych";
+conf:variable:yych:conversion = 0;
+conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
+conf:variable:yybm = "yybm";
+conf:variable:yybm:hex = 0;
+conf:variable:yystable = ""; // deprecated
+conf:cond:abort = 0; // default case causes [redundant-case] warnings
+conf:cond:prefix = "yyc_";
+conf:cond:enumprefix = "YYC_";
+conf:cond:divider = "(* *********************************** *)";
+conf:cond:divider@cond = "@@";
+conf:cond:goto = "";
+conf:cond:goto@cond = "@@";
+conf:state:abort = 1;
+conf:state:nextlabel = 0;
+conf:bit-vectors = 0;
+conf:debug-output = 0;
+conf:computed-gotos = 0;
+conf:computed-gotos:threshold = 9;
+conf:nested-ifs = 0;
+conf:case-insensitive = 0;
+conf:case-inverted = 0;
+conf:case-ranges = 0;
+conf:unsafe = 0;
+conf:encoding:ebcdic = 0;
+conf:encoding:utf32 = 0;
+conf:encoding:ucs2 = 0;
+conf:encoding:utf16 = 0;
+conf:encoding:utf8 = 0;
+conf:encoding-policy = ignore;
+conf:empty-class = match-empty;
+conf:indent:string = "\t";
+conf:indent:top = 0;
+conf:label:prefix = "yy";
+conf:label:yyfill = "yyFillLabel";
+conf:label:yyloop = "";
+conf:label:yyNext = "yyNext";
+conf:label:start = 0;
+
+code:var = topindent "let " name " = " (have_init? init : "0") nl;
+
+code:const = topindent "let " name " = " init nl;
+
+// code:array
+code:array_elem = array ".(" index ")";
+
+code:type_int = "int";
+code:type_uint = "uint";
+code:type_cond_enum = (storable_state? "int" : "uint");
+// code:type_yybm
+// code:type_yytarget
+
+code:assign = [lhs: topindent lhs " <- " rhs ";" nl];
+code:assign_op = topindent lhs " <- " lhs " " op " " rhs ";" nl;
+
+code:if_then_else =
+    [branch{0}: topindent "if (" cond ") then (" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent ") else " (have_cond? "if (" cond ") then ") "(" nl
+        indent [stmt: stmt] dedent]
+    topindent ")" nl;
+
+code:if_then_else_oneline =
+    [branch{0}: topindent "if (" cond ") then " [stmt: stmt] nl]
+    [branch{1:-1}: topindent "else " (have_cond? "if (" cond ") then ") [stmt: stmt] nl];
+
+code:switch =
+    topindent "match " expr " with" nl
+        indent [case: case] dedent;
+
+code:switch_cases =
+    [case{0:-2}: topindent "| " case nl]
+    [case{-1}:   topindent "| " case " ->" nl
+        indent [stmt: stmt] dedent
+    ];
+
+code:switch_cases_oneline =
+    [case{0:-2}: topindent "| " case nl]
+    [case{-1}:   topindent "| " case " -> " [stmt: stmt] nl];
+
+// Note: we cannot use `"c when " [val{0}: val] " <= c && c <= " [val{-1}: val]`, as it causes
+// `Error: Variable c must occur on both sides of this | pattern` when there are multiple cases.
+code:switch_case_range = [val{0}: val] [val{1:-1}: "|" val];
+
+code:switch_case_default = "_";
+
+code:enum =
+    "type " name " = "
+        [elem{0}:          elem]
+        [elem{1:-1}: " | " elem]
+    nl;
+
+code:enum_elem = name;
+
+code:fndef =
+    name [arg: " (" argname " : " argtype ")"] " : " type " =" nl
+        indent [stmt: stmt] dedent;
+
+code:fncall =
+    topindent (have_retval ? "let " retval " = ")
+        "(" name " [@tailcall])" (have_args ? [arg: " " arg] : " ()") nl;
+
+code:tailcall = topindent "(" name " [@tailcall])" (have_args ? [arg: " " arg] : " ()") nl;
+
+code:recursive_functions =
+    [fn{0}:    "let rec " fndef nl]
+    [fn{1:-1}: "and "     fndef nl];
+
+code:fingerprint =
+    "(* Generated by re2c" (version? " " version) (date? " on " date) " *)" nl;
+
+code:line_info = "#" line " \"" file "\"" nl;
+
+code:abort = topindent "raise (Failure \"internal lexer error\")" nl;
+
+code:yyaccept = topindent var " <- " num ";" nl;
+
+code:yydebug = topindent debug " " state " " char nl;
+
+code:yypeek = topindent "let " char " = " peek (api_style.functions ? "()") " in" nl;
+
+code:yyskip = topindent skip (api_style.functions ? "();") nl;
+
+code:yybackup = topindent backup (api_style.functions ? "();") nl;

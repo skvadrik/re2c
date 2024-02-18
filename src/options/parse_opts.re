@@ -221,11 +221,12 @@ opt_long: /*!local:re2c
 */
 
 opt_lang: /*!local:re2c
-    * { ERRARG("--lang", "c | go | rust | d", *argv); }
-    "c"    end { *lang = Lang::C;    goto opt; }
-    "go"   end { *lang = Lang::GO;   goto opt; }
-    "rust" end { *lang = Lang::RUST; goto opt; }
-    "d"    end { *lang = Lang::D;    goto opt; }
+    * { ERRARG("--lang", "c | d | go | ocaml | rust", *argv); }
+    "c"     end { *lang = Lang::C;     goto opt; }
+    "d"     end { *lang = Lang::D;     goto opt; }
+    "go"    end { *lang = Lang::GO;    goto opt; }
+    "ocaml" end { *lang = Lang::OCAML; goto opt; }
+    "rust"  end { *lang = Lang::RUST;  goto opt; }
 */
 
 opt_output: /*!local:re2c

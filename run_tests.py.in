@@ -28,7 +28,7 @@ TOP_BUILDIR = '@top_builddir@'
 
 
 # Prepare static patterns once at start.
-RE2C_PATTERN = re.compile(r'.*re2c[ \t]*(.*)$')
+RE2C_PATTERN = re.compile(r'.*re2c[ ]*([ a-zA-Z0-9_./$-]+).*$') # skip possible comment end
 TYPE_HEADER_PATTERN1 = re.compile(r'--header[ \t]*')
 TYPE_HEADER_PATTERN2 = re.compile(r'.*--header[ \t]*([^ \t]*).*')
 FILEPATH = b'^[a-z0-9_]+([\\\\/]+[a-z0-9_]+)+([.][a-z]+)+'
@@ -299,7 +299,7 @@ def copy_tests(tests, dst):  # type: (list, str) -> None
 def clean_test_tree(path):  # type: (str) -> None
     """Clean the test tree from the not needed files."""
     files = set([str(f) for f in Path(path).rglob('*.*')])
-    for ext in ['re', 'c', 'h', 'go', 'rs', 'd', 'inc']:
+    for ext in ['re', 'c', 'h', 'd', 'go', 'ml', 'rs', 'inc']:
         files -= set([str(f) for f in Path(path).rglob(f'*.{ext}')])
 
     remove(*[f for f in files if os.path.isfile(f)])
@@ -344,15 +344,17 @@ def run_test(test):
 
     with open(outx, mode='rb') as f:
         head = f.readline().decode('utf-8').strip()
-        # generate file extension (.c for C/C++, .go for Go, .rs for Rust)
+        # generate file extension
         if head.startswith("// re2c"):
             ext = "c"
-        elif head.startswith("//go:generate re2go"):
-            ext = "go"
-        elif head.startswith("// re2rust"):
-            ext = "rs"
         elif head.startswith("// re2d"):
             ext = "d"
+        elif head.startswith("//go:generate re2go"):
+            ext = "go"
+        elif head.startswith("(* re2ocaml"):
+            ext = "ml"
+        elif head.startswith("// re2rust"):
+            ext = "rs"
         else:
             ext = "??"
 
@@ -361,9 +363,10 @@ def run_test(test):
 
     # Prepare re2c flags
     switches = head
-    switches = switches.replace('re2go', 're2c --lang go')
-    switches = switches.replace('re2rust', 're2c --lang rust')
     switches = switches.replace('re2d', 're2c --lang d')
+    switches = switches.replace('re2go', 're2c --lang go')
+    switches = switches.replace('re2ocaml', 're2c --lang ocaml')
+    switches = switches.replace('re2rust', 're2c --lang rust')
     switches = RE2C_PATTERN.sub(r'\1', switches)
     switches = switches.replace('$INPUT', outx)
     switches = switches.replace('$OUTPUT', outy)

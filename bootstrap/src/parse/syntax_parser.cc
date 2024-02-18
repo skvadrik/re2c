@@ -1473,9 +1473,10 @@ extern "C" {
 }
 
 extern const char* DEFAULT_SYNTAX_C;
-extern const char* DEFAULT_SYNTAX_GO;
-extern const char* DEFAULT_SYNTAX_RUST;
 extern const char* DEFAULT_SYNTAX_D;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_OCAML;
+extern const char* DEFAULT_SYNTAX_RUST;
 
 namespace re2c {
 
@@ -1584,9 +1585,10 @@ Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {
         const char* src = nullptr;
         switch (lang) {
             case Lang::C: src = DEFAULT_SYNTAX_C; break;
-            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
-            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
             case Lang::D: src = DEFAULT_SYNTAX_D; break;
+            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+            case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
+            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
         }
 
         size_t flen = strlen(src);

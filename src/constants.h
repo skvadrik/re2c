@@ -14,9 +14,10 @@ enum class Target: uint32_t {
 
 enum class Lang: uint32_t {
     C,
+    D,
     GO,
-    RUST,
-    D
+    OCAML,
+    RUST
 };
 
 enum class Api: uint32_t {

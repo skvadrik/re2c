@@ -74,19 +74,18 @@ AM_COND_IF([WITH_LIBS], [
 ])
 
 
-# --enable-golang
-AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
-AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
-
-
-# --enable-rust
-AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
-AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
-
-
 # --enable-dlang
 AC_ARG_ENABLE([dlang], [AS_HELP_STRING([--enable-dlang], [build re2d executable])])
 AM_CONDITIONAL([WITH_DLANG], [test "x$enable_golang" != "xno"])
+# --enable-golang
+AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
+AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
+# --enable-ocaml
+AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
+AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])
+# --enable-rust
+AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
+AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
 
 
 # --enable-benchmarks
