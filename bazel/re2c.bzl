@@ -14,12 +14,12 @@ _RE2C_EXT = [".re", ".re2c"]
 def _re2c_impl(ctx):
     srcs = ctx.files.srcs
     if len(srcs) != 1:
-        fail("Attribute `srcs` must contain exactly 1 re2c source file ({exts}).".format(exts=", ".join(_RE2C_EXT)))
+        fail("Attribute `srcs` must contain exactly 1 re2c source file ({exts}).".format(exts = ", ".join(_RE2C_EXT)))
     outs = ctx.outputs.outs
     if not outs or [o for o in outs if paths.split_extension(o.path)[1] not in _C_SRC_EXT + _C_HDR_EXT]:
-        fail("Attribute `outs` must contain at least 1 C/C++ shource or header file ({exts}).".format(exts=", ".join(_C_SRC_EXT + _C_HDR_EXT)))
+        fail("Attribute `outs` must contain at least 1 C/C++ shource or header file ({exts}).".format(exts = ", ".join(_C_SRC_EXT + _C_HDR_EXT)))
     ctx.actions.run_shell(
-        outputs = outs + [err_file],
+        outputs = outs,
         tools = [ctx.executable._re2c_tool],
         inputs = ctx.files.srcs + ctx.files.data,
         command = """
