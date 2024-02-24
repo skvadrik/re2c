@@ -352,7 +352,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                     if (!fixed_on_cursor) {
                         o.str(opts->api_cursor).cstr(" = ").str(base);
                         if (dist > 0) o.cstr(" - ").i32(dist);
-                    } else if (dist > 0) {
+                    } else {
                         o.str(opts->api_cursor).cstr(" -= ").i32(dist);
                     }
                     append(trailops, code_stmt(alc, o.flush()));
