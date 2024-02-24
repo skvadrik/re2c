@@ -46,6 +46,12 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:type_cond_enum"] = {};
     allowed_code_confs["code:type_yybm"] = {};
     allowed_code_confs["code:type_yytarget"] = {};
+    allowed_code_confs["code:assign"] = {
+        {"rhs"}, {"lhs"}, {}
+    };
+    allowed_code_confs["code:assign_op"] = {
+        {"lhs", "rhs", "op"}, {}, {}
+    };
     allowed_code_confs["code:if_then_else"] = {
         {"cond"}, {"branch", "stmt"}, {StxLOpt::HAVE_COND}
     };

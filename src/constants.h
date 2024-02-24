@@ -117,7 +117,8 @@ enum class CodeKind: uint32_t {
     ABORT,
     ACCEPT,
     DEBUG,
-    REC_FUNCS
+    REC_FUNCS,
+    ASSIGN
 };
 
 // Types of variables in codegen (independent of the language language).

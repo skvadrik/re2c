@@ -221,9 +221,23 @@ struct CodeVar {
     const char* init;
 };
 
+// TODO: merge `BlockNameList` and `CodeExpr`?
 struct BlockNameList {
     const char* name;
     BlockNameList* next;
+};
+
+struct CodeExpr {
+    const char* expr;
+    CodeExpr* next;
+};
+
+using CodeExprs = list_t<CodeExpr>;
+
+struct CodeAssign {
+    CodeExprs* lhs; // one or more left-hand-side operands, as in `lhs1 = lhs2 = ... = rhs`
+    const char* rhs;
+    const char* op; // nullptr for simple assignment, otherwise `+`, `-`, etc. as in `lhs += rhs`
 };
 
 struct CodeFmt {
@@ -312,6 +326,7 @@ struct Code {
         CodeArray array;
         CodeEnum enumr;
         CodeFmt fmt;
+        CodeAssign assign;
         CodeLabel label;
         CodeDebug debug;
         CodeList* loop;
@@ -434,6 +449,36 @@ inline void init_code_const(Code* x, VarType type, const char* name, const char*
     x->var.type = type;
     x->var.name = name;
     x->var.init = init;
+}
+
+inline CodeExpr* code_expr(OutAllocator& alc, const char* expr) {
+    CodeExpr* x = alc.alloct<CodeExpr>(1);
+    x->expr = expr;
+    x->next = nullptr;
+    return x;
+}
+
+inline CodeExprs* code_exprs(OutAllocator& alc) {
+    return new_list<CodeExpr>(alc);
+}
+
+inline Code* code_assign(
+        OutAllocator& alc, CodeExprs* lhs, const char* rhs, const char* op = nullptr) {
+    Code* x = new_code(alc, CodeKind::ASSIGN);
+    x->assign.lhs = lhs;
+    x->assign.rhs = rhs;
+    x->assign.op = op;
+    return x;
+}
+
+inline Code* code_assign(
+        OutAllocator& alc, const char* lhs, const char* rhs, const char* op = nullptr) {
+    Code* x = new_code(alc, CodeKind::ASSIGN);
+    x->assign.lhs = code_exprs(alc);
+    append(x->assign.lhs, code_expr(alc, lhs));
+    x->assign.rhs = rhs;
+    x->assign.op = op;
+    return x;
 }
 
 inline Code* code_line_info_output(OutAllocator& alc) {

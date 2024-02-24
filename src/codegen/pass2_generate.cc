@@ -162,33 +162,41 @@ static void gen_settag(
 
 static void gen_assign(
         Output& output, CodeList* stmts, const std::string& lhs, const std::string& rhs) {
-    Scratchbuf& o = output.scratchbuf;
-    o.str(lhs).cstr(" = ").str(rhs);
-    append(stmts, code_stmt(output.allocator, o.flush()));
+    Scratchbuf& buf = output.scratchbuf;
+    const char* l = buf.str(lhs).flush();
+    const char* r = buf.str(rhs).flush();
+    append(stmts, code_assign(output.allocator, l, r));
 }
 
-static void gen_assign_many(Output& output,
-                            CodeList* stmts,
-                            const std::vector<std::string>& many,
-                            const std::string& rhs) {
-    Scratchbuf& o = output.scratchbuf;
+static void gen_assign_many(
+        Output& output,
+        CodeList* stmts,
+        const std::vector<std::string>& many,
+        const std::string& rhs) {
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeExprs* l = code_exprs(alc);
     for (const std::string& s : many) {
-        o.str(s).cstr(" = ");
+        append(l, code_expr(alc, buf.str(s).flush()));
     }
-    o.str(rhs);
-    append(stmts, code_stmt(output.allocator, o.flush()));
+    const char* r = buf.str(rhs).flush();
+    append(stmts, code_assign(alc, l, r));
 }
 
 static void gen_assign_many_to_first(
         Output& output, CodeList* stmts, const std::vector<std::string>& many) {
     if (many.size() <= 1) return;
 
-    Scratchbuf& o = output.scratchbuf;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeExprs* lhs = code_exprs(alc);
     for (size_t i = 1; i < many.size(); ++i) {
-        o.str(many[i]).cstr(" = ");
+        append(lhs, code_expr(alc, buf.str(many[i]).flush()));
     }
-    o.str(many[0]);
-    append(stmts, code_stmt(output.allocator, o.flush()));
+    const char* rhs = buf.str(many[0]).flush();
+    append(stmts, code_assign(alc, lhs, rhs));
 }
 
 static void gen_restore_ctx(Output& output, CodeList* stmts, const std::string& tag) {
@@ -258,18 +266,17 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
                 const bool negative = *h == TAGVER_BOTTOM;
                 gen_settag(output, tag_actions, le, negative, false);
             } else {
-                Scratchbuf o2(alc);
+                CodeExprs* neg = code_exprs(alc);
+                CodeExprs* pos = code_exprs(alc);
                 for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
-                    Scratchbuf& x = q->history[0] == TAGVER_BOTTOM ? o : o2;
-                    x.str(vartag_expr(q->lhs, opts, dfa.mtagvers)).cstr(" = ");
+                    const char* lhs = o.str(vartag_expr(q->lhs, opts, dfa.mtagvers)).flush();
+                    append(q->history[0] == TAGVER_BOTTOM ? neg : pos, code_expr(alc, lhs));
                 }
-                if (!o.empty()) {
-                    o.cstr("NULL");
-                    append(tag_actions, code_stmt(alc, o.flush()));
+                if (neg->head != nullptr) {
+                    append(tag_actions, code_assign(alc, neg, "NULL"));
                 }
-                if (!o2.empty()) {
-                    o2.str(opts->api_cursor);
-                    append(tag_actions, code_stmt(alc, o2.flush()));
+                if (pos->head != nullptr) {
+                    append(tag_actions, code_assign(alc, pos, opts->api_cursor.c_str()));
                 }
             }
         }
@@ -299,8 +306,9 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     std::vector<std::string> fintags;
 
     if (rule.ncap > 0) {
-        o.str(fintag_expr("yynmatch", opts)).cstr(" = ").u64(rule.ncap);
-        append(stmts, code_stmt(alc, o.flush()));
+        const char* lhs = o.str(fintag_expr("yynmatch", opts)).flush();
+        const char* rhs = o.u64(rule.ncap).flush();
+        append(stmts, code_assign(alc, lhs, rhs));
     }
 
     CodeList* varops = code_list(alc);
@@ -349,13 +357,17 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                     }
                     gen_shift(output, trailops, -dist, "", false /* unused */);
                 } else {
+                    const char* rhs, *op;
                     if (!fixed_on_cursor) {
-                        o.str(opts->api_cursor).cstr(" = ").str(base);
+                        o.str(base);
                         if (dist > 0) o.cstr(" - ").i32(dist);
+                        rhs = o.flush();
+                        op = nullptr;
                     } else {
-                        o.str(opts->api_cursor).cstr(" -= ").i32(dist);
+                        rhs = o.i32(dist).flush();
+                        op = "-";
                     }
-                    append(trailops, code_stmt(alc, o.flush()));
+                    append(trailops, code_assign(alc, opts->api_cursor.c_str(), rhs, op));
                 }
             } else {
                 DCHECK(!fintags.empty());
@@ -442,8 +454,7 @@ static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* nex
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    buf.str(opts->var_state).cstr(" = ").cstr(next);
-    append(stmts, code_stmt(alc, buf.flush()));
+    append(stmts, code_assign(alc, opts->var_state.c_str(), next));
 
     buf.cstr("continue");
     if (!opts->label_loop.empty()) buf.cstr(" ").str(opts->label_loop);
@@ -970,8 +981,7 @@ static void gen_restore(Output& output, CodeList* stmts) {
     const char* text;
 
     if (opts->api == Api::DEFAULT) {
-        text = o.str(opts->api_cursor).cstr(" = ").str(opts->api_marker).flush();
-        append(stmts, code_stmt(alc, text));
+        append(stmts, code_assign(alc, opts->api_cursor.c_str(), opts->api_marker.c_str()));
     } else if (opts->api_style == ApiStyle::FUNCTIONS) {
         text = o.str(opts->api_restore).cstr("()").flush();
         append(stmts, code_stmt(alc, text));
@@ -1176,8 +1186,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
 static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
+    Scratchbuf& buf = output.scratchbuf;
 
     switch (s->action.kind) {
     case Action::Kind::MATCH:
@@ -1193,8 +1202,7 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
         const bool ul1 = s->label->used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            text = o.str(opts->var_accept).cstr(" = ").u64(save).flush();
-            append(stmts, code_stmt(alc, text));
+            append(stmts, code_assign(alc, opts->var_accept.c_str(), buf.u64(save).flush()));
         }
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));

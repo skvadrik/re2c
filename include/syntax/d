@@ -122,6 +122,9 @@ code:type_uint = "uint";
 code:type_yybm = "immutable char";
 // code:type_yytarget
 
+code:assign = topindent [lhs: lhs " = "] rhs ";" nl;
+code:assign_op = topindent lhs " " op "= " rhs ";" nl;
+
 code:if_then_else =
     [branch{0}: topindent "if (" cond ") {" nl
         indent [stmt: stmt] dedent]

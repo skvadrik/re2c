@@ -773,6 +773,66 @@ static inline void yych_conv(std::ostream& os, const opt_t* opts) {
     }
 }
 
+class RenderAssign : public RenderCallback {
+    RenderContext& rctx;
+    const CodeAssign* code;
+    const CodeExpr* curr_lhs;
+    const CodeExpr* last_lhs;
+    size_t nlhs;
+
+  public:
+    RenderAssign(RenderContext& rctx, const CodeAssign* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_lhs(code->lhs->head) // `lhs` is a non-list var in `code:assign`/`code:assign_op`
+            , last_lhs(nullptr)
+            , nlhs(0) {
+        for (const CodeExpr* x = code->lhs->head; x; x = x->next) ++nlhs;
+    }
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "lhs") == 0) {
+            DCHECK(curr_lhs);
+            rctx.os << curr_lhs->expr;
+        } else if (strcmp(var, "rhs") == 0) {
+            rctx.os << code->rhs;
+        } else if (strcmp(var, "op") == 0) {
+            DCHECK(code->op != nullptr);
+            rctx.os << code->op;
+        } else {
+            render_global_var(rctx, var);
+        }
+    }
+
+    size_t get_list_size(const char* var) const override {
+        if (strcmp(var, "lhs") == 0) {
+            return nlhs;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(const char* var, size_t lbound, size_t rbound) override {
+        if (strcmp(var, "lhs") == 0) {
+            DCHECK(rbound < nlhs);
+            find_list_bounds(code->lhs->head, lbound, rbound, &curr_lhs, &last_lhs);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(const char* var) override {
+        if (strcmp(var, "lhs") == 0) {
+            curr_lhs = curr_lhs->next;
+            return curr_lhs != last_lhs;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderAssign);
+};
+
 class RenderAccept : public RenderCallback {
     RenderContext& rctx;
     uint32_t accept;
@@ -1113,6 +1173,13 @@ static void render(RenderContext& rctx, const Code* code) {
             if (code->raw.data[i] == '\n') ++line;
         }
         break;
+    case CodeKind::ASSIGN: {
+        RenderAssign callback(rctx, &code->assign);
+        DCHECK(code->assign.lhs->head && !(code->assign.lhs->head->next && code->assign.op));
+        const char* conf = code->assign.op ? "code:assign_op" : "code:assign";
+        rctx.opts->eval_code_conf(rctx.os, conf, callback);
+        break;
+    }
     case CodeKind::ABORT: {
         RenderSimple callback(rctx);
         rctx.opts->eval_code_conf(rctx.os, "code:abort", callback);
