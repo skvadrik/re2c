@@ -677,7 +677,8 @@ loop_dquote: /*!re2c
         eol       { next_line(); goto loop_dquote; }
         *         { goto loop_dquote; }
     */
-    } else if (quote == '`' && globopts->eval_bool_conf("backtick_quoted_strings")) {
+    } else if (quote == '`') {
+        if (!globopts->eval_bool_conf("backtick_quoted_strings")) return Ret::OK; // skip
 loop_backtick: /*!re2c
         [`] { return Ret::OK; }
         eol { next_line(); goto loop_backtick; }
