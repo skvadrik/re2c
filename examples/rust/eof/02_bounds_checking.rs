@@ -11,8 +11,8 @@ fn lex(s: &[u8]) -> isize {
 
     // Copy string to a buffer and add YYMAXFILL zero padding.
     let mut buf = Vec::with_capacity(lim);
-    buf.extend(s.iter());
-    buf.extend(vec![0; YYMAXFILL]);
+    buf.extend_from_slice(s);
+    buf.extend([0 as u8; YYMAXFILL]);
 
     'lex: loop {
 {

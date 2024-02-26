@@ -1,7 +1,9 @@
 // re2rust $INPUT -o $OUTPUT
 
-// Expect a null-terminated string.
 fn lex(s: &[u8]) -> isize {
+    // The input must be null-terminated, otherwise the function has UB.
+    assert_eq!(s.last(), Some(&0));
+
     let (mut cur, mut mar) = (0, 0);
     let lim = s.len() - 1; // null-terminator not included
     let mut count = 0;

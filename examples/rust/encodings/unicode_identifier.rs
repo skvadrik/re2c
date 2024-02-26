@@ -5,6 +5,8 @@
 
 
 fn lex(str: &[u8]) -> bool {
+    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+
     let (mut cur, mut mar) = (0, 0);
     
 {

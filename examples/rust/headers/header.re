@@ -12,6 +12,8 @@ pub struct State<'a> {
 /*!header:re2c:off*/
 
 fn lex(st: &mut State) -> usize {
+    assert_eq!(st.str.last(), Some(&0)); // expect null-terminated input
+
     let t: usize;
     /*!re2c
         re2c:header = "lexer/state.rs";

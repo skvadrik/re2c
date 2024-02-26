@@ -11,6 +11,8 @@ fn add(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
 }
 
 fn parse_u32(str: &[u8]) -> Option<u32> {
+    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+
     let (mut cur, mut mar) = (0, 0);
     let mut cond = YYC_INIT;
     let mut num = 0u64; // Store number in u64 to simplify overflow checks.

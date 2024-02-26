@@ -31,6 +31,8 @@ fn add(st: &mut State, offs: u8, base: u64) {
 }
 
 fn parse_u32(s: & [u8]) -> Option<u32> {
+    assert_eq!(s.last(), Some(&0)); // expect null-terminated input
+
     let mut st = State {str: s, cur: 0, mar: 0, num: 0};
 /*!re2c
     '0b' / [01]        { return parse_bin(&mut st); }

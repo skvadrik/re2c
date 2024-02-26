@@ -15,6 +15,8 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
 }
 
 fn parse(str: &[u8]) -> Option<SemVer> {
+    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+
     let (mut cur, mut mar) = (0, 0);
 
     // Allocate memory for capturing parentheses (twice the number of groups).

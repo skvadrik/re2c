@@ -3,6 +3,8 @@
 /*!include:re2c "unicode_categories.re" */
 
 fn lex(str: &[u8]) -> bool {
+    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+
     let (mut cur, mut mar) = (0, 0);
     /*!re2c
         re2c:define:YYCTYPE   = u8;

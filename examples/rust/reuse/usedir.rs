@@ -15,6 +15,8 @@ enum Ans { Color, Fish, Dunno }
 
 
 fn lex(str: &[u8]) -> Ans {
+    assert!(str.len() > 0); // expect nonempty input
+
     let (mut cur, mut mar) = (0, 0);
     
 {

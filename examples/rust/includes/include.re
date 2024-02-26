@@ -3,6 +3,8 @@
 /*!include:re2c "definitions.rs" */
 
 fn lex(str: &[u8]) -> Num {
+    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+
     let mut cur = 0;
     let mut mar = 0;
     /*!re2c

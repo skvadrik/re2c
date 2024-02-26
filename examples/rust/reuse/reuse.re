@@ -15,6 +15,7 @@
 */
 
 fn lex_utf8(str: &[u8]) -> Option<usize> {
+    assert!(str.len() > 0); // expect nonempty input
     let (mut cur, mut mar) = (0, 0);
     /*!use:re2c
         re2c:encoding:utf8 = 1;
@@ -23,6 +24,7 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 }
 
 fn lex_utf32(str: &[u32]) -> Option<usize> {
+    assert!(str.len() > 0); // expect nonempty input
     let (mut cur, mut mar) = (0, 0);
     /*!use:re2c
         re2c:encoding:utf32 = 1;
