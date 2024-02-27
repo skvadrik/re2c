@@ -797,7 +797,7 @@ void emit_skeleton_action(Output& output, CodeList* code, const Adfa& dfa, size_
         if (t == r.ttag || fictive(tag)) continue;
 
         const bool mtag = history(tag);
-        expand_fintags(tag, fintags, output.block().opts);
+        expand_fintags(output, tag, fintags);
         const std::string tname = fintags[0];
         --ntag;
 

@@ -116,6 +116,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "code:const = topindent \"const \" name \": \" type \" = \" init \";\" nl;\n"
     "\n"
     "// code:array\n"
+    "code:array_elem = array \"[\" index \"]\";\n"
     "\n"
     "code:type_int = \"isize\";\n"
     "code:type_uint = \"usize\";\n"

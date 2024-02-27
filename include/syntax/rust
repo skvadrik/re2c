@@ -115,6 +115,7 @@ code:var =
 code:const = topindent "const " name ": " type " = " init ";" nl;
 
 // code:array
+code:array_elem = array "[" index "]";
 
 code:type_int = "isize";
 code:type_uint = "usize";

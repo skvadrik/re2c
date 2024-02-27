@@ -117,6 +117,8 @@ const char* DEFAULT_SYNTAX_D =
     "        [row{-1}:   topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem]     nl]\n"
     "    dedent topindent \"];\" nl;\n"
     "\n"
+    "code:array_elem = array \"[\" index \"]\";\n"
+    "\n"
     "code:type_int = \"int\";\n"
     "code:type_uint = \"uint\";\n"
     "// code:type_cond_enum\n"

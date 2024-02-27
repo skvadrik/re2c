@@ -323,7 +323,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         // structural tag that is only needed for disambiguation
         if (fictive(tag)) continue;
 
-        expand_fintags(tag, fintags, opts);
+        expand_fintags(output, tag, fintags);
 
         if (!fixed(tag)) {
             // variable tag
@@ -433,7 +433,28 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     }
 }
 
-void expand_fintags(const Tag& tag, std::vector<std::string>& fintags, const opt_t* opts) {
+class GenArrayElem : public RenderCallback {
+    std::ostream& os;
+    const std::string& array;
+    size_t index;
+
+  public:
+    GenArrayElem(std::ostream& os, const std::string& array, size_t index)
+        : os(os), array(array), index(index) {}
+
+    void render_var(const char* var) override {
+        if (strcmp(var, "array") == 0) {
+            os << array;
+        } else if (strcmp(var, "index") == 0) {
+            os << index;
+        } else {
+            UNREACHABLE();
+        }
+    }
+};
+
+void expand_fintags(Output& output, const Tag& tag, std::vector<std::string>& fintags) {
+    const opt_t* opts = output.block().opts;
     fintags.clear();
     if (trailing(tag)) {
         // empty list
@@ -442,9 +463,12 @@ void expand_fintags(const Tag& tag, std::vector<std::string>& fintags, const opt
         fintags.push_back(fintag_expr(tag.name, opts));
     } else {
         // capture tag, maps to a range of parentheses
+        Scratchbuf& buf = output.scratchbuf;
         std::string yypmatch = fintag_expr("yypmatch", opts);
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
-            fintags.push_back(yypmatch + "[" + to_string(i) + "]");
+            GenArrayElem callback(buf.stream(), yypmatch, i);
+            opts->eval_code_conf(buf.stream(), "code:array_elem", callback);
+            fintags.push_back(buf.flush());
         }
     }
 }

@@ -41,6 +41,9 @@ Stx::Stx(OutAllocator& alc)
     allowed_code_confs["code:array"] = {
         {"type", "name", "size"}, {"row", "elem"}, {}
     };
+    allowed_code_confs["code:array_elem"] = {
+        {"array", "index"}, {}, {}
+    };
     allowed_code_confs["code:type_int"] = {};
     allowed_code_confs["code:type_uint"] = {};
     allowed_code_confs["code:type_cond_enum"] = {};
