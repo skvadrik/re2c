@@ -42,9 +42,9 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #44 "ocaml/submatch/03_posix.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.yyt1 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -62,20 +62,20 @@ and yy2 (st : state) : semver option =
 
 and yy3 (st : state) : semver option =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2E ->
+		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
@@ -86,31 +86,31 @@ and yy5 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2E ->
+		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x00 ->
+		| '\x00' ->
 			st.yyt3 <- st.cur;
 			st.yyt4 <- none;
 			st.yyt5 <- none;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
-		| 0x2E ->
+		| '.' ->
 			st.yyt3 <- st.cur;
 			st.yyt5 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
@@ -140,21 +140,21 @@ and yy8 (st : state) : semver option =
 #141 "ocaml/submatch/03_posix.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
-	if (yych <= 0x00) then (yy5 [@tailcall]) st
+	let yych = st.str.[st.cur] in
+	if (yych <= '\x00') then (yy5 [@tailcall]) st
 	else (yy11 [@tailcall]) st yych
 
 and yy10 (st : state) : semver option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	(yy11 [@tailcall]) st yych
 
-and yy11 (st : state) (yych : int) : semver option =
+and yy11 (st : state) (yych : char) : semver option =
 	match yych with
-		| 0x00 ->
+		| '\x00' ->
 			st.yyt4 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st

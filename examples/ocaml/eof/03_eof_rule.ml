@@ -13,12 +13,12 @@ type state = {
 
 #15 "ocaml/eof/03_eof_rule.ml"
 let rec yy0 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
-		| 0x27 ->
+		| '\'' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st count
 		| _ ->
@@ -38,9 +38,9 @@ and yy2 (st : state) (count : int) : int =
 #39 "ocaml/eof/03_eof_rule.ml"
 
 and yy3 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
 		| _ -> (yy4 [@tailcall]) st count
@@ -52,8 +52,8 @@ and yy4 (st : state) (count : int) : int =
 
 and yy5 (st : state) (count : int) : int =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
-	if (yych <= 0x00) then (
+	let yych = st.str.[st.cur] in
+	if (yych <= '\x00') then (
 		if (st.cur >= st.lim) then (
 			(yy2 [@tailcall]) st count
 		) else (
@@ -65,15 +65,15 @@ and yy5 (st : state) (count : int) : int =
 	)
 
 and yy6 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	(yy7 [@tailcall]) st count yych
 
-and yy7 (st : state) (count : int) (yych : int) : int =
+and yy7 (st : state) (count : int) (yych : char) : int =
 	match yych with
-		| 0x27 ->
+		| '\'' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st count
-		| 0x5C ->
+		| '\\' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st count
 		| _ ->
@@ -90,8 +90,8 @@ and yy8 (st : state) (count : int) : int =
 #91 "ocaml/eof/03_eof_rule.ml"
 
 and yy9 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
-	if (yych <= 0x00) then (
+	let yych = st.str.[st.cur] in
+	if (yych <= '\x00') then (
 		if (st.cur >= st.lim) then (
 			(yy11 [@tailcall]) st count
 		) else (

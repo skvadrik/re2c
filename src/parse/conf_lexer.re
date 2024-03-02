@@ -172,6 +172,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"  "yystate"         { RET_CONF_STR(var_state); }
     "variable:"  "yych"            { RET_CONF_STR(var_char); }
     "variable:"? "yych:conversion" { RET_CONF_BOOL(char_conv); }
+    "variable:"? "yych:literals"   { goto char_lit; }
     "variable:"? "yych:emit"       { RET_CONF_BOOL(char_emit); }
     "variable:"  "yybm"            { RET_CONF_STR(var_bitmaps); }
     "variable:"? "yybm:hex"        { RET_CONF_BOOL(bitmaps_hex); }
@@ -265,6 +266,17 @@ empty_class:
     "match-empty" { SETOPT(empty_class, EmptyClass::MATCH_EMPTY); goto end; }
     "match-none"  { SETOPT(empty_class, EmptyClass::MATCH_NONE);  goto end; }
     "error"       { SETOPT(empty_class, EmptyClass::ERROR);       goto end; }
+*/
+
+char_lit:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'char', 'hex', 'char_or_hex')"));
+    }
+    "char"        { SETOPT(char_literals, CharLit::CHAR);        goto end; }
+    "hex"         { SETOPT(char_literals, CharLit::HEX);         goto end; }
+    "char_or_hex" { SETOPT(char_literals, CharLit::CHAR_OR_HEX); goto end; }
 */
 
 end:

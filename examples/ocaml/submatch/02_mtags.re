@@ -21,8 +21,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 /*!local:re2c
     re2c:define:YYFN      = ["parse;(int list) option", "st;state"];
-    re2c:define:YYCTYPE   = int;
-    re2c:define:YYPEEK    = "Char.code st.str.[st.cur]";
+    re2c:define:YYCTYPE   = char;
+    re2c:define:YYPEEK    = "st.str.[st.cur]";
     re2c:define:YYSKIP    = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP  = "st.mar <- st.cur;";
     re2c:define:YYRESTORE = "st.cur <- st.mar;";

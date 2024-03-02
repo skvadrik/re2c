@@ -10,8 +10,8 @@ type state = {
 (* expect a null-terminated string *)
 /*!re2c
     re2c:define:YYFN       = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYCTYPE    = int;
-    re2c:define:YYPEEK     = "Char.code st.str.[st.cur]";
+    re2c:define:YYCTYPE    = char;
+    re2c:define:YYPEEK     = "st.str.[st.cur]";
     re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP   = "st.mar <- st.cur;";
     re2c:define:YYRESTORE  = "st.cur <- st.mar;";

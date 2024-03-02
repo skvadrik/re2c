@@ -918,15 +918,12 @@ static void gen_godot(
         for (const CodeGoCase* c = go->cases, *e = c + go->ncases; c < e; ++c) {
             o.label(*from->label).cstr(" -> ").label(*c->jump.to->label).cstr(" [label=\"");
 
-            const Enc& enc = opts->encoding;
             const int64_t* ranges = c->ranges->elems;
             for (uint32_t i = 0; i < c->ranges->size; ++i) {
                 print_span(o.stream(),
                            static_cast<uint32_t>(ranges[2 * i]),
                            static_cast<uint32_t>(ranges[2 * i + 1]),
-                           enc.cunit_size(),
-                           enc.type() == Enc::Type::EBCDIC,
-                           true);
+                           opts);
             }
 
             const tcmd_t* cmd = dfa.tcpool[c->jump.tags];
@@ -1906,7 +1903,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
 
         for (uint32_t i = 0; i < nchars; ++i) {
             if (opts->bitmaps_hex) {
-                print_hex(buf.stream(), tmpbuf[i], opts->encoding.cunit_size());
+                print_hex(buf.stream(), tmpbuf[i], opts);
             } else {
                 buf.u32(tmpbuf[i]);
             }

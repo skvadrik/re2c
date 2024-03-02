@@ -41,12 +41,12 @@ let fill(st: state) : status =
 
 #43 "ocaml/fill/01_fill.ml"
 let rec yy0 (st : state) (count : int) : int =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
-		| 0x27 ->
+		| '\'' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st count
 		| _ ->
@@ -67,9 +67,9 @@ and yy2 (st : state) (count : int) : int =
 #68 "ocaml/fill/01_fill.ml"
 
 and yy3 (st : state) (count : int) : int =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
 		| _ ->
@@ -87,8 +87,8 @@ and yy4 (st : state) (count : int) : int =
 
 and yy5 (st : state) (count : int) : int =
 	st.mar <- st.cur;
-	let yych = Char.code (Bytes.get st.buf st.cur) in
-	if (yych <= 0x00) then (
+	let yych = Bytes.get st.buf st.cur in
+	if (yych <= '\x00') then (
 		if (st.cur >= st.lim) then (
 			if (fill st = Ok) then (yy5 [@tailcall]) st count
 			else (yy2 [@tailcall]) st count
@@ -101,15 +101,15 @@ and yy5 (st : state) (count : int) : int =
 	)
 
 and yy6 (st : state) (count : int) : int =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	(yy7 [@tailcall]) st count yych
 
-and yy7 (st : state) (count : int) (yych : int) : int =
+and yy7 (st : state) (count : int) (yych : char) : int =
 	match yych with
-		| 0x27 ->
+		| '\'' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st count
-		| 0x5C ->
+		| '\\' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st count
 		| _ ->
@@ -127,8 +127,8 @@ and yy8 (st : state) (count : int) : int =
 #128 "ocaml/fill/01_fill.ml"
 
 and yy9 (st : state) (count : int) : int =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
-	if (yych <= 0x00) then (
+	let yych = Bytes.get st.buf st.cur in
+	if (yych <= '\x00') then (
 		if (st.cur >= st.lim) then (
 			if (fill st = Ok) then (yy9 [@tailcall]) st count
 			else (yy11 [@tailcall]) st count

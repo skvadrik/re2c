@@ -36,9 +36,9 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #38 "ocaml/submatch/02_mtags.ml"
 let rec yy0 (st : state) : (int list) option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.yyt1 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -56,19 +56,19 @@ and yy2 (st : state) : (int list) option =
 
 and yy3 (st : state) : (int list) option =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x00 ->
+		| '\x00' ->
 			st.yytm4 <- [];
 			st.yytm3 <- [];
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x2E ->
+		| '.' ->
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -87,9 +87,9 @@ and yy4 (st : state) : (int list) option =
 #88 "ocaml/submatch/02_mtags.ml"
 
 and yy5 (st : state) : (int list) option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.yytm3 <- st.cur :: st.yytm3;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
@@ -100,35 +100,35 @@ and yy6 (st : state) : (int list) option =
 	(yy2 [@tailcall]) st
 
 and yy7 (st : state) : (int list) option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x00 ->
+		| '\x00' ->
 			st.yytm4 <- [];
 			st.yytm3 <- [];
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x2E ->
+		| '.' ->
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy6 [@tailcall]) st
 
 and yy8 (st : state) : (int list) option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x00 ->
+		| '\x00' ->
 			st.yytm4 <- st.cur :: st.yytm4;
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x2E ->
+		| '.' ->
 			st.yytm4 <- st.cur :: st.yytm4;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
 		| _ -> (yy6 [@tailcall]) st

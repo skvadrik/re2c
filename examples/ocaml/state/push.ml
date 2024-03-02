@@ -41,9 +41,9 @@ let fill(st: state) : status =
 
 
 let rec yy0 (st : state) : status =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A ->
+		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ ->
@@ -64,12 +64,12 @@ and yy2 (st : state) : status =
 
 and yy3 (st : state) : status =
 	st.mar <- st.cur;
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 0x3B ->
+		| ';' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A ->
+		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
 		| _ ->
@@ -85,12 +85,12 @@ and yy4 (st : state) : status =
 	st.recv <- st.recv + 1; lex_loop st
 
 and yy5 (st : state) : status =
-	let yych = Char.code (Bytes.get st.buf st.cur) in
+	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 0x3B ->
+		| ';' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A ->
+		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
 		| _ ->

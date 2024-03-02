@@ -21,10 +21,10 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy0 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31 -> (yy2 [@tailcall]) st num
+		| '0'|'1' -> (yy2 [@tailcall]) st num
 		| _ -> (yy1 [@tailcall]) st num
 
 and yy1 (st : state) (num : int option) : int option =
@@ -40,10 +40,10 @@ and parse_bin (st : state) (num : int option) : int option =
 
 
 let rec yy3 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37 -> (yy5 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7' -> (yy5 [@tailcall]) st num
 		| _ -> (yy4 [@tailcall]) st num
 
 and yy4 (st : state) (num : int option) : int option =
@@ -59,10 +59,10 @@ and parse_oct (st : state) (num : int option) : int option =
 
 
 let rec yy6 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy8 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy8 [@tailcall]) st num
 		| _ -> (yy7 [@tailcall]) st num
 
 and yy7 (st : state) (num : int option) : int option =
@@ -78,12 +78,12 @@ and parse_dec (st : state) (num : int option) : int option =
 
 
 let rec yy9 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy11 [@tailcall]) st num
-		| 0x41|0x42|0x43|0x44|0x45|0x46 -> (yy12 [@tailcall]) st num
-		| 0x61|0x62|0x63|0x64|0x65|0x66 -> (yy13 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy11 [@tailcall]) st num
+		| 'A'|'B'|'C'|'D'|'E'|'F' -> (yy12 [@tailcall]) st num
+		| 'a'|'b'|'c'|'d'|'e'|'f' -> (yy13 [@tailcall]) st num
 		| _ -> (yy10 [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
@@ -105,11 +105,11 @@ and parse_hex (st : state) (num : int option) : int option =
 
 
 let rec yy14 (st : state) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30 -> (yy16 [@tailcall]) st
-		| 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy18 [@tailcall]) st
+		| '0' -> (yy16 [@tailcall]) st
+		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy18 [@tailcall]) st
 		| _ -> (yy15 [@tailcall]) st
 
 and yy15 (st : state) : int option =
@@ -117,14 +117,14 @@ and yy15 (st : state) : int option =
 
 and yy16 (st : state) : int option =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x42
-		| 0x62 ->
+		| 'B'
+		| 'b' ->
 			st.cur <- st.cur + 1;
 			(yy19 [@tailcall]) st
-		| 0x58
-		| 0x78 ->
+		| 'X'
+		| 'x' ->
 			st.cur <- st.cur + 1;
 			(yy21 [@tailcall]) st
 		| _ -> (yy17 [@tailcall]) st
@@ -137,9 +137,9 @@ and yy18 (st : state) : int option =
 	parse_dec st (Some 0)
 
 and yy19 (st : state) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31 ->
+		| '0'|'1' ->
 			st.cur <- st.cur + 1;
 			(yy22 [@tailcall]) st
 		| _ -> (yy20 [@tailcall]) st
@@ -149,11 +149,11 @@ and yy20 (st : state) : int option =
 	(yy17 [@tailcall]) st
 
 and yy21 (st : state) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39
-		| 0x41|0x42|0x43|0x44|0x45|0x46
-		| 0x61|0x62|0x63|0x64|0x65|0x66 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+		| 'A'|'B'|'C'|'D'|'E'|'F'
+		| 'a'|'b'|'c'|'d'|'e'|'f' ->
 			st.cur <- st.cur + 1;
 			(yy23 [@tailcall]) st
 		| _ -> (yy20 [@tailcall]) st

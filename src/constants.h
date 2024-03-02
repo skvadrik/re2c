@@ -135,6 +135,12 @@ enum DirConf: uint32_t {
     DCONF_SEPARATOR = 2u
 };
 
+enum class CharLit {
+    CHAR,
+    HEX,
+    CHAR_OR_HEX
+};
+
 static constexpr uint32_t NOEOF = ~0u - 1;
 
 static constexpr size_t MAX_NFA_DEPTH  = 1000 * 1000;

@@ -5,7 +5,6 @@ target = [code, dot];
 
 computed_goto = unsupported;
 case_ranges = unsupported;
-yyctype_literals = hex;
 semicolons = no;
 implicit_bool_conversion = no;
 backtick_quoted_strings = no;
@@ -69,6 +68,7 @@ conf:variable:yytarget = "yytarget";
 conf:variable:yystate = "yystate";
 conf:variable:yych = "yych";
 conf:variable:yych:conversion = 0;
+conf:variable:yych:literals = char;
 conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
 conf:variable:yybm = "yybm";
 conf:variable:yybm:hex = 0;

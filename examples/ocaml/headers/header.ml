@@ -7,12 +7,12 @@ open State
 
 
 let rec yy0 (st : State.state) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61 ->
+		| 'a' ->
 			st.cur <- st.cur + 1;
 			(yy0 [@tailcall]) st
-		| 0x62 ->
+		| 'b' ->
 			st.yyt1 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy2 [@tailcall]) st
@@ -25,9 +25,9 @@ and yy1 (st : State.state) : int =
 	st.tag
 
 and yy2 (st : State.state) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x62 ->
+		| 'b' ->
 			st.cur <- st.cur + 1;
 			(yy2 [@tailcall]) st
 		| _ -> (yy1 [@tailcall]) st

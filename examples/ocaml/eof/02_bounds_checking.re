@@ -11,8 +11,8 @@ type state = {
 /*!max:re2c format = "let maxfill = @@ + 100"; */
 /*!re2c
     re2c:define:YYFN       = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYCTYPE    = int;
-    re2c:define:YYPEEK     = "Char.code st.buf.[st.cur]";
+    re2c:define:YYCTYPE    = char;
+    re2c:define:YYPEEK     = "st.buf.[st.cur]";
     re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
     re2c:define:YYLESSTHAN = "st.cur + @@ > st.lim";
     re2c:define:YYFILL     = "raise Fill;";

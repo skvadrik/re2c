@@ -184,7 +184,7 @@ Scratchbuf& Scratchbuf::label(const Label& l) {
 
 Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {
     if (opts->bitmaps_hex) {
-        print_hex(os, u, opts->encoding.cunit_size());
+        print_hex(os, u, opts);
     } else {
         u32_width(u, width);
     }

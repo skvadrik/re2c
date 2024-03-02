@@ -17,8 +17,8 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             in if n' > (of_int32 Int32.max_int) then None else Some (to_int n')
 
 /*!re2c
-    re2c:define:YYCTYPE   = int;
-    re2c:define:YYPEEK    = "Char.code st.str.[st.cur]";
+    re2c:define:YYCTYPE   = char;
+    re2c:define:YYPEEK    = "st.str.[st.cur]";
     re2c:define:YYSKIP    = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP  = "st.mar <- st.cur;";
     re2c:define:YYRESTORE = "st.cur <- st.mar;";

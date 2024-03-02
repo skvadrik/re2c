@@ -23,11 +23,11 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy1 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30 -> (yy3 [@tailcall]) st num
-		| 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy5 [@tailcall]) st num
+		| '0' -> (yy3 [@tailcall]) st num
+		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy5 [@tailcall]) st num
 		| _ -> (yy2 [@tailcall]) st num
 
 and yy2 (st : state) (num : int option) : int option =
@@ -35,14 +35,14 @@ and yy2 (st : state) (num : int option) : int option =
 
 and yy3 (st : state) (num : int option) : int option =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x42
-		| 0x62 ->
+		| 'B'
+		| 'b' ->
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st num
-		| 0x58
-		| 0x78 ->
+		| 'X'
+		| 'x' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st num
 		| _ -> (yy4 [@tailcall]) st num
@@ -57,9 +57,9 @@ and yy5 (st : state) (num : int option) : int option =
 	(yyfndec [@tailcall]) st num
 
 and yy6 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31 ->
+		| '0'|'1' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st num
 		| _ -> (yy7 [@tailcall]) st num
@@ -69,11 +69,11 @@ and yy7 (st : state) (num : int option) : int option =
 	(yy4 [@tailcall]) st num
 
 and yy8 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39
-		| 0x41|0x42|0x43|0x44|0x45|0x46
-		| 0x61|0x62|0x63|0x64|0x65|0x66 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
+		| 'A'|'B'|'C'|'D'|'E'|'F'
+		| 'a'|'b'|'c'|'d'|'e'|'f' ->
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st num
 		| _ -> (yy7 [@tailcall]) st num
@@ -92,10 +92,10 @@ and yyfninit (st : state) (num : int option) : int option =
 	(yy1 [@tailcall]) st num
 
 and yy11 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31 -> (yy13 [@tailcall]) st num
+		| '0'|'1' -> (yy13 [@tailcall]) st num
 		| _ -> (yy12 [@tailcall]) st num
 
 and yy12 (st : state) (num : int option) : int option =
@@ -108,10 +108,10 @@ and yyfnbin (st : state) (num : int option) : int option =
 	(yy11 [@tailcall]) st num
 
 and yy14 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37 -> (yy16 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7' -> (yy16 [@tailcall]) st num
 		| _ -> (yy15 [@tailcall]) st num
 
 and yy15 (st : state) (num : int option) : int option =
@@ -124,10 +124,10 @@ and yyfnoct (st : state) (num : int option) : int option =
 	(yy14 [@tailcall]) st num
 
 and yy17 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy19 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy19 [@tailcall]) st num
 		| _ -> (yy18 [@tailcall]) st num
 
 and yy18 (st : state) (num : int option) : int option =
@@ -140,12 +140,12 @@ and yyfndec (st : state) (num : int option) : int option =
 	(yy17 [@tailcall]) st num
 
 and yy20 (st : state) (num : int option) : int option =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy22 [@tailcall]) st num
-		| 0x41|0x42|0x43|0x44|0x45|0x46 -> (yy23 [@tailcall]) st num
-		| 0x61|0x62|0x63|0x64|0x65|0x66 -> (yy24 [@tailcall]) st num
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy22 [@tailcall]) st num
+		| 'A'|'B'|'C'|'D'|'E'|'F' -> (yy23 [@tailcall]) st num
+		| 'a'|'b'|'c'|'d'|'e'|'f' -> (yy24 [@tailcall]) st num
 		| _ -> (yy21 [@tailcall]) st num
 
 and yy21 (st : state) (num : int option) : int option =

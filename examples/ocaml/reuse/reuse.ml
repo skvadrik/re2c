@@ -11,39 +11,39 @@ type state = {
     mutable mar: int;
 }
 
-#22 "ocaml/reuse/reuse.re"
+#21 "ocaml/reuse/reuse.re"
 
 
 
 #19 "ocaml/reuse/reuse.ml"
 let rec yy0 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0xE2 -> (yy3 [@tailcall]) st str
+		| '\xE2' -> (yy3 [@tailcall]) st str
 		| _ -> (yy1 [@tailcall]) st str
 
 and yy1 (st : state) (str : char array) : int option =
 	(yy2 [@tailcall]) st str
 
 and yy2 (st : state) (str : char array) : int option =
-#21 "ocaml/reuse/reuse.re"
+#20 "ocaml/reuse/reuse.re"
 	None
 #33 "ocaml/reuse/reuse.ml"
 
 and yy3 (st : state) (str : char array) : int option =
 	st.mar <- st.cur;
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x88 ->
+		| '\x88' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st str
 		| _ -> (yy2 [@tailcall]) st str
 
 and yy4 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x80 ->
+		| '\x80' ->
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
@@ -53,62 +53,62 @@ and yy5 (st : state) (str : char array) : int option =
 	(yy2 [@tailcall]) st str
 
 and yy6 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x78 ->
+		| 'x' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy7 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy8 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0xE2 ->
+		| '\xE2' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy9 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x88 ->
+		| '\x88' ->
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy10 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x83 ->
+		| '\x83' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy11 (st : state) (str : char array) : int option =
-	let yych = Char.code str.(st.cur) in
+	let yych = str.(st.cur) in
 	match yych with
-		| 0x79 ->
+		| 'y' ->
 			st.cur <- st.cur + 1;
 			(yy12 [@tailcall]) st str
 		| _ -> (yy5 [@tailcall]) st str
 
 and yy12 (st : state) (str : char array) : int option =
-#20 "ocaml/reuse/reuse.re"
+#19 "ocaml/reuse/reuse.re"
 	Some st.cur
 #107 "ocaml/reuse/reuse.ml"
 
 and lex8 (st : state) (str : char array) : int option =
 	(yy0 [@tailcall]) st str
 
-#28 "ocaml/reuse/reuse.re"
+#27 "ocaml/reuse/reuse.re"
 
 
 
@@ -123,7 +123,7 @@ and yy14 (st : state) (str : int array) : int option =
 	(yy15 [@tailcall]) st str
 
 and yy15 (st : state) (str : int array) : int option =
-#21 "ocaml/reuse/reuse.re"
+#20 "ocaml/reuse/reuse.re"
 	None
 #129 "ocaml/reuse/reuse.ml"
 
@@ -169,14 +169,14 @@ and yy20 (st : state) (str : int array) : int option =
 	)
 
 and yy21 (st : state) (str : int array) : int option =
-#20 "ocaml/reuse/reuse.re"
+#19 "ocaml/reuse/reuse.re"
 	Some st.cur
 #175 "ocaml/reuse/reuse.ml"
 
 and lex32 (st : state) (str : int array) : int option =
 	(yy13 [@tailcall]) st str
 
-#34 "ocaml/reuse/reuse.re"
+#33 "ocaml/reuse/reuse.re"
 
 
 let main() =

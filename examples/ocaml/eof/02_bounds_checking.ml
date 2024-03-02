@@ -18,12 +18,12 @@ let maxfill = 1 + 100
 #19 "ocaml/eof/02_bounds_checking.ml"
 let rec yy0 (st : state) (count : int) : int =
 	if (st.cur + 1 > st.lim) then raise Fill;
-	let yych = Char.code st.buf.[st.cur] in
+	let yych = st.buf.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x00 -> (yy1 [@tailcall]) st count
-		| 0x20 -> (yy3 [@tailcall]) st count
-		| 0x27 -> (yy5 [@tailcall]) st count
+		| '\x00' -> (yy1 [@tailcall]) st count
+		| ' ' -> (yy3 [@tailcall]) st count
+		| '\'' -> (yy5 [@tailcall]) st count
 		| _ -> (yy2 [@tailcall]) st count
 
 and yy1 (st : state) (count : int) : int =
@@ -41,9 +41,9 @@ and yy2 (st : state) (count : int) : int =
 
 and yy3 (st : state) (count : int) : int =
 	if (st.cur + 1 > st.lim) then raise Fill;
-	let yych = Char.code st.buf.[st.cur] in
+	let yych = st.buf.[st.cur] in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
 		| _ -> (yy4 [@tailcall]) st count
@@ -55,11 +55,11 @@ and yy4 (st : state) (count : int) : int =
 
 and yy5 (st : state) (count : int) : int =
 	if (st.cur + 1 > st.lim) then raise Fill;
-	let yych = Char.code st.buf.[st.cur] in
+	let yych = st.buf.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x27 -> (yy6 [@tailcall]) st count
-		| 0x5C -> (yy7 [@tailcall]) st count
+		| '\'' -> (yy6 [@tailcall]) st count
+		| '\\' -> (yy7 [@tailcall]) st count
 		| _ -> (yy5 [@tailcall]) st count
 
 and yy6 (st : state) (count : int) : int =

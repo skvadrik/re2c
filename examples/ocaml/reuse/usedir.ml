@@ -25,14 +25,14 @@ type state = {
 
 #27 "ocaml/reuse/usedir.ml"
 let rec yy0 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x65 -> (yy3 [@tailcall]) st
-		| 0x68 -> (yy4 [@tailcall]) st
-		| 0x6D -> (yy5 [@tailcall]) st
-		| 0x72 -> (yy6 [@tailcall]) st
-		| 0x73 -> (yy7 [@tailcall]) st
+		| 'e' -> (yy3 [@tailcall]) st
+		| 'h' -> (yy4 [@tailcall]) st
+		| 'm' -> (yy5 [@tailcall]) st
+		| 'r' -> (yy6 [@tailcall]) st
+		| 's' -> (yy7 [@tailcall]) st
 		| _ -> (yy1 [@tailcall]) st
 
 and yy1 (st : state) : answer =
@@ -45,53 +45,53 @@ and yy2 (st : state) : answer =
 
 and yy3 (st : state) : answer =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x65 ->
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : answer =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61 ->
+		| 'a' ->
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy5 (st : state) : answer =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61 ->
+		| 'a' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy6 (st : state) : answer =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x65 ->
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy12 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy7 (st : state) : answer =
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61 ->
+		| 'a' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy8 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6C ->
+		| 'l' ->
 			st.cur <- st.cur + 1;
 			(yy14 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
@@ -101,33 +101,33 @@ and yy9 (st : state) : answer =
 	(yy2 [@tailcall]) st
 
 and yy10 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x64 ->
+		| 'd' ->
 			st.cur <- st.cur + 1;
 			(yy15 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy11 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x67 ->
+		| 'g' ->
 			st.cur <- st.cur + 1;
 			(yy16 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy12 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x64 ->
+		| 'd' ->
 			st.cur <- st.cur + 1;
 			(yy17 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy13 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6C ->
+		| 'l' ->
 			st.cur <- st.cur + 1;
 			(yy18 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
@@ -138,17 +138,17 @@ and yy14 (st : state) : answer =
 #139 "ocaml/reuse/usedir.ml"
 
 and yy15 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x64 ->
+		| 'd' ->
 			st.cur <- st.cur + 1;
 			(yy19 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy16 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x65 ->
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy20 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
@@ -159,73 +159,73 @@ and yy17 (st : state) : answer =
 #160 "ocaml/reuse/usedir.ml"
 
 and yy18 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6D ->
+		| 'm' ->
 			st.cur <- st.cur + 1;
 			(yy21 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy19 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6F ->
+		| 'o' ->
 			st.cur <- st.cur + 1;
 			(yy22 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy20 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6E ->
+		| 'n' ->
 			st.cur <- st.cur + 1;
 			(yy23 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy21 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6F ->
+		| 'o' ->
 			st.cur <- st.cur + 1;
 			(yy24 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy22 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x63 ->
+		| 'c' ->
 			st.cur <- st.cur + 1;
 			(yy25 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy23 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x74 ->
+		| 't' ->
 			st.cur <- st.cur + 1;
 			(yy26 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy24 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6E ->
+		| 'n' ->
 			st.cur <- st.cur + 1;
 			(yy14 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy25 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x6B ->
+		| 'k' ->
 			st.cur <- st.cur + 1;
 			(yy14 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st
 
 and yy26 (st : state) : answer =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61 ->
+		| 'a' ->
 			st.cur <- st.cur + 1;
 			(yy17 [@tailcall]) st
 		| _ -> (yy9 [@tailcall]) st

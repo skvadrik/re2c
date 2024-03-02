@@ -138,6 +138,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
         real.tags_expression = defaults.tags_expression;
         real.char_emit = defaults.char_emit;
         real.char_conv = defaults.char_conv;
+        real.char_literals = defaults.char_literals;
         real.label_loop = defaults.label_loop;
         real.label_fill = defaults.label_fill;
         real.label_next = defaults.label_next;

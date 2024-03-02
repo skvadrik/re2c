@@ -8,19 +8,19 @@ type state = {
 
 
 let rec yy0 (st : state) : bool =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy2 [@tailcall]) st
+		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy2 [@tailcall]) st
 		| _ -> (yy1 [@tailcall]) st
 
 and yy1 (st : state) : bool =
 	false
 
 and yy2 (st : state) : bool =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy2 [@tailcall]) st
 		| _ -> (yy3 [@tailcall]) st

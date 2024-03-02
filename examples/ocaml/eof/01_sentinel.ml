@@ -11,12 +11,12 @@ type state = {
 
 #13 "ocaml/eof/01_sentinel.ml"
 let rec yy0 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x00 -> (yy1 [@tailcall]) st count
-		| 0x20 -> (yy3 [@tailcall]) st count
-		| 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A -> (yy5 [@tailcall]) st count
+		| '\x00' -> (yy1 [@tailcall]) st count
+		| ' ' -> (yy3 [@tailcall]) st count
+		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' -> (yy5 [@tailcall]) st count
 		| _ -> (yy2 [@tailcall]) st count
 
 and yy1 (st : state) (count : int) : int =
@@ -30,9 +30,9 @@ and yy2 (st : state) (count : int) : int =
 #31 "ocaml/eof/01_sentinel.ml"
 
 and yy3 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x20 ->
+		| ' ' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st count
 		| _ -> (yy4 [@tailcall]) st count
@@ -43,9 +43,9 @@ and yy4 (st : state) (count : int) : int =
 #44 "ocaml/eof/01_sentinel.ml"
 
 and yy5 (st : state) (count : int) : int =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A ->
+		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st count
 		| _ -> (yy6 [@tailcall]) st count

@@ -47,8 +47,8 @@ let fill (st: state) (need: int) : status =
 
 /*!re2c
     re2c:define:YYFN       = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYCTYPE    = int;
-    re2c:define:YYPEEK     = "Char.code (Bytes.get st.buf st.cur)";
+    re2c:define:YYCTYPE    = char;
+    re2c:define:YYPEEK     = "Bytes.get st.buf st.cur";
     re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP   = "st.mar <- st.cur;";
     re2c:define:YYRESTORE  = "st.cur <- st.mar;";

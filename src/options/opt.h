@@ -148,6 +148,7 @@ class Stx;
     /* yych */ \
     MUTOPT(bool, char_emit, true) \
     MUTOPT(bool, char_conv, false) \
+    MUTOPT(CharLit, char_literals, CharLit::CHAR_OR_HEX) \
     /* conditions */ \
     MUTOPT(bool, cond_abort, false) \
     MUTOPT(bool, cond_get_naked, false) \

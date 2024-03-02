@@ -15,12 +15,12 @@ type state = {
 
 
 let rec yy0 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| 0x2E -> (yy3 [@tailcall]) st
-		| 0x30 -> (yy4 [@tailcall]) st
-		| 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 -> (yy5 [@tailcall]) st
+		| '.' -> (yy3 [@tailcall]) st
+		| '0' -> (yy4 [@tailcall]) st
+		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy5 [@tailcall]) st
 		| _ -> (yy1 [@tailcall]) st
 
 and yy1 (st : state) : number =
@@ -30,9 +30,9 @@ and yy2 (st : state) : number =
 	NaN
 
 and yy3 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -40,16 +40,16 @@ and yy3 (st : state) : number =
 and yy4 (st : state) : number =
 	st.accept <- 0;
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2E ->
+		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st
-		| 0x45
-		| 0x65 ->
+		| 'E'
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -57,16 +57,16 @@ and yy4 (st : state) : number =
 and yy5 (st : state) : number =
 	st.accept <- 1;
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2E ->
+		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| 0x45
-		| 0x65 ->
+		| 'E'
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st
 		| _ -> (yy6 [@tailcall]) st
@@ -77,13 +77,13 @@ and yy6 (st : state) : number =
 and yy7 (st : state) : number =
 	st.accept <- 2;
 	st.mar <- st.cur;
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| 0x45
-		| 0x65 ->
+		| 'E'
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st
 		| _ -> (yy8 [@tailcall]) st
@@ -92,16 +92,16 @@ and yy8 (st : state) : number =
 	Float
 
 and yy9 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2E ->
+		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st
-		| 0x45
-		| 0x65 ->
+		| 'E'
+		| 'e' ->
 			st.cur <- st.cur + 1;
 			(yy11 [@tailcall]) st
 		| _ -> (yy10 [@tailcall]) st
@@ -114,29 +114,29 @@ and yy10 (st : state) : number =
 		| _ -> (yy8 [@tailcall]) st
 
 and yy11 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x2B
-		| 0x2D ->
+		| '+'
+		| '-' ->
 			st.cur <- st.cur + 1;
 			(yy12 [@tailcall]) st
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy10 [@tailcall]) st
 
 and yy12 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy10 [@tailcall]) st
 
 and yy13 (st : state) : number =
-	let yych = Char.code st.str.[st.cur] in
+	let yych = st.str.[st.cur] in
 	match yych with
-		| 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39 ->
+		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy8 [@tailcall]) st

@@ -11,7 +11,6 @@ type state = {
 
 /*!rules:re2c
     re2c:yyfill:enable    = 0;
-    re2c:define:YYCTYPE   = int;
     re2c:define:YYPEEK    = "str.(st.cur)";
     re2c:define:YYSKIP    = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP  = "st.mar <- st.cur;";
@@ -24,13 +23,13 @@ type state = {
 /*!use:re2c
     re2c:define:YYFN = ["lex8;int option", "st;state", "str;char array"];
     re2c:encoding:utf8 = 1;
-    re2c:define:YYPEEK = "Char.code str.(st.cur)";
+    re2c:define:YYCTYPE = char;
 */
 
 /*!use:re2c
     re2c:define:YYFN = ["lex32;int option", "st;state", "str;int array"];
     re2c:encoding:utf32 = 1;
-    re2c:define:YYPEEK = "str.(st.cur)";
+    re2c:define:YYCTYPE = int;
 */
 
 let main() =
