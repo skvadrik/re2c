@@ -86,8 +86,8 @@ namespace re2c {
 
 Ret Input::lex_conf(Opt& opts) {
 /*!local:re2c
-    "api" | "flags:input" { return lex_conf_input(opts); }
-    "api:style"           { return lex_conf_api_style(opts); }
+    "api" | "flags:input" { goto input; }
+    "api:style"           { goto api_style; }
     "api:sigil"           { RET_CONF_STR(api_sigil); }
 
     // header filename in configuration is relative to the output file directory
@@ -204,8 +204,8 @@ Ret Input::lex_conf(Opt& opts) {
     "encoding:utf16"  | "flags:utf-16"     | "flags:x" { RET_CONF_ENC(Enc::Type::UTF16); }
     "encoding:utf8"   | "flags:utf-8"      | "flags:8" { RET_CONF_ENC(Enc::Type::UTF8); }
 
-    "flags:"? "encoding-policy" { return lex_conf_encoding_policy(opts); }
-    "flags:"? "empty-class"     { return lex_conf_empty_class(opts); }
+    "flags:"? "encoding-policy" { goto encoding_policy; }
+    "flags:"? "empty-class"     { goto empty_class; }
 
     "indent:string" { RET_CONF_STR(indent_str); }
     "indent:top"    { RET_CONF_NUM_NONNEG(indent_top); }
@@ -222,9 +222,28 @@ Ret Input::lex_conf(Opt& opts) {
                 "unrecognized configuration '%.*s'", static_cast<int>(cur - tok), tok));
     }
 */
-}
 
-Ret Input::lex_conf_encoding_policy(Opt& opts) {
+input:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom')"));
+    }
+    "default" { SETOPT(api, Api::DEFAULT); goto end; }
+    "custom"  { SETOPT(api, Api::CUSTOM);  goto end; }
+*/
+
+api_style:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'functions', 'free-form')"));
+    }
+    "functions" { SETOPT(api_style, ApiStyle::FUNCTIONS); goto end; }
+    "free-form" { SETOPT(api_style, ApiStyle::FREEFORM);  goto end; }
+*/
+
+encoding_policy:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
@@ -235,24 +254,8 @@ Ret Input::lex_conf_encoding_policy(Opt& opts) {
     "substitute" { SETOPT(encoding_policy, Enc::Policy::SUBSTITUTE); goto end; }
     "fail"       { SETOPT(encoding_policy, Enc::Policy::FAIL);       goto end; }
 */
-end:
-    return lex_conf_semicolon();
-}
 
-Ret Input::lex_conf_input(Opt& opts) {
-    CHECK_RET(lex_conf_assign());
-/*!local:re2c
-    * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom')"));
-    }
-    "default" { SETOPT(api, Api::DEFAULT); goto end; }
-    "custom"  { SETOPT(api, Api::CUSTOM);  goto end; }
-*/
-end:
-    return lex_conf_semicolon();
-}
-
-Ret Input::lex_conf_empty_class(Opt& opts) {
+empty_class:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
@@ -263,19 +266,7 @@ Ret Input::lex_conf_empty_class(Opt& opts) {
     "match-none"  { SETOPT(empty_class, EmptyClass::MATCH_NONE);  goto end; }
     "error"       { SETOPT(empty_class, EmptyClass::ERROR);       goto end; }
 */
-end:
-    return lex_conf_semicolon();
-}
 
-Ret Input::lex_conf_api_style(Opt& opts) {
-    CHECK_RET(lex_conf_assign());
-/*!local:re2c
-    * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'functions', 'free-form')"));
-    }
-    "functions" { SETOPT(api_style, ApiStyle::FUNCTIONS); goto end; }
-    "free-form" { SETOPT(api_style, ApiStyle::FREEFORM);  goto end; }
-*/
 end:
     return lex_conf_semicolon();
 }

@@ -141,10 +141,6 @@ class Input: private LexerState {
     Ret lex_cls(Ast& ast, bool neg, const AstNode*&) NODISCARD;
     Ret lex_str(Ast& ast, uint8_t quote, const AstNode*&) NODISCARD;
 
-    Ret lex_conf_encoding_policy(Opt& opts) NODISCARD;
-    Ret lex_conf_input(Opt& opts) NODISCARD;
-    Ret lex_conf_empty_class(Opt& opts) NODISCARD;
-    Ret lex_conf_api_style(Opt& opts) NODISCARD;
     Ret lex_conf_assign() NODISCARD;
     Ret lex_conf_semicolon() NODISCARD;
     Ret lex_conf_number() NODISCARD;
