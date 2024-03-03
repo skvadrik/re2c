@@ -16,7 +16,7 @@ let rec yy0 (st : state) (count : int) : int =
 	match yych with
 		| '\x00' -> (yy1 [@tailcall]) st count
 		| ' ' -> (yy3 [@tailcall]) st count
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' -> (yy5 [@tailcall]) st count
+		| 'a'..'z' -> (yy5 [@tailcall]) st count
 		| _ -> (yy2 [@tailcall]) st count
 
 and yy1 (st : state) (count : int) : int =
@@ -45,7 +45,7 @@ and yy4 (st : state) (count : int) : int =
 and yy5 (st : state) (count : int) : int =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
+		| 'a'..'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st count
 		| _ -> (yy6 [@tailcall]) st count

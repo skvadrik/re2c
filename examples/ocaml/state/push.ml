@@ -43,7 +43,7 @@ let fill(st: state) : status =
 let rec yy0 (st : state) : status =
 	let yych = Bytes.get st.buf st.cur in
 	match yych with
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
+		| 'a'..'z' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ ->
@@ -69,7 +69,7 @@ and yy3 (st : state) : status =
 		| ';' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
+		| 'a'..'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
 		| _ ->
@@ -90,7 +90,7 @@ and yy5 (st : state) : status =
 		| ';' ->
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
+		| 'a'..'z' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
 		| _ ->

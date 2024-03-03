@@ -24,7 +24,7 @@ let rec yy0 (st : state) (num : int option) : int option =
 	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| '0'|'1' -> (yy2 [@tailcall]) st num
+		| '0'..'1' -> (yy2 [@tailcall]) st num
 		| _ -> (yy1 [@tailcall]) st num
 
 and yy1 (st : state) (num : int option) : int option =
@@ -43,7 +43,7 @@ let rec yy3 (st : state) (num : int option) : int option =
 	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7' -> (yy5 [@tailcall]) st num
+		| '0'..'7' -> (yy5 [@tailcall]) st num
 		| _ -> (yy4 [@tailcall]) st num
 
 and yy4 (st : state) (num : int option) : int option =
@@ -62,7 +62,7 @@ let rec yy6 (st : state) (num : int option) : int option =
 	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy8 [@tailcall]) st num
+		| '0'..'9' -> (yy8 [@tailcall]) st num
 		| _ -> (yy7 [@tailcall]) st num
 
 and yy7 (st : state) (num : int option) : int option =
@@ -81,9 +81,9 @@ let rec yy9 (st : state) (num : int option) : int option =
 	let yych = st.str.[st.cur] in
 	st.cur <- st.cur + 1;
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy11 [@tailcall]) st num
-		| 'A'|'B'|'C'|'D'|'E'|'F' -> (yy12 [@tailcall]) st num
-		| 'a'|'b'|'c'|'d'|'e'|'f' -> (yy13 [@tailcall]) st num
+		| '0'..'9' -> (yy11 [@tailcall]) st num
+		| 'A'..'F' -> (yy12 [@tailcall]) st num
+		| 'a'..'f' -> (yy13 [@tailcall]) st num
 		| _ -> (yy10 [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
@@ -109,7 +109,7 @@ let rec yy14 (st : state) : int option =
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0' -> (yy16 [@tailcall]) st
-		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy18 [@tailcall]) st
+		| '1'..'9' -> (yy18 [@tailcall]) st
 		| _ -> (yy15 [@tailcall]) st
 
 and yy15 (st : state) : int option =
@@ -139,7 +139,7 @@ and yy18 (st : state) : int option =
 and yy19 (st : state) : int option =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1' ->
+		| '0'..'1' ->
 			st.cur <- st.cur + 1;
 			(yy22 [@tailcall]) st
 		| _ -> (yy20 [@tailcall]) st
@@ -151,9 +151,9 @@ and yy20 (st : state) : int option =
 and yy21 (st : state) : int option =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-		| 'A'|'B'|'C'|'D'|'E'|'F'
-		| 'a'|'b'|'c'|'d'|'e'|'f' ->
+		| '0'..'9'
+		| 'A'..'F'
+		| 'a'..'f' ->
 			st.cur <- st.cur + 1;
 			(yy23 [@tailcall]) st
 		| _ -> (yy20 [@tailcall]) st

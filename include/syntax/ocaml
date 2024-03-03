@@ -147,9 +147,14 @@ code:switch_cases_oneline =
     [case{0:-2}: topindent "| " case nl]
     [case{-1}:   topindent "| " case " -> " [stmt: stmt] nl];
 
-// Note: we cannot use `"c when " [val{0}: val] " <= c && c <= " [val{-1}: val]`, as it causes
-// `Error: Variable c must occur on both sides of this | pattern` when there are multiple cases.
-code:switch_case_range = [val{0}: val] [val{1:-1}: "|" val];
+// In OCaml only literals of type `char` support case ranges.
+// For `int`, we have to exlicitly list all range values. We cannot use
+//     `"c when " [val{0}: val] " <= c && c <= " [val{-1}: val]`
+// as it causes error when there are multiple cases:
+//     `Error: Variable c must occur on both sides of this | pattern`.
+code:switch_case_range = (char_literals
+    ? [val{0}: val] (multival ? ".." [val{-1}: val])
+    : [val{0}: val] [val{1:-1}: "|" val]);
 
 code:switch_case_default = "_";
 

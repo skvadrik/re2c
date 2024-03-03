@@ -70,7 +70,7 @@ Stx::Stx(OutAllocator& alc)
         {}, {"case", "stmt"}, {}
     };
     allowed_code_confs["code:switch_case_range"] = {
-        {}, {"val"}, {StxLOpt::MULTIVAL}
+        {}, {"val"}, {StxLOpt::MULTIVAL, StxLOpt::CHAR_LITERALS}
     };
     allowed_code_confs["code:switch_case_default"] = {};
     allowed_code_confs["code:loop"] = {

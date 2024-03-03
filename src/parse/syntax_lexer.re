@@ -128,13 +128,14 @@ opt:
 
     // Local conditionals.
 
-    "have_init"    { RET_LOPT(StxLOpt::HAVE_INIT); }
-    "have_cond"    { RET_LOPT(StxLOpt::HAVE_COND); }
-    "have_type"    { RET_LOPT(StxLOpt::HAVE_TYPE); }
-    "have_args"    { RET_LOPT(StxLOpt::HAVE_ARGS); }
-    "have_argmods" { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
-    "have_retval"  { RET_LOPT(StxLOpt::HAVE_RETVAL); }
-    "multival"     { RET_LOPT(StxLOpt::MULTIVAL); }
+    "have_init"     { RET_LOPT(StxLOpt::HAVE_INIT); }
+    "have_cond"     { RET_LOPT(StxLOpt::HAVE_COND); }
+    "have_type"     { RET_LOPT(StxLOpt::HAVE_TYPE); }
+    "have_args"     { RET_LOPT(StxLOpt::HAVE_ARGS); }
+    "have_argmods"  { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
+    "have_retval"   { RET_LOPT(StxLOpt::HAVE_RETVAL); }
+    "multival"      { RET_LOPT(StxLOpt::MULTIVAL); }
+    "char_literals" { RET_LOPT(StxLOpt::CHAR_LITERALS); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }
 */

@@ -17,13 +17,13 @@ let rec yy0 (st : state) : bool =
 	st.cur <- st.cur + 1;
 	match yych with
 		| '$'
-		| 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'
+		| 'A'..'Z'
 		| '_'
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' -> (yy3 [@tailcall]) st
+		| 'a'..'z' -> (yy3 [@tailcall]) st
 		| '\xC2' -> (yy5 [@tailcall]) st
 		| '\xC3' -> (yy6 [@tailcall]) st
-		| '\xC4'|'\xC5'|'\xC6'|'\xC7'|'\xC8'|'\xC9'|'\xCA'
-		| '\xD0'|'\xD1'
+		| '\xC4'..'\xCA'
+		| '\xD0'..'\xD1'
 		| '\xD3'
 		| '\xDA' -> (yy7 [@tailcall]) st
 		| '\xCB' -> (yy8 [@tailcall]) st
@@ -47,8 +47,8 @@ let rec yy0 (st : state) : bool =
 		| '\xE2' -> (yy26 [@tailcall]) st
 		| '\xE3' -> (yy27 [@tailcall]) st
 		| '\xE4' -> (yy28 [@tailcall]) st
-		| '\xE5'|'\xE6'|'\xE7'|'\xE8'
-		| '\xEB'|'\xEC' -> (yy29 [@tailcall]) st
+		| '\xE5'..'\xE8'
+		| '\xEB'..'\xEC' -> (yy29 [@tailcall]) st
 		| '\xE9' -> (yy30 [@tailcall]) st
 		| '\xEA' -> (yy31 [@tailcall]) st
 		| '\xED' -> (yy32 [@tailcall]) st
@@ -68,10 +68,10 @@ and yy3 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '$'
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9'
-		| 'A'|'B'|'C'|'D'|'E'|'F'|'G'|'H'|'I'|'J'|'K'|'L'|'M'|'N'|'O'|'P'|'Q'|'R'|'S'|'T'|'U'|'V'|'W'|'X'|'Y'|'Z'
+		| '0'..'9'
+		| 'A'..'Z'
 		| '_'
-		| 'a'|'b'|'c'|'d'|'e'|'f'|'g'|'h'|'i'|'j'|'k'|'l'|'m'|'n'|'o'|'p'|'q'|'r'|'s'|'t'|'u'|'v'|'w'|'x'|'y'|'z' ->
+		| 'a'..'z' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| '\xC2' ->
@@ -80,9 +80,9 @@ and yy3 (st : state) : bool =
 		| '\xC3' ->
 			st.cur <- st.cur + 1;
 			(yy37 [@tailcall]) st
-		| '\xC4'|'\xC5'|'\xC6'|'\xC7'|'\xC8'|'\xC9'|'\xCA'
+		| '\xC4'..'\xCA'
 		| '\xCC'
-		| '\xD0'|'\xD1'
+		| '\xD0'..'\xD1'
 		| '\xD3'
 		| '\xDA' ->
 			st.cur <- st.cur + 1;
@@ -150,8 +150,8 @@ and yy3 (st : state) : bool =
 		| '\xE4' ->
 			st.cur <- st.cur + 1;
 			(yy59 [@tailcall]) st
-		| '\xE5'|'\xE6'|'\xE7'|'\xE8'
-		| '\xEB'|'\xEC' ->
+		| '\xE5'..'\xE8'
+		| '\xEB'..'\xEC' ->
 			st.cur <- st.cur + 1;
 			(yy60 [@tailcall]) st
 		| '\xE9' ->
@@ -190,9 +190,9 @@ and yy5 (st : state) : bool =
 and yy6 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x96'
+		| '\x98'..'\xB6'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -200,7 +200,7 @@ and yy6 (st : state) : bool =
 and yy7 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -208,9 +208,9 @@ and yy7 (st : state) : bool =
 and yy8 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'
+		| '\x80'..'\x81'
+		| '\x86'..'\x91'
+		| '\xA0'..'\xA4'
 		| '\xAC'
 		| '\xAE' ->
 			st.cur <- st.cur + 1;
@@ -220,9 +220,9 @@ and yy8 (st : state) : bool =
 and yy9 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'
+		| '\xB0'..'\xB4'
+		| '\xB6'..'\xB7'
+		| '\xBA'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -232,10 +232,10 @@ and yy10 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x86'
-		| '\x88'|'\x89'|'\x8A'
+		| '\x88'..'\x8A'
 		| '\x8C'
-		| '\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8E'..'\xA1'
+		| '\xA3'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -243,8 +243,8 @@ and yy10 (st : state) : bool =
 and yy11 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB5'
+		| '\xB7'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -252,8 +252,8 @@ and yy11 (st : state) : bool =
 and yy12 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x81'
+		| '\x8A'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -261,8 +261,8 @@ and yy12 (st : state) : bool =
 and yy13 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAF'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -270,9 +270,9 @@ and yy13 (st : state) : bool =
 and yy14 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
+		| '\x80'..'\x96'
 		| '\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -280,7 +280,7 @@ and yy14 (st : state) : bool =
 and yy15 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88' ->
+		| '\x80'..'\x88' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -288,8 +288,8 @@ and yy15 (st : state) : bool =
 and yy16 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\x90'..'\xAA'
+		| '\xAF'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -297,7 +297,7 @@ and yy16 (st : state) : bool =
 and yy17 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -305,9 +305,9 @@ and yy17 (st : state) : bool =
 and yy18 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8A'
+		| '\xAE'..'\xAF'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -315,11 +315,11 @@ and yy18 (st : state) : bool =
 and yy19 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
+		| '\x80'..'\x93'
 		| '\x95'
-		| '\xA5'|'\xA6'
-		| '\xAE'|'\xAF'
-		| '\xBA'|'\xBB'|'\xBC'
+		| '\xA5'..'\xA6'
+		| '\xAE'..'\xAF'
+		| '\xBA'..'\xBC'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -329,7 +329,7 @@ and yy20 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\x92'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -337,7 +337,7 @@ and yy20 (st : state) : bool =
 and yy21 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8D'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -345,7 +345,7 @@ and yy21 (st : state) : bool =
 and yy22 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
+		| '\x80'..'\xA5'
 		| '\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -354,8 +354,8 @@ and yy22 (st : state) : bool =
 and yy23 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xB4'|'\xB5'
+		| '\x8A'..'\xAA'
+		| '\xB4'..'\xB5'
 		| '\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -473,10 +473,10 @@ and yy25 (st : state) : bool =
 		| '\x83' ->
 			st.cur <- st.cur + 1;
 			(yy99 [@tailcall]) st
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'
-		| '\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x84'..'\x88'
+		| '\x91'..'\x98'
+		| '\xB4'..'\xB6'
+		| '\xB8'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x89' ->
@@ -665,7 +665,7 @@ and yy27 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy154 [@tailcall]) st
 		| '\x85'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x86' ->
@@ -681,8 +681,8 @@ and yy28 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB5'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xB6' ->
@@ -695,7 +695,7 @@ and yy29 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -705,7 +705,7 @@ and yy30 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xBF' ->
@@ -718,11 +718,11 @@ and yy31 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\x94'|'\x95'|'\x96'|'\x97'
+		| '\x80'..'\x91'
+		| '\x94'..'\x97'
 		| '\x9D'
 		| '\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x92' ->
@@ -804,7 +804,7 @@ and yy32 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D' ->
+		| '\x80'..'\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x9E' ->
@@ -820,9 +820,9 @@ and yy33 (st : state) : bool =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
+		| '\xA4'..'\xA8'
 		| '\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'
+		| '\xB0'..'\xB3'
 		| '\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -900,7 +900,7 @@ and yy34 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy201 [@tailcall]) st
 		| '\x97'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
+		| '\xA0'..'\xA9'
 		| '\xAD' ->
 			st.cur <- st.cur + 1;
 			(yy60 [@tailcall]) st
@@ -951,9 +951,9 @@ and yy36 (st : state) : bool =
 and yy37 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x96'
+		| '\x98'..'\xB6'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -961,7 +961,7 @@ and yy37 (st : state) : bool =
 and yy38 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -969,9 +969,9 @@ and yy38 (st : state) : bool =
 and yy39 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'
+		| '\x80'..'\x81'
+		| '\x86'..'\x91'
+		| '\xA0'..'\xA4'
 		| '\xAC'
 		| '\xAE' ->
 			st.cur <- st.cur + 1;
@@ -981,9 +981,9 @@ and yy39 (st : state) : bool =
 and yy40 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'
+		| '\x80'..'\xB4'
+		| '\xB6'..'\xB7'
+		| '\xBA'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -993,10 +993,10 @@ and yy41 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x86'
-		| '\x88'|'\x89'|'\x8A'
+		| '\x88'..'\x8A'
 		| '\x8C'
-		| '\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8E'..'\xA1'
+		| '\xA3'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1004,8 +1004,8 @@ and yy41 (st : state) : bool =
 and yy42 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB5'
+		| '\xB7'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1013,9 +1013,9 @@ and yy42 (st : state) : bool =
 and yy43 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x81'
+		| '\x83'..'\x87'
+		| '\x8A'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1023,8 +1023,8 @@ and yy43 (st : state) : bool =
 and yy44 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAF'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1032,9 +1032,9 @@ and yy44 (st : state) : bool =
 and yy45 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
+		| '\x80'..'\x96'
 		| '\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1042,8 +1042,8 @@ and yy45 (st : state) : bool =
 and yy46 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'
+		| '\x80'..'\x88'
+		| '\x91'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1052,11 +1052,11 @@ and yy46 (st : state) : bool =
 and yy47 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'
-		| '\x84'|'\x85'
+		| '\x81'..'\x82'
+		| '\x84'..'\x85'
 		| '\x87'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x90'..'\xAA'
+		| '\xAF'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1064,8 +1064,8 @@ and yy47 (st : state) : bool =
 and yy48 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\x9A'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1073,8 +1073,8 @@ and yy48 (st : state) : bool =
 and yy49 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA9'
+		| '\xAE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1082,10 +1082,10 @@ and yy49 (st : state) : bool =
 and yy50 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
-		| '\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\x80'..'\x93'
+		| '\x95'..'\x9C'
+		| '\x9F'..'\xA8'
+		| '\xAA'..'\xBC'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1094,7 +1094,7 @@ and yy50 (st : state) : bool =
 and yy51 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1102,8 +1102,8 @@ and yy51 (st : state) : bool =
 and yy52 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8A'
+		| '\x8D'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1111,7 +1111,7 @@ and yy52 (st : state) : bool =
 and yy53 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1' ->
+		| '\x80'..'\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1119,7 +1119,7 @@ and yy53 (st : state) : bool =
 and yy54 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
+		| '\x80'..'\xB5'
 		| '\xBA'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
@@ -1231,13 +1231,13 @@ and yy56 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'
+		| '\x84'..'\x88'
+		| '\x91'..'\x98'
 		| '\x9E'
 		| '\xAC'
 		| '\xAE'
-		| '\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\xB4'..'\xB6'
+		| '\xB8'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x81' ->
@@ -1431,7 +1431,7 @@ and yy58 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy154 [@tailcall]) st
 		| '\x85'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x86' ->
@@ -1445,8 +1445,8 @@ and yy58 (st : state) : bool =
 and yy59 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB5'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xB6' ->
@@ -1457,7 +1457,7 @@ and yy59 (st : state) : bool =
 and yy60 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1465,7 +1465,7 @@ and yy60 (st : state) : bool =
 and yy61 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xBF' ->
@@ -1476,15 +1476,15 @@ and yy61 (st : state) : bool =
 and yy62 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\x94'|'\x95'|'\x96'|'\x97'
+		| '\x80'..'\x91'
+		| '\x94'..'\x97'
 		| '\x9A'
 		| '\x9D'
 		| '\xA2'
 		| '\xA6'
 		| '\xAA'
 		| '\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x92' ->
@@ -1552,7 +1552,7 @@ and yy62 (st : state) : bool =
 and yy63 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D' ->
+		| '\x80'..'\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x9E' ->
@@ -1566,9 +1566,9 @@ and yy63 (st : state) : bool =
 and yy64 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
+		| '\xA4'..'\xA8'
 		| '\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'
+		| '\xB0'..'\xB3'
 		| '\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -1647,7 +1647,7 @@ and yy65 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy283 [@tailcall]) st
 		| '\x97'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
+		| '\xA0'..'\xA9'
 		| '\xAD' ->
 			st.cur <- st.cur + 1;
 			(yy60 [@tailcall]) st
@@ -1691,7 +1691,7 @@ and yy66 (st : state) : bool =
 and yy67 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
+		| '\x80'..'\x95'
 		| '\x9A'
 		| '\xA4'
 		| '\xA8' ->
@@ -1702,8 +1702,8 @@ and yy67 (st : state) : bool =
 and yy68 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA' ->
+		| '\x80'..'\x98'
+		| '\xA0'..'\xAA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1711,8 +1711,8 @@ and yy68 (st : state) : bool =
 and yy69 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\xA0'..'\xB4'
+		| '\xB6'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1720,7 +1720,7 @@ and yy69 (st : state) : bool =
 and yy70 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\x84'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1730,8 +1730,8 @@ and yy71 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x98'..'\xA1'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1740,12 +1740,12 @@ and yy72 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
+		| '\x85'..'\x8C'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
 		| '\xB2'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\xB6'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1755,9 +1755,9 @@ and yy73 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x8E'
-		| '\x9C'|'\x9D'
-		| '\x9F'|'\xA0'|'\xA1'
-		| '\xB0'|'\xB1'
+		| '\x9C'..'\x9D'
+		| '\x9F'..'\xA1'
+		| '\xB0'..'\xB1'
 		| '\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1766,13 +1766,13 @@ and yy73 (st : state) : bool =
 and yy74 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'
-		| '\xB8'|'\xB9' ->
+		| '\x85'..'\x8A'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB6'
+		| '\xB8'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1780,9 +1780,9 @@ and yy74 (st : state) : bool =
 and yy75 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'
+		| '\x99'..'\x9C'
 		| '\x9E'
-		| '\xB2'|'\xB3'|'\xB4' ->
+		| '\xB2'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1790,12 +1790,12 @@ and yy75 (st : state) : bool =
 and yy76 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x8F'|'\x90'|'\x91'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\x85'..'\x8D'
+		| '\x8F'..'\x91'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1805,7 +1805,7 @@ and yy77 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\xA0'|'\xA1'
+		| '\xA0'..'\xA1'
 		| '\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1814,12 +1814,12 @@ and yy77 (st : state) : bool =
 and yy78 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\x85'..'\x8C'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1828,8 +1828,8 @@ and yy78 (st : state) : bool =
 and yy79 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x9C'|'\x9D'
-		| '\x9F'|'\xA0'|'\xA1'
+		| '\x9C'..'\x9D'
+		| '\x9F'..'\xA1'
 		| '\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1839,15 +1839,15 @@ and yy80 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'
-		| '\x99'|'\x9A'
+		| '\x85'..'\x8A'
+		| '\x8E'..'\x90'
+		| '\x92'..'\x95'
+		| '\x99'..'\x9A'
 		| '\x9C'
-		| '\x9E'|'\x9F'
-		| '\xA3'|'\xA4'
-		| '\xA8'|'\xA9'|'\xAA'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x9E'..'\x9F'
+		| '\xA3'..'\xA4'
+		| '\xA8'..'\xAA'
+		| '\xAE'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1863,10 +1863,10 @@ and yy81 (st : state) : bool =
 and yy82 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\x85'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xA8'
+		| '\xAA'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1875,8 +1875,8 @@ and yy82 (st : state) : bool =
 and yy83 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x98'|'\x99'|'\x9A'
-		| '\xA0'|'\xA1' ->
+		| '\x98'..'\x9A'
+		| '\xA0'..'\xA1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1885,11 +1885,11 @@ and yy84 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\x85'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xA8'
+		| '\xAA'..'\xB3'
+		| '\xB5'..'\xB9'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1899,8 +1899,8 @@ and yy85 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x9E'
-		| '\xA0'|'\xA1'
-		| '\xB1'|'\xB2' ->
+		| '\xA0'..'\xA1'
+		| '\xB1'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1908,9 +1908,9 @@ and yy85 (st : state) : bool =
 and yy86 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
+		| '\x85'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xBA'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1920,9 +1920,9 @@ and yy87 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x8E'
-		| '\x94'|'\x95'|'\x96'
-		| '\x9F'|'\xA0'|'\xA1'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x94'..'\x96'
+		| '\x9F'..'\xA1'
+		| '\xBA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1930,9 +1930,9 @@ and yy87 (st : state) : bool =
 and yy88 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'
-		| '\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'
+		| '\x85'..'\x96'
+		| '\x9A'..'\xB1'
+		| '\xB3'..'\xBB'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1941,7 +1941,7 @@ and yy88 (st : state) : bool =
 and yy89 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86' ->
+		| '\x80'..'\x86' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1949,8 +1949,8 @@ and yy89 (st : state) : bool =
 and yy90 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3' ->
+		| '\x81'..'\xB0'
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1958,13 +1958,13 @@ and yy90 (st : state) : bool =
 and yy91 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'
+		| '\x81'..'\x82'
 		| '\x84'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
+		| '\x86'..'\x8A'
+		| '\x8C'..'\xA3'
 		| '\xA5'
-		| '\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
+		| '\xA7'..'\xB0'
+		| '\xB2'..'\xB3'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -1973,9 +1973,9 @@ and yy91 (st : state) : bool =
 and yy92 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
+		| '\x80'..'\x84'
 		| '\x86'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F' ->
+		| '\x9C'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -1991,8 +1991,8 @@ and yy93 (st : state) : bool =
 and yy94 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC' ->
+		| '\x80'..'\x87'
+		| '\x89'..'\xAC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2000,7 +2000,7 @@ and yy94 (st : state) : bool =
 and yy95 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C' ->
+		| '\x88'..'\x8C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2008,7 +2008,7 @@ and yy95 (st : state) : bool =
 and yy96 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
+		| '\x80'..'\xAA'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2017,12 +2017,12 @@ and yy96 (st : state) : bool =
 and yy97 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'
+		| '\x90'..'\x95'
+		| '\x9A'..'\x9D'
 		| '\xA1'
-		| '\xA5'|'\xA6'
-		| '\xAE'|'\xAF'|'\xB0'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA5'..'\xA6'
+		| '\xAE'..'\xB0'
+		| '\xB5'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2030,9 +2030,9 @@ and yy97 (st : state) : bool =
 and yy98 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
+		| '\x80'..'\x81'
 		| '\x8E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2040,11 +2040,11 @@ and yy98 (st : state) : bool =
 and yy99 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
+		| '\x80'..'\x85'
 		| '\x87'
 		| '\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\xBA'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2052,12 +2052,12 @@ and yy99 (st : state) : bool =
 and yy100 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
+		| '\x80'..'\x88'
+		| '\x8A'..'\x8D'
+		| '\x90'..'\x96'
 		| '\x98'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x9A'..'\x9D'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2065,11 +2065,11 @@ and yy100 (st : state) : bool =
 and yy101 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\x88'
+		| '\x8A'..'\x8D'
+		| '\x90'..'\xB0'
+		| '\xB2'..'\xB5'
+		| '\xB8'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2078,9 +2078,9 @@ and yy102 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x82'|'\x83'|'\x84'|'\x85'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x82'..'\x85'
+		| '\x88'..'\x96'
+		| '\x98'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2088,9 +2088,9 @@ and yy102 (st : state) : bool =
 and yy103 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x90'
+		| '\x92'..'\x95'
+		| '\x98'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2098,7 +2098,7 @@ and yy103 (st : state) : bool =
 and yy104 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A' ->
+		| '\x80'..'\x9A' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2106,8 +2106,8 @@ and yy104 (st : state) : bool =
 and yy105 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8F'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2115,8 +2115,8 @@ and yy105 (st : state) : bool =
 and yy106 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x80'..'\xB5'
+		| '\xB8'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2124,7 +2124,7 @@ and yy106 (st : state) : bool =
 and yy107 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2132,8 +2132,8 @@ and yy107 (st : state) : bool =
 and yy108 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAC'
+		| '\xAF'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2141,8 +2141,8 @@ and yy108 (st : state) : bool =
 and yy109 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\x9A'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2150,8 +2150,8 @@ and yy109 (st : state) : bool =
 and yy110 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8' ->
+		| '\x80'..'\xAA'
+		| '\xAE'..'\xB8' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2159,9 +2159,9 @@ and yy110 (st : state) : bool =
 and yy111 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1' ->
+		| '\x80'..'\x8C'
+		| '\x8E'..'\x91'
+		| '\xA0'..'\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2169,9 +2169,9 @@ and yy111 (st : state) : bool =
 and yy112 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xAE'|'\xAF'|'\xB0' ->
+		| '\x80'..'\x91'
+		| '\xA0'..'\xAC'
+		| '\xAE'..'\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2179,7 +2179,7 @@ and yy112 (st : state) : bool =
 and yy113 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x80'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2196,7 +2196,7 @@ and yy114 (st : state) : bool =
 and yy115 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2204,7 +2204,7 @@ and yy115 (st : state) : bool =
 and yy116 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8' ->
+		| '\x80'..'\xB8' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2212,10 +2212,10 @@ and yy116 (st : state) : bool =
 and yy117 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
+		| '\x80'..'\x84'
+		| '\x87'..'\xA8'
 		| '\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2223,7 +2223,7 @@ and yy117 (st : state) : bool =
 and yy118 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5' ->
+		| '\x80'..'\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2231,7 +2231,7 @@ and yy118 (st : state) : bool =
 and yy119 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E' ->
+		| '\x80'..'\x9E' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2239,8 +2239,8 @@ and yy119 (st : state) : bool =
 and yy120 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4' ->
+		| '\x90'..'\xAD'
+		| '\xB0'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2248,8 +2248,8 @@ and yy120 (st : state) : bool =
 and yy121 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAB'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2257,7 +2257,7 @@ and yy121 (st : state) : bool =
 and yy122 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89' ->
+		| '\x80'..'\x89' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2265,8 +2265,8 @@ and yy122 (st : state) : bool =
 and yy123 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x96'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2274,7 +2274,7 @@ and yy123 (st : state) : bool =
 and yy124 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94' ->
+		| '\x80'..'\x94' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2290,7 +2290,7 @@ and yy125 (st : state) : bool =
 and yy126 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x85'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2298,7 +2298,7 @@ and yy126 (st : state) : bool =
 and yy127 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B' ->
+		| '\x85'..'\x8B' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2306,9 +2306,9 @@ and yy127 (st : state) : bool =
 and yy128 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'
-		| '\xAE'|'\xAF'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x83'..'\xA0'
+		| '\xAE'..'\xAF'
+		| '\xBA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2316,7 +2316,7 @@ and yy128 (st : state) : bool =
 and yy129 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5' ->
+		| '\x80'..'\xA5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2324,7 +2324,7 @@ and yy129 (st : state) : bool =
 and yy130 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3' ->
+		| '\x80'..'\xA3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2332,8 +2332,8 @@ and yy130 (st : state) : bool =
 and yy131 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8D'|'\x8E'|'\x8F'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x8D'..'\x8F'
+		| '\x9A'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2341,9 +2341,9 @@ and yy131 (st : state) : bool =
 and yy132 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x88'
+		| '\x90'..'\xBA'
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2351,9 +2351,9 @@ and yy132 (st : state) : bool =
 and yy133 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'
-		| '\xB5'|'\xB6'
+		| '\xA9'..'\xAC'
+		| '\xAE'..'\xB3'
+		| '\xB5'..'\xB6'
 		| '\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2362,9 +2362,9 @@ and yy133 (st : state) : bool =
 and yy134 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x95'
+		| '\x98'..'\x9D'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2372,13 +2372,13 @@ and yy134 (st : state) : bool =
 and yy135 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'
+		| '\x80'..'\x85'
+		| '\x88'..'\x8D'
+		| '\x90'..'\x97'
 		| '\x99'
 		| '\x9B'
 		| '\x9D'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x9F'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2386,8 +2386,8 @@ and yy135 (st : state) : bool =
 and yy136 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\x80'..'\xB4'
+		| '\xB6'..'\xBC'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2396,13 +2396,13 @@ and yy136 (st : state) : bool =
 and yy137 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x90'|'\x91'|'\x92'|'\x93'
-		| '\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x82'..'\x84'
+		| '\x86'..'\x8C'
+		| '\x90'..'\x93'
+		| '\x96'..'\x9B'
+		| '\xA0'..'\xAC'
+		| '\xB2'..'\xB4'
+		| '\xB6'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2419,7 +2419,7 @@ and yy138 (st : state) : bool =
 and yy139 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C' ->
+		| '\x90'..'\x9C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2429,15 +2429,15 @@ and yy140 (st : state) : bool =
 	match yych with
 		| '\x82'
 		| '\x87'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
+		| '\x8A'..'\x93'
 		| '\x95'
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
+		| '\x99'..'\x9D'
 		| '\xA4'
 		| '\xA6'
 		| '\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'
-		| '\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xAA'..'\xAD'
+		| '\xAF'..'\xB9'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2445,9 +2445,9 @@ and yy140 (st : state) : bool =
 and yy141 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'
+		| '\x85'..'\x89'
 		| '\x8E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2455,7 +2455,7 @@ and yy141 (st : state) : bool =
 and yy142 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88' ->
+		| '\x80'..'\x88' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2463,8 +2463,8 @@ and yy142 (st : state) : bool =
 and yy143 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAE'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2472,8 +2472,8 @@ and yy143 (st : state) : bool =
 and yy144 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9E'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2481,9 +2481,9 @@ and yy144 (st : state) : bool =
 and yy145 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'
-		| '\xAB'|'\xAC'|'\xAD'|'\xAE'
-		| '\xB2'|'\xB3' ->
+		| '\x80'..'\xA4'
+		| '\xAB'..'\xAE'
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2491,10 +2491,10 @@ and yy145 (st : state) : bool =
 and yy146 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
+		| '\x80'..'\xA5'
 		| '\xA7'
 		| '\xAD'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2502,7 +2502,7 @@ and yy146 (st : state) : bool =
 and yy147 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
+		| '\x80'..'\xA7'
 		| '\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2511,11 +2511,11 @@ and yy147 (st : state) : bool =
 and yy148 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'
-		| '\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\x96'
+		| '\xA0'..'\xA6'
+		| '\xA8'..'\xAE'
+		| '\xB0'..'\xB6'
+		| '\xB8'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2523,10 +2523,10 @@ and yy148 (st : state) : bool =
 and yy149 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E' ->
+		| '\x80'..'\x86'
+		| '\x88'..'\x8E'
+		| '\x90'..'\x96'
+		| '\x98'..'\x9E' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2542,10 +2542,10 @@ and yy150 (st : state) : bool =
 and yy151 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x85'..'\x87'
+		| '\xA1'..'\xA9'
+		| '\xB1'..'\xB5'
+		| '\xB8'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2553,9 +2553,9 @@ and yy151 (st : state) : bool =
 and yy152 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x9D'|'\x9E'|'\x9F'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x96'
+		| '\x9D'..'\x9F'
+		| '\xA1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2563,8 +2563,8 @@ and yy152 (st : state) : bool =
 and yy153 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xBA'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2572,8 +2572,8 @@ and yy153 (st : state) : bool =
 and yy154 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x85'..'\xAF'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2581,8 +2581,8 @@ and yy154 (st : state) : bool =
 and yy155 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\x80'..'\x8E'
+		| '\xA0'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2590,7 +2590,7 @@ and yy155 (st : state) : bool =
 and yy156 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2598,7 +2598,7 @@ and yy156 (st : state) : bool =
 and yy157 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\x80'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2606,7 +2606,7 @@ and yy157 (st : state) : bool =
 and yy158 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C' ->
+		| '\x80'..'\x8C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2614,7 +2614,7 @@ and yy158 (st : state) : bool =
 and yy159 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x90'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2622,9 +2622,9 @@ and yy159 (st : state) : bool =
 and yy160 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xAA'|'\xAB' ->
+		| '\x80'..'\x8C'
+		| '\x90'..'\x9F'
+		| '\xAA'..'\xAB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2632,7 +2632,7 @@ and yy160 (st : state) : bool =
 and yy161 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'
+		| '\x80'..'\xAE'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2641,8 +2641,8 @@ and yy161 (st : state) : bool =
 and yy162 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9D'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2650,8 +2650,8 @@ and yy162 (st : state) : bool =
 and yy163 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x97'..'\x9F'
+		| '\xA2'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2659,8 +2659,8 @@ and yy163 (st : state) : bool =
 and yy164 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x88'
+		| '\x8B'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2668,8 +2668,8 @@ and yy164 (st : state) : bool =
 and yy165 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x82'..'\x86'
+		| '\xB7'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2677,10 +2677,10 @@ and yy165 (st : state) : bool =
 and yy166 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x83'|'\x84'|'\x85'
-		| '\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2' ->
+		| '\x80'..'\x81'
+		| '\x83'..'\x85'
+		| '\x87'..'\x8A'
+		| '\x8C'..'\xA2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2688,7 +2688,7 @@ and yy166 (st : state) : bool =
 and yy167 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x82'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2696,9 +2696,9 @@ and yy167 (st : state) : bool =
 and yy168 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
+		| '\xB2'..'\xB7'
 		| '\xBB'
-		| '\xBD'|'\xBE' ->
+		| '\xBD'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2706,8 +2706,8 @@ and yy168 (st : state) : bool =
 and yy169 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8A'..'\xA5'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2715,8 +2715,8 @@ and yy169 (st : state) : bool =
 and yy170 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x80'..'\x86'
+		| '\xA0'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2724,7 +2724,7 @@ and yy170 (st : state) : bool =
 and yy171 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\x84'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2733,9 +2733,9 @@ and yy172 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x8F'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\xA0'..'\xA4'
+		| '\xA6'..'\xAF'
+		| '\xBA'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2743,7 +2743,7 @@ and yy172 (st : state) : bool =
 and yy173 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8' ->
+		| '\x80'..'\xA8' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2751,11 +2751,11 @@ and yy173 (st : state) : bool =
 and yy174 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
+		| '\x80'..'\x82'
+		| '\x84'..'\x8B'
+		| '\xA0'..'\xB6'
 		| '\xBA'
-		| '\xBE'|'\xBF' ->
+		| '\xBE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2763,10 +2763,10 @@ and yy174 (st : state) : bool =
 and yy175 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
+		| '\x80'..'\xAF'
 		| '\xB1'
-		| '\xB5'|'\xB6'
-		| '\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\xB5'..'\xB6'
+		| '\xB9'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2776,9 +2776,9 @@ and yy176 (st : state) : bool =
 	match yych with
 		| '\x80'
 		| '\x82'
-		| '\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xB2'|'\xB3'|'\xB4' ->
+		| '\x9B'..'\x9D'
+		| '\xA0'..'\xAA'
+		| '\xB2'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2786,12 +2786,12 @@ and yy176 (st : state) : bool =
 and yy177 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'
-		| '\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\x86'
+		| '\x89'..'\x8E'
+		| '\x91'..'\x96'
+		| '\xA0'..'\xA6'
+		| '\xA8'..'\xAE'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2799,9 +2799,9 @@ and yy177 (st : state) : bool =
 and yy178 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9A'
+		| '\x9C'..'\xA7'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2809,7 +2809,7 @@ and yy178 (st : state) : bool =
 and yy179 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2' ->
+		| '\x80'..'\xA2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2817,8 +2817,8 @@ and yy179 (st : state) : bool =
 and yy180 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA3'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2826,8 +2826,8 @@ and yy180 (st : state) : bool =
 and yy181 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\x86'
+		| '\x8B'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2835,8 +2835,8 @@ and yy181 (st : state) : bool =
 and yy182 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAD'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2844,7 +2844,7 @@ and yy182 (st : state) : bool =
 and yy183 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x80'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2852,12 +2852,12 @@ and yy183 (st : state) : bool =
 and yy184 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'
+		| '\x80'..'\x86'
+		| '\x93'..'\x97'
 		| '\x9D'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\x9F'..'\xA8'
+		| '\xAA'..'\xB6'
+		| '\xB8'..'\xBC'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -2866,9 +2866,9 @@ and yy184 (st : state) : bool =
 and yy185 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'
-		| '\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x81'
+		| '\x83'..'\x84'
+		| '\x86'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2876,7 +2876,7 @@ and yy185 (st : state) : bool =
 and yy186 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x93'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2884,7 +2884,7 @@ and yy186 (st : state) : bool =
 and yy187 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x80'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2892,8 +2892,8 @@ and yy187 (st : state) : bool =
 and yy188 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8F'
+		| '\x92'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2901,8 +2901,8 @@ and yy188 (st : state) : bool =
 and yy189 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\x87'
+		| '\xB0'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2910,8 +2910,8 @@ and yy189 (st : state) : bool =
 and yy190 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xB4'
+		| '\xB6'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2919,7 +2919,7 @@ and yy190 (st : state) : bool =
 and yy191 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x80'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2927,7 +2927,7 @@ and yy191 (st : state) : bool =
 and yy192 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\xA1'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2935,8 +2935,8 @@ and yy192 (st : state) : bool =
 and yy193 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\x9A'
+		| '\xA6'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2944,7 +2944,7 @@ and yy193 (st : state) : bool =
 and yy194 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2952,10 +2952,10 @@ and yy194 (st : state) : bool =
 and yy195 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'
-		| '\x9A'|'\x9B'|'\x9C' ->
+		| '\x82'..'\x87'
+		| '\x8A'..'\x8F'
+		| '\x92'..'\x97'
+		| '\x9A'..'\x9C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -2970,8 +2970,8 @@ and yy196 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy289 [@tailcall]) st
 		| '\x82'
-		| '\x90'|'\x91'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'
+		| '\x90'..'\x91'
+		| '\x98'..'\x9B'
 		| '\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -3060,7 +3060,7 @@ and yy196 (st : state) : bool =
 		| '\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy142 [@tailcall]) st
-		| '\xB2'|'\xB3' ->
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy312 [@tailcall]) st
 		| '\xBC' ->
@@ -3194,9 +3194,9 @@ and yy197 (st : state) : bool =
 and yy198 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
+		| '\x80'..'\x8D'
 		| '\x90'
-		| '\x92'|'\x93'|'\x94' ->
+		| '\x92'..'\x94' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x8E' ->
@@ -3213,7 +3213,7 @@ and yy198 (st : state) : bool =
 and yy199 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F' ->
+		| '\x80'..'\x8F' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x90' ->
@@ -3224,7 +3224,7 @@ and yy199 (st : state) : bool =
 and yy200 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98' ->
+		| '\x90'..'\x98' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x99' ->
@@ -3235,7 +3235,7 @@ and yy200 (st : state) : bool =
 and yy201 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
+		| '\xA0'..'\xA7'
 		| '\xB9'
 		| '\xBC' ->
 			st.cur <- st.cur + 1;
@@ -3272,8 +3272,8 @@ and yy201 (st : state) : bool =
 and yy202 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA' ->
+		| '\x80'..'\x9E'
+		| '\xA0'..'\xAA' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x9F' ->
@@ -3287,8 +3287,8 @@ and yy202 (st : state) : bool =
 and yy203 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
+		| '\x80'..'\x83'
+		| '\x86'..'\x8A'
 		| '\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -3313,7 +3313,7 @@ and yy204 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x96'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x91' ->
@@ -3363,7 +3363,7 @@ and yy205 (st : state) : bool =
 		| '\x8B' ->
 			st.cur <- st.cur + 1;
 			(yy332 [@tailcall]) st
-		| '\xA0'|'\xA1'|'\xA2'
+		| '\xA0'..'\xA2'
 		| '\xA4' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -3387,8 +3387,8 @@ and yy205 (st : state) : bool =
 and yy206 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9A'
+		| '\x9C'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x9B' ->
@@ -3399,9 +3399,9 @@ and yy206 (st : state) : bool =
 and yy207 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'
-		| '\x9D'|'\x9E'|'\x9F'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9B'
+		| '\x9D'..'\x9F'
+		| '\xA1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x9C' ->
@@ -3415,8 +3415,8 @@ and yy207 (st : state) : bool =
 and yy208 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB9'
+		| '\xBB'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xBA' ->
@@ -3427,7 +3427,7 @@ and yy208 (st : state) : bool =
 and yy209 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE' ->
+		| '\x80'..'\xAE' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xAF' ->
@@ -3438,7 +3438,7 @@ and yy209 (st : state) : bool =
 and yy210 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7' ->
+		| '\xA0'..'\xA7' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\xA8' ->
@@ -3449,7 +3449,7 @@ and yy210 (st : state) : bool =
 and yy211 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD' ->
+		| '\x80'..'\xAD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3457,8 +3457,8 @@ and yy211 (st : state) : bool =
 and yy212 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA' ->
+		| '\x80'..'\x9B'
+		| '\xA0'..'\xAA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3466,8 +3466,8 @@ and yy212 (st : state) : bool =
 and yy213 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x93'..'\xA1'
+		| '\xA3'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3475,9 +3475,9 @@ and yy213 (st : state) : bool =
 and yy214 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA3'
+		| '\xA6'..'\xAF'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3485,14 +3485,14 @@ and yy214 (st : state) : bool =
 and yy215 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
+		| '\x80'..'\x83'
+		| '\x85'..'\x8C'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
 		| '\xB2'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB6'..'\xB9'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3500,13 +3500,13 @@ and yy215 (st : state) : bool =
 and yy216 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x87'|'\x88'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'
+		| '\x80'..'\x84'
+		| '\x87'..'\x88'
+		| '\x8B'..'\x8E'
 		| '\x97'
-		| '\x9C'|'\x9D'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'
+		| '\x9C'..'\x9D'
+		| '\x9F'..'\xA3'
+		| '\xA6'..'\xB1'
 		| '\xBC'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
@@ -3516,16 +3516,16 @@ and yy216 (st : state) : bool =
 and yy217 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'
-		| '\xB8'|'\xB9'
+		| '\x81'..'\x83'
+		| '\x85'..'\x8A'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB6'
+		| '\xB8'..'\xB9'
 		| '\xBC'
-		| '\xBE'|'\xBF' ->
+		| '\xBE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3533,13 +3533,13 @@ and yy217 (st : state) : bool =
 and yy218 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x87'|'\x88'
-		| '\x8B'|'\x8C'|'\x8D'
+		| '\x80'..'\x82'
+		| '\x87'..'\x88'
+		| '\x8B'..'\x8D'
 		| '\x91'
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'
+		| '\x99'..'\x9C'
 		| '\x9E'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5' ->
+		| '\xA6'..'\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3547,14 +3547,14 @@ and yy218 (st : state) : bool =
 and yy219 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x8F'|'\x90'|'\x91'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\x83'
+		| '\x85'..'\x8D'
+		| '\x8F'..'\x91'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB9'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3562,13 +3562,13 @@ and yy219 (st : state) : bool =
 and yy220 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
-		| '\x87'|'\x88'|'\x89'
-		| '\x8B'|'\x8C'|'\x8D'
+		| '\x80'..'\x85'
+		| '\x87'..'\x89'
+		| '\x8B'..'\x8D'
 		| '\x90'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xA3'
+		| '\xA6'..'\xAF'
+		| '\xB9'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3576,14 +3576,14 @@ and yy220 (st : state) : bool =
 and yy221 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x81'..'\x83'
+		| '\x85'..'\x8C'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB9'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3591,13 +3591,13 @@ and yy221 (st : state) : bool =
 and yy222 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x87'|'\x88'
-		| '\x8B'|'\x8C'|'\x8D'
-		| '\x96'|'\x97'
-		| '\x9C'|'\x9D'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
+		| '\x80'..'\x84'
+		| '\x87'..'\x88'
+		| '\x8B'..'\x8D'
+		| '\x96'..'\x97'
+		| '\x9C'..'\x9D'
+		| '\x9F'..'\xA3'
+		| '\xA6'..'\xAF'
 		| '\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -3606,17 +3606,17 @@ and yy222 (st : state) : bool =
 and yy223 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'
-		| '\x99'|'\x9A'
+		| '\x82'..'\x83'
+		| '\x85'..'\x8A'
+		| '\x8E'..'\x90'
+		| '\x92'..'\x95'
+		| '\x99'..'\x9A'
 		| '\x9C'
-		| '\x9E'|'\x9F'
-		| '\xA3'|'\xA4'
-		| '\xA8'|'\xA9'|'\xAA'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBE'|'\xBF' ->
+		| '\x9E'..'\x9F'
+		| '\xA3'..'\xA4'
+		| '\xA8'..'\xAA'
+		| '\xAE'..'\xB9'
+		| '\xBE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3624,12 +3624,12 @@ and yy223 (st : state) : bool =
 and yy224 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
+		| '\x80'..'\x82'
+		| '\x86'..'\x88'
+		| '\x8A'..'\x8D'
 		| '\x90'
 		| '\x97'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\xA6'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3637,11 +3637,11 @@ and yy224 (st : state) : bool =
 and yy225 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xA8'
+		| '\xAA'..'\xB9'
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3649,13 +3649,13 @@ and yy225 (st : state) : bool =
 and yy226 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\x80'..'\x84'
+		| '\x86'..'\x88'
+		| '\x8A'..'\x8D'
+		| '\x95'..'\x96'
+		| '\x98'..'\x9A'
+		| '\xA0'..'\xA3'
+		| '\xA6'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3663,13 +3663,13 @@ and yy226 (st : state) : bool =
 and yy227 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\x85'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xA8'
+		| '\xAA'..'\xB3'
+		| '\xB5'..'\xB9'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3677,14 +3677,14 @@ and yy227 (st : state) : bool =
 and yy228 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x95'|'\x96'
+		| '\x80'..'\x84'
+		| '\x86'..'\x88'
+		| '\x8A'..'\x8D'
+		| '\x95'..'\x96'
 		| '\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2' ->
+		| '\xA0'..'\xA3'
+		| '\xA6'..'\xAF'
+		| '\xB1'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3692,10 +3692,10 @@ and yy228 (st : state) : bool =
 and yy229 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\x85'..'\x8C'
+		| '\x8E'..'\x90'
+		| '\x92'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3703,13 +3703,13 @@ and yy229 (st : state) : bool =
 and yy230 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x94'|'\x95'|'\x96'|'\x97'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x84'
+		| '\x86'..'\x88'
+		| '\x8A'..'\x8E'
+		| '\x94'..'\x97'
+		| '\x9F'..'\xA3'
+		| '\xA6'..'\xAF'
+		| '\xBA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3717,10 +3717,10 @@ and yy230 (st : state) : bool =
 and yy231 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'
-		| '\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'
+		| '\x82'..'\x83'
+		| '\x85'..'\x96'
+		| '\x9A'..'\xB1'
+		| '\xB3'..'\xBB'
 		| '\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -3729,13 +3729,13 @@ and yy231 (st : state) : bool =
 and yy232 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
+		| '\x80'..'\x86'
 		| '\x8A'
-		| '\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'
+		| '\x8F'..'\x94'
 		| '\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB2'|'\xB3' ->
+		| '\x98'..'\x9F'
+		| '\xA6'..'\xAF'
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3743,7 +3743,7 @@ and yy232 (st : state) : bool =
 and yy233 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\x81'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3751,8 +3751,8 @@ and yy233 (st : state) : bool =
 and yy234 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x80'..'\x8E'
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3760,12 +3760,12 @@ and yy234 (st : state) : bool =
 and yy235 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'
+		| '\x81'..'\x82'
 		| '\x84'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
+		| '\x86'..'\x8A'
+		| '\x8C'..'\xA3'
 		| '\xA5'
-		| '\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\xA7'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3773,11 +3773,11 @@ and yy235 (st : state) : bool =
 and yy236 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
+		| '\x80'..'\x84'
 		| '\x86'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F' ->
+		| '\x88'..'\x8D'
+		| '\x90'..'\x99'
+		| '\x9C'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3786,12 +3786,12 @@ and yy237 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
+		| '\x98'..'\x99'
+		| '\xA0'..'\xA9'
 		| '\xB5'
 		| '\xB7'
 		| '\xB9'
-		| '\xBE'|'\xBF' ->
+		| '\xBE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3799,9 +3799,9 @@ and yy237 (st : state) : bool =
 and yy238 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x87'
+		| '\x89'..'\xAC'
+		| '\xB1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3809,9 +3809,9 @@ and yy238 (st : state) : bool =
 and yy239 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x80'..'\x84'
+		| '\x86'..'\x97'
+		| '\x99'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3827,8 +3827,8 @@ and yy240 (st : state) : bool =
 and yy241 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x89'
+		| '\x90'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3836,8 +3836,8 @@ and yy241 (st : state) : bool =
 and yy242 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\x9D'|'\x9E'|'\x9F' ->
+		| '\x80'..'\x9A'
+		| '\x9D'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3845,9 +3845,9 @@ and yy242 (st : state) : bool =
 and yy243 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4' ->
+		| '\x80'..'\x8C'
+		| '\x8E'..'\x94'
+		| '\xA0'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3855,10 +3855,10 @@ and yy243 (st : state) : bool =
 and yy244 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3' ->
+		| '\x80'..'\x93'
+		| '\xA0'..'\xAC'
+		| '\xAE'..'\xB0'
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3866,10 +3866,10 @@ and yy244 (st : state) : bool =
 and yy245 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
+		| '\x80'..'\x93'
 		| '\x97'
-		| '\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9' ->
+		| '\x9C'..'\x9D'
+		| '\xA0'..'\xA9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3877,9 +3877,9 @@ and yy245 (st : state) : bool =
 and yy246 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8B'..'\x8D'
+		| '\x90'..'\x99'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3887,8 +3887,8 @@ and yy246 (st : state) : bool =
 and yy247 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xAA'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3896,9 +3896,9 @@ and yy247 (st : state) : bool =
 and yy248 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\x9E'
+		| '\xA0'..'\xAB'
+		| '\xB0'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3906,8 +3906,8 @@ and yy248 (st : state) : bool =
 and yy249 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4' ->
+		| '\x86'..'\xAD'
+		| '\xB0'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3915,8 +3915,8 @@ and yy249 (st : state) : bool =
 and yy250 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x80'..'\x89'
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3924,8 +3924,8 @@ and yy250 (st : state) : bool =
 and yy251 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9B'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3933,8 +3933,8 @@ and yy251 (st : state) : bool =
 and yy252 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\x80'..'\x9E'
+		| '\xA0'..'\xBC'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -3943,10 +3943,10 @@ and yy252 (st : state) : bool =
 and yy253 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
+		| '\x80'..'\x89'
+		| '\x90'..'\x99'
 		| '\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\xB0'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3954,9 +3954,9 @@ and yy253 (st : state) : bool =
 and yy254 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x80'..'\x8B'
+		| '\x90'..'\x99'
+		| '\xAB'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3964,7 +3964,7 @@ and yy254 (st : state) : bool =
 and yy255 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7' ->
+		| '\x80'..'\xB7' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3972,8 +3972,8 @@ and yy255 (st : state) : bool =
 and yy256 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
-		| '\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x80'..'\x89'
+		| '\x8D'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3981,8 +3981,8 @@ and yy256 (st : state) : bool =
 and yy257 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'
-		| '\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\x90'..'\x92'
+		| '\x94'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -3990,8 +3990,8 @@ and yy257 (st : state) : bool =
 and yy258 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB9'
+		| '\xBB'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4019,9 +4019,9 @@ and yy260 (st : state) : bool =
 and yy261 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
+		| '\x90'..'\x9C'
 		| '\xA1'
-		| '\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0' ->
+		| '\xA5'..'\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4029,8 +4029,8 @@ and yy261 (st : state) : bool =
 and yy262 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'
-		| '\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3' ->
+		| '\x80'..'\xA4'
+		| '\xAB'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4038,7 +4038,7 @@ and yy262 (st : state) : bool =
 and yy263 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
+		| '\x80'..'\xA7'
 		| '\xAF'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
@@ -4048,11 +4048,11 @@ and yy263 (st : state) : bool =
 and yy264 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x86'
+		| '\x88'..'\x8E'
+		| '\x90'..'\x96'
+		| '\x98'..'\x9E'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4060,10 +4060,10 @@ and yy264 (st : state) : bool =
 and yy265 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x85'|'\x86'|'\x87'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x85'..'\x87'
+		| '\xA1'..'\xAF'
+		| '\xB1'..'\xB5'
+		| '\xB8'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4071,10 +4071,10 @@ and yy265 (st : state) : bool =
 and yy266 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'
-		| '\x99'|'\x9A'
-		| '\x9D'|'\x9E'|'\x9F'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x96'
+		| '\x99'..'\x9A'
+		| '\x9D'..'\x9F'
+		| '\xA1'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4082,8 +4082,8 @@ and yy266 (st : state) : bool =
 and yy267 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB' ->
+		| '\x80'..'\x8C'
+		| '\x90'..'\xAB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4091,8 +4091,8 @@ and yy267 (st : state) : bool =
 and yy268 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'
+		| '\x80'..'\xAF'
+		| '\xB4'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4101,7 +4101,7 @@ and yy268 (st : state) : bool =
 and yy269 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7' ->
+		| '\x80'..'\xA7' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4109,11 +4109,11 @@ and yy269 (st : state) : bool =
 and yy270 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
+		| '\x80'..'\x85'
+		| '\x90'..'\x99'
+		| '\xA0'..'\xB7'
 		| '\xBB'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4121,8 +4121,8 @@ and yy270 (st : state) : bool =
 and yy271 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x80'..'\x93'
+		| '\xA0'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4131,8 +4131,8 @@ and yy272 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x8F'..'\x99'
+		| '\xA0'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4140,7 +4140,7 @@ and yy272 (st : state) : bool =
 and yy273 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6' ->
+		| '\x80'..'\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4148,10 +4148,10 @@ and yy273 (st : state) : bool =
 and yy274 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8D'
+		| '\x90'..'\x99'
+		| '\xA0'..'\xB6'
+		| '\xBA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4159,10 +4159,10 @@ and yy274 (st : state) : bool =
 and yy275 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6' ->
+		| '\x80'..'\x82'
+		| '\x9B'..'\x9D'
+		| '\xA0'..'\xAF'
+		| '\xB2'..'\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4170,9 +4170,9 @@ and yy275 (st : state) : bool =
 and yy276 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xAC'|'\xAD'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\xAA'
+		| '\xAC'..'\xAD'
+		| '\xB0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4180,11 +4180,11 @@ and yy276 (st : state) : bool =
 and yy277 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'
-		| '\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\x80'..'\x86'
+		| '\x93'..'\x97'
+		| '\x9D'..'\xA8'
+		| '\xAA'..'\xB6'
+		| '\xB8'..'\xBC'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4193,9 +4193,9 @@ and yy277 (st : state) : bool =
 and yy278 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
-		| '\xB3'|'\xB4' ->
+		| '\x80'..'\x8F'
+		| '\xA0'..'\xAF'
+		| '\xB3'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4203,9 +4203,9 @@ and yy278 (st : state) : bool =
 and yy279 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x8D'|'\x8E'|'\x8F'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8D'..'\x8F'
+		| '\xB0'..'\xB4'
+		| '\xB6'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4213,8 +4213,8 @@ and yy279 (st : state) : bool =
 and yy280 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
+		| '\x90'..'\x99'
+		| '\xA1'..'\xBA'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4230,8 +4230,8 @@ and yy281 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy289 [@tailcall]) st
 		| '\x82'
-		| '\x90'|'\x91'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'
+		| '\x90'..'\x91'
+		| '\x98'..'\x9B'
 		| '\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -4322,7 +4322,7 @@ and yy281 (st : state) : bool =
 		| '\xB1' ->
 			st.cur <- st.cur + 1;
 			(yy142 [@tailcall]) st
-		| '\xB2'|'\xB3' ->
+		| '\xB2'..'\xB3' ->
 			st.cur <- st.cur + 1;
 			(yy312 [@tailcall]) st
 		| '\xB4' ->
@@ -4455,7 +4455,7 @@ and yy282 (st : state) : bool =
 and yy283 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
+		| '\xA0'..'\xA7'
 		| '\xB9'
 		| '\xBC' ->
 			st.cur <- st.cur + 1;
@@ -4492,8 +4492,8 @@ and yy283 (st : state) : bool =
 and yy284 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
+		| '\x80'..'\x83'
+		| '\x86'..'\x8A'
 		| '\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -4527,7 +4527,7 @@ and yy285 (st : state) : bool =
 			st.cur <- st.cur + 1;
 			(yy417 [@tailcall]) st
 		| '\x90'
-		| '\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x96'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x91' ->
@@ -4589,7 +4589,7 @@ and yy286 (st : state) : bool =
 		| '\x8B' ->
 			st.cur <- st.cur + 1;
 			(yy425 [@tailcall]) st
-		| '\xA0'|'\xA1'|'\xA2'
+		| '\xA0'..'\xA2'
 		| '\xA4' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
@@ -4613,7 +4613,7 @@ and yy286 (st : state) : bool =
 and yy287 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x84'|'\x85'|'\x86' ->
+		| '\x84'..'\x86' ->
 			st.cur <- st.cur + 1;
 			(yy38 [@tailcall]) st
 		| '\x87' ->
@@ -4624,10 +4624,10 @@ and yy287 (st : state) : bool =
 and yy288 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'
-		| '\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
-		| '\xBC'|'\xBD'
+		| '\x80'..'\x8B'
+		| '\x8D'..'\xA6'
+		| '\xA8'..'\xBA'
+		| '\xBC'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4636,8 +4636,8 @@ and yy288 (st : state) : bool =
 and yy289 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D' ->
+		| '\x80'..'\x8D'
+		| '\x90'..'\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4645,7 +4645,7 @@ and yy289 (st : state) : bool =
 and yy290 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\x80'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4653,7 +4653,7 @@ and yy290 (st : state) : bool =
 and yy291 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4' ->
+		| '\x80'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4661,8 +4661,8 @@ and yy291 (st : state) : bool =
 and yy292 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9C'
+		| '\xA0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4670,7 +4670,7 @@ and yy292 (st : state) : bool =
 and yy293 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90' ->
+		| '\x80'..'\x90' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4678,8 +4678,8 @@ and yy293 (st : state) : bool =
 and yy294 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9F'
+		| '\xAD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4687,8 +4687,8 @@ and yy294 (st : state) : bool =
 and yy295 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5' ->
+		| '\x80'..'\x8A'
+		| '\x90'..'\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4696,9 +4696,9 @@ and yy295 (st : state) : bool =
 and yy296 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\x91'|'\x92'|'\x93'|'\x94'|'\x95' ->
+		| '\x80'..'\x83'
+		| '\x88'..'\x8F'
+		| '\x91'..'\x95' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4706,8 +4706,8 @@ and yy296 (st : state) : bool =
 and yy297 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9D'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4715,8 +4715,8 @@ and yy297 (st : state) : bool =
 and yy298 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\x93'
+		| '\x98'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4724,8 +4724,8 @@ and yy298 (st : state) : bool =
 and yy299 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA7'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4733,8 +4733,8 @@ and yy299 (st : state) : bool =
 and yy300 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7' ->
+		| '\x80'..'\x95'
+		| '\xA0'..'\xA7' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4742,10 +4742,10 @@ and yy300 (st : state) : bool =
 and yy301 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
+		| '\x80'..'\x85'
 		| '\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB7'|'\xB8'
+		| '\x8A'..'\xB5'
+		| '\xB7'..'\xB8'
 		| '\xBC'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
@@ -4755,8 +4755,8 @@ and yy301 (st : state) : bool =
 and yy302 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6' ->
+		| '\x80'..'\x95'
+		| '\xA0'..'\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4764,8 +4764,8 @@ and yy302 (st : state) : bool =
 and yy303 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
-		| '\xB4'|'\xB5' ->
+		| '\xA0'..'\xB2'
+		| '\xB4'..'\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4773,8 +4773,8 @@ and yy303 (st : state) : bool =
 and yy304 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\x95'
+		| '\xA0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4782,8 +4782,8 @@ and yy304 (st : state) : bool =
 and yy305 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
-		| '\xBE'|'\xBF' ->
+		| '\x80'..'\xB7'
+		| '\xBE'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4792,9 +4792,9 @@ and yy306 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x90'|'\x91'|'\x92'|'\x93'
-		| '\x95'|'\x96'|'\x97'
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5' ->
+		| '\x90'..'\x93'
+		| '\x95'..'\x97'
+		| '\x99'..'\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4802,7 +4802,7 @@ and yy306 (st : state) : bool =
 and yy307 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\xA0'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4810,7 +4810,7 @@ and yy307 (st : state) : bool =
 and yy308 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C' ->
+		| '\x80'..'\x9C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4818,8 +4818,8 @@ and yy308 (st : state) : bool =
 and yy309 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4' ->
+		| '\x80'..'\x87'
+		| '\x89'..'\xA4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4827,8 +4827,8 @@ and yy309 (st : state) : bool =
 and yy310 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\x80'..'\x95'
+		| '\xA0'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4836,7 +4836,7 @@ and yy310 (st : state) : bool =
 and yy311 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91' ->
+		| '\x80'..'\x91' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4844,7 +4844,7 @@ and yy311 (st : state) : bool =
 and yy312 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\x80'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4852,9 +4852,9 @@ and yy312 (st : state) : bool =
 and yy313 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
+		| '\x80'..'\x9C'
 		| '\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4862,7 +4862,7 @@ and yy313 (st : state) : bool =
 and yy314 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85' ->
+		| '\x80'..'\x85' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4870,7 +4870,7 @@ and yy314 (st : state) : bool =
 and yy315 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6' ->
+		| '\xA0'..'\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4878,7 +4878,7 @@ and yy315 (st : state) : bool =
 and yy316 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7' ->
+		| '\x83'..'\xB7' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4886,7 +4886,7 @@ and yy316 (st : state) : bool =
 and yy317 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\x83'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4894,7 +4894,7 @@ and yy317 (st : state) : bool =
 and yy318 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8' ->
+		| '\x90'..'\xA8' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4902,7 +4902,7 @@ and yy318 (st : state) : bool =
 and yy319 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6' ->
+		| '\x83'..'\xA6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4911,7 +4911,7 @@ and yy320 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x84'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
+		| '\x90'..'\xB2'
 		| '\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4920,7 +4920,7 @@ and yy320 (st : state) : bool =
 and yy321 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\x83'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4928,7 +4928,7 @@ and yy321 (st : state) : bool =
 and yy322 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x81'|'\x82'|'\x83'|'\x84'
+		| '\x81'..'\x84'
 		| '\x9A'
 		| '\x9C' ->
 			st.cur <- st.cur + 1;
@@ -4938,8 +4938,8 @@ and yy322 (st : state) : bool =
 and yy323 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB' ->
+		| '\x80'..'\x91'
+		| '\x93'..'\xAB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4947,12 +4947,12 @@ and yy323 (st : state) : bool =
 and yy324 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
+		| '\x80'..'\x86'
 		| '\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'
-		| '\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8A'..'\x8D'
+		| '\x8F'..'\x9D'
+		| '\x9F'..'\xA8'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4961,7 +4961,7 @@ and yy325 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1' ->
+		| '\x9D'..'\xA1' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4969,7 +4969,7 @@ and yy325 (st : state) : bool =
 and yy326 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x87'|'\x88'|'\x89'|'\x8A'
+		| '\x87'..'\x8A'
 		| '\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4978,7 +4978,7 @@ and yy326 (st : state) : bool =
 and yy327 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x84'|'\x85'
+		| '\x84'..'\x85'
 		| '\x87' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -4987,7 +4987,7 @@ and yy327 (st : state) : bool =
 and yy328 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE' ->
+		| '\x80'..'\xAE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -4995,7 +4995,7 @@ and yy328 (st : state) : bool =
 and yy329 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x98'|'\x99'|'\x9A'|'\x9B' ->
+		| '\x98'..'\x9B' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5011,7 +5011,7 @@ and yy330 (st : state) : bool =
 and yy331 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
+		| '\x80'..'\xAA'
 		| '\xB8' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5020,7 +5020,7 @@ and yy331 (st : state) : bool =
 and yy332 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB' ->
+		| '\x80'..'\xAB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5028,7 +5028,7 @@ and yy332 (st : state) : bool =
 and yy333 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
+		| '\x80'..'\x9F'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5037,8 +5037,8 @@ and yy333 (st : state) : bool =
 and yy334 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xA7'
+		| '\xAA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5046,7 +5046,7 @@ and yy334 (st : state) : bool =
 and yy335 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'
+		| '\x80'..'\x90'
 		| '\xA1'
 		| '\xA3' ->
 			st.cur <- st.cur + 1;
@@ -5057,7 +5057,7 @@ and yy336 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
+		| '\x8B'..'\xB2'
 		| '\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5067,7 +5067,7 @@ and yy337 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x90'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x9C'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5075,7 +5075,7 @@ and yy337 (st : state) : bool =
 and yy338 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
+		| '\x80'..'\x89'
 		| '\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5084,8 +5084,8 @@ and yy338 (st : state) : bool =
 and yy339 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE' ->
+		| '\x80'..'\x88'
+		| '\x8A'..'\xAE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5094,7 +5094,7 @@ and yy340 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xB2'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5102,7 +5102,7 @@ and yy340 (st : state) : bool =
 and yy341 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F' ->
+		| '\x80'..'\x8F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5110,9 +5110,9 @@ and yy341 (st : state) : bool =
 and yy342 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x88'|'\x89'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0' ->
+		| '\x80'..'\x86'
+		| '\x88'..'\x89'
+		| '\x8B'..'\xB0' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5121,9 +5121,9 @@ and yy343 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x86'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
-		| '\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA0'..'\xA5'
+		| '\xA7'..'\xA8'
+		| '\xAA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5131,7 +5131,7 @@ and yy343 (st : state) : bool =
 and yy344 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
+		| '\x80'..'\x89'
 		| '\x98' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5140,7 +5140,7 @@ and yy344 (st : state) : bool =
 and yy345 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2' ->
+		| '\xA0'..'\xB2' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5148,7 +5148,7 @@ and yy345 (st : state) : bool =
 and yy346 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83' ->
+		| '\x80'..'\x83' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5156,7 +5156,7 @@ and yy346 (st : state) : bool =
 and yy347 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD' ->
+		| '\x90'..'\xAD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5164,9 +5164,9 @@ and yy347 (st : state) : bool =
 and yy348 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\xA3'..'\xB7'
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5174,7 +5174,7 @@ and yy348 (st : state) : bool =
 and yy349 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
+		| '\x80'..'\x8A'
 		| '\x90' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5183,7 +5183,7 @@ and yy349 (st : state) : bool =
 and yy350 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F' ->
+		| '\x93'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5191,7 +5191,7 @@ and yy350 (st : state) : bool =
 and yy351 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA0'|'\xA1'
+		| '\xA0'..'\xA1'
 		| '\xA3' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5200,9 +5200,9 @@ and yy351 (st : state) : bool =
 and yy352 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'
-		| '\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\x92'
+		| '\xA4'..'\xA7'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5210,7 +5210,7 @@ and yy352 (st : state) : bool =
 and yy353 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5218,8 +5218,8 @@ and yy353 (st : state) : bool =
 and yy354 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC' ->
+		| '\x80'..'\xAA'
+		| '\xB0'..'\xBC' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5227,8 +5227,8 @@ and yy354 (st : state) : bool =
 and yy355 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x80'..'\x88'
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5236,8 +5236,8 @@ and yy355 (st : state) : bool =
 and yy356 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'
-		| '\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x94'
+		| '\x96'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5245,14 +5245,14 @@ and yy356 (st : state) : bool =
 and yy357 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
-		| '\x9E'|'\x9F'
+		| '\x80'..'\x9C'
+		| '\x9E'..'\x9F'
 		| '\xA2'
-		| '\xA5'|'\xA6'
-		| '\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
+		| '\xA5'..'\xA6'
+		| '\xA9'..'\xAC'
+		| '\xAE'..'\xB9'
 		| '\xBB'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5260,8 +5260,8 @@ and yy357 (st : state) : bool =
 and yy358 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\x85'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5269,12 +5269,12 @@ and yy358 (st : state) : bool =
 and yy359 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
-		| '\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'
-		| '\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'
-		| '\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE' ->
+		| '\x80'..'\x85'
+		| '\x87'..'\x8A'
+		| '\x8D'..'\x94'
+		| '\x96'..'\x9C'
+		| '\x9E'..'\xB9'
+		| '\xBB'..'\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5282,10 +5282,10 @@ and yy359 (st : state) : bool =
 and yy360 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
+		| '\x80'..'\x84'
 		| '\x86'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x8A'..'\x90'
+		| '\x92'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5293,8 +5293,8 @@ and yy360 (st : state) : bool =
 and yy361 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
-		| '\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA5'
+		| '\xA8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5303,9 +5303,9 @@ and yy362 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'
-		| '\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x82'..'\x9A'
+		| '\x9C'..'\xBA'
+		| '\xBC'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5313,9 +5313,9 @@ and yy362 (st : state) : bool =
 and yy363 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'
-		| '\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x94'
+		| '\x96'..'\xB4'
+		| '\xB6'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5323,9 +5323,9 @@ and yy363 (st : state) : bool =
 and yy364 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8E'
+		| '\x90'..'\xAE'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5333,9 +5333,9 @@ and yy364 (st : state) : bool =
 and yy365 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x88'
+		| '\x8A'..'\xA8'
+		| '\xAA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5343,8 +5343,8 @@ and yy365 (st : state) : bool =
 and yy366 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B' ->
+		| '\x80'..'\x82'
+		| '\x84'..'\x8B' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5352,8 +5352,8 @@ and yy366 (st : state) : bool =
 and yy367 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x80'..'\xAC'
+		| '\xB7'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5369,7 +5369,7 @@ and yy368 (st : state) : bool =
 and yy369 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84' ->
+		| '\x80'..'\x84' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5377,7 +5377,7 @@ and yy369 (st : state) : bool =
 and yy370 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
+		| '\x80'..'\x83'
 		| '\x8B' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5386,13 +5386,13 @@ and yy370 (st : state) : bool =
 and yy371 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xA1'|'\xA2'
+		| '\x80'..'\x83'
+		| '\x85'..'\x9F'
+		| '\xA1'..'\xA2'
 		| '\xA4'
 		| '\xA7'
-		| '\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
-		| '\xB4'|'\xB5'|'\xB6'|'\xB7'
+		| '\xA9'..'\xB2'
+		| '\xB4'..'\xB7'
 		| '\xB9'
 		| '\xBB' ->
 			st.cur <- st.cur + 1;
@@ -5406,20 +5406,20 @@ and yy372 (st : state) : bool =
 		| '\x87'
 		| '\x89'
 		| '\x8B'
-		| '\x8D'|'\x8E'|'\x8F'
-		| '\x91'|'\x92'
+		| '\x8D'..'\x8F'
+		| '\x91'..'\x92'
 		| '\x94'
 		| '\x97'
 		| '\x99'
 		| '\x9B'
 		| '\x9D'
 		| '\x9F'
-		| '\xA1'|'\xA2'
+		| '\xA1'..'\xA2'
 		| '\xA4'
-		| '\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
-		| '\xB4'|'\xB5'|'\xB6'|'\xB7'
-		| '\xB9'|'\xBA'|'\xBB'|'\xBC'
+		| '\xA7'..'\xAA'
+		| '\xAC'..'\xB2'
+		| '\xB4'..'\xB7'
+		| '\xB9'..'\xBC'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5428,11 +5428,11 @@ and yy372 (st : state) : bool =
 and yy373 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'
-		| '\xA1'|'\xA2'|'\xA3'
-		| '\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
-		| '\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB' ->
+		| '\x80'..'\x89'
+		| '\x8B'..'\x9B'
+		| '\xA1'..'\xA3'
+		| '\xA5'..'\xA9'
+		| '\xAB'..'\xBB' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5440,7 +5440,7 @@ and yy373 (st : state) : bool =
 and yy374 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96' ->
+		| '\x80'..'\x96' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5448,8 +5448,8 @@ and yy374 (st : state) : bool =
 and yy375 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xA1'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5457,7 +5457,7 @@ and yy375 (st : state) : bool =
 and yy376 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0' ->
+		| '\x80'..'\xA0' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5465,7 +5465,7 @@ and yy376 (st : state) : bool =
 and yy377 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D' ->
+		| '\x80'..'\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5481,7 +5481,7 @@ and yy378 (st : state) : bool =
 and yy379 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'
+		| '\x80'..'\x90'
 		| '\xA0' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5490,8 +5490,8 @@ and yy379 (st : state) : bool =
 and yy380 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA' ->
+		| '\x80'..'\x8A'
+		| '\x90'..'\xBA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5499,9 +5499,9 @@ and yy380 (st : state) : bool =
 and yy381 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x9D'
+		| '\xA0'..'\xA9'
+		| '\xB0'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5509,12 +5509,12 @@ and yy381 (st : state) : bool =
 and yy382 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'
-		| '\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'
-		| '\x95'|'\x96'|'\x97'
-		| '\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'
+		| '\x80'..'\x83'
+		| '\x85'..'\x86'
+		| '\x8C'..'\x93'
+		| '\x95'..'\x97'
+		| '\x99'..'\xB5'
+		| '\xB8'..'\xBA'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5523,8 +5523,8 @@ and yy382 (st : state) : bool =
 and yy383 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6' ->
+		| '\x80'..'\x87'
+		| '\x89'..'\xA6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5532,8 +5532,8 @@ and yy383 (st : state) : bool =
 and yy384 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\xA7'
+		| '\xB0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5541,8 +5541,8 @@ and yy384 (st : state) : bool =
 and yy385 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'
+		| '\x80'..'\x86'
+		| '\xA6'..'\xAF'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5551,8 +5551,8 @@ and yy385 (st : state) : bool =
 and yy386 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x90'..'\xA8'
+		| '\xB0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5560,8 +5560,8 @@ and yy386 (st : state) : bool =
 and yy387 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'
-		| '\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB4'
+		| '\xB6'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5569,8 +5569,8 @@ and yy387 (st : state) : bool =
 and yy388 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x84'|'\x85'|'\x86'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'
+		| '\x84'..'\x86'
+		| '\x90'..'\xB3'
 		| '\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5579,9 +5579,9 @@ and yy388 (st : state) : bool =
 and yy389 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
+		| '\x80'..'\x84'
+		| '\x89'..'\x8C'
+		| '\x90'..'\x9A'
 		| '\x9C' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5590,8 +5590,8 @@ and yy389 (st : state) : bool =
 and yy390 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
+		| '\x80'..'\x91'
+		| '\x93'..'\xB7'
 		| '\xBE' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5600,8 +5600,8 @@ and yy390 (st : state) : bool =
 and yy391 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\xAA'
+		| '\xB0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5609,14 +5609,14 @@ and yy391 (st : state) : bool =
 and yy392 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'
-		| '\x8F'|'\x90'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'
-		| '\xB2'|'\xB3'
-		| '\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\x85'..'\x8C'
+		| '\x8F'..'\x90'
+		| '\x93'..'\xA8'
+		| '\xAA'..'\xB0'
+		| '\xB2'..'\xB3'
+		| '\xB5'..'\xB9'
+		| '\xBB'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5624,14 +5624,14 @@ and yy392 (st : state) : bool =
 and yy393 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x87'|'\x88'
-		| '\x8B'|'\x8C'|'\x8D'
+		| '\x80'..'\x84'
+		| '\x87'..'\x88'
+		| '\x8B'..'\x8D'
 		| '\x90'
 		| '\x97'
-		| '\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4' ->
+		| '\x9D'..'\xA3'
+		| '\xA6'..'\xAC'
+		| '\xB0'..'\xB4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5639,9 +5639,9 @@ and yy393 (st : state) : bool =
 and yy394 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\x9E'|'\x9F' ->
+		| '\x80'..'\x8A'
+		| '\x90'..'\x99'
+		| '\x9E'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5649,9 +5649,9 @@ and yy394 (st : state) : bool =
 and yy395 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'
+		| '\x80'..'\x85'
 		| '\x87'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5659,8 +5659,8 @@ and yy395 (st : state) : bool =
 and yy396 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB5'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5669,7 +5669,7 @@ and yy397 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D' ->
+		| '\x98'..'\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5679,7 +5679,7 @@ and yy398 (st : state) : bool =
 	match yych with
 		| '\x80'
 		| '\x84'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5687,9 +5687,9 @@ and yy398 (st : state) : bool =
 and yy399 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'
-		| '\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\x9A'
+		| '\x9D'..'\xAB'
+		| '\xB0'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5697,7 +5697,7 @@ and yy399 (st : state) : bool =
 and yy400 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
+		| '\x80'..'\xA9'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5706,9 +5706,9 @@ and yy400 (st : state) : bool =
 and yy401 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'
-		| '\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xA3'|'\xA4' ->
+		| '\x80'..'\x97'
+		| '\x9A'..'\xA1'
+		| '\xA3'..'\xA4' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5717,7 +5717,7 @@ and yy402 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x87'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5725,7 +5725,7 @@ and yy402 (st : state) : bool =
 and yy403 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
+		| '\x80'..'\x99'
 		| '\x9D' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5734,9 +5734,9 @@ and yy403 (st : state) : bool =
 and yy404 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x88'
+		| '\x8A'..'\xB6'
+		| '\xB8'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5745,8 +5745,8 @@ and yy405 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x80'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x90'..'\x99'
+		| '\xB2'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5754,9 +5754,9 @@ and yy405 (st : state) : bool =
 and yy406 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'
-		| '\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'
-		| '\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6' ->
+		| '\x80'..'\x8F'
+		| '\x92'..'\xA7'
+		| '\xA9'..'\xB6' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5764,11 +5764,11 @@ and yy406 (st : state) : bool =
 and yy407 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x88'|'\x89'
-		| '\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
+		| '\x80'..'\x86'
+		| '\x88'..'\x89'
+		| '\x8B'..'\xB6'
 		| '\xBA'
-		| '\xBC'|'\xBD'
+		| '\xBC'..'\xBD'
 		| '\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5777,11 +5777,11 @@ and yy407 (st : state) : bool =
 and yy408 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'
-		| '\xA7'|'\xA8'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x87'
+		| '\x90'..'\x99'
+		| '\xA0'..'\xA5'
+		| '\xA7'..'\xA8'
+		| '\xAA'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5789,10 +5789,10 @@ and yy408 (st : state) : bool =
 and yy409 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'
-		| '\x90'|'\x91'
-		| '\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9' ->
+		| '\x80'..'\x8E'
+		| '\x90'..'\x91'
+		| '\x93'..'\x98'
+		| '\xA0'..'\xA9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5800,8 +5800,8 @@ and yy409 (st : state) : bool =
 and yy410 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'
-		| '\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9' ->
+		| '\x80'..'\x9E'
+		| '\xA0'..'\xA9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5809,10 +5809,10 @@ and yy410 (st : state) : bool =
 and yy411 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'
-		| '\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x83'
+		| '\x90'..'\x99'
+		| '\xA3'..'\xB7'
+		| '\xBD'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5820,8 +5820,8 @@ and yy411 (st : state) : bool =
 and yy412 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'
-		| '\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x8A'
+		| '\x8F'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5829,8 +5829,8 @@ and yy412 (st : state) : bool =
 and yy413 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'
-		| '\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F' ->
+		| '\x80'..'\x87'
+		| '\x8F'..'\x9F' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5838,9 +5838,9 @@ and yy413 (st : state) : bool =
 and yy414 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'
-		| '\x9D'|'\x9E' ->
+		| '\x80'..'\x88'
+		| '\x90'..'\x99'
+		| '\x9D'..'\x9E' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5848,9 +5848,9 @@ and yy414 (st : state) : bool =
 and yy415 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'
-		| '\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\xA5'..'\xA9'
+		| '\xAD'..'\xB2'
+		| '\xBB'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5858,9 +5858,9 @@ and yy415 (st : state) : bool =
 and yy416 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\xAA'|'\xAB'|'\xAC'|'\xAD' ->
+		| '\x80'..'\x82'
+		| '\x85'..'\x8B'
+		| '\xAA'..'\xAD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5868,7 +5868,7 @@ and yy416 (st : state) : bool =
 and yy417 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x82'|'\x83'|'\x84' ->
+		| '\x82'..'\x84' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5876,9 +5876,9 @@ and yy417 (st : state) : bool =
 and yy418 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'
-		| '\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\x82'
+		| '\x84'..'\x8B'
+		| '\x8E'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5886,8 +5886,8 @@ and yy418 (st : state) : bool =
 and yy419 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'
-		| '\xBB'|'\xBC'|'\xBD'|'\xBE'|'\xBF' ->
+		| '\x80'..'\xB6'
+		| '\xBB'..'\xBF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5895,7 +5895,7 @@ and yy419 (st : state) : bool =
 and yy420 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
+		| '\x80'..'\xAC'
 		| '\xB5' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5905,8 +5905,8 @@ and yy421 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x84'
-		| '\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'
-		| '\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF' ->
+		| '\x9B'..'\x9F'
+		| '\xA1'..'\xAF' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5914,11 +5914,11 @@ and yy421 (st : state) : bool =
 and yy422 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'
-		| '\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'
-		| '\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'
-		| '\xA3'|'\xA4'
-		| '\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA' ->
+		| '\x80'..'\x86'
+		| '\x88'..'\x98'
+		| '\x9B'..'\xA1'
+		| '\xA3'..'\xA4'
+		| '\xA6'..'\xAA' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5926,8 +5926,8 @@ and yy422 (st : state) : bool =
 and yy423 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'
-		| '\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9'|'\xBA'|'\xBB'|'\xBC'|'\xBD' ->
+		| '\x80'..'\xAC'
+		| '\xB0'..'\xBD' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5935,7 +5935,7 @@ and yy423 (st : state) : bool =
 and yy424 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'
+		| '\x80'..'\x89'
 		| '\x8E' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -5944,7 +5944,7 @@ and yy424 (st : state) : bool =
 and yy425 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'|'\x8C'|'\x8D'|'\x8E'|'\x8F'|'\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99'|'\x9A'|'\x9B'|'\x9C'|'\x9D'|'\x9E'|'\x9F'|'\xA0'|'\xA1'|'\xA2'|'\xA3'|'\xA4'|'\xA5'|'\xA6'|'\xA7'|'\xA8'|'\xA9'|'\xAA'|'\xAB'|'\xAC'|'\xAD'|'\xAE'|'\xAF'|'\xB0'|'\xB1'|'\xB2'|'\xB3'|'\xB4'|'\xB5'|'\xB6'|'\xB7'|'\xB8'|'\xB9' ->
+		| '\x80'..'\xB9' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5952,8 +5952,8 @@ and yy425 (st : state) : bool =
 and yy426 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96' ->
+		| '\x80'..'\x84'
+		| '\x90'..'\x96' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st
@@ -5961,8 +5961,8 @@ and yy426 (st : state) : bool =
 and yy427 (st : state) : bool =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '\x80'|'\x81'|'\x82'|'\x83'|'\x84'|'\x85'|'\x86'|'\x87'|'\x88'|'\x89'|'\x8A'|'\x8B'
-		| '\x90'|'\x91'|'\x92'|'\x93'|'\x94'|'\x95'|'\x96'|'\x97'|'\x98'|'\x99' ->
+		| '\x80'..'\x8B'
+		| '\x90'..'\x99' ->
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
 		| _ -> (yy36 [@tailcall]) st

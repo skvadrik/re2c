@@ -342,11 +342,16 @@ class RenderSwitchCaseRange : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::MULTIVAL) {
+        switch (opt) {
+        case StxLOpt::MULTIVAL:
             return nsyms > 1;
+        case StxLOpt::CHAR_LITERALS:
+            return code->kind == CodeCase::Kind::RANGES
+                    && rctx.opts->char_literals == CharLit::CHAR;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderSwitchCaseRange);

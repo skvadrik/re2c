@@ -20,7 +20,7 @@ let rec yy0 (st : state) : number =
 	match yych with
 		| '.' -> (yy3 [@tailcall]) st
 		| '0' -> (yy4 [@tailcall]) st
-		| '1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' -> (yy5 [@tailcall]) st
+		| '1'..'9' -> (yy5 [@tailcall]) st
 		| _ -> (yy1 [@tailcall]) st
 
 and yy1 (st : state) : number =
@@ -32,7 +32,7 @@ and yy2 (st : state) : number =
 and yy3 (st : state) : number =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -45,7 +45,7 @@ and yy4 (st : state) : number =
 		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st
 		| 'E'
@@ -62,7 +62,7 @@ and yy5 (st : state) : number =
 		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
 		| 'E'
@@ -79,7 +79,7 @@ and yy7 (st : state) : number =
 	st.mar <- st.cur;
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| 'E'
@@ -97,7 +97,7 @@ and yy9 (st : state) : number =
 		| '.' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy9 [@tailcall]) st
 		| 'E'
@@ -120,7 +120,7 @@ and yy11 (st : state) : number =
 		| '-' ->
 			st.cur <- st.cur + 1;
 			(yy12 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy10 [@tailcall]) st
@@ -128,7 +128,7 @@ and yy11 (st : state) : number =
 and yy12 (st : state) : number =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy10 [@tailcall]) st
@@ -136,7 +136,7 @@ and yy12 (st : state) : number =
 and yy13 (st : state) : number =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy13 [@tailcall]) st
 		| _ -> (yy8 [@tailcall]) st

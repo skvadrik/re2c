@@ -38,7 +38,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 let rec yy0 (st : state) : (int list) option =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.yyt1 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st
@@ -68,7 +68,7 @@ and yy3 (st : state) : (int list) option =
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
@@ -89,7 +89,7 @@ and yy4 (st : state) : (int list) option =
 and yy5 (st : state) : (int list) option =
 	let yych = st.str.[st.cur] in
 	match yych with
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.yytm3 <- st.cur :: st.yytm3;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
@@ -112,7 +112,7 @@ and yy7 (st : state) : (int list) option =
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy6 [@tailcall]) st
@@ -128,7 +128,7 @@ and yy8 (st : state) : (int list) option =
 			st.yytm4 <- st.cur :: st.yytm4;
 			st.cur <- st.cur + 1;
 			(yy5 [@tailcall]) st
-		| '0'|'1'|'2'|'3'|'4'|'5'|'6'|'7'|'8'|'9' ->
+		| '0'..'9' ->
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
 		| _ -> (yy6 [@tailcall]) st
