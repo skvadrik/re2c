@@ -11,7 +11,7 @@ type state = {
 }
 
 #14 "ocaml/eof/02_bounds_checking.ml"
-let maxfill = 1 + 100
+let yymaxfill = 1
 #11 "ocaml/eof/02_bounds_checking.re"
 
 
@@ -30,7 +30,7 @@ and yy1 (st : state) (count : int) : int =
 #22 "ocaml/eof/02_bounds_checking.re"
 	
         (* check that it is the sentinel, not some unexpected null *)
-        if st.cur = String.length st.buf - maxfill + 1 then count else -1
+        if st.cur = String.length st.buf - yymaxfill + 1 then count else -1
 
 #36 "ocaml/eof/02_bounds_checking.ml"
 
@@ -79,7 +79,7 @@ and lex (st : state) (count : int) : int =
 
 
 let test(str, count) =
-    let buf = String.cat str (String.make maxfill '\x00') in
+    let buf = String.cat str (String.make yymaxfill '\x00') in
     let st = {buf = buf; cur = 0; lim = String.length buf} in
     let result = try lex st 0 with Fill -> -1 in
     if not (result = count) then raise (Failure "error")

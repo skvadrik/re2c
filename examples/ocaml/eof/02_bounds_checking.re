@@ -8,7 +8,7 @@ type state = {
     lim: int;
 }
 
-/*!max:re2c format = "let maxfill = @@ + 100"; */
+/*!max:re2c*/
 /*!re2c
     re2c:define:YYFN       = ["lex;int", "st;state", "count;int"];
     re2c:define:YYCTYPE    = char;
@@ -21,7 +21,7 @@ type state = {
 
     [\x00] {
         (* check that it is the sentinel, not some unexpected null *)
-        if st.cur = String.length st.buf - maxfill + 1 then count else -1
+        if st.cur = String.length st.buf - yymaxfill + 1 then count else -1
     }
     str  { lex st (count + 1) }
     [ ]+ { lex st count }
@@ -29,7 +29,7 @@ type state = {
 */
 
 let test(str, count) =
-    let buf = String.cat str (String.make maxfill '\x00') in
+    let buf = String.cat str (String.make yymaxfill '\x00') in
     let st = {buf = buf; cur = 0; lim = String.length buf} in
     let result = try lex st 0 with Fill -> -1 in
     if not (result = count) then raise (Failure "error")

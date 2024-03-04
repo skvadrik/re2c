@@ -139,6 +139,8 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYLESSTHAN"           { RET_CONF_STR(api_less_than); }
     "define:YYLIMIT"              { RET_CONF_STR(api_limit); }
     "define:YYMARKER"             { RET_CONF_STR(api_marker); }
+    "define:YYMAXFILL"            { RET_CONF_STR(api_maxfill); }
+    "define:YYMAXNMATCH"          { RET_CONF_STR(api_maxnmatch); }
     "define:YYMTAGN"              { RET_CONF_STR(api_mtag_neg); }
     "define:YYMTAGP"              { RET_CONF_STR(api_mtag_pos); }
     "define:YYPEEK"               { RET_CONF_STR(api_peek); }

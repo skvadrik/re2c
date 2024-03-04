@@ -1830,7 +1830,8 @@ LOCAL_NODISCARD(Ret gen_yymax(Output& output, Code* code)) {
 
     CodeKind kind = code->kind;
     const char* dirname = kind == CodeKind::MAXFILL ? "max:re2c" : "maxnmatch:re2c";
-    const char* varname = kind == CodeKind::MAXFILL ? "YYMAXFILL" : "YYMAXNMATCH";
+    const char* varname = kind == CodeKind::MAXFILL
+            ? opts->api_maxfill.c_str() : opts->api_maxnmatch.c_str();
 
     size_t max = 1;
     if (code->fmt.block_names == nullptr) {

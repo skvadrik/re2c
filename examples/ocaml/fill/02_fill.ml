@@ -3,7 +3,7 @@
 (* re2ocaml $INPUT -o $OUTPUT *)
 
 #6 "ocaml/fill/02_fill.ml"
-let maxfill = 1
+let yymaxfill = 1
 #3 "ocaml/fill/02_fill.re"
 
 let bufsize = 4096
@@ -43,9 +43,9 @@ let fill (st: state) (need: int) : status =
        so that the lexer can access characters at the end of buffer. *)
     if n = 0 then
         st.eof <- true; (* end of file *)
-        for i = 0 to (maxfill - 1) do
+        for i = 0 to (yymaxfill - 1) do
             Bytes.set st.buf (st.lim + i) '\x00';
-            st.lim <- st.lim + maxfill
+            st.lim <- st.lim + yymaxfill
         done;
 
     Ok)
@@ -66,7 +66,7 @@ and yy1 (st : state) (count : int) : int =
 #60 "ocaml/fill/02_fill.re"
 	
         (* check that it is the sentinel, not some unexpected null *)
-        if st.tok = st.lim - maxfill then count else -1
+        if st.tok = st.lim - yymaxfill then count else -1
 
 #72 "ocaml/fill/02_fill.ml"
 
@@ -130,7 +130,7 @@ let main () =
     (* Run lexer on the prepared file. *)
     In_channel.with_open_bin fname
         (fun ic ->
-            let lim = bufsize - maxfill in
+            let lim = bufsize - yymaxfill in
             let st = {
                 file = ic;
                 buf = Bytes.create bufsize;

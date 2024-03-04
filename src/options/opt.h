@@ -119,6 +119,8 @@ class Stx;
     MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
+    MUTOPT(std::string, api_maxfill, "YYMAXFILL") \
+    MUTOPT(std::string, api_maxnmatch, "YYMAXNMATCH") \
     MUTOPT(std::string, api_debug, "YYDEBUG") \
     MUTOPT(std::vector<std::string>, api_fn, \
             {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \
