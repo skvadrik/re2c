@@ -31,13 +31,22 @@ Stx::Stx(OutAllocator& alc)
     allowed_word_confs["backtick_quoted_strings"] = {"yes", "no"};
     allowed_word_confs["standalone_single_quotes"] = {"yes", "no"};
 
-    allowed_code_confs["code:var"] = {
+    allowed_code_confs["code:var_local"] = {
         {"type", "name", "init"}, {}, {StxLOpt::HAVE_INIT}
     };
-    allowed_code_confs["code:const"] = {
+    allowed_code_confs["code:var_global"] = {
+        {"type", "name", "init"}, {}, {StxLOpt::HAVE_INIT}
+    };
+    allowed_code_confs["code:const_local"] = {
         {"type", "name", "init"}, {}, {}
     };
-    allowed_code_confs["code:array"] = {
+    allowed_code_confs["code:const_global"] = {
+        {"type", "name", "init"}, {}, {}
+    };
+    allowed_code_confs["code:array_local"] = {
+        {"type", "name", "size"}, {"row", "elem"}, {}
+    };
+    allowed_code_confs["code:array_global"] = {
         {"type", "name", "size"}, {"row", "elem"}, {}
     };
     allowed_code_confs["code:array_elem"] = {

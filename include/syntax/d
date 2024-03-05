@@ -108,16 +108,18 @@ conf:label:yyloop = "";
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
-code:var = topindent type " " name (have_init? " = " init) ";" nl;
+code:var_local = topindent type " " name (have_init? " = " init) ";" nl;
+code:var_global = code:var_local;
 
-code:const = topindent "enum " name " = " init ";" nl;
+code:const_local = topindent "enum " name " = " init ";" nl;
+code:const_global = code:const_local;
 
-code:array =
+code:array_local =
     topindent type "[" size "] " name " = [" nl indent
         [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
         [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem]     nl]
     dedent topindent "];" nl;
-
+code:array_global = code:array_local;
 code:array_elem = array "[" index "]";
 
 code:type_int = "int";

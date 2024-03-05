@@ -1267,17 +1267,17 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::VAR: {
         RenderVar callback(rctx, &code->var);
-        rctx.opts->eval_code_conf(rctx.os, "code:var", callback);
+        rctx.opts->eval_code_conf(rctx.os, "code:var_local", callback);
         break;
     }
     case CodeKind::CONST: {
         RenderVar callback(rctx, &code->var); // same code item as for `CodeKind::VAR`
-        rctx.opts->eval_code_conf(rctx.os, "code:const", callback);
+        rctx.opts->eval_code_conf(rctx.os, "code:const_global", callback);
         break;
     }
     case CodeKind::ARRAY: {
         RenderArray callback(rctx, &code->array);
-        rctx.opts->eval_code_conf(rctx.os, "code:array", callback);
+        rctx.opts->eval_code_conf(rctx.os, "code:array_local", callback);
         break;
     }
     case CodeKind::ENUM: {

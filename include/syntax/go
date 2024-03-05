@@ -108,15 +108,21 @@ conf:label:yyloop = "yyl"; // In Go `continue` statements have labels, use it to
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
-code:var = topindent (have_init? name " := " init : "var " name " " type) nl;
+code:var_local = topindent (have_init? name " := " init : "var " name " " type) nl;
+code:var_global = topindent "var " name " " type (have_init? " = " init) nl;
 
-code:const = topindent "var " name " " type " = " init nl;
+// TODO: change this to `topindent "const " name " = " init nl`
+code:const_local = topindent "var " name " " type " = " init nl;
+code:const_global = code:const_local;
 
-code:array =
+code:array_local =
     topindent name " := [" size "]" type "{" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "}" nl;
-
+code:array_global =
+    topindent "var " name " = {" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "}" nl;
 code:array_elem = array "[" index "]";
 
 code:type_int = "int";
