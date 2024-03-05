@@ -280,8 +280,6 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     return Ret::OK;
 }
 
-void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
-
 bool Stx::have_conf(const char* name) const {
     return confs.find(name) != confs.end();
 }

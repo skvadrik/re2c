@@ -72,12 +72,11 @@ extern int stx_debug;
     STX_error = 256,               /* error  */
     STX_UNDEF = 257,               /* "invalid token"  */
     STX_NAME = 258,                /* STX_NAME  */
-    STX_NUMBER = 259,              /* STX_NUMBER  */
-    STX_STRING = 260,              /* STX_STRING  */
-    STX_GOPT = 261,                /* STX_GOPT  */
-    STX_LOPT = 262,                /* STX_LOPT  */
-    STX_CONF = 263,                /* STX_CONF  */
-    STX_CONF_CODE = 264            /* STX_CONF_CODE  */
+    STX_CODE = 259,                /* STX_CODE  */
+    STX_NUMBER = 260,              /* STX_NUMBER  */
+    STX_STRING = 261,              /* STX_STRING  */
+    STX_GOPT = 262,                /* STX_GOPT  */
+    STX_LOPT = 263                 /* STX_LOPT  */
   };
   typedef enum stx_tokentype stx_token_kind_t;
 #endif
@@ -98,7 +97,7 @@ union STX_STYPE
     re2c::StxGOpt gopt;
     re2c::StxLOpt lopt;
 
-#line 102 "src/parse/syntax_parser.h"
+#line 101 "src/parse/syntax_parser.h"
 
 };
 typedef union STX_STYPE STX_STYPE;

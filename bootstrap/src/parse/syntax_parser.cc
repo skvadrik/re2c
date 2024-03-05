@@ -120,12 +120,12 @@ enum yysymbol_kind_t
   YYSYMBOL_YYerror = 1,                    /* error  */
   YYSYMBOL_YYUNDEF = 2,                    /* "invalid token"  */
   YYSYMBOL_STX_NAME = 3,                   /* STX_NAME  */
-  YYSYMBOL_STX_NUMBER = 4,                 /* STX_NUMBER  */
-  YYSYMBOL_STX_STRING = 5,                 /* STX_STRING  */
-  YYSYMBOL_STX_GOPT = 6,                   /* STX_GOPT  */
-  YYSYMBOL_STX_LOPT = 7,                   /* STX_LOPT  */
-  YYSYMBOL_STX_CONF = 8,                   /* STX_CONF  */
-  YYSYMBOL_STX_CONF_CODE = 9,              /* STX_CONF_CODE  */
+  YYSYMBOL_STX_CODE = 4,                   /* STX_CODE  */
+  YYSYMBOL_STX_NUMBER = 5,                 /* STX_NUMBER  */
+  YYSYMBOL_STX_STRING = 6,                 /* STX_STRING  */
+  YYSYMBOL_STX_GOPT = 7,                   /* STX_GOPT  */
+  YYSYMBOL_STX_LOPT = 8,                   /* STX_LOPT  */
+  YYSYMBOL_9_ = 9,                         /* '='  */
   YYSYMBOL_10_ = 10,                       /* ';'  */
   YYSYMBOL_11_ = 11,                       /* '?'  */
   YYSYMBOL_12_ = 12,                       /* ')'  */
@@ -470,21 +470,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  18
+#define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   45
+#define YYLAST   53
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  19
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  10
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  22
+#define YYNRULES  23
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  51
+#define YYNSTATES  54
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK   264
+#define YYMAXUTOK   263
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -504,7 +504,7 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,    12,     2,     2,    18,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,    13,    10,
-       2,     2,     2,    11,     2,     2,     2,     2,     2,     2,
+       2,     9,     2,    11,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,    14,     2,    15,     2,     2,     2,     2,     2,     2,
@@ -524,16 +524,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9
+       5,     6,     7,     8
 };
 
 #if STX_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int8 yyrline[] =
+static const yytype_uint8 yyrline[] =
 {
-       0,    66,    66,    67,    70,    74,    78,    86,    87,    90,
-      91,    92,    93,    96,    99,   104,   105,   108,   111,   114,
-     120,   123,   127
+       0,    65,    65,    66,    69,    77,    81,    85,    93,    94,
+      97,    98,    99,   100,   103,   106,   111,   112,   115,   118,
+     121,   127,   130,   134
 };
 #endif
 
@@ -549,11 +549,11 @@ static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "\"end of file\"", "error", "\"invalid token\"", "STX_NAME",
-  "STX_NUMBER", "STX_STRING", "STX_GOPT", "STX_LOPT", "STX_CONF",
-  "STX_CONF_CODE", "';'", "'?'", "')'", "':'", "'['", "']'", "'{'", "'}'",
-  "','", "$accept", "confs", "conf", "code_exprs", "code_expr",
-  "code_cond", "cond", "code_list", "list", "names", YY_NULLPTR
+  "\"end of file\"", "error", "\"invalid token\"", "STX_NAME", "STX_CODE",
+  "STX_NUMBER", "STX_STRING", "STX_GOPT", "STX_LOPT", "'='", "';'", "'?'",
+  "')'", "':'", "'['", "']'", "'{'", "'}'", "','", "$accept", "confs",
+  "conf", "code_exprs", "code_expr", "code_cond", "cond", "code_list",
+  "list", "names", YY_NULLPTR
 };
 
 static const char *
@@ -563,7 +563,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-15)
+#define YYPACT_NINF (-19)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -577,12 +577,12 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-       0,     3,    -2,    10,     0,    -8,    11,    12,   -15,   -15,
-     -15,   -15,    18,    14,    -2,   -15,    15,   -15,   -15,   -15,
-     -15,     9,    13,   -15,     2,   -15,   -15,    -2,    11,   -15,
-      -2,    21,     7,   -15,    16,    -6,   -15,    -2,   -15,    26,
-      19,    22,    20,    -2,   -15,    23,    24,    -2,   -15,    25,
-     -15
+     -19,    23,   -19,    -8,     7,   -19,     6,    -1,    19,    27,
+      21,   -19,    24,   -19,   -19,   -19,    30,    25,    11,   -19,
+      26,   -19,   -19,    18,    28,   -19,   -19,     8,   -19,   -19,
+      11,    27,   -19,    11,    33,    -2,   -19,    29,    -9,   -19,
+      11,   -19,    34,    32,    35,    31,    11,   -19,    36,    37,
+      11,   -19,    38,   -19
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -590,24 +590,24 @@ static const yytype_int8 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,     0,     7,     0,     2,     0,     0,     0,    10,     9,
-      15,    16,     0,     0,     7,    11,     0,    12,     1,     3,
-       6,    21,     0,     5,     0,     4,     8,     7,     0,    20,
-       7,     0,     0,    22,     0,     0,    13,     7,    17,     0,
-       0,     0,     0,     7,    14,     0,     0,     7,    18,     0,
-      19
+       2,     0,     1,     0,     0,     3,     0,     8,     0,     0,
+       0,    11,     0,    10,    16,    17,     0,     0,     8,    12,
+       0,    13,     7,    22,     0,     6,     4,     0,     5,     9,
+       8,     0,    21,     8,     0,     0,    23,     0,     0,    14,
+       8,    18,     0,     0,     0,     0,     8,    15,     0,     0,
+       8,    19,     0,    20
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -15,    31,   -15,   -14,   -15,   -15,   -15,   -15,   -15,    17
+     -19,   -19,   -19,   -18,   -19,   -19,   -19,   -19,   -19,     9
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     3,     4,    13,    14,    15,    16,    17,     7,    22
+       0,     1,     5,    17,    18,    19,    20,    21,    10,    24
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -615,48 +615,50 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      26,     8,    20,     9,    10,    11,     5,    39,     1,     2,
-      18,    40,    12,    32,    21,    30,    34,     6,    31,    36,
-      37,    24,    23,    41,    25,    35,    27,    28,    29,    46,
-      42,    38,    43,    49,    44,    19,    47,    45,     0,    48,
-      50,     0,     0,     0,     0,    33
+      29,     6,    11,    12,    42,    13,    14,    15,    43,     8,
+      39,    40,    35,    16,    11,    37,     7,    13,    14,    15,
+       9,    33,    44,     2,    34,    16,     3,     4,    49,    22,
+      23,    25,    52,    27,    26,    28,    31,    30,    38,    45,
+      36,     0,     0,    32,    41,    46,     0,    47,    48,    50,
+       0,     0,    51,    53
 };
 
 static const yytype_int8 yycheck[] =
 {
-      14,     3,    10,     5,     6,     7,     3,    13,     8,     9,
-       0,    17,    14,    27,     3,    13,    30,    14,    16,    12,
-      13,     3,    10,    37,    10,     4,    11,    18,    15,    43,
-       4,    15,    13,    47,    12,     4,    13,    17,    -1,    15,
-      15,    -1,    -1,    -1,    -1,    28
+      18,     9,     3,     4,    13,     6,     7,     8,    17,     3,
+      12,    13,    30,    14,     3,    33,     9,     6,     7,     8,
+      14,    13,    40,     0,    16,    14,     3,     4,    46,    10,
+       3,    10,    50,     3,    10,    10,    18,    11,     5,     5,
+      31,    -1,    -1,    15,    15,    13,    -1,    12,    17,    13,
+      -1,    -1,    15,    15
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     8,     9,    20,    21,     3,    14,    27,     3,     5,
-       6,     7,    14,    22,    23,    24,    25,    26,     0,    20,
-      10,     3,    28,    10,     3,    10,    22,    11,    18,    15,
-      13,    16,    22,    28,    22,     4,    12,    13,    15,    13,
-      17,    22,     4,    13,    12,    17,    22,    13,    15,    22,
-      15
+       0,    20,     0,     3,     4,    21,     9,     9,     3,    14,
+      27,     3,     4,     6,     7,     8,    14,    22,    23,    24,
+      25,    26,    10,     3,    28,    10,    10,     3,    10,    22,
+      11,    18,    15,    13,    16,    22,    28,    22,     5,    12,
+      13,    15,    13,    17,    22,     5,    13,    12,    17,    22,
+      13,    15,    22,    15
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    19,    20,    20,    21,    21,    21,    22,    22,    23,
-      23,    23,    23,    24,    24,    25,    25,    26,    26,    26,
-      27,    28,    28
+       0,    19,    20,    20,    21,    21,    21,    21,    22,    22,
+      23,    23,    23,    23,    24,    24,    25,    25,    26,    26,
+      26,    27,    28,    28
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     0,     2,     3,     3,     3,     0,     2,     1,
-       1,     1,     1,     4,     6,     1,     1,     5,     8,    10,
-       3,     1,     3
+       0,     2,     0,     2,     4,     4,     4,     4,     0,     2,
+       1,     1,     1,     1,     4,     6,     1,     1,     5,     8,
+      10,     3,     1,     3
 };
 
 
@@ -1131,141 +1133,154 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 3: /* confs: conf confs  */
-#line 67 "../src/parse/syntax_parser.ypp"
-             { stx.add_conf((yyvsp[-1].conf)->name, (yyvsp[-1].conf)); }
-#line 1138 "src/parse/syntax_parser.cc"
+  case 3: /* confs: confs conf  */
+#line 66 "../src/parse/syntax_parser.ypp"
+             { stx.add_conf((yyvsp[0].conf)->name, (yyvsp[0].conf)); }
+#line 1140 "src/parse/syntax_parser.cc"
     break;
 
-  case 4: /* conf: STX_CONF_CODE code_exprs ';'  */
-#line 70 "../src/parse/syntax_parser.ypp"
-                               {
-    (yyval.conf) = stx.make_conf_code((yyvsp[-2].str), (yyvsp[-1].codes));
+  case 4: /* conf: STX_CODE '=' STX_CODE ';'  */
+#line 69 "../src/parse/syntax_parser.ypp"
+                            {
+    const StxConf* conf = stx.get_conf((yyvsp[-1].str));
+    if (conf == nullptr || conf->type != StxConfType::CODE) {
+        in.error_at_tok("bad reference to configuration '%s'", (yyvsp[-1].str));
+        YYABORT;
+    }
+    (yyval.conf) = stx.make_conf_code((yyvsp[-3].str), conf->code);
+}
+#line 1153 "src/parse/syntax_parser.cc"
+    break;
+
+  case 5: /* conf: STX_CODE '=' code_exprs ';'  */
+#line 77 "../src/parse/syntax_parser.ypp"
+                              {
+    (yyval.conf) = stx.make_conf_code((yyvsp[-3].str), (yyvsp[-1].codes));
     if (stx.validate_conf_code((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1147 "src/parse/syntax_parser.cc"
+#line 1162 "src/parse/syntax_parser.cc"
     break;
 
-  case 5: /* conf: STX_CONF list ';'  */
-#line 74 "../src/parse/syntax_parser.ypp"
-                    {
-    (yyval.conf) = stx.make_conf_list((yyvsp[-2].str), (yyvsp[-1].list));
+  case 6: /* conf: STX_NAME '=' list ';'  */
+#line 81 "../src/parse/syntax_parser.ypp"
+                        {
+    (yyval.conf) = stx.make_conf_list((yyvsp[-3].str), (yyvsp[-1].list));
     if (stx.validate_conf_list((yyval.conf)) == Ret::FAIL) YYABORT;
 }
-#line 1156 "src/parse/syntax_parser.cc"
-    break;
-
-  case 6: /* conf: STX_CONF STX_NAME ';'  */
-#line 78 "../src/parse/syntax_parser.ypp"
-                        {
-    (yyval.conf) = stx.make_conf_word((yyvsp[-2].str), (yyvsp[-1].str));
-    if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
-}
-#line 1165 "src/parse/syntax_parser.cc"
-    break;
-
-  case 7: /* code_exprs: %empty  */
-#line 86 "../src/parse/syntax_parser.ypp"
-                       { (yyval.codes) = stx.new_code_list(); }
 #line 1171 "src/parse/syntax_parser.cc"
     break;
 
-  case 8: /* code_exprs: code_expr code_exprs  */
-#line 87 "../src/parse/syntax_parser.ypp"
+  case 7: /* conf: STX_NAME '=' STX_NAME ';'  */
+#line 85 "../src/parse/syntax_parser.ypp"
+                            {
+    (yyval.conf) = stx.make_conf_word((yyvsp[-3].str), (yyvsp[-1].str));
+    if (stx.validate_conf_word((yyval.conf)) == Ret::FAIL) YYABORT;
+}
+#line 1180 "src/parse/syntax_parser.cc"
+    break;
+
+  case 8: /* code_exprs: %empty  */
+#line 93 "../src/parse/syntax_parser.ypp"
+                       { (yyval.codes) = stx.new_code_list(); }
+#line 1186 "src/parse/syntax_parser.cc"
+    break;
+
+  case 9: /* code_exprs: code_expr code_exprs  */
+#line 94 "../src/parse/syntax_parser.ypp"
                        { prepend((yyvsp[0].codes), (yyvsp[-1].code)); (yyval.codes) = (yyvsp[0].codes); }
-#line 1177 "src/parse/syntax_parser.cc"
+#line 1192 "src/parse/syntax_parser.cc"
     break;
 
-  case 9: /* code_expr: STX_STRING  */
-#line 90 "../src/parse/syntax_parser.ypp"
+  case 10: /* code_expr: STX_STRING  */
+#line 97 "../src/parse/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_str((yyvsp[0].str)); }
-#line 1183 "src/parse/syntax_parser.cc"
+#line 1198 "src/parse/syntax_parser.cc"
     break;
 
-  case 10: /* code_expr: STX_NAME  */
-#line 91 "../src/parse/syntax_parser.ypp"
+  case 11: /* code_expr: STX_NAME  */
+#line 98 "../src/parse/syntax_parser.ypp"
              { (yyval.code) = stx.make_code_var((yyvsp[0].str)); }
-#line 1189 "src/parse/syntax_parser.cc"
+#line 1204 "src/parse/syntax_parser.cc"
     break;
 
-  case 13: /* code_cond: cond '?' code_exprs ')'  */
-#line 96 "../src/parse/syntax_parser.ypp"
+  case 14: /* code_cond: cond '?' code_exprs ')'  */
+#line 103 "../src/parse/syntax_parser.ypp"
                           {
     (yyval.code) = stx.make_code_cond((yyvsp[-3].opt), (yyvsp[-1].codes), nullptr);
 }
-#line 1197 "src/parse/syntax_parser.cc"
+#line 1212 "src/parse/syntax_parser.cc"
     break;
 
-  case 14: /* code_cond: cond '?' code_exprs ':' code_exprs ')'  */
-#line 99 "../src/parse/syntax_parser.ypp"
+  case 15: /* code_cond: cond '?' code_exprs ':' code_exprs ')'  */
+#line 106 "../src/parse/syntax_parser.ypp"
                                          {
     (yyval.code) = stx.make_code_cond((yyvsp[-5].opt), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1205 "src/parse/syntax_parser.cc"
+#line 1220 "src/parse/syntax_parser.cc"
     break;
 
-  case 15: /* cond: STX_GOPT  */
-#line 104 "../src/parse/syntax_parser.ypp"
+  case 16: /* cond: STX_GOPT  */
+#line 111 "../src/parse/syntax_parser.ypp"
            { (yyval.opt) = stx.make_opt_global((yyvsp[0].gopt)); }
-#line 1211 "src/parse/syntax_parser.cc"
+#line 1226 "src/parse/syntax_parser.cc"
     break;
 
-  case 16: /* cond: STX_LOPT  */
-#line 105 "../src/parse/syntax_parser.ypp"
+  case 17: /* cond: STX_LOPT  */
+#line 112 "../src/parse/syntax_parser.ypp"
            { (yyval.opt) = stx.make_opt_local((yyvsp[0].lopt)); }
-#line 1217 "src/parse/syntax_parser.cc"
+#line 1232 "src/parse/syntax_parser.cc"
     break;
 
-  case 17: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
-#line 108 "../src/parse/syntax_parser.ypp"
+  case 18: /* code_list: '[' STX_NAME ':' code_exprs ']'  */
+#line 115 "../src/parse/syntax_parser.ypp"
                                   {
     (yyval.code) = stx.make_code_list((yyvsp[-3].str), 0, -1, (yyvsp[-1].codes));
 }
-#line 1225 "src/parse/syntax_parser.cc"
+#line 1240 "src/parse/syntax_parser.cc"
     break;
 
-  case 18: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 111 "../src/parse/syntax_parser.ypp"
+  case 19: /* code_list: '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']'  */
+#line 118 "../src/parse/syntax_parser.ypp"
                                                      {
     (yyval.code) = stx.make_code_list((yyvsp[-6].str), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1233 "src/parse/syntax_parser.cc"
+#line 1248 "src/parse/syntax_parser.cc"
     break;
 
-  case 19: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
-#line 114 "../src/parse/syntax_parser.ypp"
+  case 20: /* code_list: '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']'  */
+#line 121 "../src/parse/syntax_parser.ypp"
                                                                     {
     (yyval.code) = stx.make_code_list((yyvsp[-8].str), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
-}
-#line 1241 "src/parse/syntax_parser.cc"
-    break;
-
-  case 20: /* list: '[' names ']'  */
-#line 120 "../src/parse/syntax_parser.ypp"
-                    { (yyval.list) = (yyvsp[-1].list); }
-#line 1247 "src/parse/syntax_parser.cc"
-    break;
-
-  case 21: /* names: STX_NAME  */
-#line 123 "../src/parse/syntax_parser.ypp"
-           {
-    (yyval.list) = stx.new_name_list();
-    prepend((yyval.list), stx.make_name((yyvsp[0].str)));
 }
 #line 1256 "src/parse/syntax_parser.cc"
     break;
 
-  case 22: /* names: STX_NAME ',' names  */
+  case 21: /* list: '[' names ']'  */
 #line 127 "../src/parse/syntax_parser.ypp"
+                    { (yyval.list) = (yyvsp[-1].list); }
+#line 1262 "src/parse/syntax_parser.cc"
+    break;
+
+  case 22: /* names: STX_NAME  */
+#line 130 "../src/parse/syntax_parser.ypp"
+           {
+    (yyval.list) = stx.new_name_list();
+    prepend((yyval.list), stx.make_name((yyvsp[0].str)));
+}
+#line 1271 "src/parse/syntax_parser.cc"
+    break;
+
+  case 23: /* names: STX_NAME ',' names  */
+#line 134 "../src/parse/syntax_parser.ypp"
                      {
     prepend((yyvsp[0].list), stx.make_name((yyvsp[-2].str)));
     (yyval.list) = (yyvsp[0].list);
 }
-#line 1265 "src/parse/syntax_parser.cc"
+#line 1280 "src/parse/syntax_parser.cc"
     break;
 
 
-#line 1269 "src/parse/syntax_parser.cc"
+#line 1284 "src/parse/syntax_parser.cc"
 
       default: break;
     }
@@ -1458,7 +1473,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 132 "../src/parse/syntax_parser.ypp"
+#line 139 "../src/parse/syntax_parser.ypp"
 
 
 extern "C" {
@@ -1569,6 +1584,13 @@ inline StxCode* Stx::make_code_list(
     x->list.rbound = rbound;
     x->list.code = code;
     return x;
+}
+
+void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
+
+const StxConf* Stx::get_conf(const char* name) {
+    auto x = confs.find(name);
+    return x == confs.end() ? nullptr : x->second;
 }
 
 Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {

@@ -174,7 +174,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:fncall = topindent name \"(\" [arg{0:-2}: arg \", \"] [arg{-1}: arg] \")\" nl;\n"
     "\n"
-    "code:tailcall = topindent name \"(\" [arg{0:-2}: arg \", \"] [arg{-1}: arg] \")\" nl;\n"
+    "code:tailcall = code:fncall;\n"
     "\n"
     "code:recursive_functions = [fn: fndef nl];\n"
     "\n"

@@ -43,14 +43,13 @@ extern "C" {
 };
 
 %token STX_NAME
+%token STX_CODE
 %token STX_NUMBER
 %token STX_STRING
 %token STX_GOPT
 %token STX_LOPT
-%token STX_CONF
-%token STX_CONF_CODE
 
-%type <str> STX_NAME STX_STRING STX_CONF STX_CONF_CODE
+%type <str> STX_NAME STX_STRING STX_CODE
 %type <num> STX_NUMBER
 %type <gopt> STX_GOPT
 %type <lopt> STX_LOPT
@@ -64,19 +63,27 @@ extern "C" {
 
 confs
 : %empty
-| conf confs { stx.add_conf($1->name, $1); };
+| confs conf { stx.add_conf($2->name, $2); };
 
 conf
-: STX_CONF_CODE code_exprs ';' {
-    $$ = stx.make_conf_code($1, $2);
+: STX_CODE '=' STX_CODE ';' {
+    const StxConf* conf = stx.get_conf($3);
+    if (conf == nullptr || conf->type != StxConfType::CODE) {
+        in.error_at_tok("bad reference to configuration '%s'", $3);
+        YYABORT;
+    }
+    $$ = stx.make_conf_code($1, conf->code);
+}
+| STX_CODE '=' code_exprs ';' {
+    $$ = stx.make_conf_code($1, $3);
     if (stx.validate_conf_code($$) == Ret::FAIL) YYABORT;
 }
-| STX_CONF list ';' {
-    $$ = stx.make_conf_list($1, $2);
+| STX_NAME '=' list ';' {
+    $$ = stx.make_conf_list($1, $3);
     if (stx.validate_conf_list($$) == Ret::FAIL) YYABORT;
 }
-| STX_CONF STX_NAME ';' {
-    $$ = stx.make_conf_word($1, $2);
+| STX_NAME '=' STX_NAME ';' {
+    $$ = stx.make_conf_word($1, $3);
     if (stx.validate_conf_word($$) == Ret::FAIL) YYABORT;
 };
 
@@ -239,6 +246,13 @@ inline StxCode* Stx::make_code_list(
     x->list.rbound = rbound;
     x->list.code = code;
     return x;
+}
+
+void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
+
+const StxConf* Stx::get_conf(const char* name) {
+    auto x = confs.find(name);
+    return x == confs.end() ? nullptr : x->second;
 }
 
 Ret Input::load_syntax_config(Opt& opts, Stx& stx, Lang& lang) {

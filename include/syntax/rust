@@ -173,7 +173,7 @@ code:fndef =
 
 code:fncall = topindent name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
-code:tailcall = topindent name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+code:tailcall = code:fncall;
 
 code:recursive_functions = [fn: fndef nl];
 

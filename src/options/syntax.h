@@ -147,6 +147,7 @@ class Stx {
     StxOpt* make_opt_global(StxGOpt opt);
     StxOpt* make_opt_local(StxLOpt opt);
     void add_conf(const char* name, const StxConf* conf);
+    const StxConf* get_conf(const char* name);
 
     // functions that validate configuration and variable names in the AST
     Ret validate_conf_list(const StxConf* conf);

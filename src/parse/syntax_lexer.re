@@ -23,7 +23,6 @@
     re2c:define:YYCURSOR = cur;
     re2c:define:YYMARKER = mar;
     re2c:define:YYLIMIT = lim;
-    re2c:tags = 1;
 */
 
 namespace re2c {
@@ -36,9 +35,6 @@ namespace re2c {
 #define RET_LOPT(b) do { token = STX_LOPT; yylval->lopt = b; return Ret::OK; } while(0)
 
 Ret Input::lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token) {
-    const uint8_t* p;
-    /*!stags:re2c format = "const uint8_t* @@;"; */
-
 start:
     tok = cur;
     location = cur_loc();
@@ -53,13 +49,9 @@ start:
         CHECK_RET(lex_conf(opts));
         goto start;
     }
-    "code:" name @p space* "=" {
-        yylval->str = newcstr(tok, p, alc);
-        RET_TOK(STX_CONF_CODE);
-    }
-    name @p space* "=" {
-        yylval->str = newcstr(tok, p, alc);
-        RET_TOK(STX_CONF);
+    "code:" name {
+        yylval->str = newcstr(tok, cur, alc);
+        RET_TOK(STX_CODE);
     }
     name {
         yylval->str = newcstr(tok, cur, alc);
@@ -73,7 +65,7 @@ start:
     }
     ["] { tmp_str.clear(); goto str; }
     [(] space* { goto opt; }
-    [?:;,){}[\]] { RET_TOK(cur[-1]); }
+    [=?:;,){}[\]] { RET_TOK(cur[-1]); }
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */
 
