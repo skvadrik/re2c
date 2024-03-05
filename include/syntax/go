@@ -111,8 +111,7 @@ conf:label:start = 0;
 code:var_local = topindent (have_init? name " := " init : "var " name " " type) nl;
 code:var_global = topindent "var " name " " type (have_init? " = " init) nl;
 
-// TODO: change this to `topindent "const " name " = " init nl`
-code:const_local = topindent "var " name " " type " = " init nl;
+code:const_local = topindent "const " name " = " init nl;
 code:const_global = code:const_local;
 
 code:array_local =

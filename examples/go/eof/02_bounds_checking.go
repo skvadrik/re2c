@@ -6,7 +6,7 @@ package main
 import "strings"
 
 //line "go/eof/02_bounds_checking.go":9
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 //line "go/eof/02_bounds_checking.re":6
 
 

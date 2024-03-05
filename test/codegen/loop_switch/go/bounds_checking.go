@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 
 
 // Expects YYMAXFILL-padded string.

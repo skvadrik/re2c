@@ -7,7 +7,7 @@ import "fmt"
 import "os"
 
 //line "golang/003_fill.go":10
-var YYMAXFILL uint = 2
+const YYMAXFILL = 2
 //line "golang/003_fill.re":7
 
 var SIZE uint = 11

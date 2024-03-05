@@ -9,7 +9,7 @@ import (
 )
 
 //line "go/fill/02_fill.go":12
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 //line "go/fill/02_fill.re":9
 
 const BUFSIZE uint = 4096

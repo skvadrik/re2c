@@ -4,7 +4,7 @@ package main
 
 import "strings"
 
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 
 
 type State struct {

@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 
 
 // Intentionally small to trigger buffer refill.

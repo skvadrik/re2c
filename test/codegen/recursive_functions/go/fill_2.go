@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-var YYMAXFILL uint = 1
+const YYMAXFILL = 1
 
 const BUFSIZE uint = 4096
 
