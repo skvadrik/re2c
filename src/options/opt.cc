@@ -19,18 +19,6 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         glob.set_default_line_dirs(false);
     }
 
-    // Set code model based on syntax file unless it is explicitly passed as an option.
-    if (glob.is_default_code_model) {
-        const char* code_model = stx.list_conf_head("code_model");
-        if (strcmp(code_model, "goto_label") == 0) {
-            glob.set_default_code_model(CodeModel::GOTO_LABEL);
-        } else if (strcmp(code_model, "loop_switch") == 0) {
-            glob.set_default_code_model(CodeModel::LOOP_SWITCH);
-        } else if (strcmp(code_model, "recursive_functions") == 0) {
-            glob.set_default_code_model(CodeModel::REC_FUNC);
-        }
-    }
-
     // append directory separator '/' to all paths that do not have it
     for (std::string& p : const_cast<std::vector<std::string>&>(glob.include_paths)) {
         const char c = p.empty() ? 0 : *p.rbegin();
@@ -39,6 +27,32 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         }
     }
 
+    if (!glob.dep_file.empty() && glob.output_file.empty()) {
+        RET_FAIL(error("cannot generate dep file, output file not specified"));
+    }
+
+    if (glob.is_default_code_model) {
+        // Set code model based on syntax file.
+        const char* code_model = stx.list_conf_head("code_model");
+        if (strcmp(code_model, "goto_label") == 0) {
+            glob.set_default_code_model(CodeModel::GOTO_LABEL);
+        } else if (strcmp(code_model, "loop_switch") == 0) {
+            glob.set_default_code_model(CodeModel::LOOP_SWITCH);
+        } else if (strcmp(code_model, "recursive_functions") == 0) {
+            glob.set_default_code_model(CodeModel::REC_FUNC);
+        }
+    } else {
+        // Check that the chosen code model is supported for the given backend.
+        const char* model_name = nullptr;
+        switch (glob.code_model) {
+        case CodeModel::GOTO_LABEL: model_name = "goto_label"; break;
+        case CodeModel::LOOP_SWITCH: model_name = "loop_switch"; break;
+        case CodeModel::REC_FUNC: model_name = "recursive_functions"; break;
+        }
+        if (!stx.list_conf_find("code_model", model_name)) {
+            RET_FAIL(error("code model is not suppoted for this backend"));
+        }
+    }
     if (glob.code_model != CodeModel::GOTO_LABEL) {
         // In loop/switch or rec/func mode enable eager-skip always (not only in cases when YYFILL
         // labels are used) to avoid special handling of initial state when there are transitions
@@ -46,16 +60,12 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         glob.set_default_eager_skip(true);
     }
 
-    if (!glob.dep_file.empty() && glob.output_file.empty()) {
-        RET_FAIL(error("cannot generate dep file, output file not specified"));
-    }
-
-    if (glob.target == Target::SKELETON && !stx.list_conf_find("target", "skeleton")) {
-        RET_FAIL(error("skeleton is not supported for this backend"));
-    }
-
-    if (glob.target == Target::SKELETON && glob.code_model == CodeModel::REC_FUNC) {
-        RET_FAIL(error("skeleton is not supported for --recursive-functions model"));
+    if (glob.target == Target::SKELETON) {
+        if (!stx.list_conf_find("target", "skeleton")) {
+            RET_FAIL(error("skeleton is not supported for this backend"));
+        } else if (glob.code_model == CodeModel::REC_FUNC) {
+            RET_FAIL(error("skeleton is not supported for --recursive-functions model"));
+        }
     }
 
     return Ret::OK;
