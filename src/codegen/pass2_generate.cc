@@ -442,13 +442,11 @@ class GenArrayElem : public RenderCallback {
     GenArrayElem(std::ostream& os, const std::string& array, size_t index)
         : os(os), array(array), index(index) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "array") == 0) {
-            os << array;
-        } else if (strcmp(var, "index") == 0) {
-            os << index;
-        } else {
-            UNREACHABLE();
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ARRAY: os << array; break;
+            case StxVarId::INDEX: os << index; break;
+            default: UNREACHABLE(); break;
         }
     }
 };
@@ -467,7 +465,7 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<std::string>& fi
         std::string yypmatch = fintag_expr("yypmatch", opts);
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             GenArrayElem callback(buf.stream(), yypmatch, i);
-            opts->eval_code_conf(buf.stream(), "code:array_elem", callback);
+            opts->eval_code_conf(buf.stream(), StxConfId::ARRAY_ELEM, callback);
             fintags.push_back(buf.flush());
         }
     }
@@ -830,7 +828,7 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    bool need_compare = !opts->eval_bool_conf("implicit_bool_conversion");
+    bool need_compare = !opts->eval_bool_conf(StxConfId::IMPLICIT_BOOL_CONVERSION);
     if (need_compare) o.cstr("(");
     o.str(bitmap_name(opts, dfa.cond)).cstr("[").u32(go->bitmap->offset).cstr("+")
             .str(opts->var_char).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1);
@@ -869,7 +867,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
 
-    opts->eval_code_conf(buf.stream(), "code:type_yytarget");
+    opts->eval_code_conf(buf.stream(), StxConfId::TYPE_YYTARGET);
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
@@ -1042,7 +1040,7 @@ static void emit_accept(
         for (uint32_t i = 0; i < nacc; ++i) {
             elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
         }
-        opts->eval_code_conf(o.stream(), "code:type_yytarget");
+        opts->eval_code_conf(o.stream(), StxConfId::TYPE_YYTARGET);
         const char* type = o.flush();
         append(block, code_array(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
 
@@ -1109,13 +1107,11 @@ class GenEnumElem : public RenderCallback {
     GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
         : os(os), type(type), name(name) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "type") == 0) {
-            os << type;
-        } else if (strcmp(var, "name") == 0) {
-            os << name;
-        } else {
-            UNREACHABLE();
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::TYPE: os << type; break;
+            case StxVarId::NAME: os << name; break;
+            default: UNREACHABLE(); break;
         }
     }
 
@@ -1125,7 +1121,7 @@ class GenEnumElem : public RenderCallback {
 const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
     const std::string& cond = opts->cond_enum_prefix + name;
     GenEnumElem callback(buf.stream(), opts->api_cond_type, cond);
-    opts->eval_code_conf(buf.stream(), "code:enum_elem", callback);
+    opts->eval_code_conf(buf.stream(), StxConfId::ENUM_ELEM, callback);
     return buf.flush();
 }
 
@@ -1779,7 +1775,7 @@ static CodeList* gen_cond_table(Output& output) {
     for (size_t i = 0; i < conds.size(); ++i) {
         elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    opts->eval_code_conf(buf.stream(), "code:type_yytarget");
+    opts->eval_code_conf(buf.stream(), StxConfId::TYPE_YYTARGET);
     const char* type = buf.flush();
     append(code, code_array(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
@@ -1914,7 +1910,7 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
 
     const char *name = buf.str(bitmap_name(opts, cond)).flush();
 
-    opts->eval_code_conf(buf.stream(), "code:type_yybm");
+    opts->eval_code_conf(buf.stream(), StxConfId::TYPE_YYBM);
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);

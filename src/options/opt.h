@@ -193,13 +193,6 @@ class Stx;
     MUTOPT(bool, debug, false) \
     /* end */
 
-// variables in syntax files
-#define RE2C_STX_VARS \
-    STX_VAR("nl") \
-    STX_VAR("indent") \
-    STX_VAR("dedent") \
-    STX_VAR("topindent")
-
 // Constant options.
 struct conopt_t {
   private:
@@ -239,11 +232,11 @@ struct conopt_t {
 #undef CONSTOPT
 
     // forward methods from `Stx` to make them easier to use from lexer
-    inline const char* eval_word_conf(const char* name) const {
-        return stx.eval_word_conf(name);
+    inline const char* eval_word_conf(StxConfId id) const {
+        return stx.eval_word_conf(id);
     }
-    inline bool eval_bool_conf(const char* name) const {
-        return stx.eval_bool_conf(name);
+    inline bool eval_bool_conf(StxConfId id) const {
+        return stx.eval_bool_conf(id);
     }
 
     FORBID_COPY(conopt_t);
@@ -326,17 +319,17 @@ struct opt_t {
     {}
 
     // forward methods from `Stx` to make them easier to use from codegen
-    inline void eval_code_conf(std::ostream& os, const char* name, RenderCallback& callback) const {
-        stx.eval_code_conf(os, this, name, callback);
+    inline void eval_code_conf(std::ostream& os, StxConfId id, RenderCallback& callback) const {
+        stx.eval_code_conf(os, this, id, callback);
     }
-    inline void eval_code_conf(std::ostream& os, const char* name) const {
-        stx.eval_code_conf(os, this, name);
+    inline void eval_code_conf(std::ostream& os, StxConfId id) const {
+        stx.eval_code_conf(os, this, id);
     }
-    inline const char* eval_word_conf(const char* name) const {
-        return stx.eval_word_conf(name);
+    inline const char* eval_word_conf(StxConfId id) const {
+        return stx.eval_word_conf(id);
     }
-    inline bool eval_bool_conf(const char* name) const {
-        return stx.eval_bool_conf(name);
+    inline bool eval_bool_conf(StxConfId id) const {
+        return stx.eval_bool_conf(id);
     }
     bool specialize_oneline_if() const { return stx.have_oneline_if; }
     bool specialize_oneline_switch() const { return stx.have_oneline_switch; }

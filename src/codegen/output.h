@@ -13,6 +13,7 @@
 #include "src/codegen/code.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
+#include "src/options/syntax.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
 
@@ -70,17 +71,17 @@ struct RenderContext {
 
 class RenderCallback {
   public:
-    virtual void render_var(const char* /*var*/) {
+    virtual void render_var(StxVarId /*var*/) {
         UNREACHABLE();
     }
-    virtual size_t get_list_size(const char* /*var*/) const {
+    virtual size_t get_list_size(StxVarId /*var*/) const {
         UNREACHABLE();
         return 0;
     }
-    virtual void start_list(const char* /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
+    virtual void start_list(StxVarId /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
         UNREACHABLE();
     }
-    virtual bool next_in_list(const char* /*var*/) {
+    virtual bool next_in_list(StxVarId /*var*/) {
         UNREACHABLE();
         return false;
     }

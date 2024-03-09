@@ -15,7 +15,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         glob.set_default_line_dirs(false);
     }
 
-    if (!stx.have_conf("code:line_info")) {
+    if (!stx.have_conf(StxConfId::LINE_INFO)) {
         glob.set_default_line_dirs(false);
     }
 
@@ -33,7 +33,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
 
     if (glob.is_default_code_model) {
         // Set code model based on syntax file.
-        const char* code_model = stx.list_conf_head("code_model");
+        const char* code_model = stx.list_conf_head(StxConfId::CODE_MODEL);
         if (strcmp(code_model, "goto_label") == 0) {
             glob.set_default_code_model(CodeModel::GOTO_LABEL);
         } else if (strcmp(code_model, "loop_switch") == 0) {
@@ -49,7 +49,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         case CodeModel::LOOP_SWITCH: model_name = "loop_switch"; break;
         case CodeModel::REC_FUNC: model_name = "recursive_functions"; break;
         }
-        if (!stx.list_conf_find("code_model", model_name)) {
+        if (!stx.list_conf_find(StxConfId::CODE_MODEL, model_name)) {
             RET_FAIL(error("code model is not suppoted for this backend"));
         }
     }
@@ -61,7 +61,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     }
 
     if (glob.target == Target::SKELETON) {
-        if (!stx.list_conf_find("target", "skeleton")) {
+        if (!stx.list_conf_find(StxConfId::TARGET, "skeleton")) {
             RET_FAIL(error("skeleton is not supported for this backend"));
         } else if (glob.code_model == CodeModel::REC_FUNC) {
             RET_FAIL(error("skeleton is not supported for --recursive-functions model"));
@@ -290,13 +290,14 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
     }
 
     // errors
-    if (real.api == Api::DEFAULT && !stx.list_conf_find("api", "default")) {
+    if (real.api == Api::DEFAULT && !stx.list_conf_find(StxConfId::API, "default")) {
         RET_FAIL(error("default API is not supported for this backend"));
     }
-    if (real.cgoto && strcmp(stx.eval_word_conf("computed_goto"), "unsupported") == 0) {
+    if (real.cgoto && strcmp(stx.eval_word_conf(StxConfId::COMPUTED_GOTO), "unsupported") == 0) {
         RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
     }
-    if (real.case_ranges && strcmp(stx.eval_word_conf("case_ranges"), "unsupported") == 0) {
+    if (real.case_ranges
+            && strcmp(stx.eval_word_conf(StxConfId::CASE_RANGES), "unsupported") == 0) {
         RET_FAIL(error("--case-ranges option is not supported for this backend"));
     }
     // TODO: check bitmaps and other optional features

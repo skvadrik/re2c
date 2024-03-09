@@ -19,210 +19,238 @@ Stx::Stx(OutAllocator& alc)
         , have_oneline_switch(false)
         , stack_code()
         , stack_code_list() {
-    allowed_list_confs["api"] = {"default", "generic"};
-    allowed_list_confs["api_style"] = {"functions", "freeform"};
-    allowed_list_confs["code_model"] = {"goto_label", "loop_switch", "recursive_functions"};
-    allowed_list_confs["target"] = {"code", "dot", "skeleton"};
+    allowed_list_confs[StxConfId::API] = {"default", "generic"};
+    allowed_list_confs[StxConfId::API_STYLE] = {"functions", "freeform"};
+    allowed_list_confs[StxConfId::CODE_MODEL] = {"goto_label", "loop_switch", "recursive_functions"};
+    allowed_list_confs[StxConfId::TARGET] = {"code", "dot", "skeleton"};
 
-    allowed_word_confs["computed_goto"] = {"enabled", "optional", "unsupported"};
-    allowed_word_confs["case_ranges"] = {"enabled", "optional", "unsupported"};
-    allowed_word_confs["semicolons"] = {"yes", "no"};
-    allowed_word_confs["implicit_bool_conversion"] = {"yes", "no"};
-    allowed_word_confs["backtick_quoted_strings"] = {"yes", "no"};
-    allowed_word_confs["standalone_single_quotes"] = {"yes", "no"};
+    allowed_word_confs[StxConfId::COMPUTED_GOTO] = {"enabled", "optional", "unsupported"};
+    allowed_word_confs[StxConfId::CASE_RANGES] = {"enabled", "optional", "unsupported"};
+    allowed_word_confs[StxConfId::SEMICOLONS] = {"yes", "no"};
+    allowed_word_confs[StxConfId::IMPLICIT_BOOL_CONVERSION] = {"yes", "no"};
+    allowed_word_confs[StxConfId::BACKTICK_QUOTED_STRINGS] = {"yes", "no"};
+    allowed_word_confs[StxConfId::STANDALONE_SINGLE_QUOTES] = {"yes", "no"};
 
-    allowed_code_confs["code:var_local"] = {
-        {"type", "name", "init"}, {}, {StxLOpt::HAVE_INIT}
+    allowed_code_confs[StxConfId::VAR_LOCAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}, {}, {StxLOpt::HAVE_INIT}
     };
-    allowed_code_confs["code:var_global"] = {
-        {"type", "name", "init"}, {}, {StxLOpt::HAVE_INIT}
+    allowed_code_confs[StxConfId::VAR_GLOBAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}, {}, {StxLOpt::HAVE_INIT}
     };
-    allowed_code_confs["code:const_local"] = {
-        {"type", "name", "init"}, {}, {}
+    allowed_code_confs[StxConfId::CONST_LOCAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}, {}, {}
     };
-    allowed_code_confs["code:const_global"] = {
-        {"type", "name", "init"}, {}, {}
+    allowed_code_confs[StxConfId::CONST_GLOBAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}, {}, {}
     };
-    allowed_code_confs["code:array_local"] = {
-        {"type", "name", "size"}, {"row", "elem"}, {}
+    allowed_code_confs[StxConfId::ARRAY_LOCAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}, {StxVarId::ROW, StxVarId::ELEM}, {}
     };
-    allowed_code_confs["code:array_global"] = {
-        {"type", "name", "size"}, {"row", "elem"}, {}
+    allowed_code_confs[StxConfId::ARRAY_GLOBAL] = {
+        {StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}, {StxVarId::ROW, StxVarId::ELEM}, {}
     };
-    allowed_code_confs["code:array_elem"] = {
-        {"array", "index"}, {}, {}
+    allowed_code_confs[StxConfId::ARRAY_ELEM] = {
+        {StxVarId::ARRAY, StxVarId::INDEX}, {}, {}
     };
-    allowed_code_confs["code:type_int"] = {};
-    allowed_code_confs["code:type_uint"] = {};
-    allowed_code_confs["code:type_cond_enum"] = {};
-    allowed_code_confs["code:type_yybm"] = {};
-    allowed_code_confs["code:type_yytarget"] = {};
-    allowed_code_confs["code:assign"] = {
-        {"rhs"}, {"lhs"}, {}
+    allowed_code_confs[StxConfId::TYPE_INT] = {};
+    allowed_code_confs[StxConfId::TYPE_UINT] = {};
+    allowed_code_confs[StxConfId::TYPE_COND_ENUM] = {};
+    allowed_code_confs[StxConfId::TYPE_YYBM] = {};
+    allowed_code_confs[StxConfId::TYPE_YYTARGET] = {};
+    allowed_code_confs[StxConfId::ASSIGN] = {
+        {StxVarId::RHS}, {StxVarId::LHS}, {}
     };
-    allowed_code_confs["code:assign_op"] = {
-        {"lhs", "rhs", "op"}, {}, {}
+    allowed_code_confs[StxConfId::ASSIGN_OP] = {
+        {StxVarId::LHS, StxVarId::RHS, StxVarId::OP}, {}, {}
     };
-    allowed_code_confs["code:if_then_else"] = {
-        {"cond"}, {"branch", "stmt"}, {StxLOpt::HAVE_COND}
+    allowed_code_confs[StxConfId::IF_THEN_ELSE] = {
+        {StxVarId::COND}, {StxVarId::BRANCH, StxVarId::STMT}, {StxLOpt::HAVE_COND}
     };
-    allowed_code_confs["code:if_then_else_oneline"] = {
-        {"cond"}, {"branch", "stmt"}, {StxLOpt::HAVE_COND}
+    allowed_code_confs[StxConfId::IF_THEN_ELSE_ONELINE] = {
+        {StxVarId::COND}, {StxVarId::BRANCH, StxVarId::STMT}, {StxLOpt::HAVE_COND}
     };
-    allowed_code_confs["code:switch"] = {
-        {"expr"}, {"case"}, {}
+    allowed_code_confs[StxConfId::SWITCH] = {
+        {StxVarId::EXPR}, {StxVarId::CASE}, {}
     };
-    allowed_code_confs["code:switch_cases"] = {
-        {}, {"case", "stmt"}, {}
+    allowed_code_confs[StxConfId::SWITCH_CASES] = {
+        {}, {StxVarId::CASE, StxVarId::STMT}, {}
     };
-    allowed_code_confs["code:switch_cases_oneline"] = {
-        {}, {"case", "stmt"}, {}
+    allowed_code_confs[StxConfId::SWITCH_CASES_ONELINE] = {
+        {}, {StxVarId::CASE, StxVarId::STMT}, {}
     };
-    allowed_code_confs["code:switch_case_range"] = {
-        {}, {"val"}, {StxLOpt::MULTIVAL, StxLOpt::CHAR_LITERALS}
+    allowed_code_confs[StxConfId::SWITCH_CASE_RANGE] = {
+        {}, {StxVarId::VAL}, {StxLOpt::MULTIVAL, StxLOpt::CHAR_LITERALS}
     };
-    allowed_code_confs["code:switch_case_default"] = {};
-    allowed_code_confs["code:loop"] = {
-        {"label"}, {"stmt"}, {}
+    allowed_code_confs[StxConfId::SWITCH_CASE_DEFAULT] = {};
+    allowed_code_confs[StxConfId::LOOP] = {
+        {StxVarId::LABEL}, {StxVarId::STMT}, {}
     };
-    allowed_code_confs["code:enum"] = {
-        {"name", "type", "init"}, {"elem"}, {StxLOpt::HAVE_INIT}
+    allowed_code_confs[StxConfId::ENUM] = {
+        {StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}, {StxVarId::ELEM}, {StxLOpt::HAVE_INIT}
     };
-    allowed_code_confs["code:enum_elem"] = {
-        {"name", "type"}, {}, {}
+    allowed_code_confs[StxConfId::ENUM_ELEM] = {
+        {StxVarId::NAME, StxVarId::TYPE}, {}, {}
     };
-    allowed_code_confs["code:fndecl"] = {
-        {"name", "type", "argname", "argtype", "argmods"},
-        {"arg"},
+    allowed_code_confs[StxConfId::FNDECL] = {
+        {StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, StxVarId::ARGMODS},
+        {StxVarId::ARG},
         {StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}
     };
-    allowed_code_confs["code:fndef"] = {
-        {"name", "type", "argname", "argtype", "argmods"},
-        {"arg", "stmt"},
+    allowed_code_confs[StxConfId::FNDEF] = {
+        {StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, StxVarId::ARGMODS},
+        {StxVarId::ARG, StxVarId::STMT},
         {StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}
     };
-    allowed_code_confs["code:fncall"] = {
-        {"name", "retval"}, {"arg"}, {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
+    allowed_code_confs[StxConfId::FNCALL] = {
+        {StxVarId::NAME, StxVarId::RETVAL},
+        {StxVarId::ARG},
+        {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
     };
-    allowed_code_confs["code:tailcall"] = { // no `retval` as it won't be used anyway
-        {"name"}, {"arg"}, {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
+    allowed_code_confs[StxConfId::TAILCALL] = { // no `retval` as it won't be used anyway
+        {StxVarId::NAME}, {StxVarId::ARG}, {StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}
     };
-    allowed_code_confs["code:recursive_functions"] = {
-        {"fndecl", "fndef"}, {"fn"}, {}
+    allowed_code_confs[StxConfId::RECURSIVE_FUNCTIONS] = {
+        {StxVarId::FNDECL, StxVarId::FNDEF}, {StxVarId::FN}, {}
     };
-    allowed_code_confs["code:fingerprint"] = {
-        {"version", "date"}, {}, {}
+    allowed_code_confs[StxConfId::FINGERPRINT] = {
+        {StxVarId::VER, StxVarId::DATE}, {}, {}
     };
-    allowed_code_confs["code:line_info"] = {
-        {"line", "file"}, {}, {}
+    allowed_code_confs[StxConfId::LINE_INFO] = {
+        {StxVarId::LINE, StxVarId::FILE}, {}, {}
     };
-    allowed_code_confs["code:label"] = {
-        {"name"}, {}, {}
+    allowed_code_confs[StxConfId::ABORT] = {};
+    allowed_code_confs[StxConfId::ACCEPT] = {
+        {StxVarId::VAR, StxVarId::NUM}, {}, {}
     };
-    allowed_code_confs["code:abort"] = {};
-    allowed_code_confs["code:yyaccept"] = {
-        {"var", "num"}, {}, {}
+    allowed_code_confs[StxConfId::DEBUG] = {
+        {StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR}, {}, {}
     };
-    allowed_code_confs["code:yydebug"] = {
-        {"debug", "state", "char"}, {}, {}
+    allowed_code_confs[StxConfId::PEEK] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::CURSOR, StxVarId::TYPECAST},
+        {},
+        {}
     };
-    allowed_code_confs["code:yypeek"] = {
-        {"char", "ctype", "peek", "cursor", "typecast"}, {}, {}
+    allowed_code_confs[StxConfId::SKIP] = {
+        {StxVarId::SKIP, StxVarId::CURSOR}, {}, {}
     };
-    allowed_code_confs["code:yyskip"] = {
-        {"skip", "cursor"}, {}, {}
+    allowed_code_confs[StxConfId::BACKUP] = {
+        {StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER}, {}, {}
     };
-    allowed_code_confs["code:yybackup"] = {
-        {"backup", "cursor", "marker"}, {}, {}
+    allowed_code_confs[StxConfId::SKIP_PEEK] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}, {}, {}
     };
-    allowed_code_confs["code:yyskip_peek"] = {
-        {"char", "ctype", "cursor", "typecast"}, {}, {}
+    allowed_code_confs[StxConfId::PEEK_SKIP] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}, {}, {}
     };
-    allowed_code_confs["code:yypeek_skip"] = {
-        {"char", "ctype", "cursor", "typecast"}, {}, {}
+    allowed_code_confs[StxConfId::SKIP_BACKUP] = {
+        {StxVarId::CURSOR, StxVarId::MARKER}, {}, {}
     };
-    allowed_code_confs["code:yyskip_backup"] = {
-        {"cursor", "marker"}, {}, {}
+    allowed_code_confs[StxConfId::BACKUP_SKIP] = {
+        {StxVarId::CURSOR, StxVarId::MARKER}, {}, {}
     };
-    allowed_code_confs["code:yybackup_skip"] = {
-        {"cursor", "marker"}, {}, {}
+    allowed_code_confs[StxConfId::BACKUP_PEEK] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::TYPECAST},
+        {},
+        {}
     };
-    allowed_code_confs["code:yybackup_peek"] = {
-        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
+    allowed_code_confs[StxConfId::SKIP_BACKUP_PEEK] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::TYPECAST},
+        {},
+        {}
     };
-    allowed_code_confs["code:yyskip_backup_peek"] = {
-        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
-    };
-    allowed_code_confs["code:yybackup_peek_skip"] = {
-        {"char", "ctype", "cursor", "marker", "typecast"}, {}, {}
+    allowed_code_confs[StxConfId::BACKUP_PEEK_SKIP] = {
+        {StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::TYPECAST},
+        {},
+        {}
     };
 
-#define STX_VAR(name) allowed_vars.insert(name);
-    RE2C_STX_VARS
-#undef STX_VAR
+#define STX_GLOBAL_VAR(id, name) allowed_vars.insert(StxVarId:: id);
+    RE2C_STX_GLOBAL_VARS
+#undef STX_GLOBAL_VAR
+}
+
+const char* Stx::conf_name(StxConfId id) {
+#define STX_CONF(id, name) name
+    static const char* names[] = {
+        RE2C_STX_CONFS
+    };
+#undef STX_CONF
+    return names[static_cast<uint32_t>(id)];
+}
+
+const char* Stx::var_name(StxVarId id) {
+#define STX_LOCAL_VAR(id, name) name,
+#define STX_GLOBAL_VAR(id, name) name,
+    static const char* names[] = {
+        RE2C_STX_LOCAL_VARS
+        RE2C_STX_GLOBAL_VARS
+    };
+#undef STX_LOCAL_VAR
+#undef STX_GLOBAL_VAR
+    return names[static_cast<uint32_t>(id)];
 }
 
 // is this a known configuration-specific conditional?
-Ret Stx::check_cond(const char* conf, StxLOpt opt) const {
-    auto i = allowed_code_confs.find(conf);
+Ret Stx::check_cond(StxConfId id, StxLOpt opt) const {
+    auto i = allowed_code_confs.find(id);
     CHECK(i != allowed_code_confs.end());
     const std::vector<StxLOpt>& conds = i->second.cond_vars;
     if (std::find(conds.begin(), conds.end(), opt) != conds.end()) return Ret::OK;
 
-    RET_FAIL(error("unknown conditional in configuration '%s'", conf));
+    RET_FAIL(error("unknown conditional in configuration '%s'", conf_name(id)));
 }
 
-Ret Stx::check_var(const char* conf, const char* var) const {
+Ret Stx::check_var(StxConfId id, StxVarId var) const {
     // is this a global variable?
     if (allowed_vars.find(var) != allowed_vars.end()) return Ret::OK;
 
     // is this a known configuration-specific variable?
-    auto i = allowed_code_confs.find(conf);
+    auto i = allowed_code_confs.find(id);
     CHECK(i != allowed_code_confs.end());
 
     // this may be a list var; in that case it must be on the list stack
     bool is_list_var = std::find_if(stack_code_list.begin(), stack_code_list.end(),
-            [var](const StxCode* x) { return strcmp(var, x->list.var) == 0; })
+            [var](const StxCode* x) { return var == x->list.var; })
         != stack_code_list.end();
 
-    const std::vector<std::string>& v = is_list_var ? i->second.list_vars : i->second.vars;
+    const std::vector<StxVarId>& v = is_list_var ? i->second.list_vars : i->second.vars;
     if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
 
-    RET_FAIL(error("unknown variable '%s' in configuration '%s'", var, conf));
+    RET_FAIL(error("unknown variable '%s' in configuration '%s'", var_name(var), conf_name(id)));
 }
 
-Ret Stx::check_word(const char* conf, const char* word, bool list) const {
+Ret Stx::check_word(StxConfId id, const char* word, bool list) const {
     auto allowed_confs = list ? allowed_list_confs : allowed_word_confs;
-    auto i = allowed_confs.find(conf);
+    auto i = allowed_confs.find(id);
     CHECK(i != allowed_confs.end());
 
     const std::vector<std::string>& w = i->second;
     if (std::find(w.begin(), w.end(), word) != w.end()) return Ret::OK;
 
-    RET_FAIL(error("unknown value '%s' in configuration '%s'", word, conf));
+    RET_FAIL(error("unknown value '%s' in configuration '%s'", word, conf_name(id)));
 }
 
 // validate that the option name in the given configuration exists
 Ret Stx::validate_conf_word(const StxConf* conf) {
     CHECK(conf->type == StxConfType::WORD);
 
-    if (allowed_word_confs.find(conf->name) == allowed_word_confs.end()) {
-        RET_FAIL(error("unknown configuration '%s'", conf->name));
+    if (allowed_word_confs.find(conf->id) == allowed_word_confs.end()) {
+        RET_FAIL(error("unknown configuration '%s'", conf_name(conf->id)));
     }
 
-    return check_word(conf->name, conf->word, /*list*/ false);
+    return check_word(conf->id, conf->word, /*list*/ false);
 }
 
 // validate that all option names used in the given list do exist
 Ret Stx::validate_conf_list(const StxConf* conf) {
     CHECK(conf->type == StxConfType::LIST);
 
-    if (allowed_list_confs.find(conf->name) == allowed_list_confs.end()) {
-        RET_FAIL(error("unknown configuration '%s'", conf->name));
+    if (allowed_list_confs.find(conf->id) == allowed_list_confs.end()) {
+        RET_FAIL(error("unknown configuration '%s'", conf_name(conf->id)));
     }
 
-    for (const StxName* x = conf->list->head; x != nullptr; x = x->next) {
-        CHECK_RET(check_word(conf->name, x->name, /*list*/ true));
+    for (const StxWord* x = conf->list->head; x != nullptr; x = x->next) {
+        CHECK_RET(check_word(conf->id, x->word, /*list*/ true));
     }
 
     return Ret::OK;
@@ -231,10 +259,7 @@ Ret Stx::validate_conf_list(const StxConf* conf) {
 // validate that all option and variable names used in the given code do exist
 Ret Stx::validate_conf_code(const StxConf* conf) {
     CHECK(conf->type == StxConfType::CODE);
-
-    if (allowed_code_confs.find(conf->name) == allowed_code_confs.end()) {
-        RET_FAIL(error("unknown configuration '%s'", conf->name));
-    }
+    DCHECK(allowed_code_confs.find(conf->id) != allowed_code_confs.end());
 
     stack_code_list.clear();
     stack_code_t& stack = stack_code;
@@ -253,7 +278,7 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
             // no option names to check here
             break;
         case StxCodeType::VAR:
-            CHECK_RET(check_var(conf->name, x->var));
+            CHECK_RET(check_var(conf->id, x->var));
             break;
         case StxCodeType::COND:
             if (n == 0) { // recurse into branches
@@ -268,13 +293,13 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
                 }
             } else if (x->cond.opt->is_local) {
                 // no need to check global conditionals, as they are filtered in the lexer
-                CHECK_RET(check_cond(conf->name, x->cond.opt->lopt));
+                CHECK_RET(check_cond(conf->id, x->cond.opt->lopt));
             }
             break;
         case StxCodeType::LIST:
             if (n == 0) { // recurse into list body
                 stack_code_list.push_back(x);
-                CHECK_RET(check_var(conf->name, x->list.var));
+                CHECK_RET(check_var(conf->id, x->list.var));
                 stack.push_back({x, 1});
                 for (const StxCode* y = x->list.code->head; y != nullptr; y = y->next) {
                     stack.push_back({y, 0});
@@ -289,40 +314,40 @@ Ret Stx::validate_conf_code(const StxConf* conf) {
     return Ret::OK;
 }
 
-bool Stx::have_conf(const char* name) const {
-    return confs.find(name) != confs.end();
+bool Stx::have_conf(StxConfId id) const {
+    return confs.find(id) != confs.end();
 }
 
 void Stx::cache_conf_tests() {
-    have_oneline_if = have_conf("code:if_then_else_oneline");
-    have_oneline_switch = have_conf("code:switch_cases_oneline");
+    have_oneline_if = have_conf(StxConfId::IF_THEN_ELSE_ONELINE);
+    have_oneline_switch = have_conf(StxConfId::SWITCH_CASES_ONELINE);
 }
 
-const char* Stx::list_conf_head(const char* name) const {
-    auto i = confs.find(name);
+const char* Stx::list_conf_head(StxConfId id) const {
+    auto i = confs.find(id);
     if (i != confs.end()) {
         const StxConf* c = i->second;
         CHECK(c->type == StxConfType::LIST);
-        const StxName* x = c->list->head;
-        if (x) return x->name;
+        const StxWord* x = c->list->head;
+        if (x) return x->word;
     }
     return DEFAULT_EMPTY;
 }
 
-bool Stx::list_conf_find(const char* name, const char* elem) const {
-    auto i = confs.find(name);
+bool Stx::list_conf_find(StxConfId id, const char* elem) const {
+    auto i = confs.find(id);
     if (i != confs.end()) {
         const StxConf* c = i->second;
         CHECK(c->type == StxConfType::LIST);
-        for (const StxName* x = c->list->head; x; x = x->next) {
-            if (strcmp(x->name, elem) == 0) return true;
+        for (const StxWord* x = c->list->head; x; x = x->next) {
+            if (strcmp(x->word, elem) == 0) return true;
         }
     }
     return false;
 }
 
-const char* Stx::eval_word_conf(const char* name) const {
-    auto i = confs.find(name);
+const char* Stx::eval_word_conf(StxConfId id) const {
+    auto i = confs.find(id);
     if (i != confs.end()) {
         const StxConf* c = i->second;
         CHECK(c->type == StxConfType::WORD);
@@ -331,12 +356,12 @@ const char* Stx::eval_word_conf(const char* name) const {
     return DEFAULT_EMPTY;
 }
 
-bool Stx::eval_bool_conf(const char* name) const {
-    return strcmp(eval_word_conf(name), "yes") == 0;
+bool Stx::eval_bool_conf(StxConfId id) const {
+    return strcmp(eval_word_conf(id), "yes") == 0;
 }
 
-Ret Stx::eval_str_conf(const char* name, std::string& str) const{
-    auto i = confs.find(name);
+Ret Stx::eval_str_conf(StxConfId id, std::string& str) const{
+    auto i = confs.find(id);
     if (i == confs.end()) {
         str = DEFAULT_EMPTY;
         return Ret::OK;
@@ -350,7 +375,7 @@ Ret Stx::eval_str_conf(const char* name, std::string& str) const{
         str = x->str;
         return Ret::OK;
     } else {
-        RET_FAIL(error("configuration '%s' must have string value", c->name));
+        RET_FAIL(error("configuration '%s' must have string value", conf_name(c->id)));
     }
 }
 
@@ -407,8 +432,8 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 }
 
 void Stx::eval_code_conf(
-        std::ostream& os, const opt_t* opts, const char* name, RenderCallback& callback) const {
-    auto i = confs.find(name);
+        std::ostream& os, const opt_t* opts, StxConfId id, RenderCallback& callback) const {
+    auto i = confs.find(id);
     if (i == confs.end()) return; // if configuration is not defined, do nothing
 
     const StxConf* c = i->second;
@@ -456,9 +481,9 @@ void Stx::eval_code_conf(
     }
 }
 
-void Stx::eval_code_conf(std::ostream& os, const opt_t* opts, const char* name) const {
+void Stx::eval_code_conf(std::ostream& os, const opt_t* opts, StxConfId id) const {
     RenderCallback dummy;
-    eval_code_conf(os, opts, name, dummy);
+    eval_code_conf(os, opts, id, dummy);
 }
 
 } // namespace re2c

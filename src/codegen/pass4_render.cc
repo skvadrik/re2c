@@ -42,18 +42,24 @@ static inline void find_list_bounds(
     *last = e;
 }
 
-static void render_global_var(RenderContext& rctx, const char* var) {
-    if (strcmp(var, "nl") == 0) {
+static void render_global_var(RenderContext& rctx, StxVarId var) {
+    switch (var) {
+    case StxVarId::NEWLINE:
         render_nl(rctx);
-    } else if (strcmp(var, "topindent") == 0) {
-        rctx.os << indent(rctx.ind, rctx.opts->indent_str);
-    } else if (strcmp(var, "indent") == 0) {
+        break;
+    case StxVarId::INDENT:
         ++rctx.ind;
-    } else if (strcmp(var, "dedent") == 0) {
+        break;
+    case StxVarId::DEDENT:
         DCHECK(rctx.ind > 0);
         --rctx.ind;
-    } else {
+        break;
+    case StxVarId::TOPINDENT:
+        rctx.os << indent(rctx.ind, rctx.opts->indent_str);
+        break;
+    default:
         UNREACHABLE();
+        break;
     }
 }
 
@@ -63,7 +69,7 @@ class RenderSimple : public RenderCallback {
   public:
     RenderSimple(RenderContext& rctx): rctx(rctx) {}
 
-    virtual void render_var(const char* var) {
+    virtual void render_var(StxVarId var) {
         render_global_var(rctx, var);
     }
 };
@@ -78,7 +84,7 @@ static uint32_t count_lines_text(const char* text) {
 }
 
 static inline void render_stmt_end(RenderContext& rctx, bool semi) {
-    if (semi && rctx.opts->eval_bool_conf("semicolons")) rctx.os << ";";
+    if (semi && rctx.opts->eval_bool_conf(StxConfId::SEMICOLONS)) rctx.os << ";";
     render_nl(rctx);
 }
 
@@ -132,24 +138,30 @@ class RenderVar : public RenderCallback {
   public:
     RenderVar(RenderContext& rctx, const CodeVar* code): rctx(rctx), code(code) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
             rctx.os << code->name;
-        } else if (strcmp(var, "init") == 0) {
+            break;
+        case StxVarId::INIT:
             rctx.os << code->init;
-        } else if (strcmp(var, "type") == 0) {
+            break;
+        case StxVarId::TYPE:
             switch (code->type) {
             case VarType::INT:
-                rctx.opts->eval_code_conf(rctx.os, "code:type_int");
+                rctx.opts->eval_code_conf(rctx.os, StxConfId::TYPE_INT);
                 break;
             case VarType::UINT:
-                rctx.opts->eval_code_conf(rctx.os, "code:type_uint");
+                rctx.opts->eval_code_conf(rctx.os, StxConfId::TYPE_UINT);
                 break;
             case VarType::YYCTYPE:
                 rctx.os << rctx.opts->api_char_type;
+                break;
             }
-        } else {
+            break;
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
@@ -189,20 +201,19 @@ class RenderIfThenElse : public RenderCallback {
         for (const CodeBranch* b = code->head; b; b = b->next) ++nbranches;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "cond") == 0) {
-            rctx.os << curr_branch->cond;
-        } else if (strcmp(var, "stmt") == 0) {
-            render_maybe_oneline(rctx, curr_stmt, oneline);
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::COND: rctx.os << curr_branch->cond; break;
+            case StxVarId::STMT: render_maybe_oneline(rctx, curr_stmt, oneline); break;
+            default: render_global_var(rctx, var); break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "branch") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+        case StxVarId::BRANCH:
             return nbranches;
-        } else if (strcmp(var, "stmt") == 0) {
+        case StxVarId::STMT: {
             size_t n = 0;
             if (curr_branch->code != nullptr) {
                 for (const Code* s = curr_branch->code->head; s; s = s->next) ++n;
@@ -210,32 +221,40 @@ class RenderIfThenElse : public RenderCallback {
             const_cast<size_t&>(nstmts) = n;
             return nstmts;
         }
-        UNREACHABLE();
-        return 0;
+        default:
+            UNREACHABLE();
+            return 0;
+        }
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "branch") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::BRANCH:
             DCHECK(rbound < nbranches);
             find_list_bounds(code->head, lbound, rbound, &curr_branch, &last_branch);
-        } else if (strcmp(var, "stmt") == 0) {
+            break;
+        case StxVarId::STMT:
             DCHECK(rbound < nstmts);
             find_list_bounds(curr_branch->code->head, lbound, rbound, &curr_stmt, &last_stmt);
-        } else {
+            break;
+        default:
             UNREACHABLE();
+            break;
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "branch") == 0) {
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::BRANCH:
             curr_branch = curr_branch->next;
             return curr_branch != last_branch;
-        } else if (strcmp(var, "stmt") == 0) {
+        case StxVarId::STMT:
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     bool eval_cond(StxLOpt opt) override {
@@ -255,7 +274,7 @@ class RenderSwitchCaseDefault : public RenderCallback {
   public:
     RenderSwitchCaseDefault(RenderContext& rctx): rctx(rctx) {}
 
-    void render_var(const char* var) override {
+    void render_var(StxVarId var) override {
         render_global_var(rctx, var);
     }
 };
@@ -282,8 +301,8 @@ class RenderSwitchCaseRange : public RenderCallback {
         }
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "val") == 0) {
+    void render_var(StxVarId var) override {
+        if (var == StxVarId::VAL) {
             switch (code->kind) {
             case CodeCase::Kind::DEFAULT:
                 UNREACHABLE();
@@ -316,16 +335,16 @@ class RenderSwitchCaseRange : public RenderCallback {
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "val") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::VAL) {
             return nsyms;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "val") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::VAL) {
             curr_sym = lbound;
             last_sym = rbound;
         } else {
@@ -333,8 +352,8 @@ class RenderSwitchCaseRange : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "val") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::VAL) {
             return ++curr_sym <= last_sym;
         }
         UNREACHABLE();
@@ -382,59 +401,71 @@ class RenderSwitchCaseBlock : public RenderCallback {
         for (const Code* s = code->body->head; s; s = s->next) ++nstmt;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "case") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::CASE:
             switch (code->kind) {
             case CodeCase::Kind::DEFAULT: {
                 RenderSwitchCaseDefault callback(rctx);
-                rctx.opts->eval_code_conf(rctx.os, "code:switch_case_default", callback);
+                rctx.opts->eval_code_conf(rctx.os, StxConfId::SWITCH_CASE_DEFAULT, callback);
                 break;
             }
             case CodeCase::Kind::NUMBER:
             case CodeCase::Kind::STRING:
             case CodeCase::Kind::RANGES: {
                 RenderSwitchCaseRange callback(rctx, code, curr_range);
-                rctx.opts->eval_code_conf(rctx.os, "code:switch_case_range", callback);
+                rctx.opts->eval_code_conf(rctx.os, StxConfId::SWITCH_CASE_RANGE, callback);
                 break;
             }}
-        } else if (strcmp(var, "stmt") == 0) {
+            break;
+        case StxVarId::STMT:
             render_maybe_oneline(rctx, curr_stmt, oneline);
-        } else {
+            break;
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "case") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+        case StxVarId::CASE:
             return nranges;
-        } else if (strcmp(var, "stmt") == 0) {
+        case StxVarId::STMT:
             return nstmt;
+        default:
+            UNREACHABLE();
+            return 0;
         }
-        UNREACHABLE();
-        return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "case") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::CASE:
             curr_range = lbound;
             last_range = rbound;
-        } else if (strcmp(var, "stmt") == 0) {
+            break;
+        case StxVarId::STMT:
             DCHECK(rbound < nstmt);
             find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
-        } else {
+            break;
+        default:
             UNREACHABLE();
+            break;
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "case") == 0) {
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::CASE:
             return code->kind == CodeCase::Kind::RANGES && ++curr_range <= last_range;
-        } else if (strcmp(var, "stmt") == 0) {
+        case StxVarId::STMT:
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderSwitchCaseBlock);
@@ -457,30 +488,35 @@ class RenderSwitch : public RenderCallback {
         for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "expr") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::EXPR:
             rctx.os << code->expr;
-        } else if (strcmp(var, "case") == 0) {
+            break;
+        case StxVarId::CASE: {
             bool oneline = rctx.opts->specialize_oneline_switch()
                     && oneline_stmt_list(curr_case->body);
-            const char* conf = oneline ? "code:switch_cases_oneline" : "code:switch_cases";
+            StxConfId conf = oneline ? StxConfId::SWITCH_CASES_ONELINE : StxConfId::SWITCH_CASES;
             RenderSwitchCaseBlock callback(rctx, curr_case, oneline);
             rctx.opts->eval_code_conf(rctx.os, conf, callback);
-        } else {
+            break;
+        }
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "case") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::CASE) {
             return ncases;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "case") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::CASE) {
             DCHECK(rbound < ncases);
             find_list_bounds(code->cases->head, lbound, rbound, &curr_case, &last_case);
         } else {
@@ -488,8 +524,8 @@ class RenderSwitch : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "case") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::CASE) {
             curr_case = curr_case->next;
             return curr_case != last_case;
         }
@@ -513,26 +549,24 @@ class RenderLoop : public RenderCallback {
         for (const Code* s = code->head; s; s = s->next) ++nstmts;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "label") == 0) {
-            rctx.os << rctx.opts->label_loop;
-        } else if (strcmp(var, "stmt") == 0) {
-            render(rctx, curr_stmt);
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LABEL: rctx.os << rctx.opts->label_loop; break;
+            case StxVarId::STMT: render(rctx, curr_stmt); break;
+            default: render_global_var(rctx, var); break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "stmt") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::STMT) {
             return nstmts;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "stmt") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::STMT) {
             DCHECK(rbound < nstmts);
             find_list_bounds(code->head, lbound, rbound, &curr_stmt, &last_stmt);
         } else {
@@ -540,8 +574,8 @@ class RenderLoop : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "stmt") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::STMT) {
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
         }
@@ -576,57 +610,69 @@ class RenderFnDef : public RenderCallback {
         for (const Code* s = code->body->head; s; s = s->next) ++nstmts;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
             rctx.os << code->name;
-        } else if (strcmp(var, "type") == 0) {
+            break;
+        case StxVarId::TYPE:
             rctx.os << code->type;
-        } else if (strcmp(var, "argname") == 0) {
+            break;
+        case StxVarId::ARGNAME:
             rctx.os << curr_arg->name;
-        } else if (strcmp(var, "argtype") == 0) {
+            break;
+        case StxVarId::ARGTYPE:
             rctx.os << curr_arg->type;
-        } else if (strcmp(var, "argmods") == 0) {
-            DCHECK(curr_arg->mods != nullptr) ;
+            break;
+        case StxVarId::ARGMODS:
+            DCHECK(curr_arg->mods != nullptr);
             rctx.os << curr_arg->mods;
-        } else if (strcmp(var, "stmt") == 0) {
-            render(rctx, curr_stmt);
-        } else {
+            break;
+        case StxVarId::STMT:
+            render(rctx, curr_stmt);;
+            break;
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "arg") == 0) {
-            return nargs;
-        } else if (strcmp(var, "stmt") == 0) {
-            return nstmts;
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+            case StxVarId::ARG: return nargs;
+            case StxVarId::STMT: return nstmts;
+            default: UNREACHABLE(); return 0;
         }
-        UNREACHABLE();
-        return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "arg") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::ARG:
             DCHECK(rbound < nargs);
             find_list_bounds(code->params->head, lbound, rbound, &curr_arg, &last_arg);
-        } else if (strcmp(var, "stmt") == 0) {
+            break;
+        case StxVarId::STMT:
             DCHECK(rbound < nstmts);
             find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
-        } else {
+            break;
+        default:
             UNREACHABLE();
+            break;
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "arg") == 0) {
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::ARG:
             curr_arg = curr_arg->next;
             return curr_arg != last_arg;
-        } else if (strcmp(var, "stmt") == 0) {
+        case StxVarId::STMT:
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     bool eval_cond(StxLOpt opt) override {
@@ -661,28 +707,25 @@ class RenderFnCall : public RenderCallback {
         for (const CodeArg* a = code->args->head; a; a = a->next) ++nargs;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
-            rctx.os << code->name;
-        } else if (strcmp(var, "retval") == 0) {
-            rctx.os << code->retval;
-        } else if (strcmp(var, "arg") == 0) {
-            rctx.os << curr_arg->arg;
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::NAME: rctx.os << code->name; break;
+            case StxVarId::RETVAL: rctx.os << code->retval; break;
+            case StxVarId::ARG: rctx.os << curr_arg->arg; break;
+            default: render_global_var(rctx, var); break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "arg") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::ARG) {
             return nargs;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "arg") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::ARG) {
             DCHECK(rbound < nargs);
             find_list_bounds(code->args->head, lbound, rbound, &curr_arg, &last_arg);
         } else {
@@ -690,8 +733,8 @@ class RenderFnCall : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "arg") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::ARG) {
             curr_arg = curr_arg->next;
             return curr_arg != last_arg;
         }
@@ -731,28 +774,34 @@ class RenderRecFuncs : public RenderCallback {
         for (const Code* x = fns->head; x; x = x->next) ++nfuncs;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "fndecl") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::FNDECL: {
             RenderFnDef callback(rctx, &curr_fn->fndef);
-            rctx.opts->eval_code_conf(rctx.os, "code:fndecl", callback);
-        } else if (strcmp(var, "fndef") == 0) {
+            rctx.opts->eval_code_conf(rctx.os, StxConfId::FNDECL, callback);
+            break;
+        }
+        case StxVarId::FNDEF: {
             RenderFnDef callback(rctx, &curr_fn->fndef);
-            rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
-        } else {
+            rctx.opts->eval_code_conf(rctx.os, StxConfId::FNDEF, callback);
+            break;
+        }
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "fn") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::FN) {
             return nfuncs;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "fn") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::FN) {
             DCHECK(rbound < nfuncs);
             find_list_bounds(fns->head, lbound, rbound, &curr_fn, &last_fn);
         } else {
@@ -760,8 +809,8 @@ class RenderRecFuncs : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "fn") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::FN) {
             curr_fn = curr_fn->next;
             return curr_fn != last_fn;
         }
@@ -795,30 +844,35 @@ class RenderAssign : public RenderCallback {
         for (const CodeExpr* x = code->lhs->head; x; x = x->next) ++nlhs;
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "lhs") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::LHS:
             DCHECK(curr_lhs);
             rctx.os << curr_lhs->expr;
-        } else if (strcmp(var, "rhs") == 0) {
+            break;
+        case StxVarId::RHS:
             rctx.os << code->rhs;
-        } else if (strcmp(var, "op") == 0) {
+            break;
+        case StxVarId::OP:
             DCHECK(code->op != nullptr);
             rctx.os << code->op;
-        } else {
+            break;
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "lhs") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::LHS) {
             return nlhs;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "lhs") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::LHS) {
             DCHECK(rbound < nlhs);
             find_list_bounds(code->lhs->head, lbound, rbound, &curr_lhs, &last_lhs);
         } else {
@@ -826,8 +880,8 @@ class RenderAssign : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "lhs") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::LHS) {
             curr_lhs = curr_lhs->next;
             return curr_lhs != last_lhs;
         }
@@ -845,13 +899,11 @@ class RenderAccept : public RenderCallback {
   public:
     RenderAccept(RenderContext& rctx, uint32_t accept): rctx(rctx), accept(accept) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "var") == 0) {
-            rctx.os << rctx.opts->var_accept;
-        } else if (strcmp(var, "num") == 0) {
-            rctx.os << accept;
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::VAR: rctx.os << rctx.opts->var_accept; break;
+            case StxVarId::NUM: rctx.os << accept; break;
+            default: render_global_var(rctx, var); break;
         }
     }
 };
@@ -863,15 +915,12 @@ class RenderDebug : public RenderCallback {
   public:
     RenderDebug(RenderContext& rctx, const CodeDebug* code): rctx(rctx), code(code) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "debug") == 0) {
-            rctx.os << rctx.opts->api_debug;
-        } else if (strcmp(var, "state") == 0) {
-            rctx.os << code->state;
-        } else if (strcmp(var, "char") == 0) {
-            rctx.os << rctx.opts->var_char;
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::DEBUG: rctx.os << rctx.opts->api_debug; break;
+            case StxVarId::STATE: rctx.os << code->state; break;
+            case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
+            default: render_global_var(rctx, var); break;
         }
     }
 
@@ -887,25 +936,17 @@ class RenderSkipPeekBackup : public RenderCallback {
   public:
     RenderSkipPeekBackup(RenderContext& rctx): rctx(rctx) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "char") == 0) {
-            rctx.os << rctx.opts->var_char;
-        } else if (strcmp(var, "ctype") == 0) {
-            rctx.os << rctx.opts->api_char_type;
-        } else if (strcmp(var, "cursor") == 0) {
-            rctx.os << rctx.opts->api_cursor;
-        } else if (strcmp(var, "marker") == 0) {
-            rctx.os << rctx.opts->api_marker;
-        } else if (strcmp(var, "typecast") == 0) {
-            yych_conv(rctx.os, rctx.opts);
-        } else if (strcmp(var, "peek") == 0) {
-            rctx.os << rctx.opts->api_peek;
-        } else if (strcmp(var, "skip") == 0) {
-            rctx.os << rctx.opts->api_skip;
-        } else if (strcmp(var, "backup") == 0) {
-            rctx.os << rctx.opts->api_backup;
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
+            case StxVarId::CTYPE: rctx.os << rctx.opts->api_char_type; break;
+            case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
+            case StxVarId::MARKER: rctx.os << rctx.opts->api_marker; break;
+            case StxVarId::TYPECAST: yych_conv(rctx.os, rctx.opts); break;
+            case StxVarId::PEEK: rctx.os << rctx.opts->api_peek; break;
+            case StxVarId::SKIP: rctx.os << rctx.opts->api_skip; break;
+            case StxVarId::BACKUP: rctx.os << rctx.opts->api_backup; break;
+            default: render_global_var(rctx, var); break;
         }
     }
 };
@@ -950,58 +991,65 @@ class RenderArray : public RenderCallback {
         }
     }
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
             rctx.os << code->name;
-        } else if (strcmp(var, "type") == 0) {
+            break;
+        case StxVarId::TYPE:
             rctx.os << code->type;
-        } else if (strcmp(var, "size") == 0) {
+            break;
+        case StxVarId::SIZE:
             rctx.os << code->size;
-        } else if (strcmp(var, "row") == 0) {
-            // do nothing
-        } else if (strcmp(var, "elem") == 0) {
+            break;
+        case StxVarId::ROW:
+            break; // do nothing
+        case StxVarId::ELEM: {
             const char* e = code->elems[curr_row * ncols + curr_col];
             if (code->tabulate) {
                 rctx.os << indent(static_cast<uint32_t>(maxlen - strlen(e)), " ");
             }
             rctx.os << e;
-        } else {
+            break;
+        }
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "row") == 0) {
-            return nrows;
-        } else if (strcmp(var, "elem") == 0) {
-            return ncols;
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+            case StxVarId::ROW: return nrows;
+            case StxVarId::ELEM: return ncols;
+            default: UNREACHABLE(); return 0;
         }
-        UNREACHABLE();
-        return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "row") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::ROW:
             DCHECK(rbound < nrows);
             curr_row = lbound;
             last_row = rbound;
-        } else if (strcmp(var, "elem") == 0) {
+            break;
+        case StxVarId::ELEM:
             DCHECK(rbound < ncols);
             curr_col = lbound;
             last_col = rbound;
-        } else {
+            break;
+        default:
             UNREACHABLE();
+            break;
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "row") == 0) {
-            return ++curr_row <= last_row;
-        } else if (strcmp(var, "elem") == 0) {
-            return ++curr_col <= last_col;
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ROW: return ++curr_row <= last_row;
+            case StxVarId::ELEM: return ++curr_col <= last_col;
+            default: UNREACHABLE(); return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderArray);
@@ -1017,30 +1065,36 @@ class RenderEnum : public RenderCallback {
     RenderEnum(RenderContext& rctx, const CodeEnum* code)
             : rctx(rctx), code(code), curr_elem(0), last_elem(0) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "name") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
             rctx.os << code->name;
-        } else if (strcmp(var, "type") == 0) {
-            rctx.opts->eval_code_conf(rctx.os, "code:type_cond_enum");
-        } else if (strcmp(var, "elem") == 0) {
+            break;
+        case StxVarId::TYPE:
+            rctx.opts->eval_code_conf(rctx.os, StxConfId::TYPE_COND_ENUM);
+            break;
+        case StxVarId::ELEM:
             rctx.os << code->elem_ids[curr_elem];
-        } else if (strcmp(var, "init") == 0) {
+            break;
+        case StxVarId::INIT:
             rctx.os << code->elem_nums[curr_elem];
-        } else {
+            break;
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
-    size_t get_list_size(const char* var) const override {
-        if (strcmp(var, "elem") == 0) {
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::ELEM) {
             return code->size;
         }
         UNREACHABLE();
         return 0;
     }
 
-    void start_list(const char* var, size_t lbound, size_t rbound) override {
-        if (strcmp(var, "elem") == 0) {
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::ELEM) {
             curr_elem = lbound;
             last_elem = rbound;
         } else {
@@ -1048,8 +1102,8 @@ class RenderEnum : public RenderCallback {
         }
     }
 
-    bool next_in_list(const char* var) override {
-        if (strcmp(var, "elem") == 0) {
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::ELEM) {
             return ++curr_elem <= last_elem;
         } else {
             UNREACHABLE();
@@ -1074,14 +1128,19 @@ class RenderFingerprint : public RenderCallback {
   public:
     RenderFingerprint(RenderContext& rctx): rctx(rctx) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "version") == 0) {
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::VER:
             rctx.os << PACKAGE_VERSION;
-        } else if (strcmp(var, "date") == 0) {
+            break;
+        case StxVarId::DATE: {
             time_t now = time(nullptr);
             rctx.os.write(ctime(&now), 24);
-        } else {
+            break;
+        }
+        default:
             render_global_var(rctx, var);
+            break;
         }
     }
 
@@ -1097,13 +1156,11 @@ class RenderLineInfo : public RenderCallback {
     RenderLineInfo(RenderContext& rctx, uint32_t line, const std::string& file)
             : rctx(rctx), line(line), file(file) {}
 
-    void render_var(const char* var) override {
-        if (strcmp(var, "line") == 0) {
-            rctx.os << line;
-        } else if (strcmp(var, "file") == 0) {
-            rctx.os << file;
-        } else {
-            render_global_var(rctx, var);
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LINE: rctx.os << line; break;
+            case StxVarId::FILE: rctx.os << file; break;
+            default: render_global_var(rctx, var); break;
         }
     }
 
@@ -1125,13 +1182,13 @@ static void render(RenderContext& rctx, const Code* code) {
             oneline = oneline && oneline_stmt_list(b->code);
         }
         RenderIfThenElse callback(rctx, code->ifte, oneline);
-        const char* conf = oneline ? "code:if_then_else_oneline" : "code:if_then_else";
+        StxConfId conf = oneline ? StxConfId::IF_THEN_ELSE_ONELINE : StxConfId::IF_THEN_ELSE;
         rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;
     }
     case CodeKind::SWITCH: {
         RenderSwitch callback(rctx, &code->swch);
-        rctx.opts->eval_code_conf(rctx.os, "code:switch", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::SWITCH, callback);
         break;
     }
     case CodeKind::BLOCK:
@@ -1139,23 +1196,23 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     case CodeKind::FNDEF: {
         RenderFnDef callback(rctx, &code->fndef);
-        rctx.opts->eval_code_conf(rctx.os, "code:fndef", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::FNDEF, callback);
         break;
     }
     case CodeKind::FNCALL: {
         RenderFnCall callback(rctx, &code->fncall);
-        const char* conf = code->fncall.tailcall ? "code:tailcall" : "code:fncall";
+        StxConfId conf = code->fncall.tailcall ? StxConfId::TAILCALL : StxConfId::FNCALL;
         rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;
     }
     case CodeKind::REC_FUNCS: {
         RenderRecFuncs callback(rctx, code->rfuncs);
-        rctx.opts->eval_code_conf(rctx.os, "code:recursive_functions", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::RECURSIVE_FUNCTIONS, callback);
         break;
     }
     case CodeKind::LOOP: {
         RenderLoop callback(rctx, code->loop);
-        rctx.opts->eval_code_conf(rctx.os, "code:loop", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::LOOP, callback);
         break;
     }
     case CodeKind::TEXT_RAW:
@@ -1181,108 +1238,108 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::ASSIGN: {
         RenderAssign callback(rctx, &code->assign);
         DCHECK(code->assign.lhs->head && !(code->assign.lhs->head->next && code->assign.op));
-        const char* conf = code->assign.op ? "code:assign_op" : "code:assign";
+        StxConfId conf = code->assign.op ? StxConfId::ASSIGN_OP : StxConfId::ASSIGN;
         rctx.opts->eval_code_conf(rctx.os, conf, callback);
         break;
     }
     case CodeKind::ABORT: {
         RenderSimple callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:abort", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::ABORT, callback);
         break;
     }
     case CodeKind::ACCEPT: {
         RenderAccept callback(rctx, code->accept);
-        rctx.opts->eval_code_conf(rctx.os, "code:yyaccept", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::ACCEPT, callback);
         break;
     }
     case CodeKind::DEBUG: {
         RenderDebug callback(rctx, &code->debug);
-        rctx.opts->eval_code_conf(rctx.os, "code:yydebug", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::DEBUG, callback);
         break;
     }
     case CodeKind::SKIP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yyskip", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::SKIP, callback);
         break;
     }
     case CodeKind::PEEK: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yypeek", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::PEEK, callback);
         break;
     }
     case CodeKind::BACKUP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yybackup", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::BACKUP, callback);
         break;
     }
     case CodeKind::PEEK_SKIP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yypeek_skip", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::PEEK_SKIP, callback);
         break;
     }
     case CodeKind::SKIP_PEEK: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_peek", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::SKIP_PEEK, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_backup", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::SKIP_BACKUP, callback);
         break;
     }
     case CodeKind::BACKUP_SKIP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_skip", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::BACKUP_SKIP, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_peek", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::BACKUP_PEEK, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK_SKIP: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yybackup_peek_skip", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::BACKUP_PEEK_SKIP, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP_PEEK: {
         RenderSkipPeekBackup callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:yyskip_backup_peek", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::SKIP_BACKUP_PEEK, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {
         RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
-        rctx.opts->eval_code_conf(rctx.os, "code:line_info", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::LINE_INFO, callback);
         break;
     }
     case CodeKind::LINE_INFO_OUTPUT: {
         RenderLineInfo callback(rctx, rctx.line + 1, rctx.file);
-        rctx.opts->eval_code_conf(rctx.os, "code:line_info", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::LINE_INFO, callback);
         break;
     }
     case CodeKind::FINGERPRINT: {
         RenderFingerprint callback(rctx);
-        rctx.opts->eval_code_conf(rctx.os, "code:fingerprint", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::FINGERPRINT, callback);
         break;
     }
     case CodeKind::VAR: {
         RenderVar callback(rctx, &code->var);
-        rctx.opts->eval_code_conf(rctx.os, "code:var_local", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::VAR_LOCAL, callback);
         break;
     }
     case CodeKind::CONST: {
         RenderVar callback(rctx, &code->var); // same code item as for `CodeKind::VAR`
-        rctx.opts->eval_code_conf(rctx.os, "code:const_global", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::CONST_GLOBAL, callback);
         break;
     }
     case CodeKind::ARRAY: {
         RenderArray callback(rctx, &code->array);
-        rctx.opts->eval_code_conf(rctx.os, "code:array_local", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::ARRAY_LOCAL, callback);
         break;
     }
     case CodeKind::ENUM: {
         RenderEnum callback(rctx, &code->enumr);
-        rctx.opts->eval_code_conf(rctx.os, "code:enum", callback);
+        rctx.opts->eval_code_conf(rctx.os, StxConfId::ENUM, callback);
         break;
     }
     case CodeKind::LABEL:

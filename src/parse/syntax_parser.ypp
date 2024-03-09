@@ -33,6 +33,8 @@ extern "C" {
 %union {
     const char* str;
     int32_t num;
+    re2c::StxConfId conf_id;
+    re2c::StxVarId var_id;
     re2c::StxConf* conf;
     re2c::StxList* list;
     re2c::StxCode* code;
@@ -42,20 +44,23 @@ extern "C" {
     re2c::StxLOpt lopt;
 };
 
-%token STX_NAME
-%token STX_CODE
+%token STX_CONF_ID
+%token STX_VAR_ID
 %token STX_NUMBER
 %token STX_STRING
+%token STX_WORD
 %token STX_GOPT
 %token STX_LOPT
 
-%type <str> STX_NAME STX_STRING STX_CODE
+%type <conf_id> STX_CONF_ID
+%type <var_id> STX_VAR_ID
+%type <str> STX_STRING STX_WORD
 %type <num> STX_NUMBER
 %type <gopt> STX_GOPT
 %type <lopt> STX_LOPT
 %type <opt> cond
 %type <conf> conf
-%type <list> list names
+%type <list> list words
 %type <code> code_cond code_expr code_list
 %type <codes> code_exprs
 
@@ -63,26 +68,26 @@ extern "C" {
 
 confs
 : %empty
-| confs conf { stx.add_conf($2->name, $2); };
+| confs conf { stx.add_conf($2->id, $2); };
 
 conf
-: STX_CODE '=' STX_CODE ';' {
+: STX_CONF_ID '=' STX_CONF_ID ';' {
     const StxConf* conf = stx.get_conf($3);
     if (conf == nullptr || conf->type != StxConfType::CODE) {
-        in.error_at_tok("bad reference to configuration '%s'", $3);
+        in.error_at_tok("bad reference to configuration '%s'", Stx::conf_name($3));
         YYABORT;
     }
     $$ = stx.make_conf_code($1, conf->code);
 }
-| STX_CODE '=' code_exprs ';' {
+| STX_CONF_ID '=' code_exprs ';' {
     $$ = stx.make_conf_code($1, $3);
     if (stx.validate_conf_code($$) == Ret::FAIL) YYABORT;
 }
-| STX_NAME '=' list ';' {
+| STX_CONF_ID '=' list ';' {
     $$ = stx.make_conf_list($1, $3);
     if (stx.validate_conf_list($$) == Ret::FAIL) YYABORT;
 }
-| STX_NAME '=' STX_NAME ';' {
+| STX_CONF_ID '=' STX_WORD ';' {
     $$ = stx.make_conf_word($1, $3);
     if (stx.validate_conf_word($$) == Ret::FAIL) YYABORT;
 };
@@ -95,7 +100,7 @@ code_exprs
 
 code_expr
 : STX_STRING { $$ = stx.make_code_str($1); }
-| STX_NAME   { $$ = stx.make_code_var($1); }
+| STX_VAR_ID { $$ = stx.make_code_var($1); }
 | code_cond
 | code_list;
 
@@ -112,27 +117,27 @@ cond
 | STX_LOPT { $$ = stx.make_opt_local($1); };
 
 code_list
-: '[' STX_NAME ':' code_exprs ']' {
+: '[' STX_VAR_ID ':' code_exprs ']' {
     $$ = stx.make_code_list($2, 0, -1, $4);
 }
-| '[' STX_NAME '{' STX_NUMBER '}' ':' code_exprs ']' {
+| '[' STX_VAR_ID '{' STX_NUMBER '}' ':' code_exprs ']' {
     $$ = stx.make_code_list($2, $4, $4, $7);
 }
-| '[' STX_NAME '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']' {
+| '[' STX_VAR_ID '{' STX_NUMBER ':' STX_NUMBER '}' ':' code_exprs ']' {
     $$ = stx.make_code_list($2, $4, $6, $9);
 };
 
 // generic expressions (lists, conditional expressions, single words)
 
-list: '[' names ']' { $$ = $2; };
+list: '[' words ']' { $$ = $2; };
 
-names
-: STX_NAME {
-    $$ = stx.new_name_list();
-    prepend($$, stx.make_name($1));
+words
+: STX_WORD {
+    $$ = stx.new_word_list();
+    prepend($$, stx.make_word($1));
 }
-| STX_NAME ',' names {
-    prepend($3, stx.make_name($1));
+| STX_WORD ',' words {
+    prepend($3, stx.make_word($1));
     $$ = $3;
 };
 
@@ -161,38 +166,38 @@ inline StxCodes* Stx::new_code_list() {
     return new_list<StxCode, OutAllocator>(alc);
 }
 
-inline StxList* Stx::new_name_list() {
-    return new_list<StxName, OutAllocator>(alc);
+inline StxList* Stx::new_word_list() {
+    return new_list<StxWord, OutAllocator>(alc);
 }
 
-inline StxConf* Stx::make_conf(StxConfType type, const char* name) {
+inline StxConf* Stx::make_conf(StxConfType type, StxConfId id) {
     StxConf* x = alc.alloct<StxConf>(1);
+    x->id = id;
     x->type = type;
-    x->name = name;
     return x;
 }
 
-inline StxConf* Stx::make_conf_word(const char* name, const char* word) {
-    StxConf* x = make_conf(StxConfType::WORD, name);
+inline StxConf* Stx::make_conf_word(StxConfId id, const char* word) {
+    StxConf* x = make_conf(StxConfType::WORD, id);
     x->word = word;
     return x;
 }
 
-inline StxConf* Stx::make_conf_list(const char* name, StxList* list) {
-    StxConf* x = make_conf(StxConfType::LIST, name);
+inline StxConf* Stx::make_conf_list(StxConfId id, StxList* list) {
+    StxConf* x = make_conf(StxConfType::LIST, id);
     x->list = list;
     return x;
 }
 
-inline StxConf* Stx::make_conf_code(const char* name, StxCodes* code) {
-    StxConf* x = make_conf(StxConfType::CODE, name);
+inline StxConf* Stx::make_conf_code(StxConfId id, StxCodes* code) {
+    StxConf* x = make_conf(StxConfType::CODE, id);
     x->code = code;
     return x;
 }
 
-inline StxName* Stx::make_name(const char* name) {
-    StxName* x = alc.alloct<StxName>(1);
-    x->name = name;
+inline StxWord* Stx::make_word(const char* word) {
+    StxWord* x = alc.alloct<StxWord>(1);
+    x->word = word;
     x->next = nullptr;
     return x;
 }
@@ -210,7 +215,7 @@ inline StxCode* Stx::make_code_str(const char* str) {
     return x;
 }
 
-inline StxCode* Stx::make_code_var(const char* var) {
+inline StxCode* Stx::make_code_var(StxVarId var) {
     StxCode* x = make_code(StxCodeType::VAR);
     x->var = var;
     return x;
@@ -238,8 +243,7 @@ inline StxCode* Stx::make_code_cond(StxOpt* opt, StxCodes* then_code, StxCodes* 
     return x;
 }
 
-inline StxCode* Stx::make_code_list(
-        const char* var, int32_t lbound, int32_t rbound, StxCodes* code) {
+inline StxCode* Stx::make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code) {
     StxCode* x = make_code(StxCodeType::LIST);
     x->list.var = var;
     x->list.lbound = lbound;
@@ -248,10 +252,10 @@ inline StxCode* Stx::make_code_list(
     return x;
 }
 
-void Stx::add_conf(const char* name, const StxConf* conf) { confs[name] = conf; }
+void Stx::add_conf(StxConfId id, const StxConf* conf) { confs[id] = conf; }
 
-const StxConf* Stx::get_conf(const char* name) {
-    auto x = confs.find(name);
+const StxConf* Stx::get_conf(StxConfId id) {
+    auto x = confs.find(id);
     return x == confs.end() ? nullptr : x->second;
 }
 
