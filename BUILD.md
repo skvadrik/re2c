@@ -155,6 +155,10 @@ specific to re2c:
     Build re2rust executable (an alias to `re2c --lang rust`). Enabled by
     default.
 
+  * `-DRE2C_BUILD_RE2V=yes`
+    Build re2v executable (an alias to `re2c --lang v`). Enabled by
+    default.
+
   * `-DRE2C_REBUILD_LEXERS=yes`
     Enable regeneration of lexers from *.re* files (as opposed to using
     pre-generated bootstrap files). This requires setting `-DRE2C_FOR_BUILD` to

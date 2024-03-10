@@ -28,6 +28,7 @@ option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
+option(RE2C_BUILD_RE2V "Build re2v executable (an alias for `re2c --lang v`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
@@ -202,6 +203,12 @@ endif()
 if (RE2C_BUILD_RE2RUST)
     add_executable(re2rust ${re2c_sources})
     target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
+endif()
+
+# re2v
+if (RE2C_BUILD_RE2V)
+    add_executable(re2v ${re2c_sources})
+    target_compile_definitions(re2v PUBLIC "RE2C_LANG=Lang::V")
 endif()
 
 re2c_bootstrap_lexer("src/parse/lex.re" "src/parse/lex.cc" "src/parse/lex.h")
