@@ -44,6 +44,168 @@ class Stx;
 #define RE2C_LANG Lang::C
 #endif
 
+#define RE2C_CHECKED_LISTS \
+    CHECKED_LIST(supported_apis, \
+            ({"default", "generic"})) \
+    CHECKED_LIST(supported_code_models, \
+            ({"goto_label", "loop_switch", "recursive_functions"})) \
+    CHECKED_LIST(supported_targets, \
+            ({"code", "dot", "skeleton"})) \
+    CHECKED_LIST(supported_features, \
+            ({"cgoto", "case_ranges"}))
+
+#define RE2C_STX_OPTS \
+    STX_OPT(bool, semicolons, false) \
+    STX_OPT(bool, implicit_bool_conversion, false) \
+    STX_OPT(bool, backtick_quoted_strings, false) \
+    STX_OPT(bool, standalone_single_quotes, false)
+
+#define RE2C_CODE_TEMPLATES \
+    CODE_TEMPLATE(code_var_local, "code:var_local", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
+    ) \
+    CODE_TEMPLATE(code_var_global, "code:var_global", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
+    ) \
+    CODE_TEMPLATE(code_const_local, "code:const_local", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_const_global, "code:const_global", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_array_local, "code:array_local", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
+        ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_array_global, "code:array_global", \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
+        ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_array_elem, "code:array_elem", \
+        ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_type_int, "code:type_int", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_type_uint, "code:type_uint", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_type_cond_enum, "code:type_cond_enum", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_type_yybm, "code:type_yybm", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_type_yytarget, "code:type_yytarget", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_assign, "code:assign", \
+        ({StxVarId::RHS}), ({StxVarId::LHS}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_assign_op, "code:assign_op", \
+        ({StxVarId::LHS, StxVarId::RHS, StxVarId::OP}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_if_then_else, "code:if_then_else", \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::HAVE_COND}) \
+    ) \
+    CODE_TEMPLATE(code_if_then_else_oneline, "code:if_then_else_oneline", \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::HAVE_COND}) \
+    ) \
+    CODE_TEMPLATE(code_switch, "code:switch", \
+        ({StxVarId::EXPR}), ({StxVarId::CASE}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_switch_cases, "code:switch_cases", \
+        ({}), ({StxVarId::CASE, StxVarId::STMT}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_switch_cases_oneline, "code:switch_cases_oneline", \
+        ({}), ({StxVarId::CASE, StxVarId::STMT}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_switch_case_range, "code:switch_case_range", \
+        ({}), ({StxVarId::VAL}), ({StxLOpt::MULTIVAL, StxLOpt::CHAR_LITERALS}) \
+    ) \
+    CODE_TEMPLATE(code_switch_case_default, "code:switch_case_default", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_loop, "code:loop", \
+        ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_enum, "code:enum", \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
+        ({StxLOpt::HAVE_INIT}) \
+    ) \
+    CODE_TEMPLATE(code_enum_elem, "code:enum_elem", \
+        ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_fndecl, "code:fndecl", \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, \
+            StxVarId::ARGMODS}), \
+        ({StxVarId::ARG}), ({StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}) \
+    ) \
+    CODE_TEMPLATE(code_fndef, "code:fndef", \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, \
+            StxVarId::ARGMODS}), \
+        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}) \
+    ) \
+    CODE_TEMPLATE(code_fncall, "code:fncall", \
+        ({StxVarId::NAME, StxVarId::RETVAL}), ({StxVarId::ARG}), \
+        ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
+    ) \
+    CODE_TEMPLATE(code_tailcall, "code:tailcall", \
+        ({StxVarId::NAME}), ({StxVarId::ARG}), ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
+    ) \
+    CODE_TEMPLATE(code_recursive_functions, "code:recursive_functions", \
+        ({StxVarId::FNDECL, StxVarId::FNDEF}), ({StxVarId::FN}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_fingerprint, "code:fingerprint", \
+        ({StxVarId::VER, StxVarId::DATE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_line_info, "code:line_info", \
+        ({StxVarId::LINE, StxVarId::FILE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_abort, "code:abort", \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_accept, "code:accept", \
+        ({StxVarId::VAR, StxVarId::NUM}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_debug, "code:debug", \
+        ({StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_peek, "code:peek", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::CURSOR, StxVarId::TYPECAST}), \
+        ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_skip, "code:skip", \
+        ({StxVarId::SKIP, StxVarId::CURSOR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_backup, "code:backup", \
+        ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_skip_peek, "code:skip_peek", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_peek_skip, "code:peek_skip", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_skip_backup, "code:skip_backup", \
+        ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_backup_skip, "code:backup_skip", \
+        ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_backup_peek, "code:backup_peek", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
+            StxVarId::TYPECAST}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_skip_backup_peek, "code:skip_backup_peek", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
+            StxVarId::TYPECAST}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_backup_peek_skip, "code:backup_peek_skip", \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
+            StxVarId::TYPECAST}), ({}), ({}) \
+    )
+
 #define RE2C_CONSTOPTS \
     CONSTOPT(Target, target, Target::CODE) \
     CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
@@ -202,42 +364,54 @@ struct conopt_t {
     // Global options are public (for easier read access), but constant (to avoid
     // accidental write access, as this should be done by `set_*` methods that correctly
     // update `is_default_*` status).
-#define CONSTOPT(type, name, value) const type name;
+#define CONSTOPT(type, name, value) const type name; bool is_default_##name;
     RE2C_CONSTOPTS
 #undef CONSTOPT
-#define CONSTOPT(type, name, value) bool is_default_##name;
-    RE2C_CONSTOPTS
-#undef CONSTOPT
+    // Syntax file options.
+#define CHECKED_LIST(name, allowed) const std::vector<std::string> name;
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+#define STX_OPT(type, name, value) const type name;
+    RE2C_STX_OPTS
+#undef STX_OPT
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) const StxCodes* name;
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
+    bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
     conopt_t(const Stx& stx)
-        : stx(stx)
-#define CONSTOPT(type, name, value) , name(value)
+        : stx(stx),
+#define CONSTOPT(type, name, value) name(value), is_default_##name(true),
     RE2C_CONSTOPTS
 #undef CONSTOPT
-#define CONSTOPT(type, name, value) , is_default_##name(true)
-    RE2C_CONSTOPTS
-#undef CONSTOPT
-    {}
+#define CHECKED_LIST(name, allowed) name(),
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+#define STX_OPT(type, name, value) name(value),
+    RE2C_STX_OPTS
+#undef STX_OPT
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name(nullptr),
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
+    p2067() {}
 
 #define CONSTOPT(type, name, value) \
-    void set_##name(type val) { \
+    void set_##name(const type & val) { \
         const_cast<type&>(name) = val; \
         is_default_##name = false; \
     } \
-    void set_default_##name(type val) { \
+    void set_default_##name(const type & val) { \
         const_cast<type&>(name) = val; \
         is_default_##name = true; \
     }
     RE2C_CONSTOPTS
 #undef CONSTOPT
-
-    // forward methods from `Stx` to make them easier to use from lexer
-    inline const char* eval_word_conf(StxConfId id) const {
-        return stx.eval_word_conf(id);
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
+    bool have_conf_##name() const { \
+        return name != nullptr; \
     }
-    inline bool eval_bool_conf(StxConfId id) const {
-        return stx.eval_bool_conf(id);
-    }
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
 
     FORBID_COPY(conopt_t);
 };
@@ -286,7 +460,15 @@ struct opt_t {
 #define CONSTOPT(type, name, value) type name;
     RE2C_CONSTOPTS
 #undef CONSTOPT
-
+#define CHECKED_LIST(name, allowed) const std::vector<std::string> name;
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+#define STX_OPT(type, name, value) const type name;
+    RE2C_STX_OPTS
+#undef STX_OPT
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) const StxCodes* name;
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
 #define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
@@ -302,37 +484,41 @@ struct opt_t {
             const mutopt_t& mut,
             const mutdef_t& def,
             const symtab_t& symtab)
-    : stx(stx)
-#define CONSTOPT(type, name, value) , name(con.name)
+        : stx(stx),
+#define CONSTOPT(type, name, value) name(con.name),
     RE2C_CONSTOPTS
 #undef CONSTOPT
-
+#define CHECKED_LIST(name, allowed) name(con.name),
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+#define STX_OPT(type, name, value) name(con.name),
+    RE2C_STX_OPTS
+#undef STX_OPT
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name(con.name),
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
 #define MUTOPT1 MUTOPT
-#define MUTOPT(type, name, value) , name(mut.name)
+#define MUTOPT(type, name, value) name(mut.name),
     RE2C_MUTOPTS
 #undef MUTOPT
-#define MUTOPT(type, name, value) , is_default_##name(def.name)
+#define MUTOPT(type, name, value) is_default_##name(def.name),
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
-    , symtab(symtab)
+    symtab(symtab)
     {}
 
-    // forward methods from `Stx` to make them easier to use from codegen
-    inline void eval_code_conf(std::ostream& os, StxConfId id, RenderCallback& callback) const {
-        stx.eval_code_conf(os, this, id, callback);
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
+    void render_##name(std::ostream& os, RenderCallback& callback) const { \
+        stx.eval_code_conf(name, os, this, callback); \
+    } \
+    void render_##name(std::ostream& os) const { \
+        stx.eval_code_conf(name, os, this); \
     }
-    inline void eval_code_conf(std::ostream& os, StxConfId id) const {
-        stx.eval_code_conf(os, this, id);
-    }
-    inline const char* eval_word_conf(StxConfId id) const {
-        return stx.eval_word_conf(id);
-    }
-    inline bool eval_bool_conf(StxConfId id) const {
-        return stx.eval_bool_conf(id);
-    }
-    bool specialize_oneline_if() const { return stx.have_oneline_if; }
-    bool specialize_oneline_switch() const { return stx.have_oneline_switch; }
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
+    bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
+    bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
 
     FORBID_COPY(opt_t);
 };
@@ -385,6 +571,20 @@ struct Opt {
     RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+#define CHECKED_LIST(name, allowed) \
+    void set_##name(const std::vector<std::string>& list); \
+    Ret check_##name() NODISCARD;
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+#define STX_OPT(type, name, value) \
+    void set_##name(const type & val);
+    RE2C_STX_OPTS
+#undef STX_OPT
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
+    /* void set_##name(const StxCodes* code); */ \
+    Ret check_##name() NODISCARD;
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
     void init_encoding(Enc::Type type, bool on);
     void init_encoding_policy(Enc::Policy p);
     void set_encoding(Enc::Type type, bool on);

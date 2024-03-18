@@ -68,13 +68,12 @@ if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; 
     }
 
     static size_t maxfill() {
-        return std::max(maxfill_main(), std::max(maxfill_conf(), maxfill_syntax()));
+        return std::max(maxfill_main(), maxfill_conf());
     }
 
   private:
     static size_t maxfill_main();
     static size_t maxfill_conf();
-    static size_t maxfill_syntax();
 
     FORBID_COPY(LexerState);
 };

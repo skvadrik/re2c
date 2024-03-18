@@ -7,7 +7,7 @@
 namespace re2c {
 
 // This function should only change global options.
-LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
+LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
         glob.set_default_line_dirs(false);
     } else if (glob.target == Target::SKELETON) {
@@ -15,7 +15,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         glob.set_default_line_dirs(false);
     }
 
-    if (!stx.have_conf(StxConfId::LINE_INFO)) {
+    if (!glob.have_conf_code_line_info()) {
         glob.set_default_line_dirs(false);
     }
 
@@ -31,9 +31,9 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         RET_FAIL(error("cannot generate dep file, output file not specified"));
     }
 
-    if (glob.is_default_code_model) {
+    if (glob.is_default_code_model && !glob.supported_code_models.empty()) {
         // Set code model based on syntax file.
-        const char* code_model = stx.list_conf_head(StxConfId::CODE_MODEL);
+        const char* code_model = glob.supported_code_models[0].c_str();
         if (strcmp(code_model, "goto_label") == 0) {
             glob.set_default_code_model(CodeModel::GOTO_LABEL);
         } else if (strcmp(code_model, "loop_switch") == 0) {
@@ -49,7 +49,8 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
         case CodeModel::LOOP_SWITCH: model_name = "loop_switch"; break;
         case CodeModel::REC_FUNC: model_name = "recursive_functions"; break;
         }
-        if (!stx.list_conf_find(StxConfId::CODE_MODEL, model_name)) {
+        if (glob.supported_code_models.end() == std::find(
+                glob.supported_code_models.begin(), glob.supported_code_models.end(), model_name)) {
             RET_FAIL(error("code model is not suppoted for this backend"));
         }
     }
@@ -61,7 +62,8 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
     }
 
     if (glob.target == Target::SKELETON) {
-        if (!stx.list_conf_find(StxConfId::TARGET, "skeleton")) {
+        if (glob.supported_targets.end() == std::find(
+                glob.supported_targets.begin(), glob.supported_targets.end(), "skeleton")) {
             RET_FAIL(error("skeleton is not supported for this backend"));
         } else if (glob.code_model == CodeModel::REC_FUNC) {
             RET_FAIL(error("skeleton is not supported for --recursive-functions model"));
@@ -74,11 +76,11 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob, Stx& stx)) {
 // This function should only change real mutable options (based on the global options, default
 // mutable options and default flags). User-defined options are intentionally not passed to prevent
 // accidental change, and default flags are passed as read-only.
-LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
-                               const conopt_t& glob,
-                               const mutopt_t& defaults,
-                               const mutdef_t& is_default,
-                               mutopt_t& real)) {
+LOCAL_NODISCARD(Ret fix_mutopt(
+        const conopt_t& glob,
+        const mutopt_t& defaults,
+        const mutdef_t& is_default,
+        mutopt_t& real)) {
     // For skeleton target interface options must have default values (because skeleton programs
     // assume certain interface). For DOT target most of the options are unused.
     if (glob.target != Target::CODE) {
@@ -290,14 +292,16 @@ LOCAL_NODISCARD(Ret fix_mutopt(const Stx& stx,
     }
 
     // errors
-    if (real.api == Api::DEFAULT && !stx.list_conf_find(StxConfId::API, "default")) {
+    if (real.api == Api::DEFAULT && glob.supported_apis.end() == std::find(
+            glob.supported_apis.begin(), glob.supported_apis.end(), "default")) {
         RET_FAIL(error("default API is not supported for this backend"));
     }
-    if (real.cgoto && strcmp(stx.eval_word_conf(StxConfId::COMPUTED_GOTO), "unsupported") == 0) {
+    if (real.cgoto && glob.supported_features.end() == std::find(
+            glob.supported_features.begin(), glob.supported_features.end(), "cgoto")) {
         RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
     }
-    if (real.case_ranges
-            && strcmp(stx.eval_word_conf(StxConfId::CASE_RANGES), "unsupported") == 0) {
+    if (real.case_ranges && glob.supported_features.end() == std::find(
+            glob.supported_features.begin(), glob.supported_features.end(), "case_ranges")) {
         RET_FAIL(error("--case-ranges option is not supported for this backend"));
     }
     // TODO: check bitmaps and other optional features
@@ -355,7 +359,7 @@ Opt::Opt(OutAllocator& alc, Msg& msg)
 
 Ret Opt::fix_global_and_defaults() {
     // Allow to modify only the global options.
-    CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob), stx));
+    CHECK_RET(fix_conopt(const_cast<conopt_t&>(glob)));
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.
@@ -383,7 +387,7 @@ Ret Opt::sync() {
 
     // Fix the real mutable options (based on the global options, mutable option defaults and
     // default flags), but do not change user-defined options or default flags.
-    CHECK_RET(fix_mutopt(stx, glob, defaults, is_default, real));
+    CHECK_RET(fix_mutopt(glob, defaults, is_default, real));
 
     diverge = false;
 
@@ -450,6 +454,43 @@ void Opt::reset_##name() { \
 RE2C_MUTOPTS
 #undef MUTOPT1
 #undef MUTOPT
+
+#define CHECKED_LIST(name, allowed) \
+void Opt::set_##name(const std::vector<std::string>& list) { \
+    const_cast<std::vector<std::string>&>(glob.name) = list; \
+} \
+Ret Opt::check_##name() { \
+    static const std::unordered_set<std::string> alw allowed; \
+    for (const std::string& elem : glob.name) { \
+        if (std::find(alw.begin(), alw.end(), elem) == alw.end()) { \
+            RET_FAIL(error("unknown element '%s' in list '%s'", elem.c_str(), #name)); \
+        } \
+    } \
+    return Ret::OK; \
+}
+RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
+
+#define STX_OPT(type, name, value) \
+void Opt::set_##name(const type & val) { \
+    const_cast<type&>(glob.name) = val; \
+}
+RE2C_STX_OPTS
+#undef STX_OPT
+
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
+/* void Opt::set_##name(const StxCodes* code) { \
+    const_cast<conopt_t&>(glob).name = code; \
+} */ \
+Ret Opt::check_##name() { \
+    if (glob.name == nullptr) return Ret::OK; \
+    static const std::unordered_set<StxVarId> vs vars; \
+    static const std::unordered_set<StxVarId> lvs list_vars; \
+    static const std::unordered_set<StxLOpt> cs conds; \
+    return stx.validate_conf_code(glob.name, str, vs, lvs, cs); \
+}
+RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
 
 void Opt::init_encoding(Enc::Type type, bool on) {
     if (is_default.encoding) {

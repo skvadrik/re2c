@@ -1,14 +1,12 @@
-api = [default, generic];
-api_style = [functions, freeform];
-code_model = [goto_label, loop_switch, recursive_functions];
-target = [code, dot, skeleton];
+supported_apis = ["default", "generic"];
+supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
+supported_targets = ["code", "dot", "skeleton"];
+supported_features = ["cgoto", "case_ranges"];
 
-computed_goto = optional;
-case_ranges = optional;
-semicolons = yes;
-implicit_bool_conversion = yes;
-backtick_quoted_strings = no;
-standalone_single_quotes = no;
+semicolons = 1;
+implicit_bool_conversion = 1;
+backtick_quoted_strings = 0;
+standalone_single_quotes = 0;
 
 conf:api = default;
 conf:api:style = functions;

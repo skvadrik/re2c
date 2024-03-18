@@ -138,9 +138,6 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_lexer.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_parser.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/parse/syntax_lexer.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/parse/syntax_parser.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/parse/syntax_parser.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
@@ -224,9 +221,6 @@ re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/pa
 re2c_bootstrap_lexer("src/parse/conf_lexer.re" "src/parse/conf_lexer.cc")
 re2c_bootstrap_parser("src/parse/conf_parser.ypp" "src/parse/conf_parser.cc"
     "src/parse/conf_parser.h")
-re2c_bootstrap_lexer("src/parse/syntax_lexer.re" "src/parse/syntax_lexer.cc")
-re2c_bootstrap_parser("src/parse/syntax_parser.ypp" "src/parse/syntax_parser.cc"
-    "src/parse/syntax_parser.h")
 
 re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
 re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.cc")

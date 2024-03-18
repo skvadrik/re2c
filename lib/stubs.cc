@@ -9,6 +9,5 @@ namespace re2c {
 
 size_t LexerState::maxfill_main() { return 0; }
 size_t LexerState::maxfill_conf() { return 0; }
-size_t LexerState::maxfill_syntax() { return 0; }
 
 }

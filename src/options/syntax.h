@@ -21,74 +21,7 @@ namespace re2c {
 
 class RenderCallback;
 struct StxCode;
-struct StxWord;
 struct opt_t;
-
-// list of configurations in syntax files (not including `conf:*` ones that)
-#define RE2C_STX_CONFS \
-    /* list configurations */ \
-    STX_CONF(API, "api") \
-    STX_CONF(API_STYLE, "api_style") \
-    STX_CONF(CODE_MODEL, "code_model") \
-    STX_CONF(TARGET, "target") \
-    /* word configurations */ \
-    STX_CONF(COMPUTED_GOTO, "computed_goto") \
-    STX_CONF(CASE_RANGES, "case_ranges") \
-    STX_CONF(SEMICOLONS, "semicolons") \
-    STX_CONF(IMPLICIT_BOOL_CONVERSION, "implicit_bool_conversion") \
-    STX_CONF(BACKTICK_QUOTED_STRINGS, "backtick_quoted_strings") \
-    STX_CONF(STANDALONE_SINGLE_QUOTES, "standalone_single_quotes") \
-    /* code configurations */ \
-    STX_CONF(VAR_LOCAL, "code:var_local") \
-    STX_CONF(VAR_GLOBAL, "code:var_global") \
-    STX_CONF(CONST_LOCAL, "code:const_local") \
-    STX_CONF(CONST_GLOBAL, "code:const_global") \
-    STX_CONF(ARRAY_LOCAL, "code:array_local") \
-    STX_CONF(ARRAY_GLOBAL, "code:array_global") \
-    STX_CONF(ARRAY_ELEM, "code:array_elem") \
-    STX_CONF(TYPE_INT, "code:type_int") \
-    STX_CONF(TYPE_UINT, "code:type_uint") \
-    STX_CONF(TYPE_COND_ENUM, "code:type_cond_enum") \
-    STX_CONF(TYPE_YYBM, "code:type_yybm") \
-    STX_CONF(TYPE_YYTARGET, "code:type_yytarget") \
-    STX_CONF(ASSIGN, "code:assign") \
-    STX_CONF(ASSIGN_OP, "code:assign_op") \
-    STX_CONF(IF_THEN_ELSE, "code:if_then_else") \
-    STX_CONF(IF_THEN_ELSE_ONELINE, "code:if_then_else_oneline") \
-    STX_CONF(SWITCH, "code:switch") \
-    STX_CONF(SWITCH_CASES, "code:switch_cases") \
-    STX_CONF(SWITCH_CASES_ONELINE, "code:switch_cases_oneline") \
-    STX_CONF(SWITCH_CASE_RANGE, "code:switch_case_range") \
-    STX_CONF(SWITCH_CASE_DEFAULT, "code:switch_case_default") \
-    STX_CONF(LOOP, "code:loop") \
-    STX_CONF(ENUM, "code:enum") \
-    STX_CONF(ENUM_ELEM, "code:enum_elem") \
-    STX_CONF(FNDECL, "code:fndecl") \
-    STX_CONF(FNDEF, "code:fndef") \
-    STX_CONF(FNCALL, "code:fncall") \
-    STX_CONF(TAILCALL, "code:tailcall") \
-    STX_CONF(RECURSIVE_FUNCTIONS, "code:recursive_functions") \
-    STX_CONF(FINGERPRINT, "code:fingerprint") \
-    STX_CONF(LINE_INFO, "code:line_info") \
-    STX_CONF(ABORT, "code:abort") \
-    STX_CONF(ACCEPT, "code:yyaccept") \
-    STX_CONF(DEBUG, "code:yydebug") \
-    STX_CONF(PEEK, "code:yypeek") \
-    STX_CONF(SKIP, "code:yyskip") \
-    STX_CONF(BACKUP, "code:yybackup") \
-    STX_CONF(SKIP_PEEK, "code:yyskip_peek") \
-    STX_CONF(PEEK_SKIP, "code:yypeek_skip") \
-    STX_CONF(SKIP_BACKUP, "code:yyskip_backup") \
-    STX_CONF(BACKUP_SKIP, "code:yybackup_skip") \
-    STX_CONF(BACKUP_PEEK, "code:yybackup_peek") \
-    STX_CONF(SKIP_BACKUP_PEEK, "code:yyskip_backup_peek") \
-    STX_CONF(BACKUP_PEEK_SKIP, "code:yybackup_peek_skip")
-
-#define STX_CONF(id, name) id,
-enum class StxConfId : uint32_t {
-    RE2C_STX_CONFS
-};
-#undef STX_CONF
 
 // configuration-local variables in syntax files
 #define RE2C_STX_LOCAL_VARS \
@@ -152,7 +85,6 @@ enum class StxVarId : uint32_t {
 #undef STX_GLOBAL_VAR
 
 using StxCodes = list_t<StxCode>;
-using StxList = list_t<StxWord>;
 
 struct StxOpt {
     bool is_local;
@@ -188,44 +120,9 @@ struct StxCode {
     StxCode* next;
 };
 
-struct StxWord {
-    const char* word;
-    StxWord* next;
-};
-
-enum class StxConfType {LIST, WORD, CODE};
-
-struct StxConf {
-    StxConfId id;
-    StxConfType type;
-    union {
-        StxList* list;
-        const char* word;
-        StxCodes* code;
-    };
-};
-
 class Stx {
-    struct code_conf_t {
-        std::vector<StxVarId> vars;
-        std::vector<StxVarId> list_vars;
-        std::vector<StxLOpt> cond_vars;
-
-        code_conf_t(): vars(), list_vars(), cond_vars() {}
-        code_conf_t(
-            const std::vector<StxVarId>& vars,
-            const std::vector<StxVarId>& list_vars,
-            const std::vector<StxLOpt>& conds)
-                : vars(vars), list_vars(list_vars), cond_vars(conds) {}
-    };
-    using allowed_code_confs_t = std::unordered_map<StxConfId, code_conf_t>;
-    using allowed_list_confs_t = std::unordered_map<StxConfId, std::vector<std::string>>;
-    using allowed_word_confs_t = std::unordered_map<StxConfId, std::vector<std::string>>;
-    using selector_t = std::function<bool(const opt_t*)>;
-    using allowed_vars_t = std::unordered_set<StxVarId>;
     using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
     using stack_code_list_t = std::vector<const StxCode*>;
-    using confs_t = std::unordered_map<StxConfId, const StxConf*>;
 
     constexpr static const char* DEFAULT_EMPTY = ""; // default value for undefined configurations
 
@@ -233,27 +130,18 @@ class Stx {
     OutAllocator& alc;
 
   private:
-    allowed_list_confs_t allowed_list_confs;
-    allowed_word_confs_t allowed_word_confs;
-    allowed_code_confs_t allowed_code_confs;
-    allowed_vars_t allowed_vars;
-
-    confs_t confs;
-
-    bool have_oneline_if;
-    bool have_oneline_switch;
-
     // stacks are placed here to avoid reallocating them every time
     // (they can be mutated when evaluating configurations in a constant syntax object)
     mutable stack_code_t stack_code;
     mutable stack_code_list_t stack_code_list;
 
-    StxConf* make_conf(StxConfType type, StxConfId id);
+    static const char* var_name(StxVarId id);
+
     StxCode* make_code(StxCodeType type);
 
-    Ret check_cond(StxConfId id, StxLOpt opt) const;
-    Ret check_word(StxConfId id, const char* word, bool list) const;
-    Ret check_var(StxConfId id, StxVarId var) const;
+    Ret check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const;
+    Ret check_var(StxVarId var, const char* conf, const std::unordered_set<StxVarId>& vars,
+        const std::unordered_set<StxVarId>& list_vars) const;
 
     void push_list_on_stack(const StxCode* x) const;
 
@@ -262,41 +150,25 @@ class Stx {
 
     // functions that construct AST when parsing syntax configurations
     StxCodes* new_code_list();
-    StxList* new_word_list();
-    StxConf* make_conf_code(StxConfId id, StxCodes* code);
-    StxConf* make_conf_word(StxConfId id, const char* word);
-    StxConf* make_conf_list(StxConfId id, StxList* list);
     StxCode* make_code_str(const char* str);
     StxCode* make_code_var(StxVarId id);
     StxCode* make_code_cond(StxOpt* opt, StxCodes* code_then, StxCodes* code_else);
     StxCode* make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code);
-    StxWord* make_word(const char* word);
     StxOpt* make_opt_global(StxGOpt opt);
     StxOpt* make_opt_local(StxLOpt opt);
-    void add_conf(StxConfId id, const StxConf* conf);
-    const StxConf* get_conf(StxConfId id);
 
     // functions that validate configuration and variable names in the AST
-    Ret validate_conf_list(const StxConf* conf);
-    Ret validate_conf_word(const StxConf* conf);
-    Ret validate_conf_code(const StxConf* conf);
-
-    static const char* conf_name(StxConfId id);
-    static const char* var_name(StxVarId id);
-
-    // functions related to configuration checks
-    bool have_conf(StxConfId id) const;
-    void cache_conf_tests();
+    Ret validate_conf_code(
+        const StxCodes* code,
+        const char* conf,
+        const std::unordered_set<StxVarId>& vars,
+        const std::unordered_set<StxVarId>& list_vars,
+        const std::unordered_set<StxLOpt>& conds) const;
 
     // functions that check or evaluate configurations
-    const char* list_conf_head(StxConfId id) const;
-    bool list_conf_find(StxConfId id, const char* elem) const;
-    const char* eval_word_conf(StxConfId id) const;
-    bool eval_bool_conf(StxConfId id) const;
-    Ret eval_str_conf(StxConfId id, std::string& str) const;
-    void eval_code_conf(std::ostream& os, const opt_t* opts, StxConfId id) const;
+    void eval_code_conf(const StxCodes* code, std::ostream& os, const opt_t* opts) const;
     void eval_code_conf(
-            std::ostream& os, const opt_t* opts, StxConfId id, RenderCallback& callback) const;
+        const StxCodes* code, std::ostream& os, const opt_t* opts, RenderCallback& callback) const;
 
     friend class opt_t;
 };

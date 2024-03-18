@@ -20,7 +20,6 @@
 #include "src/util/forbid_copy.h"
 
 union CONF_STYPE;
-union STX_STYPE;
 
 namespace re2c {
 
@@ -34,6 +33,8 @@ struct conopt_t;
 struct opt_t;
 struct Opt;
 class Stx;
+struct StxCode;
+using StxCodes = list_t<StxCode>;
 
 struct InputFile {
     FILE* file;
@@ -83,15 +84,15 @@ class Input: private LexerState {
     ~Input();
 
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
-    Ret load_syntax_config(Opt& opts, Stx& stx, Lang& lang);
+    Ret load_syntax_config(Opt& opts, Lang& lang);
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file(const std::string& header) const NODISCARD;
 
     Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
     Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
-    Ret lex_syntax_token(STX_STYPE* yylval, Opt& opts, int& token);
-    Ret lex_conf_token(CONF_STYPE* yylval, int& token);
+    Ret lex_conf_token(CONF_STYPE* yylval, int& token, Opt& opts);
+    Ret lex_syntax_file(Opt& opts);
 
     const loc_t& tok_loc() const;
     loc_t cur_loc() const;
@@ -143,13 +144,13 @@ class Input: private LexerState {
 
     Ret lex_conf_assign() NODISCARD;
     Ret lex_conf_semicolon() NODISCARD;
-    Ret lex_conf_number() NODISCARD;
-    Ret lex_conf_bool() NODISCARD;
+    Ret lex_conf_number(Opt& opts) NODISCARD;
+    Ret lex_conf_bool(Opt& opts) NODISCARD;
     Ret lex_conf_string_quoted(uint8_t quote) NODISCARD;
     Ret lex_conf_string_legacy() NODISCARD;
-    Ret lex_conf_string() NODISCARD;
-    Ret lex_conf_list() NODISCARD;
-    Ret parse_conf();
+    Ret lex_conf_string(Opt& opts) NODISCARD;
+    Ret lex_conf_list(Opt& opts) NODISCARD;
+    Ret parse_conf(Opt& opts);
 
     FORBID_COPY(Input);
 };

@@ -115,13 +115,12 @@ struct LexerState {
     }
 
     static size_t maxfill() {
-        return std::max(maxfill_main(), std::max(maxfill_conf(), maxfill_syntax()));
+        return std::max(maxfill_main(), maxfill_conf());
     }
 
   private:
     static size_t maxfill_main();
     static size_t maxfill_conf();
-    static size_t maxfill_syntax();
 
     FORBID_COPY(LexerState);
 };
@@ -383,7 +382,7 @@ loop: /*!local:re2c
         if ((mask & DCONF_FORMAT) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'format'"));
         }
-        CHECK_RET(lex_conf_string());
+        CHECK_RET(lex_conf_string_legacy());
         fmt = copystr(tmp_str, alc);
         goto loop;
     }
@@ -392,7 +391,7 @@ loop: /*!local:re2c
         if ((mask & DCONF_SEPARATOR) == 0) {
             RET_FAIL(error_at_cur("unexpected configuration 'separator'"));
         }
-        CHECK_RET(lex_conf_string());
+        CHECK_RET(lex_conf_string_legacy());
         sep = copystr(tmp_str, alc);
         goto loop;
     }
@@ -678,7 +677,7 @@ loop_dquote: /*!re2c
         *         { goto loop_dquote; }
     */
     } else if (quote == '`') {
-        if (!globopts->eval_bool_conf(StxConfId::BACKTICK_QUOTED_STRINGS)) return Ret::OK; // skip
+        if (!globopts->backtick_quoted_strings) return Ret::OK; // skip
 loop_backtick: /*!re2c
         [`] { return Ret::OK; }
         eol { next_line(); goto loop_backtick; }
@@ -703,10 +702,7 @@ loop_backtick: /*!re2c
         [^]                       ['] { // any UTF-8 encoded Unicode symbol, unescaped
             return Ret::OK;
         }
-        "" {
-            return globopts->eval_bool_conf(StxConfId::STANDALONE_SINGLE_QUOTES)
-                ? Ret::OK : Ret::FAIL;
-        }
+        "" { return globopts->standalone_single_quotes ? Ret::OK : Ret::FAIL; }
     */
     }
     return Ret::FAIL;

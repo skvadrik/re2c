@@ -52,6 +52,15 @@
 #if CONF_DEBUG
 extern int conf_debug;
 #endif
+/* "%code requires" blocks.  */
+#line 1 "../src/parse/conf_parser.ypp"
+
+
+#include "src/constants.h"
+#include "src/options/syntax.h"
+
+
+#line 64 "src/parse/conf_parser.h"
 
 /* Token kinds.  */
 #ifndef CONF_TOKENTYPE
@@ -64,7 +73,11 @@ extern int conf_debug;
     CONF_UNDEF = 257,              /* "invalid token"  */
     CONF_NUMBER = 258,             /* CONF_NUMBER  */
     CONF_STRING = 259,             /* CONF_STRING  */
-    CONF_OPTION = 260              /* CONF_OPTION  */
+    CONF_COND = 260,               /* CONF_COND  */
+    CONF_VAR = 261,                /* CONF_VAR  */
+    CONF_CODE = 262,               /* CONF_CODE  */
+    CONF_GOPT = 263,               /* CONF_GOPT  */
+    CONF_LOPT = 264                /* CONF_LOPT  */
   };
   typedef enum conf_tokentype conf_token_kind_t;
 #endif
@@ -73,14 +86,21 @@ extern int conf_debug;
 #if ! defined CONF_STYPE && ! defined CONF_STYPE_IS_DECLARED
 union CONF_STYPE
 {
-#line 22 "../src/parse/conf_parser.ypp"
+#line 33 "../src/parse/conf_parser.ypp"
 
     const char* str;
     int32_t num;
-    bool opt;
+    bool cond;
     std::vector<std::string>* list;
+    re2c::StxVarId var;
+    re2c::StxCode* code;
+    re2c::StxCodes* codes;
+    const re2c::StxCodes** codeptr;
+    re2c::StxOpt* opt;
+    re2c::StxGOpt gopt;
+    re2c::StxLOpt lopt;
 
-#line 84 "src/parse/conf_parser.h"
+#line 104 "src/parse/conf_parser.h"
 
 };
 typedef union CONF_STYPE CONF_STYPE;
@@ -91,7 +111,7 @@ typedef union CONF_STYPE CONF_STYPE;
 
 
 
-int conf_parse (re2c::Input& in);
+int conf_parse (re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx);
 
 
 #endif /* !YY_CONF_SRC_PARSE_CONF_PARSER_H_INCLUDED  */
