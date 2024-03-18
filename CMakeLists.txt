@@ -158,7 +158,6 @@ set(re2c_sources
     src/codegen/pass4_render.cc
     src/options/opt.cc
     src/options/symtab.cc
-    src/options/syntax.cc
     src/nfa/re_to_nfa.cc
     src/adfa/adfa.cc
     src/debug/dump_adfa.cc
@@ -495,7 +494,6 @@ if (RE2C_BUILD_LIBS)
         src/parse/input.cc
         src/options/opt.cc
         src/options/symtab.cc
-        src/options/syntax.cc
         src/cfg/cfg.cc
         src/cfg/compact.cc
         src/cfg/dce.cc

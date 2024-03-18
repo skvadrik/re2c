@@ -32,7 +32,6 @@ struct BlockNameList;
 struct conopt_t;
 struct opt_t;
 struct Opt;
-class Stx;
 struct StxCode;
 using StxCodes = list_t<StxCode>;
 

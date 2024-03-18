@@ -57,7 +57,7 @@ extern int conf_debug;
 
 
 #include "src/constants.h"
-#include "src/options/syntax.h"
+#include "src/options/opt.h"
 
 
 #line 64 "src/parse/conf_parser.h"
@@ -111,7 +111,7 @@ typedef union CONF_STYPE CONF_STYPE;
 
 
 
-int conf_parse (re2c::Input& in, re2c::Opt& opts, re2c::Stx& stx);
+int conf_parse (re2c::Input& in, re2c::Opt& opts);
 
 
 #endif /* !YY_CONF_SRC_PARSE_CONF_PARSER_H_INCLUDED  */

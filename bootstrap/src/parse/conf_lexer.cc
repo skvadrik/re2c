@@ -8802,7 +8802,7 @@ yy1613:
 	++cur;
 	cur -= 5;
 #line 654 "../src/parse/conf_lexer.re"
-	{ if (conf_parse(*this, opts, opts.stx) != 0) return Ret::FAIL; goto start; }
+	{ if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
 #line 8807 "src/parse/conf_lexer.cc"
 yy1614:
 	++cur;

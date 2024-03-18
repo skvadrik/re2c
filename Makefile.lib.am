@@ -15,7 +15,6 @@ libre2c_la_HDR = \
 	src/codegen/code.h \
 	src/options/opt.h \
 	src/options/symtab.h \
-	src/options/syntax.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
 	src/dfa/closure_leftmost.h \
@@ -72,7 +71,6 @@ libre2c_la_SRC = \
 	src/parse/input.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
-	src/options/syntax.cc \
 	src/cfg/cfg.cc \
 	src/cfg/compact.cc \
 	src/cfg/dce.cc \

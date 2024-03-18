@@ -5,12 +5,14 @@
 #include <stdint.h>
 #include <string>
 #include <vector>
+#include <unordered_set>
 
 #include "src/constants.h"
 #include "src/encoding/enc.h"
 #include "src/options/symtab.h"
-#include "src/options/syntax.h"
+#include "src/util/allocator.h"
 #include "src/util/attribute.h"
+#include "src/util/containers.h"
 #include "src/util/forbid_copy.h"
 
 namespace re2c {
@@ -34,7 +36,9 @@ namespace re2c {
 
 class Input;
 class Msg;
-class Stx;
+class RenderCallback;
+struct StxCode;
+using StxCodes = list_t<StxCode>;
 
 #define RE2C_SIGIL "@@"
 #define RE2C_YYFN_SEP ";"
@@ -206,6 +210,67 @@ class Stx;
             StxVarId::TYPECAST}), ({}), ({}) \
     )
 
+// configuration-local variables in syntax files
+#define RE2C_STX_LOCAL_VARS \
+    STX_LOCAL_VAR(ARG, "arg") \
+    STX_LOCAL_VAR(ARGMODS, "argmods") \
+    STX_LOCAL_VAR(ARGNAME, "argname") \
+    STX_LOCAL_VAR(ARGTYPE, "argtype") \
+    STX_LOCAL_VAR(ARRAY, "array") \
+    STX_LOCAL_VAR(BACKUP, "backup") \
+    STX_LOCAL_VAR(BRANCH, "branch") \
+    STX_LOCAL_VAR(CASE, "case") \
+    STX_LOCAL_VAR(CHAR, "char") \
+    STX_LOCAL_VAR(COND, "cond") \
+    STX_LOCAL_VAR(CTYPE, "ctype") \
+    STX_LOCAL_VAR(CURSOR, "cursor") \
+    STX_LOCAL_VAR(DATE, "date") \
+    STX_LOCAL_VAR(DEBUG, "debug") \
+    STX_LOCAL_VAR(ELEM, "elem") \
+    STX_LOCAL_VAR(EXPR, "expr") \
+    STX_LOCAL_VAR(FN, "fn") \
+    STX_LOCAL_VAR(FILE, "file") \
+    STX_LOCAL_VAR(FNDECL, "fndecl") \
+    STX_LOCAL_VAR(FNDEF, "fndef") \
+    STX_LOCAL_VAR(INDEX, "index") \
+    STX_LOCAL_VAR(INIT, "init") \
+    STX_LOCAL_VAR(LABEL, "label") \
+    STX_LOCAL_VAR(LHS, "lhs") \
+    STX_LOCAL_VAR(LINE, "line") \
+    STX_LOCAL_VAR(MARKER, "marker") \
+    STX_LOCAL_VAR(NAME, "name") \
+    STX_LOCAL_VAR(NUM, "num") \
+    STX_LOCAL_VAR(OP, "op") \
+    STX_LOCAL_VAR(PEEK, "peek") \
+    STX_LOCAL_VAR(RETVAL, "retval") \
+    STX_LOCAL_VAR(RHS, "rhs") \
+    STX_LOCAL_VAR(ROW, "row") \
+    STX_LOCAL_VAR(SIZE, "size") \
+    STX_LOCAL_VAR(SKIP, "skip") \
+    STX_LOCAL_VAR(STATE, "state") \
+    STX_LOCAL_VAR(STMT, "stmt") \
+    STX_LOCAL_VAR(TYPE, "type") \
+    STX_LOCAL_VAR(TYPECAST, "typecast") \
+    STX_LOCAL_VAR(VAL, "val") \
+    STX_LOCAL_VAR(VAR, "var") \
+    STX_LOCAL_VAR(VER, "version")
+
+// global variables in syntax files
+#define RE2C_STX_GLOBAL_VARS \
+    STX_GLOBAL_VAR(NEWLINE, "nl") \
+    STX_GLOBAL_VAR(INDENT, "indent") \
+    STX_GLOBAL_VAR(DEDENT, "dedent") \
+    STX_GLOBAL_VAR(TOPINDENT, "topindent")
+
+#define STX_LOCAL_VAR(id, name) id,
+#define STX_GLOBAL_VAR(id, name) id,
+enum class StxVarId : uint32_t {
+    RE2C_STX_LOCAL_VARS
+    RE2C_STX_GLOBAL_VARS
+};
+#undef STX_LOCAL_VAR
+#undef STX_GLOBAL_VAR
+
 #define RE2C_CONSTOPTS \
     CONSTOPT(Target, target, Target::CODE) \
     CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
@@ -355,12 +420,42 @@ class Stx;
     MUTOPT(bool, debug, false) \
     /* end */
 
+struct StxOpt {
+    bool is_local;
+    union {
+        StxGOpt gopt;
+        StxLOpt lopt;
+    };
+};
+
+struct StxCodeCond {
+    StxOpt* opt;
+    StxCodes* then_code;
+    StxCodes* else_code;
+};
+
+struct StxCodeList {
+    StxVarId var;
+    int32_t lbound;
+    int32_t rbound;
+    StxCodes* code;
+};
+
+enum class StxCodeType {STR, VAR, COND, LIST};
+
+struct StxCode {
+    StxCodeType type;
+    union {
+        const char* str;
+        StxVarId var;
+        StxCodeCond cond;
+        StxCodeList list;
+    };
+    StxCode* next;
+};
+
 // Constant options.
 struct conopt_t {
-  private:
-    const Stx& stx;
-
-  public:
     // Global options are public (for easier read access), but constant (to avoid
     // accidental write access, as this should be done by `set_*` methods that correctly
     // update `is_default_*` status).
@@ -379,8 +474,7 @@ struct conopt_t {
 #undef CODE_TEMPLATE
     bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
-    conopt_t(const Stx& stx)
-        : stx(stx),
+    conopt_t() :
 #define CONSTOPT(type, name, value) name(value), is_default_##name(true),
     RE2C_CONSTOPTS
 #undef CONSTOPT
@@ -454,7 +548,10 @@ struct mutdef_t {
 // Union of constant and mutable options and default flags.
 struct opt_t {
   private:
-    const Stx& stx;
+    using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
+
+    // stack is placed here to avoid reallocating it every time
+    mutable stack_code_t stack_code;
 
   public:
 #define CONSTOPT(type, name, value) type name;
@@ -479,12 +576,8 @@ struct opt_t {
 #undef MUTOPT
     symtab_t symtab;
 
-    opt_t(const Stx& stx,
-            const conopt_t& con,
-            const mutopt_t& mut,
-            const mutdef_t& def,
-            const symtab_t& symtab)
-        : stx(stx),
+    opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def, const symtab_t& symtab)
+        : stack_code(),
 #define CONSTOPT(type, name, value) name(con.name),
     RE2C_CONSTOPTS
 #undef CONSTOPT
@@ -510,28 +603,38 @@ struct opt_t {
 
 #define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
     void render_##name(std::ostream& os, RenderCallback& callback) const { \
-        stx.eval_code_conf(name, os, this, callback); \
+        eval_code_conf(name, os, callback); \
     } \
     void render_##name(std::ostream& os) const { \
-        stx.eval_code_conf(name, os, this); \
+        eval_code_conf(name, os); \
     }
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
     bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
 
+  private:
+    void eval_code_conf(const StxCodes* code, std::ostream& os) const;
+    void eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallback& callback) const;
+    void push_list_on_stack(const StxCode* x) const;
+
     FORBID_COPY(opt_t);
 };
 
 // Options management.
 struct Opt {
+  private:
+    using stack_code_t = std::vector<std::pair<const StxCode*, uint8_t>>;
+    using stack_code_list_t = std::vector<const StxCode*>;
+
   public:
-    Stx stx;
     const conopt_t glob;
     symtab_t symtab;
     Msg& msg;
 
   private:
+    OutAllocator& alc;
+
     // Default mutable options. They depend on the global options, such as the language backend, and
     // are fixed after parsing the global options.
     const mutopt_t defaults;
@@ -553,6 +656,10 @@ struct Opt {
 
     // If user-set options have diverged from the real ones and need syncing.
     bool diverge;
+
+    // stacks are placed here to avoid reallocating them every time
+    stack_code_t stack_code;
+    stack_code_list_t stack_code_list;
 
   public:
     Opt(OutAllocator& alc, Msg& msg);
@@ -592,8 +699,32 @@ struct Opt {
 
     void reset_group_label_start();
 
+    StxCodes* new_code_list();
+    StxCode* make_code_str(const char* str);
+    StxCode* make_code_var(StxVarId id);
+    StxCode* make_code_cond(StxOpt* opt, StxCodes* code_then, StxCodes* code_else);
+    StxCode* make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code);
+    StxOpt* make_opt_global(StxGOpt opt);
+    StxOpt* make_opt_local(StxLOpt opt);
+
+    Ret validate_conf_code(
+        const StxCodes* code,
+        const char* conf,
+        const std::unordered_set<StxVarId>& vars,
+        const std::unordered_set<StxVarId>& list_vars,
+        const std::unordered_set<StxLOpt>& conds) NODISCARD;
+
   private:
     Ret sync() NODISCARD;
+
+    static const char* var_name(StxVarId id);
+
+    StxCode* make_code(StxCodeType type);
+
+    Ret check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const;
+    Ret check_var(StxVarId var, const char* conf, const std::unordered_set<StxVarId>& vars,
+        const std::unordered_set<StxVarId>& list_vars) const;
+
     FORBID_COPY(Opt);
 };
 

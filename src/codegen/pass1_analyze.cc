@@ -3,6 +3,7 @@
 
 #include "src/adfa/adfa.h"
 #include "src/codegen/output.h"
+#include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/dfa/tcmd.h"
 #include "src/util/check.h"

@@ -13,7 +13,6 @@
 #include "src/msg/location.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
-#include "src/options/syntax.h"
 #include "src/regexp/rule.h"
 #include "src/regexp/tag.h"
 #include "src/skeleton/skeleton.h"

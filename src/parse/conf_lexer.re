@@ -651,7 +651,7 @@ start:
     "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
     "standalone_single_quotes" { SAVE_CONF_BOOL(standalone_single_quotes); }
 
-    "" / "code:" { if (conf_parse(*this, opts, opts.stx) != 0) return Ret::FAIL; goto start; }
+    "" / "code:" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
 
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */

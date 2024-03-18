@@ -24,7 +24,6 @@ re2c_HDR = \
 	src/codegen/helpers.h \
 	src/options/opt.h \
 	src/options/symtab.h \
-	src/options/syntax.h \
 	src/adfa/adfa.h \
 	src/cfg/cfg.h \
 	src/dfa/closure_leftmost.h \
@@ -75,7 +74,6 @@ re2c_SRC = \
 	src/codegen/pass4_render.cc \
 	src/options/opt.cc \
 	src/options/symtab.cc \
-	src/options/syntax.cc \
 	src/nfa/re_to_nfa.cc \
 	src/adfa/adfa.cc \
 	src/debug/dump_adfa.cc \

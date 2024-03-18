@@ -13,7 +13,7 @@
 #include "src/codegen/code.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
-#include "src/options/syntax.h"
+#include "src/options/opt.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
 
