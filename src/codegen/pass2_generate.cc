@@ -58,7 +58,7 @@ static bool need_yych_arg(const State* s) {
     return omit_peek(s) && s->go.span_count > 1 && !endstate(s);
 }
 
-const char* fn_name_for_cond(Scratchbuf& buf, const std::string& cond) {
+static const char* fn_name_for_cond(Scratchbuf& buf, const std::string& cond) {
     return buf.cstr("yyfn").str(cond).flush();
 }
 
@@ -1117,7 +1117,7 @@ class GenEnumElem : public RenderCallback {
     FORBID_COPY(GenEnumElem);
 };
 
-const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
+static const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
     const std::string& cond = opts->cond_enum_prefix + name;
     GenEnumElem callback(buf.stream(), opts->api_cond_type, cond);
     opts->render_code_enum_elem(buf.stream(), callback);
