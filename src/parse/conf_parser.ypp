@@ -3,6 +3,12 @@
 #include "src/constants.h"
 #include "src/options/opt.h"
 
+extern const char* DEFAULT_SYNTAX_C;
+extern const char* DEFAULT_SYNTAX_D;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_OCAML;
+extern const char* DEFAULT_SYNTAX_RUST;
+
 }
 
 %{
@@ -151,12 +157,6 @@ extern "C" {
         return in.lex_conf_token(yylval, token, opts) == Ret::OK ? token : CONF_error;
     }
 }
-
-extern const char* DEFAULT_SYNTAX_C;
-extern const char* DEFAULT_SYNTAX_D;
-extern const char* DEFAULT_SYNTAX_GO;
-extern const char* DEFAULT_SYNTAX_OCAML;
-extern const char* DEFAULT_SYNTAX_RUST;
 
 namespace re2c {
 

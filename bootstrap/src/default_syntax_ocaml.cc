@@ -1,3 +1,4 @@
+#include "src/parse/conf_parser.h"
 const char* DEFAULT_SYNTAX_OCAML =
     "supported_apis = [\"generic\"];\n"
     "supported_code_models = [\"recursive_functions\"];\n"

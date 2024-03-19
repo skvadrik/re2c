@@ -1,3 +1,4 @@
+#include "src/parse/conf_parser.h"
 const char* DEFAULT_SYNTAX_RUST =
     "supported_apis = [\"generic\"];\n"
     "supported_code_models = [\"loop_switch\", \"recursive_functions\"];\n"
