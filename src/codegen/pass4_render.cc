@@ -630,7 +630,7 @@ class RenderFnDef : public RenderCallback {
             rctx.os << curr_arg->mods;
             break;
         case StxVarId::STMT:
-            render(rctx, curr_stmt);;
+            render(rctx, curr_stmt);
             break;
         default:
             render_global_var(rctx, var);
