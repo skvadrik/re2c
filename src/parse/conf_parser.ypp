@@ -7,6 +7,9 @@
 
 %{
 
+#pragma GCC diagnostic push
+#include "src/util/nowarn_in_bison.h"
+
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/parse/input.h"
@@ -135,6 +138,8 @@ code_list
 };
 
 %%
+
+#pragma GCC diagnostic pop
 
 extern "C" {
     static void yyerror(re2c::Input& in, Opt&, const char* s) {

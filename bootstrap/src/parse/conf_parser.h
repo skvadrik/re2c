@@ -86,7 +86,7 @@ extern int conf_debug;
 #if ! defined CONF_STYPE && ! defined CONF_STYPE_IS_DECLARED
 union CONF_STYPE
 {
-#line 33 "../src/parse/conf_parser.ypp"
+#line 36 "../src/parse/conf_parser.ypp"
 
     const char* str;
     int32_t num;
