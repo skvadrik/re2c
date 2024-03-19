@@ -134,7 +134,6 @@ struct LexerState {
 
 Ret Input::lex_program(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
-    OutAllocator& alc = out.allocator;
     const uint8_t* x, *y;
 
     if (is_eof()) RET_BLOCK(InputBlock::END);
@@ -312,7 +311,7 @@ Ret Input::lex_opt_name(std::string& name) {
 */
 }
 
-Ret Input::lex_name_list(OutAllocator& alc, BlockNameList** ptail) {
+Ret Input::lex_name_list(BlockNameList** ptail) {
     BlockNameList** phead = ptail;
 loop:
     tok = cur;
@@ -364,12 +363,11 @@ loop: /*!local:re2c
 }
 
 Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
-    OutAllocator& alc = out.allocator;
     const char* fmt = nullptr, *sep = nullptr;
     BlockNameList* blocks;
 
     out.gen_raw(tok, ptr, globopts->line_dirs);
-    CHECK_RET(lex_name_list(alc, &blocks));
+    CHECK_RET(lex_name_list(&blocks));
 
 loop: /*!local:re2c
     * {

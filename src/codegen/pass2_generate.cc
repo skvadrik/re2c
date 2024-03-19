@@ -2027,14 +2027,11 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
 
     DCHECK(opts->code_model == CodeModel::REC_FUNC);
 
-    const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();
-
     // emit a switch on conditions with a function call to the start state of each condition
     CodeCases* cases = code_cases(alc);
     for (const StartCond& cond : output.block().conds) {
         CodeList* body = code_list(alc);
         const char* name = fn_name_for_cond(buf, cond.name);
-        const CodeFnCommon* fn = output.block().fn_common;
         append(body, code_tailcall(alc, name, fn->args, fn->type != nullptr));
         append(cases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
     }
@@ -2043,6 +2040,8 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     }
     CodeList* body = code_list(alc);
     append(body, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+
+    const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();
 
     return code_fndef(alc, name, fn->type, fn->params, body);
 }

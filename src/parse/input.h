@@ -125,7 +125,7 @@ class Input: private LexerState {
     Ret set_sourceline() NODISCARD;
 
     Ret lex_opt_name(std::string& name) NODISCARD;
-    Ret lex_name_list(OutAllocator& alc, BlockNameList** ptail) NODISCARD;
+    Ret lex_name_list(BlockNameList** ptail) NODISCARD;
     Ret lex_special_block(Output& out, CodeKind kind, uint32_t mask) NODISCARD;
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
     Ret lex_code_indented(YYSTYPE* yylval, Ast& ast) NODISCARD;
