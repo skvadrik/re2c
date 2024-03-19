@@ -68,7 +68,7 @@ class RenderSimple : public RenderCallback {
   public:
     RenderSimple(RenderContext& rctx): rctx(rctx) {}
 
-    virtual void render_var(StxVarId var) {
+    virtual void render_var(StxVarId var) override {
         render_global_var(rctx, var);
     }
 };
