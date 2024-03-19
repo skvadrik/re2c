@@ -318,7 +318,8 @@ class RenderSwitchCaseRange : public RenderCallback {
                 switch (code->ranges->type) {
                 case VarType::UINT:
                     DCHECK(sym >= 0);
-                    // fallthrough
+                    rctx.os << sym;
+                    break;
                 case VarType::INT:
                     rctx.os << sym;
                     break;
