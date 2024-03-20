@@ -870,7 +870,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
     const char* type = buf.flush();
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(alc, opts->var_cgoto_table.c_str(),
+    append(stmts, code_array(alc, opts->var_computed_gotos_table.c_str(),
             type, elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
     return stmts;
 }
@@ -878,20 +878,18 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
 static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
+    Scratchbuf& buf = output.scratchbuf;
 
     CodeList* stmts = code_list(alc);
 
     CodeList* if_else = gen_gocp_table(output, go->table);
-    text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_char).cstr("]")
-            .flush();
-    append(if_else, code_stmt(alc, text));
+    buf.cstr("goto *").str(opts->var_computed_gotos_table).cstr("[").str(opts->var_char).cstr("]");
+    append(if_else, code_stmt(alc, buf.flush()));
 
     if (go->hgo != nullptr) {
-        text = o.str(opts->var_char).cstr(" & ~0xFF").flush();
+        const char* cond = buf.str(opts->var_char).cstr(" & ~0xFF").flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
-        append(stmts, code_if_then_else(alc, text, if_then, if_else));
+        append(stmts, code_if_then_else(alc, cond, if_then, if_else));
     } else {
         append(stmts, code_block(alc, if_else, CodeBlock::Kind::WRAPPED));
     }
@@ -1014,8 +1012,7 @@ static void emit_accept(
     const opt_t* opts = output.block().opts;
     const size_t nacc = acc.size();
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
+    Scratchbuf& buf = output.scratchbuf;
 
     if (nacc == 0) return;
 
@@ -1032,20 +1029,21 @@ static void emit_accept(
             acc.begin(), acc.end(), [](const AcceptTrans& a) { return a.tags != TCID0; });
 
     // jump table
-    if (opts->cgoto && nacc >= opts->cgoto_threshold && !have_tags) {
+    if (opts->computed_gotos && nacc >= opts->computed_gotos_threshold && !have_tags) {
         CodeList* block = code_list(alc);
 
         const char** elems = alc.alloct<const char*>(nacc);
         for (uint32_t i = 0; i < nacc; ++i) {
-            elems[i] = o.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index).flush();
+            buf.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index);
+            elems[i] = buf.flush();
         }
-        opts->render_code_type_yytarget(o.stream());
-        const char* type = o.flush();
-        append(block, code_array(alc, opts->var_cgoto_table.c_str(), type, elems, nacc));
+        opts->render_code_type_yytarget(buf.stream());
+        const char* type = buf.flush();
+        append(block, code_array(alc, opts->var_computed_gotos_table.c_str(), type, elems, nacc));
 
-        text = o.cstr("goto *").str(opts->var_cgoto_table).cstr("[").str(opts->var_accept).cstr("]")
-                .flush();
-        append(block, code_stmt(alc, text));
+        buf.cstr("goto *").str(opts->var_computed_gotos_table)
+                .cstr("[").str(opts->var_accept).cstr("]");
+        append(block, code_stmt(alc, buf.flush()));
 
         append(stmts, code_block(alc, block, CodeBlock::Kind::WRAPPED));
         return;
@@ -1069,8 +1067,7 @@ static void emit_accept(
             append(cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
         }
     }
-    text = o.str(opts->var_accept).flush();
-    append(stmts, code_switch(alc, text, cases));
+    append(stmts, code_switch(alc, opts->var_accept.c_str(), cases));
 }
 
 static void gen_debug(Output& output, const Label* label, CodeList* stmts) {
@@ -1719,19 +1716,17 @@ static CodeList* gen_cond_goto(Output& output) {
 
     const size_t ncond = conds.size();
     CodeList* stmts = code_list(alc);
-    const char* text;
 
     if (opts->target == Target::DOT) {
         for (const StartCond& cond : conds) {
-            text = buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name)
-                    .cstr("\"]").flush();
-            append(stmts, code_text(alc, text));
+            buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
+            append(stmts, code_text(alc, buf.flush()));
         }
     } else {
-        if (opts->cgoto) {
-            text = buf.cstr("goto *").str(opts->var_cond_table).cstr("[")
-                    .str(output_cond_get(opts)).cstr("]").flush();
-            append(stmts, code_stmt(alc, text));
+        if (opts->computed_gotos) {
+            buf.cstr("goto *").str(opts->var_cond_table)
+                    .cstr("[").str(output_cond_get(opts)).cstr("]");
+            append(stmts, code_stmt(alc, buf.flush()));
         } else if (opts->nested_ifs) {
             warn_cond_ord &= ncond > 1;
             append(stmts, gen_cond_goto_binary(output, 0, ncond - 1));
@@ -1741,17 +1736,17 @@ static CodeList* gen_cond_goto(Output& output) {
             CodeCases* ccases = code_cases(alc);
             for (const StartCond& cond : conds) {
                 CodeList* body = code_list(alc);
-                text = buf.cstr("goto ").str(opts->cond_label_prefix).str(cond.name).flush();
-                append(body, code_stmt(alc, text));
+                buf.cstr("goto ").str(opts->cond_label_prefix).str(cond.name);
+                append(body, code_stmt(alc, buf.flush()));
 
-                text = gen_cond_enum_elem(buf, opts, cond.name);
-                append(ccases, code_case_string(alc, body, text));
+                append(ccases, code_case_string(alc, body,
+                        gen_cond_enum_elem(buf, opts, cond.name)));
             }
             if (opts->cond_abort) {
                 append(ccases, code_case_default(alc, gen_abort(alc)));
             }
-            text = buf.str(output_cond_get(opts)).flush();
-            append(stmts, code_switch(alc, text, ccases));
+            buf.str(output_cond_get(opts));
+            append(stmts, code_switch(alc, buf.flush(), ccases));
         }
 
         // see note [condition order]
@@ -2098,7 +2093,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
     if (opts->code_model == CodeModel::GOTO_LABEL) {
         // In the goto/label mode, generate DFA states as blocks of code preceded with labels,
         // and `goto` transitions between states.
-        if (opts->cgoto && is_cond_block) {
+        if (opts->computed_gotos && is_cond_block) {
             local_decls = true;
             append(code, gen_cond_table(output));
         }

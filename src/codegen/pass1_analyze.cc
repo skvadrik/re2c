@@ -453,9 +453,9 @@ static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
         go->godot = code_gosw(alc, go->span, go->span_count, false, eof);
-    } else if (opts->cgoto
+    } else if (opts->computed_gotos
                && !part_skip
-               && dspan_count >= opts->cgoto_threshold
+               && dspan_count >= opts->computed_gotos_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CPGOTO;
         go->gocp = code_gocp(

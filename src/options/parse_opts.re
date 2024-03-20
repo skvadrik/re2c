@@ -103,7 +103,7 @@ opt_short: /*!local:re2c
 
     "b" { opts.set_bitmaps(true);         goto opt_short; }
     "d" { opts.set_debug(true);           goto opt_short; }
-    "g" { opts.set_cgoto(true);           goto opt_short; }
+    "g" { opts.set_computed_gotos(true);  goto opt_short; }
     "s" { opts.set_nested_ifs(true);      goto opt_short; }
     "T" { opts.set_tags(true);            goto opt_short; }
 
@@ -157,7 +157,7 @@ opt_long: /*!local:re2c
     "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
     "debug-output"          end { opts.set_debug(true);              goto opt; }
     "case-ranges"           end { opts.set_case_ranges(true);        goto opt; }
-    "computed-gotos"        end { opts.set_cgoto(true);              goto opt; }
+    "computed-gotos"        end { opts.set_computed_gotos(true);     goto opt; }
     "nested-ifs"            end { opts.set_nested_ifs(true);         goto opt; }
     "case-insensitive"      end { opts.set_case_insensitive(true);   goto opt; }
     "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }

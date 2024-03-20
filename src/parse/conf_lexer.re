@@ -179,7 +179,7 @@ Ret Input::lex_conf(Opt& opts) {
 
     "variable:"  "yyctable"        { RET_CONF_STR(var_cond_table); }
     "variable:"  "yyaccept"        { RET_CONF_STR(var_accept); }
-    "variable:"  "yytarget"        { RET_CONF_STR(var_cgoto_table); }
+    "variable:"  "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }
     "variable:"  "yystate"         { RET_CONF_STR(var_state); }
     "variable:"  "yych"            { RET_CONF_STR(var_char); }
     "variable:"? "yych:conversion" { RET_CONF_BOOL(char_conv); }
@@ -202,8 +202,8 @@ Ret Input::lex_conf(Opt& opts) {
 
     "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_BOOL(bitmaps); }
     "flags:"? "debug-output"   | "flags:d"    { RET_CONF_BOOL(debug); }
-    "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_FEATURE(cgoto); }
-    ("computed-gotos" | "cgoto") ":threshold" { RET_CONF_NUM_NONNEG(cgoto_threshold); }
+    "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_FEATURE(computed_gotos); }
+    ("computed-gotos" | "cgoto") ":threshold" { RET_CONF_NUM_NONNEG(computed_gotos_threshold); }
     "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_BOOL(nested_ifs); }
     "flags:"? "case-insensitive"              { RET_CONF_BOOL(case_insensitive); }
     "flags:"? "case-inverted"                 { RET_CONF_BOOL(case_inverted); }

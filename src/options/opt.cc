@@ -126,7 +126,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_bitmaps = defaults.var_bitmaps;
         real.var_char = defaults.var_char;
         real.var_cond_table = defaults.var_cond_table;
-        real.var_cgoto_table = defaults.var_cgoto_table;
+        real.var_computed_gotos_table = defaults.var_computed_gotos_table;
         real.var_state = defaults.var_state;
         real.fill_enable = defaults.fill_enable;
         real.fill_check = defaults.fill_check;
@@ -204,9 +204,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.bitmaps_hex = defaults.bitmaps_hex;
         real.var_bitmaps = defaults.var_bitmaps;
     }
-    if (!real.cgoto) {
-        real.cgoto_threshold = defaults.cgoto_threshold;
-        real.var_cgoto_table = defaults.var_cgoto_table;
+    if (!real.computed_gotos) {
+        real.computed_gotos_threshold = defaults.computed_gotos_threshold;
+        real.var_computed_gotos_table = defaults.var_computed_gotos_table;
     }
     if (real.api != Api::DEFAULT) {
         real.api_cursor = defaults.api_cursor;
@@ -248,7 +248,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.bitmaps || real.encoding.multibyte_cunit()) {
         real.nested_ifs = true;
     }
-    if (real.cgoto) {
+    if (real.computed_gotos) {
         real.bitmaps = true;
         real.nested_ifs = true;
     }
@@ -293,7 +293,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.api == Api::DEFAULT && !glob.supported_apis_contains("default")) {
         RET_FAIL(error("default API is not supported for this backend"));
     }
-    if (real.cgoto && !glob.supported_features_contains("cgoto")) {
+    if (real.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
         RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
     }
     if (real.case_ranges && !glob.supported_features_contains("case_ranges")) {
@@ -301,7 +301,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     // TODO: check bitmaps and other optional features
     if (real.fill_eof != NOEOF) {
-        if (real.bitmaps || real.cgoto) {
+        if (real.bitmaps || real.computed_gotos) {
             RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "
                            "and -g, --computed gotos"));
         }
@@ -329,7 +329,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         RET_FAIL(error("storable state requires YYFILL to be enabled"));
     }
     if (glob.code_model != CodeModel::GOTO_LABEL) {
-        if (real.cgoto) {
+        if (real.computed_gotos) {
             RET_FAIL(error("computed gotos are not supported in this code model"));
         }
         if (real.bitmaps) {

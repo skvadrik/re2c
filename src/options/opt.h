@@ -56,7 +56,7 @@ using StxCodes = list_t<StxCode>;
     CHECKED_LIST(supported_targets, \
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
-            ({"cgoto", "case_ranges"}))
+            ({"computed_gotos", "case_ranges"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
@@ -354,7 +354,7 @@ enum class StxVarId : uint32_t {
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \
     MUTOPT(std::string, var_bitmaps, "yybm") \
-    MUTOPT(std::string, var_cgoto_table, "yytarget") \
+    MUTOPT(std::string, var_computed_gotos_table, "yytarget") \
     MUTOPT(std::string, var_char, "yych") \
     MUTOPT(std::string, var_cond_table, "yyctable") \
     MUTOPT(std::string, var_state, "yystate") \
@@ -362,8 +362,8 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, bitmaps, false) \
     MUTOPT(bool, bitmaps_hex, false) \
     MUTOPT(bool, case_ranges, false) \
-    MUTOPT(bool, cgoto, false) \
-    MUTOPT(uint32_t, cgoto_threshold, 9) \
+    MUTOPT(bool, computed_gotos, false) \
+    MUTOPT(uint32_t, computed_gotos_threshold, 9) \
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
     /* YYFILL */ \

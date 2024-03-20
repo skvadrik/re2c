@@ -1150,7 +1150,7 @@ yy194:
 	}
 yy195:
 #line 205 "../src/parse/conf_lexer.re"
-	{ RET_CONF_FEATURE(cgoto); }
+	{ RET_CONF_FEATURE(computed_gotos); }
 #line 1155 "src/parse/conf_lexer.cc"
 yy196:
 	yych = *++cur;
@@ -3252,7 +3252,7 @@ yy611:
 		goto yy2;
 	}
 #line 206 "../src/parse/conf_lexer.re"
-	{ RET_CONF_NUM_NONNEG(cgoto_threshold); }
+	{ RET_CONF_NUM_NONNEG(computed_gotos_threshold); }
 #line 3257 "src/parse/conf_lexer.cc"
 yy612:
 	yych = *++cur;
@@ -3721,7 +3721,7 @@ yy695:
 		goto yy2;
 	}
 #line 182 "../src/parse/conf_lexer.re"
-	{ RET_CONF_STR(var_cgoto_table); }
+	{ RET_CONF_STR(var_computed_gotos_table); }
 #line 3726 "src/parse/conf_lexer.cc"
 yy696:
 	yych = *++cur;

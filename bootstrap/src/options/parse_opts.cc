@@ -1106,7 +1106,7 @@ yy210:
 yy211:
 	++YYCURSOR;
 #line 106 "../src/options/parse_opts.re"
-	{ opts.set_cgoto(true);           goto opt_short; }
+	{ opts.set_computed_gotos(true);  goto opt_short; }
 #line 1111 "src/options/parse_opts.cc"
 yy212:
 	++YYCURSOR;
@@ -3541,7 +3541,7 @@ yy777:
 yy778:
 	++YYCURSOR;
 #line 160 "../src/options/parse_opts.re"
-	{ opts.set_cgoto(true);              goto opt; }
+	{ opts.set_computed_gotos(true);     goto opt; }
 #line 3546 "src/options/parse_opts.cc"
 yy779:
 	yych = *++YYCURSOR;
