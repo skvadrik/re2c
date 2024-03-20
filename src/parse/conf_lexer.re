@@ -38,9 +38,7 @@ namespace re2c {
 
 #define RET_CONF_FEATURE(conf) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    if (tmp_num != 0 && opts.glob.supported_features.end() == \
-            std::find(opts.glob.supported_features.begin(), \
-                    opts.glob.supported_features.end(), #conf)) { \
+    if (tmp_num != 0 && !opts.glob.supported_features_contains(#conf)) { \
         RET_FAIL(error_at_cur("'%s' feature is not supported for this backend", #conf)); \
     } \
     SETOPT(conf, tmp_num != 0); \

@@ -500,6 +500,12 @@ struct conopt_t {
     }
     RE2C_CONSTOPTS
 #undef CONSTOPT
+#define CHECKED_LIST(name, allowed) \
+    bool name##_contains(const std::string& what) const { \
+        return name.end() != std::find(name.begin(), name.end(), what); \
+    }
+    RE2C_CHECKED_LISTS
+#undef CHECKED_LIST
 #define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
     bool have_conf_##name() const { \
         return name != nullptr; \
