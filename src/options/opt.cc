@@ -296,10 +296,15 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
         RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
     }
+    if (real.bitmaps && !glob.supported_features_contains("bitmaps")) {
+        RET_FAIL(error("-b, --bitmaps option is not supported for this backend"));
+    }
+    if (real.nested_ifs && !glob.supported_features_contains("nested_ifs")) {
+        RET_FAIL(error("-s, --nested-ifs option is not supported for this backend"));
+    }
     if (real.case_ranges && !glob.supported_features_contains("case_ranges")) {
         RET_FAIL(error("--case-ranges option is not supported for this backend"));
     }
-    // TODO: check bitmaps and other optional features
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.computed_gotos) {
             RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "

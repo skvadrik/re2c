@@ -3,7 +3,7 @@ const char* DEFAULT_SYNTAX_D =
     "supported_apis = [\"generic\"];\n"
     "supported_code_models = [\"goto_label\", \"loop_switch\", \"recursive_functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"case_ranges\"];\n"
+    "supported_features = [\"nested_ifs\", \"bitmaps\", \"case_ranges\"];\n"
     "\n"
     "semicolons = 1;\n"
     "implicit_bool_conversion = 0;\n"

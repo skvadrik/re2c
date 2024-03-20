@@ -1089,7 +1089,7 @@ yy187:
 	}
 yy188:
 #line 203 "../src/parse/conf_lexer.re"
-	{ RET_CONF_BOOL(bitmaps); }
+	{ RET_CONF_FEATURE(bitmaps); }
 #line 1094 "src/parse/conf_lexer.cc"
 yy189:
 	yych = *++cur;
@@ -1166,7 +1166,7 @@ yy198:
 		goto yy2;
 	}
 #line 207 "../src/parse/conf_lexer.re"
-	{ RET_CONF_BOOL(nested_ifs); }
+	{ RET_CONF_FEATURE(nested_ifs); }
 #line 1171 "src/parse/conf_lexer.cc"
 yy199:
 	yych = *++cur;

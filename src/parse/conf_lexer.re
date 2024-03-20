@@ -200,11 +200,11 @@ Ret Input::lex_conf(Opt& opts) {
     "state:abort"     { RET_CONF_BOOL(state_abort); }
     "state:nextlabel" { RET_CONF_BOOL(state_next); }
 
-    "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_BOOL(bitmaps); }
+    "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_FEATURE(bitmaps); }
     "flags:"? "debug-output"   | "flags:d"    { RET_CONF_BOOL(debug); }
     "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_FEATURE(computed_gotos); }
     ("computed-gotos" | "cgoto") ":threshold" { RET_CONF_NUM_NONNEG(computed_gotos_threshold); }
-    "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_BOOL(nested_ifs); }
+    "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_FEATURE(nested_ifs); }
     "flags:"? "case-insensitive"              { RET_CONF_BOOL(case_insensitive); }
     "flags:"? "case-inverted"                 { RET_CONF_BOOL(case_inverted); }
     "flags:"? "case-ranges"                   { RET_CONF_FEATURE(case_ranges); }

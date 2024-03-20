@@ -3,7 +3,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "supported_apis = [\"generic\"];\n"
     "supported_code_models = [\"recursive_functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [];\n"
+    "supported_features = [\"nested_ifs\"];\n"
     "\n"
     "semicolons = 0;\n"
     "implicit_bool_conversion = 0;\n"
