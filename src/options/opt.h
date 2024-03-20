@@ -732,4 +732,22 @@ Ret parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) NODISCARD;
 
 } // namespace re2c
 
+namespace std {
+
+// `std::hash` specialization for enum classes are necessary for some toolchains
+template<> struct hash<re2c::StxVarId> {
+    size_t operator()(re2c::StxVarId var) const {
+        hash<uint32_t> h;
+        return h(static_cast<uint32_t>(var));
+    }
+};
+template<> struct hash<re2c::StxLOpt> {
+    size_t operator()(re2c::StxLOpt opt) const {
+        hash<uint32_t> h;
+        return h(static_cast<uint32_t>(opt));
+    }
+};
+
+} // namespace std
+
 #endif // _RE2C_CONF_OPT_
