@@ -1,0 +1,184 @@
+supported_apis = ["generic"];
+// "recursive_functions" works syntactically, but causes stack overflows due to non-tail recusion
+supported_code_models = ["loop_switch"];
+supported_targets = ["code", "dot"];
+supported_features = ["nested_ifs"];
+
+semicolons = 0;
+implicit_bool_conversion = 0;
+backtick_quoted_strings = 0;
+standalone_single_quotes = 0;
+indentation_sensitive = 1;
+
+conf:api = custom;
+conf:api:style = free-form;
+conf:api:sigil = "@@";
+conf:header = "";
+conf:eof = -1;
+conf:sentinel = -1;
+conf:yyfill:enable = 1;
+conf:yyfill:parameter = 1;
+conf:yyfill:check = 1;
+conf:tags = 0;
+conf:leftmost-captures = 0;
+conf:posix-captures = 0;
+conf:tags:prefix = "yyt";
+conf:tags:expression = "@@";
+conf:invert-captures = 0;
+conf:define:YYBACKUP = "YYBACKUP";
+conf:define:YYBACKUPCTX = "YYBACKUPCTX";
+conf:define:YYCONDTYPE = "yycondtype";
+conf:define:YYCTYPE = "yyctype";
+conf:define:YYCTXMARKER = "YYCTXMARKER";
+conf:define:YYCURSOR = "YYCURSOR";
+conf:define:YYDEBUG = "YYDEBUG";
+conf:define:YYFILL = "YYFILL";
+conf:define:YYFILL@len = "@@";
+conf:define:YYFILL:naked = 0;
+conf:define:YYGETCONDITION = "YYGETCONDITION";
+conf:define:YYGETCONDITION:naked = 0;
+conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYGETSTATE:naked = 0;
+conf:define:YYLESSTHAN = "YYLESSTHAN";
+conf:define:YYLIMIT = "YYLIMIT";
+conf:define:YYMARKER = "YYMARKER";
+conf:define:YYMAXFILL = "YYMAXFILL";
+conf:define:YYMAXNMATCH = "YYMAXNMATCH";
+conf:define:YYMTAGN = "YYMTAGN";
+conf:define:YYMTAGP = "YYMTAGP";
+conf:define:YYPEEK = "YYPEEK";
+conf:define:YYRESTORE = "YYRESTORE";
+conf:define:YYRESTORECTX = "YYRESTORECTX";
+conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETCONDITION = "YYSETCONDITION";
+conf:define:YYSETCONDITION@cond = "@@";
+conf:define:YYSETCONDITION:naked = 0;
+conf:define:YYSETSTATE = "YYSETSTATE";
+conf:define:YYSETSTATE:naked = 0;
+conf:define:YYSETSTATE@state = "@@";
+conf:define:YYSHIFT = "YYSHIFT";
+conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
+conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
+conf:define:YYSKIP = "YYSKIP";
+conf:define:YYSTAGN = "YYSTAGN";
+conf:define:YYSTAGP = "YYSTAGP";
+conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+conf:yyfn:sep = ";";
+conf:variable:yyctable = "yyctable";
+conf:variable:yyaccept = "yyaccept";
+conf:variable:yytarget = "yytarget";
+conf:variable:yystate = "yystate";
+conf:variable:yych = "yych";
+conf:variable:yych:conversion = 0;
+conf:variable:yych:literals = hex;
+conf:variable:yych:emit = 0;
+conf:variable:yybm = "yybm";
+conf:variable:yybm:hex = 0;
+conf:variable:yystable = ""; // deprecated
+conf:cond:abort = 0; // default case causes [redundant-case] warnings
+conf:cond:prefix = "yyc_";
+conf:cond:enumprefix = "YYC_";
+conf:cond:divider = "(* *********************************** *)";
+conf:cond:divider@cond = "@@";
+conf:cond:goto = "";
+conf:cond:goto@cond = "@@";
+conf:state:abort = 1;
+conf:state:nextlabel = 0;
+conf:bit-vectors = 0;
+conf:debug-output = 0;
+conf:computed-gotos = 0;
+conf:computed-gotos:threshold = 9;
+conf:nested-ifs = 0;
+conf:case-insensitive = 0;
+conf:case-inverted = 0;
+conf:case-ranges = 0;
+conf:unsafe = 0;
+conf:encoding:ebcdic = 0;
+conf:encoding:utf32 = 0;
+conf:encoding:ucs2 = 0;
+conf:encoding:utf16 = 0;
+conf:encoding:utf8 = 0;
+conf:encoding-policy = ignore;
+conf:empty-class = match-empty;
+conf:indent:string = "    ";
+conf:indent:top = 0;
+conf:label:prefix = "yy";
+conf:label:yyfill = "";
+conf:label:yyloop = "";
+conf:label:yyNext = "";
+conf:label:start = 0;
+
+code:var_local = topindent name (have_init ? " = " init) nl;
+code:var_global = code:var_local;
+
+code:const_local = topindent name " = " init nl;
+code:const_global = code:const_local;
+
+// code:array_local
+// code:array_global
+code:array_elem = array "[" index "]";
+
+// code:type_int
+// code:type_uint
+// code:type_cond_enum
+// code:type_yybm
+// code:type_yytarget
+
+code:assign = [lhs: topindent lhs " = " rhs nl];
+code:assign_op = topindent lhs " = " lhs " " op " " rhs nl;
+
+code:if_then_else =
+    [branch{0}: topindent "if " cond ":" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent (have_cond? "elif " cond : "else") ":" nl
+        indent [stmt: stmt] dedent];
+
+code:switch =
+    topindent "match " expr ":" nl
+        indent [case: case] dedent;
+
+code:switch_cases = topindent "case "
+    [case{0:-2}: case "|"]
+    [case{-1}:   case ":" nl]
+        indent [stmt: stmt] dedent;
+
+code:switch_case_range = (multival
+    ? [val{0}: val] [val{1:-1}: "|" val]
+    : [val{0}: val]);
+
+code:switch_case_default = "_";
+
+code:loop =
+    topindent "while True:" nl
+        indent [stmt: stmt] dedent;
+
+code:enum = [elem: elem " = " init nl];
+
+code:enum_elem = name;
+
+code:fndef =
+    "def " name "(" [arg{0}: argname] [arg{1:-1}: ", " argname] "):" nl
+        indent [stmt: stmt] dedent;
+
+code:fncall =
+    topindent (have_retval ? retval " = ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:tailcall =
+    topindent (have_retval ? "return ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:recursive_functions = [fn: fndef nl];
+
+code:fingerprint =
+    "# Generated by re2c" (version? " " version) (date? " on " date) nl;
+
+code:abort = topindent "raise \"internal lexer error\"" nl;
+
+code:yyaccept = topindent var " = " num nl;
+
+code:yydebug = topindent debug " " state " " char nl;
+
+code:yypeek = topindent char " = " peek (api_style.functions ? "()") nl;
+
+code:yyskip = topindent skip (api_style.functions ? "()") nl;
+
+code:yybackup = topindent backup (api_style.functions ? "()") nl;

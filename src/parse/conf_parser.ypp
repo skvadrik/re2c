@@ -7,6 +7,7 @@ extern const char* DEFAULT_SYNTAX_C;
 extern const char* DEFAULT_SYNTAX_D;
 extern const char* DEFAULT_SYNTAX_GO;
 extern const char* DEFAULT_SYNTAX_OCAML;
+extern const char* DEFAULT_SYNTAX_PYTHON;
 extern const char* DEFAULT_SYNTAX_RUST;
 
 }
@@ -231,6 +232,7 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
             case Lang::D: src = DEFAULT_SYNTAX_D; break;
             case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
             case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
+            case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
             case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
         }
 

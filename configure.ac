@@ -83,6 +83,9 @@ AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
 # --enable-ocaml
 AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
 AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])
+# --enable-python
+AC_ARG_ENABLE([python], [AS_HELP_STRING([--enable-python], [build re2py executable])])
+AM_CONDITIONAL([WITH_PYTHON], [test "x$enable_python" != "xno"])
 # --enable-rust
 AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
