@@ -9,6 +9,7 @@ const char* DEFAULT_SYNTAX_C =
     "implicit_bool_conversion = 1;\n"
     "backtick_quoted_strings = 0;\n"
     "standalone_single_quotes = 0;\n"
+    "indentation_sensitive = 0;\n"
     "\n"
     "conf:api = default;\n"
     "conf:api:style = functions;\n"

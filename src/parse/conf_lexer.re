@@ -648,6 +648,7 @@ start:
     "implicit_bool_conversion" { SAVE_CONF_BOOL(implicit_bool_conversion); }
     "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
     "standalone_single_quotes" { SAVE_CONF_BOOL(standalone_single_quotes); }
+    "indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }
 
     "" / "code:" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
 

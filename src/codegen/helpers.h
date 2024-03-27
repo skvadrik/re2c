@@ -11,10 +11,40 @@ namespace re2c {
 
 struct opt_t;
 
-bool is_print(uint32_t c);
 void print_hex(std::ostream& o, uint32_t c, const opt_t* opts);
 void print_char_or_hex(std::ostream& o, uint32_t c, const opt_t* opts);
 void print_span(std::ostream& o, uint32_t l, uint32_t u, const opt_t* opts);
+
+inline bool is_print(uint32_t c) {
+    return c >= 0x20 && c < 0x7F;
+}
+
+inline bool is_space(uint32_t c) {
+    switch (c) {
+    case '\t':
+    case '\f':
+    case '\v':
+    case '\n':
+    case '\r':
+    case ' ':
+        return true;
+    default:
+        return false;
+    }
+}
+
+inline bool is_space_nonl(uint32_t c) {
+    switch (c) {
+    case '\t':
+    case '\f':
+    case '\v':
+    case '\r':
+    case ' ':
+        return true;
+    default:
+        return false;
+    }
+}
 
 template<typename T>
 void argsubst(std::ostringstream& os,

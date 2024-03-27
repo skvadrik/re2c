@@ -9,6 +9,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "implicit_bool_conversion = 0;\n"
     "backtick_quoted_strings = 0;\n"
     "standalone_single_quotes = 1;\n"
+    "indentation_sensitive = 0;\n"
     "\n"
     "conf:api = custom;\n"
     "conf:api:style = free-form;\n"

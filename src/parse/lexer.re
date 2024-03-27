@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 
+#include "src/codegen/helpers.h"
 #include "src/codegen/output.h"
 #include "src/encoding/enc.h"
 #include "src/msg/location.h"
@@ -608,8 +609,58 @@ error:
     RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
+Ret Input::process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) {
+    const char* text = "";
+    if (globopts->indentation_sensitive) {
+        // Cut off any leading or trailing newlines to make the code uniform.
+        while (p <= q && *p == '\n') ++p;
+        while (p <= q && *q == '\n') --q;
+
+        if (p <= q) {
+            // Split semantic action by newlines (note: last character `*q` is not a newline).
+            // Drop blank lines (this simplifies the code below that removes indentation).
+            auto is_blank = [](const uint8_t* s, const uint8_t* e) {
+                while (s < e && is_space(*s)) ++s;
+                return s == e;
+            };
+            tmp_list.clear();
+            for (const uint8_t* s = p; s < q; ++s) {
+                if (*s == '\n') {
+                    if (!is_blank(p, s)) tmp_list.push_back(std::string(p, s + 1));
+                    p = s + 1;
+                }
+            }
+            if (!is_blank(p, q + 1)) tmp_list.push_back(std::string(p, q + 1) + "\n");
+
+            if (!tmp_list.empty()) {
+                // Find first line indentation and use it as base indentation.
+                const std::string& first = tmp_list[0];
+                uint32_t indent = 0;
+                while (is_space_nonl(static_cast<uint8_t>(first[indent]))) ++indent;
+                std::string indstr = first.substr(0, indent);
+
+                // Cut off base indentation from every line and glue them together.
+                tmp_str.clear();
+                for (std::string& line: tmp_list) {
+                    if (line.compare(0, indent, indstr) == 0) {
+                        tmp_str += line.substr(indent, std::string::npos); // remove indent
+                    } else {
+                        RET_FAIL(error_at_tok("inconsistent indentation in semantic action"));
+                    }
+                }
+                text = copystr(tmp_str, alc);
+            }
+        }
+    } else {
+        // copy the entire semantic action verbatim
+        text = ast.cstr_global(p, q + 1);
+    }
+
+    yylval->semact = ast.sem_act(tok_loc(), text, nullptr, false);
+    return Ret::OK;
+}
+
 Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
-    const loc_t& loc = tok_loc();
     tok = cur;
 code: /*!re2c
     eol   { next_line(); goto indent; }
@@ -622,36 +673,33 @@ code: /*!re2c
 indent: /*!re2c
     "" / ws { goto code; } // indent after newline => still in semantic action
     "" {
-        while (isspace(tok[0])) ++tok;
-        uint8_t* p = cur;
-        while (p > tok && isspace(p[-1])) --p;
-        yylval->semact = ast.sem_act(loc, ast.cstr_global(tok, p), nullptr, false);
-        return Ret::OK;
+        const uint8_t* p = tok, *q = cur - 1;
+        if (!globopts->indentation_sensitive) {
+            while (p <= q && is_space(*p)) ++p;
+            while (p <= q && is_space(*q)) --q;
+        }
+        return process_semact(yylval, ast, p, q);
     }
 */
 }
 
 Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
-    const loc_t& loc = tok_loc();
     uint32_t depth = 1;
 code: /*!re2c
     "}" {
-        if (--depth == 0) {
-            const uint8_t* p = tok, *q = cur - 1;
+        --depth;
+        if (depth > 0) goto code;
 
-            // In rec/func mode, strip curly braces and the adjacent whitespace.
-            // (it won't cause any name collisions because the code is in a separate function).
-            // This is needed for languages that don't use curly braces for compound statements.
-            if (globopts->code_model == CodeModel::REC_FUNC) {
-                ++p; --q; // skip '{' and '}'
-                for (; p <= q && (*p == ' ' || *p == '\t'); ++p);
-                for (; p <= q && (*q == ' ' || *q == '\t'); --q);
-            }
-
-            yylval->semact = ast.sem_act(loc, ast.cstr_global(p, q + 1), nullptr, false);
-            return Ret::OK;
+        const uint8_t* p = tok, *q = cur - 1;
+        if (globopts->code_model == CodeModel::REC_FUNC || globopts->indentation_sensitive) {
+            // Strip curly braces and adjacent whitespace. This is needed for languages that
+            // don't use curly braces for compound statements. In rec/func mode it won't cause
+            // name collisions because the code is in a separate function.
+            ++p; --q; // skip '{' and '}'
+            while (p <= q && is_space_nonl(*p)) ++p;
+            while (p <= q && is_space_nonl(*q)) --q;
         }
-        goto code;
+        return process_semact(yylval, ast, p, q);
     }
 
     "{"               { ++depth; goto code; }

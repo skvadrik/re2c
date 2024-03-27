@@ -7,6 +7,7 @@ semicolons = 1;
 implicit_bool_conversion = 1;
 backtick_quoted_strings = 0;
 standalone_single_quotes = 0;
+indentation_sensitive = 0;
 
 conf:api = default;
 conf:api:style = functions;

@@ -5,24 +5,6 @@
 
 namespace re2c {
 
-inline bool is_print(uint32_t c) {
-    return c >= 0x20 && c < 0x7F;
-}
-
-static inline bool is_space(uint32_t c) {
-    switch (c) {
-    case '\t':
-    case '\f':
-    case '\v':
-    case '\n':
-    case '\r':
-    case ' ':
-        return true;
-    default:
-        return false;
-    }
-}
-
 static inline char hex(uint32_t c) {
     static const char* HEX_TABLE = "0123456789ABCDEF";
     return HEX_TABLE[c & 0x0F];

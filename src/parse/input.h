@@ -124,6 +124,8 @@ class Input: private LexerState {
     inline void next_line();
     Ret set_sourceline() NODISCARD;
 
+    Ret process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) NODISCARD;
+
     Ret lex_opt_name(std::string& name) NODISCARD;
     Ret lex_name_list(BlockNameList** ptail) NODISCARD;
     Ret lex_special_block(Output& out, CodeKind kind, uint32_t mask) NODISCARD;
