@@ -21,31 +21,46 @@ def parse_u32(str):
                 case 0:
                     yych = str[cur]
                     cur += 1
-                    match yych:
-                        case 0x30:
-                            yystate = 2
-                            continue
-                        case 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            yystate = 4
-                            continue
-                        case _:
-                            yystate = 1
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 1
+                        continue
+                    if yych <= 0x30:
+                        yystate = 2
+                        continue
+                    if yych <= 0x39:
+                        yystate = 4
+                        continue
+                    yystate = 1
+                    continue
                 case 1:
                     return None
                 case 2:
                     mar = cur
                     yych = str[cur]
-                    match yych:
-                        case 0x42|0x62:
+                    if yych <= 0x58:
+                        if yych == 0x42:
                             cur += 1
                             yystate = 5
                             continue
-                        case 0x58|0x78:
+                        if yych >= 0x58:
                             cur += 1
                             yystate = 7
                             continue
-                        case _:
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x62:
+                            if yych >= 0x62:
+                                cur += 1
+                                yystate = 5
+                                continue
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0x78:
+                                cur += 1
+                                yystate = 7
+                                continue
                             yystate = 3
                             continue
                 case 3:
@@ -59,28 +74,45 @@ def parse_u32(str):
                     continue
                 case 5:
                     yych = str[cur]
-                    match yych:
-                        case 0x30|0x31:
-                            cur += 1
-                            yystate = 8
-                            continue
-                        case _:
-                            yystate = 6
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 6
+                        continue
+                    if yych <= 0x31:
+                        cur += 1
+                        yystate = 8
+                        continue
+                    yystate = 6
+                    continue
                 case 6:
                     cur = mar
                     yystate = 3
                     continue
                 case 7:
                     yych = str[cur]
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39|0x41|0x42|0x43|0x44|0x45|0x46|0x61|0x62|0x63|0x64|0x65|0x66:
+                    if yych <= 0x40:
+                        if yych <= 0x2F:
+                            yystate = 6
+                            continue
+                        if yych <= 0x39:
                             cur += 1
                             yystate = 9
                             continue
-                        case _:
+                        yystate = 6
+                        continue
+                    else:
+                        if yych <= 0x46:
+                            cur += 1
+                            yystate = 9
+                            continue
+                        if yych <= 0x60:
                             yystate = 6
                             continue
+                        if yych <= 0x66:
+                            cur += 1
+                            yystate = 9
+                            continue
+                        yystate = 6
+                        continue
                 case 8:
                     cur += -1
                     cond = YYC_BIN
@@ -94,13 +126,14 @@ def parse_u32(str):
                 case 10:
                     yych = str[cur]
                     cur += 1
-                    match yych:
-                        case 0x30|0x31:
-                            yystate = 12
-                            continue
-                        case _:
-                            yystate = 11
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 11
+                        continue
+                    if yych <= 0x31:
+                        yystate = 12
+                        continue
+                    yystate = 11
+                    continue
                 case 11:
                     return num
                 case 12:
@@ -109,13 +142,14 @@ def parse_u32(str):
                 case 13:
                     yych = str[cur]
                     cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37:
-                            yystate = 15
-                            continue
-                        case _:
-                            yystate = 14
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 14
+                        continue
+                    if yych <= 0x37:
+                        yystate = 15
+                        continue
+                    yystate = 14
+                    continue
                 case 14:
                     return num
                 case 15:
@@ -124,13 +158,14 @@ def parse_u32(str):
                 case 16:
                     yych = str[cur]
                     cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            yystate = 18
-                            continue
-                        case _:
-                            yystate = 17
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 17
+                        continue
+                    if yych <= 0x39:
+                        yystate = 18
+                        continue
+                    yystate = 17
+                    continue
                 case 17:
                     return num
                 case 18:
@@ -139,19 +174,27 @@ def parse_u32(str):
                 case 19:
                     yych = str[cur]
                     cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            yystate = 21
-                            continue
-                        case 0x41|0x42|0x43|0x44|0x45|0x46:
-                            yystate = 22
-                            continue
-                        case 0x61|0x62|0x63|0x64|0x65|0x66:
-                            yystate = 23
-                            continue
-                        case _:
+                    if yych <= 0x40:
+                        if yych <= 0x2F:
                             yystate = 20
                             continue
+                        if yych <= 0x39:
+                            yystate = 21
+                            continue
+                        yystate = 20
+                        continue
+                    else:
+                        if yych <= 0x46:
+                            yystate = 22
+                            continue
+                        if yych <= 0x60:
+                            yystate = 20
+                            continue
+                        if yych <= 0x66:
+                            yystate = 23
+                            continue
+                        yystate = 20
+                        continue
                 case 20:
                     return num
                 case 21:

@@ -14,22 +14,29 @@ def lex(str):
             match yystate:
                 case 0:
                     yych = str[cur]
-                    match yych:
-                        case 0x20:
-                            cur += 1
-                            yystate = 3
-                            continue
-                        case 0x27:
-                            cur += 1
-                            yystate = 5
-                            continue
-                        case _:
+                    if yych <= 0x20:
+                        if yych <= 0x00:
                             if cur >= lim:
-                                yystate = 10
+                                yystate = 9
                                 continue
                             cur += 1
                             yystate = 1
                             continue
+                        if yych >= 0x20:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        cur += 1
+                        yystate = 1
+                        continue
+                    else:
+                        if yych == 0x27:
+                            cur += 1
+                            yystate = 5
+                            continue
+                        cur += 1
+                        yystate = 1
+                        continue
                 case 1:
                     yystate = 2
                     continue
@@ -37,14 +44,15 @@ def lex(str):
                     return -1
                 case 3:
                     yych = str[cur]
-                    match yych:
-                        case 0x20:
-                            cur += 1
-                            yystate = 3
-                            continue
-                        case _:
-                            yystate = 4
-                            continue
+                    if yych <= 0x00:
+                        yystate = 4
+                        continue
+                    if yych == 0x20:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 4
+                    continue
                 case 4:
                     break
                 case 5:
@@ -64,30 +72,34 @@ def lex(str):
                     yystate = 7
                     continue
                 case 7:
-                    match yych:
-                        case 0x27:
-                            cur += 1
-                            yystate = 8
-                            continue
-                        case 0x5C:
-                            cur += 1
-                            yystate = 9
-                            continue
-                        case _:
+                    if yych <= 0x27:
+                        if yych <= 0x00:
                             if cur >= lim:
-                                yystate = 11
+                                yystate = 10
                                 continue
                             cur += 1
                             yystate = 6
                             continue
-                case 8:
+                        if yych <= 0x26:
+                            cur += 1
+                            yystate = 6
+                            continue
+                        cur += 1
+                    else:
+                        if yych == 0x5C:
+                            cur += 1
+                            yystate = 8
+                            continue
+                        cur += 1
+                        yystate = 6
+                        continue
                     count += 1
                     break
-                case 9:
+                case 8:
                     yych = str[cur]
                     if yych <= 0x00:
                         if cur >= lim:
-                            yystate = 11
+                            yystate = 10
                             continue
                         cur += 1
                         yystate = 6
@@ -95,9 +107,9 @@ def lex(str):
                     cur += 1
                     yystate = 6
                     continue
-                case 10:
+                case 9:
                     return count
-                case 11:
+                case 10:
                     cur = mar
                     yystate = 2
                     continue

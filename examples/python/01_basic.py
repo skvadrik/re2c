@@ -10,25 +10,27 @@ def lex(str):
             case 0:
                 yych = str[cur]
                 cur += 1
-                match yych:
-                    case 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yystate = 2
-                        continue
-                    case _:
-                        yystate = 1
-                        continue
+                if yych <= 0x30:
+                    yystate = 1
+                    continue
+                if yych <= 0x39:
+                    yystate = 2
+                    continue
+                yystate = 1
+                continue
             case 1:
                 return False
             case 2:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        cur += 1
-                        yystate = 2
-                        continue
-                    case _:
-                        yystate = 3
-                        continue
+                if yych <= 0x2F:
+                    yystate = 3
+                    continue
+                if yych <= 0x39:
+                    cur += 1
+                    yystate = 2
+                    continue
+                yystate = 3
+                continue
             case 3:
                 return True
             case _:

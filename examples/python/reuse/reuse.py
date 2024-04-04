@@ -15,104 +15,62 @@ def lex_utf8(str):
             case 0:
                 yych = str[cur]
                 cur += 1
-                match yych:
-                    case 0xE2:
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 1
-                        continue
-            case 1:
-                yystate = 2
+                if yych == 0xE2:
+                    yystate = 2
+                    continue
+                yystate = 1
                 continue
-            case 2:
+            case 1:
                 return None
-            case 3:
+            case 2:
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x88:
-                        cur += 1
-                        yystate = 4
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych != 0x88:
+                    yystate = 1
+                    continue
+                cur += 1
+                yych = str[cur]
+                if yych == 0x80:
+                    cur += 1
+                    yystate = 4
+                    continue
+                yystate = 3
+                continue
+            case 3:
+                cur = mar
+                yystate = 1
+                continue
             case 4:
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 6
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 5:
-                cur = mar
-                yystate = 2
-                continue
-            case 6:
+                if yych != 0x78:
+                    yystate = 3
+                    continue
+                cur += 1
                 yych = str[cur]
-                match yych:
-                    case 0x78:
-                        cur += 1
-                        yystate = 7
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 7:
+                if yych != 0x20:
+                    yystate = 3
+                    continue
+                cur += 1
                 yych = str[cur]
-                match yych:
-                    case 0x20:
-                        cur += 1
-                        yystate = 8
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 8:
+                if yych != 0xE2:
+                    yystate = 3
+                    continue
+                cur += 1
                 yych = str[cur]
-                match yych:
-                    case 0xE2:
-                        cur += 1
-                        yystate = 9
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 9:
+                if yych != 0x88:
+                    yystate = 3
+                    continue
+                cur += 1
                 yych = str[cur]
-                match yych:
-                    case 0x88:
-                        cur += 1
-                        yystate = 10
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 10:
+                if yych != 0x83:
+                    yystate = 3
+                    continue
+                cur += 1
                 yych = str[cur]
-                match yych:
-                    case 0x83:
-                        cur += 1
-                        yystate = 11
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 11:
-                yych = str[cur]
-                match yych:
-                    case 0x79:
-                        cur += 1
-                        yystate = 12
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
-            case 12:
+                if yych != 0x79:
+                    yystate = 3
+                    continue
+                cur += 1
                 return cur
             case _:
                 raise "internal lexer error"

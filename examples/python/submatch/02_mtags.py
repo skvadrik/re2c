@@ -14,16 +14,18 @@ def parse(str):
         match yystate:
             case 0:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yyt1 = cur
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        cur += 1
-                        yystate = 1
-                        continue
+                if yych <= 0x2F:
+                    cur += 1
+                    yystate = 1
+                    continue
+                if yych <= 0x39:
+                    yyt1 = cur
+                    cur += 1
+                    yystate = 3
+                    continue
+                cur += 1
+                yystate = 1
+                continue
             case 1:
                 yystate = 2
                 continue
@@ -32,26 +34,31 @@ def parse(str):
             case 3:
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x00:
+                if yych <= 0x2E:
+                    if yych <= 0x00:
                         
                         
                         yyt2 = cur
                         cur += 1
                         yystate = 4
                         continue
-                    case 0x2E:
-                        yyt2 = cur
-                        cur += 1
-                        yystate = 5
+                    if yych <= 0x2D:
+                        yystate = 2
                         continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
+                    yyt2 = cur
+                    cur += 1
+                    yystate = 5
+                    continue
+                else:
+                    if yych <= 0x2F:
+                        yystate = 2
+                        continue
+                    if yych <= 0x39:
                         cur += 1
                         yystate = 7
                         continue
-                    case _:
-                        yystate = 2
-                        continue
+                    yystate = 2
+                    continue
             case 4:
                 t1 = yyt1
                 t2 = yyt2
@@ -63,61 +70,72 @@ def parse(str):
                 return vers
             case 5:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yytm3.append(cur)
-                        cur += 1
-                        yystate = 8
-                        continue
-                    case _:
-                        yystate = 6
-                        continue
+                if yych <= 0x2F:
+                    yystate = 6
+                    continue
+                if yych <= 0x39:
+                    yytm3.append(cur)
+                    cur += 1
+                    yystate = 8
+                    continue
+                yystate = 6
+                continue
             case 6:
                 cur = mar
                 yystate = 2
                 continue
             case 7:
                 yych = str[cur]
-                match yych:
-                    case 0x00:
+                if yych <= 0x2E:
+                    if yych <= 0x00:
                         
                         
                         yyt2 = cur
                         cur += 1
                         yystate = 4
                         continue
-                    case 0x2E:
-                        yyt2 = cur
-                        cur += 1
-                        yystate = 5
+                    if yych <= 0x2D:
+                        yystate = 6
                         continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
+                    yyt2 = cur
+                    cur += 1
+                    yystate = 5
+                    continue
+                else:
+                    if yych <= 0x2F:
+                        yystate = 6
+                        continue
+                    if yych <= 0x39:
                         cur += 1
                         yystate = 7
                         continue
-                    case _:
-                        yystate = 6
-                        continue
+                    yystate = 6
+                    continue
             case 8:
                 yych = str[cur]
-                match yych:
-                    case 0x00:
+                if yych <= 0x2E:
+                    if yych <= 0x00:
                         yytm4.append(cur)
                         cur += 1
                         yystate = 4
                         continue
-                    case 0x2E:
-                        yytm4.append(cur)
-                        cur += 1
-                        yystate = 5
+                    if yych <= 0x2D:
+                        yystate = 6
                         continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
+                    yytm4.append(cur)
+                    cur += 1
+                    yystate = 5
+                    continue
+                else:
+                    if yych <= 0x2F:
+                        yystate = 6
+                        continue
+                    if yych <= 0x39:
                         cur += 1
                         yystate = 8
                         continue
-                    case _:
-                        yystate = 6
-                        continue
+                    yystate = 6
+                    continue
             case _:
                 raise "internal lexer error"
 

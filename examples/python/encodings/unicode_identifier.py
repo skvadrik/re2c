@@ -14,103 +14,152 @@ def lex(str):
             case 0:
                 yych = str[cur]
                 cur += 1
-                match yych:
-                    case 0x24|0x41|0x42|0x43|0x44|0x45|0x46|0x47|0x48|0x49|0x4A|0x4B|0x4C|0x4D|0x4E|0x4F|0x50|0x51|0x52|0x53|0x54|0x55|0x56|0x57|0x58|0x59|0x5A|0x5F|0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A:
-                        yystate = 3
-                        continue
-                    case 0xC2:
-                        yystate = 5
-                        continue
-                    case 0xC3:
-                        yystate = 6
-                        continue
-                    case 0xC4|0xC5|0xC6|0xC7|0xC8|0xC9|0xCA|0xD0|0xD1|0xD3|0xDA:
-                        yystate = 7
-                        continue
-                    case 0xCB:
-                        yystate = 8
-                        continue
-                    case 0xCD:
-                        yystate = 9
-                        continue
-                    case 0xCE:
-                        yystate = 10
-                        continue
-                    case 0xCF:
-                        yystate = 11
-                        continue
-                    case 0xD2:
-                        yystate = 12
-                        continue
-                    case 0xD4:
-                        yystate = 13
-                        continue
-                    case 0xD5:
-                        yystate = 14
-                        continue
-                    case 0xD6:
-                        yystate = 15
-                        continue
-                    case 0xD7:
-                        yystate = 16
-                        continue
-                    case 0xD8:
-                        yystate = 17
-                        continue
-                    case 0xD9:
-                        yystate = 18
-                        continue
-                    case 0xDB:
-                        yystate = 19
-                        continue
-                    case 0xDC:
-                        yystate = 20
-                        continue
-                    case 0xDD:
-                        yystate = 21
-                        continue
-                    case 0xDE:
-                        yystate = 22
-                        continue
-                    case 0xDF:
-                        yystate = 23
-                        continue
-                    case 0xE0:
-                        yystate = 24
-                        continue
-                    case 0xE1:
-                        yystate = 25
-                        continue
-                    case 0xE2:
-                        yystate = 26
-                        continue
-                    case 0xE3:
-                        yystate = 27
-                        continue
-                    case 0xE4:
-                        yystate = 28
-                        continue
-                    case 0xE5|0xE6|0xE7|0xE8|0xEB|0xEC:
-                        yystate = 29
-                        continue
-                    case 0xE9:
-                        yystate = 30
-                        continue
-                    case 0xEA:
-                        yystate = 31
-                        continue
-                    case 0xED:
-                        yystate = 32
-                        continue
-                    case 0xEF:
-                        yystate = 33
-                        continue
-                    case 0xF0:
-                        yystate = 34
-                        continue
-                    case _:
-                        yystate = 1
-                        continue
+                if yych <= 0xD6:
+                    if yych <= 0xC3:
+                        if yych <= 0x5E:
+                            if yych <= 0x24:
+                                if yych >= 0x24:
+                                    yystate = 3
+                                    continue
+                                yystate = 1
+                                continue
+                            else:
+                                if yych <= 0x40:
+                                    yystate = 1
+                                    continue
+                                if yych <= 0x5A:
+                                    yystate = 3
+                                    continue
+                                yystate = 1
+                                continue
+                        else:
+                            if yych <= 0x7A:
+                                if yych != 0x60:
+                                    yystate = 3
+                                    continue
+                                yystate = 1
+                                continue
+                            else:
+                                if yych <= 0xC1:
+                                    yystate = 1
+                                    continue
+                                if yych <= 0xC2:
+                                    yystate = 5
+                                    continue
+                                yystate = 6
+                                continue
+                    else:
+                        if yych <= 0xCF:
+                            if yych <= 0xCC:
+                                if yych <= 0xCA:
+                                    yystate = 7
+                                    continue
+                                if yych <= 0xCB:
+                                    yystate = 8
+                                    continue
+                                yystate = 1
+                                continue
+                            else:
+                                if yych <= 0xCD:
+                                    yystate = 9
+                                    continue
+                                if yych <= 0xCE:
+                                    yystate = 10
+                                    continue
+                                yystate = 11
+                                continue
+                        else:
+                            if yych <= 0xD3:
+                                if yych == 0xD2:
+                                    yystate = 12
+                                    continue
+                                yystate = 7
+                                continue
+                            else:
+                                if yych <= 0xD4:
+                                    yystate = 13
+                                    continue
+                                if yych <= 0xD5:
+                                    yystate = 14
+                                    continue
+                                yystate = 15
+                                continue
+                else:
+                    if yych <= 0xE1:
+                        if yych <= 0xDB:
+                            if yych <= 0xD8:
+                                if yych <= 0xD7:
+                                    yystate = 16
+                                    continue
+                                yystate = 17
+                                continue
+                            else:
+                                if yych <= 0xD9:
+                                    yystate = 18
+                                    continue
+                                if yych <= 0xDA:
+                                    yystate = 7
+                                    continue
+                                yystate = 19
+                                continue
+                        else:
+                            if yych <= 0xDE:
+                                if yych <= 0xDC:
+                                    yystate = 20
+                                    continue
+                                if yych <= 0xDD:
+                                    yystate = 21
+                                    continue
+                                yystate = 22
+                                continue
+                            else:
+                                if yych <= 0xDF:
+                                    yystate = 23
+                                    continue
+                                if yych <= 0xE0:
+                                    yystate = 24
+                                    continue
+                                yystate = 25
+                                continue
+                    else:
+                        if yych <= 0xEA:
+                            if yych <= 0xE4:
+                                if yych <= 0xE2:
+                                    yystate = 26
+                                    continue
+                                if yych <= 0xE3:
+                                    yystate = 27
+                                    continue
+                                yystate = 28
+                                continue
+                            else:
+                                if yych <= 0xE8:
+                                    yystate = 29
+                                    continue
+                                if yych <= 0xE9:
+                                    yystate = 30
+                                    continue
+                                yystate = 31
+                                continue
+                        else:
+                            if yych <= 0xEE:
+                                if yych <= 0xEC:
+                                    yystate = 29
+                                    continue
+                                if yych <= 0xED:
+                                    yystate = 32
+                                    continue
+                                yystate = 1
+                                continue
+                            else:
+                                if yych <= 0xEF:
+                                    yystate = 33
+                                    continue
+                                if yych <= 0xF0:
+                                    yystate = 34
+                                    continue
+                                yystate = 1
+                                continue
             case 1:
                 yystate = 2
                 continue
@@ -120,178 +169,294 @@ def lex(str):
                 yyaccept = 0
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x24|0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39|0x41|0x42|0x43|0x44|0x45|0x46|0x47|0x48|0x49|0x4A|0x4B|0x4C|0x4D|0x4E|0x4F|0x50|0x51|0x52|0x53|0x54|0x55|0x56|0x57|0x58|0x59|0x5A|0x5F|0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case 0xC2:
-                        cur += 1
-                        yystate = 35
-                        continue
-                    case 0xC3:
-                        cur += 1
-                        yystate = 37
-                        continue
-                    case 0xC4|0xC5|0xC6|0xC7|0xC8|0xC9|0xCA|0xCC|0xD0|0xD1|0xD3|0xDA:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xCB:
-                        cur += 1
-                        yystate = 39
-                        continue
-                    case 0xCD:
-                        cur += 1
-                        yystate = 40
-                        continue
-                    case 0xCE:
-                        cur += 1
-                        yystate = 41
-                        continue
-                    case 0xCF:
-                        cur += 1
-                        yystate = 42
-                        continue
-                    case 0xD2:
-                        cur += 1
-                        yystate = 43
-                        continue
-                    case 0xD4:
-                        cur += 1
-                        yystate = 44
-                        continue
-                    case 0xD5:
-                        cur += 1
-                        yystate = 45
-                        continue
-                    case 0xD6:
-                        cur += 1
-                        yystate = 46
-                        continue
-                    case 0xD7:
-                        cur += 1
-                        yystate = 47
-                        continue
-                    case 0xD8:
-                        cur += 1
-                        yystate = 48
-                        continue
-                    case 0xD9:
-                        cur += 1
-                        yystate = 49
-                        continue
-                    case 0xDB:
-                        cur += 1
-                        yystate = 50
-                        continue
-                    case 0xDC:
-                        cur += 1
-                        yystate = 51
-                        continue
-                    case 0xDD:
-                        cur += 1
-                        yystate = 52
-                        continue
-                    case 0xDE:
-                        cur += 1
-                        yystate = 53
-                        continue
-                    case 0xDF:
-                        cur += 1
-                        yystate = 54
-                        continue
-                    case 0xE0:
-                        cur += 1
-                        yystate = 55
-                        continue
-                    case 0xE1:
-                        cur += 1
-                        yystate = 56
-                        continue
-                    case 0xE2:
-                        cur += 1
-                        yystate = 57
-                        continue
-                    case 0xE3:
-                        cur += 1
-                        yystate = 58
-                        continue
-                    case 0xE4:
-                        cur += 1
-                        yystate = 59
-                        continue
-                    case 0xE5|0xE6|0xE7|0xE8|0xEB|0xEC:
-                        cur += 1
-                        yystate = 60
-                        continue
-                    case 0xE9:
-                        cur += 1
-                        yystate = 61
-                        continue
-                    case 0xEA:
-                        cur += 1
-                        yystate = 62
-                        continue
-                    case 0xED:
-                        cur += 1
-                        yystate = 63
-                        continue
-                    case 0xEF:
-                        cur += 1
-                        yystate = 64
-                        continue
-                    case 0xF0:
-                        cur += 1
-                        yystate = 65
-                        continue
-                    case 0xF3:
-                        cur += 1
-                        yystate = 66
-                        continue
-                    case _:
-                        yystate = 4
-                        continue
+                if yych <= 0xD6:
+                    if yych <= 0xC2:
+                        if yych <= 0x5A:
+                            if yych <= 0x2F:
+                                if yych == 0x24:
+                                    cur += 1
+                                    yystate = 3
+                                    continue
+                                yystate = 4
+                                continue
+                            else:
+                                if yych <= 0x39:
+                                    cur += 1
+                                    yystate = 3
+                                    continue
+                                if yych >= 0x41:
+                                    cur += 1
+                                    yystate = 3
+                                    continue
+                                yystate = 4
+                                continue
+                        else:
+                            if yych <= 0x60:
+                                if yych == 0x5F:
+                                    cur += 1
+                                    yystate = 3
+                                    continue
+                                yystate = 4
+                                continue
+                            else:
+                                if yych <= 0x7A:
+                                    cur += 1
+                                    yystate = 3
+                                    continue
+                                if yych >= 0xC2:
+                                    cur += 1
+                                    yystate = 35
+                                    continue
+                                yystate = 4
+                                continue
+                    else:
+                        if yych <= 0xCE:
+                            if yych <= 0xCB:
+                                if yych <= 0xC3:
+                                    cur += 1
+                                    yystate = 37
+                                    continue
+                                if yych <= 0xCA:
+                                    cur += 1
+                                    yystate = 38
+                                    continue
+                                cur += 1
+                                yystate = 39
+                                continue
+                            else:
+                                if yych <= 0xCC:
+                                    cur += 1
+                                    yystate = 38
+                                    continue
+                                if yych <= 0xCD:
+                                    cur += 1
+                                    yystate = 40
+                                    continue
+                                cur += 1
+                                yystate = 41
+                                continue
+                        else:
+                            if yych <= 0xD2:
+                                if yych <= 0xCF:
+                                    cur += 1
+                                    yystate = 42
+                                    continue
+                                if yych <= 0xD1:
+                                    cur += 1
+                                    yystate = 38
+                                    continue
+                                cur += 1
+                                yystate = 43
+                                continue
+                            else:
+                                if yych <= 0xD3:
+                                    cur += 1
+                                    yystate = 38
+                                    continue
+                                if yych <= 0xD4:
+                                    cur += 1
+                                    yystate = 44
+                                    continue
+                                if yych <= 0xD5:
+                                    cur += 1
+                                    yystate = 45
+                                    continue
+                                cur += 1
+                                yystate = 46
+                                continue
+                else:
+                    if yych <= 0xE2:
+                        if yych <= 0xDC:
+                            if yych <= 0xD9:
+                                if yych <= 0xD7:
+                                    cur += 1
+                                    yystate = 47
+                                    continue
+                                if yych <= 0xD8:
+                                    cur += 1
+                                    yystate = 48
+                                    continue
+                                cur += 1
+                                yystate = 49
+                                continue
+                            else:
+                                if yych <= 0xDA:
+                                    cur += 1
+                                    yystate = 38
+                                    continue
+                                if yych <= 0xDB:
+                                    cur += 1
+                                    yystate = 50
+                                    continue
+                                cur += 1
+                                yystate = 51
+                                continue
+                        else:
+                            if yych <= 0xDF:
+                                if yych <= 0xDD:
+                                    cur += 1
+                                    yystate = 52
+                                    continue
+                                if yych <= 0xDE:
+                                    cur += 1
+                                    yystate = 53
+                                    continue
+                                cur += 1
+                                yystate = 54
+                                continue
+                            else:
+                                if yych <= 0xE0:
+                                    cur += 1
+                                    yystate = 55
+                                    continue
+                                if yych <= 0xE1:
+                                    cur += 1
+                                    yystate = 56
+                                    continue
+                                cur += 1
+                                yystate = 57
+                                continue
+                    else:
+                        if yych <= 0xEC:
+                            if yych <= 0xE8:
+                                if yych <= 0xE3:
+                                    cur += 1
+                                    yystate = 58
+                                    continue
+                                if yych <= 0xE4:
+                                    cur += 1
+                                    yystate = 59
+                                    continue
+                                cur += 1
+                                yystate = 60
+                                continue
+                            else:
+                                if yych <= 0xE9:
+                                    cur += 1
+                                    yystate = 61
+                                    continue
+                                if yych <= 0xEA:
+                                    cur += 1
+                                    yystate = 62
+                                    continue
+                                cur += 1
+                                yystate = 60
+                                continue
+                        else:
+                            if yych <= 0xEF:
+                                if yych <= 0xED:
+                                    cur += 1
+                                    yystate = 63
+                                    continue
+                                if yych >= 0xEF:
+                                    cur += 1
+                                    yystate = 64
+                                    continue
+                                yystate = 4
+                                continue
+                            else:
+                                if yych <= 0xF0:
+                                    cur += 1
+                                    yystate = 65
+                                    continue
+                                if yych == 0xF3:
+                                    cur += 1
+                                    yystate = 66
+                                    continue
+                                yystate = 4
+                                continue
             case 4:
                 return True
             case 5:
                 yych = str[cur]
-                match yych:
-                    case 0xAA|0xB5|0xBA:
+                if yych <= 0xB4:
+                    if yych == 0xAA:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 2
+                    yystate = 2
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBA:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 2
+                    continue
             case 6:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x97:
+                    if yych <= 0x7F:
+                        yystate = 2
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 2
+                    continue
+                else:
+                    if yych == 0xB7:
                         yystate = 2
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 2
+                    continue
             case 7:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 8:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0xA0|0xA1|0xA2|0xA3|0xA4|0xAC|0xAE:
+                if yych <= 0x9F:
+                    if yych <= 0x81:
+                        if yych <= 0x7F:
+                            yystate = 2
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x85:
+                            yystate = 2
+                            continue
+                        if yych <= 0x91:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 2
+                        continue
+                else:
+                    if yych <= 0xAC:
+                        if yych <= 0xA4:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xAB:
+                            yystate = 2
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xAE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 2
                         continue
             case 9:
@@ -306,144 +471,286 @@ def lex(str):
                         continue
             case 10:
                 yych = str[cur]
-                match yych:
-                    case 0x86|0x88|0x89|0x8A|0x8C|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8B:
+                    if yych <= 0x86:
+                        if yych <= 0x85:
+                            yystate = 2
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x87:
+                            yystate = 2
+                            continue
+                        if yych <= 0x8A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 2
+                        continue
+                else:
+                    if yych <= 0xA1:
+                        if yych == 0x8D:
+                            yystate = 2
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA2:
+                            yystate = 2
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 2
                         continue
             case 11:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych == 0xB6:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 12:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0x81:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x89:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 13:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych == 0xB0:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 14:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x98:
+                    if yych <= 0x7F:
+                        yystate = 2
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 2
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 2
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 2
+                    continue
             case 15:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0x88:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 16:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x8F:
+                    yystate = 2
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAE:
+                    yystate = 2
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 17:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x9F:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 18:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0xAD:
+                    if yych <= 0x7F:
                         yystate = 2
                         continue
-            case 19:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x95|0xA5|0xA6|0xAE|0xAF|0xBA|0xBB|0xBC|0xBF:
+                    if yych <= 0x8A:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 2
+                    continue
+                else:
+                    if yych == 0xB0:
+                        yystate = 2
+                        continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 2
+                    continue
+            case 19:
+                yych = str[cur]
+                if yych <= 0xA6:
+                    if yych <= 0x94:
+                        if yych <= 0x7F:
+                            yystate = 2
+                            continue
+                        if yych <= 0x93:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 2
+                        continue
+                    else:
+                        if yych <= 0x95:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA4:
+                            yystate = 2
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                else:
+                    if yych <= 0xB9:
+                        if yych <= 0xAD:
+                            yystate = 2
+                            continue
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 2
+                        continue
+                    else:
+                        if yych <= 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 2
                         continue
             case 20:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych == 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x91:
+                    yystate = 2
+                    continue
+                if yych <= 0xAF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 21:
                 yych = str[cur]
-                match yych:
-                    case 0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x8C:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 22:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xB1:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0xA5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xB1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 2
+                continue
             case 23:
                 yych = str[cur]
-                match yych:
-                    case 0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB4|0xB5|0xBA:
+                if yych <= 0xB3:
+                    if yych <= 0x89:
+                        yystate = 2
+                        continue
+                    if yych <= 0xAA:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 2
+                    yystate = 2
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBA:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 2
+                    continue
             case 24:
                 yyaccept = 1
                 mar = cur
@@ -752,150 +1059,184 @@ def lex(str):
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x81:
-                        cur += 1
-                        yystate = 138
+                if yych <= 0xB0:
+                    if yych <= 0x83:
+                        if yych <= 0x80:
+                            yystate = 2
+                            continue
+                        if yych <= 0x81:
+                            cur += 1
+                            yystate = 138
+                            continue
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 139
+                            continue
+                        yystate = 2
                         continue
-                    case 0x82:
-                        cur += 1
-                        yystate = 139
-                        continue
-                    case 0x84:
-                        cur += 1
-                        yystate = 140
-                        continue
-                    case 0x85:
-                        cur += 1
-                        yystate = 141
-                        continue
-                    case 0x86:
-                        cur += 1
-                        yystate = 142
-                        continue
-                    case 0xB0:
-                        cur += 1
-                        yystate = 143
-                        continue
-                    case 0xB1:
-                        cur += 1
-                        yystate = 144
-                        continue
-                    case 0xB2:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xB3:
-                        cur += 1
-                        yystate = 145
-                        continue
-                    case 0xB4:
+                    else:
+                        if yych <= 0x85:
+                            if yych <= 0x84:
+                                cur += 1
+                                yystate = 140
+                                continue
+                            cur += 1
+                            yystate = 141
+                            continue
+                        else:
+                            if yych <= 0x86:
+                                cur += 1
+                                yystate = 142
+                                continue
+                            if yych <= 0xAF:
+                                yystate = 2
+                                continue
+                            cur += 1
+                            yystate = 143
+                            continue
+                else:
+                    if yych <= 0xB4:
+                        if yych <= 0xB1:
+                            cur += 1
+                            yystate = 144
+                            continue
+                        if yych <= 0xB2:
+                            cur += 1
+                            yystate = 38
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 145
+                            continue
                         cur += 1
                         yystate = 146
                         continue
-                    case 0xB5:
-                        cur += 1
-                        yystate = 147
-                        continue
-                    case 0xB6:
-                        cur += 1
-                        yystate = 148
-                        continue
-                    case 0xB7:
-                        cur += 1
-                        yystate = 149
-                        continue
-                    case 0xB8:
-                        cur += 1
-                        yystate = 150
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                    else:
+                        if yych <= 0xB6:
+                            if yych <= 0xB5:
+                                cur += 1
+                                yystate = 147
+                                continue
+                            cur += 1
+                            yystate = 148
+                            continue
+                        else:
+                            if yych <= 0xB7:
+                                cur += 1
+                                yystate = 149
+                                continue
+                            if yych <= 0xB8:
+                                cur += 1
+                                yystate = 150
+                                continue
+                            yystate = 2
+                            continue
             case 27:
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 151
-                        continue
-                    case 0x81:
+                if yych <= 0x84:
+                    if yych <= 0x81:
+                        if yych <= 0x7F:
+                            yystate = 2
+                            continue
+                        if yych <= 0x80:
+                            cur += 1
+                            yystate = 151
+                            continue
                         cur += 1
                         yystate = 107
                         continue
-                    case 0x82:
-                        cur += 1
-                        yystate = 152
-                        continue
-                    case 0x83:
-                        cur += 1
-                        yystate = 153
-                        continue
-                    case 0x84:
+                    else:
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 152
+                            continue
+                        if yych <= 0x83:
+                            cur += 1
+                            yystate = 153
+                            continue
                         cur += 1
                         yystate = 154
                         continue
-                    case 0x85|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x86:
-                        cur += 1
-                        yystate = 155
-                        continue
-                    case 0x87:
+                else:
+                    if yych <= 0x87:
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 38
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 155
+                            continue
                         cur += 1
                         yystate = 156
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8F:
+                            yystate = 2
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 38
+                            continue
                         yystate = 2
                         continue
             case 28:
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xB6:
+                    if yych <= 0x7F:
+                        yystate = 2
+                        continue
+                    if yych <= 0xB5:
                         cur += 1
                         yystate = 38
                         continue
-                    case 0xB6:
-                        cur += 1
-                        yystate = 118
-                        continue
-                    case _:
+                    cur += 1
+                    yystate = 118
+                    continue
+                else:
+                    if yych <= 0xB7:
                         yystate = 2
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 38
+                        continue
+                    yystate = 2
+                    continue
             case 29:
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 38
+                    continue
+                yystate = 2
+                continue
             case 30:
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xBF:
-                        cur += 1
-                        yystate = 157
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0xBE:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 157
+                    continue
+                yystate = 2
+                continue
             case 31:
                 yyaccept = 1
                 mar = cur
@@ -1008,22 +1349,23 @@ def lex(str):
                 yyaccept = 1
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x9E:
-                        cur += 1
-                        yystate = 180
-                        continue
-                    case 0x9F:
-                        cur += 1
-                        yystate = 181
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych <= 0x7F:
+                    yystate = 2
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0x9E:
+                    cur += 1
+                    yystate = 180
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 181
+                    continue
+                yystate = 2
+                continue
             case 33:
                 yyaccept = 1
                 mar = cur
@@ -1174,14 +1516,24 @@ def lex(str):
                         continue
             case 35:
                 yych = str[cur]
-                match yych:
-                    case 0xAA|0xB5|0xBA:
+                if yych <= 0xB4:
+                    if yych == 0xAA:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBA:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 36:
                 cur = mar
                 if yyaccept == 0:
@@ -1192,184 +1544,419 @@ def lex(str):
                     continue
             case 37:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x97:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xB7:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 38:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 39:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0xA0|0xA1|0xA2|0xA3|0xA4|0xAC|0xAE:
+                if yych <= 0x9F:
+                    if yych <= 0x81:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x85:
+                            yystate = 36
+                            continue
+                        if yych <= 0x91:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xAC:
+                        if yych <= 0xA4:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xAB:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xAE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 40:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xBA|0xBB|0xBC|0xBD|0xBF:
+                if yych <= 0xB7:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0xB5:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xBD:
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 41:
                 yych = str[cur]
-                match yych:
-                    case 0x86|0x88|0x89|0x8A|0x8C|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8B:
+                    if yych <= 0x86:
+                        if yych <= 0x85:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x87:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA1:
+                        if yych == 0x8D:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA2:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 42:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xB6:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 43:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x83|0x84|0x85|0x86|0x87|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x82:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x81:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x87:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x89:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 44:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xB0:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 45:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x98:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 46:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x90:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 47:
-                yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x84|0x85|0x87|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAF|0xB0|0xB1|0xB2|0xB3:
+                    if yych <= 0x88:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xBE:
+                        yystate = 36
+                        continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 47:
+                yych = str[cur]
+                if yych <= 0x86:
+                    if yych <= 0x82:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x83:
+                            yystate = 36
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xAA:
+                        if yych <= 0x87:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAE:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 48:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 49:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAD:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 50:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBF:
+                if yych <= 0x9E:
+                    if yych <= 0x93:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x94:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9C:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBC:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 51:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 52:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8C:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 53:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 54:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xBA|0xBD:
+                if yych <= 0xB9:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB5:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xBA:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBD:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 55:
                 yych = str[cur]
                 match yych:
@@ -1672,150 +2259,182 @@ def lex(str):
                         continue
             case 57:
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 259
-                        continue
-                    case 0x81:
-                        cur += 1
-                        yystate = 260
-                        continue
-                    case 0x82:
+                if yych <= 0xAF:
+                    if yych <= 0x82:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x80:
+                            cur += 1
+                            yystate = 259
+                            continue
+                        if yych <= 0x81:
+                            cur += 1
+                            yystate = 260
+                            continue
                         cur += 1
                         yystate = 139
                         continue
-                    case 0x83:
-                        cur += 1
-                        yystate = 261
-                        continue
-                    case 0x84:
-                        cur += 1
-                        yystate = 140
-                        continue
-                    case 0x85:
-                        cur += 1
-                        yystate = 141
-                        continue
-                    case 0x86:
-                        cur += 1
-                        yystate = 142
-                        continue
-                    case 0xB0:
-                        cur += 1
-                        yystate = 143
-                        continue
-                    case 0xB1:
-                        cur += 1
-                        yystate = 144
-                        continue
-                    case 0xB2:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xB3:
-                        cur += 1
-                        yystate = 262
-                        continue
-                    case 0xB4:
-                        cur += 1
-                        yystate = 146
-                        continue
-                    case 0xB5:
-                        cur += 1
-                        yystate = 263
-                        continue
-                    case 0xB6:
-                        cur += 1
-                        yystate = 148
-                        continue
-                    case 0xB7:
-                        cur += 1
-                        yystate = 264
-                        continue
-                    case 0xB8:
-                        cur += 1
-                        yystate = 150
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                    else:
+                        if yych <= 0x84:
+                            if yych <= 0x83:
+                                cur += 1
+                                yystate = 261
+                                continue
+                            cur += 1
+                            yystate = 140
+                            continue
+                        else:
+                            if yych <= 0x85:
+                                cur += 1
+                                yystate = 141
+                                continue
+                            if yych <= 0x86:
+                                cur += 1
+                                yystate = 142
+                                continue
+                            yystate = 36
+                            continue
+                else:
+                    if yych <= 0xB4:
+                        if yych <= 0xB1:
+                            if yych <= 0xB0:
+                                cur += 1
+                                yystate = 143
+                                continue
+                            cur += 1
+                            yystate = 144
+                            continue
+                        else:
+                            if yych <= 0xB2:
+                                cur += 1
+                                yystate = 38
+                                continue
+                            if yych <= 0xB3:
+                                cur += 1
+                                yystate = 262
+                                continue
+                            cur += 1
+                            yystate = 146
+                            continue
+                    else:
+                        if yych <= 0xB6:
+                            if yych <= 0xB5:
+                                cur += 1
+                                yystate = 263
+                                continue
+                            cur += 1
+                            yystate = 148
+                            continue
+                        else:
+                            if yych <= 0xB7:
+                                cur += 1
+                                yystate = 264
+                                continue
+                            if yych <= 0xB8:
+                                cur += 1
+                                yystate = 150
+                                continue
+                            yystate = 36
+                            continue
             case 58:
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 265
-                        continue
-                    case 0x81:
+                if yych <= 0x84:
+                    if yych <= 0x81:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x80:
+                            cur += 1
+                            yystate = 265
+                            continue
                         cur += 1
                         yystate = 107
                         continue
-                    case 0x82:
-                        cur += 1
-                        yystate = 266
-                        continue
-                    case 0x83:
-                        cur += 1
-                        yystate = 153
-                        continue
-                    case 0x84:
+                    else:
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 266
+                            continue
+                        if yych <= 0x83:
+                            cur += 1
+                            yystate = 153
+                            continue
                         cur += 1
                         yystate = 154
                         continue
-                    case 0x85|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x86:
-                        cur += 1
-                        yystate = 155
-                        continue
-                    case 0x87:
+                else:
+                    if yych <= 0x87:
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 38
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 155
+                            continue
                         cur += 1
                         yystate = 156
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 38
+                            continue
                         yystate = 36
                         continue
             case 59:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xB6:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB5:
                         cur += 1
                         yystate = 38
                         continue
-                    case 0xB6:
-                        cur += 1
-                        yystate = 118
-                        continue
-                    case _:
+                    cur += 1
+                    yystate = 118
+                    continue
+                else:
+                    if yych <= 0xB7:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 38
+                        continue
+                    yystate = 36
+                    continue
             case 60:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 38
+                    continue
+                yystate = 36
+                continue
             case 61:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xBF:
-                        cur += 1
-                        yystate = 157
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBE:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 157
+                    continue
+                yystate = 36
+                continue
             case 62:
                 yych = str[cur]
                 match yych:
@@ -1908,22 +2527,23 @@ def lex(str):
                         continue
             case 63:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x9E:
-                        cur += 1
-                        yystate = 180
-                        continue
-                    case 0x9F:
-                        cur += 1
-                        yystate = 181
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0x9E:
+                    cur += 1
+                    yystate = 180
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 181
+                    continue
+                yystate = 36
+                continue
             case 64:
                 yych = str[cur]
                 match yych:
@@ -2074,144 +2694,417 @@ def lex(str):
                         continue
             case 66:
                 yych = str[cur]
-                match yych:
-                    case 0xA0:
-                        cur += 1
-                        yystate = 287
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0xA0:
+                    cur += 1
+                    yystate = 287
+                    continue
+                yystate = 36
+                continue
             case 67:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x9A|0xA4|0xA8:
+                if yych <= 0x9A:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x95:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x99:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xA4:
+                        if yych <= 0xA3:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xA8:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 68:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x98:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 69:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych == 0xB5:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 70:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x83:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 71:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x97:
+                    if yych == 0x90:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB0:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 72:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB6|0xB7|0xB8|0xB9|0xBD:
+                if yych <= 0xA8:
+                    if yych <= 0x8C:
+                        if yych == 0x80:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB2:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xBD:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 73:
                 yych = str[cur]
-                match yych:
-                    case 0x8E|0x9C|0x9D|0x9F|0xA0|0xA1|0xB0|0xB1|0xBC:
+                if yych <= 0x9E:
+                    if yych <= 0x8E:
+                        if yych <= 0x8D:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x9B:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB1:
+                        if yych <= 0xA1:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 74:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0xA9:
+                    if yych <= 0x8E:
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA8:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB4:
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xB7:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 75:
                 yych = str[cur]
-                match yych:
-                    case 0x99|0x9A|0x9B|0x9C|0x9E|0xB2|0xB3|0xB4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x9D:
+                    if yych <= 0x98:
                         yystate = 36
                         continue
-            case 76:
-                yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8F|0x90|0x91|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD:
+                    if yych <= 0x9C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x9E:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB1:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB4:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 76:
+                yych = str[cur]
+                if yych <= 0xA9:
+                    if yych <= 0x8E:
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x92:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA8:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB4:
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 77:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0xA0|0xA1|0xB9:
+                if yych <= 0x9F:
+                    if yych == 0x90:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xB9:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 78:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0xA9:
+                    if yych <= 0x8E:
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8C:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA8:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB4:
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 79:
                 yych = str[cur]
-                match yych:
-                    case 0x9C|0x9D|0x9F|0xA0|0xA1|0xB1:
+                if yych <= 0x9E:
+                    if yych <= 0x9B:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9D:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xB1:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 80:
                 yych = str[cur]
                 match yych:
@@ -2224,524 +3117,1082 @@ def lex(str):
                         continue
             case 81:
                 yych = str[cur]
-                match yych:
-                    case 0x90:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 82:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD:
+                if yych <= 0x91:
+                    if yych <= 0x8C:
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8D:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB9:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 83:
                 yych = str[cur]
-                match yych:
-                    case 0x98|0x99|0x9A|0xA0|0xA1:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x97:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 84:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x91:
+                    if yych <= 0x84:
+                        if yych == 0x80:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych == 0x8D:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB4:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 85:
                 yych = str[cur]
-                match yych:
-                    case 0x9E|0xA0|0xA1|0xB1|0xB2:
+                if yych <= 0x9F:
+                    if yych == 0x9E:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB0:
                         yystate = 36
                         continue
-            case 86:
-                yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBD:
+                    if yych <= 0xB2:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+            case 86:
+                yych = str[cur]
+                if yych <= 0x90:
+                    if yych <= 0x84:
+                        yystate = 36
+                        continue
+                    if yych == 0x8D:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xBA:
+                        if yych <= 0x91:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 87:
                 yych = str[cur]
-                match yych:
-                    case 0x8E|0x94|0x95|0x96|0x9F|0xA0|0xA1|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x96:
+                    if yych == 0x8E:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x93:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        if yych <= 0x9E:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 88:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBD:
+                if yych <= 0xB1:
+                    if yych <= 0x84:
+                        yystate = 36
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x99:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xBB:
+                        if yych <= 0xB2:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 89:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x86:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 90:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x80:
+                    yystate = 36
+                    continue
+                if yych == 0xB1:
+                    yystate = 36
+                    continue
+                if yych <= 0xB3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 91:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x84|0x86|0x87|0x88|0x89|0x8A|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA5|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xBD:
+                if yych <= 0xA3:
+                    if yych <= 0x84:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        if yych == 0x83:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x85:
+                            yystate = 36
+                            continue
+                        if yych == 0x8B:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB0:
+                        if yych == 0xA5:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA6:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB3:
+                            if yych <= 0xB1:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xBD:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 92:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x9C|0x9D|0x9E|0x9F:
+                if yych <= 0x85:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x86:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9B:
                         yystate = 36
                         continue
+                    if yych <= 0x9F:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 93:
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x80:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 94:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x88:
+                    yystate = 36
+                    continue
+                if yych <= 0xAC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 95:
                 yych = str[cur]
-                match yych:
-                    case 0x88|0x89|0x8A|0x8B|0x8C:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x87:
+                    yystate = 36
+                    continue
+                if yych <= 0x8C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 96:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 97:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x9A|0x9B|0x9C|0x9D|0xA1|0xA5|0xA6|0xAE|0xAF|0xB0|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA1:
+                    if yych <= 0x99:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x95:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA0:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0xAD:
+                        if yych <= 0xA4:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB0:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xB4:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 98:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x8E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x8D:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 99:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x87|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBC|0xBD|0xBE|0xBF:
+                    if yych <= 0x81:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x8E:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 99:
+                yych = str[cur]
+                if yych <= 0x8C:
+                    if yych <= 0x85:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x87:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBA:
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBB:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 100:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x9A|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x96:
+                    if yych <= 0x89:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x88:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0x99:
+                        if yych == 0x98:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 101:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
+                if yych <= 0x8F:
+                    if yych <= 0x88:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x89:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB5:
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB7:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 102:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x82|0x83|0x84|0x85|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x85:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x81:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x96:
+                        if yych <= 0x87:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x97:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 103:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x91:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x90:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x95:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x97:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 104:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 105:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 106:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB7:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 107:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x80:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 108:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAE:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 109:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x80:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 110:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAD:
+                    yystate = 36
+                    continue
+                if yych <= 0xB8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 111:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x91|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1:
+                if yych <= 0x8D:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x91:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 36
                         continue
+                    if yych <= 0xB1:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 112:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAE|0xAF|0xB0:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x91:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xAD:
                         yystate = 36
                         continue
+                    if yych <= 0xB0:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 113:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 114:
                 yych = str[cur]
-                match yych:
-                    case 0x97|0x9C:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x97:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x9C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 115:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 116:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 117:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA8:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x86:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xAA:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 118:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 119:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9E:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 120:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xB0|0xB1|0xB2|0xB3|0xB4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xB4:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 121:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 122:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 123:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x96:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 124:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x94:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 125:
                 yych = str[cur]
-                match yych:
-                    case 0xA7:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 126:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x84:
+                    yystate = 36
+                    continue
+                if yych <= 0xB3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 127:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x84:
+                    yystate = 36
+                    continue
+                if yych <= 0x8B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 128:
                 yych = str[cur]
-                match yych:
-                    case 0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xAE|0xAF|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xAD:
+                    if yych <= 0x82:
+                        yystate = 36
+                        continue
+                    if yych <= 0xA0:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB9:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 129:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 130:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 131:
                 yych = str[cur]
-                match yych:
-                    case 0x8D|0x8E|0x8F|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8C:
+                    yystate = 36
+                    continue
+                if yych <= 0x8F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x99:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 132:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBD|0xBE|0xBF:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x88:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xBA:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xBC:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 133:
                 yych = str[cur]
                 match yych:
@@ -2754,64 +4205,175 @@ def lex(str):
                         continue
             case 134:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x97:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 135:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x99|0x9B|0x9D|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
+                    if yych <= 0x95:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x9D:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 135:
+                yych = str[cur]
+                if yych <= 0x98:
+                    if yych <= 0x87:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0x9C:
+                        if yych == 0x9A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9B:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x9E:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 136:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBE:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0xB5:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 137:
-                yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x84|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x90|0x91|0x92|0x93|0x96|0x97|0x98|0x99|0x9A|0x9B|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
+                    if yych <= 0xB4:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xBD:
+                        yystate = 36
+                        continue
+                    if yych <= 0xBE:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 137:
+                yych = str[cur]
+                if yych <= 0x95:
+                    if yych <= 0x85:
+                        if yych <= 0x81:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x8C:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x93:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB1:
+                        if yych <= 0x9B:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xAC:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xB5:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 138:
                 yych = str[cur]
-                match yych:
-                    case 0xB1|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0xB1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 139:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 140:
                 yych = str[cur]
                 match yych:
@@ -2824,552 +4386,1107 @@ def lex(str):
                         continue
             case 141:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8D:
+                    if yych <= 0x84:
+                        yystate = 36
+                        continue
+                    if yych <= 0x89:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x8E:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 142:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x88:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 143:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 144:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 145:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xAB|0xAC|0xAD|0xAE|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0xAA:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 146:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA7|0xAD|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                    if yych <= 0xA4:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAE:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB1:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB3:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 146:
+                yych = str[cur]
+                if yych <= 0xA7:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0xA6:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xAD:
+                        if yych <= 0xAC:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 147:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xAF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xAF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 148:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
+                if yych <= 0xA7:
+                    if yych <= 0x96:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB6:
+                        if yych == 0xAF:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB7:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 149:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E:
+                if yych <= 0x8E:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0x87:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x96:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x97:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9E:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 150:
                 yych = str[cur]
-                match yych:
-                    case 0xAF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0xAF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 151:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC:
+                if yych <= 0xA9:
+                    if yych <= 0x84:
+                        yystate = 36
+                        continue
+                    if yych <= 0x87:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0xA0:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        if yych <= 0xB0:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB7:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 152:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x9D|0x9E|0x9F|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9C:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA0:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 153:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xBB:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 154:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x84:
+                    yystate = 36
+                    continue
+                if yych == 0xB0:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 155:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8E:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 156:
                 yych = str[cur]
-                match yych:
-                    case 0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 157:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 158:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 159:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 160:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xAA|0xAB:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x9F:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xA9:
                         yystate = 36
                         continue
+                    if yych <= 0xAB:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 161:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAE:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 162:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 163:
                 yych = str[cur]
-                match yych:
-                    case 0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x96:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xA1:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 164:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x88:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8A:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 165:
                 yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x84|0x85|0x86|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x81:
+                    yystate = 36
+                    continue
+                if yych <= 0x86:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB6:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 166:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x83|0x84|0x85|0x87|0x88|0x89|0x8A|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2:
+                if yych <= 0x85:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0x82:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x8A:
+                        if yych <= 0x86:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8B:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA2:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 167:
                 yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x81:
+                    yystate = 36
+                    continue
+                if yych <= 0xB3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 168:
                 yych = str[cur]
-                match yych:
-                    case 0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBB|0xBD|0xBE:
+                if yych <= 0xBA:
+                    if yych <= 0xB1:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB7:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xBC:
                         yystate = 36
                         continue
+                    if yych <= 0xBE:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 169:
                 yych = str[cur]
-                match yych:
-                    case 0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x89:
+                    yystate = 36
+                    continue
+                if yych <= 0xA5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 170:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x86:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 171:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x83:
+                    yystate = 36
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 172:
                 yych = str[cur]
-                match yych:
-                    case 0x8F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xBA|0xBB|0xBC|0xBD|0xBE:
+                if yych <= 0xA4:
+                    if yych == 0x8F:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        if yych <= 0xA5:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 173:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 174:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xBA|0xBE|0xBF:
+                if yych <= 0x9F:
+                    if yych <= 0x82:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x83:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8B:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBA:
+                        if yych <= 0xB6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBD:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 175:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB5|0xB6|0xB9|0xBA|0xBB|0xBC|0xBD:
+                if yych <= 0xB1:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0xB0:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB6:
+                        if yych <= 0xB4:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0xB8:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 176:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x82|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB2|0xB3|0xB4:
+                if yych <= 0x9A:
+                    if yych <= 0x80:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych == 0x82:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xAA:
+                        if yych <= 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB4:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 177:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x91|0x92|0x93|0x94|0x95|0x96|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x96:
+                    if yych <= 0x88:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x8E:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x90:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0xA7:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xAF:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 178:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9B:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9A:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA7:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 179:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 180:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 181:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x86:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8A:
+                    yystate = 36
+                    continue
+                if yych <= 0xBB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 182:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 183:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 184:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x93|0x94|0x95|0x96|0x97|0x9D|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBE:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x9E:
+                    if yych <= 0x92:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB7:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 185:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x83|0x84|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x82:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x81:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0x85:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 186:
                 yych = str[cur]
-                match yych:
-                    case 0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x92:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 187:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 188:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x91:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 189:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x87:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 190:
                 yych = str[cur]
-                match yych:
-                    case 0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych == 0xB5:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 191:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 192:
                 yych = str[cur]
-                match yych:
-                    case 0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0xA0:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 193:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x80:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xA5:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 194:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBE:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 195:
                 yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x84|0x85|0x86|0x87|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x92|0x93|0x94|0x95|0x96|0x97|0x9A|0x9B|0x9C:
+                if yych <= 0x8F:
+                    if yych <= 0x81:
+                        yystate = 36
+                        continue
+                    if yych <= 0x87:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x89:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x97:
+                        if yych <= 0x91:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x99:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9C:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 196:
@@ -3674,54 +5791,70 @@ def lex(str):
                         continue
             case 198:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x90|0x92|0x93|0x94:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8D:
                         cur += 1
                         yystate = 38
                         continue
-                    case 0x8E:
+                    if yych <= 0x8E:
                         cur += 1
                         yystate = 183
                         continue
-                    case 0x91:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x91:
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 38
+                            continue
                         cur += 1
                         yystate = 328
                         continue
-                    case 0x95:
-                        cur += 1
-                        yystate = 346
-                        continue
-                    case _:
+                    else:
+                        if yych <= 0x94:
+                            cur += 1
+                            yystate = 38
+                            continue
+                        if yych <= 0x95:
+                            cur += 1
+                            yystate = 346
+                            continue
                         yystate = 36
                         continue
             case 199:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x90:
-                        cur += 1
-                        yystate = 328
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8F:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0x90:
+                    cur += 1
+                    yystate = 328
+                    continue
+                yystate = 36
+                continue
             case 200:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x99:
-                        cur += 1
-                        yystate = 89
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x98:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 89
+                    continue
+                yystate = 36
+                continue
             case 201:
                 yych = str[cur]
                 match yych:
@@ -3770,50 +5903,71 @@ def lex(str):
                         continue
             case 202:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9E:
                         cur += 1
                         yystate = 38
                         continue
-                    case 0x9F:
+                    cur += 1
+                    yystate = 255
+                    continue
+                else:
+                    if yych <= 0xAA:
                         cur += 1
-                        yystate = 255
+                        yystate = 38
                         continue
-                    case 0xAB:
+                    if yych <= 0xAB:
                         cur += 1
                         yystate = 312
                         continue
-                    case _:
-                        yystate = 36
-                        continue
+                    yystate = 36
+                    continue
             case 203:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x86|0x87|0x88|0x89|0x8A|0xB0:
+                if yych <= 0x8A:
+                    if yych <= 0x83:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 38
                         continue
-                    case 0x84:
+                    else:
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 119
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 352
+                            continue
                         cur += 1
-                        yystate = 119
+                        yystate = 38
                         continue
-                    case 0x85:
+                else:
+                    if yych <= 0xB0:
+                        if yych <= 0x8B:
+                            cur += 1
+                            yystate = 353
+                            continue
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
                         cur += 1
-                        yystate = 352
+                        yystate = 38
                         continue
-                    case 0x8B:
-                        cur += 1
-                        yystate = 353
-                        continue
-                    case 0xB1:
-                        cur += 1
-                        yystate = 354
-                        continue
-                    case 0xB2:
-                        cur += 1
-                        yystate = 355
-                        continue
-                    case _:
+                    else:
+                        if yych <= 0xB1:
+                            cur += 1
+                            yystate = 354
+                            continue
+                        if yych <= 0xB2:
+                            cur += 1
+                            yystate = 355
+                            continue
                         yystate = 36
                         continue
             case 204:
@@ -3872,240 +6026,682 @@ def lex(str):
                         continue
             case 205:
                 yych = str[cur]
-                match yych:
-                    case 0x84:
-                        cur += 1
-                        yystate = 367
-                        continue
-                    case 0x85:
+                if yych <= 0xA2:
+                    if yych <= 0x85:
+                        if yych <= 0x83:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 367
+                            continue
                         cur += 1
                         yystate = 368
                         continue
-                    case 0x8B:
-                        cur += 1
-                        yystate = 332
-                        continue
-                    case 0xA0|0xA1|0xA2|0xA4:
+                    else:
+                        if yych == 0x8B:
+                            cur += 1
+                            yystate = 332
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 38
                         continue
-                    case 0xA3:
-                        cur += 1
-                        yystate = 369
+                else:
+                    if yych <= 0xB7:
+                        if yych <= 0xA3:
+                            cur += 1
+                            yystate = 369
+                            continue
+                        if yych <= 0xA4:
+                            cur += 1
+                            yystate = 38
+                            continue
+                        if yych <= 0xA5:
+                            cur += 1
+                            yystate = 370
+                            continue
+                        yystate = 36
                         continue
-                    case 0xA5:
-                        cur += 1
-                        yystate = 370
-                        continue
-                    case 0xB8:
-                        cur += 1
-                        yystate = 371
-                        continue
-                    case 0xB9:
-                        cur += 1
-                        yystate = 372
-                        continue
-                    case 0xBA:
-                        cur += 1
-                        yystate = 373
-                        continue
-                    case _:
+                    else:
+                        if yych <= 0xB8:
+                            cur += 1
+                            yystate = 371
+                            continue
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 372
+                            continue
+                        if yych <= 0xBA:
+                            cur += 1
+                            yystate = 373
+                            continue
                         yystate = 36
                         continue
             case 206:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x9B:
-                        cur += 1
-                        yystate = 374
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x9B:
+                    cur += 1
+                    yystate = 374
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 38
+                    continue
+                yystate = 36
+                continue
             case 207:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9D|0x9E|0x9F|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9C:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9B:
                         cur += 1
                         yystate = 38
                         continue
-                    case 0x9C:
-                        cur += 1
-                        yystate = 291
-                        continue
-                    case 0xA0:
+                    cur += 1
+                    yystate = 291
+                    continue
+                else:
+                    if yych == 0xA0:
                         cur += 1
                         yystate = 162
                         continue
-                    case _:
-                        yystate = 36
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 38
                         continue
+                    yystate = 36
+                    continue
             case 208:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xBA:
-                        cur += 1
-                        yystate = 375
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xBA:
+                    cur += 1
+                    yystate = 375
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 38
+                    continue
+                yystate = 36
+                continue
             case 209:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xAF:
-                        cur += 1
-                        yystate = 376
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAE:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0xAF:
+                    cur += 1
+                    yystate = 376
+                    continue
+                yystate = 36
+                continue
             case 210:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xA8:
-                        cur += 1
-                        yystate = 377
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0xA8:
+                    cur += 1
+                    yystate = 377
+                    continue
+                yystate = 36
+                continue
             case 211:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 212:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 213:
                 yych = str[cur]
-                match yych:
-                    case 0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x92:
+                    yystate = 36
+                    continue
+                if yych == 0xA2:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 214:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA5:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xA3:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xB0:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 215:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB6|0xB7|0xB8|0xB9|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA8:
+                    if yych <= 0x8C:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych == 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB2:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBB:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 216:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x87|0x88|0x8B|0x8C|0x8D|0x8E|0x97|0x9C|0x9D|0x9F|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xBC|0xBE:
+                if yych <= 0x9B:
+                    if yych <= 0x88:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x86:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
-                        continue
+                    else:
+                        if yych <= 0x8E:
+                            if yych <= 0x8A:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0x97:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                else:
+                    if yych <= 0xB1:
+                        if yych <= 0x9E:
+                            if yych <= 0x9D:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                        else:
+                            if yych <= 0xA3:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            if yych <= 0xA5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                    else:
+                        if yych <= 0xBC:
+                            if yych <= 0xBB:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xBE:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 217:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB8|0xB9|0xBC|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0xB0:
+                    if yych <= 0x8E:
+                        if yych <= 0x83:
+                            if yych <= 0x80:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0x84:
+                                yystate = 36
+                                continue
+                            if yych <= 0x8A:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                    else:
+                        if yych <= 0x92:
+                            if yych <= 0x90:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                        else:
+                            if yych == 0xA9:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                else:
+                    if yych <= 0xB7:
+                        if yych <= 0xB3:
+                            if yych <= 0xB1:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xB4:
+                                yystate = 36
+                                continue
+                            if yych <= 0xB6:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                    else:
+                        if yych <= 0xBC:
+                            if yych <= 0xB9:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            if yych <= 0xBB:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBD:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 218:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x87|0x88|0x8B|0x8C|0x8D|0x91|0x99|0x9A|0x9B|0x9C|0x9E|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x90:
+                    if yych <= 0x86:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x88:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0x9D:
+                        if yych <= 0x91:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x98:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9C:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x9E:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA5:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB5:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 219:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8F|0x90|0x91|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA8:
+                    if yych <= 0x8D:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        if yych == 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych == 0x92:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB3:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB4:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBB:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 220:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x87|0x88|0x89|0x8B|0x8C|0x8D|0x90|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x8F:
+                    if yych <= 0x86:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych == 0x8A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA5:
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xB8:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 221:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA8:
+                    if yych <= 0x8C:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        if yych == 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB3:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB4:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBB:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 222:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x87|0x88|0x8B|0x8C|0x8D|0x96|0x97|0x9C|0x9D|0x9F|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1:
+                if yych <= 0x97:
+                    if yych <= 0x88:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x86:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x95:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xA3:
+                        if yych <= 0x9B:
+                            yystate = 36
+                            continue
+                        if yych == 0x9E:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            if yych <= 0xA5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xB1:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 223:
                 yych = str[cur]
                 match yych:
@@ -4118,574 +6714,1578 @@ def lex(str):
                         continue
             case 224:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x90|0x97|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
+                if yych <= 0x8D:
+                    if yych <= 0x85:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x89:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0x96:
+                        if yych == 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA5:
+                            yystate = 36
+                            continue
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 225:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBD|0xBE|0xBF:
+                if yych <= 0x91:
+                    if yych <= 0x8C:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8D:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB9:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBC:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 226:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x95|0x96|0x98|0x99|0x9A|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x94:
+                    if yych <= 0x85:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych == 0x89:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0x9F:
+                        if yych == 0x97:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xA3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA5:
+                            yystate = 36
+                            continue
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 227:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x91:
+                    if yych <= 0x84:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x83:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych == 0x8D:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB4:
+                        if yych == 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xBB:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 228:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x95|0x96|0x9E|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2:
+                if yych <= 0x96:
+                    if yych <= 0x88:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych == 0x85:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x89:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x94:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xA3:
+                        if yych == 0x9E:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            if yych <= 0xA5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xB0:
+                                yystate = 36
+                                continue
+                            if yych <= 0xB2:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 229:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8C:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0x84:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x90:
+                        if yych <= 0x8D:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x91:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 230:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x8E|0x94|0x95|0x96|0x97|0x9F|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x93:
+                    if yych <= 0x85:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych == 0x89:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8E:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA5:
+                        if yych <= 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9E:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 231:
                 yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBD:
+                if yych <= 0x99:
+                    if yych <= 0x83:
+                        if yych <= 0x81:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x84:
+                            yystate = 36
+                            continue
+                        if yych <= 0x96:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBB:
+                        if yych == 0xB2:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 232:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x8A|0x8F|0x90|0x91|0x92|0x93|0x94|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0x95:
+                    if yych <= 0x89:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x94:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA5:
+                        if yych == 0x97:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9F:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 233:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x80:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 234:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 235:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x84|0x86|0x87|0x88|0x89|0x8A|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA5|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
+                if yych <= 0x8A:
+                    if yych <= 0x83:
+                        if yych <= 0x80:
+                            yystate = 36
+                            continue
+                        if yych <= 0x82:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x85:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0xA4:
+                        if yych <= 0x8B:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA3:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xA6:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 236:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9C|0x9D|0x9E|0x9F:
+                if yych <= 0x87:
+                    if yych <= 0x84:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych == 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0x99:
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x9B:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9F:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 237:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xB5|0xB7|0xB9|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
+                if yych <= 0xB4:
+                    if yych <= 0x97:
+                        if yych == 0x80:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x99:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB8:
+                        if yych == 0xB6:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB7:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xBD:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 238:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x88:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x87:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAC:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB0:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 239:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
+                if yych <= 0x85:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0x98:
                         yystate = 36
                         continue
+                    if yych <= 0xBC:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 240:
                 yych = str[cur]
-                match yych:
-                    case 0x86:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x86:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 241:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 242:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9D|0x9E|0x9F:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9C:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 243:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x8D:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 244:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAE|0xAF|0xB0|0xB2|0xB3:
+                    if yych <= 0x8C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x94:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB4:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 244:
+                yych = str[cur]
+                if yych <= 0xAC:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x93:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB0:
+                        if yych <= 0xAD:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB3:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 245:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x97|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9:
+                if yych <= 0x97:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x93:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x96:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x9D:
+                        if yych <= 0x9B:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA9:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 246:
                 yych = str[cur]
-                match yych:
-                    case 0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8F:
+                    if yych <= 0x8A:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8D:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 247:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 248:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9E:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAB:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xBB:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 249:
                 yych = str[cur]
-                match yych:
-                    case 0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xB0|0xB1|0xB2|0xB3|0xB4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x85:
+                    yystate = 36
+                    continue
+                if yych <= 0xAD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xB4:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 250:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 251:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 252:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 253:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
+                    if yych <= 0x9E:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xBC:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych == 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 253:
+                yych = str[cur]
+                if yych <= 0x99:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x89:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xA7:
+                        if yych <= 0xA6:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBD:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 254:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8B:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAA:
                         yystate = 36
                         continue
+                    if yych <= 0xB3:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 255:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 256:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8C:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 257:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych == 0x93:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 258:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xBA:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 259:
                 yych = str[cur]
-                match yych:
-                    case 0x8D|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x8D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 260:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x94|0xB1|0xBF:
+                if yych <= 0x94:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x93:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB1:
+                        if yych <= 0xB0:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 261:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0xA1|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0:
+                if yych <= 0xA0:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA1:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xA4:
                         yystate = 36
                         continue
+                    if yych <= 0xB0:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 262:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA4:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAA:
+                    yystate = 36
+                    continue
+                if yych <= 0xB3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 263:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xAF|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0xAE:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 264:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                    if yych <= 0xA7:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych == 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 264:
+                yych = str[cur]
+                if yych <= 0x8F:
+                    if yych <= 0x86:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x87:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8E:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0x9E:
+                        if yych == 0x97:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 265:
                 yych = str[cur]
-                match yych:
-                    case 0x85|0x86|0x87|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC:
+                if yych <= 0xAF:
+                    if yych <= 0x84:
+                        yystate = 36
+                        continue
+                    if yych <= 0x87:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0xA0:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB5:
+                        if yych <= 0xB0:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB7:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 266:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x99|0x9A|0x9D|0x9E|0x9F|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9A:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x96:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x98:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x9F:
+                        if yych <= 0x9C:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA0:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 267:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 268:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBF:
+                if yych <= 0xB3:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0xAF:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xBE:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 269:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 270:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBB|0xBD|0xBE|0xBF:
+                if yych <= 0x9F:
+                    if yych <= 0x85:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x99:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBB:
+                        if yych <= 0xB7:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xBA:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBC:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 271:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x93:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 272:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE:
+                if yych <= 0x8E:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
                         yystate = 36
                         continue
+                    if yych <= 0xBE:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 273:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 274:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x99:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8D:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB6:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 275:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB2|0xB3|0xB4|0xB5|0xB6:
+                if yych <= 0x9D:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x82:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x9A:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB1:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB6:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 276:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAC|0xAD|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0xAB:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 277:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x93|0x94|0x95|0x96|0x97|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBE:
+                    if yych <= 0xAA:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAD:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB9:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 277:
+                yych = str[cur]
+                if yych <= 0xA8:
+                    if yych <= 0x92:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9C:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                else:
+                    if yych <= 0xB7:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xBD:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 278:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB3|0xB4:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8F:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB2:
                         yystate = 36
                         continue
+                    if yych <= 0xB4:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 279:
                 yych = str[cur]
-                match yych:
-                    case 0x8D|0x8E|0x8F|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xAF:
+                    if yych <= 0x8C:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8F:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xB5:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 280:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBF:
+                if yych <= 0xA0:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x99:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xBA:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 281:
                 yych = str[cur]
                 match yych:
@@ -5030,32 +8630,47 @@ def lex(str):
                         continue
             case 284:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x86|0x87|0x88|0x89|0x8A|0xB0:
+                if yych <= 0x8A:
+                    if yych <= 0x83:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 38
                         continue
-                    case 0x84:
+                    else:
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 119
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 352
+                            continue
                         cur += 1
-                        yystate = 119
+                        yystate = 38
                         continue
-                    case 0x85:
+                else:
+                    if yych <= 0xB0:
+                        if yych <= 0x8B:
+                            cur += 1
+                            yystate = 353
+                            continue
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
                         cur += 1
-                        yystate = 352
+                        yystate = 38
                         continue
-                    case 0x8B:
-                        cur += 1
-                        yystate = 353
-                        continue
-                    case 0xB1:
-                        cur += 1
-                        yystate = 354
-                        continue
-                    case 0xB2:
-                        cur += 1
-                        yystate = 414
-                        continue
-                    case _:
+                    else:
+                        if yych <= 0xB1:
+                            cur += 1
+                            yystate = 354
+                            continue
+                        if yych <= 0xB2:
+                            cur += 1
+                            yystate = 414
+                            continue
                         yystate = 36
                         continue
             case 285:
@@ -5138,904 +8753,1612 @@ def lex(str):
                         continue
             case 286:
                 yych = str[cur]
-                match yych:
-                    case 0x80:
-                        cur += 1
-                        yystate = 422
-                        continue
-                    case 0x84:
+                if yych <= 0x9F:
+                    if yych <= 0x84:
+                        if yych == 0x80:
+                            cur += 1
+                            yystate = 422
+                            continue
+                        if yych <= 0x83:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 423
                         continue
-                    case 0x85:
-                        cur += 1
-                        yystate = 424
+                    else:
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 424
+                            continue
+                        if yych == 0x8B:
+                            cur += 1
+                            yystate = 425
+                            continue
+                        yystate = 36
                         continue
-                    case 0x8B:
-                        cur += 1
-                        yystate = 425
-                        continue
-                    case 0xA0|0xA1|0xA2|0xA4:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0xA3:
-                        cur += 1
-                        yystate = 426
-                        continue
-                    case 0xA5:
+                else:
+                    if yych <= 0xA5:
+                        if yych == 0xA3:
+                            cur += 1
+                            yystate = 426
+                            continue
+                        if yych <= 0xA4:
+                            cur += 1
+                            yystate = 38
+                            continue
                         cur += 1
                         yystate = 427
                         continue
-                    case 0xB8:
-                        cur += 1
-                        yystate = 371
-                        continue
-                    case 0xB9:
-                        cur += 1
-                        yystate = 372
-                        continue
-                    case 0xBA:
-                        cur += 1
-                        yystate = 373
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                    else:
+                        if yych <= 0xB8:
+                            if yych <= 0xB7:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 371
+                            continue
+                        else:
+                            if yych <= 0xB9:
+                                cur += 1
+                                yystate = 372
+                                continue
+                            if yych <= 0xBA:
+                                cur += 1
+                                yystate = 373
+                                continue
+                            yystate = 36
+                            continue
             case 287:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x85|0x86:
-                        cur += 1
-                        yystate = 38
-                        continue
-                    case 0x87:
-                        cur += 1
-                        yystate = 157
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x83:
+                    yystate = 36
+                    continue
+                if yych <= 0x86:
+                    cur += 1
+                    yystate = 38
+                    continue
+                if yych <= 0x87:
+                    cur += 1
+                    yystate = 157
+                    continue
+                yystate = 36
+                continue
             case 288:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBC|0xBD|0xBF:
+                if yych <= 0xA7:
+                    if yych <= 0x8B:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8C:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA6:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xBD:
+                        if yych == 0xBB:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 289:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 290:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 291:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB4:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 292:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 293:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 294:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAC:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 295:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 296:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x91|0x92|0x93|0x94|0x95:
+                if yych <= 0x87:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x83:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0x90:
                         yystate = 36
                         continue
+                    if yych <= 0x95:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 297:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 298:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x93:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x97:
+                    yystate = 36
+                    continue
+                if yych <= 0xBB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 299:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 300:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x95:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 301:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x88|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB7|0xB8|0xBC|0xBF:
+                if yych <= 0xB5:
+                    if yych <= 0x87:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x89:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0xBB:
+                        if yych <= 0xB6:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB8:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xBC:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 302:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x95:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 303:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB4|0xB5:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych == 0xB3:
+                    yystate = 36
+                    continue
+                if yych <= 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 304:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x95:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 305:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xBD:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 306:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x90|0x91|0x92|0x93|0x95|0x96|0x97|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5:
+                if yych <= 0x93:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x97:
+                        if yych <= 0x94:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x98:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB5:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 307:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 308:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9C:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 309:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x88:
+                    yystate = 36
+                    continue
+                if yych <= 0xA4:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 310:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x95:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 311:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x91:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 312:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 313:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA6:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9C:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA7:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 314:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x85:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 315:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 316:
                 yych = str[cur]
-                match yych:
-                    case 0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x82:
+                    yystate = 36
+                    continue
+                if yych <= 0xB7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 317:
                 yych = str[cur]
-                match yych:
-                    case 0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x82:
+                    yystate = 36
+                    continue
+                if yych <= 0xAF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 318:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 319:
                 yych = str[cur]
-                match yych:
-                    case 0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x82:
+                    yystate = 36
+                    continue
+                if yych <= 0xA6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 320:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB6:
+                if yych <= 0x8F:
+                    if yych == 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB2:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xB6:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 321:
                 yych = str[cur]
-                match yych:
-                    case 0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x82:
+                    yystate = 36
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 322:
                 yych = str[cur]
-                match yych:
-                    case 0x81|0x82|0x83|0x84|0x9A|0x9C:
+                if yych <= 0x99:
+                    if yych <= 0x80:
+                        yystate = 36
+                        continue
+                    if yych <= 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0x9B:
                         yystate = 36
                         continue
+                    if yych <= 0x9C:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 323:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x92:
+                    yystate = 36
+                    continue
+                if yych <= 0xAB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 324:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x8A|0x8B|0x8C|0x8D|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8D:
+                    if yych <= 0x87:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x89:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0x9E:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xA8:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xAF:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 325:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x9D|0x9E|0x9F|0xA0|0xA1:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9C:
+                    yystate = 36
+                    continue
+                if yych <= 0xA1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 326:
                 yych = str[cur]
-                match yych:
-                    case 0x87|0x88|0x89|0x8A|0x9F:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x86:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 327:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x85|0x87:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x83:
+                    yystate = 36
+                    continue
+                if yych == 0x86:
+                    yystate = 36
+                    continue
+                if yych <= 0x87:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 328:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAE:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 329:
                 yych = str[cur]
-                match yych:
-                    case 0x98|0x99|0x9A|0x9B:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x97:
+                    yystate = 36
+                    continue
+                if yych <= 0x9B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 330:
                 yych = str[cur]
-                match yych:
-                    case 0x84:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x84:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 331:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB8:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xB8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 332:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 333:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 334:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xA9:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 335:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0xA1|0xA3:
+                if yych <= 0xA0:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x90:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA2:
                         yystate = 36
                         continue
+                    if yych <= 0xA3:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 336:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xBA:
+                if yych <= 0x8A:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB2:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBA:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 337:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x9B:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 338:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x9D:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 339:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x89:
+                    yystate = 36
+                    continue
+                if yych <= 0xAE:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 340:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x80:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB1:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 341:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 342:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x89|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x87:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 343:
-                yych = str[cur]
-                match yych:
-                    case 0x86|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                    if yych <= 0x86:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0x8A:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB0:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 343:
+                yych = str[cur]
+                if yych <= 0xA5:
+                    if yych == 0x86:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xA8:
+                        if yych <= 0xA6:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 344:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x98:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x98:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 345:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB2:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 346:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x83:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 347:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 348:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBD|0xBE|0xBF:
+                if yych <= 0xA2:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x83:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB7:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xBC:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 349:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x90:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 350:
                 yych = str[cur]
-                match yych:
-                    case 0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x92:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 351:
                 yych = str[cur]
-                match yych:
-                    case 0xA0|0xA1|0xA3:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x9F:
+                    yystate = 36
+                    continue
+                if yych == 0xA2:
+                    yystate = 36
+                    continue
+                if yych <= 0xA3:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 352:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0xA4|0xA5|0xA6|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA3:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x92:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA7:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 353:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBB:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 354:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 355:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x88:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 356:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x95:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 357:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9E|0x9F|0xA2|0xA5|0xA6|0xA9|0xAA|0xAB|0xAC|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBB|0xBD|0xBE|0xBF:
+                if yych <= 0xA6:
+                    if yych <= 0x9F:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych == 0x9D:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych == 0xA2:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0xA4:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB9:
+                        if yych <= 0xA8:
+                            yystate = 36
+                            continue
+                        if yych == 0xAD:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBB:
+                            if yych <= 0xBA:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBC:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 358:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x84:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 359:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x87|0x88|0x89|0x8A|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBB|0xBC|0xBD|0xBE:
+                if yych <= 0x94:
+                    if yych <= 0x86:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x85:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x8A:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8C:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                else:
+                    if yych <= 0x9D:
+                        if yych <= 0x95:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9C:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xBA:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBE:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 360:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x86|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x86:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0x85:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x90:
+                        if yych <= 0x89:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x91:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 361:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xA7:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 362:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9A:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x81:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xBA:
+                        if yych <= 0x9B:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBB:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 363:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x95:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x94:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xB5:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 364:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8E:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 365:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x89:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x88:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA9:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 366:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x83:
+                    yystate = 36
+                    continue
+                if yych <= 0x8B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 367:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB6:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 368:
                 yych = str[cur]
-                match yych:
-                    case 0x8E:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x8E:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 369:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x84:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 370:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x8B:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x83:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x8B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 371:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA1|0xA2|0xA4|0xA7|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB4|0xB5|0xB6|0xB7|0xB9|0xBB:
+                if yych <= 0xA6:
+                    if yych <= 0x9F:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych == 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
-                        continue
+                    else:
+                        if yych <= 0xA2:
+                            if yych <= 0xA0:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xA4:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                else:
+                    if yych <= 0xB7:
+                        if yych <= 0xA8:
+                            if yych <= 0xA7:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
+                        else:
+                            if yych == 0xB3:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB8:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych == 0xBB:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 372:
                 yych = str[cur]
                 match yych:
@@ -6048,554 +10371,1251 @@ def lex(str):
                         continue
             case 373:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0xA1|0xA2|0xA3|0xA5|0xA6|0xA7|0xA8|0xA9|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB:
+                if yych <= 0xA0:
+                    if yych <= 0x89:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x9B:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA9:
+                        if yych == 0xA4:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAA:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBB:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 374:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x96:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 375:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA1:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 376:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA0:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 377:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 378:
                 yych = str[cur]
-                match yych:
-                    case 0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 379:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0xA0:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x90:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xA0:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 380:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 381:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x9F:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 382:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x95|0x96|0x97|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBF:
+                    if yych <= 0x9D:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xA9:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
+                        yystate = 36
+                        continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 382:
+                yych = str[cur]
+                if yych <= 0x94:
+                    if yych <= 0x84:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x83:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8B:
+                            yystate = 36
+                            continue
+                        if yych <= 0x93:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xB7:
+                        if yych == 0x98:
+                            yystate = 36
+                            continue
+                        if yych <= 0xB5:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych <= 0xBA:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych == 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 383:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x88:
+                    yystate = 36
+                    continue
+                if yych <= 0xA6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 384:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA7:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 385:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xBF:
+                if yych <= 0xA5:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x86:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAF:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 386:
                 yych = str[cur]
-                match yych:
-                    case 0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA8:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 387:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0xB5:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 388:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x85|0x86|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x8F:
+                    if yych <= 0x83:
                         yystate = 36
                         continue
-            case 389:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x89|0x8A|0x8B|0x8C|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9C:
+                    if yych <= 0x86:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB3:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych == 0xB6:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 389:
+                yych = str[cur]
+                if yych <= 0x8C:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x84:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x88:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x9A:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x9C:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 390:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBE:
+                if yych <= 0x92:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x91:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB7:
+                        cur += 1
+                        yystate = 3
                         continue
+                    if yych == 0xBE:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 391:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAA:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 392:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8F|0x90|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB2|0xB3|0xB5|0xB6|0xB7|0xB8|0xB9|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xA8:
+                    if yych <= 0x8C:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych == 0x84:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8E:
+                            yystate = 36
+                            continue
+                        if yych <= 0x90:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xB3:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych == 0xB1:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xB9:
+                            if yych <= 0xB4:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xBA:
+                                yystate = 36
+                                continue
+                            if yych <= 0xBF:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 393:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x87|0x88|0x8B|0x8C|0x8D|0x90|0x97|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB0|0xB1|0xB2|0xB3|0xB4:
+                if yych <= 0x90:
+                    if yych <= 0x88:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x84:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x86:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
-                        yystate = 36
+                    else:
+                        if yych <= 0x8A:
+                            yystate = 36
+                            continue
+                        if yych <= 0x8D:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
                         continue
+                else:
+                    if yych <= 0xA3:
+                        if yych == 0x97:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        if yych <= 0x9C:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xAC:
+                            if yych <= 0xA5:
+                                yystate = 36
+                                continue
+                            cur += 1
+                            yystate = 3
+                            continue
+                        else:
+                            if yych <= 0xAF:
+                                yystate = 36
+                                continue
+                            if yych <= 0xB4:
+                                cur += 1
+                                yystate = 3
+                                continue
+                            yystate = 36
+                            continue
             case 394:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9E|0x9F:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x8A:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9D:
                         yystate = 36
                         continue
+                    if yych <= 0x9F:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 395:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x87|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
+                if yych <= 0x86:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x85:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x87:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x8F:
                         yystate = 36
                         continue
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 396:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xB7:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 397:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x98|0x99|0x9A|0x9B|0x9C|0x9D:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x80:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x97:
+                    yystate = 36
+                    continue
+                if yych <= 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 398:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x84|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
+                if yych <= 0x83:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x84:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x8F:
                         yystate = 36
                         continue
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 399:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
+                if yych <= 0x9C:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x9A:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xAB:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xAF:
                         yystate = 36
                         continue
+                    if yych <= 0xB9:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 400:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 401:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA3|0xA4:
+                if yych <= 0x99:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x97:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA2:
                         yystate = 36
                         continue
+                    if yych <= 0xA4:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 402:
                 yych = str[cur]
-                match yych:
-                    case 0x87|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych == 0x87:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 403:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9D:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x9D:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 404:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x89:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x88:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xB7:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 405:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x8F:
+                    if yych == 0x80:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xB1:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 406:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
+                if yych <= 0x91:
+                    if yych <= 0x7F:
                         yystate = 36
                         continue
-            case 407:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x89|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xBA|0xBC|0xBD|0xBF:
+                    if yych <= 0x8F:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA8:
+                        yystate = 36
+                        continue
+                    if yych <= 0xB6:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
+            case 407:
+                yych = str[cur]
+                if yych <= 0xB6:
+                    if yych <= 0x87:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x86:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0x8A:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                else:
+                    if yych <= 0xBB:
+                        if yych == 0xBA:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                    else:
+                        if yych == 0xBE:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 408:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA7|0xA8|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x9F:
+                    if yych <= 0x87:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x8F:
+                            yystate = 36
+                            continue
+                        if yych <= 0x99:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA8:
+                        if yych == 0xA6:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA9:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 409:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x90|0x91|0x93|0x94|0x95|0x96|0x97|0x98|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9:
+                if yych <= 0x91:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych == 0x8F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x98:
+                        if yych <= 0x92:
+                            yystate = 36
+                            continue
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    else:
+                        if yych <= 0x9F:
+                            yystate = 36
+                            continue
+                        if yych <= 0xA9:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 410:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych == 0x9F:
+                    yystate = 36
+                    continue
+                if yych <= 0xA9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 411:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xBD|0xBE|0xBF:
+                if yych <= 0x99:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x83:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    if yych <= 0x8F:
+                        yystate = 36
+                        continue
+                    cur += 1
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0xB7:
+                        if yych <= 0xA2:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xBC:
+                            yystate = 36
+                            continue
+                        if yych <= 0xBF:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 412:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8A:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8E:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 413:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x87:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8E:
+                    yystate = 36
+                    continue
+                if yych <= 0x9F:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 414:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9D|0x9E:
+                if yych <= 0x8F:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x88:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x99:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x9C:
                         yystate = 36
                         continue
+                    if yych <= 0x9E:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 415:
                 yych = str[cur]
-                match yych:
-                    case 0xA5|0xA6|0xA7|0xA8|0xA9|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0xAC:
+                    if yych <= 0xA4:
+                        yystate = 36
+                        continue
+                    if yych <= 0xA9:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0xB2:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xBA:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 416:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0xAA|0xAB|0xAC|0xAD:
+                if yych <= 0x84:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x82:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x8B:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0xA9:
                         yystate = 36
                         continue
+                    if yych <= 0xAD:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 417:
                 yych = str[cur]
-                match yych:
-                    case 0x82|0x83|0x84:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x81:
+                    yystate = 36
+                    continue
+                if yych <= 0x84:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 418:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD|0xBE|0xBF:
+                if yych <= 0x83:
+                    if yych <= 0x7F:
+                        yystate = 36
+                        continue
+                    if yych <= 0x82:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych <= 0x8B:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    if yych <= 0x8D:
                         yystate = 36
                         continue
+                    if yych <= 0xBF:
+                        cur += 1
+                        yystate = 3
+                        continue
+                    yystate = 36
+                    continue
             case 419:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xBB|0xBC|0xBD|0xBE|0xBF:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB6:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xBA:
+                    yystate = 36
+                    continue
+                if yych <= 0xBF:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 420:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB5:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0xB5:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 421:
                 yych = str[cur]
-                match yych:
-                    case 0x84|0x9B|0x9C|0x9D|0x9E|0x9F|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF:
+                if yych <= 0x9A:
+                    if yych == 0x84:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+                else:
+                    if yych == 0xA0:
                         yystate = 36
                         continue
-            case 422:
-                yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA3|0xA4|0xA6|0xA7|0xA8|0xA9|0xAA:
+                    if yych <= 0xAF:
                         cur += 1
                         yystate = 3
                         continue
-                    case _:
+                    yystate = 36
+                    continue
+            case 422:
+                yych = str[cur]
+                if yych <= 0x9A:
+                    if yych <= 0x86:
+                        if yych <= 0x7F:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0x87:
+                            yystate = 36
+                            continue
+                        if yych <= 0x98:
+                            cur += 1
+                            yystate = 3
+                            continue
+                        yystate = 36
+                        continue
+                else:
+                    if yych <= 0xA4:
+                        if yych == 0xA2:
+                            yystate = 36
+                            continue
+                        cur += 1
+                        yystate = 3
+                        continue
+                    else:
+                        if yych <= 0xA5:
+                            yystate = 36
+                            continue
+                        if yych <= 0xAA:
+                            cur += 1
+                            yystate = 3
+                            continue
                         yystate = 36
                         continue
             case 423:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9|0xBA|0xBB|0xBC|0xBD:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xAC:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0xAF:
+                    yystate = 36
+                    continue
+                if yych <= 0xBD:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 424:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8E:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x89:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych == 0x8E:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 425:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x8C|0x8D|0x8E|0x8F|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99|0x9A|0x9B|0x9C|0x9D|0x9E|0x9F|0xA0|0xA1|0xA2|0xA3|0xA4|0xA5|0xA6|0xA7|0xA8|0xA9|0xAA|0xAB|0xAC|0xAD|0xAE|0xAF|0xB0|0xB1|0xB2|0xB3|0xB4|0xB5|0xB6|0xB7|0xB8|0xB9:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0xB9:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 426:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x90|0x91|0x92|0x93|0x94|0x95|0x96:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x84:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x96:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case 427:
                 yych = str[cur]
-                match yych:
-                    case 0x80|0x81|0x82|0x83|0x84|0x85|0x86|0x87|0x88|0x89|0x8A|0x8B|0x90|0x91|0x92|0x93|0x94|0x95|0x96|0x97|0x98|0x99:
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        yystate = 36
-                        continue
+                if yych <= 0x7F:
+                    yystate = 36
+                    continue
+                if yych <= 0x8B:
+                    cur += 1
+                    yystate = 3
+                    continue
+                if yych <= 0x8F:
+                    yystate = 36
+                    continue
+                if yych <= 0x99:
+                    cur += 1
+                    yystate = 3
+                    continue
+                yystate = 36
+                continue
             case _:
                 raise "internal lexer error"
 

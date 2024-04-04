@@ -57,18 +57,24 @@ def lex(st, recv):
             match yystate:
                 case -1|0:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A:
-                            st.cur += 1
-                            yystate = 3
-                            continue
-                        case _:
-                            if st.cur >= st.lim:
-                                st.state = 8
-                                return Status.WAITING, recv
-                            st.cur += 1
-                            yystate = 1
-                            continue
+                    if yych <= 0x00:
+                        if st.cur >= st.lim:
+                            st.state = 8
+                            return Status.WAITING, recv
+                        st.cur += 1
+                        yystate = 1
+                        continue
+                    if yych <= 0x60:
+                        st.cur += 1
+                        yystate = 1
+                        continue
+                    if yych <= 0x7A:
+                        st.cur += 1
+                        yystate = 3
+                        continue
+                    st.cur += 1
+                    yystate = 1
+                    continue
                 case 1:
                     yystate = 2
                     continue
@@ -78,42 +84,58 @@ def lex(st, recv):
                 case 3:
                     st.mar = st.cur
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x3B:
-                            st.cur += 1
-                            yystate = 4
-                            continue
-                        case 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A:
-                            st.cur += 1
-                            yystate = 5
-                            continue
-                        case _:
+                    if yych <= 0x3B:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 st.state = 9
                                 return Status.WAITING, recv
                             yystate = 2
                             continue
+                        if yych <= 0x3A:
+                            yystate = 2
+                            continue
+                        st.cur += 1
+                        yystate = 4
+                        continue
+                    else:
+                        if yych <= 0x60:
+                            yystate = 2
+                            continue
+                        if yych <= 0x7A:
+                            st.cur += 1
+                            yystate = 5
+                            continue
+                        yystate = 2
+                        continue
                 case 4:
                     st.state = -1
                     recv += 1
                     break
                 case 5:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x3B:
-                            st.cur += 1
-                            yystate = 4
-                            continue
-                        case 0x61|0x62|0x63|0x64|0x65|0x66|0x67|0x68|0x69|0x6A|0x6B|0x6C|0x6D|0x6E|0x6F|0x70|0x71|0x72|0x73|0x74|0x75|0x76|0x77|0x78|0x79|0x7A:
-                            st.cur += 1
-                            yystate = 5
-                            continue
-                        case _:
+                    if yych <= 0x3B:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 st.state = 10
                                 return Status.WAITING, recv
                             yystate = 6
                             continue
+                        if yych >= 0x3B:
+                            st.cur += 1
+                            yystate = 4
+                            continue
+                        yystate = 6
+                        continue
+                    else:
+                        if yych <= 0x60:
+                            yystate = 6
+                            continue
+                        if yych <= 0x7A:
+                            st.cur += 1
+                            yystate = 5
+                            continue
+                        yystate = 6
+                        continue
                 case 6:
                     st.cur = st.mar
                     yystate = 2

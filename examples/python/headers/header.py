@@ -12,33 +12,33 @@ def lex(st):
         match yystate:
             case 0:
                 yych = st.str[st.cur]
-                match yych:
-                    case 0x61:
-                        st.cur += 1
-                        yystate = 0
-                        continue
-                    case 0x62:
-                        st.yyt1 = st.cur
-                        st.cur += 1
-                        yystate = 2
-                        continue
-                    case _:
-                        st.yyt1 = st.cur
-                        yystate = 1
-                        continue
+                if yych <= 0x60:
+                    st.yyt1 = st.cur
+                    yystate = 1
+                    continue
+                if yych <= 0x61:
+                    st.cur += 1
+                    yystate = 0
+                    continue
+                if yych <= 0x62:
+                    st.yyt1 = st.cur
+                    st.cur += 1
+                    yystate = 2
+                    continue
+                st.yyt1 = st.cur
+                yystate = 1
+                continue
             case 1:
                 t = st.yyt1
                 return t
             case 2:
                 yych = st.str[st.cur]
-                match yych:
-                    case 0x62:
-                        st.cur += 1
-                        yystate = 2
-                        continue
-                    case _:
-                        yystate = 1
-                        continue
+                if yych == 0x62:
+                    st.cur += 1
+                    yystate = 2
+                    continue
+                yystate = 1
+                continue
             case _:
                 raise "internal lexer error"
 

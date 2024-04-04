@@ -30,6 +30,6 @@ for f in $(find -name '*.re'); do
     cd $root_dir
 done
 
-rm example.rs
+rm -f example.rs
 
 echo "All good."

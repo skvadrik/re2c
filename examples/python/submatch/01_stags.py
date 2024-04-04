@@ -15,16 +15,18 @@ def parse(str):
         match yystate:
             case 0:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yyt1 = cur
-                        cur += 1
-                        yystate = 3
-                        continue
-                    case _:
-                        cur += 1
-                        yystate = 1
-                        continue
+                if yych <= 0x2F:
+                    cur += 1
+                    yystate = 1
+                    continue
+                if yych <= 0x39:
+                    yyt1 = cur
+                    cur += 1
+                    yystate = 3
+                    continue
+                cur += 1
+                yystate = 1
+                continue
             case 1:
                 yystate = 2
                 continue
@@ -33,68 +35,76 @@ def parse(str):
             case 3:
                 mar = cur
                 yych = str[cur]
-                match yych:
-                    case 0x2E:
-                        cur += 1
-                        yystate = 4
-                        continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        cur += 1
-                        yystate = 6
-                        continue
-                    case _:
-                        yystate = 2
-                        continue
+                if yych == 0x2E:
+                    cur += 1
+                    yystate = 4
+                    continue
+                if yych <= 0x2F:
+                    yystate = 2
+                    continue
+                if yych <= 0x39:
+                    cur += 1
+                    yystate = 6
+                    continue
+                yystate = 2
+                continue
             case 4:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yyt2 = cur
-                        cur += 1
-                        yystate = 7
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
+                if yych <= 0x2F:
+                    yystate = 5
+                    continue
+                if yych <= 0x39:
+                    yyt2 = cur
+                    cur += 1
+                    yystate = 7
+                    continue
+                yystate = 5
+                continue
             case 5:
                 cur = mar
                 yystate = 2
                 continue
             case 6:
                 yych = str[cur]
-                match yych:
-                    case 0x2E:
-                        cur += 1
-                        yystate = 4
-                        continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        cur += 1
-                        yystate = 6
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
+                if yych == 0x2E:
+                    cur += 1
+                    yystate = 4
+                    continue
+                if yych <= 0x2F:
+                    yystate = 5
+                    continue
+                if yych <= 0x39:
+                    cur += 1
+                    yystate = 6
+                    continue
+                yystate = 5
+                continue
             case 7:
                 yych = str[cur]
-                match yych:
-                    case 0x00:
+                if yych <= 0x2E:
+                    if yych <= 0x00:
                         yyt3 = cur
                         yyt4 = NONE
                         cur += 1
                         yystate = 8
                         continue
-                    case 0x2E:
-                        yyt3 = cur
-                        cur += 1
-                        yystate = 9
+                    if yych <= 0x2D:
+                        yystate = 5
                         continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
+                    yyt3 = cur
+                    cur += 1
+                    yystate = 9
+                    continue
+                else:
+                    if yych <= 0x2F:
+                        yystate = 5
+                        continue
+                    if yych <= 0x39:
                         cur += 1
                         yystate = 7
                         continue
-                    case _:
-                        yystate = 5
-                        continue
+                    yystate = 5
+                    continue
             case 8:
                 t1 = yyt1
                 t3 = yyt2
@@ -108,29 +118,31 @@ def parse(str):
                 return SemVer(major, minor, patch)
             case 9:
                 yych = str[cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yyt4 = cur
-                        cur += 1
-                        yystate = 10
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
+                if yych <= 0x2F:
+                    yystate = 5
+                    continue
+                if yych >= 0x3A:
+                    yystate = 5
+                    continue
+                yyt4 = cur
+                cur += 1
+                yystate = 10
+                continue
             case 10:
                 yych = str[cur]
-                match yych:
-                    case 0x00:
-                        cur += 1
-                        yystate = 8
-                        continue
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        cur += 1
-                        yystate = 10
-                        continue
-                    case _:
-                        yystate = 5
-                        continue
+                if yych <= 0x00:
+                    cur += 1
+                    yystate = 8
+                    continue
+                if yych <= 0x2F:
+                    yystate = 5
+                    continue
+                if yych <= 0x39:
+                    cur += 1
+                    yystate = 10
+                    continue
+                yystate = 5
+                continue
             case _:
                 raise "internal lexer error"
 

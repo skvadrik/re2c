@@ -19,19 +19,21 @@ def lex(str):
                         return -1
                     yych = str[cur]
                     cur += 1;
-                    match yych:
-                        case 0x00:
+                    if yych <= 0x20:
+                        if yych <= 0x00:
                             yystate = 1
                             continue
-                        case 0x20:
-                            yystate = 3
-                            continue
-                        case 0x27:
-                            yystate = 5
-                            continue
-                        case _:
+                        if yych <= 0x1F:
                             yystate = 2
                             continue
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x27:
+                            yystate = 4
+                            continue
+                        yystate = 2
+                        continue
                 case 1:
                     # check that it is the sentinel, not some unexpected null
                     return count if cur == lim - YYMAXFILL + 1 else -1
@@ -41,39 +43,32 @@ def lex(str):
                     if cur + 1 > lim:
                         return -1
                     yych = str[cur]
-                    match yych:
-                        case 0x20:
-                            cur += 1;
-                            yystate = 3
-                            continue
-                        case _:
-                            yystate = 4
-                            continue
-                case 4:
+                    if yych == 0x20:
+                        cur += 1;
+                        yystate = 3
+                        continue
                     break
-                case 5:
+                case 4:
                     if cur + 1 > lim:
                         return -1
                     yych = str[cur]
                     cur += 1;
-                    match yych:
-                        case 0x27:
-                            yystate = 6
-                            continue
-                        case 0x5C:
-                            yystate = 7
-                            continue
-                        case _:
-                            yystate = 5
-                            continue
-                case 6:
+                    if yych == 0x27:
+                        yystate = 5
+                        continue
+                    if yych == 0x5C:
+                        yystate = 6
+                        continue
+                    yystate = 4
+                    continue
+                case 5:
                     count += 1
                     break
-                case 7:
+                case 6:
                     if cur + 1 > lim:
                         return -1
                     cur += 1;
-                    yystate = 5
+                    yystate = 4
                     continue
                 case _:
                     raise "internal lexer error"

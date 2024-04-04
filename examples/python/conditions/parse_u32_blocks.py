@@ -18,31 +18,46 @@ def parse_u32(str):
             case 0:
                 yych = st.str[st.cur]
                 st.cur += 1
-                match yych:
-                    case 0x30:
-                        yystate = 2
-                        continue
-                    case 0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                        yystate = 4
-                        continue
-                    case _:
-                        yystate = 1
-                        continue
+                if yych <= 0x2F:
+                    yystate = 1
+                    continue
+                if yych <= 0x30:
+                    yystate = 2
+                    continue
+                if yych <= 0x39:
+                    yystate = 4
+                    continue
+                yystate = 1
+                continue
             case 1:
                 return None
             case 2:
                 st.mar = st.cur
                 yych = st.str[st.cur]
-                match yych:
-                    case 0x42|0x62:
+                if yych <= 0x58:
+                    if yych == 0x42:
                         st.cur += 1
                         yystate = 5
                         continue
-                    case 0x58|0x78:
+                    if yych >= 0x58:
                         st.cur += 1
                         yystate = 7
                         continue
-                    case _:
+                    yystate = 3
+                    continue
+                else:
+                    if yych <= 0x62:
+                        if yych >= 0x62:
+                            st.cur += 1
+                            yystate = 5
+                            continue
+                        yystate = 3
+                        continue
+                    else:
+                        if yych == 0x78:
+                            st.cur += 1
+                            yystate = 7
+                            continue
                         yystate = 3
                         continue
             case 3:
@@ -52,28 +67,45 @@ def parse_u32(str):
                 return parse_dec(st)
             case 5:
                 yych = st.str[st.cur]
-                match yych:
-                    case 0x30|0x31:
-                        st.cur += 1
-                        yystate = 8
-                        continue
-                    case _:
-                        yystate = 6
-                        continue
+                if yych <= 0x2F:
+                    yystate = 6
+                    continue
+                if yych <= 0x31:
+                    st.cur += 1
+                    yystate = 8
+                    continue
+                yystate = 6
+                continue
             case 6:
                 st.cur = st.mar
                 yystate = 3
                 continue
             case 7:
                 yych = st.str[st.cur]
-                match yych:
-                    case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39|0x41|0x42|0x43|0x44|0x45|0x46|0x61|0x62|0x63|0x64|0x65|0x66:
+                if yych <= 0x40:
+                    if yych <= 0x2F:
+                        yystate = 6
+                        continue
+                    if yych <= 0x39:
                         st.cur += 1
                         yystate = 9
                         continue
-                    case _:
+                    yystate = 6
+                    continue
+                else:
+                    if yych <= 0x46:
+                        st.cur += 1
+                        yystate = 9
+                        continue
+                    if yych <= 0x60:
                         yystate = 6
                         continue
+                    if yych <= 0x66:
+                        st.cur += 1
+                        yystate = 9
+                        continue
+                    yystate = 6
+                    continue
             case 8:
                 st.cur += -1
                 return parse_bin(st)
@@ -94,13 +126,14 @@ def parse_bin(st):
                 case 0:
                     yych = st.str[st.cur]
                     st.cur += 1
-                    match yych:
-                        case 0x30|0x31:
-                            yystate = 2
-                            continue
-                        case _:
-                            yystate = 1
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 1
+                        continue
+                    if yych <= 0x31:
+                        yystate = 2
+                        continue
+                    yystate = 1
+                    continue
                 case 1:
                     return n
                 case 2:
@@ -120,13 +153,14 @@ def parse_oct(st):
                 case 0:
                     yych = st.str[st.cur]
                     st.cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37:
-                            yystate = 2
-                            continue
-                        case _:
-                            yystate = 1
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 1
+                        continue
+                    if yych <= 0x37:
+                        yystate = 2
+                        continue
+                    yystate = 1
+                    continue
                 case 1:
                     return n
                 case 2:
@@ -146,13 +180,14 @@ def parse_dec(st):
                 case 0:
                     yych = st.str[st.cur]
                     st.cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            yystate = 2
-                            continue
-                        case _:
-                            yystate = 1
-                            continue
+                    if yych <= 0x2F:
+                        yystate = 1
+                        continue
+                    if yych <= 0x39:
+                        yystate = 2
+                        continue
+                    yystate = 1
+                    continue
                 case 1:
                     return n
                 case 2:
@@ -172,19 +207,27 @@ def parse_hex(st):
                 case 0:
                     yych = st.str[st.cur]
                     st.cur += 1
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            yystate = 2
-                            continue
-                        case 0x41|0x42|0x43|0x44|0x45|0x46:
-                            yystate = 3
-                            continue
-                        case 0x61|0x62|0x63|0x64|0x65|0x66:
-                            yystate = 4
-                            continue
-                        case _:
+                    if yych <= 0x40:
+                        if yych <= 0x2F:
                             yystate = 1
                             continue
+                        if yych <= 0x39:
+                            yystate = 2
+                            continue
+                        yystate = 1
+                        continue
+                    else:
+                        if yych <= 0x46:
+                            yystate = 3
+                            continue
+                        if yych <= 0x60:
+                            yystate = 1
+                            continue
+                        if yych <= 0x66:
+                            yystate = 4
+                            continue
+                        yystate = 1
+                        continue
                 case 1:
                     return n
                 case 2:

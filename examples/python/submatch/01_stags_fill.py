@@ -69,21 +69,27 @@ def lex(st, count):
             match yystate:
                 case 0:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.cur += 1
-                            yystate = 3
-                            continue
-                        case _:
-                            if st.cur >= st.lim:
-                                if fill(st) == Status.OK:
-                                    yystate = 0
-                                    continue
-                                yystate = 11
+                    if yych <= 0x00:
+                        if st.cur >= st.lim:
+                            if fill(st) == Status.OK:
+                                yystate = 0
                                 continue
-                            st.cur += 1
-                            yystate = 1
+                            yystate = 11
                             continue
+                        st.cur += 1
+                        yystate = 1
+                        continue
+                    if yych <= 0x2F:
+                        st.cur += 1
+                        yystate = 1
+                        continue
+                    if yych <= 0x39:
+                        st.cur += 1
+                        yystate = 3
+                        continue
+                    st.cur += 1
+                    yystate = 1
+                    continue
                 case 1:
                     yystate = 2
                     continue
@@ -92,84 +98,112 @@ def lex(st, count):
                 case 3:
                     st.mar = st.cur
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x2E:
-                            st.cur += 1
-                            yystate = 4
-                            continue
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.cur += 1
-                            yystate = 6
-                            continue
-                        case _:
+                    if yych <= 0x2E:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 if fill(st) == Status.OK:
                                     yystate = 3
                                     continue
                             yystate = 2
                             continue
+                        if yych <= 0x2D:
+                            yystate = 2
+                            continue
+                        st.cur += 1
+                        yystate = 4
+                        continue
+                    else:
+                        if yych <= 0x2F:
+                            yystate = 2
+                            continue
+                        if yych <= 0x39:
+                            st.cur += 1
+                            yystate = 6
+                            continue
+                        yystate = 2
+                        continue
                 case 4:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.yyt1 = st.cur
-                            st.cur += 1
-                            yystate = 7
-                            continue
-                        case _:
-                            if st.cur >= st.lim:
-                                if fill(st) == Status.OK:
-                                    yystate = 4
-                                    continue
-                            yystate = 5
-                            continue
+                    if yych <= 0x00:
+                        if st.cur >= st.lim:
+                            if fill(st) == Status.OK:
+                                yystate = 4
+                                continue
+                        yystate = 5
+                        continue
+                    if yych <= 0x2F:
+                        yystate = 5
+                        continue
+                    if yych <= 0x39:
+                        st.yyt1 = st.cur
+                        st.cur += 1
+                        yystate = 7
+                        continue
+                    yystate = 5
+                    continue
                 case 5:
                     st.cur = st.mar
                     yystate = 2
                     continue
                 case 6:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x2E:
-                            st.cur += 1
-                            yystate = 4
-                            continue
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.cur += 1
-                            yystate = 6
-                            continue
-                        case _:
+                    if yych <= 0x2E:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 if fill(st) == Status.OK:
                                     yystate = 6
                                     continue
                             yystate = 5
                             continue
+                        if yych <= 0x2D:
+                            yystate = 5
+                            continue
+                        st.cur += 1
+                        yystate = 4
+                        continue
+                    else:
+                        if yych <= 0x2F:
+                            yystate = 5
+                            continue
+                        if yych <= 0x39:
+                            st.cur += 1
+                            yystate = 6
+                            continue
+                        yystate = 5
+                        continue
                 case 7:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x0A:
-                            st.yyt2 = st.cur
-                            st.yyt3 = NONE
-                            st.cur += 1
-                            yystate = 8
-                            continue
-                        case 0x2E:
-                            st.yyt2 = st.cur
-                            st.cur += 1
-                            yystate = 9
-                            continue
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.cur += 1
-                            yystate = 7
-                            continue
-                        case _:
+                    if yych <= 0x2D:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 if fill(st) == Status.OK:
                                     yystate = 7
                                     continue
                             yystate = 5
                             continue
+                        if yych != 0x0A:
+                            yystate = 5
+                            continue
+                        st.yyt2 = st.cur
+                        st.yyt3 = NONE
+                        st.cur += 1
+                        yystate = 8
+                        continue
+                    else:
+                        if yych <= 0x2E:
+                            st.yyt2 = st.cur
+                            st.cur += 1
+                            yystate = 9
+                            continue
+                        if yych <= 0x2F:
+                            yystate = 5
+                            continue
+                        if yych <= 0x39:
+                            st.cur += 1
+                            yystate = 7
+                            continue
+                        yystate = 5
+                        continue
                 case 8:
                     t2 = st.yyt1
                     t3 = st.yyt2
@@ -183,37 +217,49 @@ def lex(st, count):
                     break
                 case 9:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.yyt3 = st.cur
-                            st.cur += 1
-                            yystate = 10
-                            continue
-                        case _:
-                            if st.cur >= st.lim:
-                                if fill(st) == Status.OK:
-                                    yystate = 9
-                                    continue
-                            yystate = 5
-                            continue
+                    if yych <= 0x00:
+                        if st.cur >= st.lim:
+                            if fill(st) == Status.OK:
+                                yystate = 9
+                                continue
+                        yystate = 5
+                        continue
+                    if yych <= 0x2F:
+                        yystate = 5
+                        continue
+                    if yych >= 0x3A:
+                        yystate = 5
+                        continue
+                    st.yyt3 = st.cur
+                    st.cur += 1
+                    yystate = 10
+                    continue
                 case 10:
                     yych = st.buf[st.cur]
-                    match yych:
-                        case 0x0A:
-                            st.cur += 1
-                            yystate = 8
-                            continue
-                        case 0x30|0x31|0x32|0x33|0x34|0x35|0x36|0x37|0x38|0x39:
-                            st.cur += 1
-                            yystate = 10
-                            continue
-                        case _:
+                    if yych <= 0x0A:
+                        if yych <= 0x00:
                             if st.cur >= st.lim:
                                 if fill(st) == Status.OK:
                                     yystate = 10
                                     continue
                             yystate = 5
                             continue
+                        if yych <= 0x09:
+                            yystate = 5
+                            continue
+                        st.cur += 1
+                        yystate = 8
+                        continue
+                    else:
+                        if yych <= 0x2F:
+                            yystate = 5
+                            continue
+                        if yych <= 0x39:
+                            st.cur += 1
+                            yystate = 10
+                            continue
+                        yystate = 5
+                        continue
                 case 11:
                     return vers
                 case _:
