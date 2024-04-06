@@ -217,6 +217,7 @@ struct CodeBlock {
 
 struct CodeVar {
     VarType type;
+    bool is_default;
     const char* name;
     const char* init;
 };
@@ -436,9 +437,11 @@ inline Code* code_line_info_input(OutAllocator& alc, const loc_t& loc) {
     return x;
 }
 
-inline Code* code_var(OutAllocator& alc, VarType type, const char* name, const char* init) {
+inline Code* code_var(
+        OutAllocator& alc, VarType type, bool is_default, const char* name, const char* init) {
     Code* x = new_code(alc, CodeKind::VAR);
     x->var.type = type;
+    x->var.is_default = is_default;
     x->var.name = copystr(name, alc);
     x->var.init = init;
     return x;

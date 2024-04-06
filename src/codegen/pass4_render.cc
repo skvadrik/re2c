@@ -143,6 +143,7 @@ class RenderVar : public RenderCallback {
             rctx.os << code->name;
             break;
         case StxVarId::INIT:
+            DCHECK(code->init != nullptr);
             rctx.os << code->init;
             break;
         case StxVarId::TYPE:
@@ -166,7 +167,7 @@ class RenderVar : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         if (opt == StxLOpt::HAVE_INIT) {
-            return code->init != nullptr;
+            return !code->is_default;
         }
         UNREACHABLE();
         return false;

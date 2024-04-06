@@ -111,8 +111,8 @@ code:var_local =
     // In Rust uninitialized variable is an error, but if the compiler is able to see
     // that all paths overwrite the initial value, it warns about unused assignments.
     (have_init? "" : topindent "#[allow(unused_assignments)]" nl)
-    topindent "let mut " name " : " type " = " (have_init? init : "0") ";" nl;
-code:var_global = topindent "static mut " name " : " type " = " (have_init? init : "0") ";" nl;
+    topindent "let mut " name " : " type " = " init ";" nl;
+code:var_global = topindent "static mut " name " : " type " = " init ";" nl;
 
 code:const_local = topindent "const " name ": " type " = " init ";" nl;
 code:const_global = code:const_local;

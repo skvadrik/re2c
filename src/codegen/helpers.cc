@@ -107,4 +107,8 @@ void print_span(std::ostream& o, uint32_t l, uint32_t u, const opt_t* opts) {
     o << "]";
 }
 
+const char* sprint_null(const opt_t* opts) {
+    return print_as_char(0, opts) ? "'\x00'" : "0";
+}
+
 } // namespace re2c

@@ -14,6 +14,7 @@ struct opt_t;
 void print_hex(std::ostream& o, uint32_t c, const opt_t* opts);
 void print_char_or_hex(std::ostream& o, uint32_t c, const opt_t* opts);
 void print_span(std::ostream& o, uint32_t l, uint32_t u, const opt_t* opts);
+const char* sprint_null(const opt_t* opts);
 
 inline bool is_print(uint32_t c) {
     return c >= 0x20 && c < 0x7F;

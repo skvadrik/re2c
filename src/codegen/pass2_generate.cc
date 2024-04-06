@@ -1806,7 +1806,7 @@ static Code* gen_yystate_def(Output& output) {
         type = VarType::UINT;
         init = "0";
     }
-    return code_var(output.allocator, type, opts->var_state.c_str(), init);
+    return code_var(output.allocator, type, false, opts->var_state.c_str(), init);
 }
 
 static size_t max_among_blocks(const blocks_t& blocks, size_t max, CodeKind kind) {
@@ -2090,11 +2090,12 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
 
     if (!opts->storable_state && opts->char_emit && opts->code_model != CodeModel::REC_FUNC) {
         local_decls = true;
-        append(code, code_var(alc, VarType::YYCTYPE, opts->var_char.c_str(), nullptr));
+        const char* default_char = sprint_null(opts);
+        append(code, code_var(alc, VarType::YYCTYPE, true, opts->var_char.c_str(), default_char));
     }
     if (!opts->storable_state && oblock.used_yyaccept && opts->code_model != CodeModel::REC_FUNC) {
         local_decls = true;
-        append(code, code_var(alc, VarType::UINT, opts->var_accept.c_str(), "0"));
+        append(code, code_var(alc, VarType::UINT, false, opts->var_accept.c_str(), "0"));
     }
 
     if (opts->code_model == CodeModel::GOTO_LABEL) {
