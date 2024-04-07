@@ -110,6 +110,7 @@ enum class CodeKind: uint32_t {
     ARRAY,
     ENUM,
     STMT,
+    GOTO,
     LOOP,
     TEXT,
     TEXT_RAW,

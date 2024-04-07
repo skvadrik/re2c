@@ -13,12 +13,17 @@ namespace re2c {
 static void render(RenderContext& rctx, const Code* code);
 
 static bool oneline_stmt_list(const CodeList* list) {
-    const Code* head = list->head;
-    return head != nullptr
-            && head->next == nullptr
-            && (head->kind == CodeKind::STMT
-                    || head->kind == CodeKind::TEXT
-                    || head->kind == CodeKind::FNCALL);
+    if (list->head == nullptr || list->head->next != nullptr) return false;
+
+    switch (list->head->kind) {
+    case CodeKind::STMT:
+    case CodeKind::TEXT:
+    case CodeKind::GOTO:
+    case CodeKind::FNCALL:
+        return true;
+    default:
+        return false;
+    }
 }
 
 static void render_nl(RenderContext& rctx) {
@@ -586,6 +591,24 @@ class RenderLoop : public RenderCallback {
     }
 
     FORBID_COPY(RenderLoop);
+};
+
+class RenderGoto : public RenderCallback {
+    RenderContext& rctx;
+    const char* target;
+
+  public:
+    RenderGoto(RenderContext& rctx, const char* target)
+            : rctx(rctx), target(target) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LABEL: rctx.os << target; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderGoto);
 };
 
 class RenderFnDef : public RenderCallback {
@@ -1221,6 +1244,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::LOOP: {
         RenderLoop callback(rctx, code->loop);
         rctx.opts->render_code_loop(rctx.os, callback);
+        break;
+    }
+    case CodeKind::GOTO: {
+        RenderGoto callback(rctx, code->target);
+        rctx.opts->render_code_goto(rctx.os, callback);
         break;
     }
     case CodeKind::TEXT_RAW:

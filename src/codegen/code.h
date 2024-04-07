@@ -316,6 +316,7 @@ struct CodeDebug {
 struct Code {
     union {
         const char* text;
+        const char* target;
         BlockNameList* block_names;
         CodeBranches* ifte;
         CodeSwitch swch;
@@ -361,6 +362,12 @@ inline Code* new_code(OutAllocator& alc, CodeKind kind) {
 inline Code* code_stmt(OutAllocator& alc, const char* text) {
     Code* x = new_code(alc, CodeKind::STMT);
     x->text = text;
+    return x;
+}
+
+inline Code* code_goto(OutAllocator& alc, const char* target) {
+    Code* x = new_code(alc, CodeKind::GOTO);
+    x->target = target;
     return x;
 }
 

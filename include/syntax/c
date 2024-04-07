@@ -167,6 +167,8 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
+code:goto = topindent "goto " label ";" nl;
+
 code:enum =
     "enum " name " {" nl indent
         [elem{0:-2}: topindent elem (have_init? " = " init) "," nl]

@@ -468,6 +468,7 @@ start:
     "code:switch_case_range"    { RET_CODE(code_switch_case_range); }
     "code:switch_case_default"  { RET_CODE(code_switch_case_default); }
     "code:loop"                 { RET_CODE(code_loop); }
+    "code:goto"                 { RET_CODE(code_goto); }
     "code:enum"                 { RET_CODE(code_enum); }
     "code:enum_elem"            { RET_CODE(code_enum_elem); }
     "code:fndecl"               { RET_CODE(code_fndecl); }

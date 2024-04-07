@@ -516,8 +516,8 @@ static CodeList* gen_fill_falllback(
         // go to fallback state
         switch (opts->code_model) {
         case CodeModel::GOTO_LABEL:
-            buf.cstr("goto ").str(opts->label_prefix).label(*fallback->label);
-            append(fallback_trans, code_stmt(alc, buf.flush()));
+            buf.str(opts->label_prefix).label(*fallback->label);
+            append(fallback_trans, code_goto(alc, buf.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
             buf.label(*fallback->label);
@@ -567,8 +567,7 @@ CodeList* gen_goto_after_fill(
     switch (opts->code_model) {
     case CodeModel::GOTO_LABEL:
         if (opts->storable_state || eof_rule) {
-            const char* flabel = gen_fill_label(output, s->fill_label->index);
-            append(resume, code_stmt(alc, o.cstr("goto ").cstr(flabel).flush()));
+            append(resume, code_goto(alc, gen_fill_label(output, s->fill_label->index)));
         }
         break;
     case CodeModel::LOOP_SWITCH:
@@ -690,8 +689,8 @@ static void gen_goto(
     if (!jump.elide && jump.to->label->used) {
         switch (opts->code_model) {
         case CodeModel::GOTO_LABEL:
-            o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
-            append(transition, code_stmt(alc, o.flush()));
+            o.str(opts->label_prefix).label(*jump.to->label);
+            append(transition, code_goto(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
             o.label(*jump.to->label);
@@ -883,8 +882,8 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
     CodeList* stmts = code_list(alc);
 
     CodeList* if_else = gen_gocp_table(output, go->table);
-    buf.cstr("goto *").str(opts->var_computed_gotos_table).cstr("[").str(opts->var_char).cstr("]");
-    append(if_else, code_stmt(alc, buf.flush()));
+    buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").str(opts->var_char).cstr("]");
+    append(if_else, code_goto(alc, buf.flush()));
 
     if (go->hgo != nullptr) {
         const char* cond = buf.str(opts->var_char).cstr(" & ~0xFF").flush();
@@ -1041,9 +1040,8 @@ static void emit_accept(
         const char* type = buf.flush();
         append(block, code_array(alc, opts->var_computed_gotos_table.c_str(), type, elems, nacc));
 
-        buf.cstr("goto *").str(opts->var_computed_gotos_table)
-                .cstr("[").str(opts->var_accept).cstr("]");
-        append(block, code_stmt(alc, buf.flush()));
+        buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").str(opts->var_accept).cstr("]");
+        append(block, code_goto(alc, buf.flush()));
 
         append(stmts, code_block(alc, block, CodeBlock::Kind::WRAPPED));
         return;
@@ -1414,8 +1412,8 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     switch (code_model) {
     case CodeModel::GOTO_LABEL:
         // always use first block options here as this is a block-level label
-        o.cstr("goto ").str(bstart->opts->label_prefix).u32(lstart->index);
-        append(goto_start, code_stmt(alc, o.flush()));
+        o.str(bstart->opts->label_prefix).u32(lstart->index);
+        append(goto_start, code_goto(alc, o.flush()));
         break;
     case CodeModel::REC_FUNC:
         // always use first block options here as this is a block-level function
@@ -1699,8 +1697,8 @@ static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper
 
     CodeList* stmts = code_list(alc);
     if (lower == upper) {
-        buf.cstr("goto ").str(opts->cond_label_prefix).str(block.conds[lower].name);
-        append(stmts, code_stmt(alc, buf.flush()));
+        buf.str(opts->cond_label_prefix).str(block.conds[lower].name);
+        append(stmts, code_goto(alc, buf.flush()));
     } else {
         const size_t middle = lower + (upper - lower + 1) / 2;
         CodeList* if_then = gen_cond_goto_binary(output, lower, middle - 1);
@@ -1731,9 +1729,8 @@ static CodeList* gen_cond_goto(Output& output) {
         }
     } else {
         if (opts->computed_gotos) {
-            buf.cstr("goto *").str(opts->var_cond_table)
-                    .cstr("[").str(output_cond_get(opts)).cstr("]");
-            append(stmts, code_stmt(alc, buf.flush()));
+            buf.cstr("*").str(opts->var_cond_table).cstr("[").str(output_cond_get(opts)).cstr("]");
+            append(stmts, code_goto(alc, buf.flush()));
         } else if (opts->nested_ifs) {
             warn_cond_ord &= ncond > 1;
             append(stmts, gen_cond_goto_binary(output, 0, ncond - 1));
@@ -1743,8 +1740,8 @@ static CodeList* gen_cond_goto(Output& output) {
             CodeCases* ccases = code_cases(alc);
             for (const StartCond& cond : conds) {
                 CodeList* body = code_list(alc);
-                buf.cstr("goto ").str(opts->cond_label_prefix).str(cond.name);
-                append(body, code_stmt(alc, buf.flush()));
+                buf.str(opts->cond_label_prefix).str(cond.name);
+                append(body, code_goto(alc, buf.flush()));
 
                 append(ccases, code_case_string(alc, body,
                         gen_cond_enum_elem(buf, opts, cond.name)));
@@ -1930,8 +1927,8 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
     // to the middle of a state.
     DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
     if (dfa.initial_label->used) {
-        buf.cstr("goto ").str(opts->label_prefix).label(*dfa.initial_label);
-        append(stmts, code_stmt(alc, buf.flush()));
+        buf.str(opts->label_prefix).label(*dfa.initial_label);
+        append(stmts, code_goto(alc, buf.flush()));
     }
 
     for (State* s = dfa.head; s; s = s->next) {

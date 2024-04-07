@@ -134,6 +134,9 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_loop, "code:loop", \
         ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
     ) \
+    CODE_TEMPLATE(code_goto, "code:goto", \
+        ({StxVarId::LABEL}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(code_enum, "code:enum", \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
         ({StxLOpt::HAVE_INIT}) \

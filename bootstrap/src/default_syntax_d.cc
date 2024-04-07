@@ -167,6 +167,8 @@ const char* DEFAULT_SYNTAX_D =
     "        indent [stmt: stmt] dedent\n"
     "    topindent \"}\" nl;\n"
     "\n"
+    "code:goto = topindent \"goto \" label \";\" nl;\n"
+    "\n"
     "code:enum =\n"
     "    \"enum \" name \" {\" nl indent\n"
     "        [elem{0:-2}: topindent elem (have_init? \" = \" init) \",\" nl]\n"

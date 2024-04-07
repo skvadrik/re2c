@@ -162,6 +162,8 @@ const char* DEFAULT_SYNTAX_GO =
     "        indent [stmt: stmt] dedent\n"
     "    topindent \"}\" nl;\n"
     "\n"
+    "code:goto = topindent \"goto \" label nl;\n"
+    "\n"
     "code:enum =\n"
     "    \"const (\" nl indent\n"
     "        [elem{0}:    topindent elem \" = \" (have_init ? init : \"iota\") nl]\n"
