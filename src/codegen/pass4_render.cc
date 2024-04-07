@@ -13,17 +13,17 @@ namespace re2c {
 static void render(RenderContext& rctx, const Code* code);
 
 static bool oneline_stmt_list(const CodeList* list) {
-    if (list->head == nullptr || list->head->next != nullptr) return false;
+    static const std::unordered_set<CodeKind> oneliners {
+        CodeKind::STMT,
+        CodeKind::TEXT,
+#define ONELINE_CODE(name, kind) kind,
+        RE2C_ONELINE_CODES
+#undef ONELINE_CODE
+    };
 
-    switch (list->head->kind) {
-    case CodeKind::STMT:
-    case CodeKind::TEXT:
-    case CodeKind::GOTO:
-    case CodeKind::FNCALL:
-        return true;
-    default:
-        return false;
-    }
+    return list->head != nullptr
+            && list->head->next == nullptr
+            && oneliners.find(list->head->kind) != oneliners.end();
 }
 
 static void render_nl(RenderContext& rctx) {

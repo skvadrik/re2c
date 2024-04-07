@@ -377,6 +377,8 @@ Ret Input::lex_conf_string_quoted(uint8_t quote) {
         if (stop) return Ret::OK;
         if (c.chr > 0xFF) {
             RET_FAIL(error_at(c.loc, "multibyte character in configuration string: 0x%X", c.chr));
+        } else if (c.chr == '\n' && in_syntax_file) {
+            RET_FAIL(error_at(c.loc, "newline in a string literal (use `nl` variable instead)"));
         }
         tmp_str += static_cast<char>(c.chr);
     }

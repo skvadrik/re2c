@@ -592,6 +592,14 @@ Ret Opt::validate_conf_code(
         stack.push_back({x, 0});
     }
 
+    static const std::unordered_set<std::string> oneliners {
+#define ONELINE_CODE(name, kind) name,
+        RE2C_ONELINE_CODES
+#undef ONELINE_CODE
+    };
+    bool oneline = oneliners.find(conf) != oneliners.end();
+    uint32_t newlines = 0;
+
     while (!stack.empty()) {
         const StxCode* x = stack.back().first;
         uint8_t n = stack.back().second;
@@ -602,6 +610,9 @@ Ret Opt::validate_conf_code(
             // no option names to check here
             break;
         case StxCodeType::VAR:
+            if (oneline && x->var == StxVarId::NEWLINE && ++newlines > 1) {
+                RET_FAIL(error("'%s' should be a one-line configuration", conf));
+            }
             CHECK_RET(check_var(x->var, conf, vars, list_vars));
             break;
         case StxCodeType::COND:

@@ -214,6 +214,11 @@ using StxCodes = list_t<StxCode>;
             StxVarId::TYPECAST}), ({}), ({}) \
     )
 
+#define RE2C_ONELINE_CODES \
+    ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
+    ONELINE_CODE("code:tailcall", CodeKind::FNCALL) \
+    ONELINE_CODE("code:goto", CodeKind::GOTO)
+
 // configuration-local variables in syntax files
 #define RE2C_STX_LOCAL_VARS \
     STX_LOCAL_VAR(ARG, "arg") \
@@ -744,19 +749,18 @@ Ret parse_opts(char** argv, conopt_t& globopts, Opt& opts, Msg& msg) NODISCARD;
 
 namespace std {
 
-// `std::hash` specialization for enum classes are necessary for some toolchains
-template<> struct hash<re2c::StxVarId> {
-    size_t operator()(re2c::StxVarId var) const {
-        hash<uint32_t> h;
-        return h(static_cast<uint32_t>(var));
-    }
-};
-template<> struct hash<re2c::StxLOpt> {
-    size_t operator()(re2c::StxLOpt opt) const {
-        hash<uint32_t> h;
-        return h(static_cast<uint32_t>(opt));
-    }
-};
+// Some toolchains require `std::hash` specialization for `std::unordered_set`.
+#define GEN_STD_HASH(type) \
+template<> struct hash<type> { \
+    size_t operator()(type v) const { \
+        hash<uint32_t> h; \
+        return h(static_cast<uint32_t>(v)); \
+    } \
+}
+GEN_STD_HASH(re2c::StxVarId);
+GEN_STD_HASH(re2c::StxLOpt);
+GEN_STD_HASH(re2c::CodeKind);
+#undef GEN_STD_HASH
 
 } // namespace std
 
