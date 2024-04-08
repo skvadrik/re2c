@@ -144,7 +144,8 @@ re2c_GEN_SRC = \
 	src/default_syntax_go.cc \
 	src/default_syntax_ocaml.cc \
 	src/default_syntax_python.cc \
-	src/default_syntax_rust.cc
+	src/default_syntax_rust.cc \
+	src/default_syntax_v.cc
 re2c_GEN_HDR = \
 	src/options/parser.h \
 	src/options/conf_parser.h \
@@ -182,7 +183,8 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_go.cc \
 	bootstrap/src/default_syntax_ocaml.cc \
 	bootstrap/src/default_syntax_python.cc \
-	bootstrap/src/default_syntax_rust.cc
+	bootstrap/src/default_syntax_rust.cc \
+	bootstrap/src/default_syntax_v.cc
 
 # custom sources
 re2c_CUSTOM_HELP = doc/help.rst
@@ -327,6 +329,7 @@ dist_stdlib_DATA = \
 	include/syntax/ocaml \
 	include/syntax/python \
 	include/syntax/rust \
+	include/syntax/v \
 	include/unicode_categories.re
 
 BAZELFILES := \
@@ -565,4 +568,12 @@ bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
 re2rust_SOURCES = $(re2c_SOURCES)
 nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2v
+if WITH_VLANG
+bin_PROGRAMS += re2v
+re2v_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::V
+re2v_SOURCES = $(re2c_SOURCES)
+nodist_re2v_SOURCES = $(nodist_re2c_SOURCES)
 endif

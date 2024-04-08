@@ -32,6 +32,7 @@ option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)"
 option(RE2C_BUILD_RE2OCAML "Build re2ocaml executable (an alias for `re2c --lang ocaml`)" ON)
 option(RE2C_BUILD_RE2PY "Build re2py executable (an alias for `re2c --lang python`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
+option(RE2C_BUILD_RE2V "Build re2v executable (an alias for `re2c --lang v`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
@@ -134,6 +135,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.cc"
     "${re2c_docs}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
@@ -218,6 +220,7 @@ re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
 re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.cc")
 re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.cc")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
+re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.cc")
 
 # re2c
 add_executable(re2c ${re2c_sources})
@@ -250,6 +253,12 @@ endif()
 if (RE2C_BUILD_RE2RUST)
     add_executable(re2rust ${re2c_sources})
     target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
+endif()
+
+# re2v
+if (RE2C_BUILD_RE2V)
+    add_executable(re2v ${re2c_sources})
+    target_compile_definitions(re2v PUBLIC "RE2C_LANG=Lang::V")
 endif()
 
 # docs
@@ -389,6 +398,9 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         install(TARGETS re2rust RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_rust}" DESTINATION "share/man/man1")
     endif()
+    if(RE2C_BUILD_RE2V)
+        install(TARGETS re2v RUNTIME DESTINATION bin)
+    endif()
     install(FILES
         include/syntax/c
         include/syntax/d
@@ -396,6 +408,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         include/syntax/ocaml
         include/syntax/python
         include/syntax/rust
+        include/syntax/v
         include/unicode_categories.re
         DESTINATION "${RE2C_STDLIB_DIR}")
 

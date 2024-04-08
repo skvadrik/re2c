@@ -1,0 +1,208 @@
+supported_apis = ["generic"];
+supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
+supported_targets = ["code", "dot"];
+supported_features = ["nested_ifs", "bitmaps"];
+
+semicolons = 0;
+implicit_bool_conversion = 0;
+backtick_quoted_strings = 0;
+standalone_single_quotes = 0;
+indentation_sensitive = 0;
+wrap_blocks_in_braces = 0;
+
+conf:api = custom;
+conf:api:style = free-form;
+conf:api:sigil = "@@";
+conf:header = "";
+conf:eof = -1;
+conf:sentinel = -1;
+conf:yyfill:enable = 1;
+conf:yyfill:parameter = 1;
+conf:yyfill:check = 1;
+conf:tags = 0;
+conf:leftmost-captures = 0;
+conf:posix-captures = 0;
+conf:tags:prefix = "yyt";
+conf:tags:expression = "@@";
+conf:invert-captures = 0;
+conf:define:YYBACKUP = "YYBACKUP";
+conf:define:YYBACKUPCTX = "YYBACKUPCTX";
+conf:define:YYCONDTYPE = "YYCONDTYPE";
+conf:define:YYCTYPE = "YYCTYPE";
+conf:define:YYCTXMARKER = "YYCTXMARKER";
+conf:define:YYCURSOR = "YYCURSOR";
+conf:define:YYDEBUG = "YYDEBUG";
+conf:define:YYFILL = "YYFILL";
+conf:define:YYFILL@len = "@@";
+conf:define:YYFILL:naked = 0;
+conf:define:YYGETCONDITION = "YYGETCONDITION";
+conf:define:YYGETCONDITION:naked = 0;
+conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYGETSTATE:naked = 0;
+conf:define:YYLESSTHAN = "YYLESSTHAN";
+conf:define:YYLIMIT = "YYLIMIT";
+conf:define:YYMARKER = "YYMARKER";
+conf:define:YYMAXFILL = "yymaxfill";
+conf:define:YYMAXNMATCH = "yymaxnmatch";
+conf:define:YYMTAGN = "YYMTAGN";
+conf:define:YYMTAGP = "YYMTAGP";
+conf:define:YYPEEK = "YYPEEK";
+conf:define:YYRESTORE = "YYRESTORE";
+conf:define:YYRESTORECTX = "YYRESTORECTX";
+conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETCONDITION = "YYSETCONDITION";
+conf:define:YYSETCONDITION@cond = "@@";
+conf:define:YYSETCONDITION:naked = 0;
+conf:define:YYSETSTATE = "YYSETSTATE";
+conf:define:YYSETSTATE:naked = 0;
+conf:define:YYSETSTATE@state = "@@";
+conf:define:YYSHIFT = "YYSHIFT";
+conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
+conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
+conf:define:YYSKIP = "YYSKIP";
+conf:define:YYSTAGN = "YYSTAGN";
+conf:define:YYSTAGP = "YYSTAGP";
+conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+conf:yyfn:sep = ";";
+conf:variable:yyctable = "yyctable";
+conf:variable:yyaccept = "yyaccept";
+conf:variable:yytarget = "yytarget";
+conf:variable:yystate = "yystate";
+conf:variable:yych = "yych";
+conf:variable:yych:conversion = 0;
+conf:variable:yych:literals = hex;
+conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
+conf:variable:yybm = "yybm";
+conf:variable:yybm:hex = 0;
+conf:variable:yystable = ""; // deprecated
+conf:cond:abort = 0;
+conf:cond:prefix = "yyc_";
+conf:cond:enumprefix = "yyc";
+conf:cond:divider = "/* *********************************** */";
+conf:cond:divider@cond = "@@";
+conf:cond:goto = "unsafe { goto @@ }";
+conf:cond:goto@cond = "@@";
+conf:state:abort = (code_model.goto_label ? 0 : 1); // historically disabled for goto/label
+conf:state:nextlabel = 0;
+conf:bit-vectors = 0;
+conf:debug-output = 0;
+conf:computed-gotos = 0;
+conf:computed-gotos:threshold = 9;
+conf:nested-ifs = 0;
+conf:case-insensitive = 0;
+conf:case-inverted = 0;
+conf:case-ranges = 0;
+conf:unsafe = 0;
+conf:encoding:ebcdic = 0;
+conf:encoding:utf32 = 0;
+conf:encoding:ucs2 = 0;
+conf:encoding:utf16 = 0;
+conf:encoding:utf8 = 0;
+conf:encoding-policy = ignore;
+conf:empty-class = match-empty;
+conf:indent:string = "    ";
+conf:indent:top = 0;
+conf:label:prefix = "yy";
+conf:label:yyfill = "yyFillLabel";
+conf:label:yyloop = "yyl";
+conf:label:yyNext = "yyNext";
+conf:label:start = 0;
+
+code:var_local = topindent "mut " name " := " init nl;
+// code:var_global
+
+code:const_local = topindent "const " name " = " init nl;
+code:const_global = code:const_local;
+
+code:array_local =
+    topindent name " := [" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "]" nl;
+// code:array_global
+code:array_elem = array "[" index "]";
+
+code:type_int = "int";
+code:type_uint = "u32";
+// code:type_cond_enum
+code:type_yybm = "u8";
+// code:type_yytarget
+
+code:assign = topindent [lhs: lhs " = "] rhs nl;
+code:assign_op = topindent lhs " " op "= " rhs nl;
+
+code:if_then_else =
+    [branch{0}: topindent "if " cond " {" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent "} else " (have_cond? "if " cond " ") "{" nl
+        indent [stmt: stmt] dedent]
+    topindent "}" nl;
+
+code:switch =
+    topindent "match " expr " {" nl
+        indent [case: case] dedent
+    topindent "}" nl;
+
+code:switch_cases = topindent
+    [case{0:-2}: case ", "]
+    [case{-1}:   case " {"] nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
+
+code:switch_cases_oneline = topindent
+    [case{0:-2}: case ", "]
+    [case{-1}:   case " { "] [stmt: stmt] " }" nl;
+
+code:switch_case_range = [val{0}: val] (multival ? "..." [val{-1}: val]);
+
+code:switch_case_default = "else";
+
+code:loop =
+    (loop_label? label ":" nl)
+    topindent "for {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
+
+code:goto = topindent "unsafe { goto " label " }" nl;
+
+// Don't use enum in loop/switch mode, as conditions are assigned to `yystate`.
+code:enum = (code_model.loop_switch
+    ? [elem: "const " elem " = " init nl]
+    : "enum " name " {" nl
+        indent [elem: topindent elem (have_init ? " = " init) nl] dedent
+    "}" nl);
+
+code:enum_elem = (code_model.loop_switch ? "" : ".") name;
+
+code:fndef =
+    topindent "fn " name "("
+        [arg{0:-2}: argname " " argtype ", "]
+        [arg{-1}:   argname " " argtype]
+    ")" (have_type ? " " type) " {" nl
+        indent [stmt: stmt] dedent
+    "}" nl;
+
+code:fncall =
+    topindent (have_retval ? retval " = ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:tailcall =
+    topindent (have_retval ? "return ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:recursive_functions = [fn: fndef nl];
+
+code:fingerprint =
+    "// Code generated by re2c" (version? " " version) (date? " on " date) ", DO NOT EDIT." nl;
+
+code:line_info = "//line \"" file "\":" line nl;
+
+code:abort = topindent "panic(\"internal lexer error\")" nl;
+
+code:yyaccept = topindent var " = " num nl;
+
+code:yydebug = topindent debug "(" state ", " char ")" nl;
+
+code:yypeek = topindent char (code_model.recursive_functions ? " := " : " = ")
+    peek (api_style.functions ? "()") nl;
+
+code:yyskip = topindent skip (api_style.functions ? "()") nl;
+
+code:yybackup = topindent backup (api_style.functions ? "()") nl;
