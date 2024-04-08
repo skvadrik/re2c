@@ -89,6 +89,9 @@ AM_CONDITIONAL([WITH_PYTHON], [test "x$enable_python" != "xno"])
 # --enable-rust
 AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
+# --enable-vlang
+AC_ARG_ENABLE([vlang], [AS_HELP_STRING([--enable-vlang], [build re2v executable])])
+AM_CONDITIONAL([WITH_VLANG], [test "x$enable_golang" != "xno"])
 
 
 # --enable-benchmarks

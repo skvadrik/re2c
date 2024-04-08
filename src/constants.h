@@ -18,7 +18,8 @@ enum class Lang: uint32_t {
     GO,
     OCAML,
     PYTHON,
-    RUST
+    RUST,
+    V
 };
 
 enum class Api: uint32_t {
