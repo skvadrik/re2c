@@ -121,8 +121,7 @@ and lex (st : state) : status =
 		| 2 ->
 			if (st.cur >= st.lim) then (yy6 [@tailcall]) st
 			else (yy5 [@tailcall]) st
-		| _ ->
-			raise (Failure "internal lexer error")
+		| _ -> raise (Failure "internal lexer error")
 
 
 

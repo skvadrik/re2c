@@ -57,8 +57,7 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
-	default:
-		assert(false);
+	default: assert(false);
 }
 #line 45 "d/state/push.re"
 
@@ -66,7 +65,7 @@ switch (st.state) {
     for (;;) {
         st.tok = st.cur;
     
-#line 70 "d/state/push.d"
+#line 69 "d/state/push.d"
 yy0:
 yyFillLabel0:
 	yych = *st.cur;
@@ -85,7 +84,7 @@ yy3:
 	st.state = -1;
 #line 63 "d/state/push.re"
 	{ return Status.BAD_PACKET; }
-#line 89 "d/state/push.d"
+#line 88 "d/state/push.d"
 yy4:
 	++st.cur;
 	st.mar = st.cur;
@@ -106,7 +105,7 @@ yy5:
 	st.state = -1;
 #line 65 "d/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 110 "d/state/push.d"
+#line 109 "d/state/push.d"
 yy6:
 	++st.cur;
 yyFillLabel2:
@@ -128,7 +127,7 @@ yy8:
 	st.state = -1;
 #line 64 "d/state/push.re"
 	{ return Status.END; }
-#line 132 "d/state/push.d"
+#line 131 "d/state/push.d"
 #line 66 "d/state/push.re"
 
     }

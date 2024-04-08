@@ -217,6 +217,7 @@ using StxCodes = list_t<StxCode>;
 #define RE2C_ONELINE_CODES \
     ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
     ONELINE_CODE("code:tailcall", CodeKind::FNCALL) \
+    ONELINE_CODE("code:abort", CodeKind::ABORT) \
     ONELINE_CODE("code:goto", CodeKind::GOTO)
 
 // configuration-local variables in syntax files

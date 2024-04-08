@@ -1871,8 +1871,7 @@ static enum con_status yy0(struct con_state* c) {
 	switch (c->cond) {
 		case yycmedia_type: return yyfnmedia_type(c);
 		case yycheader: return yyfnheader(c);
-		default:
-			abort();
+		default: abort();
 	}
 }
 
@@ -1972,8 +1971,7 @@ static enum con_status parse_con_req(struct con_state* c) {
 		case 30:
 			if (c->lim <= c->cur) return yy29(c);
 			else return yy43(c);
-		default:
-			abort();
+		default: abort();
 	}
 }
 

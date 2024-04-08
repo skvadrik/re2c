@@ -304,8 +304,7 @@ lex:
 				}
 				yystate = 18;
 				continue;
-			default:
-				assert(false);
+			default: assert(false);
 		}
 	}
 }

@@ -56,9 +56,7 @@ fn lex(st: &mut State) -> usize {
 					}
 				}
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

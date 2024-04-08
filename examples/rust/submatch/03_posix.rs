@@ -201,9 +201,7 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 					}
 				}
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

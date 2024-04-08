@@ -40,9 +40,7 @@ fn lex(s: &[u8]) -> bool {
 				continue 'yyl;
 			}
 			3 => { return true; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

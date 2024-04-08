@@ -186,7 +186,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "// No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862.\n"
     "//code:line_info\n"
     "\n"
-    "code:abort = topindent \"panic!(\\\"internal lexer error\\\");\" nl;\n"
+    "code:abort = topindent \"panic!(\\\"internal lexer error\\\")\" nl;\n"
     "\n"
     "code:yyaccept = topindent var \" = \" num \";\" nl;\n"
     "\n"

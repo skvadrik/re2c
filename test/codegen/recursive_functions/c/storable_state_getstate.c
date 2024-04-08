@@ -10,8 +10,7 @@ void lex(T q) {
 		case 2: return yy7(z);
 		case 3: return yy10(z);
 		case 4: return yy13(w);
-		default:
-			abort();
+		default: abort();
 	}
 }
 
@@ -24,8 +23,7 @@ void lex_z(T z) {
 		case 2: return yy7(z);
 		case 3: return yy10(z);
 		case 0: return yy0(x);
-		default:
-			abort();
+		default: abort();
 	}
 }
 
@@ -158,8 +156,7 @@ void yy6(T z) {
 	switch (YYGETCONDITION()) {
 		case yycc1: return yyfnc1(z);
 		case yycc2: return yyfnc2(z);
-		default:
-			abort();
+		default: abort();
 	}
 }
 
@@ -204,8 +201,7 @@ void lex(T q) {
 		case 2: return yy7(z);
 		case 3: return yy10(z);
 		case 4: return yy13(w);
-		default:
-			abort();
+		default: abort();
 	}
 }
 
@@ -217,8 +213,7 @@ void lex_w(T w) {
 		case 4: return yy13(w);
 		case 2: return yy7(z);
 		case 3: return yy10(z);
-		default:
-			abort();
+		default: abort();
 	}
 }
 

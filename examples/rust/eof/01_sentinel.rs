@@ -69,9 +69,7 @@ fn lex(s: &[u8]) -> isize {
 				}
 			}
 			6 => { count += 1; continue 'lex; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

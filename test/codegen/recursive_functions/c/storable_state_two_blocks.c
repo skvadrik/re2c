@@ -36,8 +36,7 @@ void lex_y(Y y) {
 		case 1:
 			if (YYLIMIT <= YYCURSOR) return yy6(y);
 			else return yy3(y);
-		default:
-			abort();
+		default: abort();
 	}
 }
 

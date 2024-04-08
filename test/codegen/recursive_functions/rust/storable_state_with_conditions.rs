@@ -1106,9 +1106,7 @@ fn yy0(st: &mut ConState) -> ConStatus {
 	match st.cond {
 		YYC_media_type => yyfnmedia_type(st),
 		YYC_header => yyfnheader(st),
-		_ => {
-			panic!("internal lexer error");
-		}
+		_ => panic!("internal lexer error"),
 	}
 }
 
@@ -1332,9 +1330,7 @@ fn lex(st: &mut ConState) -> ConStatus {
 				yy43(st)
 			}
 		}
-		_ => {
-			panic!("internal lexer error");
-		}
+		_ => panic!("internal lexer error"),
 	}
 }
 

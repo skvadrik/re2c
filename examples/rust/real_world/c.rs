@@ -6597,9 +6597,7 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
 				}
 			}
 			469 => { return input.token(TName::StaticAssert) },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

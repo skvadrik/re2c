@@ -205,9 +205,7 @@ fn parse(str: &[u8]) -> Option<Ver> {
 					}
 				}
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

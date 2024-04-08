@@ -329,9 +329,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				yystate = 18;
 				continue 'yyl;
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

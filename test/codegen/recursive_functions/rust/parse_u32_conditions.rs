@@ -229,9 +229,7 @@ fn yy0(_st: &mut State) -> Option<u32> {
 		YYC_OCT => yyfnOCT(_st),
 		YYC_DEC => yyfnDEC(_st),
 		YYC_HEX => yyfnHEX(_st),
-		_ => {
-			panic!("internal lexer error");
-		}
+		_ => panic!("internal lexer error"),
 	}
 }
 

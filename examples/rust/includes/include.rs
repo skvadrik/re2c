@@ -229,9 +229,7 @@ fn lex(str: &[u8]) -> Num {
 					}
 				}
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

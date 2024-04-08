@@ -123,9 +123,7 @@ fn lex(s: &[u8]) -> isize {
 				yystate = 2;
 				continue 'yyl;
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

@@ -31,8 +31,7 @@ private ulong parse_u32(const(char)* s) {
 		case YYCONDTYPE.yycdec: goto yyc_dec;
 		case YYCONDTYPE.yychex: goto yyc_hex;
 		case YYCONDTYPE.yycoct: goto yyc_oct;
-		default:
-			assert(false);
+		default: assert(false);
 	}
 /* *********************************** */
 yyc_init:

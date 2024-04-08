@@ -123,9 +123,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				st.cur = (st.cur as isize + -1) as usize;
 				{ return parse_hex(&mut st); }
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }
@@ -156,9 +154,7 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 			}
 			1 => { return maybe!(st.num); },
 			2 => { add(st, 48, 2); continue 'bin; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }
@@ -189,9 +185,7 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 			}
 			1 => { return maybe!(st.num); },
 			2 => { add(st, 48, 8); continue 'oct; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }
@@ -222,9 +216,7 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 			}
 			1 => { return maybe!(st.num); },
 			2 => { add(st, 48, 10); continue 'dec; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }
@@ -265,9 +257,7 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 			2 => { add(st, 48, 16); continue 'hex; },
 			3 => { add(st, 55, 16); continue 'hex; },
 			4 => { add(st, 87, 16); continue 'hex; },
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

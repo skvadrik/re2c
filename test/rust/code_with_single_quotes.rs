@@ -34,9 +34,7 @@
         continue 'outer;
     }
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

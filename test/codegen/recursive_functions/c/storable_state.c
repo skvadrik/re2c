@@ -224,8 +224,7 @@ static Status lex(Input* in) {
 		case 2:
 			if (in->lim <= in->cur) return yy6(in);
 			else return yy5(in);
-		default:
-			abort();
+		default: abort();
 	}
 }
 

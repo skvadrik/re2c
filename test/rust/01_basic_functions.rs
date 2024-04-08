@@ -61,9 +61,7 @@ fn lex(s: &[u8]) -> bool {
 				YYDEBUG();
 				{ return true; }
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }

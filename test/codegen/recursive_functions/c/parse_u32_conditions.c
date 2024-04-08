@@ -329,8 +329,7 @@ uint64_t yy0(State& st) {
 		case yycdec: return yyfndec(st);
 		case yychex: return yyfnhex(st);
 		case yycoct: return yyfnoct(st);
-		default:
-			abort();
+		default: abort();
 	}
 }
 

@@ -28,8 +28,10 @@ for f in $(find -name '*.re'); do
     dmd -g -wi -ofexample  "$dtest" \
         && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
 
-    rm -f "$dtest" example example.o
+    rm -f example example.o
     cd $root_dir
 done
+
+rm -f "$dtest"
 
 echo "All good."

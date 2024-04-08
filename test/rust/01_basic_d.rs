@@ -48,9 +48,7 @@ fn lex(s: &[u8]) -> bool {
 				format!("lex: char '{}' in state {}\n", yych, 3);
 				{ return true; }
 			}
-			_ => {
-				panic!("internal lexer error");
-			}
+			_ => panic!("internal lexer error"),
 		}
 	}
 }
