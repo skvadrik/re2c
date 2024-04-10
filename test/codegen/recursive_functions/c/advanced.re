@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -cfi --loop-switch -Wno-nondeterministic-tags
+// re2c $INPUT -o $OUTPUT -cf --recursive-functions -Wno-nondeterministic-tags
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -35,6 +35,9 @@ typedef struct con_state {
     struct mtagpool mtp;
     /*!stags:re2c format = "\tunsigned char*\t\t@@;\n"; */
     /*!mtags:re2c format = "\tstruct mtag\t\t\t\t*@@;\n"; */
+    unsigned int    accept;
+    const unsigned char *l1, *l2;
+    struct mtag     *f1, *f2, *p1, *p2, *p3, *p4;
     size_t          buf_size;
     unsigned char*  buf;
     unsigned char   static_buf[];
@@ -81,96 +84,91 @@ static void mtag(struct mtag** pmt, const unsigned char* b, const unsigned char*
     *pmt = mt;
 }
 
-static enum con_status parse_con_req(struct con_state* c)
-{
-    unsigned int        yych, yyaccept;
-    const unsigned char *l1, *l2;
-    struct mtag         *f1, *f2, *p1, *p2, *p3, *p4;
+/*!re2c
+    re2c:api:style = free-form;
+    re2c:eof = 0;
+    re2c:flags:tags = 1;
+    re2c:tags:expression   = "c->@@";
+    re2c:variable:yyaccept = "c->accept";
+    re2c:define:YYCTYPE    = "unsigned char";
+    re2c:define:YYFN       = ["parse_con_req;static enum con_status", "c;struct con_state*"];
+    re2c:define:YYCURSOR   = "c->cur";
+    re2c:define:YYMARKER   = "c->mar";
+    re2c:define:YYLIMIT    = "c->lim";
+    re2c:define:YYGETSTATE = "c->state";
+    re2c:define:YYSETSTATE = "c->state = @@;";
+    re2c:define:YYFILL     = "return CON_STATUS_WAITING;";
+    re2c:define:YYGETCONDITION = "c->cond";
+    re2c:define:YYSETCONDITION = "c->cond = @@;";
+    re2c:define:YYMTAGP    = "mtag(&@@, c->tok, c->cur, &c->mtp);";
+    re2c:define:YYMTAGN    = "mtag(&@@, c->tok, NULL, &c->mtp);";
 
-    /*!re2c
-        re2c:api:style             = free-form;
-        re2c:eof                   = 0;
-        re2c:flags:tags            = 1;
-        re2c:tags:expression       = "c->@@";
-        re2c:define:YYCTYPE        = "unsigned char";
-        re2c:define:YYCURSOR       = "c->cur";
-        re2c:define:YYMARKER       = "c->mar";
-        re2c:define:YYLIMIT        = "c->lim";
-        re2c:define:YYGETSTATE     = "c->state";
-        re2c:define:YYSETSTATE     = "c->state = @@;";
-        re2c:define:YYFILL         = "return CON_STATUS_WAITING;";
-        re2c:define:YYGETCONDITION = "c->cond";
-        re2c:define:YYSETCONDITION = "c->cond = @@;";
-        re2c:define:YYMTAGP        = "mtag(&@@, c->tok, c->cur, &c->mtp);";
-        re2c:define:YYMTAGN        = "mtag(&@@, c->tok, NULL, &c->mtp);";
+    crlf  = '\r\n';
+    sp    = ' ';
+    htab  = '\t';
+    ows   = (sp | htab)*;
+    digit = [0-9];
+    alpha = [a-zA-Z];
+    vchar = [\x1f-\x7e];
+    tchar = [-!#$%&'*+.^_`|~] | digit | alpha;
 
-        crlf  = '\r\n';
-        sp    = ' ';
-        htab  = '\t';
-        ows   = (sp | htab)*;
-        digit = [0-9];
-        alpha = [a-zA-Z];
-        vchar = [\x1f-\x7e];
-        tchar = [-!#$%&'*+.^_`|~] | digit | alpha;
-
-        obs_fold            = #f1 crlf (sp | htab)+ #f2;
-        obs_text            = [\x80-\xff];
-        field_name          = tchar+;
-        field_vchar         = vchar | obs_text;
-        field_content       = field_vchar ((sp | htab)+ field_vchar)?;
-        field_value_folded  = (field_content* obs_fold field_content*)+;
-        header_field_folded = field_value_folded ows;
-        token               = tchar+;
-        qdtext
-            = htab
-            | sp
-            | [\x21-\x5B\x5D-\x7E] \ '"'
-            | obs_text;
-        quoted_pair         = '\\' ( htab | sp | vchar | obs_text );
-        quoted_string       = '"' ( qdtext | quoted_pair )* '"';
-        parameter           = #p1 token #p2 '=' #p3 ( token | quoted_string ) #p4;
-        media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
+    obs_fold            = #f1 crlf (sp | htab)+ #f2;
+    obs_text            = [\x80-\xff];
+    field_name          = tchar+;
+    field_vchar         = vchar | obs_text;
+    field_content       = field_vchar ((sp | htab)+ field_vchar)?;
+    field_value_folded  = (field_content* obs_fold field_content*)+;
+    header_field_folded = field_value_folded ows;
+    token               = tchar+;
+    qdtext
+        = htab
+        | sp
+        | [\x21-\x5B\x5D-\x7E] \ '"'
+        | obs_text;
+    quoted_pair         = '\\' ( htab | sp | vchar | obs_text );
+    quoted_string       = '"' ( qdtext | quoted_pair )* '"';
+    parameter           = #p1 token #p2 '=' #p3 ( token | quoted_string ) #p4;
+    media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
 
-        <media_type> media_type ows crlf {
-            struct mtag*    pname_start = p1;
-            struct mtag*    pname_end   = p2;
-            struct mtag*    pval_start  = p3;
-            struct mtag*    pval_end    = p4;
+    <media_type> media_type ows crlf {
+        struct mtag*    pname_start = c->p1;
+        struct mtag*    pname_end   = c->p2;
+        struct mtag*    pval_start  = c->p3;
+        struct mtag*    pval_end    = c->p4;
 
-            printf("media type: %.*s\n", (int)(l2-l1), l1);
+        printf("media type: %.*s\n", (int)(c->l2-c->l1), c->l1);
 
-            while (0 && pname_start) {
-                printf("\t(%.*s) = (%.*s)\n",
-                    pname_end->dist - pname_start->dist, c->tok + pname_start->dist,
-                    pval_end->dist - pval_start->dist, c->tok + pval_start->dist);
+        while (0 && pname_start) {
+            printf("\t(%.*s) = (%.*s)\n",
+                pname_end->dist - pname_start->dist, c->tok + pname_start->dist,
+                pval_end->dist - pval_start->dist, c->tok + pval_start->dist);
 
-                pname_start = pname_start->prev;
-                pname_end = pname_end->prev;
-                pval_start = pval_start->prev;
-                pval_end = pval_end->prev;
-            }
-
-            return CON_STATUS_DONE;
+            pname_start = pname_start->prev;
+            pname_end = pname_end->prev;
+            pval_start = pval_start->prev;
+            pval_end = pval_end->prev;
         }
 
-        <header> header_field_folded crlf {
-            struct mtag*    fold_start  = f1;
-            struct mtag*    fold_end    = f2;
+        return CON_STATUS_DONE;
+    }
 
-            while (fold_start) {
-                memset(c->tok + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
-                fold_start  = fold_start->prev;
-                fold_end    = fold_end->prev;
-            }
+    <header> header_field_folded crlf {
+        struct mtag*    fold_start  = c->f1;
+        struct mtag*    fold_end    = c->f2;
 
-            return CON_STATUS_DONE;
+        while (fold_start) {
+            memset(c->tok + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
+            fold_start  = fold_start->prev;
+            fold_end    = fold_end->prev;
         }
 
-        <*> $ { return CON_STATUS_END; }
-        <*> * { return CON_STATUS_ERROR; }
-    */
-}
+        return CON_STATUS_DONE;
+    }
+
+    <*> $ { return CON_STATUS_END; }
+    <*> * { return CON_STATUS_ERROR; }
+*/
 
 int feed(struct con_state* c, const unsigned char* chunk, size_t len)
 {
@@ -220,6 +218,7 @@ int main(int argc, char** argv)
     c->cur = c->mar = c->tok = c->lim = c->buf + CON_READ_BUF_LEN;
     c->lim[0] = 0; // sentinel
     c->state = -1;
+    c->cond = yycmedia_type;
     c->buf_size = CON_READ_BUF_LEN;
     /*!stags:re2c format = "\tc->@@ = 0;\n"; */
     /*!mtags:re2c format = "\tc->@@ = NULL;\n"; */
