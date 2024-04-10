@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT -cfi --recursive-functions -Wno-nondeterministic-tags
+//go:generate re2go $INPUT -o $OUTPUT -cf --recursive-functions -Wno-nondeterministic-tags
 package main
 
 import (

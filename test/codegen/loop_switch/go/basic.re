@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT --loop-switch -i
+//go:generate re2go $INPUT -o $OUTPUT --loop-switch
 
 package main                              //
                                           //
