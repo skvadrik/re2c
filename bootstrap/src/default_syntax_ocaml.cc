@@ -10,6 +10,8 @@ const char* DEFAULT_SYNTAX_OCAML =
     "implicit_bool_conversion = 0;\n"
     "backtick_quoted_strings = 0;\n"
     "standalone_single_quotes = 1; // TODO: what about identifiers?\n"
+    "indentation_sensitive = 0;\n"
+    "wrap_blocks_in_braces = 0;\n"
     "\n"
     "conf:api = custom;\n"
     "conf:api:style = free-form;\n"

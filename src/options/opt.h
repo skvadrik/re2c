@@ -63,7 +63,8 @@ using StxCodes = list_t<StxCode>;
     STX_OPT(bool, implicit_bool_conversion, false) \
     STX_OPT(bool, backtick_quoted_strings, false) \
     STX_OPT(bool, standalone_single_quotes, false) \
-    STX_OPT(bool, indentation_sensitive, false)
+    STX_OPT(bool, indentation_sensitive, false) \
+    STX_OPT(bool, wrap_blocks_in_braces, false)
 
 #define RE2C_CODE_TEMPLATES \
     CODE_TEMPLATE(code_var_local, "code:var_local", \

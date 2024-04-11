@@ -691,10 +691,9 @@ code: /*!re2c
         if (depth > 0) goto code;
 
         const uint8_t* p = tok, *q = cur - 1;
-        if (globopts->code_model == CodeModel::REC_FUNC || globopts->indentation_sensitive) {
-            // Strip curly braces and adjacent whitespace. This is needed for languages that
-            // don't use curly braces for compound statements. In rec/func mode it won't cause
-            // name collisions because the code is in a separate function.
+        if (globopts->code_model == CodeModel::REC_FUNC || !globopts->wrap_blocks_in_braces) {
+            // Strip curly braces and adjacent whitespace. In rec/func mode it is always safe
+            // to do, as the code is in a separate function and won't cause name collisions.
             ++p; --q; // skip '{' and '}'
             while (p <= q && is_space_nonl(*p)) ++p;
             while (p <= q && is_space_nonl(*q)) --q;
