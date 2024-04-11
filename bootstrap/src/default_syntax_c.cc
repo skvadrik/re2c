@@ -10,6 +10,7 @@ const char* DEFAULT_SYNTAX_C =
     "backtick_quoted_strings = 0;\n"
     "standalone_single_quotes = 0;\n"
     "indentation_sensitive = 0;\n"
+    "wrap_blocks_in_braces = 1;\n"
     "\n"
     "conf:api = default;\n"
     "conf:api:style = functions;\n"

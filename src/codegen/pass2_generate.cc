@@ -2162,7 +2162,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
 
     // If needed, wrap the block in braces, so that variable declarations have local scope.
     CHECK(!local_decls || opts->code_model != CodeModel::REC_FUNC);
-    CodeBlock::Kind k = local_decls && !opts->indentation_sensitive
+    CodeBlock::Kind k = local_decls && opts->wrap_blocks_in_braces
             ? CodeBlock::Kind::WRAPPED
             : opts->indent_top > 0 || opts->code_model == CodeModel::REC_FUNC
                     ? CodeBlock::Kind::RAW : CodeBlock::Kind::INDENTED;

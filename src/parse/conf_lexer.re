@@ -652,6 +652,7 @@ start:
     "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
     "standalone_single_quotes" { SAVE_CONF_BOOL(standalone_single_quotes); }
     "indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }
+    "wrap_blocks_in_braces"    { SAVE_CONF_BOOL(wrap_blocks_in_braces); }
 
     "" / "code:" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
 

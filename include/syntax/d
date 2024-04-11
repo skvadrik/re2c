@@ -8,6 +8,7 @@ implicit_bool_conversion = 0;
 backtick_quoted_strings = 0;
 standalone_single_quotes = 0;
 indentation_sensitive = 0;
+wrap_blocks_in_braces = 1;
 
 conf:api = custom;
 conf:api:style = free-form;
