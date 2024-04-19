@@ -1,1 +1,1 @@
-re2c: error: --case-ranges option is not supported for this backend
+re2c: error: `case_ranges` feature is not supported for this backend

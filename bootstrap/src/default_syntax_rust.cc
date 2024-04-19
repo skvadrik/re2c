@@ -3,7 +3,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "supported_apis = [\"generic\"];\n"
     "supported_code_models = [\"loop_switch\", \"recursive_functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"nested_ifs\"];\n"
+    "supported_features = [\"nested_ifs\", \"unsafe\"];\n"
     "\n"
     "semicolons = 1;\n"
     "implicit_bool_conversion = 0;\n"

@@ -1,1 +1,1 @@
-re2c: error: -b, --bitmaps option is not supported for this backend
+re2c: error: `bitmaps` feature is not supported for this backend
