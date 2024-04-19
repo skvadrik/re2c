@@ -80,6 +80,9 @@ AM_CONDITIONAL([WITH_DLANG], [test "x$enable_golang" != "xno"])
 # --enable-golang
 AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
 AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
+# --enable-haskell
+AC_ARG_ENABLE([haskell], [AS_HELP_STRING([--enable-haskell], [build re2hs executable])])
+AM_CONDITIONAL([WITH_HASKELL], [test "x$enable_haskell" != "xno"])
 # --enable-ocaml
 AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
 AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])

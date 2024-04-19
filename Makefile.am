@@ -142,6 +142,7 @@ re2c_GEN_SRC = \
 	src/default_syntax_c.cc \
 	src/default_syntax_d.cc \
 	src/default_syntax_go.cc \
+	src/default_syntax_haskell.cc \
 	src/default_syntax_ocaml.cc \
 	src/default_syntax_python.cc \
 	src/default_syntax_rust.cc \
@@ -181,6 +182,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_c.cc \
 	bootstrap/src/default_syntax_d.cc \
 	bootstrap/src/default_syntax_go.cc \
+	bootstrap/src/default_syntax_haskell.cc \
 	bootstrap/src/default_syntax_ocaml.cc \
 	bootstrap/src/default_syntax_python.cc \
 	bootstrap/src/default_syntax_rust.cc \
@@ -326,6 +328,7 @@ dist_stdlib_DATA = \
 	include/syntax/c \
 	include/syntax/d \
 	include/syntax/go \
+	include/syntax/haskell \
 	include/syntax/ocaml \
 	include/syntax/python \
 	include/syntax/rust \
@@ -544,6 +547,14 @@ bin_PROGRAMS += re2go
 re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2hs
+if WITH_HASKELL
+bin_PROGRAMS += re2hs
+re2hs_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::HASKELL
+re2hs_SOURCES = $(re2c_SOURCES)
+nodist_re2hs_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2ocaml

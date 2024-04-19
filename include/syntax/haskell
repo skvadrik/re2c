@@ -1,0 +1,233 @@
+supported_apis = ["generic"];
+supported_api_styles = ["free-form"];
+supported_code_models = ["recursive_functions"];
+supported_targets = ["code", "dot"];
+supported_features = ["nested_ifs", "monadic"];
+
+semicolons = 1;
+//semicolons = 0;
+implicit_bool_conversion = 0;
+backtick_quoted_strings = 0;
+standalone_single_quotes = 1; // TODO: what about identifiers?
+indentation_sensitive = 1;
+wrap_blocks_in_braces = 0;
+
+conf:api = custom;
+conf:api:style = free-form;
+conf:api:sigil = "@@";
+conf:header = "";
+conf:eof = -1;
+conf:sentinel = -1;
+conf:yyfill:enable = 1;
+conf:yyfill:parameter = 1;
+conf:yyfill:check = 1;
+conf:tags = 0;
+conf:leftmost-captures = 0;
+conf:posix-captures = 0;
+conf:tags:prefix = "yyt";
+conf:tags:expression = "@@";
+conf:invert-captures = 0;
+conf:define:YYBACKUP = "YYBACKUP";
+conf:define:YYBACKUPCTX = "YYBACKUPCTX";
+conf:define:YYCONDTYPE = "YYCONDTYPE";
+conf:define:YYCOPYMTAG = "YYCOPYMTAG";
+conf:define:YYCOPYSTAG = "YYCOPYSTAG";
+conf:define:YYCTYPE = "yyctype";
+conf:define:YYCTXMARKER = "YYCTXMARKER";
+conf:define:YYCURSOR = "YYCURSOR";
+conf:define:YYDEBUG = "YYDEBUG";
+conf:define:YYFILL = "YYFILL";
+conf:define:YYFILL@len = "@@";
+conf:define:YYFILL:naked = 0;
+conf:define:YYGETACCEPT = "GETACCEPT";
+conf:define:YYGETCOND = "YYGETCOND";
+conf:define:YYGETCOND:naked = 0;
+conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYGETSTATE:naked = 0;
+conf:define:YYLESSTHAN = "YYLESSTHAN";
+conf:define:YYLIMIT = "YYLIMIT";
+conf:define:YYMARKER = "YYMARKER";
+conf:define:YYMAXFILL = "yymaxfill";
+conf:define:YYMAXNMATCH = "yymaxnmatch";
+conf:define:YYMTAGN = "YYMTAGN";
+conf:define:YYMTAGP = "YYMTAGP";
+conf:define:YYPEEK = "YYPEEK";
+conf:define:YYRESTORE = "YYRESTORE";
+conf:define:YYRESTORECTX = "YYRESTORECTX";
+conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETACCEPT = "SETACCEPT";
+conf:define:YYSETCOND = "YYSETCOND";
+conf:define:YYSETCOND@cond = "@@";
+conf:define:YYSETCOND:naked = 0;
+conf:define:YYSETSTATE = "YYSETSTATE";
+conf:define:YYSETSTATE:naked = 0;
+conf:define:YYSETSTATE@state = "@@";
+conf:define:YYSHIFT = "YYSHIFT";
+conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
+conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
+conf:define:YYSKIP = "YYSKIP";
+conf:define:YYSTAGN = "YYSTAGN";
+conf:define:YYSTAGP = "YYSTAGP";
+conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+conf:yyfn:sep = ";";
+conf:variable:yyctable = "yyctable";
+conf:variable:yyaccept = "yyaccept";
+conf:variable:yytarget = "yytarget";
+conf:variable:yystate = "yystate";
+conf:variable:yynmatch = ""; // no array for `yypmatch` in Haskell => no need for `yynmatch`
+conf:variable:yypmatch = "yypmatch";
+conf:variable:yych = "yych";
+conf:variable:yych:conversion = 0;
+conf:variable:yych:literals = hex;
+conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
+conf:variable:yybm = "yybm";
+conf:variable:yybm:hex = 0;
+conf:variable:yyfill = "yyfill";
+conf:variable:yystable = ""; // deprecated
+conf:cond:abort = 1;
+conf:cond:prefix = "yyc_";
+conf:cond:enumprefix = "YYC_";
+conf:cond:divider = "(* *********************************** *)";
+conf:cond:divider@cond = "@@";
+conf:cond:goto = "";
+conf:cond:goto@cond = "@@";
+conf:state:abort = 1;
+conf:state:nextlabel = 0;
+conf:bit-vectors = 0;
+conf:debug-output = 0;
+conf:computed-gotos = 0;
+conf:computed-gotos:threshold = 9;
+conf:nested-ifs = 0;
+conf:case-insensitive = 0;
+conf:case-inverted = 0;
+conf:case-ranges = 0;
+conf:unsafe = 0;
+conf:monadic = 0;
+conf:encoding:ebcdic = 0;
+conf:encoding:utf32 = 0;
+conf:encoding:ucs2 = 0;
+conf:encoding:utf16 = 0;
+conf:encoding:utf8 = 0;
+conf:encoding-policy = ignore;
+conf:empty-class = match-empty;
+conf:indent:string = "    ";
+conf:indent:top = 0;
+conf:label:prefix = "yy";
+conf:label:yyfill = "yyFillLabel";
+conf:label:yyloop = "";
+conf:label:yyNext = "yyNext";
+conf:label:start = 0;
+
+code:var_local = topindent "let " name " = " init " in" nl;
+code:var_global = topindent "let " name " = " init nl;
+
+code:const_local = topindent "let " name " = " init " in" nl;
+code:const_global = topindent name " = " init nl;
+
+// code:array_local
+// code:array_global
+
+// `code:array_elem` is used to generate operations on POSIX `yypmatch` array.
+// Override it to generate an identifier instead, as mutable arrays are non-idiomatic in Haskell.
+code:array_elem = array index;
+
+code:type_int = "int";
+code:type_uint = "uint";
+code:type_cond_enum = (storable_state? "int" : "uint");
+// code:type_yybm
+// code:type_yytarget
+
+// code:assign
+
+code:if_then_else =
+    [branch{0}: topindent (multival ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent "else" (have_cond? " if " cond " then") (monadic ? " do") nl
+        indent [stmt: stmt] dedent];
+
+code:if_then_else_oneline =
+    [branch{0}: topindent (multival ? "if " cond " then " : "when (" cond ") $ ") [stmt: stmt] nl]
+    [branch{1:-1}: topindent "else " (have_cond? "if " cond " then ") [stmt: stmt] nl];
+
+code:switch =
+    topindent "case " expr " of" nl
+        indent [case: case] dedent;
+
+code:switch_cases = topindent "_c | "
+    [case{0:-2}: case " || "]
+    [case{-1}:   case " ->" (monadic ? " do") nl
+        indent [stmt: stmt] dedent
+    ];
+
+code:switch_case_range = (multival
+    ? [val{0}: val] " <= _c && _c <= " [val{-1}: val]
+    : [val{0}: val] " == _c");
+
+code:switch_case_default = "True";
+
+code:enum =
+    "data " name " = "
+        [elem{0:-2}: elem " | "]
+        [elem{-1}: elem] " deriving (Eq, Show)"
+    nl;
+
+code:enum_elem = name;
+
+code:fndef =
+    name " :: " [arg: argtype " -> "] type nl
+    name [arg: " " (have_argmods? argmods) argname] " =" (monadic ? " do") nl
+        indent [stmt: stmt] dedent;
+
+code:fncall =
+    topindent (have_retval ? "let " retval " = ")
+        name (have_args ? [arg: " " arg] : " ()") nl;
+
+code:tailcall = topindent name (have_args ? [arg: " " arg] : " ()") nl;
+
+code:recursive_functions = [fn: fndef nl];
+
+code:fingerprint = "-- Generated by re2c" (version? " " version) (date? " on " date) nl;
+
+code:line_info = "#" line " \"" file "\"" nl;
+
+code:abort = topindent "error \"internal lexer error\"" nl;
+
+code:yydebug = topindent debug " " state " " char nl;
+
+code:yypeek = (monadic
+    ? topindent char " <- " peek nl
+    : topindent "let " char " = " peek " in" nl);
+
+code:yyskip = topindent skip nl;
+
+code:yybackup = topindent backup nl;
+
+code:yybackupctx = topindent backupctx nl;
+
+code:yyrestore = topindent restore nl;
+
+code:yyrestorectx = topindent restorectx nl;
+
+code:yyrestoretag = topindent restoretag nl;
+
+code:yyshift = topindent shift nl;
+
+code:yyshiftstag = topindent shiftstag nl;
+
+code:yyshiftmtag = topindent shiftmtag nl;
+
+code:yystagp = topindent stagp nl;
+
+code:yymtagp = topindent mtagp nl;
+
+code:yystagn = topindent stagn nl;
+
+code:yymtagn = topindent mtagn nl;
+
+code:yycopystag = topindent copystag nl;
+
+code:yycopymtag = topindent copymtag nl;
+
+code:yygetaccept = getaccept;
+
+code:yysetaccept = topindent setaccept nl;
