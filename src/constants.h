@@ -165,6 +165,7 @@ enum class StxGOpt {
     VER,
     CASE_RANGES,
     UNSAFE,
+    MONADIC,
     LOOP_LABEL
 };
 

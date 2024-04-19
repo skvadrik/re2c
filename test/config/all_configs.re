@@ -78,6 +78,7 @@
     re2c:variable:yybm = "";
     re2c:variable:yybm:hex = 0;
     re2c:yybm:hex = 0;
+    re2c:variable:yyfill = "";
     re2c:variable:yystable = "";
 
     re2c:cond:prefix = "";

@@ -187,6 +187,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"? "yych:emit"       { RET_CONF_BOOL(char_emit); }
     "variable:"  "yybm"            { RET_CONF_STR(var_bitmaps); }
     "variable:"? "yybm:hex"        { RET_CONF_BOOL(bitmaps_hex); }
+    "variable:"  "yyfill"          { RET_CONF_STR(var_fill); }
     "variable:"  "yystable"        { return lex_conf_string(opts); } // deprecated
 
     "cond:abort"                         { RET_CONF_BOOL(cond_abort); }
@@ -209,6 +210,7 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "case-inverted"                 { RET_CONF_BOOL(case_inverted); }
     "flags:"? "case-ranges"                   { RET_CONF_FEATURE(case_ranges); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
+    "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
 
     "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
     "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
@@ -586,6 +588,7 @@ opt:
     "version"                        { RET_GOPT(StxGOpt::VER); }
     "case_ranges"                    { RET_GOPT(StxGOpt::CASE_RANGES); }
     "unsafe"                         { RET_GOPT(StxGOpt::UNSAFE); }
+    "monadic"                        { RET_GOPT(StxGOpt::MONADIC); }
     "loop_label"                     { RET_GOPT(StxGOpt::LOOP_LABEL); }
 
     // Local conditionals (specific to each `code:*` configuration in syntax file).

@@ -75,6 +75,7 @@ conf:variable:yych:literals = char;
 conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
 conf:variable:yybm = "yybm";
 conf:variable:yybm:hex = 0;
+conf:variable:yyfill = "";
 conf:variable:yystable = ""; // deprecated
 conf:cond:abort = 0; // default case causes [redundant-case] warnings
 conf:cond:prefix = "yyc_";
@@ -94,6 +95,7 @@ conf:case-insensitive = 0;
 conf:case-inverted = 0;
 conf:case-ranges = 0;
 conf:unsafe = 0;
+conf:monadic = 0;
 conf:encoding:ebcdic = 0;
 conf:encoding:utf32 = 0;
 conf:encoding:ucs2 = 0;
@@ -109,8 +111,8 @@ conf:label:yyloop = "";
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
-// code:var_local
-// code:var_global
+code:var_local = topindent "let " name " = " init " in" nl;
+code:var_global = topindent "let " name " = " init nl;
 
 code:const_local = topindent "let " name " = " init " in" nl;
 code:const_global = topindent "let " name " = " init nl;
