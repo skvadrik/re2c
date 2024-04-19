@@ -1,7 +1,7 @@
 supported_apis = ["generic"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested_ifs", "bitmaps"];
+supported_features = ["nested_ifs", "bitmaps", "unsafe"];
 
 semicolons = 0;
 implicit_bool_conversion = 0;

@@ -113,8 +113,8 @@
     re2c:flags:case-inverted = 0;
     re2c:case-ranges = 0;
     re2c:flags:case-ranges = 0;
-    re2c:unsafe = 0;
-    re2c:flags:unsafe = 0;
+    // re2c:unsafe = 0; // unsupported for C backend
+    // re2c:monadic = 0; // unsupported for C backend
 
     re2c:encoding:ebcdic = 0;
     re2c:flags:ecb = 0;

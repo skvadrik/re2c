@@ -295,17 +295,23 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.api == Api::DEFAULT && !glob.supported_apis_contains("default")) {
         RET_FAIL(error("default API is not supported for this backend"));
     }
-    if (real.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
-        RET_FAIL(error("-g, --computed-gotos option is not supported for this backend"));
+    if (!is_default.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
+        RET_FAIL(error("`computed_gotos` feature is not supported for this backend"));
     }
-    if (real.bitmaps && !glob.supported_features_contains("bitmaps")) {
-        RET_FAIL(error("-b, --bitmaps option is not supported for this backend"));
+    if (!is_default.bitmaps && !glob.supported_features_contains("bitmaps")) {
+        RET_FAIL(error("`bitmaps` feature is not supported for this backend"));
     }
-    if (real.nested_ifs && !glob.supported_features_contains("nested_ifs")) {
-        RET_FAIL(error("-s, --nested-ifs option is not supported for this backend"));
+    if (!is_default.nested_ifs && !glob.supported_features_contains("nested_ifs")) {
+        RET_FAIL(error("`nested_ifs` feature is not supported for this backend"));
     }
-    if (real.case_ranges && !glob.supported_features_contains("case_ranges")) {
-        RET_FAIL(error("--case-ranges option is not supported for this backend"));
+    if (!is_default.case_ranges && !glob.supported_features_contains("case_ranges")) {
+        RET_FAIL(error("`case_ranges` feature is not supported for this backend"));
+    }
+    if (!is_default.unsafe && !glob.supported_features_contains("unsafe")) {
+        RET_FAIL(error("`unsafe` feature is not supported for this backend"));
+    }
+    if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
+        RET_FAIL(error("`monadic` feature is not supported for this backend"));
     }
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.computed_gotos) {
