@@ -1,7 +1,7 @@
 supported_apis = ["generic"];
 supported_code_models = ["loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested_ifs", "unsafe"];
+supported_features = ["nested_ifs", "case_ranges", "unsafe"];
 
 semicolons = 1;
 implicit_bool_conversion = 0;
@@ -92,7 +92,7 @@ conf:computed-gotos:threshold = 9;
 conf:nested-ifs = 0;
 conf:case-insensitive = 0;
 conf:case-inverted = 0;
-conf:case-ranges = 0;
+conf:case-ranges = 1;
 conf:unsafe = 1;
 conf:monadic = 0;
 conf:encoding:ebcdic = 0;
