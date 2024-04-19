@@ -29,6 +29,7 @@ option(RE2C_BUILD_LIBS "Build libraries" OFF)
 
 option(RE2C_BUILD_RE2D "Build re2d executable (an alias for `re2c --lang d`)" ON)
 option(RE2C_BUILD_RE2GO "Build re2go executable (an alias for `re2c --lang go`)" ON)
+option(RE2C_BUILD_RE2HS "Build re2hs executable (an alias for `re2c --lang haskell`)" ON)
 option(RE2C_BUILD_RE2OCAML "Build re2ocaml executable (an alias for `re2c --lang ocaml`)" ON)
 option(RE2C_BUILD_RE2PY "Build re2py executable (an alias for `re2c --lang python`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
@@ -132,6 +133,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_haskell.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
@@ -217,6 +219,7 @@ re2c_bootstrap_parser("src/parse/conf_parser.ypp" "src/parse/conf_parser.cc"
 re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
 re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.cc")
 re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
+re2c_bootstrap_syntax("include/syntax/haskell" "src/default_syntax_haskell.cc")
 re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.cc")
 re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.cc")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
@@ -235,6 +238,12 @@ endif()
 if (RE2C_BUILD_RE2GO)
     add_executable(re2go ${re2c_sources})
     target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
+endif()
+
+# re2hs
+if (RE2C_BUILD_RE2HS)
+    add_executable(re2hs ${re2c_sources})
+    target_compile_definitions(re2hs PUBLIC "RE2C_LANG=Lang::HASKELL")
 endif()
 
 # re2ocaml
@@ -388,6 +397,9 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         install(TARGETS re2go RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_go}" DESTINATION "share/man/man1")
     endif()
+    if(RE2C_BUILD_RE2HS)
+        install(TARGETS re2hs RUNTIME DESTINATION bin)
+    endif()
     if(RE2C_BUILD_RE2OCAML)
         install(TARGETS re2ocaml RUNTIME DESTINATION bin)
     endif()
@@ -405,6 +417,7 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         include/syntax/c
         include/syntax/d
         include/syntax/go
+        include/syntax/haskell
         include/syntax/ocaml
         include/syntax/python
         include/syntax/rust

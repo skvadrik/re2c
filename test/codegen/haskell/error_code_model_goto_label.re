@@ -1,0 +1,1 @@
+-- re2hs $INPUT -o $OUTPUT --goto-label
