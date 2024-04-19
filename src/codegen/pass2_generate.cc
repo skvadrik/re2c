@@ -629,14 +629,18 @@ static void gen_fill(
         if (eof_rule && !opts->storable_state) {
             // End-of-input rule $ without a storable state: check YYFILL return value. If it
             // succeeds (returns zero) then go to YYFILL label and rematch.
-            if (!opts->fill_naked) o.cstr(" == 0");
-            const char* fill_check = o.flush();
+            const char* call = o.cstr(opts->fill_naked ? "" : " == 0").flush();
+            if (!opts->var_fill.empty()) {
+                append(fill, opts->fill_naked ? code_text(alc, call) : code_stmt(alc, call));
+                call = opts->var_fill.c_str(); // replace call with its result
+            }
             CodeList* rematch = gen_goto_after_fill(output, dfa, from, jump);
             CodeList* fallback = gen_fill_falllback(output, dfa, from, jump);
-            gen_if(alc, opts, fill_check, rematch, fallback, fill);
+            gen_if(alc, opts, call, rematch, fallback, fill);
         } else {
             // Otherwise don't check YYFILL return value: assume that it does not return on failure.
-            append(fill, opts->fill_naked ? code_text(alc, o.flush()) : code_stmt(alc, o.flush()));
+            const char* call = o.flush();
+            append(fill, opts->fill_naked ? code_text(alc, call) : code_stmt(alc, call));
         }
     } else if (eof_rule && !opts->storable_state) {
         append(fill, gen_fill_falllback(output, dfa, from, jump));

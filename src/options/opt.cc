@@ -127,6 +127,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_char = defaults.var_char;
         real.var_cond_table = defaults.var_cond_table;
         real.var_computed_gotos_table = defaults.var_computed_gotos_table;
+        real.var_fill = defaults.var_fill;
         real.var_state = defaults.var_state;
         real.fill_enable = defaults.fill_enable;
         real.fill_check = defaults.fill_check;
@@ -237,6 +238,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.fill_param = defaults.fill_param;
         real.fill_param_enable = defaults.fill_param_enable;
         real.fill_naked = defaults.fill_naked;
+        real.var_fill = defaults.var_fill;
     }
 
     // set implied options
@@ -687,6 +689,8 @@ static bool eval_cond(const StxOpt* cond, const opt_t* opts, RenderCallback* cal
             return opts->case_ranges;
         case StxGOpt::UNSAFE:
             return opts->unsafe;
+        case StxGOpt::MONADIC:
+            return opts->monadic;
         case StxGOpt::LOOP_LABEL:
             return !opts->label_loop.empty();
         }

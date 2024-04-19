@@ -368,6 +368,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, var_computed_gotos_table, "yytarget") \
     MUTOPT(std::string, var_char, "yych") \
     MUTOPT(std::string, var_cond_table, "yyctable") \
+    MUTOPT(std::string, var_fill, "") \
     MUTOPT(std::string, var_state, "yystate") \
     /* code generation */ \
     MUTOPT(bool, bitmaps, false) \
@@ -377,6 +378,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(uint32_t, computed_gotos_threshold, 9) \
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
+    MUTOPT(bool, monadic, false) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \
