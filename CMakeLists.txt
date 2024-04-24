@@ -33,11 +33,8 @@ option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
 # checks for programs
-find_package(Python3 COMPONENTS Interpreter)
-# starting from cmake 3.19 find_package can do version check, but we are on 3.12
-if(Python3_VERSION VERSION_LESS 3.7)
-    message(FATAL_ERROR "python version 3.7 or higher is required")
-endif()
+find_package(Python3 3.7 REQUIRED COMPONENTS Interpreter)
+
 if(RE2C_REBUILD_DOCS)
     execute_process(
         COMMAND "${Python3_EXECUTABLE}" -c "import docutils"
