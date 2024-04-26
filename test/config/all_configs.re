@@ -63,8 +63,10 @@
     re2c:define:YYSHIFTSTAG = "";
     re2c:define:YYSHIFTMTAG = "";
     re2c:define:YYSKIP = "";
-    re2c:define:YYSTAGN = "";
-    re2c:define:YYSTAGP = "";
+    re2c:define:YYSTAGN = ""; // deprecated
+    re2c:define:YYSETSTAGN = "";
+    re2c:define:YYSTAGP = ""; // deprecated
+    re2c:define:YYSETSTAGP = "";
 
     re2c:variable:yyctable = "";
     re2c:variable:yyaccept = "";

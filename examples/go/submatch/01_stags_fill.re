@@ -75,8 +75,8 @@ func parse(in *Input) []SemVer {
 		re2c:define:YYRESTORE   = "in.cur = in.mar";
 		re2c:define:YYLESSTHAN  = "in.lim <= in.cur";
 		re2c:define:YYFILL      = "fill(in) == 0";
-		re2c:define:YYSTAGP     = "@@{tag} = in.cur";
-		re2c:define:YYSTAGN     = "@@{tag} = -1";
+		re2c:define:YYSETSTAGP  = "@@{tag} = in.cur";
+		re2c:define:YYSETSTAGN  = "@@{tag} = -1";
 		re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
 		re2c:tags:expression    = "in.@@";
 

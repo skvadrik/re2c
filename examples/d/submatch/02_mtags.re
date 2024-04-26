@@ -69,8 +69,8 @@ private bool parse(const(char)* str, ref Ver ver) {
         re2c:define:YYSKIP      = "++cur;";
         re2c:define:YYBACKUP    = "mar = cur;";
         re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = null;";
+        re2c:define:YYSETSTAGP  = "@@{tag} = cur;";
+        re2c:define:YYSETSTAGN  = "@@{tag} = null;";
         re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift};";
         re2c:define:YYMTAGP     = "add_mtag(mt, @@, cur);";
         re2c:define:YYMTAGN     = "add_mtag(mt, @@, null);";
