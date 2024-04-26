@@ -264,16 +264,49 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (is_default.state_get_naked) real.state_get_naked = real.api_style == ApiStyle::FREEFORM;
     if (is_default.state_set_naked) real.state_set_naked = real.api_style == ApiStyle::FREEFORM;
     // individual template options, unless explicitly set, inherit "api:sigil"
-    if (is_default.fill_param)       real.fill_param       = real.api_sigil;
-    if (is_default.cond_set_param)   real.cond_set_param   = real.api_sigil;
-    if (is_default.cond_div_param)   real.cond_div_param   = real.api_sigil;
-    if (is_default.cond_goto_param)  real.cond_goto_param  = real.api_sigil;
-    if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
-    if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
-    if (is_default.cond_goto) {
-        real.cond_goto = defaults.cond_goto;
-        strrreplace(real.cond_goto, defaults.cond_goto_param, real.cond_goto_param);
+    if (!is_default.api_sigil) {
+        if (is_default.fill_param)       real.fill_param       = real.api_sigil;
+        if (is_default.cond_set_param)   real.cond_set_param   = real.api_sigil;
+        if (is_default.cond_div_param)   real.cond_div_param   = real.api_sigil;
+        if (is_default.cond_goto_param)  real.cond_goto_param  = real.api_sigil;
+        if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
+        if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
+
+        // Replace sigil in default API definitions. We must handle all APIs with substitutions,
+        // as we don't know their default definition (the user may provide a custom syntax file).
+#define REPLACE_SIGIL(api) \
+        if (is_default.api) strrreplace(real.api, defaults.api_sigil, real.api_sigil)
+        REPLACE_SIGIL(api_peek);
+        REPLACE_SIGIL(api_skip);
+        REPLACE_SIGIL(api_backup);
+        REPLACE_SIGIL(api_backup_ctx);
+        REPLACE_SIGIL(api_restore);
+        REPLACE_SIGIL(api_restore_ctx);
+        REPLACE_SIGIL(api_restore_tag);
+        REPLACE_SIGIL(api_less_than);
+        REPLACE_SIGIL(api_stag_set_neg);
+        REPLACE_SIGIL(api_stag_set_pos);
+        REPLACE_SIGIL(api_mtag_set_neg);
+        REPLACE_SIGIL(api_mtag_set_pos);
+        REPLACE_SIGIL(api_shift);
+        REPLACE_SIGIL(api_stag_shift);
+        REPLACE_SIGIL(api_mtag_shift);
+        REPLACE_SIGIL(api_cond_get);
+        REPLACE_SIGIL(api_state_get);
+        REPLACE_SIGIL(api_debug);
+        REPLACE_SIGIL(tags_expression);
+#undef REPLACE_SIGIL
     }
+    // Replace sigil in API primitives that have their own substitution parameter.
+#define REPLACE_SIGIL(api, param) \
+    if ((!is_default.param || !is_default.api_sigil) && is_default.api) \
+         strrreplace(real.api, defaults.param, real.param)
+    REPLACE_SIGIL(api_cond_set, cond_set_param);
+    REPLACE_SIGIL(api_fill, fill_param);
+    REPLACE_SIGIL(api_state_set, state_set_param);
+    REPLACE_SIGIL(cond_div, cond_div_param);
+    REPLACE_SIGIL(cond_goto, cond_goto_param);;
+#undef REPLACE_SIGIL
     // "startlabel" configuration exists in two variants: string and boolean, and the string one
     // overrides the boolean one
     if (!is_default.label_start) {
