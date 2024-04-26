@@ -80,8 +80,8 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
         re2c:define:YYSKIP      = "st.cur += 1;";
         re2c:define:YYBACKUP    = "st.mar = st.cur;";
         re2c:define:YYRESTORE   = "st.cur = st.mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = st.cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
+        re2c:define:YYSETSTAGP  = "@@{tag} = st.cur;";
+        re2c:define:YYSETSTAGN  = "@@{tag} = NONE;";
         re2c:define:YYSHIFTSTAG = "@@{tag} -= -@@{shift}isize as usize;";
         re2c:define:YYLESSTHAN  = "st.cur >= st.lim";
         re2c:define:YYFILL      = "fill(st) == Fill::Ok";

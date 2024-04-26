@@ -344,13 +344,13 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, api_restore_ctx, "YYRESTORECTX") \
     MUTOPT(std::string, api_restore_tag, "YYRESTORETAG") \
     MUTOPT(std::string, api_less_than, "YYLESSTHAN") \
-    MUTOPT(std::string, api_stag_neg, "YYSTAGN") \
-    MUTOPT(std::string, api_stag_pos, "YYSTAGP") \
-    MUTOPT(std::string, api_mtag_neg, "YYMTAGN") \
-    MUTOPT(std::string, api_mtag_pos, "YYMTAGP") \
+    MUTOPT(std::string, api_stag_set_neg, "YYSETSTAGN") \
+    MUTOPT(std::string, api_stag_set_pos, "YYSETSTAGP") \
+    MUTOPT(std::string, api_mtag_set_neg, "YYSETMTAGN") \
+    MUTOPT(std::string, api_mtag_set_pos, "YYSETMTAGP") \
     MUTOPT(std::string, api_shift, "YYSHIFT") \
-    MUTOPT(std::string, api_shift_stag, "YYSHIFTSTAG") \
-    MUTOPT(std::string, api_shift_mtag, "YYSHIFTMTAG") \
+    MUTOPT(std::string, api_stag_shift, "YYSHIFTSTAG") \
+    MUTOPT(std::string, api_mtag_shift, "YYSHIFTMTAG") \
     MUTOPT(std::string, api_fill, "YYFILL") \
     MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
     MUTOPT(std::string, api_cond_get, "YYGETCONDITION") \

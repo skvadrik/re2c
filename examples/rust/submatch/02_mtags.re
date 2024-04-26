@@ -62,15 +62,15 @@ fn parse(str: &[u8]) -> Option<Ver> {
     /*!mtags:re2c format = 'let mut @@ = MTAG_ROOT;'; */
 
     /*!re2c
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSTAGP   = "@@ = cur;";
-        re2c:define:YYSTAGN   = "@@ = NONE;";
-        re2c:define:YYMTAGP   = "@@ = add_mtag(&mut mt, @@, cur);";
-        re2c:define:YYMTAGN   = "@@ = add_mtag(&mut mt, @@, NONE);";
+        re2c:define:YYCTYPE    = u8;
+        re2c:define:YYPEEK     = "*str.get_unchecked(cur)";
+        re2c:define:YYSKIP     = "cur += 1;";
+        re2c:define:YYBACKUP   = "mar = cur;";
+        re2c:define:YYRESTORE  = "cur = mar;";
+        re2c:define:YYSETSTAGP = "@@ = cur;";
+        re2c:define:YYSETSTAGN = "@@ = NONE;";
+        re2c:define:YYSETMTAGP = "@@ = add_mtag(&mut mt, @@, cur);";
+        re2c:define:YYSETMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
