@@ -353,8 +353,8 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, api_mtag_shift, "YYSHIFTMTAG") \
     MUTOPT(std::string, api_fill, "YYFILL") \
     MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
-    MUTOPT(std::string, api_cond_get, "YYGETCONDITION") \
-    MUTOPT(std::string, api_cond_set, "YYSETCONDITION" ) \
+    MUTOPT(std::string, api_cond_get, "YYGETCOND") \
+    MUTOPT(std::string, api_cond_set, "YYSETCOND" ) \
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
     MUTOPT(std::string, api_maxfill, "YYMAXFILL") \

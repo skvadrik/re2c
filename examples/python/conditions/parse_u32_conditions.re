@@ -14,8 +14,8 @@ def parse_u32(str):
         re2c:define:YYBACKUP  = "mar = cur";
         re2c:define:YYRESTORE = "cur = mar";
         re2c:define:YYSHIFT   = "cur += @@";
-        re2c:define:YYGETCONDITION = "cond";
-        re2c:define:YYSETCONDITION = "cond = @@";
+        re2c:define:YYGETCOND = "cond";
+        re2c:define:YYSETCOND = "cond = @@";
         re2c:yyfill:enable = 0;
         re2c:indent:top = 2;
 

@@ -27,8 +27,8 @@ let add (num: int option) (dgt: int) (base: int) : int option =
     re2c:define:YYBACKUP  = "st.mar <- st.cur;";
     re2c:define:YYRESTORE = "st.cur <- st.mar;";
     re2c:define:YYSHIFT   = "st.cur <- st.cur + @@;";
-    re2c:define:YYGETCONDITION = "st.cond";
-    re2c:define:YYSETCONDITION = "st.cond <- @@;";
+    re2c:define:YYGETCOND = "st.cond";
+    re2c:define:YYSETCOND = "st.cond <- @@;";
     re2c:yyfill:enable = 0;
 
     <init> '0b' / [01]        :=> bin
