@@ -26,14 +26,14 @@ func parse_u32(str string) (uint32, error) {
 
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE        = byte;
-		re2c:define:YYPEEK         = "str[cur]";
-		re2c:define:YYSKIP         = "cur += 1";
-		re2c:define:YYSHIFT        = "cur += @@{shift}";
-		re2c:define:YYBACKUP       = "mar = cur";
-		re2c:define:YYRESTORE      = "cur = mar";
-		re2c:define:YYGETCONDITION = "cond";
-		re2c:define:YYSETCONDITION = "cond = @@";
+		re2c:define:YYCTYPE   = byte;
+		re2c:define:YYPEEK    = "str[cur]";
+		re2c:define:YYSKIP    = "cur += 1";
+		re2c:define:YYSHIFT   = "cur += @@{shift}";
+		re2c:define:YYBACKUP  = "mar = cur";
+		re2c:define:YYRESTORE = "cur = mar";
+		re2c:define:YYGETCOND = "cond";
+		re2c:define:YYSETCOND = "cond = @@";
 
 		<*> * { return 0, eSyntax }
 

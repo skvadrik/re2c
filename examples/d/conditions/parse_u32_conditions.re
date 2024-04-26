@@ -16,14 +16,14 @@ private ulong parse_u32(const(char)* s) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE        = char;
-        re2c:define:YYGETCONDITION = "c";
-        re2c:define:YYSETCONDITION = "c = @@;";
-        re2c:define:YYSKIP         = 'cur++;';
-        re2c:define:YYPEEK         = '*cur';
-        re2c:define:YYBACKUP       = 'mar = cur;';
-        re2c:define:YYRESTORE      = 'cur = mar;';
-        re2c:define:YYSHIFT        = 'cur += @@{shift};';
+        re2c:define:YYCTYPE   = char;
+        re2c:define:YYGETCOND = "c";
+        re2c:define:YYSETCOND = "c = @@;";
+        re2c:define:YYSKIP    = 'cur++;';
+        re2c:define:YYPEEK    = '*cur';
+        re2c:define:YYBACKUP  = 'mar = cur;';
+        re2c:define:YYRESTORE = 'cur = mar;';
+        re2c:define:YYSHIFT   = 'cur += @@{shift};';
 
         <*> * { return ERROR; }
         <init> '0b' / [01]        :=> bin

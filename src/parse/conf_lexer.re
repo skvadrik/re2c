@@ -141,8 +141,8 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYFILL"                      { RET_CONF_STR(api_fill); }
     "define:YYFILL@len"                  { RET_CONF_STR(fill_param); }
     "define:YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
-    "define:YYGETCONDITION"              { RET_CONF_STR(api_cond_get); }
-    "define:YYGETCONDITION:naked"        { RET_CONF_BOOL(cond_get_naked); }
+    "define:YYGETCOND" "ITION"?          { RET_CONF_STR(api_cond_get); }
+    "define:YYGETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_get_naked); }
     "define:YYGETSTATE"                  { RET_CONF_STR(api_state_get); }
     "define:YYGETSTATE:naked"            { RET_CONF_BOOL(state_get_naked); }
     "define:YYLESSTHAN"                  { RET_CONF_STR(api_less_than); }
@@ -156,9 +156,9 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYRESTORE"                   { RET_CONF_STR(api_restore); }
     "define:YYRESTORECTX"                { RET_CONF_STR(api_restore_ctx); }
     "define:YYRESTORETAG"                { RET_CONF_STR(api_restore_tag); }
-    "define:YYSETCONDITION"              { RET_CONF_STR(api_cond_set); }
-    "define:YYSETCONDITION@cond"         { RET_CONF_STR(cond_set_param); }
-    "define:YYSETCONDITION:naked"        { RET_CONF_BOOL(cond_set_naked); }
+    "define:YYSETCOND" "ITION"?          { RET_CONF_STR(api_cond_set); }
+    "define:YYSETCOND" "ITION"? "@cond"  { RET_CONF_STR(cond_set_param); }
+    "define:YYSETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_set_naked); }
     "define:YYSETSTATE"                  { RET_CONF_STR(api_state_set); }
     "define:YYSETSTATE:naked"            { RET_CONF_BOOL(state_set_naked); }
     "define:YYSETSTATE@state"            { RET_CONF_STR(state_set_param); }
