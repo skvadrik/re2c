@@ -27,8 +27,8 @@ func parse(str string) *SemVer {
 		re2c:define:YYSKIP      = "cur += 1";
 		re2c:define:YYBACKUP    = "mar = cur";
 		re2c:define:YYRESTORE   = "cur = mar";
-		re2c:define:YYSETSTAGP  = "@@{tag} = cur";
-		re2c:define:YYSETSTAGN  = "@@{tag} = -1";
+		re2c:define:YYSTAGP     = "@@{tag} = cur";
+		re2c:define:YYSTAGN     = "@@{tag} = -1";
 		re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
 		re2c:tags = 1;
 

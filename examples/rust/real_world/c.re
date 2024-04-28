@@ -297,8 +297,8 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
     re2c:define:YYBACKUP     = "input.marker = input.cursor;";
     re2c:define:YYRESTORE    = "input.cursor = input.marker;";
     re2c:define:YYRESTORETAG = "input.cursor = ${tag};";
-    re2c:define:YYSETSTAGP   = "@@{tag} = input.cursor;";
-    re2c:define:YYSETSTAGN   = "@@{tag} = -1;";
+    re2c:define:YYSTAGP      = "@@{tag} = input.cursor;";
+    re2c:define:YYSTAGN      = "@@{tag} = -1;";
     re2c:define:YYSHIFT      = "input.cursor += @@{shift};";
     re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
 

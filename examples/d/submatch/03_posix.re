@@ -30,8 +30,8 @@ private bool lex(const(char)* str, ref SemVer ver) {
         re2c:define:YYSKIP      = "++cur;";
         re2c:define:YYBACKUP    = "mar = cur;";
         re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSETSTAGP  = "@@{tag} = cur;";
-        re2c:define:YYSETSTAGN  = "@@{tag} = null;";
+        re2c:define:YYSTAGP     = "@@{tag} = cur;";
+        re2c:define:YYSTAGN     = "@@{tag} = null;";
         re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift};";
 
         num = [0-9]+;

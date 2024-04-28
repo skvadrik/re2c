@@ -64,8 +64,8 @@ def lex(st, count):
             re2c:define:YYSKIP      = "st.cur += 1";
             re2c:define:YYBACKUP    = "st.mar = st.cur";
             re2c:define:YYRESTORE   = "st.cur = st.mar";
-            re2c:define:YYSETSTAGP  = "@@{tag} = st.cur";
-            re2c:define:YYSETSTAGN  = "@@{tag} = NONE";
+            re2c:define:YYSTAGP     = "@@{tag} = st.cur";
+            re2c:define:YYSTAGN     = "@@{tag} = NONE";
             re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
             re2c:define:YYLESSTHAN  = "st.cur >= st.lim";
             re2c:define:YYFILL      = "fill(st) == Status.OK";

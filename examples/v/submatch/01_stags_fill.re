@@ -79,8 +79,8 @@ loop:
         re2c:define:YYRESTORE   = "st.cur = st.mar";
         re2c:define:YYLESSTHAN  = "st.lim <= st.cur";
         re2c:define:YYFILL      = "fill(mut st) == 0";
-        re2c:define:YYSETSTAGP  = "@@{tag} = st.cur";
-        re2c:define:YYSETSTAGN  = "@@{tag} = -1";
+        re2c:define:YYSTAGP     = "@@{tag} = st.cur";
+        re2c:define:YYSTAGN     = "@@{tag} = -1";
         re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
         re2c:tags = 1;
         re2c:tags:expression = "st.@@";

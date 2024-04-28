@@ -68,15 +68,15 @@ fn parse(str string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE    = byte;
-        re2c:define:YYPEEK     = "str[cur]";
-        re2c:define:YYSKIP     = "cur += 1";
-        re2c:define:YYBACKUP   = "mar = cur";
-        re2c:define:YYRESTORE  = "cur = mar";
-        re2c:define:YYSETSTAGP = "@@ = cur";
-        re2c:define:YYSETSTAGN = "@@ = tag_none";
-        re2c:define:YYSETMTAGP = "@@ = add_mtag(mut &trie, @@, cur)";
-        re2c:define:YYSETMTAGN = "@@ = add_mtag(mut &trie, @@, tag_none)";
+        re2c:define:YYCTYPE   = byte;
+        re2c:define:YYPEEK    = "str[cur]";
+        re2c:define:YYSKIP    = "cur += 1";
+        re2c:define:YYBACKUP  = "mar = cur";
+        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYSTAGP   = "@@ = cur";
+        re2c:define:YYSTAGN   = "@@ = tag_none";
+        re2c:define:YYMTAGP   = "@@ = add_mtag(mut &trie, @@, cur)";
+        re2c:define:YYMTAGN   = "@@ = add_mtag(mut &trie, @@, tag_none)";
 
         num = [0-9]+;
 

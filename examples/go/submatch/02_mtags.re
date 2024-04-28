@@ -72,15 +72,15 @@ func parse(str string) []int {
 	/*!re2c
 		re2c:tags = 1;
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYPEEK     = "str[cur]";
-		re2c:define:YYSKIP     = "cur += 1";
-		re2c:define:YYBACKUP   = "mar = cur";
-		re2c:define:YYRESTORE  = "cur = mar";
-		re2c:define:YYSETSTAGP = "@@ = cur";
-		re2c:define:YYSETSTAGN = "@@ = tagNone";
-		re2c:define:YYSETMTAGP = "@@ = add_mtag(&trie, @@, cur)";
-		re2c:define:YYSETMTAGN = "@@ = add_mtag(&trie, @@, tagNone)";
+		re2c:define:YYCTYPE   = byte;
+		re2c:define:YYPEEK    = "str[cur]";
+		re2c:define:YYSKIP    = "cur += 1";
+		re2c:define:YYBACKUP  = "mar = cur";
+		re2c:define:YYRESTORE = "cur = mar";
+		re2c:define:YYSTAGP   = "@@ = cur";
+		re2c:define:YYSTAGN   = "@@ = tagNone";
+		re2c:define:YYMTAGP   = "@@ = add_mtag(&trie, @@, cur)";
+		re2c:define:YYMTAGN   = "@@ = add_mtag(&trie, @@, tagNone)";
 
 		num = [0-9]+;
 
