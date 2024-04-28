@@ -464,8 +464,9 @@ Ret Adfa::calc_stats(OutputBlock& out) {
             }
         }
         for (tagver_t v = 1; v <= maxtagver; ++v) {
-            const std::string s = vartag_name(v, opts->tags_prefix, mtagvers);
-            if (mtagvers.find(v) != mtagvers.end()) {
+            bool is_mtag = mtagvers.find(v) != mtagvers.end();
+            const std::string s = vartag_name(v, opts->tags_prefix, is_mtag);
+            if (is_mtag) {
                 mtagnames.insert(s);
             } else {
                 stagnames.insert(s);

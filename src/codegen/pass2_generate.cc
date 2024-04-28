@@ -241,8 +241,9 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
 
     for (const tcmd_t* p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history, *h0;
-        const std::string le = vartag_expr(l, opts, dfa.mtagvers);
-        const std::string re = vartag_expr(r, opts, dfa.mtagvers);
+        bool is_mtag = dfa.mtagvers.find(l) != dfa.mtagvers.end();
+        const std::string le = vartag_expr(l, opts, is_mtag);
+        const std::string re = vartag_expr(r, opts, is_mtag);
         std::string s;
 
         if (tcmd_t::iscopy(p)) {
@@ -268,7 +269,7 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
                 CodeExprs* neg = code_exprs(alc);
                 CodeExprs* pos = code_exprs(alc);
                 for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
-                    const char* lhs = o.str(vartag_expr(q->lhs, opts, dfa.mtagvers)).flush();
+                    const char* lhs = o.str(vartag_expr(q->lhs, opts, is_mtag)).flush();
                     append(q->history[0] == TAGVER_BOTTOM ? neg : pos, code_expr(alc, lhs));
                 }
                 if (neg->head != nullptr) {
@@ -326,7 +327,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 
         if (!fixed(tag)) {
             // variable tag
-            const std::string expr = vartag_expr(fins[t], opts, dfa.mtagvers);
+            const std::string expr = vartag_expr(fins[t], opts, history(tag));
             if (trailing(tag)) {
                 const bool notag = dfa.oldstyle_ctxmarker;
                 if (generic) {
@@ -346,7 +347,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
             const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
             const std::string base = fixed_on_cursor
                     ? opts->api_cursor
-                    : vartag_expr(fins[tag.base], opts, dfa.mtagvers);
+                    : vartag_expr(fins[tag.base], opts, history(tag));
 
             if (trailing(tag)) {
                 DCHECK(tag.toplevel);
@@ -926,9 +927,10 @@ static void gen_godot(
 
             const tcmd_t* cmd = dfa.tcpool[c->jump.tags];
             for (const tcmd_t* p = cmd; p; p = p->next) {
-                o.cstr("<").str(vartag_name(p->lhs, prefix, dfa.mtagvers));
+                bool is_mtag = dfa.mtagvers.find(p->lhs) != dfa.mtagvers.end();
+                o.cstr("<").str(vartag_name(p->lhs, prefix, is_mtag));
                 if (tcmd_t::iscopy(p)) {
-                    o.cstr("~").str(vartag_name(p->rhs, prefix, dfa.mtagvers));
+                    o.cstr("~").str(vartag_name(p->rhs, prefix, is_mtag));
                 }
                 o.cstr(">");
             }
@@ -2275,20 +2277,17 @@ Ret codegen_generate(Output& output) {
     return Ret::OK;
 }
 
-std::string vartag_name(
-        tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers) {
+std::string vartag_name(tagver_t ver, const std::string& prefix, bool is_mtag) {
     std::ostringstream s;
-    s << prefix;
     // S-tags and m-tags should not overlap, so m-tags have an additional "m" prefix (note that tag
     // variables in different conditions may have identical numbers).
-    if (mtagvers.find(ver) != mtagvers.end()) s << "m";
-    s << ver;
+    s << prefix << (is_mtag ? "m" : "") << ver;
     return s.str();
 }
 
-std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers) {
+std::string vartag_expr(tagver_t ver, const opt_t* opts, bool is_mtag) {
     std::ostringstream os(opts->tags_expression);
-    std::string name = vartag_name(ver, opts->tags_prefix, mtagvers);
+    std::string name = vartag_name(ver, opts->tags_prefix, is_mtag);
     argsubst(os, opts->api_sigil, "tag", true, name);
     return os.str();
 }
