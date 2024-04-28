@@ -19,8 +19,8 @@ def parse(str):
         re2c:define:YYSKIP      = "cur += 1";
         re2c:define:YYBACKUP    = "mar = cur";
         re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSETSTAGP  = "@@{tag} = cur";
-        re2c:define:YYSETSTAGN  = "@@{tag} = NONE";
+        re2c:define:YYSTAGP     = "@@{tag} = cur";
+        re2c:define:YYSTAGN     = "@@{tag} = NONE";
         re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
         re2c:yyfill:enable = 0;
         re2c:posix-captures = 1;

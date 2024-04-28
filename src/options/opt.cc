@@ -105,13 +105,13 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_restore = defaults.api_restore;
         real.api_restore_ctx = defaults.api_restore_ctx;
         real.api_restore_tag = defaults.api_restore_tag;
-        real.api_stag_set_neg = defaults.api_stag_set_neg;
-        real.api_stag_set_pos = defaults.api_stag_set_pos;
-        real.api_mtag_set_neg = defaults.api_mtag_set_neg;
-        real.api_mtag_set_pos = defaults.api_mtag_set_pos;
-        real.api_shift = defaults.api_shift;
+        real.api_stag_neg = defaults.api_stag_neg;
+        real.api_stag_pos = defaults.api_stag_pos;
         real.api_stag_shift = defaults.api_stag_shift;
+        real.api_mtag_neg = defaults.api_mtag_neg;
+        real.api_mtag_pos = defaults.api_mtag_pos;
         real.api_mtag_shift = defaults.api_mtag_shift;
+        real.api_shift = defaults.api_shift;
         real.api_fill = defaults.api_fill;
         real.api_less_than = defaults.api_less_than;
         real.api_cond_type = defaults.api_cond_type;
@@ -223,10 +223,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_restore = defaults.api_restore;
         real.api_restore_ctx = defaults.api_restore_ctx;
         real.api_restore_tag = defaults.api_restore_tag;
-        real.api_stag_set_neg = defaults.api_stag_set_neg;
-        real.api_stag_set_pos = defaults.api_stag_set_pos;
-        real.api_shift = defaults.api_shift;
+        real.api_stag_neg = defaults.api_stag_neg;
+        real.api_stag_pos = defaults.api_stag_pos;
         real.api_stag_shift = defaults.api_stag_shift;
+        real.api_shift = defaults.api_shift;
         // for mtags there are no sensible defaults
     }
     if (!real.debug) {
@@ -284,13 +284,13 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         REPLACE_SIGIL(api_restore_ctx);
         REPLACE_SIGIL(api_restore_tag);
         REPLACE_SIGIL(api_less_than);
-        REPLACE_SIGIL(api_stag_set_neg);
-        REPLACE_SIGIL(api_stag_set_pos);
-        REPLACE_SIGIL(api_mtag_set_neg);
-        REPLACE_SIGIL(api_mtag_set_pos);
-        REPLACE_SIGIL(api_shift);
+        REPLACE_SIGIL(api_stag_neg);
+        REPLACE_SIGIL(api_stag_pos);
         REPLACE_SIGIL(api_stag_shift);
+        REPLACE_SIGIL(api_mtag_neg);
+        REPLACE_SIGIL(api_mtag_pos);
         REPLACE_SIGIL(api_mtag_shift);
+        REPLACE_SIGIL(api_shift);
         REPLACE_SIGIL(api_cond_get);
         REPLACE_SIGIL(api_state_get);
         REPLACE_SIGIL(api_debug);

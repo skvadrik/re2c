@@ -150,8 +150,8 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYMARKER"                    { RET_CONF_STR(api_marker); }
     "define:YYMAXFILL"                   { RET_CONF_STR(api_maxfill); }
     "define:YYMAXNMATCH"                 { RET_CONF_STR(api_maxnmatch); }
-    "define:" ("YYMTAGN" | "YYSETMTAGN") { RET_CONF_STR(api_mtag_set_neg); }
-    "define:" ("YYMTAGP" | "YYSETMTAGP") { RET_CONF_STR(api_mtag_set_pos); }
+    "define:YYMTAGN"                     { RET_CONF_STR(api_mtag_neg); }
+    "define:YYMTAGP"                     { RET_CONF_STR(api_mtag_pos); }
     "define:YYPEEK"                      { RET_CONF_STR(api_peek); }
     "define:YYRESTORE"                   { RET_CONF_STR(api_restore); }
     "define:YYRESTORECTX"                { RET_CONF_STR(api_restore_ctx); }
@@ -166,8 +166,8 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYSHIFTSTAG"                 { RET_CONF_STR(api_stag_shift); }
     "define:YYSHIFTMTAG"                 { RET_CONF_STR(api_mtag_shift); }
     "define:YYSKIP"                      { RET_CONF_STR(api_skip); }
-    "define:" ("YYSTAGN" | "YYSETSTAGN") { RET_CONF_STR(api_stag_set_neg); }
-    "define:" ("YYSTAGP" | "YYSETSTAGP") { RET_CONF_STR(api_stag_set_pos); }
+    "define:YYSTAGN"                     { RET_CONF_STR(api_stag_neg); }
+    "define:YYSTAGP"                     { RET_CONF_STR(api_stag_pos); }
     "define:YYFN" {
         CHECK_RET(lex_conf_list(opts));
         if (tmp_list.size() < 1) {

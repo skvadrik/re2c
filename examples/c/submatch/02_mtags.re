@@ -65,11 +65,11 @@ static bool parse(const char *str, Ver &ver) {
 
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE    = char;
-        re2c:define:YYSETSTAGP = "@@ = YYCURSOR;";
-        re2c:define:YYSETSTAGN = "@@ = NULL;";
-        re2c:define:YYSETMTAGP = "add_mtag(mt, @@, YYCURSOR);";
-        re2c:define:YYSETMTAGN = "add_mtag(mt, @@, NULL);";
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYSTAGP = "@@ = YYCURSOR;";
+        re2c:define:YYSTAGN = "@@ = NULL;";
+        re2c:define:YYMTAGP = "add_mtag(mt, @@, YYCURSOR);";
+        re2c:define:YYMTAGN = "add_mtag(mt, @@, NULL);";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

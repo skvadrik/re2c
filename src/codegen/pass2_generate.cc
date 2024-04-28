@@ -147,8 +147,8 @@ static void gen_settag(
     Scratchbuf& o = output.scratchbuf;
 
     const std::string& s = history
-            ? (negative ? opts->api_mtag_set_neg : opts->api_mtag_set_pos)
-            : (negative ? opts->api_stag_set_neg : opts->api_stag_set_pos);
+            ? (negative ? opts->api_mtag_neg : opts->api_mtag_pos)
+            : (negative ? opts->api_stag_neg : opts->api_stag_pos);
     o.str(s);
     if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(").str(tag).cstr(")");

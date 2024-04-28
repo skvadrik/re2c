@@ -20,16 +20,16 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 /*!local:re2c
-    re2c:define:YYFN       = ["parse;(int list) option", "st;state"];
-    re2c:define:YYCTYPE    = char;
-    re2c:define:YYPEEK     = "st.str.[st.cur]";
-    re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP   = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE  = "st.cur <- st.mar;";
-    re2c:define:YYSETSTAGP = "@@{tag} <- st.cur;";
-    re2c:define:YYSETSTAGN = "@@{tag} <- none;";
-    re2c:define:YYSETMTAGP = "@@ <- st.cur :: @@;";
-    re2c:define:YYSETMTAGN = "@@ <- [];";
+    re2c:define:YYFN      = ["parse;(int list) option", "st;state"];
+    re2c:define:YYCTYPE   = char;
+    re2c:define:YYPEEK    = "st.str.[st.cur]";
+    re2c:define:YYSKIP    = "st.cur <- st.cur + 1;";
+    re2c:define:YYBACKUP  = "st.mar <- st.cur;";
+    re2c:define:YYRESTORE = "st.cur <- st.mar;";
+    re2c:define:YYSTAGP   = "@@{tag} <- st.cur;";
+    re2c:define:YYSTAGN   = "@@{tag} <- none;";
+    re2c:define:YYMTAGP   = "@@ <- st.cur :: @@;";
+    re2c:define:YYMTAGN   = "@@ <- [];";
     re2c:tags = 1;
     re2c:tags:expression = "st.@@";
     re2c:yyfill:enable = 0;
