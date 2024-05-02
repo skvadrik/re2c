@@ -512,6 +512,10 @@ inline Code* code_backup(OutAllocator& alc) {
     return new_code(alc, CodeKind::BACKUP);
 }
 
+inline Code* code_backupctx(OutAllocator& alc) {
+    return new_code(alc, CodeKind::BACKUPCTX);
+}
+
 inline Code* code_dfas(OutAllocator& alc) {
     return new_code(alc, CodeKind::DFAS);
 }

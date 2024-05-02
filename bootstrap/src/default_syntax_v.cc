@@ -210,4 +210,6 @@ const char* DEFAULT_SYNTAX_V =
     "code:yyskip = topindent skip (api_style.functions ? \"()\") nl;\n"
     "\n"
     "code:yybackup = topindent backup (api_style.functions ? \"()\") nl;\n"
+    "\n"
+    "code:yybackupctx = topindent backupctx (api_style.functions ? \"()\") nl;\n"
     ;

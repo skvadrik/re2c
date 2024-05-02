@@ -90,6 +90,7 @@ enum class CodeKind: uint32_t {
     SKIP,
     PEEK,
     BACKUP,
+    BACKUPCTX,
     PEEK_SKIP,
     SKIP_PEEK,
     SKIP_BACKUP,

@@ -221,3 +221,9 @@ code:yybackup =
         ? backup (api_style.functions ? "();")
         : marker " = " cursor ";"
     ) nl;
+
+code:yybackupctx =
+    topindent (api.generic
+        ? backupctx (api_style.functions ? "();")
+        : ctxmarker " = " cursor ";"
+    ) nl;

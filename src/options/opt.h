@@ -210,7 +210,10 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_backup_peek_skip, "code:backup_peek_skip", \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
-    )
+    ) \
+    CODE_TEMPLATE(code_backupctx, "code:backupctx", \
+        ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
+    ) \
 
 #define RE2C_ONELINE_CODES \
     ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
@@ -226,11 +229,13 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
     STX_LOCAL_VAR(BACKUP, "backup") \
+    STX_LOCAL_VAR(BACKUPCTX, "backupctx") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(CHAR, "char") \
     STX_LOCAL_VAR(COND, "cond") \
     STX_LOCAL_VAR(CTYPE, "ctype") \
+    STX_LOCAL_VAR(CTXMARKER, "ctxmarker") \
     STX_LOCAL_VAR(CURSOR, "cursor") \
     STX_LOCAL_VAR(DATE, "date") \
     STX_LOCAL_VAR(DEBUG, "debug") \

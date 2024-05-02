@@ -960,6 +960,22 @@ class RenderSkipPeekBackup : public RenderCallback {
     }
 };
 
+class RenderBackupctx : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderBackupctx(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::CTXMARKER: rctx.os << rctx.opts->api_ctxmarker; break;
+            case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
+            case StxVarId::BACKUPCTX: rctx.os << rctx.opts->api_backup_ctx; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+};
+
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
     if (label.kind == CodeLabel::Kind::SLABEL) {
         rctx.os << label.slabel << ":" << std::endl;
@@ -1323,6 +1339,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK: {
         RenderSkipPeekBackup callback(rctx);
         rctx.opts->render_code_skip_backup_peek(rctx.os, callback);
+        break;
+    }
+    case CodeKind::BACKUPCTX: {
+        RenderBackupctx callback(rctx);
+        rctx.opts->render_code_backupctx(rctx.os, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {
