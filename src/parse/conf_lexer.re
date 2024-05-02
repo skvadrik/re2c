@@ -134,6 +134,8 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYBACKUP"                    { RET_CONF_STR(api_backup); }
     "define:YYBACKUPCTX"                 { RET_CONF_STR(api_backup_ctx); }
     "define:YYCONDTYPE"                  { RET_CONF_STR(api_cond_type); }
+    "define:YYCOPYMTAG"                  { RET_CONF_STR(api_mtag_copy); }
+    "define:YYCOPYSTAG"                  { RET_CONF_STR(api_stag_copy); }
     "define:YYCTYPE"                     { RET_CONF_STR(api_char_type); }
     "define:YYCTXMARKER"                 { RET_CONF_STR(api_ctxmarker); }
     "define:YYCURSOR"                    { RET_CONF_STR(api_cursor); }

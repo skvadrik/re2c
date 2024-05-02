@@ -31,6 +31,8 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "conf:define:YYBACKUP = \"YYBACKUP\";\n"
     "conf:define:YYBACKUPCTX = \"YYBACKUPCTX\";\n"
     "conf:define:YYCONDTYPE = \"yycondtype\";\n"
+    "conf:define:YYCOPYMTAG = \"@@{lhs} = @@{rhs}\";\n"
+    "conf:define:YYCOPYSTAG = \"@@{lhs} = @@{rhs}\";\n"
     "conf:define:YYCTYPE = \"yyctype\";\n"
     "conf:define:YYCTXMARKER = \"YYCTXMARKER\";\n"
     "conf:define:YYCURSOR = \"YYCURSOR\";\n"

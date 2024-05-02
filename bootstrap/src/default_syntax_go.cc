@@ -30,6 +30,8 @@ const char* DEFAULT_SYNTAX_GO =
     "conf:define:YYBACKUP = \"YYBACKUP\";\n"
     "conf:define:YYBACKUPCTX = \"YYBACKUPCTX\";\n"
     "conf:define:YYCONDTYPE = \"YYCONDTYPE\";\n"
+    "conf:define:YYCOPYMTAG = \"@@{lhs} = @@{rhs}\";\n"
+    "conf:define:YYCOPYSTAG = \"@@{lhs} = @@{rhs}\";\n"
     "conf:define:YYCTYPE = \"YYCTYPE\";\n"
     "conf:define:YYCTXMARKER = \"YYCTXMARKER\";\n"
     "conf:define:YYCURSOR = \"YYCURSOR\";\n"
