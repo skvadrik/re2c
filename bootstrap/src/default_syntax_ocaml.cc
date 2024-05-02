@@ -199,8 +199,6 @@ const char* DEFAULT_SYNTAX_OCAML =
     "\n"
     "code:abort = topindent \"raise (Failure \\\"internal lexer error\\\")\" nl;\n"
     "\n"
-    "code:yyaccept = topindent var \" <- \" num \";\" nl;\n"
-    "\n"
     "code:yydebug = topindent debug \" \" state \" \" char nl;\n"
     "\n"
     "code:yypeek = topindent \"let \" char \" = \" peek (api_style.functions ? \"()\") \" in\" nl;\n"

@@ -485,7 +485,6 @@ start:
     "code:fingerprint"          { RET_CODE(code_fingerprint); }
     "code:line_info"            { RET_CODE(code_line_info); }
     "code:abort"                { RET_CODE(code_abort); }
-    "code:yyaccept"             { RET_CODE(code_accept); }
     "code:yydebug"              { RET_CODE(code_debug); }
     "code:yypeek"               { RET_CODE(code_peek); }
     "code:yyskip"               { RET_CODE(code_skip); }
@@ -530,7 +529,6 @@ start:
     "line"      { RET_VAR(StxVarId::LINE); }
     "marker"    { RET_VAR(StxVarId::MARKER); }
     "name"      { RET_VAR(StxVarId::NAME); }
-    "num"       { RET_VAR(StxVarId::NUM); }
     "op"        { RET_VAR(StxVarId::OP); }
     "peek"      { RET_VAR(StxVarId::PEEK); }
     "retval"    { RET_VAR(StxVarId::RETVAL); }
@@ -543,7 +541,6 @@ start:
     "type"      { RET_VAR(StxVarId::TYPE); }
     "typecast"  { RET_VAR(StxVarId::TYPECAST); }
     "val"       { RET_VAR(StxVarId::VAL); }
-    "var"       { RET_VAR(StxVarId::VAR); }
     "version"   { RET_VAR(StxVarId::VER); }
 
     // global variables

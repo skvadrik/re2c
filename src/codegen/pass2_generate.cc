@@ -1231,7 +1231,8 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
         const bool ul1 = s->label->used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            append(stmts, code_assign(alc, opts->var_accept.c_str(), buf.u64(save).flush()));
+            const char* save = buf.u64(s->action.info.save).flush();
+            append(stmts, code_assign(alc, opts->var_accept.c_str(), save));
         }
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));
@@ -1247,7 +1248,8 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
     }
     case Action::Kind::SAVE:
         if (dfa.accepts.size() > 1) {
-            append(stmts, code_accept(alc, static_cast<uint32_t>(s->action.info.save)));
+            const char* save = buf.u64(s->action.info.save).flush();
+            append(stmts, code_assign(alc, opts->var_accept.c_str(), save));
         }
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));
