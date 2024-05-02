@@ -159,43 +159,45 @@ static void gen_settag(
     }
 }
 
-static void gen_assign(
-        Output& output, CodeList* stmts, const std::string& lhs, const std::string& rhs) {
-    Scratchbuf& buf = output.scratchbuf;
-    const char* l = buf.str(lhs).flush();
-    const char* r = buf.str(rhs).flush();
-    append(stmts, code_assign(output.allocator, l, r));
-}
-
-static void gen_assign_many(
+static void gen_copy_tag(
         Output& output,
         CodeList* stmts,
-        const std::vector<std::string>& many,
-        const std::string& rhs) {
-    OutAllocator& alc = output.allocator;
+        const std::string& lhs,
+        const std::string& rhs,
+        bool is_mtag) {
+    const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
-
-    CodeExprs* l = code_exprs(alc);
-    for (const std::string& s : many) {
-        append(l, code_expr(alc, buf.str(s).flush()));
-    }
-    const char* r = buf.str(rhs).flush();
-    append(stmts, code_assign(alc, l, r));
+    buf.str(is_mtag ? opts->api_mtag_copy : opts->api_stag_copy);
+    argsubst(buf.stream(), opts->api_sigil, "lhs", false, lhs.c_str());
+    argsubst(buf.stream(), opts->api_sigil, "rhs", false, rhs.c_str());
+    append(stmts, code_text(output.allocator, buf.flush()));
 }
 
-static void gen_assign_many_to_first(
-        Output& output, CodeList* stmts, const std::vector<std::string>& many) {
-    if (many.size() <= 1) return;
+static void gen_copy_tags(
+        Output& output,
+        CodeList* stmts,
+        std::vector<std::string>::const_iterator i,
+        std::vector<std::string>::const_iterator j,
+        const std::string& rhs,
+        bool is_mtag) {
+    if (i >= j) return;
 
+    const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    CodeExprs* lhs = code_exprs(alc);
-    for (size_t i = 1; i < many.size(); ++i) {
-        append(lhs, code_expr(alc, buf.str(many[i]).flush()));
+    if (opts->api == Api::DEFAULT) {
+        CodeExprs* l = code_exprs(alc);
+        for (; i < j; ++i) {
+            append(l, code_expr(alc, buf.str(*i).flush()));
+        }
+        const char* r = buf.str(rhs).flush();
+        append(stmts, code_assign(alc, l, r));
+    } else {
+        for (; i < j; ++i) {
+            gen_copy_tag(output, stmts, *i, rhs, is_mtag);
+        }
     }
-    const char* rhs = buf.str(many[0]).flush();
-    append(stmts, code_assign(alc, lhs, rhs));
 }
 
 static void gen_restore_ctx(Output& output, CodeList* stmts, const std::string& tag) {
@@ -234,7 +236,8 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
                 append(tag_actions, code_text(alc, o.flush()));
             }
         } else {
-            gen_assign(output, tag_actions, opts->api_ctxmarker, opts->api_cursor);
+            append(tag_actions,
+                code_assign(alc, opts->api_ctxmarker.c_str(), opts->api_cursor.c_str()));
         }
         return;
     }
@@ -248,11 +251,11 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
 
         if (tcmd_t::iscopy(p)) {
             // "copy" command
-            gen_assign(output, tag_actions, le, re);
+            gen_copy_tag(output, tag_actions, le, re, is_mtag);
         } else if (tcmd_t::isadd(p)) {
             // "save" command with history
             if (l != r) {
-                gen_assign(output, tag_actions, le, re);
+                gen_copy_tag(output, tag_actions, le, re, is_mtag);
             }
             // history is reversed, so find its end and iterate back
             for (h0 = h; *h != TAGVER_ZERO; ++h);
@@ -319,6 +322,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag& tag = tags[t];
+        bool is_mtag = history(tag);
 
         // structural tag that is only needed for disambiguation
         if (fictive(tag)) continue;
@@ -333,11 +337,11 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                 if (generic) {
                     gen_restore_ctx(output, trailops, notag ? "" : expr);
                 } else {
-                    gen_assign(
-                            output, trailops, opts->api_cursor, notag ? opts->api_ctxmarker : expr);
+                    append(trailops, code_assign(alc, opts->api_cursor.c_str(),
+                            notag ? opts->api_ctxmarker.c_str() : o.str(expr).flush()));
                 }
             } else {
-                gen_assign_many(output, varops, fintags, expr);
+                gen_copy_tags(output, varops, fintags.begin(), fintags.end(), expr, is_mtag);
             }
         } else {
             DCHECK(!history(tag));
@@ -371,46 +375,47 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                 }
             } else {
                 DCHECK(!fintags.empty());
-                const std::string& first = fintags[0];
+                auto first = fintags.begin(), second = first + 1, last = fintags.end();
 
                 if (generic) {
                     if (fixed_on_cursor) {
-                        gen_settag(output, fixops, first, false, false);
-                        gen_shift(output, fixops, -dist, first, false);
-                        gen_assign_many_to_first(output, fixops, fintags);
+                        gen_settag(output, fixops, *first, false, false);
+                        gen_shift(output, fixops, -dist, *first, false);
+                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
                     } else if (dist == 0) {
-                        gen_assign_many(output, fixops, fintags, base);
+                        gen_copy_tags(output, fixops, first, last, base, is_mtag);
                     } else if (tag.toplevel) {
-                        gen_assign(output, fixops, first, base);
-                        gen_shift(output, fixops, -dist, first, false);
-                        gen_assign_many_to_first(output, fixops, fintags);
+                        gen_copy_tag(output, fixops, *first, base, is_mtag);
+                        gen_shift(output, fixops, -dist, *first, false);
+                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
                     } else {
                         // Split operations in two parts. First, set all fixed tags to their base
                         // tag. Second, choose one of the base tags to store negative value (with
                         // generic API there is no NULL constant) and compare fixed tags against it
                         // before shifting. This must be done after all uses of that base tag.
                         if (negtag.empty()) negtag = base;
-                        gen_assign(output, fixops, first, base);
-                        const char* cond = o.str(first).cstr(" != ").str(negtag).flush();
+                        gen_copy_tag(output, fixops, *first, base, is_mtag);
+                        const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
                         CodeList* then = code_list(alc);
-                        gen_shift(output, then, -dist, first, false);
+                        gen_shift(output, then, -dist, *first, false);
                         append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                     }
                 } else {
                     if (dist == 0) {
-                        gen_assign_many(output, fixops, fintags, base);
+                        gen_copy_tags(output, fixops, first, last, base, is_mtag);
                     } else if (tag.toplevel) {
-                        gen_assign_many(
-                                output, fixops, fintags, o.str(base).cstr(" - ").i32(dist).flush());
+                        o.str(base).cstr(" - ").i32(dist);
+                        gen_copy_tags(output, fixops, first, last, o.flush(), is_mtag);
                     } else {
                         // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
                         // value of the base tag plus offset.
-                        gen_assign(output, fixops, first, base);
+                        append(fixops,
+                                code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
                         const char* cond = o.str(base).cstr(" != NULL").flush();
                         CodeList* then = code_list(alc);
-                        append(then, code_stmt(alc, o.str(first).cstr(" -= ").i32(dist).flush()));
+                        append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));
                         append(fixops, code_if_then_else(alc, cond, then, nullptr));
-                        gen_assign_many_to_first(output, fixops, fintags);
+                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
                     }
                 }
             }
