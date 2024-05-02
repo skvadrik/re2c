@@ -223,4 +223,10 @@ const char* DEFAULT_SYNTAX_D =
     "        ? backup (api_style.functions ? \"();\")\n"
     "        : marker \" = \" cursor \";\"\n"
     "    ) nl;\n"
+    "\n"
+    "code:yybackupctx =\n"
+    "    topindent (api.generic\n"
+    "        ? backupctx (api_style.functions ? \"();\")\n"
+    "        : ctxmarker \" = \" cursor \";\"\n"
+    "    ) nl;\n"
     ;

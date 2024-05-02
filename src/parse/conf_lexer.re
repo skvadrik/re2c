@@ -496,6 +496,7 @@ start:
     "code:yybackup_peek"        { RET_CODE(code_backup_peek); }
     "code:yyskip_backup_peek"   { RET_CODE(code_skip_backup_peek); }
     "code:yybackup_peek_skip"   { RET_CODE(code_backup_peek_skip); }
+    "code:yybackupctx"          { RET_CODE(code_backupctx); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
@@ -508,11 +509,13 @@ start:
     "argtype"   { RET_VAR(StxVarId::ARGTYPE); }
     "array"     { RET_VAR(StxVarId::ARRAY); }
     "backup"    { RET_VAR(StxVarId::BACKUP); }
+    "backupctx" { RET_VAR(StxVarId::BACKUPCTX); }
     "branch"    { RET_VAR(StxVarId::BRANCH); }
     "case"      { RET_VAR(StxVarId::CASE); }
     "char"      { RET_VAR(StxVarId::CHAR); }
     "cond"      { RET_VAR(StxVarId::COND); }
     "ctype"     { RET_VAR(StxVarId::CTYPE); }
+    "ctxmarker" { RET_VAR(StxVarId::CTXMARKER); }
     "cursor"    { RET_VAR(StxVarId::CURSOR); }
     "date"      { RET_VAR(StxVarId::DATE); }
     "debug"     { RET_VAR(StxVarId::DEBUG); }

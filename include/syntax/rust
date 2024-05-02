@@ -202,3 +202,5 @@ code:yypeek =
 code:yyskip = topindent skip (api_style.functions ? "();") nl;
 
 code:yybackup = topindent backup (api_style.functions ? "();") nl;
+
+code:yybackupctx = topindent backupctx (api_style.functions ? "();") nl;

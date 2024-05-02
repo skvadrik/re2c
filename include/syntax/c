@@ -256,3 +256,9 @@ code:yyskip_backup_peek =
 code:yybackup_peek_skip =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*(" marker " = " cursor "++);" nl;
+
+code:yybackupctx =
+    topindent (api.generic
+        ? backupctx (api_style.functions ? "();")
+        : ctxmarker " = " cursor ";"
+    ) nl;

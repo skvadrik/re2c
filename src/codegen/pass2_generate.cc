@@ -227,18 +227,7 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
 
     // single tag, backwards compatibility, use context marker
     if (cmd && dfa.oldstyle_ctxmarker) {
-        if (generic) {
-            o.str(opts->api_backup_ctx);
-            if (opts->api_style == ApiStyle::FUNCTIONS) {
-                o.cstr("()");
-                append(tag_actions, code_stmt(alc, o.flush()));
-            } else {
-                append(tag_actions, code_text(alc, o.flush()));
-            }
-        } else {
-            append(tag_actions,
-                code_assign(alc, opts->api_ctxmarker.c_str(), opts->api_cursor.c_str()));
-        }
+        append(tag_actions, code_backupctx(alc));
         return;
     }
 

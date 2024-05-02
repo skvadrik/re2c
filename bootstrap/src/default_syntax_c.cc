@@ -258,4 +258,10 @@ const char* DEFAULT_SYNTAX_C =
     "code:yybackup_peek_skip =\n"
     "    topindent (code_model.recursive_functions ? ctype \" \") char \" = \"\n"
     "        typecast \"*(\" marker \" = \" cursor \"++);\" nl;\n"
+    "\n"
+    "code:yybackupctx =\n"
+    "    topindent (api.generic\n"
+    "        ? backupctx (api_style.functions ? \"();\")\n"
+    "        : ctxmarker \" = \" cursor \";\"\n"
+    "    ) nl;\n"
     ;
