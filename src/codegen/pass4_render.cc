@@ -917,22 +917,6 @@ class RenderAssign : public RenderCallback {
     FORBID_COPY(RenderAssign);
 };
 
-class RenderAccept : public RenderCallback {
-    RenderContext& rctx;
-    uint32_t accept;
-
-  public:
-    RenderAccept(RenderContext& rctx, uint32_t accept): rctx(rctx), accept(accept) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::VAR: rctx.os << rctx.opts->var_accept; break;
-            case StxVarId::NUM: rctx.os << accept; break;
-            default: render_global_var(rctx, var); break;
-        }
-    }
-};
-
 class RenderDebug : public RenderCallback {
     RenderContext& rctx;
     const CodeDebug* code;
@@ -1284,11 +1268,6 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::ABORT: {
         RenderSimple callback(rctx);
         rctx.opts->render_code_abort(rctx.os, callback);
-        break;
-    }
-    case CodeKind::ACCEPT: {
-        RenderAccept callback(rctx, code->accept);
-        rctx.opts->render_code_accept(rctx.os, callback);
         break;
     }
     case CodeKind::DEBUG: {

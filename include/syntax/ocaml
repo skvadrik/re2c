@@ -197,8 +197,6 @@ code:line_info = "#" line " \"" file "\"" nl;
 
 code:abort = topindent "raise (Failure \"internal lexer error\")" nl;
 
-code:yyaccept = topindent var " <- " num ";" nl;
-
 code:yydebug = topindent debug " " state " " char nl;
 
 code:yypeek = topindent "let " char " = " peek (api_style.functions ? "()") " in" nl;

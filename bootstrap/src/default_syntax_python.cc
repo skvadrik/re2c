@@ -180,8 +180,6 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "\n"
     "code:abort = topindent \"raise \\\"internal lexer error\\\"\" nl;\n"
     "\n"
-    "code:yyaccept = topindent var \" = \" num nl;\n"
-    "\n"
     "code:yydebug = topindent debug \" \" state \" \" char nl;\n"
     "\n"
     "code:yypeek = topindent char \" = \" peek (api_style.functions ? \"()\") nl;\n"

@@ -202,8 +202,6 @@ const char* DEFAULT_SYNTAX_V =
     "\n"
     "code:abort = topindent \"panic(\\\"internal lexer error\\\")\" nl;\n"
     "\n"
-    "code:yyaccept = topindent var \" = \" num nl;\n"
-    "\n"
     "code:yydebug = topindent debug \"(\" state \", \" char \")\" nl;\n"
     "\n"
     "code:yypeek = topindent char (code_model.recursive_functions ? \" := \" : \" = \")\n"

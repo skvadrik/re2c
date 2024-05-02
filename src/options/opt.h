@@ -174,9 +174,6 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_abort, "code:abort", \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_accept, "code:accept", \
-        ({StxVarId::VAR, StxVarId::NUM}), ({}), ({}) \
-    ) \
     CODE_TEMPLATE(code_debug, "code:debug", \
         ({StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR}), ({}), ({}) \
     ) \
@@ -250,7 +247,6 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(LINE, "line") \
     STX_LOCAL_VAR(MARKER, "marker") \
     STX_LOCAL_VAR(NAME, "name") \
-    STX_LOCAL_VAR(NUM, "num") \
     STX_LOCAL_VAR(OP, "op") \
     STX_LOCAL_VAR(PEEK, "peek") \
     STX_LOCAL_VAR(RETVAL, "retval") \
@@ -263,7 +259,6 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(TYPE, "type") \
     STX_LOCAL_VAR(TYPECAST, "typecast") \
     STX_LOCAL_VAR(VAL, "val") \
-    STX_LOCAL_VAR(VAR, "var") \
     STX_LOCAL_VAR(VER, "version")
 
 // global variables in syntax files

@@ -178,8 +178,6 @@ code:fingerprint =
 
 code:abort = topindent "raise \"internal lexer error\"" nl;
 
-code:yyaccept = topindent var " = " num nl;
-
 code:yydebug = topindent debug " " state " " char nl;
 
 code:yypeek = topindent char " = " peek (api_style.functions ? "()") nl;

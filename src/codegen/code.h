@@ -334,7 +334,6 @@ struct Code {
         CodeList* loop;
         CodeList* rfuncs;
         loc_t loc;
-        uint32_t accept;
     };
 
     CodeKind kind;
@@ -493,12 +492,6 @@ inline Code* code_assign(
 
 inline Code* code_line_info_output(OutAllocator& alc) {
     return new_code(alc, CodeKind::LINE_INFO_OUTPUT);
-}
-
-inline Code* code_accept(OutAllocator& alc, uint32_t accept) {
-    Code* x = new_code(alc, CodeKind::ACCEPT);
-    x->accept = accept;
-    return x;
 }
 
 inline Code* code_debug(OutAllocator& alc, uint32_t state) {
