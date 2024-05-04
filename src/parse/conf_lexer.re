@@ -465,7 +465,6 @@ start:
     "code:type_yybm"            { RET_CODE(code_type_yybm); }
     "code:type_yytarget"        { RET_CODE(code_type_yytarget); }
     "code:assign"               { RET_CODE(code_assign); }
-    "code:assign_op"            { RET_CODE(code_assign_op); }
     "code:if_then_else"         { RET_CODE(code_if_then_else); }
     "code:if_then_else_oneline" { RET_CODE(code_if_then_else_oneline); }
     "code:switch"               { RET_CODE(code_switch); }
@@ -489,6 +488,9 @@ start:
     "code:yypeek"               { RET_CODE(code_peek); }
     "code:yyskip"               { RET_CODE(code_skip); }
     "code:yybackup"             { RET_CODE(code_backup); }
+    "code:yybackupctx"          { RET_CODE(code_backupctx); }
+    "code:yyrestore"            { RET_CODE(code_restore); }
+    "code:yyrestorectx"         { RET_CODE(code_restorectx); }
     "code:yyskip_peek"          { RET_CODE(code_skip_peek); }
     "code:yypeek_skip"          { RET_CODE(code_peek_skip); }
     "code:yyskip_backup"        { RET_CODE(code_skip_backup); }
@@ -496,55 +498,59 @@ start:
     "code:yybackup_peek"        { RET_CODE(code_backup_peek); }
     "code:yyskip_backup_peek"   { RET_CODE(code_skip_backup_peek); }
     "code:yybackup_peek_skip"   { RET_CODE(code_backup_peek_skip); }
-    "code:yybackupctx"          { RET_CODE(code_backupctx); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
     }
 
     // local variables
-    "arg"       { RET_VAR(StxVarId::ARG); }
-    "argmods"   { RET_VAR(StxVarId::ARGMODS); }
-    "argname"   { RET_VAR(StxVarId::ARGNAME); }
-    "argtype"   { RET_VAR(StxVarId::ARGTYPE); }
-    "array"     { RET_VAR(StxVarId::ARRAY); }
-    "backup"    { RET_VAR(StxVarId::BACKUP); }
-    "backupctx" { RET_VAR(StxVarId::BACKUPCTX); }
-    "branch"    { RET_VAR(StxVarId::BRANCH); }
-    "case"      { RET_VAR(StxVarId::CASE); }
-    "char"      { RET_VAR(StxVarId::CHAR); }
-    "cond"      { RET_VAR(StxVarId::COND); }
-    "ctype"     { RET_VAR(StxVarId::CTYPE); }
-    "ctxmarker" { RET_VAR(StxVarId::CTXMARKER); }
-    "cursor"    { RET_VAR(StxVarId::CURSOR); }
-    "date"      { RET_VAR(StxVarId::DATE); }
-    "debug"     { RET_VAR(StxVarId::DEBUG); }
-    "elem"      { RET_VAR(StxVarId::ELEM); }
-    "expr"      { RET_VAR(StxVarId::EXPR); }
-    "fn"        { RET_VAR(StxVarId::FN); }
-    "file"      { RET_VAR(StxVarId::FILE); }
-    "fndecl"    { RET_VAR(StxVarId::FNDECL); }
-    "fndef"     { RET_VAR(StxVarId::FNDEF); }
-    "index"     { RET_VAR(StxVarId::INDEX); }
-    "init"      { RET_VAR(StxVarId::INIT); }
-    "label"     { RET_VAR(StxVarId::LABEL); }
-    "lhs"       { RET_VAR(StxVarId::LHS); }
-    "line"      { RET_VAR(StxVarId::LINE); }
-    "marker"    { RET_VAR(StxVarId::MARKER); }
-    "name"      { RET_VAR(StxVarId::NAME); }
-    "op"        { RET_VAR(StxVarId::OP); }
-    "peek"      { RET_VAR(StxVarId::PEEK); }
-    "retval"    { RET_VAR(StxVarId::RETVAL); }
-    "rhs"       { RET_VAR(StxVarId::RHS); }
-    "row"       { RET_VAR(StxVarId::ROW); }
-    "size"      { RET_VAR(StxVarId::SIZE); }
-    "skip"      { RET_VAR(StxVarId::SKIP); }
-    "state"     { RET_VAR(StxVarId::STATE); }
-    "stmt"      { RET_VAR(StxVarId::STMT); }
-    "type"      { RET_VAR(StxVarId::TYPE); }
-    "typecast"  { RET_VAR(StxVarId::TYPECAST); }
-    "val"       { RET_VAR(StxVarId::VAL); }
-    "version"   { RET_VAR(StxVarId::VER); }
+    "arg"        { RET_VAR(StxVarId::ARG); }
+    "argmods"    { RET_VAR(StxVarId::ARGMODS); }
+    "argname"    { RET_VAR(StxVarId::ARGNAME); }
+    "argtype"    { RET_VAR(StxVarId::ARGTYPE); }
+    "array"      { RET_VAR(StxVarId::ARRAY); }
+    "backup"     { RET_VAR(StxVarId::BACKUP); }
+    "backupctx"  { RET_VAR(StxVarId::BACKUPCTX); }
+    "base"       { RET_VAR(StxVarId::BASE); }
+    "branch"     { RET_VAR(StxVarId::BRANCH); }
+    "case"       { RET_VAR(StxVarId::CASE); }
+    "char"       { RET_VAR(StxVarId::CHAR); }
+    "cond"       { RET_VAR(StxVarId::COND); }
+    "ctype"      { RET_VAR(StxVarId::CTYPE); }
+    "ctxmarker"  { RET_VAR(StxVarId::CTXMARKER); }
+    "cursor"     { RET_VAR(StxVarId::CURSOR); }
+    "date"       { RET_VAR(StxVarId::DATE); }
+    "debug"      { RET_VAR(StxVarId::DEBUG); }
+    "elem"       { RET_VAR(StxVarId::ELEM); }
+    "expr"       { RET_VAR(StxVarId::EXPR); }
+    "fn"         { RET_VAR(StxVarId::FN); }
+    "file"       { RET_VAR(StxVarId::FILE); }
+    "fndecl"     { RET_VAR(StxVarId::FNDECL); }
+    "fndef"      { RET_VAR(StxVarId::FNDEF); }
+    "index"      { RET_VAR(StxVarId::INDEX); }
+    "init"       { RET_VAR(StxVarId::INIT); }
+    "label"      { RET_VAR(StxVarId::LABEL); }
+    "lhs"        { RET_VAR(StxVarId::LHS); }
+    "line"       { RET_VAR(StxVarId::LINE); }
+    "marker"     { RET_VAR(StxVarId::MARKER); }
+    "name"       { RET_VAR(StxVarId::NAME); }
+    "offset"     { RET_VAR(StxVarId::OFFSET); }
+    "peek"       { RET_VAR(StxVarId::PEEK); }
+    "restore"    { RET_VAR(StxVarId::RESTORE); }
+    "restorectx" { RET_VAR(StxVarId::RESTORECTX); }
+    "restoretag" { RET_VAR(StxVarId::RESTORETAG); }
+    "retval"     { RET_VAR(StxVarId::RETVAL); }
+    "rhs"        { RET_VAR(StxVarId::RHS); }
+    "row"        { RET_VAR(StxVarId::ROW); }
+    "size"       { RET_VAR(StxVarId::SIZE); }
+    "shift"      { RET_VAR(StxVarId::SHIFT); }
+    "skip"       { RET_VAR(StxVarId::SKIP); }
+    "state"      { RET_VAR(StxVarId::STATE); }
+    "stmt"       { RET_VAR(StxVarId::STMT); }
+    "type"       { RET_VAR(StxVarId::TYPE); }
+    "typecast"   { RET_VAR(StxVarId::TYPECAST); }
+    "val"        { RET_VAR(StxVarId::VAL); }
+    "version"    { RET_VAR(StxVarId::VER); }
 
     // global variables
     "nl"        { RET_VAR(StxVarId::NEWLINE); }
@@ -597,14 +603,17 @@ opt:
     //
     // These options are part of the syntax file API.
 
-    "have_init"     { RET_LOPT(StxLOpt::HAVE_INIT); }
-    "have_cond"     { RET_LOPT(StxLOpt::HAVE_COND); }
-    "have_type"     { RET_LOPT(StxLOpt::HAVE_TYPE); }
-    "have_args"     { RET_LOPT(StxLOpt::HAVE_ARGS); }
-    "have_argmods"  { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
-    "have_retval"   { RET_LOPT(StxLOpt::HAVE_RETVAL); }
-    "multival"      { RET_LOPT(StxLOpt::MULTIVAL); }
-    "char_literals" { RET_LOPT(StxLOpt::CHAR_LITERALS); }
+    "char_literals"   { RET_LOPT(StxLOpt::CHAR_LITERALS); }
+    "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
+    "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
+    "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
+    "have_args"       { RET_LOPT(StxLOpt::HAVE_ARGS); }
+    "have_argmods"    { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
+    "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }
+    "fixed"           { RET_LOPT(StxLOpt::FIXED); }
+    "fixed_on_cursor" { RET_LOPT(StxLOpt::FIXED_ON_CURSOR); }
+    "multival"        { RET_LOPT(StxLOpt::MULTIVAL); }
+    "tags"            { RET_LOPT(StxLOpt::TAGS); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }
 */

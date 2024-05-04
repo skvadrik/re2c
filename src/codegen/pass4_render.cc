@@ -878,10 +878,6 @@ class RenderAssign : public RenderCallback {
         case StxVarId::RHS:
             rctx.os << code->rhs;
             break;
-        case StxVarId::OP:
-            DCHECK(code->op != nullptr);
-            rctx.os << code->op;
-            break;
         default:
             render_global_var(rctx, var);
             break;
@@ -937,13 +933,13 @@ class RenderDebug : public RenderCallback {
 };
 
 // One callback class is used for all combinations of YYSKIP, YYPEEK and YYBACKUP primitives,
-// as they all have very similar variables. This should not cause variable misuse, as the variables
-// for each configuration are checked after parsing syntax file.
-class RenderSkipPeekBackup : public RenderCallback {
+// plus YYRESTORE, as they all have very similar variables. This should not cause variable misuse,
+// as the variables for each configuration are checked after parsing syntax file.
+class RenderSkipPeekBackupRestore : public RenderCallback {
     RenderContext& rctx;
 
   public:
-    RenderSkipPeekBackup(RenderContext& rctx): rctx(rctx) {}
+    RenderSkipPeekBackupRestore(RenderContext& rctx): rctx(rctx) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
@@ -955,16 +951,17 @@ class RenderSkipPeekBackup : public RenderCallback {
             case StxVarId::PEEK: rctx.os << rctx.opts->api_peek; break;
             case StxVarId::SKIP: rctx.os << rctx.opts->api_skip; break;
             case StxVarId::BACKUP: rctx.os << rctx.opts->api_backup; break;
+            case StxVarId::RESTORE: rctx.os << rctx.opts->api_restore; break;
             default: render_global_var(rctx, var); break;
         }
     }
 };
 
-class RenderBackupctx : public RenderCallback {
+class RenderBackupCtx : public RenderCallback {
     RenderContext& rctx;
 
   public:
-    RenderBackupctx(RenderContext& rctx): rctx(rctx) {}
+    RenderBackupCtx(RenderContext& rctx): rctx(rctx) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
@@ -974,6 +971,70 @@ class RenderBackupctx : public RenderCallback {
             default: render_global_var(rctx, var); break;
         }
     }
+};
+
+class RenderRestoreCtx : public RenderCallback {
+    RenderContext& rctx;
+    const CodeRestoreCtx* code;
+
+  public:
+    RenderRestoreCtx(RenderContext& rctx, const CodeRestoreCtx* code)
+            : rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::BASE:
+            rctx.os << code->base;
+            break;
+        case StxVarId::CTXMARKER:
+            rctx.os << rctx.opts->api_ctxmarker;
+            break;
+        case StxVarId::CURSOR:
+            rctx.os << rctx.opts->api_cursor;
+            break;
+        case StxVarId::OFFSET:
+            rctx.os << code->tag.dist;
+            break;
+        case StxVarId::RESTORECTX:
+            rctx.os << rctx.opts->api_restore_ctx;
+            break;
+        case StxVarId::RESTORETAG:
+            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, rctx.opts->api_restore_tag, rctx.opts->api_sigil, "tag", true,
+                        code->base);
+            } else {
+                rctx.os << rctx.opts->api_restore_tag;
+            }
+            break;
+        case StxVarId::SHIFT:
+            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, rctx.opts->api_shift, rctx.opts->api_sigil, "shift", true,
+                        -static_cast<int32_t>(code->tag.dist));
+            } else {
+                rctx.os << rctx.opts->api_shift;
+            }
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        switch (opt) {
+        case StxLOpt::FIXED:
+            return code->tag.dist != Tag::VARDIST;
+        case StxLOpt::FIXED_ON_CURSOR:
+            return code->tag.dist != Tag::VARDIST && code->tag.base == Tag::RIGHTMOST;
+        case StxLOpt::TAGS:
+            return code->use_tags;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    FORBID_COPY(RenderRestoreCtx);
 };
 
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
@@ -1273,12 +1334,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     case CodeKind::ASSIGN: {
         RenderAssign callback(rctx, &code->assign);
-        DCHECK(code->assign.lhs->head && !(code->assign.lhs->head->next && code->assign.op));
-        if (code->assign.op != nullptr) {
-            rctx.opts->render_code_assign_op(rctx.os, callback);
-        } else {
-            rctx.opts->render_code_assign(rctx.os, callback);
-        }
+        rctx.opts->render_code_assign(rctx.os, callback);
         break;
     }
     case CodeKind::ABORT: {
@@ -1292,58 +1348,68 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::SKIP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_skip(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_peek(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_backup(rctx.os, callback);
         break;
     }
+    case CodeKind::BACKUPCTX: {
+        RenderBackupCtx callback(rctx);
+        rctx.opts->render_code_backupctx(rctx.os, callback);
+        break;
+    }
+    case CodeKind::RESTORE: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_restore(rctx.os, callback);
+        break;
+    }
+    case CodeKind::RESTORECTX: {
+        RenderRestoreCtx callback(rctx, &code->restorectx);
+        rctx.opts->render_code_restorectx(rctx.os, callback);
+        break;
+    }
     case CodeKind::PEEK_SKIP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_peek_skip(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_PEEK: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_skip_peek(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_skip_backup(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_SKIP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_backup_skip(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_backup_peek(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK_SKIP: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_backup_peek_skip(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP_PEEK: {
-        RenderSkipPeekBackup callback(rctx);
+        RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_skip_backup_peek(rctx.os, callback);
-        break;
-    }
-    case CodeKind::BACKUPCTX: {
-        RenderBackupctx callback(rctx);
-        rctx.opts->render_code_backupctx(rctx.os, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {

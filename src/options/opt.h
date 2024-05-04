@@ -108,9 +108,6 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_assign, "code:assign", \
         ({StxVarId::RHS}), ({StxVarId::LHS}), ({}) \
     ) \
-    CODE_TEMPLATE(code_assign_op, "code:assign_op", \
-        ({StxVarId::LHS, StxVarId::RHS, StxVarId::OP}), ({}), ({}) \
-    ) \
     CODE_TEMPLATE(code_if_then_else, "code:if_then_else", \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::HAVE_COND}) \
     ) \
@@ -187,6 +184,17 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_backup, "code:backup", \
         ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(code_backupctx, "code:backupctx", \
+        ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_restore, "code:restore", \
+        ({StxVarId::RESTORE, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_restorectx, "code:restorectx", \
+        ({StxVarId::RESTORECTX, StxVarId::RESTORETAG, StxVarId::SHIFT, \
+                StxVarId::CURSOR, StxVarId::BASE, StxVarId::OFFSET}), \
+        ({}), ({StxLOpt::TAGS, StxLOpt::FIXED, StxLOpt::FIXED_ON_CURSOR}) \
+    ) \
     CODE_TEMPLATE(code_skip_peek, "code:skip_peek", \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
     ) \
@@ -210,10 +218,7 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_backup_peek_skip, "code:backup_peek_skip", \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(code_backupctx, "code:backupctx", \
-        ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
-    ) \
+    )
 
 #define RE2C_ONELINE_CODES \
     ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
@@ -230,6 +235,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARRAY, "array") \
     STX_LOCAL_VAR(BACKUP, "backup") \
     STX_LOCAL_VAR(BACKUPCTX, "backupctx") \
+    STX_LOCAL_VAR(BASE, "base") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(CHAR, "char") \
@@ -252,12 +258,16 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(LINE, "line") \
     STX_LOCAL_VAR(MARKER, "marker") \
     STX_LOCAL_VAR(NAME, "name") \
-    STX_LOCAL_VAR(OP, "op") \
+    STX_LOCAL_VAR(OFFSET, "offset") \
     STX_LOCAL_VAR(PEEK, "peek") \
+    STX_LOCAL_VAR(RESTORE, "restore") \
+    STX_LOCAL_VAR(RESTORECTX, "restorectx") \
+    STX_LOCAL_VAR(RESTORETAG, "restoretag") \
     STX_LOCAL_VAR(RETVAL, "retval") \
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
     STX_LOCAL_VAR(SIZE, "size") \
+    STX_LOCAL_VAR(SHIFT, "shift") \
     STX_LOCAL_VAR(SKIP, "skip") \
     STX_LOCAL_VAR(STATE, "state") \
     STX_LOCAL_VAR(STMT, "stmt") \
