@@ -238,7 +238,6 @@ using CodeExprs = list_t<CodeExpr>;
 struct CodeAssign {
     CodeExprs* lhs; // one or more left-hand-side operands, as in `lhs1 = lhs2 = ... = rhs`
     const char* rhs;
-    const char* op; // nullptr for simple assignment, otherwise `+`, `-`, etc. as in `lhs += rhs`
 };
 
 struct CodeFmt {
@@ -313,6 +312,12 @@ struct CodeDebug {
     uint32_t state;
 };
 
+struct CodeRestoreCtx {
+    Tag tag;
+    const char* base;
+    bool use_tags;
+};
+
 struct Code {
     union {
         const char* text;
@@ -331,6 +336,7 @@ struct Code {
         CodeAssign assign;
         CodeLabel label;
         CodeDebug debug;
+        CodeRestoreCtx restorectx;
         CodeList* loop;
         CodeList* rfuncs;
         loc_t loc;
@@ -471,22 +477,18 @@ inline CodeExprs* code_exprs(OutAllocator& alc) {
     return new_list<CodeExpr>(alc);
 }
 
-inline Code* code_assign(
-        OutAllocator& alc, CodeExprs* lhs, const char* rhs, const char* op = nullptr) {
+inline Code* code_assign(OutAllocator& alc, CodeExprs* lhs, const char* rhs) {
     Code* x = new_code(alc, CodeKind::ASSIGN);
     x->assign.lhs = lhs;
     x->assign.rhs = rhs;
-    x->assign.op = op;
     return x;
 }
 
-inline Code* code_assign(
-        OutAllocator& alc, const char* lhs, const char* rhs, const char* op = nullptr) {
+inline Code* code_assign(OutAllocator& alc, const char* lhs, const char* rhs) {
     Code* x = new_code(alc, CodeKind::ASSIGN);
     x->assign.lhs = code_exprs(alc);
     append(x->assign.lhs, code_expr(alc, lhs));
     x->assign.rhs = rhs;
-    x->assign.op = op;
     return x;
 }
 
@@ -514,6 +516,18 @@ inline Code* code_backup(OutAllocator& alc) {
 
 inline Code* code_backupctx(OutAllocator& alc) {
     return new_code(alc, CodeKind::BACKUPCTX);
+}
+
+inline Code* code_restore(OutAllocator& alc) {
+    return new_code(alc, CodeKind::RESTORE);
+}
+
+inline Code* code_restore_ctx(OutAllocator& alc, const Tag& tag, const char* base, bool use_tags) {
+    Code* x = new_code(alc, CodeKind::RESTORECTX);
+    x->restorectx.tag = tag;
+    x->restorectx.base = base;
+    x->restorectx.use_tags = use_tags;
+    return x;
 }
 
 inline Code* code_dfas(OutAllocator& alc) {

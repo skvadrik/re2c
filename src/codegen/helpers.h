@@ -49,15 +49,13 @@ inline bool is_space_nonl(uint32_t c) {
 
 template<typename T>
 void argsubst(std::ostringstream& os,
+              const std::string& str,
               const std::string& stub,
               const char* arg,
               bool allow_unnamed,
               T val) {
     CHECK(!stub.empty());
     DCHECK(arg != nullptr);
-
-    const std::string str = os.str();
-    os.str("");
 
     const char* s = str.c_str(), *e = s + str.length(), *p, *q;
     const size_t l = strlen(arg);
@@ -84,6 +82,17 @@ void argsubst(std::ostringstream& os,
         }
     }
     os.write(s, e - s);
+}
+
+template<typename T>
+void argsubst(std::ostringstream& os,
+              const std::string& stub,
+              const char* arg,
+              bool allow_unnamed,
+              T val) {
+    const std::string str = os.str();
+    os.str("");
+    argsubst(os, str, stub, arg, allow_unnamed, val);
 }
 
 inline std::string indent(uint32_t n, const std::string& s) {

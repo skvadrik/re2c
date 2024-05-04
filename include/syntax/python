@@ -130,7 +130,6 @@ code:array_elem = array "[" index "]";
 // code:type_yytarget
 
 code:assign = [lhs: topindent lhs " = " rhs nl];
-code:assign_op = topindent lhs " = " lhs " " op " " rhs nl;
 
 code:if_then_else =
     [branch{0}: topindent "if " cond ":" nl
@@ -187,3 +186,13 @@ code:yyskip = topindent skip (api_style.functions ? "()") nl;
 code:yybackup = topindent backup (api_style.functions ? "()") nl;
 
 code:yybackupctx = topindent backupctx (api_style.functions ? "()") nl;
+
+code:yyrestore = topindent restore (api_style.functions ? "()") nl;
+
+code:yyrestorectx =
+    (fixed_on_cursor
+        ? topindent shift (api_style.functions ? "(-" offset ")") nl
+        : topindent (tags
+            ? restoretag (api_style.functions ? "(" base ")")
+            : restorectx (api_style.functions ? "()")) nl
+          (fixed ? topindent shift (api_style.functions ? "(-" offset ")") nl));

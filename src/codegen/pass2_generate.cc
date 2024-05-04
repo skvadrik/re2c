@@ -200,24 +200,6 @@ static void gen_copy_tags(
     }
 }
 
-static void gen_restore_ctx(Output& output, CodeList* stmts, const std::string& tag) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const bool notag = tag.empty();
-
-    o.str(notag ? opts->api_restore_ctx : opts->api_restore_tag);
-    if (opts->api_style == ApiStyle::FUNCTIONS) {
-        o.cstr("(").str(tag).cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
-    } else {
-        if (!notag) {
-            argsubst(o.stream(), opts->api_sigil, "tag", true, tag);
-        }
-        append(stmts, code_text(alc, o.flush()));
-    }
-}
-
 static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -311,101 +293,77 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag& tag = tags[t];
-        bool is_mtag = history(tag);
 
         // structural tag that is only needed for disambiguation
         if (fictive(tag)) continue;
+
+        bool is_mtag = history(tag);
+        bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
+
+        const char* base = fixed(tag)
+                ? (fixed_on_cursor
+                    ? opts->api_cursor.c_str()
+                    : o.str(vartag_expr(fins[tag.base], opts, is_mtag)).flush())
+                : (dfa.oldstyle_ctxmarker
+                    ? opts->api_ctxmarker.c_str()
+                    : o.str(vartag_expr(fins[t], opts, is_mtag)).flush());
+
+        if (trailing(tag)) {
+            append(trailops, code_restore_ctx(alc, tag, base, !dfa.oldstyle_ctxmarker));
+            continue;
+        }
 
         expand_fintags(output, tag, fintags);
 
         if (!fixed(tag)) {
             // variable tag
-            const std::string expr = vartag_expr(fins[t], opts, history(tag));
-            if (trailing(tag)) {
-                const bool notag = dfa.oldstyle_ctxmarker;
-                if (generic) {
-                    gen_restore_ctx(output, trailops, notag ? "" : expr);
-                } else {
-                    append(trailops, code_assign(alc, opts->api_cursor.c_str(),
-                            notag ? opts->api_ctxmarker.c_str() : o.str(expr).flush()));
-                }
-            } else {
-                gen_copy_tags(output, varops, fintags.begin(), fintags.end(), expr, is_mtag);
-            }
+            const std::string expr = vartag_expr(fins[t], opts, is_mtag);
+            gen_copy_tags(output, varops, fintags.begin(), fintags.end(), expr, is_mtag);
         } else {
-            DCHECK(!history(tag));
-
-            // fixed tag that is based on either variable tag or cursor
+            DCHECK(!is_mtag);
+            DCHECK(!fintags.empty());
+            auto first = fintags.begin(), second = first + 1, last = fintags.end();
             const int32_t dist = static_cast<int32_t>(tag.dist);
-            const bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-            const std::string base = fixed_on_cursor
-                    ? opts->api_cursor
-                    : vartag_expr(fins[tag.base], opts, history(tag));
 
-            if (trailing(tag)) {
-                DCHECK(tag.toplevel);
-                if (generic) {
-                    if (!fixed_on_cursor) {
-                        gen_restore_ctx(output, trailops, base);
-                    }
-                    gen_shift(output, trailops, -dist, "", false /* unused */);
+            if (generic) {
+                if (fixed_on_cursor) {
+                    gen_settag(output, fixops, *first, false, false);
+                    gen_shift(output, fixops, -dist, *first, false);
+                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
+                } else if (dist == 0) {
+                    gen_copy_tags(output, fixops, first, last, base, is_mtag);
+                } else if (tag.toplevel) {
+                    gen_copy_tag(output, fixops, *first, base, is_mtag);
+                    gen_shift(output, fixops, -dist, *first, false);
+                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
                 } else {
-                    const char* rhs, *op;
-                    if (!fixed_on_cursor) {
-                        o.str(base);
-                        if (dist > 0) o.cstr(" - ").i32(dist);
-                        rhs = o.flush();
-                        op = nullptr;
-                    } else {
-                        rhs = o.i32(dist).flush();
-                        op = "-";
-                    }
-                    append(trailops, code_assign(alc, opts->api_cursor.c_str(), rhs, op));
+                    // Split operations in two parts. First, set all fixed tags to their base
+                    // tag. Second, choose one of the base tags to store negative value (with
+                    // generic API there is no NULL constant) and compare fixed tags against it
+                    // before shifting. This must be done after all uses of that base tag.
+                    if (negtag.empty()) negtag = base;
+                    gen_copy_tag(output, fixops, *first, base, is_mtag);
+                    const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
+                    CodeList* then = code_list(alc);
+                    gen_shift(output, then, -dist, *first, false);
+                    append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                 }
             } else {
-                DCHECK(!fintags.empty());
-                auto first = fintags.begin(), second = first + 1, last = fintags.end();
-
-                if (generic) {
-                    if (fixed_on_cursor) {
-                        gen_settag(output, fixops, *first, false, false);
-                        gen_shift(output, fixops, -dist, *first, false);
-                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
-                    } else if (dist == 0) {
-                        gen_copy_tags(output, fixops, first, last, base, is_mtag);
-                    } else if (tag.toplevel) {
-                        gen_copy_tag(output, fixops, *first, base, is_mtag);
-                        gen_shift(output, fixops, -dist, *first, false);
-                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
-                    } else {
-                        // Split operations in two parts. First, set all fixed tags to their base
-                        // tag. Second, choose one of the base tags to store negative value (with
-                        // generic API there is no NULL constant) and compare fixed tags against it
-                        // before shifting. This must be done after all uses of that base tag.
-                        if (negtag.empty()) negtag = base;
-                        gen_copy_tag(output, fixops, *first, base, is_mtag);
-                        const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
-                        CodeList* then = code_list(alc);
-                        gen_shift(output, then, -dist, *first, false);
-                        append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
-                    }
+                if (dist == 0) {
+                    gen_copy_tags(output, fixops, first, last, base, is_mtag);
+                } else if (tag.toplevel) {
+                    o.str(base).cstr(" - ").i32(dist);
+                    gen_copy_tags(output, fixops, first, last, o.flush(), is_mtag);
                 } else {
-                    if (dist == 0) {
-                        gen_copy_tags(output, fixops, first, last, base, is_mtag);
-                    } else if (tag.toplevel) {
-                        o.str(base).cstr(" - ").i32(dist);
-                        gen_copy_tags(output, fixops, first, last, o.flush(), is_mtag);
-                    } else {
-                        // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
-                        // value of the base tag plus offset.
-                        append(fixops,
-                                code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
-                        const char* cond = o.str(base).cstr(" != NULL").flush();
-                        CodeList* then = code_list(alc);
-                        append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));
-                        append(fixops, code_if_then_else(alc, cond, then, nullptr));
-                        gen_copy_tags(output, fixops, second, last, *first, is_mtag);
-                    }
+                    // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
+                    // value of the base tag plus offset.
+                    append(fixops,
+                            code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
+                    const char* cond = o.str(base).cstr(" != NULL").flush();
+                    CodeList* then = code_list(alc);
+                    append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));
+                    append(fixops, code_if_then_else(alc, cond, then, nullptr));
+                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
                 }
             }
         }
@@ -989,23 +947,6 @@ static CodeList* emit_accept_binary(Output& output,
     return stmts;
 }
 
-static void gen_restore(Output& output, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const char* text;
-
-    if (opts->api == Api::DEFAULT) {
-        append(stmts, code_assign(alc, opts->api_cursor.c_str(), opts->api_marker.c_str()));
-    } else if (opts->api_style == ApiStyle::FUNCTIONS) {
-        text = o.str(opts->api_restore).cstr("()").flush();
-        append(stmts, code_stmt(alc, text));
-    } else {
-        text = o.str(opts->api_restore).flush();
-        append(stmts, code_text(alc, text));
-    }
-}
-
 static void emit_accept(
         Output& output, CodeList* stmts, const Adfa& dfa, const uniq_vector_t<AcceptTrans>& acc) {
     const opt_t* opts = output.block().opts;
@@ -1015,7 +956,7 @@ static void emit_accept(
 
     if (nacc == 0) return;
 
-    gen_restore(output, stmts);
+    append(stmts, code_restore(alc));
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {

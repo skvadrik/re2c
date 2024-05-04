@@ -91,6 +91,8 @@ enum class CodeKind: uint32_t {
     PEEK,
     BACKUP,
     BACKUPCTX,
+    RESTORE,
+    RESTORECTX,
     PEEK_SKIP,
     SKIP_PEEK,
     SKIP_BACKUP,
@@ -170,14 +172,17 @@ enum class StxGOpt {
 };
 
 enum class StxLOpt {
+    CHAR_LITERALS,
     HAVE_INIT,
     HAVE_COND,
     HAVE_TYPE,
     HAVE_ARGS,
     HAVE_ARGMODS,
     HAVE_RETVAL,
+    FIXED,
+    FIXED_ON_CURSOR,
     MULTIVAL,
-    CHAR_LITERALS
+    TAGS
 };
 
 enum class Ret: uint32_t {
