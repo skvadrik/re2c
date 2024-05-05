@@ -1,6 +1,7 @@
 #include "src/parse/conf_parser.h"
 const char* DEFAULT_SYNTAX_C =
     "supported_apis = [\"default\", \"generic\"];\n"
+    "supported_api_styles = [\"functions\", \"free-form\"];\n"
     "supported_code_models = [\"goto_label\", \"loop_switch\", \"recursive_functions\"];\n"
     "supported_targets = [\"code\", \"dot\", \"skeleton\"];\n"
     "supported_features = [\"nested_ifs\", \"bitmaps\", \"computed_gotos\", \"case_ranges\"];\n"

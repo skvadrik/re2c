@@ -1,4 +1,5 @@
 supported_apis = ["generic"];
+supported_api_styles = ["free-form"];
 supported_code_models = ["loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs", "case_ranges", "unsafe"];
@@ -194,22 +195,18 @@ code:yydebug = topindent debug "(" state ", " char ");" nl;
 
 code:yypeek =
     topindent (code_model.recursive_functions ? "let ") char " = "
-        (unsafe? "unsafe {" peek "}" : peek)
-        (api_style.functions ? "()")
-        ";" nl;
+        (unsafe? "unsafe {" peek "}" : peek) ";" nl;
 
-code:yyskip = topindent skip (api_style.functions ? "();") nl;
+code:yyskip = topindent skip nl;
 
-code:yybackup = topindent backup (api_style.functions ? "();") nl;
+code:yybackup = topindent backup nl;
 
-code:yybackupctx = topindent backupctx (api_style.functions ? "();") nl;
+code:yybackupctx = topindent backupctx nl;
 
-code:yyrestore = topindent restore (api_style.functions ? "()") nl;
+code:yyrestore = topindent restore nl;
 
 code:yyrestorectx =
     (fixed_on_cursor
-        ? topindent shift (api_style.functions ? "(-" offset ");") nl
-        : topindent (tags
-            ? restoretag (api_style.functions ? "(" base ");")
-            : restorectx (api_style.functions ? "();")) nl
-          (fixed ? topindent shift (api_style.functions ? "(-" offset ");") nl));
+        ? topindent shift nl
+        : topindent (tags ? restoretag : restorectx) nl
+          (fixed ? topindent shift nl));

@@ -1,4 +1,5 @@
 supported_apis = ["generic"];
+supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs", "bitmaps"];

@@ -334,6 +334,12 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.api == Api::DEFAULT && !glob.supported_apis_contains("default")) {
         RET_FAIL(error("default API is not supported for this backend"));
     }
+    if (real.api_style == ApiStyle::FUNCTIONS && !glob.supported_api_styles_contains("functions")) {
+        RET_FAIL(error("function-like API style is not supported for this backend"));
+    }
+    if (real.api_style == ApiStyle::FREEFORM && !glob.supported_api_styles_contains("free-form")) {
+        RET_FAIL(error("free-form API style is not supported for this backend"));
+    }
     if (!is_default.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
         RET_FAIL(error("`computed_gotos` feature is not supported for this backend"));
     }
