@@ -657,6 +657,7 @@ start:
     "conf:" { CHECK_RET(lex_conf(opts)); goto start; }
 
     "supported_apis"        { SAVE_CONF_LIST(supported_apis); }
+    "supported_api_styles"  { SAVE_CONF_LIST(supported_api_styles); }
     "supported_code_models" { SAVE_CONF_LIST(supported_code_models); }
     "supported_targets"     { SAVE_CONF_LIST(supported_targets); }
     "supported_features"    { SAVE_CONF_LIST(supported_features); }

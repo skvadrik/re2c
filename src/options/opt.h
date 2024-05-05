@@ -51,6 +51,8 @@ using StxCodes = list_t<StxCode>;
 #define RE2C_CHECKED_LISTS \
     CHECKED_LIST(supported_apis, \
             ({"default", "generic"})) \
+    CHECKED_LIST(supported_api_styles, \
+            ({"free-form", "functions"})) \
     CHECKED_LIST(supported_code_models, \
             ({"goto_label", "loop_switch", "recursive_functions"})) \
     CHECKED_LIST(supported_targets, \
