@@ -135,7 +135,7 @@ const char* DEFAULT_SYNTAX_C =
     "code:type_yybm = \"static const unsigned char\";\n"
     "code:type_yytarget = \"static const void*\";\n"
     "\n"
-    "code:assign = topindent [lhs: lhs \" = \"] rhs \";\" nl;\n"
+    "code:assign = topindent lhs \" = \" rhs \";\" nl;\n"
     "\n"
     "code:if_then_else =\n"
     "    [branch{0}: topindent \"if (\" cond \") {\" nl\n"

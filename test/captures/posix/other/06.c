@@ -25,8 +25,8 @@ yy3:
 	goto yy1;
 yy4:
 	++YYCURSOR;
-	yyt2 = NULL;
 	yyt1 = YYCURSOR;
+	yyt2 = NULL;
 	yynmatch = 3;
 	yypmatch[3] = yyt1;
 	yypmatch[5] = yyt2;

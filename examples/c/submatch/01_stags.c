@@ -110,8 +110,8 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x00:
-			yyt4 = NULL;
 			yyt3 = YYCURSOR;
+			yyt4 = NULL;
 			goto yy8;
 		case '.':
 			yyt3 = YYCURSOR;

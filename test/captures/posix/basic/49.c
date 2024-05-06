@@ -22,7 +22,8 @@ yy2:
 			yyt1 = YYCURSOR;
 			goto yy4;
 		case 'd':
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy5;
 		default: goto yy3;
 	}

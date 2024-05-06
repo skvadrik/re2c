@@ -9,7 +9,9 @@
 		yyt1 = YYCURSOR;
 		goto yy2;
 	}
-	yyt1 = yyt2 = yyt3 = YYCURSOR;
+	yyt1 = YYCURSOR;
+	yyt2 = YYCURSOR;
+	yyt3 = YYCURSOR;
 yy1:
 	yynmatch = 4;
 	yypmatch[2] = yyt1;
@@ -24,12 +26,14 @@ yy1:
 yy2:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt2 = yyt3 = YYCURSOR;
+		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy1;
 	}
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) {
-		yyt2 = yyt3 = YYCURSOR;
+		yyt2 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy1;
 	}
 	yyt2 = YYCURSOR;

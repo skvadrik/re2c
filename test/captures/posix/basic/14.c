@@ -11,8 +11,8 @@
 			yyt1 = YYCURSOR;
 			goto yy2;
 		case 'c':
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy4;
 		default: goto yy1;
 	}

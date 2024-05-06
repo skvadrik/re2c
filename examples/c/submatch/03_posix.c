@@ -118,11 +118,13 @@ yy7:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x00:
-			yyt4 = yyt5 = NULL;
 			yyt3 = YYCURSOR;
+			yyt4 = NULL;
+			yyt5 = NULL;
 			goto yy8;
 		case '.':
-			yyt3 = yyt5 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy9;
 		case '0':
 		case '1':
@@ -158,7 +160,7 @@ yy8:
             ver.patch = yypmatch[6] ? s2n(yypmatch[6] + 1, yypmatch[7]) : 0;
             return true;
         }
-#line 162 "c/submatch/03_posix.c"
+#line 164 "c/submatch/03_posix.c"
 yy9:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) goto yy5;

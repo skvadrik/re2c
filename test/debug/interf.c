@@ -10,7 +10,8 @@
 			yyt1 = YYCURSOR;
 			goto yy2;
 		case 'b':
-			yyt1 = yyt2 = NULL;
+			yyt1 = NULL;
+			yyt2 = NULL;
 			yyt3 = YYCURSOR;
 			goto yy4;
 		default: goto yy1;
@@ -20,8 +21,9 @@ yy1:
 	{}
 yy2:
 	++YYCURSOR;
-	yyt3 = yyt4 = NULL;
 	yyt2 = YYCURSOR;
+	yyt3 = NULL;
+	yyt4 = NULL;
 yy3:
 	yynmatch = 3;
 	yypmatch[2] = yyt1;

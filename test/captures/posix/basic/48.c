@@ -22,7 +22,8 @@ yy2:
 			yyt1 = YYCURSOR;
 			goto yy4;
 		default:
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy3;
 	}
 yy3:
