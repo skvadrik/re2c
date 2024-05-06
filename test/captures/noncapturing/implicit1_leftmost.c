@@ -242,8 +242,8 @@ yy36:
 			yyt1 = YYCURSOR;
 			goto yy39;
 		default:
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy38;
 	}
 yy38:

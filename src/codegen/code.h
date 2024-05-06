@@ -228,15 +228,8 @@ struct BlockNameList {
     BlockNameList* next;
 };
 
-struct CodeExpr {
-    const char* expr;
-    CodeExpr* next;
-};
-
-using CodeExprs = list_t<CodeExpr>;
-
 struct CodeAssign {
-    CodeExprs* lhs; // one or more left-hand-side operands, as in `lhs1 = lhs2 = ... = rhs`
+    const char* lhs;
     const char* rhs;
 };
 
@@ -466,28 +459,9 @@ inline void init_code_const(Code* x, VarType type, const char* name, const char*
     x->var.init = init;
 }
 
-inline CodeExpr* code_expr(OutAllocator& alc, const char* expr) {
-    CodeExpr* x = alc.alloct<CodeExpr>(1);
-    x->expr = expr;
-    x->next = nullptr;
-    return x;
-}
-
-inline CodeExprs* code_exprs(OutAllocator& alc) {
-    return new_list<CodeExpr>(alc);
-}
-
-inline Code* code_assign(OutAllocator& alc, CodeExprs* lhs, const char* rhs) {
-    Code* x = new_code(alc, CodeKind::ASSIGN);
-    x->assign.lhs = lhs;
-    x->assign.rhs = rhs;
-    return x;
-}
-
 inline Code* code_assign(OutAllocator& alc, const char* lhs, const char* rhs) {
     Code* x = new_code(alc, CodeKind::ASSIGN);
-    x->assign.lhs = code_exprs(alc);
-    append(x->assign.lhs, code_expr(alc, lhs));
+    x->assign.lhs = lhs;
     x->assign.rhs = rhs;
     return x;
 }

@@ -27,10 +27,12 @@ yy0:
 			tags.yyt1 = YYCURSOR;
 			goto yy3;
 		case 'c':
-			tags.yyt1 = tags.yyt2 = YYCURSOR;
+			tags.yyt1 = YYCURSOR;
+			tags.yyt2 = YYCURSOR;
 			goto yy4;
 		default:
-			tags.yyt1 = tags.yyt2 = YYCURSOR;
+			tags.yyt1 = YYCURSOR;
+			tags.yyt2 = YYCURSOR;
 			goto yy2;
 	}
 yy2:
@@ -38,7 +40,7 @@ yy2:
 	y = tags.yyt2;
 #line 23 "header/header_02.re"
 	{ return; }
-#line 42 "header/header_02.c"
+#line 44 "header/header_02.c"
 yy3:
 	yych = *++YYCURSOR;
 	switch (yych) {

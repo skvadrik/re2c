@@ -855,59 +855,17 @@ static inline void yych_conv(std::ostream& os, const opt_t* opts) {
 class RenderAssign : public RenderCallback {
     RenderContext& rctx;
     const CodeAssign* code;
-    const CodeExpr* curr_lhs;
-    const CodeExpr* last_lhs;
-    size_t nlhs;
 
   public:
     RenderAssign(RenderContext& rctx, const CodeAssign* code)
-            : rctx(rctx)
-            , code(code)
-            , curr_lhs(code->lhs->head) // `lhs` is a non-list var in `code:assign`/`code:assign_op`
-            , last_lhs(nullptr)
-            , nlhs(0) {
-        for (const CodeExpr* x = code->lhs->head; x; x = x->next) ++nlhs;
-    }
+            : rctx(rctx), code(code) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
-        case StxVarId::LHS:
-            DCHECK(curr_lhs);
-            rctx.os << curr_lhs->expr;
-            break;
-        case StxVarId::RHS:
-            rctx.os << code->rhs;
-            break;
-        default:
-            render_global_var(rctx, var);
-            break;
+            case StxVarId::LHS: rctx.os << code->lhs; break;
+            case StxVarId::RHS: rctx.os << code->rhs; break;
+            default: render_global_var(rctx, var); break;
         }
-    }
-
-    size_t get_list_size(StxVarId var) const override {
-        if (var == StxVarId::LHS) {
-            return nlhs;
-        }
-        UNREACHABLE();
-        return 0;
-    }
-
-    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
-        if (var == StxVarId::LHS) {
-            DCHECK(rbound < nlhs);
-            find_list_bounds(code->lhs->head, lbound, rbound, &curr_lhs, &last_lhs);
-        } else {
-            UNREACHABLE();
-        }
-    }
-
-    bool next_in_list(StxVarId var) override {
-        if (var == StxVarId::LHS) {
-            curr_lhs = curr_lhs->next;
-            return curr_lhs != last_lhs;
-        }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderAssign);

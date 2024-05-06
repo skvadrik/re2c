@@ -10,8 +10,8 @@
 			yyt1 = YYCURSOR;
 			goto yy2;
 		default:
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy1;
 	}
 yy1:

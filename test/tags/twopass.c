@@ -14,7 +14,9 @@
 			yyt3 = YYCURSOR;
 			goto yy4;
 		case 'b':
-			yyt1 = yyt2 = yyt3 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
 			goto yy6;
 		default: goto yy2;
 	}
@@ -123,12 +125,14 @@ yy13:
 			yyt3 = NULL;
 			goto yy15;
 		case 'b':
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			yyt3 = NULL;
-			yyt1 = yyt2 = YYCURSOR;
 			goto yy14;
 		default:
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			yyt3 = NULL;
-			yyt1 = yyt2 = YYCURSOR;
 			goto yy12;
 	}
 yy14:

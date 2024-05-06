@@ -216,7 +216,8 @@ yy33:
 			yyt2 = YYCURSOR;
 			goto yy36;
 		default:
-			yyt1 = yyt2 = NULL;
+			yyt1 = NULL;
+			yyt2 = NULL;
 			goto yy35;
 	}
 yy35:
@@ -259,7 +260,10 @@ yy37:
 			yyt4 = YYCURSOR;
 			goto yy40;
 		default:
-			yyt1 = yyt2 = yyt3 = yyt4 = NULL;
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
 			goto yy39;
 	}
 yy39:
@@ -280,8 +284,9 @@ yy40:
 	switch (yych) {
 		case 'a': goto yy41;
 		default:
-			yyt2 = yyt3 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
+			yyt3 = NULL;
 			goto yy39;
 	}
 yy41:
@@ -293,8 +298,9 @@ yy41:
 			yyt4 = YYCURSOR;
 			goto yy40;
 		default:
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			yyt3 = NULL;
-			yyt1 = yyt2 = YYCURSOR;
 			goto yy39;
 	}
 }

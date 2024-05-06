@@ -180,23 +180,8 @@ static void gen_copy_tags(
         std::vector<std::string>::const_iterator j,
         const std::string& rhs,
         bool is_mtag) {
-    if (i >= j) return;
-
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    if (opts->api == Api::DEFAULT) {
-        CodeExprs* l = code_exprs(alc);
-        for (; i < j; ++i) {
-            append(l, code_expr(alc, buf.str(*i).flush()));
-        }
-        const char* r = buf.str(rhs).flush();
-        append(stmts, code_assign(alc, l, r));
-    } else {
-        for (; i < j; ++i) {
-            gen_copy_tag(output, stmts, *i, rhs, is_mtag);
-        }
+    for (; i < j; ++i) {
+        gen_copy_tag(output, stmts, *i, rhs, is_mtag);
     }
 }
 
@@ -240,17 +225,10 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
                 const bool negative = *h == TAGVER_BOTTOM;
                 gen_settag(output, tag_actions, le, negative, false);
             } else {
-                CodeExprs* neg = code_exprs(alc);
-                CodeExprs* pos = code_exprs(alc);
                 for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
                     const char* lhs = o.str(vartag_expr(q->lhs, opts, is_mtag)).flush();
-                    append(q->history[0] == TAGVER_BOTTOM ? neg : pos, code_expr(alc, lhs));
-                }
-                if (neg->head != nullptr) {
-                    append(tag_actions, code_assign(alc, neg, "NULL"));
-                }
-                if (pos->head != nullptr) {
-                    append(tag_actions, code_assign(alc, pos, opts->api_cursor.c_str()));
+                    append(tag_actions, code_assign(alc, lhs,
+                            q->history[0] == TAGVER_BOTTOM ? "NULL" : opts->api_cursor.c_str()));
                 }
             }
         }
@@ -357,8 +335,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                 } else {
                     // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
                     // value of the base tag plus offset.
-                    append(fixops,
-                            code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
+                    append(fixops, code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
                     const char* cond = o.str(base).cstr(" != NULL").flush();
                     CodeList* then = code_list(alc);
                     append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));

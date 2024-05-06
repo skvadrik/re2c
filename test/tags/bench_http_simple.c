@@ -1578,7 +1578,8 @@ yy47:
 			YYMTAGN(in->yytm8);
 			YYMTAGN(in->yytm7);
 			YYMTAGN(in->yytm6);
-			in->yyt4 = in->yyt5 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
 			goto yy49;
 		case '!':
 		case '#':
@@ -1658,7 +1659,8 @@ yy47:
 		case '|':
 		case '~':
 			YYMTAGP(in->yytm6);
-			in->yyt4 = in->yyt5 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
 			goto yy50;
 		default: goto yy8;
 	}
@@ -1696,7 +1698,8 @@ yy48:
 		case 0x1E:
 		case 0x7F: goto yy8;
 		case '\n':
-			in->yyt4 = in->yyt5 = YYCURSOR;
+			in->yyt4 = YYCURSOR;
+			in->yyt5 = YYCURSOR;
 			goto yy52;
 		default:
 			in->yyt4 = YYCURSOR;
@@ -1881,7 +1884,9 @@ yy52:
 			YYMTAGN(in->yytm8);
 			YYMTAGN(in->yytm7);
 			YYMTAGN(in->yytm6);
-			in->yyt1 = in->yyt2 = in->yyt3 = NULL;
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
 			goto yy49;
 		case '!':
 		case '#':
@@ -1961,7 +1966,9 @@ yy52:
 		case '|':
 		case '~':
 			YYMTAGP(in->yytm6);
-			in->yyt1 = in->yyt2 = in->yyt3 = NULL;
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
 			goto yy50;
 		default: goto yy8;
 	}

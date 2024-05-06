@@ -144,7 +144,8 @@ yy10:
 			yyt4 = s;
 			goto yy9;
 		case '"':
-			yyt1 = yyt4 = s;
+			yyt1 = s;
+			yyt4 = s;
 			goto yy21;
 		case '=':
 			yyt4 = s;
@@ -204,7 +205,8 @@ yy13:
 			yyt5 = s;
 			goto yy12;
 		case '"':
-			yyt1 = yyt5 = s;
+			yyt1 = s;
+			yyt5 = s;
 			goto yy32;
 		case '=':
 			yyt5 = s;
@@ -236,7 +238,8 @@ yy14:
 		case '7':
 		case '8':
 		case '9':
-			yyt1 = yyt5 = s;
+			yyt1 = s;
+			yyt5 = s;
 			goto yy33;
 		case '=':
 			yyt5 = s;
@@ -256,7 +259,8 @@ yy15:
 			yyt1 = s;
 			goto yy16;
 		case '"':
-			yyt1 = yyt5 = s;
+			yyt1 = s;
+			yyt5 = s;
 			goto yy36;
 		case '=':
 			yyt5 = s;

@@ -180,8 +180,8 @@ yyFillLabel4:
 	yych = *in.cur;
 	switch (yych) {
 		case '\n':
-			in.yyt3 = NULL;
 			in.yyt2 = in.cur;
+			in.yyt3 = NULL;
 			goto yy8;
 		case '.':
 			in.yyt2 = in.cur;

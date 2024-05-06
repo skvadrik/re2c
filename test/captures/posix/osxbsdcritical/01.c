@@ -8,12 +8,13 @@
 	switch (yych) {
 		case 0x00: goto yy1;
 		case 'b':
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			yyt3 = NULL;
-			yyt1 = yyt2 = YYCURSOR;
 			goto yy4;
 		default:
-			yyt3 = NULL;
 			yyt1 = YYCURSOR;
+			yyt3 = NULL;
 			goto yy2;
 	}
 yy1:

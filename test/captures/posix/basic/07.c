@@ -19,8 +19,10 @@ yy2:
 	yyt1 = YYCURSOR;
 	yynmatch = 3;
 	yypmatch[5] = yyt1;
-	yypmatch[0] = yypmatch[2] = YYCURSOR - 1;
-	yypmatch[1] = yypmatch[3] = YYCURSOR;
+	yypmatch[0] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR - 1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = YYCURSOR;
 	yypmatch[4] = yyt1;
 	if (yyt1 != NULL) yypmatch[4] -= 1;
 	{}

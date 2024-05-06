@@ -16,16 +16,26 @@ static void lex(const char *YYCURSOR)
 			yyt1 = YYCURSOR;
 			goto yy2;
 		case '1':
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy4;
 		case '2':
-			yyt1 = yyt2 = yyt3 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
 			goto yy5;
 		case '3':
-			yyt1 = yyt2 = yyt3 = yyt4 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy6;
 		case '4':
-			yyt1 = yyt2 = yyt3 = yyt4 = yyt5 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy7;
 		default: goto yy1;
 	}
@@ -40,16 +50,25 @@ yy2:
 			yyt2 = YYCURSOR;
 			goto yy4;
 		case '2':
-			yyt2 = yyt3 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
 			goto yy5;
 		case '3':
-			yyt2 = yyt3 = yyt4 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy6;
 		case '4':
-			yyt2 = yyt3 = yyt4 = yyt5 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy7;
 		default:
-			yyt2 = yyt3 = yyt4 = yyt5 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy3;
 	}
 yy3:
@@ -75,13 +94,18 @@ yy4:
 			yyt3 = YYCURSOR;
 			goto yy5;
 		case '3':
-			yyt3 = yyt4 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy6;
 		case '4':
-			yyt3 = yyt4 = yyt5 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy7;
 		default:
-			yyt3 = yyt4 = yyt5 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy3;
 	}
 yy5:
@@ -92,10 +116,12 @@ yy5:
 			yyt4 = YYCURSOR;
 			goto yy6;
 		case '4':
-			yyt4 = yyt5 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy7;
 		default:
-			yyt4 = yyt5 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			yyt5 = YYCURSOR;
 			goto yy3;
 	}
 yy6:
