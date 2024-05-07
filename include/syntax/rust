@@ -205,8 +205,8 @@ code:yybackupctx = topindent backupctx nl;
 
 code:yyrestore = topindent restore nl;
 
-code:yyrestorectx =
-    (fixed_on_cursor
-        ? topindent shift nl
-        : topindent (tags ? restoretag : restorectx) nl
-          (fixed ? topindent shift nl));
+code:yyrestorectx = topindent restorectx nl;
+
+code:yyrestoretag = topindent restoretag nl;
+
+code:yyshift = topindent shift nl;

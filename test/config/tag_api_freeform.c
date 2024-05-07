@@ -215,7 +215,8 @@ yy24:
 	z = yyt1;
 	x = yyt1 - 1;
 	y = yyt1 - 1;
-	YYCURSOR = yyt1 - 1;
+	YYCURSOR = yyt1;
+	YYCURSOR -= 1;
 	{ c }
 }
 

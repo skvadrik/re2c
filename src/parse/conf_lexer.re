@@ -491,6 +491,8 @@ start:
     "code:yybackupctx"          { RET_CODE(code_backupctx); }
     "code:yyrestore"            { RET_CODE(code_restore); }
     "code:yyrestorectx"         { RET_CODE(code_restorectx); }
+    "code:yyrestoretag"         { RET_CODE(code_restoretag); }
+    "code:yyshift"              { RET_CODE(code_shift); }
     "code:yyskip_peek"          { RET_CODE(code_skip_peek); }
     "code:yypeek_skip"          { RET_CODE(code_peek_skip); }
     "code:yyskip_backup"        { RET_CODE(code_skip_backup); }
@@ -511,7 +513,6 @@ start:
     "array"      { RET_VAR(StxVarId::ARRAY); }
     "backup"     { RET_VAR(StxVarId::BACKUP); }
     "backupctx"  { RET_VAR(StxVarId::BACKUPCTX); }
-    "base"       { RET_VAR(StxVarId::BASE); }
     "branch"     { RET_VAR(StxVarId::BRANCH); }
     "case"       { RET_VAR(StxVarId::CASE); }
     "char"       { RET_VAR(StxVarId::CHAR); }
@@ -547,6 +548,7 @@ start:
     "skip"       { RET_VAR(StxVarId::SKIP); }
     "state"      { RET_VAR(StxVarId::STATE); }
     "stmt"       { RET_VAR(StxVarId::STMT); }
+    "tag"        { RET_VAR(StxVarId::TAG); }
     "type"       { RET_VAR(StxVarId::TYPE); }
     "typecast"   { RET_VAR(StxVarId::TYPECAST); }
     "val"        { RET_VAR(StxVarId::VAL); }
@@ -604,16 +606,13 @@ opt:
     // These options are part of the syntax file API.
 
     "char_literals"   { RET_LOPT(StxLOpt::CHAR_LITERALS); }
-    "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
-    "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
-    "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
     "have_args"       { RET_LOPT(StxLOpt::HAVE_ARGS); }
     "have_argmods"    { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
+    "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
+    "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
     "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }
-    "fixed"           { RET_LOPT(StxLOpt::FIXED); }
-    "fixed_on_cursor" { RET_LOPT(StxLOpt::FIXED_ON_CURSOR); }
+    "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
     "multival"        { RET_LOPT(StxLOpt::MULTIVAL); }
-    "tags"            { RET_LOPT(StxLOpt::TAGS); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }
 */

@@ -121,21 +121,14 @@ static void gen_shift(
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-    const bool notag = tag.empty();
 
-    o.str(notag ? opts->api_shift : (history ? opts->api_mtag_shift : opts->api_stag_shift));
+    o.str(history ? opts->api_mtag_shift : opts->api_stag_shift);
     if (opts->api_style == ApiStyle::FUNCTIONS) {
-        o.cstr("(");
-        if (!notag) o.str(tag).cstr(", ");
-        o.i32(shift).cstr(")");
+        o.cstr("(").str(tag).cstr(", ").i32(shift).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
     } else {
-        // Single-argument YYSHIFT allows short-form unnamed substitution, multi-argument
-        // YYSHIFTSTAG / YYSHIFTMTAG require named placeholders.
-        if (!notag) {
-            argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
-        }
-        argsubst(o.stream(), opts->api_sigil, "shift", notag, shift);
+        argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
+        argsubst(o.stream(), opts->api_sigil, "shift", false, shift);
         append(stmts, code_text(alc, o.flush()));
     }
 }
@@ -276,32 +269,31 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         if (fictive(tag)) continue;
 
         bool is_mtag = history(tag);
-        bool fixed_on_cursor = tag.base == Tag::RIGHTMOST;
-
-        const char* base = fixed(tag)
-                ? (fixed_on_cursor
-                    ? opts->api_cursor.c_str()
-                    : o.str(vartag_expr(fins[tag.base], opts, is_mtag)).flush())
-                : (dfa.oldstyle_ctxmarker
-                    ? opts->api_ctxmarker.c_str()
-                    : o.str(vartag_expr(fins[t], opts, is_mtag)).flush());
+        bool fixed_on_cursor = fixed(tag) && tag.base == Tag::RIGHTMOST;
+        int32_t dist = tag.dist == Tag::VARDIST ? 0 : static_cast<int32_t>(tag.dist);
+        const std::string& base = fixed_on_cursor
+                ? opts->api_cursor : vartag_expr(fins[fixed(tag) ? tag.base : t], opts, is_mtag);
 
         if (trailing(tag)) {
-            append(trailops, code_restore_ctx(alc, tag, base, !dfa.oldstyle_ctxmarker));
+            if (fixed_on_cursor) {
+                append(trailops, code_shift(alc, dist));
+            } else if (dfa.oldstyle_ctxmarker) {
+                append(trailops, code_restore_ctx(alc));
+            } else {
+                append(trailops, code_restore_tag(alc, o.str(base).flush()));
+                if (dist != 0) append(trailops, code_shift(alc, dist));
+            }
             continue;
         }
 
         expand_fintags(output, tag, fintags);
 
-        if (!fixed(tag)) {
-            // variable tag
-            const std::string expr = vartag_expr(fins[t], opts, is_mtag);
-            gen_copy_tags(output, varops, fintags.begin(), fintags.end(), expr, is_mtag);
+        if (!fixed(tag)) { // variable tag
+            gen_copy_tags(output, varops, fintags.begin(), fintags.end(), base, is_mtag);
         } else {
             DCHECK(!is_mtag);
             DCHECK(!fintags.empty());
             auto first = fintags.begin(), second = first + 1, last = fintags.end();
-            const int32_t dist = static_cast<int32_t>(tag.dist);
 
             if (generic) {
                 if (fixed_on_cursor) {

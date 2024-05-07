@@ -915,61 +915,55 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
     }
 };
 
-class RenderBackupCtx : public RenderCallback {
+class RenderBackupRestoreCtx : public RenderCallback {
     RenderContext& rctx;
 
   public:
-    RenderBackupCtx(RenderContext& rctx): rctx(rctx) {}
+    RenderBackupRestoreCtx(RenderContext& rctx): rctx(rctx) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
             case StxVarId::CTXMARKER: rctx.os << rctx.opts->api_ctxmarker; break;
             case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
             case StxVarId::BACKUPCTX: rctx.os << rctx.opts->api_backup_ctx; break;
+            case StxVarId::RESTORECTX: rctx.os << rctx.opts->api_restore_ctx; break;
             default: render_global_var(rctx, var); break;
         }
     }
 };
 
-class RenderRestoreCtx : public RenderCallback {
+class RenderRestoreTagShift : public RenderCallback {
     RenderContext& rctx;
-    const CodeRestoreCtx* code;
+    const CodeTag* code;
 
   public:
-    RenderRestoreCtx(RenderContext& rctx, const CodeRestoreCtx* code)
+    RenderRestoreTagShift(RenderContext& rctx, const CodeTag* code)
             : rctx(rctx), code(code) {}
 
     void render_var(StxVarId var) override {
+        const opt_t* opts = rctx.opts;
         switch (var) {
-        case StxVarId::BASE:
+        case StxVarId::TAG:
             rctx.os << code->base;
             break;
-        case StxVarId::CTXMARKER:
-            rctx.os << rctx.opts->api_ctxmarker;
-            break;
         case StxVarId::CURSOR:
-            rctx.os << rctx.opts->api_cursor;
+            rctx.os << opts->api_cursor;
             break;
         case StxVarId::OFFSET:
-            rctx.os << code->tag.dist;
-            break;
-        case StxVarId::RESTORECTX:
-            rctx.os << rctx.opts->api_restore_ctx;
+            rctx.os << code->dist;
             break;
         case StxVarId::RESTORETAG:
-            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, rctx.opts->api_restore_tag, rctx.opts->api_sigil, "tag", true,
-                        code->base);
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->base);
             } else {
-                rctx.os << rctx.opts->api_restore_tag;
+                rctx.os << opts->api_restore_tag;
             }
             break;
         case StxVarId::SHIFT:
-            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, rctx.opts->api_shift, rctx.opts->api_sigil, "shift", true,
-                        -static_cast<int32_t>(code->tag.dist));
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_shift, opts->api_sigil, "shift", true, -code->dist);
             } else {
-                rctx.os << rctx.opts->api_shift;
+                rctx.os << opts->api_shift;
             }
             break;
         default:
@@ -978,21 +972,7 @@ class RenderRestoreCtx : public RenderCallback {
         }
     }
 
-    bool eval_cond(StxLOpt opt) override {
-        switch (opt) {
-        case StxLOpt::FIXED:
-            return code->tag.dist != Tag::VARDIST;
-        case StxLOpt::FIXED_ON_CURSOR:
-            return code->tag.dist != Tag::VARDIST && code->tag.base == Tag::RIGHTMOST;
-        case StxLOpt::TAGS:
-            return code->use_tags;
-        default:
-            UNREACHABLE();
-            return false;
-        }
-    }
-
-    FORBID_COPY(RenderRestoreCtx);
+    FORBID_COPY(RenderRestoreTagShift);
 };
 
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
@@ -1321,7 +1301,7 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::BACKUPCTX: {
-        RenderBackupCtx callback(rctx);
+        RenderBackupRestoreCtx callback(rctx);
         rctx.opts->render_code_backupctx(rctx.os, callback);
         break;
     }
@@ -1331,8 +1311,18 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::RESTORECTX: {
-        RenderRestoreCtx callback(rctx, &code->restorectx);
+        RenderBackupRestoreCtx callback(rctx);
         rctx.opts->render_code_restorectx(rctx.os, callback);
+        break;
+    }
+    case CodeKind::RESTORETAG: {
+        RenderRestoreTagShift callback(rctx, &code->tag);
+        rctx.opts->render_code_restoretag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SHIFT: {
+        RenderRestoreTagShift callback(rctx, &code->tag);
+        rctx.opts->render_code_shift(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK_SKIP: {

@@ -246,16 +246,22 @@ code:yyrestore =
     ) nl;
 
 code:yyrestorectx =
-    (api.generic
-        ? (fixed_on_cursor
-            ? topindent shift (api_style.functions ? "(-" offset ");") nl
-            : topindent (tags
-                ? restoretag (api_style.functions ? "(" base ");")
-                : restorectx (api_style.functions ? "();")) nl
-              (fixed ? topindent shift (api_style.functions ? "(-" offset ");") nl))
-        : (fixed_on_cursor
-            ? topindent cursor " -= " offset ";" nl
-            : topindent cursor " = " base (fixed ? " - " offset) ";" nl));
+    topindent (api.generic
+        ? restorectx (api_style.functions ? "();")
+        : cursor " = " ctxmarker ";"
+    ) nl;
+
+code:yyrestoretag =
+    topindent (api.generic
+        ? restoretag (api_style.functions ? "(" tag ");")
+        : cursor " = " tag ";"
+    ) nl;
+
+code:yyshift =
+    topindent (api.generic
+        ? shift (api_style.functions ? "(-" offset ");")
+        : cursor " -= " offset ";"
+    ) nl;
 
 code:yyskip_peek =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
