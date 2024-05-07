@@ -115,14 +115,18 @@ static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n) {
 }
 
 static void gen_shift(
-        Output& output, CodeList* stmts, int32_t shift, const std::string& tag, bool history) {
+        Output& output,
+        CodeList* stmts,
+        int32_t shift,
+        const std::string& tag,
+        bool is_mtag = false) {
     if (shift == 0) return;
 
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    o.str(history ? opts->api_mtag_shift : opts->api_stag_shift);
+    o.str(is_mtag ? opts->api_mtag_shift : opts->api_stag_shift);
     if (opts->api_style == ApiStyle::FUNCTIONS) {
         o.cstr("(").str(tag).cstr(", ").i32(shift).cstr(")");
         append(stmts, code_stmt(alc, o.flush()));
@@ -133,13 +137,17 @@ static void gen_shift(
     }
 }
 
-static void gen_settag(
-        Output& output, CodeList* stmts, const std::string& tag, bool negative, bool history) {
+static void gen_set_tag(
+        Output& output,
+        CodeList* stmts,
+        const std::string& tag,
+        bool negative,
+        bool is_mtag = false) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const std::string& s = history
+    const std::string& s = is_mtag
             ? (negative ? opts->api_mtag_neg : opts->api_mtag_pos)
             : (negative ? opts->api_stag_neg : opts->api_stag_pos);
     o.str(s);
@@ -157,7 +165,7 @@ static void gen_copy_tag(
         CodeList* stmts,
         const std::string& lhs,
         const std::string& rhs,
-        bool is_mtag) {
+        bool is_mtag = false) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
     buf.str(is_mtag ? opts->api_mtag_copy : opts->api_stag_copy);
@@ -172,13 +180,13 @@ static void gen_copy_tags(
         std::vector<std::string>::const_iterator i,
         std::vector<std::string>::const_iterator j,
         const std::string& rhs,
-        bool is_mtag) {
+        bool is_mtag = false) {
     for (; i < j; ++i) {
         gen_copy_tag(output, stmts, *i, rhs, is_mtag);
     }
 }
 
-static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
+static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -210,13 +218,13 @@ static void gen_settags(Output& output, CodeList* tag_actions, const Adfa& dfa, 
             for (h0 = h; *h != TAGVER_ZERO; ++h);
             for (; h --> h0; ) {
                 const bool negative = *h == TAGVER_BOTTOM;
-                gen_settag(output, tag_actions, le, negative, true);
+                gen_set_tag(output, tag_actions, le, negative, true);
             }
         } else {
             // "save" command
             if (generic) {
                 const bool negative = *h == TAGVER_BOTTOM;
-                gen_settag(output, tag_actions, le, negative, false);
+                gen_set_tag(output, tag_actions, le, negative, false);
             } else {
                 for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
                     const char* lhs = o.str(vartag_expr(q->lhs, opts, is_mtag)).flush();
@@ -297,33 +305,33 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 
             if (generic) {
                 if (fixed_on_cursor) {
-                    gen_settag(output, fixops, *first, false, false);
-                    gen_shift(output, fixops, -dist, *first, false);
-                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
+                    gen_set_tag(output, fixops, *first, false);
+                    gen_shift(output, fixops, -dist, *first);
+                    gen_copy_tags(output, fixops, second, last, *first);
                 } else if (dist == 0) {
-                    gen_copy_tags(output, fixops, first, last, base, is_mtag);
+                    gen_copy_tags(output, fixops, first, last, base);
                 } else if (tag.toplevel) {
-                    gen_copy_tag(output, fixops, *first, base, is_mtag);
-                    gen_shift(output, fixops, -dist, *first, false);
-                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
+                    gen_copy_tag(output, fixops, *first, base);
+                    gen_shift(output, fixops, -dist, *first);
+                    gen_copy_tags(output, fixops, second, last, *first);
                 } else {
                     // Split operations in two parts. First, set all fixed tags to their base
                     // tag. Second, choose one of the base tags to store negative value (with
                     // generic API there is no NULL constant) and compare fixed tags against it
                     // before shifting. This must be done after all uses of that base tag.
                     if (negtag.empty()) negtag = base;
-                    gen_copy_tag(output, fixops, *first, base, is_mtag);
+                    gen_copy_tag(output, fixops, *first, base);
                     const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
                     CodeList* then = code_list(alc);
-                    gen_shift(output, then, -dist, *first, false);
+                    gen_shift(output, then, -dist, *first);
                     append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                 }
             } else {
                 if (dist == 0) {
-                    gen_copy_tags(output, fixops, first, last, base, is_mtag);
+                    gen_copy_tags(output, fixops, first, last, base);
                 } else if (tag.toplevel) {
                     o.str(base).cstr(" - ").i32(dist);
-                    gen_copy_tags(output, fixops, first, last, o.flush(), is_mtag);
+                    gen_copy_tags(output, fixops, first, last, o.flush());
                 } else {
                     // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
                     // value of the base tag plus offset.
@@ -332,7 +340,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                     CodeList* then = code_list(alc);
                     append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));
                     append(fixops, code_if_then_else(alc, cond, then, nullptr));
-                    gen_copy_tags(output, fixops, second, last, *first, is_mtag);
+                    gen_copy_tags(output, fixops, second, last, *first);
                 }
             }
         }
@@ -349,7 +357,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         // materialize no-match value in a tag.
         DCHECK(opts->api == Api::CUSTOM);
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
-        gen_settag(output, stmts, negtag, true, false);
+        gen_set_tag(output, stmts, negtag, true, false);
         append(stmts, fixpostops);
     }
 }
@@ -433,7 +441,7 @@ static CodeList* gen_fill_falllback(
         // with the same destination state, tags and no YYSKIP.
     } else {
         // tag actions on the fallback transition
-        gen_settags(output, fallback_trans, dfa, falltags);
+        gen_set_tags(output, fallback_trans, dfa, falltags);
 
         // go to fallback state
         switch (opts->code_model) {
@@ -589,7 +597,7 @@ static void gen_fill_and_label(Output& output, CodeList* stmts, const Adfa& dfa,
         // current input character. Generate tag operations before the label to avoid applying them
         // multiple times in the above scenario (re-application may produce incorrect results in
         // case of non-idempotent operations).
-        gen_settags(output, stmts, dfa, s->go.tags);
+        gen_set_tags(output, stmts, dfa, s->go.tags);
     }
 
     if (s->fill_label != nullptr && opts->code_model == CodeModel::GOTO_LABEL) {
@@ -606,7 +614,7 @@ static void gen_goto(
 
     CodeList* transition = code_list(alc);
 
-    gen_settags(output, transition, dfa, jump.tags);
+    gen_set_tags(output, transition, dfa, jump.tags);
 
     if (jump.skip) {
         append(transition, code_skip(alc));
@@ -876,7 +884,7 @@ static void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const Stat
         // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
         // Without the $ rule the are no strict requirements, but generating them here (after YYFILL
         // label) allows to fuse skip and peek into one statement.
-        gen_settags(output, stmts, dfa, go->tags);
+        gen_set_tags(output, stmts, dfa, go->tags);
     }
 
     if (go->skip) {
