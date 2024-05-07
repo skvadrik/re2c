@@ -305,10 +305,9 @@ struct CodeDebug {
     uint32_t state;
 };
 
-struct CodeRestoreCtx {
-    Tag tag;
+struct CodeTag {
     const char* base;
-    bool use_tags;
+    int32_t dist;
 };
 
 struct Code {
@@ -329,7 +328,7 @@ struct Code {
         CodeAssign assign;
         CodeLabel label;
         CodeDebug debug;
-        CodeRestoreCtx restorectx;
+        CodeTag tag;
         CodeList* loop;
         CodeList* rfuncs;
         loc_t loc;
@@ -496,11 +495,21 @@ inline Code* code_restore(OutAllocator& alc) {
     return new_code(alc, CodeKind::RESTORE);
 }
 
-inline Code* code_restore_ctx(OutAllocator& alc, const Tag& tag, const char* base, bool use_tags) {
-    Code* x = new_code(alc, CodeKind::RESTORECTX);
-    x->restorectx.tag = tag;
-    x->restorectx.base = base;
-    x->restorectx.use_tags = use_tags;
+inline Code* code_restore_ctx(OutAllocator& alc) {
+    return new_code(alc, CodeKind::RESTORECTX);
+}
+
+inline Code* code_restore_tag(OutAllocator& alc, const char* base) {
+    Code* x = new_code(alc, CodeKind::RESTORETAG);
+    x->tag.base = base;
+    x->tag.dist = 0;
+    return x;
+}
+
+inline Code* code_shift(OutAllocator& alc, int32_t dist) {
+    Code* x = new_code(alc, CodeKind::SHIFT);
+    x->tag.base = nullptr;
+    x->tag.dist = dist;
     return x;
 }
 

@@ -235,11 +235,19 @@ code:yyrestore =
     ) nl;
 
 code:yyrestorectx =
-    (api.generic
-        ? (fixed_on_cursor
-            ? topindent shift nl
-            : topindent (tags ? restoretag : restorectx) nl
-              (fixed ? topindent shift nl))
-        : (fixed_on_cursor
-            ? topindent cursor " -= " offset ";" nl
-            : topindent cursor " = " base (fixed ? " - " offset) ";" nl));
+    topindent (api.generic
+        ? restorectx
+        : cursor " = " ctxmarker ";"
+    ) nl;
+
+code:yyrestoretag =
+    topindent (api.generic
+        ? restoretag
+        : cursor " = " tag ";"
+    ) nl;
+
+code:yyshift =
+    topindent (api.generic
+        ? shift
+        : cursor " -= " offset ";"
+    ) nl;
