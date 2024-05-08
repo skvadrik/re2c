@@ -325,6 +325,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                     CodeList* then = code_list(alc);
                     gen_shift(output, then, -dist, *first);
                     append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
+                    gen_copy_tags(output, fixpostops, second, last, *first);
                 }
             } else {
                 if (dist == 0) {
