@@ -147,16 +147,21 @@ static void gen_set_tag(
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    const std::string& s = is_mtag
-            ? (negative ? opts->api_mtag_neg : opts->api_mtag_pos)
-            : (negative ? opts->api_stag_neg : opts->api_stag_pos);
-    o.str(s);
-    if (opts->api_style == ApiStyle::FUNCTIONS) {
-        o.cstr("(").str(tag).cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
+    if (opts->api == Api::DEFAULT && !is_mtag) {
+        append(stmts, code_assign(alc, o.str(tag).flush(),
+                negative ? "NULL" : opts->api_cursor.c_str()));
     } else {
-        argsubst(o.stream(), opts->api_sigil, "tag", true, tag);
-        append(stmts, code_text(alc, o.flush()));
+        const std::string& s = is_mtag
+                ? (negative ? opts->api_mtag_neg : opts->api_mtag_pos)
+                : (negative ? opts->api_stag_neg : opts->api_stag_pos);
+        o.str(s);
+        if (opts->api_style == ApiStyle::FUNCTIONS) {
+            o.cstr("(").str(tag).cstr(")");
+            append(stmts, code_stmt(alc, o.flush()));
+        } else {
+            argsubst(o.stream(), opts->api_sigil, "tag", true, tag);
+            append(stmts, code_text(alc, o.flush()));
+        }
     }
 }
 
@@ -189,8 +194,6 @@ static void gen_copy_tags(
 static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-    const bool generic = opts->api == Api::CUSTOM;
     const tcmd_t* cmd = dfa.tcpool[tcid];
 
     // single tag, backwards compatibility, use context marker
@@ -217,21 +220,13 @@ static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa,
             // history is reversed, so find its end and iterate back
             for (h0 = h; *h != TAGVER_ZERO; ++h);
             for (; h --> h0; ) {
-                const bool negative = *h == TAGVER_BOTTOM;
+                bool negative = *h == TAGVER_BOTTOM;
                 gen_set_tag(output, tag_actions, le, negative, true);
             }
         } else {
             // "save" command
-            if (generic) {
-                const bool negative = *h == TAGVER_BOTTOM;
-                gen_set_tag(output, tag_actions, le, negative, false);
-            } else {
-                for (const tcmd_t* q = p; q && tcmd_t::isset(q); p = q, q = q->next) {
-                    const char* lhs = o.str(vartag_expr(q->lhs, opts, is_mtag)).flush();
-                    append(tag_actions, code_assign(alc, lhs,
-                            q->history[0] == TAGVER_BOTTOM ? "NULL" : opts->api_cursor.c_str()));
-                }
-            }
+            bool negative = *h == TAGVER_BOTTOM;
+            gen_set_tag(output, tag_actions, le, negative, false);
         }
     }
 }
