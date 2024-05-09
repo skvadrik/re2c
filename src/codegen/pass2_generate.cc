@@ -126,14 +126,18 @@ static void gen_shift(
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
-    o.str(is_mtag ? opts->api_mtag_shift : opts->api_stag_shift);
-    if (opts->api_style == ApiStyle::FUNCTIONS) {
-        o.cstr("(").str(tag).cstr(", ").i32(shift).cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
+    if (opts->api == Api::DEFAULT && !is_mtag) {
+        append(stmts, code_stmt(alc, o.str(tag).cstr(" -= ").i32(shift).flush()));
     } else {
-        argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
-        argsubst(o.stream(), opts->api_sigil, "shift", false, shift);
-        append(stmts, code_text(alc, o.flush()));
+        o.str(is_mtag ? opts->api_mtag_shift : opts->api_stag_shift);
+        if (opts->api_style == ApiStyle::FUNCTIONS) {
+            o.cstr("(").str(tag).cstr(", ").i32(-shift).cstr(")");
+            append(stmts, code_stmt(alc, o.flush()));
+        } else {
+            argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
+            argsubst(o.stream(), opts->api_sigil, "shift", false, -shift);
+            append(stmts, code_text(alc, o.flush()));
+        }
     }
 }
 
@@ -301,13 +305,13 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
             if (generic) {
                 if (fixed_on_cursor) {
                     gen_set_tag(output, fixops, *first, false);
-                    gen_shift(output, fixops, -dist, *first);
+                    gen_shift(output, fixops, dist, *first);
                     gen_copy_tags(output, fixops, second, last, *first);
                 } else if (dist == 0) {
                     gen_copy_tags(output, fixops, first, last, base);
                 } else if (tag.toplevel) {
                     gen_copy_tag(output, fixops, *first, base);
-                    gen_shift(output, fixops, -dist, *first);
+                    gen_shift(output, fixops, dist, *first);
                     gen_copy_tags(output, fixops, second, last, *first);
                 } else {
                     // Split operations in two parts. First, set all fixed tags to their base
@@ -318,7 +322,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                     gen_copy_tag(output, fixops, *first, base);
                     const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
                     CodeList* then = code_list(alc);
-                    gen_shift(output, then, -dist, *first);
+                    gen_shift(output, then, dist, *first);
                     append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
                     gen_copy_tags(output, fixpostops, second, last, *first);
                 }
