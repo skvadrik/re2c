@@ -71,7 +71,8 @@ yy8:
 	yypmatch[1] = YYCURSOR;
 	yypmatch[3] = yyt2;
 	yypmatch[5] = yyt3;
-	yypmatch[7] = YYCURSOR - 3;
+	yypmatch[7] = YYCURSOR;
+	yypmatch[7] -= 3;
 	{}
 yy9:
 	++YYCURSOR;

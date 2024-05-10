@@ -51,11 +51,11 @@ yy6:
 	yypmatch[7] = yyt4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 1;
 	yypmatch[4] = yyt3;
-	if (yyt3 != NULL) yypmatch[4] -= 1;
 	yypmatch[6] = yyt4;
-	if (yyt4 != NULL) yypmatch[6] -= 1;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 1;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 1;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 1;
 	{}
 yy7:
 	yych = *++YYCURSOR;

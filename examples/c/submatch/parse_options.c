@@ -1536,7 +1536,8 @@ yy99:
 		default: goto yy28;
 	}
 yy100:
-	v = s - 10;
+	v = s;
+	v -= 10;
 	{ o.date   = std::string(v, s); continue; }
 yy101:
 	yych = *++s;

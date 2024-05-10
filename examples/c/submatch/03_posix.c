@@ -148,7 +148,8 @@ yy8:
 	yypmatch[7] = yyt4;
 	yypmatch[0] = yyt1;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = yyt2 - 1;
+	yypmatch[3] = yyt2;
+	yypmatch[3] -= 1;
 #line 33 "c/submatch/03_posix.re"
 	{
             // `yynmatch` is the number of capturing groups
@@ -160,7 +161,7 @@ yy8:
             ver.patch = yypmatch[6] ? s2n(yypmatch[6] + 1, yypmatch[7]) : 0;
             return true;
         }
-#line 164 "c/submatch/03_posix.c"
+#line 165 "c/submatch/03_posix.c"
 yy9:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) goto yy5;

@@ -39,8 +39,10 @@ yy5:
 	yypmatch[2] = yyt1;
 	yypmatch[0] = yyt1;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR - 1;
-	yypmatch[4] = YYCURSOR - 1;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 1;
+	yypmatch[4] = YYCURSOR;
+	yypmatch[4] -= 1;
 	yypmatch[5] = YYCURSOR;
 	{}
 yy6:

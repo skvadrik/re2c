@@ -108,10 +108,14 @@ yy17:
 	}
 yy18:
 	++YYCURSOR;
-	p0 = YYCURSOR - 15;
-	p1 = YYCURSOR - 14;
-	p2 = YYCURSOR - 12;
-	p3 = YYCURSOR - 9;
+	p0 = YYCURSOR;
+	p0 -= 15;
+	p1 = YYCURSOR;
+	p1 -= 14;
+	p2 = YYCURSOR;
+	p2 -= 12;
+	p3 = YYCURSOR;
+	p3 -= 9;
 	YYCURSOR -= 5;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",

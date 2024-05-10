@@ -38,10 +38,13 @@ yy5:
 yy6:
 	++YYCURSOR;
 	yynmatch = 2;
-	yypmatch[0] = YYCURSOR - 4;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 4;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 3;
-	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 3;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 1;
 	{}
 }
 

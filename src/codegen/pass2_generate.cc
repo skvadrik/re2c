@@ -250,7 +250,6 @@ static std::string fintag_expr(const std::string& name, const opt_t* opts) {
 
 static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const Rule& rule) {
     const opt_t* opts = output.block().opts;
-    const bool generic = opts->api == Api::CUSTOM;
     const std::vector<Tag>& tags = dfa.tags;
     const tagver_t* fins = dfa.finvers;
     OutAllocator& alc = output.allocator;
@@ -302,46 +301,28 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
             DCHECK(!fintags.empty());
             auto first = fintags.begin(), second = first + 1, last = fintags.end();
 
-            if (generic) {
-                if (fixed_on_cursor) {
-                    gen_set_tag(output, fixops, *first, false);
-                    gen_shift(output, fixops, dist, *first);
-                    gen_copy_tags(output, fixops, second, last, *first);
-                } else if (dist == 0) {
-                    gen_copy_tags(output, fixops, first, last, base);
-                } else if (tag.toplevel) {
-                    gen_copy_tag(output, fixops, *first, base);
-                    gen_shift(output, fixops, dist, *first);
-                    gen_copy_tags(output, fixops, second, last, *first);
-                } else {
-                    // Split operations in two parts. First, set all fixed tags to their base
-                    // tag. Second, choose one of the base tags to store negative value (with
-                    // generic API there is no NULL constant) and compare fixed tags against it
-                    // before shifting. This must be done after all uses of that base tag.
-                    if (negtag.empty()) negtag = base;
-                    gen_copy_tag(output, fixops, *first, base);
-                    const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
-                    CodeList* then = code_list(alc);
-                    gen_shift(output, then, dist, *first);
-                    append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
-                    gen_copy_tags(output, fixpostops, second, last, *first);
-                }
+            if (fixed_on_cursor) {
+                gen_set_tag(output, fixops, *first, false);
+                gen_shift(output, fixops, dist, *first);
+                gen_copy_tags(output, fixops, second, last, *first);
+            } else if (dist == 0) {
+                gen_copy_tags(output, fixops, first, last, base);
+            } else if (tag.toplevel) {
+                gen_copy_tag(output, fixops, *first, base);
+                gen_shift(output, fixops, dist, *first);
+                gen_copy_tags(output, fixops, second, last, *first);
             } else {
-                if (dist == 0) {
-                    gen_copy_tags(output, fixops, first, last, base);
-                } else if (tag.toplevel) {
-                    o.str(base).cstr(" - ").i32(dist);
-                    gen_copy_tags(output, fixops, first, last, o.flush());
-                } else {
-                    // If base tag is NULL, fixed tag is also NULL, otherwise it equals the
-                    // value of the base tag plus offset.
-                    append(fixops, code_assign(alc, o.str(*first).flush(), o.str(base).flush()));
-                    const char* cond = o.str(base).cstr(" != NULL").flush();
-                    CodeList* then = code_list(alc);
-                    append(then, code_stmt(alc, o.str(*first).cstr(" -= ").i32(dist).flush()));
-                    append(fixops, code_if_then_else(alc, cond, then, nullptr));
-                    gen_copy_tags(output, fixops, second, last, *first);
-                }
+                // Split operations in two parts. First, set all fixed tags to their base tag.
+                // Second, choose one of the base tags to store negative value (with generic API
+                // there is no NULL constant) and compare fixed tags against it before shifting.
+                // This must be done after all uses of that base tag.
+                if (negtag.empty()) negtag = opts->api == Api::CUSTOM ? base : "NULL";
+                gen_copy_tag(output, fixops, *first, base);
+                const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
+                CodeList* then = code_list(alc);
+                gen_shift(output, then, dist, *first);
+                append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
+                gen_copy_tags(output, fixpostops, second, last, *first);
             }
         }
     }
@@ -351,15 +332,12 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     append(stmts, varops);
     append(stmts, fixops);
     append(stmts, trailops);
-
-    if (!negtag.empty()) {
-        // With generic API there is no explicit negative NULL value, so it is necessary to
-        // materialize no-match value in a tag.
-        DCHECK(opts->api == Api::CUSTOM);
+    // With generic API it's necessary to materialize no-match value in a tag (there's no constant).
+    if (opts->api == Api::CUSTOM && !negtag.empty()) {
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
         gen_set_tag(output, stmts, negtag, true, false);
-        append(stmts, fixpostops);
     }
+    append(stmts, fixpostops);
 }
 
 class GenArrayElem : public RenderCallback {

@@ -26,7 +26,7 @@ yy1:
 	yypmatch[3] = yyt3;
 	yypmatch[5] = YYCURSOR;
 	yypmatch[6] = yyt2;
-	if (yyt2 != NULL) yypmatch[6] -= 2;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 2;
 	{}
 yy2:
 	yych = *(YYMARKER = ++YYCURSOR);

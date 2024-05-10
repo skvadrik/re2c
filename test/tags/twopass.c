@@ -23,7 +23,7 @@
 yy1:
 	s = yyt4;
 	r = yyt4;
-	if (yyt4 != NULL) r -= 1;
+	if (r != NULL) r -= 1;
 	{}
 yy2:
 	yyaccept = 1;

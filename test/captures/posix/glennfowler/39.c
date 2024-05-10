@@ -57,7 +57,7 @@ yy6:
 	yypmatch[0] = yyt1;
 	yypmatch[2] = yyt1;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR;
+	yypmatch[3] = yypmatch[1];
 	{}
 yy7:
 	yyaccept = 1;
