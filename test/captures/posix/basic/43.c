@@ -68,7 +68,7 @@ yy6:
 	yypmatch[3] = yyt2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 1;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 1;
 	{}
 }
 

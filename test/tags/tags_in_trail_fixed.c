@@ -38,8 +38,10 @@ yy6:
 	}
 yy7:
 	++YYCURSOR;
-	p = YYCURSOR - 4;
-	q = YYCURSOR - 2;
+	p = YYCURSOR;
+	p -= 4;
+	q = YYCURSOR;
+	q -= 2;
 	YYCURSOR -= 3;
 	{}
 }
@@ -87,8 +89,10 @@ yy14:
 	}
 yy15:
 	++YYCURSOR;
-	p = yyt1 - 1;
-	q = YYCURSOR - 2;
+	p = yyt1;
+	p -= 1;
+	q = YYCURSOR;
+	q -= 2;
 	YYCURSOR = yyt1;
 	{}
 }

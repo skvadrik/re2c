@@ -134,7 +134,8 @@ yy8:
 	t3 = yyt2;
 	t4 = yyt3;
 	t5 = yyt4;
-	t2 = yyt2 - 1;
+	t2 = yyt2;
+	t2 -= 1;
 #line 29 "c/submatch/01_stags.re"
 	{
             ver.major = s2n(t1, t2);
@@ -142,7 +143,7 @@ yy8:
             ver.patch = t5 != NULL ? s2n(t5, YYCURSOR - 1) : 0;
             return true;
         }
-#line 146 "c/submatch/01_stags.c"
+#line 147 "c/submatch/01_stags.c"
 yy9:
 	yych = *++YYCURSOR;
 	switch (yych) {

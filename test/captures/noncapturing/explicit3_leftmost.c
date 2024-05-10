@@ -23,10 +23,13 @@ yy3:
 yy4:
 	++YYCURSOR;
 	yynmatch = 2;
-	yypmatch[0] = YYCURSOR - 2;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 2;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 2;
-	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 2;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 1;
 	{}
 }
 
@@ -68,10 +71,13 @@ yy11:
 yy12:
 	++YYCURSOR;
 	yynmatch = 2;
-	yypmatch[0] = YYCURSOR - 4;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 4;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 4;
-	yypmatch[3] = YYCURSOR - 2;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 4;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 2;
 	{}
 }
 
@@ -113,13 +119,19 @@ yy19:
 yy20:
 	++YYCURSOR;
 	yynmatch = 4;
-	yypmatch[0] = YYCURSOR - 4;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 4;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 4;
-	yypmatch[3] = YYCURSOR - 2;
-	yypmatch[4] = YYCURSOR - 3;
-	yypmatch[5] = YYCURSOR - 2;
-	yypmatch[6] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 4;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 2;
+	yypmatch[4] = YYCURSOR;
+	yypmatch[4] -= 3;
+	yypmatch[5] = YYCURSOR;
+	yypmatch[5] -= 2;
+	yypmatch[6] = YYCURSOR;
+	yypmatch[6] -= 1;
 	yypmatch[7] = YYCURSOR;
 	{}
 }
@@ -149,10 +161,13 @@ yy24:
 yy25:
 	++YYCURSOR;
 	yynmatch = 2;
-	yypmatch[0] = YYCURSOR - 2;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 2;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 2;
-	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 2;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 1;
 	{}
 }
 
@@ -200,14 +215,17 @@ yy32:
 	yynmatch = 4;
 	yypmatch[5] = yyt1;
 	yypmatch[7] = yyt2;
-	yypmatch[0] = YYCURSOR - 2;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 2;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[2] = YYCURSOR - 2;
-	yypmatch[3] = YYCURSOR - 1;
+	yypmatch[2] = YYCURSOR;
+	yypmatch[2] -= 2;
+	yypmatch[3] = YYCURSOR;
+	yypmatch[3] -= 1;
 	yypmatch[4] = yyt1;
-	if (yyt1 != NULL) yypmatch[4] -= 1;
 	yypmatch[6] = yyt2;
-	if (yyt2 != NULL) yypmatch[6] -= 1;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 1;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 1;
 	{}
 yy33:
 	++YYCURSOR;
@@ -280,9 +298,9 @@ yy38:
 	yypmatch[7] = yyt4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[4] = yyt4;
-	if (yyt4 != NULL) yypmatch[4] -= 2;
 	yypmatch[6] = yyt4;
-	if (yyt4 != NULL) yypmatch[6] -= 2;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 2;
 	{}
 yy39:
 	++YYCURSOR;

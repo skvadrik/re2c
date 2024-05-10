@@ -17,10 +17,11 @@ yy1:
 yy2:
 	++YYCURSOR;
 	yynmatch = 2;
-	yypmatch[0] = YYCURSOR - 1;
-	yypmatch[2] = YYCURSOR - 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 1;
+	yypmatch[2] = yypmatch[0];
 	yypmatch[1] = YYCURSOR;
-	yypmatch[3] = YYCURSOR;
+	yypmatch[3] = yypmatch[1];
 	{}
 }
 

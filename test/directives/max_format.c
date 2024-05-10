@@ -55,11 +55,12 @@ yy1:
 yy2:
 	++YYCURSOR;
 	yynmatch = 1;
-	yypmatch[0] = YYCURSOR - 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 1;
 	yypmatch[1] = YYCURSOR;
 #line 25 "directives/max_format.re"
 	{ a }
-#line 63 "directives/max_format.c"
+#line 64 "directives/max_format.c"
 }
 #line 27 "directives/max_format.re"
 

@@ -31,14 +31,14 @@ yy1:
 	yypmatch[1] = YYCURSOR;
 	yypmatch[3] = yyt4;
 	yypmatch[4] = yyt2;
-	if (yyt2 != NULL) yypmatch[4] -= 2;
 	yypmatch[6] = yyt3;
-	if (yyt3 != NULL) yypmatch[6] -= 3;
 	yypmatch[9] = YYCURSOR;
 	yypmatch[10] = yyt5;
-	if (yyt5 != NULL) yypmatch[10] -= 2;
 	yypmatch[12] = yyt6;
-	if (yyt6 != NULL) yypmatch[12] -= 3;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 3;
+	if (yypmatch[10] != NULL) yypmatch[10] -= 2;
+	if (yypmatch[12] != NULL) yypmatch[12] -= 3;
 	{}
 yy2:
 	yych = *++YYCURSOR;

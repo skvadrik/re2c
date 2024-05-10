@@ -1716,19 +1716,19 @@ yy49:
 	h2 = in->yytm7;
 	h3 = in->yytm8;
 	m2 = in->yyt2;
-	if (in->yyt2 != NULL) m2 -= 1;
 	rt2 = in->yyt3;
-	if (in->yyt3 != NULL) rt2 -= 9;
 	v3 = in->yyt3;
-	if (in->yyt3 != NULL) v3 -= 8;
 	v1 = in->yyt4;
-	if (in->yyt4 != NULL) v1 -= 13;
 	v2 = in->yyt4;
-	if (in->yyt4 != NULL) v2 -= 5;
 	s1 = in->yyt4;
-	if (in->yyt4 != NULL) s1 -= 4;
 	s2 = in->yyt4;
-	if (in->yyt4 != NULL) s2 -= 1;
+	if (m2 != NULL) m2 -= 1;
+	if (rt2 != NULL) rt2 -= 9;
+	if (v3 != NULL) v3 -= 8;
+	if (v1 != NULL) v1 -= 13;
+	if (v2 != NULL) v2 -= 5;
+	if (s1 != NULL) s1 -= 4;
+	if (s2 != NULL) s2 -= 1;
 	{
 #ifndef VERIFY
         c += 1;

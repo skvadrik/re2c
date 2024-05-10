@@ -57,19 +57,19 @@ yy5:
 	yypmatch[1] = YYCURSOR;
 	yypmatch[3] = yyt4;
 	yypmatch[4] = yyt2;
-	if (yyt2 != NULL) yypmatch[4] -= 2;
 	yypmatch[6] = yyt3;
-	if (yyt3 != NULL) yypmatch[6] -= 1;
 	yypmatch[9] = yyt7;
 	yypmatch[10] = yyt5;
-	if (yyt5 != NULL) yypmatch[10] -= 2;
 	yypmatch[12] = yyt6;
-	if (yyt6 != NULL) yypmatch[12] -= 1;
 	yypmatch[15] = YYCURSOR;
 	yypmatch[16] = yyt8;
-	if (yyt8 != NULL) yypmatch[16] -= 2;
 	yypmatch[18] = yyt9;
-	if (yyt9 != NULL) yypmatch[18] -= 1;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 1;
+	if (yypmatch[10] != NULL) yypmatch[10] -= 2;
+	if (yypmatch[12] != NULL) yypmatch[12] -= 1;
+	if (yypmatch[16] != NULL) yypmatch[16] -= 2;
+	if (yypmatch[18] != NULL) yypmatch[18] -= 1;
 	{}
 yy6:
 	yych = *++YYCURSOR;

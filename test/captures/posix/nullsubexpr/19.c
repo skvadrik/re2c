@@ -41,7 +41,8 @@ yy4:
 	yypmatch[2] = yyt2;
 	yypmatch[3] = yyt2;
 	yypmatch[1] = YYCURSOR;
-	yypmatch[4] = YYCURSOR - 1;
+	yypmatch[4] = YYCURSOR;
+	yypmatch[4] -= 1;
 	yypmatch[5] = YYCURSOR;
 	{}
 }

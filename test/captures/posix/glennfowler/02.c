@@ -34,8 +34,8 @@ yy1:
 	yypmatch[3] = yyt2;
 	yypmatch[5] = yyt4;
 	yypmatch[6] = yyt3;
-	if (yyt3 != NULL) yypmatch[6] -= 2;
 	yypmatch[9] = YYCURSOR;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 2;
 	{}
 yy2:
 	yych = *(YYMARKER = ++YYCURSOR);

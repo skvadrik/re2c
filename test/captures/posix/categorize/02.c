@@ -36,11 +36,11 @@ yy1:
 	yypmatch[2] = yyt1;
 	yypmatch[3] = yyt4;
 	yypmatch[6] = yyt3;
-	if (yyt3 != NULL) yypmatch[6] -= 2;
 	yypmatch[8] = yyt4;
 	yypmatch[9] = YYCURSOR;
 	yypmatch[11] = yyt5;
 	yypmatch[13] = YYCURSOR;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 2;
 	{}
 yy2:
 	++YYCURSOR;

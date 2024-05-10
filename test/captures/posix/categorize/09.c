@@ -39,7 +39,7 @@ yy3:
 	yypmatch[5] = yyt4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[4] = yyt4;
-	if (yyt4 != NULL) yypmatch[4] -= 1;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 1;
 	{}
 yy4:
 	++YYCURSOR;

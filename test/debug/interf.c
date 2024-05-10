@@ -30,7 +30,8 @@ yy3:
 	yypmatch[3] = yyt2;
 	yypmatch[4] = yyt3;
 	yypmatch[5] = yyt4;
-	yypmatch[0] = YYCURSOR - 1;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 1;
 	yypmatch[1] = YYCURSOR;
 	{}
 yy4:

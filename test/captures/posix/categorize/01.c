@@ -33,8 +33,8 @@ yy1:
 	yypmatch[0] = yyt1;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[4] = yyt3;
-	if (yyt3 != NULL) yypmatch[4] -= 2;
 	yypmatch[7] = YYCURSOR;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
 	{}
 yy2:
 	yych = *++YYCURSOR;

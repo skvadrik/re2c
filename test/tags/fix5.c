@@ -79,8 +79,10 @@ yy11:
 	p0 = yyt1;
 	p2 = yyt2;
 	p4 = yyt3;
-	p1 = yyt2 - 1;
-	p3 = yyt3 - 1;
+	p1 = yyt2;
+	p1 -= 1;
+	p3 = yyt3;
+	p3 -= 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%.*s'\n",
                 p1 - p0, p0,

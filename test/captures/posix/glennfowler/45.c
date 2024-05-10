@@ -23,9 +23,9 @@ yy1:
 	yypmatch[7] = yyt4;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[4] = yyt3;
-	if (yyt3 != NULL) yypmatch[4] -= 2;
 	yypmatch[6] = yyt4;
-	if (yyt4 != NULL) yypmatch[6] -= 3;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
+	if (yypmatch[6] != NULL) yypmatch[6] -= 3;
 	{}
 yy2:
 	yych = *++YYCURSOR;

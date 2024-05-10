@@ -207,7 +207,8 @@ yy8:
 	t2 = in.yyt1;
 	t3 = in.yyt2;
 	t4 = in.yyt3;
-	t1 = in.yyt1 - 1;
+	t1 = in.yyt1;
+	t1 -= 1;
 #line 77 "c/submatch/01_stags_fill.re"
 	{
             int major = s2n(in.tok, t1);
@@ -217,7 +218,7 @@ yy8:
             vers.push_back(ver);
             continue;
         }
-#line 221 "c/submatch/01_stags_fill.c"
+#line 222 "c/submatch/01_stags_fill.c"
 yy9:
 	++in.cur;
 yyFillLabel5:
@@ -266,7 +267,7 @@ yyFillLabel6:
 yy11:
 #line 85 "c/submatch/01_stags_fill.re"
 	{ return true; }
-#line 270 "c/submatch/01_stags_fill.c"
+#line 271 "c/submatch/01_stags_fill.c"
 }
 #line 87 "c/submatch/01_stags_fill.re"
 }
@@ -290,7 +291,7 @@ int main() {
     in.file = f;
     in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
     
-#line 294 "c/submatch/01_stags_fill.c"
+#line 295 "c/submatch/01_stags_fill.c"
 in.yyt1 = in.lim;
 in.yyt2 = in.lim;
 in.yyt3 = in.lim;

@@ -62,8 +62,10 @@ yy8:
 	++YYCURSOR;
 	p1 = yyt1;
 	p3 = yyt2;
-	p0 = yyt1 - 1;
-	p2 = yyt2 - 1;
+	p0 = yyt1;
+	p0 -= 1;
+	p2 = yyt2;
+	p2 -= 1;
 	YYCURSOR -= 1;
 	{
             printf("'%.*s', '%.*s', '%.*s', '%.*s', '%s'\n",

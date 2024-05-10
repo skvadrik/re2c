@@ -49,7 +49,7 @@ yy1:
 	yypmatch[61] = yyt2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 1;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 1;
 	yypmatch[4] = yypmatch[2];
 	yypmatch[6] = yypmatch[2];
 	yypmatch[8] = yypmatch[2];

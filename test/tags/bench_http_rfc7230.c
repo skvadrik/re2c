@@ -8851,15 +8851,15 @@ yy244:
 	au = in->yyt13;
 	of = in->yyt26;
 	v3 = in->yyt8;
-	if (in->yyt8 != NULL) v3 -= 8;
 	v1 = in->yyt29;
-	if (in->yyt29 != NULL) v1 -= 13;
 	v2 = in->yyt29;
-	if (in->yyt29 != NULL) v2 -= 5;
 	st1 = in->yyt29;
-	if (in->yyt29 != NULL) st1 -= 4;
 	st2 = in->yyt29;
-	if (in->yyt29 != NULL) st2 -= 1;
+	if (v3 != NULL) v3 -= 8;
+	if (v1 != NULL) v1 -= 13;
+	if (v2 != NULL) v2 -= 5;
+	if (st1 != NULL) st1 -= 4;
+	if (st2 != NULL) st2 -= 1;
 	{
 #ifndef VERIFY
         c += 1;
