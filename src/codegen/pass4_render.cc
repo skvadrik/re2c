@@ -932,19 +932,23 @@ class RenderBackupRestoreCtx : public RenderCallback {
     }
 };
 
-class RenderRestoreTagShift : public RenderCallback {
+class RenderTagOps : public RenderCallback {
     RenderContext& rctx;
     const CodeTag* code;
 
   public:
-    RenderRestoreTagShift(RenderContext& rctx, const CodeTag* code)
+    RenderTagOps(RenderContext& rctx, const CodeTag* code)
             : rctx(rctx), code(code) {}
 
     void render_var(StxVarId var) override {
         const opt_t* opts = rctx.opts;
         switch (var) {
         case StxVarId::TAG:
-            rctx.os << code->base;
+        case StxVarId::LHS:
+            rctx.os << code->tag1;
+            break;
+        case StxVarId::RHS:
+            rctx.os << code->tag2;
             break;
         case StxVarId::CURSOR:
             rctx.os << opts->api_cursor;
@@ -954,7 +958,7 @@ class RenderRestoreTagShift : public RenderCallback {
             break;
         case StxVarId::RESTORETAG:
             if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->base);
+                argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->tag1);
             } else {
                 rctx.os << opts->api_restore_tag;
             }
@@ -966,13 +970,77 @@ class RenderRestoreTagShift : public RenderCallback {
                 rctx.os << opts->api_shift;
             }
             break;
+        case StxVarId::SHIFTSTAG:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                std::ostringstream s(opts->api_stag_shift);
+                argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+                argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+                rctx.os << s.str();
+            } else {
+                rctx.os << opts->api_stag_shift;
+            }
+            break;
+        case StxVarId::SHIFTMTAG:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                std::ostringstream s(opts->api_mtag_shift);
+                argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+                argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+                rctx.os << s.str();
+            } else {
+                rctx.os << opts->api_mtag_shift;
+            }
+            break;
+        case StxVarId::STAGP:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_stag_pos, opts->api_sigil, "tag", true, code->tag1);
+            } else {
+                rctx.os << opts->api_stag_pos;
+            }
+            break;
+        case StxVarId::STAGN:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_stag_neg, opts->api_sigil, "tag", true, code->tag1);
+            } else {
+                rctx.os << opts->api_stag_neg;
+            }
+            break;
+        case StxVarId::MTAGP:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_mtag_pos, opts->api_sigil, "tag", true, code->tag1);
+            } else {
+                rctx.os << opts->api_mtag_pos;
+            }
+            break;
+        case StxVarId::MTAGN:
+            if (opts->api_style == ApiStyle::FREEFORM) {
+                argsubst(rctx.os, opts->api_mtag_neg, opts->api_sigil, "tag", true, code->tag1);
+            } else {
+                rctx.os << opts->api_mtag_neg;
+            }
+            break;
+        case StxVarId::COPYSTAG: {
+            // no function style, as YYCOPYSTAG must have a working default definition
+            std::ostringstream s(opts->api_stag_copy);
+            argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
+            argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::COPYMTAG: {
+            // no function style, as YYCOPYMTAG must have a working default definition
+            std::ostringstream s(opts->api_mtag_copy);
+            argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
+            argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
+            rctx.os << s.str();
+            break;
+        }
         default:
             render_global_var(rctx, var);
             break;
         }
     }
 
-    FORBID_COPY(RenderRestoreTagShift);
+    FORBID_COPY(RenderTagOps);
 };
 
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
@@ -1316,13 +1384,53 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::RESTORETAG: {
-        RenderRestoreTagShift callback(rctx, &code->tag);
+        RenderTagOps callback(rctx, &code->tag);
         rctx.opts->render_code_restoretag(rctx.os, callback);
         break;
     }
     case CodeKind::SHIFT: {
-        RenderRestoreTagShift callback(rctx, &code->tag);
+        RenderTagOps callback(rctx, &code->tag);
         rctx.opts->render_code_shift(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SHIFTSTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_shiftstag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SHIFTMTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_shiftstag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::STAGN: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_stagn(rctx.os, callback);
+        break;
+    }
+    case CodeKind::STAGP: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_stagp(rctx.os, callback);
+        break;
+    }
+    case CodeKind::MTAGN: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_mtagn(rctx.os, callback);
+        break;
+    }
+    case CodeKind::MTAGP: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_mtagp(rctx.os, callback);
+        break;
+    }
+    case CodeKind::COPYSTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_copystag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::COPYMTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_copymtag(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK_SKIP: {

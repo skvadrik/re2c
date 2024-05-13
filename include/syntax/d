@@ -251,3 +251,39 @@ code:yyshift =
         ? shift
         : cursor " -= " offset ";"
     ) nl;
+
+code:yyshiftstag =
+    topindent (api.generic
+        ? shiftstag
+        : tag " -= " offset ";"
+    ) nl;
+
+code:yyshiftmtag = topindent shiftmtag nl;
+
+code:yystagp =
+    topindent (api.generic
+        ? stagp
+        : tag " = " cursor ";"
+    ) nl;
+
+code:yymtagp = topindent mtagp nl;
+
+code:yystagn =
+    topindent (api.generic
+        ? stagn
+        : tag " = NULL;"
+    ) nl;
+
+code:yymtagn = topindent mtagn nl;
+
+code:yycopystag =
+    topindent (api.generic
+        ? copystag
+        : lhs " = " rhs ";"
+    ) nl;
+
+code:yycopymtag =
+    topindent (api.generic
+        ? copymtag
+        : lhs " = " rhs ";"
+    ) nl;

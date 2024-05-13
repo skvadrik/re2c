@@ -213,6 +213,24 @@ code:yyrestore = topindent restore (api_style.functions ? "()") nl;
 
 code:yyrestorectx = topindent restorectx (api_style.functions ? "()") nl;
 
-code:yyrestoretag = topindent restoretag (api_style.functions ? "(" tag ");") nl;
+code:yyrestoretag = topindent restoretag (api_style.functions ? "(" tag ")") nl;
 
-code:yyshift = topindent shift (api_style.functions ? "(-" offset ");") nl;
+code:yyshift = topindent shift (api_style.functions ? "(-" offset ")") nl;
+
+code:yyshiftstag = topindent shiftstag (api_style.functions ? "(" tag ", -" offset ")") nl;
+
+code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offset ")") nl;
+
+code:yystagp = topindent stagp (api_style.functions ? "(" tag ")") nl;
+
+code:yymtagp = topindent mtagp (api_style.functions ? "(" tag ")") nl;
+
+code:yystagn = topindent stagn (api_style.functions ? "(" tag ")") nl;
+
+code:yymtagn = topindent mtagn (api_style.functions ? "(" tag ")") nl;
+
+// function style is not supported, as there's no sensible default
+code:yycopystag = topindent copystag nl;
+
+// function style is not supported, as there's no sensible default
+code:yycopymtag = topindent copymtag nl;

@@ -493,6 +493,14 @@ start:
     "code:yyrestorectx"         { RET_CODE(code_restorectx); }
     "code:yyrestoretag"         { RET_CODE(code_restoretag); }
     "code:yyshift"              { RET_CODE(code_shift); }
+    "code:yyshiftmtag"          { RET_CODE(code_shiftmtag); }
+    "code:yyshiftstag"          { RET_CODE(code_shiftstag); }
+    "code:yystagn"              { RET_CODE(code_stagn); }
+    "code:yymtagn"              { RET_CODE(code_mtagn); }
+    "code:yystagp"              { RET_CODE(code_stagp); }
+    "code:yymtagp"              { RET_CODE(code_mtagp); }
+    "code:yycopymtag"           { RET_CODE(code_copymtag); }
+    "code:yycopystag"           { RET_CODE(code_copystag); }
     "code:yyskip_peek"          { RET_CODE(code_skip_peek); }
     "code:yypeek_skip"          { RET_CODE(code_peek_skip); }
     "code:yyskip_backup"        { RET_CODE(code_skip_backup); }
@@ -517,6 +525,8 @@ start:
     "case"       { RET_VAR(StxVarId::CASE); }
     "char"       { RET_VAR(StxVarId::CHAR); }
     "cond"       { RET_VAR(StxVarId::COND); }
+    "copymtag"   { RET_VAR(StxVarId::COPYMTAG); }
+    "copystag"   { RET_VAR(StxVarId::COPYSTAG); }
     "ctype"      { RET_VAR(StxVarId::CTYPE); }
     "ctxmarker"  { RET_VAR(StxVarId::CTXMARKER); }
     "cursor"     { RET_VAR(StxVarId::CURSOR); }
@@ -534,6 +544,8 @@ start:
     "lhs"        { RET_VAR(StxVarId::LHS); }
     "line"       { RET_VAR(StxVarId::LINE); }
     "marker"     { RET_VAR(StxVarId::MARKER); }
+    "mtagn"      { RET_VAR(StxVarId::MTAGN); }
+    "mtagp"      { RET_VAR(StxVarId::MTAGP); }
     "name"       { RET_VAR(StxVarId::NAME); }
     "offset"     { RET_VAR(StxVarId::OFFSET); }
     "peek"       { RET_VAR(StxVarId::PEEK); }
@@ -545,7 +557,11 @@ start:
     "row"        { RET_VAR(StxVarId::ROW); }
     "size"       { RET_VAR(StxVarId::SIZE); }
     "shift"      { RET_VAR(StxVarId::SHIFT); }
+    "shiftmtag"  { RET_VAR(StxVarId::SHIFTMTAG); }
+    "shiftstag"  { RET_VAR(StxVarId::SHIFTSTAG); }
     "skip"       { RET_VAR(StxVarId::SKIP); }
+    "stagn"      { RET_VAR(StxVarId::STAGN); }
+    "stagp"      { RET_VAR(StxVarId::STAGP); }
     "state"      { RET_VAR(StxVarId::STATE); }
     "stmt"       { RET_VAR(StxVarId::STMT); }
     "tag"        { RET_VAR(StxVarId::TAG); }
