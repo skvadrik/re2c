@@ -202,6 +202,30 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_shift, "code:shift", \
         ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(code_shiftstag, "code:shiftstag", \
+        ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_shiftmtag, "code:shiftstag", \
+        ({StxVarId::SHIFTMTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_stagp, "code:stagp", \
+        ({StxVarId::STAGP, StxVarId::TAG, StxVarId::CURSOR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_mtagp, "code:mtagp", \
+        ({StxVarId::MTAGP, StxVarId::TAG}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_stagn, "code:stagn", \
+        ({StxVarId::STAGN, StxVarId::TAG}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_mtagn, "code:mtagn", \
+        ({StxVarId::MTAGN, StxVarId::TAG}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_copystag, "code:copystag", \
+        ({StxVarId::COPYSTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_copymtag, "code:copymtag", \
+        ({StxVarId::COPYMTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(code_skip_peek, "code:skip_peek", \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
     ) \
@@ -228,10 +252,12 @@ using StxCodes = list_t<StxCode>;
     )
 
 #define RE2C_ONELINE_CODES \
-    ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
-    ONELINE_CODE("code:tailcall", CodeKind::FNCALL) \
     ONELINE_CODE("code:abort", CodeKind::ABORT) \
-    ONELINE_CODE("code:goto", CodeKind::GOTO)
+    ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
+    ONELINE_CODE("code:goto", CodeKind::GOTO) \
+    ONELINE_CODE("code:shiftmtag", CodeKind::SHIFTMTAG) \
+    ONELINE_CODE("code:shiftstag", CodeKind::SHIFTSTAG) \
+    ONELINE_CODE("code:tailcall", CodeKind::FNCALL)
 
 // configuration-local variables in syntax files
 #define RE2C_STX_LOCAL_VARS \
@@ -246,6 +272,8 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(CHAR, "char") \
     STX_LOCAL_VAR(COND, "cond") \
+    STX_LOCAL_VAR(COPYMTAG, "copymtag") \
+    STX_LOCAL_VAR(COPYSTAG, "copystag") \
     STX_LOCAL_VAR(CTYPE, "ctype") \
     STX_LOCAL_VAR(CTXMARKER, "ctxmarker") \
     STX_LOCAL_VAR(CURSOR, "cursor") \
@@ -263,6 +291,8 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
     STX_LOCAL_VAR(MARKER, "marker") \
+    STX_LOCAL_VAR(MTAGN, "mtagn") \
+    STX_LOCAL_VAR(MTAGP, "mtagp") \
     STX_LOCAL_VAR(NAME, "name") \
     STX_LOCAL_VAR(OFFSET, "offset") \
     STX_LOCAL_VAR(PEEK, "peek") \
@@ -274,7 +304,11 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ROW, "row") \
     STX_LOCAL_VAR(SIZE, "size") \
     STX_LOCAL_VAR(SHIFT, "shift") \
+    STX_LOCAL_VAR(SHIFTMTAG, "shiftmtag") \
+    STX_LOCAL_VAR(SHIFTSTAG, "shiftstag") \
     STX_LOCAL_VAR(SKIP, "skip") \
+    STX_LOCAL_VAR(STAGN, "stagn") \
+    STX_LOCAL_VAR(STAGP, "stagp") \
     STX_LOCAL_VAR(STATE, "state") \
     STX_LOCAL_VAR(STMT, "stmt") \
     STX_LOCAL_VAR(TAG, "tag") \

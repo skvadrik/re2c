@@ -217,3 +217,19 @@ code:yyrestorectx = topindent restorectx nl;
 code:yyrestoretag = topindent restoretag nl;
 
 code:yyshift = topindent shift nl;
+
+code:yyshiftstag = topindent shiftstag nl;
+
+code:yyshiftmtag = topindent shiftmtag nl;
+
+code:yystagp = topindent stagp nl;
+
+code:yymtagp = topindent mtagp nl;
+
+code:yystagn = topindent stagn nl;
+
+code:yymtagn = topindent mtagn nl;
+
+code:yycopystag = topindent copystag nl;
+
+code:yycopymtag = topindent copymtag nl;

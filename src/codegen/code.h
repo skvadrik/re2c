@@ -306,7 +306,8 @@ struct CodeDebug {
 };
 
 struct CodeTag {
-    const char* base;
+    const char* tag1;
+    const char* tag2;
     int32_t dist;
 };
 
@@ -499,17 +500,45 @@ inline Code* code_restore_ctx(OutAllocator& alc) {
     return new_code(alc, CodeKind::RESTORECTX);
 }
 
-inline Code* code_restore_tag(OutAllocator& alc, const char* base) {
+inline Code* code_restore_tag(OutAllocator& alc, const char* tag) {
     Code* x = new_code(alc, CodeKind::RESTORETAG);
-    x->tag.base = base;
+    x->tag.tag1 = tag;
+    x->tag.tag2 = nullptr;
     x->tag.dist = 0;
     return x;
 }
 
 inline Code* code_shift(OutAllocator& alc, int32_t dist) {
     Code* x = new_code(alc, CodeKind::SHIFT);
-    x->tag.base = nullptr;
+    x->tag.tag1 = nullptr;
+    x->tag.tag2 = nullptr;
     x->tag.dist = dist;
+    return x;
+}
+
+inline Code* code_shift_tag(OutAllocator& alc, const char* tag, int32_t dist, bool is_mtag) {
+    Code* x = new_code(alc, is_mtag ? CodeKind::SHIFTMTAG : CodeKind::SHIFTSTAG);
+    x->tag.tag1 = tag;
+    x->tag.tag2 = nullptr;
+    x->tag.dist = dist;
+    return x;
+}
+
+inline Code* code_set_tag(OutAllocator& alc, const char* tag, bool is_mtag, bool is_negative) {
+    Code* x = new_code(alc, is_mtag
+        ? (is_negative ? CodeKind::MTAGN : CodeKind::MTAGP)
+        : (is_negative ? CodeKind::STAGN : CodeKind::STAGP));
+    x->tag.tag1 = tag;
+    x->tag.tag2 = nullptr;
+    x->tag.dist = 0;
+    return x;
+}
+
+inline Code* code_copy_tag(OutAllocator& alc, const char* lhs, const char* rhs, bool is_mtag) {
+    Code* x = new_code(alc, is_mtag ? CodeKind::COPYMTAG : CodeKind::COPYSTAG);
+    x->tag.tag1 = lhs;
+    x->tag.tag2 = rhs;
+    x->tag.dist = 0;
     return x;
 }
 

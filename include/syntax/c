@@ -263,6 +263,42 @@ code:yyshift =
         : cursor " -= " offset ";"
     ) nl;
 
+code:yyshiftstag =
+    topindent (api.generic
+        ? shiftstag (api_style.functions ? "(" tag ", -" offset ");")
+        : tag " -= " offset ";"
+    ) nl;
+
+code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offset ");") nl;
+
+code:yystagp =
+    topindent (api.generic
+        ? stagp (api_style.functions ? "(" tag ");")
+        : tag " = " cursor ";"
+    ) nl;
+
+code:yymtagp = topindent mtagp (api_style.functions ? "(" tag ");") nl;
+
+code:yystagn =
+    topindent (api.generic
+        ? stagn (api_style.functions ? "(" tag ");")
+        : tag " = NULL;"
+    ) nl;
+
+code:yymtagn = topindent mtagn (api_style.functions ? "(" tag ");") nl;
+
+code:yycopystag =
+    topindent (api.generic
+        ? copystag // function style is not supported, as there's no sensible default
+        : lhs " = " rhs ";"
+    ) nl;
+
+code:yycopymtag =
+    topindent (api.generic
+        ? copymtag // function style is not supported, as there's no sensible default
+        : lhs " = " rhs ";"
+    ) nl;
+
 code:yyskip_peek =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*++" cursor ";" nl;

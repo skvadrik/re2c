@@ -114,90 +114,10 @@ static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n) {
     return o.flush();
 }
 
-static void gen_shift(
-        Output& output,
-        CodeList* stmts,
-        int32_t shift,
-        const std::string& tag,
-        bool is_mtag = false) {
-    if (shift == 0) return;
-
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-
-    if (opts->api == Api::DEFAULT && !is_mtag) {
-        append(stmts, code_stmt(alc, o.str(tag).cstr(" -= ").i32(shift).flush()));
-    } else {
-        o.str(is_mtag ? opts->api_mtag_shift : opts->api_stag_shift);
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            o.cstr("(").str(tag).cstr(", ").i32(-shift).cstr(")");
-            append(stmts, code_stmt(alc, o.flush()));
-        } else {
-            argsubst(o.stream(), opts->api_sigil, "tag", false, tag);
-            argsubst(o.stream(), opts->api_sigil, "shift", false, -shift);
-            append(stmts, code_text(alc, o.flush()));
-        }
-    }
-}
-
-static void gen_set_tag(
-        Output& output,
-        CodeList* stmts,
-        const std::string& tag,
-        bool negative,
-        bool is_mtag = false) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-
-    if (opts->api == Api::DEFAULT && !is_mtag) {
-        append(stmts, code_assign(alc, o.str(tag).flush(),
-                negative ? "NULL" : opts->api_cursor.c_str()));
-    } else {
-        const std::string& s = is_mtag
-                ? (negative ? opts->api_mtag_neg : opts->api_mtag_pos)
-                : (negative ? opts->api_stag_neg : opts->api_stag_pos);
-        o.str(s);
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            o.cstr("(").str(tag).cstr(")");
-            append(stmts, code_stmt(alc, o.flush()));
-        } else {
-            argsubst(o.stream(), opts->api_sigil, "tag", true, tag);
-            append(stmts, code_text(alc, o.flush()));
-        }
-    }
-}
-
-static void gen_copy_tag(
-        Output& output,
-        CodeList* stmts,
-        const std::string& lhs,
-        const std::string& rhs,
-        bool is_mtag = false) {
-    const opt_t* opts = output.block().opts;
-    Scratchbuf& buf = output.scratchbuf;
-    buf.str(is_mtag ? opts->api_mtag_copy : opts->api_stag_copy);
-    argsubst(buf.stream(), opts->api_sigil, "lhs", false, lhs.c_str());
-    argsubst(buf.stream(), opts->api_sigil, "rhs", false, rhs.c_str());
-    append(stmts, code_text(output.allocator, buf.flush()));
-}
-
-static void gen_copy_tags(
-        Output& output,
-        CodeList* stmts,
-        std::vector<std::string>::const_iterator i,
-        std::vector<std::string>::const_iterator j,
-        const std::string& rhs,
-        bool is_mtag = false) {
-    for (; i < j; ++i) {
-        gen_copy_tag(output, stmts, *i, rhs, is_mtag);
-    }
-}
-
 static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
     const tcmd_t* cmd = dfa.tcpool[tcid];
 
     // single tag, backwards compatibility, use context marker
@@ -209,40 +129,40 @@ static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa,
     for (const tcmd_t* p = cmd; p; p = p->next) {
         const tagver_t l = p->lhs, r = p->rhs, *h = p->history, *h0;
         bool is_mtag = dfa.mtagvers.find(l) != dfa.mtagvers.end();
-        const std::string le = vartag_expr(l, opts, is_mtag);
-        const std::string re = vartag_expr(r, opts, is_mtag);
-        std::string s;
+        const char* le = buf.str(vartag_expr(l, opts, is_mtag)).flush();
+        const char* re = buf.str(vartag_expr(r, opts, is_mtag)).flush();
 
         if (tcmd_t::iscopy(p)) {
             // "copy" command
-            gen_copy_tag(output, tag_actions, le, re, is_mtag);
+            append(tag_actions, code_copy_tag(alc, le, re, is_mtag));
         } else if (tcmd_t::isadd(p)) {
             // "save" command with history
             if (l != r) {
-                gen_copy_tag(output, tag_actions, le, re, is_mtag);
+                append(tag_actions, code_copy_tag(alc, le, re, is_mtag));
             }
             // history is reversed, so find its end and iterate back
             for (h0 = h; *h != TAGVER_ZERO; ++h);
             for (; h --> h0; ) {
                 bool negative = *h == TAGVER_BOTTOM;
-                gen_set_tag(output, tag_actions, le, negative, true);
+                append(tag_actions, code_set_tag(alc, le, true, negative));
             }
         } else {
             // "save" command
             bool negative = *h == TAGVER_BOTTOM;
-            gen_set_tag(output, tag_actions, le, negative, false);
+            append(tag_actions, code_set_tag(alc, le, false, negative));
         }
     }
 }
 
-static std::string fintag_expr(const std::string& name, const opt_t* opts) {
+static const char* fintag_expr(Output& output, const char* name) {
     // Normally final tags are local variables defined by the user in the function that wraps DFA.
     // But in rec/func mode each DFA state is a separate autogenerated function, so final tags must
     // be part of the state that is passed to these functions.
+    const opt_t* opts = output.block().opts;
     if (opts->code_model == CodeModel::REC_FUNC) {
-        std::ostringstream os(opts->tags_expression);
-        argsubst(os, opts->api_sigil, "tag", true, name);
-        return os.str();
+        Scratchbuf& buf = output.scratchbuf;
+        argsubst(buf.stream(), opts->tags_expression, opts->api_sigil, "tag", true, name);
+        return buf.flush();
     } else {
         return name;
     }
@@ -254,10 +174,10 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     const tagver_t* fins = dfa.finvers;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-    std::vector<std::string> fintags;
+    std::vector<const char*> fintags;
 
     if (rule.ncap > 0) {
-        const char* lhs = o.str(fintag_expr("yynmatch", opts)).flush();
+        const char* lhs = fintag_expr(output, "yynmatch");
         const char* rhs = o.u64(rule.ncap).flush();
         append(stmts, code_assign(alc, lhs, rhs));
     }
@@ -266,7 +186,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     CodeList* fixops = code_list(alc);
     CodeList* trailops = code_list(alc);
     CodeList* fixpostops = code_list(alc);
-    std::string negtag;
+    const char* negtag = nullptr;
 
     for (size_t t = rule.ltag; t < rule.htag; ++t) {
         const Tag& tag = tags[t];
@@ -277,8 +197,9 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         bool is_mtag = history(tag);
         bool fixed_on_cursor = fixed(tag) && tag.base == Tag::RIGHTMOST;
         int32_t dist = tag.dist == Tag::VARDIST ? 0 : static_cast<int32_t>(tag.dist);
-        const std::string& base = fixed_on_cursor
-                ? opts->api_cursor : vartag_expr(fins[fixed(tag) ? tag.base : t], opts, is_mtag);
+        const char* base = fixed_on_cursor
+                ? opts->api_cursor.c_str()
+                : o.str(vartag_expr(fins[fixed(tag) ? tag.base : t], opts, is_mtag)).flush();
 
         if (trailing(tag)) {
             if (fixed_on_cursor) {
@@ -295,34 +216,44 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         expand_fintags(output, tag, fintags);
 
         if (!fixed(tag)) { // variable tag
-            gen_copy_tags(output, varops, fintags.begin(), fintags.end(), base, is_mtag);
+            for (const char* t : fintags) {
+                append(varops, code_copy_tag(alc, t, base, is_mtag));
+            }
         } else {
             DCHECK(!is_mtag);
             DCHECK(!fintags.empty());
             auto first = fintags.begin(), second = first + 1, last = fintags.end();
 
             if (fixed_on_cursor) {
-                gen_set_tag(output, fixops, *first, false);
-                gen_shift(output, fixops, dist, *first);
-                gen_copy_tags(output, fixops, second, last, *first);
+                append(fixops, code_set_tag(alc, *first, false, false));
+                if (dist != 0) append(fixops, code_shift_tag(alc, *first, dist, false));
+                for (auto i = second; i != last; ++i) {
+                    append(fixops, code_copy_tag(alc, *i, *first, false));
+                }
             } else if (dist == 0) {
-                gen_copy_tags(output, fixops, first, last, base);
+                for (auto i = first; i != last; ++i) {
+                    append(fixops, code_copy_tag(alc, *i, base, false));
+                }
             } else if (tag.toplevel) {
-                gen_copy_tag(output, fixops, *first, base);
-                gen_shift(output, fixops, dist, *first);
-                gen_copy_tags(output, fixops, second, last, *first);
+                append(fixops, code_copy_tag(alc, *first, base, false));
+                append(fixops, code_shift_tag(alc, *first, dist, false));
+                for (auto i = second; i != last; ++i) {
+                    append(fixops, code_copy_tag(alc, *i, *first, false));
+                }
             } else {
                 // Split operations in two parts. First, set all fixed tags to their base tag.
                 // Second, choose one of the base tags to store negative value (with generic API
                 // there is no NULL constant) and compare fixed tags against it before shifting.
                 // This must be done after all uses of that base tag.
-                if (negtag.empty()) negtag = opts->api == Api::CUSTOM ? base : "NULL";
-                gen_copy_tag(output, fixops, *first, base);
+                if (negtag == nullptr) negtag = opts->api == Api::CUSTOM ? base : "NULL";
+                append(fixops, code_copy_tag(alc, *first, base, false));
                 const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
                 CodeList* then = code_list(alc);
-                gen_shift(output, then, dist, *first);
+                append(then, code_shift_tag(alc, *first, dist, false));
                 append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
-                gen_copy_tags(output, fixpostops, second, last, *first);
+                for (auto i = second; i != last; ++i) {
+                    append(fixpostops, code_copy_tag(alc, *i, *first, false));
+                }
             }
         }
     }
@@ -333,20 +264,20 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     append(stmts, fixops);
     append(stmts, trailops);
     // With generic API it's necessary to materialize no-match value in a tag (there's no constant).
-    if (opts->api == Api::CUSTOM && !negtag.empty()) {
+    if (opts->api == Api::CUSTOM && negtag != nullptr) {
         append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
-        gen_set_tag(output, stmts, negtag, true, false);
+        append(stmts, code_set_tag(alc, negtag, false, true));
     }
     append(stmts, fixpostops);
 }
 
 class GenArrayElem : public RenderCallback {
     std::ostream& os;
-    const std::string& array;
+    const char* array;
     size_t index;
 
   public:
-    GenArrayElem(std::ostream& os, const std::string& array, size_t index)
+    GenArrayElem(std::ostream& os, const char* array, size_t index)
         : os(os), array(array), index(index) {}
 
     void render_var(StxVarId var) override {
@@ -356,20 +287,22 @@ class GenArrayElem : public RenderCallback {
             default: UNREACHABLE(); break;
         }
     }
+
+    FORBID_COPY(GenArrayElem);
 };
 
-void expand_fintags(Output& output, const Tag& tag, std::vector<std::string>& fintags) {
+void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fintags) {
     const opt_t* opts = output.block().opts;
     fintags.clear();
     if (trailing(tag)) {
         // empty list
     } else if (!capture(tag)) {
         // named tag
-        fintags.push_back(fintag_expr(tag.name, opts));
+        fintags.push_back(fintag_expr(output, output.scratchbuf.str(tag.name).flush()));
     } else {
         // capture tag, maps to a range of parentheses
         Scratchbuf& buf = output.scratchbuf;
-        std::string yypmatch = fintag_expr("yypmatch", opts);
+        const char* yypmatch = fintag_expr(output, "yypmatch");
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             GenArrayElem callback(buf.stream(), yypmatch, i);
             opts->render_code_array_elem(buf.stream(), callback);
