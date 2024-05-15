@@ -265,7 +265,6 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     append(stmts, trailops);
     // With generic API it's necessary to materialize no-match value in a tag (there's no constant).
     if (opts->api == Api::CUSTOM && negtag != nullptr) {
-        append(stmts, code_text(alc, o.cstr("/* materialize no-match value */").flush()));
         append(stmts, code_set_tag(alc, negtag, false, true));
     }
     append(stmts, fixpostops);

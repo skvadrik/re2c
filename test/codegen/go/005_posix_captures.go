@@ -72,7 +72,6 @@ yy1:
 	yypmatch[6] = yyt4
 	yypmatch[8] = yyt2
 	yypmatch[9] = yyt2
-	/* materialize no-match value */
 	yyt3 = -1
 	if (yypmatch[2] != yyt3) {
 		yypmatch[2] += -1
@@ -90,7 +89,7 @@ yy1:
 	{
 		return yynmatch, yypmatch
 	}
-//line "codegen/go/005_posix_captures.go":94
+//line "codegen/go/005_posix_captures.go":93
 yy2:
 	cursor += 1
 yy3:
@@ -98,7 +97,7 @@ yy3:
 	{
 		return -1, nil
 	}
-//line "codegen/go/005_posix_captures.go":102
+//line "codegen/go/005_posix_captures.go":101
 yy4:
 	cursor += 1
 	marker = cursor
@@ -168,7 +167,7 @@ yy7:
 	{
 		return yynmatch, yypmatch
 	}
-//line "codegen/go/005_posix_captures.go":172
+//line "codegen/go/005_posix_captures.go":171
 yy8:
 	cursor += 1
 	yych = str[cursor]
@@ -301,7 +300,7 @@ yy19:
 	{
 		return yynmatch, yypmatch
 	}
-//line "codegen/go/005_posix_captures.go":305
+//line "codegen/go/005_posix_captures.go":304
 yy20:
 	cursor += 1
 	yych = str[cursor]

@@ -27,13 +27,12 @@ yy1:
 	yypmatch[5] = yyt2;
 	YYSTAGP(yypmatch[1]);
 	yypmatch[2] = yyt2;
-	/* materialize no-match value */
 	YYSTAGN(yyt2);
 	if (yypmatch[2] != yyt2) YYSHIFTSTAG(yypmatch[2], -1);
 	yypmatch[4] = yypmatch[2];
 #line 4 "captures/nested_fixed.re"
 	{}
-#line 37 "captures/nested_fixed.c"
+#line 36 "captures/nested_fixed.c"
 yy2:
 	YYSKIP();
 	YYSTAGP(yyt2);
@@ -43,7 +42,7 @@ yy2:
 
 
 
-#line 47 "captures/nested_fixed.c"
+#line 46 "captures/nested_fixed.c"
 {
 	YYCTYPE yych;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -68,7 +67,7 @@ yy4:
 	yypmatch[4] = yypmatch[2];
 #line 4 "captures/nested_fixed.re"
 	{}
-#line 72 "captures/nested_fixed.c"
+#line 71 "captures/nested_fixed.c"
 yy5:
 	++YYCURSOR;
 	yyt2 = YYCURSOR;
