@@ -547,6 +547,7 @@ start:
     "mtagn"      { RET_VAR(StxVarId::MTAGN); }
     "mtagp"      { RET_VAR(StxVarId::MTAGP); }
     "name"       { RET_VAR(StxVarId::NAME); }
+    "neg"        { RET_VAR(StxVarId::NEG); }
     "offset"     { RET_VAR(StxVarId::OFFSET); }
     "peek"       { RET_VAR(StxVarId::PEEK); }
     "restore"    { RET_VAR(StxVarId::RESTORE); }
@@ -629,6 +630,7 @@ opt:
     "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }
     "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
     "multival"        { RET_LOPT(StxLOpt::MULTIVAL); }
+    "nested"          { RET_LOPT(StxLOpt::NESTED); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }
 */

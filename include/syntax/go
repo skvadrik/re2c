@@ -217,7 +217,10 @@ code:yyrestoretag = topindent restoretag (api_style.functions ? "(" tag ")") nl;
 
 code:yyshift = topindent shift (api_style.functions ? "(-" offset ")") nl;
 
-code:yyshiftstag = topindent shiftstag (api_style.functions ? "(" tag ", -" offset ")") nl;
+code:yyshiftstag =
+    (nested ? topindent "if (" tag " != " neg ") {" nl indent)
+        topindent shiftstag (api_style.functions ? "(" tag ", -" offset ")") nl
+    (nested ? dedent topindent "}" nl);
 
 code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offset ")") nl;
 

@@ -253,7 +253,7 @@ code:yyshift =
     ) nl;
 
 code:yyshiftstag =
-    topindent (api.generic
+    topindent (nested ? "if (" tag " != " (api.generic ? neg : "NULL") ") ") (api.generic
         ? shiftstag
         : tag " -= " offset ";"
     ) nl;

@@ -203,9 +203,10 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(code_shiftstag, "code:shiftstag", \
-        ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
+        ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET}), ({}), \
+        ({StxLOpt::NESTED}) \
     ) \
-    CODE_TEMPLATE(code_shiftmtag, "code:shiftstag", \
+    CODE_TEMPLATE(code_shiftmtag, "code:shiftmtag", \
         ({StxVarId::SHIFTMTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(code_stagp, "code:stagp", \
@@ -255,8 +256,6 @@ using StxCodes = list_t<StxCode>;
     ONELINE_CODE("code:abort", CodeKind::ABORT) \
     ONELINE_CODE("code:fncall", CodeKind::FNCALL) \
     ONELINE_CODE("code:goto", CodeKind::GOTO) \
-    ONELINE_CODE("code:shiftmtag", CodeKind::SHIFTMTAG) \
-    ONELINE_CODE("code:shiftstag", CodeKind::SHIFTSTAG) \
     ONELINE_CODE("code:tailcall", CodeKind::FNCALL)
 
 // configuration-local variables in syntax files
@@ -294,6 +293,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(MTAGN, "mtagn") \
     STX_LOCAL_VAR(MTAGP, "mtagp") \
     STX_LOCAL_VAR(NAME, "name") \
+    STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
     STX_LOCAL_VAR(PEEK, "peek") \
     STX_LOCAL_VAR(RESTORE, "restore") \
