@@ -189,7 +189,8 @@ enum class StxLOpt {
     HAVE_INIT,
     HAVE_TYPE,
     HAVE_RETVAL,
-    MULTIVAL
+    MULTIVAL,
+    NESTED
 };
 
 enum class Ret: uint32_t {

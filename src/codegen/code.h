@@ -516,10 +516,11 @@ inline Code* code_shift(OutAllocator& alc, int32_t dist) {
     return x;
 }
 
-inline Code* code_shift_tag(OutAllocator& alc, const char* tag, int32_t dist, bool is_mtag) {
+inline Code* code_shift_tag(
+        OutAllocator& alc, const char* tag, const char* neg, int32_t dist, bool is_mtag) {
     Code* x = new_code(alc, is_mtag ? CodeKind::SHIFTMTAG : CodeKind::SHIFTSTAG);
     x->tag.tag1 = tag;
-    x->tag.tag2 = nullptr;
+    x->tag.tag2 = neg;
     x->tag.dist = dist;
     return x;
 }

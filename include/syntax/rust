@@ -211,7 +211,10 @@ code:yyrestoretag = topindent restoretag nl;
 
 code:yyshift = topindent shift nl;
 
-code:yyshiftstag = topindent shiftstag nl;
+code:yyshiftstag =
+    (nested ? topindent "if " tag " != " neg " {" nl indent)
+        topindent shiftstag nl
+    (nested ? dedent topindent "}" nl);
 
 code:yyshiftmtag = topindent shiftmtag nl;
 

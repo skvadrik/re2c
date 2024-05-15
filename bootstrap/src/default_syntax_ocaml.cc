@@ -216,7 +216,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "\n"
     "code:yyshift = topindent shift nl;\n"
     "\n"
-    "code:yyshiftstag = topindent shiftstag nl;\n"
+    "code:yyshiftstag = topindent (nested ? \"if \" tag \" <> \" neg \" then \") shiftstag nl;\n"
     "\n"
     "code:yyshiftmtag = topindent shiftmtag nl;\n"
     "\n"

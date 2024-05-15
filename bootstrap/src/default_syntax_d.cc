@@ -255,7 +255,7 @@ const char* DEFAULT_SYNTAX_D =
     "    ) nl;\n"
     "\n"
     "code:yyshiftstag =\n"
-    "    topindent (api.generic\n"
+    "    topindent (nested ? \"if (\" tag \" != \" (api.generic ? neg : \"NULL\") \") \") (api.generic\n"
     "        ? shiftstag\n"
     "        : tag \" -= \" offset \";\"\n"
     "    ) nl;\n"

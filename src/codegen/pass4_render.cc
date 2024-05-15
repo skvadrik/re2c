@@ -948,6 +948,7 @@ class RenderTagOps : public RenderCallback {
             rctx.os << code->tag1;
             break;
         case StxVarId::RHS:
+        case StxVarId::NEG:
             rctx.os << code->tag2;
             break;
         case StxVarId::CURSOR:
@@ -1038,6 +1039,14 @@ class RenderTagOps : public RenderCallback {
             render_global_var(rctx, var);
             break;
         }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::NESTED) {
+            return code->tag2 != nullptr; // for nested tags there is a negative tag
+        }
+        UNREACHABLE();
+        return false;
     }
 
     FORBID_COPY(RenderTagOps);

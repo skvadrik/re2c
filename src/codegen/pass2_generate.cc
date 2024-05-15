@@ -226,7 +226,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 
             if (fixed_on_cursor) {
                 append(fixops, code_set_tag(alc, *first, false, false));
-                if (dist != 0) append(fixops, code_shift_tag(alc, *first, dist, false));
+                if (dist != 0) append(fixops, code_shift_tag(alc, *first, nullptr, dist, false));
                 for (auto i = second; i != last; ++i) {
                     append(fixops, code_copy_tag(alc, *i, *first, false));
                 }
@@ -236,21 +236,17 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                 }
             } else if (tag.toplevel) {
                 append(fixops, code_copy_tag(alc, *first, base, false));
-                append(fixops, code_shift_tag(alc, *first, dist, false));
+                append(fixops, code_shift_tag(alc, *first, nullptr, dist, false));
                 for (auto i = second; i != last; ++i) {
                     append(fixops, code_copy_tag(alc, *i, *first, false));
                 }
             } else {
-                // Split operations in two parts. First, set all fixed tags to their base tag.
-                // Second, choose one of the base tags to store negative value (with generic API
-                // there is no NULL constant) and compare fixed tags against it before shifting.
-                // This must be done after all uses of that base tag.
-                if (negtag == nullptr) negtag = opts->api == Api::CUSTOM ? base : "NULL";
+                // Pick one of the base tags to store negative value (with generic API we cannot
+                // rely on a NULL constant). `code:yyshiftstag` or YYSHIFTSTAG will compare the tag
+                // to it before shifting. These operations must go after all uses of the base tag.
+                if (negtag == nullptr) negtag = base;
                 append(fixops, code_copy_tag(alc, *first, base, false));
-                const char* cond = o.str(*first).cstr(" != ").str(negtag).flush();
-                CodeList* then = code_list(alc);
-                append(then, code_shift_tag(alc, *first, dist, false));
-                append(fixpostops, code_if_then_else(alc, cond, then, nullptr));
+                append(fixpostops, code_shift_tag(alc, *first, negtag, dist, false));
                 for (auto i = second; i != last; ++i) {
                     append(fixpostops, code_copy_tag(alc, *i, *first, false));
                 }
