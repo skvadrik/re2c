@@ -59,8 +59,8 @@ and yy3 (st : state) : (int list) option =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x00' ->
-			st.yytm4 <- [];
-			st.yytm3 <- [];
+			
+			
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
@@ -103,8 +103,8 @@ and yy7 (st : state) : (int list) option =
 	let yych = st.str.[st.cur] in
 	match yych with
 		| '\x00' ->
-			st.yytm4 <- [];
-			st.yytm3 <- [];
+			
+			
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy4 [@tailcall]) st
