@@ -176,8 +176,8 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     Scratchbuf& o = output.scratchbuf;
     std::vector<const char*> fintags;
 
-    if (rule.ncap > 0) {
-        const char* lhs = fintag_expr(output, "yynmatch");
+    if (rule.ncap > 0 && !opts->var_nmatch.empty()) {
+        const char* lhs = fintag_expr(output, opts->var_nmatch.c_str());
         const char* rhs = o.u64(rule.ncap).flush();
         append(stmts, code_assign(alc, lhs, rhs));
     }
@@ -297,7 +297,7 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
     } else {
         // capture tag, maps to a range of parentheses
         Scratchbuf& buf = output.scratchbuf;
-        const char* yypmatch = fintag_expr(output, "yypmatch");
+        const char* yypmatch = fintag_expr(output, opts->var_pmatch.c_str());
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             GenArrayElem callback(buf.stream(), yypmatch, i);
             opts->render_code_array_elem(buf.stream(), callback);

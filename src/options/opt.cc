@@ -131,6 +131,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_computed_gotos_table = defaults.var_computed_gotos_table;
         real.var_fill = defaults.var_fill;
         real.var_state = defaults.var_state;
+        real.var_nmatch = defaults.var_nmatch;
+        real.var_pmatch = defaults.var_pmatch;
         real.fill_enable = defaults.fill_enable;
         real.fill_check = defaults.fill_check;
         real.fill_param = defaults.fill_param;
