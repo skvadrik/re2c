@@ -75,6 +75,8 @@
     re2c:variable:yyaccept = "";
     re2c:variable:yytarget = "";
     re2c:variable:yystate = "";
+    re2c:variable:yynmatch = "";
+    re2c:variable:yypmatch = "";
     re2c:variable:yych = "";
     re2c:variable:yych:conversion = 0;
     re2c:yych:conversion = 0;

@@ -183,6 +183,8 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"  "yyaccept"        { RET_CONF_STR(var_accept); }
     "variable:"  "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }
     "variable:"  "yystate"         { RET_CONF_STR(var_state); }
+    "variable:"  "yynmatch"        { RET_CONF_STR(var_nmatch); }
+    "variable:"  "yypmatch"        { RET_CONF_STR(var_pmatch); }
     "variable:"  "yych"            { RET_CONF_STR(var_char); }
     "variable:"? "yych:conversion" { RET_CONF_BOOL(char_conv); }
     "variable:"? "yych:literals"   { goto char_lit; }
