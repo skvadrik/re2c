@@ -111,10 +111,12 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(code_if_then_else, "code:if_then_else", \
-        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::HAVE_COND}) \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
+        ({StxLOpt::HAVE_COND, StxLOpt::MULTIVAL}) \
     ) \
     CODE_TEMPLATE(code_if_then_else_oneline, "code:if_then_else_oneline", \
-        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::HAVE_COND}) \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
+        ({StxLOpt::HAVE_COND, StxLOpt::MULTIVAL}) \
     ) \
     CODE_TEMPLATE(code_switch, "code:switch", \
         ({StxVarId::EXPR}), ({StxVarId::CASE}), ({}) \

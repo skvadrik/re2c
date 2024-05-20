@@ -263,8 +263,10 @@ class RenderIfThenElse : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_COND) {
-            return curr_branch->cond != nullptr;
+        switch (opt) {
+            case StxLOpt::HAVE_COND: return curr_branch->cond != nullptr;
+            case StxLOpt::MULTIVAL: return nbranches > 1;
+            default: break;
         }
         UNREACHABLE();
         return false;
