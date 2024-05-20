@@ -98,7 +98,7 @@ Handling the end of input
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/eof/04_generic_api.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/eof/05_generic_api_eof_rule.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/eof/04_fake_sentinel.re
     :literal:
     :code: RE2C_LANG
 

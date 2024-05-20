@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "RE2C" 1 "" "" ""
+.TH "RE2C" 1 "" ""
 .SH NAME
 re2c \- generate fast lexical analyzers for C/C++, Go and Rust
 .SH SYNOPSIS
@@ -1838,13 +1838,12 @@ int main() {
 .sp
 This example uses a custom end\-of\-input handling method based on generic API.
 The program counts space\-separated single\-quoted strings. It is the same as the
-\fI\%sentinel with bounds checks\fP example, except that the input is not
-null\-terminated (this method can be used if padding is not an option, not even a
-single character). To cover up for the absence of sentinel character at the end
-of input, \fBYYPEEK\fP is redefined to perform a bounds check before it reads the
-next input character. This is inefficient because checks are done very often. If
-the check condition fails, \fBYYPEEK\fP returns the real character, otherwise it
-returns a fake sentinel character.
+\fI\%sentinel\fP example, except that the input is not null\-terminated. To cover up
+for the absence of a sentinel character at the end of input, \fBYYPEEK\fP is
+redefined to perform a bounds check before it reads the next input character.
+This is inefficient because checks are done very often. If the check condition
+fails, \fBYYPEEK\fP returns the real character, otherwise it returns a fake
+sentinel character.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -1860,28 +1859,22 @@ static int lex(const char *str, unsigned int len) {
     char *buf = (char*) malloc(len);
     memcpy(buf, str, len);
 
-    const char *cur = buf, *lim = buf + len, *mar;
+    const char *cur = buf, *lim = buf + len;
     int count = 0;
 
     for (;;) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:eof = 0;
         re2c:api = custom;
         re2c:api:style = free\-form;
         re2c:define:YYCTYPE = char;
-        re2c:define:YYLESSTHAN = \(dqcur >= lim\(dq;
         re2c:define:YYPEEK = \(dqcur < lim ? *cur : 0\(dq;  // fake null
         re2c:define:YYSKIP = \(dq++cur;\(dq;
-        re2c:define:YYBACKUP = \(dqmar = cur;\(dq;
-        re2c:define:YYRESTORE = \(dqcur = mar;\(dq;
 
-        str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
-
-        *    { count = \-1; break; }
-        $    { break;; }
-        str  { ++count; continue; }
-        [ ]+ { continue; }
+        *      { count = \-1; break; }
+        [\ex00] { break;; }
+        [a\-z]+ { ++count; continue;; }
+        [ ]+   { continue; }
     */
     }
 
@@ -1892,8 +1885,8 @@ static int lex(const char *str, unsigned int len) {
 #define TEST(s, r) assert(lex(s, sizeof(s) \- 1) == r)
 int main() {
     TEST(\(dq\(dq, 0);
-    TEST(\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq, 3);
-    TEST(\(dq\(aqunterminated\e\e\(aq\(dq, \-1);
+    TEST(\(dqone two three \(dq, 3);
+    TEST(\(dqf0ur\(dq, \-1);
     return 0;
 }
 
@@ -2435,9 +2428,9 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE        = char;
-        re2c:define:YYGETCONDITION = \(dqc\(dq;
-        re2c:define:YYSETCONDITION = \(dqc = @@;\(dq;
+        re2c:define:YYCTYPE   = char;
+        re2c:define:YYGETCOND = \(dqc\(dq;
+        re2c:define:YYSETCOND = \(dqc = @@;\(dq;
         re2c:yyfill:enable = 0;
 
         <*> * { return ERROR; }

@@ -247,7 +247,7 @@ re2c_SRC_DOC_EXT = \
 	examples/c/eof/01_sentinel.re \
 	examples/c/eof/02_bounds_checking.re \
 	examples/c/eof/03_eof_rule.re \
-	examples/c/eof/05_generic_api_eof_rule.re \
+	examples/c/eof/04_fake_sentinel.re \
 	examples/c/fill/01_fill.re \
 	examples/c/fill/02_fill.re \
 	examples/c/headers/header.re \
@@ -269,7 +269,7 @@ re2c_SRC_DOC_EXT = \
 	examples/go/eof/01_sentinel.re \
 	examples/go/eof/02_bounds_checking.re \
 	examples/go/eof/03_eof_rule.re \
-	examples/go/eof/05_generic_api_eof_rule.re \
+	examples/go/eof/04_fake_sentinel.re \
 	examples/go/fill/01_fill.re \
 	examples/go/fill/02_fill.re \
 	examples/go/headers/header.re \
@@ -291,7 +291,7 @@ re2c_SRC_DOC_EXT = \
 	examples/rust/eof/01_sentinel.re \
 	examples/rust/eof/02_bounds_checking.re \
 	examples/rust/eof/03_eof_rule.re \
-	examples/rust/eof/05_generic_api_eof_rule.re \
+	examples/rust/eof/04_fake_sentinel.re \
 	examples/rust/fill/01_fill.re \
 	examples/rust/fill/02_fill.re \
 	examples/rust/headers/header.re \
