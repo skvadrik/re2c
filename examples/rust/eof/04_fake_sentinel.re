@@ -10,8 +10,7 @@ fn lex(s: &[u8]) -> isize {
         re2c:define:YYCTYPE = u8;
         re2c:define:YYPEEK  = "if cur < lim {*s.get_unchecked(cur)} else {0}";
         re2c:define:YYSKIP  = "cur += 1;";
-        re2c:define:YYFILL  = "{ return -1; }";
-        re2c:yyfill:enable = 0;
+        re2c:yyfill:enable  = 0;
 
         *      { return -1; }
         [\x00] { return count; }
