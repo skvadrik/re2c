@@ -1270,6 +1270,39 @@ class RenderLineInfo : public RenderCallback {
     FORBID_COPY(RenderLineInfo);
 };
 
+class RenderSetAccept : public RenderCallback {
+    RenderContext& rctx;
+    size_t val;
+
+  public:
+    RenderSetAccept(RenderContext& rctx, size_t val)
+        : rctx(rctx), val(val) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETACCEPT: {
+            // no function style, as YYSETACCEPT must have a working default definition
+            std::ostringstream s(rctx.opts->api_accept_set);
+            argsubst(s, rctx.opts->api_sigil, "var", false, rctx.opts->var_accept);
+            argsubst(s, rctx.opts->api_sigil, "val", false, val);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_accept;
+            break;
+        case StxVarId::VAL:
+            rctx.os << val;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetAccept);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -1477,6 +1510,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SKIP_BACKUP_PEEK: {
         RenderSkipPeekBackupRestore callback(rctx);
         rctx.opts->render_code_skip_backup_peek(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETACCEPT: {
+        RenderSetAccept callback(rctx, code->accept);
+        rctx.opts->render_code_setaccept(rctx.os, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {

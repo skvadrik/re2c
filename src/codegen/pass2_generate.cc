@@ -806,22 +806,48 @@ static void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const Stat
     }
 }
 
+class GenGetAccept : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetAccept(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::GETACCEPT:
+            // no function style, as YYGETACCEPT must have a working default definition
+            argsubst(os, opts->api_accept_get, opts->api_sigil, "var", true, opts->var_accept);
+            break;
+        case StxVarId::VAR:
+            os << opts->var_accept;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenGetAccept);
+};
+
 static CodeList* emit_accept_binary(Output& output,
                                     const Adfa& dfa,
+                                    const char* var,
                                     const uniq_vector_t<AcceptTrans>& acc,
                                     size_t l,
                                     size_t r) {
-    const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
 
     CodeList* stmts = code_list(alc);
     if (l < r) {
         const size_t m = (l + r) >> 1;
-        const char* if_cond = o.str(opts->var_accept).cstr(r == l + 1 ? " == " : " <= ").u64(m)
+        const char* if_cond = o.cstr(var).cstr(r == l + 1 ? " == " : " <= ").u64(m)
                 .flush();
-        CodeList* if_then = emit_accept_binary(output, dfa, acc, l, m);
-        CodeList* if_else = emit_accept_binary(output, dfa, acc, m + 1, r);
+        CodeList* if_then = emit_accept_binary(output, dfa, var, acc, l, m);
+        CodeList* if_else = emit_accept_binary(output, dfa, var, acc, m + 1, r);
         append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
     } else {
         const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
@@ -840,6 +866,10 @@ static void emit_accept(
     if (nacc == 0) return;
 
     append(stmts, code_restore(alc));
+
+    GenGetAccept callback(buf.stream(), opts);
+    opts->render_code_getaccept(buf.stream(), callback);
+    const char* var = buf.flush();
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -864,7 +894,7 @@ static void emit_accept(
         const char* type = buf.flush();
         append(block, code_array(alc, opts->var_computed_gotos_table.c_str(), type, elems, nacc));
 
-        buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").str(opts->var_accept).cstr("]");
+        buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").cstr(var).cstr("]");
         append(block, code_goto(alc, buf.flush()));
 
         append(stmts, code_block(alc, block, CodeBlock::Kind::WRAPPED));
@@ -873,7 +903,7 @@ static void emit_accept(
 
     // nested ifs
     if (opts->nested_ifs || nacc == 2) {
-        append(stmts, emit_accept_binary(output, dfa, acc, 0, nacc - 1));
+        append(stmts, emit_accept_binary(output, dfa, var, acc, 0, nacc - 1));
         return;
     }
 
@@ -889,7 +919,7 @@ static void emit_accept(
             append(cases, code_case_number(alc, case_body, static_cast<int32_t>(i)));
         }
     }
-    append(stmts, code_switch(alc, opts->var_accept.c_str(), cases));
+    append(stmts, code_switch(alc, var, cases));
 }
 
 static void gen_debug(Output& output, const Label* label, CodeList* stmts) {
@@ -1028,7 +1058,6 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
 static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
 
     switch (s->action.kind) {
     case Action::Kind::MATCH:
@@ -1044,8 +1073,7 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
         const bool ul1 = s->label->used;
 
         if (ul1 && dfa.accepts.size() > 1 && backup) {
-            const char* save = buf.u64(s->action.info.save).flush();
-            append(stmts, code_assign(alc, opts->var_accept.c_str(), save));
+            append(stmts, code_set_accept(alc, save));
         }
         if (ul1 && !opts->eager_skip) {
             append(stmts, code_skip(alc));
@@ -1061,8 +1089,7 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
     }
     case Action::Kind::SAVE:
         if (dfa.accepts.size() > 1) {
-            const char* save = buf.u64(s->action.info.save).flush();
-            append(stmts, code_assign(alc, opts->var_accept.c_str(), save));
+            append(stmts, code_set_accept(alc, s->action.info.save));
         }
         if (!opts->eager_skip) {
             append(stmts, code_skip(alc));

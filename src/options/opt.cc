@@ -121,6 +121,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_cond_set = defaults.api_cond_set;
         real.api_state_get = defaults.api_state_get;
         real.api_state_set = defaults.api_state_set;
+        real.api_accept_get = defaults.api_accept_get;
+        real.api_accept_set = defaults.api_accept_set;
         real.api_maxfill = defaults.api_maxfill;
         real.api_maxnmatch = defaults.api_maxnmatch;
         real.api_debug = defaults.api_debug;
@@ -301,6 +303,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         REPLACE_SIGIL(api_mtag_shift);
         REPLACE_SIGIL(api_cond_get);
         REPLACE_SIGIL(api_state_get);
+        REPLACE_SIGIL(api_accept_get);
+        REPLACE_SIGIL(api_accept_set);
         REPLACE_SIGIL(api_debug);
         REPLACE_SIGIL(tags_expression);
 #undef REPLACE_SIGIL

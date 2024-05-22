@@ -38,6 +38,7 @@ conf:define:YYDEBUG = "YYDEBUG";
 conf:define:YYFILL = "YYFILL";
 conf:define:YYFILL@len = "@@";
 conf:define:YYFILL:naked = 0;
+conf:define:YYGETACCEPT = "@@{var}";
 conf:define:YYGETCOND = "YYGETCONDITION"; // historic default
 conf:define:YYGETCOND:naked = 0;
 conf:define:YYGETSTATE = "YYGETSTATE";
@@ -53,6 +54,7 @@ conf:define:YYPEEK = "YYPEEK";
 conf:define:YYRESTORE = "YYRESTORE";
 conf:define:YYRESTORECTX = "YYRESTORECTX";
 conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETACCEPT = "@@{var} = @@{val};";
 conf:define:YYSETCOND = "YYSETCONDITION"; // historic default
 conf:define:YYSETCOND@cond = "@@";
 conf:define:YYSETCOND:naked = 0;
@@ -324,3 +326,12 @@ code:yyskip_backup_peek =
 code:yybackup_peek_skip =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*(" marker " = " cursor "++);" nl;
+
+// function style is not supported, as there's no sensible default
+code:yygetaccept = (api.generic ? getaccept : var);
+
+code:yysetaccept =
+    topindent (api.generic
+        ? setaccept // function style is not supported, as there's no sensible default
+        : var " = " val ";"
+    ) nl;
