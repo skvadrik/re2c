@@ -101,6 +101,7 @@ enum class CodeKind: uint32_t {
     BACKUP_PEEK,
     BACKUP_PEEK_SKIP,
     SKIP_BACKUP_PEEK,
+    SETACCEPT,
     LINE_INFO_INPUT,
     LINE_INFO_OUTPUT,
     FINGERPRINT,

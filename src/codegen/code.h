@@ -333,6 +333,7 @@ struct Code {
         CodeList* loop;
         CodeList* rfuncs;
         loc_t loc;
+        size_t accept;
     };
 
     CodeKind kind;
@@ -540,6 +541,12 @@ inline Code* code_copy_tag(OutAllocator& alc, const char* lhs, const char* rhs, 
     x->tag.tag1 = lhs;
     x->tag.tag2 = rhs;
     x->tag.dist = 0;
+    return x;
+}
+
+inline Code* code_set_accept(OutAllocator& alc, size_t accept) {
+    Code* x = new_code(alc, CodeKind::SETACCEPT);
+    x->accept = accept;
     return x;
 }
 

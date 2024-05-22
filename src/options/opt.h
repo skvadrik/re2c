@@ -252,6 +252,12 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(code_backup_peek_skip, "code:backup_peek_skip", \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_getaccept, "code:getaccept", \
+        ({StxVarId::GETACCEPT, StxVarId::VAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_setaccept, "code:setaccept", \
+        ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL}), ({}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -286,6 +292,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(FILE, "file") \
     STX_LOCAL_VAR(FNDECL, "fndecl") \
     STX_LOCAL_VAR(FNDEF, "fndef") \
+    STX_LOCAL_VAR(GETACCEPT, "getaccept") \
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
     STX_LOCAL_VAR(LABEL, "label") \
@@ -304,6 +311,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(RETVAL, "retval") \
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
+    STX_LOCAL_VAR(SETACCEPT, "setaccept") \
     STX_LOCAL_VAR(SIZE, "size") \
     STX_LOCAL_VAR(SHIFT, "shift") \
     STX_LOCAL_VAR(SHIFTMTAG, "shiftmtag") \
@@ -317,6 +325,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(TYPE, "type") \
     STX_LOCAL_VAR(TYPECAST, "typecast") \
     STX_LOCAL_VAR(VAL, "val") \
+    STX_LOCAL_VAR(VAR, "var") \
     STX_LOCAL_VAR(VER, "version")
 
 // global variables in syntax files
@@ -412,6 +421,8 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, api_cond_set, "YYSETCOND" ) \
     MUTOPT(std::string, api_state_get, "YYGETSTATE") \
     MUTOPT(std::string, api_state_set, "YYSETSTATE") \
+    MUTOPT(std::string, api_accept_get, "YYGETACCEPT") \
+    MUTOPT(std::string, api_accept_set, "YYSETACCEPT") \
     MUTOPT(std::string, api_maxfill, "YYMAXFILL") \
     MUTOPT(std::string, api_maxnmatch, "YYMAXNMATCH") \
     MUTOPT(std::string, api_debug, "YYDEBUG") \

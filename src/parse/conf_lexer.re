@@ -143,6 +143,7 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYFILL"                      { RET_CONF_STR(api_fill); }
     "define:YYFILL@len"                  { RET_CONF_STR(fill_param); }
     "define:YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
+    "define:YYGETACCEPT"                 { RET_CONF_STR(api_accept_get); }
     "define:YYGETCOND" "ITION"?          { RET_CONF_STR(api_cond_get); }
     "define:YYGETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_get_naked); }
     "define:YYGETSTATE"                  { RET_CONF_STR(api_state_get); }
@@ -158,6 +159,7 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYRESTORE"                   { RET_CONF_STR(api_restore); }
     "define:YYRESTORECTX"                { RET_CONF_STR(api_restore_ctx); }
     "define:YYRESTORETAG"                { RET_CONF_STR(api_restore_tag); }
+    "define:YYSETACCEPT"                 { RET_CONF_STR(api_accept_set); }
     "define:YYSETCOND" "ITION"?          { RET_CONF_STR(api_cond_set); }
     "define:YYSETCOND" "ITION"? "@cond"  { RET_CONF_STR(cond_set_param); }
     "define:YYSETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_set_naked); }
@@ -510,6 +512,8 @@ start:
     "code:yybackup_peek"        { RET_CODE(code_backup_peek); }
     "code:yyskip_backup_peek"   { RET_CODE(code_skip_backup_peek); }
     "code:yybackup_peek_skip"   { RET_CODE(code_backup_peek_skip); }
+    "code:yygetaccept"          { RET_CODE(code_getaccept); }
+    "code:yysetaccept"          { RET_CODE(code_setaccept); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
@@ -540,6 +544,7 @@ start:
     "file"       { RET_VAR(StxVarId::FILE); }
     "fndecl"     { RET_VAR(StxVarId::FNDECL); }
     "fndef"      { RET_VAR(StxVarId::FNDEF); }
+    "getaccept"  { RET_VAR(StxVarId::GETACCEPT); }
     "index"      { RET_VAR(StxVarId::INDEX); }
     "init"       { RET_VAR(StxVarId::INIT); }
     "label"      { RET_VAR(StxVarId::LABEL); }
@@ -558,6 +563,7 @@ start:
     "retval"     { RET_VAR(StxVarId::RETVAL); }
     "rhs"        { RET_VAR(StxVarId::RHS); }
     "row"        { RET_VAR(StxVarId::ROW); }
+    "setaccept"  { RET_VAR(StxVarId::SETACCEPT); }
     "size"       { RET_VAR(StxVarId::SIZE); }
     "shift"      { RET_VAR(StxVarId::SHIFT); }
     "shiftmtag"  { RET_VAR(StxVarId::SHIFTMTAG); }
@@ -571,6 +577,7 @@ start:
     "type"       { RET_VAR(StxVarId::TYPE); }
     "typecast"   { RET_VAR(StxVarId::TYPECAST); }
     "val"        { RET_VAR(StxVarId::VAL); }
+    "var"        { RET_VAR(StxVarId::VAR); }
     "version"    { RET_VAR(StxVarId::VER); }
 
     // global variables
