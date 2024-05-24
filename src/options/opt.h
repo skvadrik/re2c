@@ -37,6 +37,7 @@ namespace re2c {
 class Input;
 class Msg;
 class RenderCallback;
+class Scratchbuf;
 struct StxCode;
 using StxCodes = list_t<StxCode>;
 
@@ -689,12 +690,10 @@ struct opt_t {
     {}
 
 #define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-    void render_##name(std::ostream& os, RenderCallback& callback) const { \
-        eval_code_conf(name, os, callback); \
-    } \
-    void render_##name(std::ostream& os) const { \
-        eval_code_conf(name, os); \
-    }
+    const char* gen_##name(Scratchbuf& buf, RenderCallback& callback) const; \
+    const char* gen_##name(Scratchbuf& buf) const; \
+    void render_##name(std::ostream& os, RenderCallback& callback) const; \
+    void render_##name(std::ostream& os) const;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }

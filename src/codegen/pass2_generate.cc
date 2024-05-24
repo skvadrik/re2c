@@ -300,8 +300,7 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
         const char* yypmatch = fintag_expr(output, opts->var_pmatch.c_str());
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             GenArrayElem callback(buf.stream(), yypmatch, i);
-            opts->render_code_array_elem(buf.stream(), callback);
-            fintags.push_back(buf.flush());
+            fintags.push_back(opts->gen_code_array_elem(buf, callback));
         }
     }
 }
@@ -705,8 +704,7 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
 
-    opts->render_code_type_yytarget(buf.stream());
-    const char* type = buf.flush();
+    const char* type = opts->gen_code_type_yytarget(buf);
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_array(alc, opts->var_computed_gotos_table.c_str(),
@@ -868,8 +866,7 @@ static void emit_accept(
     append(stmts, code_restore(alc));
 
     GenGetAccept callback(buf.stream(), opts);
-    opts->render_code_getaccept(buf.stream(), callback);
-    const char* var = buf.flush();
+    const char* var = opts->gen_code_getaccept(buf, callback);
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -890,8 +887,7 @@ static void emit_accept(
             buf.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index);
             elems[i] = buf.flush();
         }
-        opts->render_code_type_yytarget(buf.stream());
-        const char* type = buf.flush();
+        const char* type = opts->gen_code_type_yytarget(buf);
         append(block, code_array(alc, opts->var_computed_gotos_table.c_str(), type, elems, nacc));
 
         buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").cstr(var).cstr("]");
@@ -969,8 +965,7 @@ class GenEnumElem : public RenderCallback {
 static const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
     const std::string& cond = opts->cond_enum_prefix + name;
     GenEnumElem callback(buf.stream(), opts->api_cond_type, cond);
-    opts->render_code_enum_elem(buf.stream(), callback);
-    return buf.flush();
+    return opts->gen_code_enum_elem(buf, callback);
 }
 
 static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx) {
@@ -1626,8 +1621,7 @@ static CodeList* gen_cond_table(Output& output) {
     for (size_t i = 0; i < conds.size(); ++i) {
         elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
-    opts->render_code_type_yytarget(buf.stream());
-    const char* type = buf.flush();
+    const char* type = opts->gen_code_type_yytarget(buf);
     append(code, code_array(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
     return code;
 }
@@ -1759,10 +1753,8 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
         }
     }
 
-    const char *name = buf.str(bitmap_name(opts, cond)).flush();
-
-    opts->render_code_type_yybm(buf.stream());
-    const char* type = buf.flush();
+    const char* name = buf.str(bitmap_name(opts, cond)).flush();
+    const char* type = opts->gen_code_type_yybm(buf);
 
     CodeList* stmts = code_list(alc);
     append(stmts, code_array(alc, name, type, elems, nelems, /*tabulate*/ true));
