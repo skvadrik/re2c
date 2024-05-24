@@ -762,6 +762,24 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
     return lbound <= rbound && rbound >= 0;
 }
 
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
+const char* opt_t::gen_##name(Scratchbuf& buf, RenderCallback& callback) const { \
+    eval_code_conf(name, buf.stream(), callback); \
+    return buf.flush(); \
+} \
+const char* opt_t::gen_##name(Scratchbuf& buf) const { \
+    eval_code_conf(name, buf.stream()); \
+    return buf.flush(); \
+} \
+void opt_t::render_##name(std::ostream& os, RenderCallback& callback) const { \
+    eval_code_conf(name, os, callback); \
+} \
+void opt_t::render_##name(std::ostream& os) const { \
+    eval_code_conf(name, os); \
+}
+RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
+
 void opt_t::eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallback& callback) const {
     stack_code_t& stack = stack_code;
     size_t bottom = stack.size();
