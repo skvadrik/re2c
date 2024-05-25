@@ -202,7 +202,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "\n"
     "code:abort = topindent \"raise (Failure \\\"internal lexer error\\\")\" nl;\n"
     "\n"
-    "code:yydebug = topindent debug \" \" state \" \" char nl;\n"
+    "code:yydebug = topindent debug nl;\n"
     "\n"
     "code:yypeek = topindent \"let \" char \" = \" peek \" in\" nl;\n"
     "\n"

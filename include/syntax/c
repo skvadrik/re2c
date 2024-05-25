@@ -217,7 +217,11 @@ code:line_info = "#line " line " \"" file "\"" nl;
 
 code:abort = topindent "abort();" nl;
 
-code:yydebug = topindent debug "(" state ", " char ");" nl;
+code:yydebug =
+    topindent (api.generic
+        ? debug (api_style.functions ? "();")
+        : debug "(" state ", " char ");"
+    ) nl;
 
 code:yypeek =
     topindent (code_model.recursive_functions ? ctype " ") char " = " (api.generic

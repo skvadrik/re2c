@@ -882,10 +882,25 @@ class RenderDebug : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::DEBUG: rctx.os << rctx.opts->api_debug; break;
-            case StxVarId::STATE: rctx.os << code->state; break;
-            case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
-            default: render_global_var(rctx, var); break;
+        case StxVarId::DEBUG:
+            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
+                std::ostringstream s(rctx.opts->api_debug);
+                argsubst(s, rctx.opts->api_sigil, "state", false, code->state);
+                argsubst(s, rctx.opts->api_sigil, "char", false, rctx.opts->var_char);
+                rctx.os << s.str();
+            } else {
+                rctx.os << rctx.opts->api_debug;
+            }
+            break;
+        case StxVarId::STATE:
+            rctx.os << code->state;
+            break;
+        case StxVarId::CHAR:
+            rctx.os << rctx.opts->var_char;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
         }
     }
 

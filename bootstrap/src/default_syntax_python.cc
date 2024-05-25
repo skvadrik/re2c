@@ -184,7 +184,7 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "\n"
     "code:abort = topindent \"raise \\\"internal lexer error\\\"\" nl;\n"
     "\n"
-    "code:yydebug = topindent debug \" \" state \" \" char nl;\n"
+    "code:yydebug = topindent debug nl;\n"
     "\n"
     "code:yypeek = topindent char \" = \" peek nl;\n"
     "\n"

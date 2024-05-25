@@ -918,30 +918,6 @@ static void emit_accept(
     append(stmts, code_switch(alc, var, cases));
 }
 
-static void gen_debug(Output& output, const Label* label, CodeList* stmts) {
-    if (!output.block().opts->debug) return;
-
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-    const opt_t* opts = output.block().opts;
-
-    // The label may be unused but still have a valid index (one such example is the initial label
-    // in goto/label mode). It still needs an YYDEBUG statement.
-    const uint32_t state = label->index;
-
-    if (opts->api == Api::DEFAULT) {
-        append(stmts, code_debug(alc, state));
-    } else if (opts->api_style == ApiStyle::FREEFORM) {
-        buf.str(opts->api_debug);
-        argsubst(buf.stream(), opts->api_sigil, "state", false, state);
-        argsubst(buf.stream(), opts->api_sigil, "char", false, opts->var_char);
-        append(stmts, code_text(alc, buf.flush()));
-    } else {
-        buf.str(opts->api_debug).cstr("()");
-        append(stmts, code_stmt(alc, buf.flush()));
-    }
-}
-
 class GenEnumElem : public RenderCallback {
     std::ostream& os;
     const std::string& type;
@@ -1079,7 +1055,9 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
             append(stmts, code_backup(alc));
         }
         gen_peek(alc, s, stmts);
-        gen_debug(output, dfa.initial_label, stmts);
+        if (opts->debug) {
+            append(stmts, code_debug(alc, dfa.initial_label->index));
+        }
         break;
     }
     case Action::Kind::SAVE:
@@ -1105,15 +1083,18 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
 }
 
 static void emit_state(Output& output, const State* state, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+
     // If state label is unused, we should not generate it.
     // Nor can we emit an YYDEBUG statement, as there is no state number to pass to it.
     if (!state->label->used) return;
 
-    if (output.block().opts->code_model == CodeModel::GOTO_LABEL) {
+    if (opts->code_model == CodeModel::GOTO_LABEL) {
         append(stmts, code_nlabel(output.allocator, state->label));
     }
-    if (state->action.kind != Action::Kind::INITIAL) {
-        gen_debug(output, state->label, stmts);
+    if (opts->debug && state->action.kind != Action::Kind::INITIAL) {
+        append(stmts, code_debug(alc, state->label->index));
     }
 }
 

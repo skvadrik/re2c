@@ -194,7 +194,7 @@ const char* DEFAULT_SYNTAX_HASKELL =
     "\n"
     "code:abort = topindent \"error \\\"internal lexer error\\\"\" nl;\n"
     "\n"
-    "code:yydebug = topindent debug \" \" state \" \" char nl;\n"
+    "code:yydebug = topindent debug nl;\n"
     "\n"
     "code:yypeek = (monadic\n"
     "    ? topindent char \" <- \" peek nl\n"

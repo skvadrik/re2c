@@ -192,7 +192,7 @@ code:line_info = "#" line " \"" file "\"" nl;
 
 code:abort = topindent "error \"internal lexer error\"" nl;
 
-code:yydebug = topindent debug " " state " " char nl;
+code:yydebug = topindent debug nl;
 
 code:yypeek = (monadic
     ? topindent char " <- " peek nl

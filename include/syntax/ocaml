@@ -200,7 +200,7 @@ code:line_info = "#" line " \"" file "\"" nl;
 
 code:abort = topindent "raise (Failure \"internal lexer error\")" nl;
 
-code:yydebug = topindent debug " " state " " char nl;
+code:yydebug = topindent debug nl;
 
 code:yypeek = topindent "let " char " = " peek " in" nl;
 
