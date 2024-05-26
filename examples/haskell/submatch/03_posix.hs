@@ -68,7 +68,7 @@ yy1 !_s =
 
 yy2 :: State -> Maybe SemVer
 yy2 !_s =
-#65 "haskell/submatch/03_posix.re"
+#68 "haskell/submatch/03_posix.re"
     Nothing
 #74 "haskell/submatch/03_posix.hs"
 
@@ -147,7 +147,7 @@ yy8 !_s =
     let _t = _s{yypmatch1 = _s.cur} in let _s = _t in
     let _t = _s{yypmatch3 = _s.yyt2} in let _s = _t in
     let _t = if _s.yypmatch3 == none then _s else _s{yypmatch3 = _s.yypmatch3 + (-1)} in let _s = _t in
-#56 "haskell/submatch/03_posix.re"
+#59 "haskell/submatch/03_posix.re"
     -- Even `yypmatch` values are for opening parentheses, odd values
     -- are for closing parentheses, the first group is the whole match.
     Just SemVer {
@@ -185,7 +185,7 @@ parse :: State -> Maybe SemVer
 parse !_s =
     yy0 _s
 
-#66 "haskell/submatch/03_posix.re"
+#69 "haskell/submatch/03_posix.re"
 
 
 test :: BS.ByteString -> Maybe SemVer -> IO ()
@@ -202,7 +202,7 @@ yyt2 = none,
 yyt3 = none,
 yyt4 = none,
 yyt5 = none,
-#74 "haskell/submatch/03_posix.re"
+#77 "haskell/submatch/03_posix.re"
 
         yypmatch0 = none,
         yypmatch1 = none,

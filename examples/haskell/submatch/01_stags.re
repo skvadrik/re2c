@@ -41,7 +41,10 @@ s2n s i j = f i 0 where
     re2c:define:YYSTAGP     = "let _t = _s{@@{tag} = _s.cur} in let _s = _t in";
     re2c:define:YYSTAGN     = "let _t = _s{@@{tag} = none} in let _s = _t in";
     re2c:define:YYCOPYSTAG  = "let _t = _s{@@{lhs} = _s.@@{rhs}} in let _s = _t in";
-    re2c:define:YYSHIFTSTAG = "let _t = if _s.@@{tag} == none then _s else _s{@@{tag} = _s.@@{tag} + (@@{shift})} in let _s = _t in";
+    re2c:define:YYSHIFTSTAG = "let _t = if _s.@@{tag} == none "
+                                  "then _s "
+                                  "else _s{@@{tag} = _s.@@{tag} + (@@{shift})} "
+                              "in let _s = _t in";
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
 
