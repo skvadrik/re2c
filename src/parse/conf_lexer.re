@@ -348,9 +348,17 @@ Ret Input::lex_conf_string_legacy() {
     CHECK_RET(lex_conf_assign());
     tok = cur;
 /*!local:re2c
-    quotes { CHECK_RET(lex_conf_string_quoted(tok[0])); goto end; }
-    naked  { tmp_str.assign(tok, cur); goto end; }
-    ""     { tmp_str.clear(); goto end; }
+    naked       { tmp_str.assign(tok, cur); goto end; }
+    "" / quotes { tmp_str.clear(); goto loop; }
+    ""          { tmp_str.clear(); goto end; }
+*/
+loop: // lex one or more double-quoted strings separated with spaces or newlines
+    tok = cur;
+/*!local:re2c
+    quotes { CHECK_RET(lex_conf_string_quoted(tok[0])); goto loop; }
+    eol    { next_line(); goto loop; }
+    space  { goto loop; }
+    ""     { goto end; }
 */
 end:
     return lex_conf_semicolon();
@@ -379,7 +387,6 @@ Ret Input::lex_conf_list(Opt& opts) {
 Ret Input::lex_conf_string_quoted(uint8_t quote) {
     AstChar c;
     bool stop;
-    tmp_str.clear();
     for (;;) {
         CHECK_RET(lex_str_chr(quote, c, stop));
         if (stop) return Ret::OK;
@@ -447,6 +454,7 @@ start:
     }
 
     quotes {
+        tmp_str.clear();
         CHECK_RET(lex_conf_string_quoted(cur[-1]));
         yylval->str = copystr(tmp_str, alc);
         RET_TOK(CONF_STRING);
