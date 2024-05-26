@@ -50,7 +50,9 @@ s2n s i j = f i 0 where
     re2c:define:YYSTAGP     = "_st <- return _st{@@{tag} = _st.cur}";
     re2c:define:YYSTAGN     = "_st <- return _st{@@{tag} = none}";
     re2c:define:YYCOPYSTAG  = "_st <- return _st{@@{lhs} = _st.@@{rhs}}";
-    re2c:define:YYSHIFTSTAG = "_st <- return $ if _st.@@{tag} == none then _st else _st{@@{tag} = _st.@@{tag} + (@@{shift})}";
+    re2c:define:YYSHIFTSTAG = "_st <- return $ if _st.@@{tag} == none "
+                                  "then _st "
+                                  "else _st{@@{tag} = _st.@@{tag} + (@@{shift})}";
     re2c:define:YYLESSTHAN  = "_st.cur >= _st.lim";
     re2c:define:YYFILL      = "(_st, yyfill) <- fill _st";
     re2c:eof = 0;

@@ -141,5 +141,5 @@ main = do
     test lex_tags "ba\0" 1
     test lex_captures "\0" none
     test lex_captures "a\0" 0
-codegen/haskell/nested_fixed_tags.re:43:21: warning: rule matches empty string [-Wmatch-empty-string]
-codegen/haskell/nested_fixed_tags.re:50:13: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/haskell/nested_fixed_tags.re:46:21: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/haskell/nested_fixed_tags.re:53:13: warning: rule matches empty string [-Wmatch-empty-string]

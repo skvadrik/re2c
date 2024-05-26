@@ -75,7 +75,7 @@ yy1 !_st !_vs = do
 
 yy2 :: State -> [SemVer] -> IO [SemVer]
 yy2 !_st !_vs = do
-#71 "haskell/submatch/01_stags_fill.re"
+#73 "haskell/submatch/01_stags_fill.re"
     error "lexer failed"
 #81 "haskell/submatch/01_stags_fill.hs"
 
@@ -169,7 +169,7 @@ yy8 !_st !_vs = do
     _st <- return _st{t5 = _st.yyt4}
     _st <- return _st{t2 = _st.yyt2}
     _st <- return $ if _st.t2 == none then _st else _st{t2 = _st.t2 + (-1)}
-#62 "haskell/submatch/01_stags_fill.re"
+#64 "haskell/submatch/01_stags_fill.re"
     let v = SemVer {
         major = s2n _st.buf _st.t1 _st.t2,
         minor = s2n _st.buf _st.t3 _st.t4,
@@ -214,7 +214,7 @@ yy10 !_st !_vs = do
 
 yy11 :: State -> [SemVer] -> IO [SemVer]
 yy11 !_st !_vs = do
-#70 "haskell/submatch/01_stags_fill.re"
+#72 "haskell/submatch/01_stags_fill.re"
     return _vs
 #220 "haskell/submatch/01_stags_fill.hs"
 
@@ -222,7 +222,7 @@ lexer :: State -> [SemVer] -> IO [SemVer]
 lexer !_st !_vs = do
     yy0 _st _vs
 
-#72 "haskell/submatch/01_stags_fill.re"
+#74 "haskell/submatch/01_stags_fill.re"
 
 
 fill :: State -> IO (State, Bool)
@@ -268,7 +268,7 @@ yyt1 = none,
 yyt2 = none,
 yyt3 = none,
 yyt4 = none,
-#110 "haskell/submatch/01_stags_fill.re"
+#112 "haskell/submatch/01_stags_fill.re"
 
         t1 = none,
         t2 = none,

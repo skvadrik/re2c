@@ -61,7 +61,7 @@ yy1 !_s =
 
 yy2 :: State -> Maybe SemVer
 yy2 !_s =
-#57 "haskell/submatch/01_stags.re"
+#60 "haskell/submatch/01_stags.re"
     Nothing
 #67 "haskell/submatch/01_stags.hs"
 
@@ -135,7 +135,7 @@ yy8 !_s =
     let _t = _s{t5 = _s.yyt4} in let _s = _t in
     let _t = _s{t2 = _s.yyt2} in let _s = _t in
     let _t = if _s.t2 == none then _s else _s{t2 = _s.t2 + (-1)} in let _s = _t in
-#50 "haskell/submatch/01_stags.re"
+#53 "haskell/submatch/01_stags.re"
     Just SemVer {
         major = s2n _s.str _s.t1 _s.t2,
         minor = s2n _s.str _s.t3 _s.t4,
@@ -171,7 +171,7 @@ parse :: State -> Maybe SemVer
 parse !_s =
     yy0 _s
 
-#58 "haskell/submatch/01_stags.re"
+#61 "haskell/submatch/01_stags.re"
 
 
 test :: BS.ByteString -> Maybe SemVer -> IO ()
@@ -187,7 +187,7 @@ yyt1 = none,
 yyt2 = none,
 yyt3 = none,
 yyt4 = none,
-#66 "haskell/submatch/01_stags.re"
+#69 "haskell/submatch/01_stags.re"
 
         t1 = none,
         t2 = none,
