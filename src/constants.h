@@ -186,7 +186,6 @@ enum class StxGOpt {
 enum class StxLOpt {
     CHAR_LITERALS,
     HAVE_ARGS,
-    HAVE_ARGMODS,
     HAVE_COND,
     HAVE_INIT,
     HAVE_TYPE,

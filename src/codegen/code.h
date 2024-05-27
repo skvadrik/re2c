@@ -247,7 +247,6 @@ struct CodeRaw {
 struct CodeParam {
     const char* name;
     const char* type;
-    const char* mods;
     CodeParam* next;
 };
 
@@ -624,15 +623,13 @@ inline CodeCase* code_case_string(OutAllocator& alc, CodeList* body, const char*
     return x;
 }
 
-inline CodeCase* code_case_ranges(
-    OutAllocator& alc, CodeList* body, const CodeRanges* ranges) {
+inline CodeCase* code_case_ranges(OutAllocator& alc, CodeList* body, const CodeRanges* ranges) {
     CodeCase* x = code_case(alc, body, CodeCase::Kind::RANGES);
     x->ranges = ranges;
     return x;
 }
 
-inline CodeRanges* code_ranges(
-    OutAllocator& alc, VarType type, int64_t* start, int64_t* end) {
+inline CodeRanges* code_ranges(OutAllocator& alc, VarType type, int64_t* start, int64_t* end) {
     CodeRanges* x = alc.alloct<CodeRanges>(1);
     x->size = static_cast<uint32_t>(end - start) / 2;
     x->type = type;
@@ -644,12 +641,10 @@ inline CodeCases* code_cases(OutAllocator& alc) {
     return new_list<CodeCase>(alc);
 }
 
-inline CodeParam* code_param(
-        OutAllocator& alc, const char* name, const char* type, const char* mods = nullptr) {
+inline CodeParam* code_param(OutAllocator& alc, const char* name, const char* type) {
     CodeParam* x = alc.alloct<CodeParam>(1);
     x->name = name;
     x->type = type;
-    x->mods = mods;
     x->next = nullptr;
     return x;
 }

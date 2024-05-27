@@ -25,7 +25,7 @@ data State = State {
 data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;IO (State, Status)", "_st;State;!"];
+    re2c:define:YYFN       = ["lexer;IO (State, Status)", "_st;State;!_st"];
     re2c:define:YYCTYPE    = "Word8";
     re2c:define:YYPEEK     = "return $ BS.index _st.buf _st.cur";
     re2c:define:YYSKIP     = "_st <- return _st{cur = _st.cur + 1}";

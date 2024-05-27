@@ -177,7 +177,7 @@ const char* DEFAULT_SYNTAX_HASKELL =
     "\n"
     "code:fndef =\n"
     "    name \" :: \" [arg: argtype \" -> \"] type nl\n"
-    "    name [arg: \" \" (have_argmods? argmods) argname] \" =\" (monadic ? \" do\") nl\n"
+    "    name [arg: \" \" argname] \" =\" (monadic ? \" do\") nl\n"
     "        indent [stmt: stmt] dedent;\n"
     "\n"
     "code:fncall =\n"

@@ -175,7 +175,7 @@ code:enum_elem = name;
 
 code:fndef =
     name " :: " [arg: argtype " -> "] type nl
-    name [arg: " " (have_argmods? argmods) argname] " =" (monadic ? " do") nl
+    name [arg: " " argname] " =" (monadic ? " do") nl
         indent [stmt: stmt] dedent;
 
 code:fncall =

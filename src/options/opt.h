@@ -153,14 +153,12 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(code_fndecl, "code:fndecl", \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, \
-            StxVarId::ARGMODS}), \
-        ({StxVarId::ARG}), ({StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}) \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::ARG}), ({StxLOpt::HAVE_TYPE}) \
     ) \
     CODE_TEMPLATE(code_fndef, "code:fndef", \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, \
-            StxVarId::ARGMODS}), \
-        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::HAVE_TYPE, StxLOpt::HAVE_ARGMODS}) \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::HAVE_TYPE}) \
     ) \
     CODE_TEMPLATE(code_fncall, "code:fncall", \
         ({StxVarId::NAME, StxVarId::RETVAL}), ({StxVarId::ARG}), \
@@ -275,7 +273,6 @@ using StxCodes = list_t<StxCode>;
 // configuration-local variables in syntax files
 #define RE2C_STX_LOCAL_VARS \
     STX_LOCAL_VAR(ARG, "arg") \
-    STX_LOCAL_VAR(ARGMODS, "argmods") \
     STX_LOCAL_VAR(ARGNAME, "argname") \
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
