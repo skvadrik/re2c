@@ -503,7 +503,7 @@ bool consume(const State* s) {
 LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, const opt_t* opts)) {
     if (opts->code_model != CodeModel::REC_FUNC) return Ret::OK;
 
-    const char* name, *type, *mods;
+    const char* name, *param, *type;
 
     auto split = [&](const std::string& s) -> Ret {
         std::vector<std::string> parts;
@@ -519,7 +519,7 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
         }
         name = copystr(parts[0], alc);
         type = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
-        mods = parts.size() > 2 ? copystr(parts[2], alc) : nullptr;
+        param = parts.size() > 2 ? copystr(parts[2], alc) : name;
         if (parts.size() > 3) {
             RET_FAIL(error("`define:YYFN` element '%s' has too many parts", s.c_str()));
         }
@@ -532,7 +532,6 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     CHECK_RET(split(opts->api_fn[0]));
     f->name = name;
     f->type = type;
-    // TODO: do we want to support modifiers (attributes?) for the whole function?
 
     f->params = code_params(alc);
     f->params_yych = code_params(alc);
@@ -545,15 +544,14 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
             RET_FAIL(error("missing type in `define:YYFN` element '%s'", opts->api_fn[i].c_str()));
         }
 
-        append(f->params, code_param(alc, name, type, mods));
-        append(f->params_yych, code_param(alc, name, type, mods));
+        append(f->params, code_param(alc, param, type));
+        append(f->params_yych, code_param(alc, param, type));
 
         append(f->args, code_arg(alc, name));
         append(f->args_yych, code_arg(alc, name));
     }
 
-    append(f->params_yych,
-            code_param(alc, opts->var_char.c_str(), opts->api_char_type.c_str(), nullptr));
+    append(f->params_yych, code_param(alc, opts->var_char.c_str(), opts->api_char_type.c_str()));
     append(f->args_yych, code_arg(alc, opts->var_char.c_str()));
 
     *fn_common = f;

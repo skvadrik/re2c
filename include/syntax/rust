@@ -176,8 +176,8 @@ code:enum_elem = name;
 
 code:fndef =
     topindent "fn " name "("
-        [arg{0:-2}: (have_argmods? argmods " ") argname ": " argtype ", "]
-        [arg{-1}:   (have_argmods? argmods " ") argname ": " argtype]
+        [arg{0:-2}: argname ": " argtype ", "]
+        [arg{-1}:   argname ": " argtype]
     ")" (have_type ? " -> " type) " {" nl
         indent [stmt: stmt] dedent
     "}" nl;

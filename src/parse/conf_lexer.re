@@ -529,7 +529,6 @@ start:
 
     // local variables
     "arg"        { RET_VAR(StxVarId::ARG); }
-    "argmods"    { RET_VAR(StxVarId::ARGMODS); }
     "argname"    { RET_VAR(StxVarId::ARGNAME); }
     "argtype"    { RET_VAR(StxVarId::ARGTYPE); }
     "array"      { RET_VAR(StxVarId::ARRAY); }
@@ -641,7 +640,6 @@ opt:
 
     "char_literals"   { RET_LOPT(StxLOpt::CHAR_LITERALS); }
     "have_args"       { RET_LOPT(StxLOpt::HAVE_ARGS); }
-    "have_argmods"    { RET_LOPT(StxLOpt::HAVE_ARGMODS); }
     "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
     "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
     "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }

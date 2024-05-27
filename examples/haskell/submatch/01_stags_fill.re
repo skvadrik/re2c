@@ -41,7 +41,7 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
 /*!re2c
-    re2c:define:YYFN        = ["lexer;IO [SemVer]", "_st;State;!", "_vs;[SemVer];!"];
+    re2c:define:YYFN        = ["lexer;IO [SemVer]", "_st;State;!_st", "_vs;[SemVer];!_vs"];
     re2c:define:YYCTYPE     = "Word8";
     re2c:define:YYPEEK      = "return $ BS.index _st.buf _st.cur";
     re2c:define:YYSKIP      = "_st <- return _st{cur = _st.cur + 1}";

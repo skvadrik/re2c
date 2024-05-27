@@ -21,7 +21,7 @@ data State = State {
 } deriving (Show)
 
 /*!re2c
-    re2c:define:YYFN    = ["lexer;IO Int", "_st;State;!", "_count;Int;!"];
+    re2c:define:YYFN    = ["lexer;IO Int", "_st;State;!_st", "_count;Int;!_count"];
     re2c:define:YYCTYPE = "Word8";
     re2c:define:YYPEEK  = "return $ BS.index _st.buf _st.cur";
     re2c:define:YYSKIP  = "_st <- return _st{cur = _st.cur + 1}";

@@ -616,9 +616,9 @@ class RenderGoto : public RenderCallback {
 class RenderFnDef : public RenderCallback {
     RenderContext& rctx;
     const CodeFnDef* code;
-    const CodeParam* curr_arg;
-    const CodeParam* last_arg;
-    size_t nargs;
+    const CodeParam* curr_param;
+    const CodeParam* last_param;
+    size_t nparams;
     const Code* curr_stmt;
     const Code* last_stmt;
     size_t nstmts;
@@ -627,13 +627,13 @@ class RenderFnDef : public RenderCallback {
     RenderFnDef(RenderContext& rctx, const CodeFnDef* code)
             : rctx(rctx)
             , code(code)
-            , curr_arg(nullptr)
-            , last_arg(nullptr)
-            , nargs(0)
+            , curr_param(nullptr)
+            , last_param(nullptr)
+            , nparams(0)
             , curr_stmt(nullptr)
             , last_stmt(nullptr)
             , nstmts(0) {
-        for (const CodeParam* p = code->params->head; p; p = p->next) ++nargs;
+        for (const CodeParam* p = code->params->head; p; p = p->next) ++nparams;
         for (const Code* s = code->body->head; s; s = s->next) ++nstmts;
     }
 
@@ -646,14 +646,10 @@ class RenderFnDef : public RenderCallback {
             rctx.os << code->type;
             break;
         case StxVarId::ARGNAME:
-            rctx.os << curr_arg->name;
+            rctx.os << curr_param->name;
             break;
         case StxVarId::ARGTYPE:
-            rctx.os << curr_arg->type;
-            break;
-        case StxVarId::ARGMODS:
-            DCHECK(curr_arg->mods != nullptr);
-            rctx.os << curr_arg->mods;
+            rctx.os << curr_param->type;
             break;
         case StxVarId::STMT:
             render(rctx, curr_stmt);
@@ -666,7 +662,7 @@ class RenderFnDef : public RenderCallback {
 
     size_t get_list_size(StxVarId var) const override {
         switch (var) {
-            case StxVarId::ARG: return nargs;
+            case StxVarId::ARG: return nparams;
             case StxVarId::STMT: return nstmts;
             default: UNREACHABLE(); return 0;
         }
@@ -675,8 +671,8 @@ class RenderFnDef : public RenderCallback {
     void start_list(StxVarId var, size_t lbound, size_t rbound) override {
         switch (var) {
         case StxVarId::ARG:
-            DCHECK(rbound < nargs);
-            find_list_bounds(code->params->head, lbound, rbound, &curr_arg, &last_arg);
+            DCHECK(rbound < nparams);
+            find_list_bounds(code->params->head, lbound, rbound, &curr_param, &last_param);
             break;
         case StxVarId::STMT:
             DCHECK(rbound < nstmts);
@@ -691,8 +687,8 @@ class RenderFnDef : public RenderCallback {
     bool next_in_list(StxVarId var) override {
         switch (var) {
         case StxVarId::ARG:
-            curr_arg = curr_arg->next;
-            return curr_arg != last_arg;
+            curr_param = curr_param->next;
+            return curr_param != last_param;
         case StxVarId::STMT:
             curr_stmt = curr_stmt->next;
             return curr_stmt != last_stmt;
@@ -703,15 +699,11 @@ class RenderFnDef : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        switch (opt) {
-        case StxLOpt::HAVE_TYPE:
+        if (opt == StxLOpt::HAVE_TYPE) {
             return code->type != nullptr;
-        case StxLOpt::HAVE_ARGMODS:
-            return curr_arg->mods != nullptr;
-        default:
-            UNREACHABLE();
-            return false;
         }
+        UNREACHABLE();
+        return false;
     }
 
     FORBID_COPY(RenderFnDef);
