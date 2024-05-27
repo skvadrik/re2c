@@ -536,7 +536,7 @@ endif
 # re2d
 if WITH_DLANG
 bin_PROGRAMS += re2d
-re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D
+re2d_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::D -DRE2C_PROG=\"re2d\"
 re2d_SOURCES = $(re2c_SOURCES)
 nodist_re2d_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -544,7 +544,7 @@ endif
 # re2go
 if WITH_GOLANG
 bin_PROGRAMS += re2go
-re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO
+re2go_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::GO -DRE2C_PROG=\"re2go\"
 re2go_SOURCES = $(re2c_SOURCES)
 nodist_re2go_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -552,7 +552,7 @@ endif
 # re2hs
 if WITH_HASKELL
 bin_PROGRAMS += re2hs
-re2hs_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::HASKELL
+re2hs_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::HASKELL -DRE2C_PROG=\"re2hs\"
 re2hs_SOURCES = $(re2c_SOURCES)
 nodist_re2hs_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -560,7 +560,7 @@ endif
 # re2ocaml
 if WITH_OCAML
 bin_PROGRAMS += re2ocaml
-re2ocaml_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::OCAML
+re2ocaml_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::OCAML -DRE2C_PROG=\"re2ocaml\"
 re2ocaml_SOURCES = $(re2c_SOURCES)
 nodist_re2ocaml_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -568,7 +568,7 @@ endif
 # re2py
 if WITH_PYTHON
 bin_PROGRAMS += re2py
-re2py_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PYTHON
+re2py_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PYTHON -DRE2C_PROG=\"re2py\"
 re2py_SOURCES = $(re2c_SOURCES)
 nodist_re2py_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -576,7 +576,7 @@ endif
 # re2rust
 if WITH_RUST
 bin_PROGRAMS += re2rust
-re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST
+re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST -DRE2C_PROG=\"re2rust\"
 re2rust_SOURCES = $(re2c_SOURCES)
 nodist_re2rust_SOURCES = $(nodist_re2c_SOURCES)
 endif
@@ -584,7 +584,7 @@ endif
 # re2v
 if WITH_VLANG
 bin_PROGRAMS += re2v
-re2v_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::V
+re2v_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::V -DRE2C_PROG=\"re2v\"
 re2v_SOURCES = $(re2c_SOURCES)
 nodist_re2v_SOURCES = $(nodist_re2c_SOURCES)
 endif

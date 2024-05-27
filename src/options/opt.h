@@ -45,8 +45,13 @@ using StxCodes = list_t<StxCode>;
 #define RE2C_YYFN_SEP ";"
 
 // default backend is C
+
 #ifndef RE2C_LANG
 #define RE2C_LANG Lang::C
+#endif
+
+#ifndef RE2C_PROG
+#define RE2C_PROG "re2c"
 #endif
 
 #define RE2C_CHECKED_LISTS \
