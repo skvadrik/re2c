@@ -242,43 +242,64 @@ add_executable(re2c ${re2c_sources})
 # re2d
 if (RE2C_BUILD_RE2D)
     add_executable(re2d ${re2c_sources})
-    target_compile_definitions(re2d PUBLIC "RE2C_LANG=Lang::D")
+    target_compile_definitions(re2d PUBLIC
+        "RE2C_LANG=Lang::D"
+        "RE2C_PROG=\"re2d\""
+    )
 endif()
 
 # re2go
 if (RE2C_BUILD_RE2GO)
     add_executable(re2go ${re2c_sources})
-    target_compile_definitions(re2go PUBLIC "RE2C_LANG=Lang::GO")
+    target_compile_definitions(re2go PUBLIC
+        "RE2C_LANG=Lang::GO"
+        "RE2C_PROG=\"re2go\""
+    )
 endif()
 
 # re2hs
 if (RE2C_BUILD_RE2HS)
     add_executable(re2hs ${re2c_sources})
-    target_compile_definitions(re2hs PUBLIC "RE2C_LANG=Lang::HASKELL")
+    target_compile_definitions(re2hs PUBLIC
+        "RE2C_LANG=Lang::HASKELL"
+        "RE2C_PROG=\"re2hs\""
+    )
 endif()
 
 # re2ocaml
 if (RE2C_BUILD_RE2OCAML)
     add_executable(re2ocaml ${re2c_sources})
-    target_compile_definitions(re2ocaml PUBLIC "RE2C_LANG=Lang::OCAML")
+    target_compile_definitions(re2ocaml PUBLIC
+        "RE2C_LANG=Lang::OCAML"
+        "RE2C_PROG=\"re2ocaml\""
+    )
 endif()
 
 # re2py
 if (RE2C_BUILD_RE2PY)
     add_executable(re2py ${re2c_sources})
-    target_compile_definitions(re2py PUBLIC "RE2C_LANG=Lang::PYTHON")
+    target_compile_definitions(re2py PUBLIC
+        "RE2C_LANG=Lang::PYTHON"
+        "RE2C_PROG=\"re2py\""
+    )
 endif()
 
 # re2rust
 if (RE2C_BUILD_RE2RUST)
     add_executable(re2rust ${re2c_sources})
-    target_compile_definitions(re2rust PUBLIC "RE2C_LANG=Lang::RUST")
+    target_compile_definitions(re2rust PUBLIC
+        "RE2C_LANG=Lang::RUST"
+        "RE2C_PROG=\"re2rust\""
+    )
 endif()
 
 # re2v
 if (RE2C_BUILD_RE2V)
     add_executable(re2v ${re2c_sources})
-    target_compile_definitions(re2v PUBLIC "RE2C_LANG=Lang::V")
+    target_compile_definitions(re2v PUBLIC
+        "RE2C_LANG=Lang::V"
+        "RE2C_PROG=\"re2v\""
+    )
 endif()
 
 # docs
