@@ -1,15 +1,16 @@
 -- re2hs $INPUT -o $OUTPUT
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Control.Exception
 import Control.Monad (when)
 import Data.ByteString as BS
 
 data State = State {
-    buf :: BS.ByteString,
-    cur :: Int,
-    lim :: Int
+    _buf :: BS.ByteString,
+    _cur :: Int,
+    _lim :: Int
 } deriving (Show)
 
 data FillException = UnexpectedFill deriving (Show)
@@ -19,11 +20,11 @@ yymaxfill :: Int
 /*!max:re2c*/
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;IO Int", "_s;State", "_cnt;Int"];
+    re2c:define:YYFN       = ["lexer;IO Int", "State{..};State", "_cnt;Int"];
     re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "return $ BS.index _s.buf _s.cur";
-    re2c:define:YYSKIP     = "_s <- return _s{cur = _s.cur + 1}";
-    re2c:define:YYLESSTHAN = "_s.lim - _s.cur < @@";
+    re2c:define:YYPEEK     = "return $ BS.index _buf _cur";
+    re2c:define:YYSKIP     = "_cur <- return $ _cur + 1";
+    re2c:define:YYLESSTHAN = "_lim - _cur < @@";
     re2c:define:YYFILL     = "throw UnexpectedFill";
     re2c:monadic = 1; // YYFILL requires monadic do-notation for `when` conditions
 
@@ -31,10 +32,10 @@ yymaxfill :: Int
 
     [\x00] {
         -- check that it is the sentinel, not some unexpected null
-        return $ if _s.cur == BS.length _s.buf - yymaxfill + 1 then _cnt else (-1)
+        return $ if _cur == BS.length _buf - yymaxfill + 1 then _cnt else (-1)
     }
-    str  { lexer _s (_cnt + 1) }
-    [ ]+ { lexer _s _cnt }
+    str  { lexer State{..} (_cnt + 1) }
+    [ ]+ { lexer State{..} _cnt }
     *    { return (-1) }
 */
 
@@ -42,7 +43,7 @@ main :: IO ()
 main = do
     let test s n = do
             let buf = BS.concat [s, BS.replicate yymaxfill 0]
-            let st = State {buf = buf, cur = 0, lim = BS.length buf}
+            let st = State {_buf = buf, _cur = 0, _lim = BS.length buf}
             m <- catch (lexer st 0) (\(_ :: FillException) -> return (-2))
             when (m /= n) $ error "failed"
 

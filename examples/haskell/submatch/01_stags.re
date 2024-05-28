@@ -1,6 +1,6 @@
 -- re2hs $INPUT -o $OUTPUT
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
@@ -8,14 +8,14 @@ import Data.ByteString as BS
 
 data State = State {
     str :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int,
+    _cur :: !Int,
+    _mar :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
-    t1 :: !Int,
-    t2 :: !Int,
-    t3 :: !Int,
-    t4 :: !Int,
-    t5 :: !Int
+    _1 :: !Int,
+    _2 :: !Int,
+    _3 :: !Int,
+    _4 :: !Int,
+    _5 :: !Int
 } deriving (Show)
 
 data SemVer = SemVer {
@@ -32,29 +32,28 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
 /*!re2c
-    re2c:define:YYFN        = ["parse;Maybe SemVer", "_s;State;!_s"];
+    re2c:define:YYFN        = ["parse;Maybe SemVer", "State{..};State"];
     re2c:define:YYCTYPE     = "Word8";
-    re2c:define:YYPEEK      = "BS.index _s.str _s.cur";
-    re2c:define:YYSKIP      = "let _t = _s{cur = _s.cur + 1} in let _s = _t in";
-    re2c:define:YYBACKUP    = "let _t = _s{mar = _s.cur} in let _s = _t in";
-    re2c:define:YYRESTORE   = "let _t = _s{cur = _s.mar} in let _s = _t in";
-    re2c:define:YYSTAGP     = "let _t = _s{@@{tag} = _s.cur} in let _s = _t in";
-    re2c:define:YYSTAGN     = "let _t = _s{@@{tag} = none} in let _s = _t in";
-    re2c:define:YYCOPYSTAG  = "let _t = _s{@@{lhs} = _s.@@{rhs}} in let _s = _t in";
-    re2c:define:YYSHIFTSTAG = "let _t = if _s.@@{tag} == none "
-                                  "then _s "
-                                  "else _s{@@{tag} = _s.@@{tag} + (@@{shift})} "
-                              "in let _s = _t in";
+    re2c:define:YYPEEK      = "BS.index str _cur";
+    re2c:define:YYSKIP      = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:define:YYBACKUP    = "let _mar = _cur in";
+    re2c:define:YYRESTORE   = "let _cur = _mar in";
+    re2c:define:YYSTAGP     = "let @@{tag} = _cur in";
+    re2c:define:YYSTAGN     = "let @@{tag} = none in";
+    re2c:define:YYCOPYSTAG  = "let @@{lhs} = @@{rhs} in";
+    re2c:define:YYSHIFTSTAG = "let tag = @@{tag} + if @@{tag} == none then 0 else (@@{shift}) "
+                              "in let @@{tag} = tag in";
     re2c:tags = 1;
+    re2c:tags:prefix = _t;
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
 
-    @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\x00] {
+    @_1 num @_2 "." @_3 num @_4 ("." @_5 num)? [\x00] {
         Just SemVer {
-            major = s2n _s.str _s.t1 _s.t2,
-            minor = s2n _s.str _s.t3 _s.t4,
-            patch = if _s.t5 == none then 0 else s2n _s.str _s.t5 (_s.cur - 1)
+            major = s2n str _1 _2,
+            minor = s2n str _3 _4,
+            patch = if _5 == none then 0 else s2n str _5 (_cur - 1)
         }
     }
     * { Nothing }
@@ -64,14 +63,14 @@ test :: BS.ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
         str = str,
-        cur = 0,
-        mar = 0,
+        _cur = 0,
+        _mar = 0,
         /*!stags:re2c format = '\n@@{tag} = none,'; */
-        t1 = none,
-        t2 = none,
-        t3 = none,
-        t4 = none,
-        t5 = none
+        _1 = none,
+        _2 = none,
+        _3 = none,
+        _4 = none,
+        _5 = none
     }
     when (parse s /= expect) $ error "failed!"
 

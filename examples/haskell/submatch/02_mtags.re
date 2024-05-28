@@ -1,21 +1,21 @@
 -- re2hs $INPUT -o $OUTPUT
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
 {-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
-import Data.ByteString as BS
+import qualified Data.ByteString as BS
 
 data State = State {
-    str :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int,
+    _str :: !BS.ByteString,
+    _cur :: !Int,
+    _mar :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
-    t1 :: !Int,
-    t2 :: !Int,
+    _1 :: !Int,
+    _2 :: !Int,
     /*!mtags:re2c format = '\n@@{tag} :: ![Int],'; */
-    t3 :: ![Int],
-    t4 :: ![Int]
+    _3 :: ![Int],
+    _4 :: ![Int]
 } deriving (Show)
 
 none :: Int
@@ -26,45 +26,44 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
 /*!re2c
-    re2c:define:YYFN       = ["parse;Maybe [Int]", "_s;State;!_s"];
+    re2c:define:YYFN       = ["parse;Maybe [Int]", "State{..};State"];
     re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "BS.index _s.str _s.cur";
-    re2c:define:YYSKIP     = "let _t = _s{cur = _s.cur + 1} in let _s = _t in";
-    re2c:define:YYBACKUP   = "let _t = _s{mar = _s.cur} in let _s = _t in";
-    re2c:define:YYRESTORE  = "let _t = _s{cur = _s.mar} in let _s = _t in";
-    re2c:define:YYSTAGP    = "let _t = _s{@@{tag} = _s.cur} in let _s = _t in";
-    re2c:define:YYSTAGN    = "let _t = _s{@@{tag} = none} in let _s = _t in";
-    re2c:define:YYMTAGP    = "let _t = _s{@@{tag} = _s.cur : _s.@@{tag}} in let _s = _t in";
+    re2c:define:YYPEEK     = "BS.index _str _cur";
+    re2c:define:YYSKIP     = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:define:YYBACKUP   = "let _mar = _cur in";
+    re2c:define:YYRESTORE  = "let _cur = _mar in";
+    re2c:define:YYSTAGP    = "let @@{tag} = _cur in";
+    re2c:define:YYSTAGN    = "let @@{tag} = none in";
+    re2c:define:YYMTAGP    = "let tag = _cur : @@{tag} in let @@{tag} = tag in";
     re2c:define:YYMTAGN    = ""; // alternatively could add `none` to the list
-    re2c:define:YYCOPYSTAG = "let _t = _s{@@{lhs} = _s.@@{rhs}} in let _s = _t in";
-    re2c:define:YYCOPYMTAG = "let _t = _s{@@{lhs} = _s.@@{rhs}} in let _s = _t in";
+    re2c:define:YYCOPYSTAG = "let @@{lhs} = @@{rhs} in";
+    re2c:define:YYCOPYMTAG = "let @@{lhs} = @@{rhs} in";
     re2c:tags = 1;
+    re2c:tags:prefix = _t;
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
 
-    @t1 num @t2 ("." #t3 num #t4)* [\x00] {
-        let x = s2n _s.str _s.t1 _s.t2
-            xs = Prelude.reverse $ Prelude.zipWith (\i j -> s2n _s.str i j) _s.t3 _s.t4
-        in Just (x : xs)
+    @_1 num @_2 ("." #_3 num #_4)* [\x00] {
+        Just $ (s2n _str _1 _2) : (reverse $ zipWith (\i j -> s2n _str i j) _3 _4)
     }
     * { Nothing }
 */
 
 test :: BS.ByteString -> Maybe [Int] -> IO ()
 test str expect = do
-    let s = State {
-        str = str,
-        cur = 0,
-        mar = 0,
+    let st = State {
+        _str = str,
+        _cur = 0,
+        _mar = 0,
         /*!stags:re2c format = '\n@@{tag} = none,'; */
-        t1 = none,
-        t2 = none,
+        _1 = none,
+        _2 = none,
         /*!mtags:re2c format = '\n@@{tag} = [],'; */
-        t3 = [],
-        t4 = []
+        _3 = [],
+        _4 = []
     }
-    when (parse s /= expect) $ error "failed!"
+    when (parse st /= expect) $ error "failed!"
 
 main :: IO ()
 main = do

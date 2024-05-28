@@ -1,6 +1,7 @@
 -- re2hs $INPUT -o $OUTPUT
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad
 import Data.ByteString as BS
@@ -13,24 +14,24 @@ chunk_size :: Int
 chunk_size = 4096
 
 data State = State {
-    file :: !Handle,
-    buf :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int,
-    lim :: !Int,
-    tok :: !Int,
-    eof :: !Bool
+    _file :: !Handle,
+    _buf :: !BS.ByteString,
+    _cur :: !Int,
+    _mar :: !Int,
+    _lim :: !Int,
+    _tok :: !Int,
+    _eof :: !Bool
 } deriving (Show)
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;IO Int", "_st;State;!_st", "_count;Int;!_count"];
+    re2c:define:YYFN       = ["lexer;IO Int", "State{..};State;!State{..}", "_count;Int;!_count"];
     re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "return $ BS.index _st.buf _st.cur";
-    re2c:define:YYSKIP     = "_st <- return _st{cur = _st.cur + 1}";
-    re2c:define:YYBACKUP   = "_st <- return _st{mar = _st.cur}";
-    re2c:define:YYRESTORE  = "_st <- return _st{cur = _st.mar}";
-    re2c:define:YYLESSTHAN = "_st.cur >= _st.lim";
-    re2c:define:YYFILL     = "(_st, yyfill) <- fill _st";
+    re2c:define:YYPEEK     = "return $ BS.index _buf _cur";
+    re2c:define:YYSKIP     = "_cur <- return $ _cur + 1";
+    re2c:define:YYBACKUP   = "let _mar = _cur";
+    re2c:define:YYRESTORE  = "let _cur = _mar";
+    re2c:define:YYLESSTHAN = "_cur >= _lim";
+    re2c:define:YYFILL     = "(State{..}, yyfill) <- fill State{..}";
     re2c:eof = 0;
     re2c:monadic = 1;
 
@@ -38,27 +39,26 @@ data State = State {
 
     *    { return (-1) }
     $    { return _count }
-    str  { lexer _st{tok = _st.cur} (_count + 1) }
-    [ ]+ { lexer _st{tok = _st.cur} _count }
+    str  { lexer State{_tok = _cur, ..} (_count + 1) }
+    [ ]+ { lexer State{_tok = _cur, ..} _count }
 */
 
 fill :: State -> IO (State, Bool)
-fill st = do
-    case st.eof of
-        True -> return (st, False)
+fill State{..} = do
+    case _eof of
+        True -> return (State{..}, False)
         False -> do
             -- Discard everything up to the current token, cut off terminating null,
             -- read new chunk from file and reappend terminating null at the end.
-            chunk <- BS.hGet st.file chunk_size
-            let st' = st{
-                buf = BS.concat [(BS.init . BS.drop st.tok) st.buf, chunk, "\0"],
-                cur = st.cur - st.tok,
-                mar = st.mar - st.tok,
-                lim = st.lim - st.tok + BS.length chunk, -- exclude terminating null
-                tok = 0,
-                eof = BS.null chunk -- end of file?
-            }
-            return (st', True)
+            chunk <- BS.hGet _file chunk_size
+            return (State {
+                _buf = BS.concat [(BS.init . BS.drop _tok) _buf, chunk, "\0"],
+                _cur = _cur - _tok,
+                _mar = _mar - _tok,
+                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
+                _tok = 0,
+                _eof = BS.null chunk, -- end of file?
+                ..}, True)
 
 main :: IO ()
 main = do
@@ -71,13 +71,13 @@ main = do
     -- Run lexer on the prepared file.
     fh <- openFile fname ReadMode
     let st = State {
-        file = fh,
-        buf = BS.singleton 0,
-        cur = 0,
-        mar = 0,
-        tok = 0,
-        lim = 0,
-        eof = False
+        _file = fh,
+        _buf = BS.singleton 0,
+        _cur = 0,
+        _mar = 0,
+        _tok = 0,
+        _lim = 0,
+        _eof = False
     }
     result <- lexer st 0
     hClose fh

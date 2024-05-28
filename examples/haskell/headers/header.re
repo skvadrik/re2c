@@ -1,6 +1,7 @@
 -- re2hs $INPUT -o $OUTPUT --header lexer/State.hs -i
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Data.ByteString as BS
 import Control.Monad (when)
@@ -12,33 +13,34 @@ module State where
 import Data.ByteString as BS
 
 data State = State {
-    str :: !BS.ByteString,
-    cur :: !Int,
+    _str :: !BS.ByteString,
+    _cur :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
-    tag :: !Int
+    _tag :: !Int
 } deriving (Show)
 /*!header:re2c:off*/
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;Int", "_s;State"];
+    re2c:define:YYFN       = ["lexer;Int", "State{..};State"];
     re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "BS.index _s.str _s.cur";
-    re2c:define:YYSKIP     = "let _t = _s{cur = _s.cur + 1} in let _s = _t in";
-    re2c:define:YYSTAGP    = "let _t = _s{@@{tag} = _s.cur} in let _s = _t in";
-    re2c:define:YYCOPYSTAG = "let _t = _s{@@{lhs} = _s.@@{rhs}} in let _s = _t in";
+    re2c:define:YYPEEK     = "BS.index _str _cur";
+    re2c:define:YYSKIP     = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:define:YYSTAGP    = "let @@{tag} = _cur in";
+    re2c:define:YYCOPYSTAG = "let @@{lhs} = @@{rhs} in";
     re2c:tags = 1;
+    re2c:tags:prefix = _t;
     re2c:yyfill:enable = 0;
     re2c:header = "lexer/State.hs";
 
-    [a]* @tag [b]* { _s.tag }
+    [a]* @_tag [b]* { _tag }
 */
 
 main :: IO ()
 main = do
     let s = State {
-        str = "ab\0",
-        cur = 0,
+        _str = "ab\0",
+        _cur = 0,
         /*!stags:re2c format = '\n@@{tag} = -1,'; */
-        tag = 0
-    }
+        _tag = 0}
+
     when (lexer s /= 1) $ error "failed!"

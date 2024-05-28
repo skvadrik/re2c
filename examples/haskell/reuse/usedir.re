@@ -1,6 +1,7 @@
 -- re2hs $INPUT -o $OUTPUT
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE RecordWildCards #-}
 
 -- This example shows how to combine reusable re2c blocks: two blocks
 -- ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
@@ -14,9 +15,9 @@ import Data.ByteString as BS
 data Answer = Color | Fish | Dunno deriving (Eq)
 
 data State = State {
-    str :: BS.ByteString,
-    cur :: Int,
-    mar :: Int
+    _str :: BS.ByteString,
+    _cur :: Int,
+    _mar :: Int
 } deriving (Show)
 
 /*!rules:re2c:colors
@@ -30,12 +31,12 @@ data State = State {
 */
 
 /*!re2c
-    re2c:define:YYFN      = ["lexer;Answer", "_s;State"];
+    re2c:define:YYFN      = ["lexer;Answer", "State{..};State"];
     re2c:define:YYCTYPE   = "Word8";
-    re2c:define:YYPEEK    = "BS.index _s.str _s.cur";
-    re2c:define:YYSKIP    = "let _t = _s{cur = _s.cur + 1} in let _s = _t in";
-    re2c:define:YYBACKUP  = "let _t = _s{mar = _s.cur} in let _s = _t in";
-    re2c:define:YYRESTORE = "let _t = _s{cur = _s.mar} in let _s = _t in";
+    re2c:define:YYPEEK    = "BS.index _str _cur";
+    re2c:define:YYSKIP    = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:define:YYBACKUP  = "let _mar = _cur in";
+    re2c:define:YYRESTORE = "let _cur = _mar in";
     re2c:yyfill:enable    = 0;
 
     !use:fish;
@@ -46,7 +47,7 @@ data State = State {
 main :: IO ()
 main = do
     let test str ans = do
-            let st = State {str = str, cur = 0, mar = 0}
+            let st = State {_str = str, _cur = 0, _mar = 0}
             when (lexer st /= ans) $ error "failed"
 
     test "salmon" Fish
