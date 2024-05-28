@@ -1,6 +1,7 @@
 -- re2hs $INPUT -o $OUTPUT
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad
 import Data.ByteString as BS
@@ -12,19 +13,19 @@ chunk_size :: Int
 chunk_size = 4096
 
 data State = State {
-    file :: !Handle,
-    buf :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int,
-    lim :: !Int,
-    tok :: !Int,
-    eof :: !Bool,
+    _file :: !Handle,
+    _buf :: !BS.ByteString,
+    _cur :: !Int,
+    _mar :: !Int,
+    _lim :: !Int,
+    _tok :: !Int,
+    _eof :: !Bool,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
-    t1 :: !Int,
-    t2 :: !Int,
-    t3 :: !Int,
-    t4 :: !Int,
-    t5 :: !Int
+    _1 :: !Int,
+    _2 :: !Int,
+    _3 :: !Int,
+    _4 :: !Int,
+    _5 :: !Int
 } deriving (Show)
 
 data SemVer = SemVer {
@@ -41,55 +42,54 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
 /*!re2c
-    re2c:define:YYFN        = ["lexer;IO [SemVer]", "_st;State;!_st", "_vs;[SemVer];!_vs"];
+    re2c:define:YYFN        = ["lexer;IO [SemVer]", "State{..};State", "_vers;[SemVer]"];
     re2c:define:YYCTYPE     = "Word8";
-    re2c:define:YYPEEK      = "return $ BS.index _st.buf _st.cur";
-    re2c:define:YYSKIP      = "_st <- return _st{cur = _st.cur + 1}";
-    re2c:define:YYBACKUP    = "_st <- return _st{mar = _st.cur}";
-    re2c:define:YYRESTORE   = "_st <- return _st{cur = _st.mar}";
-    re2c:define:YYSTAGP     = "_st <- return _st{@@{tag} = _st.cur}";
-    re2c:define:YYSTAGN     = "_st <- return _st{@@{tag} = none}";
-    re2c:define:YYCOPYSTAG  = "_st <- return _st{@@{lhs} = _st.@@{rhs}}";
-    re2c:define:YYSHIFTSTAG = "_st <- return $ if _st.@@{tag} == none "
-                                  "then _st "
-                                  "else _st{@@{tag} = _st.@@{tag} + (@@{shift})}";
-    re2c:define:YYLESSTHAN  = "_st.cur >= _st.lim";
-    re2c:define:YYFILL      = "(_st, yyfill) <- fill _st";
+    re2c:define:YYPEEK      = "return $ BS.index _buf _cur";
+    re2c:define:YYSKIP      = "_cur <- return $ _cur + 1";
+    re2c:define:YYBACKUP    = "let _mar = _cur";
+    re2c:define:YYRESTORE   = "let _cur = _mar";
+    re2c:define:YYSTAGP     = "let @@{tag} = _cur";
+    re2c:define:YYSTAGN     = "let @@{tag} = none";
+    re2c:define:YYCOPYSTAG  = "let @@{lhs} = @@{rhs}";
+    re2c:define:YYSHIFTSTAG = "@@{tag} <- return $ "
+                                  "if @@{tag} == none then none else @@{tag} + (@@{shift})";
+    re2c:define:YYLESSTHAN  = "_cur >= _lim";
+    re2c:define:YYFILL      = "(State{..}, yyfill) <- fill State{..}";
     re2c:eof = 0;
     re2c:monadic = 1;
     re2c:tags = 1;
+    re2c:tags:prefix = _t;
 
     num = [0-9]+;
 
-    @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\n] {
-        let v = SemVer {
-            major = s2n _st.buf _st.t1 _st.t2,
-            minor = s2n _st.buf _st.t3 _st.t4,
-            patch = if _st.t5 == none then 0 else s2n _st.buf _st.t5 (_st.cur - 1)
+    @_1 num @_2 "." @_3 num @_4 ("." @_5 num)? [\n] {
+        let ver = SemVer {
+            major = s2n _buf _1 _2,
+            minor = s2n _buf _3 _4,
+            patch = if _5 == none then 0 else s2n _buf _5 (_cur - 1)
         }
-        lexer _st (v: _vs)
+        lexer State{..} (ver: _vers)
     }
-    $ { return _vs }
+    $ { return _vers }
     * { error "lexer failed" }
 */
 
 fill :: State -> IO (State, Bool)
-fill st = do
-    case st.eof of
-        True -> return (st, False)
+fill State{..} = do
+    case _eof of
+        True -> return (State{..}, False)
         False -> do
             -- Discard everything up to the current token, cut off terminating null,
             -- read new chunk from file and reappend terminating null at the end.
-            chunk <- BS.hGet st.file chunk_size
-            let st' = st{
-                buf = BS.concat [(BS.init . BS.drop st.tok) st.buf, chunk, "\0"],
-                cur = st.cur - st.tok,
-                mar = st.mar - st.tok,
-                lim = st.lim - st.tok + BS.length chunk, -- exclude terminating null
-                tok = 0,
-                eof = BS.null chunk -- end of file?
-            }
-            return (st', True)
+            chunk <- BS.hGet _file chunk_size
+            return (State{
+                _buf = BS.concat [(BS.init . BS.drop _tok) _buf, chunk, "\0"],
+                _cur = _cur - _tok,
+                _mar = _mar - _tok,
+                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
+                _tok = 0,
+                _eof = BS.null chunk, -- end of file?
+                ..}, True)
 
 main :: IO ()
 main = do
@@ -102,19 +102,19 @@ main = do
     -- Run lexer on the prepared file.
     fh <- openFile fname ReadMode
     let st = State {
-        file = fh,
-        buf = BS.singleton 0,
-        cur = 0,
-        mar = 0,
-        tok = 0,
-        lim = 0,
-        eof = False,
+        _file = fh,
+        _buf = BS.singleton 0,
+        _cur = 0,
+        _mar = 0,
+        _tok = 0,
+        _lim = 0,
+        _eof = False,
         /*!stags:re2c format = '\n@@{tag} = none,'; */
-        t1 = none,
-        t2 = none,
-        t3 = none,
-        t4 = none,
-        t5 = none
+        _1 = none,
+        _2 = none,
+        _3 = none,
+        _4 = none,
+        _5 = none
     }
     result <- lexer st []
     hClose fh

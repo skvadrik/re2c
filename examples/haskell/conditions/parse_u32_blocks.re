@@ -1,14 +1,15 @@
 -- re2hs $INPUT -o $OUTPUT -i
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
 import Data.ByteString as BS
 
 data State = State {
-    str :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int
+    _str :: !BS.ByteString,
+    _cur :: !Int,
+    _mar :: !Int
 } deriving (Show)
 
 peek_digit :: BS.ByteString -> Int -> Int -> Int
@@ -16,52 +17,52 @@ peek_digit str idx offs = fromIntegral (BS.index str (idx - 1)) - offs
 
 /*!re2c
     re2c:define:YYCTYPE   = "Word8";
-    re2c:define:YYPEEK    = "BS.index _s.str _s.cur";
-    re2c:define:YYSKIP    = "let _t = _s{cur = _s.cur + 1} in let _s = _t in";
-    re2c:define:YYBACKUP  = "let _t = _s{mar = _s.cur} in let _s = _t in";
-    re2c:define:YYRESTORE = "let _t = _s{cur = _s.mar} in let _s = _t in";
-    re2c:define:YYSHIFT   = "let _t = _s{cur = _s.cur + (@@)} in let _s = _t in";
+    re2c:define:YYPEEK    = "BS.index _str _cur";
+    re2c:define:YYSKIP    = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:define:YYSHIFT   = "let cur = _cur + (@@) in let _cur = cur in";
+    re2c:define:YYBACKUP  = "let _mar = _cur in";
+    re2c:define:YYRESTORE = "let _cur = _mar in";
     re2c:yyfill:enable    = 0;
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["parse_bin;Int", "_s;State", "num;Int"];
-    [01] { parse_bin _s $ num * 2 + (peek_digit _s.str _s.cur 48) }
+    re2c:define:YYFN = ["parse_bin;Int", "State{..};State", "num;Int"];
+    [01] { parse_bin State{..} $ num * 2 + (peek_digit _str _cur 48) }
     *    { num }
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["parse_oct;Int", "_s;State", "num;Int"];
-    [0-7] { parse_oct _s $ num * 8 + (peek_digit _s.str _s.cur 48) }
+    re2c:define:YYFN = ["parse_oct;Int", "State{..};State", "num;Int"];
+    [0-7] { parse_oct State{..} $ num * 8 + (peek_digit _str _cur 48) }
     *     { num }
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["parse_dec;Int", "_s;State", "num;Int"];
-    [0-9] { parse_dec _s $ num * 10 + (peek_digit _s.str _s.cur 48) }
+    re2c:define:YYFN = ["parse_dec;Int", "State{..};State", "num;Int"];
+    [0-9] { parse_dec State{..} $ num * 10 + (peek_digit _str _cur 48) }
     *     { num }
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["parse_hex;Int", "_s;State", "num;Int"];
-    [0-9] { parse_hex _s $ num * 16 + (peek_digit _s.str _s.cur 48) }
-    [a-f] { parse_hex _s $ num * 16 + (peek_digit _s.str _s.cur 87) }
-    [A-F] { parse_hex _s $ num * 16 + (peek_digit _s.str _s.cur 55) }
+    re2c:define:YYFN = ["parse_hex;Int", "State{..};State", "num;Int"];
+    [0-9] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 48) }
+    [a-f] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 87) }
+    [A-F] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 55) }
     *     { num }
 */
 
 /*!local:re2c
-    re2c:define:YYFN = ["parse;Maybe Int", "_s;State"];
-    '0b' / [01]        { Just $ parse_bin _s 0 }
-    "0"                { Just $ parse_oct _s 0 }
-    "" / [1-9]         { Just $ parse_dec _s 0 }
-    '0x' / [0-9a-fA-F] { Just $ parse_hex _s 0 }
+    re2c:define:YYFN = ["parse;Maybe Int", "State{..};State"];
+    '0b' / [01]        { Just $ parse_bin State{..} 0 }
+    "0"                { Just $ parse_oct State{..} 0 }
+    "" / [1-9]         { Just $ parse_dec State{..} 0 }
+    '0x' / [0-9a-fA-F] { Just $ parse_hex State{..} 0 }
     *                  { Nothing }
 */
 
 test :: BS.ByteString -> Maybe Int -> IO ()
 test str expect = do
-    let s = State {str = str, cur = 0, mar = 0}
+    let s = State {_str = str, _cur = 0, _mar = 0}
     when (parse s /= expect) $ error "failed!"
 
 main :: IO ()

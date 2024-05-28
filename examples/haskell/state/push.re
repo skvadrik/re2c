@@ -1,6 +1,7 @@
 -- re2hs $INPUT -o $OUTPUT -fi
-{-# LANGUAGE OverloadedRecordDot #-}
+{-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RecordWildCards #-}
 
 import Control.Concurrent.Chan
 import Control.Monad
@@ -8,81 +9,80 @@ import Data.ByteString as BS
 import Text.Printf
 
 debug :: PrintfType r => String -> r
-debug format = printf format
+debug format = printf format -- not sure how to make it conditional
 
 data State = State {
-    pipe :: !(Chan BS.ByteString),
-    buf :: !BS.ByteString,
-    cur :: !Int,
-    mar :: !Int,
-    lim :: !Int,
-    tok :: !Int,
-    eof :: !Bool,
-    state :: !Int,
-    recv :: !Int
+    _pipe :: !(Chan BS.ByteString),
+    _buf :: !BS.ByteString,
+    _cur :: !Int,
+    _mar :: !Int,
+    _lim :: !Int,
+    _tok :: !Int,
+    _eof :: !Bool,
+    _state :: !Int,
+    _recv :: !Int
 }
 
 data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;IO (State, Status)", "_st;State;!_st"];
+    re2c:define:YYFN       = ["lexer;IO (State, Status)", "State{..};State;!State{..}"];
     re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "return $ BS.index _st.buf _st.cur";
-    re2c:define:YYSKIP     = "_st <- return _st{cur = _st.cur + 1}";
-    re2c:define:YYBACKUP   = "_st <- return _st{mar = _st.cur}";
-    re2c:define:YYRESTORE  = "_st <- return _st{cur = _st.mar}";
-    re2c:define:YYGETSTATE = "_st.state";
-    re2c:define:YYSETSTATE = "_st <- return _st{state = @@}";
-    re2c:define:YYLESSTHAN = "_st.cur >= _st.lim";
-    re2c:define:YYFILL     = "return (_st, Waiting)";
+    re2c:define:YYPEEK     = "return $ BS.index _buf _cur";
+    re2c:define:YYSKIP     = "_cur <- return $ _cur + 1";
+    re2c:define:YYBACKUP   = "let _mar = _cur";
+    re2c:define:YYRESTORE  = "let _cur = _mar";
+    re2c:define:YYGETSTATE = "_state";
+    re2c:define:YYSETSTATE = "let _state = @@";
+    re2c:define:YYLESSTHAN = "_cur >= _lim";
+    re2c:define:YYFILL     = "return (State{..}, Waiting)";
     re2c:eof = 0;
     re2c:monadic = 1;
 
     packet = [a-z]+[;];
 
-    *      { return (_st, BadPacket) }
-    $      { return (_st, End) }
-    packet { lexer _st{tok = _st.cur, recv = _st.recv + 1} }
+    *      { return (State{..}, BadPacket) }
+    $      { return (State{..}, End) }
+    packet { lexer State{_tok = _cur, _recv = _recv + 1, ..} }
 */
 
 fill :: State -> IO (State, Status)
-fill st = do
-    case st.eof of
+fill st@State{..} = do
+    case _eof of
         True -> return (st, End)
         False -> do
             -- Discard everything up to the current token, cut off terminating null,
             -- read new chunk from file and reappend terminating null at the end.
-            chunk <- readChan st.pipe
-            let st' = st{
-                buf = BS.concat [(BS.init . BS.drop st.tok) st.buf, chunk, "\0"],
-                cur = st.cur - st.tok,
-                mar = st.mar - st.tok,
-                lim = st.lim - st.tok + BS.length chunk, -- exclude terminating null
-                tok = 0,
-                eof = BS.null chunk -- end of file?
-            }
-            return (st', Ready)
+            chunk <- readChan _pipe
+            return (State {
+                _buf = BS.concat [(BS.init . BS.drop _tok) _buf, chunk, "\0"],
+                _cur = _cur - _tok,
+                _mar = _mar - _tok,
+                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
+                _tok = 0,
+                _eof = BS.null chunk, -- end of file?
+                ..}, Ready)
 
 loop :: State -> [BS.ByteString] -> IO Status
-loop st packets = do
-    (st', status) <- lexer st
+loop State{..} packets = do
+    (State{..}, status) <- lexer State{..}
     case status of
         End -> do
-            debug "done: got %d packets\n" st'.recv
+            debug "done: got %d packets\n" _recv
             return End
         Waiting -> do
             debug "waiting...\n"
             packets' <- case packets of
                 [] -> do
-                    writeChan st'.pipe BS.empty
+                    writeChan _pipe BS.empty
                     return []
                 p:ps -> do
                     debug "sent packet '%s'\n" (show p)
-                    writeChan st'.pipe p
+                    writeChan _pipe p
                     return ps
-            (st'', status') <- fill st'
+            (State{..}, status') <- fill State{..}
             case status' of
-                Ready -> loop st'' packets'
+                Ready -> loop State{..} packets'
                 _ -> error "unexpected status after fill"
         BadPacket -> do
             debug "error: ill-formed packet\n"
@@ -93,15 +93,15 @@ test :: [BS.ByteString] -> Status -> IO ()
 test packets expect = do
     pipe <- newChan -- emulate pipe using a chan of bytestrings
     let st = State {
-        pipe = pipe,
-        buf = BS.singleton 0, -- null sentinel triggers YYFILL
-        cur = 0,
-        mar = 0,
-        tok = 0,
-        lim = 0,
-        eof = False,
-        state = -1,
-        recv = 0
+        _pipe = pipe,
+        _buf = BS.singleton 0, -- null sentinel triggers YYFILL
+        _cur = 0,
+        _mar = 0,
+        _tok = 0,
+        _lim = 0,
+        _eof = False,
+        _state = -1,
+        _recv = 0
     }
     status <- loop st packets
     when (status /= expect) $ error "failed"

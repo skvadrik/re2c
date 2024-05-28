@@ -8,7 +8,7 @@ import Data.ByteString as BS
 yy0 :: BS.ByteString -> Int -> Bool
 yy0 _str _cur =
     let yych = BS.index _str _cur in
-    let _cur' = _cur + 1 in let _cur = _cur' in
+    let cur = _cur + 1 in let _cur = cur in
     case yych of
         _c | 0x31 <= _c && _c <= 0x39 ->
             yy2 _str _cur
@@ -24,7 +24,7 @@ yy2 _str _cur =
     let yych = BS.index _str _cur in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let _cur' = _cur + 1 in let _cur = _cur' in
+            let cur = _cur + 1 in let _cur = cur in
             yy2 _str _cur
         _c | True ->
             yy3 _str _cur
