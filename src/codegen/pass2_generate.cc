@@ -70,11 +70,9 @@ static CodeList* gen_abort(OutAllocator& alc) {
 
 static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n) {
     if (opts->api == Api::CUSTOM) {
-        o.str(opts->api_less_than);
+        argsubst(o.stream(), opts->api_less_than, opts->api_sigil, "len", true, n);
         if (opts->api_style == ApiStyle::FUNCTIONS) {
             o.cstr("(").u64(n).cstr(")");
-        } else {
-            argsubst(o.stream(), opts->api_sigil, "len", true, n);
         }
     } else if (n == 1) {
         o.str(opts->api_limit).cstr(" <= ").str(opts->api_cursor);
