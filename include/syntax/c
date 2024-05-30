@@ -339,3 +339,11 @@ code:yysetaccept =
         ? setaccept // function style is not supported, as there's no sensible default
         : var " = " val ";"
     ) nl;
+
+code:yygetcond = getcond (api_style.functions ? "()");
+
+code:yysetcond = topindent setcond (api_style.functions ? "(" cond ");") nl;
+
+code:yygetstate = getstate (api_style.functions ? "()");
+
+code:yysetstate = topindent setstate (api_style.functions ? "(" state ");") nl;

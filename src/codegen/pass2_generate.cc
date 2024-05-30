@@ -68,36 +68,6 @@ static CodeList* gen_abort(OutAllocator& alc) {
     return abort;
 }
 
-static void gen_state_set(Output& output, CodeList* stmts, const char* fillidx) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-
-    o.str(opts->api_state_set);
-    argsubst(o.stream(), opts->state_set_param, "state", true, fillidx);
-    if (opts->state_set_naked) {
-        append(stmts, code_text(alc, o.flush()));
-    } else {
-        o.cstr("(").cstr(fillidx).cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
-    }
-}
-
-static void gen_cond_set(Output& output, CodeList* stmts, const char* cond) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-
-    o.str(opts->api_cond_set);
-    argsubst(o.stream(), opts->cond_set_param, "cond", true, cond);
-    if (opts->cond_set_naked) {
-        append(stmts, code_text(alc, o.flush()));
-    } else {
-        o.cstr("(").cstr(cond).cstr(")");
-        append(stmts, code_stmt(alc, o.flush()));
-    }
-}
-
 static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n) {
     if (opts->api == Api::CUSTOM) {
         o.str(opts->api_less_than);
@@ -448,7 +418,7 @@ static void gen_fill(
     CodeList* fill = code_list(alc);
     if (opts->fill_enable) {
         if (opts->storable_state) {
-            gen_state_set(output, fill, o.u32(from->fill_state->fill_label->index).flush());
+            append(fill, code_set_state(alc, o.u32(from->fill_state->fill_label->index).flush()));
         }
 
         // With end-of-input rule $ there is no YYFILL argument and no parameter to replace.
@@ -830,6 +800,42 @@ class GenGetAccept : public RenderCallback {
     FORBID_COPY(GenGetAccept);
 };
 
+class GenGetCond : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetCond(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::GETCOND: os << opts->api_cond_get; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenGetCond);
+};
+
+class GenGetState : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetState(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::GETSTATE: os << opts->api_state_get; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenGetState);
+};
+
 static CodeList* emit_accept_binary(Output& output,
                                     const Adfa& dfa,
                                     const char* var,
@@ -974,7 +980,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         // is not used, which is the case in the loop/switch mode). The user would expect the next
         // iteration of the loop to start in the initial DFA state, so YYGETSTATE should return the
         // corresponding value.
-        gen_state_set(output, stmts, next_state);
+        append(stmts, code_set_state(alc, next_state));
     }
 
     if (cond != dfa.cond && !(opts->code_model == CodeModel::LOOP_SWITCH && opts->storable_state)) {
@@ -984,7 +990,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         // YYGETSTATE because the lexer may be reentered after an YYFILL invocation. Therefore we
         // use YYSETSTATE instead of YYSETCONDITION in the final states in order to match YYGETSTATE
         // in `yystate` initialization.
-        gen_cond_set(output, stmts, next_cond);
+        append(stmts, code_set_cond(alc, next_cond));
     }
 
     if (!semact->autogen) {
@@ -1123,14 +1129,6 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
     first->ranges = code_ranges(alc, VarType::INT, ranges, ranges_end);
 }
 
-static std::string output_cond_get(const opt_t* opts) {
-    return opts->api_cond_get + (opts->cond_get_naked ? "" : "()");
-}
-
-static std::string output_state_get(const opt_t* opts) {
-    return opts->api_state_get + (opts->state_get_naked ? "" : "()");
-}
-
 static OutputBlock* find_block_with_name(Output& output, const char* name) {
     for (OutputBlock* b : output.cblocks) {
         if (b->name.compare(name) == 0) return b;
@@ -1266,7 +1264,10 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     }
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_switch(alc, o.str(output_state_get(opts)).flush(), cases));
+
+    GenGetState callback(o.stream(), opts);
+    const char* getstate = opts->gen_code_getstate(o, callback);
+    append(stmts, code_switch(alc, getstate, cases));
 
     if (opts->state_next) {
         append(stmts, code_textraw(alc, o.str(opts->label_next).cstr(":").flush()));
@@ -1518,7 +1519,8 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
 //     - dispatch is independent of condition order: either it uses explicit condition names or
 //       there's only one condition and dispatch shrinks to unconditional jump
 
-static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper) {
+static CodeList* gen_cond_goto_binary(
+        Output& output, const char* getcond, size_t lower, size_t upper) {
     OutputBlock& block = output.block();
     const opt_t* opts = block.opts;
     OutAllocator& alc = output.allocator;
@@ -1530,10 +1532,10 @@ static CodeList* gen_cond_goto_binary(Output& output, size_t lower, size_t upper
         append(stmts, code_goto(alc, buf.flush()));
     } else {
         const size_t middle = lower + (upper - lower + 1) / 2;
-        CodeList* if_then = gen_cond_goto_binary(output, lower, middle - 1);
-        CodeList* if_else = gen_cond_goto_binary(output, middle, upper);
-        buf.str(output_cond_get(opts)).cstr(" < ").u64(middle);
-        append(stmts, code_if_then_else(alc, buf.flush(), if_then, if_else));
+        CodeList* if_then = gen_cond_goto_binary(output, getcond, lower, middle - 1);
+        CodeList* if_else = gen_cond_goto_binary(output, getcond, middle, upper);
+        const char* cond = buf.cstr(getcond).cstr(" < ").u64(middle).flush();
+        append(stmts, code_if_then_else(alc, cond, if_then, if_else));
     }
     return stmts;
 }
@@ -1551,6 +1553,9 @@ static CodeList* gen_cond_goto(Output& output) {
     const size_t ncond = conds.size();
     CodeList* stmts = code_list(alc);
 
+    GenGetCond callback(buf.stream(), opts);
+    const char* getcond = opts->gen_code_getcond(buf, callback);
+
     if (opts->target == Target::DOT) {
         for (const StartCond& cond : conds) {
             buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
@@ -1558,11 +1563,11 @@ static CodeList* gen_cond_goto(Output& output) {
         }
     } else {
         if (opts->computed_gotos) {
-            buf.cstr("*").str(opts->var_cond_table).cstr("[").str(output_cond_get(opts)).cstr("]");
+            buf.cstr("*").str(opts->var_cond_table).cstr("[").cstr(getcond).cstr("]");
             append(stmts, code_goto(alc, buf.flush()));
         } else if (opts->nested_ifs) {
             warn_cond_ord &= ncond > 1;
-            append(stmts, gen_cond_goto_binary(output, 0, ncond - 1));
+            append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
         } else {
             warn_cond_ord = false;
 
@@ -1578,8 +1583,7 @@ static CodeList* gen_cond_goto(Output& output) {
             if (opts->cond_abort) {
                 append(ccases, code_case_default(alc, gen_abort(alc)));
             }
-            buf.str(output_cond_get(opts));
-            append(stmts, code_switch(alc, buf.flush(), ccases));
+            append(stmts, code_switch(alc, getcond, ccases));
         }
 
         // see note [condition order]
@@ -1621,11 +1625,13 @@ static Code* gen_yystate_def(Output& output) {
         // takes priority over YYGETCONDITION, because the lexer may be reentered after an YYFILL
         // invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the final states.
         type = VarType::INT;
-        init = buf.str(output_state_get(opts)).flush();
+        GenGetState callback(buf.stream(), opts);
+        init = opts->gen_code_getstate(buf, callback);
     } else if (opts->start_conditions) {
         // Else with start conditions yystate should be initialized to YYGETCONDITION.
         type = VarType::UINT;
-        init = buf.str(output_cond_get(opts)).flush();
+        GenGetCond callback(buf.stream(), opts);
+        init = opts->gen_code_getcond(buf, callback);
     } else {
         // Else it should be the start DFA state (always case 0 with --loop-switch).
         type = VarType::UINT;
@@ -1863,8 +1869,12 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     if (opts->cond_abort) {
         append(cases, code_case_default(alc, gen_abort(alc)));
     }
+
     CodeList* body = code_list(alc);
-    append(body, code_switch(alc, buf.str(output_cond_get(opts)).flush(), cases));
+
+    GenGetCond callback(buf.stream(), opts);
+    const char* getcond = opts->gen_code_getcond(buf, callback);
+    append(body, code_switch(alc, getcond, cases));
 
     const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();
 

@@ -1310,6 +1310,58 @@ class RenderSetAccept : public RenderCallback {
     FORBID_COPY(RenderSetAccept);
 };
 
+class RenderSetCond : public RenderCallback {
+    RenderContext& rctx;
+    const char* cond;
+
+  public:
+    RenderSetCond(RenderContext& rctx, const char* cond)
+        : rctx(rctx), cond(cond) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETCOND:
+            argsubst(
+                rctx.os, rctx.opts->api_cond_set, rctx.opts->cond_set_param, "cond", true, cond);
+            break;
+        case StxVarId::COND:
+            rctx.os << cond;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetCond);
+};
+
+class RenderSetState : public RenderCallback {
+    RenderContext& rctx;
+    const char* state;
+
+  public:
+    RenderSetState(RenderContext& rctx, const char* state)
+        : rctx(rctx), state(state) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETSTATE:
+            argsubst(rctx.os,
+                rctx.opts->api_state_set, rctx.opts->state_set_param, "state", true, state);
+            break;
+        case StxVarId::STATE:
+            rctx.os << state;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetState);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -1522,6 +1574,16 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::SETACCEPT: {
         RenderSetAccept callback(rctx, code->accept);
         rctx.opts->render_code_setaccept(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETCOND: {
+        RenderSetCond callback(rctx, code->cond);
+        rctx.opts->render_code_setcond(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETSTATE: {
+        RenderSetState callback(rctx, code->state);
+        rctx.opts->render_code_setstate(rctx.os, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {

@@ -244,3 +244,11 @@ code:yycopymtag = topindent copymtag nl;
 code:yygetaccept = getaccept;
 
 code:yysetaccept = topindent setaccept nl;
+
+code:yygetcond = getcond;
+
+code:yysetcond = topindent setcond nl;
+
+code:yygetstate = getstate;
+
+code:yysetstate = topindent setstate nl;

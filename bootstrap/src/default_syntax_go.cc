@@ -249,4 +249,12 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "// function style is not supported, as there's no sensible default\n"
     "code:yysetaccept = topindent setaccept nl;\n"
+    "\n"
+    "code:yygetcond = getcond (api_style.functions ? \"()\");\n"
+    "\n"
+    "code:yysetcond = topindent setcond (api_style.functions ? \"(\" cond \")\") nl;\n"
+    "\n"
+    "code:yygetstate = getstate (api_style.functions ? \"()\");\n"
+    "\n"
+    "code:yysetstate = topindent setstate (api_style.functions ? \"(\" state \")\") nl;\n"
     ;

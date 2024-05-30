@@ -262,6 +262,18 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(code_setaccept, "code:setaccept", \
         ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_getcond, "code:getcond", \
+        ({StxVarId::GETCOND}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_setcond, "code:setcond", \
+        ({StxVarId::SETCOND, StxVarId::COND}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_getstate, "code:getstate", \
+        ({StxVarId::GETSTATE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_setstate, "code:setstate", \
+        ({StxVarId::SETSTATE, StxVarId::STATE}), ({}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -296,6 +308,8 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(FNDECL, "fndecl") \
     STX_LOCAL_VAR(FNDEF, "fndef") \
     STX_LOCAL_VAR(GETACCEPT, "getaccept") \
+    STX_LOCAL_VAR(GETCOND, "getcond") \
+    STX_LOCAL_VAR(GETSTATE, "getstate") \
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
     STX_LOCAL_VAR(LABEL, "label") \
@@ -315,6 +329,8 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
     STX_LOCAL_VAR(SETACCEPT, "setaccept") \
+    STX_LOCAL_VAR(SETCOND, "setcond") \
+    STX_LOCAL_VAR(SETSTATE, "setstate") \
     STX_LOCAL_VAR(SIZE, "size") \
     STX_LOCAL_VAR(SHIFT, "shift") \
     STX_LOCAL_VAR(SHIFTMTAG, "shiftmtag") \
@@ -337,6 +353,12 @@ using StxCodes = list_t<StxCode>;
     STX_GLOBAL_VAR(INDENT, "indent") \
     STX_GLOBAL_VAR(DEDENT, "dedent") \
     STX_GLOBAL_VAR(TOPINDENT, "topindent")
+
+#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name,
+enum class StxCodeId : uint32_t {
+    RE2C_CODE_TEMPLATES
+};
+#undef CODE_TEMPLATE
 
 #define STX_LOCAL_VAR(id, name) id,
 #define STX_GLOBAL_VAR(id, name) id,
@@ -702,8 +724,9 @@ struct opt_t {
     bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
 
   private:
-    void eval_code_conf(const StxCodes* code, std::ostream& os) const;
-    void eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallback& callback) const;
+    void eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const;
+    void eval_code_conf(
+        StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const;
     void push_list_on_stack(const StxCode* x) const;
 
     FORBID_COPY(opt_t);
