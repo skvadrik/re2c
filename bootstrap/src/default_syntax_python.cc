@@ -153,7 +153,7 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "    [case{-1}:   case \":\" nl]\n"
     "        indent [stmt: stmt] dedent;\n"
     "\n"
-    "code:switch_case_range = (multival\n"
+    "code:switch_case_range = (many\n"
     "    ? [val{0}: val] [val{1:-1}: \"|\" val]\n"
     "    : [val{0}: val]);\n"
     "\n"

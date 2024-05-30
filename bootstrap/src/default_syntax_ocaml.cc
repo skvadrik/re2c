@@ -168,7 +168,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "// as it causes error when there are multiple cases:\n"
     "//     `Error: Variable c must occur on both sides of this | pattern`.\n"
     "code:switch_case_range = (char_literals\n"
-    "    ? [val{0}: val] (multival ? \"..\" [val{-1}: val])\n"
+    "    ? [val{0}: val] (many ? \"..\" [val{-1}: val])\n"
     "    : [val{0}: val] [val{1:-1}: \"|\" val]);\n"
     "\n"
     "code:switch_case_default = \"_\";\n"

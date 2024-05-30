@@ -140,13 +140,13 @@ code:type_cond_enum = (storable_state? "int" : "uint");
 // code:assign
 
 code:if_then_else =
-    [branch{0}: topindent (multival ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
+    [branch{0}: topindent (many ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
         indent [stmt: stmt] dedent]
     [branch{1:-1}: topindent "else" (have_cond? " if " cond " then") (monadic ? " do") nl
         indent [stmt: stmt] dedent];
 
 code:if_then_else_oneline =
-    [branch{0}: topindent (multival ? "if " cond " then " : "when (" cond ") $ ") [stmt: stmt] nl]
+    [branch{0}: topindent (many ? "if " cond " then " : "when (" cond ") $ ") [stmt: stmt] nl]
     [branch{1:-1}: topindent "else " (have_cond? "if " cond " then ") [stmt: stmt] nl];
 
 code:switch =
@@ -159,7 +159,7 @@ code:switch_cases = topindent "_c | "
         indent [stmt: stmt] dedent
     ];
 
-code:switch_case_range = (multival
+code:switch_case_range = (many
     ? [val{0}: val] " <= _c && _c <= " [val{-1}: val]
     : [val{0}: val] " == _c");
 

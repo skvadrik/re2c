@@ -265,7 +265,7 @@ class RenderIfThenElse : public RenderCallback {
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
             case StxLOpt::HAVE_COND: return curr_branch->cond != nullptr;
-            case StxLOpt::MULTIVAL: return nbranches > 1;
+            case StxLOpt::MANY: return nbranches > 1;
             default: break;
         }
         UNREACHABLE();
@@ -370,7 +370,7 @@ class RenderSwitchCaseRange : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
-        case StxLOpt::MULTIVAL:
+        case StxLOpt::MANY:
             return nsyms > 1;
         case StxLOpt::CHAR_LITERALS:
             return code->kind == CodeCase::Kind::RANGES
