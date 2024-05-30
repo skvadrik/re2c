@@ -522,6 +522,10 @@ start:
     "code:yybackup_peek_skip"   { RET_CODE(code_backup_peek_skip); }
     "code:yygetaccept"          { RET_CODE(code_getaccept); }
     "code:yysetaccept"          { RET_CODE(code_setaccept); }
+    "code:yygetcond"            { RET_CODE(code_getcond); }
+    "code:yysetcond"            { RET_CODE(code_setcond); }
+    "code:yygetstate"           { RET_CODE(code_getstate); }
+    "code:yysetstate"           { RET_CODE(code_setstate); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
@@ -552,6 +556,8 @@ start:
     "fndecl"     { RET_VAR(StxVarId::FNDECL); }
     "fndef"      { RET_VAR(StxVarId::FNDEF); }
     "getaccept"  { RET_VAR(StxVarId::GETACCEPT); }
+    "getcond"    { RET_VAR(StxVarId::GETCOND); }
+    "getstate"   { RET_VAR(StxVarId::GETSTATE); }
     "index"      { RET_VAR(StxVarId::INDEX); }
     "init"       { RET_VAR(StxVarId::INIT); }
     "label"      { RET_VAR(StxVarId::LABEL); }
@@ -571,6 +577,8 @@ start:
     "rhs"        { RET_VAR(StxVarId::RHS); }
     "row"        { RET_VAR(StxVarId::ROW); }
     "setaccept"  { RET_VAR(StxVarId::SETACCEPT); }
+    "setcond"    { RET_VAR(StxVarId::SETCOND); }
+    "setstate"   { RET_VAR(StxVarId::SETSTATE); }
     "size"       { RET_VAR(StxVarId::SIZE); }
     "shift"      { RET_VAR(StxVarId::SHIFT); }
     "shiftmtag"  { RET_VAR(StxVarId::SHIFTMTAG); }

@@ -714,7 +714,8 @@ void opt_t::push_list_on_stack(const StxCode* x) const {
     stack_code.push_back({x, 0});
 }
 
-static bool eval_cond(const StxOpt* cond, const opt_t* opts, RenderCallback* callback) {
+static bool eval_cond(
+        StxCodeId id, const StxOpt* cond, const opt_t* opts, RenderCallback* callback) {
     if (cond->is_local) {
         DCHECK(callback != nullptr);
         return callback->eval_cond(cond->lopt);
@@ -725,9 +726,21 @@ static bool eval_cond(const StxOpt* cond, const opt_t* opts, RenderCallback* cal
         case StxGOpt::API_CUSTOM:
             return opts->api == Api::CUSTOM;
         case StxGOpt::API_STYLE_FUNCTIONS:
-            return opts->api_style == ApiStyle::FUNCTIONS;
+            switch (id) {
+                case StxCodeId::code_getcond: return !opts->cond_get_naked;
+                case StxCodeId::code_setcond: return !opts->cond_set_naked;
+                case StxCodeId::code_getstate: return !opts->state_get_naked;
+                case StxCodeId::code_setstate: return !opts->state_set_naked;
+                default: return opts->api_style == ApiStyle::FUNCTIONS;
+            }
         case StxGOpt::API_STYLE_FREEFORM:
-            return opts->api_style == ApiStyle::FREEFORM;
+            switch (id) {
+                case StxCodeId::code_getcond: return opts->cond_get_naked;
+                case StxCodeId::code_setcond: return opts->cond_set_naked;
+                case StxCodeId::code_getstate: return opts->state_get_naked;
+                case StxCodeId::code_setstate: return opts->state_set_naked;
+                default: return opts->api_style == ApiStyle::FREEFORM;
+            }
         case StxGOpt::CODE_MODEL_GOTO_LABEL:
             return opts->code_model == CodeModel::GOTO_LABEL;
         case StxGOpt::CODE_MODEL_LOOP_SWITCH:
@@ -764,23 +777,24 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 
 #define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
 const char* opt_t::gen_##name(Scratchbuf& buf, RenderCallback& callback) const { \
-    eval_code_conf(name, buf.stream(), callback); \
+    eval_code_conf(StxCodeId:: name, name, buf.stream(), callback); \
     return buf.flush(); \
 } \
 const char* opt_t::gen_##name(Scratchbuf& buf) const { \
-    eval_code_conf(name, buf.stream()); \
+    eval_code_conf(StxCodeId:: name, name, buf.stream()); \
     return buf.flush(); \
 } \
 void opt_t::render_##name(std::ostream& os, RenderCallback& callback) const { \
-    eval_code_conf(name, os, callback); \
+    eval_code_conf(StxCodeId:: name, name, os, callback); \
 } \
 void opt_t::render_##name(std::ostream& os) const { \
-    eval_code_conf(name, os); \
+    eval_code_conf(StxCodeId:: name, name, os); \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 
-void opt_t::eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallback& callback) const {
+void opt_t::eval_code_conf(
+        StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const {
     stack_code_t& stack = stack_code;
     size_t bottom = stack.size();
     push_list_on_stack(code->head);
@@ -798,7 +812,7 @@ void opt_t::eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallbac
             callback.render_var(x->var);
             break;
         case StxCodeType::COND:
-            if (eval_cond(x->cond.opt, this, &callback)) {
+            if (eval_cond(id, x->cond.opt, this, &callback)) {
                 push_list_on_stack(x->cond.then_code->head);
             } else if (x->cond.else_code != nullptr) {
                 push_list_on_stack(x->cond.else_code->head);
@@ -823,9 +837,9 @@ void opt_t::eval_code_conf(const StxCodes* code, std::ostream& os, RenderCallbac
     }
 }
 
-void opt_t::eval_code_conf(const StxCodes* code, std::ostream& os) const {
+void opt_t::eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const {
     RenderCallback dummy;
-    eval_code_conf(code, os, dummy);
+    eval_code_conf(id, code, os, dummy);
 }
 
 } // namespace re2c

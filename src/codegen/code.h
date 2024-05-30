@@ -314,6 +314,8 @@ struct Code {
     union {
         const char* text;
         const char* target;
+        const char* cond;
+        const char* state;
         BlockNameList* block_names;
         CodeBranches* ifte;
         CodeSwitch swch;
@@ -546,6 +548,18 @@ inline Code* code_copy_tag(OutAllocator& alc, const char* lhs, const char* rhs, 
 inline Code* code_set_accept(OutAllocator& alc, size_t accept) {
     Code* x = new_code(alc, CodeKind::SETACCEPT);
     x->accept = accept;
+    return x;
+}
+
+inline Code* code_set_cond(OutAllocator& alc, const char* cond) {
+    Code* x = new_code(alc, CodeKind::SETCOND);
+    x->cond = cond;
+    return x;
+}
+
+inline Code* code_set_state(OutAllocator& alc, const char* state) {
+    Code* x = new_code(alc, CodeKind::SETSTATE);
+    x->state = state;
     return x;
 }
 

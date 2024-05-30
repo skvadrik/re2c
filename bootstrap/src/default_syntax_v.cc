@@ -246,4 +246,12 @@ const char* DEFAULT_SYNTAX_V =
     "code:yygetaccept = getaccept;\n"
     "\n"
     "code:yysetaccept = topindent setaccept nl;\n"
+    "\n"
+    "code:yygetcond = getcond;\n"
+    "\n"
+    "code:yysetcond = topindent setcond nl;\n"
+    "\n"
+    "code:yygetstate = getstate;\n"
+    "\n"
+    "code:yysetstate = topindent setstate nl;\n"
     ;
