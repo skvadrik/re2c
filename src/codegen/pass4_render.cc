@@ -874,16 +874,13 @@ class RenderDebug : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
-        case StxVarId::DEBUG:
-            if (rctx.opts->api_style == ApiStyle::FREEFORM) {
-                std::ostringstream s(rctx.opts->api_debug);
-                argsubst(s, rctx.opts->api_sigil, "state", false, code->state);
-                argsubst(s, rctx.opts->api_sigil, "char", false, rctx.opts->var_char);
-                rctx.os << s.str();
-            } else {
-                rctx.os << rctx.opts->api_debug;
-            }
+        case StxVarId::DEBUG: {
+            std::ostringstream s(rctx.opts->api_debug);
+            argsubst(s, rctx.opts->api_sigil, "state", false, code->state);
+            argsubst(s, rctx.opts->api_sigil, "char", false, rctx.opts->var_char);
+            rctx.os << s.str();
             break;
+        }
         case StxVarId::STATE:
             rctx.os << code->state;
             break;
@@ -967,69 +964,38 @@ class RenderTagOps : public RenderCallback {
             rctx.os << code->dist;
             break;
         case StxVarId::RESTORETAG:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->tag1);
-            } else {
-                rctx.os << opts->api_restore_tag;
-            }
+            argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->tag1);
             break;
         case StxVarId::SHIFT:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_shift, opts->api_sigil, "shift", true, -code->dist);
-            } else {
-                rctx.os << opts->api_shift;
-            }
+            argsubst(rctx.os, opts->api_shift, opts->api_sigil, "shift", true, -code->dist);
             break;
-        case StxVarId::SHIFTSTAG:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                std::ostringstream s(opts->api_stag_shift);
-                argsubst(s, opts->api_sigil, "tag", false, code->tag1);
-                argsubst(s, opts->api_sigil, "shift", false, -code->dist);
-                rctx.os << s.str();
-            } else {
-                rctx.os << opts->api_stag_shift;
-            }
+        case StxVarId::SHIFTSTAG: {
+            std::ostringstream s(opts->api_stag_shift);
+            argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+            argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+            rctx.os << s.str();
             break;
-        case StxVarId::SHIFTMTAG:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                std::ostringstream s(opts->api_mtag_shift);
-                argsubst(s, opts->api_sigil, "tag", false, code->tag1);
-                argsubst(s, opts->api_sigil, "shift", false, -code->dist);
-                rctx.os << s.str();
-            } else {
-                rctx.os << opts->api_mtag_shift;
-            }
+        }
+        case StxVarId::SHIFTMTAG: {
+            std::ostringstream s(opts->api_mtag_shift);
+            argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+            argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+            rctx.os << s.str();
             break;
+        }
         case StxVarId::STAGP:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_stag_pos, opts->api_sigil, "tag", true, code->tag1);
-            } else {
-                rctx.os << opts->api_stag_pos;
-            }
+            argsubst(rctx.os, opts->api_stag_pos, opts->api_sigil, "tag", true, code->tag1);
             break;
         case StxVarId::STAGN:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_stag_neg, opts->api_sigil, "tag", true, code->tag1);
-            } else {
-                rctx.os << opts->api_stag_neg;
-            }
+            argsubst(rctx.os, opts->api_stag_neg, opts->api_sigil, "tag", true, code->tag1);
             break;
         case StxVarId::MTAGP:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_mtag_pos, opts->api_sigil, "tag", true, code->tag1);
-            } else {
-                rctx.os << opts->api_mtag_pos;
-            }
+            argsubst(rctx.os, opts->api_mtag_pos, opts->api_sigil, "tag", true, code->tag1);
             break;
         case StxVarId::MTAGN:
-            if (opts->api_style == ApiStyle::FREEFORM) {
-                argsubst(rctx.os, opts->api_mtag_neg, opts->api_sigil, "tag", true, code->tag1);
-            } else {
-                rctx.os << opts->api_mtag_neg;
-            }
+            argsubst(rctx.os, opts->api_mtag_neg, opts->api_sigil, "tag", true, code->tag1);
             break;
         case StxVarId::COPYSTAG: {
-            // no function style, as YYCOPYSTAG must have a working default definition
             std::ostringstream s(opts->api_stag_copy);
             argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
             argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
@@ -1037,7 +1003,6 @@ class RenderTagOps : public RenderCallback {
             break;
         }
         case StxVarId::COPYMTAG: {
-            // no function style, as YYCOPYMTAG must have a working default definition
             std::ostringstream s(opts->api_mtag_copy);
             argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
             argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
@@ -1288,7 +1253,6 @@ class RenderSetAccept : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
         case StxVarId::SETACCEPT: {
-            // no function style, as YYSETACCEPT must have a working default definition
             std::ostringstream s(rctx.opts->api_accept_set);
             argsubst(s, rctx.opts->api_sigil, "var", false, rctx.opts->var_accept);
             argsubst(s, rctx.opts->api_sigil, "val", false, val);
