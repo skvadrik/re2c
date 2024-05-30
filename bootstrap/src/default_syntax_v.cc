@@ -162,7 +162,7 @@ const char* DEFAULT_SYNTAX_V =
     "    [case{0:-2}: case \", \"]\n"
     "    [case{-1}:   case \" { \"] [stmt: stmt] \" }\" nl;\n"
     "\n"
-    "code:switch_case_range = [val{0}: val] (multival ? \"...\" [val{-1}: val]);\n"
+    "code:switch_case_range = [val{0}: val] (many ? \"...\" [val{-1}: val]);\n"
     "\n"
     "code:switch_case_default = \"else\";\n"
     "\n"

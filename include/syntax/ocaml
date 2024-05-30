@@ -166,7 +166,7 @@ code:switch_cases_oneline =
 // as it causes error when there are multiple cases:
 //     `Error: Variable c must occur on both sides of this | pattern`.
 code:switch_case_range = (char_literals
-    ? [val{0}: val] (multival ? ".." [val{-1}: val])
+    ? [val{0}: val] (many ? ".." [val{-1}: val])
     : [val{0}: val] [val{1:-1}: "|" val]);
 
 code:switch_case_default = "_";

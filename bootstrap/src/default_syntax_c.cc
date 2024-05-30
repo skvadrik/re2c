@@ -166,7 +166,7 @@ const char* DEFAULT_SYNTAX_C =
     "    [case{-1}:   case \" \" [stmt: stmt] nl];\n"
     "\n"
     "code:switch_case_range = (case_ranges\n"
-    "    ? topindent \"case \" [val{0}: val] (multival ? \" ... \" [val{-1}: val]) \":\"\n"
+    "    ? topindent \"case \" [val{0}: val] (many ? \" ... \" [val{-1}: val]) \":\"\n"
     "    : [val{0:-2}: topindent \"case \" val \":\" nl]\n"
     "      [val{-1}:   topindent \"case \" val \":\"]);\n"
     "\n"

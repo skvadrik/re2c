@@ -161,7 +161,7 @@ code:switch_cases_oneline =
     [case{0:-2}: topindent case " |" nl]
     [case{-1}:   topindent case " => " [stmt: stmt] "," nl];
 
-code:switch_case_range = [val{0}: val] (multival ? " ..= " [val{-1}: val]);
+code:switch_case_range = [val{0}: val] (many ? " ..= " [val{-1}: val]);
 
 code:switch_case_default = "_";
 

@@ -192,7 +192,7 @@ enum class StxLOpt {
     HAVE_INIT,
     HAVE_TYPE,
     HAVE_RETVAL,
-    MULTIVAL,
+    MANY,
     NESTED
 };
 

@@ -118,11 +118,11 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(code_if_then_else, "code:if_then_else", \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
-        ({StxLOpt::HAVE_COND, StxLOpt::MULTIVAL}) \
+        ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
     ) \
     CODE_TEMPLATE(code_if_then_else_oneline, "code:if_then_else_oneline", \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
-        ({StxLOpt::HAVE_COND, StxLOpt::MULTIVAL}) \
+        ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
     ) \
     CODE_TEMPLATE(code_switch, "code:switch", \
         ({StxVarId::EXPR}), ({StxVarId::CASE}), ({}) \
@@ -134,7 +134,7 @@ using StxCodes = list_t<StxCode>;
         ({}), ({StxVarId::CASE, StxVarId::STMT}), ({}) \
     ) \
     CODE_TEMPLATE(code_switch_case_range, "code:switch_case_range", \
-        ({}), ({StxVarId::VAL}), ({StxLOpt::MULTIVAL, StxLOpt::CHAR_LITERALS}) \
+        ({}), ({StxVarId::VAL}), ({StxLOpt::MANY, StxLOpt::CHAR_LITERALS}) \
     ) \
     CODE_TEMPLATE(code_switch_case_default, "code:switch_case_default", \
         ({}), ({}), ({}) \

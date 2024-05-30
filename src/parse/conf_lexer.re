@@ -652,7 +652,7 @@ opt:
     "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
     "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }
     "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
-    "multival"        { RET_LOPT(StxLOpt::MULTIVAL); }
+    "many"            { RET_LOPT(StxLOpt::MANY); }
     "nested"          { RET_LOPT(StxLOpt::NESTED); }
 
     * { RET_FAIL(error_at_cur("unknown option")); }

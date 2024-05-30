@@ -151,7 +151,7 @@ code:switch_cases = topindent "case "
     [case{-1}:   case ":" nl]
         indent [stmt: stmt] dedent;
 
-code:switch_case_range = (multival
+code:switch_case_range = (many
     ? [val{0}: val] [val{1:-1}: "|" val]
     : [val{0}: val]);
 
