@@ -75,207 +75,207 @@ using StxCodes = list_t<StxCode>;
     STX_OPT(bool, wrap_blocks_in_braces, false)
 
 #define RE2C_CODE_TEMPLATES \
-    CODE_TEMPLATE(code_var_local, "code:var_local", \
+    CODE_TEMPLATE(var_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
     ) \
-    CODE_TEMPLATE(code_var_global, "code:var_global", \
+    CODE_TEMPLATE(var_global, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
     ) \
-    CODE_TEMPLATE(code_const_local, "code:const_local", \
+    CODE_TEMPLATE(const_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_const_global, "code:const_global", \
+    CODE_TEMPLATE(const_global, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_array_local, "code:array_local", \
+    CODE_TEMPLATE(array_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
         ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
     ) \
-    CODE_TEMPLATE(code_array_global, "code:array_global", \
+    CODE_TEMPLATE(array_global, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
         ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
     ) \
-    CODE_TEMPLATE(code_array_elem, "code:array_elem", \
+    CODE_TEMPLATE(array_elem, \
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_type_int, "code:type_int", \
+    CODE_TEMPLATE(type_int, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_type_uint, "code:type_uint", \
+    CODE_TEMPLATE(type_uint, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_type_cond_enum, "code:type_cond_enum", \
+    CODE_TEMPLATE(type_cond_enum, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_type_yybm, "code:type_yybm", \
+    CODE_TEMPLATE(type_yybm, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_type_yytarget, "code:type_yytarget", \
+    CODE_TEMPLATE(type_yytarget, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_assign, "code:assign", \
+    CODE_TEMPLATE(assign, \
         ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_if_then_else, "code:if_then_else", \
+    CODE_TEMPLATE(if_then_else, \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
         ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
     ) \
-    CODE_TEMPLATE(code_if_then_else_oneline, "code:if_then_else_oneline", \
+    CODE_TEMPLATE(if_then_else_oneline, \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
         ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
     ) \
-    CODE_TEMPLATE(code_switch, "code:switch", \
+    CODE_TEMPLATE(switch, \
         ({StxVarId::EXPR}), ({StxVarId::CASE}), ({}) \
     ) \
-    CODE_TEMPLATE(code_switch_cases, "code:switch_cases", \
+    CODE_TEMPLATE(switch_cases, \
         ({}), ({StxVarId::CASE, StxVarId::STMT}), ({}) \
     ) \
-    CODE_TEMPLATE(code_switch_cases_oneline, "code:switch_cases_oneline", \
+    CODE_TEMPLATE(switch_cases_oneline, \
         ({}), ({StxVarId::CASE, StxVarId::STMT}), ({}) \
     ) \
-    CODE_TEMPLATE(code_switch_case_range, "code:switch_case_range", \
+    CODE_TEMPLATE(switch_case_range, \
         ({}), ({StxVarId::VAL}), ({StxLOpt::MANY, StxLOpt::CHAR_LITERALS}) \
     ) \
-    CODE_TEMPLATE(code_switch_case_default, "code:switch_case_default", \
+    CODE_TEMPLATE(switch_case_default, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_loop, "code:loop", \
+    CODE_TEMPLATE(loop, \
         ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
     ) \
-    CODE_TEMPLATE(code_goto, "code:goto", \
+    CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_enum, "code:enum", \
+    CODE_TEMPLATE(enum, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
         ({StxLOpt::HAVE_INIT}) \
     ) \
-    CODE_TEMPLATE(code_enum_elem, "code:enum_elem", \
+    CODE_TEMPLATE(enum_elem, \
         ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_fndecl, "code:fndecl", \
+    CODE_TEMPLATE(fndecl, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
         ({StxVarId::ARG}), ({StxLOpt::HAVE_TYPE}) \
     ) \
-    CODE_TEMPLATE(code_fndef, "code:fndef", \
+    CODE_TEMPLATE(fndef, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
         ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::HAVE_TYPE}) \
     ) \
-    CODE_TEMPLATE(code_fncall, "code:fncall", \
+    CODE_TEMPLATE(fncall, \
         ({StxVarId::NAME, StxVarId::RETVAL}), ({StxVarId::ARG}), \
         ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
     ) \
-    CODE_TEMPLATE(code_tailcall, "code:tailcall", \
+    CODE_TEMPLATE(tailcall, \
         ({StxVarId::NAME}), ({StxVarId::ARG}), ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
     ) \
-    CODE_TEMPLATE(code_recursive_functions, "code:recursive_functions", \
+    CODE_TEMPLATE(recursive_functions, \
         ({StxVarId::FNDECL, StxVarId::FNDEF}), ({StxVarId::FN}), ({}) \
     ) \
-    CODE_TEMPLATE(code_fingerprint, "code:fingerprint", \
+    CODE_TEMPLATE(fingerprint, \
         ({StxVarId::VER, StxVarId::DATE}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_line_info, "code:line_info", \
+    CODE_TEMPLATE(line_info, \
         ({StxVarId::LINE, StxVarId::FILE}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_abort, "code:abort", \
+    CODE_TEMPLATE(abort, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_debug, "code:debug", \
+    CODE_TEMPLATE(yydebug, \
         ({StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_peek, "code:peek", \
+    CODE_TEMPLATE(yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::CURSOR, StxVarId::TYPECAST}), \
         ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_skip, "code:skip", \
+    CODE_TEMPLATE(yyskip, \
         ({StxVarId::SKIP, StxVarId::CURSOR}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_backup, "code:backup", \
+    CODE_TEMPLATE(yybackup, \
         ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_backupctx, "code:backupctx", \
+    CODE_TEMPLATE(yybackupctx, \
         ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_restore, "code:restore", \
+    CODE_TEMPLATE(yyrestore, \
         ({StxVarId::RESTORE, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_restorectx, "code:restorectx", \
+    CODE_TEMPLATE(yyrestorectx, \
         ({StxVarId::RESTORECTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_restoretag, "code:restoretag", \
+    CODE_TEMPLATE(yyrestoretag, \
         ({StxVarId::RESTORETAG, StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::TAG, \
             StxVarId::OFFSET}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_shift, "code:shift", \
+    CODE_TEMPLATE(yyshift, \
         ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_shiftstag, "code:shiftstag", \
+    CODE_TEMPLATE(yyshiftstag, \
         ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET}), ({}), \
         ({StxLOpt::NESTED}) \
     ) \
-    CODE_TEMPLATE(code_shiftmtag, "code:shiftmtag", \
+    CODE_TEMPLATE(yyshiftmtag, \
         ({StxVarId::SHIFTMTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_stagp, "code:stagp", \
+    CODE_TEMPLATE(yystagp, \
         ({StxVarId::STAGP, StxVarId::TAG, StxVarId::CURSOR}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_mtagp, "code:mtagp", \
+    CODE_TEMPLATE(yymtagp, \
         ({StxVarId::MTAGP, StxVarId::TAG}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_stagn, "code:stagn", \
+    CODE_TEMPLATE(yystagn, \
         ({StxVarId::STAGN, StxVarId::TAG}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_mtagn, "code:mtagn", \
+    CODE_TEMPLATE(yymtagn, \
         ({StxVarId::MTAGN, StxVarId::TAG}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_copystag, "code:copystag", \
+    CODE_TEMPLATE(yycopystag, \
         ({StxVarId::COPYSTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_copymtag, "code:copymtag", \
+    CODE_TEMPLATE(yycopymtag, \
         ({StxVarId::COPYMTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_skip_peek, "code:skip_peek", \
+    CODE_TEMPLATE(yyskip_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_peek_skip, "code:peek_skip", \
+    CODE_TEMPLATE(yypeek_yyskip, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_skip_backup, "code:skip_backup", \
+    CODE_TEMPLATE(yyskip_yybackup, \
         ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_backup_skip, "code:backup_skip", \
+    CODE_TEMPLATE(yybackup_yyskip, \
         ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_backup_peek, "code:backup_peek", \
+    CODE_TEMPLATE(yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_skip_backup_peek, "code:skip_backup_peek", \
+    CODE_TEMPLATE(yyskip_yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_backup_peek_skip, "code:backup_peek_skip", \
+    CODE_TEMPLATE(yybackup_yypeek_yyskip, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
             StxVarId::TYPECAST}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_getaccept, "code:getaccept", \
+    CODE_TEMPLATE(yygetaccept, \
         ({StxVarId::GETACCEPT, StxVarId::VAR}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_setaccept, "code:setaccept", \
+    CODE_TEMPLATE(yysetaccept, \
         ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_getcond, "code:getcond", \
+    CODE_TEMPLATE(yygetcond, \
         ({StxVarId::GETCOND}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_setcond, "code:setcond", \
+    CODE_TEMPLATE(yysetcond, \
         ({StxVarId::SETCOND, StxVarId::COND}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_getstate, "code:getstate", \
+    CODE_TEMPLATE(yygetstate, \
         ({StxVarId::GETSTATE}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_setstate, "code:setstate", \
+    CODE_TEMPLATE(yysetstate, \
         ({StxVarId::SETSTATE, StxVarId::STATE}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(code_lessthan, "code:lessthan", \
+    CODE_TEMPLATE(yylessthan, \
         ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT}), \
         ({}), ({StxLOpt::MANY}) \
     )
@@ -361,7 +361,7 @@ using StxCodes = list_t<StxCode>;
     STX_GLOBAL_VAR(DEDENT, "dedent") \
     STX_GLOBAL_VAR(TOPINDENT, "topindent")
 
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name,
+#define CODE_TEMPLATE(name, vars, list_vars, conds) STX_##name,
 enum class StxCodeId : uint32_t {
     RE2C_CODE_TEMPLATES
 };
@@ -582,7 +582,7 @@ struct conopt_t {
 #define STX_OPT(type, name, value) const type name;
     RE2C_STX_OPTS
 #undef STX_OPT
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) const StxCodes* name;
+#define CODE_TEMPLATE(name, vars, list_vars, conds) const StxCodes* code_##name;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
@@ -597,7 +597,7 @@ struct conopt_t {
 #define STX_OPT(type, name, value) name(value),
     RE2C_STX_OPTS
 #undef STX_OPT
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name(nullptr),
+#define CODE_TEMPLATE(name, vars, list_vars, conds) code_##name(nullptr),
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     p2067() {}
@@ -619,9 +619,9 @@ struct conopt_t {
     }
     RE2C_CHECKED_LISTS
 #undef CHECKED_LIST
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-    bool have_conf_##name() const { \
-        return name != nullptr; \
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+    bool have_conf_code_##name() const { \
+        return code_##name != nullptr; \
     }
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
@@ -682,7 +682,7 @@ struct opt_t {
 #define STX_OPT(type, name, value) const type name;
     RE2C_STX_OPTS
 #undef STX_OPT
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) const StxCodes* name;
+#define CODE_TEMPLATE(name, vars, list_vars, conds) const StxCodes* code_##name;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 #define MUTOPT1 MUTOPT
@@ -706,7 +706,7 @@ struct opt_t {
 #define STX_OPT(type, name, value) name(con.name),
     RE2C_STX_OPTS
 #undef STX_OPT
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) name(con.name),
+#define CODE_TEMPLATE(name, vars, list_vars, conds) code_##name(con.code_##name),
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 #define MUTOPT1 MUTOPT
@@ -720,11 +720,11 @@ struct opt_t {
     symtab(symtab)
     {}
 
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-    const char* gen_##name(Scratchbuf& buf, RenderCallback& callback) const; \
-    const char* gen_##name(Scratchbuf& buf) const; \
-    void render_##name(std::ostream& os, RenderCallback& callback) const; \
-    void render_##name(std::ostream& os) const;
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+    const char* gen_code_##name(Scratchbuf& buf, RenderCallback& callback) const; \
+    const char* gen_code_##name(Scratchbuf& buf) const; \
+    void render_code_##name(std::ostream& os, RenderCallback& callback) const; \
+    void render_code_##name(std::ostream& os) const;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
@@ -805,9 +805,9 @@ struct Opt {
     void set_##name(const type & val);
     RE2C_STX_OPTS
 #undef STX_OPT
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-    /* void set_##name(const StxCodes* code); */ \
-    Ret check_##name() NODISCARD;
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+    /* void set_code_##name(const StxCodes* code); */ \
+    Ret check_code_##name() NODISCARD;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     void init_encoding(Enc::Type type, bool on);

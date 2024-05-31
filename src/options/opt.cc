@@ -540,16 +540,16 @@ void Opt::set_##name(const type & val) { \
 RE2C_STX_OPTS
 #undef STX_OPT
 
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-/* void Opt::set_##name(const StxCodes* code) { \
-    const_cast<conopt_t&>(glob).name = code; \
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+/* void Opt::set_code_##name(const StxCodes* code) { \
+    const_cast<conopt_t&>(glob).code_##name = code; \
 } */ \
-Ret Opt::check_##name() { \
-    if (glob.name == nullptr) return Ret::OK; \
+Ret Opt::check_code_##name() { \
+    if (glob.code_##name == nullptr) return Ret::OK; \
     static const std::unordered_set<StxVarId> vs vars; \
     static const std::unordered_set<StxVarId> lvs list_vars; \
     static const std::unordered_set<StxLOpt> cs conds; \
-    return validate_conf_code(glob.name, str, vs, lvs, cs); \
+    return validate_conf_code(glob.code_##name, "code:" #name, vs, lvs, cs); \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
@@ -727,18 +727,18 @@ static bool eval_cond(
             return opts->api == Api::CUSTOM;
         case StxGOpt::API_STYLE_FUNCTIONS:
             switch (id) {
-                case StxCodeId::code_getcond: return !opts->cond_get_naked;
-                case StxCodeId::code_setcond: return !opts->cond_set_naked;
-                case StxCodeId::code_getstate: return !opts->state_get_naked;
-                case StxCodeId::code_setstate: return !opts->state_set_naked;
+                case StxCodeId::STX_yygetcond: return !opts->cond_get_naked;
+                case StxCodeId::STX_yysetcond: return !opts->cond_set_naked;
+                case StxCodeId::STX_yygetstate: return !opts->state_get_naked;
+                case StxCodeId::STX_yysetstate: return !opts->state_set_naked;
                 default: return opts->api_style == ApiStyle::FUNCTIONS;
             }
         case StxGOpt::API_STYLE_FREEFORM:
             switch (id) {
-                case StxCodeId::code_getcond: return opts->cond_get_naked;
-                case StxCodeId::code_setcond: return opts->cond_set_naked;
-                case StxCodeId::code_getstate: return opts->state_get_naked;
-                case StxCodeId::code_setstate: return opts->state_set_naked;
+                case StxCodeId::STX_yygetcond: return opts->cond_get_naked;
+                case StxCodeId::STX_yysetcond: return opts->cond_set_naked;
+                case StxCodeId::STX_yygetstate: return opts->state_get_naked;
+                case StxCodeId::STX_yysetstate: return opts->state_set_naked;
                 default: return opts->api_style == ApiStyle::FREEFORM;
             }
         case StxGOpt::CODE_MODEL_GOTO_LABEL:
@@ -775,20 +775,20 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
     return lbound <= rbound && rbound >= 0;
 }
 
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-const char* opt_t::gen_##name(Scratchbuf& buf, RenderCallback& callback) const { \
-    eval_code_conf(StxCodeId:: name, name, buf.stream(), callback); \
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+const char* opt_t::gen_code_##name(Scratchbuf& buf, RenderCallback& callback) const { \
+    eval_code_conf(StxCodeId::STX_##name, code_##name, buf.stream(), callback); \
     return buf.flush(); \
 } \
-const char* opt_t::gen_##name(Scratchbuf& buf) const { \
-    eval_code_conf(StxCodeId:: name, name, buf.stream()); \
+const char* opt_t::gen_code_##name(Scratchbuf& buf) const { \
+    eval_code_conf(StxCodeId::STX_##name, code_##name, buf.stream()); \
     return buf.flush(); \
 } \
-void opt_t::render_##name(std::ostream& os, RenderCallback& callback) const { \
-    eval_code_conf(StxCodeId:: name, name, os, callback); \
+void opt_t::render_code_##name(std::ostream& os, RenderCallback& callback) const { \
+    eval_code_conf(StxCodeId::STX_##name, code_##name, os, callback); \
 } \
-void opt_t::render_##name(std::ostream& os) const { \
-    eval_code_conf(StxCodeId:: name, name, os); \
+void opt_t::render_code_##name(std::ostream& os) const { \
+    eval_code_conf(StxCodeId::STX_##name, code_##name, os); \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE

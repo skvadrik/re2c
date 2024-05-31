@@ -481,7 +481,7 @@ CodeList* gen_goto_after_fill(
         CodeList* fallback_or_resume = code_list(alc);
         CodeList* fallback = gen_fill_falllback(output, dfa, from, jump);
         GenLessThan callback(o.stream(), opts, 1);
-        const char* less_than = opts->gen_code_lessthan(o, callback);
+        const char* less_than = opts->gen_code_yylessthan(o, callback);
         gen_if(alc, opts, less_than, fallback, resume, fallback_or_resume);
         return fallback_or_resume;
     } else {
@@ -540,7 +540,7 @@ static void gen_fill(
 
     if (opts->fill_check && fill->head) {
         GenLessThan callback(o.stream(), opts, need);
-        const char* less_than = opts->gen_code_lessthan(o, callback);
+        const char* less_than = opts->gen_code_yylessthan(o, callback);
         gen_if(alc, opts, less_than, fill, tail, stmts);
     } else {
         append(stmts, fill);
@@ -898,7 +898,7 @@ static void emit_accept(
     append(stmts, code_restore(alc));
 
     GenGetAccept callback(buf.stream(), opts);
-    const char* var = opts->gen_code_getaccept(buf, callback);
+    const char* var = opts->gen_code_yygetaccept(buf, callback);
 
     // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
@@ -1292,7 +1292,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     CodeList* stmts = code_list(alc);
 
     GenGetState callback(o.stream(), opts);
-    const char* getstate = opts->gen_code_getstate(o, callback);
+    const char* getstate = opts->gen_code_yygetstate(o, callback);
     append(stmts, code_switch(alc, getstate, cases));
 
     if (opts->state_next) {
@@ -1580,7 +1580,7 @@ static CodeList* gen_cond_goto(Output& output) {
     CodeList* stmts = code_list(alc);
 
     GenGetCond callback(buf.stream(), opts);
-    const char* getcond = opts->gen_code_getcond(buf, callback);
+    const char* getcond = opts->gen_code_yygetcond(buf, callback);
 
     if (opts->target == Target::DOT) {
         for (const StartCond& cond : conds) {
@@ -1652,12 +1652,12 @@ static Code* gen_yystate_def(Output& output) {
         // invocation. In that case we use YYSETSTATE instead of YYSETCONDITION in the final states.
         type = VarType::INT;
         GenGetState callback(buf.stream(), opts);
-        init = opts->gen_code_getstate(buf, callback);
+        init = opts->gen_code_yygetstate(buf, callback);
     } else if (opts->start_conditions) {
         // Else with start conditions yystate should be initialized to YYGETCONDITION.
         type = VarType::UINT;
         GenGetCond callback(buf.stream(), opts);
-        init = opts->gen_code_getcond(buf, callback);
+        init = opts->gen_code_yygetcond(buf, callback);
     } else {
         // Else it should be the start DFA state (always case 0 with --loop-switch).
         type = VarType::UINT;
@@ -1899,7 +1899,7 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
     CodeList* body = code_list(alc);
 
     GenGetCond callback(buf.stream(), opts);
-    const char* getcond = opts->gen_code_getcond(buf, callback);
+    const char* getcond = opts->gen_code_yygetcond(buf, callback);
     append(body, code_switch(alc, getcond, cases));
 
     const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();

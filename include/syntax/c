@@ -307,27 +307,27 @@ code:yycopymtag =
         : lhs " = " rhs ";"
     ) nl;
 
-code:yyskip_peek =
+code:yyskip_yypeek =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*++" cursor ";" nl;
 
-code:yypeek_skip =
+code:yypeek_yyskip =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*" cursor "++;" nl;
 
-code:yyskip_backup = topindent marker " = ++" cursor ";" nl;
+code:yyskip_yybackup = topindent marker " = ++" cursor ";" nl;
 
-code:yybackup_skip = topindent marker " = " cursor "++;" nl;
+code:yybackup_yyskip = topindent marker " = " cursor "++;" nl;
 
-code:yybackup_peek =
+code:yybackup_yypeek =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*(" marker " = " cursor ");" nl;
 
-code:yyskip_backup_peek =
+code:yyskip_yybackup_yypeek =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*(" marker " = ++" cursor ");" nl;
 
-code:yybackup_peek_skip =
+code:yybackup_yypeek_yyskip =
     topindent (code_model.recursive_functions ? ctype " ") char " = "
         typecast "*(" marker " = " cursor "++);" nl;
 
