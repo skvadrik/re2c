@@ -1417,137 +1417,137 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::DEBUG: {
         RenderDebug callback(rctx, &code->debug);
-        rctx.opts->render_code_debug(rctx.os, callback);
+        rctx.opts->render_code_yydebug(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_skip(rctx.os, callback);
+        rctx.opts->render_code_yyskip(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_peek(rctx.os, callback);
+        rctx.opts->render_code_yypeek(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_backup(rctx.os, callback);
+        rctx.opts->render_code_yybackup(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUPCTX: {
         RenderBackupRestoreCtx callback(rctx);
-        rctx.opts->render_code_backupctx(rctx.os, callback);
+        rctx.opts->render_code_yybackupctx(rctx.os, callback);
         break;
     }
     case CodeKind::RESTORE: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_restore(rctx.os, callback);
+        rctx.opts->render_code_yyrestore(rctx.os, callback);
         break;
     }
     case CodeKind::RESTORECTX: {
         RenderBackupRestoreCtx callback(rctx);
-        rctx.opts->render_code_restorectx(rctx.os, callback);
+        rctx.opts->render_code_yyrestorectx(rctx.os, callback);
         break;
     }
     case CodeKind::RESTORETAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_restoretag(rctx.os, callback);
+        rctx.opts->render_code_yyrestoretag(rctx.os, callback);
         break;
     }
     case CodeKind::SHIFT: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_shift(rctx.os, callback);
+        rctx.opts->render_code_yyshift(rctx.os, callback);
         break;
     }
     case CodeKind::SHIFTSTAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_shiftstag(rctx.os, callback);
+        rctx.opts->render_code_yyshiftstag(rctx.os, callback);
         break;
     }
     case CodeKind::SHIFTMTAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_shiftstag(rctx.os, callback);
+        rctx.opts->render_code_yyshiftstag(rctx.os, callback);
         break;
     }
     case CodeKind::STAGN: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_stagn(rctx.os, callback);
+        rctx.opts->render_code_yystagn(rctx.os, callback);
         break;
     }
     case CodeKind::STAGP: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_stagp(rctx.os, callback);
+        rctx.opts->render_code_yystagp(rctx.os, callback);
         break;
     }
     case CodeKind::MTAGN: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_mtagn(rctx.os, callback);
+        rctx.opts->render_code_yymtagn(rctx.os, callback);
         break;
     }
     case CodeKind::MTAGP: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_mtagp(rctx.os, callback);
+        rctx.opts->render_code_yymtagp(rctx.os, callback);
         break;
     }
     case CodeKind::COPYSTAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_copystag(rctx.os, callback);
+        rctx.opts->render_code_yycopystag(rctx.os, callback);
         break;
     }
     case CodeKind::COPYMTAG: {
         RenderTagOps callback(rctx, &code->tag);
-        rctx.opts->render_code_copymtag(rctx.os, callback);
+        rctx.opts->render_code_yycopymtag(rctx.os, callback);
         break;
     }
     case CodeKind::PEEK_SKIP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_peek_skip(rctx.os, callback);
+        rctx.opts->render_code_yypeek_yyskip(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_PEEK: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_skip_peek(rctx.os, callback);
+        rctx.opts->render_code_yyskip_yypeek(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_skip_backup(rctx.os, callback);
+        rctx.opts->render_code_yyskip_yybackup(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_SKIP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_backup_skip(rctx.os, callback);
+        rctx.opts->render_code_yybackup_yyskip(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_backup_peek(rctx.os, callback);
+        rctx.opts->render_code_yybackup_yypeek(rctx.os, callback);
         break;
     }
     case CodeKind::BACKUP_PEEK_SKIP: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_backup_peek_skip(rctx.os, callback);
+        rctx.opts->render_code_yybackup_yypeek_yyskip(rctx.os, callback);
         break;
     }
     case CodeKind::SKIP_BACKUP_PEEK: {
         RenderSkipPeekBackupRestore callback(rctx);
-        rctx.opts->render_code_skip_backup_peek(rctx.os, callback);
+        rctx.opts->render_code_yyskip_yybackup_yypeek(rctx.os, callback);
         break;
     }
     case CodeKind::SETACCEPT: {
         RenderSetAccept callback(rctx, code->accept);
-        rctx.opts->render_code_setaccept(rctx.os, callback);
+        rctx.opts->render_code_yysetaccept(rctx.os, callback);
         break;
     }
     case CodeKind::SETCOND: {
         RenderSetCond callback(rctx, code->cond);
-        rctx.opts->render_code_setcond(rctx.os, callback);
+        rctx.opts->render_code_yysetcond(rctx.os, callback);
         break;
     }
     case CodeKind::SETSTATE: {
         RenderSetState callback(rctx, code->state);
-        rctx.opts->render_code_setstate(rctx.os, callback);
+        rctx.opts->render_code_yysetstate(rctx.os, callback);
         break;
     }
     case CodeKind::LINE_INFO_INPUT: {

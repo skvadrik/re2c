@@ -259,8 +259,8 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
 
     CHECK_RET(lex_syntax_file(opts));
 
-#define CODE_TEMPLATE(name, str, vars, list_vars, conds) \
-    CHECK_RET(opts.check_##name());
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+    CHECK_RET(opts.check_code_##name());
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 
