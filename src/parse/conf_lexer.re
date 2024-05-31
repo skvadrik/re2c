@@ -526,6 +526,7 @@ start:
     "code:yysetcond"            { RET_CODE(code_setcond); }
     "code:yygetstate"           { RET_CODE(code_getstate); }
     "code:yysetstate"           { RET_CODE(code_setstate); }
+    "code:yylessthan"           { RET_CODE(code_lessthan); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
@@ -561,13 +562,16 @@ start:
     "index"      { RET_VAR(StxVarId::INDEX); }
     "init"       { RET_VAR(StxVarId::INIT); }
     "label"      { RET_VAR(StxVarId::LABEL); }
+    "lessthan"   { RET_VAR(StxVarId::LESSTHAN); }
     "lhs"        { RET_VAR(StxVarId::LHS); }
     "line"       { RET_VAR(StxVarId::LINE); }
+    "limit"      { RET_VAR(StxVarId::LIMIT); }
     "marker"     { RET_VAR(StxVarId::MARKER); }
     "mtagn"      { RET_VAR(StxVarId::MTAGN); }
     "mtagp"      { RET_VAR(StxVarId::MTAGP); }
     "name"       { RET_VAR(StxVarId::NAME); }
     "neg"        { RET_VAR(StxVarId::NEG); }
+    "need"       { RET_VAR(StxVarId::NEED); }
     "offset"     { RET_VAR(StxVarId::OFFSET); }
     "peek"       { RET_VAR(StxVarId::PEEK); }
     "restore"    { RET_VAR(StxVarId::RESTORE); }

@@ -313,4 +313,11 @@ const char* DEFAULT_SYNTAX_D =
     "code:yygetstate = getstate;\n"
     "\n"
     "code:yysetstate = topindent setstate nl;\n"
+    "\n"
+    "code:yylessthan =\n"
+    "    (api.generic\n"
+    "        ? lessthan\n"
+    "        : (many\n"
+    "            ? \"(\" limit \" - \" cursor \") < \" need\n"
+    "            : limit \" <= \" cursor));\n"
     ;

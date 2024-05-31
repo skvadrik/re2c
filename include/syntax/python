@@ -227,3 +227,5 @@ code:yysetcond = topindent setcond nl;
 code:yygetstate = getstate;
 
 code:yysetstate = topindent setstate nl;
+
+code:yylessthan = lessthan;

@@ -21,6 +21,108 @@
 
 namespace re2c {
 
+class GenGetAccept : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetAccept(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::GETACCEPT:
+            // no function style, as YYGETACCEPT must have a working default definition
+            argsubst(os, opts->api_accept_get, opts->api_sigil, "var", true, opts->var_accept);
+            break;
+        case StxVarId::VAR:
+            os << opts->var_accept;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenGetAccept);
+};
+
+class GenGetCond : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetCond(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::GETCOND: os << opts->api_cond_get; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenGetCond);
+};
+
+class GenGetState : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenGetState(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::GETSTATE: os << opts->api_state_get; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenGetState);
+};
+
+class GenLessThan : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+    size_t need;
+
+  public:
+    GenLessThan(std::ostringstream& os, const opt_t* opts, size_t need)
+        : os(os), opts(opts), need(need) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::LESSTHAN:
+            argsubst(os, opts->api_less_than, opts->api_sigil, "len", true, need);
+            break;
+        case StxVarId::CURSOR:
+            os << opts->api_cursor;
+            break;
+        case StxVarId::LIMIT:
+            os << opts->api_limit;
+            break;
+        case StxVarId::NEED:
+            os << need;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::MANY) {
+            return need > 1;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(GenLessThan);
+};
+
 bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
     // are final states (not all final states are 'end' states), but sometimes it be initial
@@ -66,20 +168,6 @@ static CodeList* gen_abort(OutAllocator& alc) {
     CodeList* abort = code_list(alc);
     append(abort, code_abort(alc));
     return abort;
-}
-
-static const char* gen_less_than(Scratchbuf& o, const opt_t* opts, size_t n) {
-    if (opts->api == Api::CUSTOM) {
-        argsubst(o.stream(), opts->api_less_than, opts->api_sigil, "len", true, n);
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            o.cstr("(").u64(n).cstr(")");
-        }
-    } else if (n == 1) {
-        o.str(opts->api_limit).cstr(" <= ").str(opts->api_cursor);
-    } else {
-        o.cstr("(").str(opts->api_limit).cstr(" - ").str(opts->api_cursor).cstr(") < ").u64(n);
-    }
-    return o.flush();
 }
 
 static void gen_set_tags(Output& output, CodeList* tag_actions, const Adfa& dfa, tcid_t tcid) {
@@ -392,7 +480,8 @@ CodeList* gen_goto_after_fill(
         // backend does not support jumping in the middle of a nested block.
         CodeList* fallback_or_resume = code_list(alc);
         CodeList* fallback = gen_fill_falllback(output, dfa, from, jump);
-        const char* less_than = gen_less_than(o, opts, 1);
+        GenLessThan callback(o.stream(), opts, 1);
+        const char* less_than = opts->gen_code_lessthan(o, callback);
         gen_if(alc, opts, less_than, fallback, resume, fallback_or_resume);
         return fallback_or_resume;
     } else {
@@ -450,7 +539,8 @@ static void gen_fill(
     }
 
     if (opts->fill_check && fill->head) {
-        const char* less_than = gen_less_than(o, opts, need);
+        GenLessThan callback(o.stream(), opts, need);
+        const char* less_than = opts->gen_code_lessthan(o, callback);
         gen_if(alc, opts, less_than, fill, tail, stmts);
     } else {
         append(stmts, fill);
@@ -771,68 +861,6 @@ static void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const Stat
         append(stmts, gen_gocp(output, dfa, go->gocp, from));
     }
 }
-
-class GenGetAccept : public RenderCallback {
-    std::ostringstream& os;
-    const opt_t* opts;
-
-  public:
-    GenGetAccept(std::ostringstream& os, const opt_t* opts)
-        : os(os), opts(opts) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-        case StxVarId::GETACCEPT:
-            // no function style, as YYGETACCEPT must have a working default definition
-            argsubst(os, opts->api_accept_get, opts->api_sigil, "var", true, opts->var_accept);
-            break;
-        case StxVarId::VAR:
-            os << opts->var_accept;
-            break;
-        default:
-            UNREACHABLE();
-            break;
-        }
-    }
-
-    FORBID_COPY(GenGetAccept);
-};
-
-class GenGetCond : public RenderCallback {
-    std::ostringstream& os;
-    const opt_t* opts;
-
-  public:
-    GenGetCond(std::ostringstream& os, const opt_t* opts)
-        : os(os), opts(opts) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::GETCOND: os << opts->api_cond_get; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    FORBID_COPY(GenGetCond);
-};
-
-class GenGetState : public RenderCallback {
-    std::ostringstream& os;
-    const opt_t* opts;
-
-  public:
-    GenGetState(std::ostringstream& os, const opt_t* opts)
-        : os(os), opts(opts) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::GETSTATE: os << opts->api_state_get; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    FORBID_COPY(GenGetState);
-};
 
 static CodeList* emit_accept_binary(Output& output,
                                     const Adfa& dfa,
