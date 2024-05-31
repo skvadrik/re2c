@@ -255,3 +255,5 @@ code:yysetcond = topindent setcond (api_style.functions ? "(" cond ")") nl;
 code:yygetstate = getstate (api_style.functions ? "()");
 
 code:yysetstate = topindent setstate (api_style.functions ? "(" state ")") nl;
+
+code:yylessthan = lessthan (api_style.functions ? "(" need ")");

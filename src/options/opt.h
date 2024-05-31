@@ -274,6 +274,10 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(code_setstate, "code:setstate", \
         ({StxVarId::SETSTATE, StxVarId::STATE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(code_lessthan, "code:lessthan", \
+        ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT}), \
+        ({}), ({StxLOpt::MANY}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -313,12 +317,15 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
     STX_LOCAL_VAR(LABEL, "label") \
+    STX_LOCAL_VAR(LESSTHAN, "lessthan") \
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
+    STX_LOCAL_VAR(LIMIT, "limit") \
     STX_LOCAL_VAR(MARKER, "marker") \
     STX_LOCAL_VAR(MTAGN, "mtagn") \
     STX_LOCAL_VAR(MTAGP, "mtagp") \
     STX_LOCAL_VAR(NAME, "name") \
+    STX_LOCAL_VAR(NEED, "need") \
     STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
     STX_LOCAL_VAR(PEEK, "peek") \

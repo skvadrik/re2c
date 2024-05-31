@@ -349,4 +349,11 @@ const char* DEFAULT_SYNTAX_C =
     "code:yygetstate = getstate (api_style.functions ? \"()\");\n"
     "\n"
     "code:yysetstate = topindent setstate (api_style.functions ? \"(\" state \");\") nl;\n"
+    "\n"
+    "code:yylessthan =\n"
+    "    (api.generic\n"
+    "        ? lessthan (api_style.functions ? \"(\" need \")\")\n"
+    "        : (many\n"
+    "            ? \"(\" limit \" - \" cursor \") < \" need\n"
+    "            : limit \" <= \" cursor));\n"
     ;

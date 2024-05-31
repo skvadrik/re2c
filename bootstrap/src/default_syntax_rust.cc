@@ -247,4 +247,6 @@ const char* DEFAULT_SYNTAX_RUST =
     "code:yygetstate = getstate;\n"
     "\n"
     "code:yysetstate = topindent setstate nl;\n"
+    "\n"
+    "code:yylessthan = lessthan;\n"
     ;

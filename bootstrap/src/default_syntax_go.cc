@@ -257,4 +257,6 @@ const char* DEFAULT_SYNTAX_GO =
     "code:yygetstate = getstate (api_style.functions ? \"()\");\n"
     "\n"
     "code:yysetstate = topindent setstate (api_style.functions ? \"(\" state \")\") nl;\n"
+    "\n"
+    "code:yylessthan = lessthan (api_style.functions ? \"(\" need \")\");\n"
     ;
