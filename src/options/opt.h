@@ -376,6 +376,7 @@ enum class StxVarId : uint32_t {
 #undef STX_LOCAL_VAR
 #undef STX_GLOBAL_VAR
 
+// Immutable options (passed on the command line).
 #define RE2C_CONSTOPTS \
     CONSTOPT(Target, target, Target::CODE) \
     CONSTOPT(CodeModel, code_model, CodeModel::GOTO_LABEL) \
@@ -413,15 +414,17 @@ enum class StxVarId : uint32_t {
     CONSTOPT(bool, dump_dfa_tree, false) \
     /* end */
 
+// Mutable options (configurations) can be set anywhere in a block.
+// They may depend on immutable options, but not on other mutable options.
 #define RE2C_MUTOPTS \
-    /* header file */ \
-    MUTOPT1(std::string, header_file, "") \
+    /* files */ \
+    MUTOPT(std::string, header_file, "") \
     /* regular expressions */ \
     MUTOPT(Enc,  encoding, Enc()) \
     MUTOPT(bool, case_insensitive, false) \
     MUTOPT(bool, case_inverted, false) \
     MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
-    /* input API */ \
+    /* API */ \
     MUTOPT(Api, api, Api::CUSTOM) \
     MUTOPT(ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
@@ -631,37 +634,32 @@ struct conopt_t {
 
 // Mutable options.
 struct mutopt_t {
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
+    bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
-    mutopt_t()
-#define MUTOPT1(type, name, value) : name(value)
-#define MUTOPT(type, name, value)  , name(value)
+    mutopt_t() :
+#define MUTOPT(type, name, value) name(value),
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
-    {}
+    p2067() {}
+
     FORBID_COPY(mutopt_t);
 };
 
 // Boolean flags for mutable options.
 struct mutdef_t {
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) bool name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
+    bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
-    mutdef_t()
-#define MUTOPT1(type, name, value) : name(true)
-#define MUTOPT(type, name, value)  , name(true)
+    mutdef_t() :
+#define MUTOPT(type, name, value) name(true),
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
-    {}
+    p2067() {}
 };
 
 // Union of constant and mutable options and default flags.
@@ -685,13 +683,11 @@ struct opt_t {
 #define CODE_TEMPLATE(name, vars, list_vars, conds) const StxCodes* code_##name;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
 #undef MUTOPT
 #define MUTOPT(type, name, value) bool is_default_##name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
     symtab_t symtab;
 
@@ -709,16 +705,13 @@ struct opt_t {
 #define CODE_TEMPLATE(name, vars, list_vars, conds) code_##name(con.code_##name),
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) name(mut.name),
     RE2C_MUTOPTS
 #undef MUTOPT
 #define MUTOPT(type, name, value) is_default_##name(def.name),
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
-    symtab(symtab)
-    {}
+    symtab(symtab) {}
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
     const char* gen_code_##name(Scratchbuf& buf, RenderCallback& callback) const; \
@@ -788,13 +781,11 @@ struct Opt {
     Ret restore(const opt_t* opts) NODISCARD;
     Ret merge(const opt_t* opts, Input& input) NODISCARD;
 
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     void init_##name(const type &arg); \
     void set_##name(const type &arg); \
     void reset_##name();
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
 #define CHECKED_LIST(name, allowed) \
     void set_##name(const std::vector<std::string>& list); \

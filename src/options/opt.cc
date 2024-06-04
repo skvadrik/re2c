@@ -425,11 +425,9 @@ Ret Opt::fix_global_and_defaults() {
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (is_default.name) user.name = defaults.name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
     diverge = true;
 
@@ -440,11 +438,9 @@ Ret Opt::sync() {
     if (!diverge) return Ret::OK;
 
     // Copy user-defined options to real options.
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     real.name = user.name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
 
     // Fix the real mutable options (based on the global options, mutable option defaults and
@@ -463,12 +459,10 @@ Ret Opt::snapshot(const opt_t** opts) {
 }
 
 Ret Opt::restore(const opt_t* opts) {
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     user.name = opts->name; \
     is_default.name = opts->is_default_##name;
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
 
     symtab = opts->symtab;
@@ -478,14 +472,12 @@ Ret Opt::restore(const opt_t* opts) {
 }
 
 Ret Opt::merge(const opt_t* opts, Input& input) {
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
     if (!opts->is_default_##name) { \
         user.name = opts->name; \
         is_default.name = false; \
     }
     RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
 
     CHECK_RET(merge_symtab(symtab, opts->symtab, input));
@@ -494,7 +486,6 @@ Ret Opt::merge(const opt_t* opts, Input& input) {
     return sync();
 }
 
-#define MUTOPT1 MUTOPT
 #define MUTOPT(type, name, value) \
 void Opt::init_##name(const type &arg) { \
     if (is_default.name) { \
@@ -514,7 +505,6 @@ void Opt::reset_##name() { \
     diverge = true; \
 }
 RE2C_MUTOPTS
-#undef MUTOPT1
 #undef MUTOPT
 
 #define CHECKED_LIST(name, allowed) \
