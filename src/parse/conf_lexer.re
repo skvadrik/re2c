@@ -51,6 +51,12 @@ namespace re2c {
     return Ret::OK; \
 } while(0)
 
+#define RET_CONF_CODE(conf) do { \
+    CHECK_RET(lex_conf_code(opts)); \
+    SETOPT(conf, tmp_code); \
+    return Ret::OK; \
+} while(0)
+
 #define RET_CONF_ENC(enc) do { \
     CHECK_RET(lex_conf_bool(opts)); \
     if (in_syntax_file) { \
@@ -128,50 +134,50 @@ Ret Input::lex_conf(Opt& opts) {
         return Ret::OK;
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
-    "tags:expression" { RET_CONF_STR(tags_expression); }
+    "tags:expression" { RET_CONF_CODE(tags_expression); }
     "invert-captures" { RET_CONF_BOOL(invert_captures); }
 
-    "define:YYBACKUP"                    { RET_CONF_STR(api_backup); }
-    "define:YYBACKUPCTX"                 { RET_CONF_STR(api_backup_ctx); }
-    "define:YYCONDTYPE"                  { RET_CONF_STR(api_cond_type); }
-    "define:YYCOPYMTAG"                  { RET_CONF_STR(api_mtag_copy); }
-    "define:YYCOPYSTAG"                  { RET_CONF_STR(api_stag_copy); }
-    "define:YYCTYPE"                     { RET_CONF_STR(api_char_type); }
-    "define:YYCTXMARKER"                 { RET_CONF_STR(api_ctxmarker); }
-    "define:YYCURSOR"                    { RET_CONF_STR(api_cursor); }
-    "define:YYDEBUG"                     { RET_CONF_STR(api_debug); }
-    "define:YYFILL"                      { RET_CONF_STR(api_fill); }
+    "define:YYBACKUP"                    { RET_CONF_CODE(api_backup); }
+    "define:YYBACKUPCTX"                 { RET_CONF_CODE(api_backup_ctx); }
+    "define:YYCONDTYPE"                  { RET_CONF_CODE(api_cond_type); }
+    "define:YYCOPYMTAG"                  { RET_CONF_CODE(api_mtag_copy); }
+    "define:YYCOPYSTAG"                  { RET_CONF_CODE(api_stag_copy); }
+    "define:YYCTYPE"                     { RET_CONF_CODE(api_char_type); }
+    "define:YYCTXMARKER"                 { RET_CONF_CODE(api_ctxmarker); }
+    "define:YYCURSOR"                    { RET_CONF_CODE(api_cursor); }
+    "define:YYDEBUG"                     { RET_CONF_CODE(api_debug); }
+    "define:YYFILL"                      { RET_CONF_CODE(api_fill); }
     "define:YYFILL@len"                  { RET_CONF_STR(fill_param); }
     "define:YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
-    "define:YYGETACCEPT"                 { RET_CONF_STR(api_accept_get); }
-    "define:YYGETCOND" "ITION"?          { RET_CONF_STR(api_cond_get); }
+    "define:YYGETACCEPT"                 { RET_CONF_CODE(api_accept_get); }
+    "define:YYGETCOND" "ITION"?          { RET_CONF_CODE(api_cond_get); }
     "define:YYGETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_get_naked); }
-    "define:YYGETSTATE"                  { RET_CONF_STR(api_state_get); }
+    "define:YYGETSTATE"                  { RET_CONF_CODE(api_state_get); }
     "define:YYGETSTATE:naked"            { RET_CONF_BOOL(state_get_naked); }
-    "define:YYLESSTHAN"                  { RET_CONF_STR(api_less_than); }
-    "define:YYLIMIT"                     { RET_CONF_STR(api_limit); }
-    "define:YYMARKER"                    { RET_CONF_STR(api_marker); }
-    "define:YYMAXFILL"                   { RET_CONF_STR(api_maxfill); }
-    "define:YYMAXNMATCH"                 { RET_CONF_STR(api_maxnmatch); }
-    "define:YYMTAGN"                     { RET_CONF_STR(api_mtag_neg); }
-    "define:YYMTAGP"                     { RET_CONF_STR(api_mtag_pos); }
-    "define:YYPEEK"                      { RET_CONF_STR(api_peek); }
-    "define:YYRESTORE"                   { RET_CONF_STR(api_restore); }
-    "define:YYRESTORECTX"                { RET_CONF_STR(api_restore_ctx); }
-    "define:YYRESTORETAG"                { RET_CONF_STR(api_restore_tag); }
-    "define:YYSETACCEPT"                 { RET_CONF_STR(api_accept_set); }
-    "define:YYSETCOND" "ITION"?          { RET_CONF_STR(api_cond_set); }
+    "define:YYLESSTHAN"                  { RET_CONF_CODE(api_less_than); }
+    "define:YYLIMIT"                     { RET_CONF_CODE(api_limit); }
+    "define:YYMARKER"                    { RET_CONF_CODE(api_marker); }
+    "define:YYMAXFILL"                   { RET_CONF_CODE(api_maxfill); }
+    "define:YYMAXNMATCH"                 { RET_CONF_CODE(api_maxnmatch); }
+    "define:YYMTAGN"                     { RET_CONF_CODE(api_mtag_neg); }
+    "define:YYMTAGP"                     { RET_CONF_CODE(api_mtag_pos); }
+    "define:YYPEEK"                      { RET_CONF_CODE(api_peek); }
+    "define:YYRESTORE"                   { RET_CONF_CODE(api_restore); }
+    "define:YYRESTORECTX"                { RET_CONF_CODE(api_restore_ctx); }
+    "define:YYRESTORETAG"                { RET_CONF_CODE(api_restore_tag); }
+    "define:YYSETACCEPT"                 { RET_CONF_CODE(api_accept_set); }
+    "define:YYSETCOND" "ITION"?          { RET_CONF_CODE(api_cond_set); }
     "define:YYSETCOND" "ITION"? "@cond"  { RET_CONF_STR(cond_set_param); }
     "define:YYSETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_set_naked); }
-    "define:YYSETSTATE"                  { RET_CONF_STR(api_state_set); }
+    "define:YYSETSTATE"                  { RET_CONF_CODE(api_state_set); }
     "define:YYSETSTATE:naked"            { RET_CONF_BOOL(state_set_naked); }
     "define:YYSETSTATE@state"            { RET_CONF_STR(state_set_param); }
-    "define:YYSHIFT"                     { RET_CONF_STR(api_shift); }
-    "define:YYSHIFTSTAG"                 { RET_CONF_STR(api_stag_shift); }
-    "define:YYSHIFTMTAG"                 { RET_CONF_STR(api_mtag_shift); }
-    "define:YYSKIP"                      { RET_CONF_STR(api_skip); }
-    "define:YYSTAGN"                     { RET_CONF_STR(api_stag_neg); }
-    "define:YYSTAGP"                     { RET_CONF_STR(api_stag_pos); }
+    "define:YYSHIFT"                     { RET_CONF_CODE(api_shift); }
+    "define:YYSHIFTSTAG"                 { RET_CONF_CODE(api_stag_shift); }
+    "define:YYSHIFTMTAG"                 { RET_CONF_CODE(api_mtag_shift); }
+    "define:YYSKIP"                      { RET_CONF_CODE(api_skip); }
+    "define:YYSTAGN"                     { RET_CONF_CODE(api_stag_neg); }
+    "define:YYSTAGP"                     { RET_CONF_CODE(api_stag_pos); }
     "define:YYFN" {
         CHECK_RET(lex_conf_list(opts));
         if (tmp_list.size() < 1) {
@@ -199,9 +205,9 @@ Ret Input::lex_conf(Opt& opts) {
     "cond:abort"                         { RET_CONF_BOOL(cond_abort); }
     "cond:prefix" | "condprefix"         { RET_CONF_STR(cond_label_prefix); }
     "cond:enumprefix" | "condenumprefix" { RET_CONF_STR(cond_enum_prefix); }
-    "cond:divider"                       { RET_CONF_STR(cond_div); }
+    "cond:divider"                       { RET_CONF_CODE(cond_div); }
     "cond:divider@cond"                  { RET_CONF_STR(cond_div_param); }
-    "cond:goto"                          { RET_CONF_STR(cond_goto); }
+    "cond:goto"                          { RET_CONF_CODE(cond_goto); }
     "cond:goto@cond"                     { RET_CONF_STR(cond_goto_param); }
 
     "state:abort"     { RET_CONF_BOOL(state_abort); }
@@ -399,6 +405,17 @@ Ret Input::lex_conf_string_quoted(uint8_t quote) {
     }
 }
 
+Ret Input::lex_conf_code(Opt& opts) {
+    if (in_syntax_file) {
+        conf_kind = ConfKind::CODE;
+        CHECK_RET(parse_conf(opts));
+    } else {
+        CHECK_RET(lex_conf_string(opts));
+        tmp_code = opts.make_api(tmp_str);
+    }
+    return Ret::OK;
+}
+
 #define RET_TOK(t) do { \
     token = t; \
     return Ret::OK; \
@@ -435,6 +452,11 @@ Ret Input::lex_conf_string_quoted(uint8_t quote) {
 } while(0)
 
 Ret Input::lex_conf_token(CONF_STYPE* yylval, int& token, Opt& opts) {
+    if (conf_kind == ConfKind::CODE) { // one of pre-lexed `conf:` configuratins
+        conf_kind = ConfKind::NONE;
+        yylval->codeptr = &tmp_code;
+        RET_TOK(CONF_CODE);
+    }
 start:
     tok = cur;
 /*!local:re2c
@@ -583,6 +605,7 @@ start:
     "setaccept"  { RET_VAR(StxVarId::SETACCEPT); }
     "setcond"    { RET_VAR(StxVarId::SETCOND); }
     "setstate"   { RET_VAR(StxVarId::SETSTATE); }
+    "sigil"      { RET_VAR(StxVarId::SIGIL); }
     "size"       { RET_VAR(StxVarId::SIZE); }
     "shift"      { RET_VAR(StxVarId::SHIFT); }
     "shiftmtag"  { RET_VAR(StxVarId::SHIFTMTAG); }

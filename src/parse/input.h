@@ -71,10 +71,11 @@ class Input: private LexerState {
     // and line start `pos` are only updated for `cur`.
     loc_t location;
 
-    enum class ConfKind { STR, NUM, LIST } conf_kind;
+    enum class ConfKind {NONE, STR, NUM, LIST, CODE} conf_kind;
     std::string tmp_str;
     int32_t tmp_num;
     std::vector<std::string> tmp_list;
+    const StxCodes* tmp_code;
 
     bool in_syntax_file;
 
@@ -151,6 +152,7 @@ class Input: private LexerState {
     Ret lex_conf_string_legacy() NODISCARD;
     Ret lex_conf_string(Opt& opts) NODISCARD;
     Ret lex_conf_list(Opt& opts) NODISCARD;
+    Ret lex_conf_code(Opt& opts) NODISCARD;
     Ret parse_conf(Opt& opts);
 
     FORBID_COPY(Input);
@@ -164,10 +166,11 @@ inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
       filedeps(),
       globopts(o),
       location(ATSTART),
-      conf_kind(),
+      conf_kind(ConfKind::NONE),
       tmp_str(),
       tmp_num(),
       tmp_list(),
+      tmp_code(),
       in_syntax_file(false) {}
 
 inline loc_t Input::cur_loc() const {
