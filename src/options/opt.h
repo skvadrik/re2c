@@ -338,6 +338,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(SETACCEPT, "setaccept") \
     STX_LOCAL_VAR(SETCOND, "setcond") \
     STX_LOCAL_VAR(SETSTATE, "setstate") \
+    STX_LOCAL_VAR(SIGIL, "sigil") \
     STX_LOCAL_VAR(SIZE, "size") \
     STX_LOCAL_VAR(SHIFT, "shift") \
     STX_LOCAL_VAR(SHIFTMTAG, "shiftmtag") \
@@ -360,12 +361,6 @@ using StxCodes = list_t<StxCode>;
     STX_GLOBAL_VAR(INDENT, "indent") \
     STX_GLOBAL_VAR(DEDENT, "dedent") \
     STX_GLOBAL_VAR(TOPINDENT, "topindent")
-
-#define CODE_TEMPLATE(name, vars, list_vars, conds) STX_##name,
-enum class StxCodeId : uint32_t {
-    RE2C_CODE_TEMPLATES
-};
-#undef CODE_TEMPLATE
 
 #define STX_LOCAL_VAR(id, name) id,
 #define STX_GLOBAL_VAR(id, name) id,
@@ -428,41 +423,6 @@ enum class StxVarId : uint32_t {
     MUTOPT(Api, api, Api::CUSTOM) \
     MUTOPT(ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
-    MUTOPT(std::string, api_char_type, "YYCTYPE") \
-    MUTOPT(std::string, api_cursor, "YYCURSOR") \
-    MUTOPT(std::string, api_marker, "YYMARKER") \
-    MUTOPT(std::string, api_ctxmarker, "YYCTXMARKER") \
-    MUTOPT(std::string, api_limit, "YYLIMIT") \
-    MUTOPT(std::string, api_peek, "YYPEEK") \
-    MUTOPT(std::string, api_skip, "YYSKIP") \
-    MUTOPT(std::string, api_backup, "YYBACKUP") \
-    MUTOPT(std::string, api_backup_ctx, "YYBACKUPCTX") \
-    MUTOPT(std::string, api_restore, "YYRESTORE") \
-    MUTOPT(std::string, api_restore_ctx, "YYRESTORECTX") \
-    MUTOPT(std::string, api_restore_tag, "YYRESTORETAG") \
-    MUTOPT(std::string, api_less_than, "YYLESSTHAN") \
-    MUTOPT(std::string, api_stag_neg, "YYSTAGN") \
-    MUTOPT(std::string, api_stag_pos, "YYSTAGP") \
-    MUTOPT(std::string, api_mtag_neg, "YYMTAGN") \
-    MUTOPT(std::string, api_mtag_pos, "YYMTAGP") \
-    MUTOPT(std::string, api_stag_copy, "YYCOPYSTAG") \
-    MUTOPT(std::string, api_mtag_copy, "YYCOPYMTAG") \
-    MUTOPT(std::string, api_shift, "YYSHIFT") \
-    MUTOPT(std::string, api_stag_shift, "YYSHIFTSTAG") \
-    MUTOPT(std::string, api_mtag_shift, "YYSHIFTMTAG") \
-    MUTOPT(std::string, api_fill, "YYFILL") \
-    MUTOPT(std::string, api_cond_type, "YYCONDTYPE") \
-    MUTOPT(std::string, api_cond_get, "YYGETCOND") \
-    MUTOPT(std::string, api_cond_set, "YYSETCOND" ) \
-    MUTOPT(std::string, api_state_get, "YYGETSTATE") \
-    MUTOPT(std::string, api_state_set, "YYSETSTATE") \
-    MUTOPT(std::string, api_accept_get, "YYGETACCEPT") \
-    MUTOPT(std::string, api_accept_set, "YYSETACCEPT") \
-    MUTOPT(std::string, api_maxfill, "YYMAXFILL") \
-    MUTOPT(std::string, api_maxnmatch, "YYMAXNMATCH") \
-    MUTOPT(std::string, api_debug, "YYDEBUG") \
-    MUTOPT(std::vector<std::string>, api_fn, \
-            {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \
     MUTOPT(std::string, var_bitmaps, "yybm") \
@@ -501,9 +461,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, cond_set_naked, false ) \
     MUTOPT(std::string, cond_label_prefix, "yyc_") \
     MUTOPT(std::string, cond_enum_prefix, "yyc") \
-    MUTOPT(std::string, cond_div, "/* *********************************** */") \
     MUTOPT(std::string, cond_div_param, RE2C_SIGIL) \
-    MUTOPT(std::string, cond_goto, "goto " RE2C_SIGIL ";") \
     MUTOPT(std::string, cond_goto_param, RE2C_SIGIL) \
     /* states */ \
     MUTOPT(bool, state_get_naked, false) \
@@ -513,7 +471,6 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, state_next, false) \
     /* tags */ \
     MUTOPT(bool, tags, false) \
-    MUTOPT(std::string, tags_expression, RE2C_SIGIL) \
     MUTOPT(bool, tags_automatic, false) \
     MUTOPT(bool, tags_history, false) \
     MUTOPT(bool, tags_posix_syntax, false) \
@@ -521,6 +478,8 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, tags_prefix, "yyt") \
     MUTOPT(bool, invert_captures, false) \
     /* functions */ \
+    MUTOPT(std::vector<std::string>, api_fn, \
+            {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \
     MUTOPT(std::string, fn_sep, ";") \
     /* labels */ \
     MUTOPT(std::string, label_fill, "yyFillLabel") \
@@ -535,6 +494,57 @@ enum class StxVarId : uint32_t {
     /* debug */ \
     MUTOPT(bool, debug, false) \
     /* end */
+
+// Mutable code templates may depend on other options (both mutable and immutable ones).
+// In source files their value is a string; in syntax files it is a code template (the latter
+// allows one to set API defauls conditionally based on the chosen API, style, sigil etc.).
+#define RE2C_MUTCODES \
+    MUTCODE(api_char_type) \
+    MUTCODE(api_cond_type) \
+    MUTCODE(api_cursor) \
+    MUTCODE(api_marker) \
+    MUTCODE(api_ctxmarker) \
+    MUTCODE(api_limit) \
+    MUTCODE(api_maxfill) \
+    MUTCODE(api_maxnmatch) \
+    MUTCODE(api_peek) \
+    MUTCODE(api_skip) \
+    MUTCODE(api_backup) \
+    MUTCODE(api_backup_ctx) \
+    MUTCODE(api_restore) \
+    MUTCODE(api_restore_ctx) \
+    MUTCODE(api_restore_tag) \
+    MUTCODE(api_less_than) \
+    MUTCODE(api_stag_neg) \
+    MUTCODE(api_stag_pos) \
+    MUTCODE(api_mtag_neg) \
+    MUTCODE(api_mtag_pos) \
+    MUTCODE(api_stag_copy) \
+    MUTCODE(api_mtag_copy) \
+    MUTCODE(api_shift) \
+    MUTCODE(api_stag_shift) \
+    MUTCODE(api_mtag_shift) \
+    MUTCODE(api_fill) \
+    MUTCODE(api_cond_get) \
+    MUTCODE(api_cond_set) \
+    MUTCODE(api_state_get) \
+    MUTCODE(api_state_set) \
+    MUTCODE(api_accept_get) \
+    MUTCODE(api_accept_set) \
+    MUTCODE(api_debug) \
+    MUTCODE(tags_expression) \
+    MUTCODE(cond_div) \
+    MUTCODE(cond_goto) \
+    /* end */
+
+#define CODE_TEMPLATE(name, vars, list_vars, conds) STX_##name,
+#define MUTCODE(name) STX_##name,
+enum class StxCodeId : uint32_t {
+    RE2C_CODE_TEMPLATES
+    RE2C_MUTCODES
+};
+#undef CODE_TEMPLATE
+#undef MUTCODE
 
 struct StxOpt {
     bool is_local;
@@ -637,12 +647,18 @@ struct mutopt_t {
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) const StxCodes* name;
+    RE2C_MUTCODES
+#undef MUTCODE
     bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
     mutopt_t() :
 #define MUTOPT(type, name, value) name(value),
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) name(nullptr),
+    RE2C_MUTCODES
+#undef MUTCODE
     p2067() {}
 
     FORBID_COPY(mutopt_t);
@@ -653,12 +669,18 @@ struct mutdef_t {
 #define MUTOPT(type, name, value) bool name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) bool name;
+    RE2C_MUTCODES
+#undef MUTCODE
     bool p2067; // until c++ allows trailing comma in macro-expanded ctor-intializer
 
     mutdef_t() :
 #define MUTOPT(type, name, value) name(true),
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) name(true),
+    RE2C_MUTCODES
+#undef MUTCODE
     p2067() {}
 };
 
@@ -686,9 +708,15 @@ struct opt_t {
 #define MUTOPT(type, name, value) type name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) std::string name; const StxCodes* code_##name;
+    RE2C_MUTCODES
+#undef MUTCODE
 #define MUTOPT(type, name, value) bool is_default_##name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) bool is_default_##name;
+    RE2C_MUTCODES
+#undef MUTCODE
     symtab_t symtab;
 
     opt_t(const conopt_t& con, const mutopt_t& mut, const mutdef_t& def, const symtab_t& symtab)
@@ -708,9 +736,15 @@ struct opt_t {
 #define MUTOPT(type, name, value) name(mut.name),
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) name(this->gen_##name(mut.name)), code_##name(mut.name),
+    RE2C_MUTCODES
+#undef MUTCODE
 #define MUTOPT(type, name, value) is_default_##name(def.name),
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) is_default_##name(def.name),
+    RE2C_MUTCODES
+#undef MUTCODE
     symtab(symtab) {}
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
@@ -720,6 +754,10 @@ struct opt_t {
     void render_code_##name(std::ostream& os) const;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
+#define MUTCODE(name) \
+    std::string gen_##name(const StxCodes* code) const;
+    RE2C_MUTCODES
+#undef MUTCODE
     bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
     bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
 
@@ -787,6 +825,11 @@ struct Opt {
     void reset_##name();
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) \
+    void init_##name(const StxCodes* arg); \
+    void set_##name(const StxCodes* arg);
+    RE2C_MUTCODES
+#undef MUTCODE
 #define CHECKED_LIST(name, allowed) \
     void set_##name(const std::vector<std::string>& list); \
     Ret check_##name() NODISCARD;
@@ -815,6 +858,7 @@ struct Opt {
     StxCode* make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code);
     StxOpt* make_opt_global(StxGOpt opt);
     StxOpt* make_opt_local(StxLOpt opt);
+    StxCodes* make_api(const std::string& str);
 
     Ret validate_conf_code(
         const StxCodes* code,

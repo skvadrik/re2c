@@ -273,52 +273,12 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (is_default.state_set_naked) real.state_set_naked = real.api_style == ApiStyle::FREEFORM;
     // individual template options, unless explicitly set, inherit "api:sigil"
     if (!is_default.api_sigil) {
-        if (is_default.fill_param)       real.fill_param       = real.api_sigil;
-        if (is_default.cond_set_param)   real.cond_set_param   = real.api_sigil;
-        if (is_default.cond_div_param)   real.cond_div_param   = real.api_sigil;
-        if (is_default.cond_goto_param)  real.cond_goto_param  = real.api_sigil;
-        if (is_default.state_set_param)  real.state_set_param  = real.api_sigil;
-        if (is_default.tags_expression)  real.tags_expression  = real.api_sigil;
-
-        // Replace sigil in default API definitions. We must handle all APIs with substitutions,
-        // as we don't know their default definition (the user may provide a custom syntax file).
-#define REPLACE_SIGIL(api) \
-        if (is_default.api) strrreplace(real.api, defaults.api_sigil, real.api_sigil)
-        REPLACE_SIGIL(api_peek);
-        REPLACE_SIGIL(api_skip);
-        REPLACE_SIGIL(api_backup);
-        REPLACE_SIGIL(api_backup_ctx);
-        REPLACE_SIGIL(api_restore);
-        REPLACE_SIGIL(api_restore_ctx);
-        REPLACE_SIGIL(api_restore_tag);
-        REPLACE_SIGIL(api_less_than);
-        REPLACE_SIGIL(api_stag_neg);
-        REPLACE_SIGIL(api_stag_pos);
-        REPLACE_SIGIL(api_mtag_neg);
-        REPLACE_SIGIL(api_mtag_pos);
-        REPLACE_SIGIL(api_stag_copy);
-        REPLACE_SIGIL(api_mtag_copy);
-        REPLACE_SIGIL(api_shift);
-        REPLACE_SIGIL(api_stag_shift);
-        REPLACE_SIGIL(api_mtag_shift);
-        REPLACE_SIGIL(api_cond_get);
-        REPLACE_SIGIL(api_state_get);
-        REPLACE_SIGIL(api_accept_get);
-        REPLACE_SIGIL(api_accept_set);
-        REPLACE_SIGIL(api_debug);
-        REPLACE_SIGIL(tags_expression);
-#undef REPLACE_SIGIL
+        if (is_default.fill_param)       real.fill_param      = real.api_sigil;
+        if (is_default.cond_set_param)   real.cond_set_param  = real.api_sigil;
+        if (is_default.cond_div_param)   real.cond_div_param  = real.api_sigil;
+        if (is_default.cond_goto_param)  real.cond_goto_param = real.api_sigil;
+        if (is_default.state_set_param)  real.state_set_param = real.api_sigil;
     }
-    // Replace sigil in API primitives that have their own substitution parameter.
-#define REPLACE_SIGIL(api, param) \
-    if ((!is_default.param || !is_default.api_sigil) && is_default.api) \
-         strrreplace(real.api, defaults.param, real.param)
-    REPLACE_SIGIL(api_cond_set, cond_set_param);
-    REPLACE_SIGIL(api_fill, fill_param);
-    REPLACE_SIGIL(api_state_set, state_set_param);
-    REPLACE_SIGIL(cond_div, cond_div_param);
-    REPLACE_SIGIL(cond_goto, cond_goto_param);;
-#undef REPLACE_SIGIL
     // "startlabel" configuration exists in two variants: string and boolean, and the string one
     // overrides the boolean one
     if (!is_default.label_start) {
@@ -425,10 +385,12 @@ Ret Opt::fix_global_and_defaults() {
 
     // Apply new defaults to all mutable options except those that have been explicitly defined by
     // the user.
-#define MUTOPT(type, name, value) \
-    if (is_default.name) user.name = defaults.name;
+#define MUTOPT(type, name, value) if (is_default.name) user.name = defaults.name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) if (is_default.name) user.name = defaults.name;
+    RE2C_MUTCODES
+#undef MUTCODE
     diverge = true;
 
     return Ret::OK;
@@ -438,10 +400,12 @@ Ret Opt::sync() {
     if (!diverge) return Ret::OK;
 
     // Copy user-defined options to real options.
-#define MUTOPT(type, name, value) \
-    real.name = user.name;
+#define MUTOPT(type, name, value) real.name = user.name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) real.name = user.name;
+    RE2C_MUTCODES
+#undef MUTCODE
 
     // Fix the real mutable options (based on the global options, mutable option defaults and
     // default flags), but do not change user-defined options or default flags.
@@ -464,6 +428,11 @@ Ret Opt::restore(const opt_t* opts) {
     is_default.name = opts->is_default_##name;
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) \
+    user.name = opts->code_##name; \
+    is_default.name = opts->is_default_##name;
+    RE2C_MUTCODES
+#undef MUTCODE
 
     symtab = opts->symtab;
 
@@ -479,6 +448,13 @@ Ret Opt::merge(const opt_t* opts, Input& input) {
     }
     RE2C_MUTOPTS
 #undef MUTOPT
+#define MUTCODE(name) \
+    if (!opts->is_default_##name) { \
+        user.name = opts->code_##name; \
+        is_default.name = false; \
+    }
+    RE2C_MUTCODES
+#undef MUTCODE
 
     CHECK_RET(merge_symtab(symtab, opts->symtab, input));
 
@@ -506,6 +482,22 @@ void Opt::reset_##name() { \
 }
 RE2C_MUTOPTS
 #undef MUTOPT
+
+#define MUTCODE(name) \
+void Opt::init_##name(const StxCodes* arg) { \
+    if (is_default.name) { \
+        user.name = arg; \
+        const_cast<mutopt_t&>(defaults).name = arg; \
+    } \
+    diverge = true; \
+} \
+void Opt::set_##name(const StxCodes* arg) { \
+    user.name = arg; \
+    is_default.name = false; \
+    diverge = true; \
+}
+RE2C_MUTCODES
+#undef MUTCODE
 
 #define CHECKED_LIST(name, allowed) \
 void Opt::set_##name(const std::vector<std::string>& list) { \
@@ -698,6 +690,66 @@ Ret Opt::validate_conf_code(
     return Ret::OK;
 }
 
+StxCodes* Opt::new_code_list() {
+    return new_list<StxCode, OutAllocator>(alc);
+}
+
+StxCode* Opt::make_code(StxCodeType type) {
+    StxCode* x = alc.alloct<StxCode>(1);
+    x->type = type;
+    x->next = nullptr;
+    return x;
+}
+
+StxCode* Opt::make_code_str(const char* str) {
+    StxCode* x = make_code(StxCodeType::STR);
+    x->str = str;
+    return x;
+}
+
+StxCode* Opt::make_code_var(StxVarId var) {
+    StxCode* x = make_code(StxCodeType::VAR);
+    x->var = var;
+    return x;
+}
+
+StxOpt* Opt::make_opt_global(StxGOpt opt) {
+    StxOpt* x = alc.alloct<StxOpt>(1);
+    x->is_local = false;
+    x->gopt = opt;
+    return x;
+}
+
+StxOpt* Opt::make_opt_local(StxLOpt opt) {
+    StxOpt* x = alc.alloct<StxOpt>(1);
+    x->is_local = true;
+    x->lopt = opt;
+    return x;
+}
+
+StxCode* Opt::make_code_cond(StxOpt* opt, StxCodes* then_code, StxCodes* else_code) {
+    StxCode* x = make_code(StxCodeType::COND);
+    x->cond.opt = opt;
+    x->cond.then_code = then_code;
+    x->cond.else_code = else_code;
+    return x;
+}
+
+StxCode* Opt::make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code) {
+    StxCode* x = make_code(StxCodeType::LIST);
+    x->list.var = var;
+    x->list.lbound = lbound;
+    x->list.rbound = rbound;
+    x->list.code = code;
+    return x;
+}
+
+StxCodes* Opt::make_api(const std::string& str) {
+    StxCodes* x = new_code_list();
+    append(x, make_code_str(copystr(str, alc)));
+    return x;
+}
+
 void opt_t::push_list_on_stack(const StxCode* x) const {
     if (x == nullptr) return;
     push_list_on_stack(x->next);
@@ -782,6 +834,47 @@ void opt_t::render_code_##name(std::ostream& os) const { \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
+
+class GenOpt : public RenderCallback {
+    std::ostringstream &os;
+    const opt_t* opts;
+    StxCodeId id;
+
+  public:
+    GenOpt(std::ostringstream& os, const opt_t* opts, StxCodeId id)
+        : os(os), opts(opts), id(id) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SIGIL:
+            switch (id) {
+                case StxCodeId::STX_api_fill: os << opts->fill_param; break;
+                case StxCodeId::STX_api_cond_set: os << opts->cond_set_param; break;
+                case StxCodeId::STX_api_state_set: os << opts->state_set_param; break;
+                case StxCodeId::STX_cond_div: os << opts->cond_div_param; break;
+                case StxCodeId::STX_cond_goto: os << opts->cond_goto_param; break;
+                default: os << opts->api_sigil; break;
+            }
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenOpt);
+};
+
+#define MUTCODE(name) \
+std::string opt_t::gen_##name(const StxCodes* code) const { \
+    if (code == nullptr) return "<undefined>"; \
+    std::ostringstream os; \
+    GenOpt callback(os, this, StxCodeId::STX_##name); \
+    eval_code_conf(StxCodeId::STX_##name, code, os, callback); \
+    return os.str(); \
+}
+RE2C_MUTCODES
+#undef MUTCODE
 
 void opt_t::eval_code_conf(
         StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const {

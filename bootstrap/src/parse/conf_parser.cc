@@ -1184,34 +1184,28 @@ yyreduce:
 #line 1185 "src/parse/conf_parser.cc"
     break;
 
-  case 7: /* num: CONF_NUMBER  */
-#line 89 "../src/parse/conf_parser.ypp"
-              { (yyval.num) = (yyvsp[0].num); }
-#line 1191 "src/parse/conf_parser.cc"
-    break;
-
   case 8: /* num: CONF_COND '?' num ':' num ')'  */
 #line 90 "../src/parse/conf_parser.ypp"
                                 { (yyval.num) = (yyvsp[-5].cond) ? (yyvsp[-3].num) : (yyvsp[-1].num); }
-#line 1197 "src/parse/conf_parser.cc"
+#line 1191 "src/parse/conf_parser.cc"
     break;
 
   case 10: /* str: CONF_COND '?' str ':' str ')'  */
 #line 94 "../src/parse/conf_parser.ypp"
                                 { (yyval.str) = (yyvsp[-5].cond) ? (yyvsp[-3].str) : (yyvsp[-1].str); }
-#line 1203 "src/parse/conf_parser.cc"
+#line 1197 "src/parse/conf_parser.cc"
     break;
 
   case 11: /* list: '[' ']'  */
 #line 97 "../src/parse/conf_parser.ypp"
                 { (yyval.list) = in.get_tmp_list(); }
-#line 1209 "src/parse/conf_parser.cc"
+#line 1203 "src/parse/conf_parser.cc"
     break;
 
   case 12: /* list: '[' elems ']'  */
 #line 98 "../src/parse/conf_parser.ypp"
                 { (yyval.list) = (yyvsp[-1].list); }
-#line 1215 "src/parse/conf_parser.cc"
+#line 1209 "src/parse/conf_parser.cc"
     break;
 
   case 13: /* elems: CONF_STRING  */
@@ -1220,7 +1214,7 @@ yyreduce:
     (yyval.list) = in.get_tmp_list();
     (yyval.list)->push_back((yyvsp[0].str));
 }
-#line 1224 "src/parse/conf_parser.cc"
+#line 1218 "src/parse/conf_parser.cc"
     break;
 
   case 14: /* elems: elems ',' CONF_STRING  */
@@ -1229,7 +1223,7 @@ yyreduce:
     (yyval.list) = (yyvsp[-2].list);
     (yyval.list)->push_back((yyvsp[0].str));
 }
-#line 1233 "src/parse/conf_parser.cc"
+#line 1227 "src/parse/conf_parser.cc"
     break;
 
   case 15: /* code_exprs: %empty  */
@@ -1237,7 +1231,7 @@ yyreduce:
          {
     (yyval.codes) = opts.new_code_list();
 }
-#line 1241 "src/parse/conf_parser.cc"
+#line 1235 "src/parse/conf_parser.cc"
     break;
 
   case 16: /* code_exprs: code_exprs code_expr  */
@@ -1246,7 +1240,7 @@ yyreduce:
     (yyval.codes) = (yyvsp[-1].codes);
     append((yyvsp[-1].codes), (yyvsp[0].code));
 }
-#line 1250 "src/parse/conf_parser.cc"
+#line 1244 "src/parse/conf_parser.cc"
     break;
 
   case 17: /* code_exprs: code_exprs CONF_COND '?' code_exprs ':' code_exprs ')'  */
@@ -1255,7 +1249,7 @@ yyreduce:
     (yyval.codes) = (yyvsp[-6].codes);
     append((yyvsp[-6].codes), (yyvsp[-5].cond) ? (yyvsp[-3].codes) : (yyvsp[-1].codes));
 }
-#line 1259 "src/parse/conf_parser.cc"
+#line 1253 "src/parse/conf_parser.cc"
     break;
 
   case 18: /* code_exprs: code_exprs CONF_COND '?' code_exprs ')'  */
@@ -1264,19 +1258,19 @@ yyreduce:
     (yyval.codes) = (yyvsp[-4].codes);
     if ((yyvsp[-3].cond)) append((yyvsp[-4].codes), (yyvsp[-1].codes));
 }
-#line 1268 "src/parse/conf_parser.cc"
+#line 1262 "src/parse/conf_parser.cc"
     break;
 
   case 19: /* code_expr: CONF_STRING  */
 #line 124 "../src/parse/conf_parser.ypp"
               { (yyval.code) = opts.make_code_str((yyvsp[0].str)); }
-#line 1274 "src/parse/conf_parser.cc"
+#line 1268 "src/parse/conf_parser.cc"
     break;
 
   case 20: /* code_expr: CONF_VAR  */
 #line 125 "../src/parse/conf_parser.ypp"
               { (yyval.code) = opts.make_code_var((yyvsp[0].var)); }
-#line 1280 "src/parse/conf_parser.cc"
+#line 1274 "src/parse/conf_parser.cc"
     break;
 
   case 23: /* code_opt: opt '?' code_exprs ')'  */
@@ -1284,7 +1278,7 @@ yyreduce:
                          {
     (yyval.code) = opts.make_code_cond((yyvsp[-3].opt), (yyvsp[-1].codes), nullptr);
 }
-#line 1288 "src/parse/conf_parser.cc"
+#line 1282 "src/parse/conf_parser.cc"
     break;
 
   case 24: /* code_opt: opt '?' code_exprs ':' code_exprs ')'  */
@@ -1292,19 +1286,19 @@ yyreduce:
                                           {
     (yyval.code) = opts.make_code_cond((yyvsp[-5].opt), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
-#line 1296 "src/parse/conf_parser.cc"
+#line 1290 "src/parse/conf_parser.cc"
     break;
 
   case 25: /* opt: CONF_GOPT  */
 #line 137 "../src/parse/conf_parser.ypp"
             { (yyval.opt) = opts.make_opt_global((yyvsp[0].gopt)); }
-#line 1302 "src/parse/conf_parser.cc"
+#line 1296 "src/parse/conf_parser.cc"
     break;
 
   case 26: /* opt: CONF_LOPT  */
 #line 138 "../src/parse/conf_parser.ypp"
             { (yyval.opt) = opts.make_opt_local((yyvsp[0].lopt)); }
-#line 1308 "src/parse/conf_parser.cc"
+#line 1302 "src/parse/conf_parser.cc"
     break;
 
   case 27: /* code_list: '[' CONF_VAR ':' code_exprs ']'  */
@@ -1312,7 +1306,7 @@ yyreduce:
                                   {
     (yyval.code) = opts.make_code_list((yyvsp[-3].var), 0, -1, (yyvsp[-1].codes));
 }
-#line 1316 "src/parse/conf_parser.cc"
+#line 1310 "src/parse/conf_parser.cc"
     break;
 
   case 28: /* code_list: '[' CONF_VAR '{' CONF_NUMBER '}' ':' code_exprs ']'  */
@@ -1320,7 +1314,7 @@ yyreduce:
                                                         {
     (yyval.code) = opts.make_code_list((yyvsp[-6].var), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1324 "src/parse/conf_parser.cc"
+#line 1318 "src/parse/conf_parser.cc"
     break;
 
   case 29: /* code_list: '[' CONF_VAR '{' CONF_NUMBER ':' CONF_NUMBER '}' ':' code_exprs ']'  */
@@ -1328,11 +1322,11 @@ yyreduce:
                                                                         {
     (yyval.code) = opts.make_code_list((yyvsp[-8].var), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
-#line 1332 "src/parse/conf_parser.cc"
+#line 1326 "src/parse/conf_parser.cc"
     break;
 
 
-#line 1336 "src/parse/conf_parser.cc"
+#line 1330 "src/parse/conf_parser.cc"
 
       default: break;
     }
@@ -1542,60 +1536,6 @@ extern "C" {
 }
 
 namespace re2c {
-
-inline StxCodes* Opt::new_code_list() {
-    return new_list<StxCode, OutAllocator>(alc);
-}
-
-inline StxCode* Opt::make_code(StxCodeType type) {
-    StxCode* x = alc.alloct<StxCode>(1);
-    x->type = type;
-    x->next = nullptr;
-    return x;
-}
-
-inline StxCode* Opt::make_code_str(const char* str) {
-    StxCode* x = make_code(StxCodeType::STR);
-    x->str = str;
-    return x;
-}
-
-inline StxCode* Opt::make_code_var(StxVarId var) {
-    StxCode* x = make_code(StxCodeType::VAR);
-    x->var = var;
-    return x;
-}
-
-inline StxOpt* Opt::make_opt_global(StxGOpt opt) {
-    StxOpt* x = alc.alloct<StxOpt>(1);
-    x->is_local = false;
-    x->gopt = opt;
-    return x;
-}
-
-inline StxOpt* Opt::make_opt_local(StxLOpt opt) {
-    StxOpt* x = alc.alloct<StxOpt>(1);
-    x->is_local = true;
-    x->lopt = opt;
-    return x;
-}
-
-inline StxCode* Opt::make_code_cond(StxOpt* opt, StxCodes* then_code, StxCodes* else_code) {
-    StxCode* x = make_code(StxCodeType::COND);
-    x->cond.opt = opt;
-    x->cond.then_code = then_code;
-    x->cond.else_code = else_code;
-    return x;
-}
-
-inline StxCode* Opt::make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code) {
-    StxCode* x = make_code(StxCodeType::LIST);
-    x->list.var = var;
-    x->list.lbound = lbound;
-    x->list.rbound = rbound;
-    x->list.code = code;
-    return x;
-}
 
 Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
     in_syntax_file = true;
