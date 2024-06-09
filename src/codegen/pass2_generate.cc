@@ -32,11 +32,13 @@ class GenGetAccept : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
         case StxVarId::GETACCEPT:
-            // no function style, as YYGETACCEPT must have a working default definition
             argsubst(os, opts->api_accept_get, opts->api_sigil, "var", true, opts->var_accept);
             break;
         case StxVarId::VAR:
             os << opts->var_accept;
+            break;
+        case StxVarId::RECORD:
+            os << opts->var_record;
             break;
         default:
             UNREACHABLE();
@@ -58,6 +60,7 @@ class GenGetCond : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
             case StxVarId::GETCOND: os << opts->api_cond_get; break;
+            case StxVarId::RECORD: os << opts->var_record; break;
             default: UNREACHABLE(); break;
         }
     }
@@ -76,6 +79,7 @@ class GenGetState : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
             case StxVarId::GETSTATE: os << opts->api_state_get; break;
+            case StxVarId::RECORD: os << opts->var_record; break;
             default: UNREACHABLE(); break;
         }
     }
@@ -105,6 +109,9 @@ class GenLessThan : public RenderCallback {
             break;
         case StxVarId::NEED:
             os << need;
+            break;
+        case StxVarId::RECORD:
+            os << opts->var_record;
             break;
         default:
             UNREACHABLE();

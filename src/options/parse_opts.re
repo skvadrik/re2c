@@ -266,9 +266,10 @@ opt_encoding_policy: /*!local:re2c
 */
 
 opt_input: /*!local:re2c
-    * { ERRARG("--api, --input", "default | custom", *argv); }
+    * { ERRARG("--api, --input", "default | custom | record", *argv); }
     "default" end { opts.set_api(Api::DEFAULT); goto opt; }
     "custom"  end { opts.set_api(Api::CUSTOM);  goto opt; }
+    "record"  end { opts.set_api(Api::RECORD);  goto opt; }
 */
 
 opt_empty_class: /*!local:re2c

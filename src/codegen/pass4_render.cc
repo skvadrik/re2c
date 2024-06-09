@@ -887,6 +887,9 @@ class RenderDebug : public RenderCallback {
         case StxVarId::CHAR:
             rctx.os << rctx.opts->var_char;
             break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
         default:
             render_global_var(rctx, var);
             break;
@@ -916,6 +919,7 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
             case StxVarId::SKIP: rctx.os << rctx.opts->api_skip; break;
             case StxVarId::BACKUP: rctx.os << rctx.opts->api_backup; break;
             case StxVarId::RESTORE: rctx.os << rctx.opts->api_restore; break;
+            case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
             default: render_global_var(rctx, var); break;
         }
     }
@@ -933,6 +937,7 @@ class RenderBackupRestoreCtx : public RenderCallback {
             case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
             case StxVarId::BACKUPCTX: rctx.os << rctx.opts->api_backup_ctx; break;
             case StxVarId::RESTORECTX: rctx.os << rctx.opts->api_restore_ctx; break;
+            case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
             default: render_global_var(rctx, var); break;
         }
     }
@@ -1009,6 +1014,9 @@ class RenderTagOps : public RenderCallback {
             rctx.os << s.str();
             break;
         }
+        case StxVarId::RECORD:
+            rctx.os << opts->var_record;
+            break;
         default:
             render_global_var(rctx, var);
             break;
@@ -1265,6 +1273,9 @@ class RenderSetAccept : public RenderCallback {
         case StxVarId::VAL:
             rctx.os << val;
             break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
         default:
             render_global_var(rctx, var);
             break;
@@ -1291,6 +1302,9 @@ class RenderSetCond : public RenderCallback {
         case StxVarId::COND:
             rctx.os << cond;
             break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
         default:
             render_global_var(rctx, var);
             break;
@@ -1316,6 +1330,9 @@ class RenderSetState : public RenderCallback {
             break;
         case StxVarId::STATE:
             rctx.os << state;
+            break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
             break;
         default:
             render_global_var(rctx, var);

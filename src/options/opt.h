@@ -56,7 +56,7 @@ using StxCodes = list_t<StxCode>;
 
 #define RE2C_CHECKED_LISTS \
     CHECKED_LIST(supported_apis, \
-            ({"default", "generic"})) \
+            ({"default", "generic", "record"})) \
     CHECKED_LIST(supported_api_styles, \
             ({"free-form", "functions"})) \
     CHECKED_LIST(supported_code_models, \
@@ -180,104 +180,108 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yydebug, \
-        ({StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR}), ({}), ({}) \
+        ({StxVarId::DEBUG, StxVarId::STATE, StxVarId::CHAR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yypeek, \
-        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::CURSOR, StxVarId::TYPECAST}), \
-        ({}), ({}) \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::CURSOR, StxVarId::TYPECAST, \
+            StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip, \
-        ({StxVarId::SKIP, StxVarId::CURSOR}), ({}), ({}) \
+        ({StxVarId::SKIP, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackup, \
-        ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+        ({StxVarId::BACKUP, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackupctx, \
-        ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
+        ({StxVarId::BACKUPCTX, StxVarId::CURSOR, StxVarId::CTXMARKER, StxVarId::RECORD}), \
+        ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestore, \
-        ({StxVarId::RESTORE, StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+        ({StxVarId::RESTORE, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestorectx, \
-        ({StxVarId::RESTORECTX, StxVarId::CURSOR, StxVarId::CTXMARKER}), ({}), ({}) \
+        ({StxVarId::RESTORECTX, StxVarId::CURSOR, StxVarId::CTXMARKER, StxVarId::RECORD}), \
+        ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestoretag, \
         ({StxVarId::RESTORETAG, StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::TAG, \
-            StxVarId::OFFSET}), ({}), ({}) \
+            StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshift, \
-        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET}), ({}), ({}) \
+        ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshiftstag, \
-        ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET}), ({}), \
-        ({StxLOpt::NESTED}) \
+        ({StxVarId::SHIFTSTAG, StxVarId::TAG, StxVarId::NEG, StxVarId::OFFSET, StxVarId::RECORD}), \
+        ({}), ({StxLOpt::NESTED}) \
     ) \
     CODE_TEMPLATE(yyshiftmtag, \
         ({StxVarId::SHIFTMTAG, StxVarId::TAG, StxVarId::OFFSET}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yystagp, \
-        ({StxVarId::STAGP, StxVarId::TAG, StxVarId::CURSOR}), ({}), ({}) \
+        ({StxVarId::STAGP, StxVarId::TAG, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yymtagp, \
         ({StxVarId::MTAGP, StxVarId::TAG}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yystagn, \
-        ({StxVarId::STAGN, StxVarId::TAG}), ({}), ({}) \
+        ({StxVarId::STAGN, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yymtagn, \
         ({StxVarId::MTAGN, StxVarId::TAG}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yycopystag, \
-        ({StxVarId::COPYSTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+        ({StxVarId::COPYSTAG, StxVarId::LHS, StxVarId::RHS, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yycopymtag, \
-        ({StxVarId::COPYMTAG, StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+        ({StxVarId::COPYMTAG, StxVarId::LHS, StxVarId::RHS, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yypeek, \
-        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST, \
+            StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yypeek_yyskip, \
-        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST}), ({}), ({}) \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST, \
+            StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yybackup, \
-        ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+        ({StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackup_yyskip, \
-        ({StxVarId::CURSOR, StxVarId::MARKER}), ({}), ({}) \
+        ({StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST}), ({}), ({}) \
+            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST}), ({}), ({}) \
+            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackup_yypeek_yyskip, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST}), ({}), ({}) \
+            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yygetaccept, \
-        ({StxVarId::GETACCEPT, StxVarId::VAR}), ({}), ({}) \
+        ({StxVarId::GETACCEPT, StxVarId::VAR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yysetaccept, \
-        ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL}), ({}), ({}) \
+        ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yygetcond, \
-        ({StxVarId::GETCOND}), ({}), ({}) \
+        ({StxVarId::GETCOND, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yysetcond, \
-        ({StxVarId::SETCOND, StxVarId::COND}), ({}), ({}) \
+        ({StxVarId::SETCOND, StxVarId::COND, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yygetstate, \
-        ({StxVarId::GETSTATE}), ({}), ({}) \
+        ({StxVarId::GETSTATE, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yysetstate, \
-        ({StxVarId::SETSTATE, StxVarId::STATE}), ({}), ({}) \
+        ({StxVarId::SETSTATE, StxVarId::STATE, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yylessthan, \
-        ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT}), \
-        ({}), ({StxLOpt::MANY}) \
+        ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT, \
+            StxVarId::RECORD}), ({}), ({StxLOpt::MANY}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -329,6 +333,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
     STX_LOCAL_VAR(PEEK, "peek") \
+    STX_LOCAL_VAR(RECORD, "record") \
     STX_LOCAL_VAR(RESTORE, "restore") \
     STX_LOCAL_VAR(RESTORECTX, "restorectx") \
     STX_LOCAL_VAR(RESTORETAG, "restoretag") \
@@ -433,6 +438,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, var_state, "yystate") \
     MUTOPT(std::string, var_nmatch, "yynmatch") \
     MUTOPT(std::string, var_pmatch, "yypmatch") \
+    MUTOPT(std::string, var_record, "yyrecord") \
     /* code generation */ \
     MUTOPT(bool, bitmaps, false) \
     MUTOPT(bool, bitmaps_hex, false) \
