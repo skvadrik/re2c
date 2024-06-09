@@ -193,6 +193,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"  "yystate"         { RET_CONF_STR(var_state); }
     "variable:"  "yynmatch"        { RET_CONF_STR(var_nmatch); }
     "variable:"  "yypmatch"        { RET_CONF_STR(var_pmatch); }
+    "variable:"  "yyrecord"        { RET_CONF_STR(var_record); }
     "variable:"  "yych"            { RET_CONF_STR(var_char); }
     "variable:"? "yych:conversion" { RET_CONF_BOOL(char_conv); }
     "variable:"? "yych:literals"   { goto char_lit; }
@@ -253,10 +254,11 @@ input:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom', 'record')"));
     }
     "default" { SETOPT(api, Api::DEFAULT); goto end; }
     "custom"  { SETOPT(api, Api::CUSTOM);  goto end; }
+    "record"  { SETOPT(api, Api::RECORD);  goto end; }
 */
 
 api_style:
@@ -596,6 +598,7 @@ start:
     "need"       { RET_VAR(StxVarId::NEED); }
     "offset"     { RET_VAR(StxVarId::OFFSET); }
     "peek"       { RET_VAR(StxVarId::PEEK); }
+    "record"     { RET_VAR(StxVarId::RECORD); }
     "restore"    { RET_VAR(StxVarId::RESTORE); }
     "restorectx" { RET_VAR(StxVarId::RESTORECTX); }
     "restoretag" { RET_VAR(StxVarId::RESTORETAG); }
@@ -658,6 +661,7 @@ opt:
 
     "api.pointers"                   { RET_GOPT(StxGOpt::API_DEFAULT); }
     "api.generic"                    { RET_GOPT(StxGOpt::API_CUSTOM); }
+    "api.record"                     { RET_GOPT(StxGOpt::API_RECORD); }
     "api_style.functions"            { RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
     "api_style.freeform"             { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
     "start_conditions"               { RET_GOPT(StxGOpt::START_CONDITIONS); }

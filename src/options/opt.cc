@@ -135,6 +135,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_state = defaults.var_state;
         real.var_nmatch = defaults.var_nmatch;
         real.var_pmatch = defaults.var_pmatch;
+        real.var_record = defaults.var_record;
         real.fill_enable = defaults.fill_enable;
         real.fill_check = defaults.fill_check;
         real.fill_param = defaults.fill_param;
@@ -254,6 +255,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api = Api::CUSTOM;
         real.indent_str = "    ";
         real.indent_top = 0;
+    }
+    if (real.api == Api::RECORD && is_default.api_style) {
+        real.api_style = ApiStyle::FREEFORM;
     }
     if (real.bitmaps || real.encoding.multibyte_cunit()) {
         real.nested_ifs = true;
@@ -767,6 +771,8 @@ static bool eval_cond(
             return opts->api == Api::DEFAULT;
         case StxGOpt::API_CUSTOM:
             return opts->api == Api::CUSTOM;
+        case StxGOpt::API_RECORD:
+            return opts->api == Api::RECORD;
         case StxGOpt::API_STYLE_FUNCTIONS:
             switch (id) {
                 case StxCodeId::STX_yygetcond: return !opts->cond_get_naked;
@@ -855,6 +861,9 @@ class GenOpt : public RenderCallback {
                 case StxCodeId::STX_cond_goto: os << opts->cond_goto_param; break;
                 default: os << opts->api_sigil; break;
             }
+            break;
+        case StxVarId::RECORD:
+            os << opts->var_record;
             break;
         default:
             UNREACHABLE();

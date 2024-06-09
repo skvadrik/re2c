@@ -42,15 +42,14 @@ static int fill(Input &in, size_t need) {
 }
 
 static int lex(Input &in) {
+    Input *yyrecord = &in;
     int count = 0;
-    for (;;) {
-        in.tok = in.cur;
+loop:
+    in.tok = in.cur;
     /*!re2c
-        re2c:api:style = free-form;
-        re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in.cur;
-        re2c:define:YYLIMIT  = in.lim;
-        re2c:define:YYFILL   = "if (fill(in, @@) != 0) return -1;";
+        re2c:api = record;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYFILL = "if (fill(in, @@) != 0) return -1;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
@@ -58,11 +57,10 @@ static int lex(Input &in) {
             // Check that it is the sentinel, not some unexpected null.
             return in.tok == in.lim - YYMAXFILL ? count : -1;
         }
-        str  { ++count; continue; }
-        [ ]+ { continue; }
+        str  { ++count; goto loop; }
+        [ ]+ { goto loop; }
         *    { return -1; }
     */
-    }
 }
 
 int main() {

@@ -47,15 +47,16 @@ static int fill(Input &in, size_t need) {
 }
 
 static int lex(Input &in) {
+    Input *yyrecord = &in;
     int count = 0;
-    for (;;) {
-        in.tok = in.cur;
+loop:
+    in.tok = in.cur;
     
-#line 55 "c/fill/02_fill.c"
+#line 56 "c/fill/02_fill.c"
 {
 	char yych;
-	if (in.lim <= in.cur) if (fill(in, 1) != 0) return -1;
-	yych = *in.cur;
+	if (yyrecord->lim <= yyrecord->cur) if (fill(in, 1) != 0) return -1;
+	yych = *yyrecord->cur;
 	switch (yych) {
 		case 0x00: goto yy1;
 		case ' ': goto yy3;
@@ -63,52 +64,51 @@ static int lex(Input &in) {
 		default: goto yy2;
 	}
 yy1:
-	++in.cur;
-#line 57 "c/fill/02_fill.re"
+	++yyrecord->cur;
+#line 56 "c/fill/02_fill.re"
 	{
             // Check that it is the sentinel, not some unexpected null.
             return in.tok == in.lim - YYMAXFILL ? count : -1;
         }
-#line 73 "c/fill/02_fill.c"
+#line 74 "c/fill/02_fill.c"
 yy2:
-	++in.cur;
-#line 63 "c/fill/02_fill.re"
+	++yyrecord->cur;
+#line 62 "c/fill/02_fill.re"
 	{ return -1; }
-#line 78 "c/fill/02_fill.c"
+#line 79 "c/fill/02_fill.c"
 yy3:
-	++in.cur;
-	if (in.lim <= in.cur) if (fill(in, 1) != 0) return -1;
-	yych = *in.cur;
+	++yyrecord->cur;
+	if (yyrecord->lim <= yyrecord->cur) if (fill(in, 1) != 0) return -1;
+	yych = *yyrecord->cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
 	}
 yy4:
-#line 62 "c/fill/02_fill.re"
-	{ continue; }
-#line 90 "c/fill/02_fill.c"
+#line 61 "c/fill/02_fill.re"
+	{ goto loop; }
+#line 91 "c/fill/02_fill.c"
 yy5:
-	++in.cur;
-	if (in.lim <= in.cur) if (fill(in, 1) != 0) return -1;
-	yych = *in.cur;
+	++yyrecord->cur;
+	if (yyrecord->lim <= yyrecord->cur) if (fill(in, 1) != 0) return -1;
+	yych = *yyrecord->cur;
 	switch (yych) {
 		case '\'': goto yy6;
 		case '\\': goto yy7;
 		default: goto yy5;
 	}
 yy6:
-	++in.cur;
-#line 61 "c/fill/02_fill.re"
-	{ ++count; continue; }
-#line 104 "c/fill/02_fill.c"
+	++yyrecord->cur;
+#line 60 "c/fill/02_fill.re"
+	{ ++count; goto loop; }
+#line 105 "c/fill/02_fill.c"
 yy7:
-	++in.cur;
-	if (in.lim <= in.cur) if (fill(in, 1) != 0) return -1;
+	++yyrecord->cur;
+	if (yyrecord->lim <= yyrecord->cur) if (fill(in, 1) != 0) return -1;
 	goto yy5;
 }
-#line 64 "c/fill/02_fill.re"
+#line 63 "c/fill/02_fill.re"
 
-    }
 }
 
 int main() {

@@ -35,26 +35,23 @@ static int fill(Input &in) {
 }
 
 static int lex(Input &in) {
+    Input *yyrecord = &in;
     int count = 0;
-    for (;;) {
-        in.tok = in.cur;
+loop:
+    in.tok = in.cur;
     /*!re2c
-        re2c:api:style = free-form;
-        re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in.cur;
-        re2c:define:YYMARKER = in.mar;
-        re2c:define:YYLIMIT  = in.lim;
-        re2c:define:YYFILL   = "fill(in) == 0";
+        re2c:api = record;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYFILL = "fill(in) == 0";
         re2c:eof = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         *    { return -1; }
         $    { return count; }
-        str  { ++count; continue; }
-        [ ]+ { continue; }
+        str  { ++count; goto loop; }
+        [ ]+ { goto loop; }
     */
-    }
 }
 
 int main() {
