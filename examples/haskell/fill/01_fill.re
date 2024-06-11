@@ -1,7 +1,6 @@
 -- re2hs $INPUT -o $OUTPUT
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad
 import Data.ByteString as BS
@@ -15,32 +14,29 @@ chunk_size = 4096
 
 data State = State {
     _file :: !Handle,
-    _buf :: !BS.ByteString,
+    _str :: !BS.ByteString,
     _cur :: !Int,
     _mar :: !Int,
     _lim :: !Int,
     _tok :: !Int,
-    _eof :: !Bool
-} deriving (Show)
+    _eof :: !Bool,
+    _cnt :: !Int
+}
 
 /*!re2c
-    re2c:define:YYFN       = ["lexer;IO Int", "State{..};State;!State{..}", "_count;Int;!_count"];
-    re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "return $ BS.index _buf _cur";
-    re2c:define:YYSKIP     = "_cur <- return $ _cur + 1";
-    re2c:define:YYBACKUP   = "let _mar = _cur";
-    re2c:define:YYRESTORE  = "let _cur = _mar";
-    re2c:define:YYLESSTHAN = "_cur >= _lim";
-    re2c:define:YYFILL     = "(State{..}, yyfill) <- fill State{..}";
+    re2c:define:YYFN = ["lexer;IO Int", "State{..};State;!State{..}"];
+    re2c:define:YYCTYPE = "Word8";
+    re2c:define:YYPEEK = "BS.index";
+    re2c:define:YYFILL = "(State{..}, yyfill) <- fill State{..}";
     re2c:eof = 0;
     re2c:monadic = 1;
 
     str = ['] ([^'\\] | [\\][^])* ['];
 
     *    { return (-1) }
-    $    { return _count }
-    str  { lexer State{_tok = _cur, ..} (_count + 1) }
-    [ ]+ { lexer State{_tok = _cur, ..} _count }
+    $    { return _cnt }
+    str  { lexer State{_tok = _cur, _cnt = _cnt + 1, ..} }
+    [ ]+ { lexer State{_tok = _cur, ..} }
 */
 
 fill :: State -> IO (State, Bool)
@@ -52,7 +48,7 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State {
-                _buf = BS.concat [(BS.init . BS.drop _tok) _buf, chunk, "\0"],
+                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
                 _cur = _cur - _tok,
                 _mar = _mar - _tok,
                 _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
@@ -72,14 +68,15 @@ main = do
     fh <- openFile fname ReadMode
     let st = State {
         _file = fh,
-        _buf = BS.singleton 0,
+        _str = BS.singleton 0,
         _cur = 0,
         _mar = 0,
         _tok = 0,
         _lim = 0,
-        _eof = False
+        _eof = False,
+        _cnt = 0
     }
-    result <- lexer st 0
+    result <- lexer st
     hClose fh
 
     -- Cleanup.

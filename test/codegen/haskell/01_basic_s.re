@@ -1,4 +1,4 @@
--- re2hs $INPUT -o $OUTPUT -i -s
+-- re2hs $INPUT -o $OUTPUT -is --api custom
 {-# LANGUAGE OverloadedStrings #-}
 
 import Data.ByteString as BS

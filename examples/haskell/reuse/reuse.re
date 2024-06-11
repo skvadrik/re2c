@@ -1,44 +1,39 @@
 -- re2hs $INPUT -o $OUTPUT --input-encoding utf8
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 -- This example supports multiple input encodings: UTF-8 and UTF-32.
 -- Both lexers are generated from the same rules block, and the use
 -- blocks add only encoding-specific configurations.
 
 import Control.Monad (when)
-import Data.Array as A
+import Data.Array
 import Data.Word
 
 data State a = State {
     _str :: a,
     _cur :: Int,
     _mar :: Int
-} deriving (Show)
+}
 
 /*!rules:re2c
-    re2c:define:YYSKIP    = "let cur = _cur + 1 in let _cur = cur in";
-    re2c:define:YYBACKUP  = "let _mar = _cur in";
-    re2c:define:YYRESTORE = "let _cur = _mar in";
-    re2c:yyfill:enable    = 0;
+    re2c:yyfill:enable = 0;
+    re2c:define:YYPEEK = "(!)";
 
     "∀x ∃y" { Just _cur }
     *       { Nothing }
 */
 
 /*!use:re2c
-    re2c:define:YYFN = ["lex8;Maybe Int", "State{..};State (A.Array Int Word8)"];
+    re2c:define:YYFN = ["lex8;Maybe Int", "State{..};State (Array Int Word8)"];
     re2c:encoding:utf8 = 1;
     re2c:define:YYCTYPE = Word8;
-    re2c:define:YYPEEK = "_str ! _cur";
 */
 
 /*!use:re2c
-    re2c:define:YYFN = ["lex32;Maybe Int", "State{..};State (A.Array Int Int)"];
+    re2c:define:YYFN = ["lex32;Maybe Int", "State{..};State (Array Int Int)"];
     re2c:encoding:utf32 = 1;
     re2c:define:YYCTYPE = Int;
-    re2c:define:YYPEEK = "_str ! _cur";
 */
 
 main :: IO ()

@@ -1,4 +1,4 @@
--- re2hs $INPUT -o $OUTPUT -i
+-- re2hs $INPUT -o $OUTPUT -i --api custom
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE OverloadedRecordDot #-}
 
