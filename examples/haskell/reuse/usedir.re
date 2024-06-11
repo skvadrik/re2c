@@ -1,7 +1,6 @@
 -- re2hs $INPUT -o $OUTPUT
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 -- This example shows how to combine reusable re2c blocks: two blocks
 -- ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
@@ -10,15 +9,15 @@
 -- inherited) definition takes priority.
 
 import Control.Monad (when)
-import Data.ByteString as BS
+import Data.ByteString (ByteString, index)
 
 data Answer = Color | Fish | Dunno deriving (Eq)
 
 data State = State {
-    _str :: BS.ByteString,
+    _str :: ByteString,
     _cur :: Int,
     _mar :: Int
-} deriving (Show)
+}
 
 /*!rules:re2c:colors
     *                            { error "ah" }
@@ -31,13 +30,8 @@ data State = State {
 */
 
 /*!re2c
-    re2c:define:YYFN      = ["lexer;Answer", "State{..};State"];
-    re2c:define:YYCTYPE   = "Word8";
-    re2c:define:YYPEEK    = "BS.index _str _cur";
-    re2c:define:YYSKIP    = "let cur = _cur + 1 in let _cur = cur in";
-    re2c:define:YYBACKUP  = "let _mar = _cur in";
-    re2c:define:YYRESTORE = "let _cur = _mar in";
-    re2c:yyfill:enable    = 0;
+    re2c:define:YYFN = ["lexer;Answer", "State{..};State"];
+    re2c:yyfill:enable = 0;
 
     !use:fish;
     !use:colors;

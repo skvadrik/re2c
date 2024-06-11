@@ -1,30 +1,22 @@
 -- re2hs $INPUT -o $OUTPUT -i
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
-import Data.ByteString as BS
+import Data.ByteString (ByteString, index)
 
 /*!include:re2c "definitions.hs" */
 
 data State = State {
-    _str :: BS.ByteString,
+    _str :: ByteString,
     _cur :: Int,
     _mar :: Int,
     _accept :: Int
-} deriving (Show)
+}
 
 /*!re2c
-    re2c:define:YYFN        = ["lexer;Number", "State{..};State"];
-    re2c:define:YYCTYPE     = "Word8";
-    re2c:define:YYPEEK      = "BS.index _str _cur";
-    re2c:define:YYSKIP      = "let cur = _cur + 1 in let _cur = cur in";
-    re2c:define:YYBACKUP    = "let _mar = _cur in";
-    re2c:define:YYRESTORE   = "let _cur = _mar in";
-    re2c:define:YYGETACCEPT = "_accept";
-    re2c:define:YYSETACCEPT = "let _accept = @@{val} in";
-    re2c:yyfill:enable      = 0;
+    re2c:define:YYFN = ["lexer;Number", "State{..};State"];
+    re2c:yyfill:enable = 0;
 
     *      { NNaN }
     number { INum }

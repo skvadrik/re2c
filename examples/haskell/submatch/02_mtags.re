@@ -1,13 +1,12 @@
 -- re2hs $INPUT -o $OUTPUT
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
-import qualified Data.ByteString as BS
+import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !BS.ByteString,
+    _str :: !ByteString,
     _cur :: !Int,
     _mar :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
@@ -16,30 +15,17 @@ data State = State {
     /*!mtags:re2c format = '\n@@{tag} :: ![Int],'; */
     _3 :: ![Int],
     _4 :: ![Int]
-} deriving (Show)
+}
 
-none :: Int
-none = -1
-
-s2n :: BS.ByteString -> Int -> Int -> Int
+s2n :: ByteString -> Int -> Int -> Int
 s2n s i j = f i 0 where
-    f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
+    f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (index s k) - 48))
 
 /*!re2c
-    re2c:define:YYFN       = ["parse;Maybe [Int]", "State{..};State"];
-    re2c:define:YYCTYPE    = "Word8";
-    re2c:define:YYPEEK     = "BS.index _str _cur";
-    re2c:define:YYSKIP     = "let cur = _cur + 1 in let _cur = cur in";
-    re2c:define:YYBACKUP   = "let _mar = _cur in";
-    re2c:define:YYRESTORE  = "let _cur = _mar in";
-    re2c:define:YYSTAGP    = "let @@{tag} = _cur in";
-    re2c:define:YYSTAGN    = "let @@{tag} = none in";
-    re2c:define:YYMTAGP    = "let tag = _cur : @@{tag} in let @@{tag} = tag in";
-    re2c:define:YYMTAGN    = ""; // alternatively could add `none` to the list
-    re2c:define:YYCOPYSTAG = "let @@{lhs} = @@{rhs} in";
-    re2c:define:YYCOPYMTAG = "let @@{lhs} = @@{rhs} in";
+    re2c:define:YYFN = ["parse;Maybe [Int]", "State{..};State"];
+    re2c:define:YYMTAGP = "let tag = _cur : @@{tag} in let @@{tag} = tag in";
+    re2c:define:YYMTAGN = ""; // alternatively could add -1 to the list
     re2c:tags = 1;
-    re2c:tags:prefix = _t;
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
@@ -50,15 +36,15 @@ s2n s i j = f i 0 where
     * { Nothing }
 */
 
-test :: BS.ByteString -> Maybe [Int] -> IO ()
+test :: ByteString -> Maybe [Int] -> IO ()
 test str expect = do
     let st = State {
         _str = str,
         _cur = 0,
         _mar = 0,
-        /*!stags:re2c format = '\n@@{tag} = none,'; */
-        _1 = none,
-        _2 = none,
+        /*!stags:re2c format = '\n@@{tag} = (-1),'; */
+        _1 = (-1),
+        _2 = (-1),
         /*!mtags:re2c format = '\n@@{tag} = [],'; */
         _3 = [],
         _4 = []

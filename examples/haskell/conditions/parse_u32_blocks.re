@@ -1,28 +1,21 @@
 -- re2hs $INPUT -o $OUTPUT -i
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE RecordWildCards #-}
 
 import Control.Monad (when)
-import Data.ByteString as BS
+import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !BS.ByteString,
+    _str :: !ByteString,
     _cur :: !Int,
     _mar :: !Int
-} deriving (Show)
+}
 
-peek_digit :: BS.ByteString -> Int -> Int -> Int
-peek_digit str idx offs = fromIntegral (BS.index str (idx - 1)) - offs
+peek_digit :: ByteString -> Int -> Int -> Int
+peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 /*!re2c
-    re2c:define:YYCTYPE   = "Word8";
-    re2c:define:YYPEEK    = "BS.index _str _cur";
-    re2c:define:YYSKIP    = "let cur = _cur + 1 in let _cur = cur in";
-    re2c:define:YYSHIFT   = "let cur = _cur + (@@) in let _cur = cur in";
-    re2c:define:YYBACKUP  = "let _mar = _cur in";
-    re2c:define:YYRESTORE = "let _cur = _mar in";
-    re2c:yyfill:enable    = 0;
+    re2c:yyfill:enable = 0;
 */
 
 /*!local:re2c
@@ -60,7 +53,7 @@ peek_digit str idx offs = fromIntegral (BS.index str (idx - 1)) - offs
     *                  { Nothing }
 */
 
-test :: BS.ByteString -> Maybe Int -> IO ()
+test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
     let s = State {_str = str, _cur = 0, _mar = 0}
     when (parse s /= expect) $ error "failed!"
