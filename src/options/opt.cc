@@ -216,28 +216,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.computed_gotos_threshold = defaults.computed_gotos_threshold;
         real.var_computed_gotos_table = defaults.var_computed_gotos_table;
     }
-    if (real.api != Api::DEFAULT) {
-        real.api_cursor = defaults.api_cursor;
-        real.api_marker = defaults.api_marker;
-        real.api_ctxmarker = defaults.api_ctxmarker;
-        real.api_limit = defaults.api_limit;
-    }
-    if (real.api != Api::CUSTOM) {
-        real.api_peek = defaults.api_peek;
-        real.api_skip = defaults.api_skip;
-        real.api_backup = defaults.api_backup;
-        real.api_backup_ctx = defaults.api_backup_ctx;
-        real.api_restore = defaults.api_restore;
-        real.api_restore_ctx = defaults.api_restore_ctx;
-        real.api_restore_tag = defaults.api_restore_tag;
-        real.api_stag_neg = defaults.api_stag_neg;
-        real.api_stag_pos = defaults.api_stag_pos;
-        real.api_stag_copy = defaults.api_stag_copy;
-        real.api_stag_shift = defaults.api_stag_shift;
-        real.api_shift = defaults.api_shift;
-        real.api_mtag_copy = defaults.api_mtag_copy;
-        // for other mtag operations there are no sensible defaults
-    }
     if (!real.debug) {
         real.api_debug = defaults.api_debug;
     }
