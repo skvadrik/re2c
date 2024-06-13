@@ -126,5 +126,5 @@ let main () =
     ()
 
 let _ = main ()
-codegen/ocaml/nested_fixed_tags.re:35:21: warning: rule matches empty string [-Wmatch-empty-string]
-codegen/ocaml/nested_fixed_tags.re:44:13: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/ocaml/nested_fixed_tags.re:36:21: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/ocaml/nested_fixed_tags.re:45:13: warning: rule matches empty string [-Wmatch-empty-string]

@@ -2,13 +2,13 @@
 #1 "ocaml/submatch/03_posix.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open String
+
 (* Maximum number of capturing groups among all rules. *)
-#7 "ocaml/submatch/03_posix.ml"
+#9 "ocaml/submatch/03_posix.ml"
 let yymaxnmatch = 4
-#4 "ocaml/submatch/03_posix.re"
+#6 "ocaml/submatch/03_posix.re"
 
-
-let none = max_int
 
 type state = {
     str: string;
@@ -42,7 +42,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #44 "ocaml/submatch/03_posix.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.cur;
@@ -56,13 +56,13 @@ and yy1 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy2 (st : state) : semver option =
-#54 "ocaml/submatch/03_posix.re"
+#47 "ocaml/submatch/03_posix.re"
 	None
 #62 "ocaml/submatch/03_posix.ml"
 
 and yy3 (st : state) : semver option =
 	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -73,7 +73,7 @@ and yy3 (st : state) : semver option =
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt2 <- st.cur;
@@ -86,7 +86,7 @@ and yy5 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -97,12 +97,12 @@ and yy6 (st : state) : semver option =
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			st.yyt3 <- st.cur;
-			st.yyt4 <- none;
-			st.yyt5 <- none;
+			st.yyt4 <- -1;
+			st.yyt5 <- -1;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
 		| '.' ->
@@ -125,27 +125,27 @@ and yy8 (st : state) : semver option =
 	st.yypmatch.(0) <- st.yyt1;
 	st.yypmatch.(1) <- st.cur;
 	st.yypmatch.(3) <- st.yyt2;
-	st.yypmatch.(3) <- st.yypmatch.(3) + -1;
-#44 "ocaml/submatch/03_posix.re"
+	st.yypmatch.(3) <- st.yypmatch.(3) - 1;
+#37 "ocaml/submatch/03_posix.re"
 	
         (* Even `yypmatch` values are for opening parentheses, odd values
            are for closing parentheses, the first group is the whole match. *)
         Some {
             major = s2n st.str st.yypmatch.(2) st.yypmatch.(3);
             minor = s2n st.str st.yypmatch.(4) st.yypmatch.(5);
-            patch = if st.yypmatch.(6) = none then 0
+            patch = if st.yypmatch.(6) = -1 then 0
                 else s2n st.str (st.yypmatch.(6) + 1) st.yypmatch.(7)
         }
 
 #141 "ocaml/submatch/03_posix.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	if (yych <= '\x00') then (yy5 [@tailcall]) st
 	else (yy11 [@tailcall]) st yych
 
 and yy10 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	(yy11 [@tailcall]) st yych
 
 and yy11 (st : state) (yych : char) : semver option =
@@ -162,7 +162,7 @@ and yy11 (st : state) (yych : char) : semver option =
 and parse (st : state) : semver option =
 	(yy0 [@tailcall]) st
 
-#55 "ocaml/submatch/03_posix.re"
+#48 "ocaml/submatch/03_posix.re"
 
 
 let test (str: string) (result: semver option) =
@@ -171,16 +171,16 @@ let test (str: string) (result: semver option) =
         cur = 0;
         mar = 0;
         yynmatch = 0;
-        yypmatch = Array.make (2 * yymaxnmatch) none;
+        yypmatch = Array.make (2 * yymaxnmatch) (-1);
         
 #177 "ocaml/submatch/03_posix.ml"
 
-		yyt1 = none;
-		yyt2 = none;
-		yyt3 = none;
-		yyt4 = none;
-		yyt5 = none;
-#64 "ocaml/submatch/03_posix.re"
+		yyt1 = -1;
+		yyt2 = -1;
+		yyt3 = -1;
+		yyt4 = -1;
+		yyt5 = -1;
+#57 "ocaml/submatch/03_posix.re"
 
     }
     in if not (parse st = result) then raise (Failure "error")

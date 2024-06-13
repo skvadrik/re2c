@@ -1,5 +1,7 @@
 (* re2ocaml $INPUT -o $OUTPUT -fi *)
 
+open Bytes
+
 (* Use a small buffer to cover the case when a lexeme doesn't fit.
    In real world use a larger buffer. *)
 let bufsize = 10
@@ -9,7 +11,7 @@ let log format = (if debug then Printf.eprintf else Printf.ifprintf stderr) form
 
 type state = {
     file: in_channel;
-    buf: bytes;
+    str: bytes;
     mutable cur: int;
     mutable mar: int;
     mutable tok: int;
@@ -25,37 +27,30 @@ let fill(st: state) : status =
     if st.tok < 1 then BigPacket else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    Bytes.blit st.buf st.tok st.buf 0 (st.lim - st.tok);
+    blit st.str st.tok st.str 0 (st.lim - st.tok);
     st.cur <- st.cur - st.tok;
     st.mar <- st.mar - st.tok;
     st.lim <- st.lim - st.tok;
     st.tok <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = In_channel.input st.file st.buf st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
+    let n = In_channel.input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
     st.lim <- st.lim + n;
-    Bytes.set st.buf st.lim '\x00'; (* append sentinel *)
+    set st.str st.lim '\x00'; (* append sentinel *)
 
     Ready)
 
 /*!re2c
-    re2c:define:YYFN       = ["lex;status", "st;state"];
-    re2c:define:YYCTYPE    = char;
-    re2c:define:YYPEEK     = "Bytes.get st.buf st.cur";
-    re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP   = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE  = "st.cur <- st.mar;";
-    re2c:define:YYGETSTATE = "st.state";
-    re2c:define:YYSETSTATE = "st.state <- @@;";
-    re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-    re2c:define:YYFILL     = "Waiting";
+    re2c:define:YYFN = ["lex;status", "yyrecord;state"];
+    re2c:define:YYCTYPE = "char";
+    re2c:define:YYFILL  = "Waiting";
     re2c:eof = 0;
 
     packet = [a-z]+[;];
 
     *      { BadPacket }
     $      { End }
-    packet { st.recv <- st.recv + 1; lex_loop st }
+    packet { yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord }
 */
 
 and lex_loop st =
@@ -72,7 +67,7 @@ let test (packets: string list) (sts: status) =
     let st = {
         file = ic;
         (* Sentinel (at `lim` offset) is set to null, which triggers YYFILL. *)
-        buf = Bytes.create bufsize;
+        str = create bufsize;
         cur = lim;
         mar = lim;
         tok = lim;

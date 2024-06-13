@@ -1,6 +1,7 @@
 (* re2ocaml $INPUT -o $OUTPUT --header lexer/state.ml -i *)
 
 open State
+open String
 
 /*!header:re2c:on*/
 type state = {
@@ -12,17 +13,12 @@ type state = {
 /*!header:re2c:off*/
 
 /*!re2c
-    re2c:define:YYFN    = ["lex;int", "st;State.state"];
-    re2c:define:YYCTYPE = char;
-    re2c:define:YYPEEK  = "st.str.[st.cur]";
-    re2c:define:YYSKIP  = "st.cur <- st.cur + 1;";
-    re2c:define:YYSTAGP = "@@ <- st.cur;";
+    re2c:define:YYFN = ["lex;int", "yyrecord;State.state"];
     re2c:tags = 1;
-    re2c:tags:expression = "st.@@";
     re2c:yyfill:enable = 0;
     re2c:header = "lexer/state.ml";
 
-    [a]* @tag [b]* { st.tag }
+    [a]* @tag [b]* { yyrecord.tag }
 */
 
 let main () =

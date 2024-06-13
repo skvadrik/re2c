@@ -2,6 +2,8 @@
 #1 "ocaml/eof/01_sentinel.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open String
+
 type state = {
     str: string;
     mutable cur: int;
@@ -9,56 +11,56 @@ type state = {
 
 (* expect a null-terminated string *)
 
-#13 "ocaml/eof/01_sentinel.ml"
-let rec yy0 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
-	st.cur <- st.cur + 1;
+#15 "ocaml/eof/01_sentinel.ml"
+let rec yy0 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.cur <- yyrecord.cur + 1;
 	match yych with
-		| '\x00' -> (yy1 [@tailcall]) st count
-		| ' ' -> (yy3 [@tailcall]) st count
-		| 'a'..'z' -> (yy5 [@tailcall]) st count
-		| _ -> (yy2 [@tailcall]) st count
+		| '\x00' -> (yy1 [@tailcall]) yyrecord count
+		| ' ' -> (yy3 [@tailcall]) yyrecord count
+		| 'a'..'z' -> (yy5 [@tailcall]) yyrecord count
+		| _ -> (yy2 [@tailcall]) yyrecord count
 
-and yy1 (st : state) (count : int) : int =
-#17 "ocaml/eof/01_sentinel.re"
-	count
-#26 "ocaml/eof/01_sentinel.ml"
-
-and yy2 (st : state) (count : int) : int =
+and yy1 (yyrecord : state) (count : int) : int =
 #16 "ocaml/eof/01_sentinel.re"
-	-1
-#31 "ocaml/eof/01_sentinel.ml"
+	count
+#28 "ocaml/eof/01_sentinel.ml"
 
-and yy3 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
+and yy2 (yyrecord : state) (count : int) : int =
+#15 "ocaml/eof/01_sentinel.re"
+	-1
+#33 "ocaml/eof/01_sentinel.ml"
+
+and yy3 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| ' ' ->
-			st.cur <- st.cur + 1;
-			(yy3 [@tailcall]) st count
-		| _ -> (yy4 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy3 [@tailcall]) yyrecord count
+		| _ -> (yy4 [@tailcall]) yyrecord count
 
-and yy4 (st : state) (count : int) : int =
-#19 "ocaml/eof/01_sentinel.re"
-	lex st count
-#44 "ocaml/eof/01_sentinel.ml"
+and yy4 (yyrecord : state) (count : int) : int =
+#18 "ocaml/eof/01_sentinel.re"
+	lex yyrecord count
+#46 "ocaml/eof/01_sentinel.ml"
 
-and yy5 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
+and yy5 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| 'a'..'z' ->
-			st.cur <- st.cur + 1;
-			(yy5 [@tailcall]) st count
-		| _ -> (yy6 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy5 [@tailcall]) yyrecord count
+		| _ -> (yy6 [@tailcall]) yyrecord count
 
-and yy6 (st : state) (count : int) : int =
-#18 "ocaml/eof/01_sentinel.re"
-	lex st (count + 1)
-#57 "ocaml/eof/01_sentinel.ml"
+and yy6 (yyrecord : state) (count : int) : int =
+#17 "ocaml/eof/01_sentinel.re"
+	lex yyrecord (count + 1)
+#59 "ocaml/eof/01_sentinel.ml"
 
-and lex (st : state) (count : int) : int =
-	(yy0 [@tailcall]) st count
+and lex (yyrecord : state) (count : int) : int =
+	(yy0 [@tailcall]) yyrecord count
 
-#20 "ocaml/eof/01_sentinel.re"
+#19 "ocaml/eof/01_sentinel.re"
 
 
 let test(str, count) =

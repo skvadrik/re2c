@@ -3,6 +3,7 @@
 
 open Int64
 open Option
+open String
 
 type state = {
     str: string;
@@ -21,7 +22,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy0 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'1' -> (yy2 [@tailcall]) st num
@@ -40,7 +41,7 @@ and parse_bin (st : state) (num : int option) : int option =
 
 
 let rec yy3 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'7' -> (yy5 [@tailcall]) st num
@@ -59,7 +60,7 @@ and parse_oct (st : state) (num : int option) : int option =
 
 
 let rec yy6 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'9' -> (yy8 [@tailcall]) st num
@@ -78,7 +79,7 @@ and parse_dec (st : state) (num : int option) : int option =
 
 
 let rec yy9 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'9' -> (yy11 [@tailcall]) st num
@@ -105,7 +106,7 @@ and parse_hex (st : state) (num : int option) : int option =
 
 
 let rec yy14 (st : state) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0' -> (yy16 [@tailcall]) st
@@ -117,7 +118,7 @@ and yy15 (st : state) : int option =
 
 and yy16 (st : state) : int option =
 	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| 'B'
 		| 'b' ->
@@ -133,11 +134,11 @@ and yy17 (st : state) : int option =
 	parse_oct st (Some 0)
 
 and yy18 (st : state) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	parse_dec st (Some 0)
 
 and yy19 (st : state) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'1' ->
 			st.cur <- st.cur + 1;
@@ -149,7 +150,7 @@ and yy20 (st : state) : int option =
 	(yy17 [@tailcall]) st
 
 and yy21 (st : state) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9'
 		| 'A'..'F'
@@ -159,11 +160,11 @@ and yy21 (st : state) : int option =
 		| _ -> (yy20 [@tailcall]) st
 
 and yy22 (st : state) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	parse_bin st (Some 0)
 
 and yy23 (st : state) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	parse_hex st (Some 0)
 
 and parse (st : state) : int option =

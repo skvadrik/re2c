@@ -1,5 +1,7 @@
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open String
+
 type state = {
     str: string;
     mutable cur: int;
@@ -7,16 +9,13 @@ type state = {
 
 (* expect a null-terminated string *)
 /*!re2c
-    re2c:define:YYFN    = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYCTYPE = char;
-    re2c:define:YYPEEK  = "st.str.[st.cur]";
-    re2c:define:YYSKIP  = "st.cur <- st.cur + 1;";
-    re2c:yyfill:enable  = 0;
+    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:yyfill:enable = 0;
 
     *      { -1 }
     [\x00] { count }
-    [a-z]+ { lex st (count + 1) }
-    [ ]+   { lex st count }
+    [a-z]+ { lex yyrecord (count + 1) }
+    [ ]+   { lex yyrecord count }
 */
 
 let test(str, count) =

@@ -2,6 +2,8 @@
 #1 "ocaml/eof/03_eof_rule.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open String
+
 type state = {
     str: string;
     mutable cur: int;
@@ -11,111 +13,111 @@ type state = {
 
 (* expect a null-terminated string *)
 
-#15 "ocaml/eof/03_eof_rule.ml"
-let rec yy0 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
+#17 "ocaml/eof/03_eof_rule.ml"
+let rec yy0 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| ' ' ->
-			st.cur <- st.cur + 1;
-			(yy3 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy3 [@tailcall]) yyrecord count
 		| '\'' ->
-			st.cur <- st.cur + 1;
-			(yy5 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy5 [@tailcall]) yyrecord count
 		| _ ->
-			if (st.cur >= st.lim) then (
-				(yy10 [@tailcall]) st count
+			if (yyrecord.lim <= yyrecord.cur) then (
+				(yy10 [@tailcall]) yyrecord count
 			) else (
-				st.cur <- st.cur + 1;
-				(yy1 [@tailcall]) st count
+				yyrecord.cur <- yyrecord.cur + 1;
+				(yy1 [@tailcall]) yyrecord count
 			)
 
-and yy1 (st : state) (count : int) : int =
-	(yy2 [@tailcall]) st count
+and yy1 (yyrecord : state) (count : int) : int =
+	(yy2 [@tailcall]) yyrecord count
 
-and yy2 (st : state) (count : int) : int =
-#24 "ocaml/eof/03_eof_rule.re"
+and yy2 (yyrecord : state) (count : int) : int =
+#21 "ocaml/eof/03_eof_rule.re"
 	-1
-#39 "ocaml/eof/03_eof_rule.ml"
+#41 "ocaml/eof/03_eof_rule.ml"
 
-and yy3 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
+and yy3 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| ' ' ->
-			st.cur <- st.cur + 1;
-			(yy3 [@tailcall]) st count
-		| _ -> (yy4 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy3 [@tailcall]) yyrecord count
+		| _ -> (yy4 [@tailcall]) yyrecord count
 
-and yy4 (st : state) (count : int) : int =
-#27 "ocaml/eof/03_eof_rule.re"
-	lex st count
-#52 "ocaml/eof/03_eof_rule.ml"
+and yy4 (yyrecord : state) (count : int) : int =
+#24 "ocaml/eof/03_eof_rule.re"
+	lex yyrecord count
+#54 "ocaml/eof/03_eof_rule.ml"
 
-and yy5 (st : state) (count : int) : int =
-	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+and yy5 (yyrecord : state) (count : int) : int =
+	yyrecord.mar <- yyrecord.cur;
+	let yych = get yyrecord.str yyrecord.cur in
 	if (yych <= '\x00') then (
-		if (st.cur >= st.lim) then (
-			(yy2 [@tailcall]) st count
+		if (yyrecord.lim <= yyrecord.cur) then (
+			(yy2 [@tailcall]) yyrecord count
 		) else (
-			st.cur <- st.cur + 1;
-			(yy6 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy6 [@tailcall]) yyrecord count
 		)
 	) else (
-		(yy7 [@tailcall]) st count yych
+		(yy7 [@tailcall]) yyrecord count yych
 	)
 
-and yy6 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
-	(yy7 [@tailcall]) st count yych
+and yy6 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
+	(yy7 [@tailcall]) yyrecord count yych
 
-and yy7 (st : state) (count : int) (yych : char) : int =
+and yy7 (yyrecord : state) (count : int) (yych : char) : int =
 	match yych with
 		| '\'' ->
-			st.cur <- st.cur + 1;
-			(yy8 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy8 [@tailcall]) yyrecord count
 		| '\\' ->
-			st.cur <- st.cur + 1;
-			(yy9 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy9 [@tailcall]) yyrecord count
 		| _ ->
-			if (st.cur >= st.lim) then (
-				(yy11 [@tailcall]) st count
+			if (yyrecord.lim <= yyrecord.cur) then (
+				(yy11 [@tailcall]) yyrecord count
 			) else (
-				st.cur <- st.cur + 1;
-				(yy6 [@tailcall]) st count
+				yyrecord.cur <- yyrecord.cur + 1;
+				(yy6 [@tailcall]) yyrecord count
 			)
 
-and yy8 (st : state) (count : int) : int =
-#26 "ocaml/eof/03_eof_rule.re"
-	lex st (count + 1)
-#91 "ocaml/eof/03_eof_rule.ml"
+and yy8 (yyrecord : state) (count : int) : int =
+#23 "ocaml/eof/03_eof_rule.re"
+	lex yyrecord (count + 1)
+#93 "ocaml/eof/03_eof_rule.ml"
 
-and yy9 (st : state) (count : int) : int =
-	let yych = st.str.[st.cur] in
+and yy9 (yyrecord : state) (count : int) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	if (yych <= '\x00') then (
-		if (st.cur >= st.lim) then (
-			(yy11 [@tailcall]) st count
+		if (yyrecord.lim <= yyrecord.cur) then (
+			(yy11 [@tailcall]) yyrecord count
 		) else (
-			st.cur <- st.cur + 1;
-			(yy6 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy6 [@tailcall]) yyrecord count
 		)
 	) else (
-		st.cur <- st.cur + 1;
-		(yy6 [@tailcall]) st count
+		yyrecord.cur <- yyrecord.cur + 1;
+		(yy6 [@tailcall]) yyrecord count
 	)
 
-and yy10 (st : state) (count : int) : int =
-#25 "ocaml/eof/03_eof_rule.re"
+and yy10 (yyrecord : state) (count : int) : int =
+#22 "ocaml/eof/03_eof_rule.re"
 	count
-#110 "ocaml/eof/03_eof_rule.ml"
+#112 "ocaml/eof/03_eof_rule.ml"
 
-and yy11 (st : state) (count : int) : int =
-	st.cur <- st.mar;
-	(yy2 [@tailcall]) st count
+and yy11 (yyrecord : state) (count : int) : int =
+	yyrecord.cur <- yyrecord.mar;
+	(yy2 [@tailcall]) yyrecord count
 
-and lex (st : state) (count : int) : int =
-	(yy0 [@tailcall]) st count
+and lex (yyrecord : state) (count : int) : int =
+	(yy0 [@tailcall]) yyrecord count
 
-#28 "ocaml/eof/03_eof_rule.re"
+#25 "ocaml/eof/03_eof_rule.re"
 
 
 let test(str, count) =

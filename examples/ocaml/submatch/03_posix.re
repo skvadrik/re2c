@@ -1,9 +1,9 @@
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open String
+
 (* Maximum number of capturing groups among all rules. *)
 /*!maxnmatch:re2c format = "let yymaxnmatch = @@"; */
-
-let none = max_int
 
 type state = {
     str: string;
@@ -26,17 +26,10 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 /*!local:re2c
-    re2c:define:YYFN        = ["parse;semver option", "st;state"];
-    re2c:define:YYCTYPE     = char;
-    re2c:define:YYPEEK      = "st.str.[st.cur]";
-    re2c:define:YYSKIP      = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP    = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE   = "st.cur <- st.mar;";
-    re2c:define:YYSTAGP     = "@@{tag} <- st.cur;";
-    re2c:define:YYSTAGN     = "@@{tag} <- none;";
-    re2c:define:YYSHIFTSTAG = "@@{tag} <- @@{tag} + @@{shift};";
+    re2c:define:YYFN = ["parse;semver option", "st;state"];
+    re2c:define:YYCTYPE = "char";
+    re2c:variable:yyrecord = "st";
     re2c:posix-captures = 1;
-    re2c:tags:expression = "st.@@";
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
@@ -47,7 +40,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         Some {
             major = s2n st.str st.yypmatch.(2) st.yypmatch.(3);
             minor = s2n st.str st.yypmatch.(4) st.yypmatch.(5);
-            patch = if st.yypmatch.(6) = none then 0
+            patch = if st.yypmatch.(6) = -1 then 0
                 else s2n st.str (st.yypmatch.(6) + 1) st.yypmatch.(7)
         }
     }
@@ -60,8 +53,8 @@ let test (str: string) (result: semver option) =
         cur = 0;
         mar = 0;
         yynmatch = 0;
-        yypmatch = Array.make (2 * yymaxnmatch) none;
-        /*!stags:re2c format = '\n\t\t@@{tag} = none;'; */
+        yypmatch = Array.make (2 * yymaxnmatch) (-1);
+        /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
     }
     in if not (parse st = result) then raise (Failure "error")
 
