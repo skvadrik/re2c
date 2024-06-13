@@ -3,6 +3,7 @@
 
 open Int64
 open Option
+open String
 
 type yycondtype = YYC_init | YYC_bin | YYC_oct | YYC_dec | YYC_hex
 
@@ -23,7 +24,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy1 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0' -> (yy3 [@tailcall]) st num
@@ -35,7 +36,7 @@ and yy2 (st : state) (num : int option) : int option =
 
 and yy3 (st : state) (num : int option) : int option =
 	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| 'B'
 		| 'b' ->
@@ -52,12 +53,12 @@ and yy4 (st : state) (num : int option) : int option =
 	(yyfnoct [@tailcall]) st num
 
 and yy5 (st : state) (num : int option) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	st.cond <- YYC_dec;
 	(yyfndec [@tailcall]) st num
 
 and yy6 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'1' ->
 			st.cur <- st.cur + 1;
@@ -69,7 +70,7 @@ and yy7 (st : state) (num : int option) : int option =
 	(yy4 [@tailcall]) st num
 
 and yy8 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9'
 		| 'A'..'F'
@@ -79,12 +80,12 @@ and yy8 (st : state) (num : int option) : int option =
 		| _ -> (yy7 [@tailcall]) st num
 
 and yy9 (st : state) (num : int option) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	st.cond <- YYC_bin;
 	(yyfnbin [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
-	st.cur <- st.cur + -1;
+	st.cur <- st.cur - 1;
 	st.cond <- YYC_hex;
 	(yyfnhex [@tailcall]) st num
 
@@ -92,7 +93,7 @@ and yyfninit (st : state) (num : int option) : int option =
 	(yy1 [@tailcall]) st num
 
 and yy11 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'1' -> (yy13 [@tailcall]) st num
@@ -108,7 +109,7 @@ and yyfnbin (st : state) (num : int option) : int option =
 	(yy11 [@tailcall]) st num
 
 and yy14 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'7' -> (yy16 [@tailcall]) st num
@@ -124,7 +125,7 @@ and yyfnoct (st : state) (num : int option) : int option =
 	(yy14 [@tailcall]) st num
 
 and yy17 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'9' -> (yy19 [@tailcall]) st num
@@ -140,7 +141,7 @@ and yyfndec (st : state) (num : int option) : int option =
 	(yy17 [@tailcall]) st num
 
 and yy20 (st : state) (num : int option) : int option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	st.cur <- st.cur + 1;
 	match yych with
 		| '0'..'9' -> (yy22 [@tailcall]) st num

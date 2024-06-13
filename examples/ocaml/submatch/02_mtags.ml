@@ -2,7 +2,7 @@
 #1 "ocaml/submatch/02_mtags.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
-let none = max_int;
+open String
 
 type state = {
     str: string;
@@ -36,7 +36,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #38 "ocaml/submatch/02_mtags.ml"
 let rec yy0 (st : state) : (int list) option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.cur;
@@ -50,13 +50,13 @@ and yy1 (st : state) : (int list) option =
 	(yy2 [@tailcall]) st
 
 and yy2 (st : state) : (int list) option =
-#44 "ocaml/submatch/02_mtags.re"
+#37 "ocaml/submatch/02_mtags.re"
 	None
 #56 "ocaml/submatch/02_mtags.ml"
 
 and yy3 (st : state) : (int list) option =
 	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			
@@ -78,7 +78,7 @@ and yy4 (st : state) : (int list) option =
 	st.t2 <- st.yyt2;
 	st.t3 <- st.yytm3;
 	st.t4 <- st.yytm4;
-#39 "ocaml/submatch/02_mtags.re"
+#32 "ocaml/submatch/02_mtags.re"
 	
         let x = s2n st.str st.t1 st.t2 in
         let xs = List.rev (List.map2 (fun x y -> s2n st.str x y) st.t3 st.t4) in
@@ -87,7 +87,7 @@ and yy4 (st : state) : (int list) option =
 #88 "ocaml/submatch/02_mtags.ml"
 
 and yy5 (st : state) : (int list) option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yytm3 <- st.cur :: st.yytm3;
@@ -100,7 +100,7 @@ and yy6 (st : state) : (int list) option =
 	(yy2 [@tailcall]) st
 
 and yy7 (st : state) : (int list) option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			
@@ -118,7 +118,7 @@ and yy7 (st : state) : (int list) option =
 		| _ -> (yy6 [@tailcall]) st
 
 and yy8 (st : state) : (int list) option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			st.yytm4 <- st.cur :: st.yytm4;
@@ -136,7 +136,7 @@ and yy8 (st : state) : (int list) option =
 and parse (st : state) : (int list) option =
 	(yy0 [@tailcall]) st
 
-#45 "ocaml/submatch/02_mtags.re"
+#38 "ocaml/submatch/02_mtags.re"
 
 
 let test (str: string) (result: (int list) option) =
@@ -147,18 +147,18 @@ let test (str: string) (result: (int list) option) =
         
 #149 "ocaml/submatch/02_mtags.ml"
 
-		yyt1 = none;
-		yyt2 = none;
-#52 "ocaml/submatch/02_mtags.re"
+		yyt1 = -1;
+		yyt2 = -1;
+#45 "ocaml/submatch/02_mtags.re"
 
-        t1 = none;
-        t2 = none;
+        t1 = -1;
+        t2 = -1;
         
 #158 "ocaml/submatch/02_mtags.ml"
 
 		yytm3 = [];
 		yytm4 = [];
-#55 "ocaml/submatch/02_mtags.re"
+#48 "ocaml/submatch/02_mtags.re"
 
         t3 = [];
         t4 = [];

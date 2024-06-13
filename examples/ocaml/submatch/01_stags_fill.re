@@ -1,11 +1,12 @@
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open Bytes
+
 let bufsize = 4096
-let none = max_int;
 
 type state = {
     file: in_channel;
-    buf: bytes;
+    str: bytes;
     mutable cur: int;
     mutable mar: int;
     mutable tok: int;
@@ -29,7 +30,7 @@ type semver = {
 
 let s2n (str: bytes) (i1: int) (i2: int) : int =
     let rec f s i j n =
-        if i >= j then n else f s (i + 1) j (n * 10 + Char.code (Bytes.get s i) - 48)
+        if i >= j then n else f s (i + 1) j (n * 10 + Char.code (get s i) - 48)
     in f str i1 i2 0
 
 let fill(st: state) : status =
@@ -39,45 +40,36 @@ let fill(st: state) : status =
     if st.tok < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    Bytes.blit st.buf st.tok st.buf 0 (st.lim - st.tok);
+    blit st.str st.tok st.str 0 (st.lim - st.tok);
     st.cur <- st.cur - st.tok;
     st.mar <- st.mar - st.tok;
     st.lim <- st.lim - st.tok;
-    /*!stags:re2c format = '\n\tst.@@ <- if st.@@ = none then none else st.@@ - st.tok;'; */
+    /*!stags:re2c format = '\n\tst.@@ <- if st.@@ = -1 then -1 else st.@@ - st.tok;'; */
     st.tok <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.buf st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
+    let n = input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
     st.lim <- st.lim + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        Bytes.set st.buf st.lim '\x00'; (* append sentinel *)
+        set st.str st.lim '\x00'; (* append sentinel *)
 
     Ok)
 
 /*!re2c
-    re2c:define:YYFN        = ["lex;(semver list) option", "st;state", "vers;semver list"];
-    re2c:define:YYCTYPE     = char;
-    re2c:define:YYPEEK      = "Bytes.get st.buf st.cur";
-    re2c:define:YYSKIP      = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP    = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE   = "st.cur <- st.mar;";
-    re2c:define:YYSTAGP     = "@@{tag} <- st.cur;";
-    re2c:define:YYSTAGN     = "@@{tag} <- none;";
-    re2c:define:YYSHIFTSTAG = "@@{tag} <- @@{tag} + @@{shift};";
-    re2c:define:YYLESSTHAN  = "st.cur >= st.lim";
-    re2c:define:YYFILL      = "fill st = Ok";
+    re2c:define:YYFN = ["lex;(semver list) option", "st;state", "vers;semver list"];
+    re2c:define:YYFILL = "fill st = Ok";
+    re2c:variable:yyrecord = "st";
     re2c:tags = 1;
-    re2c:tags:expression = "st.@@";
     re2c:eof = 0;
 
     num = [0-9]+;
 
     @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\n] {
         let ver = {
-            major = s2n st.buf st.t1 st.t2;
-            minor = s2n st.buf st.t3 st.t4;
-            patch = if st.t5 = none then 0 else s2n st.buf st.t5 (st.cur - 1)
+            major = s2n st.str st.t1 st.t2;
+            minor = s2n st.str st.t3 st.t4;
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
         } in lex_loop st (ver :: vers)
     }
     $ { Some (List.rev vers) }
@@ -107,18 +99,18 @@ let main () =
             let lim = bufsize - 1 in
             let st = {
                 file = ic;
-                buf = Bytes.create bufsize;
+                str = create bufsize;
                 cur = lim;
                 mar = lim;
                 tok = lim;
                 lim = lim;
                 eof = false;
-                t1 = none;
-                t2 = none;
-                t3 = none;
-                t4 = none;
-                t5 = none;
-                /*!stags:re2c format = '\n\t\t@@{tag} = none;'; */
+                t1 = -1;
+                t2 = -1;
+                t3 = -1;
+                t4 = -1;
+                t5 = -1;
+                /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
             } in if (lex_loop st [] <> expect) then
                 raise (Failure "error"));
 

@@ -1,5 +1,7 @@
 (* re2ocaml $INPUT -o $OUTPUT -i *)
 
+open String
+
 /*!include:re2c "definitions.ml" */
 
 type state = {
@@ -10,14 +12,8 @@ type state = {
 }
 
 /*!re2c
-    re2c:define:YYFN       = ["lex;number", "st;state"];
-    re2c:define:YYCTYPE    = char;
-    re2c:define:YYPEEK     = "st.str.[st.cur]";
-    re2c:define:YYSKIP     = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP   = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE  = "st.cur <- st.mar;";
-    re2c:variable:yyaccept = "st.accept";
-    re2c:yyfill:enable     = 0;
+    re2c:define:YYFN = ["lex;number", "yyrecord;state"];
+    re2c:yyfill:enable = 0;
 
     *      { NaN }
     number { Int }

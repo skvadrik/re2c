@@ -4,5 +4,6 @@ type state = {
     str: string;
     mutable cur: int;
     mutable tag: int;
-    mutable yyt1: int;
+    
+mutable yyt1: int;
 }

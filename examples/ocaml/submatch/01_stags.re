@@ -1,6 +1,6 @@
 (* re2ocaml $INPUT -o $OUTPUT *)
 
-let none = max_int;
+open String
 
 type state = {
     str: string;
@@ -26,17 +26,9 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 /*!local:re2c
-    re2c:define:YYFN        = ["parse;semver option", "st;state"];
-    re2c:define:YYCTYPE     = char;
-    re2c:define:YYPEEK      = "st.str.[st.cur]";
-    re2c:define:YYSKIP      = "st.cur <- st.cur + 1;";
-    re2c:define:YYBACKUP    = "st.mar <- st.cur;";
-    re2c:define:YYRESTORE   = "st.cur <- st.mar;";
-    re2c:define:YYSTAGP     = "@@{tag} <- st.cur;";
-    re2c:define:YYSTAGN     = "@@{tag} <- none;";
-    re2c:define:YYSHIFTSTAG = "@@{tag} <- @@{tag} + @@{shift};";
+    re2c:define:YYFN = ["parse;semver option", "st;state"];
+    re2c:variable:yyrecord = "st";
     re2c:tags = 1;
-    re2c:tags:expression = "st.@@";
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
@@ -45,7 +37,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         Some {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = none then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
         }
     }
     * { None }
@@ -56,12 +48,12 @@ let test (str: string) (result: semver option) =
         str = str;
         cur = 0;
         mar = 0;
-        t1 = none;
-        t2 = none;
-        t3 = none;
-        t4 = none;
-        t5 = none;
-        /*!stags:re2c format = '\n\t\t@@{tag} = none;'; */
+        t1 = -1;
+        t2 = -1;
+        t3 = -1;
+        t4 = -1;
+        t5 = -1;
+        /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
     }
     in if not (parse st = result) then raise (Failure "error")
 

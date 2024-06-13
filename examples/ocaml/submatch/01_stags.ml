@@ -2,7 +2,7 @@
 #1 "ocaml/submatch/01_stags.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
-let none = max_int;
+open String
 
 type state = {
     str: string;
@@ -38,7 +38,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #40 "ocaml/submatch/01_stags.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.cur;
@@ -52,13 +52,13 @@ and yy1 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy2 (st : state) : semver option =
-#51 "ocaml/submatch/01_stags.re"
+#43 "ocaml/submatch/01_stags.re"
 	None
 #58 "ocaml/submatch/01_stags.ml"
 
 and yy3 (st : state) : semver option =
 	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -69,7 +69,7 @@ and yy3 (st : state) : semver option =
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt2 <- st.cur;
@@ -82,7 +82,7 @@ and yy5 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -93,11 +93,11 @@ and yy6 (st : state) : semver option =
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			st.yyt3 <- st.cur;
-			st.yyt4 <- none;
+			st.yyt4 <- -1;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st
 		| '.' ->
@@ -115,19 +115,19 @@ and yy8 (st : state) : semver option =
 	st.t4 <- st.yyt3;
 	st.t5 <- st.yyt4;
 	st.t2 <- st.yyt2;
-	st.t2 <- st.t2 + -1;
-#44 "ocaml/submatch/01_stags.re"
+	st.t2 <- st.t2 - 1;
+#36 "ocaml/submatch/01_stags.re"
 	
         Some {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = none then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
         }
 
 #128 "ocaml/submatch/01_stags.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt4 <- st.cur;
@@ -136,7 +136,7 @@ and yy9 (st : state) : semver option =
 		| _ -> (yy5 [@tailcall]) st
 
 and yy10 (st : state) : semver option =
-	let yych = st.str.[st.cur] in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\x00' ->
 			st.cur <- st.cur + 1;
@@ -149,7 +149,7 @@ and yy10 (st : state) : semver option =
 and parse (st : state) : semver option =
 	(yy0 [@tailcall]) st
 
-#52 "ocaml/submatch/01_stags.re"
+#44 "ocaml/submatch/01_stags.re"
 
 
 let test (str: string) (result: semver option) =
@@ -157,19 +157,19 @@ let test (str: string) (result: semver option) =
         str = str;
         cur = 0;
         mar = 0;
-        t1 = none;
-        t2 = none;
-        t3 = none;
-        t4 = none;
-        t5 = none;
+        t1 = -1;
+        t2 = -1;
+        t3 = -1;
+        t4 = -1;
+        t5 = -1;
         
 #167 "ocaml/submatch/01_stags.ml"
 
-		yyt1 = none;
-		yyt2 = none;
-		yyt3 = none;
-		yyt4 = none;
-#64 "ocaml/submatch/01_stags.re"
+		yyt1 = -1;
+		yyt2 = -1;
+		yyt3 = -1;
+		yyt4 = -1;
+#56 "ocaml/submatch/01_stags.re"
 
     }
     in if not (parse st = result) then raise (Failure "error")

@@ -2,12 +2,13 @@
 #1 "ocaml/submatch/01_stags_fill.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
+open Bytes
+
 let bufsize = 4096
-let none = max_int;
 
 type state = {
     file: in_channel;
-    buf: bytes;
+    str: bytes;
     mutable cur: int;
     mutable mar: int;
     mutable tok: int;
@@ -19,13 +20,13 @@ type state = {
     mutable t4: int;
     mutable t5: int;
     
-#23 "ocaml/submatch/01_stags_fill.ml"
+#24 "ocaml/submatch/01_stags_fill.ml"
 
 	mutable yyt1: int;
 	mutable yyt2: int;
 	mutable yyt3: int;
 	mutable yyt4: int;
-#19 "ocaml/submatch/01_stags_fill.re"
+#20 "ocaml/submatch/01_stags_fill.re"
 
 }
 
@@ -39,7 +40,7 @@ type semver = {
 
 let s2n (str: bytes) (i1: int) (i2: int) : int =
     let rec f s i j n =
-        if i >= j then n else f s (i + 1) j (n * 10 + Char.code (Bytes.get s i) - 48)
+        if i >= j then n else f s (i + 1) j (n * 10 + Char.code (get s i) - 48)
     in f str i1 i2 0
 
 let fill(st: state) : status =
@@ -49,41 +50,41 @@ let fill(st: state) : status =
     if st.tok < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    Bytes.blit st.buf st.tok st.buf 0 (st.lim - st.tok);
+    blit st.str st.tok st.str 0 (st.lim - st.tok);
     st.cur <- st.cur - st.tok;
     st.mar <- st.mar - st.tok;
     st.lim <- st.lim - st.tok;
     
-#58 "ocaml/submatch/01_stags_fill.ml"
+#59 "ocaml/submatch/01_stags_fill.ml"
 
-	st.yyt1 <- if st.yyt1 = none then none else st.yyt1 - st.tok;
-	st.yyt2 <- if st.yyt2 = none then none else st.yyt2 - st.tok;
-	st.yyt3 <- if st.yyt3 = none then none else st.yyt3 - st.tok;
-	st.yyt4 <- if st.yyt4 = none then none else st.yyt4 - st.tok;
-#46 "ocaml/submatch/01_stags_fill.re"
+	st.yyt1 <- if st.yyt1 = -1 then -1 else st.yyt1 - st.tok;
+	st.yyt2 <- if st.yyt2 = -1 then -1 else st.yyt2 - st.tok;
+	st.yyt3 <- if st.yyt3 = -1 then -1 else st.yyt3 - st.tok;
+	st.yyt4 <- if st.yyt4 = -1 then -1 else st.yyt4 - st.tok;
+#47 "ocaml/submatch/01_stags_fill.re"
 
     st.tok <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.buf st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
+    let n = input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
     st.lim <- st.lim + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        Bytes.set st.buf st.lim '\x00'; (* append sentinel *)
+        set st.str st.lim '\x00'; (* append sentinel *)
 
     Ok)
 
 
-#78 "ocaml/submatch/01_stags_fill.ml"
+#79 "ocaml/submatch/01_stags_fill.ml"
 let rec yy0 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy3 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy0 [@tailcall]) st vers
 				else (yy11 [@tailcall]) st vers
 			) else (
@@ -95,13 +96,13 @@ and yy1 (st : state) (vers : semver list) : (semver list) option =
 	(yy2 [@tailcall]) st vers
 
 and yy2 (st : state) (vers : semver list) : (semver list) option =
-#84 "ocaml/submatch/01_stags_fill.re"
+#76 "ocaml/submatch/01_stags_fill.re"
 	None
-#101 "ocaml/submatch/01_stags_fill.ml"
+#102 "ocaml/submatch/01_stags_fill.ml"
 
 and yy3 (st : state) (vers : semver list) : (semver list) option =
 	st.mar <- st.cur;
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -110,7 +111,7 @@ and yy3 (st : state) (vers : semver list) : (semver list) option =
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy3 [@tailcall]) st vers
 				else (yy2 [@tailcall]) st vers
 			) else (
@@ -118,14 +119,14 @@ and yy3 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy4 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt2 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy4 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -137,7 +138,7 @@ and yy5 (st : state) (vers : semver list) : (semver list) option =
 	(yy2 [@tailcall]) st vers
 
 and yy6 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '.' ->
 			st.cur <- st.cur + 1;
@@ -146,7 +147,7 @@ and yy6 (st : state) (vers : semver list) : (semver list) option =
 			st.cur <- st.cur + 1;
 			(yy6 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy6 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -154,11 +155,11 @@ and yy6 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy7 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\n' ->
 			st.yyt3 <- st.cur;
-			st.yyt4 <- none;
+			st.yyt4 <- -1;
 			st.cur <- st.cur + 1;
 			(yy8 [@tailcall]) st vers
 		| '.' ->
@@ -169,7 +170,7 @@ and yy7 (st : state) (vers : semver list) : (semver list) option =
 			st.cur <- st.cur + 1;
 			(yy7 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy7 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -182,26 +183,26 @@ and yy8 (st : state) (vers : semver list) : (semver list) option =
 	st.t4 <- st.yyt3;
 	st.t5 <- st.yyt4;
 	st.t2 <- st.yyt2;
-	st.t2 <- st.t2 + -1;
-#76 "ocaml/submatch/01_stags_fill.re"
+	st.t2 <- st.t2 - 1;
+#68 "ocaml/submatch/01_stags_fill.re"
 	
         let ver = {
-            major = s2n st.buf st.t1 st.t2;
-            minor = s2n st.buf st.t3 st.t4;
-            patch = if st.t5 = none then 0 else s2n st.buf st.t5 (st.cur - 1)
+            major = s2n st.str st.t1 st.t2;
+            minor = s2n st.str st.t3 st.t4;
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
         } in lex_loop st (ver :: vers)
 
-#195 "ocaml/submatch/01_stags_fill.ml"
+#196 "ocaml/submatch/01_stags_fill.ml"
 
 and yy9 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '0'..'9' ->
 			st.yyt4 <- st.cur;
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy9 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -209,7 +210,7 @@ and yy9 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy10 (st : state) (vers : semver list) : (semver list) option =
-	let yych = Bytes.get st.buf st.cur in
+	let yych = get st.str st.cur in
 	match yych with
 		| '\n' ->
 			st.cur <- st.cur + 1;
@@ -218,7 +219,7 @@ and yy10 (st : state) (vers : semver list) : (semver list) option =
 			st.cur <- st.cur + 1;
 			(yy10 [@tailcall]) st vers
 		| _ ->
-			if (st.cur >= st.lim) then (
+			if (st.lim <= st.cur) then (
 				if (fill st = Ok) then (yy10 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -226,14 +227,14 @@ and yy10 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy11 (st : state) (vers : semver list) : (semver list) option =
-#83 "ocaml/submatch/01_stags_fill.re"
+#75 "ocaml/submatch/01_stags_fill.re"
 	Some (List.rev vers)
-#232 "ocaml/submatch/01_stags_fill.ml"
+#233 "ocaml/submatch/01_stags_fill.ml"
 
 and lex (st : state) (vers : semver list) : (semver list) option =
 	(yy0 [@tailcall]) st vers
 
-#85 "ocaml/submatch/01_stags_fill.re"
+#77 "ocaml/submatch/01_stags_fill.re"
 
 
 and lex_loop st vers =
@@ -259,25 +260,25 @@ let main () =
             let lim = bufsize - 1 in
             let st = {
                 file = ic;
-                buf = Bytes.create bufsize;
+                str = create bufsize;
                 cur = lim;
                 mar = lim;
                 tok = lim;
                 lim = lim;
                 eof = false;
-                t1 = none;
-                t2 = none;
-                t3 = none;
-                t4 = none;
-                t5 = none;
+                t1 = -1;
+                t2 = -1;
+                t3 = -1;
+                t4 = -1;
+                t5 = -1;
                 
-#275 "ocaml/submatch/01_stags_fill.ml"
+#276 "ocaml/submatch/01_stags_fill.ml"
 
-		yyt1 = none;
-		yyt2 = none;
-		yyt3 = none;
-		yyt4 = none;
-#121 "ocaml/submatch/01_stags_fill.re"
+		yyt1 = -1;
+		yyt2 = -1;
+		yyt3 = -1;
+		yyt4 = -1;
+#113 "ocaml/submatch/01_stags_fill.re"
 
             } in if (lex_loop st [] <> expect) then
                 raise (Failure "error"));

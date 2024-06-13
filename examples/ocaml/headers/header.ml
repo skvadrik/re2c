@@ -2,38 +2,39 @@
 (* re2ocaml $INPUT -o $OUTPUT --header lexer/state.ml -i *)
 
 open State
+open String
 
 
 
 
-let rec yy0 (st : State.state) : int =
-	let yych = st.str.[st.cur] in
+let rec yy0 (yyrecord : State.state) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| 'a' ->
-			st.cur <- st.cur + 1;
-			(yy0 [@tailcall]) st
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy0 [@tailcall]) yyrecord
 		| 'b' ->
-			st.yyt1 <- st.cur;
-			st.cur <- st.cur + 1;
-			(yy2 [@tailcall]) st
+			yyrecord.yyt1 <- yyrecord.cur;
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy2 [@tailcall]) yyrecord
 		| _ ->
-			st.yyt1 <- st.cur;
-			(yy1 [@tailcall]) st
+			yyrecord.yyt1 <- yyrecord.cur;
+			(yy1 [@tailcall]) yyrecord
 
-and yy1 (st : State.state) : int =
-	st.tag <- st.yyt1;
-	st.tag
+and yy1 (yyrecord : State.state) : int =
+	yyrecord.tag <- yyrecord.yyt1;
+	yyrecord.tag
 
-and yy2 (st : State.state) : int =
-	let yych = st.str.[st.cur] in
+and yy2 (yyrecord : State.state) : int =
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| 'b' ->
-			st.cur <- st.cur + 1;
-			(yy2 [@tailcall]) st
-		| _ -> (yy1 [@tailcall]) st
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy2 [@tailcall]) yyrecord
+		| _ -> (yy1 [@tailcall]) yyrecord
 
-and lex (st : State.state) : int =
-	(yy0 [@tailcall]) st
+and lex (yyrecord : State.state) : int =
+	(yy0 [@tailcall]) yyrecord
 
 
 
@@ -56,4 +57,4 @@ type state = {
     mutable tag: int;
     mutable yyt1: int;
 }
-ocaml/headers/header.re:25:19: warning: rule matches empty string [-Wmatch-empty-string]
+ocaml/headers/header.re:21:19: warning: rule matches empty string [-Wmatch-empty-string]

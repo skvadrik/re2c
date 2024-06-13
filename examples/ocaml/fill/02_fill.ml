@@ -2,9 +2,11 @@
 #1 "ocaml/fill/02_fill.re"
 (* re2ocaml $INPUT -o $OUTPUT *)
 
-#6 "ocaml/fill/02_fill.ml"
+open Bytes
+
+#8 "ocaml/fill/02_fill.ml"
 let yymaxfill = 1
-#3 "ocaml/fill/02_fill.re"
+#5 "ocaml/fill/02_fill.re"
 
 let bufsize = 4096
 
@@ -12,7 +14,7 @@ exception Fill
 
 type state = {
     file: in_channel;
-    buf: bytes;
+    str: bytes;
     mutable cur: int;
     mutable mar: int;
     mutable tok: int;
@@ -29,14 +31,14 @@ let fill (st: state) (need: int) : status =
     if st.tok < need then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    Bytes.blit st.buf st.tok st.buf 0 (st.lim - st.tok);
+    blit st.str st.tok st.str 0 (st.lim - st.tok);
     st.cur <- st.cur - st.tok;
     st.mar <- st.mar - st.tok;
     st.lim <- st.lim - st.tok;
     st.tok <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.buf st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
+    let n = input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
     st.lim <- st.lim + n;
 
     (* If read zero characters, this is end of input => add zero padding
@@ -44,74 +46,74 @@ let fill (st: state) (need: int) : status =
     if n = 0 then
         st.eof <- true; (* end of file *)
         for i = 0 to (yymaxfill - 1) do
-            Bytes.set st.buf (st.lim + i) '\x00';
+            set st.str (st.lim + i) '\x00';
             st.lim <- st.lim + yymaxfill
         done;
 
     Ok)
 
 
-#55 "ocaml/fill/02_fill.ml"
-let rec yy0 (st : state) (count : int) : int =
-	if (st.lim - st.cur < 1) then if not (fill st 1 = Ok) then raise Fill;
-	let yych = Bytes.get st.buf st.cur in
-	st.cur <- st.cur + 1;
+#57 "ocaml/fill/02_fill.ml"
+let rec yy0 (yyrecord : state) (count : int) : int =
+	if (yyrecord.lim <= yyrecord.cur) then if not (fill yyrecord 1 = Ok) then raise Fill;
+	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.cur <- yyrecord.cur + 1;
 	match yych with
-		| '\x00' -> (yy1 [@tailcall]) st count
-		| ' ' -> (yy3 [@tailcall]) st count
-		| '\'' -> (yy5 [@tailcall]) st count
-		| _ -> (yy2 [@tailcall]) st count
+		| '\x00' -> (yy1 [@tailcall]) yyrecord count
+		| ' ' -> (yy3 [@tailcall]) yyrecord count
+		| '\'' -> (yy5 [@tailcall]) yyrecord count
+		| _ -> (yy2 [@tailcall]) yyrecord count
 
-and yy1 (st : state) (count : int) : int =
-#60 "ocaml/fill/02_fill.re"
+and yy1 (yyrecord : state) (count : int) : int =
+#56 "ocaml/fill/02_fill.re"
 	
         (* check that it is the sentinel, not some unexpected null *)
-        if st.tok = st.lim - yymaxfill then count else -1
+        if yyrecord.tok = yyrecord.lim - yymaxfill then count else -1
 
-#72 "ocaml/fill/02_fill.ml"
+#74 "ocaml/fill/02_fill.ml"
 
-and yy2 (st : state) (count : int) : int =
-#66 "ocaml/fill/02_fill.re"
+and yy2 (yyrecord : state) (count : int) : int =
+#62 "ocaml/fill/02_fill.re"
 	-1
-#77 "ocaml/fill/02_fill.ml"
+#79 "ocaml/fill/02_fill.ml"
 
-and yy3 (st : state) (count : int) : int =
-	if (st.lim - st.cur < 1) then if not (fill st 1 = Ok) then raise Fill;
-	let yych = Bytes.get st.buf st.cur in
+and yy3 (yyrecord : state) (count : int) : int =
+	if (yyrecord.lim <= yyrecord.cur) then if not (fill yyrecord 1 = Ok) then raise Fill;
+	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
 		| ' ' ->
-			st.cur <- st.cur + 1;
-			(yy3 [@tailcall]) st count
-		| _ -> (yy4 [@tailcall]) st count
+			yyrecord.cur <- yyrecord.cur + 1;
+			(yy3 [@tailcall]) yyrecord count
+		| _ -> (yy4 [@tailcall]) yyrecord count
 
-and yy4 (st : state) (count : int) : int =
-#65 "ocaml/fill/02_fill.re"
-	lex_loop st count
-#91 "ocaml/fill/02_fill.ml"
+and yy4 (yyrecord : state) (count : int) : int =
+#61 "ocaml/fill/02_fill.re"
+	lex_loop yyrecord count
+#93 "ocaml/fill/02_fill.ml"
 
-and yy5 (st : state) (count : int) : int =
-	if (st.lim - st.cur < 1) then if not (fill st 1 = Ok) then raise Fill;
-	let yych = Bytes.get st.buf st.cur in
-	st.cur <- st.cur + 1;
+and yy5 (yyrecord : state) (count : int) : int =
+	if (yyrecord.lim <= yyrecord.cur) then if not (fill yyrecord 1 = Ok) then raise Fill;
+	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.cur <- yyrecord.cur + 1;
 	match yych with
-		| '\'' -> (yy6 [@tailcall]) st count
-		| '\\' -> (yy7 [@tailcall]) st count
-		| _ -> (yy5 [@tailcall]) st count
+		| '\'' -> (yy6 [@tailcall]) yyrecord count
+		| '\\' -> (yy7 [@tailcall]) yyrecord count
+		| _ -> (yy5 [@tailcall]) yyrecord count
 
-and yy6 (st : state) (count : int) : int =
-#64 "ocaml/fill/02_fill.re"
-	lex_loop st (count + 1)
-#105 "ocaml/fill/02_fill.ml"
+and yy6 (yyrecord : state) (count : int) : int =
+#60 "ocaml/fill/02_fill.re"
+	lex_loop yyrecord (count + 1)
+#107 "ocaml/fill/02_fill.ml"
 
-and yy7 (st : state) (count : int) : int =
-	if (st.lim - st.cur < 1) then if not (fill st 1 = Ok) then raise Fill;
-	st.cur <- st.cur + 1;
-	(yy5 [@tailcall]) st count
+and yy7 (yyrecord : state) (count : int) : int =
+	if (yyrecord.lim <= yyrecord.cur) then if not (fill yyrecord 1 = Ok) then raise Fill;
+	yyrecord.cur <- yyrecord.cur + 1;
+	(yy5 [@tailcall]) yyrecord count
 
-and lex (st : state) (count : int) : int =
-	(yy0 [@tailcall]) st count
+and lex (yyrecord : state) (count : int) : int =
+	(yy0 [@tailcall]) yyrecord count
 
-#67 "ocaml/fill/02_fill.re"
+#63 "ocaml/fill/02_fill.re"
 
 
 and lex_loop st count =
@@ -133,7 +135,7 @@ let main () =
             let lim = bufsize - yymaxfill in
             let st = {
                 file = ic;
-                buf = Bytes.create bufsize;
+                str = create bufsize;
                 cur = lim;
                 mar = lim;
                 tok = lim;
