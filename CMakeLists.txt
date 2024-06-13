@@ -12,6 +12,13 @@ include(Re2cCompilerFlags)
 
 ac_subst(PACKAGE_VERSION "${PROJECT_VERSION}")
 
+# check whether re2c is the root project
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    set(RE2C_IS_ROOT_PROJECT TRUE)
+else()
+    set(RE2C_IS_ROOT_PROJECT FALSE)
+endif()
+
 option(RE2C_REBUILD_LEXERS "Regenerate lexers" OFF)
 if(RE2C_REBUILD_LEXERS AND NOT RE2C_FOR_BUILD)
     message(FATAL_ERROR "option RE2C_FOR_BUILD is required for RE2C_REBUILD_LEXERS")
@@ -32,8 +39,13 @@ option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang r
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)
 
+# test targets are enabled by default only if re2c is the root project
+option(RE2C_BUILD_TESTS "Build tests" "${RE2C_IS_ROOT_PROJECT}")
+
 # checks for programs
-find_package(Python3 3.7 REQUIRED COMPONENTS Interpreter)
+if(RE2C_REBUILD_DOCS OR RE2C_BUILD_TESTS OR RE2C_BUILD_BENCHMARKS)
+    find_package(Python3 3.7 REQUIRED COMPONENTS Interpreter)
+endif()
 
 if(RE2C_REBUILD_DOCS)
     execute_process(
@@ -89,10 +101,12 @@ set(PYTHON "${Python3_EXECUTABLE}")
 configure_file(doc/manpage.rst.in doc/manpage.rst @ONLY)
 configure_file(doc/help.rst.in doc/help.rst @ONLY)
 
-configure_file(run_tests.py.in run_tests.py @ONLY)
-set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
-if(CMAKE_HOST_UNIX)
-    execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
+if(RE2C_BUILD_TESTS)
+    configure_file(run_tests.py.in run_tests.py @ONLY)
+    set(RE2C_RUN_TESTS "${CMAKE_CURRENT_BINARY_DIR}/run_tests.py")
+    if(CMAKE_HOST_UNIX)
+        execute_process(COMMAND chmod +x "${RE2C_RUN_TESTS}")
+    endif()
 endif()
 
 ac_config_headers("config.h")
@@ -322,8 +336,8 @@ re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_rust}" "${re2c_manpage
 re2c_gen_help("${re2c_help_source}" "${re2c_help}" "${re2c_help_bootstrap}")
 add_custom_target(docs DEPENDS "${re2c_docs}")
 
-# install and test targets are enabled only if re2c is the root project
-if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+# install targets are enabled only if re2c is the root project
+if(RE2C_IS_ROOT_PROJECT)
     # install
     install(TARGETS re2c RUNTIME DESTINATION bin)
     install(FILES "${re2c_manpage_c}" DESTINATION "share/man/man1")
@@ -343,7 +357,9 @@ if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
         COMMAND "${CMAKE_COMMAND}" -E remove_directory "doc"
         COMMAND "${CMAKE_COMMAND}" --build "${CMAKE_CURRENT_BINARY_DIR}"
     )
+endif()
 
+if(RE2C_BUILD_TESTS)
     # tests
     add_custom_target(tests
         DEPENDS "${RE2C_RUN_TESTS}"
@@ -507,12 +523,14 @@ if (RE2C_BUILD_LIBS)
     endif()
 
     # libre2c test
-    add_executable(test_libre2c lib/test.cc)
-    target_link_libraries(test_libre2c libre2c)
-    target_link_libraries(test_libre2c test_libre2c_objects_autogen)
-    add_custom_target(check_libre2c
-        COMMAND ./test_libre2c
-    )
+    if(RE2C_BUILD_TESTS)
+        add_executable(test_libre2c lib/test.cc)
+        target_link_libraries(test_libre2c libre2c)
+        target_link_libraries(test_libre2c test_libre2c_objects_autogen)
+        add_custom_target(check_libre2c
+            COMMAND ./test_libre2c
+        )
+    endif()
 
     if(RE2C_BUILD_BENCHMARKS)
         add_subdirectory(benchmarks/submatch_nfa)
@@ -521,15 +539,16 @@ if (RE2C_BUILD_LIBS)
     endif()
 else()
     # empty check target
-    add_custom_target(check_libre2c)
+    if(RE2C_BUILD_TESTS)
+        add_custom_target(check_libre2c)
+    endif()
 endif()
 
 if(RE2C_BUILD_BENCHMARKS)
     add_subdirectory(benchmarks/submatch_dfa_aot)
 endif()
 
-# only add check target if toplevel project
-if (CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+if(RE2C_BUILD_TESTS)
     add_custom_target(check)
     add_dependencies(check check_re2c check_libre2c)
 endif()
