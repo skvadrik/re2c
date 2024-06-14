@@ -12,7 +12,7 @@ DEBUG = False
 class State:
     def __init__(self, file):
         self.file = file
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - 1 # exclude terminating null
         self.cur = self.lim
         self.mar = self.lim
@@ -32,7 +32,7 @@ def fill(st):
         return Status.BIG_PACKET
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -42,59 +42,59 @@ def fill(st):
     bytes = st.file.read(BUFSIZE - st.lim - 1) # -1 for sentinel
     if bytes:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
-    st.buf += b'\0' # append sentinel
+    st.str += b'\0' # append sentinel
 
     return Status.READY
 
-def lex(st, recv):
+def lex(yyrecord, recv):
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         
-        yystate = st.state
+        yystate = yyrecord.state
         while True:
             match yystate:
                 case -1|0:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
-                            st.state = 8
+                        if yyrecord.lim <= yyrecord.cur:
+                            yyrecord.state = 8
                             return Status.WAITING, recv
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 1
                         continue
                     if yych <= 0x60:
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 1
                         continue
                     if yych <= 0x7A:
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 3
                         continue
-                    st.cur += 1
+                    yyrecord.cur += 1
                     yystate = 1
                     continue
                 case 1:
                     yystate = 2
                     continue
                 case 2:
-                    st.state = -1
+                    yyrecord.state = -1
                     return Status.BAD_PACKET, recv
                 case 3:
-                    st.mar = st.cur
-                    yych = st.buf[st.cur]
+                    yyrecord.mar = yyrecord.cur
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x3B:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
-                                st.state = 9
+                            if yyrecord.lim <= yyrecord.cur:
+                                yyrecord.state = 9
                                 return Status.WAITING, recv
                             yystate = 2
                             continue
                         if yych <= 0x3A:
                             yystate = 2
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 4
                         continue
                     else:
@@ -102,26 +102,26 @@ def lex(st, recv):
                             yystate = 2
                             continue
                         if yych <= 0x7A:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 5
                             continue
                         yystate = 2
                         continue
                 case 4:
-                    st.state = -1
+                    yyrecord.state = -1
                     recv += 1
                     break
                 case 5:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x3B:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
-                                st.state = 10
+                            if yyrecord.lim <= yyrecord.cur:
+                                yyrecord.state = 10
                                 return Status.WAITING, recv
                             yystate = 6
                             continue
                         if yych >= 0x3B:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 4
                             continue
                         yystate = 6
@@ -131,32 +131,32 @@ def lex(st, recv):
                             yystate = 6
                             continue
                         if yych <= 0x7A:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 5
                             continue
                         yystate = 6
                         continue
                 case 6:
-                    st.cur = st.mar
+                    yyrecord.cur = yyrecord.mar
                     yystate = 2
                     continue
                 case 7:
-                    st.state = -1
+                    yyrecord.state = -1
                     return Status.END, recv
                 case 8:
-                    if st.cur >= st.lim:
+                    if yyrecord.lim <= yyrecord.cur:
                         yystate = 7
                         continue
                     yystate = 0
                     continue
                 case 9:
-                    if st.cur >= st.lim:
+                    if yyrecord.lim <= yyrecord.cur:
                         yystate = 2
                         continue
                     yystate = 3
                     continue
                 case 10:
-                    if st.cur >= st.lim:
+                    if yyrecord.lim <= yyrecord.cur:
                         yystate = 6
                         continue
                     yystate = 5
@@ -196,7 +196,7 @@ def test(packets, expect):
                 send += 1
 
             status = fill(st)
-            if DEBUG: print("queue: '{}', status: {}".format(st.buf, status))
+            if DEBUG: print("queue: '{}', status: {}".format(st.str, status))
             if status == Status.BIG_PACKET:
                 if DEBUG: print("error: packet too big")
                 break

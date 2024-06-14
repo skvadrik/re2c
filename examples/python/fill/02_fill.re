@@ -9,7 +9,7 @@ BUFSIZE = 4096
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - YYMAXFILL
         self.cur = self.lim
         self.mar = self.lim
@@ -33,7 +33,7 @@ def fill(st, need):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -44,31 +44,27 @@ def fill(st, need):
     if not bytes:
         st.eof = True # end of file
         st.lim += YYMAXFILL
-        st.buf += b"\0" * YYMAXFILL
+        st.str += b"\0" * YYMAXFILL
     else:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
     return Status.OK
 
-def lex(st):
+def lex(yyrecord):
     count = 0
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         /*!re2c
-            re2c:define:YYPEEK     = "st.buf[st.cur]";
-            re2c:define:YYSKIP     = "st.cur += 1";
-            re2c:define:YYBACKUP   = "st.mar = st.cur";
-            re2c:define:YYRESTORE  = "st.cur = st.mar";
-            re2c:define:YYLESSTHAN = "st.lim - st.cur < @@";
-            re2c:define:YYFILL     = "if fill(st, @@) != Status.OK: return -1";
-            re2c:indent:top        = 2;
+            re2c:api = record;
+            re2c:define:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
+            re2c:indent:top = 2;
 
             str = ['] ([^'\\] | [\\][^])* ['];
 
             [\x00] {
                 # Check that it is the sentinel, not some unexpected null.
-                return count if st.tok == st.lim - YYMAXFILL else -1
+                return count if yyrecord.tok == yyrecord.lim - YYMAXFILL else -1
             }
             str {
                 count += 1

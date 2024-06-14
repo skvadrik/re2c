@@ -1,6 +1,8 @@
 root_dir=$(pwd)
 
 for f in $(find -name '*.re'); do
+    grep -q 'assert' $f || continue # skip incomplete tests
+
     cd $(dirname $f)
 
     pyfile="$(basename ${f%.re}.py)"

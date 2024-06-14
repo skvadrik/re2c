@@ -11,7 +11,7 @@ DEBUG = False
 class State:
     def __init__(self, file):
         self.file = file
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - 1 # exclude terminating null
         self.cur = self.lim
         self.mar = self.lim
@@ -31,7 +31,7 @@ def fill(st):
         return Status.BIG_PACKET
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -41,24 +41,18 @@ def fill(st):
     bytes = st.file.read(BUFSIZE - st.lim - 1) # -1 for sentinel
     if bytes:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
-    st.buf += b'\0' # append sentinel
+    st.str += b'\0' # append sentinel
 
     return Status.READY
 
-def lex(st, recv):
+def lex(yyrecord, recv):
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         /*!re2c
-            re2c:define:YYPEEK     = "st.buf[st.cur]";
-            re2c:define:YYSKIP     = "st.cur += 1";
-            re2c:define:YYBACKUP   = "st.mar = st.cur";
-            re2c:define:YYRESTORE  = "st.cur = st.mar";
-            re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-            re2c:define:YYGETSTATE = "st.state";
-            re2c:define:YYSETSTATE = "st.state = @@";
-            re2c:define:YYFILL     = "return Status.WAITING, recv";
+            re2c:api = record;
+            re2c:define:YYFILL = "return Status.WAITING, recv";
             re2c:eof = 0;
             re2c:indent:top = 2;
 
@@ -103,7 +97,7 @@ def test(packets, expect):
                 send += 1
 
             status = fill(st)
-            if DEBUG: print("queue: '{}', status: {}".format(st.buf, status))
+            if DEBUG: print("queue: '{}', status: {}".format(st.str, status))
             if status == Status.BIG_PACKET:
                 if DEBUG: print("error: packet too big")
                 break

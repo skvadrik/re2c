@@ -8,7 +8,7 @@ BUFSIZE = 4096
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - 1 # exclude terminating null
         self.cur = self.lim
         self.mar = self.lim
@@ -32,7 +32,7 @@ def fill(st):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -44,22 +44,18 @@ def fill(st):
         st.eof = True # end of file
     else:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
-    st.buf += b'\0' # append sentinel
+    st.str += b'\0' # append sentinel
 
     return Status.OK
 
-def lex(st, count):
+def lex(yyrecord, count):
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         /*!re2c
-            re2c:define:YYPEEK     = "st.buf[st.cur]";
-            re2c:define:YYSKIP     = "st.cur += 1";
-            re2c:define:YYBACKUP   = "st.mar = st.cur";
-            re2c:define:YYRESTORE  = "st.cur = st.mar";
-            re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-            re2c:define:YYFILL     = "fill(st) == Status.OK";
+            re2c:api = record;
+            re2c:define:YYFILL = "fill(yyrecord) == Status.OK";
             re2c:eof = 0;
             re2c:indent:top = 2;
 

@@ -6,10 +6,10 @@
     while True:
         match yystate:
             case 0:
-                if YYLESSTHAN:
-                    YYFILL
-                yych = YYPEEK
-                YYSKIP
+                if yylessthan:
+                    yyfill
+                yych = yypeek
+                yyskip
                 match yych:
                     case 0x61:
                         yystate = 2
