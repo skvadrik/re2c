@@ -7,13 +7,10 @@ class State:
         self.mar = 0
 
 /*!re2c // Common re2c definitions shared between all functions.
+    re2c:api = record;
+    re2c:variable:yyrecord = st;
     re2c:yyfill:enable = 0;
     re2c:indent:top = 2;
-    re2c:define:YYPEEK    = "st.str[st.cur]";
-    re2c:define:YYSKIP    = "st.cur += 1";
-    re2c:define:YYBACKUP  = "st.mar = st.cur";
-    re2c:define:YYRESTORE = "st.cur = st.mar";
-    re2c:define:YYSHIFT   = "st.cur += @@";
 */
 
 def parse_u32(str):

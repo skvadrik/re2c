@@ -11,7 +11,7 @@ YYMAXFILL = 1
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - YYMAXFILL
         self.cur = self.lim
         self.mar = self.lim
@@ -35,7 +35,7 @@ def fill(st, need):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -46,26 +46,26 @@ def fill(st, need):
     if not bytes:
         st.eof = True # end of file
         st.lim += YYMAXFILL
-        st.buf += b"\0" * YYMAXFILL
+        st.str += b"\0" * YYMAXFILL
     else:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
     return Status.OK
 
-def lex(st):
+def lex(yyrecord):
     count = 0
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         
         yystate = 0
         while True:
             match yystate:
                 case 0:
-                    if st.lim - st.cur < 1:
-                        if fill(st, 1) != Status.OK: return -1
-                    yych = st.buf[st.cur]
-                    st.cur += 1
+                    if yyrecord.lim <= yyrecord.cur:
+                        if fill(yyrecord, 1) != Status.OK: return -1
+                    yych = yyrecord.str[yyrecord.cur]
+                    yyrecord.cur += 1
                     if yych <= 0x20:
                         if yych <= 0x00:
                             yystate = 1
@@ -83,23 +83,23 @@ def lex(st):
                         continue
                 case 1:
                     # Check that it is the sentinel, not some unexpected null.
-                    return count if st.tok == st.lim - YYMAXFILL else -1
+                    return count if yyrecord.tok == yyrecord.lim - YYMAXFILL else -1
                 case 2:
                     return -1
                 case 3:
-                    if st.lim - st.cur < 1:
-                        if fill(st, 1) != Status.OK: return -1
-                    yych = st.buf[st.cur]
+                    if yyrecord.lim <= yyrecord.cur:
+                        if fill(yyrecord, 1) != Status.OK: return -1
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych == 0x20:
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 3
                         continue
                     break
                 case 4:
-                    if st.lim - st.cur < 1:
-                        if fill(st, 1) != Status.OK: return -1
-                    yych = st.buf[st.cur]
-                    st.cur += 1
+                    if yyrecord.lim <= yyrecord.cur:
+                        if fill(yyrecord, 1) != Status.OK: return -1
+                    yych = yyrecord.str[yyrecord.cur]
+                    yyrecord.cur += 1
                     if yych == 0x27:
                         yystate = 5
                         continue
@@ -112,9 +112,9 @@ def lex(st):
                     count += 1
                     break
                 case 6:
-                    if st.lim - st.cur < 1:
-                        if fill(st, 1) != Status.OK: return -1
-                    st.cur += 1
+                    if yyrecord.lim <= yyrecord.cur:
+                        if fill(yyrecord, 1) != Status.OK: return -1
+                    yyrecord.cur += 1
                     yystate = 4
                     continue
                 case _:

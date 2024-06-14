@@ -10,13 +10,10 @@ class State:
         /*!stags:re2c format = "\n        self.@@ = 0"; */
 /*!header:re2c:off*/
 
-def lex(st):
+def lex(yyrecord):
     /*!re2c
-        re2c:define:YYPEEK  = "st.str[st.cur]";
-        re2c:define:YYSKIP  = "st.cur += 1";
-        re2c:define:YYSTAGP = "@@ = st.cur";
+        re2c:api = record;
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
         re2c:yyfill:enable = 0;
         re2c:indent:top = 1;
         re2c:header = "lexer/state.py";

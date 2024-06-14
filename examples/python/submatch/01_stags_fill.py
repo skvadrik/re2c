@@ -5,7 +5,6 @@ from collections import namedtuple
 from enum import Enum
 import os
 
-NONE = -1
 BUFSIZE = 4096
 
 SemVer = namedtuple('SemVer', 'major minor patch')
@@ -13,16 +12,16 @@ SemVer = namedtuple('SemVer', 'major minor patch')
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - 1 # exclude terminating null
         self.cur = self.lim
         self.mar = self.lim
         self.tok = self.lim
         self.eof = False
         
-        self.yyt1 = NONE
-        self.yyt2 = NONE
-        self.yyt3 = NONE
+        self.yyt1 = -1
+        self.yyt2 = -1
+        self.yyt3 = -1
 
     def __del__(self):
         self.file.close()
@@ -41,7 +40,7 @@ def fill(st):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -53,9 +52,9 @@ def fill(st):
         st.eof = True # end of file
     else:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
-    st.buf += b'\0' # append sentinel
+    st.str += b'\0' # append sentinel
 
     return Status.OK
 
@@ -68,9 +67,9 @@ def lex(st, count):
         while True:
             match yystate:
                 case 0:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
+                        if st.lim <= st.cur:
                             if fill(st) == Status.OK:
                                 yystate = 0
                                 continue
@@ -97,10 +96,10 @@ def lex(st, count):
                     return None
                 case 3:
                     st.mar = st.cur
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x2E:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
+                            if st.lim <= st.cur:
                                 if fill(st) == Status.OK:
                                     yystate = 3
                                     continue
@@ -123,9 +122,9 @@ def lex(st, count):
                         yystate = 2
                         continue
                 case 4:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
+                        if st.lim <= st.cur:
                             if fill(st) == Status.OK:
                                 yystate = 4
                                 continue
@@ -135,7 +134,7 @@ def lex(st, count):
                         yystate = 5
                         continue
                     if yych <= 0x39:
-                        st.yyt1 = st.cur
+                        yyt1 = st.cur
                         st.cur += 1
                         yystate = 7
                         continue
@@ -146,10 +145,10 @@ def lex(st, count):
                     yystate = 2
                     continue
                 case 6:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x2E:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
+                            if st.lim <= st.cur:
                                 if fill(st) == Status.OK:
                                     yystate = 6
                                     continue
@@ -172,10 +171,10 @@ def lex(st, count):
                         yystate = 5
                         continue
                 case 7:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x2D:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
+                            if st.lim <= st.cur:
                                 if fill(st) == Status.OK:
                                     yystate = 7
                                     continue
@@ -184,14 +183,14 @@ def lex(st, count):
                         if yych != 0x0A:
                             yystate = 5
                             continue
-                        st.yyt2 = st.cur
-                        st.yyt3 = NONE
+                        yyt2 = st.cur
+                        yyt3 = -1
                         st.cur += 1
                         yystate = 8
                         continue
                     else:
                         if yych <= 0x2E:
-                            st.yyt2 = st.cur
+                            yyt2 = st.cur
                             st.cur += 1
                             yystate = 9
                             continue
@@ -205,20 +204,20 @@ def lex(st, count):
                         yystate = 5
                         continue
                 case 8:
-                    t2 = st.yyt1
-                    t3 = st.yyt2
-                    t4 = st.yyt3
-                    t1 = st.yyt1
-                    t1 += -1
-                    major = int(st.buf[st.tok:t1]);
-                    minor = int(st.buf[t2:t3]);
-                    patch = int(st.buf[t4:st.cur - 1]) if t4 != NONE else 0
+                    t2 = yyt1
+                    t3 = yyt2
+                    t4 = yyt3
+                    t1 = yyt1
+                    t1 -= 1
+                    major = int(st.str[st.tok:t1]);
+                    minor = int(st.str[t2:t3]);
+                    patch = int(st.str[t4:st.cur - 1]) if t4 != -1 else 0
                     vers.append(SemVer(major, minor, patch))
                     break
                 case 9:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
+                        if st.lim <= st.cur:
                             if fill(st) == Status.OK:
                                 yystate = 9
                                 continue
@@ -230,15 +229,15 @@ def lex(st, count):
                     if yych >= 0x3A:
                         yystate = 5
                         continue
-                    st.yyt3 = st.cur
+                    yyt3 = st.cur
                     st.cur += 1
                     yystate = 10
                     continue
                 case 10:
-                    yych = st.buf[st.cur]
+                    yych = st.str[st.cur]
                     if yych <= 0x0A:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
+                            if st.lim <= st.cur:
                                 if fill(st) == Status.OK:
                                     yystate = 10
                                     continue

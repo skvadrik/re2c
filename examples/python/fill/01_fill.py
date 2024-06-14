@@ -9,7 +9,7 @@ BUFSIZE = 4096
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.buf = bytearray(BUFSIZE)
+        self.str = bytearray(BUFSIZE)
         self.lim = BUFSIZE - 1 # exclude terminating null
         self.cur = self.lim
         self.mar = self.lim
@@ -33,7 +33,7 @@ def fill(st):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.buf = st.buf[st.tok:st.lim]
+    st.str = st.str[st.tok:st.lim]
     st.cur -= st.tok;
     st.mar -= st.tok;
     st.lim -= st.tok;
@@ -45,45 +45,45 @@ def fill(st):
         st.eof = True # end of file
     else:
         st.lim += len(bytes);
-        st.buf += bytes
+        st.str += bytes
 
-    st.buf += b'\0' # append sentinel
+    st.str += b'\0' # append sentinel
 
     return Status.OK
 
-def lex(st, count):
+def lex(yyrecord, count):
     while True:
-        st.tok = st.cur
+        yyrecord.tok = yyrecord.cur
         
         yystate = 0
         while True:
             match yystate:
                 case 0:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x20:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
-                                if fill(st) == Status.OK:
+                            if yyrecord.lim <= yyrecord.cur:
+                                if fill(yyrecord) == Status.OK:
                                     yystate = 0
                                     continue
                                 yystate = 9
                                 continue
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 1
                             continue
                         if yych >= 0x20:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 3
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 1
                         continue
                     else:
                         if yych == 0x27:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 5
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 1
                         continue
                 case 1:
@@ -92,16 +92,16 @@ def lex(st, count):
                 case 2:
                     return -1
                 case 3:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
-                            if fill(st) == Status.OK:
+                        if yyrecord.lim <= yyrecord.cur:
+                            if fill(yyrecord) == Status.OK:
                                 yystate = 3
                                 continue
                         yystate = 4
                         continue
                     if yych == 0x20:
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 3
                         continue
                     yystate = 4
@@ -109,70 +109,70 @@ def lex(st, count):
                 case 4:
                     break
                 case 5:
-                    st.mar = st.cur
-                    yych = st.buf[st.cur]
+                    yyrecord.mar = yyrecord.cur
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych >= 0x01:
                         yystate = 7
                         continue
-                    if st.cur >= st.lim:
-                        if fill(st) == Status.OK:
+                    if yyrecord.lim <= yyrecord.cur:
+                        if fill(yyrecord) == Status.OK:
                             yystate = 5
                             continue
                         yystate = 2
                         continue
-                    st.cur += 1
+                    yyrecord.cur += 1
                     yystate = 6
                     continue
                 case 6:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     yystate = 7
                     continue
                 case 7:
                     if yych <= 0x27:
                         if yych <= 0x00:
-                            if st.cur >= st.lim:
-                                if fill(st) == Status.OK:
+                            if yyrecord.lim <= yyrecord.cur:
+                                if fill(yyrecord) == Status.OK:
                                     yystate = 6
                                     continue
                                 yystate = 10
                                 continue
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 6
                             continue
                         if yych <= 0x26:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 6
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                     else:
                         if yych == 0x5C:
-                            st.cur += 1
+                            yyrecord.cur += 1
                             yystate = 8
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 6
                         continue
                     count += 1
                     break
                 case 8:
-                    yych = st.buf[st.cur]
+                    yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x00:
-                        if st.cur >= st.lim:
-                            if fill(st) == Status.OK:
+                        if yyrecord.lim <= yyrecord.cur:
+                            if fill(yyrecord) == Status.OK:
                                 yystate = 8
                                 continue
                             yystate = 10
                             continue
-                        st.cur += 1
+                        yyrecord.cur += 1
                         yystate = 6
                         continue
-                    st.cur += 1
+                    yyrecord.cur += 1
                     yystate = 6
                     continue
                 case 9:
                     return count
                 case 10:
-                    st.cur = st.mar
+                    yyrecord.cur = yyrecord.mar
                     yystate = 2
                     continue
                 case _:

@@ -5,36 +5,36 @@ from lexer.state import State
 
 
 
-def lex(st):
+def lex(yyrecord):
     
     yystate = 0
     while True:
         match yystate:
             case 0:
-                yych = st.str[st.cur]
+                yych = yyrecord.str[yyrecord.cur]
                 if yych <= 0x60:
-                    st.yyt1 = st.cur
+                    yyt1 = yyrecord.cur
                     yystate = 1
                     continue
                 if yych <= 0x61:
-                    st.cur += 1
+                    yyrecord.cur += 1
                     yystate = 0
                     continue
                 if yych <= 0x62:
-                    st.yyt1 = st.cur
-                    st.cur += 1
+                    yyt1 = yyrecord.cur
+                    yyrecord.cur += 1
                     yystate = 2
                     continue
-                st.yyt1 = st.cur
+                yyt1 = yyrecord.cur
                 yystate = 1
                 continue
             case 1:
-                t = st.yyt1
+                t = yyt1
                 return t
             case 2:
-                yych = st.str[st.cur]
+                yych = yyrecord.str[yyrecord.cur]
                 if yych == 0x62:
-                    st.cur += 1
+                    yyrecord.cur += 1
                     yystate = 2
                     continue
                 yystate = 1
@@ -52,4 +52,4 @@ class State:
         self.cur = 0
         
         self.yyt1 = 0
-python/headers/header.re:24:21: warning: rule matches empty string [-Wmatch-empty-string]
+python/headers/header.re:21:21: warning: rule matches empty string [-Wmatch-empty-string]

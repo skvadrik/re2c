@@ -63,7 +63,7 @@ def parse_u32(str):
             case 3:
                 return parse_oct(st)
             case 4:
-                st.cur += -1
+                st.cur -= 1
                 return parse_dec(st)
             case 5:
                 yych = st.str[st.cur]
@@ -107,10 +107,10 @@ def parse_u32(str):
                     yystate = 6
                     continue
             case 8:
-                st.cur += -1
+                st.cur -= 1
                 return parse_bin(st)
             case 9:
-                st.cur += -1
+                st.cur -= 1
                 return parse_hex(st)
             case _:
                 raise "internal lexer error"
