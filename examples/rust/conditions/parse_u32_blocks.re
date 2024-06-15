@@ -9,13 +9,10 @@ struct State<'a> {
 }
 
 /*!re2c // Common re2c definitions shared between all functions.
+    re2c:api = record;
+    re2c:variable:yyrecord = st;
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE   = u8;
-    re2c:define:YYPEEK    = "*st.str.get_unchecked(st.cur)";
-    re2c:define:YYSKIP    = "st.cur += 1;";
-    re2c:define:YYBACKUP  = "st.mar = st.cur;";
-    re2c:define:YYRESTORE = "st.cur = st.mar;";
-    re2c:define:YYSHIFT   = "st.cur = (st.cur as isize + @@) as usize;";
+    re2c:define:YYCTYPE = u8;
 */
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow

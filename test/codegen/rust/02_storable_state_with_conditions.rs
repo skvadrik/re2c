@@ -19,7 +19,7 @@ macro_rules! log {
 
 struct State {
     file: File,
-    buf: [u8; BUFSIZE + 1],
+    str: [u8; BUFSIZE + 1],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -40,7 +40,7 @@ fn fill(st: &mut State) -> Status {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.buf.as_mut_ptr();
+        let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.lim -= shift;
@@ -49,117 +49,117 @@ fn fill(st: &mut State) -> Status {
     st.tok -= shift;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE]) {
+    match st.file.read(&mut st.str[st.lim..BUFSIZE]) {
         Ok(n) => st.lim += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.buf[st.lim] = 0; // append sentinel symbol
+    st.str[st.lim] = 0; // append sentinel symbol
 
     return Status::Ready;
 }
 
-fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
+fn lex(yyrecord: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     #[allow(unused_assignments)]
     let mut yych: u8 = 0;
     'lex: loop {
-        st.tok = st.cur;
+        yyrecord.tok = yyrecord.cur;
     
 {
-	let mut yystate : isize = st.state;
+	let mut yystate : isize = yyrecord.state;
 	'yyl: loop {
 		match yystate {
 			-1 ..= 0 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x09 |
 					0x20 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 2;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
 					0x61 ..= 0x7A => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 21;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 21;
 							return Status::Waiting;
 						}
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 1;
 						continue 'yyl;
 					}
 				}
 			}
 			1 => {
-				st.state = YYC_INIT;
+				yyrecord.state = YYC_INIT;
 				{ return Status::BadPacket; }
 			}
 			2 => {
-				st.cur = (st.cur as isize + -1) as usize;
-				st.state = YYC_SPACES;
+				yyrecord.cur -= 1;
+				yyrecord.state = YYC_SPACES;
 				yystate = YYC_SPACES;
 				continue 'yyl;
 			}
 			3 => {
-				st.cur = (st.cur as isize + -1) as usize;
-				st.state = YYC_NUMBER;
+				yyrecord.cur -= 1;
+				yyrecord.state = YYC_NUMBER;
 				yystate = YYC_NUMBER;
 				continue 'yyl;
 			}
 			4 => {
-				st.cur = (st.cur as isize + -1) as usize;
-				st.state = YYC_WORD;
+				yyrecord.cur -= 1;
+				yyrecord.state = YYC_WORD;
 				yystate = YYC_WORD;
 				continue 'yyl;
 			}
 			5 => {
-				st.state = YYC_INIT;
+				yyrecord.state = YYC_INIT;
 				{ return Status::End; }
 			}
 			6 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x09 |
 					0x20 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 22;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 22;
 							return Status::Waiting;
 						}
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
 				}
 			}
 			7 => {
-				st.state = YYC_SPACES;
+				yyrecord.state = YYC_SPACES;
 				{ return Status::BadPacket; }
 			}
 			8 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x09 |
 					0x20 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 23;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 23;
 							return Status::Waiting;
 						}
 						yystate = 9;
@@ -168,47 +168,47 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			9 => {
-				st.state = YYC_INIT;
+				yyrecord.state = YYC_INIT;
 				{ continue 'lex; }
 			}
 			10 => {
-				st.state = YYC_SPACES;
+				yyrecord.state = YYC_SPACES;
 				{ return Status::End; }
 			}
 			11 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x30 ..= 0x39 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 13;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 24;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 24;
 							return Status::Waiting;
 						}
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 12;
 						continue 'yyl;
 					}
 				}
 			}
 			12 => {
-				st.state = YYC_NUMBER;
+				yyrecord.state = YYC_NUMBER;
 				{ return Status::BadPacket; }
 			}
 			13 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x30 ..= 0x39 => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 13;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 25;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 25;
 							return Status::Waiting;
 						}
 						yystate = 14;
@@ -217,47 +217,47 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			14 => {
-				st.state = YYC_SPACES;
+				yyrecord.state = YYC_SPACES;
 				{ *nc += 1; continue 'lex; }
 			}
 			15 => {
-				st.state = YYC_NUMBER;
+				yyrecord.state = YYC_NUMBER;
 				{ return Status::End; }
 			}
 			16 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x61 ..= 0x7A => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 18;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 26;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 26;
 							return Status::Waiting;
 						}
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 17;
 						continue 'yyl;
 					}
 				}
 			}
 			17 => {
-				st.state = YYC_WORD;
+				yyrecord.state = YYC_WORD;
 				{ return Status::BadPacket; }
 			}
 			18 => {
-				yych = st.buf[st.cur];
+				yych = yyrecord.str[yyrecord.cur];
 				match yych {
 					0x61 ..= 0x7A => {
-						st.cur += 1;
+						yyrecord.cur += 1;
 						yystate = 18;
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
-							st.state = 27;
+						if yyrecord.lim <= yyrecord.cur {
+							yyrecord.state = 27;
 							return Status::Waiting;
 						}
 						yystate = 19;
@@ -266,15 +266,15 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				}
 			}
 			19 => {
-				st.state = YYC_SPACES;
+				yyrecord.state = YYC_SPACES;
 				{ *wc += 1; continue 'lex; }
 			}
 			20 => {
-				st.state = YYC_WORD;
+				yyrecord.state = YYC_WORD;
 				{ return Status::End; }
 			}
 			21 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 5;
 					continue 'yyl;
 				}
@@ -282,7 +282,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			22 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 10;
 					continue 'yyl;
 				}
@@ -290,7 +290,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			23 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 9;
 					continue 'yyl;
 				}
@@ -298,7 +298,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			24 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 15;
 					continue 'yyl;
 				}
@@ -306,7 +306,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			25 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 14;
 					continue 'yyl;
 				}
@@ -314,7 +314,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			26 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 20;
 					continue 'yyl;
 				}
@@ -322,7 +322,7 @@ fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
 				continue 'yyl;
 			}
 			27 => {
-				if st.cur >= st.lim {
+				if yyrecord.lim <= yyrecord.cur {
 					yystate = 19;
 					continue 'yyl;
 				}
@@ -352,7 +352,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
     // of buffer, the character at `lim` offset is the sentinel (null).
     let mut state = State {
         file: fr,
-        buf: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
+        str: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
         cur: BUFSIZE,
         mar: BUFSIZE,
         tok: BUFSIZE,
@@ -382,7 +382,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.buf));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
             if status == Status::BigPacket {
                 log!("error: packet too big");
                 break;

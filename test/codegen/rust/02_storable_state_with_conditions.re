@@ -14,7 +14,7 @@ macro_rules! log {
 
 struct State {
     file: File,
-    buf: [u8; BUFSIZE + 1],
+    str: [u8; BUFSIZE + 1],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -35,7 +35,7 @@ fn fill(st: &mut State) -> Status {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.buf.as_mut_ptr();
+        let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.lim -= shift;
@@ -44,31 +44,24 @@ fn fill(st: &mut State) -> Status {
     st.tok -= shift;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE]) {
+    match st.file.read(&mut st.str[st.lim..BUFSIZE]) {
         Ok(n) => st.lim += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.buf[st.lim] = 0; // append sentinel symbol
+    st.str[st.lim] = 0; // append sentinel symbol
 
     return Status::Ready;
 }
 
-fn lex(st: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
+fn lex(yyrecord: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     #[allow(unused_assignments)]
     let mut yych: u8 = 0;
     'lex: loop {
-        st.tok = st.cur;
+        yyrecord.tok = yyrecord.cur;
     /*!re2c
+        re2c:api = record;
         re2c:eof = 0;
         re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK = "st.buf[st.cur]";
-        re2c:define:YYSKIP = "st.cur += 1;";
-        re2c:define:YYBACKUP = "st.mar = st.cur;";
-        re2c:define:YYRESTORE = "st.cur = st.mar;";
-        re2c:define:YYSHIFT = "st.cur = (st.cur as isize + @@) as usize;";
-        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@;";
         re2c:define:YYFILL = "return Status::Waiting;";
 
         digit  = [0-9];
@@ -105,7 +98,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
     // of buffer, the character at `lim` offset is the sentinel (null).
     let mut state = State {
         file: fr,
-        buf: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
+        str: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
         cur: BUFSIZE,
         mar: BUFSIZE,
         tok: BUFSIZE,
@@ -135,7 +128,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.buf));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
             if status == Status::BigPacket {
                 log!("error: packet too big");
                 break;

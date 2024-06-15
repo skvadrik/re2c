@@ -11,19 +11,16 @@ pub struct State<'a> {
 }
 /*!header:re2c:off*/
 
-fn lex(st: &mut State) -> usize {
-    assert_eq!(st.str.last(), Some(&0)); // expect null-terminated input
+fn lex(yyrecord: &mut State) -> usize {
+    assert_eq!(yyrecord.str.last(), Some(&0)); // expect null-terminated input
 
     let t: usize;
     /*!re2c
         re2c:header = "lexer/state.rs";
         re2c:yyfill:enable = 0;
+        re2c:api = record;
         re2c:define:YYCTYPE = "u8";
-        re2c:define:YYPEEK  = "*st.str.get_unchecked(st.cur)";
-        re2c:define:YYSKIP  = "st.cur += 1;";
-        re2c:define:YYSTAGP = "@@ = st.cur;";
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
 
         [a]* @t [b]* { return t; }
     */

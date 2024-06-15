@@ -7,7 +7,7 @@ const BUFSIZE: usize = 4096;
 
 struct State {
     file: File,
-    buf: [u8; BUFSIZE],
+    str: [u8; BUFSIZE],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -25,18 +25,18 @@ fn fill(st: &mut State) -> Fill {
     if st.tok < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.buf.copy_within(st.tok..st.lim, 0);
+    st.str.copy_within(st.tok..st.lim, 0);
     st.lim -= st.tok;
     st.cur -= st.tok;
     st.mar = st.mar.overflowing_sub(st.tok).0; // may underflow if marker is unused
     st.tok = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE - 1]) { // -1 for sentinel
+    match st.file.read(&mut st.str[st.lim..BUFSIZE - 1]) { // -1 for sentinel
         Ok(n) => {
             st.lim += n;
             st.eof = n == 0; // end of file
-            st.buf[st.lim] = 0; // append sentinel
+            st.str[st.lim] = 0; // append sentinel
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -44,19 +44,15 @@ fn fill(st: &mut State) -> Fill {
     return Fill::Ok;
 }
 
-fn lex(st: &mut State) -> isize {
+fn lex(yyrecord: &mut State) -> isize {
     let mut count: isize = 0;
 
     'lex: loop {
-        st.tok = st.cur;
+        yyrecord.tok = yyrecord.cur;
     /*!re2c
-        re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP     = "st.cur += 1;";
-        re2c:define:YYBACKUP   = "st.mar = st.cur;";
-        re2c:define:YYRESTORE  = "st.cur = st.mar;";
-        re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-        re2c:define:YYFILL     = "fill(st) == Fill::Ok";
+        re2c:api = record;
+        re2c:define:YYCTYPE = u8;
+        re2c:define:YYFILL = "fill(yyrecord) == Fill::Ok";
         re2c:eof = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];
@@ -94,7 +90,7 @@ fn main() {
     let mut st = State {
         file: file,
         // Sentinel (at `lim` offset) is set to null, which triggers YYFILL.
-        buf: [0; BUFSIZE],
+        str: [0; BUFSIZE],
         lim: lim,
         cur: lim,
         mar: lim,

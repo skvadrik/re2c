@@ -77,7 +77,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 			}
 			3 => { return parse_oct(&mut st); },
 			4 => {
-				st.cur = (st.cur as isize + -1) as usize;
+				st.cur -= 1;
 				{ return parse_dec(&mut st); }
 			}
 			5 => {
@@ -116,11 +116,11 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				}
 			}
 			8 => {
-				st.cur = (st.cur as isize + -1) as usize;
+				st.cur -= 1;
 				{ return parse_bin(&mut st); }
 			}
 			9 => {
-				st.cur = (st.cur as isize + -1) as usize;
+				st.cur -= 1;
 				{ return parse_hex(&mut st); }
 			}
 			_ => panic!("internal lexer error"),

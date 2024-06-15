@@ -4,11 +4,11 @@ use std::fs::File;
 use std::io::{Read, Write};
 
 const BUFSIZE: usize = 4096;
-const NONE: usize = std::usize::MAX;
+const NONE: usize = usize::MAX;
 
 struct State {
     file: File,
-    buf: [u8; BUFSIZE],
+    str: [u8; BUFSIZE],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -42,7 +42,7 @@ fn fill(st: &mut State) -> Fill {
     if st.tok < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.buf.copy_within(st.tok..st.lim, 0);
+    st.str.copy_within(st.tok..st.lim, 0);
     st.lim -= st.tok;
     st.cur -= st.tok;
     shift!(st.mar, st.tok);
@@ -53,11 +53,11 @@ fn fill(st: &mut State) -> Fill {
     st.tok = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE - 1]) {
+    match st.file.read(&mut st.str[st.lim..BUFSIZE - 1]) {
         Ok(n) => {
             st.lim += n;
             st.eof = n == 0;
-            st.buf[st.lim] = 0;
+            st.str[st.lim] = 0;
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -74,26 +74,19 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
     'parse: loop {
         st.tok = st.cur;
     /*!re2c
+        re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*st.buf.get_unchecked(st.cur)";
-        re2c:define:YYSKIP      = "st.cur += 1;";
-        re2c:define:YYBACKUP    = "st.mar = st.cur;";
-        re2c:define:YYRESTORE   = "st.cur = st.mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = st.cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} -= -@@{shift}isize as usize;";
-        re2c:define:YYLESSTHAN  = "st.cur >= st.lim";
-        re2c:define:YYFILL      = "fill(st) == Fill::Ok";
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
+        re2c:variable:yyrecord = st;
+        re2c:define:YYCTYPE = u8;
+        re2c:define:YYFILL = "fill(st) == Fill::Ok";
 
         num = [0-9]+;
 
         num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
-            let major = s2n(&st.buf[st.tok..t1]);
-            let minor = s2n(&st.buf[t2..t3]);
-            let patch = if t4 != NONE {s2n(&st.buf[t4..st.cur - 1])} else {0};
+            let major = s2n(&st.str[st.tok..t1]);
+            let minor = s2n(&st.str[t2..t3]);
+            let patch = if t4 != NONE {s2n(&st.str[t4..st.cur - 1])} else {0};
             vers.push(SemVer(major, minor, patch));
             continue 'parse;
         }
@@ -127,7 +120,7 @@ fn main() {
     let lim = BUFSIZE - 1;
     let mut st = State {
         file: file,
-        buf: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
+        str: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
         lim: lim,
         cur: lim,
         mar: lim,
