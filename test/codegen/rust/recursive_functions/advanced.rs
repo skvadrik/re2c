@@ -24,7 +24,7 @@ const MTAG_ROOT: usize = NONE - 1;
 
 struct ConState {
     file: File,
-    buf: [u8; CON_STATE_SIZE + 1],
+    str: [u8; CON_STATE_SIZE + 1],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -104,7 +104,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.buf.as_mut_ptr();
+        let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.lim -= shift;
@@ -116,18 +116,18 @@ if st.yyt2 != NONE { st.yyt2.overflowing_sub(shift).0; }
 
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..CON_STATE_SIZE]) {
+    match st.file.read(&mut st.str[st.lim..CON_STATE_SIZE]) {
         Ok(n) => st.lim += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.buf[st.lim] = 0; // append sentinel symbol
+    st.str[st.lim] = 0; // append sentinel symbol
 
     return ConStatus::Ready;
 }
 
 
 fn yy1(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -143,7 +143,7 @@ fn yy1(st: &mut ConState) -> ConStatus {
 			yy4(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 0;
 				return ConStatus::Waiting;
 			} else {
@@ -165,7 +165,7 @@ fn yy3(st: &mut ConState) -> ConStatus {
 
 fn yy4(st: &mut ConState) -> ConStatus {
 	st.mar = st.cur;
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -176,7 +176,7 @@ fn yy4(st: &mut ConState) -> ConStatus {
 		0x7C |
 		0x7E => yy6(st, yych),
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 1;
 				return ConStatus::Waiting;
 			} else {
@@ -187,7 +187,7 @@ fn yy4(st: &mut ConState) -> ConStatus {
 }
 
 fn yy5(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	yy6(st, yych)
 }
 
@@ -210,7 +210,7 @@ fn yy6(st: &mut ConState, yych: u8) -> ConStatus {
 			yy8(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 2;
 				return ConStatus::Waiting;
 			} else {
@@ -226,14 +226,14 @@ fn yy7(st: &mut ConState) -> ConStatus {
 }
 
 fn yy8(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x09 |
 		0x0D |
 		0x20 |
 		0x3B => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 3;
 				return ConStatus::Waiting;
 			} else {
@@ -245,7 +245,7 @@ fn yy8(st: &mut ConState) -> ConStatus {
 }
 
 fn yy9(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	yy10(st, yych)
 }
 
@@ -296,7 +296,7 @@ fn yy10(st: &mut ConState, yych: u8) -> ConStatus {
 			yy13(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 4;
 				return ConStatus::Waiting;
 			} else {
@@ -307,7 +307,7 @@ fn yy10(st: &mut ConState, yych: u8) -> ConStatus {
 }
 
 fn yy11(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -323,7 +323,7 @@ fn yy11(st: &mut ConState) -> ConStatus {
 			yy13(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 5;
 				return ConStatus::Waiting;
 			} else {
@@ -334,14 +334,14 @@ fn yy11(st: &mut ConState) -> ConStatus {
 }
 
 fn yy12(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x0A => {
 			st.cur += 1;
 			yy14(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 6;
 				return ConStatus::Waiting;
 			} else {
@@ -352,7 +352,7 @@ fn yy12(st: &mut ConState) -> ConStatus {
 }
 
 fn yy13(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -373,7 +373,7 @@ fn yy13(st: &mut ConState) -> ConStatus {
 			yy15(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 7;
 				return ConStatus::Waiting;
 			} else {
@@ -392,14 +392,14 @@ fn yy14(st: &mut ConState) -> ConStatus {
 	st.p4 = st.yytm6;
 	st.state = -1;
 	
-        log!("media type: {}", String::from_utf8_lossy(&st.buf[st.l1..st.l2]));
+        log!("media type: {}", String::from_utf8_lossy(&st.str[st.l1..st.l2]));
 
         let mut pnames: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.buf, &mut pnames);
+        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.str, &mut pnames);
         log!("pnames: {:?}", pnames);
 
         let mut pvals: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.buf, &mut pvals);
+        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.str, &mut pvals);
         log!("pvals: {:?}", pvals);
 
         st.tok = st.cur;
@@ -408,7 +408,7 @@ fn yy14(st: &mut ConState) -> ConStatus {
 }
 
 fn yy15(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -428,7 +428,7 @@ fn yy15(st: &mut ConState) -> ConStatus {
 			yy16(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 8;
 				return ConStatus::Waiting;
 			} else {
@@ -439,7 +439,7 @@ fn yy15(st: &mut ConState) -> ConStatus {
 }
 
 fn yy16(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -460,7 +460,7 @@ fn yy16(st: &mut ConState) -> ConStatus {
 			yy18(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 9;
 				return ConStatus::Waiting;
 			} else {
@@ -471,7 +471,7 @@ fn yy16(st: &mut ConState) -> ConStatus {
 }
 
 fn yy17(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -506,7 +506,7 @@ fn yy17(st: &mut ConState) -> ConStatus {
 			yy13(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 10;
 				return ConStatus::Waiting;
 			} else {
@@ -517,13 +517,13 @@ fn yy17(st: &mut ConState) -> ConStatus {
 }
 
 fn yy18(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x1F |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 11;
 				return ConStatus::Waiting;
 			} else {
@@ -546,7 +546,7 @@ fn yy18(st: &mut ConState) -> ConStatus {
 }
 
 fn yy19(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -566,7 +566,7 @@ fn yy19(st: &mut ConState) -> ConStatus {
 			yy13(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 12;
 				return ConStatus::Waiting;
 			} else {
@@ -577,7 +577,7 @@ fn yy19(st: &mut ConState) -> ConStatus {
 }
 
 fn yy20(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -600,7 +600,7 @@ fn yy20(st: &mut ConState) -> ConStatus {
 			yy13(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 13;
 				return ConStatus::Waiting;
 			} else {
@@ -611,13 +611,13 @@ fn yy20(st: &mut ConState) -> ConStatus {
 }
 
 fn yy21(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 14;
 				return ConStatus::Waiting;
 			} else {
@@ -641,13 +641,13 @@ fn yyfnmedia_type(st: &mut ConState) -> ConStatus {
 }
 
 fn yy23(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 15;
 				return ConStatus::Waiting;
 			} else {
@@ -679,14 +679,14 @@ fn yy25(st: &mut ConState) -> ConStatus {
 fn yy26(st: &mut ConState) -> ConStatus {
 	st.accept = 0;
 	st.mar = st.cur;
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x0A => {
 			st.cur += 1;
 			yy28(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 16;
 				return ConStatus::Waiting;
 			} else {
@@ -699,14 +699,14 @@ fn yy26(st: &mut ConState) -> ConStatus {
 fn yy27(st: &mut ConState) -> ConStatus {
 	st.accept = 0;
 	st.mar = st.cur;
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 17;
 				return ConStatus::Waiting;
 			} else {
@@ -730,7 +730,7 @@ fn yy27(st: &mut ConState) -> ConStatus {
 }
 
 fn yy28(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -738,7 +738,7 @@ fn yy28(st: &mut ConState) -> ConStatus {
 			yy33(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 18;
 				return ConStatus::Waiting;
 			} else {
@@ -758,13 +758,13 @@ fn yy29(st: &mut ConState) -> ConStatus {
 }
 
 fn yy30(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 19;
 				return ConStatus::Waiting;
 			} else {
@@ -787,14 +787,14 @@ fn yy30(st: &mut ConState) -> ConStatus {
 }
 
 fn yy31(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x0A => {
 			st.cur += 1;
 			yy28(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 20;
 				return ConStatus::Waiting;
 			} else {
@@ -805,14 +805,14 @@ fn yy31(st: &mut ConState) -> ConStatus {
 }
 
 fn yy32(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 21;
 				return ConStatus::Waiting;
 			} else {
@@ -836,14 +836,14 @@ fn yy32(st: &mut ConState) -> ConStatus {
 }
 
 fn yy33(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 22;
 				return ConStatus::Waiting;
 			} else {
@@ -871,13 +871,13 @@ fn yy33(st: &mut ConState) -> ConStatus {
 }
 
 fn yy34(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 23;
 				return ConStatus::Waiting;
 			} else {
@@ -897,14 +897,14 @@ fn yy34(st: &mut ConState) -> ConStatus {
 }
 
 fn yy35(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x0A => {
 			st.cur += 1;
 			yy37(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 24;
 				return ConStatus::Waiting;
 			} else {
@@ -915,14 +915,14 @@ fn yy35(st: &mut ConState) -> ConStatus {
 }
 
 fn yy36(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 25;
 				return ConStatus::Waiting;
 			} else {
@@ -949,7 +949,7 @@ fn yy36(st: &mut ConState) -> ConStatus {
 fn yy37(st: &mut ConState) -> ConStatus {
 	st.accept = 1;
 	st.mar = st.cur;
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -958,7 +958,7 @@ fn yy37(st: &mut ConState) -> ConStatus {
 			yy33(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 26;
 				return ConStatus::Waiting;
 			} else {
@@ -974,7 +974,7 @@ fn yy38(st: &mut ConState) -> ConStatus {
 	st.state = -1;
 	
         let mut folds: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.buf, &mut folds);
+        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
         log!("folds: {:?}", folds);
 
         st.tok = st.cur;
@@ -983,14 +983,14 @@ fn yy38(st: &mut ConState) -> ConStatus {
 }
 
 fn yy39(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 27;
 				return ConStatus::Waiting;
 			} else {
@@ -1017,14 +1017,14 @@ fn yy39(st: &mut ConState) -> ConStatus {
 }
 
 fn yy40(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x0A => {
 			st.cur += 1;
 			yy42(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 28;
 				return ConStatus::Waiting;
 			} else {
@@ -1035,14 +1035,14 @@ fn yy40(st: &mut ConState) -> ConStatus {
 }
 
 fn yy41(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
 		0x0A ..= 0x0C |
 		0x0E ..= 0x1E |
 		0x7F => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 29;
 				return ConStatus::Waiting;
 			} else {
@@ -1071,7 +1071,7 @@ fn yy42(st: &mut ConState) -> ConStatus {
 }
 
 fn yy43(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.buf.get_unchecked(st.cur)};
+	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -1083,7 +1083,7 @@ fn yy43(st: &mut ConState) -> ConStatus {
 			yy40(st)
 		}
 		_ => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				st.state = 30;
 				return ConStatus::Waiting;
 			} else {
@@ -1114,217 +1114,217 @@ fn lex(st: &mut ConState) -> ConStatus {
 	match st.state {
 		-1 => yy0(st),
 		0 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy22(st)
 			} else {
 				yy1(st)
 			}
 		}
 		1 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy3(st)
 			} else {
 				yy4(st)
 			}
 		}
 		2 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy5(st)
 			}
 		}
 		3 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy8(st)
 			}
 		}
 		4 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy9(st)
 			}
 		}
 		5 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy11(st)
 			}
 		}
 		6 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy12(st)
 			}
 		}
 		7 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy13(st)
 			}
 		}
 		8 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy15(st)
 			}
 		}
 		9 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy16(st)
 			}
 		}
 		10 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy17(st)
 			}
 		}
 		11 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy18(st)
 			}
 		}
 		12 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy19(st)
 			}
 		}
 		13 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy20(st)
 			}
 		}
 		14 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy7(st)
 			} else {
 				yy21(st)
 			}
 		}
 		15 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy44(st)
 			} else {
 				yy23(st)
 			}
 		}
 		16 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy25(st)
 			} else {
 				yy26(st)
 			}
 		}
 		17 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy25(st)
 			} else {
 				yy27(st)
 			}
 		}
 		18 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy28(st)
 			}
 		}
 		19 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy30(st)
 			}
 		}
 		20 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy31(st)
 			}
 		}
 		21 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy32(st)
 			}
 		}
 		22 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy33(st)
 			}
 		}
 		23 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy34(st)
 			}
 		}
 		24 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy35(st)
 			}
 		}
 		25 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy36(st)
 			}
 		}
 		26 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy38(st)
 			} else {
 				yy37(st)
 			}
 		}
 		27 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy39(st)
 			}
 		}
 		28 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy40(st)
 			}
 		}
 		29 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy41(st)
 			}
 		}
 		30 => {
-			if st.cur >= st.lim {
+			if st.lim <= st.cur {
 				yy29(st)
 			} else {
 				yy43(st)
@@ -1352,7 +1352,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
     // of buffer, the character at `lim` offset is the sentinel (null).
     let mut state = ConState {
         file: fr,
-        buf: [0; CON_STATE_SIZE + 1], // sentinel (at `lim` offset) is set to null
+        str: [0; CON_STATE_SIZE + 1], // sentinel (at `lim` offset) is set to null
         cur: CON_STATE_SIZE,
         mar: CON_STATE_SIZE,
         tok: CON_STATE_SIZE,
@@ -1405,7 +1405,7 @@ yytm9: MTAG_ROOT,
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.buf));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
             if status == ConStatus::BigPacket {
                 log!("error: packet too big");
                 break;

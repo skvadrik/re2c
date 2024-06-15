@@ -5,11 +5,11 @@ use std::fs::File;
 use std::io::{Read, Write};
 
 const BUFSIZE: usize = 4096;
-const NONE: usize = std::usize::MAX;
+const NONE: usize = usize::MAX;
 
 struct State {
     file: File,
-    buf: [u8; BUFSIZE],
+    str: [u8; BUFSIZE],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -46,7 +46,7 @@ fn fill(st: &mut State) -> Fill {
     if st.tok < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.buf.copy_within(st.tok..st.lim, 0);
+    st.str.copy_within(st.tok..st.lim, 0);
     st.lim -= st.tok;
     st.cur -= st.tok;
     shift!(st.mar, st.tok);
@@ -60,11 +60,11 @@ if st.yyt3 != NONE { shift!(st.yyt3, st.tok); }
     st.tok = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.buf[st.lim..BUFSIZE - 1]) {
+    match st.file.read(&mut st.str[st.lim..BUFSIZE - 1]) {
         Ok(n) => {
             st.lim += n;
             st.eof = n == 0;
-            st.buf[st.lim] = 0;
+            st.str[st.lim] = 0;
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -88,7 +88,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x30 ..= 0x39 => {
 						st.cur += 1;
@@ -96,7 +96,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 0;
 								continue 'yyl;
@@ -117,7 +117,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 			2 => { return None; },
 			3 => {
 				st.mar = st.cur;
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x2E => {
 						st.cur += 1;
@@ -130,7 +130,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 3;
 								continue 'yyl;
@@ -142,7 +142,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				}
 			}
 			4 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x30 ..= 0x39 => {
 						st.yyt1 = st.cur;
@@ -151,7 +151,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 4;
 								continue 'yyl;
@@ -168,7 +168,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x2E => {
 						st.cur += 1;
@@ -181,7 +181,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 6;
 								continue 'yyl;
@@ -193,11 +193,11 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				}
 			}
 			7 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x0A => {
 						st.yyt2 = st.cur;
-						st.yyt3 = NONE;
+						st.yyt3 = usize::MAX;
 						st.cur += 1;
 						yystate = 8;
 						continue 'yyl;
@@ -214,7 +214,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 7;
 								continue 'yyl;
@@ -230,17 +230,17 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				t3 = st.yyt2;
 				t4 = st.yyt3;
 				t1 = st.yyt1;
-				t1 -= --1isize as usize;
+				t1 -= 1;
 				{
-            let major = s2n(&st.buf[st.tok..t1]);
-            let minor = s2n(&st.buf[t2..t3]);
-            let patch = if t4 != NONE {s2n(&st.buf[t4..st.cur - 1])} else {0};
+            let major = s2n(&st.str[st.tok..t1]);
+            let minor = s2n(&st.str[t2..t3]);
+            let patch = if t4 != NONE {s2n(&st.str[t4..st.cur - 1])} else {0};
             vers.push(SemVer(major, minor, patch));
             continue 'parse;
         }
 			}
 			9 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x30 ..= 0x39 => {
 						st.yyt3 = st.cur;
@@ -249,7 +249,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 9;
 								continue 'yyl;
@@ -261,7 +261,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 				}
 			}
 			10 => {
-				yych = unsafe {*st.buf.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.cur)};
 				match yych {
 					0x0A => {
 						st.cur += 1;
@@ -274,7 +274,7 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
 						continue 'yyl;
 					}
 					_ => {
-						if st.cur >= st.lim {
+						if st.lim <= st.cur {
 							if fill(st) == Fill::Ok {
 								yystate = 10;
 								continue 'yyl;
@@ -318,7 +318,7 @@ fn main() {
     let lim = BUFSIZE - 1;
     let mut st = State {
         file: file,
-        buf: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
+        str: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
         lim: lim,
         cur: lim,
         mar: lim,

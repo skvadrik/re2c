@@ -21,7 +21,7 @@ const MTAG_ROOT: usize = NONE - 1;
 
 struct ConState {
     file: File,
-    buf: [u8; CON_STATE_SIZE + 1],
+    str: [u8; CON_STATE_SIZE + 1],
     lim: usize,
     cur: usize,
     mar: usize,
@@ -89,7 +89,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.buf.as_mut_ptr();
+        let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.lim -= shift;
@@ -99,11 +99,11 @@ fn fill(st: &mut ConState) -> ConStatus {
     /*!stags:re2c format = "if st.@@ != NONE { st.@@.overflowing_sub(shift).0; }\n"; */
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.buf[st.lim..CON_STATE_SIZE]) {
+    match st.file.read(&mut st.str[st.lim..CON_STATE_SIZE]) {
         Ok(n) => st.lim += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.buf[st.lim] = 0; // append sentinel symbol
+    st.str[st.lim] = 0; // append sentinel symbol
 
     return ConStatus::Ready;
 }
@@ -111,23 +111,11 @@ fn fill(st: &mut ConState) -> ConStatus {
 /*!re2c
     re2c:eof = 0;
     re2c:tags = 1;
-    re2c:tags:expression = "st.@@";
-    re2c:variable:yyaccept = "st.accept";
+    re2c:api = record;
+    re2c:variable:yyrecord = "st";
     re2c:define:YYFN       = ["lex;ConStatus", "st;&mut ConState"];
     re2c:define:YYCTYPE    = "u8";
-    re2c:define:YYPEEK     = "*st.buf.get_unchecked(st.cur)";
-    re2c:define:YYSKIP     = "st.cur += 1;";
-    re2c:define:YYBACKUP   = "st.mar = st.cur;";
-    re2c:define:YYRESTORE  = "st.cur = st.mar;";
-    re2c:define:YYSHIFT    = "st.cur = (st.cur as isize + @@) as usize;";
-    re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-    re2c:define:YYGETSTATE = "st.state";
-    re2c:define:YYSETSTATE = "st.state = @@;";
     re2c:define:YYFILL     = "return ConStatus::Waiting;";
-    re2c:define:YYGETCONDITION = "st.cond";
-    re2c:define:YYSETCONDITION = "st.cond = @@;";
-    re2c:define:YYSTAGP    = "@@ = st.cur;";
-    re2c:define:YYSTAGN    = "@@ = NONE;";
     re2c:define:YYMTAGP    = "@@ = add_mtag(&mut st.mtag_trie, @@, st.cur);";
     re2c:define:YYMTAGN    = "@@ = add_mtag(&mut st.mtag_trie, @@, NONE);";
 
@@ -159,14 +147,14 @@ fn fill(st: &mut ConState) -> ConStatus {
     media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
     <media_type> media_type ows crlf {
-        log!("media type: {}", String::from_utf8_lossy(&st.buf[st.l1..st.l2]));
+        log!("media type: {}", String::from_utf8_lossy(&st.str[st.l1..st.l2]));
 
         let mut pnames: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.buf, &mut pnames);
+        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.str, &mut pnames);
         log!("pnames: {:?}", pnames);
 
         let mut pvals: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.buf, &mut pvals);
+        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.str, &mut pvals);
         log!("pvals: {:?}", pvals);
 
         st.tok = st.cur;
@@ -175,7 +163,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     <header> header_field_folded crlf {
         let mut folds: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.buf, &mut folds);
+        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
         log!("folds: {:?}", folds);
 
         st.tok = st.cur;
@@ -202,7 +190,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
     // of buffer, the character at `lim` offset is the sentinel (null).
     let mut state = ConState {
         file: fr,
-        buf: [0; CON_STATE_SIZE + 1], // sentinel (at `lim` offset) is set to null
+        str: [0; CON_STATE_SIZE + 1], // sentinel (at `lim` offset) is set to null
         cur: CON_STATE_SIZE,
         mar: CON_STATE_SIZE,
         tok: CON_STATE_SIZE,
@@ -243,7 +231,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.buf));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
             if status == ConStatus::BigPacket {
                 log!("error: packet too big");
                 break;
