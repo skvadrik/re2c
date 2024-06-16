@@ -11,7 +11,7 @@ const BUFSIZE int = 4095
 
 type Input struct {
 	file *os.File
-	buf  []byte
+	str  []byte
 	cur  int
 	mar  int
 	tok  int
@@ -37,7 +37,7 @@ func fill(in *Input) int {
 	if in.tok < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	copy(in.str[0:], in.str[in.tok:in.lim])
 	in.cur -= in.tok
 	in.mar -= in.tok
 	in.lim -= in.tok
@@ -48,9 +48,9 @@ func fill(in *Input) int {
 	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
 	in.lim += n
-	in.buf[in.lim] = 0
+	in.str[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
 	in.eof = in.lim < BUFSIZE
@@ -67,26 +67,19 @@ func parse(in *Input) []SemVer {
 	for {
 		in.tok = in.cur
 	/*!re2c
+		re2c:api = record;
 		re2c:eof = 0;
-		re2c:define:YYCTYPE     = byte;
-		re2c:define:YYPEEK      = "in.buf[in.cur]";
-		re2c:define:YYSKIP      = "in.cur += 1";
-		re2c:define:YYBACKUP    = "in.mar = in.cur";
-		re2c:define:YYRESTORE   = "in.cur = in.mar";
-		re2c:define:YYLESSTHAN  = "in.lim <= in.cur";
-		re2c:define:YYFILL      = "fill(in) == 0";
-		re2c:define:YYSTAGP     = "@@{tag} = in.cur";
-		re2c:define:YYSTAGN     = "@@{tag} = -1";
-		re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
-		re2c:tags:expression    = "in.@@";
+		re2c:variable:yyrecord = in;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYFILL = "fill(in) == 0";
 
 		num = [0-9]+;
 
 		num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
-			major := s2n(in.buf[in.tok:t1])
-			minor := s2n(in.buf[t2:t3])
+			major := s2n(in.str[in.tok:t1])
+			minor := s2n(in.str[t2:t3])
 			patch := 0
-			if t4 != -1 { patch = s2n(in.buf[t4:in.cur-1]) }
+			if t4 != -1 { patch = s2n(in.str[t4:in.cur-1]) }
 			vers = append(vers, SemVer{major, minor, patch})
 			continue
 		}
@@ -113,7 +106,7 @@ func main() () {
 	in := &Input{
 		file: f,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:  make([]byte, BUFSIZE+1),
+		str:  make([]byte, BUFSIZE+1),
 		cur:  BUFSIZE,
 		mar:  BUFSIZE,
 		tok:  BUFSIZE,

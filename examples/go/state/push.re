@@ -12,7 +12,7 @@ const BUFSIZE int = 10
 
 type State struct {
 	file  *os.File
-	buf   []byte
+	str   []byte
 	cur   int
 	mar   int
 	tok   int
@@ -37,35 +37,29 @@ func fill(st *State) int {
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.buf[0:], st.buf[shift:shift+used])
+	copy(st.str[0:], st.str[shift:shift+used])
 	st.cur -= shift
 	st.mar -= shift
 	st.lim -= shift
 	st.tok -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
+	n, _ := st.file.Read(st.str[st.lim:BUFSIZE])
 	st.lim += n
-	st.buf[st.lim] = 0 // append sentinel symbol
+	st.str[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
-func lex(st *State, recv *int) int {
+func lex(yyrecord *State, recv *int) int {
 	var yych byte
 	/*!getstate:re2c*/
 loop:
-	st.tok = st.cur
+	yyrecord.tok = yyrecord.cur
 	/*!re2c
+		re2c:api = record;
 		re2c:eof = 0;
-		re2c:define:YYPEEK     = "st.buf[st.cur]";
-		re2c:define:YYSKIP     = "st.cur += 1";
-		re2c:define:YYBACKUP   = "st.mar = st.cur";
-		re2c:define:YYRESTORE  = "st.cur = st.mar";
-		re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-		re2c:define:YYFILL     = "return lexWaitingForInput";
-		re2c:define:YYGETSTATE = "st.state";
-		re2c:define:YYSETSTATE = "st.state = @@{state}";
+		re2c:define:YYFILL = "return lexWaitingForInput";
 
 		packet = [a-z]+[;];
 
@@ -86,7 +80,7 @@ func test(expect int, packets []string) {
 	st := &State{
 		file:  fr,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:   make([]byte, BUFSIZE+1),
+		str:   make([]byte, BUFSIZE+1),
 		cur:   BUFSIZE,
 		mar:   BUFSIZE,
 		tok:   BUFSIZE,

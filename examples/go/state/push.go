@@ -14,7 +14,7 @@ const BUFSIZE int = 10
 
 type State struct {
 	file  *os.File
-	buf   []byte
+	str   []byte
 	cur   int
 	mar   int
 	tok   int
@@ -39,37 +39,37 @@ func fill(st *State) int {
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.buf[0:], st.buf[shift:shift+used])
+	copy(st.str[0:], st.str[shift:shift+used])
 	st.cur -= shift
 	st.mar -= shift
 	st.lim -= shift
 	st.tok -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
+	n, _ := st.file.Read(st.str[st.lim:BUFSIZE])
 	st.lim += n
-	st.buf[st.lim] = 0 // append sentinel symbol
+	st.str[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
-func lex(st *State, recv *int) int {
+func lex(yyrecord *State, recv *int) int {
 	var yych byte
 	
 //line "go/state/push.go":60
-switch (st.state) {
+switch (yyrecord.state) {
 case 0:
-	if (st.lim <= st.cur) {
+	if (yyrecord.lim <= yyrecord.cur) {
 		goto yy8
 	}
 	goto yyFillLabel0
 case 1:
-	if (st.lim <= st.cur) {
+	if (yyrecord.lim <= yyrecord.cur) {
 		goto yy3
 	}
 	goto yyFillLabel1
 case 2:
-	if (st.lim <= st.cur) {
+	if (yyrecord.lim <= yyrecord.cur) {
 		goto yy7
 	}
 	goto yyFillLabel2
@@ -79,77 +79,77 @@ default:
 //line "go/state/push.re":56
 
 loop:
-	st.tok = st.cur
+	yyrecord.tok = yyrecord.cur
 	
 //line "go/state/push.go":85
 yy0:
 yyFillLabel0:
-	yych = st.buf[st.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy4
 	default:
-		if (st.lim <= st.cur) {
-			st.state = 0
+		if (yyrecord.lim <= yyrecord.cur) {
+			yyrecord.state = 0
 			return lexWaitingForInput
 		}
 		goto yy2
 	}
 yy2:
-	st.cur += 1
+	yyrecord.cur += 1
 yy3:
-	st.state = -1
-//line "go/state/push.re":72
+	yyrecord.state = -1
+//line "go/state/push.re":66
 	{ return lexPacketBroken }
 //line "go/state/push.go":105
 yy4:
-	st.cur += 1
-	st.mar = st.cur
+	yyrecord.cur += 1
+	yyrecord.mar = yyrecord.cur
 yyFillLabel1:
-	yych = st.buf[st.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (st.lim <= st.cur) {
-			st.state = 1
+		if (yyrecord.lim <= yyrecord.cur) {
+			yyrecord.state = 1
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
 yy5:
-	st.cur += 1
-	st.state = -1
-//line "go/state/push.re":74
+	yyrecord.cur += 1
+	yyrecord.state = -1
+//line "go/state/push.re":68
 	{ *recv = *recv + 1; goto loop }
 //line "go/state/push.go":128
 yy6:
-	st.cur += 1
+	yyrecord.cur += 1
 yyFillLabel2:
-	yych = st.buf[st.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (st.lim <= st.cur) {
-			st.state = 2
+		if (yyrecord.lim <= yyrecord.cur) {
+			yyrecord.state = 2
 			return lexWaitingForInput
 		}
 		goto yy7
 	}
 yy7:
-	st.cur = st.mar
+	yyrecord.cur = yyrecord.mar
 	goto yy3
 yy8:
-	st.state = -1
-//line "go/state/push.re":73
+	yyrecord.state = -1
+//line "go/state/push.re":67
 	{ return lexEnd }
 //line "go/state/push.go":152
-//line "go/state/push.re":75
+//line "go/state/push.re":69
 
 }
 
@@ -164,7 +164,7 @@ func test(expect int, packets []string) {
 	st := &State{
 		file:  fr,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:   make([]byte, BUFSIZE+1),
+		str:   make([]byte, BUFSIZE+1),
 		cur:   BUFSIZE,
 		mar:   BUFSIZE,
 		tok:   BUFSIZE,

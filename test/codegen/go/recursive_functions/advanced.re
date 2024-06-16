@@ -62,7 +62,7 @@ func unwind(trie mtagTrie, x int, y int, str []byte) []string {
 
 type State struct {
 	file     *os.File
-	data     []byte
+	str      []byte
 	cur      int
 	mar      int
 	tok      int
@@ -96,7 +96,7 @@ func fill(st *State) int {
 	if free < 1 { return lexBigPacket }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.data[0:], st.data[shift:shift+used])
+	copy(st.str[0:], st.str[shift:shift+used])
 	st.cur -= shift
 	st.mar -= shift
 	st.lim -= shift
@@ -104,35 +104,23 @@ func fill(st *State) int {
 	/*!stags:re2c format = '\n\tst.@@ -= shift'; */
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.data[st.lim:SIZE])
+	n, _ := st.file.Read(st.str[st.lim:SIZE])
 	st.lim += n
-	st.data[st.lim] = 0 // append sentinel symbol
+	st.str[st.lim] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
 /*!re2c
+	re2c:api = record;
 	re2c:eof = 0;
 	re2c:tags = 1;
-	re2c:tags:expression = "st.@@";
-	re2c:variable:yyaccept = "st.accept";
-	re2c:define:YYFN       = ["lex;int", "st;*State"];
-	re2c:define:YYCTYPE    = "byte";
-	re2c:define:YYPEEK     = "st.data[st.cur]";
-	re2c:define:YYSKIP     = "st.cur += 1";
-	re2c:define:YYBACKUP   = "st.mar = st.cur";
-	re2c:define:YYRESTORE  = "st.cur = st.mar";
-	re2c:define:YYSHIFT    = "st.cur += @@";
-	re2c:define:YYLESSTHAN = "st.cur >= st.lim";
-	re2c:define:YYGETSTATE = "st.state";
-	re2c:define:YYSETSTATE = "st.state = @@";
-	re2c:define:YYFILL     = "return lexWaiting";
-	re2c:define:YYGETCONDITION = "st.cond";
-	re2c:define:YYSETCONDITION = "st.cond = @@";
-	re2c:define:YYSTAGP    = "@@ = st.cur";
-	re2c:define:YYSTAGN    = "@@ = tagNone";
-	re2c:define:YYMTAGP    = "@@ = add_mtag(&st.trie, @@, st.cur)";
-	re2c:define:YYMTAGN    = "@@ = add_mtag(&st.trie, @@, tagNone)";
+	re2c:variable:yyrecord = st;
+	re2c:define:YYFN = ["lex;int", "st;*State"];
+	re2c:define:YYCTYPE = "byte";
+	re2c:define:YYFILL = "return lexWaiting";
+	re2c:define:YYMTAGP = "@@ = add_mtag(&st.trie, @@, st.cur)";
+	re2c:define:YYMTAGN = "@@ = add_mtag(&st.trie, @@, tagNone)";
 
 	crlf  = '\r\n';
 	sp    = ' ';
@@ -162,12 +150,12 @@ func fill(st *State) int {
 	media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
 	<media_type> media_type ows crlf {
-		if debug {fmt.Printf("media type: %v\n", string(st.data[st.l1:st.l2]))}
+		if debug {fmt.Printf("media type: %v\n", string(st.str[st.l1:st.l2]))}
 
-		pnames := unwind(st.trie, st.p1, st.p2, st.data)
+		pnames := unwind(st.trie, st.p1, st.p2, st.str)
 		if debug {fmt.Printf("pnames: %v\n", pnames)}
 
-		pvals := unwind(st.trie, st.p3, st.p4, st.data)
+		pvals := unwind(st.trie, st.p3, st.p4, st.str)
 		if debug {fmt.Printf("pvals: %v\n", pvals)}
 
 		st.tok = st.cur
@@ -175,7 +163,7 @@ func fill(st *State) int {
 	}
 
 	<header> header_field_folded crlf {
-		folds := unwind(st.trie, st.f1, st.f2, st.data)
+		folds := unwind(st.trie, st.f1, st.f2, st.str)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
 		st.tok = st.cur
@@ -193,7 +181,7 @@ func test(packets []string) int {
 
 	st := &State{
 		file:   fr,
-		data:   make([]byte, SIZE+1),
+		str:    make([]byte, SIZE+1),
 		cur:    SIZE,
 		mar:    SIZE,
 		tok:    SIZE,
@@ -213,7 +201,7 @@ func test(packets []string) int {
 		p4:     0,
 		accept: 0,
 	}
-	// data is zero-initialized, no need to write sentinel
+	// str is zero-initialized, no need to write sentinel
 
 	var status int
 	send := 0
