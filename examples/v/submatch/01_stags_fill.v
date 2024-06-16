@@ -12,7 +12,7 @@ const tag_none = -1
 struct State {
     file os.File
 mut:
-    buf  []u8
+    str  []u8
     cur  int
     mar  int
     tok  int
@@ -48,7 +48,7 @@ fn fill(mut st &State) int {
     if st.tok < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.buf, st.buf[st.tok..st.lim])
+    copy(mut &st.str, st.str[st.tok..st.lim])
     st.cur -= st.tok
     st.mar -= st.tok
     st.lim -= st.tok
@@ -66,10 +66,10 @@ fn fill(mut st &State) int {
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
     st.eof = st.lim < bufsize
@@ -89,7 +89,7 @@ loop:
 //line "v/submatch/01_stags_fill.v":90
     mut yych := 0
 yyFillLabel0:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x30...0x39 { unsafe { goto yy3 } }
         else {
@@ -105,14 +105,14 @@ yyFillLabel0:
 yy1:
     st.cur += 1
 yy2:
-//line "v/submatch/01_stags_fill.re":101
+//line "v/submatch/01_stags_fill.re":93
     return none
 //line "v/submatch/01_stags_fill.v":111
 yy3:
     st.cur += 1
     st.mar = st.cur
 yyFillLabel1:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
@@ -128,7 +128,7 @@ yyFillLabel1:
 yy4:
     st.cur += 1
 yyFillLabel2:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x30...0x39 {
             st.yyt1 = st.cur
@@ -149,7 +149,7 @@ yy5:
 yy6:
     st.cur += 1
 yyFillLabel3:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
@@ -165,7 +165,7 @@ yyFillLabel3:
 yy7:
     st.cur += 1
 yyFillLabel4:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x0A {
             st.yyt2 = st.cur
@@ -192,13 +192,13 @@ yy8:
     t3 = st.yyt2
     t4 = st.yyt3
     t1 = st.yyt1
-    t1 += -1
-//line "v/submatch/01_stags_fill.re":91
+    t1-= 1
+//line "v/submatch/01_stags_fill.re":83
     
             ver := SemVer {
-                major: s2n(st.buf[st.tok..t1]),
-                minor: s2n(st.buf[t2..t3]),
-                patch: if t4 == -1 { 0 } else { s2n(st.buf[t4..st.cur - 1]) }
+                major: s2n(st.str[st.tok..t1]),
+                minor: s2n(st.str[t2..t3]),
+                patch: if t4 == -1 { 0 } else { s2n(st.str[t4..st.cur - 1]) }
             }
             vers = arrays.concat(vers, ver)
             unsafe { goto loop }
@@ -207,7 +207,7 @@ yy8:
 yy9:
     st.cur += 1
 yyFillLabel5:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x30...0x39 {
             st.yyt3 = st.cur
@@ -225,7 +225,7 @@ yyFillLabel5:
 yy10:
     st.cur += 1
 yyFillLabel6:
-    yych = st.buf[st.cur]
+    yych = st.str[st.cur]
     match yych {
         0x0A { unsafe { goto yy8 } }
         0x30...0x39 { unsafe { goto yy10 } }
@@ -239,10 +239,10 @@ yyFillLabel6:
         }
     }
 yy11:
-//line "v/submatch/01_stags_fill.re":100
+//line "v/submatch/01_stags_fill.re":92
     return vers
 //line "v/submatch/01_stags_fill.v":245
-//line "v/submatch/01_stags_fill.re":102
+//line "v/submatch/01_stags_fill.re":94
 
 }
 
@@ -261,7 +261,7 @@ fn main() {
     mut st := &State{
         file: fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:  []u8{len: bufsize + 1},
+        str:  []u8{len: bufsize + 1},
         cur:  bufsize,
         mar:  bufsize,
         tok:  bufsize,

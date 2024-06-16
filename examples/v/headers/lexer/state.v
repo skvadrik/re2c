@@ -4,8 +4,8 @@ module lexer
 
 pub struct State {
 pub mut:
-    data string
-    cur  int
-    yyt1 int
-
+    str string
+    cur int
+    
+yyt1 int
 }

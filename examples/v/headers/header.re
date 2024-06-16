@@ -8,30 +8,26 @@ module lexer
 
 pub struct State {
 pub mut:
-    data string
-    cur  int
+    str string
+    cur int
     /*!stags:re2c format="@@ int\n"; */
 }
 /*!header:re2c:off*/
 
-fn lex(mut st &lexer.State) int {
+fn lex(mut yyrecord &lexer.State) int {
     mut t := 0
     /*!re2c
         re2c:header = "lexer/state.v";
+        re2c:api = record;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE  = u8;
-        re2c:define:YYPEEK   = "st.data[st.cur]";
-        re2c:define:YYSKIP   = "st.cur++";
-        re2c:define:YYSTAGP  = "@@ = st.cur";
-        re2c:tags            = 1;
-        re2c:tags:expression = "st.@@";
+        re2c:tags = 1;
 
         [a]* @t [b]* { return t }
     */
 }
 
 fn main() {
-    mut st := &lexer.State{data:"ab\0",}
+    mut st := &lexer.State{str:"ab\0",}
     if lex(mut st) != 1 {
         panic("error")
     }

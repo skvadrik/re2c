@@ -66,7 +66,7 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 struct State {
 mut:
     file   os.File
-    buf    []u8
+    str    []u8
     cur    int
     mar    int
     tok    int
@@ -124,7 +124,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.buf, st.buf[shift..shift+used])
+    copy(mut &st.str, st.str[shift..shift+used])
     st.cur -= shift
     st.mar -= shift
     st.lim -= shift
@@ -139,10 +139,10 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -150,7 +150,7 @@ fn fill(mut st &State) Status {
 
 //line "codegen/v/recursive_functions/advanced.v":152
 fn yy1(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yyt1 = st.cur
@@ -175,14 +175,14 @@ fn yy2(mut st State) Status {
 
 fn yy3(mut st State) Status {
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":187
+//line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":181
 }
 
 fn yy4(mut st State) Status {
     st.mar = st.cur
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E { return yy6(mut st, yych) }
         else {
@@ -197,7 +197,7 @@ fn yy4(mut st State) Status {
 }
 
 fn yy5(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     return yy6(mut st, yych)
 }
 
@@ -228,7 +228,7 @@ fn yy7(mut st State) Status {
 }
 
 fn yy8(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x09, 0x0D, 0x20, 0x3B {
             if st.lim <= st.cur {
@@ -243,7 +243,7 @@ fn yy8(mut st State) Status {
 }
 
 fn yy9(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     return yy10(mut st, yych)
 }
 
@@ -296,7 +296,7 @@ fn yy10(mut st State, yych u8) Status {
 }
 
 fn yy11(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.cur += 1
@@ -322,7 +322,7 @@ fn yy11(mut st State) Status {
 }
 
 fn yy12(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x0A {
             st.cur += 1
@@ -340,7 +340,7 @@ fn yy12(mut st State) Status {
 }
 
 fn yy13(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.cur += 1
@@ -370,15 +370,15 @@ fn yy14(mut st State) Status {
     st.p3 = st.yytm5
     st.p4 = st.yytm6
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":165
+//line "codegen/v/recursive_functions/advanced.re":154
     
-        mt := st.buf[st.l1..st.l2].str()
+        mt := st.str[st.l1..st.l2].str()
         log.debug("media type: $mt")
 
-        pnames := unwind(st.trie, st.p1, st.p2, st.buf)
+        pnames := unwind(st.trie, st.p1, st.p2, st.str)
         log.debug("pnames: $pnames")
 
-        pvals := unwind(st.trie, st.p3, st.p4, st.buf)
+        pvals := unwind(st.trie, st.p3, st.p4, st.str)
         log.debug("pvals: $pvals")
 
         st.tok = st.cur
@@ -388,7 +388,7 @@ fn yy14(mut st State) Status {
 }
 
 fn yy15(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.cur += 1
@@ -411,7 +411,7 @@ fn yy15(mut st State) Status {
 }
 
 fn yy16(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.cur)
@@ -435,7 +435,7 @@ fn yy16(mut st State) Status {
 }
 
 fn yy17(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
@@ -472,7 +472,7 @@ fn yy17(mut st State) Status {
 }
 
 fn yy18(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1F, 0x7F {
             if st.lim <= st.cur {
@@ -498,7 +498,7 @@ fn yy18(mut st State) Status {
 }
 
 fn yy19(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.cur += 1
@@ -528,7 +528,7 @@ fn yy19(mut st State) Status {
 }
 
 fn yy20(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
@@ -561,7 +561,7 @@ fn yy20(mut st State) Status {
 }
 
 fn yy21(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -580,7 +580,7 @@ fn yy21(mut st State) Status {
 
 fn yy22(mut st State) Status {
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":188
+//line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":586
 }
@@ -590,7 +590,7 @@ fn yyfnmedia_type(mut st State) Status {
 }
 
 fn yy23(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -619,7 +619,7 @@ fn yy24(mut st State) Status {
 
 fn yy25(mut st State) Status {
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":187
+//line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":625
 }
@@ -627,7 +627,7 @@ fn yy25(mut st State) Status {
 fn yy26(mut st State) Status {
     st.accept = 0
     st.mar = st.cur
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x0A {
             st.cur += 1
@@ -647,7 +647,7 @@ fn yy26(mut st State) Status {
 fn yy27(mut st State) Status {
     st.accept = 0
     st.mar = st.cur
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -674,7 +674,7 @@ fn yy27(mut st State) Status {
 }
 
 fn yy28(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.cur += 1
@@ -701,7 +701,7 @@ fn yy29(mut st State) Status {
 }
 
 fn yy30(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -727,7 +727,7 @@ fn yy30(mut st State) Status {
 }
 
 fn yy31(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x0A {
             st.cur += 1
@@ -745,7 +745,7 @@ fn yy31(mut st State) Status {
 }
 
 fn yy32(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -772,7 +772,7 @@ fn yy32(mut st State) Status {
 }
 
 fn yy33(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -802,7 +802,7 @@ fn yy33(mut st State) Status {
 }
 
 fn yy34(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -825,7 +825,7 @@ fn yy34(mut st State) Status {
 }
 
 fn yy35(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x0A {
             st.cur += 1
@@ -843,7 +843,7 @@ fn yy35(mut st State) Status {
 }
 
 fn yy36(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -873,7 +873,7 @@ fn yy36(mut st State) Status {
 fn yy37(mut st State) Status {
     st.accept = 1
     st.mar = st.cur
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.yytm1 = st.yytm2
@@ -895,9 +895,9 @@ fn yy38(mut st State) Status {
     st.f1 = st.yytm1
     st.f2 = st.yytm3
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":179
+//line "codegen/v/recursive_functions/advanced.re":168
     
-        folds := unwind(st.trie, st.f1, st.f2, st.buf)
+        folds := unwind(st.trie, st.f1, st.f2, st.str)
         log.debug("folds: $folds")
 
         st.tok = st.cur
@@ -907,7 +907,7 @@ fn yy38(mut st State) Status {
 }
 
 fn yy39(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -937,7 +937,7 @@ fn yy39(mut st State) Status {
 }
 
 fn yy40(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x0A {
             st.cur += 1
@@ -955,7 +955,7 @@ fn yy40(mut st State) Status {
 }
 
 fn yy41(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
@@ -987,7 +987,7 @@ fn yy42(mut st State) Status {
 }
 
 fn yy43(mut st State) Status {
-    yych := st.buf[st.cur]
+    yych := st.str[st.cur]
     match yych {
         0x09, 0x20 {
             st.cur += 1
@@ -1010,7 +1010,7 @@ fn yy43(mut st State) Status {
 
 fn yy44(mut st State) Status {
     st.state = -1
-//line "codegen/v/recursive_functions/advanced.re":188
+//line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":1016
 }
@@ -1250,7 +1250,7 @@ fn lex(mut st State) Status {
     }
 }
 
-//line "codegen/v/recursive_functions/advanced.re":189
+//line "codegen/v/recursive_functions/advanced.re":178
 
 
 fn test(expect Status, packets []string) {
@@ -1264,7 +1264,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:   fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:    []u8{len: bufsize + 1},
+        str:    []u8{len: bufsize + 1},
         cur:    bufsize,
         mar:    bufsize,
         tok:    bufsize,
@@ -1277,7 +1277,7 @@ fn test(expect Status, packets []string) {
 
 		yyt1: tag_none,
 		yyt2: tag_none,
-//line "codegen/v/recursive_functions/advanced.re":210
+//line "codegen/v/recursive_functions/advanced.re":199
 
         
 //line "codegen/v/recursive_functions/advanced.v":1284
@@ -1292,7 +1292,7 @@ fn test(expect Status, packets []string) {
 		yytm7: mtag_root,
 		yytm8: mtag_root,
 		yytm9: mtag_root,
-//line "codegen/v/recursive_functions/advanced.re":211
+//line "codegen/v/recursive_functions/advanced.re":200
 
         l1:     tag_none,
         l2:     tag_none,
@@ -1304,7 +1304,7 @@ fn test(expect Status, packets []string) {
         p4:     mtag_root,
         accept: 0,
     }
-    // buf is zero-initialized, no need to write sentinel
+    // str is zero-initialized, no need to write sentinel
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and
@@ -1323,7 +1323,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.buf, status $status")
+            log.debug("filled buffer $st.str, status $status")
             if status != .lex_ready {
                 break
             }

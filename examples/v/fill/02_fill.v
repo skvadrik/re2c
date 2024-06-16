@@ -14,7 +14,7 @@ const bufsize = 4096
 struct State {
     file os.File
 mut:
-    buf  []u8
+    str  []u8
     cur  int
     tok  int
     lim  int
@@ -28,38 +28,38 @@ fn fill(mut st &State, need int) int {
     if st.tok < need { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.buf, st.buf[st.tok..st.lim])
+    copy(mut &st.str, st.str[st.tok..st.lim])
     st.cur -= st.tok
     st.lim -= st.tok
     st.tok = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
 
     // If read less than expected, this is the end of input.
     if st.lim < bufsize {
         st.eof = true
-        for i := 0; i < yymaxfill; i += 1 { st.buf[st.lim + i] = 0 }
+        for i := 0; i < yymaxfill; i += 1 { st.str[st.lim + i] = 0 }
         st.lim += yymaxfill
     }
 
     return 0
 }
 
-fn lex(mut st &State) int {
+fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    st.tok = st.cur
+    yyrecord.tok = yyrecord.cur
     
 //line "v/fill/02_fill.v":58
     mut yych := 0
-    if st.lim - st.cur < 1 {
-        r := fill(mut st, 1); if r != 0 { return r }
+    if yyrecord.lim <= yyrecord.cur {
+        r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x00 { unsafe { goto yy1 } }
         0x20 { unsafe { goto yy3 } }
@@ -67,55 +67,55 @@ loop:
         else { unsafe { goto yy2 } }
     }
 yy1:
-    st.cur += 1
-//line "v/fill/02_fill.re":62
+    yyrecord.cur += 1
+//line "v/fill/02_fill.re":57
     
             // Check that it is the sentinel, not some unexpected null.
-            return if st.tok == (st.lim - yymaxfill) { count } else { -1 }
+            return if yyrecord.tok == (yyrecord.lim - yymaxfill) { count } else { -1 }
 
 //line "v/fill/02_fill.v":77
 yy2:
-    st.cur += 1
-//line "v/fill/02_fill.re":68
+    yyrecord.cur += 1
+//line "v/fill/02_fill.re":63
     return -1
 //line "v/fill/02_fill.v":82
 yy3:
-    st.cur += 1
-    if st.lim - st.cur < 1 {
-        r := fill(mut st, 1); if r != 0 { return r }
+    yyrecord.cur += 1
+    if yyrecord.lim <= yyrecord.cur {
+        r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/fill/02_fill.re":67
+//line "v/fill/02_fill.re":62
     unsafe { goto loop }
 //line "v/fill/02_fill.v":96
 yy5:
-    st.cur += 1
-    if st.lim - st.cur < 1 {
-        r := fill(mut st, 1); if r != 0 { return r }
+    yyrecord.cur += 1
+    if yyrecord.lim <= yyrecord.cur {
+        r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x27 { unsafe { goto yy6 } }
         0x5C { unsafe { goto yy7 } }
         else { unsafe { goto yy5 } }
     }
 yy6:
-    st.cur += 1
-//line "v/fill/02_fill.re":66
+    yyrecord.cur += 1
+//line "v/fill/02_fill.re":61
     count += 1; unsafe { goto loop }
 //line "v/fill/02_fill.v":112
 yy7:
-    st.cur += 1
-    if st.lim - st.cur < 1 {
-        r := fill(mut st, 1); if r != 0 { return r }
+    yyrecord.cur += 1
+    if yyrecord.lim <= yyrecord.cur {
+        r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
     unsafe { goto yy5 }
-//line "v/fill/02_fill.re":69
+//line "v/fill/02_fill.re":64
 
 }
 
@@ -135,7 +135,7 @@ fn main() {
     mut fr := os.open(fname)!
     mut st := &State{
         file: fr,
-        buf:  []u8{len: bufsize + yymaxfill},
+        str:  []u8{len: bufsize + yymaxfill},
         cur:  bufsize,
         tok:  bufsize,
         lim:  bufsize,
