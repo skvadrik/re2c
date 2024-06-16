@@ -11,7 +11,7 @@ const BUFSIZE uint = 4096
 
 type Input struct {
 	file *os.File
-	buf  []byte
+	str  []byte
 	cur  uint
 	tok  uint
 	lim  uint
@@ -25,42 +25,40 @@ func fill(in *Input, need uint) int {
 	if in.tok < need { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	copy(in.str[0:], in.str[in.tok:in.lim])
 	in.cur -= in.tok
 	in.lim -= in.tok
 	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
 	in.lim += uint(n)
 
 	// If read less than expected, this is end of input => add zero padding
 	// so that the lexer can access characters at the end of buffer.
 	if in.lim < BUFSIZE {
 		in.eof = true
-		for i := uint(0); i < YYMAXFILL; i += 1 { in.buf[in.lim+i] = 0 }
+		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.lim+i] = 0 }
 		in.lim += YYMAXFILL
 	}
 
 	return 0
 }
 
-func lex(in *Input) int {
+func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		in.tok = in.cur
+		yyrecord.tok = yyrecord.cur
 	/*!re2c
-		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYPEEK     = "in.buf[in.cur]";
-		re2c:define:YYSKIP     = "in.cur += 1";
-		re2c:define:YYLESSTHAN = "in.lim-in.cur < @@";
-		re2c:define:YYFILL     = "if r := fill(in, @@); r != 0 { return r }";
+		re2c:api = record;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYFILL = "if r := fill(yyrecord, @@); r != 0 { return r }";
 
 		str = ['] ([^'\\] | [\\][^])* ['];
 
 		[\x00] {
 			// Check that it is the sentinel, not some unexpected null.
-			if in.tok == in.lim - YYMAXFILL { return count } else { return -1 }
+			if yyrecord.tok == yyrecord.lim - YYMAXFILL { return count } else { return -1 }
 		}
 		str  { count += 1; continue }
 		[ ]+ { continue }
@@ -84,7 +82,7 @@ func main() () {
 	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
 		file: f,
-		buf:  make([]byte, BUFSIZE+YYMAXFILL),
+		str:  make([]byte, BUFSIZE+YYMAXFILL),
 		cur:  BUFSIZE,
 		tok:  BUFSIZE,
 		lim:  BUFSIZE,

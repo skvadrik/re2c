@@ -1,4 +1,4 @@
-supported_apis = ["generic"];
+supported_apis = ["generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
@@ -30,6 +30,7 @@ conf:variable:yytarget = "yytarget";
 conf:variable:yystate = "yystate";
 conf:variable:yynmatch = "yynmatch";
 conf:variable:yypmatch = "yypmatch";
+conf:variable:yyrecord = "yyrecord";
 conf:variable:yych = "yych";
 conf:variable:yych:conversion = 0;
 conf:variable:yych:literals = char_or_hex;
@@ -114,7 +115,7 @@ conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
 conf:define:YYSKIP = "YYSKIP";
 conf:define:YYSTAGN = "YYSTAGN";
 conf:define:YYSTAGP = "YYSTAGP";
-conf:tags:expression = sigil;
+conf:tags:expression = (api.record ? record ".") sigil;
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil;
 
@@ -203,58 +204,134 @@ code:line_info = "//line \"" file "\":" line nl;
 
 code:abort = topindent "panic(\"internal lexer error\")" nl;
 
-code:yydebug = topindent debug (api_style.functions ? "()") nl;
+code:yydebug =
+    topindent (api.record
+        ? debug "(" record ")"
+        : debug (api_style.functions ? "()")
+    ) nl;
 
-code:yypeek = topindent char (code_model.recursive_functions ? " := " : " = ")
-    peek (api_style.functions ? "()") nl;
+code:yypeek =
+    topindent char (code_model.recursive_functions ? " := " : " = ") (api.record
+        ? record ".str[" record ".cur]"
+        : peek (api_style.functions ? "()")
+    ) nl;
 
-code:yyskip = topindent skip (api_style.functions ? "()") nl;
+code:yyskip =
+    topindent (api.record
+        ? record ".cur += 1"
+        : skip (api_style.functions ? "()")
+    ) nl;
 
-code:yybackup = topindent backup (api_style.functions ? "()") nl;
+code:yybackup =
+    topindent (api.record
+        ? record ".mar = " record ".cur"
+        : backup (api_style.functions ? "()")
+    ) nl;
 
-code:yybackupctx = topindent backupctx (api_style.functions ? "()") nl;
+code:yybackupctx =
+    topindent (api.record
+        ? record ".ctx = " record ".cur"
+        : backupctx (api_style.functions ? "()")
+    ) nl;
 
-code:yyrestore = topindent restore (api_style.functions ? "()") nl;
+code:yyrestore =
+    topindent (api.record
+        ? record ".cur = " record ".mar"
+        : restore (api_style.functions ? "()")
+    ) nl;
 
-code:yyrestorectx = topindent restorectx (api_style.functions ? "()") nl;
+code:yyrestorectx =
+    topindent (api.record
+        ? record ".cur = " record ".ctx"
+        : restorectx (api_style.functions ? "()")
+    ) nl;
 
-code:yyrestoretag = topindent restoretag (api_style.functions ? "(" tag ")") nl;
+code:yyrestoretag =
+    topindent (api.record
+        ? record ".cur = " tag
+        : restoretag (api_style.functions ? "(" tag ")")
+    ) nl;
 
-code:yyshift = topindent shift (api_style.functions ? "(-" offset ")") nl;
+code:yyshift =
+    topindent (api.record
+        ? record ".cur -= " offset
+        : shift (api_style.functions ? "(-" offset ")")
+    ) nl;
 
 code:yyshiftstag =
     (nested ? topindent "if (" tag " != " neg ") {" nl indent)
-        topindent shiftstag (api_style.functions ? "(" tag ", -" offset ")") nl
+        topindent (api.record
+            ? tag " -= " offset
+            : shiftstag (api_style.functions ? "(" tag ", -" offset ")")
+        ) nl
     (nested ? dedent topindent "}" nl);
 
 code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offset ")") nl;
 
-code:yystagp = topindent stagp (api_style.functions ? "(" tag ")") nl;
+code:yystagp =
+    topindent (api.record
+        ? tag " = " record ".cur"
+        : stagp (api_style.functions ? "(" tag ")")
+    ) nl;
 
 code:yymtagp = topindent mtagp (api_style.functions ? "(" tag ")") nl;
 
-code:yystagn = topindent stagn (api_style.functions ? "(" tag ")") nl;
+code:yystagn =
+    topindent (api.record
+        ? tag " = -1"
+        : stagn (api_style.functions ? "(" tag ")")
+    ) nl;
 
 code:yymtagn = topindent mtagn (api_style.functions ? "(" tag ")") nl;
 
-// function style is not supported, as there's no sensible default
-code:yycopystag = topindent copystag nl;
+code:yycopystag =
+    topindent (api.record
+        ? lhs " = " rhs
+        : copystag // function style is not supported, as there's no sensible default
+    ) nl;
 
-// function style is not supported, as there's no sensible default
-code:yycopymtag = topindent copymtag nl;
+code:yycopymtag =
+    topindent (api.record
+        ? lhs " = " rhs
+        : copymtag // function style is not supported, as there's no sensible default
+    ) nl;
 
-// function style is not supported, as there's no sensible default
-code:yygetaccept = getaccept;
+code:yygetaccept =
+    (api.record
+        ? record ".accept"
+        : getaccept); // function style is not supported, as there's no sensible default
 
-// function style is not supported, as there's no sensible default
-code:yysetaccept = topindent setaccept nl;
+code:yysetaccept =
+    topindent (api.record
+        ? record ".accept = " val
+        : setaccept // function style is not supported, as there's no sensible default
+    ) nl;
 
-code:yygetcond = getcond (api_style.functions ? "()");
+code:yygetcond =
+    (api.record
+        ? record ".cond"
+        : getcond (api_style.functions ? "()"));
 
-code:yysetcond = topindent setcond (api_style.functions ? "(" cond ")") nl;
+code:yysetcond =
+    topindent (api.record
+        ? record ".cond = " cond 
+        : setcond (api_style.functions ? "(" cond ")")
+    ) nl;
 
-code:yygetstate = getstate (api_style.functions ? "()");
+code:yygetstate =
+    (api.record
+        ? record ".state"
+        : getstate (api_style.functions ? "()"));
 
-code:yysetstate = topindent setstate (api_style.functions ? "(" state ")") nl;
+code:yysetstate =
+    topindent (api.record
+        ? record ".state = " state
+        : setstate (api_style.functions ? "(" state ")")
+    ) nl;
 
-code:yylessthan = lessthan (api_style.functions ? "(" need ")");
+code:yylessthan =
+    (api.record
+        ? (many
+            ? "(" record ".lim - " record ".cur) < " need
+            : record ".lim <= " record ".cur")
+        : lessthan (api_style.functions ? "(" need ")"));

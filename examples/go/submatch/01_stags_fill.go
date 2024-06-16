@@ -13,7 +13,7 @@ const BUFSIZE int = 4095
 
 type Input struct {
 	file *os.File
-	buf  []byte
+	str  []byte
 	cur  int
 	mar  int
 	tok  int
@@ -45,7 +45,7 @@ func fill(in *Input) int {
 	if in.tok < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	copy(in.str[0:], in.str[in.tok:in.lim])
 	in.cur -= in.tok
 	in.mar -= in.tok
 	in.lim -= in.tok
@@ -62,9 +62,9 @@ func fill(in *Input) int {
 	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
 	in.lim += n
-	in.buf[in.lim] = 0
+	in.str[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
 	in.eof = in.lim < BUFSIZE
@@ -85,7 +85,7 @@ func parse(in *Input) []SemVer {
 {
 	var yych byte
 yyFillLabel0:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy3
@@ -101,14 +101,14 @@ yyFillLabel0:
 yy1:
 	in.cur += 1
 yy2:
-//line "go/submatch/01_stags_fill.re":94
+//line "go/submatch/01_stags_fill.re":87
 	{ return nil }
 //line "go/submatch/01_stags_fill.go":107
 yy3:
 	in.cur += 1
 	in.mar = in.cur
 yyFillLabel1:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -125,7 +125,7 @@ yyFillLabel1:
 yy4:
 	in.cur += 1
 yyFillLabel2:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		in.yyt1 = in.cur
@@ -144,7 +144,7 @@ yy5:
 yy6:
 	in.cur += 1
 yyFillLabel3:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -161,7 +161,7 @@ yyFillLabel3:
 yy7:
 	in.cur += 1
 yyFillLabel4:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '\n':
 		in.yyt2 = in.cur
@@ -186,13 +186,13 @@ yy8:
 	t3 = in.yyt2
 	t4 = in.yyt3
 	t1 = in.yyt1
-	t1 += -1
-//line "go/submatch/01_stags_fill.re":85
+	t1 -= 1
+//line "go/submatch/01_stags_fill.re":78
 	{
-			major := s2n(in.buf[in.tok:t1])
-			minor := s2n(in.buf[t2:t3])
+			major := s2n(in.str[in.tok:t1])
+			minor := s2n(in.str[t2:t3])
 			patch := 0
-			if t4 != -1 { patch = s2n(in.buf[t4:in.cur-1]) }
+			if t4 != -1 { patch = s2n(in.str[t4:in.cur-1]) }
 			vers = append(vers, SemVer{major, minor, patch})
 			continue
 		}
@@ -200,7 +200,7 @@ yy8:
 yy9:
 	in.cur += 1
 yyFillLabel5:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		in.yyt3 = in.cur
@@ -216,7 +216,7 @@ yyFillLabel5:
 yy10:
 	in.cur += 1
 yyFillLabel6:
-	yych = in.buf[in.cur]
+	yych = in.str[in.cur]
 	switch (yych) {
 	case '\n':
 		goto yy8
@@ -231,11 +231,11 @@ yyFillLabel6:
 		goto yy5
 	}
 yy11:
-//line "go/submatch/01_stags_fill.re":93
+//line "go/submatch/01_stags_fill.re":86
 	{ return vers }
 //line "go/submatch/01_stags_fill.go":237
 }
-//line "go/submatch/01_stags_fill.re":95
+//line "go/submatch/01_stags_fill.re":88
 
 	}
 }
@@ -257,7 +257,7 @@ func main() () {
 	in := &Input{
 		file: f,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:  make([]byte, BUFSIZE+1),
+		str:  make([]byte, BUFSIZE+1),
 		cur:  BUFSIZE,
 		mar:  BUFSIZE,
 		tok:  BUFSIZE,

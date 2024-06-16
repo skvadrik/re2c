@@ -12,7 +12,7 @@ const BUFSIZE uint = 4096
 
 type Input struct {
 	file *os.File
-	buf  []byte
+	str  []byte
 	cur  uint
 	mar  uint
 	tok  uint
@@ -27,16 +27,16 @@ func fill(in *Input) int {
 	if in.tok < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.buf[0:], in.buf[in.tok:in.lim])
+	copy(in.str[0:], in.str[in.tok:in.lim])
 	in.cur -= in.tok
 	in.mar -= in.tok
 	in.lim -= in.tok
 	in.tok = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
+	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
 	in.lim += uint(n)
-	in.buf[in.lim] = 0
+	in.str[in.lim] = 0
 
 	// If read less than expected, this is the end of input.
 	in.eof = in.lim < BUFSIZE
@@ -44,24 +44,24 @@ func fill(in *Input) int {
 	return 0
 }
 
-func lex(in *Input) int {
+func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		in.tok = in.cur
+		yyrecord.tok = yyrecord.cur
 	
 //line "go/fill/01_fill.go":53
 {
 	var yych byte
 yyFillLabel0:
-	yych = in.buf[in.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (in.lim <= in.cur) {
-			if (fill(in) == 0) {
+		if (yyrecord.lim <= yyrecord.cur) {
+			if (fill(yyrecord) == 0) {
 				goto yyFillLabel0
 			}
 			goto yy10
@@ -69,48 +69,48 @@ yyFillLabel0:
 		goto yy1
 	}
 yy1:
-	in.cur += 1
+	yyrecord.cur += 1
 yy2:
-//line "go/fill/01_fill.re":61
+//line "go/fill/01_fill.re":57
 	{ return -1 }
 //line "go/fill/01_fill.go":77
 yy3:
-	in.cur += 1
+	yyrecord.cur += 1
 yyFillLabel1:
-	yych = in.buf[in.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	default:
-		if (in.lim <= in.cur) {
-			if (fill(in) == 0) {
+		if (yyrecord.lim <= yyrecord.cur) {
+			if (fill(yyrecord) == 0) {
 				goto yyFillLabel1
 			}
 		}
 		goto yy4
 	}
 yy4:
-//line "go/fill/01_fill.re":64
+//line "go/fill/01_fill.re":60
 	{ continue }
 //line "go/fill/01_fill.go":96
 yy5:
-	in.cur += 1
-	in.mar = in.cur
+	yyrecord.cur += 1
+	yyrecord.mar = yyrecord.cur
 yyFillLabel2:
-	yych = in.buf[in.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (in.lim <= in.cur) {
-		if (fill(in) == 0) {
+	if (yyrecord.lim <= yyrecord.cur) {
+		if (fill(yyrecord) == 0) {
 			goto yyFillLabel2
 		}
 		goto yy2
 	}
 yy6:
-	in.cur += 1
+	yyrecord.cur += 1
 yyFillLabel3:
-	yych = in.buf[in.cur]
+	yych = yyrecord.str[yyrecord.cur]
 yy7:
 	switch (yych) {
 	case '\'':
@@ -118,8 +118,8 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (in.lim <= in.cur) {
-			if (fill(in) == 0) {
+		if (yyrecord.lim <= yyrecord.cur) {
+			if (fill(yyrecord) == 0) {
 				goto yyFillLabel3
 			}
 			goto yy11
@@ -127,17 +127,17 @@ yy7:
 		goto yy6
 	}
 yy8:
-	in.cur += 1
-//line "go/fill/01_fill.re":63
+	yyrecord.cur += 1
+//line "go/fill/01_fill.re":59
 	{ count += 1; continue }
 //line "go/fill/01_fill.go":134
 yy9:
-	in.cur += 1
+	yyrecord.cur += 1
 yyFillLabel4:
-	yych = in.buf[in.cur]
+	yych = yyrecord.str[yyrecord.cur]
 	if (yych <= 0x00) {
-		if (in.lim <= in.cur) {
-			if (fill(in) == 0) {
+		if (yyrecord.lim <= yyrecord.cur) {
+			if (fill(yyrecord) == 0) {
 				goto yyFillLabel4
 			}
 			goto yy11
@@ -146,14 +146,14 @@ yyFillLabel4:
 	}
 	goto yy6
 yy10:
-//line "go/fill/01_fill.re":62
+//line "go/fill/01_fill.re":58
 	{ return count }
 //line "go/fill/01_fill.go":152
 yy11:
-	in.cur = in.mar
+	yyrecord.cur = yyrecord.mar
 	goto yy2
 }
-//line "go/fill/01_fill.re":65
+//line "go/fill/01_fill.re":61
 
 	}
 }
@@ -173,7 +173,7 @@ func main() () {
 	in := &Input{
 		file: f,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:  make([]byte, BUFSIZE+1),
+		str:  make([]byte, BUFSIZE+1),
 		cur:  BUFSIZE,
 		mar:  BUFSIZE,
 		tok:  BUFSIZE,
