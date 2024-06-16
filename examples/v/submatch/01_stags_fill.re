@@ -10,7 +10,7 @@ const tag_none = -1
 struct State {
     file os.File
 mut:
-    buf  []u8
+    str  []u8
     cur  int
     mar  int
     tok  int
@@ -40,7 +40,7 @@ fn fill(mut st &State) int {
     if st.tok < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.buf, st.buf[st.tok..st.lim])
+    copy(mut &st.str, st.str[st.tok..st.lim])
     st.cur -= st.tok
     st.mar -= st.tok
     st.lim -= st.tok
@@ -52,10 +52,10 @@ fn fill(mut st &State) int {
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
     st.eof = st.lim < bufsize
@@ -72,27 +72,19 @@ fn parse(mut st &State) ?[]SemVer {
 loop:
     st.tok = st.cur
     /*!re2c
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "st.buf[st.cur]";
-        re2c:define:YYSKIP      = "st.cur += 1";
-        re2c:define:YYBACKUP    = "st.mar = st.cur";
-        re2c:define:YYRESTORE   = "st.cur = st.mar";
-        re2c:define:YYLESSTHAN  = "st.lim <= st.cur";
-        re2c:define:YYFILL      = "fill(mut st) == 0";
-        re2c:define:YYSTAGP     = "@@{tag} = st.cur";
-        re2c:define:YYSTAGN     = "@@{tag} = -1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
+        re2c:api = record;
+        re2c:variable:yyrecord = st;
+        re2c:define:YYFILL = "fill(mut st) == 0";
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
         re2c:eof = 0;
 
         num = [0-9]+;
 
         num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
             ver := SemVer {
-                major: s2n(st.buf[st.tok..t1]),
-                minor: s2n(st.buf[t2..t3]),
-                patch: if t4 == -1 { 0 } else { s2n(st.buf[t4..st.cur - 1]) }
+                major: s2n(st.str[st.tok..t1]),
+                minor: s2n(st.str[t2..t3]),
+                patch: if t4 == -1 { 0 } else { s2n(st.str[t4..st.cur - 1]) }
             }
             vers = arrays.concat(vers, ver)
             unsafe { goto loop }
@@ -117,7 +109,7 @@ fn main() {
     mut st := &State{
         file: fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:  []u8{len: bufsize + 1},
+        str:  []u8{len: bufsize + 1},
         cur:  bufsize,
         mar:  bufsize,
         tok:  bufsize,

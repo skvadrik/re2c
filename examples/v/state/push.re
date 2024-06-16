@@ -10,7 +10,7 @@ const bufsize = 10
 struct State {
 mut:
     file  os.File
-    buf   []u8
+    str   []u8
     cur   int
     mar   int
     tok   int
@@ -35,7 +35,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.buf, st.buf[shift..shift+used])
+    copy(mut &st.str, st.str[shift..shift+used])
     st.cur -= shift
     st.mar -= shift
     st.lim -= shift
@@ -43,29 +43,23 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     return .lex_ready
 }
 
-fn lex(mut st &State, mut recv &int) Status {
+fn lex(mut yyrecord &State, mut recv &int) Status {
     mut yych := u8(0)
     /*!getstate:re2c*/
 loop:
-    st.tok = st.cur
+    yyrecord.tok = yyrecord.cur
     /*!re2c
+        re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYPEEK     = "st.buf[st.cur]";
-        re2c:define:YYSKIP     = "st.cur += 1";
-        re2c:define:YYBACKUP   = "st.mar = st.cur";
-        re2c:define:YYRESTORE  = "st.cur = st.mar";
-        re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-        re2c:define:YYFILL     = "return .lex_waiting";
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@{state}";
+        re2c:define:YYFILL = "return .lex_waiting";
 
         packet = [a-z]+[;];
 
@@ -86,7 +80,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:  fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:   []u8{len: bufsize + 1},
+        str:   []u8{len: bufsize + 1},
         cur:   bufsize,
         mar:   bufsize,
         tok:   bufsize,
@@ -112,7 +106,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.buf, status $status")
+            log.debug("filled buffer $st.str, status $status")
             if status != .lex_ready {
                 break
             }

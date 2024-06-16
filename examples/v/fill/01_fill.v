@@ -10,7 +10,7 @@ const bufsize = 4096
 struct State {
     file os.File
 mut:
-    buf  []u8
+    str  []u8
     cur  int
     mar  int
     tok  int
@@ -25,7 +25,7 @@ fn fill(mut st &State) int {
     if st.tok < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.buf, st.buf[st.tok..st.lim])
+    copy(mut &st.str, st.str[st.tok..st.lim])
     st.cur -= st.tok
     st.mar -= st.tok
     st.lim -= st.tok
@@ -33,10 +33,10 @@ fn fill(mut st &State) int {
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
     st.eof = st.lim < bufsize
@@ -44,21 +44,21 @@ fn fill(mut st &State) int {
     return 0
 }
 
-fn lex(mut st &State) int {
+fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    st.tok = st.cur
+    yyrecord.tok = yyrecord.cur
     
 //line "v/fill/01_fill.v":53
     mut yych := 0
 yyFillLabel0:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x20 { unsafe { goto yy3 } }
         0x27 { unsafe { goto yy5 } }
         else {
-            if st.lim <= st.cur {
-                if fill(mut st) == 0 {
+            if yyrecord.lim <= yyrecord.cur {
+                if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel0 }
                 }
                 unsafe { goto yy10 }
@@ -67,20 +67,20 @@ yyFillLabel0:
         }
     }
 yy1:
-    st.cur += 1
+    yyrecord.cur += 1
 yy2:
-//line "v/fill/01_fill.re":61
+//line "v/fill/01_fill.re":56
     return -1
 //line "v/fill/01_fill.v":75
 yy3:
-    st.cur += 1
+    yyrecord.cur += 1
 yyFillLabel1:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else {
-            if st.lim <= st.cur {
-                if fill(mut st) == 0 {
+            if yyrecord.lim <= yyrecord.cur {
+                if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel1 }
                 }
             }
@@ -88,34 +88,34 @@ yyFillLabel1:
         }
     }
 yy4:
-//line "v/fill/01_fill.re":64
+//line "v/fill/01_fill.re":59
     unsafe { goto loop }
 //line "v/fill/01_fill.v":94
 yy5:
-    st.cur += 1
-    st.mar = st.cur
+    yyrecord.cur += 1
+    yyrecord.mar = yyrecord.cur
 yyFillLabel2:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     if yych >= 0x01 {
         unsafe { goto yy7 }
     }
-    if st.lim <= st.cur {
-        if fill(mut st) == 0 {
+    if yyrecord.lim <= yyrecord.cur {
+        if fill(mut yyrecord) == 0 {
             unsafe { goto yyFillLabel2 }
         }
         unsafe { goto yy2 }
     }
 yy6:
-    st.cur += 1
+    yyrecord.cur += 1
 yyFillLabel3:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
 yy7:
     match yych {
         0x27 { unsafe { goto yy8 } }
         0x5C { unsafe { goto yy9 } }
         else {
-            if st.lim <= st.cur {
-                if fill(mut st) == 0 {
+            if yyrecord.lim <= yyrecord.cur {
+                if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel3 }
                 }
                 unsafe { goto yy11 }
@@ -124,17 +124,17 @@ yy7:
         }
     }
 yy8:
-    st.cur += 1
-//line "v/fill/01_fill.re":63
+    yyrecord.cur += 1
+//line "v/fill/01_fill.re":58
     count += 1; unsafe { goto loop }
 //line "v/fill/01_fill.v":131
 yy9:
-    st.cur += 1
+    yyrecord.cur += 1
 yyFillLabel4:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     if yych <= 0x00 {
-        if st.lim <= st.cur {
-            if fill(mut st) == 0 {
+        if yyrecord.lim <= yyrecord.cur {
+            if fill(mut yyrecord) == 0 {
                 unsafe { goto yyFillLabel4 }
             }
             unsafe { goto yy11 }
@@ -143,13 +143,13 @@ yyFillLabel4:
     }
     unsafe { goto yy6 }
 yy10:
-//line "v/fill/01_fill.re":62
+//line "v/fill/01_fill.re":57
     return count
 //line "v/fill/01_fill.v":149
 yy11:
-    st.cur = st.mar
+    yyrecord.cur = yyrecord.mar
     unsafe { goto yy2 }
-//line "v/fill/01_fill.re":65
+//line "v/fill/01_fill.re":60
 
 }
 
@@ -169,7 +169,7 @@ fn main() {
     mut st := &State{
         file: fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:  []u8{len: bufsize + 1},
+        str:  []u8{len: bufsize + 1},
         cur:  bufsize,
         mar:  bufsize,
         tok:  bufsize,

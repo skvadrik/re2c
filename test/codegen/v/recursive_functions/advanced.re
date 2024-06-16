@@ -58,7 +58,7 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 struct State {
 mut:
     file   os.File
-    buf    []u8
+    str    []u8
     cur    int
     mar    int
     tok    int
@@ -96,7 +96,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.buf, st.buf[shift..shift+used])
+    copy(mut &st.str, st.str[shift..shift+used])
     st.cur -= shift
     st.mar -= shift
     st.lim -= shift
@@ -105,35 +105,24 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     return .lex_ready
 }
 
 /*!re2c
+    re2c:api = record;
     re2c:eof = 0;
     re2c:tags = 1;
-    re2c:tags:expression   = "st.@@";
-    re2c:variable:yyaccept = "st.accept";
-    re2c:define:YYFN       = ["lex;Status", "mut st;State"];
-    re2c:define:YYCTYPE    = u8;
-    re2c:define:YYPEEK     = "st.buf[st.cur]";
-    re2c:define:YYSKIP     = "st.cur += 1";
-    re2c:define:YYBACKUP   = "st.mar = st.cur";
-    re2c:define:YYRESTORE  = "st.cur = st.mar";
-    re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-    re2c:define:YYFILL     = "return .lex_waiting";
-    re2c:define:YYGETSTATE = "st.state";
-    re2c:define:YYSETSTATE = "st.state = @@{state}";
-    re2c:define:YYGETCONDITION = "st.cond";
-    re2c:define:YYSETCONDITION = "st.cond = @@";
-    re2c:define:YYSTAGP    = "@@ = st.cur";
-    re2c:define:YYSTAGN    = "@@ = tag_none";
-    re2c:define:YYMTAGP    = "@@ = add_mtag(mut &st.trie, @@, st.cur)";
-    re2c:define:YYMTAGN    = "@@ = add_mtag(mut &st.trie, @@, tag_none)";
+    re2c:variable:yyrecord = st;
+    re2c:define:YYCTYPE = u8;
+    re2c:define:YYFN = ["lex;Status", "mut st;State"];
+    re2c:define:YYFILL = "return .lex_waiting";
+    re2c:define:YYMTAGP = "@@ = add_mtag(mut &st.trie, @@, st.cur)";
+    re2c:define:YYMTAGN = "@@ = add_mtag(mut &st.trie, @@, tag_none)";
 
     crlf  = '\r\n';
     sp    = ' ';
@@ -163,13 +152,13 @@ fn fill(mut st &State) Status {
     media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
     <media_type> media_type ows crlf {
-        mt := st.buf[st.l1..st.l2].str()
+        mt := st.str[st.l1..st.l2].str()
         log.debug("media type: $mt")
 
-        pnames := unwind(st.trie, st.p1, st.p2, st.buf)
+        pnames := unwind(st.trie, st.p1, st.p2, st.str)
         log.debug("pnames: $pnames")
 
-        pvals := unwind(st.trie, st.p3, st.p4, st.buf)
+        pvals := unwind(st.trie, st.p3, st.p4, st.str)
         log.debug("pvals: $pvals")
 
         st.tok = st.cur
@@ -177,7 +166,7 @@ fn fill(mut st &State) Status {
     }
 
     <header> header_field_folded crlf {
-        folds := unwind(st.trie, st.f1, st.f2, st.buf)
+        folds := unwind(st.trie, st.f1, st.f2, st.str)
         log.debug("folds: $folds")
 
         st.tok = st.cur
@@ -199,7 +188,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:   fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:    []u8{len: bufsize + 1},
+        str:    []u8{len: bufsize + 1},
         cur:    bufsize,
         mar:    bufsize,
         tok:    bufsize,
@@ -219,7 +208,7 @@ fn test(expect Status, packets []string) {
         p4:     mtag_root,
         accept: 0,
     }
-    // buf is zero-initialized, no need to write sentinel
+    // str is zero-initialized, no need to write sentinel
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and
@@ -238,7 +227,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.buf, status $status")
+            log.debug("filled buffer $st.str, status $status")
             if status != .lex_ready {
                 break
             }

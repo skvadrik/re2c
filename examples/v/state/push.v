@@ -12,7 +12,7 @@ const bufsize = 10
 struct State {
 mut:
     file  os.File
-    buf   []u8
+    str   []u8
     cur   int
     mar   int
     tok   int
@@ -37,7 +37,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.buf, st.buf[shift..shift+used])
+    copy(mut &st.str, st.str[shift..shift+used])
     st.cur -= shift
     st.mar -= shift
     st.lim -= shift
@@ -45,33 +45,33 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
-    st.buf[st.lim] = 0 // append sentinel symbol
+    st.str[st.lim] = 0 // append sentinel symbol
 
     return .lex_ready
 }
 
-fn lex(mut st &State, mut recv &int) Status {
+fn lex(mut yyrecord &State, mut recv &int) Status {
     mut yych := u8(0)
     
 //line "v/state/push.v":60
-match st.state {
+match yyrecord.state {
     0 {
-        if st.lim <= st.cur {
+        if yyrecord.lim <= yyrecord.cur {
             unsafe { goto yy8 }
         }
         unsafe { goto yyFillLabel0 }
     }
     1 {
-        if st.lim <= st.cur {
+        if yyrecord.lim <= yyrecord.cur {
             unsafe { goto yy3 }
         }
         unsafe { goto yyFillLabel1 }
     }
     2 {
-        if st.lim <= st.cur {
+        if yyrecord.lim <= yyrecord.cur {
             unsafe { goto yy7 }
         }
         unsafe { goto yyFillLabel2 }
@@ -81,75 +81,75 @@ match st.state {
 //line "v/state/push.re":56
 
 loop:
-    st.tok = st.cur
+    yyrecord.tok = yyrecord.cur
     
 //line "v/state/push.v":87
 yy0:
 yyFillLabel0:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x61...0x7A { unsafe { goto yy4 } }
         else {
-            if st.lim <= st.cur {
-                st.state = 0
+            if yyrecord.lim <= yyrecord.cur {
+                yyrecord.state = 0
                 return .lex_waiting
             }
             unsafe { goto yy2 }
         }
     }
 yy2:
-    st.cur += 1
+    yyrecord.cur += 1
 yy3:
-    st.state = -1
-//line "v/state/push.re":72
+    yyrecord.state = -1
+//line "v/state/push.re":66
     return .lex_bad_packet
 //line "v/state/push.v":107
 yy4:
-    st.cur += 1
-    st.mar = st.cur
+    yyrecord.cur += 1
+    yyrecord.mar = yyrecord.cur
 yyFillLabel1:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x3B { unsafe { goto yy5 } }
         0x61...0x7A { unsafe { goto yy6 } }
         else {
-            if st.lim <= st.cur {
-                st.state = 1
+            if yyrecord.lim <= yyrecord.cur {
+                yyrecord.state = 1
                 return .lex_waiting
             }
             unsafe { goto yy3 }
         }
     }
 yy5:
-    st.cur += 1
-    st.state = -1
-//line "v/state/push.re":74
+    yyrecord.cur += 1
+    yyrecord.state = -1
+//line "v/state/push.re":68
     recv += 1; unsafe{ goto loop }
 //line "v/state/push.v":129
 yy6:
-    st.cur += 1
+    yyrecord.cur += 1
 yyFillLabel2:
-    yych = st.buf[st.cur]
+    yych = yyrecord.str[yyrecord.cur]
     match yych {
         0x3B { unsafe { goto yy5 } }
         0x61...0x7A { unsafe { goto yy6 } }
         else {
-            if st.lim <= st.cur {
-                st.state = 2
+            if yyrecord.lim <= yyrecord.cur {
+                yyrecord.state = 2
                 return .lex_waiting
             }
             unsafe { goto yy7 }
         }
     }
 yy7:
-    st.cur = st.mar
+    yyrecord.cur = yyrecord.mar
     unsafe { goto yy3 }
 yy8:
-    st.state = -1
-//line "v/state/push.re":73
+    yyrecord.state = -1
+//line "v/state/push.re":67
     return .lex_end
 //line "v/state/push.v":152
-//line "v/state/push.re":75
+//line "v/state/push.re":69
 
 }
 
@@ -164,7 +164,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:  fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        buf:   []u8{len: bufsize + 1},
+        str:   []u8{len: bufsize + 1},
         cur:   bufsize,
         mar:   bufsize,
         tok:   bufsize,
@@ -190,7 +190,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.buf, status $status")
+            log.debug("filled buffer $st.str, status $status")
             if status != .lex_ready {
                 break
             }

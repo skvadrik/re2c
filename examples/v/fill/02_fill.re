@@ -9,7 +9,7 @@ const bufsize = 4096
 struct State {
     file os.File
 mut:
-    buf  []u8
+    str  []u8
     cur  int
     tok  int
     lim  int
@@ -23,45 +23,40 @@ fn fill(mut st &State, need int) int {
     if st.tok < need { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.buf, st.buf[st.tok..st.lim])
+    copy(mut &st.str, st.str[st.tok..st.lim])
     st.cur -= st.tok
     st.lim -= st.tok
     st.tok = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.buf[st.lim..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
         st.lim += n
     }
 
     // If read less than expected, this is the end of input.
     if st.lim < bufsize {
         st.eof = true
-        for i := 0; i < yymaxfill; i += 1 { st.buf[st.lim + i] = 0 }
+        for i := 0; i < yymaxfill; i += 1 { st.str[st.lim + i] = 0 }
         st.lim += yymaxfill
     }
 
     return 0
 }
 
-fn lex(mut st &State) int {
+fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    st.tok = st.cur
+    yyrecord.tok = yyrecord.cur
     /*!re2c
-        re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "st.buf[st.cur]";
-        re2c:define:YYSKIP     = "st.cur += 1";
-        re2c:define:YYBACKUP   = "st.mar = st.cur";
-        re2c:define:YYRESTORE  = "st.cur = st.mar";
-        re2c:define:YYLESSTHAN = "st.lim - st.cur < @@";
-        re2c:define:YYFILL     = "r := fill(mut st, @@); if r != 0 { return r }";
+        re2c:api = record;
+        re2c:define:YYFILL = "r := fill(mut yyrecord, @@); if r != 0 { return r }";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return if st.tok == (st.lim - yymaxfill) { count } else { -1 }
+            return if yyrecord.tok == (yyrecord.lim - yymaxfill) { count } else { -1 }
         }
         str  { count += 1; unsafe { goto loop } }
         [ ]+ { unsafe { goto loop } }
@@ -85,7 +80,7 @@ fn main() {
     mut fr := os.open(fname)!
     mut st := &State{
         file: fr,
-        buf:  []u8{len: bufsize + yymaxfill},
+        str:  []u8{len: bufsize + yymaxfill},
         cur:  bufsize,
         tok:  bufsize,
         lim:  bufsize,
