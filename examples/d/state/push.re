@@ -10,7 +10,7 @@ enum BUFSIZE = 10;
 
 struct State {
     FILE* file;
-    char[BUFSIZE + 1] buf;
+    char[BUFSIZE + 1] str;
     char* lim, cur, mar, tok;
     int state;
 };
@@ -18,7 +18,7 @@ struct State {
 enum Status {END, READY, WAITING, BAD_PACKET, BIG_PACKET};
 
 private Status fill(ref State st) {
-    const size_t shift = st.tok - cast(char*)st.buf;
+    const size_t shift = st.tok - cast(char*)st.str;
     const size_t used = st.lim - st.tok;
     const size_t free = BUFSIZE - used;
 
@@ -26,7 +26,7 @@ private Status fill(ref State st) {
     if (free < 1) return Status.BIG_PACKET;
 
     // Shift buffer contents (discard already processed data).
-    memmove(cast(void*)st.buf, st.tok, used);
+    memmove(cast(void*)st.str, st.tok, used);
     st.lim -= shift;
     st.cur -= shift;
     st.mar -= shift;
@@ -40,22 +40,16 @@ private Status fill(ref State st) {
     return Status.READY;
 }
 
-private Status lex(ref State st, uint* recv) {
+private Status lex(ref State yyrecord, uint* recv) {
     char yych;
     /*!getstate:re2c*/
 
     for (;;) {
-        st.tok = st.cur;
+        yyrecord.tok = yyrecord.cur;
     /*!re2c
-        re2c:define:YYCTYPE    = char;
-        re2c:define:YYPEEK     = '*st.cur';
-        re2c:define:YYSKIP     = '++st.cur;';
-        re2c:define:YYRESTORE  = 'st.cur = st.mar;';
-        re2c:define:YYBACKUP   = 'st.mar = st.cur;';
-        re2c:define:YYGETSTATE = "st.state";
-        re2c:define:YYSETSTATE = "st.state = @@;";
-        re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-        re2c:define:YYFILL     = "return Status.WAITING;";
+        re2c:api = record;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYFILL = "return Status.WAITING;";
         re2c:eof = 0;
 
         packet = [a-z]+[;];
@@ -80,7 +74,7 @@ private void test(string[] packets, Status expect) {
     // of buffer.
     State st;
     st.file = fr;
-    st.cur = st.mar = st.tok = st.lim = cast(char*)st.buf + BUFSIZE;
+    st.cur = st.mar = st.tok = st.lim = cast(char*)st.str + BUFSIZE;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     st.lim[0] = 0;
     st.state = -1;
@@ -103,7 +97,7 @@ private void test(string[] packets, Status expect) {
                 ++send;
             }
             status = fill(st);
-            debug{printf("queue: '%s'\n", cast(char*)st.buf);}
+            debug{printf("queue: '%s'\n", cast(char*)st.str);}
             if (status == Status.BIG_PACKET) {
                 debug{printf("error: packet too big\n");}
                 break;

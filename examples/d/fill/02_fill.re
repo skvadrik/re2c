@@ -9,7 +9,7 @@ enum BUFSIZE = (4096 - YYMAXFILL);
 
 struct Input {
     FILE* file;
-    char[BUFSIZE + YYMAXFILL] buf;
+    char[BUFSIZE + YYMAXFILL] str;
     char* lim, cur, tok;
     bool eof;
 };
@@ -17,14 +17,14 @@ struct Input {
 private int fill(ref Input input, size_t need) {
     if (input.eof) return 1;
 
-    const size_t shift = input.tok - input.buf.ptr;
+    const size_t shift = input.tok - input.str.ptr;
     const size_t used = input.lim - input.tok;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < need) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(input.buf.ptr, input.tok, used);
+    memmove(input.str.ptr, input.tok, used);
     input.lim -= shift;
     input.cur -= shift;
     input.tok -= shift;
@@ -34,7 +34,7 @@ private int fill(ref Input input, size_t need) {
 
     // If read less than expected, this is end of input => add zero padding
     // so that the lexer can access characters at the end of buffer.
-    if (input.lim < input.buf.ptr + BUFSIZE) {
+    if (input.lim < input.str.ptr + BUFSIZE) {
         input.eof = true;
         memset(input.lim, 0, YYMAXFILL);
         input.lim += YYMAXFILL;
@@ -43,24 +43,20 @@ private int fill(ref Input input, size_t need) {
     return 0;
 }
 
-private int lex(ref Input input) {
+private int lex(ref Input yyrecord) {
     int count = 0;
     for (;;) {
-        input.tok = input.cur;
+        yyrecord.tok = yyrecord.cur;
     /*!re2c
-        re2c:define:YYCTYPE    = "char";
-        re2c:define:YYSKIP     = "input.cur++;";
-        re2c:define:YYPEEK     = "(*input.cur)";
-        re2c:define:YYBACKUP   = "input.mar = input.cur;";
-        re2c:define:YYRESTORE  = "input.cur = input.mar;";
-        re2c:define:YYLESSTHAN = "input.lim <= input.cur";
-        re2c:define:YYFILL     = "if (fill(input, @@) != 0) return -1;";
+        re2c:api = record;
+        re2c:define:YYCTYPE = "char";
+        re2c:define:YYFILL = "if (fill(yyrecord, @@) != 0) return -1;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return input.tok == input.lim - YYMAXFILL ? count : -1;
+            return yyrecord.tok == yyrecord.lim - YYMAXFILL ? count : -1;
         }
         str  { ++count; continue; }
         [ ]+ { continue; }
@@ -87,7 +83,7 @@ void main() {
     // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
     Input input;
     input.file = fopen(fname.ptr, "r");
-    input.cur = input.tok = input.lim = input.buf.ptr + BUFSIZE;
+    input.cur = input.tok = input.lim = input.str.ptr + BUFSIZE;
     input.eof = 0;
 
     // Run the lexer.
