@@ -13,19 +13,16 @@ struct LexerState {
 };
 /*!header:re2c:off*/
 
-private long lex(ref LexerState st) {
+private long lex(ref LexerState yyrecord) {
     const(char)* t;
     /*!re2c
-        re2c:define:YYCTYPE  = "char";
-        re2c:define:YYPEEK   = "*st.cur";
-        re2c:define:YYSKIP   = "++st.cur;";
-        re2c:define:YYSTAGP  = "@@{tag} = st.cur;";
+        re2c:api = record;
+        re2c:define:YYCTYPE = "char";
         re2c:tags = 1;
-        re2c:tags:expression = "st.@@";
         re2c:yyfill:enable = 0;
         re2c:header = "lexer/state.d";
 
-        [a]* @t [b]* { return t - st.str; }
+        [a]* @t [b]* { return t - yyrecord.str; }
     */
 }
 

@@ -12,7 +12,7 @@ enum BUFSIZE = 10;
 
 struct State {
     FILE* file;
-    char[BUFSIZE + 1] buf;
+    char[BUFSIZE + 1] str;
     char* lim, cur, mar, tok;
     int state;
 };
@@ -20,7 +20,7 @@ struct State {
 enum Status {END, READY, WAITING, BAD_PACKET, BIG_PACKET};
 
 private Status fill(ref State st) {
-    const size_t shift = st.tok - cast(char*)st.buf;
+    const size_t shift = st.tok - cast(char*)st.str;
     const size_t used = st.lim - st.tok;
     const size_t free = BUFSIZE - used;
 
@@ -28,7 +28,7 @@ private Status fill(ref State st) {
     if (free < 1) return Status.BIG_PACKET;
 
     // Shift buffer contents (discard already processed data).
-    memmove(cast(void*)st.buf, st.tok, used);
+    memmove(cast(void*)st.str, st.tok, used);
     st.lim -= shift;
     st.cur -= shift;
     st.mar -= shift;
@@ -42,20 +42,20 @@ private Status fill(ref State st) {
     return Status.READY;
 }
 
-private Status lex(ref State st, uint* recv) {
+private Status lex(ref State yyrecord, uint* recv) {
     char yych;
     
 #line 49 "d/state/push.d"
-switch (st.state) {
+switch (yyrecord.state) {
 	case -1: goto yy0;
 	case 0:
-		if (st.lim <= st.cur) goto yy8;
+		if (yyrecord.lim <= yyrecord.cur) goto yy8;
 		goto yyFillLabel0;
 	case 1:
-		if (st.lim <= st.cur) goto yy3;
+		if (yyrecord.lim <= yyrecord.cur) goto yy3;
 		goto yyFillLabel1;
 	case 2:
-		if (st.lim <= st.cur) goto yy7;
+		if (yyrecord.lim <= yyrecord.cur) goto yy7;
 		goto yyFillLabel2;
 	default: assert(false);
 }
@@ -63,72 +63,72 @@ switch (st.state) {
 
 
     for (;;) {
-        st.tok = st.cur;
+        yyrecord.tok = yyrecord.cur;
     
 #line 69 "d/state/push.d"
 yy0:
 yyFillLabel0:
-	yych = *st.cur;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case 'a': .. case 'z': goto yy4;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 0;
+			if (yyrecord.lim <= yyrecord.cur) {
+				yyrecord.state = 0;
 				return Status.WAITING;
 			}
 			goto yy2;
 	}
 yy2:
-	++st.cur;
+	++yyrecord.cur;
 yy3:
-	st.state = -1;
-#line 63 "d/state/push.re"
+	yyrecord.state = -1;
+#line 57 "d/state/push.re"
 	{ return Status.BAD_PACKET; }
 #line 88 "d/state/push.d"
 yy4:
-	++st.cur;
-	st.mar = st.cur;
+	++yyrecord.cur;
+	yyrecord.mar = yyrecord.cur;
 yyFillLabel1:
-	yych = *st.cur;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a': .. case 'z': goto yy6;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 1;
+			if (yyrecord.lim <= yyrecord.cur) {
+				yyrecord.state = 1;
 				return Status.WAITING;
 			}
 			goto yy3;
 	}
 yy5:
-	++st.cur;
-	st.state = -1;
-#line 65 "d/state/push.re"
+	++yyrecord.cur;
+	yyrecord.state = -1;
+#line 59 "d/state/push.re"
 	{ *recv = *recv + 1; continue; }
 #line 109 "d/state/push.d"
 yy6:
-	++st.cur;
+	++yyrecord.cur;
 yyFillLabel2:
-	yych = *st.cur;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a': .. case 'z': goto yy6;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 2;
+			if (yyrecord.lim <= yyrecord.cur) {
+				yyrecord.state = 2;
 				return Status.WAITING;
 			}
 			goto yy7;
 	}
 yy7:
-	st.cur = st.mar;
+	yyrecord.cur = yyrecord.mar;
 	goto yy3;
 yy8:
-	st.state = -1;
-#line 64 "d/state/push.re"
+	yyrecord.state = -1;
+#line 58 "d/state/push.re"
 	{ return Status.END; }
 #line 131 "d/state/push.d"
-#line 66 "d/state/push.re"
+#line 60 "d/state/push.re"
 
     }
     assert(0); // unreachable
@@ -146,7 +146,7 @@ private void test(string[] packets, Status expect) {
     // of buffer.
     State st;
     st.file = fr;
-    st.cur = st.mar = st.tok = st.lim = cast(char*)st.buf + BUFSIZE;
+    st.cur = st.mar = st.tok = st.lim = cast(char*)st.str + BUFSIZE;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     st.lim[0] = 0;
     st.state = -1;
@@ -169,7 +169,7 @@ private void test(string[] packets, Status expect) {
                 ++send;
             }
             status = fill(st);
-            debug{printf("queue: '%s'\n", cast(char*)st.buf);}
+            debug{printf("queue: '%s'\n", cast(char*)st.str);}
             if (status == Status.BIG_PACKET) {
                 debug{printf("error: packet too big\n");}
                 break;

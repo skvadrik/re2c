@@ -10,7 +10,7 @@ enum BUFSIZE = 4095;
 
 struct Input {
     FILE* file;
-    char[BUFSIZE + 1] buf;// +1 for sentinputel
+    char[BUFSIZE + 1] str;// +1 for sentinel
     char* lim, cur, mar, tok;
     bool eof;
 };
@@ -18,14 +18,14 @@ struct Input {
 private int fill(ref Input input) {
     if (input.eof) return 1;
 
-    const size_t shift = input.tok - input.buf.ptr;
+    const size_t shift = input.tok - input.str.ptr;
     const size_t used = input.lim - input.tok;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < 1) return 2;
 
-    // Shift buffer contents (discard everythinputg up to the current token).
-    memmove(cast(void*)input.buf.ptr, input.tok, used);
+    // Shift buffer contents (discard everything up to the current token).
+    memmove(cast(void*)input.str.ptr, input.tok, used);
     input.lim -= shift;
     input.cur -= shift;
     input.mar -= shift;
@@ -34,103 +34,103 @@ private int fill(ref Input input) {
     // Fill free space at the end of buffer with new data from file.
     input.lim += fread(input.lim, 1, BUFSIZE - used, input.file);
     input.lim[0] = 0;
-    input.eof = input.lim < (input.buf.ptr + BUFSIZE);
+    input.eof = input.lim < (input.str.ptr + BUFSIZE);
     return 0;
 }
 
-private int lex(ref Input input) {
+private int lex(ref Input yyrecord) {
     int count = 0;
     for (;;) {
-        input.tok = input.cur;
+        yyrecord.tok = yyrecord.cur;
     
 #line 47 "d/fill/01_fill.d"
 {
 	char yych;
 yyFillLabel0:
-	yych = (*input.cur);
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		case '\'': goto yy5;
 		default:
-			if (input.lim <= input.cur) {
-				if (fill(input) == 0) goto yyFillLabel0;
+			if (yyrecord.lim <= yyrecord.cur) {
+				if (fill(yyrecord) == 0) goto yyFillLabel0;
 				goto yy10;
 			}
 			goto yy1;
 	}
 yy1:
-	input.cur++;
+	++yyrecord.cur;
 yy2:
-#line 55 "d/fill/01_fill.re"
+#line 51 "d/fill/01_fill.re"
 	{ return -1; }
 #line 67 "d/fill/01_fill.d"
 yy3:
-	input.cur++;
+	++yyrecord.cur;
 yyFillLabel1:
-	yych = (*input.cur);
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		default:
-			if (input.lim <= input.cur) {
-				if (fill(input) == 0) goto yyFillLabel1;
+			if (yyrecord.lim <= yyrecord.cur) {
+				if (fill(yyrecord) == 0) goto yyFillLabel1;
 			}
 			goto yy4;
 	}
 yy4:
-#line 58 "d/fill/01_fill.re"
+#line 54 "d/fill/01_fill.re"
 	{ continue; }
 #line 83 "d/fill/01_fill.d"
 yy5:
-	input.cur++;
-	input.mar = input.cur;
+	++yyrecord.cur;
+	yyrecord.mar = yyrecord.cur;
 yyFillLabel2:
-	yych = (*input.cur);
+	yych = *yyrecord.cur;
 	if (yych >= 0x01) goto yy7;
-	if (input.lim <= input.cur) {
-		if (fill(input) == 0) goto yyFillLabel2;
+	if (yyrecord.lim <= yyrecord.cur) {
+		if (fill(yyrecord) == 0) goto yyFillLabel2;
 		goto yy2;
 	}
 yy6:
-	input.cur++;
+	++yyrecord.cur;
 yyFillLabel3:
-	yych = (*input.cur);
+	yych = *yyrecord.cur;
 yy7:
 	switch (yych) {
 		case '\'': goto yy8;
 		case '\\': goto yy9;
 		default:
-			if (input.lim <= input.cur) {
-				if (fill(input) == 0) goto yyFillLabel3;
+			if (yyrecord.lim <= yyrecord.cur) {
+				if (fill(yyrecord) == 0) goto yyFillLabel3;
 				goto yy11;
 			}
 			goto yy6;
 	}
 yy8:
-	input.cur++;
-#line 57 "d/fill/01_fill.re"
+	++yyrecord.cur;
+#line 53 "d/fill/01_fill.re"
 	{ ++count; continue; }
 #line 113 "d/fill/01_fill.d"
 yy9:
-	input.cur++;
+	++yyrecord.cur;
 yyFillLabel4:
-	yych = (*input.cur);
+	yych = *yyrecord.cur;
 	if (yych <= 0x00) {
-		if (input.lim <= input.cur) {
-			if (fill(input) == 0) goto yyFillLabel4;
+		if (yyrecord.lim <= yyrecord.cur) {
+			if (fill(yyrecord) == 0) goto yyFillLabel4;
 			goto yy11;
 		}
 		goto yy6;
 	}
 	goto yy6;
 yy10:
-#line 56 "d/fill/01_fill.re"
+#line 52 "d/fill/01_fill.re"
 	{ return count; }
 #line 129 "d/fill/01_fill.d"
 yy11:
-	input.cur = input.mar;
+	yyrecord.cur = yyrecord.mar;
 	goto yy2;
 }
-#line 59 "d/fill/01_fill.re"
+#line 55 "d/fill/01_fill.re"
 
     }
     assert(0);
@@ -140,7 +140,7 @@ void main() {
     const char[] fname = "input";
     const char[] content = "'qu\0tes' 'are' 'fine: \\'' ";
 
-    // Prepare inputput file: a few times the size of the buffer, containing
+    // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
     FILE* f = fopen(fname.ptr, "w");
     for (int i = 0; i < BUFSIZE; ++i) {
@@ -152,7 +152,7 @@ void main() {
     // Initialize lexer state: all pointers are at the end of buffer.
     Input input;
     input.file = fopen(fname.ptr, "r");
-    input.cur = input.mar = input.tok = input.lim = input.buf.ptr + BUFSIZE;
+    input.cur = input.mar = input.tok = input.lim = input.str.ptr + BUFSIZE;
     input.eof = 0;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     input.lim[0] = 0;

@@ -14,7 +14,7 @@ enum BUFSIZE = (4096 - YYMAXFILL);
 
 struct Input {
     FILE* file;
-    char[BUFSIZE + YYMAXFILL] buf;
+    char[BUFSIZE + YYMAXFILL] str;
     char* lim, cur, tok;
     bool eof;
 };
@@ -22,14 +22,14 @@ struct Input {
 private int fill(ref Input input, size_t need) {
     if (input.eof) return 1;
 
-    const size_t shift = input.tok - input.buf.ptr;
+    const size_t shift = input.tok - input.str.ptr;
     const size_t used = input.lim - input.tok;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < need) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(input.buf.ptr, input.tok, used);
+    memmove(input.str.ptr, input.tok, used);
     input.lim -= shift;
     input.cur -= shift;
     input.tok -= shift;
@@ -39,7 +39,7 @@ private int fill(ref Input input, size_t need) {
 
     // If read less than expected, this is end of input => add zero padding
     // so that the lexer can access characters at the end of buffer.
-    if (input.lim < input.buf.ptr + BUFSIZE) {
+    if (input.lim < input.str.ptr + BUFSIZE) {
         input.eof = true;
         memset(input.lim, 0, YYMAXFILL);
         input.lim += YYMAXFILL;
@@ -48,16 +48,16 @@ private int fill(ref Input input, size_t need) {
     return 0;
 }
 
-private int lex(ref Input input) {
+private int lex(ref Input yyrecord) {
     int count = 0;
     for (;;) {
-        input.tok = input.cur;
+        yyrecord.tok = yyrecord.cur;
     
 #line 57 "d/fill/02_fill.d"
 {
 	char yych;
-	if (input.lim <= input.cur) if (fill(input, 1) != 0) return -1;
-	yych = (*input.cur);
+	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case 0x00: goto yy1;
 		case ' ': goto yy3;
@@ -65,50 +65,50 @@ private int lex(ref Input input) {
 		default: goto yy2;
 	}
 yy1:
-	input.cur++;
-#line 61 "d/fill/02_fill.re"
+	++yyrecord.cur;
+#line 57 "d/fill/02_fill.re"
 	{
             // Check that it is the sentinel, not some unexpected null.
-            return input.tok == input.lim - YYMAXFILL ? count : -1;
+            return yyrecord.tok == yyrecord.lim - YYMAXFILL ? count : -1;
         }
 #line 75 "d/fill/02_fill.d"
 yy2:
-	input.cur++;
-#line 67 "d/fill/02_fill.re"
+	++yyrecord.cur;
+#line 63 "d/fill/02_fill.re"
 	{ return -1; }
 #line 80 "d/fill/02_fill.d"
 yy3:
-	input.cur++;
-	if (input.lim <= input.cur) if (fill(input, 1) != 0) return -1;
-	yych = (*input.cur);
+	++yyrecord.cur;
+	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
 	}
 yy4:
-#line 66 "d/fill/02_fill.re"
+#line 62 "d/fill/02_fill.re"
 	{ continue; }
 #line 92 "d/fill/02_fill.d"
 yy5:
-	input.cur++;
-	if (input.lim <= input.cur) if (fill(input, 1) != 0) return -1;
-	yych = (*input.cur);
+	++yyrecord.cur;
+	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.cur;
 	switch (yych) {
 		case '\'': goto yy6;
 		case '\\': goto yy7;
 		default: goto yy5;
 	}
 yy6:
-	input.cur++;
-#line 65 "d/fill/02_fill.re"
+	++yyrecord.cur;
+#line 61 "d/fill/02_fill.re"
 	{ ++count; continue; }
 #line 106 "d/fill/02_fill.d"
 yy7:
-	input.cur++;
-	if (input.lim <= input.cur) if (fill(input, 1) != 0) return -1;
+	++yyrecord.cur;
+	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
 	goto yy5;
 }
-#line 68 "d/fill/02_fill.re"
+#line 64 "d/fill/02_fill.re"
 
     }
     assert(0);
@@ -131,7 +131,7 @@ void main() {
     // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
     Input input;
     input.file = fopen(fname.ptr, "r");
-    input.cur = input.tok = input.lim = input.buf.ptr + BUFSIZE;
+    input.cur = input.tok = input.lim = input.str.ptr + BUFSIZE;
     input.eof = 0;
 
     // Run the lexer.
