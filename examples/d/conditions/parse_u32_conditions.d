@@ -3,7 +3,7 @@
 module main;
 
 enum ERROR = ulong.max;
-enum YYCONDTYPE {
+enum YYCond {
 	yycinit,
 	yycbin,
 	yycdec,
@@ -18,36 +18,34 @@ private void add(ulong BASE)(ref ulong u, int d) {
 }
 
 private ulong parse_u32(const(char)* s) {
-    const(char)* cur = s, mar;
-    YYCONDTYPE c = YYCONDTYPE.yycinit;
+    const(char)* yycursor = s, yymarker;
+    YYCond c = YYCond.yycinit;
     ulong u = 0;
 
     
 {
 	char yych;
 	switch (c) {
-		case YYCONDTYPE.yycinit: goto yyc_init;
-		case YYCONDTYPE.yycbin: goto yyc_bin;
-		case YYCONDTYPE.yycdec: goto yyc_dec;
-		case YYCONDTYPE.yychex: goto yyc_hex;
-		case YYCONDTYPE.yycoct: goto yyc_oct;
+		case YYCond.yycinit: goto yyc_init;
+		case YYCond.yycbin: goto yyc_bin;
+		case YYCond.yycdec: goto yyc_dec;
+		case YYCond.yychex: goto yyc_hex;
+		case YYCond.yycoct: goto yyc_oct;
 		default: assert(false);
 	}
 /* *********************************** */
 yyc_init:
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '0': goto yy2;
 		case '1': .. case '9': goto yy4;
 		default: goto yy1;
 	}
 yy1:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy2:
-	cur++;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'B':
 		case 'b': goto yy5;
@@ -56,26 +54,24 @@ yy2:
 		default: goto yy3;
 	}
 yy3:
-	c = YYCONDTYPE.yycoct;
+	c = YYCond.yycoct;
 	goto yyc_oct;
 yy4:
-	cur++;
-	cur += -1;
-	c = YYCONDTYPE.yycdec;
+	++yycursor;
+	yycursor -= 1;
+	c = YYCond.yycdec;
 	goto yyc_dec;
 yy5:
-	cur++;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '1': goto yy8;
 		default: goto yy6;
 	}
 yy6:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy3;
 yy7:
-	cur++;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9':
 		case 'A': .. case 'F':
@@ -83,52 +79,52 @@ yy7:
 		default: goto yy6;
 	}
 yy8:
-	cur++;
-	cur += -1;
-	c = YYCONDTYPE.yycbin;
+	++yycursor;
+	yycursor -= 1;
+	c = YYCond.yycbin;
 	goto yyc_bin;
 yy9:
-	cur++;
-	cur += -1;
-	c = YYCONDTYPE.yychex;
+	++yycursor;
+	yycursor -= 1;
+	c = YYCond.yychex;
 	goto yyc_hex;
 /* *********************************** */
 yyc_bin:
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy11;
 		case '0': .. case '1': goto yy13;
 		default: goto yy12;
 	}
 yy11:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy12:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy13:
-	cur++;
-	{ add!(2)(u,  cur[-1] - '0');      goto yyc_bin; }
+	++yycursor;
+	{ add!(2)(u,  yycursor[-1] - '0');      goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy15;
 		case '0': .. case '9': goto yy17;
 		default: goto yy16;
 	}
 yy15:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy16:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy17:
-	cur++;
-	{ add!(10)(u, cur[-1] - '0');      goto yyc_dec; }
+	++yycursor;
+	{ add!(10)(u, yycursor[-1] - '0');      goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy19;
 		case '0': .. case '9': goto yy21;
@@ -137,37 +133,37 @@ yyc_hex:
 		default: goto yy20;
 	}
 yy19:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy20:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy21:
-	cur++;
-	{ add!(16)(u, cur[-1] - '0');      goto yyc_hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - '0');      goto yyc_hex; }
 yy22:
-	cur++;
-	{ add!(16)(u, cur[-1] - 'A' + 10); goto yyc_hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - 'A' + 10); goto yyc_hex; }
 yy23:
-	cur++;
-	{ add!(16)(u, cur[-1] - 'a' + 10); goto yyc_hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - 'a' + 10); goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy25;
 		case '0': .. case '7': goto yy27;
 		default: goto yy26;
 	}
 yy25:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy26:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy27:
-	cur++;
-	{ add!(8)(u,  cur[-1] - '0');      goto yyc_oct; }
+	++yycursor;
+	{ add!(8)(u,  yycursor[-1] - '0');      goto yyc_oct; }
 }
 
 }

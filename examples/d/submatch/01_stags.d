@@ -16,7 +16,7 @@ private int s2n(const(char)* s, const(char)* e) { // pre-parsed string to number
 }
 
 private bool lex(const(char)* str, ref SemVer ver) {
-    const(char)* cur = str, mar;
+    const(char)* yycursor = str, yymarker;
 
     // User-defined tag variables that are available in semantic action.
     const(char)* t1, t2, t3, t4, t5;
@@ -35,97 +35,90 @@ const(char)* yyt4;
 #line 36 "d/submatch/01_stags.d"
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '0': .. case '9':
-			yyt1 = cur;
+			yyt1 = yycursor;
 			goto yy3;
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
-#line 45 "d/submatch/01_stags.re"
+#line 38 "d/submatch/01_stags.re"
 	{ return false; }
 #line 51 "d/submatch/01_stags.d"
 yy3:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case '.': goto yy4;
 		case '0': .. case '9': goto yy6;
 		default: goto yy2;
 	}
 yy4:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9':
-			yyt2 = cur;
+			yyt2 = yycursor;
 			goto yy7;
 		default: goto yy5;
 	}
 yy5:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy2;
 yy6:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '.': goto yy4;
 		case '0': .. case '9': goto yy6;
 		default: goto yy5;
 	}
 yy7:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x00:
-			yyt3 = cur;
+			yyt3 = yycursor;
 			yyt4 = null;
 			goto yy8;
 		case '.':
-			yyt3 = cur;
+			yyt3 = yycursor;
 			goto yy9;
 		case '0': .. case '9': goto yy7;
 		default: goto yy5;
 	}
 yy8:
-	++cur;
+	++yycursor;
 	t1 = yyt1;
 	t3 = yyt2;
 	t4 = yyt3;
 	t5 = yyt4;
 	t2 = yyt2;
-	t2 += -1;
-#line 39 "d/submatch/01_stags.re"
+	t2 -= 1;
+#line 32 "d/submatch/01_stags.re"
 	{
             ver.major = s2n(t1, t2);
             ver.minor = s2n(t3, t4);
-            ver.patch = t5 != null ? s2n(t5, cur - 1) : 0;
+            ver.patch = t5 != null ? s2n(t5, yycursor - 1) : 0;
             return true;
         }
-#line 110 "d/submatch/01_stags.d"
+#line 105 "d/submatch/01_stags.d"
 yy9:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9':
-			yyt4 = cur;
+			yyt4 = yycursor;
 			goto yy10;
 		default: goto yy5;
 	}
 yy10:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x00: goto yy8;
 		case '0': .. case '9': goto yy10;
 		default: goto yy5;
 	}
 }
-#line 46 "d/submatch/01_stags.re"
+#line 39 "d/submatch/01_stags.re"
 
 }
 

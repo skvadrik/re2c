@@ -5,7 +5,7 @@ module main;
 
 // Expect a null-terminated string.
 private int lex(immutable char[] s) {
-    const(char)* cur = s.ptr, lim = s.ptr + s.length, mar;
+    const(char)* yycursor = s.ptr, yylimit = s.ptr + s.length, yymarker;
     int count = 0;
 
     for (;;) {
@@ -13,70 +13,65 @@ private int lex(immutable char[] s) {
 #line 14 "d/eof/03_eof_rule.d"
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case ' ': goto yy3;
 		case '\'': goto yy5;
 		default:
-			if (lim <= cur) goto yy10;
+			if (yylimit <= yycursor) goto yy10;
 			goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
-#line 22 "d/eof/03_eof_rule.re"
+#line 17 "d/eof/03_eof_rule.re"
 	{ return -1; }
 #line 30 "d/eof/03_eof_rule.d"
 yy3:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
 	}
 yy4:
-#line 25 "d/eof/03_eof_rule.re"
+#line 20 "d/eof/03_eof_rule.re"
 	{ continue; }
-#line 41 "d/eof/03_eof_rule.d"
+#line 40 "d/eof/03_eof_rule.d"
 yy5:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	if (yych >= 0x01) goto yy7;
-	if (lim <= cur) goto yy2;
+	if (yylimit <= yycursor) goto yy2;
 yy6:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 yy7:
 	switch (yych) {
 		case '\'': goto yy8;
 		case '\\': goto yy9;
 		default:
-			if (lim <= cur) goto yy11;
+			if (yylimit <= yycursor) goto yy11;
 			goto yy6;
 	}
 yy8:
-	++cur;
-#line 24 "d/eof/03_eof_rule.re"
+	++yycursor;
+#line 19 "d/eof/03_eof_rule.re"
 	{ ++count; continue; }
-#line 63 "d/eof/03_eof_rule.d"
+#line 59 "d/eof/03_eof_rule.d"
 yy9:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	if (yych <= 0x00) {
-		if (lim <= cur) goto yy11;
+		if (yylimit <= yycursor) goto yy11;
 		goto yy6;
 	}
 	goto yy6;
 yy10:
-#line 23 "d/eof/03_eof_rule.re"
+#line 18 "d/eof/03_eof_rule.re"
 	{ return count; }
-#line 75 "d/eof/03_eof_rule.d"
+#line 70 "d/eof/03_eof_rule.d"
 yy11:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy2;
 }
-#line 26 "d/eof/03_eof_rule.re"
+#line 21 "d/eof/03_eof_rule.re"
 
     }
     assert(0); // unreachable

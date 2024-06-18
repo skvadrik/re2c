@@ -7,10 +7,6 @@ import std.stdint;
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding-specific configurations.
 /*!rules:re2c
-    re2c:define:YYPEEK    = "*cur";
-    re2c:define:YYSKIP    = "++cur;";
-    re2c:define:YYBACKUP  = "mar = cur;";
-    re2c:define:YYRESTORE = "cur = mar;";
     re2c:yyfill:enable = 0;
 
     "∀x ∃y" { return 0; }
@@ -18,7 +14,7 @@ import std.stdint;
 */
 
 private int lex_utf8(const(uint8_t)* s) {
-    const(uint8_t)* cur = s, mar;
+    const(uint8_t)* yycursor = s, yymarker;
     /*!use:re2c
         re2c:define:YYCTYPE = uint8_t;
         re2c:encoding:utf8 = 1;
@@ -26,7 +22,7 @@ private int lex_utf8(const(uint8_t)* s) {
 }
 
 private int lex_utf32(const(uint32_t)* s) {
-    const(uint32_t)* cur = s, mar;
+    const(uint32_t)* yycursor = s, yymarker;
     /*!use:re2c
         re2c:define:YYCTYPE = uint32_t;
         re2c:encoding:utf32 = 1;

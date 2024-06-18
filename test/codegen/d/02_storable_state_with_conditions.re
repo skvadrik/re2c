@@ -50,6 +50,7 @@ lex:
     for (;;) {
         st.tok = st.cur;
     /*!re2c
+        re2c:api = custom;
         re2c:define:YYCTYPE    = "char";
         re2c:define:YYPEEK     = "*st.cur";
         re2c:define:YYSKIP     = "st.cur += 1;";

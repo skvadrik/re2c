@@ -3,18 +3,11 @@ module main;
 
 /*!re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE     = "char";
-    re2c:define:YYPEEK      = "*cur";
-    re2c:define:YYSKIP      = "++cur;";
-    re2c:define:YYBACKUP    = "mar = cur;";
-    re2c:define:YYRESTORE   = "cur = mar;";
-    re2c:define:YYSTAGP     = "@@{tag} = cur;";
-    re2c:define:YYSTAGN     = "@@{tag} = null;";
-    re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift};";
+    re2c:define:YYCTYPE = "char";
 */
 
 private long lex_tags(const(char)* str) {
-    const(char)* cur = str, mar, x, y;
+    const(char)* yycursor = str, yymarker, x, y;
     /*!stags:re2c:b1 format = 'const(char)* @@;\n'; */
     /*!re2c:b1
         re2c:tags = 1;
@@ -25,9 +18,9 @@ private long lex_tags(const(char)* str) {
 /*!maxnmatch:re2c*/
 
 private long lex_captures(const(char)* str) {
-    const(char)* cur = str;
+    const(char)* yycursor = str;
     uint yynmatch;
-    const(char)*[2*YYMAXNMATCH] yypmatch; 
+    const(char)*[2*YYMaxNMatch] yypmatch; 
     /*!stags:re2c:b2 format = 'const(char)* @@;\n'; */
     /*!re2c:b2
         re2c:posix-captures = 1;

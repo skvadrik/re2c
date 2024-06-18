@@ -5,11 +5,11 @@ import core.stdc.string;
 import core.stdc.stdio;
 
 /*!max:re2c*/
-enum BUFSIZE = (4096 - YYMAXFILL);
+enum BufSize = (4096 - YYMaxFill);
 
 struct Input {
     FILE* file;
-    char[BUFSIZE + YYMAXFILL] str;
+    char[BufSize + YYMaxFill] str;
     char* lim, cur, tok;
     bool eof;
 };
@@ -30,14 +30,14 @@ private int fill(ref Input input, size_t need) {
     input.tok -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    input.lim += fread(input.lim, 1, BUFSIZE - used, input.file);
+    input.lim += fread(input.lim, 1, BufSize - used, input.file);
 
     // If read less than expected, this is end of input => add zero padding
     // so that the lexer can access characters at the end of buffer.
-    if (input.lim < input.str.ptr + BUFSIZE) {
+    if (input.lim < input.str.ptr + BufSize) {
         input.eof = true;
-        memset(input.lim, 0, YYMAXFILL);
-        input.lim += YYMAXFILL;
+        memset(input.lim, 0, YYMaxFill);
+        input.lim += YYMaxFill;
     }
 
     return 0;
@@ -56,7 +56,7 @@ private int lex(ref Input yyrecord) {
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return yyrecord.tok == yyrecord.lim - YYMAXFILL ? count : -1;
+            return yyrecord.tok == yyrecord.lim - YYMaxFill ? count : -1;
         }
         str  { ++count; continue; }
         [ ]+ { continue; }
@@ -73,17 +73,17 @@ void main() {
     // Prepare input file: a few times the size of the buffer, containing
     // strings with zeroes and escaped quotes.
     FILE* f = fopen(fname.ptr, "w");
-    for (int i = 0; i < BUFSIZE; ++i) {
+    for (int i = 0; i < BufSize; ++i) {
         fwrite(content.ptr, 1, content.length - 1, f);
     }
     fclose(f);
-    int count = 3 * BUFSIZE; // number of quoted strings written to file
+    int count = 3 * BufSize; // number of quoted strings written to file
 
     // Initialize lexer state: all pointers are at the end of buffer.
     // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
     Input input;
     input.file = fopen(fname.ptr, "r");
-    input.cur = input.tok = input.lim = input.str.ptr + BUFSIZE;
+    input.cur = input.tok = input.lim = input.str.ptr + BufSize;
     input.eof = 0;
 
     // Run the lexer.

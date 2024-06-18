@@ -1,12 +1,9 @@
 // re2d $INPUT -o $OUTPUT -i
 module main;
 
-private bool lex(const(char)* s) {
-    const(char)* cur = s;
+private bool lex(const(char)* yycursor) {
     /*!re2c
         re2c:define:YYCTYPE = char;
-        re2c:define:YYPEEK = "*cur";
-        re2c:define:YYSKIP = "++cur;";
         re2c:yyfill:enable = 0;
 
         number = [1-9][0-9]*;

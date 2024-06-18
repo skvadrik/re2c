@@ -3,17 +3,12 @@ module main;
 
 // Expect a null-terminated string.
 private int lex(immutable char[] s) {
-    const(char)* cur = s.ptr, lim = s.ptr + s.length, mar;
+    const(char)* yycursor = s.ptr, yylimit = s.ptr + s.length, yymarker;
     int count = 0;
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE    = char;
-        re2c:define:YYPEEK     = '*cur';
-        re2c:define:YYSKIP     = '++cur;';
-        re2c:define:YYRESTORE  = 'cur = mar;';
-        re2c:define:YYBACKUP   = 'mar = cur;';
-        re2c:define:YYLESSTHAN = 'lim <= cur';
+        re2c:define:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 

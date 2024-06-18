@@ -18,12 +18,12 @@ enum What { COLOR, FISH, DUNNO };
 
 
 private What lex(const(char)* s) {
-    const(char)* cur = s, mar;
+    const(char)* yycursor = s, yymarker;
     
 #line 24 "d/reuse/usedir.d"
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 'e': goto yy3;
 		case 'h': goto yy4;
@@ -33,178 +33,152 @@ private What lex(const(char)* s) {
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
-#line 34 "d/reuse/usedir.re"
+#line 30 "d/reuse/usedir.re"
 	{ return What.DUNNO; }
 #line 41 "d/reuse/usedir.d"
 yy3:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'e': goto yy8;
 		default: goto yy2;
 	}
 yy4:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'a': goto yy10;
 		default: goto yy2;
 	}
 yy5:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'a': goto yy11;
 		default: goto yy2;
 	}
 yy6:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'e': goto yy12;
 		default: goto yy2;
 	}
 yy7:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'a': goto yy13;
 		default: goto yy2;
 	}
 yy8:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'l': goto yy14;
 		default: goto yy9;
 	}
 yy9:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy2;
 yy10:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'd': goto yy15;
 		default: goto yy9;
 	}
 yy11:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'g': goto yy16;
 		default: goto yy9;
 	}
 yy12:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'd': goto yy17;
 		default: goto yy9;
 	}
 yy13:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'l': goto yy18;
 		default: goto yy9;
 	}
 yy14:
-	++cur;
+	++yycursor;
 #line 19 "d/reuse/usedir.re"
 	{ return What.FISH; }
-#line 124 "d/reuse/usedir.d"
+#line 109 "d/reuse/usedir.d"
 yy15:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'd': goto yy19;
 		default: goto yy9;
 	}
 yy16:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'e': goto yy20;
 		default: goto yy9;
 	}
 yy17:
-	++cur;
+	++yycursor;
 #line 14 "d/reuse/usedir.re"
 	{ return What.COLOR; }
-#line 143 "d/reuse/usedir.d"
+#line 126 "d/reuse/usedir.d"
 yy18:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'm': goto yy21;
 		default: goto yy9;
 	}
 yy19:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'o': goto yy22;
 		default: goto yy9;
 	}
 yy20:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'n': goto yy23;
 		default: goto yy9;
 	}
 yy21:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'o': goto yy24;
 		default: goto yy9;
 	}
 yy22:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'c': goto yy25;
 		default: goto yy9;
 	}
 yy23:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 't': goto yy26;
 		default: goto yy9;
 	}
 yy24:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'n': goto yy14;
 		default: goto yy9;
 	}
 yy25:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'k': goto yy14;
 		default: goto yy9;
 	}
 yy26:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'a': goto yy17;
 		default: goto yy9;
 	}
 }
-#line 35 "d/reuse/usedir.re"
+#line 31 "d/reuse/usedir.re"
 
 }
 

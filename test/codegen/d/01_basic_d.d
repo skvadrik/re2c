@@ -20,7 +20,7 @@ bool lex(const char *s) {
 yy1:
 	debug{printf("lex1: char '%c' at state %u\n", yych, 1);}
 	++cursor;
-#line 17 "codegen/d/01_basic_d.re"
+#line 18 "codegen/d/01_basic_d.re"
 	{ return false; }
 #line 26 "codegen/d/01_basic_d.d"
 yy2:
@@ -33,11 +33,11 @@ yy2:
 	}
 yy3:
 	debug{printf("lex1: char '%c' at state %u\n", yych, 3);}
-#line 16 "codegen/d/01_basic_d.re"
+#line 17 "codegen/d/01_basic_d.re"
 	{ return true; }
 #line 39 "codegen/d/01_basic_d.d"
 }
-#line 18 "codegen/d/01_basic_d.re"
+#line 19 "codegen/d/01_basic_d.re"
 
 }
 

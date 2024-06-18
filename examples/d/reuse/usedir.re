@@ -20,13 +20,9 @@ enum What { COLOR, FISH, DUNNO };
 */
 
 private What lex(const(char)* s) {
-    const(char)* cur = s, mar;
+    const(char)* yycursor = s, yymarker;
     /*!re2c
-        re2c:define:YYCTYPE   = "char";
-        re2c:define:YYPEEK    = "*cur";
-        re2c:define:YYSKIP    = "++cur;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYCTYPE = "char";
         re2c:yyfill:enable = 0;
 
         !use:fish;
