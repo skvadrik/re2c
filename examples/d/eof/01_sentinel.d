@@ -4,16 +4,15 @@
 module main;
 
 // Expect a null-terminated string.
-private int lex(const(char)* s) {
-    const(char)* cur = s;
+private int lex(const(char)* yycursor) {
     uint count = 0;
 
     for (;;) {
     
-#line 14 "d/eof/01_sentinel.d"
+#line 13 "d/eof/01_sentinel.d"
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy1;
 		case ' ': goto yy3;
@@ -21,39 +20,37 @@ private int lex(const(char)* s) {
 		default: goto yy2;
 	}
 yy1:
-	++cur;
-#line 17 "d/eof/01_sentinel.re"
+	++yycursor;
+#line 14 "d/eof/01_sentinel.re"
 	{ return count; }
-#line 28 "d/eof/01_sentinel.d"
+#line 27 "d/eof/01_sentinel.d"
 yy2:
-	++cur;
-#line 16 "d/eof/01_sentinel.re"
+	++yycursor;
+#line 13 "d/eof/01_sentinel.re"
 	{ return -1; }
-#line 33 "d/eof/01_sentinel.d"
+#line 32 "d/eof/01_sentinel.d"
 yy3:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
 	}
 yy4:
-#line 19 "d/eof/01_sentinel.re"
+#line 16 "d/eof/01_sentinel.re"
 	{ continue; }
-#line 44 "d/eof/01_sentinel.d"
+#line 42 "d/eof/01_sentinel.d"
 yy5:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'a': .. case 'z': goto yy5;
 		default: goto yy6;
 	}
 yy6:
-#line 18 "d/eof/01_sentinel.re"
+#line 15 "d/eof/01_sentinel.re"
 	{ ++count; continue; }
-#line 55 "d/eof/01_sentinel.d"
+#line 52 "d/eof/01_sentinel.d"
 }
-#line 20 "d/eof/01_sentinel.re"
+#line 17 "d/eof/01_sentinel.re"
 
     }
     assert(0); // unreachable

@@ -1,4 +1,4 @@
-supported_apis = ["generic", "record"];
+supported_apis = ["default", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
@@ -11,7 +11,7 @@ standalone_single_quotes = 0;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
 
-conf:api = custom;
+conf:api = default;
 conf:api:style = free-form;
 conf:api:sigil = "@@";
 conf:define:YYGETCOND:naked = 0;
@@ -82,39 +82,39 @@ conf:label:yyloop = "";
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
-conf:define:YYBACKUP = "YYBACKUP";
-conf:define:YYBACKUPCTX = "YYBACKUPCTX";
-conf:define:YYCONDTYPE = "YYCONDTYPE";
+conf:define:YYBACKUP = "yybackup";
+conf:define:YYBACKUPCTX = "yybackupctx";
+conf:define:YYCONDTYPE = "YYCond";
 conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
-conf:define:YYCTXMARKER = (api.record ? record ".ctx" : "YYCTXMARKER");
-conf:define:YYCTYPE = "YYCTYPE";
-conf:define:YYCURSOR = (api.record ? record ".cur" : "YYCURSOR");
-conf:define:YYDEBUG = "YYDEBUG";
-conf:define:YYFILL = "YYFILL";
+conf:define:YYCTXMARKER = (api.record ? record ".ctx" : "yyctxmarker");
+conf:define:YYCTYPE = "YYChar";
+conf:define:YYCURSOR = (api.record ? record ".cur" : "yycursor");
+conf:define:YYDEBUG = "yydebug";
+conf:define:YYFILL = "yyfill";
 conf:define:YYGETACCEPT = sigil "{var}";
-conf:define:YYGETCOND = "YYGETCOND";
-conf:define:YYGETSTATE = "YYGETSTATE";
-conf:define:YYLESSTHAN = "YYLESSTHAN";
-conf:define:YYLIMIT = (api.record ? record ".lim" : "YYLIMIT");
-conf:define:YYMARKER = (api.record ? record ".mar" : "YYMARKER");
-conf:define:YYMAXFILL = "YYMAXFILL";
-conf:define:YYMAXNMATCH = "YYMAXNMATCH";
-conf:define:YYMTAGN = "YYMTAGN";
-conf:define:YYMTAGP = "YYMTAGP";
-conf:define:YYPEEK = "YYPEEK";
-conf:define:YYRESTORE = "YYRESTORE";
-conf:define:YYRESTORECTX = "YYRESTORECTX";
-conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYGETCOND = "yygetcond";
+conf:define:YYGETSTATE = "yygetstate";
+conf:define:YYLESSTHAN = "yylessthan";
+conf:define:YYLIMIT = (api.record ? record ".lim" : "yylimit");
+conf:define:YYMARKER = (api.record ? record ".mar" : "yymarker");
+conf:define:YYMAXFILL = "YYMaxFill";
+conf:define:YYMAXNMATCH = "YYMaxNMatch";
+conf:define:YYMTAGN = "yymtagn";
+conf:define:YYMTAGP = "yymtagp";
+conf:define:YYPEEK = "yypeek";
+conf:define:YYRESTORE = "yyrestore";
+conf:define:YYRESTORECTX = "yyrestorectx";
+conf:define:YYRESTORETAG = "yyrestoretag";
 conf:define:YYSETACCEPT = sigil "{var} = " sigil "{val};";
-conf:define:YYSETCOND = "YYSETCOND";
-conf:define:YYSETSTATE = "YYSETSTATE";
-conf:define:YYSHIFT = "YYSHIFT";
-conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
-conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
-conf:define:YYSKIP = "YYSKIP";
-conf:define:YYSTAGN = "YYSTAGN";
-conf:define:YYSTAGP = "YYSTAGP";
+conf:define:YYSETCOND = "yysetcond";
+conf:define:YYSETSTATE = "yysetstate";
+conf:define:YYSHIFT = "yyshift";
+conf:define:YYSHIFTSTAG = "yyshiftstag";
+conf:define:YYSHIFTMTAG = "yyshiftmtag";
+conf:define:YYSKIP = "yyskip";
+conf:define:YYSTAGN = "yystagn";
+conf:define:YYSTAGP = "yystagp";
 conf:tags:expression = (api.record ? record ".") sigil;
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil ";";
@@ -240,6 +240,30 @@ code:yybackupctx =
         : ctxmarker " = " cursor ";"
     ) nl;
 
+code:yyskip_yypeek =
+    topindent (code_model.recursive_functions ? ctype " ") char " = "
+        typecast "*++" cursor ";" nl;
+
+code:yypeek_yyskip =
+    topindent (code_model.recursive_functions ? ctype " ") char " = "
+        typecast "*" cursor "++;" nl;
+
+code:yyskip_yybackup = topindent marker " = ++" cursor ";" nl;
+
+code:yybackup_yyskip = topindent marker " = " cursor "++;" nl;
+
+code:yybackup_yypeek =
+    topindent (code_model.recursive_functions ? ctype " ") char " = "
+        typecast "*(" marker " = " cursor ");" nl;
+
+code:yyskip_yybackup_yypeek =
+    topindent (code_model.recursive_functions ? ctype " ") char " = "
+        typecast "*(" marker " = ++" cursor ");" nl;
+
+code:yybackup_yypeek_yyskip =
+    topindent (code_model.recursive_functions ? ctype " ") char " = "
+        typecast "*(" marker " = " cursor "++);" nl;
+
 code:yyrestore =
     topindent (api.generic
         ? restore
@@ -265,7 +289,7 @@ code:yyshift =
     ) nl;
 
 code:yyshiftstag =
-    topindent (nested ? "if (" tag " != " (api.generic ? neg : "NULL") ") ") (api.generic
+    topindent (nested ? "if (" tag " != " (api.generic ? neg : "null") ") ") (api.generic
         ? shiftstag
         : tag " -= " offset ";"
     ) nl;
@@ -283,7 +307,7 @@ code:yymtagp = topindent mtagp nl;
 code:yystagn =
     topindent (api.generic
         ? stagn
-        : tag " = NULL;"
+        : tag " = null;"
     ) nl;
 
 code:yymtagn = topindent mtagn nl;

@@ -8,27 +8,24 @@ import core.stdc.string;
 
 private int lex(immutable char[] s) {
     // Make a copy of the string with YYMAXFILL zeroes at the end.
-    char *buf = cast(char*) malloc(s.length + YYMAXFILL);
+    char *buf = cast(char*) malloc(s.length + YYMaxFill);
     memcpy(buf, cast(const(void*)) s, s.length);
-    memset(buf + s.length, 0, YYMAXFILL);
+    memset(buf + s.length, 0, YYMaxFill);
 
-    const(char)* cur = buf;
-    const(char)* lim = buf + s.length + YYMAXFILL;
+    const(char)* yycursor = buf;
+    const(char)* yylimit = buf + s.length + YYMaxFill;
     int count = 0;
 
 loop:
     /*!re2c
-        re2c:define:YYCTYPE    = char;
-        re2c:define:YYPEEK     = '*cur';
-        re2c:define:YYSKIP     = 'cur++;';
-        re2c:define:YYLESSTHAN = 'lim <= cur';
-        re2c:define:YYFILL     = "goto fail;";
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYFILL = "goto fail;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            if (cur - 1 == buf + s.length) goto exit; else goto fail;
+            if (yycursor - 1 == buf + s.length) goto exit; else goto fail;
         }
         str  { ++count; goto loop; }
         [ ]+ { goto loop; }

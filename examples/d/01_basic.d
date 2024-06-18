@@ -2,22 +2,20 @@
 // re2d $INPUT -o $OUTPUT -i
 module main;
 
-private bool lex(const(char)* s) {
-    const(char)* cur = s;
+private bool lex(const(char)* yycursor) {
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '1': .. case '9': goto yy2;
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 	{ return false; }
 yy2:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9': goto yy2;
 		default: goto yy3;

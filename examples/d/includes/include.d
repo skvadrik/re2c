@@ -7,12 +7,12 @@ enum Result{ OK, FAIL };
 
 
 private Result lex(const(char)* s) {
-    const(char)* cur = s, mar;
+    const(char)* yycursor = s, yymarker;
     
 {
 	char yych;
 	uint yyaccept = 0;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '.': goto yy3;
 		case '0': goto yy4;
@@ -20,21 +20,18 @@ private Result lex(const(char)* s) {
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
 	{ return Result.FAIL; }
 yy3:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9': goto yy7;
 		default: goto yy2;
 	}
 yy4:
 	yyaccept = 0;
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case '.': goto yy7;
 		case '0': .. case '9': goto yy9;
@@ -44,9 +41,7 @@ yy4:
 	}
 yy5:
 	yyaccept = 1;
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case '.': goto yy7;
 		case '0': .. case '9': goto yy5;
@@ -58,9 +53,7 @@ yy6:
 	{ return Result.OK; }
 yy7:
 	yyaccept = 2;
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case '0': .. case '9': goto yy7;
 		case 'E':
@@ -70,8 +63,7 @@ yy7:
 yy8:
 	{ return Result.OK; }
 yy9:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '.': goto yy7;
 		case '0': .. case '9': goto yy9;
@@ -80,15 +72,14 @@ yy9:
 		default: goto yy10;
 	}
 yy10:
-	cur = mar;
+	yycursor = yymarker;
 	switch (yyaccept) {
 		case 0: goto yy2;
 		case 1: goto yy6;
 		default: goto yy8;
 	}
 yy11:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '+':
 		case '-': goto yy12;
@@ -96,15 +87,13 @@ yy11:
 		default: goto yy10;
 	}
 yy12:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9': goto yy13;
 		default: goto yy10;
 	}
 yy13:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9': goto yy13;
 		default: goto yy8;

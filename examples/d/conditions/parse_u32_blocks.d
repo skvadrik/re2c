@@ -10,25 +10,23 @@ private void add(ulong BASE)(ref ulong u, int d) {
 }
 
 private ulong parse_u32(const(char)* s) {
-    const(char)* cur = s, mar;
+    const(char)* yycursor = s, yymarker;
     ulong u = 0;
 
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '0': goto yy2;
 		case '1': .. case '9': goto yy4;
 		default: goto yy1;
 	}
 yy1:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy2:
-	cur++;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 'B':
 		case 'b': goto yy5;
@@ -39,22 +37,20 @@ yy2:
 yy3:
 	{ goto oct; }
 yy4:
-	cur++;
-	cur += -1;
+	++yycursor;
+	yycursor -= 1;
 	{ goto dec; }
 yy5:
-	cur++;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '1': goto yy8;
 		default: goto yy6;
 	}
 yy6:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy3;
 yy7:
-	cur++;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9':
 		case 'A': .. case 'F':
@@ -62,12 +58,12 @@ yy7:
 		default: goto yy6;
 	}
 yy8:
-	cur++;
-	cur += -1;
+	++yycursor;
+	yycursor -= 1;
 	{ goto bin; }
 yy9:
-	cur++;
-	cur += -1;
+	++yycursor;
+	yycursor -= 1;
 	{ goto hex; }
 }
 
@@ -75,70 +71,70 @@ bin:
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy11;
 		case '0': .. case '1': goto yy13;
 		default: goto yy12;
 	}
 yy11:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy12:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy13:
-	cur++;
-	{ add!(2)(u, cur[-1] - '0'); goto bin; }
+	++yycursor;
+	{ add!(2)(u, yycursor[-1] - '0'); goto bin; }
 }
 
 oct:
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy15;
 		case '0': .. case '7': goto yy17;
 		default: goto yy16;
 	}
 yy15:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy16:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy17:
-	cur++;
-	{ add!(8)(u, cur[-1] - '0'); goto oct; }
+	++yycursor;
+	{ add!(8)(u, yycursor[-1] - '0'); goto oct; }
 }
 
 dec:
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy19;
 		case '0': .. case '9': goto yy21;
 		default: goto yy20;
 	}
 yy19:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy20:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy21:
-	cur++;
-	{ add!(10)(u, cur[-1] - '0'); goto dec; }
+	++yycursor;
+	{ add!(10)(u, yycursor[-1] - '0'); goto dec; }
 }
 
 hex:
     
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy23;
 		case '0': .. case '9': goto yy25;
@@ -147,20 +143,20 @@ hex:
 		default: goto yy24;
 	}
 yy23:
-	cur++;
+	++yycursor;
 	{ return u; }
 yy24:
-	cur++;
+	++yycursor;
 	{ return ERROR; }
 yy25:
-	cur++;
-	{ add!(16)(u, cur[-1] - '0');      goto hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - '0');      goto hex; }
 yy26:
-	cur++;
-	{ add!(16)(u, cur[-1] - 'A' + 10); goto hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - 'A' + 10); goto hex; }
 yy27:
-	cur++;
-	{ add!(16)(u, cur[-1] - 'a' + 10); goto hex; }
+	++yycursor;
+	{ add!(16)(u, yycursor[-1] - 'a' + 10); goto hex; }
 }
 
 }

@@ -7,18 +7,18 @@ import core.stdc.stdlib;
 import core.stdc.string;
 
 #line 10 "d/eof/02_bounds_checking.d"
-enum YYMAXFILL = 1;
+enum YYMaxFill = 1;
 #line 7 "d/eof/02_bounds_checking.re"
 
 
 private int lex(immutable char[] s) {
     // Make a copy of the string with YYMAXFILL zeroes at the end.
-    char *buf = cast(char*) malloc(s.length + YYMAXFILL);
+    char *buf = cast(char*) malloc(s.length + YYMaxFill);
     memcpy(buf, cast(const(void*)) s, s.length);
-    memset(buf + s.length, 0, YYMAXFILL);
+    memset(buf + s.length, 0, YYMaxFill);
 
-    const(char)* cur = buf;
-    const(char)* lim = buf + s.length + YYMAXFILL;
+    const(char)* yycursor = buf;
+    const(char)* yylimit = buf + s.length + YYMaxFill;
     int count = 0;
 
 loop:
@@ -26,8 +26,8 @@ loop:
 #line 27 "d/eof/02_bounds_checking.d"
 {
 	char yych;
-	if (lim <= cur) goto fail;
-	yych = *cur;
+	if (yylimit <= yycursor) goto fail;
+	yych = *yycursor;
 	switch (yych) {
 		case 0x00: goto yy1;
 		case ' ': goto yy3;
@@ -35,50 +35,50 @@ loop:
 		default: goto yy2;
 	}
 yy1:
-	cur++;
-#line 29 "d/eof/02_bounds_checking.re"
+	++yycursor;
+#line 26 "d/eof/02_bounds_checking.re"
 	{
             // Check that it is the sentinel, not some unexpected null.
-            if (cur - 1 == buf + s.length) goto exit; else goto fail;
+            if (yycursor - 1 == buf + s.length) goto exit; else goto fail;
         }
 #line 45 "d/eof/02_bounds_checking.d"
 yy2:
-	cur++;
-#line 35 "d/eof/02_bounds_checking.re"
+	++yycursor;
+#line 32 "d/eof/02_bounds_checking.re"
 	{ goto fail; }
 #line 50 "d/eof/02_bounds_checking.d"
 yy3:
-	cur++;
-	if (lim <= cur) goto fail;
-	yych = *cur;
+	++yycursor;
+	if (yylimit <= yycursor) goto fail;
+	yych = *yycursor;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
 	}
 yy4:
-#line 34 "d/eof/02_bounds_checking.re"
+#line 31 "d/eof/02_bounds_checking.re"
 	{ goto loop; }
 #line 62 "d/eof/02_bounds_checking.d"
 yy5:
-	cur++;
-	if (lim <= cur) goto fail;
-	yych = *cur;
+	++yycursor;
+	if (yylimit <= yycursor) goto fail;
+	yych = *yycursor;
 	switch (yych) {
 		case '\'': goto yy6;
 		case '\\': goto yy7;
 		default: goto yy5;
 	}
 yy6:
-	cur++;
-#line 33 "d/eof/02_bounds_checking.re"
+	++yycursor;
+#line 30 "d/eof/02_bounds_checking.re"
 	{ ++count; goto loop; }
 #line 76 "d/eof/02_bounds_checking.d"
 yy7:
-	cur++;
-	if (lim <= cur) goto fail;
+	++yycursor;
+	if (yylimit <= yycursor) goto fail;
 	goto yy5;
 }
-#line 36 "d/eof/02_bounds_checking.re"
+#line 33 "d/eof/02_bounds_checking.re"
 
 fail:
     count = -1;

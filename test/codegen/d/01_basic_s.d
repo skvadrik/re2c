@@ -14,7 +14,7 @@ bool lex(const char *s) {
 	if (yych <= '9') goto yy2;
 yy1:
 	++cursor;
-#line 14 "codegen/d/01_basic_s.re"
+#line 15 "codegen/d/01_basic_s.re"
 	{ return false; }
 #line 20 "codegen/d/01_basic_s.d"
 yy2:
@@ -23,11 +23,11 @@ yy2:
 	if (yych <= '/') goto yy3;
 	if (yych <= '9') goto yy2;
 yy3:
-#line 13 "codegen/d/01_basic_s.re"
+#line 14 "codegen/d/01_basic_s.re"
 	{ return true; }
 #line 29 "codegen/d/01_basic_s.d"
 }
-#line 15 "codegen/d/01_basic_s.re"
+#line 16 "codegen/d/01_basic_s.re"
 
 }
 

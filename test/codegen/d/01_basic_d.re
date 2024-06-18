@@ -6,6 +6,7 @@ import core.stdc.stdio;
 bool lex(const char *s) {
     size_t cursor;
     /*!re2c
+        re2c:api = custom;
         re2c:define:YYCTYPE = char;
         re2c:define:YYPEEK = "s[cursor]";
         re2c:define:YYSKIP = "++cursor;";

@@ -11,7 +11,7 @@ import core.stdc.string;
 enum BUFSIZE = 10;
 
 #line 14 "codegen/d/02_storable_state_with_conditions.d"
-enum YYCONDTYPE {
+enum YYCond {
 	yycINIT = 0,
 	yycSPACES = 6,
 	yycNUMBER = 11,
@@ -91,28 +91,28 @@ lex:
 						continue;
 				}
 			case 1:
-				st.state = YYCONDTYPE.yycINIT;
-#line 69 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycINIT;
+#line 70 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.BAD_PACKET; }
 #line 98 "codegen/d/02_storable_state_with_conditions.d"
 			case 2:
 				st.cur += -1;
-				st.state = YYCONDTYPE.yycSPACES;
-				yystate = YYCONDTYPE.yycSPACES;
+				st.state = YYCond.yycSPACES;
+				yystate = YYCond.yycSPACES;
 				continue;
 			case 3:
 				st.cur += -1;
-				st.state = YYCONDTYPE.yycNUMBER;
-				yystate = YYCONDTYPE.yycNUMBER;
+				st.state = YYCond.yycNUMBER;
+				yystate = YYCond.yycNUMBER;
 				continue;
 			case 4:
 				st.cur += -1;
-				st.state = YYCONDTYPE.yycWORD;
-				yystate = YYCONDTYPE.yycWORD;
+				st.state = YYCond.yycWORD;
+				yystate = YYCond.yycWORD;
 				continue;
 			case 5:
-				st.state = YYCONDTYPE.yycINIT;
-#line 70 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycINIT;
+#line 71 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.END; }
 #line 118 "codegen/d/02_storable_state_with_conditions.d"
 			case 6:
@@ -133,8 +133,8 @@ lex:
 						continue;
 				}
 			case 7:
-				st.state = YYCONDTYPE.yycSPACES;
-#line 69 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycSPACES;
+#line 70 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.BAD_PACKET; }
 #line 140 "codegen/d/02_storable_state_with_conditions.d"
 			case 8:
@@ -154,13 +154,13 @@ lex:
 						continue;
 				}
 			case 9:
-				st.state = YYCONDTYPE.yycINIT;
-#line 76 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycINIT;
+#line 77 "codegen/d/02_storable_state_with_conditions.re"
 				{ continue lex; }
 #line 161 "codegen/d/02_storable_state_with_conditions.d"
 			case 10:
-				st.state = YYCONDTYPE.yycSPACES;
-#line 70 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycSPACES;
+#line 71 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.END; }
 #line 166 "codegen/d/02_storable_state_with_conditions.d"
 			case 11:
@@ -180,8 +180,8 @@ lex:
 						continue;
 				}
 			case 12:
-				st.state = YYCONDTYPE.yycNUMBER;
-#line 69 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycNUMBER;
+#line 70 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.BAD_PACKET; }
 #line 187 "codegen/d/02_storable_state_with_conditions.d"
 			case 13:
@@ -200,13 +200,13 @@ lex:
 						continue;
 				}
 			case 14:
-				st.state = YYCONDTYPE.yycSPACES;
-#line 78 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycSPACES;
+#line 79 "codegen/d/02_storable_state_with_conditions.re"
 				{ *nc += 1; continue lex; }
 #line 207 "codegen/d/02_storable_state_with_conditions.d"
 			case 15:
-				st.state = YYCONDTYPE.yycNUMBER;
-#line 70 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycNUMBER;
+#line 71 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.END; }
 #line 212 "codegen/d/02_storable_state_with_conditions.d"
 			case 16:
@@ -226,8 +226,8 @@ lex:
 						continue;
 				}
 			case 17:
-				st.state = YYCONDTYPE.yycWORD;
-#line 69 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycWORD;
+#line 70 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.BAD_PACKET; }
 #line 233 "codegen/d/02_storable_state_with_conditions.d"
 			case 18:
@@ -246,13 +246,13 @@ lex:
 						continue;
 				}
 			case 19:
-				st.state = YYCONDTYPE.yycSPACES;
-#line 79 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycSPACES;
+#line 80 "codegen/d/02_storable_state_with_conditions.re"
 				{ *wc += 1; continue lex; }
 #line 253 "codegen/d/02_storable_state_with_conditions.d"
 			case 20:
-				st.state = YYCONDTYPE.yycWORD;
-#line 70 "codegen/d/02_storable_state_with_conditions.re"
+				st.state = YYCond.yycWORD;
+#line 71 "codegen/d/02_storable_state_with_conditions.re"
 				{ return Status.END; }
 #line 258 "codegen/d/02_storable_state_with_conditions.d"
 			case 21:
@@ -308,7 +308,7 @@ lex:
 		}
 	}
 }
-#line 80 "codegen/d/02_storable_state_with_conditions.re"
+#line 81 "codegen/d/02_storable_state_with_conditions.re"
 
     }
     assert(0); // unreachable

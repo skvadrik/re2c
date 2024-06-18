@@ -3,7 +3,7 @@
 // re2d $INPUT -o $OUTPUT
 module main;
 
-enum MTAG_ROOT = -1;
+enum MtagRoot = -1;
 
 // An m-tag tree is a way to store histories with an O(1) copy operation.
 // Histories naturally form a tree, as they have common start and fork at some
@@ -33,13 +33,13 @@ private void add_mtag(ref MtagTrie trie, ref int mtag, const(char)* value) {
 // Recursively unwind tag histories and collect version components.
 private void unfold(const ref MtagTrie trie, int x, int y, ref Ver ver) {
     // Reached the root of the m-tag tree, stop recursion.
-    if (x == MTAG_ROOT && y == MTAG_ROOT) return;
+    if (x == MtagRoot && y == MtagRoot) return;
 
     // Unwind history further.
     unfold(trie, trie[x].pred, trie[y].pred, ver);
 
     // Get tag values. Tag histories must have equal length.
-    assert(x != MTAG_ROOT && y != MTAG_ROOT);
+    assert(x != MtagRoot && y != MtagRoot);
     const(char)* ex = trie[x].elem, ey = trie[y].elem;
 
     if (ex != null && ey != null) {
@@ -52,7 +52,7 @@ private void unfold(const ref MtagTrie trie, int x, int y, ref Ver ver) {
 }
 
 private bool parse(const(char)* str, ref Ver ver) {
-    const(char)* cur = str, mar;
+    const(char)* yycursor = str, yymarker;
     MtagTrie mt;
 
     // User-defined tag variables that are available in semantic action.
@@ -67,7 +67,7 @@ const(char)* yyt1 = null;const(char)* yyt2 = null;
 
     
 #line 70 "d/submatch/02_mtags.d"
-int yytm3 = MTAG_ROOT;int yytm4 = MTAG_ROOT;
+int yytm3 = MtagRoot;int yytm4 = MtagRoot;
 #line 62 "d/submatch/02_mtags.re"
 
 
@@ -75,91 +75,86 @@ int yytm3 = MTAG_ROOT;int yytm4 = MTAG_ROOT;
 #line 76 "d/submatch/02_mtags.d"
 {
 	char yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case '0': .. case '9':
-			yyt1 = cur;
+			yyt1 = yycursor;
 			goto yy3;
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
-#line 85 "d/submatch/02_mtags.re"
+#line 78 "d/submatch/02_mtags.re"
 	{ return false; }
 #line 91 "d/submatch/02_mtags.d"
 yy3:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 0x00:
 			add_mtag(mt, yytm4, null);
 			add_mtag(mt, yytm3, null);
-			yyt2 = cur;
+			yyt2 = yycursor;
 			goto yy4;
 		case '.':
-			yyt2 = cur;
+			yyt2 = yycursor;
 			goto yy5;
 		case '0': .. case '9': goto yy7;
 		default: goto yy2;
 	}
 yy4:
-	++cur;
+	++yycursor;
 	t1 = yyt1;
 	t2 = yyt2;
 	t3 = yytm3;
 	t4 = yytm4;
-#line 79 "d/submatch/02_mtags.re"
+#line 72 "d/submatch/02_mtags.re"
 	{
             ver = [];
             ver ~= [s2n(t1, t2)];
             unfold(mt, t3, t4, ver);
             return true;
         }
-#line 121 "d/submatch/02_mtags.d"
+#line 119 "d/submatch/02_mtags.d"
 yy5:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case '0': .. case '9':
-			add_mtag(mt, yytm3, cur);
+			add_mtag(mt, yytm3, yycursor);
 			goto yy8;
 		default: goto yy6;
 	}
 yy6:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy2;
 yy7:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x00:
 			add_mtag(mt, yytm4, null);
 			add_mtag(mt, yytm3, null);
-			yyt2 = cur;
+			yyt2 = yycursor;
 			goto yy4;
 		case '.':
-			yyt2 = cur;
+			yyt2 = yycursor;
 			goto yy5;
 		case '0': .. case '9': goto yy7;
 		default: goto yy6;
 	}
 yy8:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x00:
-			add_mtag(mt, yytm4, cur);
+			add_mtag(mt, yytm4, yycursor);
 			goto yy4;
 		case '.':
-			add_mtag(mt, yytm4, cur);
+			add_mtag(mt, yytm4, yycursor);
 			goto yy5;
 		case '0': .. case '9': goto yy8;
 		default: goto yy6;
 	}
 }
-#line 86 "d/submatch/02_mtags.re"
+#line 79 "d/submatch/02_mtags.re"
 
 }
 

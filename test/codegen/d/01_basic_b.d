@@ -48,18 +48,18 @@ bool lex(const char *s) {
 	if (yych <= '9') goto yy2;
 yy1:
 	++cursor;
-#line 14 "codegen/d/01_basic_b.re"
+#line 15 "codegen/d/01_basic_b.re"
 	{ return false; }
 #line 54 "codegen/d/01_basic_b.d"
 yy2:
 	++cursor;
 	yych = s[cursor];
 	if ((yybm[0+yych] & 128) != 0) goto yy2;
-#line 13 "codegen/d/01_basic_b.re"
+#line 14 "codegen/d/01_basic_b.re"
 	{ return true; }
 #line 61 "codegen/d/01_basic_b.d"
 }
-#line 15 "codegen/d/01_basic_b.re"
+#line 16 "codegen/d/01_basic_b.re"
 
 }
 

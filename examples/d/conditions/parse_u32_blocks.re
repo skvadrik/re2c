@@ -9,17 +9,12 @@ private void add(ulong BASE)(ref ulong u, int d) {
 }
 
 private ulong parse_u32(const(char)* s) {
-    const(char)* cur = s, mar;
+    const(char)* yycursor = s, yymarker;
     ulong u = 0;
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE   = char;
-        re2c:define:YYSKIP    = 'cur++;';
-        re2c:define:YYPEEK    = '*cur';
-        re2c:define:YYRESTORE = 'cur = mar;';
-        re2c:define:YYBACKUP  = 'mar = cur;';
-        re2c:define:YYSHIFT   = 'cur += @@{shift};';
+        re2c:define:YYCTYPE = char;
 
         end = "\x00";
 
@@ -32,27 +27,27 @@ private ulong parse_u32(const(char)* s) {
 bin:
     /*!re2c
         end   { return u; }
-        [01]  { add!(2)(u, cur[-1] - '0'); goto bin; }
+        [01]  { add!(2)(u, yycursor[-1] - '0'); goto bin; }
         *     { return ERROR; }
     */
 oct:
     /*!re2c
         end   { return u; }
-        [0-7] { add!(8)(u, cur[-1] - '0'); goto oct; }
+        [0-7] { add!(8)(u, yycursor[-1] - '0'); goto oct; }
         *     { return ERROR; }
     */
 dec:
     /*!re2c
         end   { return u; }
-        [0-9] { add!(10)(u, cur[-1] - '0'); goto dec; }
+        [0-9] { add!(10)(u, yycursor[-1] - '0'); goto dec; }
         *     { return ERROR; }
     */
 hex:
     /*!re2c
         end   { return u; }
-        [0-9] { add!(16)(u, cur[-1] - '0');      goto hex; }
-        [a-f] { add!(16)(u, cur[-1] - 'a' + 10); goto hex; }
-        [A-F] { add!(16)(u, cur[-1] - 'A' + 10); goto hex; }
+        [0-9] { add!(16)(u, yycursor[-1] - '0');      goto hex; }
+        [a-f] { add!(16)(u, yycursor[-1] - 'a' + 10); goto hex; }
+        [A-F] { add!(16)(u, yycursor[-1] - 'A' + 10); goto hex; }
         *     { return ERROR; }
     */
 }

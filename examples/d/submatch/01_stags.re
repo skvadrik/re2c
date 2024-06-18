@@ -14,7 +14,7 @@ private int s2n(const(char)* s, const(char)* e) { // pre-parsed string to number
 }
 
 private bool lex(const(char)* str, ref SemVer ver) {
-    const(char)* cur = str, mar;
+    const(char)* yycursor = str, yymarker;
 
     // User-defined tag variables that are available in semantic action.
     const(char)* t1, t2, t3, t4, t5;
@@ -25,21 +25,14 @@ private bool lex(const(char)* str, ref SemVer ver) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
-        re2c:define:YYCTYPE     = "char";
-        re2c:define:YYPEEK      = "*cur";
-        re2c:define:YYSKIP      = "++cur;";
-        re2c:define:YYBACKUP    = "mar = cur;";
-        re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = null;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift};";
+        re2c:define:YYCTYPE = "char";
 
         num = [0-9]+;
 
         @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\x00] {
             ver.major = s2n(t1, t2);
             ver.minor = s2n(t3, t4);
-            ver.patch = t5 != null ? s2n(t5, cur - 1) : 0;
+            ver.patch = t5 != null ? s2n(t5, yycursor - 1) : 0;
             return true;
         }
         * { return false; }

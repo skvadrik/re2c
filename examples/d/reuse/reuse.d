@@ -8,133 +8,119 @@ import std.stdint;
 // This example supports multiple input encodings: UTF-8 and UTF-32.
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding-specific configurations.
-#line 18 "d/reuse/reuse.re"
+#line 14 "d/reuse/reuse.re"
 
 
 private int lex_utf8(const(uint8_t)* s) {
-    const(uint8_t)* cur = s, mar;
+    const(uint8_t)* yycursor = s, yymarker;
     
 #line 18 "d/reuse/reuse.d"
 {
 	uint8_t yych;
-	yych = *cur;
+	yych = *yycursor;
 	switch (yych) {
 		case 0xE2: goto yy3;
 		default: goto yy1;
 	}
 yy1:
-	++cur;
+	++yycursor;
 yy2:
-#line 17 "d/reuse/reuse.re"
+#line 13 "d/reuse/reuse.re"
 	{ return 1; }
 #line 31 "d/reuse/reuse.d"
 yy3:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	switch (yych) {
 		case 0x88: goto yy4;
 		default: goto yy2;
 	}
 yy4:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x80: goto yy6;
 		default: goto yy5;
 	}
 yy5:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy2;
 yy6:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'x': goto yy7;
 		default: goto yy5;
 	}
 yy7:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case ' ': goto yy8;
 		default: goto yy5;
 	}
 yy8:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0xE2: goto yy9;
 		default: goto yy5;
 	}
 yy9:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x88: goto yy10;
 		default: goto yy5;
 	}
 yy10:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 0x83: goto yy11;
 		default: goto yy5;
 	}
 yy11:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	switch (yych) {
 		case 'y': goto yy12;
 		default: goto yy5;
 	}
 yy12:
-	++cur;
-#line 16 "d/reuse/reuse.re"
+	++yycursor;
+#line 12 "d/reuse/reuse.re"
 	{ return 0; }
-#line 96 "d/reuse/reuse.d"
+#line 87 "d/reuse/reuse.d"
 }
-#line 25 "d/reuse/reuse.re"
+#line 21 "d/reuse/reuse.re"
 
 }
 
 private int lex_utf32(const(uint32_t)* s) {
-    const(uint32_t)* cur = s, mar;
+    const(uint32_t)* yycursor = s, yymarker;
     
-#line 105 "d/reuse/reuse.d"
+#line 96 "d/reuse/reuse.d"
 {
 	uint32_t yych;
-	yych = *cur;
+	yych = *yycursor;
 	if (yych == 0x00002200) goto yy15;
-	++cur;
+	++yycursor;
 yy14:
-#line 17 "d/reuse/reuse.re"
+#line 13 "d/reuse/reuse.re"
 	{ return 1; }
-#line 114 "d/reuse/reuse.d"
+#line 105 "d/reuse/reuse.d"
 yy15:
-	++cur;
-	mar = cur;
-	yych = *cur;
+	yych = *(yymarker = ++yycursor);
 	if (yych != 'x') goto yy14;
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	if (yych == ' ') goto yy17;
 yy16:
-	cur = mar;
+	yycursor = yymarker;
 	goto yy14;
 yy17:
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	if (yych != 0x00002203) goto yy16;
-	++cur;
-	yych = *cur;
+	yych = *++yycursor;
 	if (yych != 'y') goto yy16;
-	++cur;
-#line 16 "d/reuse/reuse.re"
+	++yycursor;
+#line 12 "d/reuse/reuse.re"
 	{ return 0; }
-#line 136 "d/reuse/reuse.d"
+#line 122 "d/reuse/reuse.d"
 }
-#line 33 "d/reuse/reuse.re"
+#line 29 "d/reuse/reuse.re"
 
 }
 
