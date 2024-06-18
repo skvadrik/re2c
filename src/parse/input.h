@@ -144,6 +144,7 @@ class Input: private LexerState {
     Ret lex_cls(Ast& ast, bool neg, const AstNode*&) NODISCARD;
     Ret lex_str(Ast& ast, uint8_t quote, const AstNode*&) NODISCARD;
 
+    Ret lex_spaces() NODISCARD;
     Ret lex_conf_assign() NODISCARD;
     Ret lex_conf_semicolon() NODISCARD;
     Ret lex_conf_number(Opt& opts) NODISCARD;

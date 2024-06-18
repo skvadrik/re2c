@@ -87,16 +87,15 @@ namespace re2c {
     re2c:define:YYMARKER    = mar;
     re2c:define:YYCTXMARKER = ctx;
 
-    eof         = [\x00];
-    eol         = [\n];
-    space       = [ \t\r];
-    semi        = [;];
-    quotes      = ['"];
-    naked_char  = [^] \ (eof | eol | space | semi);
-    naked       = (naked_char \ quotes) naked_char*;
-    conf_assign = space* "=" space*;
-    number      = "0" | ("-"? [1-9] [0-9]*);
-    comment     = "//" [^\x00\n]* eol;
+    eof        = [\x00];
+    eol        = [\n];
+    space      = [ \t\r];
+    semi       = [;];
+    quotes     = ['"];
+    naked_char = [^] \ (eof | eol | space | semi);
+    naked      = (naked_char \ quotes) naked_char*;
+    number     = "0" | ("-"? [1-9] [0-9]*);
+    comment    = "//" [^\x00\n]* eol;
 */
 
 Ret Input::lex_conf(Opt& opts) {
@@ -237,12 +236,12 @@ Ret Input::lex_conf(Opt& opts) {
     "indent:string" { RET_CONF_STR(indent_str); }
     "indent:top"    { RET_CONF_NUM_NONNEG(indent_top); }
 
-    "label:prefix" | "labelprefix"                    { RET_CONF_STR(label_prefix); }
-    "label:yyfill" | "label:yyFillLabel"              { RET_CONF_STR(label_fill); }
-    "label:yyloop"                                    { RET_CONF_STR(label_loop); }
-    "label:yyNext"                                    { RET_CONF_STR(label_next); }
-    "label:start" | "startlabel" / conf_assign number { RET_CONF_BOOL(label_start_force); }
-    "label:start" | "startlabel"                      { RET_CONF_STR(label_start); }
+    "label:prefix" | "labelprefix"       { RET_CONF_STR(label_prefix); }
+    "label:yyfill" | "label:yyFillLabel" { RET_CONF_STR(label_fill); }
+    "label:yyloop"                       { RET_CONF_STR(label_loop); }
+    "label:yyNext"                       { RET_CONF_STR(label_next); }
+    "label:start" | "startlabel" / space* "=" space* number { RET_CONF_BOOL(label_start_force); }
+    "label:start" | "startlabel"         { RET_CONF_STR(label_start); }
 
     [a-zA-Z0-9_:-]* {
         RET_FAIL(error_at_tok(
@@ -318,17 +317,27 @@ end:
 #undef RET_CONF_NUM_NONNEG
 #undef RET_CONF_EOF
 
+Ret Input::lex_spaces() {
+loop: /*!local:re2c
+    eol    { next_line(); goto loop; }
+    space  { goto loop; }
+    ""     { return Ret::OK; }
+*/
+}
+
 Ret Input::lex_conf_assign() {
+    CHECK_RET(lex_spaces());
 /*!local:re2c
-    *           { RET_FAIL(error_at_cur("missing '=' in configuration")); }
-    conf_assign { return Ret::OK; }
+    [=] { return lex_spaces(); }
+    *   { RET_FAIL(error_at_cur("missing '=' in configuration")); }
 */
 }
 
 Ret Input::lex_conf_semicolon() {
+    CHECK_RET(lex_spaces());
 /*!local:re2c
-    *          { RET_FAIL(error_at_cur("missing ending ';' in configuration")); }
-    space* ";" { return Ret::OK; }
+    [;] { return Ret::OK; }
+    *   { RET_FAIL(error_at_cur("missing ending ';' in configuration")); }
 */
 }
 
