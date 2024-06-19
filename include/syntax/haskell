@@ -25,6 +25,7 @@ conf:define:YYFILL@len = "@@";
 conf:define:YYFILL:naked = 0;
 conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
 conf:yyfn:sep = ";";
+conf:variable:yycond = "yycond";
 conf:variable:yyctable = "yyctable";
 conf:variable:yyaccept = "yyaccept";
 conf:variable:yytarget = "yytarget";

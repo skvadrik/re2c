@@ -433,6 +433,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::string, var_bitmaps, "yybm") \
     MUTOPT(std::string, var_computed_gotos_table, "yytarget") \
     MUTOPT(std::string, var_char, "yych") \
+    MUTOPT(std::string, var_cond, "yycond") \
     MUTOPT(std::string, var_cond_table, "yyctable") \
     MUTOPT(std::string, var_fill, "") \
     MUTOPT(std::string, var_state, "yystate") \

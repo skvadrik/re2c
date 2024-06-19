@@ -26,6 +26,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "conf:define:YYFILL:naked = 0;\n"
     "conf:define:YYFN = [\"<undefined-function-name>;<undefined-function-type>\"];\n"
     "conf:yyfn:sep = \";\";\n"
+    "conf:variable:yycond = \"yycond\";\n"
     "conf:variable:yyctable = \"yyctable\";\n"
     "conf:variable:yyaccept = \"yyaccept\";\n"
     "conf:variable:yytarget = \"yytarget\";\n"
