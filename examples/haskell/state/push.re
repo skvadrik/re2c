@@ -18,7 +18,7 @@ data State = State {
     _lim :: !Int,
     _tok :: !Int,
     _eof :: !Bool,
-    _state :: !Int,
+    _yystate :: !Int,
     _recv :: !Int
 }
 
@@ -92,7 +92,7 @@ test packets expect = do
         _tok = 0,
         _lim = 0,
         _eof = False,
-        _state = -1,
+        _yystate = -1,
         _recv = 0
     }
     status <- loop st packets

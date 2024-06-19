@@ -13,13 +13,13 @@ import (
 const BUFSIZE int = 10
 
 type State struct {
-	file  *os.File
-	str   []byte
-	cur   int
-	mar   int
-	tok   int
-	lim   int
-	state int
+	file    *os.File
+	str     []byte
+	cur     int
+	mar     int
+	tok     int
+	lim     int
+	yystate int
 }
 
 const (
@@ -57,7 +57,7 @@ func lex(yyrecord *State, recv *int) int {
 	var yych byte
 	
 //line "go/state/push.go":60
-switch (yyrecord.state) {
+switch (yyrecord.yystate) {
 case 0:
 	if (yyrecord.lim <= yyrecord.cur) {
 		goto yy8
@@ -90,7 +90,7 @@ yyFillLabel0:
 		goto yy4
 	default:
 		if (yyrecord.lim <= yyrecord.cur) {
-			yyrecord.state = 0
+			yyrecord.yystate = 0
 			return lexWaitingForInput
 		}
 		goto yy2
@@ -98,7 +98,7 @@ yyFillLabel0:
 yy2:
 	yyrecord.cur += 1
 yy3:
-	yyrecord.state = -1
+	yyrecord.yystate = -1
 //line "go/state/push.re":66
 	{ return lexPacketBroken }
 //line "go/state/push.go":105
@@ -114,14 +114,14 @@ yyFillLabel1:
 		goto yy6
 	default:
 		if (yyrecord.lim <= yyrecord.cur) {
-			yyrecord.state = 1
+			yyrecord.yystate = 1
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
 yy5:
 	yyrecord.cur += 1
-	yyrecord.state = -1
+	yyrecord.yystate = -1
 //line "go/state/push.re":68
 	{ *recv = *recv + 1; goto loop }
 //line "go/state/push.go":128
@@ -136,7 +136,7 @@ yyFillLabel2:
 		goto yy6
 	default:
 		if (yyrecord.lim <= yyrecord.cur) {
-			yyrecord.state = 2
+			yyrecord.yystate = 2
 			return lexWaitingForInput
 		}
 		goto yy7
@@ -145,7 +145,7 @@ yy7:
 	yyrecord.cur = yyrecord.mar
 	goto yy3
 yy8:
-	yyrecord.state = -1
+	yyrecord.yystate = -1
 //line "go/state/push.re":67
 	{ return lexEnd }
 //line "go/state/push.go":152
@@ -162,14 +162,14 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer.
 	st := &State{
-		file:  fr,
+		file:    fr,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		str:   make([]byte, BUFSIZE+1),
-		cur:   BUFSIZE,
-		mar:   BUFSIZE,
-		tok:   BUFSIZE,
-		lim:   BUFSIZE,
-		state: -1,
+		str:     make([]byte, BUFSIZE+1),
+		cur:     BUFSIZE,
+		mar:     BUFSIZE,
+		tok:     BUFSIZE,
+		lim:     BUFSIZE,
+		yystate: -1,
 	}
 
 	// Main loop. The buffer contains incomplete data which appears packet by

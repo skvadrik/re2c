@@ -268,16 +268,16 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::SETACCEPT, StxVarId::VAR, StxVarId::VAL, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yygetcond, \
-        ({StxVarId::GETCOND, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::GETCOND, StxVarId::VAR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yysetcond, \
-        ({StxVarId::SETCOND, StxVarId::COND, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::SETCOND, StxVarId::VAR, StxVarId::VAL, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yygetstate, \
-        ({StxVarId::GETSTATE, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::GETSTATE, StxVarId::VAR, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yysetstate, \
-        ({StxVarId::SETSTATE, StxVarId::STATE, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::SETSTATE, StxVarId::VAR, StxVarId::VAL, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yylessthan, \
         ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT, \

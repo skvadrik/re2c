@@ -295,27 +295,30 @@ code:yycopymtag =
         : copymtag
     ) nl;
 
-code:yygetaccept = (api.record ? record ".accept" : getaccept);
+code:yygetaccept =
+    (api.record
+        ? (storable_state | code_model.recursive_functions ? record ".") var
+        : getaccept);
 
 code:yysetaccept =
     topindent (api.record
-        ? record ".accept = " val ";"
+        ? (storable_state | code_model.recursive_functions ? record ".") var " = " val ";"
         : setaccept
     ) nl;
 
-code:yygetcond = (api.record ? record ".cond" : getcond);
+code:yygetcond = (api.record ? record "." var : getcond);
 
 code:yysetcond =
     topindent (api.record
-        ? record ".cond = " cond ";"
+        ? record "." var " = " val ";"
         : setcond
     ) nl;
 
-code:yygetstate = (api.record ? record ".state" : getstate);
+code:yygetstate = (api.record ? record "." var : getstate);
 
 code:yysetstate =
     topindent (api.record
-        ? record ".state = " state ";"
+        ? record "." var " = " val ";"
         : setstate
     ) nl;
 

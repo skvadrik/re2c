@@ -14,7 +14,7 @@ data State = State {
     _str :: !ByteString,
     _cur :: !Int,
     _mar :: !Int,
-    _cond :: !YYCONDTYPE
+    _yycond :: !YYCONDTYPE
 }
 
 peek_digit :: ByteString -> Int -> Int -> Int
@@ -53,13 +53,13 @@ yy3 State{..} _num =
 
 yy4 :: State -> Int -> Maybe Int
 yy4 State{..} _num =
-    let _cond = YYC_oct in
+    let _yycond = YYC_oct in
     yyfnoct State{..} _num
 
 yy5 :: State -> Int -> Maybe Int
 yy5 State{..} _num =
     let __ = _cur - 1 in let _cur = __ in
-    let _cond = YYC_dec in
+    let _yycond = YYC_dec in
     yyfndec State{..} _num
 
 yy6 :: State -> Int -> Maybe Int
@@ -90,13 +90,13 @@ yy8 State{..} _num =
 yy9 :: State -> Int -> Maybe Int
 yy9 State{..} _num =
     let __ = _cur - 1 in let _cur = __ in
-    let _cond = YYC_bin in
+    let _yycond = YYC_bin in
     yyfnbin State{..} _num
 
 yy10 :: State -> Int -> Maybe Int
 yy10 State{..} _num =
     let __ = _cur - 1 in let _cur = __ in
-    let _cond = YYC_hex in
+    let _yycond = YYC_hex in
     yyfnhex State{..} _num
 
 yyfninit :: State -> Int -> Maybe Int
@@ -205,7 +205,7 @@ yyfnhex State{..} _num =
 
 yy0 :: State -> Int -> Maybe Int
 yy0 State{..} _num =
-    case _cond of
+    case _yycond of
         _c | YYC_init == _c ->
             yyfninit State{..} _num
         _c | YYC_bin == _c ->
@@ -227,7 +227,11 @@ parse State{..} _num =
 
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
-    let s = State {_str = str, _cur = 0, _mar = 0, _cond = YYC_init}
+    let s = State {
+            _str = str,
+            _cur = 0,
+            _mar = 0,
+            _yycond = YYC_init}
     when (parse s 0 /= expect) $ error "failed!"
 
 main :: IO ()

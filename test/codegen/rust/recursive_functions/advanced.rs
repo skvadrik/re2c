@@ -29,8 +29,8 @@ struct ConState {
     cur: usize,
     mar: usize,
     tok: usize,
-    cond: isize,
-    state: isize,
+    yycond: isize,
+    yystate: isize,
     mtag_trie: MtagTrie,
     
 	yyt1: usize,
@@ -54,7 +54,7 @@ struct ConState {
     p2: usize,
     p3: usize,
     p4: usize,
-    accept: usize,
+    yyaccept: usize,
 }
 
 // An m-tag tree is a way to store histories with an O(1) copy operation.
@@ -144,7 +144,7 @@ fn yy1(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 0;
+				st.yystate = 0;
 				return ConStatus::Waiting;
 			} else {
 				st.cur += 1;
@@ -159,7 +159,7 @@ fn yy2(st: &mut ConState) -> ConStatus {
 }
 
 fn yy3(st: &mut ConState) -> ConStatus {
-	st.state = -1;
+	st.yystate = -1;
 	return ConStatus::BadPacket;
 }
 
@@ -177,7 +177,7 @@ fn yy4(st: &mut ConState) -> ConStatus {
 		0x7E => yy6(st, yych),
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 1;
+				st.yystate = 1;
 				return ConStatus::Waiting;
 			} else {
 				yy3(st)
@@ -211,7 +211,7 @@ fn yy6(st: &mut ConState, yych: u8) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 2;
+				st.yystate = 2;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -234,7 +234,7 @@ fn yy8(st: &mut ConState) -> ConStatus {
 		0x20 |
 		0x3B => {
 			if st.lim <= st.cur {
-				st.state = 3;
+				st.yystate = 3;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -297,7 +297,7 @@ fn yy10(st: &mut ConState, yych: u8) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 4;
+				st.yystate = 4;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -324,7 +324,7 @@ fn yy11(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 5;
+				st.yystate = 5;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -342,7 +342,7 @@ fn yy12(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 6;
+				st.yystate = 6;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -374,7 +374,7 @@ fn yy13(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 7;
+				st.yystate = 7;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -390,7 +390,7 @@ fn yy14(st: &mut ConState) -> ConStatus {
 	st.p2 = st.yytm4;
 	st.p3 = st.yytm5;
 	st.p4 = st.yytm6;
-	st.state = -1;
+	st.yystate = -1;
 	
         log!("media type: {}", String::from_utf8_lossy(&st.str[st.l1..st.l2]));
 
@@ -429,7 +429,7 @@ fn yy15(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 8;
+				st.yystate = 8;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -461,7 +461,7 @@ fn yy16(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 9;
+				st.yystate = 9;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -507,7 +507,7 @@ fn yy17(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 10;
+				st.yystate = 10;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -524,7 +524,7 @@ fn yy18(st: &mut ConState) -> ConStatus {
 		0x0A ..= 0x1F |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 11;
+				st.yystate = 11;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -567,7 +567,7 @@ fn yy19(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 12;
+				st.yystate = 12;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -601,7 +601,7 @@ fn yy20(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 13;
+				st.yystate = 13;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -618,7 +618,7 @@ fn yy21(st: &mut ConState) -> ConStatus {
 		0x0A ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 14;
+				st.yystate = 14;
 				return ConStatus::Waiting;
 			} else {
 				yy7(st)
@@ -632,7 +632,7 @@ fn yy21(st: &mut ConState) -> ConStatus {
 }
 
 fn yy22(st: &mut ConState) -> ConStatus {
-	st.state = -1;
+	st.yystate = -1;
 	return ConStatus::End;
 }
 
@@ -648,7 +648,7 @@ fn yy23(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 15;
+				st.yystate = 15;
 				return ConStatus::Waiting;
 			} else {
 				st.cur += 1;
@@ -672,12 +672,12 @@ fn yy24(st: &mut ConState) -> ConStatus {
 }
 
 fn yy25(st: &mut ConState) -> ConStatus {
-	st.state = -1;
+	st.yystate = -1;
 	return ConStatus::BadPacket;
 }
 
 fn yy26(st: &mut ConState) -> ConStatus {
-	st.accept = 0;
+	st.yyaccept = 0;
 	st.mar = st.cur;
 	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
@@ -687,7 +687,7 @@ fn yy26(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 16;
+				st.yystate = 16;
 				return ConStatus::Waiting;
 			} else {
 				yy25(st)
@@ -697,7 +697,7 @@ fn yy26(st: &mut ConState) -> ConStatus {
 }
 
 fn yy27(st: &mut ConState) -> ConStatus {
-	st.accept = 0;
+	st.yyaccept = 0;
 	st.mar = st.cur;
 	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
@@ -707,7 +707,7 @@ fn yy27(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 17;
+				st.yystate = 17;
 				return ConStatus::Waiting;
 			} else {
 				yy25(st)
@@ -739,7 +739,7 @@ fn yy28(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 18;
+				st.yystate = 18;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -750,7 +750,7 @@ fn yy28(st: &mut ConState) -> ConStatus {
 
 fn yy29(st: &mut ConState) -> ConStatus {
 	st.cur = st.mar;
-	if st.accept == 0 {
+	if st.yyaccept == 0 {
 		yy25(st)
 	} else {
 		yy38(st)
@@ -765,7 +765,7 @@ fn yy30(st: &mut ConState) -> ConStatus {
 		0x0A ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 19;
+				st.yystate = 19;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -795,7 +795,7 @@ fn yy31(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 20;
+				st.yystate = 20;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -813,7 +813,7 @@ fn yy32(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 21;
+				st.yystate = 21;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -844,7 +844,7 @@ fn yy33(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 22;
+				st.yystate = 22;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -878,7 +878,7 @@ fn yy34(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 23;
+				st.yystate = 23;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -905,7 +905,7 @@ fn yy35(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 24;
+				st.yystate = 24;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -923,7 +923,7 @@ fn yy36(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 25;
+				st.yystate = 25;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -947,7 +947,7 @@ fn yy36(st: &mut ConState) -> ConStatus {
 }
 
 fn yy37(st: &mut ConState) -> ConStatus {
-	st.accept = 1;
+	st.yyaccept = 1;
 	st.mar = st.cur;
 	let yych = unsafe {*st.str.get_unchecked(st.cur)};
 	match yych {
@@ -959,7 +959,7 @@ fn yy37(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 26;
+				st.yystate = 26;
 				return ConStatus::Waiting;
 			} else {
 				yy38(st)
@@ -971,7 +971,7 @@ fn yy37(st: &mut ConState) -> ConStatus {
 fn yy38(st: &mut ConState) -> ConStatus {
 	st.f1 = st.yytm1;
 	st.f2 = st.yytm3;
-	st.state = -1;
+	st.yystate = -1;
 	
         let mut folds: Vec::<String> = Vec::new();
         unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
@@ -991,7 +991,7 @@ fn yy39(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 27;
+				st.yystate = 27;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -1025,7 +1025,7 @@ fn yy40(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 28;
+				st.yystate = 28;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -1043,7 +1043,7 @@ fn yy41(st: &mut ConState) -> ConStatus {
 		0x0E ..= 0x1E |
 		0x7F => {
 			if st.lim <= st.cur {
-				st.state = 29;
+				st.yystate = 29;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -1084,7 +1084,7 @@ fn yy43(st: &mut ConState) -> ConStatus {
 		}
 		_ => {
 			if st.lim <= st.cur {
-				st.state = 30;
+				st.yystate = 30;
 				return ConStatus::Waiting;
 			} else {
 				yy29(st)
@@ -1094,7 +1094,7 @@ fn yy43(st: &mut ConState) -> ConStatus {
 }
 
 fn yy44(st: &mut ConState) -> ConStatus {
-	st.state = -1;
+	st.yystate = -1;
 	return ConStatus::End;
 }
 
@@ -1103,7 +1103,7 @@ fn yyfnheader(st: &mut ConState) -> ConStatus {
 }
 
 fn yy0(st: &mut ConState) -> ConStatus {
-	match st.cond {
+	match st.yycond {
 		YYC_media_type => yyfnmedia_type(st),
 		YYC_header => yyfnheader(st),
 		_ => panic!("internal lexer error"),
@@ -1111,7 +1111,7 @@ fn yy0(st: &mut ConState) -> ConStatus {
 }
 
 fn lex(st: &mut ConState) -> ConStatus {
-	match st.state {
+	match st.yystate {
 		-1 => yy0(st),
 		0 => {
 			if st.lim <= st.cur {
@@ -1357,8 +1357,8 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
         mar: CON_STATE_SIZE,
         tok: CON_STATE_SIZE,
         lim: CON_STATE_SIZE,
-        cond: YYC_media_type,
-        state: -1,
+        yycond: YYC_media_type,
+        yystate: -1,
         yyt1: NONE,
 yyt2: NONE,
 
@@ -1382,7 +1382,7 @@ yytm9: MTAG_ROOT,
         p2: MTAG_ROOT,
         p3: MTAG_ROOT,
         p4: MTAG_ROOT,
-        accept: 0
+        yyaccept: 0
     };
 
     // Main loop. The buffer contains incomplete data which appears packet by

@@ -10,7 +10,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable cond: yycondtype;
+    mutable yycond: yycondtype;
 } 
 
 let add (num: int option) (dgt: int) (base: int) : int option =
@@ -42,7 +42,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 */
 
 let test (str: string) (result: int option) =
-    let st = {str = str; cur = 0; mar = 0; cond = YYC_init} in
+    let st = {str = str; cur = 0; mar = 0; yycond = YYC_init} in
     if not (parse st (Some 0) = result) then raise (Failure "error")
 
 let main () =

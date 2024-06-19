@@ -8,7 +8,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable accept: int;
+    mutable yyaccept: int;
 }
 
 /*!re2c
@@ -21,7 +21,7 @@ type state = {
 */
 
 let test(str, num) =
-    let st = {str = str; cur = 0; mar = 0; accept = 0}
+    let st = {str = str; cur = 0; mar = 0; yyaccept = 0}
     in if not (lex st = num) then raise (Failure "error")
 
 let main () =

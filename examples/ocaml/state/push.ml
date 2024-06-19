@@ -17,7 +17,7 @@ type state = {
     mutable mar: int;
     mutable tok: int;
     mutable lim: int;
-    mutable state: int;
+    mutable yystate: int;
     mutable recv: int;
 }
 
@@ -50,7 +50,7 @@ let rec yy0 (yyrecord : state) : status =
 			(yy3 [@tailcall]) yyrecord
 		| _ ->
 			if (yyrecord.lim <= yyrecord.cur) then (
-				yyrecord.state <- 0;
+				yyrecord.yystate <- 0;
 				Waiting
 			) else (
 				yyrecord.cur <- yyrecord.cur + 1;
@@ -61,7 +61,7 @@ and yy1 (yyrecord : state) : status =
 	(yy2 [@tailcall]) yyrecord
 
 and yy2 (yyrecord : state) : status =
-	yyrecord.state <- -1;
+	yyrecord.yystate <- -1;
 	BadPacket
 
 and yy3 (yyrecord : state) : status =
@@ -76,14 +76,14 @@ and yy3 (yyrecord : state) : status =
 			(yy5 [@tailcall]) yyrecord
 		| _ ->
 			if (yyrecord.lim <= yyrecord.cur) then (
-				yyrecord.state <- 1;
+				yyrecord.yystate <- 1;
 				Waiting
 			) else (
 				(yy2 [@tailcall]) yyrecord
 			)
 
 and yy4 (yyrecord : state) : status =
-	yyrecord.state <- -1;
+	yyrecord.yystate <- -1;
 	yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord
 
 and yy5 (yyrecord : state) : status =
@@ -97,7 +97,7 @@ and yy5 (yyrecord : state) : status =
 			(yy5 [@tailcall]) yyrecord
 		| _ ->
 			if (yyrecord.lim <= yyrecord.cur) then (
-				yyrecord.state <- 2;
+				yyrecord.yystate <- 2;
 				Waiting
 			) else (
 				(yy6 [@tailcall]) yyrecord
@@ -108,11 +108,11 @@ and yy6 (yyrecord : state) : status =
 	(yy2 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : state) : status =
-	yyrecord.state <- -1;
+	yyrecord.yystate <- -1;
 	End
 
 and lex (yyrecord : state) : status =
-	match yyrecord.state with
+	match yyrecord.yystate with
 		| -1 -> (yy0 [@tailcall]) yyrecord
 		| 0 ->
 			if (yyrecord.lim <= yyrecord.cur) then (yy7 [@tailcall]) yyrecord
@@ -146,7 +146,7 @@ let test (packets: string list) (sts: status) =
         mar = lim;
         tok = lim;
         lim = lim;
-        state = -1;
+        yystate = -1;
         recv = 0;
     } in
 

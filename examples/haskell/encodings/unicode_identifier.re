@@ -11,7 +11,7 @@ data State = State {
     _str :: ByteString,
     _cur :: Int,
     _mar :: Int,
-    _accept :: Int
+    _yyaccept :: Int
 }
 
 /*!re2c
@@ -34,6 +34,6 @@ main = do
             _str = "_Ыдентификатор\x00",
             _cur = 0,
             _mar = 0,
-            _accept = 0}
+            _yyaccept = 0}
 
     when (not $ lexer st) $ error "failed"

@@ -16,7 +16,7 @@ data State = State {
     _str :: ByteString,
     _cur :: Int,
     _mar :: Int,
-    _accept :: Int
+    _yyaccept :: Int
 }
 
 
@@ -54,7 +54,7 @@ yy3 State{..} =
 
 yy4 :: State -> Number
 yy4 State{..} =
-    let _accept = 0 in
+    let _yyaccept = 0 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -72,7 +72,7 @@ yy4 State{..} =
 
 yy5 :: State -> Number
 yy5 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -94,7 +94,7 @@ yy6 State{..} =
 
 yy7 :: State -> Number
 yy7 State{..} =
-    let _accept = 2 in
+    let _yyaccept = 2 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -130,7 +130,7 @@ yy9 State{..} =
 yy10 :: State -> Number
 yy10 State{..} =
     let _cur = _mar in
-    case _accept of
+    case _yyaccept of
         _c | 0 == _c ->
             yy2 State{..}
         _c | 1 == _c ->
@@ -180,7 +180,7 @@ lexer State{..} =
 main :: IO ()
 main = do
     let test s n = do
-            let st = State {_str = s, _cur = 0, _mar = 0, _accept = 0}
+            let st = State {_str = s, _cur = 0, _mar = 0, _yyaccept = 0}
             when (lexer st /= n) $ error "failed"
 
     test "123\0" INum

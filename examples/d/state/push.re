@@ -12,7 +12,7 @@ struct State {
     FILE* file;
     char[BUFSIZE + 1] str;
     char* lim, cur, mar, tok;
-    int state;
+    int yystate;
 };
 
 enum Status {END, READY, WAITING, BAD_PACKET, BIG_PACKET};
@@ -77,7 +77,7 @@ private void test(string[] packets, Status expect) {
     st.cur = st.mar = st.tok = st.lim = cast(char*)st.str + BUFSIZE;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     st.lim[0] = 0;
-    st.state = -1;
+    st.yystate = -1;
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and

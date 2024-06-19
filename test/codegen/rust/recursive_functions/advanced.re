@@ -26,8 +26,8 @@ struct ConState {
     cur: usize,
     mar: usize,
     tok: usize,
-    cond: isize,
-    state: isize,
+    yycond: isize,
+    yystate: isize,
     mtag_trie: MtagTrie,
     /*!stags:re2c format = '\n\t@@: usize,'; */
     /*!mtags:re2c format = '\n\t@@: usize,'; */
@@ -39,7 +39,7 @@ struct ConState {
     p2: usize,
     p3: usize,
     p4: usize,
-    accept: usize,
+    yyaccept: usize,
 }
 
 // An m-tag tree is a way to store histories with an O(1) copy operation.
@@ -195,8 +195,8 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
         mar: CON_STATE_SIZE,
         tok: CON_STATE_SIZE,
         lim: CON_STATE_SIZE,
-        cond: YYC_media_type,
-        state: -1,
+        yycond: YYC_media_type,
+        yystate: -1,
         /*!stags:re2c format = "@@: NONE,\n"; */
         /*!mtags:re2c format = "@@: MTAG_ROOT,\n"; */
         mtag_trie: Vec::new(),
@@ -208,7 +208,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
         p2: MTAG_ROOT,
         p3: MTAG_ROOT,
         p4: MTAG_ROOT,
-        accept: 0
+        yyaccept: 0
     };
 
     // Main loop. The buffer contains incomplete data which appears packet by

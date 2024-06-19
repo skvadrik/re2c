@@ -16,7 +16,7 @@ class State:
         self.cur = self.lim
         self.mar = self.lim
         self.tok = self.lim
-        self.state = -1
+        self.yystate = -1
 
 class Status(Enum):
     END = 0
