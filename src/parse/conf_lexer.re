@@ -186,6 +186,7 @@ Ret Input::lex_conf(Opt& opts) {
         return Ret::OK;
     }
 
+    "variable:"  "yycond"          { RET_CONF_STR(var_cond); }
     "variable:"  "yyctable"        { RET_CONF_STR(var_cond_table); }
     "variable:"  "yyaccept"        { RET_CONF_STR(var_accept); }
     "variable:"  "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }

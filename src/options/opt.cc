@@ -129,6 +129,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_accept = defaults.var_accept;
         real.var_bitmaps = defaults.var_bitmaps;
         real.var_char = defaults.var_char;
+        real.var_cond = defaults.var_cond;
         real.var_cond_table = defaults.var_cond_table;
         real.var_computed_gotos_table = defaults.var_computed_gotos_table;
         real.var_fill = defaults.var_fill;
@@ -173,6 +174,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_cond_type = defaults.api_cond_type;
         real.api_cond_get = defaults.api_cond_get;
         real.api_cond_set = defaults.api_cond_set;
+        real.var_cond = defaults.var_cond;
         real.var_cond_table = defaults.var_cond_table;
         real.cond_abort = defaults.cond_abort;
         real.cond_get_naked = defaults.cond_get_naked;
@@ -271,6 +273,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (glob.code_model != CodeModel::GOTO_LABEL) {
         // In code models other than goto/label there is no `goto`.
+        real.var_cond = defaults.var_cond;
         real.var_cond_table = defaults.var_cond_table;
         real.cond_div = defaults.cond_div;
         real.cond_div_param = defaults.cond_div_param;
