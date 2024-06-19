@@ -1299,7 +1299,10 @@ class RenderSetCond : public RenderCallback {
             argsubst(
                 rctx.os, rctx.opts->api_cond_set, rctx.opts->cond_set_param, "cond", true, cond);
             break;
-        case StxVarId::COND:
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_cond;
+            break;
+        case StxVarId::VAL:
             rctx.os << cond;
             break;
         case StxVarId::RECORD:
@@ -1328,7 +1331,10 @@ class RenderSetState : public RenderCallback {
             argsubst(rctx.os,
                 rctx.opts->api_state_set, rctx.opts->state_set_param, "state", true, state);
             break;
-        case StxVarId::STATE:
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_state;
+            break;
+        case StxVarId::VAL:
             rctx.os << state;
             break;
         case StxVarId::RECORD:

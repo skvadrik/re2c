@@ -67,8 +67,8 @@ type State struct {
 	mar      int
 	tok      int
 	lim      int
-	cond     int
-	state    int
+	yycond   int
+	yystate  int
 	trie     mtagTrie
 	/*!stags:re2c format = '\n\t@@ int'; */
 	/*!mtags:re2c format = '\n\t@@ int'; */
@@ -76,7 +76,7 @@ type State struct {
 	f1, f2   int
 	p1, p2   int
 	p3, p4   int
-	accept   int
+	yyaccept int
 }
 
 const (
@@ -180,26 +180,26 @@ func test(packets []string) int {
 	fr, _ := os.Open(fname);
 
 	st := &State{
-		file:   fr,
-		str:    make([]byte, SIZE+1),
-		cur:    SIZE,
-		mar:    SIZE,
-		tok:    SIZE,
-		lim:    SIZE,
-		cond:   yycmedia_type,
-		state:  -1,
-		trie:   make([]mtagElem, 0),
+		file:     fr,
+		str:      make([]byte, SIZE+1),
+		cur:      SIZE,
+		mar:      SIZE,
+		tok:      SIZE,
+		lim:      SIZE,
+		yycond:   yycmedia_type,
+		yystate:  -1,
+		trie:     make([]mtagElem, 0),
 		/*!stags:re2c format = '\n\t\t@@: tagNone,'; */
 		/*!mtags:re2c format = '\n\t\t@@: mtagRoot,'; */
-		l1:     0,
-		l2:     0,
-		f1:     0,
-		f2:     0,
-		p1:     0,
-		p2:     0,
-		p3:     0,
-		p4:     0,
-		accept: 0,
+		l1:       0,
+		l2:       0,
+		f1:       0,
+		f2:       0,
+		p1:       0,
+		p2:       0,
+		p3:       0,
+		p4:       0,
+		yyaccept: 0,
 	}
 	// str is zero-initialized, no need to write sentinel
 

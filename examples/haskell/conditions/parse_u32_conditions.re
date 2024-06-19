@@ -11,7 +11,7 @@ data State = State {
     _str :: !ByteString,
     _cur :: !Int,
     _mar :: !Int,
-    _cond :: !YYCONDTYPE
+    _yycond :: !YYCONDTYPE
 }
 
 peek_digit :: ByteString -> Int -> Int -> Int
@@ -39,7 +39,11 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
-    let s = State {_str = str, _cur = 0, _mar = 0, _cond = YYC_init}
+    let s = State {
+            _str = str,
+            _cur = 0,
+            _mar = 0,
+            _yycond = YYC_init}
     when (parse s 0 /= expect) $ error "failed!"
 
 main :: IO ()

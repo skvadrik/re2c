@@ -9,13 +9,13 @@ const bufsize = 10
 
 struct State {
 mut:
-    file  os.File
-    str   []u8
-    cur   int
-    mar   int
-    tok   int
-    lim   int
-    state int
+    file    os.File
+    str     []u8
+    cur     int
+    mar     int
+    tok     int
+    lim     int
+    yystate int
 }
 
 enum Status {
@@ -78,14 +78,14 @@ fn test(expect Status, packets []string) {
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer.
     mut st := &State{
-        file:  fr,
+        file:    fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:   []u8{len: bufsize + 1},
-        cur:   bufsize,
-        mar:   bufsize,
-        tok:   bufsize,
-        lim:   bufsize,
-        state: -1,
+        str:     []u8{len: bufsize + 1},
+        cur:     bufsize,
+        mar:     bufsize,
+        tok:     bufsize,
+        lim:     bufsize,
+        yystate: -1,
     }
 
     // Main loop. The buffer contains incomplete data which appears packet by

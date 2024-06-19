@@ -75,8 +75,8 @@ type State struct {
 	mar      int
 	tok      int
 	lim      int
-	cond     int
-	state    int
+	yycond   int
+	yystate  int
 	trie     mtagTrie
 	
 //line "codegen/go/recursive_functions/advanced.go":83
@@ -104,7 +104,7 @@ type State struct {
 	f1, f2   int
 	p1, p2   int
 	p3, p4   int
-	accept   int
+	yyaccept int
 }
 
 const (
@@ -172,7 +172,7 @@ func yy1(st *State) int {
 		return yy4(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 0
+			st.yystate = 0
 			return lexWaiting
 		} else {
 			st.cur += 1
@@ -186,7 +186,7 @@ func yy2(st *State) int {
 }
 
 func yy3(st *State) int {
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":174
 	return lexBadPacket
 //line "codegen/go/recursive_functions/advanced.go":193
@@ -214,7 +214,7 @@ func yy4(st *State) int {
 		return yy6(st, yych)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 1
+			st.yystate = 1
 			return lexWaiting
 		} else {
 			return yy3(st)
@@ -253,7 +253,7 @@ func yy6(st *State, yych byte) int {
 		return yy8(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 2
+			st.yystate = 2
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -279,7 +279,7 @@ func yy8(st *State) int {
 		fallthrough
 	case ';':
 		if (st.lim <= st.cur) {
-			st.state = 3
+			st.yystate = 3
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -347,7 +347,7 @@ func yy10(st *State, yych byte) int {
 		return yy13(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 4
+			st.yystate = 4
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -371,7 +371,7 @@ func yy11(st *State) int {
 		return yy13(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 5
+			st.yystate = 5
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -387,7 +387,7 @@ func yy12(st *State) int {
 		return yy14(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 6
+			st.yystate = 6
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -425,7 +425,7 @@ func yy13(st *State) int {
 		return yy15(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 7
+			st.yystate = 7
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -440,7 +440,7 @@ func yy14(st *State) int {
 	st.p2 = st.yytm4
 	st.p3 = st.yytm5
 	st.p4 = st.yytm6
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":152
 	
 		if debug {fmt.Printf("media type: %v\n", string(st.str[st.l1:st.l2]))}
@@ -485,7 +485,7 @@ func yy15(st *State) int {
 		return yy16(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 8
+			st.yystate = 8
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -522,7 +522,7 @@ func yy16(st *State) int {
 		return yy18(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 9
+			st.yystate = 9
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -572,7 +572,7 @@ func yy17(st *State) int {
 		return yy13(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 10
+			st.yystate = 10
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -591,7 +591,7 @@ func yy18(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 11
+			st.yystate = 11
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -628,7 +628,7 @@ func yy19(st *State) int {
 		return yy13(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 12
+			st.yystate = 12
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -659,7 +659,7 @@ func yy20(st *State) int {
 		return yy13(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 13
+			st.yystate = 13
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -678,7 +678,7 @@ func yy21(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 14
+			st.yystate = 14
 			return lexWaiting
 		} else {
 			return yy7(st)
@@ -690,7 +690,7 @@ func yy21(st *State) int {
 }
 
 func yy22(st *State) int {
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":173
 	return lexEnd
 //line "codegen/go/recursive_functions/advanced.go":697
@@ -711,7 +711,7 @@ func yy23(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 15
+			st.yystate = 15
 			return lexWaiting
 		} else {
 			st.cur += 1
@@ -732,14 +732,14 @@ func yy24(st *State) int {
 }
 
 func yy25(st *State) int {
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":174
 	return lexBadPacket
 //line "codegen/go/recursive_functions/advanced.go":739
 }
 
 func yy26(st *State) int {
-	st.accept = 0
+	st.yyaccept = 0
 	st.mar = st.cur
 	yych := st.str[st.cur]
 	switch (yych) {
@@ -748,7 +748,7 @@ func yy26(st *State) int {
 		return yy28(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 16
+			st.yystate = 16
 			return lexWaiting
 		} else {
 			return yy25(st)
@@ -757,7 +757,7 @@ func yy26(st *State) int {
 }
 
 func yy27(st *State) int {
-	st.accept = 0
+	st.yyaccept = 0
 	st.mar = st.cur
 	yych := st.str[st.cur]
 	switch (yych) {
@@ -771,7 +771,7 @@ func yy27(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 17
+			st.yystate = 17
 			return lexWaiting
 		} else {
 			return yy25(st)
@@ -799,7 +799,7 @@ func yy28(st *State) int {
 		return yy33(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 18
+			st.yystate = 18
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -809,7 +809,7 @@ func yy28(st *State) int {
 
 func yy29(st *State) int {
 	st.cur = st.mar
-	if (st.accept == 0) {
+	if (st.yyaccept == 0) {
 		return yy25(st)
 	} else {
 		return yy38(st)
@@ -827,7 +827,7 @@ func yy30(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 19
+			st.yystate = 19
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -852,7 +852,7 @@ func yy31(st *State) int {
 		return yy28(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 20
+			st.yystate = 20
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -873,7 +873,7 @@ func yy32(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 21
+			st.yystate = 21
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -904,7 +904,7 @@ func yy33(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 22
+			st.yystate = 22
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -938,7 +938,7 @@ func yy34(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 23
+			st.yystate = 23
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -961,7 +961,7 @@ func yy35(st *State) int {
 		return yy37(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 24
+			st.yystate = 24
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -982,7 +982,7 @@ func yy36(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 25
+			st.yystate = 25
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -1002,7 +1002,7 @@ func yy36(st *State) int {
 }
 
 func yy37(st *State) int {
-	st.accept = 1
+	st.yyaccept = 1
 	st.mar = st.cur
 	yych := st.str[st.cur]
 	switch (yych) {
@@ -1014,7 +1014,7 @@ func yy37(st *State) int {
 		return yy33(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 26
+			st.yystate = 26
 			return lexWaiting
 		} else {
 			return yy38(st)
@@ -1025,7 +1025,7 @@ func yy37(st *State) int {
 func yy38(st *State) int {
 	st.f1 = st.yytm1
 	st.f2 = st.yytm3
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":165
 	
 		folds := unwind(st.trie, st.f1, st.f2, st.str)
@@ -1050,7 +1050,7 @@ func yy39(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 27
+			st.yystate = 27
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -1078,7 +1078,7 @@ func yy40(st *State) int {
 		return yy42(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 28
+			st.yystate = 28
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -1099,7 +1099,7 @@ func yy41(st *State) int {
 		fallthrough
 	case 0x7F:
 		if (st.lim <= st.cur) {
-			st.state = 29
+			st.yystate = 29
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -1135,7 +1135,7 @@ func yy43(st *State) int {
 		return yy40(st)
 	default:
 		if (st.lim <= st.cur) {
-			st.state = 30
+			st.yystate = 30
 			return lexWaiting
 		} else {
 			return yy29(st)
@@ -1144,7 +1144,7 @@ func yy43(st *State) int {
 }
 
 func yy44(st *State) int {
-	st.state = -1
+	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":173
 	return lexEnd
 //line "codegen/go/recursive_functions/advanced.go":1151
@@ -1155,7 +1155,7 @@ func yyfnheader(st *State) int {
 }
 
 func yy0(st *State) int {
-	switch (st.cond) {
+	switch (st.yycond) {
 	case yycmedia_type:
 		return yyfnmedia_type(st)
 	case yycheader:
@@ -1166,7 +1166,7 @@ func yy0(st *State) int {
 }
 
 func lex(st *State) int {
-	switch (st.state) {
+	switch (st.yystate) {
 	case -1:
 		return yy0(st)
 	case 0:
@@ -1369,15 +1369,15 @@ func test(packets []string) int {
 	fr, _ := os.Open(fname);
 
 	st := &State{
-		file:   fr,
-		str:    make([]byte, SIZE+1),
-		cur:    SIZE,
-		mar:    SIZE,
-		tok:    SIZE,
-		lim:    SIZE,
-		cond:   yycmedia_type,
-		state:  -1,
-		trie:   make([]mtagElem, 0),
+		file:     fr,
+		str:      make([]byte, SIZE+1),
+		cur:      SIZE,
+		mar:      SIZE,
+		tok:      SIZE,
+		lim:      SIZE,
+		yycond:   yycmedia_type,
+		yystate:  -1,
+		trie:     make([]mtagElem, 0),
 		
 //line "codegen/go/recursive_functions/advanced.go":1383
 
@@ -1400,15 +1400,15 @@ func test(packets []string) int {
 		yytm9: mtagRoot,
 //line "codegen/go/recursive_functions/advanced.re":193
 
-		l1:     0,
-		l2:     0,
-		f1:     0,
-		f2:     0,
-		p1:     0,
-		p2:     0,
-		p3:     0,
-		p4:     0,
-		accept: 0,
+		l1:       0,
+		l2:       0,
+		f1:       0,
+		f2:       0,
+		p1:       0,
+		p2:       0,
+		p3:       0,
+		p4:       0,
+		yyaccept: 0,
 	}
 	// str is zero-initialized, no need to write sentinel
 

@@ -329,37 +329,37 @@ code:yycopymtag =
 code:yygetaccept =
     (api.generic
         ? getaccept
-    : (api.record
+    : (api.record & (storable_state | code_model.recursive_functions)
         ? record "." var
         : var));
 
 code:yysetaccept =
     topindent (api.generic
         ? setaccept
-    : (api.record
+    : (api.record & (storable_state | code_model.recursive_functions)
         ? record "." var " = " val ";"
         : var " = " val ";"
     )) nl;
 
 code:yygetcond =
     (api.record
-        ? record ".cond"
+        ? record "." var
         : getcond);
 
 code:yysetcond =
     topindent (api.record
-        ? record ".cond = " cond ";"
+        ? record "." var " = " val ";"
         : setcond
     ) nl;
 
 code:yygetstate =
     (api.record
-        ? record ".state"
+        ? record "." var
         : getstate);
 
 code:yysetstate =
     topindent (api.record
-        ? record ".state = " state ";"
+        ? record "." var " = " val ";"
         : setstate
     ) nl;
 

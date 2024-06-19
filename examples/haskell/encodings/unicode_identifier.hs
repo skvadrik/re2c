@@ -14,7 +14,7 @@ data State = State {
     _str :: ByteString,
     _cur :: Int,
     _mar :: Int,
-    _accept :: Int
+    _yyaccept :: Int
 }
 
 
@@ -98,7 +98,7 @@ yy2 State{..} =
 
 yy3 :: State -> Bool
 yy3 State{..} =
-    let _accept = 0 in
+    let _yyaccept = 0 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -397,7 +397,7 @@ yy23 State{..} =
 
 yy24 :: State -> Bool
 yy24 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -493,7 +493,7 @@ yy24 State{..} =
 
 yy25 :: State -> Bool
 yy25 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -631,7 +631,7 @@ yy25 State{..} =
 
 yy26 :: State -> Bool
 yy26 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -682,7 +682,7 @@ yy26 State{..} =
 
 yy27 :: State -> Bool
 yy27 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -715,7 +715,7 @@ yy27 State{..} =
 
 yy28 :: State -> Bool
 yy28 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -730,7 +730,7 @@ yy28 State{..} =
 
 yy29 :: State -> Bool
 yy29 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -742,7 +742,7 @@ yy29 State{..} =
 
 yy30 :: State -> Bool
 yy30 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -757,7 +757,7 @@ yy30 State{..} =
 
 yy31 :: State -> Bool
 yy31 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -841,7 +841,7 @@ yy31 State{..} =
 
 yy32 :: State -> Bool
 yy32 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -859,7 +859,7 @@ yy32 State{..} =
 
 yy33 :: State -> Bool
 yy33 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -919,7 +919,7 @@ yy33 State{..} =
 
 yy34 :: State -> Bool
 yy34 State{..} =
-    let _accept = 1 in
+    let _yyaccept = 1 in
     let _mar = _cur in
     let yych = index _str _cur in
     case yych of
@@ -987,7 +987,7 @@ yy35 State{..} =
 yy36 :: State -> Bool
 yy36 State{..} =
     let _cur = _mar in
-    if _accept == 0 then yy4 State{..}
+    if _yyaccept == 0 then yy4 State{..}
     else yy2 State{..}
 
 yy37 :: State -> Bool
@@ -6034,6 +6034,6 @@ main = do
             _str = "_Ыдентификатор\x00",
             _cur = 0,
             _mar = 0,
-            _accept = 0}
+            _yyaccept = 0}
 
     when (not $ lexer st) $ error "failed"

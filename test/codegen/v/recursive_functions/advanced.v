@@ -65,15 +65,15 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 
 struct State {
 mut:
-    file   os.File
-    str    []u8
-    cur    int
-    mar    int
-    tok    int
-    lim    int
-    cond   YYCONDTYPE
-    state  int
-    trie   MtagTrie
+    file     os.File
+    str      []u8
+    cur      int
+    mar      int
+    tok      int
+    lim      int
+    yycond   YYCONDTYPE
+    yystate  int
+    trie     MtagTrie
     
 //line "codegen/v/recursive_functions/advanced.v":79
 
@@ -96,15 +96,15 @@ mut:
 	yytm9 int
 //line "codegen/v/recursive_functions/advanced.re":70
 
-    l1     int
-    l2     int
-    f1     int
-    f2     int
-    p1     int
-    p2     int
-    p3     int
-    p4     int
-    accept int
+    l1       int
+    l2       int
+    f1       int
+    f2       int
+    p1       int
+    p2       int
+    p3       int
+    p4       int
+    yyaccept int
 }
 
 enum Status {
@@ -159,7 +159,7 @@ fn yy1(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 0
+                st.yystate = 0
                 return .lex_waiting
             } else {
                 st.cur += 1
@@ -174,7 +174,7 @@ fn yy2(mut st State) Status {
 }
 
 fn yy3(mut st State) Status {
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":181
@@ -187,7 +187,7 @@ fn yy4(mut st State) Status {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E { return yy6(mut st, yych) }
         else {
             if st.lim <= st.cur {
-                st.state = 1
+                st.yystate = 1
                 return .lex_waiting
             } else {
                 return yy3(mut st)
@@ -213,7 +213,7 @@ fn yy6(mut st State, yych u8) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 2
+                st.yystate = 2
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -232,7 +232,7 @@ fn yy8(mut st State) Status {
     match yych {
         0x00, 0x09, 0x0D, 0x20, 0x3B {
             if st.lim <= st.cur {
-                st.state = 3
+                st.yystate = 3
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -286,7 +286,7 @@ fn yy10(mut st State, yych u8) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 4
+                st.yystate = 4
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -312,7 +312,7 @@ fn yy11(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 5
+                st.yystate = 5
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -330,7 +330,7 @@ fn yy12(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 6
+                st.yystate = 6
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -353,7 +353,7 @@ fn yy13(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 7
+                st.yystate = 7
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -369,7 +369,7 @@ fn yy14(mut st State) Status {
     st.p2 = st.yytm4
     st.p3 = st.yytm5
     st.p4 = st.yytm6
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":154
     
         mt := st.str[st.l1..st.l2].str()
@@ -401,7 +401,7 @@ fn yy15(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 8
+                st.yystate = 8
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -425,7 +425,7 @@ fn yy16(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 9
+                st.yystate = 9
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -462,7 +462,7 @@ fn yy17(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 10
+                st.yystate = 10
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -476,7 +476,7 @@ fn yy18(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1F, 0x7F {
             if st.lim <= st.cur {
-                st.state = 11
+                st.yystate = 11
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -518,7 +518,7 @@ fn yy19(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 12
+                st.yystate = 12
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -551,7 +551,7 @@ fn yy20(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 13
+                st.yystate = 13
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -565,7 +565,7 @@ fn yy21(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 14
+                st.yystate = 14
                 return .lex_waiting
             } else {
                 return yy7(mut st)
@@ -579,7 +579,7 @@ fn yy21(mut st State) Status {
 }
 
 fn yy22(mut st State) Status {
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":586
@@ -594,7 +594,7 @@ fn yy23(mut st State) Status {
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 15
+                st.yystate = 15
                 return .lex_waiting
             } else {
                 st.cur += 1
@@ -618,14 +618,14 @@ fn yy24(mut st State) Status {
 }
 
 fn yy25(mut st State) Status {
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":625
 }
 
 fn yy26(mut st State) Status {
-    st.accept = 0
+    st.yyaccept = 0
     st.mar = st.cur
     yych := st.str[st.cur]
     match yych {
@@ -635,7 +635,7 @@ fn yy26(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 16
+                st.yystate = 16
                 return .lex_waiting
             } else {
                 return yy25(mut st)
@@ -645,13 +645,13 @@ fn yy26(mut st State) Status {
 }
 
 fn yy27(mut st State) Status {
-    st.accept = 0
+    st.yyaccept = 0
     st.mar = st.cur
     yych := st.str[st.cur]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 17
+                st.yystate = 17
                 return .lex_waiting
             } else {
                 return yy25(mut st)
@@ -682,7 +682,7 @@ fn yy28(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 18
+                st.yystate = 18
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -693,7 +693,7 @@ fn yy28(mut st State) Status {
 
 fn yy29(mut st State) Status {
     st.cur = st.mar
-    if st.accept == 0 {
+    if st.yyaccept == 0 {
         return yy25(mut st)
     } else {
         return yy38(mut st)
@@ -705,7 +705,7 @@ fn yy30(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 19
+                st.yystate = 19
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -735,7 +735,7 @@ fn yy31(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 20
+                st.yystate = 20
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -749,7 +749,7 @@ fn yy32(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 21
+                st.yystate = 21
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -776,7 +776,7 @@ fn yy33(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 22
+                st.yystate = 22
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -806,7 +806,7 @@ fn yy34(mut st State) Status {
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 23
+                st.yystate = 23
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -833,7 +833,7 @@ fn yy35(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 24
+                st.yystate = 24
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -847,7 +847,7 @@ fn yy36(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 25
+                st.yystate = 25
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -871,7 +871,7 @@ fn yy36(mut st State) Status {
 }
 
 fn yy37(mut st State) Status {
-    st.accept = 1
+    st.yyaccept = 1
     st.mar = st.cur
     yych := st.str[st.cur]
     match yych {
@@ -882,7 +882,7 @@ fn yy37(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 26
+                st.yystate = 26
                 return .lex_waiting
             } else {
                 return yy38(mut st)
@@ -894,7 +894,7 @@ fn yy37(mut st State) Status {
 fn yy38(mut st State) Status {
     st.f1 = st.yytm1
     st.f2 = st.yytm3
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":168
     
         folds := unwind(st.trie, st.f1, st.f2, st.str)
@@ -911,7 +911,7 @@ fn yy39(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 27
+                st.yystate = 27
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -945,7 +945,7 @@ fn yy40(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 28
+                st.yystate = 28
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -959,7 +959,7 @@ fn yy41(mut st State) Status {
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.lim <= st.cur {
-                st.state = 29
+                st.yystate = 29
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -999,7 +999,7 @@ fn yy43(mut st State) Status {
         }
         else {
             if st.lim <= st.cur {
-                st.state = 30
+                st.yystate = 30
                 return .lex_waiting
             } else {
                 return yy29(mut st)
@@ -1009,7 +1009,7 @@ fn yy43(mut st State) Status {
 }
 
 fn yy44(mut st State) Status {
-    st.state = -1
+    st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":1016
@@ -1020,14 +1020,14 @@ fn yyfnheader(mut st State) Status {
 }
 
 fn yy0(mut st State) Status {
-    match st.cond {
+    match st.yycond {
         .yycmedia_type { return yyfnmedia_type(mut st) }
         .yycheader { return yyfnheader(mut st) }
     }
 }
 
 fn lex(mut st State) Status {
-    match st.state {
+    match st.yystate {
         -1 { return yy0(mut st) }
         0 {
             if st.lim <= st.cur {
@@ -1262,16 +1262,16 @@ fn test(expect Status, packets []string) {
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer.
     mut st := &State{
-        file:   fr,
+        file:     fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:    []u8{len: bufsize + 1},
-        cur:    bufsize,
-        mar:    bufsize,
-        tok:    bufsize,
-        lim:    bufsize,
-        cond:   .yycmedia_type,
-        state:  -1,
-        trie:   []MtagElem{},
+        str:      []u8{len: bufsize + 1},
+        cur:      bufsize,
+        mar:      bufsize,
+        tok:      bufsize,
+        lim:      bufsize,
+        yycond:   .yycmedia_type,
+        yystate:  -1,
+        trie:     []MtagElem{},
         
 //line "codegen/v/recursive_functions/advanced.v":1277
 
@@ -1294,15 +1294,15 @@ fn test(expect Status, packets []string) {
 		yytm9: mtag_root,
 //line "codegen/v/recursive_functions/advanced.re":200
 
-        l1:     tag_none,
-        l2:     tag_none,
-        f1:     mtag_root,
-        f2:     mtag_root,
-        p1:     mtag_root,
-        p2:     mtag_root,
-        p3:     mtag_root,
-        p4:     mtag_root,
-        accept: 0,
+        l1:       tag_none,
+        l2:       tag_none,
+        f1:       mtag_root,
+        f2:       mtag_root,
+        p1:       mtag_root,
+        p2:       mtag_root,
+        p3:       mtag_root,
+        p4:       mtag_root,
+        yyaccept: 0,
     }
     // str is zero-initialized, no need to write sentinel
 

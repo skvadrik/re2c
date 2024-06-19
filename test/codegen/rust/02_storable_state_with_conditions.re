@@ -19,7 +19,7 @@ struct State {
     cur: usize,
     mar: usize,
     tok: usize,
-    state: isize,
+    yystate: isize,
 }
 
 #[derive(Debug, PartialEq)]
@@ -103,7 +103,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
         mar: BUFSIZE,
         tok: BUFSIZE,
         lim: BUFSIZE,
-        state: -1,
+        yystate: -1,
     };
 
     // Main loop. The buffer contains incomplete data which appears packet by

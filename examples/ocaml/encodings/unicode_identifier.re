@@ -8,7 +8,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable accept: int;
+    mutable yyaccept: int;
 }
 
 /*!re2c
@@ -30,7 +30,7 @@ let main () =
         str = "_Ыдентификатор\x00";
         cur = 0;
         mar = 0;
-        accept = 0;
+        yyaccept = 0;
     }
     in if not (lex st) then raise (Failure "error")
 

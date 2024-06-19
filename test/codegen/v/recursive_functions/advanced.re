@@ -57,26 +57,26 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 
 struct State {
 mut:
-    file   os.File
-    str    []u8
-    cur    int
-    mar    int
-    tok    int
-    lim    int
-    cond   YYCONDTYPE
-    state  int
-    trie   MtagTrie
+    file     os.File
+    str      []u8
+    cur      int
+    mar      int
+    tok      int
+    lim      int
+    yycond   YYCONDTYPE
+    yystate  int
+    trie     MtagTrie
     /*!stags:re2c format = '\n\t@@ int'; */
     /*!mtags:re2c format = '\n\t@@ int'; */
-    l1     int
-    l2     int
-    f1     int
-    f2     int
-    p1     int
-    p2     int
-    p3     int
-    p4     int
-    accept int
+    l1       int
+    l2       int
+    f1       int
+    f2       int
+    p1       int
+    p2       int
+    p3       int
+    p4       int
+    yyaccept int
 }
 
 enum Status {
@@ -186,27 +186,27 @@ fn test(expect Status, packets []string) {
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer.
     mut st := &State{
-        file:   fr,
+        file:     fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:    []u8{len: bufsize + 1},
-        cur:    bufsize,
-        mar:    bufsize,
-        tok:    bufsize,
-        lim:    bufsize,
-        cond:   .yycmedia_type,
-        state:  -1,
-        trie:   []MtagElem{},
+        str:      []u8{len: bufsize + 1},
+        cur:      bufsize,
+        mar:      bufsize,
+        tok:      bufsize,
+        lim:      bufsize,
+        yycond:   .yycmedia_type,
+        yystate:  -1,
+        trie:     []MtagElem{},
         /*!stags:re2c format = '\n\t\t@@: tag_none,'; */
         /*!mtags:re2c format = '\n\t\t@@: mtag_root,'; */
-        l1:     tag_none,
-        l2:     tag_none,
-        f1:     mtag_root,
-        f2:     mtag_root,
-        p1:     mtag_root,
-        p2:     mtag_root,
-        p3:     mtag_root,
-        p4:     mtag_root,
-        accept: 0,
+        l1:       tag_none,
+        l2:       tag_none,
+        f1:       mtag_root,
+        f2:       mtag_root,
+        p1:       mtag_root,
+        p2:       mtag_root,
+        p3:       mtag_root,
+        p4:       mtag_root,
+        yyaccept: 0,
     }
     // str is zero-initialized, no need to write sentinel
 

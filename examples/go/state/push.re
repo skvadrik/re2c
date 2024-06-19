@@ -11,13 +11,13 @@ import (
 const BUFSIZE int = 10
 
 type State struct {
-	file  *os.File
-	str   []byte
-	cur   int
-	mar   int
-	tok   int
-	lim   int
-	state int
+	file    *os.File
+	str     []byte
+	cur     int
+	mar     int
+	tok     int
+	lim     int
+	yystate int
 }
 
 const (
@@ -78,14 +78,14 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer.
 	st := &State{
-		file:  fr,
+		file:    fr,
 		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		str:   make([]byte, BUFSIZE+1),
-		cur:   BUFSIZE,
-		mar:   BUFSIZE,
-		tok:   BUFSIZE,
-		lim:   BUFSIZE,
-		state: -1,
+		str:     make([]byte, BUFSIZE+1),
+		cur:     BUFSIZE,
+		mar:     BUFSIZE,
+		tok:     BUFSIZE,
+		lim:     BUFSIZE,
+		yystate: -1,
 	}
 
 	// Main loop. The buffer contains incomplete data which appears packet by

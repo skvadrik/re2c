@@ -14,7 +14,7 @@ struct State {
     FILE* file;
     char[BUFSIZE + 1] str;
     char* lim, cur, mar, tok;
-    int state;
+    int yystate;
 };
 
 enum Status {END, READY, WAITING, BAD_PACKET, BIG_PACKET};
@@ -46,7 +46,7 @@ private Status lex(ref State yyrecord, uint* recv) {
     char yych;
     
 #line 49 "d/state/push.d"
-switch (yyrecord.state) {
+switch (yyrecord.yystate) {
 	case -1: goto yy0;
 	case 0:
 		if (yyrecord.lim <= yyrecord.cur) goto yy8;
@@ -73,7 +73,7 @@ yyFillLabel0:
 		case 'a': .. case 'z': goto yy4;
 		default:
 			if (yyrecord.lim <= yyrecord.cur) {
-				yyrecord.state = 0;
+				yyrecord.yystate = 0;
 				return Status.WAITING;
 			}
 			goto yy2;
@@ -81,7 +81,7 @@ yyFillLabel0:
 yy2:
 	++yyrecord.cur;
 yy3:
-	yyrecord.state = -1;
+	yyrecord.yystate = -1;
 #line 57 "d/state/push.re"
 	{ return Status.BAD_PACKET; }
 #line 88 "d/state/push.d"
@@ -95,14 +95,14 @@ yyFillLabel1:
 		case 'a': .. case 'z': goto yy6;
 		default:
 			if (yyrecord.lim <= yyrecord.cur) {
-				yyrecord.state = 1;
+				yyrecord.yystate = 1;
 				return Status.WAITING;
 			}
 			goto yy3;
 	}
 yy5:
 	++yyrecord.cur;
-	yyrecord.state = -1;
+	yyrecord.yystate = -1;
 #line 59 "d/state/push.re"
 	{ *recv = *recv + 1; continue; }
 #line 109 "d/state/push.d"
@@ -115,7 +115,7 @@ yyFillLabel2:
 		case 'a': .. case 'z': goto yy6;
 		default:
 			if (yyrecord.lim <= yyrecord.cur) {
-				yyrecord.state = 2;
+				yyrecord.yystate = 2;
 				return Status.WAITING;
 			}
 			goto yy7;
@@ -124,7 +124,7 @@ yy7:
 	yyrecord.cur = yyrecord.mar;
 	goto yy3;
 yy8:
-	yyrecord.state = -1;
+	yyrecord.yystate = -1;
 #line 58 "d/state/push.re"
 	{ return Status.END; }
 #line 131 "d/state/push.d"
@@ -149,7 +149,7 @@ private void test(string[] packets, Status expect) {
     st.cur = st.mar = st.tok = st.lim = cast(char*)st.str + BUFSIZE;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
     st.lim[0] = 0;
-    st.state = -1;
+    st.yystate = -1;
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and

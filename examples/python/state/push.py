@@ -17,7 +17,7 @@ class State:
         self.cur = self.lim
         self.mar = self.lim
         self.tok = self.lim
-        self.state = -1
+        self.yystate = -1
 
 class Status(Enum):
     END = 0
@@ -52,14 +52,14 @@ def lex(yyrecord, recv):
     while True:
         yyrecord.tok = yyrecord.cur
         
-        yystate = yyrecord.state
+        yystate = yyrecord.yystate
         while True:
             match yystate:
                 case -1|0:
                     yych = yyrecord.str[yyrecord.cur]
                     if yych <= 0x00:
                         if yyrecord.lim <= yyrecord.cur:
-                            yyrecord.state = 8
+                            yyrecord.yystate = 8
                             return Status.WAITING, recv
                         yyrecord.cur += 1
                         yystate = 1
@@ -79,7 +79,7 @@ def lex(yyrecord, recv):
                     yystate = 2
                     continue
                 case 2:
-                    yyrecord.state = -1
+                    yyrecord.yystate = -1
                     return Status.BAD_PACKET, recv
                 case 3:
                     yyrecord.mar = yyrecord.cur
@@ -87,7 +87,7 @@ def lex(yyrecord, recv):
                     if yych <= 0x3B:
                         if yych <= 0x00:
                             if yyrecord.lim <= yyrecord.cur:
-                                yyrecord.state = 9
+                                yyrecord.yystate = 9
                                 return Status.WAITING, recv
                             yystate = 2
                             continue
@@ -108,7 +108,7 @@ def lex(yyrecord, recv):
                         yystate = 2
                         continue
                 case 4:
-                    yyrecord.state = -1
+                    yyrecord.yystate = -1
                     recv += 1
                     break
                 case 5:
@@ -116,7 +116,7 @@ def lex(yyrecord, recv):
                     if yych <= 0x3B:
                         if yych <= 0x00:
                             if yyrecord.lim <= yyrecord.cur:
-                                yyrecord.state = 10
+                                yyrecord.yystate = 10
                                 return Status.WAITING, recv
                             yystate = 6
                             continue
@@ -141,7 +141,7 @@ def lex(yyrecord, recv):
                     yystate = 2
                     continue
                 case 7:
-                    yyrecord.state = -1
+                    yyrecord.yystate = -1
                     return Status.END, recv
                 case 8:
                     if yyrecord.lim <= yyrecord.cur:

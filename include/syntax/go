@@ -302,35 +302,35 @@ code:yycopymtag =
 
 code:yygetaccept =
     (api.record
-        ? record ".accept"
+        ? (storable_state | code_model.recursive_functions ? record ".") var
         : getaccept); // function style is not supported, as there's no sensible default
 
 code:yysetaccept =
     topindent (api.record
-        ? record ".accept = " val
+        ? (storable_state | code_model.recursive_functions ? record ".") var " = " val
         : setaccept // function style is not supported, as there's no sensible default
     ) nl;
 
 code:yygetcond =
     (api.record
-        ? record ".cond"
+        ? record "." var
         : getcond (api_style.functions ? "()"));
 
 code:yysetcond =
     topindent (api.record
-        ? record ".cond = " cond 
-        : setcond (api_style.functions ? "(" cond ")")
+        ? record "." var " = " val 
+        : setcond (api_style.functions ? "(" val ")")
     ) nl;
 
 code:yygetstate =
     (api.record
-        ? record ".state"
+        ? record "." var
         : getstate (api_style.functions ? "()"));
 
 code:yysetstate =
     topindent (api.record
-        ? record ".state = " state
-        : setstate (api_style.functions ? "(" state ")")
+        ? record "." var " = " val
+        : setstate (api_style.functions ? "(" val ")")
     ) nl;
 
 code:yylessthan =

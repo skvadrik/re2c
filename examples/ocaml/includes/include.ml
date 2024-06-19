@@ -12,7 +12,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable accept: int;
+    mutable yyaccept: int;
 }
 
 
@@ -40,7 +40,7 @@ and yy3 (yyrecord : state) : number =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : state) : number =
-	yyrecord.accept <- 0;
+	yyrecord.yyaccept <- 0;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -57,7 +57,7 @@ and yy4 (yyrecord : state) : number =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy5 (yyrecord : state) : number =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -77,7 +77,7 @@ and yy6 (yyrecord : state) : number =
 	Int
 
 and yy7 (yyrecord : state) : number =
-	yyrecord.accept <- 2;
+	yyrecord.yyaccept <- 2;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -110,7 +110,7 @@ and yy9 (yyrecord : state) : number =
 
 and yy10 (yyrecord : state) : number =
 	yyrecord.cur <- yyrecord.mar;
-	match yyrecord.accept with
+	match yyrecord.yyaccept with
 		| 0 -> (yy2 [@tailcall]) yyrecord
 		| 1 -> (yy6 [@tailcall]) yyrecord
 		| _ -> (yy8 [@tailcall]) yyrecord
@@ -149,7 +149,7 @@ and lex (yyrecord : state) : number =
 
 
 let test(str, num) =
-    let st = {str = str; cur = 0; mar = 0; accept = 0}
+    let st = {str = str; cur = 0; mar = 0; yyaccept = 0}
     in if not (lex st = num) then raise (Failure "error")
 
 let main () =

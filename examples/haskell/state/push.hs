@@ -20,7 +20,7 @@ data State = State {
     _lim :: !Int,
     _tok :: !Int,
     _eof :: !Bool,
-    _state :: !Int,
+    _yystate :: !Int,
     _recv :: !Int
 }
 
@@ -36,7 +36,7 @@ yy0 !State{..} = do
             yy3 State{..}
         _c | True -> do
             if _cur >= _lim then do
-                let _state = 0
+                let _yystate = 0
                 return (State{..}, Waiting)
             else do
                 _cur <- return $ _cur + 1
@@ -48,7 +48,7 @@ yy1 !State{..} = do
 
 yy2 :: State -> IO (State, Status)
 yy2 !State{..} = do
-    let _state = -1
+    let _yystate = -1
     return (State{..}, BadPacket)
 
 yy3 :: State -> IO (State, Status)
@@ -64,14 +64,14 @@ yy3 !State{..} = do
             yy5 State{..}
         _c | True -> do
             if _cur >= _lim then do
-                let _state = 1
+                let _yystate = 1
                 return (State{..}, Waiting)
             else do
                 yy2 State{..}
 
 yy4 :: State -> IO (State, Status)
 yy4 !State{..} = do
-    let _state = -1
+    let _yystate = -1
     lexer State{_tok = _cur, _recv = _recv + 1, ..}
 
 yy5 :: State -> IO (State, Status)
@@ -86,7 +86,7 @@ yy5 !State{..} = do
             yy5 State{..}
         _c | True -> do
             if _cur >= _lim then do
-                let _state = 2
+                let _yystate = 2
                 return (State{..}, Waiting)
             else do
                 yy6 State{..}
@@ -98,12 +98,12 @@ yy6 !State{..} = do
 
 yy7 :: State -> IO (State, Status)
 yy7 !State{..} = do
-    let _state = -1
+    let _yystate = -1
     return (State{..}, End)
 
 lexer :: State -> IO (State, Status)
 lexer !State{..} = do
-    case _state of
+    case _yystate of
         _c | -1 == _c -> do
             yy0 State{..}
         _c | 0 == _c -> do
@@ -174,7 +174,7 @@ test packets expect = do
         _tok = 0,
         _lim = 0,
         _eof = False,
-        _state = -1,
+        _yystate = -1,
         _recv = 0
     }
     status <- loop st packets

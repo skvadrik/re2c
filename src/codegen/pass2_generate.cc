@@ -60,6 +60,7 @@ class GenGetCond : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
             case StxVarId::GETCOND: os << opts->api_cond_get; break;
+            case StxVarId::VAR: os << opts->var_cond; break;
             case StxVarId::RECORD: os << opts->var_record; break;
             default: UNREACHABLE(); break;
         }
@@ -79,6 +80,7 @@ class GenGetState : public RenderCallback {
     void render_var(StxVarId var) override {
         switch (var) {
             case StxVarId::GETSTATE: os << opts->api_state_get; break;
+            case StxVarId::VAR: os << opts->var_state; break;
             case StxVarId::RECORD: os << opts->var_record; break;
             default: UNREACHABLE(); break;
         }

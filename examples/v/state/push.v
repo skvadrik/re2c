@@ -11,13 +11,13 @@ const bufsize = 10
 
 struct State {
 mut:
-    file  os.File
-    str   []u8
-    cur   int
-    mar   int
-    tok   int
-    lim   int
-    state int
+    file    os.File
+    str     []u8
+    cur     int
+    mar     int
+    tok     int
+    lim     int
+    yystate int
 }
 
 enum Status {
@@ -57,7 +57,7 @@ fn lex(mut yyrecord &State, mut recv &int) Status {
     mut yych := u8(0)
     
 //line "v/state/push.v":60
-match yyrecord.state {
+match yyrecord.yystate {
     0 {
         if yyrecord.lim <= yyrecord.cur {
             unsafe { goto yy8 }
@@ -91,7 +91,7 @@ yyFillLabel0:
         0x61...0x7A { unsafe { goto yy4 } }
         else {
             if yyrecord.lim <= yyrecord.cur {
-                yyrecord.state = 0
+                yyrecord.yystate = 0
                 return .lex_waiting
             }
             unsafe { goto yy2 }
@@ -100,7 +100,7 @@ yyFillLabel0:
 yy2:
     yyrecord.cur += 1
 yy3:
-    yyrecord.state = -1
+    yyrecord.yystate = -1
 //line "v/state/push.re":66
     return .lex_bad_packet
 //line "v/state/push.v":107
@@ -114,7 +114,7 @@ yyFillLabel1:
         0x61...0x7A { unsafe { goto yy6 } }
         else {
             if yyrecord.lim <= yyrecord.cur {
-                yyrecord.state = 1
+                yyrecord.yystate = 1
                 return .lex_waiting
             }
             unsafe { goto yy3 }
@@ -122,7 +122,7 @@ yyFillLabel1:
     }
 yy5:
     yyrecord.cur += 1
-    yyrecord.state = -1
+    yyrecord.yystate = -1
 //line "v/state/push.re":68
     recv += 1; unsafe{ goto loop }
 //line "v/state/push.v":129
@@ -135,7 +135,7 @@ yyFillLabel2:
         0x61...0x7A { unsafe { goto yy6 } }
         else {
             if yyrecord.lim <= yyrecord.cur {
-                yyrecord.state = 2
+                yyrecord.yystate = 2
                 return .lex_waiting
             }
             unsafe { goto yy7 }
@@ -145,7 +145,7 @@ yy7:
     yyrecord.cur = yyrecord.mar
     unsafe { goto yy3 }
 yy8:
-    yyrecord.state = -1
+    yyrecord.yystate = -1
 //line "v/state/push.re":67
     return .lex_end
 //line "v/state/push.v":152
@@ -162,14 +162,14 @@ fn test(expect Status, packets []string) {
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer.
     mut st := &State{
-        file:  fr,
+        file:    fr,
         // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:   []u8{len: bufsize + 1},
-        cur:   bufsize,
-        mar:   bufsize,
-        tok:   bufsize,
-        lim:   bufsize,
-        state: -1,
+        str:     []u8{len: bufsize + 1},
+        cur:     bufsize,
+        mar:     bufsize,
+        tok:     bufsize,
+        lim:     bufsize,
+        yystate: -1,
     }
 
     // Main loop. The buffer contains incomplete data which appears packet by

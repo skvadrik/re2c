@@ -12,7 +12,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable cond: yycondtype;
+    mutable yycond: yycondtype;
 } 
 
 let add (num: int option) (dgt: int) (base: int) : int option =
@@ -49,12 +49,12 @@ and yy3 (st : state) (num : int option) : int option =
 		| _ -> (yy4 [@tailcall]) st num
 
 and yy4 (st : state) (num : int option) : int option =
-	st.cond <- YYC_oct;
+	st.yycond <- YYC_oct;
 	(yyfnoct [@tailcall]) st num
 
 and yy5 (st : state) (num : int option) : int option =
 	st.cur <- st.cur - 1;
-	st.cond <- YYC_dec;
+	st.yycond <- YYC_dec;
 	(yyfndec [@tailcall]) st num
 
 and yy6 (st : state) (num : int option) : int option =
@@ -81,12 +81,12 @@ and yy8 (st : state) (num : int option) : int option =
 
 and yy9 (st : state) (num : int option) : int option =
 	st.cur <- st.cur - 1;
-	st.cond <- YYC_bin;
+	st.yycond <- YYC_bin;
 	(yyfnbin [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
 	st.cur <- st.cur - 1;
-	st.cond <- YYC_hex;
+	st.yycond <- YYC_hex;
 	(yyfnhex [@tailcall]) st num
 
 and yyfninit (st : state) (num : int option) : int option =
@@ -165,7 +165,7 @@ and yyfnhex (st : state) (num : int option) : int option =
 	(yy20 [@tailcall]) st num
 
 and yy0 (st : state) (num : int option) : int option =
-	match st.cond with
+	match st.yycond with
 		| YYC_init -> (yyfninit [@tailcall]) st num
 		| YYC_bin -> (yyfnbin [@tailcall]) st num
 		| YYC_oct -> (yyfnoct [@tailcall]) st num
@@ -178,7 +178,7 @@ and parse (st : state) (num : int option) : int option =
 
 
 let test (str: string) (result: int option) =
-    let st = {str = str; cur = 0; mar = 0; cond = YYC_init} in
+    let st = {str = str; cur = 0; mar = 0; yycond = YYC_init} in
     if not (parse st (Some 0) = result) then raise (Failure "error")
 
 let main () =

@@ -22,7 +22,7 @@ struct State {
     cur: usize,
     mar: usize,
     tok: usize,
-    state: isize,
+    yystate: isize,
 }
 
 #[derive(Debug, PartialEq)]
@@ -57,7 +57,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
         yyrecord.tok = yyrecord.cur;
     
 {
-	let mut yystate : isize = yyrecord.state;
+	let mut yystate : isize = yyrecord.yystate;
 	'yyl: loop {
 		match yystate {
 			-1 ..= 0 => {
@@ -70,7 +70,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 					}
 					_ => {
 						if yyrecord.lim <= yyrecord.cur {
-							yyrecord.state = 8;
+							yyrecord.yystate = 8;
 							return Status::Waiting;
 						}
 						yyrecord.cur += 1;
@@ -84,7 +84,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 				continue 'yyl;
 			}
 			2 => {
-				yyrecord.state = -1;
+				yyrecord.yystate = -1;
 				{ return Status::BadPacket; }
 			}
 			3 => {
@@ -103,7 +103,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 					}
 					_ => {
 						if yyrecord.lim <= yyrecord.cur {
-							yyrecord.state = 9;
+							yyrecord.yystate = 9;
 							return Status::Waiting;
 						}
 						yystate = 2;
@@ -112,7 +112,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 				}
 			}
 			4 => {
-				yyrecord.state = -1;
+				yyrecord.yystate = -1;
 				{ *recv += 1; continue 'lex; }
 			}
 			5 => {
@@ -130,7 +130,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 					}
 					_ => {
 						if yyrecord.lim <= yyrecord.cur {
-							yyrecord.state = 10;
+							yyrecord.yystate = 10;
 							return Status::Waiting;
 						}
 						yystate = 6;
@@ -144,7 +144,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 				continue 'yyl;
 			}
 			7 => {
-				yyrecord.state = -1;
+				yyrecord.yystate = -1;
 				{ return Status::End; }
 			}
 			8 => {
@@ -201,7 +201,7 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
         mar: lim,
         tok: lim,
         lim: lim,
-        state: -1,
+        yystate: -1,
     };
 
     // Main loop. The buffer contains incomplete data which appears packet by

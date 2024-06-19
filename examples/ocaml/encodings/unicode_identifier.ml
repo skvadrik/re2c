@@ -10,7 +10,7 @@ type state = {
     str: string;
     mutable cur: int;
     mutable mar: int;
-    mutable accept: int;
+    mutable yyaccept: int;
 }
 
 
@@ -65,7 +65,7 @@ and yy2 (yyrecord : state) : bool =
 	false
 
 and yy3 (yyrecord : state) : bool =
-	yyrecord.accept <- 0;
+	yyrecord.yyaccept <- 0;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -364,7 +364,7 @@ and yy23 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy24 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -459,7 +459,7 @@ and yy24 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy25 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -598,7 +598,7 @@ and yy25 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy26 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -647,7 +647,7 @@ and yy26 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy27 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -679,7 +679,7 @@ and yy27 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy28 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -693,7 +693,7 @@ and yy28 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy29 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -703,7 +703,7 @@ and yy29 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy30 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -716,7 +716,7 @@ and yy30 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy31 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -802,7 +802,7 @@ and yy31 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy32 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -818,7 +818,7 @@ and yy32 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy33 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -879,7 +879,7 @@ and yy33 (yyrecord : state) : bool =
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy34 (yyrecord : state) : bool =
-	yyrecord.accept <- 1;
+	yyrecord.yyaccept <- 1;
 	yyrecord.mar <- yyrecord.cur;
 	let yych = get yyrecord.str yyrecord.cur in
 	match yych with
@@ -947,7 +947,7 @@ and yy35 (yyrecord : state) : bool =
 
 and yy36 (yyrecord : state) : bool =
 	yyrecord.cur <- yyrecord.mar;
-	if (yyrecord.accept == 0) then (yy4 [@tailcall]) yyrecord
+	if (yyrecord.yyaccept == 0) then (yy4 [@tailcall]) yyrecord
 	else (yy2 [@tailcall]) yyrecord
 
 and yy37 (yyrecord : state) : bool =
@@ -5979,7 +5979,7 @@ let main () =
         str = "_Ыдентификатор\x00";
         cur = 0;
         mar = 0;
-        accept = 0;
+        yyaccept = 0;
     }
     in if not (lex st) then raise (Failure "error")
 

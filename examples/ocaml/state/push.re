@@ -16,7 +16,7 @@ type state = {
     mutable mar: int;
     mutable tok: int;
     mutable lim: int;
-    mutable state: int;
+    mutable yystate: int;
     mutable recv: int;
 }
 
@@ -72,7 +72,7 @@ let test (packets: string list) (sts: status) =
         mar = lim;
         tok = lim;
         lim = lim;
-        state = -1;
+        yystate = -1;
         recv = 0;
     } in
 
