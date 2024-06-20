@@ -3,6 +3,6 @@
 module lexer.state;
 
 struct LexerState {
-    const(char)* str, cur;
+    const(char)* str, yycursor;
     const(char)* yyt1;
 };

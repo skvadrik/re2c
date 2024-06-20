@@ -13,10 +13,10 @@ debug = when False
 data State = State {
     _pipe :: !(Chan BS.ByteString),
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
     _yystate :: !Int,
     _recv :: !Int
@@ -35,7 +35,7 @@ data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
     *      { return (State{..}, BadPacket) }
     $      { return (State{..}, End) }
-    packet { lexer State{_tok = _cur, _recv = _recv + 1, ..} }
+    packet { lexer State{_token = _yycursor, _recv = _recv + 1, ..} }
 */
 
 fill :: State -> IO (State, Status)
@@ -47,11 +47,11 @@ fill st@State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- readChan _pipe
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
-                _cur = _cur - _tok,
-                _mar = _mar - _tok,
-                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
-                _tok = 0,
+                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yycursor = _yycursor - _token,
+                _yymarker = _yymarker - _token,
+                _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
+                _token = 0,
                 _eof = BS.null chunk, -- end of file?
                 ..}, Ready)
 
@@ -87,10 +87,10 @@ test packets expect = do
     let st = State {
         _pipe = pipe,
         _str = BS.singleton 0, -- null sentinel triggers YYFILL
-        _cur = 0,
-        _mar = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _yymarker = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
         _yystate = -1,
         _recv = 0

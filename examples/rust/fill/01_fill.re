@@ -8,10 +8,10 @@ const BUFSIZE: usize = 4096;
 struct State {
     file: File,
     str: [u8; BUFSIZE],
-    lim: usize,
-    cur: usize,
-    mar: usize,
-    tok: usize,
+    yylimit: usize,
+    yycursor: usize,
+    yymarker: usize,
+    token: usize,
     eof: bool,
 }
 
@@ -22,21 +22,21 @@ fn fill(st: &mut State) -> Fill {
     if st.eof { return Fill::Eof; }
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
-    if st.tok < 1 { return Fill::LongLexeme; }
+    if st.token < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.str.copy_within(st.tok..st.lim, 0);
-    st.lim -= st.tok;
-    st.cur -= st.tok;
-    st.mar = st.mar.overflowing_sub(st.tok).0; // may underflow if marker is unused
-    st.tok = 0;
+    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yylimit -= st.token;
+    st.yycursor -= st.token;
+    st.yymarker = st.yymarker.overflowing_sub(st.token).0; // may underflow if marker is unused
+    st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.str[st.lim..BUFSIZE - 1]) { // -1 for sentinel
+    match st.file.read(&mut st.str[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
         Ok(n) => {
-            st.lim += n;
+            st.yylimit += n;
             st.eof = n == 0; // end of file
-            st.str[st.lim] = 0; // append sentinel
+            st.str[st.yylimit] = 0; // append sentinel
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -48,7 +48,7 @@ fn lex(yyrecord: &mut State) -> isize {
     let mut count: isize = 0;
 
     'lex: loop {
-        yyrecord.tok = yyrecord.cur;
+        yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
         re2c:define:YYCTYPE = u8;
@@ -86,15 +86,15 @@ fn main() {
     };
 
     // Initialize lexer state: all offsets are at the end of buffer.
-    let lim = BUFSIZE - 1;
+    let yylimit = BUFSIZE - 1;
     let mut st = State {
         file: file,
-        // Sentinel (at `lim` offset) is set to null, which triggers YYFILL.
+        // Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL.
         str: [0; BUFSIZE],
-        lim: lim,
-        cur: lim,
-        mar: lim,
-        tok: lim,
+        yylimit: yylimit,
+        yycursor: yylimit,
+        yymarker: yylimit,
+        token: yylimit,
         eof: false,
     };
 

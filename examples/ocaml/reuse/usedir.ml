@@ -13,8 +13,8 @@ type answer = Color | Fish | Dunno
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
 }
 
 #21 "ocaml/reuse/usedir.re"
@@ -26,8 +26,8 @@ type state = {
 
 #28 "ocaml/reuse/usedir.ml"
 let rec yy0 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
-	yyrecord.cur <- yyrecord.cur + 1;
+	let yych = get yyrecord.str yyrecord.yycursor in
+	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| 'e' -> (yy3 [@tailcall]) yyrecord
 		| 'h' -> (yy4 [@tailcall]) yyrecord
@@ -45,91 +45,91 @@ and yy2 (yyrecord : state) : answer =
 #46 "ocaml/reuse/usedir.ml"
 
 and yy3 (yyrecord : state) : answer =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy8 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : state) : answer =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy10 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy5 (yyrecord : state) : answer =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy6 (yyrecord : state) : answer =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy12 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : state) : answer =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy13 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy8 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'l' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy14 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy9 (yyrecord : state) : answer =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	(yy2 [@tailcall]) yyrecord
 
 and yy10 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'd' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy15 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy11 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'g' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy16 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy12 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'd' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy17 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy13 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'l' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy18 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
@@ -139,18 +139,18 @@ and yy14 (yyrecord : state) : answer =
 #140 "ocaml/reuse/usedir.ml"
 
 and yy15 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'd' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy19 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy16 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy20 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
@@ -160,74 +160,74 @@ and yy17 (yyrecord : state) : answer =
 #161 "ocaml/reuse/usedir.ml"
 
 and yy18 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'm' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy21 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy19 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'o' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy22 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy20 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'n' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy23 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy21 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'o' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy24 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy22 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'c' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy25 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy23 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 't' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy26 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy24 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'n' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy14 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy25 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'k' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy14 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
 and yy26 (yyrecord : state) : answer =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy17 [@tailcall]) yyrecord
 		| _ -> (yy9 [@tailcall]) yyrecord
 
@@ -238,7 +238,7 @@ and lex (yyrecord : state) : answer =
 
 
 let test(str, ans) =
-    let st = {str = str; cur = 0; mar = 0}
+    let st = {str = str; yycursor = 0; yymarker = 0}
     in if not (lex st = ans) then raise (Failure "error")
 
 let main () =

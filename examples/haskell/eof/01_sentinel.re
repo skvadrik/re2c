@@ -7,8 +7,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _cnt :: Int
+    _yycursor :: Int,
+    _count :: Int
 }
 
 -- expect a null-terminated string
@@ -17,14 +17,15 @@ data State = State {
     re2c:yyfill:enable = 0;
 
     *      { (-1) }
-    [\x00] { _cnt }
-    [a-z]+ { lexer State{_cnt = _cnt + 1, ..} }
+    [\x00] { _count }
+    [a-z]+ { lexer State{_count = _count + 1, ..} }
     [ ]+   { lexer State{..} }
 */
 
 main :: IO ()
 main = do
-    let test s n = when (lexer State{_str = s, _cur = 0, _cnt = 0} /= n) $ error "failed"
+    let test s n = when (lexer st  /= n) $ error "failed"
+                   where st = State{_str = s, _yycursor = 0, _count = 0}
     test "\0" 0
     test "one two three\0" 3
     test "f0ur\0" (-1)

@@ -7,10 +7,10 @@ let bufsize = 4096
 type state = {
     file: in_channel;
     str: bytes;
-    mutable cur: int;
-    mutable mar: int;
-    mutable tok: int;
-    mutable lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    mutable yylimit: int;
+    mutable token: int;
     mutable eof: bool;
     mutable t1: int;
     mutable t2: int;
@@ -37,22 +37,22 @@ let fill(st: state) : status =
     if st.eof then Eof else
 
     (* Error: lexeme too long. In real life could reallocate a larger buffer. *)
-    if st.tok < 1 then LongLexeme else (
+    if st.token < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.tok st.str 0 (st.lim - st.tok);
-    st.cur <- st.cur - st.tok;
-    st.mar <- st.mar - st.tok;
-    st.lim <- st.lim - st.tok;
-    /*!stags:re2c format = '\n\tst.@@ <- if st.@@ = -1 then -1 else st.@@ - st.tok;'; */
-    st.tok <- 0;
+    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    st.yycursor <- st.yycursor - st.token;
+    st.yymarker <- st.yymarker - st.token;
+    st.yylimit <- st.yylimit - st.token;
+    /*!stags:re2c format = '\n\tst.@@ <- if st.@@ = -1 then -1 else st.@@ - st.token;'; */
+    st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
-    st.lim <- st.lim + n;
+    let n = input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
+    st.yylimit <- st.yylimit + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        set st.str st.lim '\x00'; (* append sentinel *)
+        set st.str st.yylimit '\x00'; (* append sentinel *)
 
     Ok)
 
@@ -69,7 +69,7 @@ let fill(st: state) : status =
         let ver = {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.yycursor - 1)
         } in lex_loop st (ver :: vers)
     }
     $ { Some (List.rev vers) }
@@ -77,7 +77,7 @@ let fill(st: state) : status =
 */
 
 and lex_loop st vers =
-    st.tok <- st.cur;
+    st.token <- st.yycursor;
     lex st vers
 
 let main () =
@@ -96,14 +96,14 @@ let main () =
     (* Run lexer on the prepared file. *)
     In_channel.with_open_bin fname
         (fun ic ->
-            let lim = bufsize - 1 in
+            let yylimit = bufsize - 1 in
             let st = {
                 file = ic;
                 str = create bufsize;
-                cur = lim;
-                mar = lim;
-                tok = lim;
-                lim = lim;
+                yycursor = yylimit;
+                yymarker = yylimit;
+                yylimit = yylimit;
+                token = yylimit;
                 eof = false;
                 t1 = -1;
                 t2 = -1;

@@ -18,21 +18,21 @@ fn lex(yyrecord: &mut State) -> usize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.cur)};
+				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x61 => {
-						yyrecord.cur += 1;
+						yyrecord.yycursor += 1;
 						yystate = 0;
 						continue 'yyl;
 					}
 					0x62 => {
-						yyrecord.yyt1 = yyrecord.cur;
-						yyrecord.cur += 1;
+						yyrecord.yyt1 = yyrecord.yycursor;
+						yyrecord.yycursor += 1;
 						yystate = 2;
 						continue 'yyl;
 					}
 					_ => {
-						yyrecord.yyt1 = yyrecord.cur;
+						yyrecord.yyt1 = yyrecord.yycursor;
 						yystate = 1;
 						continue 'yyl;
 					}
@@ -43,10 +43,10 @@ fn lex(yyrecord: &mut State) -> usize {
 				{ return t; }
 			}
 			2 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.cur)};
+				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x62 => {
-						yyrecord.cur += 1;
+						yyrecord.yycursor += 1;
 						yystate = 2;
 						continue 'yyl;
 					}
@@ -66,7 +66,7 @@ fn lex(yyrecord: &mut State) -> usize {
 fn main() {
     let mut st = State {
         str: b"ab\0",
-        cur: 0,
+        yycursor: 0,
         yyt1: 0,
     };
     assert_eq!(lex(&mut st), 1);
@@ -75,7 +75,7 @@ fn main() {
 
 pub struct State<'a> {
     pub str: &'a [u8],
-    pub cur: usize,
+    pub yycursor: usize,
     pub yyt1: usize,
 }
 rust/headers/header.re:25:21: warning: rule matches empty string [-Wmatch-empty-string]

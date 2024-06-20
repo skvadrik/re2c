@@ -9,8 +9,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _mar :: Int,
+    _yycursor :: Int,
+    _yymarker :: Int,
     _yyaccept :: Int
 }
 
@@ -32,8 +32,8 @@ main :: IO ()
 main = do
     let st = State {
             _str = "_Ыдентификатор\x00",
-            _cur = 0,
-            _mar = 0,
+            _yycursor = 0,
+            _yymarker = 0,
             _yyaccept = 0}
 
     when (not $ lexer st) $ error "failed"

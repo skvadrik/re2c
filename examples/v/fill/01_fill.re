@@ -6,38 +6,38 @@ import strings
 const bufsize = 4096
 
 struct State {
-    file os.File
+    file     os.File
 mut:
     str  []u8
-    cur  int
-    mar  int
-    tok  int
-    lim  int
-    eof  bool
+    yycursor int
+    yymarker int
+    yylimit  int
+    token    int
+    eof      bool
 }
 
 fn fill(mut st &State) int {
     if st.eof { return -1 } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
-    if st.tok < 1 { return -2 }
+    if st.token < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.tok..st.lim])
-    st.cur -= st.tok
-    st.mar -= st.tok
-    st.lim -= st.tok
-    st.tok = 0
+    copy(mut &st.str, st.str[st.token..st.yylimit])
+    st.yycursor -= st.token
+    st.yymarker -= st.token
+    st.yylimit -= st.token
+    st.token = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
-    st.str[st.lim] = 0 // append sentinel symbol
+    st.str[st.yylimit] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
-    st.eof = st.lim < bufsize
+    st.eof = st.yylimit < bufsize
 
     return 0
 }
@@ -45,7 +45,7 @@ fn fill(mut st &State) int {
 fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    yyrecord.tok = yyrecord.cur
+    yyrecord.token = yyrecord.yycursor
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
@@ -74,14 +74,14 @@ fn main() {
     // Prepare lexer state: all offsets are at the end of buffer.
     mut fr := os.open(fname)!
     mut st := &State{
-        file: fr,
-        // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:  []u8{len: bufsize + 1},
-        cur:  bufsize,
-        mar:  bufsize,
-        tok:  bufsize,
-        lim:  bufsize,
-        eof:  false,
+        file:     fr,
+        // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+        str:      []u8{len: bufsize + 1},
+        yycursor: bufsize,
+        yymarker: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
+        eof:      false,
     }
 
     // Run the lexer.

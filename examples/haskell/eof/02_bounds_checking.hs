@@ -11,9 +11,9 @@ import qualified Data.ByteString as BS
 
 data State = State {
     _str :: BS.ByteString,
-    _cur :: Int,
-    _lim :: Int,
-    _cnt :: Int
+    _yycursor :: Int,
+    _yylimit :: Int,
+    _count :: Int
 }
 
 data FillException = UnexpectedFill deriving (Show)
@@ -29,9 +29,9 @@ yymaxfill = 1
 #30 "haskell/eof/02_bounds_checking.hs"
 yy0 :: State -> IO Int
 yy0 State{..} = do
-    when (_cur >= _lim) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _cur
-    _cur <- return $ _cur + 1
+    when (_yycursor >= _yylimit) $ throw UnexpectedFill
+    yych <- return $ BS.index _str _yycursor
+    _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x00 == _c -> do
             yy1 State{..}
@@ -46,7 +46,7 @@ yy1 :: State -> IO Int
 yy1 State{..} = do
 #30 "haskell/eof/02_bounds_checking.re"
     -- check that it is the sentinel, not some unexpected null
-    return $ if _cur == BS.length _str - yymaxfill + 1 then _cnt else (-1)
+    return $ if _yycursor == BS.length _str - yymaxfill + 1 then _count else (-1)
 #51 "haskell/eof/02_bounds_checking.hs"
 
 yy2 :: State -> IO Int
@@ -57,11 +57,11 @@ yy2 State{..} = do
 
 yy3 :: State -> IO Int
 yy3 State{..} = do
-    when (_cur >= _lim) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _cur
+    when (_yycursor >= _yylimit) $ throw UnexpectedFill
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x20 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..}
         _c | True -> do
             yy4 State{..}
@@ -74,9 +74,9 @@ yy4 State{..} = do
 
 yy5 :: State -> IO Int
 yy5 State{..} = do
-    when (_cur >= _lim) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _cur
-    _cur <- return $ _cur + 1
+    when (_yycursor >= _yylimit) $ throw UnexpectedFill
+    yych <- return $ BS.index _str _yycursor
+    _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x27 == _c -> do
             yy6 State{..}
@@ -88,13 +88,13 @@ yy5 State{..} = do
 yy6 :: State -> IO Int
 yy6 State{..} = do
 #34 "haskell/eof/02_bounds_checking.re"
-    lexer State{_cnt = _cnt + 1, ..}
+    lexer State{_count = _count + 1, ..}
 #93 "haskell/eof/02_bounds_checking.hs"
 
 yy7 :: State -> IO Int
 yy7 State{..} = do
-    when (_cur >= _lim) $ throw UnexpectedFill
-    _cur <- return $ _cur + 1
+    when (_yycursor >= _yylimit) $ throw UnexpectedFill
+    _yycursor <- return $ _yycursor + 1
     yy5 State{..}
 
 lexer :: State -> IO Int
@@ -108,7 +108,11 @@ main :: IO ()
 main = do
     let test s n = do
             let buf = BS.concat [s, BS.replicate yymaxfill 0]
-            let st = State {_str = buf, _cur = 0, _lim = BS.length buf, _cnt = 0}
+            let st = State {
+                    _str = buf,
+                    _yycursor = 0,
+                    _yylimit = BS.length buf,
+                    _count = 0}
             m <- catch (lexer st) (\(_ :: FillException) -> return (-2))
             when (m /= n) $ error "failed"
 

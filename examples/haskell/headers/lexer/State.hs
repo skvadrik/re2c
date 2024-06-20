@@ -7,7 +7,7 @@ import Data.ByteString (ByteString)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
+    _yycursor :: !Int,
     
 _yyt1 :: !Int,
     _tag :: !Int

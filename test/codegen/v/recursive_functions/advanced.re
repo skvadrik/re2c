@@ -59,10 +59,10 @@ struct State {
 mut:
     file     os.File
     str      []u8
-    cur      int
-    mar      int
-    tok      int
-    lim      int
+    yycursor int
+    yymarker int
+    yylimit  int
+    token    int
     yycond   YYCONDTYPE
     yystate  int
     trie     MtagTrie
@@ -88,8 +88,8 @@ enum Status {
 }
 
 fn fill(mut st &State) Status {
-    shift := st.tok
-    used := st.lim - st.tok
+    shift := st.token
+    used := st.yylimit - st.token
     free := bufsize - used
 
     // Error: no space. In real life can reallocate a larger buffer.
@@ -97,18 +97,18 @@ fn fill(mut st &State) Status {
 
     // Shift buffer contents (discard already processed data).
     copy(mut &st.str, st.str[shift..shift+used])
-    st.cur -= shift
-    st.mar -= shift
-    st.lim -= shift
-    st.tok -= shift
+    st.yycursor -= shift
+    st.yymarker -= shift
+    st.yylimit -= shift
+    st.token -= shift
     /*!stags:re2c format = '\n\tif st.@@ != tag_none { st.@@ -= shift };'; */
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
-    st.str[st.lim] = 0 // append sentinel symbol
+    st.str[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -121,7 +121,7 @@ fn fill(mut st &State) Status {
     re2c:define:YYCTYPE = u8;
     re2c:define:YYFN = ["lex;Status", "mut st;State"];
     re2c:define:YYFILL = "return .lex_waiting";
-    re2c:define:YYMTAGP = "@@ = add_mtag(mut &st.trie, @@, st.cur)";
+    re2c:define:YYMTAGP = "@@ = add_mtag(mut &st.trie, @@, st.yycursor)";
     re2c:define:YYMTAGN = "@@ = add_mtag(mut &st.trie, @@, tag_none)";
 
     crlf  = '\r\n';
@@ -161,7 +161,7 @@ fn fill(mut st &State) Status {
         pvals := unwind(st.trie, st.p3, st.p4, st.str)
         log.debug("pvals: $pvals")
 
-        st.tok = st.cur
+        st.token = st.yycursor
         return lex(mut st)
     }
 
@@ -169,7 +169,7 @@ fn fill(mut st &State) Status {
         folds := unwind(st.trie, st.f1, st.f2, st.str)
         log.debug("folds: $folds")
 
-        st.tok = st.cur
+        st.token = st.yycursor
         return lex(mut st)
     }
 
@@ -187,12 +187,12 @@ fn test(expect Status, packets []string) {
     // of buffer.
     mut st := &State{
         file:     fr,
-        // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
+        // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
         str:      []u8{len: bufsize + 1},
-        cur:      bufsize,
-        mar:      bufsize,
-        tok:      bufsize,
-        lim:      bufsize,
+        yycursor: bufsize,
+        yymarker: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
         yycond:   .yycmedia_type,
         yystate:  -1,
         trie:     []MtagElem{},

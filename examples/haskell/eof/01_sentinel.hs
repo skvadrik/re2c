@@ -10,8 +10,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _cnt :: Int
+    _yycursor :: Int,
+    _count :: Int
 }
 
 -- expect a null-terminated string
@@ -19,8 +19,8 @@ data State = State {
 #20 "haskell/eof/01_sentinel.hs"
 yy0 :: State -> Int
 yy0 State{..} =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x00 == _c ->
             yy1 State{..}
@@ -34,7 +34,7 @@ yy0 State{..} =
 yy1 :: State -> Int
 yy1 State{..} =
 #20 "haskell/eof/01_sentinel.re"
-    _cnt
+    _count
 #39 "haskell/eof/01_sentinel.hs"
 
 yy2 :: State -> Int
@@ -45,10 +45,10 @@ yy2 State{..} =
 
 yy3 :: State -> Int
 yy3 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x20 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy3 State{..}
         _c | True ->
             yy4 State{..}
@@ -61,10 +61,10 @@ yy4 State{..} =
 
 yy5 :: State -> Int
 yy5 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 <= _c && _c <= 0x7A ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy5 State{..}
         _c | True ->
             yy6 State{..}
@@ -72,7 +72,7 @@ yy5 State{..} =
 yy6 :: State -> Int
 yy6 State{..} =
 #21 "haskell/eof/01_sentinel.re"
-    lexer State{_cnt = _cnt + 1, ..}
+    lexer State{_count = _count + 1, ..}
 #77 "haskell/eof/01_sentinel.hs"
 
 lexer :: State -> Int
@@ -84,7 +84,8 @@ lexer State{..} =
 
 main :: IO ()
 main = do
-    let test s n = when (lexer State{_str = s, _cur = 0, _cnt = 0} /= n) $ error "failed"
+    let test s n = when (lexer st  /= n) $ error "failed"
+                   where st = State{_str = s, _yycursor = 0, _count = 0}
     test "\0" 0
     test "one two three\0" 3
     test "f0ur\0" (-1)

@@ -22,10 +22,10 @@ const MTAG_ROOT: usize = NONE - 1;
 struct ConState {
     file: File,
     str: [u8; CON_STATE_SIZE + 1],
-    lim: usize,
-    cur: usize,
-    mar: usize,
-    tok: usize,
+    yylimit: usize,
+    yycursor: usize,
+    yymarker: usize,
+    token: usize,
     yycond: isize,
     yystate: isize,
     mtag_trie: MtagTrie,
@@ -80,8 +80,8 @@ fn unwind(trie: &MtagTrie, x: usize, y: usize, str: &[u8], result: &mut Vec::<St
 }
 
 fn fill(st: &mut ConState) -> ConStatus {
-    let shift = st.tok;
-    let used = st.lim - st.tok;
+    let shift = st.token;
+    let used = st.yylimit - st.token;
     let free = CON_STATE_SIZE - used;
 
     // Error: no space. In real life can reallocate a larger buffer.
@@ -92,18 +92,18 @@ fn fill(st: &mut ConState) -> ConStatus {
         let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
-    st.lim -= shift;
-    st.cur -= shift;
-    st.mar = st.mar.overflowing_sub(shift).0; // underflow ok if marker is unused
-    st.tok -= shift;
+    st.yylimit -= shift;
+    st.yycursor -= shift;
+    st.yymarker = st.yymarker.overflowing_sub(shift).0; // underflow ok if marker is unused
+    st.token -= shift;
     /*!stags:re2c format = "if st.@@ != NONE { st.@@.overflowing_sub(shift).0; }\n"; */
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.lim..CON_STATE_SIZE]) {
-        Ok(n) => st.lim += n,
+    match st.file.read(&mut st.str[st.yylimit..CON_STATE_SIZE]) {
+        Ok(n) => st.yylimit += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.str[st.lim] = 0; // append sentinel symbol
+    st.str[st.yylimit] = 0; // append sentinel symbol
 
     return ConStatus::Ready;
 }
@@ -116,7 +116,7 @@ fn fill(st: &mut ConState) -> ConStatus {
     re2c:define:YYFN       = ["lex;ConStatus", "st;&mut ConState"];
     re2c:define:YYCTYPE    = "u8";
     re2c:define:YYFILL     = "return ConStatus::Waiting;";
-    re2c:define:YYMTAGP    = "@@ = add_mtag(&mut st.mtag_trie, @@, st.cur);";
+    re2c:define:YYMTAGP    = "@@ = add_mtag(&mut st.mtag_trie, @@, st.yycursor);";
     re2c:define:YYMTAGN    = "@@ = add_mtag(&mut st.mtag_trie, @@, NONE);";
 
     crlf  = '\r\n';
@@ -157,7 +157,7 @@ fn fill(st: &mut ConState) -> ConStatus {
         unwind(&mut st.mtag_trie, st.p3, st.p4, &st.str, &mut pvals);
         log!("pvals: {:?}", pvals);
 
-        st.tok = st.cur;
+        st.token = st.yycursor;
         return lex(st);
     }
 
@@ -166,7 +166,7 @@ fn fill(st: &mut ConState) -> ConStatus {
         unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
         log!("folds: {:?}", folds);
 
-        st.tok = st.cur;
+        st.token = st.yycursor;
         return lex(st);
     }
 
@@ -187,14 +187,14 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
     };
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
-    // of buffer, the character at `lim` offset is the sentinel (null).
+    // of buffer, the character at `yylimit` offset is the sentinel (null).
     let mut state = ConState {
         file: fr,
-        str: [0; CON_STATE_SIZE + 1], // sentinel (at `lim` offset) is set to null
-        cur: CON_STATE_SIZE,
-        mar: CON_STATE_SIZE,
-        tok: CON_STATE_SIZE,
-        lim: CON_STATE_SIZE,
+        str: [0; CON_STATE_SIZE + 1], // sentinel (at `yylimit` offset) is set to null
+        yycursor: CON_STATE_SIZE,
+        yymarker: CON_STATE_SIZE,
+        yylimit: CON_STATE_SIZE,
+        token: CON_STATE_SIZE,
         yycond: YYC_media_type,
         yystate: -1,
         /*!stags:re2c format = "@@: NONE,\n"; */

@@ -4,8 +4,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
     mutable t1: int;
     mutable t2: int;
@@ -21,7 +21,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 /*!local:re2c
     re2c:define:YYFN = ["parse;(int list) option", "st;state"];
-    re2c:define:YYMTAGP = "@@ <- st.cur :: @@;";
+    re2c:define:YYMTAGP = "@@ <- st.yycursor :: @@;";
     re2c:define:YYMTAGN = ""; // alternatively could add `-1` to the list
     re2c:variable:yyrecord = "st";
     re2c:tags = 1;
@@ -40,8 +40,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 let test (str: string) (result: (int list) option) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
         t1 = -1;
         t2 = -1;

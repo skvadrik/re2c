@@ -12,8 +12,8 @@ data YYCONDTYPE = YYC_init | YYC_bin | YYC_oct | YYC_dec | YYC_hex deriving (Eq,
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
     _yycond :: !YYCONDTYPE
 }
 
@@ -23,8 +23,8 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 yy1 :: State -> Int -> Maybe Int
 yy1 State{..} _num =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 == _c ->
             yy3 State{..} _num
@@ -39,14 +39,14 @@ yy2 State{..} _num =
 
 yy3 :: State -> Int -> Maybe Int
 yy3 State{..} _num =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x42 == _c || 0x62 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy6 State{..} _num
         _c | 0x58 == _c || 0x78 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy8 State{..} _num
         _c | True ->
             yy4 State{..} _num
@@ -58,44 +58,44 @@ yy4 State{..} _num =
 
 yy5 :: State -> Int -> Maybe Int
 yy5 State{..} _num =
-    let __ = _cur - 1 in let _cur = __ in
+    let __ = _yycursor - 1 in let _yycursor = __ in
     let _yycond = YYC_dec in
     yyfndec State{..} _num
 
 yy6 :: State -> Int -> Maybe Int
 yy6 State{..} _num =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x31 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy9 State{..} _num
         _c | True ->
             yy7 State{..} _num
 
 yy7 :: State -> Int -> Maybe Int
 yy7 State{..} _num =
-    let _cur = _mar in
+    let _yycursor = _yymarker in
     yy4 State{..} _num
 
 yy8 :: State -> Int -> Maybe Int
 yy8 State{..} _num =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 || 0x41 <= _c && _c <= 0x46 || 0x61 <= _c && _c <= 0x66 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy10 State{..} _num
         _c | True ->
             yy7 State{..} _num
 
 yy9 :: State -> Int -> Maybe Int
 yy9 State{..} _num =
-    let __ = _cur - 1 in let _cur = __ in
+    let __ = _yycursor - 1 in let _yycursor = __ in
     let _yycond = YYC_bin in
     yyfnbin State{..} _num
 
 yy10 :: State -> Int -> Maybe Int
 yy10 State{..} _num =
-    let __ = _cur - 1 in let _cur = __ in
+    let __ = _yycursor - 1 in let _yycursor = __ in
     let _yycond = YYC_hex in
     yyfnhex State{..} _num
 
@@ -105,8 +105,8 @@ yyfninit State{..} _num =
 
 yy11 :: State -> Int -> Maybe Int
 yy11 State{..} _num =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x31 ->
             yy13 State{..} _num
@@ -119,7 +119,7 @@ yy12 State{..} _num =
 
 yy13 :: State -> Int -> Maybe Int
 yy13 State{..} _num =
-    yyfnbin State{..} $ _num * 2 + (peek_digit _str _cur 48)
+    yyfnbin State{..} $ _num * 2 + (peek_digit _str _yycursor 48)
 
 yyfnbin :: State -> Int -> Maybe Int
 yyfnbin State{..} _num =
@@ -127,8 +127,8 @@ yyfnbin State{..} _num =
 
 yy14 :: State -> Int -> Maybe Int
 yy14 State{..} _num =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x37 ->
             yy16 State{..} _num
@@ -141,7 +141,7 @@ yy15 State{..} _num =
 
 yy16 :: State -> Int -> Maybe Int
 yy16 State{..} _num =
-    yyfnoct State{..} $ _num * 8 + (peek_digit _str _cur 48)
+    yyfnoct State{..} $ _num * 8 + (peek_digit _str _yycursor 48)
 
 yyfnoct :: State -> Int -> Maybe Int
 yyfnoct State{..} _num =
@@ -149,8 +149,8 @@ yyfnoct State{..} _num =
 
 yy17 :: State -> Int -> Maybe Int
 yy17 State{..} _num =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             yy19 State{..} _num
@@ -163,7 +163,7 @@ yy18 State{..} _num =
 
 yy19 :: State -> Int -> Maybe Int
 yy19 State{..} _num =
-    yyfndec State{..} $ _num * 10 + (peek_digit _str _cur 48)
+    yyfndec State{..} $ _num * 10 + (peek_digit _str _yycursor 48)
 
 yyfndec :: State -> Int -> Maybe Int
 yyfndec State{..} _num =
@@ -171,8 +171,8 @@ yyfndec State{..} _num =
 
 yy20 :: State -> Int -> Maybe Int
 yy20 State{..} _num =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             yy22 State{..} _num
@@ -189,15 +189,15 @@ yy21 State{..} _num =
 
 yy22 :: State -> Int -> Maybe Int
 yy22 State{..} _num =
-    yyfnhex State{..} $ _num * 16 + (peek_digit _str _cur 48)
+    yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 48)
 
 yy23 :: State -> Int -> Maybe Int
 yy23 State{..} _num =
-    yyfnhex State{..} $ _num * 16 + (peek_digit _str _cur 55)
+    yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 55)
 
 yy24 :: State -> Int -> Maybe Int
 yy24 State{..} _num =
-    yyfnhex State{..} $ _num * 16 + (peek_digit _str _cur 87)
+    yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 87)
 
 yyfnhex :: State -> Int -> Maybe Int
 yyfnhex State{..} _num =
@@ -229,8 +229,8 @@ test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
     let s = State {
             _str = str,
-            _cur = 0,
-            _mar = 0,
+            _yycursor = 0,
+            _yymarker = 0,
             _yycond = YYC_init}
     when (parse s 0 /= expect) $ error "failed!"
 

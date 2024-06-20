@@ -10,36 +10,36 @@ import (
 const BUFSIZE uint = 4096
 
 type Input struct {
-	file *os.File
-	str  []byte
-	cur  uint
-	tok  uint
-	lim  uint
-	eof  bool
+	file     *os.File
+	str      []byte
+	yycursor uint
+	yylimit  uint
+	token    uint
+	eof      bool
 }
 
 func fill(in *Input, need uint) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.tok < need { return -2 }
+	if in.token < need { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.tok:in.lim])
-	in.cur -= in.tok
-	in.lim -= in.tok
-	in.tok = 0
+	copy(in.str[0:], in.str[in.token:in.yylimit])
+	in.yycursor -= in.token
+	in.yylimit -= in.token
+	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
-	in.lim += uint(n)
+	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	in.yylimit += uint(n)
 
 	// If read less than expected, this is end of input => add zero padding
 	// so that the lexer can access characters at the end of buffer.
-	if in.lim < BUFSIZE {
+	if in.yylimit < BUFSIZE {
 		in.eof = true
-		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.lim+i] = 0 }
-		in.lim += YYMAXFILL
+		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.yylimit+i] = 0 }
+		in.yylimit += YYMAXFILL
 	}
 
 	return 0
@@ -48,7 +48,7 @@ func fill(in *Input, need uint) int {
 func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		yyrecord.tok = yyrecord.cur
+		yyrecord.token = yyrecord.yycursor
 	/*!re2c
 		re2c:api = record;
 		re2c:define:YYCTYPE = byte;
@@ -58,7 +58,7 @@ func lex(yyrecord *Input) int {
 
 		[\x00] {
 			// Check that it is the sentinel, not some unexpected null.
-			if yyrecord.tok == yyrecord.lim - YYMAXFILL { return count } else { return -1 }
+			if yyrecord.token == yyrecord.yylimit - YYMAXFILL { return count } else { return -1 }
 		}
 		str  { count += 1; continue }
 		[ ]+ { continue }
@@ -81,12 +81,12 @@ func main() () {
 	// Prepare lexer state: all offsets are at the end of buffer.
 	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
-		file: f,
-		str:  make([]byte, BUFSIZE+YYMAXFILL),
-		cur:  BUFSIZE,
-		tok:  BUFSIZE,
-		lim:  BUFSIZE,
-		eof:  false,
+		file:     f,
+		str:      make([]byte, BUFSIZE+YYMAXFILL),
+		yycursor: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		eof:      false,
 	}
 
 	// Run the lexer.

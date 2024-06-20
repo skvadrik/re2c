@@ -9,7 +9,7 @@ module lexer
 pub struct State {
 pub mut:
     str string
-    cur int
+    yycursor int
     /*!stags:re2c format="@@ int\n"; */
 }
 /*!header:re2c:off*/

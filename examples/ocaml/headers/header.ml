@@ -8,17 +8,17 @@ open String
 
 
 let rec yy0 (yyrecord : State.state) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy0 [@tailcall]) yyrecord
 		| 'b' ->
-			yyrecord.yyt1 <- yyrecord.cur;
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yyt1 <- yyrecord.yycursor;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy2 [@tailcall]) yyrecord
 		| _ ->
-			yyrecord.yyt1 <- yyrecord.cur;
+			yyrecord.yyt1 <- yyrecord.yycursor;
 			(yy1 [@tailcall]) yyrecord
 
 and yy1 (yyrecord : State.state) : int =
@@ -26,10 +26,10 @@ and yy1 (yyrecord : State.state) : int =
 	yyrecord.tag
 
 and yy2 (yyrecord : State.state) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'b' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy2 [@tailcall]) yyrecord
 		| _ -> (yy1 [@tailcall]) yyrecord
 
@@ -41,7 +41,7 @@ and lex (yyrecord : State.state) : int =
 let main () =
     let st = {
         str = "ab\x00";
-        cur = 0;
+        yycursor = 0;
         tag = 0;
         
 	yyt1 = 0;
@@ -53,7 +53,7 @@ let _ = main ()
 
 type state = {
     str: string;
-    mutable cur: int;
+    mutable yycursor: int;
     mutable tag: int;
     mutable yyt1: int;
 }

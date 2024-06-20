@@ -10,15 +10,15 @@ type number = Int | Float | NaN
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable yyaccept: int;
 }
 
 
 let rec yy0 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
-	yyrecord.cur <- yyrecord.cur + 1;
+	let yych = get yyrecord.str yyrecord.yycursor in
+	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '.' -> (yy3 [@tailcall]) yyrecord
 		| '0' -> (yy4 [@tailcall]) yyrecord
@@ -32,44 +32,44 @@ and yy2 (yyrecord : state) : number =
 	NaN
 
 and yy3 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : state) : number =
 	yyrecord.yyaccept <- 0;
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '.' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy9 [@tailcall]) yyrecord
 		| 'E'
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy5 (yyrecord : state) : number =
 	yyrecord.yyaccept <- 1;
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '.' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy5 [@tailcall]) yyrecord
 		| 'E'
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy6 [@tailcall]) yyrecord
 
@@ -78,15 +78,15 @@ and yy6 (yyrecord : state) : number =
 
 and yy7 (yyrecord : state) : number =
 	yyrecord.yyaccept <- 2;
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| 'E'
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy8 [@tailcall]) yyrecord
 
@@ -94,52 +94,52 @@ and yy8 (yyrecord : state) : number =
 	Float
 
 and yy9 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '.' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy9 [@tailcall]) yyrecord
 		| 'E'
 		| 'e' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy10 [@tailcall]) yyrecord
 
 and yy10 (yyrecord : state) : number =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	match yyrecord.yyaccept with
 		| 0 -> (yy2 [@tailcall]) yyrecord
 		| 1 -> (yy6 [@tailcall]) yyrecord
 		| _ -> (yy8 [@tailcall]) yyrecord
 
 and yy11 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '+'
 		| '-' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy12 [@tailcall]) yyrecord
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy13 [@tailcall]) yyrecord
 		| _ -> (yy10 [@tailcall]) yyrecord
 
 and yy12 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy13 [@tailcall]) yyrecord
 		| _ -> (yy10 [@tailcall]) yyrecord
 
 and yy13 (yyrecord : state) : number =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '0'..'9' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy13 [@tailcall]) yyrecord
 		| _ -> (yy8 [@tailcall]) yyrecord
 
@@ -149,7 +149,7 @@ and lex (yyrecord : state) : number =
 
 
 let test(str, num) =
-    let st = {str = str; cur = 0; mar = 0; yyaccept = 0}
+    let st = {str = str; yycursor = 0; yymarker = 0; yyaccept = 0}
     in if not (lex st = num) then raise (Failure "error")
 
 let main () =

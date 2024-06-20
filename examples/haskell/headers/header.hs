@@ -13,17 +13,17 @@ import State
 
 yy0 :: State -> Int
 yy0 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy0 State{..}
         _c | 0x62 == _c ->
-            let _yyt1 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt1 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy2 State{..}
         _c | True ->
-            let _yyt1 = _cur in
+            let _yyt1 = _yycursor in
             yy1 State{..}
 
 yy1 :: State -> Int
@@ -33,10 +33,10 @@ yy1 State{..} =
 
 yy2 :: State -> Int
 yy2 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x62 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy2 State{..}
         _c | True ->
             yy1 State{..}
@@ -51,7 +51,7 @@ main :: IO ()
 main = do
     let s = State {
         _str = "ab\0",
-        _cur = 0,
+        _yycursor = 0,
         
 _yyt1 = -1,
         _tag = 0}
@@ -66,7 +66,7 @@ import Data.ByteString (ByteString)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
+    _yycursor :: !Int,
     
 _yyt1 :: !Int,
     _tag :: !Int

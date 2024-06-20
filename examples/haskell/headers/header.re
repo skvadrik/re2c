@@ -13,7 +13,7 @@ import Data.ByteString (ByteString)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
+    _yycursor :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
     _tag :: !Int
 }
@@ -32,7 +32,7 @@ main :: IO ()
 main = do
     let s = State {
         _str = "ab\0",
-        _cur = 0,
+        _yycursor = 0,
         /*!stags:re2c format = '\n@@{tag} = -1,'; */
         _tag = 0}
 

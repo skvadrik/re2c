@@ -7,38 +7,38 @@ import strings
 const bufsize = 4096
 
 struct State {
-    file os.File
+    file     os.File
 mut:
-    str  []u8
-    cur  int
-    tok  int
-    lim  int
-    eof  bool
+    str      []u8
+    yycursor int
+    yylimit  int
+    token    int
+    eof      bool
 }
 
 fn fill(mut st &State, need int) int {
     if st.eof { return -1 } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
-    if st.tok < need { return -2 }
+    if st.token < need { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.tok..st.lim])
-    st.cur -= st.tok
-    st.lim -= st.tok
-    st.tok = 0
+    copy(mut &st.str, st.str[st.token..st.yylimit])
+    st.yycursor -= st.token
+    st.yylimit -= st.token
+    st.token = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
 
     // If read less than expected, this is the end of input.
-    if st.lim < bufsize {
+    if st.yylimit < bufsize {
         st.eof = true
-        for i := 0; i < yymaxfill; i += 1 { st.str[st.lim + i] = 0 }
-        st.lim += yymaxfill
+        for i := 0; i < yymaxfill; i += 1 { st.str[st.yylimit + i] = 0 }
+        st.yylimit += yymaxfill
     }
 
     return 0
@@ -47,7 +47,7 @@ fn fill(mut st &State, need int) int {
 fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    yyrecord.tok = yyrecord.cur
+    yyrecord.token = yyrecord.yycursor
     /*!re2c
         re2c:api = record;
         re2c:define:YYFILL = "r := fill(mut yyrecord, @@); if r != 0 { return r }";
@@ -56,7 +56,7 @@ loop:
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return if yyrecord.tok == (yyrecord.lim - yymaxfill) { count } else { -1 }
+            return if yyrecord.token == (yyrecord.yylimit - yymaxfill) { count } else { -1 }
         }
         str  { count += 1; unsafe { goto loop } }
         [ ]+ { unsafe { goto loop } }
@@ -79,12 +79,12 @@ fn main() {
     // This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
     mut fr := os.open(fname)!
     mut st := &State{
-        file: fr,
-        str:  []u8{len: bufsize + yymaxfill},
-        cur:  bufsize,
-        tok:  bufsize,
-        lim:  bufsize,
-        eof:  false,
+        file:     fr,
+        str:      []u8{len: bufsize + yymaxfill},
+        yycursor: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
+        eof:      false,
     }
 
     // Run the lexer.

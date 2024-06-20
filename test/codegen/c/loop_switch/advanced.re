@@ -26,17 +26,18 @@ enum con_status {
 
 #define CON_STATE_SIZE  (4096-32)
 typedef struct con_state {
-    unsigned char*  cur;
-    unsigned char*  mar;
-    unsigned char*  tok;
-    unsigned char*  lim;
-    int             cond;
-    int             state;
+    unsigned char*  yycursor;
+    unsigned char*  yymarker;
+    unsigned char*  token;
+    unsigned char*  yylimit;
+    int             yycond;
+    int             yystate;
+    int             yyaccept;
     struct mtagpool mtp;
     /*!stags:re2c format = "\tunsigned char*\t\t@@;\n"; */
     /*!mtags:re2c format = "\tstruct mtag\t\t\t\t*@@;\n"; */
-    size_t          buf_size;
-    unsigned char*  buf;
+    size_t          bufsize;
+    unsigned char*  buffer;
     unsigned char   static_buf[];
 } con_state;
 #define CON_READ_BUF_LEN  (CON_STATE_SIZE - sizeof(struct con_state) - 1) // -1: ensure a sentinel at the end of buf
@@ -83,26 +84,19 @@ static void mtag(struct mtag** pmt, const unsigned char* b, const unsigned char*
 
 static enum con_status parse_con_req(struct con_state* c)
 {
-    unsigned int        yych, yyaccept;
+    unsigned int        yych = 0;
     const unsigned char *l1, *l2;
     struct mtag         *f1, *f2, *p1, *p2, *p3, *p4;
 
     /*!re2c
-        re2c:api:style             = free-form;
-        re2c:eof                   = 0;
-        re2c:flags:tags            = 1;
-        re2c:tags:expression       = "c->@@";
-        re2c:define:YYCTYPE        = "unsigned char";
-        re2c:define:YYCURSOR       = "c->cur";
-        re2c:define:YYMARKER       = "c->mar";
-        re2c:define:YYLIMIT        = "c->lim";
-        re2c:define:YYGETSTATE     = "c->state";
-        re2c:define:YYSETSTATE     = "c->state = @@;";
-        re2c:define:YYFILL         = "return CON_STATUS_WAITING;";
-        re2c:define:YYGETCONDITION = "c->cond";
-        re2c:define:YYSETCONDITION = "c->cond = @@;";
-        re2c:define:YYMTAGP        = "mtag(&@@, c->tok, c->cur, &c->mtp);";
-        re2c:define:YYMTAGN        = "mtag(&@@, c->tok, NULL, &c->mtp);";
+        re2c:api               = record;
+        re2c:eof               = 0;
+        re2c:flags:tags        = 1;
+        re2c:variable:yyrecord = "c";
+        re2c:define:YYCTYPE    = "unsigned char";
+        re2c:define:YYFILL     = "return CON_STATUS_WAITING;";
+        re2c:define:YYMTAGP    = "mtag(&@@, c->token, c->yycursor, &c->mtp);";
+        re2c:define:YYMTAGN    = "mtag(&@@, c->token, NULL, &c->mtp);";
 
         crlf  = '\r\n';
         sp    = ' ';
@@ -142,8 +136,8 @@ static enum con_status parse_con_req(struct con_state* c)
 
             while (0 && pname_start) {
                 printf("\t(%.*s) = (%.*s)\n",
-                    pname_end->dist - pname_start->dist, c->tok + pname_start->dist,
-                    pval_end->dist - pval_start->dist, c->tok + pval_start->dist);
+                    pname_end->dist - pname_start->dist, c->token + pname_start->dist,
+                    pval_end->dist - pval_start->dist, c->token + pval_start->dist);
 
                 pname_start = pname_start->prev;
                 pname_end = pname_end->prev;
@@ -159,7 +153,7 @@ static enum con_status parse_con_req(struct con_state* c)
             struct mtag*    fold_end    = f2;
 
             while (fold_start) {
-                memset(c->tok + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
+                memset(c->token + fold_start->dist, ' ', fold_end->dist - fold_start->dist);
                 fold_start  = fold_start->prev;
                 fold_end    = fold_end->prev;
             }
@@ -174,27 +168,27 @@ static enum con_status parse_con_req(struct con_state* c)
 
 int feed(struct con_state* c, const unsigned char* chunk, size_t len)
 {
-    const size_t shift = c->tok - c->buf;
-    const size_t free = c->buf_size - (c->lim - c->tok);
+    const size_t shift = c->token - c->buffer;
+    const size_t free = c->bufsize - (c->yylimit - c->token);
 
     if (free < len) {
-        fprintf(stderr, "Token too long for receive buffer: %ld\n", c->buf_size);
+        fprintf(stderr, "Token too long for receive buffer: %ld\n", c->bufsize);
         return 1;
     }
 
     if (shift) {
-        memmove(c->buf, c->tok, c->buf_size - shift);
-        c->lim -= shift;
-        c->cur -= shift;
-        c->mar -= shift;
-        c->tok -= shift;
+        memmove(c->buffer, c->token, c->bufsize - shift);
+        c->yylimit -= shift;
+        c->yycursor -= shift;
+        c->yymarker -= shift;
+        c->token -= shift;
         /*!stags:re2c format = "\t\t\tif (c->@@) c->@@ -= shift;\n"; */
     }
 
-    memcpy(c->lim, chunk, len);
+    memcpy(c->yylimit, chunk, len);
 
-    c->lim += len;
-    c->lim[0] = 0;  // Append sentinel
+    c->yylimit += len;
+    c->yylimit[0] = 0;  // Append sentinel
 
     return 0;
 }
@@ -216,11 +210,12 @@ int main(int argc, char** argv)
     };
 
     c = (con_state*)malloc(CON_STATE_SIZE);
-    c->buf = c->static_buf;
-    c->cur = c->mar = c->tok = c->lim = c->buf + CON_READ_BUF_LEN;
-    c->lim[0] = 0; // sentinel
-    c->state = -1;
-    c->buf_size = CON_READ_BUF_LEN;
+    c->buffer = c->static_buf;
+    c->yycursor = c->yymarker = c->token = c->yylimit = c->buffer + CON_READ_BUF_LEN;
+    c->yylimit[0] = 0; // sentinel
+    c->yystate = -1;
+    c->yyaccept = -1;
+    c->bufsize = CON_READ_BUF_LEN;
     /*!stags:re2c format = "\tc->@@ = 0;\n"; */
     /*!mtags:re2c format = "\tc->@@ = NULL;\n"; */
     mtagpool_init(&c->mtp);

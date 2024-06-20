@@ -4,8 +4,8 @@
 // Store u32 number in u64 during parsing to simplify overflow hadling.
 struct State<'a> {
     str: &'a [u8],
-    cur: usize,
-    mar: usize,
+    yycursor: usize,
+    yymarker: usize,
     num: u64,
 }
 
@@ -19,14 +19,14 @@ macro_rules! maybe { // Convert the number from u64 to optional u32.
 
 // Add digit with the given base, checking for overflow.
 fn add(st: &mut State, offs: u8, base: u64) {
-    let digit = unsafe { st.str.get_unchecked(st.cur - 1) } - offs;
+    let digit = unsafe { st.str.get_unchecked(st.yycursor - 1) } - offs;
     st.num = std::cmp::min(st.num * base + digit as u64, ERROR);
 }
 
 fn parse_u32(s: & [u8]) -> Option<u32> {
     assert_eq!(s.last(), Some(&0)); // expect null-terminated input
 
-    let mut st = State {str: s, cur: 0, mar: 0, num: 0};
+    let mut st = State {str: s, yycursor: 0, yymarker: 0, num: 0};
 
 {
 	#[allow(unused_assignments)]
@@ -35,8 +35,8 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
-				st.cur += 1;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				st.yycursor += 1;
 				match yych {
 					0x30 => {
 						yystate = 2;
@@ -54,18 +54,18 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 			}
 			1 => { return None; },
 			2 => {
-				st.mar = st.cur;
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
+				st.yymarker = st.yycursor;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
 				match yych {
 					0x42 |
 					0x62 => {
-						st.cur += 1;
+						st.yycursor += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					0x58 |
 					0x78 => {
-						st.cur += 1;
+						st.yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -77,14 +77,14 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 			}
 			3 => { return parse_oct(&mut st); },
 			4 => {
-				st.cur -= 1;
+				st.yycursor -= 1;
 				{ return parse_dec(&mut st); }
 			}
 			5 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
 				match yych {
 					0x30 ..= 0x31 => {
-						st.cur += 1;
+						st.yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
@@ -95,17 +95,17 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				}
 			}
 			6 => {
-				st.cur = st.mar;
+				st.yycursor = st.yymarker;
 				yystate = 3;
 				continue 'yyl;
 			}
 			7 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x46 |
 					0x61 ..= 0x66 => {
-						st.cur += 1;
+						st.yycursor += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
@@ -116,11 +116,11 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				}
 			}
 			8 => {
-				st.cur -= 1;
+				st.yycursor -= 1;
 				{ return parse_bin(&mut st); }
 			}
 			9 => {
-				st.cur -= 1;
+				st.yycursor -= 1;
 				{ return parse_hex(&mut st); }
 			}
 			_ => panic!("internal lexer error"),
@@ -139,8 +139,8 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
-				st.cur += 1;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x31 => {
 						yystate = 2;
@@ -170,8 +170,8 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
-				st.cur += 1;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x37 => {
 						yystate = 2;
@@ -201,8 +201,8 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
-				st.cur += 1;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 2;
@@ -232,8 +232,8 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.cur)};
-				st.cur += 1;
+				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 2;

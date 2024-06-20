@@ -4,9 +4,9 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
-    lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    yylimit: int;
 }
 
 (* expect a null-terminated string *)
@@ -27,9 +27,9 @@ type state = {
 let test(str, count) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
-        lim = String.length str - 1; (* termunating null not included *)
+        yycursor = 0;
+        yymarker = 0;
+        yylimit = String.length str - 1; (* terminating null not included *)
     }
     in if not (lex st 0 = count) then raise (Failure "error")
 

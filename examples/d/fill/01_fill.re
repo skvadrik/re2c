@@ -8,38 +8,38 @@ enum BUFSIZE = 4095;
 
 struct Input {
     FILE* file;
-    char[BUFSIZE + 1] str;// +1 for sentinel
-    char* lim, cur, mar, tok;
+    char[BUFSIZE + 1] buffer;// +1 for sentinel
+    char* yylimit, yycursor, yymarker, token;
     bool eof;
 };
 
-private int fill(ref Input input) {
-    if (input.eof) return 1;
+private int fill(ref Input it) {
+    if (it.eof) return 1;
 
-    const size_t shift = input.tok - input.str.ptr;
-    const size_t used = input.lim - input.tok;
+    const size_t shift = it.token - it.buffer.ptr;
+    const size_t used = it.yylimit - it.token;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < 1) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(cast(void*)input.str.ptr, input.tok, used);
-    input.lim -= shift;
-    input.cur -= shift;
-    input.mar -= shift;
-    input.tok -= shift;
+    memmove(cast(void*)it.buffer.ptr, it.token, used);
+    it.yylimit -= shift;
+    it.yycursor -= shift;
+    it.yymarker -= shift;
+    it.token -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    input.lim += fread(input.lim, 1, BUFSIZE - used, input.file);
-    input.lim[0] = 0;
-    input.eof = input.lim < (input.str.ptr + BUFSIZE);
+    it.yylimit += fread(it.yylimit, 1, BUFSIZE - used, it.file);
+    it.yylimit[0] = 0;
+    it.eof = it.yylimit < (it.buffer.ptr + BUFSIZE);
     return 0;
 }
 
 private int lex(ref Input yyrecord) {
     int count = 0;
     for (;;) {
-        yyrecord.tok = yyrecord.cur;
+        yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
         re2c:define:YYCTYPE = "char";
@@ -71,17 +71,17 @@ void main() {
     int count = 3 * BUFSIZE; // number of quoted strings written to file
 
     // Initialize lexer state: all pointers are at the end of buffer.
-    Input input;
-    input.file = fopen(fname.ptr, "r");
-    input.cur = input.mar = input.tok = input.lim = input.str.ptr + BUFSIZE;
-    input.eof = 0;
+    Input it;
+    it.file = fopen(fname.ptr, "r");
+    it.yycursor = it.yymarker = it.token = it.yylimit = it.buffer.ptr + BUFSIZE;
+    it.eof = 0;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
-    input.lim[0] = 0;
+    it.yylimit[0] = 0;
 
     // Run the lexer.
-    assert(lex(input) == count);
+    assert(lex(it) == count);
 
     // Cleanup: remove input file.
-    fclose(input.file);
+    fclose(it.file);
     remove(fname.ptr);
 }

@@ -10,10 +10,10 @@ class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
         self.str = bytearray(BUFSIZE)
-        self.lim = BUFSIZE - 1 # exclude terminating null
-        self.cur = self.lim
-        self.mar = self.lim
-        self.tok = self.lim
+        self.yylimit = BUFSIZE - 1 # exclude terminating null
+        self.yycursor = self.yylimit
+        self.yymarker = self.yylimit
+        self.token = self.yylimit
         self.eof = False
 
     def __del__(self):
@@ -29,22 +29,22 @@ def fill(st):
         return Status.EOF
 
     # Error: lexeme too long. In real life could reallocate a larger buffer.
-    if st.tok < 1:
+    if st.token < 1:
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.tok:st.lim]
-    st.cur -= st.tok;
-    st.mar -= st.tok;
-    st.lim -= st.tok;
-    st.tok = 0;
+    st.str = st.str[st.token:st.yylimit]
+    st.yycursor -= st.token;
+    st.yymarker -= st.token;
+    st.yylimit -= st.token;
+    st.token = 0;
 
     # Fill free space at the end of buffer with new data from file.
-    bytes = st.file.read(BUFSIZE - st.lim - 1) # -1 for sentinel
+    bytes = st.file.read(BUFSIZE - st.yylimit - 1) # -1 for sentinel
     if not bytes:
         st.eof = True # end of file
     else:
-        st.lim += len(bytes);
+        st.yylimit += len(bytes);
         st.str += bytes
 
     st.str += b'\0' # append sentinel
@@ -53,37 +53,37 @@ def fill(st):
 
 def lex(yyrecord, count):
     while True:
-        yyrecord.tok = yyrecord.cur
+        yyrecord.token = yyrecord.yycursor
         
         yystate = 0
         while True:
             match yystate:
                 case 0:
-                    yych = yyrecord.str[yyrecord.cur]
+                    yych = yyrecord.str[yyrecord.yycursor]
                     if yych <= 0x20:
                         if yych <= 0x00:
-                            if yyrecord.lim <= yyrecord.cur:
+                            if yyrecord.yylimit <= yyrecord.yycursor:
                                 if fill(yyrecord) == Status.OK:
                                     yystate = 0
                                     continue
                                 yystate = 9
                                 continue
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 1
                             continue
                         if yych >= 0x20:
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 3
                             continue
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                         yystate = 1
                         continue
                     else:
                         if yych == 0x27:
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 5
                             continue
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                         yystate = 1
                         continue
                 case 1:
@@ -92,16 +92,16 @@ def lex(yyrecord, count):
                 case 2:
                     return -1
                 case 3:
-                    yych = yyrecord.str[yyrecord.cur]
+                    yych = yyrecord.str[yyrecord.yycursor]
                     if yych <= 0x00:
-                        if yyrecord.lim <= yyrecord.cur:
+                        if yyrecord.yylimit <= yyrecord.yycursor:
                             if fill(yyrecord) == Status.OK:
                                 yystate = 3
                                 continue
                         yystate = 4
                         continue
                     if yych == 0x20:
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                         yystate = 3
                         continue
                     yystate = 4
@@ -109,70 +109,70 @@ def lex(yyrecord, count):
                 case 4:
                     break
                 case 5:
-                    yyrecord.mar = yyrecord.cur
-                    yych = yyrecord.str[yyrecord.cur]
+                    yyrecord.yymarker = yyrecord.yycursor
+                    yych = yyrecord.str[yyrecord.yycursor]
                     if yych >= 0x01:
                         yystate = 7
                         continue
-                    if yyrecord.lim <= yyrecord.cur:
+                    if yyrecord.yylimit <= yyrecord.yycursor:
                         if fill(yyrecord) == Status.OK:
                             yystate = 5
                             continue
                         yystate = 2
                         continue
-                    yyrecord.cur += 1
+                    yyrecord.yycursor += 1
                     yystate = 6
                     continue
                 case 6:
-                    yych = yyrecord.str[yyrecord.cur]
+                    yych = yyrecord.str[yyrecord.yycursor]
                     yystate = 7
                     continue
                 case 7:
                     if yych <= 0x27:
                         if yych <= 0x00:
-                            if yyrecord.lim <= yyrecord.cur:
+                            if yyrecord.yylimit <= yyrecord.yycursor:
                                 if fill(yyrecord) == Status.OK:
                                     yystate = 6
                                     continue
                                 yystate = 10
                                 continue
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 6
                             continue
                         if yych <= 0x26:
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 6
                             continue
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                     else:
                         if yych == 0x5C:
-                            yyrecord.cur += 1
+                            yyrecord.yycursor += 1
                             yystate = 8
                             continue
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                         yystate = 6
                         continue
                     count += 1
                     break
                 case 8:
-                    yych = yyrecord.str[yyrecord.cur]
+                    yych = yyrecord.str[yyrecord.yycursor]
                     if yych <= 0x00:
-                        if yyrecord.lim <= yyrecord.cur:
+                        if yyrecord.yylimit <= yyrecord.yycursor:
                             if fill(yyrecord) == Status.OK:
                                 yystate = 8
                                 continue
                             yystate = 10
                             continue
-                        yyrecord.cur += 1
+                        yyrecord.yycursor += 1
                         yystate = 6
                         continue
-                    yyrecord.cur += 1
+                    yyrecord.yycursor += 1
                     yystate = 6
                     continue
                 case 9:
                     return count
                 case 10:
-                    yyrecord.cur = yyrecord.mar
+                    yyrecord.yycursor = yyrecord.yymarker
                     yystate = 2
                     continue
                 case _:

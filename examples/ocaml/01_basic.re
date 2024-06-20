@@ -4,7 +4,7 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
+    mutable yycursor: int;
 }
 
 /*!re2c
@@ -18,7 +18,7 @@ type state = {
 */
 
 let main () =
-    let st = {str = "1234\x00"; cur = 0}
+    let st = {str = "1234\x00"; yycursor = 0}
     in if not (lex st) then raise (Failure "error")
 
 let _ = main ()

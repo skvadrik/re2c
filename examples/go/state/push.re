@@ -11,13 +11,13 @@ import (
 const BUFSIZE int = 10
 
 type State struct {
-	file    *os.File
-	str     []byte
-	cur     int
-	mar     int
-	tok     int
-	lim     int
-	yystate int
+	file     *os.File
+	str      []byte
+	yycursor int
+	yymarker int
+	yylimit  int
+	token    int
+	yystate  int
 }
 
 const (
@@ -29,8 +29,8 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.tok
-	used := st.lim - st.tok
+	shift := st.token
+	used := st.yylimit - st.token
 	free := BUFSIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
@@ -38,15 +38,15 @@ func fill(st *State) int {
 
 	// Shift buffer contents (discard already processed data).
 	copy(st.str[0:], st.str[shift:shift+used])
-	st.cur -= shift
-	st.mar -= shift
-	st.lim -= shift
-	st.tok -= shift
+	st.yycursor -= shift
+	st.yymarker -= shift
+	st.yylimit -= shift
+	st.token -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.lim:BUFSIZE])
-	st.lim += n
-	st.str[st.lim] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.str[st.yylimit:BUFSIZE])
+	st.yylimit += n
+	st.str[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -55,7 +55,7 @@ func lex(yyrecord *State, recv *int) int {
 	var yych byte
 	/*!getstate:re2c*/
 loop:
-	yyrecord.tok = yyrecord.cur
+	yyrecord.token = yyrecord.yycursor
 	/*!re2c
 		re2c:api = record;
 		re2c:eof = 0;
@@ -78,14 +78,14 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer.
 	st := &State{
-		file:    fr,
-		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		str:     make([]byte, BUFSIZE+1),
-		cur:     BUFSIZE,
-		mar:     BUFSIZE,
-		tok:     BUFSIZE,
-		lim:     BUFSIZE,
-		yystate: -1,
+		file:     fr,
+		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+		str:      make([]byte, BUFSIZE+1),
+		yycursor: BUFSIZE,
+		yymarker: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		yystate:  -1,
 	}
 
 	// Main loop. The buffer contains incomplete data which appears packet by

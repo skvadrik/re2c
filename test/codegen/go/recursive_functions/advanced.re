@@ -63,10 +63,10 @@ func unwind(trie mtagTrie, x int, y int, str []byte) []string {
 type State struct {
 	file     *os.File
 	str      []byte
-	cur      int
-	mar      int
-	tok      int
-	lim      int
+	yycursor int
+	yymarker int
+	yylimit  int
+	token    int
 	yycond   int
 	yystate  int
 	trie     mtagTrie
@@ -88,8 +88,8 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.tok
-	used := st.lim - st.tok
+	shift := st.token
+	used := st.yylimit - st.token
 	free := SIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
@@ -97,16 +97,16 @@ func fill(st *State) int {
 
 	// Shift buffer contents (discard already processed data).
 	copy(st.str[0:], st.str[shift:shift+used])
-	st.cur -= shift
-	st.mar -= shift
-	st.lim -= shift
-	st.tok -= shift
+	st.yycursor -= shift
+	st.yymarker -= shift
+	st.yylimit -= shift
+	st.token -= shift
 	/*!stags:re2c format = '\n\tst.@@ -= shift'; */
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.lim:SIZE])
-	st.lim += n
-	st.str[st.lim] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.str[st.yylimit:SIZE])
+	st.yylimit += n
+	st.str[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -119,7 +119,7 @@ func fill(st *State) int {
 	re2c:define:YYFN = ["lex;int", "st;*State"];
 	re2c:define:YYCTYPE = "byte";
 	re2c:define:YYFILL = "return lexWaiting";
-	re2c:define:YYMTAGP = "@@ = add_mtag(&st.trie, @@, st.cur)";
+	re2c:define:YYMTAGP = "@@ = add_mtag(&st.trie, @@, st.yycursor)";
 	re2c:define:YYMTAGN = "@@ = add_mtag(&st.trie, @@, tagNone)";
 
 	crlf  = '\r\n';
@@ -158,7 +158,7 @@ func fill(st *State) int {
 		pvals := unwind(st.trie, st.p3, st.p4, st.str)
 		if debug {fmt.Printf("pvals: %v\n", pvals)}
 
-		st.tok = st.cur
+		st.token = st.yycursor
 		return lex(st)
 	}
 
@@ -166,7 +166,7 @@ func fill(st *State) int {
 		folds := unwind(st.trie, st.f1, st.f2, st.str)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
-		st.tok = st.cur
+		st.token = st.yycursor
 		return lex(st)
 	}
 
@@ -182,10 +182,10 @@ func test(packets []string) int {
 	st := &State{
 		file:     fr,
 		str:      make([]byte, SIZE+1),
-		cur:      SIZE,
-		mar:      SIZE,
-		tok:      SIZE,
-		lim:      SIZE,
+		yycursor: SIZE,
+		yymarker: SIZE,
+		yylimit:  SIZE,
+		token:    SIZE,
 		yycond:   yycmedia_type,
 		yystate:  -1,
 		trie:     make([]mtagElem, 0),

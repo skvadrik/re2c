@@ -10,8 +10,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
     
 #17 "haskell/submatch/02_mtags.hs"
 
@@ -40,14 +40,14 @@ s2n s i j = f i 0 where
 #41 "haskell/submatch/02_mtags.hs"
 yy0 :: State -> Maybe [Int]
 yy0 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let _yyt1 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt1 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy3 State{..}
         _c | True ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy1 State{..}
 
 yy1 :: State -> Maybe [Int]
@@ -62,21 +62,21 @@ yy2 State{..} =
 
 yy3 :: State -> Maybe [Int]
 yy3 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x00 == _c ->
             
             
-            let _yyt2 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt2 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy4 State{..}
         _c | 0x2E == _c ->
-            let _yyt2 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt2 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy5 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | True ->
             yy2 State{..}
@@ -93,54 +93,54 @@ yy4 State{..} =
 
 yy5 :: State -> Maybe [Int]
 yy5 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let tag = _cur : _yytm3 in let _yytm3 = tag in
-            let __ = _cur + 1 in let _cur = __ in
+            let tag = _yycursor : _yytm3 in let _yytm3 = tag in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy8 State{..}
         _c | True ->
             yy6 State{..}
 
 yy6 :: State -> Maybe [Int]
 yy6 State{..} =
-    let _cur = _mar in
+    let _yycursor = _yymarker in
     yy2 State{..}
 
 yy7 :: State -> Maybe [Int]
 yy7 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x00 == _c ->
             
             
-            let _yyt2 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt2 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy4 State{..}
         _c | 0x2E == _c ->
-            let _yyt2 = _cur in
-            let __ = _cur + 1 in let _cur = __ in
+            let _yyt2 = _yycursor in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy5 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | True ->
             yy6 State{..}
 
 yy8 :: State -> Maybe [Int]
 yy8 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x00 == _c ->
-            let tag = _cur : _yytm4 in let _yytm4 = tag in
-            let __ = _cur + 1 in let _cur = __ in
+            let tag = _yycursor : _yytm4 in let _yytm4 = tag in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy4 State{..}
         _c | 0x2E == _c ->
-            let tag = _cur : _yytm4 in let _yytm4 = tag in
-            let __ = _cur + 1 in let _cur = __ in
+            let tag = _yycursor : _yytm4 in let _yytm4 = tag in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy5 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy8 State{..}
         _c | True ->
             yy6 State{..}
@@ -156,8 +156,8 @@ test :: ByteString -> Maybe [Int] -> IO ()
 test str expect = do
     let st = State {
         _str = str,
-        _cur = 0,
-        _mar = 0,
+        _yycursor = 0,
+        _yymarker = 0,
         
 #163 "haskell/submatch/02_mtags.hs"
 

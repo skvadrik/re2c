@@ -12,32 +12,32 @@ enum BUFSIZE = 10;
 
 struct State {
     FILE* file;
-    char[BUFSIZE + 1] str;
-    char* lim, cur, mar, tok;
+    char[BUFSIZE + 1] buffer;
+    char* yylimit, yycursor, yymarker, token;
     int yystate;
 };
 
 enum Status {END, READY, WAITING, BAD_PACKET, BIG_PACKET};
 
 private Status fill(ref State st) {
-    const size_t shift = st.tok - cast(char*)st.str;
-    const size_t used = st.lim - st.tok;
+    const size_t shift = st.token - cast(char*)st.buffer;
+    const size_t used = st.yylimit - st.token;
     const size_t free = BUFSIZE - used;
 
     // Error: no space. In real life can reallocate a larger buffer.
     if (free < 1) return Status.BIG_PACKET;
 
     // Shift buffer contents (discard already processed data).
-    memmove(cast(void*)st.str, st.tok, used);
-    st.lim -= shift;
-    st.cur -= shift;
-    st.mar -= shift;
-    st.tok -= shift;
+    memmove(cast(void*)st.buffer, st.token, used);
+    st.yylimit -= shift;
+    st.yycursor -= shift;
+    st.yymarker -= shift;
+    st.token -= shift;
 
     // Fill free space at the end of buffer with new data.
-    const size_t read = fread(st.lim, 1, free, st.file);
-    st.lim += read;
-    st.lim[0] = 0; // append sentinel symbol
+    const size_t read = fread(st.yylimit, 1, free, st.file);
+    st.yylimit += read;
+    st.yylimit[0] = 0; // append sentinel symbol
 
     return Status.READY;
 }
@@ -49,13 +49,13 @@ private Status lex(ref State yyrecord, uint* recv) {
 switch (yyrecord.yystate) {
 	case -1: goto yy0;
 	case 0:
-		if (yyrecord.lim <= yyrecord.cur) goto yy8;
+		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy8;
 		goto yyFillLabel0;
 	case 1:
-		if (yyrecord.lim <= yyrecord.cur) goto yy3;
+		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy3;
 		goto yyFillLabel1;
 	case 2:
-		if (yyrecord.lim <= yyrecord.cur) goto yy7;
+		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy7;
 		goto yyFillLabel2;
 	default: assert(false);
 }
@@ -63,65 +63,65 @@ switch (yyrecord.yystate) {
 
 
     for (;;) {
-        yyrecord.tok = yyrecord.cur;
+        yyrecord.token = yyrecord.yycursor;
     
 #line 69 "d/state/push.d"
 yy0:
 yyFillLabel0:
-	yych = *yyrecord.cur;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case 'a': .. case 'z': goto yy4;
 		default:
-			if (yyrecord.lim <= yyrecord.cur) {
+			if (yyrecord.yylimit <= yyrecord.yycursor) {
 				yyrecord.yystate = 0;
 				return Status.WAITING;
 			}
 			goto yy2;
 	}
 yy2:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 yy3:
 	yyrecord.yystate = -1;
 #line 57 "d/state/push.re"
 	{ return Status.BAD_PACKET; }
 #line 88 "d/state/push.d"
 yy4:
-	++yyrecord.cur;
-	yyrecord.mar = yyrecord.cur;
+	++yyrecord.yycursor;
+	yyrecord.yymarker = yyrecord.yycursor;
 yyFillLabel1:
-	yych = *yyrecord.cur;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a': .. case 'z': goto yy6;
 		default:
-			if (yyrecord.lim <= yyrecord.cur) {
+			if (yyrecord.yylimit <= yyrecord.yycursor) {
 				yyrecord.yystate = 1;
 				return Status.WAITING;
 			}
 			goto yy3;
 	}
 yy5:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 	yyrecord.yystate = -1;
 #line 59 "d/state/push.re"
 	{ *recv = *recv + 1; continue; }
 #line 109 "d/state/push.d"
 yy6:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 yyFillLabel2:
-	yych = *yyrecord.cur;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a': .. case 'z': goto yy6;
 		default:
-			if (yyrecord.lim <= yyrecord.cur) {
+			if (yyrecord.yylimit <= yyrecord.yycursor) {
 				yyrecord.yystate = 2;
 				return Status.WAITING;
 			}
 			goto yy7;
 	}
 yy7:
-	yyrecord.cur = yyrecord.mar;
+	yyrecord.yycursor = yyrecord.yymarker;
 	goto yy3;
 yy8:
 	yyrecord.yystate = -1;
@@ -146,9 +146,9 @@ private void test(string[] packets, Status expect) {
     // of buffer.
     State st;
     st.file = fr;
-    st.cur = st.mar = st.tok = st.lim = cast(char*)st.str + BUFSIZE;
+    st.yycursor = st.yymarker = st.token = st.yylimit = cast(char*)st.buffer + BUFSIZE;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
-    st.lim[0] = 0;
+    st.yylimit[0] = 0;
     st.yystate = -1;
 
     // Main loop. The buffer contains incomplete data which appears packet by
@@ -169,7 +169,7 @@ private void test(string[] packets, Status expect) {
                 ++send;
             }
             status = fill(st);
-            debug{printf("queue: '%s'\n", cast(char*)st.str);}
+            debug{printf("queue: '%s'\n", cast(char*)st.buffer);}
             if (status == Status.BIG_PACKET) {
                 debug{printf("error: packet too big\n");}
                 break;

@@ -11,8 +11,8 @@ none = -1
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
     -- use record fields instead of canonical POSIX `yypmatch` array,
     -- as mutable arrays are non-idiomatic in Haskell
@@ -61,8 +61,8 @@ test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
         _str = str,
-        _cur = 0,
-        _mar = 0,
+        _yycursor = 0,
+        _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = none,'; */
         _0 = none,
         _1 = none,

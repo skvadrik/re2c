@@ -17,11 +17,11 @@ chunk_size = 4096
 data State = State {
     _file :: !Handle,
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
-    _cnt :: !Int
+    _count :: !Int
 }
 
 
@@ -29,8 +29,8 @@ data State = State {
 yy0 :: State -> IO Int
 yy0 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _cur
-    _cur <- return $ _cur + 1
+    yych <- return $ BS.index _str _yycursor
+    _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x00 == _c -> do
             yy1 State{..}
@@ -44,7 +44,7 @@ yy0 !State{..} = do
 yy1 :: State -> IO Int
 yy1 !State{..} = do
 #37 "haskell/fill/02_fill.re"
-    return $ if _cur == _lim - yymaxfill + 1 then _cnt else (-1)
+    return $ if _yycursor == _yylimit - yymaxfill + 1 then _count else (-1)
 #49 "haskell/fill/02_fill.hs"
 
 yy2 :: State -> IO Int
@@ -56,10 +56,10 @@ yy2 !State{..} = do
 yy3 :: State -> IO Int
 yy3 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x20 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..}
         _c | True -> do
             yy4 State{..}
@@ -67,14 +67,14 @@ yy3 !State{..} = do
 yy4 :: State -> IO Int
 yy4 !State{..} = do
 #39 "haskell/fill/02_fill.re"
-    lexer State{_tok = _cur, ..}
+    lexer State{_token = _yycursor, ..}
 #72 "haskell/fill/02_fill.hs"
 
 yy5 :: State -> IO Int
 yy5 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _cur
-    _cur <- return $ _cur + 1
+    yych <- return $ BS.index _str _yycursor
+    _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x27 == _c -> do
             yy6 State{..}
@@ -86,13 +86,13 @@ yy5 !State{..} = do
 yy6 :: State -> IO Int
 yy6 !State{..} = do
 #38 "haskell/fill/02_fill.re"
-    lexer State{_tok = _cur, _cnt = _cnt + 1, ..}
+    lexer State{_token = _yycursor, _count = _count + 1, ..}
 #91 "haskell/fill/02_fill.hs"
 
 yy7 :: State -> IO Int
 yy7 !State{..} = do
     State{..} <- fill State{..} 1
-    _cur <- return $ _cur + 1
+    _yycursor <- return $ _yycursor + 1
     yy5 State{..}
 
 lexer :: State -> IO Int
@@ -110,7 +110,7 @@ yymaxfill = 1
 
 fill :: State -> Int -> IO State
 fill !st@State{..} !need =
-    if _lim - _cur >= need then
+    if _yylimit - _yycursor >= need then
         return st
     else case _eof of
         True -> error "fill failed"
@@ -120,14 +120,14 @@ fill !st@State{..} !need =
             chunk <- BS.hGet _file chunk_size
             let !eof = BS.length chunk < need -- end of file ?
             let !buf = BS.concat [
-                    BS.drop _tok _str,
+                    BS.drop _token _str,
                     chunk,
                     if eof then (BS.replicate yymaxfill 0) else BS.empty]
             return State {
                 _str = buf,
-                _cur = _cur - _tok,
-                _lim = BS.length buf,
-                _tok = 0,
+                _yycursor = _yycursor - _token,
+                _yylimit = BS.length buf,
+                _token = 0,
                 _eof = eof,
                 ..}
 
@@ -144,11 +144,11 @@ main = do
     let st = State {
         _file = fh,
         _str = BS.empty,
-        _cur = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
-        _cnt = 0
+        _count = 0
     }
     result <- lexer st
     hClose fh

@@ -7,8 +7,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int
+    _yycursor :: !Int,
+    _yymarker :: !Int
 }
 
 peek_digit :: ByteString -> Int -> Int -> Int
@@ -20,27 +20,27 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_bin;Int", "State{..};State", "num;Int"];
-    [01] { parse_bin State{..} $ num * 2 + (peek_digit _str _cur 48) }
+    [01] { parse_bin State{..} $ num * 2 + (peek_digit _str _yycursor 48) }
     *    { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_oct;Int", "State{..};State", "num;Int"];
-    [0-7] { parse_oct State{..} $ num * 8 + (peek_digit _str _cur 48) }
+    [0-7] { parse_oct State{..} $ num * 8 + (peek_digit _str _yycursor 48) }
     *     { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_dec;Int", "State{..};State", "num;Int"];
-    [0-9] { parse_dec State{..} $ num * 10 + (peek_digit _str _cur 48) }
+    [0-9] { parse_dec State{..} $ num * 10 + (peek_digit _str _yycursor 48) }
     *     { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_hex;Int", "State{..};State", "num;Int"];
-    [0-9] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 48) }
-    [a-f] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 87) }
-    [A-F] { parse_hex State{..} $ num * 16 + (peek_digit _str _cur 55) }
+    [0-9] { parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 48) }
+    [a-f] { parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 87) }
+    [A-F] { parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 55) }
     *     { num }
 */
 
@@ -55,7 +55,7 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
-    let s = State {_str = str, _cur = 0, _mar = 0}
+    let s = State {_str = str, _yycursor = 0, _yymarker = 0}
     when (parse s /= expect) $ error "failed!"
 
 main :: IO ()

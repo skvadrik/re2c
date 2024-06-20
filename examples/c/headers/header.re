@@ -5,7 +5,7 @@
 
 /*!header:re2c:on*/
 struct LexerState {
-    const char *str, *cur;
+    const char *str, *yycursor;
     /*!stags:re2c format = "const char *@@;"; */
 };
 /*!header:re2c:off*/

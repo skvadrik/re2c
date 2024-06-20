@@ -8,9 +8,9 @@ import qualified Data.ByteString as BS
 
 data State = State {
     _str :: BS.ByteString,
-    _cur :: Int,
-    _lim :: Int,
-    _cnt :: Int
+    _yycursor :: Int,
+    _yylimit :: Int,
+    _count :: Int
 }
 
 data FillException = UnexpectedFill deriving (Show)
@@ -29,9 +29,9 @@ yymaxfill :: Int
 
     [\x00] {
         -- check that it is the sentinel, not some unexpected null
-        return $ if _cur == BS.length _str - yymaxfill + 1 then _cnt else (-1)
+        return $ if _yycursor == BS.length _str - yymaxfill + 1 then _count else (-1)
     }
-    str  { lexer State{_cnt = _cnt + 1, ..} }
+    str  { lexer State{_count = _count + 1, ..} }
     [ ]+ { lexer State{..} }
     *    { return (-1) }
 */
@@ -40,7 +40,11 @@ main :: IO ()
 main = do
     let test s n = do
             let buf = BS.concat [s, BS.replicate yymaxfill 0]
-            let st = State {_str = buf, _cur = 0, _lim = BS.length buf, _cnt = 0}
+            let st = State {
+                    _str = buf,
+                    _yycursor = 0,
+                    _yylimit = BS.length buf,
+                    _count = 0}
             m <- catch (lexer st) (\(_ :: FillException) -> return (-2))
             when (m /= n) $ error "failed"
 

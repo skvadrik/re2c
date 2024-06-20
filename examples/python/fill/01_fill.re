@@ -9,10 +9,10 @@ class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
         self.str = bytearray(BUFSIZE)
-        self.lim = BUFSIZE - 1 # exclude terminating null
-        self.cur = self.lim
-        self.mar = self.lim
-        self.tok = self.lim
+        self.yylimit = BUFSIZE - 1 # exclude terminating null
+        self.yycursor = self.yylimit
+        self.yymarker = self.yylimit
+        self.token = self.yylimit
         self.eof = False
 
     def __del__(self):
@@ -28,22 +28,22 @@ def fill(st):
         return Status.EOF
 
     # Error: lexeme too long. In real life could reallocate a larger buffer.
-    if st.tok < 1:
+    if st.token < 1:
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.tok:st.lim]
-    st.cur -= st.tok;
-    st.mar -= st.tok;
-    st.lim -= st.tok;
-    st.tok = 0;
+    st.str = st.str[st.token:st.yylimit]
+    st.yycursor -= st.token;
+    st.yymarker -= st.token;
+    st.yylimit -= st.token;
+    st.token = 0;
 
     # Fill free space at the end of buffer with new data from file.
-    bytes = st.file.read(BUFSIZE - st.lim - 1) # -1 for sentinel
+    bytes = st.file.read(BUFSIZE - st.yylimit - 1) # -1 for sentinel
     if not bytes:
         st.eof = True # end of file
     else:
-        st.lim += len(bytes);
+        st.yylimit += len(bytes);
         st.str += bytes
 
     st.str += b'\0' # append sentinel
@@ -52,7 +52,7 @@ def fill(st):
 
 def lex(yyrecord, count):
     while True:
-        yyrecord.tok = yyrecord.cur
+        yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
             re2c:define:YYFILL = "fill(yyrecord) == Status.OK";

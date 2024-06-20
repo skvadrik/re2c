@@ -67,10 +67,10 @@ struct State {
 mut:
     file     os.File
     str      []u8
-    cur      int
-    mar      int
-    tok      int
-    lim      int
+    yycursor int
+    yymarker int
+    yylimit  int
+    token    int
     yycond   YYCONDTYPE
     yystate  int
     trie     MtagTrie
@@ -116,8 +116,8 @@ enum Status {
 }
 
 fn fill(mut st &State) Status {
-    shift := st.tok
-    used := st.lim - st.tok
+    shift := st.token
+    used := st.yylimit - st.token
     free := bufsize - used
 
     // Error: no space. In real life can reallocate a larger buffer.
@@ -125,10 +125,10 @@ fn fill(mut st &State) Status {
 
     // Shift buffer contents (discard already processed data).
     copy(mut &st.str, st.str[shift..shift+used])
-    st.cur -= shift
-    st.mar -= shift
-    st.lim -= shift
-    st.tok -= shift
+    st.yycursor -= shift
+    st.yymarker -= shift
+    st.yylimit -= shift
+    st.token -= shift
     
 //line "codegen/v/recursive_functions/advanced.v":134
 
@@ -139,10 +139,10 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
-    st.str[st.lim] = 0 // append sentinel symbol
+    st.str[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -150,19 +150,19 @@ fn fill(mut st &State) Status {
 
 //line "codegen/v/recursive_functions/advanced.v":152
 fn yy1(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.yyt1 = st.cur
-            st.cur += 1
+            st.yyt1 = st.yycursor
+            st.yycursor += 1
             return yy4(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 0
                 return .lex_waiting
             } else {
-                st.cur += 1
+                st.yycursor += 1
                 return yy2(mut st)
             }
         }
@@ -181,12 +181,12 @@ fn yy3(mut st State) Status {
 }
 
 fn yy4(mut st State) Status {
-    st.mar = st.cur
-    yych := st.str[st.cur]
+    st.yymarker = st.yycursor
+    yych := st.str[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E { return yy6(mut st, yych) }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 1
                 return .lex_waiting
             } else {
@@ -197,22 +197,22 @@ fn yy4(mut st State) Status {
 }
 
 fn yy5(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     return yy6(mut st, yych)
 }
 
 fn yy6(mut st State, yych u8) Status {
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.cur += 1
+            st.yycursor += 1
             return yy5(mut st)
         }
         0x2F {
-            st.cur += 1
+            st.yycursor += 1
             return yy8(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 2
                 return .lex_waiting
             } else {
@@ -223,15 +223,15 @@ fn yy6(mut st State, yych u8) Status {
 }
 
 fn yy7(mut st State) Status {
-    st.cur = st.mar
+    st.yycursor = st.yymarker
     return yy3(mut st)
 }
 
 fn yy8(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x09, 0x0D, 0x20, 0x3B {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 3
                 return .lex_waiting
             } else {
@@ -243,7 +243,7 @@ fn yy8(mut st State) Status {
 }
 
 fn yy9(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     return yy10(mut st, yych)
 }
 
@@ -258,8 +258,8 @@ fn yy10(mut st State, yych u8) Status {
             st.yytm4 = add_mtag(mut &st.trie, st.yytm4, tag_none)
             st.yytm3 = st.yytm7
             st.yytm3 = add_mtag(mut &st.trie, st.yytm3, tag_none)
-            st.yyt2 = st.cur
-            st.cur += 1
+            st.yyt2 = st.yycursor
+            st.yycursor += 1
             return yy11(mut st)
         }
         0x0D {
@@ -271,21 +271,21 @@ fn yy10(mut st State, yych u8) Status {
             st.yytm4 = add_mtag(mut &st.trie, st.yytm4, tag_none)
             st.yytm3 = st.yytm7
             st.yytm3 = add_mtag(mut &st.trie, st.yytm3, tag_none)
-            st.yyt2 = st.cur
-            st.cur += 1
+            st.yyt2 = st.yycursor
+            st.yycursor += 1
             return yy12(mut st)
         }
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.cur += 1
+            st.yycursor += 1
             return yy9(mut st)
         }
         0x3B {
-            st.yyt2 = st.cur
-            st.cur += 1
+            st.yyt2 = st.yycursor
+            st.yycursor += 1
             return yy13(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 4
                 return .lex_waiting
             } else {
@@ -296,22 +296,22 @@ fn yy10(mut st State, yych u8) Status {
 }
 
 fn yy11(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy11(mut st)
         }
         0x0D {
-            st.cur += 1
+            st.yycursor += 1
             return yy12(mut st)
         }
         0x3B {
-            st.cur += 1
+            st.yycursor += 1
             return yy13(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 5
                 return .lex_waiting
             } else {
@@ -322,14 +322,14 @@ fn yy11(mut st State) Status {
 }
 
 fn yy12(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x0A {
-            st.cur += 1
+            st.yycursor += 1
             return yy14(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 6
                 return .lex_waiting
             } else {
@@ -340,19 +340,19 @@ fn yy12(mut st State) Status {
 }
 
 fn yy13(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy13(mut st)
         }
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.yytm7 = add_mtag(mut &st.trie, st.yytm7, st.cur)
-            st.cur += 1
+            st.yytm7 = add_mtag(mut &st.trie, st.yytm7, st.yycursor)
+            st.yycursor += 1
             return yy15(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 7
                 return .lex_waiting
             } else {
@@ -381,26 +381,26 @@ fn yy14(mut st State) Status {
         pvals := unwind(st.trie, st.p3, st.p4, st.str)
         log.debug("pvals: $pvals")
 
-        st.tok = st.cur
+        st.token = st.yycursor
         return lex(mut st)
 
 //line "codegen/v/recursive_functions/advanced.v":388
 }
 
 fn yy15(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.cur += 1
+            st.yycursor += 1
             return yy15(mut st)
         }
         0x3D {
-            st.yytm8 = add_mtag(mut &st.trie, st.yytm8, st.cur)
-            st.cur += 1
+            st.yytm8 = add_mtag(mut &st.trie, st.yytm8, st.yycursor)
+            st.yycursor += 1
             return yy16(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 8
                 return .lex_waiting
             } else {
@@ -411,20 +411,20 @@ fn yy15(mut st State) Status {
 }
 
 fn yy16(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.cur)
-            st.cur += 1
+            st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.yycursor)
+            st.yycursor += 1
             return yy17(mut st)
         }
         0x22 {
-            st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.cur)
-            st.cur += 1
+            st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.yycursor)
+            st.yycursor += 1
             return yy18(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 9
                 return .lex_waiting
             } else {
@@ -435,11 +435,11 @@ fn yy16(mut st State) Status {
 }
 
 fn yy17(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
-            st.cur += 1
+            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
+            st.yycursor += 1
             return yy19(mut st)
         }
         0x0D {
@@ -447,21 +447,21 @@ fn yy17(mut st State) Status {
             st.yytm4 = st.yytm8
             st.yytm5 = st.yytm9
             st.yytm6 = st.yytm10
-            st.yytm6 = add_mtag(mut &st.trie, st.yytm6, st.cur)
-            st.cur += 1
+            st.yytm6 = add_mtag(mut &st.trie, st.yytm6, st.yycursor)
+            st.yycursor += 1
             return yy12(mut st)
         }
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
-            st.cur += 1
+            st.yycursor += 1
             return yy17(mut st)
         }
         0x3B {
-            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
-            st.cur += 1
+            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
+            st.yycursor += 1
             return yy13(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 10
                 return .lex_waiting
             } else {
@@ -472,10 +472,10 @@ fn yy17(mut st State) Status {
 }
 
 fn yy18(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1F, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 11
                 return .lex_waiting
             } else {
@@ -483,25 +483,25 @@ fn yy18(mut st State) Status {
             }
         }
         0x22 {
-            st.cur += 1
+            st.yycursor += 1
             return yy20(mut st)
         }
         0x5C {
-            st.cur += 1
+            st.yycursor += 1
             return yy21(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy18(mut st)
         }
     }
 }
 
 fn yy19(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy19(mut st)
         }
         0x0D {
@@ -509,15 +509,15 @@ fn yy19(mut st State) Status {
             st.yytm4 = st.yytm8
             st.yytm5 = st.yytm9
             st.yytm6 = st.yytm10
-            st.cur += 1
+            st.yycursor += 1
             return yy12(mut st)
         }
         0x3B {
-            st.cur += 1
+            st.yycursor += 1
             return yy13(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 12
                 return .lex_waiting
             } else {
@@ -528,11 +528,11 @@ fn yy19(mut st State) Status {
 }
 
 fn yy20(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
-            st.cur += 1
+            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
+            st.yycursor += 1
             return yy19(mut st)
         }
         0x0D {
@@ -540,17 +540,17 @@ fn yy20(mut st State) Status {
             st.yytm4 = st.yytm8
             st.yytm5 = st.yytm9
             st.yytm6 = st.yytm10
-            st.yytm6 = add_mtag(mut &st.trie, st.yytm6, st.cur)
-            st.cur += 1
+            st.yytm6 = add_mtag(mut &st.trie, st.yytm6, st.yycursor)
+            st.yycursor += 1
             return yy12(mut st)
         }
         0x3B {
-            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.cur)
-            st.cur += 1
+            st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
+            st.yycursor += 1
             return yy13(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 13
                 return .lex_waiting
             } else {
@@ -561,10 +561,10 @@ fn yy20(mut st State) Status {
 }
 
 fn yy21(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 14
                 return .lex_waiting
             } else {
@@ -572,7 +572,7 @@ fn yy21(mut st State) Status {
             }
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy18(mut st)
         }
     }
@@ -590,24 +590,24 @@ fn yyfnmedia_type(mut st State) Status {
 }
 
 fn yy23(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 15
                 return .lex_waiting
             } else {
-                st.cur += 1
+                st.yycursor += 1
                 return yy24(mut st)
             }
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
-            st.cur += 1
+            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yycursor += 1
             return yy26(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy27(mut st)
         }
     }
@@ -626,15 +626,15 @@ fn yy25(mut st State) Status {
 
 fn yy26(mut st State) Status {
     st.yyaccept = 0
-    st.mar = st.cur
-    yych := st.str[st.cur]
+    st.yymarker = st.yycursor
+    yych := st.str[st.yycursor]
     match yych {
         0x0A {
-            st.cur += 1
+            st.yycursor += 1
             return yy28(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 16
                 return .lex_waiting
             } else {
@@ -646,11 +646,11 @@ fn yy26(mut st State) Status {
 
 fn yy27(mut st State) Status {
     st.yyaccept = 0
-    st.mar = st.cur
-    yych := st.str[st.cur]
+    st.yymarker = st.yycursor
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 17
                 return .lex_waiting
             } else {
@@ -658,30 +658,30 @@ fn yy27(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy30(mut st)
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
-            st.cur += 1
+            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yycursor += 1
             return yy31(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy32(mut st)
         }
     }
 }
 
 fn yy28(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy33(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 18
                 return .lex_waiting
             } else {
@@ -692,7 +692,7 @@ fn yy28(mut st State) Status {
 }
 
 fn yy29(mut st State) Status {
-    st.cur = st.mar
+    st.yycursor = st.yymarker
     if st.yyaccept == 0 {
         return yy25(mut st)
     } else {
@@ -701,10 +701,10 @@ fn yy29(mut st State) Status {
 }
 
 fn yy30(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 19
                 return .lex_waiting
             } else {
@@ -712,29 +712,29 @@ fn yy30(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy30(mut st)
         }
         0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy32(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy34(mut st)
         }
     }
 }
 
 fn yy31(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x0A {
-            st.cur += 1
+            st.yycursor += 1
             return yy28(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 20
                 return .lex_waiting
             } else {
@@ -745,10 +745,10 @@ fn yy31(mut st State) Status {
 }
 
 fn yy32(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 21
                 return .lex_waiting
             } else {
@@ -756,26 +756,26 @@ fn yy32(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy30(mut st)
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
-            st.cur += 1
+            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yycursor += 1
             return yy31(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy32(mut st)
         }
     }
 }
 
 fn yy33(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 22
                 return .lex_waiting
             } else {
@@ -783,29 +783,29 @@ fn yy33(mut st State) Status {
             }
         }
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy33(mut st)
         }
         0x0D {
-            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
             st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
-            st.cur += 1
+            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yycursor += 1
             return yy35(mut st)
         }
         else {
-            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
-            st.cur += 1
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
+            st.yycursor += 1
             return yy36(mut st)
         }
     }
 }
 
 fn yy34(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 23
                 return .lex_waiting
             } else {
@@ -813,26 +813,26 @@ fn yy34(mut st State) Status {
             }
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
-            st.cur += 1
+            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yycursor += 1
             return yy31(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy32(mut st)
         }
     }
 }
 
 fn yy35(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x0A {
-            st.cur += 1
+            st.yycursor += 1
             return yy37(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 24
                 return .lex_waiting
             } else {
@@ -843,10 +843,10 @@ fn yy35(mut st State) Status {
 }
 
 fn yy36(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 25
                 return .lex_waiting
             } else {
@@ -854,17 +854,17 @@ fn yy36(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy39(mut st)
         }
         0x0D {
             st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
-            st.cur += 1
+            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yycursor += 1
             return yy35(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy36(mut st)
         }
     }
@@ -872,16 +872,16 @@ fn yy36(mut st State) Status {
 
 fn yy37(mut st State) Status {
     st.yyaccept = 1
-    st.mar = st.cur
-    yych := st.str[st.cur]
+    st.yymarker = st.yycursor
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yytm1 = st.yytm2
-            st.cur += 1
+            st.yycursor += 1
             return yy33(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 26
                 return .lex_waiting
             } else {
@@ -900,17 +900,17 @@ fn yy38(mut st State) Status {
         folds := unwind(st.trie, st.f1, st.f2, st.str)
         log.debug("folds: $folds")
 
-        st.tok = st.cur
+        st.token = st.yycursor
         return lex(mut st)
 
 //line "codegen/v/recursive_functions/advanced.v":907
 }
 
 fn yy39(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 27
                 return .lex_waiting
             } else {
@@ -918,33 +918,33 @@ fn yy39(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy39(mut st)
         }
         0x0D {
-            st.cur += 1
+            st.yycursor += 1
             return yy40(mut st)
         }
         0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy36(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy41(mut st)
         }
     }
 }
 
 fn yy40(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x0A {
-            st.cur += 1
+            st.yycursor += 1
             return yy42(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 28
                 return .lex_waiting
             } else {
@@ -955,10 +955,10 @@ fn yy40(mut st State) Status {
 }
 
 fn yy41(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 29
                 return .lex_waiting
             } else {
@@ -966,17 +966,17 @@ fn yy41(mut st State) Status {
             }
         }
         0x09 {
-            st.cur += 1
+            st.yycursor += 1
             return yy43(mut st)
         }
         0x0D {
             st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
-            st.cur += 1
+            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yycursor += 1
             return yy35(mut st)
         }
         else {
-            st.cur += 1
+            st.yycursor += 1
             return yy36(mut st)
         }
     }
@@ -987,18 +987,18 @@ fn yy42(mut st State) Status {
 }
 
 fn yy43(mut st State) Status {
-    yych := st.str[st.cur]
+    yych := st.str[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.cur += 1
+            st.yycursor += 1
             return yy43(mut st)
         }
         0x0D {
-            st.cur += 1
+            st.yycursor += 1
             return yy40(mut st)
         }
         else {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 st.yystate = 30
                 return .lex_waiting
             } else {
@@ -1030,217 +1030,217 @@ fn lex(mut st State) Status {
     match st.yystate {
         -1 { return yy0(mut st) }
         0 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy22(mut st)
             } else {
                 return yy1(mut st)
             }
         }
         1 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy3(mut st)
             } else {
                 return yy4(mut st)
             }
         }
         2 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy5(mut st)
             }
         }
         3 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy8(mut st)
             }
         }
         4 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy9(mut st)
             }
         }
         5 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy11(mut st)
             }
         }
         6 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy12(mut st)
             }
         }
         7 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy13(mut st)
             }
         }
         8 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy15(mut st)
             }
         }
         9 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy16(mut st)
             }
         }
         10 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy17(mut st)
             }
         }
         11 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy18(mut st)
             }
         }
         12 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy19(mut st)
             }
         }
         13 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy20(mut st)
             }
         }
         14 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy7(mut st)
             } else {
                 return yy21(mut st)
             }
         }
         15 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy44(mut st)
             } else {
                 return yy23(mut st)
             }
         }
         16 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy25(mut st)
             } else {
                 return yy26(mut st)
             }
         }
         17 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy25(mut st)
             } else {
                 return yy27(mut st)
             }
         }
         18 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy28(mut st)
             }
         }
         19 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy30(mut st)
             }
         }
         20 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy31(mut st)
             }
         }
         21 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy32(mut st)
             }
         }
         22 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy33(mut st)
             }
         }
         23 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy34(mut st)
             }
         }
         24 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy35(mut st)
             }
         }
         25 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy36(mut st)
             }
         }
         26 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy38(mut st)
             } else {
                 return yy37(mut st)
             }
         }
         27 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy39(mut st)
             }
         }
         28 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy40(mut st)
             }
         }
         29 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy41(mut st)
             }
         }
         30 {
-            if st.lim <= st.cur {
+            if st.yylimit <= st.yycursor {
                 return yy29(mut st)
             } else {
                 return yy43(mut st)
@@ -1263,12 +1263,12 @@ fn test(expect Status, packets []string) {
     // of buffer.
     mut st := &State{
         file:     fr,
-        // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
+        // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
         str:      []u8{len: bufsize + 1},
-        cur:      bufsize,
-        mar:      bufsize,
-        tok:      bufsize,
-        lim:      bufsize,
+        yycursor: bufsize,
+        yymarker: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
         yycond:   .yycmedia_type,
         yystate:  -1,
         trie:     []MtagElem{},

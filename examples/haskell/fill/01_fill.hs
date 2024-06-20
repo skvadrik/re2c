@@ -18,33 +18,33 @@ chunk_size = 4096
 data State = State {
     _file :: !Handle,
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
-    _cnt :: !Int
+    _count :: !Int
 }
 
 
 #31 "haskell/fill/01_fill.hs"
 yy0 :: State -> IO Int
 yy0 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x20 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..}
         _c | 0x27 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy5 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy0 State{..}
                 else yy10 State{..}
             else do
-                _cur <- return $ _cur + 1
+                _yycursor <- return $ _yycursor + 1
                 yy1 State{..}
 
 yy1 :: State -> IO Int
@@ -59,13 +59,13 @@ yy2 !State{..} = do
 
 yy3 :: State -> IO Int
 yy3 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x20 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy3 State{..}
                 else yy4 State{..}
@@ -75,77 +75,77 @@ yy3 !State{..} = do
 yy4 :: State -> IO Int
 yy4 !State{..} = do
 #39 "haskell/fill/01_fill.re"
-    lexer State{_tok = _cur, ..}
+    lexer State{_token = _yycursor, ..}
 #80 "haskell/fill/01_fill.hs"
 
 yy5 :: State -> IO Int
 yy5 !State{..} = do
-    let _mar = _cur
-    yych <- return $ BS.index _str _cur
+    let _yymarker = _yycursor
+    yych <- return $ BS.index _str _yycursor
     if yych <= 0x00 then do
-        if _cur >= _lim then do
+        if _yycursor >= _yylimit then do
             (State{..}, yyfill) <- fill State{..}
             if yyfill then yy5 State{..}
             else yy2 State{..}
         else do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy6 State{..}
     else do
         yy7 State{..} yych
 
 yy6 :: State -> IO Int
 yy6 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     yy7 State{..} yych
 
 yy7 :: State -> Word8 -> IO Int
 yy7 !State{..} yych = do
     case yych of
         _c | 0x27 == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy8 State{..}
         _c | 0x5C == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy9 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy6 State{..}
                 else yy11 State{..}
             else do
-                _cur <- return $ _cur + 1
+                _yycursor <- return $ _yycursor + 1
                 yy6 State{..}
 
 yy8 :: State -> IO Int
 yy8 !State{..} = do
 #38 "haskell/fill/01_fill.re"
-    lexer State{_tok = _cur, _cnt = _cnt + 1, ..}
+    lexer State{_token = _yycursor, _count = _count + 1, ..}
 #124 "haskell/fill/01_fill.hs"
 
 yy9 :: State -> IO Int
 yy9 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     if yych <= 0x00 then do
-        if _cur >= _lim then do
+        if _yycursor >= _yylimit then do
             (State{..}, yyfill) <- fill State{..}
             if yyfill then yy9 State{..}
             else yy11 State{..}
         else do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy6 State{..}
     else do
-        _cur <- return $ _cur + 1
+        _yycursor <- return $ _yycursor + 1
         yy6 State{..}
 
 yy10 :: State -> IO Int
 yy10 !State{..} = do
 #37 "haskell/fill/01_fill.re"
-    return _cnt
+    return _count
 #145 "haskell/fill/01_fill.hs"
 
 yy11 :: State -> IO Int
 yy11 !State{..} = do
-    let _cur = _mar
+    let _yycursor = _yymarker
     yy2 State{..}
 
 lexer :: State -> IO Int
@@ -164,11 +164,11 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
-                _cur = _cur - _tok,
-                _mar = _mar - _tok,
-                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
-                _tok = 0,
+                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yycursor = _yycursor - _token,
+                _yymarker = _yymarker - _token,
+                _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
+                _token = 0,
                 _eof = BS.null chunk, -- end of file?
                 ..}, True)
 
@@ -185,12 +185,12 @@ main = do
     let st = State {
         _file = fh,
         _str = BS.singleton 0,
-        _cur = 0,
-        _mar = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _yymarker = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
-        _cnt = 0
+        _count = 0
     }
     result <- lexer st
     hClose fh
