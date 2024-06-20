@@ -7,14 +7,14 @@ open Array
 
 type 'a state = {
     str: 'a array;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
 }
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
 
-    "∀x ∃y" { Some yyrecord.cur }
+    "∀x ∃y" { Some yyrecord.yycursor }
     *       { None }
 */
 
@@ -31,12 +31,12 @@ type 'a state = {
 let main() =
     let st8 = {
         str = [|'\xe2'; '\x08'; '\x80'; '\x78'; '\x20'; '\xe2'; '\x88'; '\x83'; '\x79'|];
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
     } in if not (lex8 st8 = Some (Array.length st8.str)) then raise (Failure "error");
 
     let st32 = {
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         str = [|0x2200; 0x78; 0x20; 0x2203; 0x79|];
     } in if not (lex32 st32 = Some (Array.length st32.str)) then raise (Failure "error");

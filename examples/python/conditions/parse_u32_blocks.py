@@ -4,8 +4,8 @@
 class State:
     def __init__(self, str):
         self.str = str
-        self.cur = 0
-        self.mar = 0
+        self.yycursor = 0
+        self.yymarker = 0
 
 
 
@@ -16,8 +16,8 @@ def parse_u32(str):
     while True:
         match yystate:
             case 0:
-                yych = st.str[st.cur]
-                st.cur += 1
+                yych = st.str[st.yycursor]
+                st.yycursor += 1
                 if yych <= 0x2F:
                     yystate = 1
                     continue
@@ -32,15 +32,15 @@ def parse_u32(str):
             case 1:
                 return None
             case 2:
-                st.mar = st.cur
-                yych = st.str[st.cur]
+                st.yymarker = st.yycursor
+                yych = st.str[st.yycursor]
                 if yych <= 0x58:
                     if yych == 0x42:
-                        st.cur += 1
+                        st.yycursor += 1
                         yystate = 5
                         continue
                     if yych >= 0x58:
-                        st.cur += 1
+                        st.yycursor += 1
                         yystate = 7
                         continue
                     yystate = 3
@@ -48,14 +48,14 @@ def parse_u32(str):
                 else:
                     if yych <= 0x62:
                         if yych >= 0x62:
-                            st.cur += 1
+                            st.yycursor += 1
                             yystate = 5
                             continue
                         yystate = 3
                         continue
                     else:
                         if yych == 0x78:
-                            st.cur += 1
+                            st.yycursor += 1
                             yystate = 7
                             continue
                         yystate = 3
@@ -63,54 +63,54 @@ def parse_u32(str):
             case 3:
                 return parse_oct(st)
             case 4:
-                st.cur -= 1
+                st.yycursor -= 1
                 return parse_dec(st)
             case 5:
-                yych = st.str[st.cur]
+                yych = st.str[st.yycursor]
                 if yych <= 0x2F:
                     yystate = 6
                     continue
                 if yych <= 0x31:
-                    st.cur += 1
+                    st.yycursor += 1
                     yystate = 8
                     continue
                 yystate = 6
                 continue
             case 6:
-                st.cur = st.mar
+                st.yycursor = st.yymarker
                 yystate = 3
                 continue
             case 7:
-                yych = st.str[st.cur]
+                yych = st.str[st.yycursor]
                 if yych <= 0x40:
                     if yych <= 0x2F:
                         yystate = 6
                         continue
                     if yych <= 0x39:
-                        st.cur += 1
+                        st.yycursor += 1
                         yystate = 9
                         continue
                     yystate = 6
                     continue
                 else:
                     if yych <= 0x46:
-                        st.cur += 1
+                        st.yycursor += 1
                         yystate = 9
                         continue
                     if yych <= 0x60:
                         yystate = 6
                         continue
                     if yych <= 0x66:
-                        st.cur += 1
+                        st.yycursor += 1
                         yystate = 9
                         continue
                     yystate = 6
                     continue
             case 8:
-                st.cur -= 1
+                st.yycursor -= 1
                 return parse_bin(st)
             case 9:
-                st.cur -= 1
+                st.yycursor -= 1
                 return parse_hex(st)
             case _:
                 raise "internal lexer error"
@@ -124,8 +124,8 @@ def parse_bin(st):
         while True:
             match yystate:
                 case 0:
-                    yych = st.str[st.cur]
-                    st.cur += 1
+                    yych = st.str[st.yycursor]
+                    st.yycursor += 1
                     if yych <= 0x2F:
                         yystate = 1
                         continue
@@ -137,7 +137,7 @@ def parse_bin(st):
                 case 1:
                     return n
                 case 2:
-                    n = n * 2 + (st.str[st.cur - 1] - 48)
+                    n = n * 2 + (st.str[st.yycursor - 1] - 48)
                     break
                 case _:
                     raise "internal lexer error"
@@ -151,8 +151,8 @@ def parse_oct(st):
         while True:
             match yystate:
                 case 0:
-                    yych = st.str[st.cur]
-                    st.cur += 1
+                    yych = st.str[st.yycursor]
+                    st.yycursor += 1
                     if yych <= 0x2F:
                         yystate = 1
                         continue
@@ -164,7 +164,7 @@ def parse_oct(st):
                 case 1:
                     return n
                 case 2:
-                    n = n * 8 + (st.str[st.cur - 1] - 48)
+                    n = n * 8 + (st.str[st.yycursor - 1] - 48)
                     break
                 case _:
                     raise "internal lexer error"
@@ -178,8 +178,8 @@ def parse_dec(st):
         while True:
             match yystate:
                 case 0:
-                    yych = st.str[st.cur]
-                    st.cur += 1
+                    yych = st.str[st.yycursor]
+                    st.yycursor += 1
                     if yych <= 0x2F:
                         yystate = 1
                         continue
@@ -191,7 +191,7 @@ def parse_dec(st):
                 case 1:
                     return n
                 case 2:
-                    n = n * 10 + (st.str[st.cur - 1] - 48)
+                    n = n * 10 + (st.str[st.yycursor - 1] - 48)
                     break
                 case _:
                     raise "internal lexer error"
@@ -205,8 +205,8 @@ def parse_hex(st):
         while True:
             match yystate:
                 case 0:
-                    yych = st.str[st.cur]
-                    st.cur += 1
+                    yych = st.str[st.yycursor]
+                    st.yycursor += 1
                     if yych <= 0x40:
                         if yych <= 0x2F:
                             yystate = 1
@@ -231,13 +231,13 @@ def parse_hex(st):
                 case 1:
                     return n
                 case 2:
-                    n = n * 16 + (st.str[st.cur - 1] - 48)
+                    n = n * 16 + (st.str[st.yycursor - 1] - 48)
                     break
                 case 3:
-                    n = n * 16 + (st.str[st.cur - 1] - 55)
+                    n = n * 16 + (st.str[st.yycursor - 1] - 55)
                     break
                 case 4:
-                    n = n * 16 + (st.str[st.cur - 1] - 87)
+                    n = n * 16 + (st.str[st.yycursor - 1] - 87)
                     break
                 case _:
                     raise "internal lexer error"

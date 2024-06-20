@@ -12,8 +12,8 @@ let yymaxnmatch = 4
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable yynmatch: int; (* number of capturing groups *)
     mutable yypmatch: int array; (* memory for capturing parentheses *)
     
@@ -42,14 +42,14 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #44 "ocaml/submatch/03_posix.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt1 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt1 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy3 [@tailcall]) st
 		| _ ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy1 [@tailcall]) st
 
 and yy1 (st : state) : semver option =
@@ -61,57 +61,57 @@ and yy2 (st : state) : semver option =
 #62 "ocaml/submatch/03_posix.ml"
 
 and yy3 (st : state) : semver option =
-	st.mar <- st.cur;
-	let yych = get st.str st.cur in
+	st.yymarker <- st.yycursor;
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt2 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt2 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy5 (st : state) : semver option =
-	st.cur <- st.mar;
+	st.yycursor <- st.yymarker;
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '\x00' ->
-			st.yyt3 <- st.cur;
+			st.yyt3 <- st.yycursor;
 			st.yyt4 <- -1;
 			st.yyt5 <- -1;
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st
 		| '.' ->
-			st.yyt3 <- st.cur;
-			st.yyt5 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt3 <- st.yycursor;
+			st.yyt5 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy9 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
@@ -123,7 +123,7 @@ and yy8 (st : state) : semver option =
 	st.yypmatch.(6) <- st.yyt5;
 	st.yypmatch.(7) <- st.yyt4;
 	st.yypmatch.(0) <- st.yyt1;
-	st.yypmatch.(1) <- st.cur;
+	st.yypmatch.(1) <- st.yycursor;
 	st.yypmatch.(3) <- st.yyt2;
 	st.yypmatch.(3) <- st.yypmatch.(3) - 1;
 #37 "ocaml/submatch/03_posix.re"
@@ -140,22 +140,22 @@ and yy8 (st : state) : semver option =
 #141 "ocaml/submatch/03_posix.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	if (yych <= '\x00') then (yy5 [@tailcall]) st
 	else (yy11 [@tailcall]) st yych
 
 and yy10 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	(yy11 [@tailcall]) st yych
 
 and yy11 (st : state) (yych : char) : semver option =
 	match yych with
 		| '\x00' ->
-			st.yyt4 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt4 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy10 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
@@ -168,8 +168,8 @@ and parse (st : state) : semver option =
 let test (str: string) (result: semver option) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         yynmatch = 0;
         yypmatch = Array.make (2 * yymaxnmatch) (-1);
         

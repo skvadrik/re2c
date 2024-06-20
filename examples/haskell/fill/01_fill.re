@@ -15,12 +15,12 @@ chunk_size = 4096
 data State = State {
     _file :: !Handle,
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
-    _cnt :: !Int
+    _count :: !Int
 }
 
 /*!re2c
@@ -34,9 +34,9 @@ data State = State {
     str = ['] ([^'\\] | [\\][^])* ['];
 
     *    { return (-1) }
-    $    { return _cnt }
-    str  { lexer State{_tok = _cur, _cnt = _cnt + 1, ..} }
-    [ ]+ { lexer State{_tok = _cur, ..} }
+    $    { return _count }
+    str  { lexer State{_token = _yycursor, _count = _count + 1, ..} }
+    [ ]+ { lexer State{_token = _yycursor, ..} }
 */
 
 fill :: State -> IO (State, Bool)
@@ -48,11 +48,11 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
-                _cur = _cur - _tok,
-                _mar = _mar - _tok,
-                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
-                _tok = 0,
+                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yycursor = _yycursor - _token,
+                _yymarker = _yymarker - _token,
+                _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
+                _token = 0,
                 _eof = BS.null chunk, -- end of file?
                 ..}, True)
 
@@ -69,12 +69,12 @@ main = do
     let st = State {
         _file = fh,
         _str = BS.singleton 0,
-        _cur = 0,
-        _mar = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _yymarker = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
-        _cnt = 0
+        _count = 0
     }
     result <- lexer st
     hClose fh

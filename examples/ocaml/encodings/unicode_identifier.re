@@ -6,8 +6,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable yyaccept: int;
 }
 
@@ -28,8 +28,8 @@ type state = {
 let main () =
     let st = {
         str = "_Ыдентификатор\x00";
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         yyaccept = 0;
     }
     in if not (lex st) then raise (Failure "error")

@@ -3,8 +3,8 @@
 class State:
     def __init__(self, str):
         self.str = str
-        self.cur = 0
-        self.mar = 0
+        self.yycursor = 0
+        self.yymarker = 0
 
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:api = record;
@@ -30,7 +30,7 @@ def parse_bin(st):
     while True:
     /*!re2c
         [01] {
-            n = n * 2 + (st.str[st.cur - 1] - 48)
+            n = n * 2 + (st.str[st.yycursor - 1] - 48)
             break
         }
         * { return n }
@@ -41,7 +41,7 @@ def parse_oct(st):
     while True:
     /*!re2c
         [0-7] {
-            n = n * 8 + (st.str[st.cur - 1] - 48)
+            n = n * 8 + (st.str[st.yycursor - 1] - 48)
             break
         }
         * { return n }
@@ -52,7 +52,7 @@ def parse_dec(st):
     while True:
     /*!re2c
         [0-9] {
-            n = n * 10 + (st.str[st.cur - 1] - 48)
+            n = n * 10 + (st.str[st.yycursor - 1] - 48)
             break
         }
         * { return n }
@@ -63,15 +63,15 @@ def parse_hex(st):
     while True:
     /*!re2c
         [0-9] {
-            n = n * 16 + (st.str[st.cur - 1] - 48)
+            n = n * 16 + (st.str[st.yycursor - 1] - 48)
             break
         }
         [a-f] {
-            n = n * 16 + (st.str[st.cur - 1] - 87)
+            n = n * 16 + (st.str[st.yycursor - 1] - 87)
             break
         }
         [A-F] {
-            n = n * 16 + (st.str[st.cur - 1] - 55)
+            n = n * 16 + (st.str[st.yycursor - 1] - 55)
             break
         }
         * { return n }

@@ -10,10 +10,10 @@ class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
         self.str = bytearray(BUFSIZE)
-        self.lim = BUFSIZE - YYMAXFILL
-        self.cur = self.lim
-        self.mar = self.lim
-        self.tok = self.lim
+        self.yylimit = BUFSIZE - YYMAXFILL
+        self.yycursor = self.yylimit
+        self.yymarker = self.yylimit
+        self.token = self.yylimit
         self.eof = False
 
     def __del__(self):
@@ -29,24 +29,24 @@ def fill(st, need):
         return Status.EOF
 
     # Error: lexeme too long. In real life could reallocate a larger buffer.
-    if st.tok < need:
+    if st.token < need:
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.tok:st.lim]
-    st.cur -= st.tok;
-    st.mar -= st.tok;
-    st.lim -= st.tok;
-    st.tok = 0;
+    st.str = st.str[st.token:st.yylimit]
+    st.yycursor -= st.token;
+    st.yymarker -= st.token;
+    st.yylimit -= st.token;
+    st.token = 0;
 
     # Fill free space at the end of buffer with new data from file.
-    bytes = st.file.read(BUFSIZE - st.lim - 1) # -1 for sentinel
+    bytes = st.file.read(BUFSIZE - st.yylimit - 1) # -1 for sentinel
     if not bytes:
         st.eof = True # end of file
-        st.lim += YYMAXFILL
+        st.yylimit += YYMAXFILL
         st.str += b"\0" * YYMAXFILL
     else:
-        st.lim += len(bytes);
+        st.yylimit += len(bytes);
         st.str += bytes
 
     return Status.OK
@@ -54,7 +54,7 @@ def fill(st, need):
 def lex(yyrecord):
     count = 0
     while True:
-        yyrecord.tok = yyrecord.cur
+        yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
             re2c:define:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
@@ -64,7 +64,7 @@ def lex(yyrecord):
 
             [\x00] {
                 # Check that it is the sentinel, not some unexpected null.
-                return count if yyrecord.tok == yyrecord.lim - YYMAXFILL else -1
+                return count if yyrecord.token == yyrecord.yylimit - YYMAXFILL else -1
             }
             str {
                 count += 1

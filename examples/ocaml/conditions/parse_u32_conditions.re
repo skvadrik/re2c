@@ -8,8 +8,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable yycond: yycondtype;
 } 
 
@@ -31,18 +31,18 @@ let add (num: int option) (dgt: int) (base: int) : int option =
     <init> '0x' / [0-9a-fA-F] :=> hex
     <init> * { None }
 
-    <bin> [01]  { yyfnbin st (add num (Char.code st.str.[st.cur - 1] - 48) 2) }
-    <oct> [0-7] { yyfnoct st (add num (Char.code st.str.[st.cur - 1] - 48) 8) }
-    <dec> [0-9] { yyfndec st (add num (Char.code st.str.[st.cur - 1] - 48) 10) }
-    <hex> [0-9] { yyfnhex st (add num (Char.code st.str.[st.cur - 1] - 48) 16) }
-    <hex> [a-f] { yyfnhex st (add num (Char.code st.str.[st.cur - 1] - 87) 16) }
-    <hex> [A-F] { yyfnhex st (add num (Char.code st.str.[st.cur - 1] - 55) 16) }
+    <bin> [01]  { yyfnbin st (add num (Char.code st.str.[st.yycursor - 1] - 48) 2) }
+    <oct> [0-7] { yyfnoct st (add num (Char.code st.str.[st.yycursor - 1] - 48) 8) }
+    <dec> [0-9] { yyfndec st (add num (Char.code st.str.[st.yycursor - 1] - 48) 10) }
+    <hex> [0-9] { yyfnhex st (add num (Char.code st.str.[st.yycursor - 1] - 48) 16) }
+    <hex> [a-f] { yyfnhex st (add num (Char.code st.str.[st.yycursor - 1] - 87) 16) }
+    <hex> [A-F] { yyfnhex st (add num (Char.code st.str.[st.yycursor - 1] - 55) 16) }
 
     <bin, oct, dec, hex> * { num }
 */
 
 let test (str: string) (result: int option) =
-    let st = {str = str; cur = 0; mar = 0; yycond = YYC_init} in
+    let st = {str = str; yycursor = 0; yymarker = 0; yycond = YYC_init} in
     if not (parse st (Some 0) = result) then raise (Failure "error")
 
 let main () =

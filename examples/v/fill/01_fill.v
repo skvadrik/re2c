@@ -8,38 +8,38 @@ import strings
 const bufsize = 4096
 
 struct State {
-    file os.File
+    file     os.File
 mut:
     str  []u8
-    cur  int
-    mar  int
-    tok  int
-    lim  int
-    eof  bool
+    yycursor int
+    yymarker int
+    yylimit  int
+    token    int
+    eof      bool
 }
 
 fn fill(mut st &State) int {
     if st.eof { return -1 } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
-    if st.tok < 1 { return -2 }
+    if st.token < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.tok..st.lim])
-    st.cur -= st.tok
-    st.mar -= st.tok
-    st.lim -= st.tok
-    st.tok = 0
+    copy(mut &st.str, st.str[st.token..st.yylimit])
+    st.yycursor -= st.token
+    st.yymarker -= st.token
+    st.yylimit -= st.token
+    st.token = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
-    st.str[st.lim] = 0 // append sentinel symbol
+    st.str[st.yylimit] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
-    st.eof = st.lim < bufsize
+    st.eof = st.yylimit < bufsize
 
     return 0
 }
@@ -47,17 +47,17 @@ fn fill(mut st &State) int {
 fn lex(mut yyrecord &State) int {
     mut count := 0
 loop:
-    yyrecord.tok = yyrecord.cur
+    yyrecord.token = yyrecord.yycursor
     
 //line "v/fill/01_fill.v":53
     mut yych := 0
 yyFillLabel0:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         0x27 { unsafe { goto yy5 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel0 }
                 }
@@ -67,19 +67,19 @@ yyFillLabel0:
         }
     }
 yy1:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yy2:
 //line "v/fill/01_fill.re":56
     return -1
 //line "v/fill/01_fill.v":75
 yy3:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yyFillLabel1:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel1 }
                 }
@@ -92,29 +92,29 @@ yy4:
     unsafe { goto loop }
 //line "v/fill/01_fill.v":94
 yy5:
-    yyrecord.cur += 1
-    yyrecord.mar = yyrecord.cur
+    yyrecord.yycursor += 1
+    yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel2:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     if yych >= 0x01 {
         unsafe { goto yy7 }
     }
-    if yyrecord.lim <= yyrecord.cur {
+    if yyrecord.yylimit <= yyrecord.yycursor {
         if fill(mut yyrecord) == 0 {
             unsafe { goto yyFillLabel2 }
         }
         unsafe { goto yy2 }
     }
 yy6:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yyFillLabel3:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
 yy7:
     match yych {
         0x27 { unsafe { goto yy8 } }
         0x5C { unsafe { goto yy9 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 if fill(mut yyrecord) == 0 {
                     unsafe { goto yyFillLabel3 }
                 }
@@ -124,16 +124,16 @@ yy7:
         }
     }
 yy8:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 //line "v/fill/01_fill.re":58
     count += 1; unsafe { goto loop }
 //line "v/fill/01_fill.v":131
 yy9:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yyFillLabel4:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     if yych <= 0x00 {
-        if yyrecord.lim <= yyrecord.cur {
+        if yyrecord.yylimit <= yyrecord.yycursor {
             if fill(mut yyrecord) == 0 {
                 unsafe { goto yyFillLabel4 }
             }
@@ -147,7 +147,7 @@ yy10:
     return count
 //line "v/fill/01_fill.v":149
 yy11:
-    yyrecord.cur = yyrecord.mar
+    yyrecord.yycursor = yyrecord.yymarker
     unsafe { goto yy2 }
 //line "v/fill/01_fill.re":60
 
@@ -167,14 +167,14 @@ fn main() {
     // Prepare lexer state: all offsets are at the end of buffer.
     mut fr := os.open(fname)!
     mut st := &State{
-        file: fr,
-        // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:  []u8{len: bufsize + 1},
-        cur:  bufsize,
-        mar:  bufsize,
-        tok:  bufsize,
-        lim:  bufsize,
-        eof:  false,
+        file:     fr,
+        // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+        str:      []u8{len: bufsize + 1},
+        yycursor: bufsize,
+        yymarker: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
+        eof:      false,
     }
 
     // Run the lexer.

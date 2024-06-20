@@ -6,8 +6,8 @@ exception Fill
 
 type state = {
     str: string;
-    mutable cur: int;
-    lim: int;
+    mutable yycursor: int;
+    yylimit: int;
 }
 
 /*!max:re2c*/
@@ -19,7 +19,7 @@ type state = {
 
     [\x00] {
         (* check that it is the sentinel, not some unexpected null *)
-        if yyrecord.cur = String.length yyrecord.str - yymaxfill + 1 then count else -1
+        if yyrecord.yycursor = String.length yyrecord.str - yymaxfill + 1 then count else -1
     }
     str  { lex yyrecord (count + 1) }
     [ ]+ { lex yyrecord count }
@@ -28,7 +28,7 @@ type state = {
 
 let test(str, count) =
     let buf = String.cat str (String.make yymaxfill '\x00') in
-    let st = {str = buf; cur = 0; lim = String.length buf} in
+    let st = {str = buf; yycursor = 0; yylimit = String.length buf} in
     let result = try lex st 0 with Fill -> -1 in
     if not (result = count) then raise (Failure "error")
 

@@ -9,10 +9,10 @@ let bufsize = 4096
 type state = {
     file: in_channel;
     str: bytes;
-    mutable cur: int;
-    mutable mar: int;
-    mutable tok: int;
-    mutable lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    mutable yylimit: int;
+    mutable token: int;
     mutable eof: bool;
     mutable t1: int;
     mutable t2: int;
@@ -47,48 +47,48 @@ let fill(st: state) : status =
     if st.eof then Eof else
 
     (* Error: lexeme too long. In real life could reallocate a larger buffer. *)
-    if st.tok < 1 then LongLexeme else (
+    if st.token < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.tok st.str 0 (st.lim - st.tok);
-    st.cur <- st.cur - st.tok;
-    st.mar <- st.mar - st.tok;
-    st.lim <- st.lim - st.tok;
+    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    st.yycursor <- st.yycursor - st.token;
+    st.yymarker <- st.yymarker - st.token;
+    st.yylimit <- st.yylimit - st.token;
     
 #59 "ocaml/submatch/01_stags_fill.ml"
 
-	st.yyt1 <- if st.yyt1 = -1 then -1 else st.yyt1 - st.tok;
-	st.yyt2 <- if st.yyt2 = -1 then -1 else st.yyt2 - st.tok;
-	st.yyt3 <- if st.yyt3 = -1 then -1 else st.yyt3 - st.tok;
-	st.yyt4 <- if st.yyt4 = -1 then -1 else st.yyt4 - st.tok;
+	st.yyt1 <- if st.yyt1 = -1 then -1 else st.yyt1 - st.token;
+	st.yyt2 <- if st.yyt2 = -1 then -1 else st.yyt2 - st.token;
+	st.yyt3 <- if st.yyt3 = -1 then -1 else st.yyt3 - st.token;
+	st.yyt4 <- if st.yyt4 = -1 then -1 else st.yyt4 - st.token;
 #47 "ocaml/submatch/01_stags_fill.re"
 
-    st.tok <- 0;
+    st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
-    st.lim <- st.lim + n;
+    let n = input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
+    st.yylimit <- st.yylimit + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        set st.str st.lim '\x00'; (* append sentinel *)
+        set st.str st.yylimit '\x00'; (* append sentinel *)
 
     Ok)
 
 
 #79 "ocaml/submatch/01_stags_fill.ml"
 let rec yy0 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt1 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt1 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy3 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy0 [@tailcall]) st vers
 				else (yy11 [@tailcall]) st vers
 			) else (
-				st.cur <- st.cur + 1;
+				st.yycursor <- st.yycursor + 1;
 				(yy1 [@tailcall]) st vers
 			)
 
@@ -101,17 +101,17 @@ and yy2 (st : state) (vers : semver list) : (semver list) option =
 #102 "ocaml/submatch/01_stags_fill.ml"
 
 and yy3 (st : state) (vers : semver list) : (semver list) option =
-	st.mar <- st.cur;
-	let yych = get st.str st.cur in
+	st.yymarker <- st.yycursor;
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st vers
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy3 [@tailcall]) st vers
 				else (yy2 [@tailcall]) st vers
 			) else (
@@ -119,14 +119,14 @@ and yy3 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy4 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt2 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt2 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy4 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -134,20 +134,20 @@ and yy4 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy5 (st : state) (vers : semver list) : (semver list) option =
-	st.cur <- st.mar;
+	st.yycursor <- st.yymarker;
 	(yy2 [@tailcall]) st vers
 
 and yy6 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st vers
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy6 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -155,22 +155,22 @@ and yy6 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy7 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '\n' ->
-			st.yyt3 <- st.cur;
+			st.yyt3 <- st.yycursor;
 			st.yyt4 <- -1;
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st vers
 		| '.' ->
-			st.yyt3 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt3 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy9 [@tailcall]) st vers
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy7 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -189,20 +189,20 @@ and yy8 (st : state) (vers : semver list) : (semver list) option =
         let ver = {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.yycursor - 1)
         } in lex_loop st (ver :: vers)
 
 #196 "ocaml/submatch/01_stags_fill.ml"
 
 and yy9 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt4 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt4 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy10 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy9 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -210,16 +210,16 @@ and yy9 (st : state) (vers : semver list) : (semver list) option =
 			)
 
 and yy10 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '\n' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st vers
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy10 [@tailcall]) st vers
 		| _ ->
-			if (st.lim <= st.cur) then (
+			if (st.yylimit <= st.yycursor) then (
 				if (fill st = Ok) then (yy10 [@tailcall]) st vers
 				else (yy5 [@tailcall]) st vers
 			) else (
@@ -238,7 +238,7 @@ and lex (st : state) (vers : semver list) : (semver list) option =
 
 
 and lex_loop st vers =
-    st.tok <- st.cur;
+    st.token <- st.yycursor;
     lex st vers
 
 let main () =
@@ -257,14 +257,14 @@ let main () =
     (* Run lexer on the prepared file. *)
     In_channel.with_open_bin fname
         (fun ic ->
-            let lim = bufsize - 1 in
+            let yylimit = bufsize - 1 in
             let st = {
                 file = ic;
                 str = create bufsize;
-                cur = lim;
-                mar = lim;
-                tok = lim;
-                lim = lim;
+                yycursor = yylimit;
+                yymarker = yylimit;
+                yylimit = yylimit;
+                token = yylimit;
                 eof = false;
                 t1 = -1;
                 t2 = -1;

@@ -11,35 +11,35 @@ import (
 const BUFSIZE uint = 4096
 
 type Input struct {
-	file *os.File
-	str  []byte
-	cur  uint
-	mar  uint
-	tok  uint
-	lim  uint
-	eof  bool
+	file     *os.File
+	str      []byte
+	yycursor uint
+	yymarker uint
+	yylimit  uint
+	token    uint
+	eof      bool
 }
 
 func fill(in *Input) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.tok < 1 { return -2 }
+	if in.token < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.tok:in.lim])
-	in.cur -= in.tok
-	in.mar -= in.tok
-	in.lim -= in.tok
-	in.tok = 0
+	copy(in.str[0:], in.str[in.token:in.yylimit])
+	in.yycursor -= in.token
+	in.yymarker -= in.token
+	in.yylimit -= in.token
+	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
-	in.lim += uint(n)
-	in.str[in.lim] = 0
+	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	in.yylimit += uint(n)
+	in.str[in.yylimit] = 0
 
 	// If read less than expected, this is the end of input.
-	in.eof = in.lim < BUFSIZE
+	in.eof = in.yylimit < BUFSIZE
 
 	return 0
 }
@@ -47,20 +47,20 @@ func fill(in *Input) int {
 func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		yyrecord.tok = yyrecord.cur
+		yyrecord.token = yyrecord.yycursor
 	
 //line "go/fill/01_fill.go":53
 {
 	var yych byte
 yyFillLabel0:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			if (fill(yyrecord) == 0) {
 				goto yyFillLabel0
 			}
@@ -69,20 +69,20 @@ yyFillLabel0:
 		goto yy1
 	}
 yy1:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yy2:
 //line "go/fill/01_fill.re":57
 	{ return -1 }
 //line "go/fill/01_fill.go":77
 yy3:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yyFillLabel1:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			if (fill(yyrecord) == 0) {
 				goto yyFillLabel1
 			}
@@ -94,23 +94,23 @@ yy4:
 	{ continue }
 //line "go/fill/01_fill.go":96
 yy5:
-	yyrecord.cur += 1
-	yyrecord.mar = yyrecord.cur
+	yyrecord.yycursor += 1
+	yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel2:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (yyrecord.lim <= yyrecord.cur) {
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if (fill(yyrecord) == 0) {
 			goto yyFillLabel2
 		}
 		goto yy2
 	}
 yy6:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yyFillLabel3:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 yy7:
 	switch (yych) {
 	case '\'':
@@ -118,7 +118,7 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			if (fill(yyrecord) == 0) {
 				goto yyFillLabel3
 			}
@@ -127,16 +127,16 @@ yy7:
 		goto yy6
 	}
 yy8:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 //line "go/fill/01_fill.re":59
 	{ count += 1; continue }
 //line "go/fill/01_fill.go":134
 yy9:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yyFillLabel4:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	if (yych <= 0x00) {
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			if (fill(yyrecord) == 0) {
 				goto yyFillLabel4
 			}
@@ -150,7 +150,7 @@ yy10:
 	{ return count }
 //line "go/fill/01_fill.go":152
 yy11:
-	yyrecord.cur = yyrecord.mar
+	yyrecord.yycursor = yyrecord.yymarker
 	goto yy2
 }
 //line "go/fill/01_fill.re":61
@@ -171,14 +171,14 @@ func main() () {
 
 	// Prepare lexer state: all offsets are at the end of buffer.
 	in := &Input{
-		file: f,
-		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		str:  make([]byte, BUFSIZE+1),
-		cur:  BUFSIZE,
-		mar:  BUFSIZE,
-		tok:  BUFSIZE,
-		lim:  BUFSIZE,
-		eof:  false,
+		file:     f,
+		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+		str:      make([]byte, BUFSIZE+1),
+		yycursor: BUFSIZE,
+		yymarker: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		eof:      false,
 	}
 
 	// Run the lexer.

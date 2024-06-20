@@ -13,10 +13,10 @@ let log format = (if debug then Printf.eprintf else Printf.ifprintf stderr) form
 type state = {
     file: in_channel;
     str: bytes;
-    mutable cur: int;
-    mutable mar: int;
-    mutable tok: int;
-    mutable lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    mutable yylimit: int;
+    mutable token: int;
     mutable yystate: int;
     mutable recv: int;
 }
@@ -25,35 +25,35 @@ type status = End | Ready | Waiting | BadPacket | BigPacket
 
 let fill(st: state) : status =
     (* Error: lexeme too long. In real life could reallocate a larger buffer. *)
-    if st.tok < 1 then BigPacket else (
+    if st.token < 1 then BigPacket else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.tok st.str 0 (st.lim - st.tok);
-    st.cur <- st.cur - st.tok;
-    st.mar <- st.mar - st.tok;
-    st.lim <- st.lim - st.tok;
-    st.tok <- 0;
+    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    st.yycursor <- st.yycursor - st.token;
+    st.yymarker <- st.yymarker - st.token;
+    st.yylimit <- st.yylimit - st.token;
+    st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = In_channel.input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
-    st.lim <- st.lim + n;
-    set st.str st.lim '\x00'; (* append sentinel *)
+    let n = In_channel.input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in
+    st.yylimit <- st.yylimit + n;
+    set st.str st.yylimit '\x00'; (* append sentinel *)
 
     Ready)
 
 
 let rec yy0 (yyrecord : state) : status =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a'..'z' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy3 [@tailcall]) yyrecord
 		| _ ->
-			if (yyrecord.lim <= yyrecord.cur) then (
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (
 				yyrecord.yystate <- 0;
 				Waiting
 			) else (
-				yyrecord.cur <- yyrecord.cur + 1;
+				yyrecord.yycursor <- yyrecord.yycursor + 1;
 				(yy1 [@tailcall]) yyrecord
 			)
 
@@ -65,17 +65,17 @@ and yy2 (yyrecord : state) : status =
 	BadPacket
 
 and yy3 (yyrecord : state) : status =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ';' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy4 [@tailcall]) yyrecord
 		| 'a'..'z' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy5 [@tailcall]) yyrecord
 		| _ ->
-			if (yyrecord.lim <= yyrecord.cur) then (
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (
 				yyrecord.yystate <- 1;
 				Waiting
 			) else (
@@ -87,16 +87,16 @@ and yy4 (yyrecord : state) : status =
 	yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord
 
 and yy5 (yyrecord : state) : status =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ';' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy4 [@tailcall]) yyrecord
 		| 'a'..'z' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy5 [@tailcall]) yyrecord
 		| _ ->
-			if (yyrecord.lim <= yyrecord.cur) then (
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (
 				yyrecord.yystate <- 2;
 				Waiting
 			) else (
@@ -104,7 +104,7 @@ and yy5 (yyrecord : state) : status =
 			)
 
 and yy6 (yyrecord : state) : status =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	(yy2 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : state) : status =
@@ -115,20 +115,20 @@ and lex (yyrecord : state) : status =
 	match yyrecord.yystate with
 		| -1 -> (yy0 [@tailcall]) yyrecord
 		| 0 ->
-			if (yyrecord.lim <= yyrecord.cur) then (yy7 [@tailcall]) yyrecord
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy7 [@tailcall]) yyrecord
 			else (yy0 [@tailcall]) yyrecord
 		| 1 ->
-			if (yyrecord.lim <= yyrecord.cur) then (yy2 [@tailcall]) yyrecord
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy2 [@tailcall]) yyrecord
 			else (yy3 [@tailcall]) yyrecord
 		| 2 ->
-			if (yyrecord.lim <= yyrecord.cur) then (yy6 [@tailcall]) yyrecord
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy6 [@tailcall]) yyrecord
 			else (yy5 [@tailcall]) yyrecord
 		| _ -> raise (Failure "internal lexer error")
 
 
 
 and lex_loop st =
-    st.tok <- st.cur;
+    st.token <- st.yycursor;
     lex st
 
 let test (packets: string list) (sts: status) =
@@ -137,15 +137,15 @@ let test (packets: string list) (sts: status) =
     let oc = Out_channel.open_bin fname in
     let ic = In_channel.open_bin fname in
 
-    let lim = bufsize - 1 in
+    let yylimit = bufsize - 1 in
     let st = {
         file = ic;
-        (* Sentinel (at `lim` offset) is set to null, which triggers YYFILL. *)
+        (* Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL. *)
         str = create bufsize;
-        cur = lim;
-        mar = lim;
-        tok = lim;
-        lim = lim;
+        yycursor = yylimit;
+        yymarker = yylimit;
+        yylimit = yylimit;
+        token = yylimit;
         yystate = -1;
         recv = 0;
     } in

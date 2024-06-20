@@ -4,7 +4,7 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
+    mutable yycursor: int;
 }
 
 (* expect a null-terminated string *)
@@ -19,7 +19,7 @@ type state = {
 */
 
 let test(str, count) =
-    let st = {str = str; cur = 0}
+    let st = {str = str; yycursor = 0}
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =

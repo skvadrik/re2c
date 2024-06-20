@@ -8,10 +8,10 @@ import Data.Word
 
 data State = State {
     _str :: BS.ByteString,
-    _cur :: Int,
-    _mar :: Int,
-    _lim :: Int,
-    _cnt :: Int
+    _yycursor :: Int,
+    _yymarker :: Int,
+    _yylimit :: Int,
+    _count :: Int
 }
 
 -- expect a null-terminated string
@@ -25,8 +25,8 @@ data State = State {
     str = ['] ([^'\\] | [\\][^])* ['];
 
     *    { (-1) }
-    $    { _cnt }
-    str  { lexer State{_cnt = _cnt + 1, ..} }
+    $    { _count }
+    str  { lexer State{_count = _count + 1, ..} }
     [ ]+ { lexer State{..} }
 */
 
@@ -35,10 +35,10 @@ main = do
     let test s n = do
             let st = State {
                     _str = s,
-                    _cur = 0, 
-                    _mar = 0,
-                    _lim = BS.length s - 1, -- terminating null not included
-                    _cnt = 0}
+                    _yycursor = 0, 
+                    _yymarker = 0,
+                    _yylimit = BS.length s - 1, -- terminating null not included
+                    _count = 0}
 
             when (lexer st /= n) $ error "failed"
 

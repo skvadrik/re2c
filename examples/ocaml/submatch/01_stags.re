@@ -4,8 +4,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable t1: int;
     mutable t2: int;
     mutable t3: int;
@@ -37,7 +37,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         Some {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.yycursor - 1)
         }
     }
     * { None }
@@ -46,8 +46,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 let test (str: string) (result: semver option) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         t1 = -1;
         t2 = -1;
         t3 = -1;

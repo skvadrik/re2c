@@ -12,15 +12,15 @@ import Data.Word
 
 data State a = State {
     _str :: a,
-    _cur :: Int,
-    _mar :: Int
+    _yycursor :: Int,
+    _yymarker :: Int
 }
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
     re2c:define:YYPEEK = "(!)";
 
-    "∀x ∃y" { Just _cur }
+    "∀x ∃y" { Just _yycursor }
     *       { Nothing }
 */
 
@@ -38,7 +38,10 @@ data State a = State {
 
 main :: IO ()
 main = do
-    let make_st l = State {_str = listArray (0, length l - 1) l, _cur = 0, _mar = 0}
+    let make_st l = State {
+            _str = listArray (0, length l - 1) l,
+            _yycursor = 0,
+            _yymarker = 0}
 
     let s8 = [0xe2, 0x88, 0x80, 0x78, 0x20, 0xe2, 0x88, 0x83, 0x79]
     when (lex8 (make_st s8) /= Just (length s8)) $ error "lex8 failed"

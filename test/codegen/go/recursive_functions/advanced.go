@@ -71,10 +71,10 @@ func unwind(trie mtagTrie, x int, y int, str []byte) []string {
 type State struct {
 	file     *os.File
 	str      []byte
-	cur      int
-	mar      int
-	tok      int
-	lim      int
+	yycursor int
+	yymarker int
+	yylimit  int
+	token    int
 	yycond   int
 	yystate  int
 	trie     mtagTrie
@@ -116,8 +116,8 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.tok
-	used := st.lim - st.tok
+	shift := st.token
+	used := st.yylimit - st.token
 	free := SIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
@@ -125,10 +125,10 @@ func fill(st *State) int {
 
 	// Shift buffer contents (discard already processed data).
 	copy(st.str[0:], st.str[shift:shift+used])
-	st.cur -= shift
-	st.mar -= shift
-	st.lim -= shift
-	st.tok -= shift
+	st.yycursor -= shift
+	st.yymarker -= shift
+	st.yylimit -= shift
+	st.token -= shift
 	
 //line "codegen/go/recursive_functions/advanced.go":134
 
@@ -138,9 +138,9 @@ func fill(st *State) int {
 
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.lim:SIZE])
-	st.lim += n
-	st.str[st.lim] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.str[st.yylimit:SIZE])
+	st.yylimit += n
+	st.str[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -148,7 +148,7 @@ func fill(st *State) int {
 
 //line "codegen/go/recursive_functions/advanced.go":150
 func yy1(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -167,15 +167,15 @@ func yy1(st *State) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.yyt1 = st.cur
-		st.cur += 1
+		st.yyt1 = st.yycursor
+		st.yycursor += 1
 		return yy4(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 0
 			return lexWaiting
 		} else {
-			st.cur += 1
+			st.yycursor += 1
 			return yy2(st)
 		}
 	}
@@ -193,8 +193,8 @@ func yy3(st *State) int {
 }
 
 func yy4(st *State) int {
-	st.mar = st.cur
-	yych := st.str[st.cur]
+	st.yymarker = st.yycursor
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -213,7 +213,7 @@ func yy4(st *State) int {
 	case '~':
 		return yy6(st, yych)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 1
 			return lexWaiting
 		} else {
@@ -223,7 +223,7 @@ func yy4(st *State) int {
 }
 
 func yy5(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	return yy6(st, yych)
 }
 
@@ -246,13 +246,13 @@ func yy6(st *State, yych byte) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.cur += 1
+		st.yycursor += 1
 		return yy5(st)
 	case '/':
-		st.cur += 1
+		st.yycursor += 1
 		return yy8(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 2
 			return lexWaiting
 		} else {
@@ -262,12 +262,12 @@ func yy6(st *State, yych byte) int {
 }
 
 func yy7(st *State) int {
-	st.cur = st.mar
+	st.yycursor = st.yymarker
 	return yy3(st)
 }
 
 func yy8(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -278,7 +278,7 @@ func yy8(st *State) int {
 	case ' ':
 		fallthrough
 	case ';':
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 3
 			return lexWaiting
 		} else {
@@ -290,7 +290,7 @@ func yy8(st *State) int {
 }
 
 func yy9(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	return yy10(st, yych)
 }
 
@@ -307,8 +307,8 @@ func yy10(st *State, yych byte) int {
 		st.yytm4 = add_mtag(&st.trie, st.yytm4, tagNone)
 		st.yytm3 = st.yytm7
 		st.yytm3 = add_mtag(&st.trie, st.yytm3, tagNone)
-		st.yyt2 = st.cur
-		st.cur += 1
+		st.yyt2 = st.yycursor
+		st.yycursor += 1
 		return yy11(st)
 	case '\r':
 		st.yytm6 = st.yytm10
@@ -319,8 +319,8 @@ func yy10(st *State, yych byte) int {
 		st.yytm4 = add_mtag(&st.trie, st.yytm4, tagNone)
 		st.yytm3 = st.yytm7
 		st.yytm3 = add_mtag(&st.trie, st.yytm3, tagNone)
-		st.yyt2 = st.cur
-		st.cur += 1
+		st.yyt2 = st.yycursor
+		st.yycursor += 1
 		return yy12(st)
 	case '!':
 		fallthrough
@@ -339,14 +339,14 @@ func yy10(st *State, yych byte) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.cur += 1
+		st.yycursor += 1
 		return yy9(st)
 	case ';':
-		st.yyt2 = st.cur
-		st.cur += 1
+		st.yyt2 = st.yycursor
+		st.yycursor += 1
 		return yy13(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 4
 			return lexWaiting
 		} else {
@@ -356,21 +356,21 @@ func yy10(st *State, yych byte) int {
 }
 
 func yy11(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy11(st)
 	case '\r':
-		st.cur += 1
+		st.yycursor += 1
 		return yy12(st)
 	case ';':
-		st.cur += 1
+		st.yycursor += 1
 		return yy13(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 5
 			return lexWaiting
 		} else {
@@ -380,13 +380,13 @@ func yy11(st *State) int {
 }
 
 func yy12(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\n':
-		st.cur += 1
+		st.yycursor += 1
 		return yy14(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 6
 			return lexWaiting
 		} else {
@@ -396,12 +396,12 @@ func yy12(st *State) int {
 }
 
 func yy13(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy13(st)
 	case '!':
 		fallthrough
@@ -420,11 +420,11 @@ func yy13(st *State) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.yytm7 = add_mtag(&st.trie, st.yytm7, st.cur)
-		st.cur += 1
+		st.yytm7 = add_mtag(&st.trie, st.yytm7, st.yycursor)
+		st.yycursor += 1
 		return yy15(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 7
 			return lexWaiting
 		} else {
@@ -451,14 +451,14 @@ func yy14(st *State) int {
 		pvals := unwind(st.trie, st.p3, st.p4, st.str)
 		if debug {fmt.Printf("pvals: %v\n", pvals)}
 
-		st.tok = st.cur
+		st.token = st.yycursor
 		return lex(st)
 
 //line "codegen/go/recursive_functions/advanced.go":458
 }
 
 func yy15(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -477,14 +477,14 @@ func yy15(st *State) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.cur += 1
+		st.yycursor += 1
 		return yy15(st)
 	case '=':
-		st.yytm8 = add_mtag(&st.trie, st.yytm8, st.cur)
-		st.cur += 1
+		st.yytm8 = add_mtag(&st.trie, st.yytm8, st.yycursor)
+		st.yycursor += 1
 		return yy16(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 8
 			return lexWaiting
 		} else {
@@ -494,7 +494,7 @@ func yy15(st *State) int {
 }
 
 func yy16(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -513,15 +513,15 @@ func yy16(st *State) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.yytm9 = add_mtag(&st.trie, st.yytm9, st.cur)
-		st.cur += 1
+		st.yytm9 = add_mtag(&st.trie, st.yytm9, st.yycursor)
+		st.yycursor += 1
 		return yy17(st)
 	case '"':
-		st.yytm9 = add_mtag(&st.trie, st.yytm9, st.cur)
-		st.cur += 1
+		st.yytm9 = add_mtag(&st.trie, st.yytm9, st.yycursor)
+		st.yycursor += 1
 		return yy18(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 9
 			return lexWaiting
 		} else {
@@ -531,21 +531,21 @@ func yy16(st *State) int {
 }
 
 func yy17(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.cur)
-		st.cur += 1
+		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.yycursor)
+		st.yycursor += 1
 		return yy19(st)
 	case '\r':
 		st.yytm3 = st.yytm7
 		st.yytm4 = st.yytm8
 		st.yytm5 = st.yytm9
 		st.yytm6 = st.yytm10
-		st.yytm6 = add_mtag(&st.trie, st.yytm6, st.cur)
-		st.cur += 1
+		st.yytm6 = add_mtag(&st.trie, st.yytm6, st.yycursor)
+		st.yycursor += 1
 		return yy12(st)
 	case '!':
 		fallthrough
@@ -564,14 +564,14 @@ func yy17(st *State) int {
 	case '|':
 		fallthrough
 	case '~':
-		st.cur += 1
+		st.yycursor += 1
 		return yy17(st)
 	case ';':
-		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.cur)
-		st.cur += 1
+		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.yycursor)
+		st.yycursor += 1
 		return yy13(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 10
 			return lexWaiting
 		} else {
@@ -581,7 +581,7 @@ func yy17(st *State) int {
 }
 
 func yy18(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -590,44 +590,44 @@ func yy18(st *State) int {
 	case '\n','\v','\f','\r',0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E,0x1F:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 11
 			return lexWaiting
 		} else {
 			return yy7(st)
 		}
 	case '"':
-		st.cur += 1
+		st.yycursor += 1
 		return yy20(st)
 	case '\\':
-		st.cur += 1
+		st.yycursor += 1
 		return yy21(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy18(st)
 	}
 }
 
 func yy19(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy19(st)
 	case '\r':
 		st.yytm3 = st.yytm7
 		st.yytm4 = st.yytm8
 		st.yytm5 = st.yytm9
 		st.yytm6 = st.yytm10
-		st.cur += 1
+		st.yycursor += 1
 		return yy12(st)
 	case ';':
-		st.cur += 1
+		st.yycursor += 1
 		return yy13(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 12
 			return lexWaiting
 		} else {
@@ -637,28 +637,28 @@ func yy19(st *State) int {
 }
 
 func yy20(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.cur)
-		st.cur += 1
+		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.yycursor)
+		st.yycursor += 1
 		return yy19(st)
 	case '\r':
 		st.yytm3 = st.yytm7
 		st.yytm4 = st.yytm8
 		st.yytm5 = st.yytm9
 		st.yytm6 = st.yytm10
-		st.yytm6 = add_mtag(&st.trie, st.yytm6, st.cur)
-		st.cur += 1
+		st.yytm6 = add_mtag(&st.trie, st.yytm6, st.yycursor)
+		st.yycursor += 1
 		return yy12(st)
 	case ';':
-		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.cur)
-		st.cur += 1
+		st.yytm10 = add_mtag(&st.trie, st.yytm10, st.yycursor)
+		st.yycursor += 1
 		return yy13(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 13
 			return lexWaiting
 		} else {
@@ -668,7 +668,7 @@ func yy20(st *State) int {
 }
 
 func yy21(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -677,14 +677,14 @@ func yy21(st *State) int {
 	case '\n','\v','\f','\r',0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 14
 			return lexWaiting
 		} else {
 			return yy7(st)
 		}
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy18(st)
 	}
 }
@@ -701,7 +701,7 @@ func yyfnmedia_type(st *State) int {
 }
 
 func yy23(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -710,19 +710,19 @@ func yy23(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 15
 			return lexWaiting
 		} else {
-			st.cur += 1
+			st.yycursor += 1
 			return yy24(st)
 		}
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
-		st.cur += 1
+		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yycursor += 1
 		return yy26(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy27(st)
 	}
 }
@@ -740,14 +740,14 @@ func yy25(st *State) int {
 
 func yy26(st *State) int {
 	st.yyaccept = 0
-	st.mar = st.cur
-	yych := st.str[st.cur]
+	st.yymarker = st.yycursor
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\n':
-		st.cur += 1
+		st.yycursor += 1
 		return yy28(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 16
 			return lexWaiting
 		} else {
@@ -758,8 +758,8 @@ func yy26(st *State) int {
 
 func yy27(st *State) int {
 	st.yyaccept = 0
-	st.mar = st.cur
-	yych := st.str[st.cur]
+	st.yymarker = st.yycursor
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -770,35 +770,35 @@ func yy27(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 17
 			return lexWaiting
 		} else {
 			return yy25(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy30(st)
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
-		st.cur += 1
+		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yycursor += 1
 		return yy31(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy32(st)
 	}
 }
 
 func yy28(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy33(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 18
 			return lexWaiting
 		} else {
@@ -808,7 +808,7 @@ func yy28(st *State) int {
 }
 
 func yy29(st *State) int {
-	st.cur = st.mar
+	st.yycursor = st.yymarker
 	if (st.yyaccept == 0) {
 		return yy25(st)
 	} else {
@@ -817,7 +817,7 @@ func yy29(st *State) int {
 }
 
 func yy30(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -826,32 +826,32 @@ func yy30(st *State) int {
 	case '\n','\v','\f','\r',0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 19
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy30(st)
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy32(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy34(st)
 	}
 }
 
 func yy31(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\n':
-		st.cur += 1
+		st.yycursor += 1
 		return yy28(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 20
 			return lexWaiting
 		} else {
@@ -861,7 +861,7 @@ func yy31(st *State) int {
 }
 
 func yy32(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -872,27 +872,27 @@ func yy32(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 21
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy30(st)
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
-		st.cur += 1
+		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yycursor += 1
 		return yy31(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy32(st)
 	}
 }
 
 func yy33(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -903,7 +903,7 @@ func yy33(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 22
 			return lexWaiting
 		} else {
@@ -912,23 +912,23 @@ func yy33(st *State) int {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy33(st)
 	case '\r':
-		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
 		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
-		st.cur += 1
+		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yycursor += 1
 		return yy35(st)
 	default:
-		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
-		st.cur += 1
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
+		st.yycursor += 1
 		return yy36(st)
 	}
 }
 
 func yy34(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -937,30 +937,30 @@ func yy34(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 23
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
-		st.cur += 1
+		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yycursor += 1
 		return yy31(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy32(st)
 	}
 }
 
 func yy35(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\n':
-		st.cur += 1
+		st.yycursor += 1
 		return yy37(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 24
 			return lexWaiting
 		} else {
@@ -970,7 +970,7 @@ func yy35(st *State) int {
 }
 
 func yy36(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -981,39 +981,39 @@ func yy36(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 25
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy39(st)
 	case '\r':
 		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
-		st.cur += 1
+		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yycursor += 1
 		return yy35(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy36(st)
 	}
 }
 
 func yy37(st *State) int {
 	st.yyaccept = 1
-	st.mar = st.cur
-	yych := st.str[st.cur]
+	st.yymarker = st.yycursor
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
 		st.yytm1 = st.yytm2
-		st.cur += 1
+		st.yycursor += 1
 		return yy33(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 26
 			return lexWaiting
 		} else {
@@ -1031,14 +1031,14 @@ func yy38(st *State) int {
 		folds := unwind(st.trie, st.f1, st.f2, st.str)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
-		st.tok = st.cur
+		st.token = st.yycursor
 		return lex(st)
 
 //line "codegen/go/recursive_functions/advanced.go":1038
 }
 
 func yy39(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -1049,35 +1049,35 @@ func yy39(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 27
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy39(st)
 	case '\r':
-		st.cur += 1
+		st.yycursor += 1
 		return yy40(st)
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy36(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy41(st)
 	}
 }
 
 func yy40(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\n':
-		st.cur += 1
+		st.yycursor += 1
 		return yy42(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 28
 			return lexWaiting
 		} else {
@@ -1087,7 +1087,7 @@ func yy40(st *State) int {
 }
 
 func yy41(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -1098,22 +1098,22 @@ func yy41(st *State) int {
 	case 0x0E,0x0F,0x10,0x11,0x12,0x13,0x14,0x15,0x16,0x17,0x18,0x19,0x1A,0x1B,0x1C,0x1D,0x1E:
 		fallthrough
 	case 0x7F:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 29
 			return lexWaiting
 		} else {
 			return yy29(st)
 		}
 	case '\t':
-		st.cur += 1
+		st.yycursor += 1
 		return yy43(st)
 	case '\r':
 		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
-		st.cur += 1
+		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yycursor += 1
 		return yy35(st)
 	default:
-		st.cur += 1
+		st.yycursor += 1
 		return yy36(st)
 	}
 }
@@ -1123,18 +1123,18 @@ func yy42(st *State) int {
 }
 
 func yy43(st *State) int {
-	yych := st.str[st.cur]
+	yych := st.str[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.cur += 1
+		st.yycursor += 1
 		return yy43(st)
 	case '\r':
-		st.cur += 1
+		st.yycursor += 1
 		return yy40(st)
 	default:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			st.yystate = 30
 			return lexWaiting
 		} else {
@@ -1170,187 +1170,187 @@ func lex(st *State) int {
 	case -1:
 		return yy0(st)
 	case 0:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy22(st)
 		} else {
 			return yy1(st)
 		}
 	case 1:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy3(st)
 		} else {
 			return yy4(st)
 		}
 	case 2:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy5(st)
 		}
 	case 3:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy8(st)
 		}
 	case 4:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy9(st)
 		}
 	case 5:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy11(st)
 		}
 	case 6:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy12(st)
 		}
 	case 7:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy13(st)
 		}
 	case 8:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy15(st)
 		}
 	case 9:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy16(st)
 		}
 	case 10:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy17(st)
 		}
 	case 11:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy18(st)
 		}
 	case 12:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy19(st)
 		}
 	case 13:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy20(st)
 		}
 	case 14:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy7(st)
 		} else {
 			return yy21(st)
 		}
 	case 15:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy44(st)
 		} else {
 			return yy23(st)
 		}
 	case 16:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy25(st)
 		} else {
 			return yy26(st)
 		}
 	case 17:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy25(st)
 		} else {
 			return yy27(st)
 		}
 	case 18:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy28(st)
 		}
 	case 19:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy30(st)
 		}
 	case 20:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy31(st)
 		}
 	case 21:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy32(st)
 		}
 	case 22:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy33(st)
 		}
 	case 23:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy34(st)
 		}
 	case 24:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy35(st)
 		}
 	case 25:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy36(st)
 		}
 	case 26:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy38(st)
 		} else {
 			return yy37(st)
 		}
 	case 27:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy39(st)
 		}
 	case 28:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy40(st)
 		}
 	case 29:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy41(st)
 		}
 	case 30:
-		if (st.lim <= st.cur) {
+		if (st.yylimit <= st.yycursor) {
 			return yy29(st)
 		} else {
 			return yy43(st)
@@ -1371,10 +1371,10 @@ func test(packets []string) int {
 	st := &State{
 		file:     fr,
 		str:      make([]byte, SIZE+1),
-		cur:      SIZE,
-		mar:      SIZE,
-		tok:      SIZE,
-		lim:      SIZE,
+		yycursor: SIZE,
+		yymarker: SIZE,
+		yylimit:  SIZE,
+		token:    SIZE,
 		yycond:   yycmedia_type,
 		yystate:  -1,
 		trie:     make([]mtagElem, 0),

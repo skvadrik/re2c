@@ -17,10 +17,10 @@ chunk_size = 4096
 data State = State {
     _file :: !Handle,
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
     
 #27 "haskell/submatch/01_stags_fill.hs"
@@ -52,19 +52,19 @@ s2n s i j = f i 0 where
 #53 "haskell/submatch/01_stags_fill.hs"
 yy0 :: State -> [SemVer] -> IO [SemVer]
 yy0 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            let _yyt1 = _cur
-            _cur <- return $ _cur + 1
+            let _yyt1 = _yycursor
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy0 State{..} _vers
                 else yy11 State{..} _vers
             else do
-                _cur <- return $ _cur + 1
+                _yycursor <- return $ _yycursor + 1
                 yy1 State{..} _vers
 
 yy1 :: State -> [SemVer] -> IO [SemVer]
@@ -79,17 +79,17 @@ yy2 State{..} _vers = do
 
 yy3 :: State -> [SemVer] -> IO [SemVer]
 yy3 State{..} _vers = do
-    let _mar = _cur
-    yych <- return $ BS.index _str _cur
+    let _yymarker = _yycursor
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x2E == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy4 State{..} _vers
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy6 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy3 State{..} _vers
                 else yy2 State{..} _vers
@@ -98,14 +98,14 @@ yy3 State{..} _vers = do
 
 yy4 :: State -> [SemVer] -> IO [SemVer]
 yy4 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            let _yyt2 = _cur
-            _cur <- return $ _cur + 1
+            let _yyt2 = _yycursor
+            _yycursor <- return $ _yycursor + 1
             yy7 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy4 State{..} _vers
                 else yy5 State{..} _vers
@@ -114,21 +114,21 @@ yy4 State{..} _vers = do
 
 yy5 :: State -> [SemVer] -> IO [SemVer]
 yy5 State{..} _vers = do
-    let _cur = _mar
+    let _yycursor = _yymarker
     yy2 State{..} _vers
 
 yy6 :: State -> [SemVer] -> IO [SemVer]
 yy6 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x2E == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy4 State{..} _vers
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy6 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy6 State{..} _vers
                 else yy5 State{..} _vers
@@ -137,22 +137,22 @@ yy6 State{..} _vers = do
 
 yy7 :: State -> [SemVer] -> IO [SemVer]
 yy7 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x0A == _c -> do
-            let _yyt3 = _cur
+            let _yyt3 = _yycursor
             let _yyt4 = (-1)
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy8 State{..} _vers
         _c | 0x2E == _c -> do
-            let _yyt3 = _cur
-            _cur <- return $ _cur + 1
+            let _yyt3 = _yycursor
+            _yycursor <- return $ _yycursor + 1
             yy9 State{..} _vers
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy7 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy7 State{..} _vers
                 else yy5 State{..} _vers
@@ -171,21 +171,21 @@ yy8 State{..} _vers = do
     let ver = SemVer {
         major = s2n _str _1 _2,
         minor = s2n _str _3 _4,
-        patch = if _5 == (-1) then 0 else s2n _str _5 (_cur - 1)
+        patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
     }
     lexer State{..} (ver: _vers)
 #178 "haskell/submatch/01_stags_fill.hs"
 
 yy9 :: State -> [SemVer] -> IO [SemVer]
 yy9 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            let _yyt4 = _cur
-            _cur <- return $ _cur + 1
+            let _yyt4 = _yycursor
+            _yycursor <- return $ _yycursor + 1
             yy10 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy9 State{..} _vers
                 else yy5 State{..} _vers
@@ -194,16 +194,16 @@ yy9 State{..} _vers = do
 
 yy10 :: State -> [SemVer] -> IO [SemVer]
 yy10 State{..} _vers = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x0A == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy8 State{..} _vers
         _c | 0x30 <= _c && _c <= 0x39 -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy10 State{..} _vers
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 (State{..}, yyfill) <- fill State{..}
                 if yyfill then yy10 State{..} _vers
                 else yy5 State{..} _vers
@@ -232,11 +232,11 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State{
-                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
-                _cur = _cur - _tok,
-                _mar = _mar - _tok,
-                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
-                _tok = 0,
+                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yycursor = _yycursor - _token,
+                _yymarker = _yymarker - _token,
+                _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
+                _token = 0,
                 _eof = BS.null chunk, -- end of file?
                 ..}, True)
 
@@ -253,10 +253,10 @@ main = do
     let st = State {
         _file = fh,
         _str = BS.singleton 0,
-        _cur = 0,
-        _mar = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _yymarker = 0,
+        _yylimit = 0,
+        _token = 0,
         _eof = False,
         
 #263 "haskell/submatch/01_stags_fill.hs"

@@ -9,8 +9,8 @@ open Array
 
 type 'a state = {
     str: 'a array;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
 }
 
 #19 "ocaml/reuse/reuse.re"
@@ -19,8 +19,8 @@ type 'a state = {
 
 #21 "ocaml/reuse/reuse.ml"
 let rec yy0 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
-	yyrecord.cur <- yyrecord.cur + 1;
+	let yych = get yyrecord.str yyrecord.yycursor in
+	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '\xE2' -> (yy3 [@tailcall]) yyrecord
 		| _ -> (yy1 [@tailcall]) yyrecord
@@ -34,77 +34,77 @@ and yy2 (yyrecord : char state) : int option =
 #35 "ocaml/reuse/reuse.ml"
 
 and yy3 (yyrecord : char state) : int option =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '\x88' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy4 [@tailcall]) yyrecord
 		| _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '\x80' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy6 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy5 (yyrecord : char state) : int option =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	(yy2 [@tailcall]) yyrecord
 
 and yy6 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'x' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy7 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ' ' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy8 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy8 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '\xE2' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy9 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy9 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '\x88' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy10 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy10 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| '\x83' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy11 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy11 (yyrecord : char state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'y' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy12 [@tailcall]) yyrecord
 		| _ -> (yy5 [@tailcall]) yyrecord
 
 and yy12 (yyrecord : char state) : int option =
 #17 "ocaml/reuse/reuse.re"
-	Some yyrecord.cur
+	Some yyrecord.yycursor
 #109 "ocaml/reuse/reuse.ml"
 
 and lex8 (yyrecord : char state) : int option =
@@ -116,8 +116,8 @@ and lex8 (yyrecord : char state) : int option =
 
 #118 "ocaml/reuse/reuse.ml"
 let rec yy13 (yyrecord : int state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
-	yyrecord.cur <- yyrecord.cur + 1;
+	let yych = get yyrecord.str yyrecord.yycursor in
+	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	if (yych == 0x00002200) then (yy16 [@tailcall]) yyrecord
 	else (yy14 [@tailcall]) yyrecord
 
@@ -130,41 +130,41 @@ and yy15 (yyrecord : int state) : int option =
 #131 "ocaml/reuse/reuse.ml"
 
 and yy16 (yyrecord : int state) : int option =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych == 0x00000078) then (
-		yyrecord.cur <- yyrecord.cur + 1;
+		yyrecord.yycursor <- yyrecord.yycursor + 1;
 		(yy17 [@tailcall]) yyrecord
 	) else (
 		(yy15 [@tailcall]) yyrecord
 	)
 
 and yy17 (yyrecord : int state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych == 0x00000020) then (
-		yyrecord.cur <- yyrecord.cur + 1;
+		yyrecord.yycursor <- yyrecord.yycursor + 1;
 		(yy19 [@tailcall]) yyrecord
 	) else (
 		(yy18 [@tailcall]) yyrecord
 	)
 
 and yy18 (yyrecord : int state) : int option =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	(yy15 [@tailcall]) yyrecord
 
 and yy19 (yyrecord : int state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych == 0x00002203) then (
-		yyrecord.cur <- yyrecord.cur + 1;
+		yyrecord.yycursor <- yyrecord.yycursor + 1;
 		(yy20 [@tailcall]) yyrecord
 	) else (
 		(yy18 [@tailcall]) yyrecord
 	)
 
 and yy20 (yyrecord : int state) : int option =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych == 0x00000079) then (
-		yyrecord.cur <- yyrecord.cur + 1;
+		yyrecord.yycursor <- yyrecord.yycursor + 1;
 		(yy21 [@tailcall]) yyrecord
 	) else (
 		(yy18 [@tailcall]) yyrecord
@@ -172,7 +172,7 @@ and yy20 (yyrecord : int state) : int option =
 
 and yy21 (yyrecord : int state) : int option =
 #17 "ocaml/reuse/reuse.re"
-	Some yyrecord.cur
+	Some yyrecord.yycursor
 #177 "ocaml/reuse/reuse.ml"
 
 and lex32 (yyrecord : int state) : int option =
@@ -184,12 +184,12 @@ and lex32 (yyrecord : int state) : int option =
 let main() =
     let st8 = {
         str = [|'\xe2'; '\x08'; '\x80'; '\x78'; '\x20'; '\xe2'; '\x88'; '\x83'; '\x79'|];
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
     } in if not (lex8 st8 = Some (Array.length st8.str)) then raise (Failure "error");
 
     let st32 = {
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         str = [|0x2200; 0x78; 0x20; 0x2203; 0x79|];
     } in if not (lex32 st32 = Some (Array.length st32.str)) then raise (Failure "error");

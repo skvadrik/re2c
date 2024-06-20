@@ -11,13 +11,13 @@ const bufsize = 10
 
 struct State {
 mut:
-    file    os.File
-    str     []u8
-    cur     int
-    mar     int
-    tok     int
-    lim     int
-    yystate int
+    file     os.File
+    str      []u8
+    yycursor int
+    yymarker int
+    yylimit  int
+    token    int
+    yystate  int
 }
 
 enum Status {
@@ -29,8 +29,8 @@ enum Status {
 }
 
 fn fill(mut st &State) Status {
-    shift := st.tok
-    used := st.lim - st.tok
+    shift := st.token
+    used := st.yylimit - st.token
     free := bufsize - used
 
     // Error: no space. In real life can reallocate a larger buffer.
@@ -38,17 +38,17 @@ fn fill(mut st &State) Status {
 
     // Shift buffer contents (discard already processed data).
     copy(mut &st.str, st.str[shift..shift+used])
-    st.cur -= shift
-    st.mar -= shift
-    st.lim -= shift
-    st.tok -= shift
+    st.yycursor -= shift
+    st.yymarker -= shift
+    st.yylimit -= shift
+    st.token -= shift
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.lim..bufsize]) {
-        st.lim += n
+    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+        st.yylimit += n
     }
-    st.str[st.lim] = 0 // append sentinel symbol
+    st.str[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -59,19 +59,19 @@ fn lex(mut yyrecord &State, mut recv &int) Status {
 //line "v/state/push.v":60
 match yyrecord.yystate {
     0 {
-        if yyrecord.lim <= yyrecord.cur {
+        if yyrecord.yylimit <= yyrecord.yycursor {
             unsafe { goto yy8 }
         }
         unsafe { goto yyFillLabel0 }
     }
     1 {
-        if yyrecord.lim <= yyrecord.cur {
+        if yyrecord.yylimit <= yyrecord.yycursor {
             unsafe { goto yy3 }
         }
         unsafe { goto yyFillLabel1 }
     }
     2 {
-        if yyrecord.lim <= yyrecord.cur {
+        if yyrecord.yylimit <= yyrecord.yycursor {
             unsafe { goto yy7 }
         }
         unsafe { goto yyFillLabel2 }
@@ -81,16 +81,16 @@ match yyrecord.yystate {
 //line "v/state/push.re":56
 
 loop:
-    yyrecord.tok = yyrecord.cur
+    yyrecord.token = yyrecord.yycursor
     
 //line "v/state/push.v":87
 yy0:
 yyFillLabel0:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     match yych {
         0x61...0x7A { unsafe { goto yy4 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 yyrecord.yystate = 0
                 return .lex_waiting
             }
@@ -98,22 +98,22 @@ yyFillLabel0:
         }
     }
 yy2:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yy3:
     yyrecord.yystate = -1
 //line "v/state/push.re":66
     return .lex_bad_packet
 //line "v/state/push.v":107
 yy4:
-    yyrecord.cur += 1
-    yyrecord.mar = yyrecord.cur
+    yyrecord.yycursor += 1
+    yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel1:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     match yych {
         0x3B { unsafe { goto yy5 } }
         0x61...0x7A { unsafe { goto yy6 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 yyrecord.yystate = 1
                 return .lex_waiting
             }
@@ -121,20 +121,20 @@ yyFillLabel1:
         }
     }
 yy5:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
     yyrecord.yystate = -1
 //line "v/state/push.re":68
     recv += 1; unsafe{ goto loop }
 //line "v/state/push.v":129
 yy6:
-    yyrecord.cur += 1
+    yyrecord.yycursor += 1
 yyFillLabel2:
-    yych = yyrecord.str[yyrecord.cur]
+    yych = yyrecord.str[yyrecord.yycursor]
     match yych {
         0x3B { unsafe { goto yy5 } }
         0x61...0x7A { unsafe { goto yy6 } }
         else {
-            if yyrecord.lim <= yyrecord.cur {
+            if yyrecord.yylimit <= yyrecord.yycursor {
                 yyrecord.yystate = 2
                 return .lex_waiting
             }
@@ -142,7 +142,7 @@ yyFillLabel2:
         }
     }
 yy7:
-    yyrecord.cur = yyrecord.mar
+    yyrecord.yycursor = yyrecord.yymarker
     unsafe { goto yy3 }
 yy8:
     yyrecord.yystate = -1
@@ -162,14 +162,14 @@ fn test(expect Status, packets []string) {
     // Initialize lexer state: `state` value is -1, all offsets are at the end
     // of buffer.
     mut st := &State{
-        file:    fr,
-        // Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-        str:     []u8{len: bufsize + 1},
-        cur:     bufsize,
-        mar:     bufsize,
-        tok:     bufsize,
-        lim:     bufsize,
-        yystate: -1,
+        file:     fr,
+        // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+        str:      []u8{len: bufsize + 1},
+        yycursor: bufsize,
+        yymarker: bufsize,
+        yylimit:  bufsize,
+        token:    bufsize,
+        yystate:  -1,
     }
 
     // Main loop. The buffer contains incomplete data which appears packet by

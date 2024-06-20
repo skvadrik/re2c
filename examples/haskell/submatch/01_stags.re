@@ -7,8 +7,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
     _1 :: !Int,
     _2 :: !Int,
@@ -38,7 +38,7 @@ s2n s i j = f i 0 where
         Just SemVer {
             major = s2n _str _1 _2,
             minor = s2n _str _3 _4,
-            patch = if _5 == (-1) then 0 else s2n _str _5 (_cur - 1)
+            patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
         }
     }
     * { Nothing }
@@ -48,8 +48,8 @@ test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
         _str = str,
-        _cur = 0,
-        _mar = 0,
+        _yycursor = 0,
+        _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = (-1),'; */
         _1 = (-1),
         _2 = (-1),

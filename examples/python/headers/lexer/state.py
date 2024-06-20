@@ -3,6 +3,6 @@
 class State:
     def __init__(self, str):
         self.str = str
-        self.cur = 0
+        self.yycursor = 0
         
         self.yyt1 = 0

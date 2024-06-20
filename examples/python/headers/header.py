@@ -11,30 +11,30 @@ def lex(yyrecord):
     while True:
         match yystate:
             case 0:
-                yych = yyrecord.str[yyrecord.cur]
+                yych = yyrecord.str[yyrecord.yycursor]
                 if yych <= 0x60:
-                    yyt1 = yyrecord.cur
+                    yyt1 = yyrecord.yycursor
                     yystate = 1
                     continue
                 if yych <= 0x61:
-                    yyrecord.cur += 1
+                    yyrecord.yycursor += 1
                     yystate = 0
                     continue
                 if yych <= 0x62:
-                    yyt1 = yyrecord.cur
-                    yyrecord.cur += 1
+                    yyt1 = yyrecord.yycursor
+                    yyrecord.yycursor += 1
                     yystate = 2
                     continue
-                yyt1 = yyrecord.cur
+                yyt1 = yyrecord.yycursor
                 yystate = 1
                 continue
             case 1:
                 t = yyt1
                 return t
             case 2:
-                yych = yyrecord.str[yyrecord.cur]
+                yych = yyrecord.str[yyrecord.yycursor]
                 if yych == 0x62:
-                    yyrecord.cur += 1
+                    yyrecord.yycursor += 1
                     yystate = 2
                     continue
                 yystate = 1
@@ -49,7 +49,7 @@ assert lex(State(b"ab\0")) == 1
 class State:
     def __init__(self, str):
         self.str = str
-        self.cur = 0
+        self.yycursor = 0
         
         self.yyt1 = 0
 python/headers/header.re:21:21: warning: rule matches empty string [-Wmatch-empty-string]

@@ -7,8 +7,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: !ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
     _1 :: !Int,
     _2 :: !Int,
@@ -23,7 +23,7 @@ s2n s i j = f i 0 where
 
 /*!re2c
     re2c:define:YYFN = ["parse;Maybe [Int]", "State{..};State"];
-    re2c:define:YYMTAGP = "let tag = _cur : @@{tag} in let @@{tag} = tag in";
+    re2c:define:YYMTAGP = "let tag = _yycursor : @@{tag} in let @@{tag} = tag in";
     re2c:define:YYMTAGN = ""; // alternatively could add -1 to the list
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
@@ -40,8 +40,8 @@ test :: ByteString -> Maybe [Int] -> IO ()
 test str expect = do
     let st = State {
         _str = str,
-        _cur = 0,
-        _mar = 0,
+        _yycursor = 0,
+        _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = (-1),'; */
         _1 = (-1),
         _2 = (-1),

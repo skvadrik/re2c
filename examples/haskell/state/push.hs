@@ -15,10 +15,10 @@ debug = when False
 data State = State {
     _pipe :: !(Chan BS.ByteString),
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _mar :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yymarker :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
     _yystate :: !Int,
     _recv :: !Int
@@ -29,17 +29,17 @@ data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
 yy0 :: State -> IO (State, Status)
 yy0 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x61 <= _c && _c <= 0x7A -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy3 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 let _yystate = 0
                 return (State{..}, Waiting)
             else do
-                _cur <- return $ _cur + 1
+                _yycursor <- return $ _yycursor + 1
                 yy1 State{..}
 
 yy1 :: State -> IO (State, Status)
@@ -53,17 +53,17 @@ yy2 !State{..} = do
 
 yy3 :: State -> IO (State, Status)
 yy3 !State{..} = do
-    let _mar = _cur
-    yych <- return $ BS.index _str _cur
+    let _yymarker = _yycursor
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x3B == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy4 State{..}
         _c | 0x61 <= _c && _c <= 0x7A -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy5 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 let _yystate = 1
                 return (State{..}, Waiting)
             else do
@@ -72,20 +72,20 @@ yy3 !State{..} = do
 yy4 :: State -> IO (State, Status)
 yy4 !State{..} = do
     let _yystate = -1
-    lexer State{_tok = _cur, _recv = _recv + 1, ..}
+    lexer State{_token = _yycursor, _recv = _recv + 1, ..}
 
 yy5 :: State -> IO (State, Status)
 yy5 !State{..} = do
-    yych <- return $ BS.index _str _cur
+    yych <- return $ BS.index _str _yycursor
     case yych of
         _c | 0x3B == _c -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy4 State{..}
         _c | 0x61 <= _c && _c <= 0x7A -> do
-            _cur <- return $ _cur + 1
+            _yycursor <- return $ _yycursor + 1
             yy5 State{..}
         _c | True -> do
-            if _cur >= _lim then do
+            if _yycursor >= _yylimit then do
                 let _yystate = 2
                 return (State{..}, Waiting)
             else do
@@ -93,7 +93,7 @@ yy5 !State{..} = do
 
 yy6 :: State -> IO (State, Status)
 yy6 !State{..} = do
-    let _cur = _mar
+    let _yycursor = _yymarker
     yy2 State{..}
 
 yy7 :: State -> IO (State, Status)
@@ -107,13 +107,13 @@ lexer !State{..} = do
         _c | -1 == _c -> do
             yy0 State{..}
         _c | 0 == _c -> do
-            if _cur >= _lim then yy7 State{..}
+            if _yycursor >= _yylimit then yy7 State{..}
             else yy0 State{..}
         _c | 1 == _c -> do
-            if _cur >= _lim then yy2 State{..}
+            if _yycursor >= _yylimit then yy2 State{..}
             else yy3 State{..}
         _c | 2 == _c -> do
-            if _cur >= _lim then yy6 State{..}
+            if _yycursor >= _yylimit then yy6 State{..}
             else yy5 State{..}
         _c | True -> do
             error "internal lexer error"
@@ -129,11 +129,11 @@ fill st@State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- readChan _pipe
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _tok) _str, chunk, "\0"],
-                _cur = _cur - _tok,
-                _mar = _mar - _tok,
-                _lim = _lim - _tok + BS.length chunk, -- exclude terminating null
-                _tok = 0,
+                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yycursor = _yycursor - _token,
+                _yymarker = _yymarker - _token,
+                _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
+                _token = 0,
                 _eof = BS.null chunk, -- end of file?
                 ..}, Ready)
 
@@ -169,10 +169,10 @@ test packets expect = do
     let st = State {
         _pipe = pipe,
         _str = BS.singleton 0, -- null sentinel triggers YYFILL
-        _cur = 0,
-        _mar = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _yymarker = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
         _yystate = -1,
         _recv = 0

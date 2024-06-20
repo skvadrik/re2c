@@ -14,16 +14,16 @@ data Number = INum | FNum | NNaN deriving (Eq)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _mar :: Int,
+    _yycursor :: Int,
+    _yymarker :: Int,
     _yyaccept :: Int
 }
 
 
 yy0 :: State -> Number
 yy0 State{..} =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x2E == _c ->
             yy3 State{..}
@@ -44,10 +44,10 @@ yy2 State{..} =
 
 yy3 :: State -> Number
 yy3 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | True ->
             yy2 State{..}
@@ -55,17 +55,17 @@ yy3 State{..} =
 yy4 :: State -> Number
 yy4 State{..} =
     let _yyaccept = 0 in
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x2E == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy9 State{..}
         _c | 0x45 == _c || 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy11 State{..}
         _c | True ->
             yy2 State{..}
@@ -73,17 +73,17 @@ yy4 State{..} =
 yy5 :: State -> Number
 yy5 State{..} =
     let _yyaccept = 1 in
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x2E == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy5 State{..}
         _c | 0x45 == _c || 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy11 State{..}
         _c | True ->
             yy6 State{..}
@@ -95,14 +95,14 @@ yy6 State{..} =
 yy7 :: State -> Number
 yy7 State{..} =
     let _yyaccept = 2 in
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | 0x45 == _c || 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy11 State{..}
         _c | True ->
             yy8 State{..}
@@ -113,23 +113,23 @@ yy8 State{..} =
 
 yy9 :: State -> Number
 yy9 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x2E == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy7 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy9 State{..}
         _c | 0x45 == _c || 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy11 State{..}
         _c | True ->
             yy10 State{..}
 
 yy10 :: State -> Number
 yy10 State{..} =
-    let _cur = _mar in
+    let _yycursor = _yymarker in
     case _yyaccept of
         _c | 0 == _c ->
             yy2 State{..}
@@ -140,33 +140,33 @@ yy10 State{..} =
 
 yy11 :: State -> Number
 yy11 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x2B == _c || 0x2D == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy12 State{..}
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy13 State{..}
         _c | True ->
             yy10 State{..}
 
 yy12 :: State -> Number
 yy12 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy13 State{..}
         _c | True ->
             yy10 State{..}
 
 yy13 :: State -> Number
 yy13 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy13 State{..}
         _c | True ->
             yy8 State{..}
@@ -180,7 +180,12 @@ lexer State{..} =
 main :: IO ()
 main = do
     let test s n = do
-            let st = State {_str = s, _cur = 0, _mar = 0, _yyaccept = 0}
+            let st = State {
+                    _str = s,
+                    _yycursor = 0,
+                    _yymarker = 0,
+                    _yyaccept = 0}
+
             when (lexer st /= n) $ error "failed"
 
     test "123\0" INum

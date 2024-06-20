@@ -14,11 +14,11 @@ chunk_size = 4096
 data State = State {
     _file :: !Handle,
     _str :: !BS.ByteString,
-    _cur :: !Int,
-    _lim :: !Int,
-    _tok :: !Int,
+    _yycursor :: !Int,
+    _yylimit :: !Int,
+    _token :: !Int,
     _eof :: !Bool,
-    _cnt :: !Int
+    _count :: !Int
 }
 
 /*!re2c
@@ -34,9 +34,9 @@ data State = State {
     str = ['] ([^'\\] | [\\][^])* ['];
 
     *      { return (-1) }
-    [\x00] { return $ if _cur == _lim - yymaxfill + 1 then _cnt else (-1) }
-    str    { lexer State{_tok = _cur, _cnt = _cnt + 1, ..} }
-    [ ]+   { lexer State{_tok = _cur, ..} }
+    [\x00] { return $ if _yycursor == _yylimit - yymaxfill + 1 then _count else (-1) }
+    str    { lexer State{_token = _yycursor, _count = _count + 1, ..} }
+    [ ]+   { lexer State{_token = _yycursor, ..} }
 */
 
 yymaxfill :: Int
@@ -44,7 +44,7 @@ yymaxfill :: Int
 
 fill :: State -> Int -> IO State
 fill !st@State{..} !need =
-    if _lim - _cur >= need then
+    if _yylimit - _yycursor >= need then
         return st
     else case _eof of
         True -> error "fill failed"
@@ -54,14 +54,14 @@ fill !st@State{..} !need =
             chunk <- BS.hGet _file chunk_size
             let !eof = BS.length chunk < need -- end of file ?
             let !buf = BS.concat [
-                    BS.drop _tok _str,
+                    BS.drop _token _str,
                     chunk,
                     if eof then (BS.replicate yymaxfill 0) else BS.empty]
             return State {
                 _str = buf,
-                _cur = _cur - _tok,
-                _lim = BS.length buf,
-                _tok = 0,
+                _yycursor = _yycursor - _token,
+                _yylimit = BS.length buf,
+                _token = 0,
                 _eof = eof,
                 ..}
 
@@ -78,11 +78,11 @@ main = do
     let st = State {
         _file = fh,
         _str = BS.empty,
-        _cur = 0,
-        _tok = 0,
-        _lim = 0,
+        _yycursor = 0,
+        _token = 0,
+        _yylimit = 0,
         _eof = False,
-        _cnt = 0
+        _count = 0
     }
     result <- lexer st
     hClose fh

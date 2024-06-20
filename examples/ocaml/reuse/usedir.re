@@ -11,8 +11,8 @@ type answer = Color | Fish | Dunno
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
 }
 
 /*!rules:re2c:colors
@@ -35,7 +35,7 @@ type state = {
 */
 
 let test(str, ans) =
-    let st = {str = str; cur = 0; mar = 0}
+    let st = {str = str; yycursor = 0; yymarker = 0}
     in if not (lex st = ans) then raise (Failure "error")
 
 let main () =

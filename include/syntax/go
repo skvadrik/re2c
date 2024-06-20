@@ -89,16 +89,16 @@ conf:define:YYCONDTYPE = "YYCONDTYPE";
 conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
 conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
 conf:define:YYCTYPE = "YYCTYPE";
-conf:define:YYCTXMARKER = "YYCTXMARKER";
-conf:define:YYCURSOR = "YYCURSOR";
+conf:define:YYCTXMARKER = (api.record ? record ".yyctxmarker" : "YYCTXMARKER");
+conf:define:YYCURSOR = (api.record ? record ".yycursor" : "YYCURSOR");
 conf:define:YYDEBUG = "YYDEBUG";
 conf:define:YYFILL = "YYFILL";
 conf:define:YYGETACCEPT = sigil "{var}";
 conf:define:YYGETCOND = "YYGETCONDITION"; // historic default
 conf:define:YYGETSTATE = "YYGETSTATE";
 conf:define:YYLESSTHAN = "YYLESSTHAN";
-conf:define:YYLIMIT = "YYLIMIT";
-conf:define:YYMARKER = "YYMARKER";
+conf:define:YYLIMIT = (api.record ? record ".yylimit" : "YYLIMIT");
+conf:define:YYMARKER = (api.record ? record ".yymarker" : "YYMARKER");
 conf:define:YYMAXFILL = "YYMAXFILL";
 conf:define:YYMAXNMATCH = "YYMAXNMATCH";
 conf:define:YYMTAGN = "YYMTAGN";
@@ -216,49 +216,49 @@ code:yydebug =
 
 code:yypeek =
     topindent char (code_model.recursive_functions ? " := " : " = ") (api.record
-        ? record ".str[" record ".cur]"
+        ? record ".str[" cursor "]"
         : peek (api_style.functions ? "()")
     ) nl;
 
 code:yyskip =
     topindent (api.record
-        ? record ".cur += 1"
+        ? cursor " += 1"
         : skip (api_style.functions ? "()")
     ) nl;
 
 code:yybackup =
     topindent (api.record
-        ? record ".mar = " record ".cur"
+        ? marker " = " cursor
         : backup (api_style.functions ? "()")
     ) nl;
 
 code:yybackupctx =
     topindent (api.record
-        ? record ".ctx = " record ".cur"
+        ? ctxmarker " = " cursor
         : backupctx (api_style.functions ? "()")
     ) nl;
 
 code:yyrestore =
     topindent (api.record
-        ? record ".cur = " record ".mar"
+        ? cursor " = " marker
         : restore (api_style.functions ? "()")
     ) nl;
 
 code:yyrestorectx =
     topindent (api.record
-        ? record ".cur = " record ".ctx"
+        ? cursor " = " ctxmarker
         : restorectx (api_style.functions ? "()")
     ) nl;
 
 code:yyrestoretag =
     topindent (api.record
-        ? record ".cur = " tag
+        ? cursor " = " tag
         : restoretag (api_style.functions ? "(" tag ")")
     ) nl;
 
 code:yyshift =
     topindent (api.record
-        ? record ".cur -= " offset
+        ? cursor " -= " offset
         : shift (api_style.functions ? "(-" offset ")")
     ) nl;
 
@@ -274,7 +274,7 @@ code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offs
 
 code:yystagp =
     topindent (api.record
-        ? tag " = " record ".cur"
+        ? tag " = " cursor
         : stagp (api_style.functions ? "(" tag ")")
     ) nl;
 
@@ -336,6 +336,6 @@ code:yysetstate =
 code:yylessthan =
     (api.record
         ? (many
-            ? "(" record ".lim - " record ".cur) < " need
-            : record ".lim <= " record ".cur")
+            ? "(" limit " - " cursor ") < " need
+            : limit " <= " cursor)
         : lessthan (api_style.functions ? "(" need ")"));

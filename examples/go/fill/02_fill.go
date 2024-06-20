@@ -15,36 +15,36 @@ const YYMAXFILL = 1
 const BUFSIZE uint = 4096
 
 type Input struct {
-	file *os.File
-	str  []byte
-	cur  uint
-	tok  uint
-	lim  uint
-	eof  bool
+	file     *os.File
+	str      []byte
+	yycursor uint
+	yylimit  uint
+	token    uint
+	eof      bool
 }
 
 func fill(in *Input, need uint) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.tok < need { return -2 }
+	if in.token < need { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.tok:in.lim])
-	in.cur -= in.tok
-	in.lim -= in.tok
-	in.tok = 0
+	copy(in.str[0:], in.str[in.token:in.yylimit])
+	in.yycursor -= in.token
+	in.yylimit -= in.token
+	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.lim:BUFSIZE])
-	in.lim += uint(n)
+	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	in.yylimit += uint(n)
 
 	// If read less than expected, this is end of input => add zero padding
 	// so that the lexer can access characters at the end of buffer.
-	if in.lim < BUFSIZE {
+	if in.yylimit < BUFSIZE {
 		in.eof = true
-		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.lim+i] = 0 }
-		in.lim += YYMAXFILL
+		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.yylimit+i] = 0 }
+		in.yylimit += YYMAXFILL
 	}
 
 	return 0
@@ -53,15 +53,15 @@ func fill(in *Input, need uint) int {
 func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		yyrecord.tok = yyrecord.cur
+		yyrecord.token = yyrecord.yycursor
 	
 //line "go/fill/02_fill.go":59
 {
 	var yych byte
-	if (yyrecord.lim <= yyrecord.cur) {
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -73,24 +73,24 @@ func lex(yyrecord *Input) int {
 		goto yy2
 	}
 yy1:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 //line "go/fill/02_fill.re":59
 	{
 			// Check that it is the sentinel, not some unexpected null.
-			if yyrecord.tok == yyrecord.lim - YYMAXFILL { return count } else { return -1 }
+			if yyrecord.token == yyrecord.yylimit - YYMAXFILL { return count } else { return -1 }
 		}
 //line "go/fill/02_fill.go":83
 yy2:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 //line "go/fill/02_fill.re":65
 	{ return -1 }
 //line "go/fill/02_fill.go":88
 yy3:
-	yyrecord.cur += 1
-	if (yyrecord.lim <= yyrecord.cur) {
+	yyrecord.yycursor += 1
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -102,11 +102,11 @@ yy4:
 	{ continue }
 //line "go/fill/02_fill.go":104
 yy5:
-	yyrecord.cur += 1
-	if (yyrecord.lim <= yyrecord.cur) {
+	yyrecord.yycursor += 1
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case '\'':
 		goto yy6
@@ -116,13 +116,13 @@ yy5:
 		goto yy5
 	}
 yy6:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 //line "go/fill/02_fill.re":63
 	{ count += 1; continue }
 //line "go/fill/02_fill.go":123
 yy7:
-	yyrecord.cur += 1
-	if (yyrecord.lim <= yyrecord.cur) {
+	yyrecord.yycursor += 1
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		if r := fill(yyrecord, 1); r != 0 { return r }
 	}
 	goto yy5
@@ -146,12 +146,12 @@ func main() () {
 	// Prepare lexer state: all offsets are at the end of buffer.
 	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
-		file: f,
-		str:  make([]byte, BUFSIZE+YYMAXFILL),
-		cur:  BUFSIZE,
-		tok:  BUFSIZE,
-		lim:  BUFSIZE,
-		eof:  false,
+		file:     f,
+		str:      make([]byte, BUFSIZE+YYMAXFILL),
+		yycursor: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		eof:      false,
 	}
 
 	// Run the lexer.

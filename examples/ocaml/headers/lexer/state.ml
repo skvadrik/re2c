@@ -2,7 +2,7 @@
 
 type state = {
     str: string;
-    mutable cur: int;
+    mutable yycursor: int;
     mutable tag: int;
     
 mutable yyt1: int;

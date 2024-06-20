@@ -13,13 +13,13 @@ import (
 const BUFSIZE int = 10
 
 type State struct {
-	file    *os.File
-	str     []byte
-	cur     int
-	mar     int
-	tok     int
-	lim     int
-	yystate int
+	file     *os.File
+	str      []byte
+	yycursor int
+	yymarker int
+	yylimit  int
+	token    int
+	yystate  int
 }
 
 const (
@@ -31,8 +31,8 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.tok
-	used := st.lim - st.tok
+	shift := st.token
+	used := st.yylimit - st.token
 	free := BUFSIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
@@ -40,15 +40,15 @@ func fill(st *State) int {
 
 	// Shift buffer contents (discard already processed data).
 	copy(st.str[0:], st.str[shift:shift+used])
-	st.cur -= shift
-	st.mar -= shift
-	st.lim -= shift
-	st.tok -= shift
+	st.yycursor -= shift
+	st.yymarker -= shift
+	st.yylimit -= shift
+	st.token -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.lim:BUFSIZE])
-	st.lim += n
-	st.str[st.lim] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.str[st.yylimit:BUFSIZE])
+	st.yylimit += n
+	st.str[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -59,17 +59,17 @@ func lex(yyrecord *State, recv *int) int {
 //line "go/state/push.go":60
 switch (yyrecord.yystate) {
 case 0:
-	if (yyrecord.lim <= yyrecord.cur) {
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		goto yy8
 	}
 	goto yyFillLabel0
 case 1:
-	if (yyrecord.lim <= yyrecord.cur) {
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		goto yy3
 	}
 	goto yyFillLabel1
 case 2:
-	if (yyrecord.lim <= yyrecord.cur) {
+	if (yyrecord.yylimit <= yyrecord.yycursor) {
 		goto yy7
 	}
 	goto yyFillLabel2
@@ -79,70 +79,70 @@ default:
 //line "go/state/push.re":56
 
 loop:
-	yyrecord.tok = yyrecord.cur
+	yyrecord.token = yyrecord.yycursor
 	
 //line "go/state/push.go":85
 yy0:
 yyFillLabel0:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy4
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			yyrecord.yystate = 0
 			return lexWaitingForInput
 		}
 		goto yy2
 	}
 yy2:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yy3:
 	yyrecord.yystate = -1
 //line "go/state/push.re":66
 	{ return lexPacketBroken }
 //line "go/state/push.go":105
 yy4:
-	yyrecord.cur += 1
-	yyrecord.mar = yyrecord.cur
+	yyrecord.yycursor += 1
+	yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel1:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			yyrecord.yystate = 1
 			return lexWaitingForInput
 		}
 		goto yy3
 	}
 yy5:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 	yyrecord.yystate = -1
 //line "go/state/push.re":68
 	{ *recv = *recv + 1; goto loop }
 //line "go/state/push.go":128
 yy6:
-	yyrecord.cur += 1
+	yyrecord.yycursor += 1
 yyFillLabel2:
-	yych = yyrecord.str[yyrecord.cur]
+	yych = yyrecord.str[yyrecord.yycursor]
 	switch (yych) {
 	case ';':
 		goto yy5
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy6
 	default:
-		if (yyrecord.lim <= yyrecord.cur) {
+		if (yyrecord.yylimit <= yyrecord.yycursor) {
 			yyrecord.yystate = 2
 			return lexWaitingForInput
 		}
 		goto yy7
 	}
 yy7:
-	yyrecord.cur = yyrecord.mar
+	yyrecord.yycursor = yyrecord.yymarker
 	goto yy3
 yy8:
 	yyrecord.yystate = -1
@@ -162,14 +162,14 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer.
 	st := &State{
-		file:    fr,
-		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		str:     make([]byte, BUFSIZE+1),
-		cur:     BUFSIZE,
-		mar:     BUFSIZE,
-		tok:     BUFSIZE,
-		lim:     BUFSIZE,
-		yystate: -1,
+		file:     fr,
+		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+		str:      make([]byte, BUFSIZE+1),
+		yycursor: BUFSIZE,
+		yymarker: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		yystate:  -1,
 	}
 
 	// Main loop. The buffer contains incomplete data which appears packet by

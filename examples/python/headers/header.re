@@ -6,7 +6,7 @@ from lexer.state import State
 class State:
     def __init__(self, str):
         self.str = str
-        self.cur = 0
+        self.yycursor = 0
         /*!stags:re2c format = "\n        self.@@ = 0"; */
 /*!header:re2c:off*/
 

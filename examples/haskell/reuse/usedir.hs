@@ -18,8 +18,8 @@ data Answer = Color | Fish | Dunno deriving (Eq)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _mar :: Int
+    _yycursor :: Int,
+    _yymarker :: Int
 }
 
 #25 "haskell/reuse/usedir.re"
@@ -32,8 +32,8 @@ data State = State {
 #33 "haskell/reuse/usedir.hs"
 yy0 :: State -> Answer
 yy0 State{..} =
-    let yych = index _str _cur in
-    let __ = _cur + 1 in let _cur = __ in
+    let yych = index _str _yycursor in
+    let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x65 == _c ->
             yy3 State{..}
@@ -60,110 +60,110 @@ yy2 State{..} =
 
 yy3 :: State -> Answer
 yy3 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy8 State{..}
         _c | True ->
             yy2 State{..}
 
 yy4 :: State -> Answer
 yy4 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy10 State{..}
         _c | True ->
             yy2 State{..}
 
 yy5 :: State -> Answer
 yy5 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy11 State{..}
         _c | True ->
             yy2 State{..}
 
 yy6 :: State -> Answer
 yy6 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy12 State{..}
         _c | True ->
             yy2 State{..}
 
 yy7 :: State -> Answer
 yy7 State{..} =
-    let _mar = _cur in
-    let yych = index _str _cur in
+    let _yymarker = _yycursor in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy13 State{..}
         _c | True ->
             yy2 State{..}
 
 yy8 :: State -> Answer
 yy8 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6C == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy14 State{..}
         _c | True ->
             yy9 State{..}
 
 yy9 :: State -> Answer
 yy9 State{..} =
-    let _cur = _mar in
+    let _yycursor = _yymarker in
     yy2 State{..}
 
 yy10 :: State -> Answer
 yy10 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x64 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy15 State{..}
         _c | True ->
             yy9 State{..}
 
 yy11 :: State -> Answer
 yy11 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x67 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy16 State{..}
         _c | True ->
             yy9 State{..}
 
 yy12 :: State -> Answer
 yy12 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x64 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy17 State{..}
         _c | True ->
             yy9 State{..}
 
 yy13 :: State -> Answer
 yy13 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6C == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy18 State{..}
         _c | True ->
             yy9 State{..}
@@ -176,20 +176,20 @@ yy14 State{..} =
 
 yy15 :: State -> Answer
 yy15 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x64 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy19 State{..}
         _c | True ->
             yy9 State{..}
 
 yy16 :: State -> Answer
 yy16 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x65 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy20 State{..}
         _c | True ->
             yy9 State{..}
@@ -202,90 +202,90 @@ yy17 State{..} =
 
 yy18 :: State -> Answer
 yy18 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6D == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy21 State{..}
         _c | True ->
             yy9 State{..}
 
 yy19 :: State -> Answer
 yy19 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6F == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy22 State{..}
         _c | True ->
             yy9 State{..}
 
 yy20 :: State -> Answer
 yy20 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6E == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy23 State{..}
         _c | True ->
             yy9 State{..}
 
 yy21 :: State -> Answer
 yy21 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6F == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy24 State{..}
         _c | True ->
             yy9 State{..}
 
 yy22 :: State -> Answer
 yy22 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x63 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy25 State{..}
         _c | True ->
             yy9 State{..}
 
 yy23 :: State -> Answer
 yy23 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x74 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy26 State{..}
         _c | True ->
             yy9 State{..}
 
 yy24 :: State -> Answer
 yy24 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6E == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy14 State{..}
         _c | True ->
             yy9 State{..}
 
 yy25 :: State -> Answer
 yy25 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x6B == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy14 State{..}
         _c | True ->
             yy9 State{..}
 
 yy26 :: State -> Answer
 yy26 State{..} =
-    let yych = index _str _cur in
+    let yych = index _str _yycursor in
     case yych of
         _c | 0x61 == _c ->
-            let __ = _cur + 1 in let _cur = __ in
+            let __ = _yycursor + 1 in let _yycursor = __ in
             yy17 State{..}
         _c | True ->
             yy9 State{..}
@@ -300,7 +300,7 @@ lexer State{..} =
 main :: IO ()
 main = do
     let test str ans = do
-            let st = State {_str = str, _cur = 0, _mar = 0}
+            let st = State {_str = str, _yycursor = 0, _yymarker = 0}
             when (lexer st /= ans) $ error "failed"
 
     test "salmon" Fish

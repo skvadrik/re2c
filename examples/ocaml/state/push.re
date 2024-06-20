@@ -12,10 +12,10 @@ let log format = (if debug then Printf.eprintf else Printf.ifprintf stderr) form
 type state = {
     file: in_channel;
     str: bytes;
-    mutable cur: int;
-    mutable mar: int;
-    mutable tok: int;
-    mutable lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    mutable yylimit: int;
+    mutable token: int;
     mutable yystate: int;
     mutable recv: int;
 }
@@ -24,19 +24,19 @@ type status = End | Ready | Waiting | BadPacket | BigPacket
 
 let fill(st: state) : status =
     (* Error: lexeme too long. In real life could reallocate a larger buffer. *)
-    if st.tok < 1 then BigPacket else (
+    if st.token < 1 then BigPacket else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.tok st.str 0 (st.lim - st.tok);
-    st.cur <- st.cur - st.tok;
-    st.mar <- st.mar - st.tok;
-    st.lim <- st.lim - st.tok;
-    st.tok <- 0;
+    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    st.yycursor <- st.yycursor - st.token;
+    st.yymarker <- st.yymarker - st.token;
+    st.yylimit <- st.yylimit - st.token;
+    st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = In_channel.input st.file st.str st.lim (bufsize - st.lim - 1) in (* -1 for sentinel *)
-    st.lim <- st.lim + n;
-    set st.str st.lim '\x00'; (* append sentinel *)
+    let n = In_channel.input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in
+    st.yylimit <- st.yylimit + n;
+    set st.str st.yylimit '\x00'; (* append sentinel *)
 
     Ready)
 
@@ -54,7 +54,7 @@ let fill(st: state) : status =
 */
 
 and lex_loop st =
-    st.tok <- st.cur;
+    st.token <- st.yycursor;
     lex st
 
 let test (packets: string list) (sts: status) =
@@ -63,15 +63,15 @@ let test (packets: string list) (sts: status) =
     let oc = Out_channel.open_bin fname in
     let ic = In_channel.open_bin fname in
 
-    let lim = bufsize - 1 in
+    let yylimit = bufsize - 1 in
     let st = {
         file = ic;
-        (* Sentinel (at `lim` offset) is set to null, which triggers YYFILL. *)
+        (* Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL. *)
         str = create bufsize;
-        cur = lim;
-        mar = lim;
-        tok = lim;
-        lim = lim;
+        yycursor = yylimit;
+        yymarker = yylimit;
+        yylimit = yylimit;
+        token = yylimit;
         yystate = -1;
         recv = 0;
     } in

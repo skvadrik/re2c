@@ -90,16 +90,16 @@ conf:define:YYCONDTYPE = "YYCONDTYPE";
 conf:define:YYCOPYMTAG = "yycopymtag";
 conf:define:YYCOPYSTAG = "yycopystag";
 conf:define:YYCTYPE = "YYCTYPE";
-conf:define:YYCTXMARKER = "yyctxmarker";
-conf:define:YYCURSOR = "yycursor";
+conf:define:YYCTXMARKER = "_yyctxmarker";
+conf:define:YYCURSOR = "_yycursor";
 conf:define:YYDEBUG = "yydebug";
 conf:define:YYFILL = "yyfill";
 conf:define:YYGETACCEPT = "yygetaccept";
 conf:define:YYGETCOND = "yygetcond";
 conf:define:YYGETSTATE = "yygetstate";
 conf:define:YYLESSTHAN = "yylessthan";
-conf:define:YYLIMIT = "yylimit";
-conf:define:YYMARKER = "YYMARKER";
+conf:define:YYLIMIT = "_yylimit";
+conf:define:YYMARKER = "_yymarker";
 conf:define:YYMAXFILL = "yymaxfill";
 conf:define:YYMAXNMATCH = "yymaxnmatch";
 conf:define:YYMTAGN = "yymtagn";
@@ -202,8 +202,8 @@ code:yydebug = topindent debug nl;
 code:yypeek =
     topindent (api.record
         ? (monadic
-            ? char " <- return $ " peek " _str _cur"
-            : "let " char " = " peek " _str _cur in")
+            ? char " <- return $ " peek " _str " cursor
+            : "let " char " = " peek " _str " cursor " in")
         : (monadic
             ? char " <- " peek
             : "let " char " = " peek " in")
@@ -212,56 +212,56 @@ code:yypeek =
 code:yyskip =
     topindent (api.record
         ? (monadic
-            ? "_cur <- return $ _cur + 1"
-            : "let __ = _cur + 1 in let _cur = __ in")
+            ? cursor " <- return $ " cursor " + 1"
+            : "let __ = " cursor " + 1 in let " cursor " = __ in")
         : skip
     ) nl;
 
 code:yybackup =
     topindent (api.record
         ? (monadic
-            ? "let _mar = _cur"
-            : "let _mar = _cur in")
+            ? "let " marker " = " cursor
+            : "let " marker " = " cursor " in")
         : backup
     ) nl;
 
 code:yybackupctx =
     topindent (api.record
         ? (monadic
-            ? "let _ctx = _cur"
-            : "let _ctx = _cur in")
+            ? "let " ctxmarker " = " cursor
+            : "let " ctxmarker " = " cursor " in")
         : backupctx
     ) nl;
 
 code:yyrestore =
     topindent (api.record
         ? (monadic
-            ? "let _cur = _mar"
-            : "let _cur = _mar in")
+            ? "let " cursor " = " marker
+            : "let " cursor " = " marker " in")
         : restore
     ) nl;
 
 code:yyrestorectx =
     topindent (api.record
         ? (monadic
-            ? "let _cur = _ctx"
-            : "let _cur = _ctx in")
+            ? "let " cursor " = " ctxmarker
+            : "let " cursor " = " ctxmarker " in")
         : restorectx
     ) nl;
 
 code:yyrestoretag =
     topindent (api.record
         ? (monadic
-            ? "let _cur = " tag
-            : "let _cur = " tag " in")
+            ? "let " cursor " = " tag
+            : "let " cursor " = " tag " in")
         : restoretag
     ) nl;
 
 code:yyshift =
     topindent (api.record
         ? (monadic
-            ? "_cur <- return $ _cur - " offset
-            : "let __ = _cur - " offset " in let _cur = __ in")
+            ? cursor " <- return $ " cursor " - " offset
+            : "let __ = " cursor " - " offset " in let " cursor " = __ in")
         : shift
     ) nl;
 
@@ -279,8 +279,8 @@ code:yyshiftmtag = topindent shiftmtag nl;
 code:yystagp =
     topindent (api.record
         ? (monadic
-            ? "let " tag " = _cur"
-            : "let " tag " = _cur in")
+            ? "let " tag " = " cursor
+            : "let " tag " = " cursor " in")
         : stagp
     ) nl;
 
@@ -344,5 +344,5 @@ code:yysetstate =
 
 code:yylessthan =
     (api.record
-        ? "_cur >= _lim" // YYFILL check can only be used with EOF rule $
+        ? cursor " >= " limit // YYFILL check can only be used with EOF rule $
         : lessthan);

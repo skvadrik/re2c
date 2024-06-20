@@ -14,35 +14,35 @@ enum BufSize = (4096 - YYMaxFill);
 
 struct Input {
     FILE* file;
-    char[BufSize + YYMaxFill] str;
-    char* lim, cur, tok;
+    char[BufSize + YYMaxFill] buffer;
+    char* yylimit, yycursor, token;
     bool eof;
 };
 
-private int fill(ref Input input, size_t need) {
-    if (input.eof) return 1;
+private int fill(ref Input it, size_t need) {
+    if (it.eof) return 1;
 
-    const size_t shift = input.tok - input.str.ptr;
-    const size_t used = input.lim - input.tok;
+    const size_t shift = it.token - it.buffer.ptr;
+    const size_t used = it.yylimit - it.token;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < need) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(input.str.ptr, input.tok, used);
-    input.lim -= shift;
-    input.cur -= shift;
-    input.tok -= shift;
+    memmove(it.buffer.ptr, it.token, used);
+    it.yylimit -= shift;
+    it.yycursor -= shift;
+    it.token -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    input.lim += fread(input.lim, 1, BufSize - used, input.file);
+    it.yylimit += fread(it.yylimit, 1, BufSize - used, it.file);
 
     // If read less than expected, this is end of input => add zero padding
     // so that the lexer can access characters at the end of buffer.
-    if (input.lim < input.str.ptr + BufSize) {
-        input.eof = true;
-        memset(input.lim, 0, YYMaxFill);
-        input.lim += YYMaxFill;
+    if (it.yylimit < it.buffer.ptr + BufSize) {
+        it.eof = true;
+        memset(it.yylimit, 0, YYMaxFill);
+        it.yylimit += YYMaxFill;
     }
 
     return 0;
@@ -51,13 +51,13 @@ private int fill(ref Input input, size_t need) {
 private int lex(ref Input yyrecord) {
     int count = 0;
     for (;;) {
-        yyrecord.tok = yyrecord.cur;
+        yyrecord.token = yyrecord.yycursor;
     
 #line 57 "d/fill/02_fill.d"
 {
 	char yych;
-	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.cur;
+	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case 0x00: goto yy1;
 		case ' ': goto yy3;
@@ -65,22 +65,22 @@ private int lex(ref Input yyrecord) {
 		default: goto yy2;
 	}
 yy1:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 #line 57 "d/fill/02_fill.re"
 	{
             // Check that it is the sentinel, not some unexpected null.
-            return yyrecord.tok == yyrecord.lim - YYMaxFill ? count : -1;
+            return yyrecord.token == yyrecord.yylimit - YYMaxFill ? count : -1;
         }
 #line 75 "d/fill/02_fill.d"
 yy2:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 #line 63 "d/fill/02_fill.re"
 	{ return -1; }
 #line 80 "d/fill/02_fill.d"
 yy3:
-	++yyrecord.cur;
-	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.cur;
+	++yyrecord.yycursor;
+	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case ' ': goto yy3;
 		default: goto yy4;
@@ -90,22 +90,22 @@ yy4:
 	{ continue; }
 #line 92 "d/fill/02_fill.d"
 yy5:
-	++yyrecord.cur;
-	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.cur;
+	++yyrecord.yycursor;
+	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+	yych = *yyrecord.yycursor;
 	switch (yych) {
 		case '\'': goto yy6;
 		case '\\': goto yy7;
 		default: goto yy5;
 	}
 yy6:
-	++yyrecord.cur;
+	++yyrecord.yycursor;
 #line 61 "d/fill/02_fill.re"
 	{ ++count; continue; }
 #line 106 "d/fill/02_fill.d"
 yy7:
-	++yyrecord.cur;
-	if (yyrecord.lim <= yyrecord.cur) if (fill(yyrecord, 1) != 0) return -1;
+	++yyrecord.yycursor;
+	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
 	goto yy5;
 }
 #line 64 "d/fill/02_fill.re"
@@ -128,16 +128,16 @@ void main() {
     int count = 3 * BufSize; // number of quoted strings written to file
 
     // Initialize lexer state: all pointers are at the end of buffer.
-    // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
-    Input input;
-    input.file = fopen(fname.ptr, "r");
-    input.cur = input.tok = input.lim = input.str.ptr + BufSize;
-    input.eof = 0;
+    // This immediately triggers YYFILL, as the check `it.yycursor < it.yylimit` fails.
+    Input it;
+    it.file = fopen(fname.ptr, "r");
+    it.yycursor = it.token = it.yylimit = it.buffer.ptr + BufSize;
+    it.eof = 0;
 
     // Run the lexer.
-    assert(lex(input) == count);
+    assert(lex(it) == count);
 
     // Cleanup: remove input file.
-    fclose(input.file);
+    fclose(it.file);
     remove(fname.ptr);
 }

@@ -6,15 +6,15 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
+    mutable yycursor: int;
 }
 
 (* expect a null-terminated string *)
 
 #15 "ocaml/eof/01_sentinel.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
-	yyrecord.cur <- yyrecord.cur + 1;
+	let yych = get yyrecord.str yyrecord.yycursor in
+	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '\x00' -> (yy1 [@tailcall]) yyrecord count
 		| ' ' -> (yy3 [@tailcall]) yyrecord count
@@ -32,10 +32,10 @@ and yy2 (yyrecord : state) (count : int) : int =
 #33 "ocaml/eof/01_sentinel.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ' ' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy3 [@tailcall]) yyrecord count
 		| _ -> (yy4 [@tailcall]) yyrecord count
 
@@ -45,10 +45,10 @@ and yy4 (yyrecord : state) (count : int) : int =
 #46 "ocaml/eof/01_sentinel.ml"
 
 and yy5 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| 'a'..'z' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy5 [@tailcall]) yyrecord count
 		| _ -> (yy6 [@tailcall]) yyrecord count
 
@@ -64,7 +64,7 @@ and lex (yyrecord : state) (count : int) : int =
 
 
 let test(str, count) =
-    let st = {str = str; cur = 0}
+    let st = {str = str; yycursor = 0}
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =

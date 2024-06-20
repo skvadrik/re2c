@@ -6,8 +6,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable t1: int;
     mutable t2: int;
     mutable t3: int;
@@ -38,14 +38,14 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #40 "ocaml/submatch/01_stags.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt1 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt1 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy3 [@tailcall]) st
 		| _ ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy1 [@tailcall]) st
 
 and yy1 (st : state) : semver option =
@@ -57,55 +57,55 @@ and yy2 (st : state) : semver option =
 #58 "ocaml/submatch/01_stags.ml"
 
 and yy3 (st : state) : semver option =
-	st.mar <- st.cur;
-	let yych = get st.str st.cur in
+	st.yymarker <- st.yycursor;
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt2 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt2 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy5 (st : state) : semver option =
-	st.cur <- st.mar;
+	st.yycursor <- st.yymarker;
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '.' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy4 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy6 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '\x00' ->
-			st.yyt3 <- st.cur;
+			st.yyt3 <- st.yycursor;
 			st.yyt4 <- -1;
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st
 		| '.' ->
-			st.yyt3 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt3 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy9 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy7 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
@@ -121,28 +121,28 @@ and yy8 (st : state) : semver option =
         Some {
             major = s2n st.str st.t1 st.t2;
             minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.cur - 1)
+            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.yycursor - 1)
         }
 
 #128 "ocaml/submatch/01_stags.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '0'..'9' ->
-			st.yyt4 <- st.cur;
-			st.cur <- st.cur + 1;
+			st.yyt4 <- st.yycursor;
+			st.yycursor <- st.yycursor + 1;
 			(yy10 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
 and yy10 (st : state) : semver option =
-	let yych = get st.str st.cur in
+	let yych = get st.str st.yycursor in
 	match yych with
 		| '\x00' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy8 [@tailcall]) st
 		| '0'..'9' ->
-			st.cur <- st.cur + 1;
+			st.yycursor <- st.yycursor + 1;
 			(yy10 [@tailcall]) st
 		| _ -> (yy5 [@tailcall]) st
 
@@ -155,8 +155,8 @@ and parse (st : state) : semver option =
 let test (str: string) (result: semver option) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         t1 = -1;
         t2 = -1;
         t3 = -1;

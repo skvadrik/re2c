@@ -7,8 +7,8 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
     mutable yynmatch: int; (* number of capturing groups *)
     mutable yypmatch: int array; (* memory for capturing parentheses *)
     /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
@@ -50,8 +50,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 let test (str: string) (result: semver option) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
+        yycursor = 0;
+        yymarker = 0;
         yynmatch = 0;
         yypmatch = Array.make (2 * yymaxnmatch) (-1);
         /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */

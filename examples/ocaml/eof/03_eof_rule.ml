@@ -6,28 +6,28 @@ open String
 
 type state = {
     str: string;
-    mutable cur: int;
-    mutable mar: int;
-    lim: int;
+    mutable yycursor: int;
+    mutable yymarker: int;
+    yylimit: int;
 }
 
 (* expect a null-terminated string *)
 
 #17 "ocaml/eof/03_eof_rule.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ' ' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy3 [@tailcall]) yyrecord count
 		| '\'' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy5 [@tailcall]) yyrecord count
 		| _ ->
-			if (yyrecord.lim <= yyrecord.cur) then (
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (
 				(yy10 [@tailcall]) yyrecord count
 			) else (
-				yyrecord.cur <- yyrecord.cur + 1;
+				yyrecord.yycursor <- yyrecord.yycursor + 1;
 				(yy1 [@tailcall]) yyrecord count
 			)
 
@@ -40,10 +40,10 @@ and yy2 (yyrecord : state) (count : int) : int =
 #41 "ocaml/eof/03_eof_rule.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	match yych with
 		| ' ' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy3 [@tailcall]) yyrecord count
 		| _ -> (yy4 [@tailcall]) yyrecord count
 
@@ -53,13 +53,13 @@ and yy4 (yyrecord : state) (count : int) : int =
 #54 "ocaml/eof/03_eof_rule.ml"
 
 and yy5 (yyrecord : state) (count : int) : int =
-	yyrecord.mar <- yyrecord.cur;
-	let yych = get yyrecord.str yyrecord.cur in
+	yyrecord.yymarker <- yyrecord.yycursor;
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych <= '\x00') then (
-		if (yyrecord.lim <= yyrecord.cur) then (
+		if (yyrecord.yylimit <= yyrecord.yycursor) then (
 			(yy2 [@tailcall]) yyrecord count
 		) else (
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy6 [@tailcall]) yyrecord count
 		)
 	) else (
@@ -67,22 +67,22 @@ and yy5 (yyrecord : state) (count : int) : int =
 	)
 
 and yy6 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	(yy7 [@tailcall]) yyrecord count yych
 
 and yy7 (yyrecord : state) (count : int) (yych : char) : int =
 	match yych with
 		| '\'' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy8 [@tailcall]) yyrecord count
 		| '\\' ->
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy9 [@tailcall]) yyrecord count
 		| _ ->
-			if (yyrecord.lim <= yyrecord.cur) then (
+			if (yyrecord.yylimit <= yyrecord.yycursor) then (
 				(yy11 [@tailcall]) yyrecord count
 			) else (
-				yyrecord.cur <- yyrecord.cur + 1;
+				yyrecord.yycursor <- yyrecord.yycursor + 1;
 				(yy6 [@tailcall]) yyrecord count
 			)
 
@@ -92,16 +92,16 @@ and yy8 (yyrecord : state) (count : int) : int =
 #93 "ocaml/eof/03_eof_rule.ml"
 
 and yy9 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.cur in
+	let yych = get yyrecord.str yyrecord.yycursor in
 	if (yych <= '\x00') then (
-		if (yyrecord.lim <= yyrecord.cur) then (
+		if (yyrecord.yylimit <= yyrecord.yycursor) then (
 			(yy11 [@tailcall]) yyrecord count
 		) else (
-			yyrecord.cur <- yyrecord.cur + 1;
+			yyrecord.yycursor <- yyrecord.yycursor + 1;
 			(yy6 [@tailcall]) yyrecord count
 		)
 	) else (
-		yyrecord.cur <- yyrecord.cur + 1;
+		yyrecord.yycursor <- yyrecord.yycursor + 1;
 		(yy6 [@tailcall]) yyrecord count
 	)
 
@@ -111,7 +111,7 @@ and yy10 (yyrecord : state) (count : int) : int =
 #112 "ocaml/eof/03_eof_rule.ml"
 
 and yy11 (yyrecord : state) (count : int) : int =
-	yyrecord.cur <- yyrecord.mar;
+	yyrecord.yycursor <- yyrecord.yymarker;
 	(yy2 [@tailcall]) yyrecord count
 
 and lex (yyrecord : state) (count : int) : int =
@@ -123,9 +123,9 @@ and lex (yyrecord : state) (count : int) : int =
 let test(str, count) =
     let st = {
         str = str;
-        cur = 0;
-        mar = 0;
-        lim = String.length str - 1; (* termunating null not included *)
+        yycursor = 0;
+        yymarker = 0;
+        yylimit = String.length str - 1; (* terminating null not included *)
     }
     in if not (lex st 0 = count) then raise (Failure "error")
 

@@ -15,10 +15,10 @@ macro_rules! log {
 struct State {
     file: File,
     str: [u8; BUFSIZE + 1],
-    lim: usize,
-    cur: usize,
-    mar: usize,
-    tok: usize,
+    yylimit: usize,
+    yycursor: usize,
+    yymarker: usize,
+    token: usize,
     yystate: isize,
 }
 
@@ -26,8 +26,8 @@ struct State {
 enum Status {End, Ready, Waiting, BadPacket, BigPacket}
 
 fn fill(st: &mut State) -> Status {
-    let shift = st.tok;
-    let used = st.lim - st.tok;
+    let shift = st.token;
+    let used = st.yylimit - st.token;
     let free = BUFSIZE - used;
 
     // Error: no space. In real life can reallocate a larger buffer.
@@ -38,17 +38,17 @@ fn fill(st: &mut State) -> Status {
         let p = st.str.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
-    st.lim -= shift;
-    st.cur -= shift;
-    st.mar = st.mar.overflowing_sub(shift).0; // underflow ok if marker is unused
-    st.tok -= shift;
+    st.yylimit -= shift;
+    st.yycursor -= shift;
+    st.yymarker = st.yymarker.overflowing_sub(shift).0; // underflow ok if marker is unused
+    st.token -= shift;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.lim..BUFSIZE]) {
-        Ok(n) => st.lim += n,
+    match st.file.read(&mut st.str[st.yylimit..BUFSIZE]) {
+        Ok(n) => st.yylimit += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.str[st.lim] = 0; // append sentinel symbol
+    st.str[st.yylimit] = 0; // append sentinel symbol
 
     return Status::Ready;
 }
@@ -57,7 +57,7 @@ fn lex(yyrecord: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
     #[allow(unused_assignments)]
     let mut yych: u8 = 0;
     'lex: loop {
-        yyrecord.tok = yyrecord.cur;
+        yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
@@ -95,14 +95,14 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
     };
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
-    // of buffer, the character at `lim` offset is the sentinel (null).
+    // of buffer, the character at `yylimit` offset is the sentinel (null).
     let mut state = State {
         file: fr,
-        str: [0; BUFSIZE + 1], // sentinel (at `lim` offset) is set to null
-        cur: BUFSIZE,
-        mar: BUFSIZE,
-        tok: BUFSIZE,
-        lim: BUFSIZE,
+        str: [0; BUFSIZE + 1], // sentinel (at `yylimit` offset) is set to null
+        yylimit: BUFSIZE,
+        yycursor: BUFSIZE,
+        yymarker: BUFSIZE,
+        token: BUFSIZE,
         yystate: -1,
     };
 

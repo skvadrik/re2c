@@ -9,8 +9,8 @@ import Data.ByteString (ByteString, index)
 
 data State = State {
     _str :: ByteString,
-    _cur :: Int,
-    _mar :: Int,
+    _yycursor :: Int,
+    _yymarker :: Int,
     _yyaccept :: Int
 }
 
@@ -26,7 +26,12 @@ data State = State {
 main :: IO ()
 main = do
     let test s n = do
-            let st = State {_str = s, _cur = 0, _mar = 0, _yyaccept = 0}
+            let st = State {
+                    _str = s,
+                    _yycursor = 0,
+                    _yymarker = 0,
+                    _yyaccept = 0}
+
             when (lexer st /= n) $ error "failed"
 
     test "123\0" INum
