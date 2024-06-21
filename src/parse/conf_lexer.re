@@ -676,8 +676,8 @@ opt:
     "api_style.freeform"             { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
     "start_conditions"               { RET_GOPT(StxGOpt::START_CONDITIONS); }
     "storable_state"                 { RET_GOPT(StxGOpt::STORABLE_STATE); }
-    "date"                           { RET_GOPT(StxGOpt::DATE); }
-    "version"                        { RET_GOPT(StxGOpt::VER); }
+    "have_date"                      { RET_GOPT(StxGOpt::HAVE_DATE); }
+    "have_version"                   { RET_GOPT(StxGOpt::HAVE_VER); }
     "case_ranges"                    { RET_GOPT(StxGOpt::CASE_RANGES); }
     "unsafe"                         { RET_GOPT(StxGOpt::UNSAFE); }
     "monadic"                        { RET_GOPT(StxGOpt::MONADIC); }
