@@ -780,9 +780,9 @@ static bool eval_cond(
             return opts->start_conditions;
         case StxGOpt::STORABLE_STATE:
             return opts->storable_state;
-        case StxGOpt::DATE:
+        case StxGOpt::HAVE_DATE:
             return opts->date;
-        case StxGOpt::VER:
+        case StxGOpt::HAVE_VER:
             return opts->version;
         case StxGOpt::CASE_RANGES:
             return opts->case_ranges;
