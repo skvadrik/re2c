@@ -494,9 +494,7 @@ start:
         RET_TOK(CONF_STRING);
     }
 
-    [(] space* { goto opt; }
-
-    [=?:,){}[\]] { RET_TOK(cur[-1]); }
+    [=?!&|:,(){}[\]] { RET_TOK(cur[-1]); }
 
     "code:var_local"              { RET_CODE(code_var_local); }
     "code:var_global"             { RET_CODE(code_var_global); }
@@ -641,14 +639,6 @@ start:
     "dedent"    { RET_VAR(StxVarId::DEDENT); }
     "topindent" { RET_VAR(StxVarId::TOPINDENT); }
 
-    [a-z0-9_]+ { RET_FAIL(error_at_tok("unknown variable: '%.*s'", int(cur - tok), tok)); }
-
-    * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
-*/
-
-opt:
-    tok = cur;
-/*!local:re2c
     // Global (immutable) conditionals.
     //
     // A subset of constant options that is exported for use in syntax files.
@@ -696,7 +686,11 @@ opt:
     "many"            { RET_LOPT(StxLOpt::MANY); }
     "nested"          { RET_LOPT(StxLOpt::NESTED); }
 
-    * { RET_FAIL(error_at_cur("unknown option")); }
+    [a-z0-9_]+ {
+        RET_FAIL(error_at_tok("unknown variable or option: '%.*s'", int(cur - tok), tok));
+    }
+
+    * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */
 
     UNREACHABLE();

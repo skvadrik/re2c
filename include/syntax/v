@@ -182,7 +182,7 @@ code:enum = (code_model.loop_switch
         indent [elem: topindent elem (have_init ? " = " init) nl] dedent
     "}" nl);
 
-code:enum_elem = (code_model.loop_switch ? "" : ".") name;
+code:enum_elem = (!code_model.loop_switch ? ".") name;
 
 code:fndef =
     topindent "fn " name "("

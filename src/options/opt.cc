@@ -652,7 +652,7 @@ Ret Opt::validate_conf_code(
                         stack.push_back({y, 0});
                     }
                 }
-            } else if (x->cond.opt->is_local) {
+            } else if (x->cond.opt->kind == StxOptKind::LOC) {
                 // no need to check global conditionals, as they are filtered in the lexer
                 CHECK_RET(check_cond(x->cond.opt->lopt, conf, conds));
             }
@@ -700,16 +700,63 @@ StxCode* Opt::make_code_var(StxVarId var) {
 
 StxOpt* Opt::make_opt_global(StxGOpt opt) {
     StxOpt* x = alc.alloct<StxOpt>(1);
-    x->is_local = false;
+    x->kind = StxOptKind::GLOB;
     x->gopt = opt;
     return x;
 }
 
 StxOpt* Opt::make_opt_local(StxLOpt opt) {
     StxOpt* x = alc.alloct<StxOpt>(1);
-    x->is_local = true;
+    x->kind = StxOptKind::LOC;
     x->lopt = opt;
     return x;
+}
+
+StxOpt* Opt::make_opt_imm(bool b) {
+    StxOpt* x = alc.alloct<StxOpt>(1);
+    x->kind = StxOptKind::IMM;
+    x->imm = b;
+    return x;
+}
+
+StxOpt* Opt::make_opt_neg(StxOpt* x) {
+    if (x->kind == StxOptKind::IMM) {
+        x->imm = !x->imm;
+        return x;
+    } else {
+        StxOpt* y = alc.alloct<StxOpt>(1);
+        y->kind = StxOptKind::NEG;
+        y->neg = x;
+        return y;
+    }
+}
+
+StxOpt* Opt::make_opt_and(StxOpt* x, StxOpt* y) {
+    if (x->kind == StxOptKind::IMM) {
+        return x->imm ? y : x;
+    } else if (y->kind == StxOptKind::IMM) {
+        return y->imm ? x : y;
+    } else {
+        StxOpt* z = alc.alloct<StxOpt>(1);
+        z->kind = StxOptKind::AND;
+        z->op.lhs = x;
+        z->op.rhs = y;
+        return z;
+    }
+}
+
+StxOpt* Opt::make_opt_or(StxOpt* x, StxOpt* y) {
+    if (x->kind == StxOptKind::IMM) {
+        return x->imm ? x : y;
+    } else if (y->kind == StxOptKind::IMM) {
+        return y->imm ? y : x;
+    } else {
+        StxOpt* z = alc.alloct<StxOpt>(1);
+        z->kind = StxOptKind::OR;
+        z->op.lhs = x;
+        z->op.rhs = y;
+        return z;
+    }
 }
 
 StxCode* Opt::make_code_cond(StxOpt* opt, StxCodes* then_code, StxCodes* else_code) {
@@ -743,10 +790,21 @@ void opt_t::push_list_on_stack(const StxCode* x) const {
 
 static bool eval_cond(
         StxCodeId id, const StxOpt* cond, const opt_t* opts, RenderCallback* callback) {
-    if (cond->is_local) {
+    switch (cond->kind) {
+    case StxOptKind::IMM:
+        return cond->imm;
+    case StxOptKind::NEG:
+        return !eval_cond(id, cond->neg, opts, callback);
+    case StxOptKind::AND:
+        return eval_cond(id, cond->op.lhs, opts, callback)
+            && eval_cond(id, cond->op.rhs, opts, callback);
+    case StxOptKind::OR:
+        return eval_cond(id, cond->op.lhs, opts, callback)
+            || eval_cond(id, cond->op.rhs, opts, callback);
+    case StxOptKind::LOC:
         DCHECK(callback != nullptr);
         return callback->eval_cond(cond->lopt);
-    } else {
+    case StxOptKind::GLOB:
         switch (cond->gopt) {
         case StxGOpt::API_DEFAULT:
             return opts->api == Api::DEFAULT;
