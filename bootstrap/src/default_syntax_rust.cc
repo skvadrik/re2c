@@ -125,7 +125,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "code:var_local =\n"
     "    // In Rust uninitialized variable is an error, but if the compiler is able to see\n"
     "    // that all paths overwrite the initial value, it warns about unused assignments.\n"
-    "    (have_init? \"\" : topindent \"#[allow(unused_assignments)]\" nl)\n"
+    "    (!have_init ? topindent \"#[allow(unused_assignments)]\" nl)\n"
     "    topindent \"let mut \" name \" : \" type \" = \" init \";\" nl;\n"
     "code:var_global = topindent \"static mut \" name \" : \" type \" = \" init \";\" nl;\n"
     "\n"

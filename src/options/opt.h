@@ -553,11 +553,19 @@ enum class StxCodeId : uint32_t {
 #undef CODE_TEMPLATE
 #undef MUTCODE
 
+enum class StxOptKind {GLOB, LOC, IMM, NEG, AND, OR};
+
 struct StxOpt {
-    bool is_local;
+    StxOptKind kind;
     union {
         StxGOpt gopt;
         StxLOpt lopt;
+        bool imm;
+        StxOpt* neg;
+        struct {
+            StxOpt* lhs;
+            StxOpt* rhs;
+        } op;
     };
 };
 
@@ -865,6 +873,10 @@ struct Opt {
     StxCode* make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code);
     StxOpt* make_opt_global(StxGOpt opt);
     StxOpt* make_opt_local(StxLOpt opt);
+    StxOpt* make_opt_imm(bool b);
+    StxOpt* make_opt_neg(StxOpt* x);
+    StxOpt* make_opt_and(StxOpt* x, StxOpt* y);
+    StxOpt* make_opt_or(StxOpt* x, StxOpt* y);
     StxCodes* make_api(const std::string& str);
 
     Ret validate_conf_code(

@@ -184,7 +184,7 @@ const char* DEFAULT_SYNTAX_V =
     "        indent [elem: topindent elem (have_init ? \" = \" init) nl] dedent\n"
     "    \"}\" nl);\n"
     "\n"
-    "code:enum_elem = (code_model.loop_switch ? \"\" : \".\") name;\n"
+    "code:enum_elem = (!code_model.loop_switch ? \".\") name;\n"
     "\n"
     "code:fndef =\n"
     "    topindent \"fn \" name \"(\"\n"
