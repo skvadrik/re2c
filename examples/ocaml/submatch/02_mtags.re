@@ -3,7 +3,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
@@ -30,8 +30,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     num = [0-9]+;
 
     @t1 num @t2 ("." #t3 num #t4)* [\x00] {
-        let x = s2n st.str st.t1 st.t2 in
-        let xs = List.rev (List.map2 (fun x y -> s2n st.str x y) st.t3 st.t4) in
+        let x = s2n st.yyinput st.t1 st.t2 in
+        let xs = List.rev (List.map2 (fun x y -> s2n st.yyinput x y) st.t3 st.t4) in
         Some (x :: xs)
     }
     * { None }
@@ -39,7 +39,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 let test (str: string) (result: (int list) option) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
         /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */

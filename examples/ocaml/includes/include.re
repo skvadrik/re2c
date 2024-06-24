@@ -5,7 +5,7 @@ open String
 /*!include:re2c "definitions.ml" */
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yyaccept: int;
@@ -21,7 +21,7 @@ type state = {
 */
 
 let test(str, num) =
-    let st = {str = str; yycursor = 0; yymarker = 0; yyaccept = 0}
+    let st = {yyinput = str; yycursor = 0; yymarker = 0; yyaccept = 0}
     in if not (lex st = num) then raise (Failure "error")
 
 let main () =

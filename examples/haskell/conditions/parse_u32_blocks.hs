@@ -8,7 +8,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int
 }
@@ -21,7 +21,7 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 yy0 :: State -> Int -> Int
 yy0 State{..} num =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x31 ->
@@ -35,7 +35,7 @@ yy1 State{..} num =
 
 yy2 :: State -> Int -> Int
 yy2 State{..} num =
-    parse_bin State{..} $ num * 2 + (peek_digit _str _yycursor 48)
+    parse_bin State{..} $ num * 2 + (peek_digit _yyinput _yycursor 48)
 
 parse_bin :: State -> Int -> Int
 parse_bin State{..} num =
@@ -46,7 +46,7 @@ parse_bin State{..} num =
 
 yy3 :: State -> Int -> Int
 yy3 State{..} num =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x37 ->
@@ -60,7 +60,7 @@ yy4 State{..} num =
 
 yy5 :: State -> Int -> Int
 yy5 State{..} num =
-    parse_oct State{..} $ num * 8 + (peek_digit _str _yycursor 48)
+    parse_oct State{..} $ num * 8 + (peek_digit _yyinput _yycursor 48)
 
 parse_oct :: State -> Int -> Int
 parse_oct State{..} num =
@@ -71,7 +71,7 @@ parse_oct State{..} num =
 
 yy6 :: State -> Int -> Int
 yy6 State{..} num =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
@@ -85,7 +85,7 @@ yy7 State{..} num =
 
 yy8 :: State -> Int -> Int
 yy8 State{..} num =
-    parse_dec State{..} $ num * 10 + (peek_digit _str _yycursor 48)
+    parse_dec State{..} $ num * 10 + (peek_digit _yyinput _yycursor 48)
 
 parse_dec :: State -> Int -> Int
 parse_dec State{..} num =
@@ -96,7 +96,7 @@ parse_dec State{..} num =
 
 yy9 :: State -> Int -> Int
 yy9 State{..} num =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
@@ -114,15 +114,15 @@ yy10 State{..} num =
 
 yy11 :: State -> Int -> Int
 yy11 State{..} num =
-    parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 48)
+    parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 48)
 
 yy12 :: State -> Int -> Int
 yy12 State{..} num =
-    parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 55)
+    parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 55)
 
 yy13 :: State -> Int -> Int
 yy13 State{..} num =
-    parse_hex State{..} $ num * 16 + (peek_digit _str _yycursor 87)
+    parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 87)
 
 parse_hex :: State -> Int -> Int
 parse_hex State{..} num =
@@ -133,7 +133,7 @@ parse_hex State{..} num =
 
 yy14 :: State -> Maybe Int
 yy14 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x30 == _c ->
@@ -150,7 +150,7 @@ yy15 State{..} =
 yy16 :: State -> Maybe Int
 yy16 State{..} =
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x42 == _c || 0x62 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -172,7 +172,7 @@ yy18 State{..} =
 
 yy19 :: State -> Maybe Int
 yy19 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x31 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -187,7 +187,7 @@ yy20 State{..} =
 
 yy21 :: State -> Maybe Int
 yy21 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 || 0x41 <= _c && _c <= 0x46 || 0x61 <= _c && _c <= 0x66 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -213,7 +213,7 @@ parse State{..} =
 
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
-    let s = State {_str = str, _yycursor = 0, _yymarker = 0}
+    let s = State {_yyinput = str, _yycursor = 0, _yymarker = 0}
     when (parse s /= expect) $ error "failed!"
 
 main :: IO ()

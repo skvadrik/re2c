@@ -70,7 +70,7 @@ func unwind(trie mtagTrie, x int, y int, str []byte) []string {
 
 type State struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor int
 	yymarker int
 	yylimit  int
@@ -124,7 +124,7 @@ func fill(st *State) int {
 	if free < 1 { return lexBigPacket }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.str[0:], st.str[shift:shift+used])
+	copy(st.yyinput[0:], st.yyinput[shift:shift+used])
 	st.yycursor -= shift
 	st.yymarker -= shift
 	st.yylimit -= shift
@@ -138,9 +138,9 @@ func fill(st *State) int {
 
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.yylimit:SIZE])
+	n, _ := st.file.Read(st.yyinput[st.yylimit:SIZE])
 	st.yylimit += n
-	st.str[st.yylimit] = 0 // append sentinel symbol
+	st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -148,7 +148,7 @@ func fill(st *State) int {
 
 //line "codegen/go/recursive_functions/advanced.go":150
 func yy1(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -194,7 +194,7 @@ func yy3(st *State) int {
 
 func yy4(st *State) int {
 	st.yymarker = st.yycursor
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -223,7 +223,7 @@ func yy4(st *State) int {
 }
 
 func yy5(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	return yy6(st, yych)
 }
 
@@ -267,7 +267,7 @@ func yy7(st *State) int {
 }
 
 func yy8(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -290,7 +290,7 @@ func yy8(st *State) int {
 }
 
 func yy9(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	return yy10(st, yych)
 }
 
@@ -356,7 +356,7 @@ func yy10(st *State, yych byte) int {
 }
 
 func yy11(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -380,7 +380,7 @@ func yy11(st *State) int {
 }
 
 func yy12(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\n':
 		st.yycursor += 1
@@ -396,7 +396,7 @@ func yy12(st *State) int {
 }
 
 func yy13(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -443,12 +443,12 @@ func yy14(st *State) int {
 	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":152
 	
-		if debug {fmt.Printf("media type: %v\n", string(st.str[st.l1:st.l2]))}
+		if debug {fmt.Printf("media type: %v\n", string(st.yyinput[st.l1:st.l2]))}
 
-		pnames := unwind(st.trie, st.p1, st.p2, st.str)
+		pnames := unwind(st.trie, st.p1, st.p2, st.yyinput)
 		if debug {fmt.Printf("pnames: %v\n", pnames)}
 
-		pvals := unwind(st.trie, st.p3, st.p4, st.str)
+		pvals := unwind(st.trie, st.p3, st.p4, st.yyinput)
 		if debug {fmt.Printf("pvals: %v\n", pvals)}
 
 		st.token = st.yycursor
@@ -458,7 +458,7 @@ func yy14(st *State) int {
 }
 
 func yy15(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -494,7 +494,7 @@ func yy15(st *State) int {
 }
 
 func yy16(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '!':
 		fallthrough
@@ -531,7 +531,7 @@ func yy16(st *State) int {
 }
 
 func yy17(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -581,7 +581,7 @@ func yy17(st *State) int {
 }
 
 func yy18(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -609,7 +609,7 @@ func yy18(st *State) int {
 }
 
 func yy19(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -637,7 +637,7 @@ func yy19(st *State) int {
 }
 
 func yy20(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -668,7 +668,7 @@ func yy20(st *State) int {
 }
 
 func yy21(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -701,7 +701,7 @@ func yyfnmedia_type(st *State) int {
 }
 
 func yy23(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -741,7 +741,7 @@ func yy25(st *State) int {
 func yy26(st *State) int {
 	st.yyaccept = 0
 	st.yymarker = st.yycursor
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\n':
 		st.yycursor += 1
@@ -759,7 +759,7 @@ func yy26(st *State) int {
 func yy27(st *State) int {
 	st.yyaccept = 0
 	st.yymarker = st.yycursor
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -790,7 +790,7 @@ func yy27(st *State) int {
 }
 
 func yy28(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -817,7 +817,7 @@ func yy29(st *State) int {
 }
 
 func yy30(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -845,7 +845,7 @@ func yy30(st *State) int {
 }
 
 func yy31(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\n':
 		st.yycursor += 1
@@ -861,7 +861,7 @@ func yy31(st *State) int {
 }
 
 func yy32(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -892,7 +892,7 @@ func yy32(st *State) int {
 }
 
 func yy33(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -928,7 +928,7 @@ func yy33(st *State) int {
 }
 
 func yy34(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -954,7 +954,7 @@ func yy34(st *State) int {
 }
 
 func yy35(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\n':
 		st.yycursor += 1
@@ -970,7 +970,7 @@ func yy35(st *State) int {
 }
 
 func yy36(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -1004,7 +1004,7 @@ func yy36(st *State) int {
 func yy37(st *State) int {
 	st.yyaccept = 1
 	st.yymarker = st.yycursor
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -1028,7 +1028,7 @@ func yy38(st *State) int {
 	st.yystate = -1
 //line "codegen/go/recursive_functions/advanced.re":165
 	
-		folds := unwind(st.trie, st.f1, st.f2, st.str)
+		folds := unwind(st.trie, st.f1, st.f2, st.yyinput)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
 		st.token = st.yycursor
@@ -1038,7 +1038,7 @@ func yy38(st *State) int {
 }
 
 func yy39(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -1071,7 +1071,7 @@ func yy39(st *State) int {
 }
 
 func yy40(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\n':
 		st.yycursor += 1
@@ -1087,7 +1087,7 @@ func yy40(st *State) int {
 }
 
 func yy41(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case 0x00:
 		fallthrough
@@ -1123,7 +1123,7 @@ func yy42(st *State) int {
 }
 
 func yy43(st *State) int {
-	yych := st.str[st.yycursor]
+	yych := st.yyinput[st.yycursor]
 	switch (yych) {
 	case '\t':
 		fallthrough
@@ -1370,7 +1370,7 @@ func test(packets []string) int {
 
 	st := &State{
 		file:     fr,
-		str:      make([]byte, SIZE+1),
+		yyinput:  make([]byte, SIZE+1),
 		yycursor: SIZE,
 		yymarker: SIZE,
 		yylimit:  SIZE,
@@ -1410,7 +1410,7 @@ func test(packets []string) int {
 		p4:       0,
 		yyaccept: 0,
 	}
-	// str is zero-initialized, no need to write sentinel
+	// yyinput is zero-initialized, no need to write sentinel
 
 	var status int
 	send := 0

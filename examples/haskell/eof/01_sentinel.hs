@@ -9,7 +9,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _count :: Int
 }
@@ -19,7 +19,7 @@ data State = State {
 #20 "haskell/eof/01_sentinel.hs"
 yy0 :: State -> Int
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x00 == _c ->
@@ -45,7 +45,7 @@ yy2 State{..} =
 
 yy3 :: State -> Int
 yy3 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x20 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -61,7 +61,7 @@ yy4 State{..} =
 
 yy5 :: State -> Int
 yy5 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x61 <= _c && _c <= 0x7A ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -85,7 +85,7 @@ lexer State{..} =
 main :: IO ()
 main = do
     let test s n = when (lexer st  /= n) $ error "failed"
-                   where st = State{_str = s, _yycursor = 0, _count = 0}
+                   where st = State{_yyinput = s, _yycursor = 0, _count = 0}
     test "\0" 0
     test "one two three\0" 3
     test "f0ur\0" (-1)

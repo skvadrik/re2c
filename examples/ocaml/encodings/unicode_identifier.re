@@ -5,7 +5,7 @@ open String
 /*!include:re2c "unicode_categories.re" */
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yyaccept: int;
@@ -27,7 +27,7 @@ type state = {
 
 let main () =
     let st = {
-        str = "_Ыдентификатор\x00";
+        yyinput = "_Ыдентификатор\x00";
         yycursor = 0;
         yymarker = 0;
         yyaccept = 0;

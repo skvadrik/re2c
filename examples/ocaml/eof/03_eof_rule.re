@@ -3,7 +3,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     yylimit: int;
@@ -26,10 +26,10 @@ type state = {
 
 let test(str, count) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
-        yylimit = String.length str - 1; (* terminating null not included *)
+        yylimit = length str - 1; (* terminating null not included *)
     }
     in if not (lex st 0 = count) then raise (Failure "error")
 

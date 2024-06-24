@@ -13,7 +13,7 @@ import State
 
 yy0 :: State -> Int
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x61 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -33,7 +33,7 @@ yy1 State{..} =
 
 yy2 :: State -> Int
 yy2 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x62 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -50,7 +50,7 @@ lexer State{..} =
 main :: IO ()
 main = do
     let s = State {
-        _str = "ab\0",
+        _yyinput = "ab\0",
         _yycursor = 0,
         
 _yyt1 = -1,
@@ -65,7 +65,7 @@ module State where
 import Data.ByteString (ByteString)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     
 _yyt1 :: !Int,

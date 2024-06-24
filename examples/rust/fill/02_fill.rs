@@ -10,7 +10,7 @@ const BUFSIZE: usize = 4096;
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE],
+    yyinput: [u8; BUFSIZE],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -28,14 +28,14 @@ fn fill(st: &mut State, need: usize) -> Fill {
     if st.token < need { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yyinput.copy_within(st.token..st.yylimit, 0);
     st.yylimit -= st.token;
     st.yycursor -= st.token;
     st.yymarker = st.yymarker.overflowing_sub(st.token).0; // underflows if marker is unused
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    let n = match st.file.read(&mut st.str[st.yylimit..BUFSIZE - YYMAXFILL]) {
+    let n = match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE - YYMAXFILL]) {
         Ok(n) => n,
         Err(why) => panic!("cannot read from file: {}", why)
     };
@@ -45,7 +45,7 @@ fn fill(st: &mut State, need: usize) -> Fill {
     // so that the lexer can access characters at the end of buffer.
     if n == 0 {
         st.eof = true;
-        for i in 0..YYMAXFILL { st.str[st.yylimit + i] = 0; }
+        for i in 0..YYMAXFILL { st.yyinput[st.yylimit + i] = 0; }
         st.yylimit += YYMAXFILL;
     }
 
@@ -68,7 +68,7 @@ fn lex(yyrecord: &mut State) -> isize {
 				if yyrecord.yylimit <= yyrecord.yycursor {
 					if fill(yyrecord, 1) != Fill::Ok { return -1; }
 				}
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				yyrecord.yycursor += 1;
 				match yych {
 					0x00 => {
@@ -98,7 +98,7 @@ fn lex(yyrecord: &mut State) -> isize {
 				if yyrecord.yylimit <= yyrecord.yycursor {
 					if fill(yyrecord, 1) != Fill::Ok { return -1; }
 				}
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x20 => {
 						yyrecord.yycursor += 1;
@@ -116,7 +116,7 @@ fn lex(yyrecord: &mut State) -> isize {
 				if yyrecord.yylimit <= yyrecord.yycursor {
 					if fill(yyrecord, 1) != Fill::Ok { return -1; }
 				}
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				yyrecord.yycursor += 1;
 				match yych {
 					0x27 => {
@@ -175,7 +175,7 @@ fn main() {
     let yylimit = BUFSIZE - YYMAXFILL;
     let mut st = State {
         file: file,
-        str: [0; BUFSIZE],
+        yyinput: [0; BUFSIZE],
         yylimit: yylimit,
         yycursor: yylimit,
         yymarker: yylimit,

@@ -14,7 +14,7 @@ fn lex(mut yyrecord &lexer.State) int {
 yy1:
     yyrecord.yycursor += 1
 yy0:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x61 { unsafe { goto yy1 } }
         0x62 {
@@ -31,7 +31,7 @@ yy2:
     return t
 yy3:
     yyrecord.yycursor += 1
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x62 { unsafe { goto yy3 } }
         else { unsafe { goto yy2 } }
@@ -40,7 +40,7 @@ yy3:
 }
 
 fn main() {
-    mut st := &lexer.State{str:"ab\0",}
+    mut st := &lexer.State{yyinput:"ab\0",}
     if lex(mut st) != 1 {
         panic("error")
     }
@@ -51,7 +51,7 @@ module lexer
 
 pub struct State {
 pub mut:
-    str string
+    yyinput string
     yycursor int
     yyt1 int
 

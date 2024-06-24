@@ -6,7 +6,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
@@ -36,9 +36,9 @@ s2n s i j = f i 0 where
 
     @_1 num @_2 "." @_3 num @_4 ("." @_5 num)? [\x00] {
         Just SemVer {
-            major = s2n _str _1 _2,
-            minor = s2n _str _3 _4,
-            patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
+            major = s2n _yyinput _1 _2,
+            minor = s2n _yyinput _3 _4,
+            patch = if _5 == (-1) then 0 else s2n _yyinput _5 (_yycursor - 1)
         }
     }
     * { Nothing }
@@ -47,7 +47,7 @@ s2n s i j = f i 0 where
 test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
-        _str = str,
+        _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = (-1),'; */

@@ -6,7 +6,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _count :: Int
 }
@@ -25,7 +25,7 @@ data State = State {
 main :: IO ()
 main = do
     let test s n = when (lexer st  /= n) $ error "failed"
-                   where st = State{_str = s, _yycursor = 0, _count = 0}
+                   where st = State{_yyinput = s, _yycursor = 0, _count = 0}
     test "\0" 0
     test "one two three\0" 3
     test "f0ur\0" (-1)

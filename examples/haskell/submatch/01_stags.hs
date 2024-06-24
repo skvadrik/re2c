@@ -9,7 +9,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     
@@ -42,7 +42,7 @@ s2n s i j = f i 0 where
 #43 "haskell/submatch/01_stags.hs"
 yy0 :: State -> Maybe SemVer
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let _yyt1 = _yycursor in
@@ -65,7 +65,7 @@ yy2 State{..} =
 yy3 :: State -> Maybe SemVer
 yy3 State{..} =
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -78,7 +78,7 @@ yy3 State{..} =
 
 yy4 :: State -> Maybe SemVer
 yy4 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let _yyt2 = _yycursor in
@@ -94,7 +94,7 @@ yy5 State{..} =
 
 yy6 :: State -> Maybe SemVer
 yy6 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -107,7 +107,7 @@ yy6 State{..} =
 
 yy7 :: State -> Maybe SemVer
 yy7 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x00 == _c ->
             let _yyt3 = _yycursor in
@@ -134,15 +134,15 @@ yy8 State{..} =
     let __ = if _2 == (-1) then (-1) else _2 - 1 in let _2 = __ in
 #37 "haskell/submatch/01_stags.re"
     Just SemVer {
-        major = s2n _str _1 _2,
-        minor = s2n _str _3 _4,
-        patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
+        major = s2n _yyinput _1 _2,
+        minor = s2n _yyinput _3 _4,
+        patch = if _5 == (-1) then 0 else s2n _yyinput _5 (_yycursor - 1)
     }
 #142 "haskell/submatch/01_stags.hs"
 
 yy9 :: State -> Maybe SemVer
 yy9 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let _yyt4 = _yycursor in
@@ -153,7 +153,7 @@ yy9 State{..} =
 
 yy10 :: State -> Maybe SemVer
 yy10 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x00 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -174,7 +174,7 @@ parse State{..} =
 test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
-        _str = str,
+        _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
         

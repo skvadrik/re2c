@@ -4,7 +4,7 @@ module lexer
 
 pub struct State {
 pub mut:
-    str string
+    yyinput string
     yycursor int
     
 yyt1 int

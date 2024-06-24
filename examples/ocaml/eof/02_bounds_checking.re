@@ -5,7 +5,7 @@ open String
 exception Fill
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     yylimit: int;
 }
@@ -19,7 +19,7 @@ type state = {
 
     [\x00] {
         (* check that it is the sentinel, not some unexpected null *)
-        if yyrecord.yycursor = String.length yyrecord.str - yymaxfill + 1 then count else -1
+        if yyrecord.yycursor = length yyrecord.yyinput - yymaxfill + 1 then count else -1
     }
     str  { lex yyrecord (count + 1) }
     [ ]+ { lex yyrecord count }
@@ -27,8 +27,8 @@ type state = {
 */
 
 let test(str, count) =
-    let buf = String.cat str (String.make yymaxfill '\x00') in
-    let st = {str = buf; yycursor = 0; yylimit = String.length buf} in
+    let buf = cat str (make yymaxfill '\x00') in
+    let st = {yyinput = buf; yycursor = 0; yylimit = length buf} in
     let result = try lex st 0 with Fill -> -1 in
     if not (result = count) then raise (Failure "error")
 

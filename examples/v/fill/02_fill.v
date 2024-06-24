@@ -14,7 +14,7 @@ const bufsize = 4096
 struct State {
     file     os.File
 mut:
-    str      []u8
+    yyinput  []u8
     yycursor int
     yylimit  int
     token    int
@@ -28,21 +28,21 @@ fn fill(mut st &State, need int) int {
     if st.token < need { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.token..st.yylimit])
+    copy(mut &st.yyinput, st.yyinput[st.token..st.yylimit])
     st.yycursor -= st.token
     st.yylimit -= st.token
     st.token = 0
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
 
     // If read less than expected, this is the end of input.
     if st.yylimit < bufsize {
         st.eof = true
-        for i := 0; i < yymaxfill; i += 1 { st.str[st.yylimit + i] = 0 }
+        for i := 0; i < yymaxfill; i += 1 { st.yyinput[st.yylimit + i] = 0 }
         st.yylimit += yymaxfill
     }
 
@@ -59,7 +59,7 @@ loop:
     if yyrecord.yylimit <= yyrecord.yycursor {
         r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x00 { unsafe { goto yy1 } }
         0x20 { unsafe { goto yy3 } }
@@ -84,7 +84,7 @@ yy3:
     if yyrecord.yylimit <= yyrecord.yycursor {
         r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else { unsafe { goto yy4 } }
@@ -98,7 +98,7 @@ yy5:
     if yyrecord.yylimit <= yyrecord.yycursor {
         r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x27 { unsafe { goto yy6 } }
         0x5C { unsafe { goto yy7 } }
@@ -135,7 +135,7 @@ fn main() {
     mut fr := os.open(fname)!
     mut st := &State{
         file:     fr,
-        str:      []u8{len: bufsize + yymaxfill},
+        yyinput:  []u8{len: bufsize + yymaxfill},
         yycursor: bufsize,
         yylimit:  bufsize,
         token:    bufsize,

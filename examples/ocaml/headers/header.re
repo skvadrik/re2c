@@ -5,7 +5,7 @@ open String
 
 /*!header:re2c:on*/
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable tag: int;
     /*!stags:re2c format = "mutable @@: int;"; */
@@ -23,7 +23,7 @@ type state = {
 
 let main () =
     let st = {
-        str = "ab\x00";
+        yyinput = "ab\x00";
         yycursor = 0;
         tag = 0;
         /*!stags:re2c format = "\n\t@@ = 0;"; */

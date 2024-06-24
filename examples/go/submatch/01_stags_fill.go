@@ -13,7 +13,7 @@ const BUFSIZE int = 4095
 
 type Input struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor int
 	yymarker int
 	yylimit  int
@@ -45,7 +45,7 @@ func fill(in *Input) int {
 	if in.token < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.token:in.yylimit])
+	copy(in.yyinput[0:], in.yyinput[in.token:in.yylimit])
 	in.yycursor -= in.token
 	in.yymarker -= in.token
 	in.yylimit -= in.token
@@ -62,9 +62,9 @@ func fill(in *Input) int {
 	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	n, _ := in.file.Read(in.yyinput[in.yylimit:BUFSIZE])
 	in.yylimit += n
-	in.str[in.yylimit] = 0
+	in.yyinput[in.yylimit] = 0
 
 	// If read less than expected, this is the end of input.
 	in.eof = in.yylimit < BUFSIZE
@@ -85,7 +85,7 @@ func parse(in *Input) []SemVer {
 {
 	var yych byte
 yyFillLabel0:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy3
@@ -108,7 +108,7 @@ yy3:
 	in.yycursor += 1
 	in.yymarker = in.yycursor
 yyFillLabel1:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -125,7 +125,7 @@ yyFillLabel1:
 yy4:
 	in.yycursor += 1
 yyFillLabel2:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		in.yyt1 = in.yycursor
@@ -144,7 +144,7 @@ yy5:
 yy6:
 	in.yycursor += 1
 yyFillLabel3:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -161,7 +161,7 @@ yyFillLabel3:
 yy7:
 	in.yycursor += 1
 yyFillLabel4:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '\n':
 		in.yyt2 = in.yycursor
@@ -189,10 +189,10 @@ yy8:
 	t1 -= 1
 //line "go/submatch/01_stags_fill.re":78
 	{
-			major := s2n(in.str[in.token:t1])
-			minor := s2n(in.str[t2:t3])
+			major := s2n(in.yyinput[in.token:t1])
+			minor := s2n(in.yyinput[t2:t3])
 			patch := 0
-			if t4 != -1 { patch = s2n(in.str[t4:in.yycursor-1]) }
+			if t4 != -1 { patch = s2n(in.yyinput[t4:in.yycursor-1]) }
 			vers = append(vers, SemVer{major, minor, patch})
 			continue
 		}
@@ -200,7 +200,7 @@ yy8:
 yy9:
 	in.yycursor += 1
 yyFillLabel5:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		in.yyt3 = in.yycursor
@@ -216,7 +216,7 @@ yyFillLabel5:
 yy10:
 	in.yycursor += 1
 yyFillLabel6:
-	yych = in.str[in.yycursor]
+	yych = in.yyinput[in.yycursor]
 	switch (yych) {
 	case '\n':
 		goto yy8
@@ -257,7 +257,7 @@ func main() () {
 	in := &Input{
 		file:     f,
 		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-		str:      make([]byte, BUFSIZE+1),
+		yyinput:  make([]byte, BUFSIZE+1),
 		yycursor: BUFSIZE,
 		yymarker: BUFSIZE,
 		yylimit:  BUFSIZE,

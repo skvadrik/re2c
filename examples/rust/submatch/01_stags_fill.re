@@ -8,7 +8,7 @@ const NONE: usize = usize::MAX;
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE],
+    yyinput: [u8; BUFSIZE],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -42,7 +42,7 @@ fn fill(st: &mut State) -> Fill {
     if st.token < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yyinput.copy_within(st.token..st.yylimit, 0);
     st.yylimit -= st.token;
     st.yycursor -= st.token;
     shift!(st.yymarker, st.token);
@@ -53,11 +53,11 @@ fn fill(st: &mut State) -> Fill {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.str[st.yylimit..BUFSIZE - 1]) {
+    match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE - 1]) {
         Ok(n) => {
             st.yylimit += n;
             st.eof = n == 0;
-            st.str[st.yylimit] = 0;
+            st.yyinput[st.yylimit] = 0;
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -84,9 +84,9 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
         num = [0-9]+;
 
         num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
-            let major = s2n(&st.str[st.token..t1]);
-            let minor = s2n(&st.str[t2..t3]);
-            let patch = if t4 != NONE {s2n(&st.str[t4..st.yycursor - 1])} else {0};
+            let major = s2n(&st.yyinput[st.token..t1]);
+            let minor = s2n(&st.yyinput[t2..t3]);
+            let patch = if t4 != NONE {s2n(&st.yyinput[t4..st.yycursor - 1])} else {0};
             vers.push(SemVer(major, minor, patch));
             continue 'parse;
         }
@@ -120,7 +120,7 @@ fn main() {
     let yylimit = BUFSIZE - 1;
     let mut st = State {
         file: file,
-        str: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
+        yyinput: [0; BUFSIZE], // sentinel is set to zero, which triggers YYFILL
         yylimit: yylimit,
         yycursor: yylimit,
         yymarker: yylimit,

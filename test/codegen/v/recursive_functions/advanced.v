@@ -66,7 +66,7 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 struct State {
 mut:
     file     os.File
-    str      []u8
+    yyinput  []u8
     yycursor int
     yymarker int
     yylimit  int
@@ -124,7 +124,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.str, st.str[shift..shift+used])
+    copy(mut &st.yyinput, st.yyinput[shift..shift+used])
     st.yycursor -= shift
     st.yymarker -= shift
     st.yylimit -= shift
@@ -139,10 +139,10 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
-    st.str[st.yylimit] = 0 // append sentinel symbol
+    st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -150,7 +150,7 @@ fn fill(mut st &State) Status {
 
 //line "codegen/v/recursive_functions/advanced.v":152
 fn yy1(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yyt1 = st.yycursor
@@ -182,7 +182,7 @@ fn yy3(mut st State) Status {
 
 fn yy4(mut st State) Status {
     st.yymarker = st.yycursor
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E { return yy6(mut st, yych) }
         else {
@@ -197,7 +197,7 @@ fn yy4(mut st State) Status {
 }
 
 fn yy5(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     return yy6(mut st, yych)
 }
 
@@ -228,7 +228,7 @@ fn yy7(mut st State) Status {
 }
 
 fn yy8(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x09, 0x0D, 0x20, 0x3B {
             if st.yylimit <= st.yycursor {
@@ -243,7 +243,7 @@ fn yy8(mut st State) Status {
 }
 
 fn yy9(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     return yy10(mut st, yych)
 }
 
@@ -296,7 +296,7 @@ fn yy10(mut st State, yych u8) Status {
 }
 
 fn yy11(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yycursor += 1
@@ -322,7 +322,7 @@ fn yy11(mut st State) Status {
 }
 
 fn yy12(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
             st.yycursor += 1
@@ -340,7 +340,7 @@ fn yy12(mut st State) Status {
 }
 
 fn yy13(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yycursor += 1
@@ -372,13 +372,13 @@ fn yy14(mut st State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":154
     
-        mt := st.str[st.l1..st.l2].str()
+        mt := st.yyinput[st.l1..st.l2].str()
         log.debug("media type: $mt")
 
-        pnames := unwind(st.trie, st.p1, st.p2, st.str)
+        pnames := unwind(st.trie, st.p1, st.p2, st.yyinput)
         log.debug("pnames: $pnames")
 
-        pvals := unwind(st.trie, st.p3, st.p4, st.str)
+        pvals := unwind(st.trie, st.p3, st.p4, st.yyinput)
         log.debug("pvals: $pvals")
 
         st.token = st.yycursor
@@ -388,7 +388,7 @@ fn yy14(mut st State) Status {
 }
 
 fn yy15(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yycursor += 1
@@ -411,7 +411,7 @@ fn yy15(mut st State) Status {
 }
 
 fn yy16(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yytm9 = add_mtag(mut &st.trie, st.yytm9, st.yycursor)
@@ -435,7 +435,7 @@ fn yy16(mut st State) Status {
 }
 
 fn yy17(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
@@ -472,7 +472,7 @@ fn yy17(mut st State) Status {
 }
 
 fn yy18(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1F, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -498,7 +498,7 @@ fn yy18(mut st State) Status {
 }
 
 fn yy19(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yycursor += 1
@@ -528,7 +528,7 @@ fn yy19(mut st State) Status {
 }
 
 fn yy20(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yytm10 = add_mtag(mut &st.trie, st.yytm10, st.yycursor)
@@ -561,7 +561,7 @@ fn yy20(mut st State) Status {
 }
 
 fn yy21(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -590,7 +590,7 @@ fn yyfnmedia_type(mut st State) Status {
 }
 
 fn yy23(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -627,7 +627,7 @@ fn yy25(mut st State) Status {
 fn yy26(mut st State) Status {
     st.yyaccept = 0
     st.yymarker = st.yycursor
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
             st.yycursor += 1
@@ -647,7 +647,7 @@ fn yy26(mut st State) Status {
 fn yy27(mut st State) Status {
     st.yyaccept = 0
     st.yymarker = st.yycursor
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -674,7 +674,7 @@ fn yy27(mut st State) Status {
 }
 
 fn yy28(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yycursor += 1
@@ -701,7 +701,7 @@ fn yy29(mut st State) Status {
 }
 
 fn yy30(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -727,7 +727,7 @@ fn yy30(mut st State) Status {
 }
 
 fn yy31(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
             st.yycursor += 1
@@ -745,7 +745,7 @@ fn yy31(mut st State) Status {
 }
 
 fn yy32(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -772,7 +772,7 @@ fn yy32(mut st State) Status {
 }
 
 fn yy33(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -802,7 +802,7 @@ fn yy33(mut st State) Status {
 }
 
 fn yy34(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -825,7 +825,7 @@ fn yy34(mut st State) Status {
 }
 
 fn yy35(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
             st.yycursor += 1
@@ -843,7 +843,7 @@ fn yy35(mut st State) Status {
 }
 
 fn yy36(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -873,7 +873,7 @@ fn yy36(mut st State) Status {
 fn yy37(mut st State) Status {
     st.yyaccept = 1
     st.yymarker = st.yycursor
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yytm1 = st.yytm2
@@ -897,7 +897,7 @@ fn yy38(mut st State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":168
     
-        folds := unwind(st.trie, st.f1, st.f2, st.str)
+        folds := unwind(st.trie, st.f1, st.f2, st.yyinput)
         log.debug("folds: $folds")
 
         st.token = st.yycursor
@@ -907,7 +907,7 @@ fn yy38(mut st State) Status {
 }
 
 fn yy39(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -937,7 +937,7 @@ fn yy39(mut st State) Status {
 }
 
 fn yy40(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
             st.yycursor += 1
@@ -955,7 +955,7 @@ fn yy40(mut st State) Status {
 }
 
 fn yy41(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
             if st.yylimit <= st.yycursor {
@@ -987,7 +987,7 @@ fn yy42(mut st State) Status {
 }
 
 fn yy43(mut st State) Status {
-    yych := st.str[st.yycursor]
+    yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
             st.yycursor += 1
@@ -1264,7 +1264,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:     fr,
         // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-        str:      []u8{len: bufsize + 1},
+        yyinput:  []u8{len: bufsize + 1},
         yycursor: bufsize,
         yymarker: bufsize,
         yylimit:  bufsize,
@@ -1304,7 +1304,7 @@ fn test(expect Status, packets []string) {
         p4:       mtag_root,
         yyaccept: 0,
     }
-    // str is zero-initialized, no need to write sentinel
+    // yyinput is zero-initialized, no need to write sentinel
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and
@@ -1323,7 +1323,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.str, status $status")
+            log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break
             }

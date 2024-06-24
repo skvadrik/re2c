@@ -6,7 +6,7 @@ import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
@@ -31,7 +31,7 @@ s2n s i j = f i 0 where
     num = [0-9]+;
 
     @_1 num @_2 ("." #_3 num #_4)* [\x00] {
-        Just $ (s2n _str _1 _2) : (reverse $ zipWith (\i j -> s2n _str i j) _3 _4)
+        Just $ (s2n _yyinput _1 _2) : (reverse $ zipWith (\i j -> s2n _yyinput i j) _3 _4)
     }
     * { Nothing }
 */
@@ -39,7 +39,7 @@ s2n s i j = f i 0 where
 test :: ByteString -> Maybe [Int] -> IO ()
 test str expect = do
     let st = State {
-        _str = str,
+        _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = (-1),'; */

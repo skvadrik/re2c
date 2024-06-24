@@ -14,7 +14,7 @@ import Data.Array
 import Data.Word
 
 data State a = State {
-    _str :: a,
+    _yyinput :: a,
     _yycursor :: Int,
     _yymarker :: Int
 }
@@ -26,7 +26,7 @@ data State a = State {
 #27 "haskell/reuse/reuse.hs"
 yy0 :: State (Array Int Word8) -> Maybe Int
 yy0 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0xE2 == _c ->
@@ -47,7 +47,7 @@ yy2 State{..} =
 yy3 :: State (Array Int Word8) -> Maybe Int
 yy3 State{..} =
     let _yymarker = _yycursor in
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x88 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -57,7 +57,7 @@ yy3 State{..} =
 
 yy4 :: State (Array Int Word8) -> Maybe Int
 yy4 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -72,7 +72,7 @@ yy5 State{..} =
 
 yy6 :: State (Array Int Word8) -> Maybe Int
 yy6 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x78 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -82,7 +82,7 @@ yy6 State{..} =
 
 yy7 :: State (Array Int Word8) -> Maybe Int
 yy7 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x20 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -92,7 +92,7 @@ yy7 State{..} =
 
 yy8 :: State (Array Int Word8) -> Maybe Int
 yy8 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0xE2 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -102,7 +102,7 @@ yy8 State{..} =
 
 yy9 :: State (Array Int Word8) -> Maybe Int
 yy9 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x88 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -112,7 +112,7 @@ yy9 State{..} =
 
 yy10 :: State (Array Int Word8) -> Maybe Int
 yy10 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x83 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -122,7 +122,7 @@ yy10 State{..} =
 
 yy11 :: State (Array Int Word8) -> Maybe Int
 yy11 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     case yych of
         _c | 0x79 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -147,7 +147,7 @@ lex8 State{..} =
 #148 "haskell/reuse/reuse.hs"
 yy13 :: State (Array Int Int) -> Maybe Int
 yy13 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     if yych == 0x00002200 then yy16 State{..}
     else yy14 State{..}
@@ -165,7 +165,7 @@ yy15 State{..} =
 yy16 :: State (Array Int Int) -> Maybe Int
 yy16 State{..} =
     let _yymarker = _yycursor in
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     if yych == 0x00000078 then
         let __ = _yycursor + 1 in let _yycursor = __ in
         yy17 State{..}
@@ -174,7 +174,7 @@ yy16 State{..} =
 
 yy17 :: State (Array Int Int) -> Maybe Int
 yy17 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     if yych == 0x00000020 then
         let __ = _yycursor + 1 in let _yycursor = __ in
         yy19 State{..}
@@ -188,7 +188,7 @@ yy18 State{..} =
 
 yy19 :: State (Array Int Int) -> Maybe Int
 yy19 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     if yych == 0x00002203 then
         let __ = _yycursor + 1 in let _yycursor = __ in
         yy20 State{..}
@@ -197,7 +197,7 @@ yy19 State{..} =
 
 yy20 :: State (Array Int Int) -> Maybe Int
 yy20 State{..} =
-    let yych = (!) _str _yycursor in
+    let yych = (!) _yyinput _yycursor in
     if yych == 0x00000079 then
         let __ = _yycursor + 1 in let _yycursor = __ in
         yy21 State{..}
@@ -220,7 +220,7 @@ lex32 State{..} =
 main :: IO ()
 main = do
     let make_st l = State {
-            _str = listArray (0, length l - 1) l,
+            _yyinput = listArray (0, length l - 1) l,
             _yycursor = 0,
             _yymarker = 0}
 

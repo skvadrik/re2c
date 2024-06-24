@@ -21,7 +21,7 @@ const MTAG_ROOT: usize = NONE - 1;
 
 struct ConState {
     file: File,
-    str: [u8; CON_STATE_SIZE + 1],
+    yyinput: [u8; CON_STATE_SIZE + 1],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -89,7 +89,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.str.as_mut_ptr();
+        let p = st.yyinput.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.yylimit -= shift;
@@ -99,11 +99,11 @@ fn fill(st: &mut ConState) -> ConStatus {
     /*!stags:re2c format = "if st.@@ != NONE { st.@@.overflowing_sub(shift).0; }\n"; */
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.yylimit..CON_STATE_SIZE]) {
+    match st.file.read(&mut st.yyinput[st.yylimit..CON_STATE_SIZE]) {
         Ok(n) => st.yylimit += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.str[st.yylimit] = 0; // append sentinel symbol
+    st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return ConStatus::Ready;
 }
@@ -147,14 +147,14 @@ fn fill(st: &mut ConState) -> ConStatus {
     media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
     <media_type> media_type ows crlf {
-        log!("media type: {}", String::from_utf8_lossy(&st.str[st.l1..st.l2]));
+        log!("media type: {}", String::from_utf8_lossy(&st.yyinput[st.l1..st.l2]));
 
         let mut pnames: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.str, &mut pnames);
+        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.yyinput, &mut pnames);
         log!("pnames: {:?}", pnames);
 
         let mut pvals: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.str, &mut pvals);
+        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.yyinput, &mut pvals);
         log!("pvals: {:?}", pvals);
 
         st.token = st.yycursor;
@@ -163,7 +163,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     <header> header_field_folded crlf {
         let mut folds: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
+        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.yyinput, &mut folds);
         log!("folds: {:?}", folds);
 
         st.token = st.yycursor;
@@ -190,7 +190,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
     // of buffer, the character at `yylimit` offset is the sentinel (null).
     let mut state = ConState {
         file: fr,
-        str: [0; CON_STATE_SIZE + 1], // sentinel (at `yylimit` offset) is set to null
+        yyinput: [0; CON_STATE_SIZE + 1], // sentinel (at `yylimit` offset) is set to null
         yycursor: CON_STATE_SIZE,
         yymarker: CON_STATE_SIZE,
         yylimit: CON_STATE_SIZE,
@@ -231,7 +231,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.yyinput));
             if status == ConStatus::BigPacket {
                 log!("error: packet too big");
                 break;

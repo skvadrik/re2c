@@ -3,7 +3,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
 }
 
@@ -18,7 +18,7 @@ type state = {
 */
 
 let main () =
-    let st = {str = "1234\x00"; yycursor = 0}
+    let st = {yyinput = "1234\x00"; yycursor = 0}
     in if not (lex st) then raise (Failure "error")
 
 let _ = main ()

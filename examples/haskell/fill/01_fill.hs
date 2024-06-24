@@ -17,7 +17,7 @@ chunk_size = 4096
 
 data State = State {
     _file :: !Handle,
-    _str :: !BS.ByteString,
+    _yyinput :: !BS.ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     _yylimit :: !Int,
@@ -30,7 +30,7 @@ data State = State {
 #31 "haskell/fill/01_fill.hs"
 yy0 :: State -> IO Int
 yy0 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x20 == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -59,7 +59,7 @@ yy2 !State{..} = do
 
 yy3 :: State -> IO Int
 yy3 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x20 == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -81,7 +81,7 @@ yy4 !State{..} = do
 yy5 :: State -> IO Int
 yy5 !State{..} = do
     let _yymarker = _yycursor
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     if yych <= 0x00 then do
         if _yycursor >= _yylimit then do
             (State{..}, yyfill) <- fill State{..}
@@ -95,7 +95,7 @@ yy5 !State{..} = do
 
 yy6 :: State -> IO Int
 yy6 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     yy7 State{..} yych
 
 yy7 :: State -> Word8 -> IO Int
@@ -124,7 +124,7 @@ yy8 !State{..} = do
 
 yy9 :: State -> IO Int
 yy9 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     if yych <= 0x00 then do
         if _yycursor >= _yylimit then do
             (State{..}, yyfill) <- fill State{..}
@@ -164,7 +164,7 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yyinput = BS.concat [(BS.init . BS.drop _token) _yyinput, chunk, "\0"],
                 _yycursor = _yycursor - _token,
                 _yymarker = _yymarker - _token,
                 _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
@@ -184,7 +184,7 @@ main = do
     fh <- openFile fname ReadMode
     let st = State {
         _file = fh,
-        _str = BS.singleton 0,
+        _yyinput = BS.singleton 0,
         _yycursor = 0,
         _yymarker = 0,
         _token = 0,

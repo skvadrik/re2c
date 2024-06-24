@@ -98,6 +98,7 @@ const char* DEFAULT_SYNTAX_C =
     "conf:define:YYGETACCEPT = sigil \"{var}\";\n"
     "conf:define:YYGETCOND = \"YYGETCONDITION\"; // historic default\n"
     "conf:define:YYGETSTATE = \"YYGETSTATE\";\n"
+    "conf:define:YYINPUT = (api.record ? record \"->yyinput\" : \"YYINPUT\");\n"
     "conf:define:YYLESSTHAN = \"YYLESSTHAN\";\n"
     "conf:define:YYLIMIT = (api.record ? record \"->yylimit\" : \"YYLIMIT\");\n"
     "conf:define:YYMARKER = (api.record ? record \"->yymarker\" : \"YYMARKER\");\n"

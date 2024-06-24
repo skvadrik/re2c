@@ -7,7 +7,7 @@ const BUFSIZE: usize = 4096;
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE],
+    yyinput: [u8; BUFSIZE],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -25,18 +25,18 @@ fn fill(st: &mut State) -> Fill {
     if st.token < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yyinput.copy_within(st.token..st.yylimit, 0);
     st.yylimit -= st.token;
     st.yycursor -= st.token;
     st.yymarker = st.yymarker.overflowing_sub(st.token).0; // may underflow if marker is unused
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.str[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
+    match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
         Ok(n) => {
             st.yylimit += n;
             st.eof = n == 0; // end of file
-            st.str[st.yylimit] = 0; // append sentinel
+            st.yyinput[st.yylimit] = 0; // append sentinel
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -90,7 +90,7 @@ fn main() {
     let mut st = State {
         file: file,
         // Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL.
-        str: [0; BUFSIZE],
+        yyinput: [0; BUFSIZE],
         yylimit: yylimit,
         yycursor: yylimit,
         yymarker: yylimit,

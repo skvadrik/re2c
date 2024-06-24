@@ -58,7 +58,7 @@ fn unwind(trie MtagTrie, x int, y int, str []u8) []string {
 struct State {
 mut:
     file     os.File
-    str      []u8
+    yyinput  []u8
     yycursor int
     yymarker int
     yylimit  int
@@ -96,7 +96,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.str, st.str[shift..shift+used])
+    copy(mut &st.yyinput, st.yyinput[shift..shift+used])
     st.yycursor -= shift
     st.yymarker -= shift
     st.yylimit -= shift
@@ -105,10 +105,10 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
-    st.str[st.yylimit] = 0 // append sentinel symbol
+    st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -152,13 +152,13 @@ fn fill(mut st &State) Status {
     media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
     <media_type> media_type ows crlf {
-        mt := st.str[st.l1..st.l2].str()
+        mt := st.yyinput[st.l1..st.l2].str()
         log.debug("media type: $mt")
 
-        pnames := unwind(st.trie, st.p1, st.p2, st.str)
+        pnames := unwind(st.trie, st.p1, st.p2, st.yyinput)
         log.debug("pnames: $pnames")
 
-        pvals := unwind(st.trie, st.p3, st.p4, st.str)
+        pvals := unwind(st.trie, st.p3, st.p4, st.yyinput)
         log.debug("pvals: $pvals")
 
         st.token = st.yycursor
@@ -166,7 +166,7 @@ fn fill(mut st &State) Status {
     }
 
     <header> header_field_folded crlf {
-        folds := unwind(st.trie, st.f1, st.f2, st.str)
+        folds := unwind(st.trie, st.f1, st.f2, st.yyinput)
         log.debug("folds: $folds")
 
         st.token = st.yycursor
@@ -188,7 +188,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:     fr,
         // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-        str:      []u8{len: bufsize + 1},
+        yyinput:  []u8{len: bufsize + 1},
         yycursor: bufsize,
         yymarker: bufsize,
         yylimit:  bufsize,
@@ -208,7 +208,7 @@ fn test(expect Status, packets []string) {
         p4:       mtag_root,
         yyaccept: 0,
     }
-    // str is zero-initialized, no need to write sentinel
+    // yyinput is zero-initialized, no need to write sentinel
 
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and
@@ -227,7 +227,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.str, status $status")
+            log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break
             }

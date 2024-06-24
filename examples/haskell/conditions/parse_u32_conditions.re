@@ -8,7 +8,7 @@ import Data.ByteString (ByteString, index)
 /*!conditions:re2c*/
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     _yycond :: !YYCONDTYPE
@@ -27,12 +27,12 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
     <init> '0x' / [0-9a-fA-F] :=> hex
     <init> * { Nothing }
 
-    <bin> [01]  { yyfnbin State{..} $ _num * 2 + (peek_digit _str _yycursor 48) }
-    <oct> [0-7] { yyfnoct State{..} $ _num * 8 + (peek_digit _str _yycursor 48) }
-    <dec> [0-9] { yyfndec State{..} $ _num * 10 + (peek_digit _str _yycursor 48) }
-    <hex> [0-9] { yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 48) }
-    <hex> [a-f] { yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 87) }
-    <hex> [A-F] { yyfnhex State{..} $ _num * 16 + (peek_digit _str _yycursor 55) }
+    <bin> [01]  { yyfnbin State{..} $ _num * 2 + (peek_digit _yyinput _yycursor 48) }
+    <oct> [0-7] { yyfnoct State{..} $ _num * 8 + (peek_digit _yyinput _yycursor 48) }
+    <dec> [0-9] { yyfndec State{..} $ _num * 10 + (peek_digit _yyinput _yycursor 48) }
+    <hex> [0-9] { yyfnhex State{..} $ _num * 16 + (peek_digit _yyinput _yycursor 48) }
+    <hex> [a-f] { yyfnhex State{..} $ _num * 16 + (peek_digit _yyinput _yycursor 87) }
+    <hex> [A-F] { yyfnhex State{..} $ _num * 16 + (peek_digit _yyinput _yycursor 55) }
 
     <bin, oct, dec, hex> * { Just _num }
 */
@@ -40,7 +40,7 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do
     let s = State {
-            _str = str,
+            _yyinput = str,
             _yycursor = 0,
             _yymarker = 0,
             _yycond = YYC_init}

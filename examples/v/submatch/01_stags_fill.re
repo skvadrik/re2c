@@ -10,7 +10,7 @@ const tag_none = -1
 struct State {
     file     os.File
 mut:
-    str      []u8
+    yyinput  []u8
     yycursor int
     yymarker int
     yylimit  int
@@ -40,7 +40,7 @@ fn fill(mut st &State) int {
     if st.token < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.token..st.yylimit])
+    copy(mut &st.yyinput, st.yyinput[st.token..st.yylimit])
     st.yycursor -= st.token
     st.yymarker -= st.token
     st.yylimit -= st.token
@@ -52,10 +52,10 @@ fn fill(mut st &State) int {
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
-    st.str[st.yylimit] = 0 // append sentinel symbol
+    st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
     st.eof = st.yylimit < bufsize
@@ -82,9 +82,9 @@ loop:
 
         num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
             ver := SemVer {
-                major: s2n(st.str[st.token..t1]),
-                minor: s2n(st.str[t2..t3]),
-                patch: if t4 == -1 { 0 } else { s2n(st.str[t4..st.yycursor - 1]) }
+                major: s2n(st.yyinput[st.token..t1]),
+                minor: s2n(st.yyinput[t2..t3]),
+                patch: if t4 == -1 { 0 } else { s2n(st.yyinput[t4..st.yycursor - 1]) }
             }
             vers = arrays.concat(vers, ver)
             unsafe { goto loop }
@@ -109,7 +109,7 @@ fn main() {
     mut st := &State{
         file:      fr,
         // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-        str:      []u8{len: bufsize + 1},
+        yyinput:  []u8{len: bufsize + 1},
         yycursor: bufsize,
         yymarker: bufsize,
         yylimit:  bufsize,

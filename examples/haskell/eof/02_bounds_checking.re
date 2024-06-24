@@ -7,7 +7,7 @@ import Control.Monad (when)
 import qualified Data.ByteString as BS
 
 data State = State {
-    _str :: BS.ByteString,
+    _yyinput :: BS.ByteString,
     _yycursor :: Int,
     _yylimit :: Int,
     _count :: Int
@@ -29,7 +29,7 @@ yymaxfill :: Int
 
     [\x00] {
         -- check that it is the sentinel, not some unexpected null
-        return $ if _yycursor == BS.length _str - yymaxfill + 1 then _count else (-1)
+        return $ if _yycursor == BS.length _yyinput - yymaxfill + 1 then _count else (-1)
     }
     str  { lexer State{_count = _count + 1, ..} }
     [ ]+ { lexer State{..} }
@@ -41,7 +41,7 @@ main = do
     let test s n = do
             let buf = BS.concat [s, BS.replicate yymaxfill 0]
             let st = State {
-                    _str = buf,
+                    _yyinput = buf,
                     _yycursor = 0,
                     _yylimit = BS.length buf,
                     _count = 0}

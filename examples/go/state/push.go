@@ -14,7 +14,7 @@ const BUFSIZE int = 10
 
 type State struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor int
 	yymarker int
 	yylimit  int
@@ -39,16 +39,16 @@ func fill(st *State) int {
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.str[0:], st.str[shift:shift+used])
+	copy(st.yyinput[0:], st.yyinput[shift:shift+used])
 	st.yycursor -= shift
 	st.yymarker -= shift
 	st.yylimit -= shift
 	st.token -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.yylimit:BUFSIZE])
+	n, _ := st.file.Read(st.yyinput[st.yylimit:BUFSIZE])
 	st.yylimit += n
-	st.str[st.yylimit] = 0 // append sentinel symbol
+	st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -84,7 +84,7 @@ loop:
 //line "go/state/push.go":85
 yy0:
 yyFillLabel0:
-	yych = yyrecord.str[yyrecord.yycursor]
+	yych = yyrecord.yyinput[yyrecord.yycursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy4
@@ -106,7 +106,7 @@ yy4:
 	yyrecord.yycursor += 1
 	yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel1:
-	yych = yyrecord.str[yyrecord.yycursor]
+	yych = yyrecord.yyinput[yyrecord.yycursor]
 	switch (yych) {
 	case ';':
 		goto yy5
@@ -128,7 +128,7 @@ yy5:
 yy6:
 	yyrecord.yycursor += 1
 yyFillLabel2:
-	yych = yyrecord.str[yyrecord.yycursor]
+	yych = yyrecord.yyinput[yyrecord.yycursor]
 	switch (yych) {
 	case ';':
 		goto yy5
@@ -164,7 +164,7 @@ func test(expect int, packets []string) {
 	st := &State{
 		file:     fr,
 		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-		str:      make([]byte, BUFSIZE+1),
+		yyinput:  make([]byte, BUFSIZE+1),
 		yycursor: BUFSIZE,
 		yymarker: BUFSIZE,
 		yylimit:  BUFSIZE,

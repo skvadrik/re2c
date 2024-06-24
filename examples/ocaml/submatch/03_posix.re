@@ -6,7 +6,7 @@ open String
 /*!maxnmatch:re2c format = "let yymaxnmatch = @@"; */
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yynmatch: int; (* number of capturing groups *)
@@ -38,10 +38,10 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         (* Even `yypmatch` values are for opening parentheses, odd values
            are for closing parentheses, the first group is the whole match. *)
         Some {
-            major = s2n st.str st.yypmatch.(2) st.yypmatch.(3);
-            minor = s2n st.str st.yypmatch.(4) st.yypmatch.(5);
+            major = s2n st.yyinput st.yypmatch.(2) st.yypmatch.(3);
+            minor = s2n st.yyinput st.yypmatch.(4) st.yypmatch.(5);
             patch = if st.yypmatch.(6) = -1 then 0
-                else s2n st.str (st.yypmatch.(6) + 1) st.yypmatch.(7)
+                else s2n st.yyinput (st.yypmatch.(6) + 1) st.yypmatch.(7)
         }
     }
     * { None }
@@ -49,7 +49,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 let test (str: string) (result: semver option) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
         yynmatch = 0;

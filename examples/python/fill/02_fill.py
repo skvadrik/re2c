@@ -11,7 +11,7 @@ YYMAXFILL = 1
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.str = bytearray(BUFSIZE)
+        self.yyinput = bytearray(BUFSIZE)
         self.yylimit = BUFSIZE - YYMAXFILL
         self.yycursor = self.yylimit
         self.yymarker = self.yylimit
@@ -35,7 +35,7 @@ def fill(st, need):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.token:st.yylimit]
+    st.yyinput = st.yyinput[st.token:st.yylimit]
     st.yycursor -= st.token;
     st.yymarker -= st.token;
     st.yylimit -= st.token;
@@ -46,10 +46,10 @@ def fill(st, need):
     if not bytes:
         st.eof = True # end of file
         st.yylimit += YYMAXFILL
-        st.str += b"\0" * YYMAXFILL
+        st.yyinput += b"\0" * YYMAXFILL
     else:
         st.yylimit += len(bytes);
-        st.str += bytes
+        st.yyinput += bytes
 
     return Status.OK
 
@@ -64,7 +64,7 @@ def lex(yyrecord):
                 case 0:
                     if yyrecord.yylimit <= yyrecord.yycursor:
                         if fill(yyrecord, 1) != Status.OK: return -1
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     yyrecord.yycursor += 1
                     if yych <= 0x20:
                         if yych <= 0x00:
@@ -89,7 +89,7 @@ def lex(yyrecord):
                 case 3:
                     if yyrecord.yylimit <= yyrecord.yycursor:
                         if fill(yyrecord, 1) != Status.OK: return -1
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     if yych == 0x20:
                         yyrecord.yycursor += 1
                         yystate = 3
@@ -98,7 +98,7 @@ def lex(yyrecord):
                 case 4:
                     if yyrecord.yylimit <= yyrecord.yycursor:
                         if fill(yyrecord, 1) != Status.OK: return -1
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     yyrecord.yycursor += 1
                     if yych == 0x27:
                         yystate = 5

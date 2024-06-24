@@ -96,6 +96,7 @@ conf:define:YYFILL = "YYFILL";
 conf:define:YYGETACCEPT = sigil "{var}";
 conf:define:YYGETCOND = "YYGETCONDITION"; // historic default
 conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYINPUT = (api.record ? record "->yyinput" : "YYINPUT");
 conf:define:YYLESSTHAN = "YYLESSTHAN";
 conf:define:YYLIMIT = (api.record ? record "->yylimit" : "YYLIMIT");
 conf:define:YYMARKER = (api.record ? record "->yymarker" : "YYMARKER");

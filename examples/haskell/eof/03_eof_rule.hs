@@ -10,7 +10,7 @@ import qualified Data.ByteString as BS
 import Data.Word
 
 data State = State {
-    _str :: BS.ByteString,
+    _yyinput :: BS.ByteString,
     _yycursor :: Int,
     _yymarker :: Int,
     _yylimit :: Int,
@@ -22,7 +22,7 @@ data State = State {
 #23 "haskell/eof/03_eof_rule.hs"
 yy0 :: State -> Int
 yy0 State{..} =
-    let yych = BS.index _str _yycursor in
+    let yych = BS.index _yyinput _yycursor in
     case yych of
         _c | 0x20 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -49,7 +49,7 @@ yy2 State{..} =
 
 yy3 :: State -> Int
 yy3 State{..} =
-    let yych = BS.index _str _yycursor in
+    let yych = BS.index _yyinput _yycursor in
     case yych of
         _c | 0x20 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -66,7 +66,7 @@ yy4 State{..} =
 yy5 :: State -> Int
 yy5 State{..} =
     let _yymarker = _yycursor in
-    let yych = BS.index _str _yycursor in
+    let yych = BS.index _yyinput _yycursor in
     if yych <= 0x00 then
         if _yycursor >= _yylimit then
             yy2 State{..}
@@ -78,7 +78,7 @@ yy5 State{..} =
 
 yy6 :: State -> Int
 yy6 State{..} =
-    let yych = BS.index _str _yycursor in
+    let yych = BS.index _yyinput _yycursor in
     yy7 State{..} yych
 
 yy7 :: State -> Word8 -> Int
@@ -105,7 +105,7 @@ yy8 State{..} =
 
 yy9 :: State -> Int
 yy9 State{..} =
-    let yych = BS.index _str _yycursor in
+    let yych = BS.index _yyinput _yycursor in
     if yych <= 0x00 then
         if _yycursor >= _yylimit then
             yy11 State{..}
@@ -138,7 +138,7 @@ main :: IO ()
 main = do
     let test s n = do
             let st = State {
-                    _str = s,
+                    _yyinput = s,
                     _yycursor = 0, 
                     _yymarker = 0,
                     _yylimit = BS.length s - 1, -- terminating null not included

@@ -46,6 +46,7 @@
     re2c:define:YYGETCONDITION:naked = 0; // deprecated
     re2c:define:YYGETSTATE = "";
     re2c:define:YYGETSTATE:naked = 0;
+    re2c:define:YYINPUT = "";
     re2c:define:YYLESSTHAN = "";
     re2c:define:YYLIMIT = "";
     re2c:define:YYMARKER = "";

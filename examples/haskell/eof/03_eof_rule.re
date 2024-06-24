@@ -7,7 +7,7 @@ import qualified Data.ByteString as BS
 import Data.Word
 
 data State = State {
-    _str :: BS.ByteString,
+    _yyinput :: BS.ByteString,
     _yycursor :: Int,
     _yymarker :: Int,
     _yylimit :: Int,
@@ -34,7 +34,7 @@ main :: IO ()
 main = do
     let test s n = do
             let st = State {
-                    _str = s,
+                    _yyinput = s,
                     _yycursor = 0, 
                     _yymarker = 0,
                     _yylimit = BS.length s - 1, -- terminating null not included

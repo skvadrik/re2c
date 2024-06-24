@@ -11,7 +11,7 @@ import Data.Array
 import Data.Word
 
 data State a = State {
-    _str :: a,
+    _yyinput :: a,
     _yycursor :: Int,
     _yymarker :: Int
 }
@@ -39,7 +39,7 @@ data State a = State {
 main :: IO ()
 main = do
     let make_st l = State {
-            _str = listArray (0, length l - 1) l,
+            _yyinput = listArray (0, length l - 1) l,
             _yycursor = 0,
             _yymarker = 0}
 

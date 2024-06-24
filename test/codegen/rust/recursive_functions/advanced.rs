@@ -24,7 +24,7 @@ const MTAG_ROOT: usize = NONE - 1;
 
 struct ConState {
     file: File,
-    str: [u8; CON_STATE_SIZE + 1],
+    yyinput: [u8; CON_STATE_SIZE + 1],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -104,7 +104,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.str.as_mut_ptr();
+        let p = st.yyinput.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.yylimit -= shift;
@@ -116,18 +116,18 @@ if st.yyt2 != NONE { st.yyt2.overflowing_sub(shift).0; }
 
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.yylimit..CON_STATE_SIZE]) {
+    match st.file.read(&mut st.yyinput[st.yylimit..CON_STATE_SIZE]) {
         Ok(n) => st.yylimit += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.str[st.yylimit] = 0; // append sentinel symbol
+    st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return ConStatus::Ready;
 }
 
 
 fn yy1(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -165,7 +165,7 @@ fn yy3(st: &mut ConState) -> ConStatus {
 
 fn yy4(st: &mut ConState) -> ConStatus {
 	st.yymarker = st.yycursor;
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -187,7 +187,7 @@ fn yy4(st: &mut ConState) -> ConStatus {
 }
 
 fn yy5(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	yy6(st, yych)
 }
 
@@ -226,7 +226,7 @@ fn yy7(st: &mut ConState) -> ConStatus {
 }
 
 fn yy8(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x09 |
@@ -245,7 +245,7 @@ fn yy8(st: &mut ConState) -> ConStatus {
 }
 
 fn yy9(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	yy10(st, yych)
 }
 
@@ -307,7 +307,7 @@ fn yy10(st: &mut ConState, yych: u8) -> ConStatus {
 }
 
 fn yy11(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -334,7 +334,7 @@ fn yy11(st: &mut ConState) -> ConStatus {
 }
 
 fn yy12(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x0A => {
 			st.yycursor += 1;
@@ -352,7 +352,7 @@ fn yy12(st: &mut ConState) -> ConStatus {
 }
 
 fn yy13(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -392,14 +392,14 @@ fn yy14(st: &mut ConState) -> ConStatus {
 	st.p4 = st.yytm6;
 	st.yystate = -1;
 	
-        log!("media type: {}", String::from_utf8_lossy(&st.str[st.l1..st.l2]));
+        log!("media type: {}", String::from_utf8_lossy(&st.yyinput[st.l1..st.l2]));
 
         let mut pnames: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.str, &mut pnames);
+        unwind(&mut st.mtag_trie, st.p1, st.p2, &st.yyinput, &mut pnames);
         log!("pnames: {:?}", pnames);
 
         let mut pvals: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.str, &mut pvals);
+        unwind(&mut st.mtag_trie, st.p3, st.p4, &st.yyinput, &mut pvals);
         log!("pvals: {:?}", pvals);
 
         st.token = st.yycursor;
@@ -408,7 +408,7 @@ fn yy14(st: &mut ConState) -> ConStatus {
 }
 
 fn yy15(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -439,7 +439,7 @@ fn yy15(st: &mut ConState) -> ConStatus {
 }
 
 fn yy16(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x21 |
 		0x23 ..= 0x27 |
@@ -471,7 +471,7 @@ fn yy16(st: &mut ConState) -> ConStatus {
 }
 
 fn yy17(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -517,7 +517,7 @@ fn yy17(st: &mut ConState) -> ConStatus {
 }
 
 fn yy18(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -546,7 +546,7 @@ fn yy18(st: &mut ConState) -> ConStatus {
 }
 
 fn yy19(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -577,7 +577,7 @@ fn yy19(st: &mut ConState) -> ConStatus {
 }
 
 fn yy20(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -611,7 +611,7 @@ fn yy20(st: &mut ConState) -> ConStatus {
 }
 
 fn yy21(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -641,7 +641,7 @@ fn yyfnmedia_type(st: &mut ConState) -> ConStatus {
 }
 
 fn yy23(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x0C |
@@ -679,7 +679,7 @@ fn yy25(st: &mut ConState) -> ConStatus {
 fn yy26(st: &mut ConState) -> ConStatus {
 	st.yyaccept = 0;
 	st.yymarker = st.yycursor;
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x0A => {
 			st.yycursor += 1;
@@ -699,7 +699,7 @@ fn yy26(st: &mut ConState) -> ConStatus {
 fn yy27(st: &mut ConState) -> ConStatus {
 	st.yyaccept = 0;
 	st.yymarker = st.yycursor;
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -730,7 +730,7 @@ fn yy27(st: &mut ConState) -> ConStatus {
 }
 
 fn yy28(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -758,7 +758,7 @@ fn yy29(st: &mut ConState) -> ConStatus {
 }
 
 fn yy30(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -787,7 +787,7 @@ fn yy30(st: &mut ConState) -> ConStatus {
 }
 
 fn yy31(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x0A => {
 			st.yycursor += 1;
@@ -805,7 +805,7 @@ fn yy31(st: &mut ConState) -> ConStatus {
 }
 
 fn yy32(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -836,7 +836,7 @@ fn yy32(st: &mut ConState) -> ConStatus {
 }
 
 fn yy33(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -871,7 +871,7 @@ fn yy33(st: &mut ConState) -> ConStatus {
 }
 
 fn yy34(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x0C |
@@ -897,7 +897,7 @@ fn yy34(st: &mut ConState) -> ConStatus {
 }
 
 fn yy35(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x0A => {
 			st.yycursor += 1;
@@ -915,7 +915,7 @@ fn yy35(st: &mut ConState) -> ConStatus {
 }
 
 fn yy36(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -949,7 +949,7 @@ fn yy36(st: &mut ConState) -> ConStatus {
 fn yy37(st: &mut ConState) -> ConStatus {
 	st.yyaccept = 1;
 	st.yymarker = st.yycursor;
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -974,7 +974,7 @@ fn yy38(st: &mut ConState) -> ConStatus {
 	st.yystate = -1;
 	
         let mut folds: Vec::<String> = Vec::new();
-        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.str, &mut folds);
+        unwind(&mut st.mtag_trie, st.f1, st.f2, &st.yyinput, &mut folds);
         log!("folds: {:?}", folds);
 
         st.token = st.yycursor;
@@ -983,7 +983,7 @@ fn yy38(st: &mut ConState) -> ConStatus {
 }
 
 fn yy39(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -1017,7 +1017,7 @@ fn yy39(st: &mut ConState) -> ConStatus {
 }
 
 fn yy40(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x0A => {
 			st.yycursor += 1;
@@ -1035,7 +1035,7 @@ fn yy40(st: &mut ConState) -> ConStatus {
 }
 
 fn yy41(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x00 |
 		0x01 ..= 0x08 |
@@ -1071,7 +1071,7 @@ fn yy42(st: &mut ConState) -> ConStatus {
 }
 
 fn yy43(st: &mut ConState) -> ConStatus {
-	let yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+	let yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 	match yych {
 		0x09 |
 		0x20 => {
@@ -1352,7 +1352,7 @@ fn test(packets: Vec<&[u8]>, expect: ConStatus) {
     // of buffer, the character at `yylimit` offset is the sentinel (null).
     let mut state = ConState {
         file: fr,
-        str: [0; CON_STATE_SIZE + 1], // sentinel (at `yylimit` offset) is set to null
+        yyinput: [0; CON_STATE_SIZE + 1], // sentinel (at `yylimit` offset) is set to null
         yycursor: CON_STATE_SIZE,
         yymarker: CON_STATE_SIZE,
         yylimit: CON_STATE_SIZE,
@@ -1405,7 +1405,7 @@ yytm9: MTAG_ROOT,
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.yyinput));
             if status == ConStatus::BigPacket {
                 log!("error: packet too big");
                 break;

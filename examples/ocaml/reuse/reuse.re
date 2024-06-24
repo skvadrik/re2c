@@ -6,7 +6,7 @@
 open Array
 
 type 'a state = {
-    str: 'a array;
+    yyinput: 'a array;
     mutable yycursor: int;
     mutable yymarker: int;
 }
@@ -30,13 +30,13 @@ type 'a state = {
 
 let main() =
     let st8 = {
-        str = [|'\xe2'; '\x08'; '\x80'; '\x78'; '\x20'; '\xe2'; '\x88'; '\x83'; '\x79'|];
+        yyinput = [|'\xe2'; '\x08'; '\x80'; '\x78'; '\x20'; '\xe2'; '\x88'; '\x83'; '\x79'|];
         yycursor = 0;
         yymarker = 0;
-    } in if not (lex8 st8 = Some (Array.length st8.str)) then raise (Failure "error");
+    } in if not (lex8 st8 = Some (Array.length st8.yyinput)) then raise (Failure "error");
 
     let st32 = {
         yycursor = 0;
         yymarker = 0;
-        str = [|0x2200; 0x78; 0x20; 0x2203; 0x79|];
-    } in if not (lex32 st32 = Some (Array.length st32.str)) then raise (Failure "error");
+        yyinput = [|0x2200; 0x78; 0x20; 0x2203; 0x79|];
+    } in if not (lex32 st32 = Some (Array.length st32.yyinput)) then raise (Failure "error");

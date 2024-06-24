@@ -12,7 +12,7 @@ SemVer = namedtuple('SemVer', 'major minor patch')
 class State:
     def __init__(self, fname):
         self.file = open(fname, "rb")
-        self.str = bytearray(BUFSIZE)
+        self.yyinput = bytearray(BUFSIZE)
         self.yylimit = BUFSIZE - 1 # exclude terminating null
         self.yycursor = self.yylimit
         self.yymarker = self.yylimit
@@ -40,7 +40,7 @@ def fill(st):
         return Status.LONG_LEXEME
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.token:st.yylimit]
+    st.yyinput = st.yyinput[st.token:st.yylimit]
     st.yycursor -= st.token;
     st.yymarker -= st.token;
     st.yylimit -= st.token;
@@ -52,9 +52,9 @@ def fill(st):
         st.eof = True # end of file
     else:
         st.yylimit += len(bytes);
-        st.str += bytes
+        st.yyinput += bytes
 
-    st.str += b'\0' # append sentinel
+    st.yyinput += b'\0' # append sentinel
 
     return Status.OK
 
@@ -67,7 +67,7 @@ def lex(st, count):
         while True:
             match yystate:
                 case 0:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x00:
                         if st.yylimit <= st.yycursor:
                             if fill(st) == Status.OK:
@@ -96,7 +96,7 @@ def lex(st, count):
                     return None
                 case 3:
                     st.yymarker = st.yycursor
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x2E:
                         if yych <= 0x00:
                             if st.yylimit <= st.yycursor:
@@ -122,7 +122,7 @@ def lex(st, count):
                         yystate = 2
                         continue
                 case 4:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x00:
                         if st.yylimit <= st.yycursor:
                             if fill(st) == Status.OK:
@@ -145,7 +145,7 @@ def lex(st, count):
                     yystate = 2
                     continue
                 case 6:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x2E:
                         if yych <= 0x00:
                             if st.yylimit <= st.yycursor:
@@ -171,7 +171,7 @@ def lex(st, count):
                         yystate = 5
                         continue
                 case 7:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x2D:
                         if yych <= 0x00:
                             if st.yylimit <= st.yycursor:
@@ -209,13 +209,13 @@ def lex(st, count):
                     t4 = yyt3
                     t1 = yyt1
                     t1 -= 1
-                    major = int(st.str[st.token:t1]);
-                    minor = int(st.str[t2:t3]);
-                    patch = int(st.str[t4:st.yycursor - 1]) if t4 != -1 else 0
+                    major = int(st.yyinput[st.token:t1]);
+                    minor = int(st.yyinput[t2:t3]);
+                    patch = int(st.yyinput[t4:st.yycursor - 1]) if t4 != -1 else 0
                     vers.append(SemVer(major, minor, patch))
                     break
                 case 9:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x00:
                         if st.yylimit <= st.yycursor:
                             if fill(st) == Status.OK:
@@ -234,7 +234,7 @@ def lex(st, count):
                     yystate = 10
                     continue
                 case 10:
-                    yych = st.str[st.yycursor]
+                    yych = st.yyinput[st.yycursor]
                     if yych <= 0x0A:
                         if yych <= 0x00:
                             if st.yylimit <= st.yycursor:

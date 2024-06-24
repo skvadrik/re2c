@@ -8,7 +8,7 @@ const BUFSIZE: usize = 4096;
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE],
+    yyinput: [u8; BUFSIZE],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -26,18 +26,18 @@ fn fill(st: &mut State) -> Fill {
     if st.token < 1 { return Fill::LongLexeme; }
 
     // Shift buffer contents (discard everything up to the current token).
-    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yyinput.copy_within(st.token..st.yylimit, 0);
     st.yylimit -= st.token;
     st.yycursor -= st.token;
     st.yymarker = st.yymarker.overflowing_sub(st.token).0; // may underflow if marker is unused
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    match st.file.read(&mut st.str[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
+    match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
         Ok(n) => {
             st.yylimit += n;
             st.eof = n == 0; // end of file
-            st.str[st.yylimit] = 0; // append sentinel
+            st.yyinput[st.yylimit] = 0; // append sentinel
         }
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -58,7 +58,7 @@ fn lex(yyrecord: &mut State) -> isize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x20 => {
 						yyrecord.yycursor += 1;
@@ -91,7 +91,7 @@ fn lex(yyrecord: &mut State) -> isize {
 			}
 			2 => { return -1; },
 			3 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x20 => {
 						yyrecord.yycursor += 1;
@@ -113,7 +113,7 @@ fn lex(yyrecord: &mut State) -> isize {
 			4 => { continue 'lex; },
 			5 => {
 				yyrecord.yymarker = yyrecord.yycursor;
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				if yych >= 0x01 {
 					yystate = 7;
 					continue 'yyl;
@@ -131,7 +131,7 @@ fn lex(yyrecord: &mut State) -> isize {
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				yystate = 7;
 				continue 'yyl;
 			}
@@ -164,7 +164,7 @@ fn lex(yyrecord: &mut State) -> isize {
 			}
 			8 => { count += 1; continue 'lex; },
 			9 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				if yych <= 0x00 {
 					if yyrecord.yylimit <= yyrecord.yycursor {
 						if fill(yyrecord) == Fill::Ok {
@@ -221,7 +221,7 @@ fn main() {
     let mut st = State {
         file: file,
         // Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL.
-        str: [0; BUFSIZE],
+        yyinput: [0; BUFSIZE],
         yylimit: yylimit,
         yycursor: yylimit,
         yymarker: yylimit,

@@ -3,7 +3,7 @@
 
 // Store u32 number in u64 during parsing to simplify overflow hadling.
 struct State<'a> {
-    str: &'a [u8],
+    yyinput: &'a [u8],
     yycursor: usize,
     yymarker: usize,
     num: u64,
@@ -19,14 +19,14 @@ macro_rules! maybe { // Convert the number from u64 to optional u32.
 
 // Add digit with the given base, checking for overflow.
 fn add(st: &mut State, offs: u8, base: u64) {
-    let digit = unsafe { st.str.get_unchecked(st.yycursor - 1) } - offs;
+    let digit = unsafe { st.yyinput.get_unchecked(st.yycursor - 1) } - offs;
     st.num = std::cmp::min(st.num * base + digit as u64, ERROR);
 }
 
 fn parse_u32(s: & [u8]) -> Option<u32> {
     assert_eq!(s.last(), Some(&0)); // expect null-terminated input
 
-    let mut st = State {str: s, yycursor: 0, yymarker: 0, num: 0};
+    let mut st = State {yyinput: s, yycursor: 0, yymarker: 0, num: 0};
 
 {
 	#[allow(unused_assignments)]
@@ -35,7 +35,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				st.yycursor += 1;
 				match yych {
 					0x30 => {
@@ -55,7 +55,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 			1 => { return None; },
 			2 => {
 				st.yymarker = st.yycursor;
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				match yych {
 					0x42 |
 					0x62 => {
@@ -81,7 +81,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				{ return parse_dec(&mut st); }
 			}
 			5 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				match yych {
 					0x30 ..= 0x31 => {
 						st.yycursor += 1;
@@ -100,7 +100,7 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 				continue 'yyl;
 			}
 			7 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x46 |
@@ -139,7 +139,7 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x31 => {
@@ -170,7 +170,7 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x37 => {
@@ -201,7 +201,7 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {
@@ -232,7 +232,7 @@ fn parse_hex(st: &mut State) -> Option<u32> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*st.str.get_unchecked(st.yycursor)};
+				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
 				st.yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {

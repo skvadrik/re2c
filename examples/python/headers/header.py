@@ -11,7 +11,7 @@ def lex(yyrecord):
     while True:
         match yystate:
             case 0:
-                yych = yyrecord.str[yyrecord.yycursor]
+                yych = yyrecord.yyinput[yyrecord.yycursor]
                 if yych <= 0x60:
                     yyt1 = yyrecord.yycursor
                     yystate = 1
@@ -32,7 +32,7 @@ def lex(yyrecord):
                 t = yyt1
                 return t
             case 2:
-                yych = yyrecord.str[yyrecord.yycursor]
+                yych = yyrecord.yyinput[yyrecord.yycursor]
                 if yych == 0x62:
                     yyrecord.yycursor += 1
                     yystate = 2
@@ -48,7 +48,7 @@ assert lex(State(b"ab\0")) == 1
 
 class State:
     def __init__(self, str):
-        self.str = str
+        self.yyinput = str
         self.yycursor = 0
         
         self.yyt1 = 0

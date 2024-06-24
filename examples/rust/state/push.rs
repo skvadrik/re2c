@@ -17,7 +17,7 @@ const BUFSIZE: usize = 10;
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE],
+    yyinput: [u8; BUFSIZE],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -33,17 +33,17 @@ fn fill(st: &mut State) -> Status {
     if st.token < 1 { return Status::BigPacket; }
 
     // Shift buffer contents (discard everything up to the current lexeme).
-    st.str.copy_within(st.token..st.yylimit, 0);
+    st.yyinput.copy_within(st.token..st.yylimit, 0);
     st.yylimit -= st.token;
     st.yycursor -= st.token;
     st.yymarker = st.yymarker.overflowing_sub(st.token).0; // underflows if marker is unused
     st.token = 0;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
+    match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE - 1]) { // -1 for sentinel
         Ok(n) => {
             st.yylimit += n;
-            st.str[st.yylimit] = 0; // append sentinel symbol
+            st.yyinput[st.yylimit] = 0; // append sentinel symbol
         },
         Err(why) => panic!("cannot read from file: {}", why)
     }
@@ -61,7 +61,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 	'yyl: loop {
 		match yystate {
 			-1 ..= 0 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x61 ..= 0x7A => {
 						yyrecord.yycursor += 1;
@@ -89,7 +89,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 			}
 			3 => {
 				yyrecord.yymarker = yyrecord.yycursor;
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x3B => {
 						yyrecord.yycursor += 1;
@@ -116,7 +116,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 				{ *recv += 1; continue 'lex; }
 			}
 			5 => {
-				yych = unsafe {*yyrecord.str.get_unchecked(yyrecord.yycursor)};
+				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
 				match yych {
 					0x3B => {
 						yyrecord.yycursor += 1;
@@ -196,7 +196,7 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
     let mut state = State {
         file: fr,
         // Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL.
-        str: [0; BUFSIZE],
+        yyinput: [0; BUFSIZE],
         yylimit: yylimit,
         yycursor: yylimit,
         yymarker: yylimit,
@@ -225,7 +225,7 @@ fn test(packets: Vec<&[u8]>, expect: Status) {
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.yyinput));
             if status == Status::BigPacket {
                 log!("error: packet too big");
                 break;

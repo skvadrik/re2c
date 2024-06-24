@@ -6,7 +6,7 @@ let bufsize = 4096
 
 type state = {
     file: in_channel;
-    str: bytes;
+    yyinput: bytes;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yylimit: int;
@@ -23,18 +23,18 @@ let fill(st: state) : status =
     if st.token < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    blit st.yyinput st.token st.yyinput 0 (st.yylimit - st.token);
     st.yycursor <- st.yycursor - st.token;
     st.yymarker <- st.yymarker - st.token;
     st.yylimit <- st.yylimit - st.token;
     st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
+    let n = input st.file st.yyinput st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
     st.yylimit <- st.yylimit + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        set st.str st.yylimit '\x00'; (* append sentinel *)
+        set st.yyinput st.yylimit '\x00'; (* append sentinel *)
 
     Ok)
 
@@ -71,7 +71,7 @@ let main () =
             let yylimit = bufsize - 1 in
             let st = {
                 file = ic;
-                str = create bufsize;
+                yyinput = create bufsize;
                 yycursor = yylimit;
                 yymarker = yylimit;
                 yylimit = yylimit;

@@ -13,7 +13,7 @@ data Number = INum | FNum | NNaN deriving (Eq)
 
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _yymarker :: Int,
     _yyaccept :: Int
@@ -22,7 +22,7 @@ data State = State {
 
 yy0 :: State -> Number
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x2E == _c ->
@@ -44,7 +44,7 @@ yy2 State{..} =
 
 yy3 :: State -> Number
 yy3 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -56,7 +56,7 @@ yy4 :: State -> Number
 yy4 State{..} =
     let _yyaccept = 0 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -74,7 +74,7 @@ yy5 :: State -> Number
 yy5 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -96,7 +96,7 @@ yy7 :: State -> Number
 yy7 State{..} =
     let _yyaccept = 2 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -113,7 +113,7 @@ yy8 State{..} =
 
 yy9 :: State -> Number
 yy9 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -140,7 +140,7 @@ yy10 State{..} =
 
 yy11 :: State -> Number
 yy11 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x2B == _c || 0x2D == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -153,7 +153,7 @@ yy11 State{..} =
 
 yy12 :: State -> Number
 yy12 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -163,7 +163,7 @@ yy12 State{..} =
 
 yy13 :: State -> Number
 yy13 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -181,7 +181,7 @@ main :: IO ()
 main = do
     let test s n = do
             let st = State {
-                    _str = s,
+                    _yyinput = s,
                     _yycursor = 0,
                     _yymarker = 0,
                     _yyaccept = 0}

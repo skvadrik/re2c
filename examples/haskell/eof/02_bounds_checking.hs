@@ -10,7 +10,7 @@ import Control.Monad (when)
 import qualified Data.ByteString as BS
 
 data State = State {
-    _str :: BS.ByteString,
+    _yyinput :: BS.ByteString,
     _yycursor :: Int,
     _yylimit :: Int,
     _count :: Int
@@ -30,7 +30,7 @@ yymaxfill = 1
 yy0 :: State -> IO Int
 yy0 State{..} = do
     when (_yycursor >= _yylimit) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x00 == _c -> do
@@ -46,7 +46,7 @@ yy1 :: State -> IO Int
 yy1 State{..} = do
 #30 "haskell/eof/02_bounds_checking.re"
     -- check that it is the sentinel, not some unexpected null
-    return $ if _yycursor == BS.length _str - yymaxfill + 1 then _count else (-1)
+    return $ if _yycursor == BS.length _yyinput - yymaxfill + 1 then _count else (-1)
 #51 "haskell/eof/02_bounds_checking.hs"
 
 yy2 :: State -> IO Int
@@ -58,7 +58,7 @@ yy2 State{..} = do
 yy3 :: State -> IO Int
 yy3 State{..} = do
     when (_yycursor >= _yylimit) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x20 == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -75,7 +75,7 @@ yy4 State{..} = do
 yy5 :: State -> IO Int
 yy5 State{..} = do
     when (_yycursor >= _yylimit) $ throw UnexpectedFill
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x27 == _c -> do
@@ -109,7 +109,7 @@ main = do
     let test s n = do
             let buf = BS.concat [s, BS.replicate yymaxfill 0]
             let st = State {
-                    _str = buf,
+                    _yyinput = buf,
                     _yycursor = 0,
                     _yylimit = BS.length buf,
                     _count = 0}

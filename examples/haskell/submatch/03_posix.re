@@ -10,7 +10,7 @@ none :: Int
 none = -1
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
@@ -49,9 +49,9 @@ s2n s i j = f i 0 where
         -- Even `yypmatch` values are for opening parentheses, odd values
         -- are for closing parentheses, the first group is the whole match.
         Just SemVer {
-            major = s2n _str _2 _3,
-            minor = s2n _str _4 _5,
-            patch = if _6 == none then 0 else s2n _str (_6 + 1) _7
+            major = s2n _yyinput _2 _3,
+            minor = s2n _yyinput _4 _5,
+            patch = if _6 == none then 0 else s2n _yyinput (_6 + 1) _7
         }
     }
     * { Nothing }
@@ -60,7 +60,7 @@ s2n s i j = f i 0 where
 test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
     let s = State {
-        _str = str,
+        _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
         /*!stags:re2c format = '\n@@{tag} = none,'; */
