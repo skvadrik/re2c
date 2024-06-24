@@ -14,7 +14,7 @@ macro_rules! log {
 
 struct State {
     file: File,
-    str: [u8; BUFSIZE + 1],
+    yyinput: [u8; BUFSIZE + 1],
     yylimit: usize,
     yycursor: usize,
     yymarker: usize,
@@ -35,7 +35,7 @@ fn fill(st: &mut State) -> Status {
 
     // Shift buffer contents (discard already processed data).
     unsafe {
-        let p = st.str.as_mut_ptr();
+        let p = st.yyinput.as_mut_ptr();
         std::ptr::copy(p, p.offset(shift as isize), used);
     }
     st.yylimit -= shift;
@@ -44,11 +44,11 @@ fn fill(st: &mut State) -> Status {
     st.token -= shift;
 
     // Fill free space at the end of buffer with new data.
-    match st.file.read(&mut st.str[st.yylimit..BUFSIZE]) {
+    match st.file.read(&mut st.yyinput[st.yylimit..BUFSIZE]) {
         Ok(n) => st.yylimit += n,
         Err(why) => panic!("cannot read from file: {}", why)
     }
-    st.str[st.yylimit] = 0; // append sentinel symbol
+    st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return Status::Ready;
 }
@@ -98,7 +98,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
     // of buffer, the character at `yylimit` offset is the sentinel (null).
     let mut state = State {
         file: fr,
-        str: [0; BUFSIZE + 1], // sentinel (at `yylimit` offset) is set to null
+        yyinput: [0; BUFSIZE + 1], // sentinel (at `yylimit` offset) is set to null
         yylimit: BUFSIZE,
         yycursor: BUFSIZE,
         yymarker: BUFSIZE,
@@ -128,7 +128,7 @@ fn test(packets: Vec<&[u8]>, expect: Status, expect_nc: isize, expect_wc: isize)
                 }
             }
             status = fill(&mut state);
-            log!("queue: '{}'", String::from_utf8_lossy(&state.str));
+            log!("queue: '{}'", String::from_utf8_lossy(&state.yyinput));
             if status == Status::BigPacket {
                 log!("error: packet too big");
                 break;

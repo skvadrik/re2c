@@ -13,7 +13,7 @@ chunk_size = 4096
 
 data State = State {
     _file :: !Handle,
-    _str :: !BS.ByteString,
+    _yyinput :: !BS.ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     _yylimit :: !Int,
@@ -49,9 +49,9 @@ s2n s i j = f i 0 where
 
     @_1 num @_2 "." @_3 num @_4 ("." @_5 num)? [\n] {
         let ver = SemVer {
-            major = s2n _str _1 _2,
-            minor = s2n _str _3 _4,
-            patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
+            major = s2n _yyinput _1 _2,
+            minor = s2n _yyinput _3 _4,
+            patch = if _5 == (-1) then 0 else s2n _yyinput _5 (_yycursor - 1)
         }
         lexer State{..} (ver: _vers)
     }
@@ -68,7 +68,7 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State{
-                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yyinput = BS.concat [(BS.init . BS.drop _token) _yyinput, chunk, "\0"],
                 _yycursor = _yycursor - _token,
                 _yymarker = _yymarker - _token,
                 _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
@@ -88,7 +88,7 @@ main = do
     fh <- openFile fname ReadMode
     let st = State {
         _file = fh,
-        _str = BS.singleton 0,
+        _yyinput = BS.singleton 0,
         _yycursor = 0,
         _yymarker = 0,
         _yylimit = 0,

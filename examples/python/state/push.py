@@ -12,7 +12,7 @@ DEBUG = False
 class State:
     def __init__(self, file):
         self.file = file
-        self.str = bytearray(BUFSIZE)
+        self.yyinput = bytearray(BUFSIZE)
         self.yylimit = BUFSIZE - 1 # exclude terminating null
         self.yycursor = self.yylimit
         self.yymarker = self.yylimit
@@ -32,7 +32,7 @@ def fill(st):
         return Status.BIG_PACKET
 
     # Shift buffer contents (discard everything up to the current token).
-    st.str = st.str[st.token:st.yylimit]
+    st.yyinput = st.yyinput[st.token:st.yylimit]
     st.yycursor -= st.token;
     st.yymarker -= st.token;
     st.yylimit -= st.token;
@@ -42,9 +42,9 @@ def fill(st):
     bytes = st.file.read(BUFSIZE - st.yylimit - 1) # -1 for sentinel
     if bytes:
         st.yylimit += len(bytes);
-        st.str += bytes
+        st.yyinput += bytes
 
-    st.str += b'\0' # append sentinel
+    st.yyinput += b'\0' # append sentinel
 
     return Status.READY
 
@@ -56,7 +56,7 @@ def lex(yyrecord, recv):
         while True:
             match yystate:
                 case -1|0:
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     if yych <= 0x00:
                         if yyrecord.yylimit <= yyrecord.yycursor:
                             yyrecord.yystate = 8
@@ -83,7 +83,7 @@ def lex(yyrecord, recv):
                     return Status.BAD_PACKET, recv
                 case 3:
                     yyrecord.yymarker = yyrecord.yycursor
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     if yych <= 0x3B:
                         if yych <= 0x00:
                             if yyrecord.yylimit <= yyrecord.yycursor:
@@ -112,7 +112,7 @@ def lex(yyrecord, recv):
                     recv += 1
                     break
                 case 5:
-                    yych = yyrecord.str[yyrecord.yycursor]
+                    yych = yyrecord.yyinput[yyrecord.yycursor]
                     if yych <= 0x3B:
                         if yych <= 0x00:
                             if yyrecord.yylimit <= yyrecord.yycursor:
@@ -196,7 +196,7 @@ def test(packets, expect):
                 send += 1
 
             status = fill(st)
-            if DEBUG: print("queue: '{}', status: {}".format(st.str, status))
+            if DEBUG: print("queue: '{}', status: {}".format(st.yyinput, status))
             if status == Status.BIG_PACKET:
                 if DEBUG: print("error: packet too big")
                 break

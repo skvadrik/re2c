@@ -14,7 +14,7 @@ import Data.ByteString (ByteString, index)
 data Answer = Color | Fish | Dunno deriving (Eq)
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _yymarker :: Int
 }
@@ -41,7 +41,7 @@ data State = State {
 main :: IO ()
 main = do
     let test str ans = do
-            let st = State {_str = str, _yycursor = 0, _yymarker = 0}
+            let st = State {_yyinput = str, _yycursor = 0, _yymarker = 0}
             when (lexer st /= ans) $ error "failed"
 
     test "salmon" Fish

@@ -7,7 +7,7 @@ open String
 exception Fill
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     yylimit: int;
 }
@@ -20,7 +20,7 @@ let yymaxfill = 1
 #21 "ocaml/eof/02_bounds_checking.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
 	if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '\x00' -> (yy1 [@tailcall]) yyrecord count
@@ -32,7 +32,7 @@ and yy1 (yyrecord : state) (count : int) : int =
 #20 "ocaml/eof/02_bounds_checking.re"
 	
         (* check that it is the sentinel, not some unexpected null *)
-        if yyrecord.yycursor = String.length yyrecord.str - yymaxfill + 1 then count else -1
+        if yyrecord.yycursor = length yyrecord.yyinput - yymaxfill + 1 then count else -1
 
 #38 "ocaml/eof/02_bounds_checking.ml"
 
@@ -43,7 +43,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 
 and yy3 (yyrecord : state) (count : int) : int =
 	if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	match yych with
 		| ' ' ->
 			yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -57,7 +57,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
 	if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '\'' -> (yy6 [@tailcall]) yyrecord count
@@ -81,8 +81,8 @@ and lex (yyrecord : state) (count : int) : int =
 
 
 let test(str, count) =
-    let buf = String.cat str (String.make yymaxfill '\x00') in
-    let st = {str = buf; yycursor = 0; yylimit = String.length buf} in
+    let buf = cat str (make yymaxfill '\x00') in
+    let st = {yyinput = buf; yycursor = 0; yylimit = length buf} in
     let result = try lex st 0 with Fill -> -1 in
     if not (result = count) then raise (Failure "error")
 

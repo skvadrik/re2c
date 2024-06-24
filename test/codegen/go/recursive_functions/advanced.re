@@ -62,7 +62,7 @@ func unwind(trie mtagTrie, x int, y int, str []byte) []string {
 
 type State struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor int
 	yymarker int
 	yylimit  int
@@ -96,7 +96,7 @@ func fill(st *State) int {
 	if free < 1 { return lexBigPacket }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.str[0:], st.str[shift:shift+used])
+	copy(st.yyinput[0:], st.yyinput[shift:shift+used])
 	st.yycursor -= shift
 	st.yymarker -= shift
 	st.yylimit -= shift
@@ -104,9 +104,9 @@ func fill(st *State) int {
 	/*!stags:re2c format = '\n\tst.@@ -= shift'; */
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.str[st.yylimit:SIZE])
+	n, _ := st.file.Read(st.yyinput[st.yylimit:SIZE])
 	st.yylimit += n
-	st.str[st.yylimit] = 0 // append sentinel symbol
+	st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
@@ -150,12 +150,12 @@ func fill(st *State) int {
 	media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
 	<media_type> media_type ows crlf {
-		if debug {fmt.Printf("media type: %v\n", string(st.str[st.l1:st.l2]))}
+		if debug {fmt.Printf("media type: %v\n", string(st.yyinput[st.l1:st.l2]))}
 
-		pnames := unwind(st.trie, st.p1, st.p2, st.str)
+		pnames := unwind(st.trie, st.p1, st.p2, st.yyinput)
 		if debug {fmt.Printf("pnames: %v\n", pnames)}
 
-		pvals := unwind(st.trie, st.p3, st.p4, st.str)
+		pvals := unwind(st.trie, st.p3, st.p4, st.yyinput)
 		if debug {fmt.Printf("pvals: %v\n", pvals)}
 
 		st.token = st.yycursor
@@ -163,7 +163,7 @@ func fill(st *State) int {
 	}
 
 	<header> header_field_folded crlf {
-		folds := unwind(st.trie, st.f1, st.f2, st.str)
+		folds := unwind(st.trie, st.f1, st.f2, st.yyinput)
 		if debug {fmt.Printf("folds: %v\n", folds)}
 
 		st.token = st.yycursor
@@ -181,7 +181,7 @@ func test(packets []string) int {
 
 	st := &State{
 		file:     fr,
-		str:      make([]byte, SIZE+1),
+		yyinput:  make([]byte, SIZE+1),
 		yycursor: SIZE,
 		yymarker: SIZE,
 		yylimit:  SIZE,
@@ -201,7 +201,7 @@ func test(packets []string) int {
 		p4:       0,
 		yyaccept: 0,
 	}
-	// str is zero-initialized, no need to write sentinel
+	// yyinput is zero-initialized, no need to write sentinel
 
 	var status int
 	send := 0

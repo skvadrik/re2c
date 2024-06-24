@@ -96,6 +96,7 @@ conf:define:YYFILL = "yyfill";
 conf:define:YYGETACCEPT = sigil "{var}";
 conf:define:YYGETCOND = "yygetcond";
 conf:define:YYGETSTATE = "yygetstate";
+conf:define:YYINPUT = (api.record ? record ".") "yyinput";
 conf:define:YYLESSTHAN = "yylessthan";
 conf:define:YYLIMIT = (api.record ? record ".") "yylimit";
 conf:define:YYMARKER = (api.record ? record ".") "yymarker";
@@ -218,7 +219,7 @@ code:yydebug =
 
 code:yypeek =
     topindent char (code_model.recursive_functions ? " := " : " = ") (api.record
-        ? record ".str[" cursor "]"
+        ? input "[" cursor "]"
         : peek
     ) nl;
 

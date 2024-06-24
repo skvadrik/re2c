@@ -5,7 +5,7 @@ open Option
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
 } 
@@ -24,27 +24,27 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_bin;int option", "st;state", "num;int option"];
-    [01] { parse_bin st (add num (Char.code st.str.[st.yycursor - 1] - 48) 2) }
+    [01] { parse_bin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2) }
     *    { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_oct;int option", "st;state", "num;int option"];
-    [0-7] { parse_oct st (add num (Char.code st.str.[st.yycursor - 1] - 48) 8) }
+    [0-7] { parse_oct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8) }
     *     { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_dec;int option", "st;state", "num;int option"];
-    [0-9] { parse_dec st (add num (Char.code st.str.[st.yycursor - 1] - 48) 10) }
+    [0-9] { parse_dec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10) }
     *     { num }
 */
 
 /*!local:re2c
     re2c:define:YYFN = ["parse_hex;int option", "st;state", "num;int option"];
-    [0-9] { parse_hex st (add num (Char.code st.str.[st.yycursor - 1] - 48) 16) }
-    [a-f] { parse_hex st (add num (Char.code st.str.[st.yycursor - 1] - 87) 16) }
-    [A-F] { parse_hex st (add num (Char.code st.str.[st.yycursor - 1] - 55) 16) }
+    [0-9] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16) }
+    [a-f] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16) }
+    [A-F] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16) }
     *     { num }
 */
 
@@ -57,8 +57,8 @@ let add (num: int option) (dgt: int) (base: int) : int option =
     *                  { None }
 */
 
-let test (str: string) (result: int option) =
-    let st = {str = str; yycursor = 0; yymarker = 0} in
+let test (yyinput: string) (result: int option) =
+    let st = {yyinput = yyinput; yycursor = 0; yymarker = 0} in
     if not (parse st = result) then raise (Failure "error")
 
 let main () =

@@ -7,14 +7,14 @@
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int
 }
 
 
 yy0 :: State -> Bool
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x31 <= _c && _c <= 0x39 ->
@@ -28,7 +28,7 @@ yy1 State{..} =
 
 yy2 :: State -> Bool
 yy2 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -47,6 +47,6 @@ lexer State{..} =
 
 
 main :: IO ()
-main = case lexer State{_str = "1234\0", _yycursor = 0} of
+main = case lexer State{_yyinput = "1234\0", _yycursor = 0} of
     True -> return ()
     False -> error "lexer failed!"

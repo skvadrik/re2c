@@ -8,7 +8,7 @@ module lexer
 
 pub struct State {
 pub mut:
-    str string
+    yyinput string
     yycursor int
     /*!stags:re2c format="@@ int\n"; */
 }
@@ -27,7 +27,7 @@ fn lex(mut yyrecord &lexer.State) int {
 }
 
 fn main() {
-    mut st := &lexer.State{str:"ab\0",}
+    mut st := &lexer.State{yyinput:"ab\0",}
     if lex(mut st) != 1 {
         panic("error")
     }

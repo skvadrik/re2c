@@ -10,7 +10,7 @@ const BUFSIZE uint = 4096
 
 type Input struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor uint
 	yymarker uint
 	yylimit  uint
@@ -25,16 +25,16 @@ func fill(in *Input) int {
 	if in.token < 1 { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.token:in.yylimit])
+	copy(in.yyinput[0:], in.yyinput[in.token:in.yylimit])
 	in.yycursor -= in.token
 	in.yymarker -= in.token
 	in.yylimit -= in.token
 	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	n, _ := in.file.Read(in.yyinput[in.yylimit:BUFSIZE])
 	in.yylimit += uint(n)
-	in.str[in.yylimit] = 0
+	in.yyinput[in.yylimit] = 0
 
 	// If read less than expected, this is the end of input.
 	in.eof = in.yylimit < BUFSIZE
@@ -77,7 +77,7 @@ func main() () {
 	in := &Input{
 		file:     f,
 		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-		str:      make([]byte, BUFSIZE+1),
+		yyinput:  make([]byte, BUFSIZE+1),
 		yycursor: BUFSIZE,
 		yymarker: BUFSIZE,
 		yylimit:  BUFSIZE,

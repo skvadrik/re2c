@@ -16,7 +16,7 @@ chunk_size = 4096
 
 data State = State {
     _file :: !Handle,
-    _str :: !BS.ByteString,
+    _yyinput :: !BS.ByteString,
     _yycursor :: !Int,
     _yylimit :: !Int,
     _token :: !Int,
@@ -29,7 +29,7 @@ data State = State {
 yy0 :: State -> IO Int
 yy0 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x00 == _c -> do
@@ -56,7 +56,7 @@ yy2 !State{..} = do
 yy3 :: State -> IO Int
 yy3 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x20 == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -73,7 +73,7 @@ yy4 !State{..} = do
 yy5 :: State -> IO Int
 yy5 !State{..} = do
     State{..} <- fill State{..} 1
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     _yycursor <- return $ _yycursor + 1
     case yych of
         _c | 0x27 == _c -> do
@@ -120,11 +120,11 @@ fill !st@State{..} !need =
             chunk <- BS.hGet _file chunk_size
             let !eof = BS.length chunk < need -- end of file ?
             let !buf = BS.concat [
-                    BS.drop _token _str,
+                    BS.drop _token _yyinput,
                     chunk,
                     if eof then (BS.replicate yymaxfill 0) else BS.empty]
             return State {
-                _str = buf,
+                _yyinput = buf,
                 _yycursor = _yycursor - _token,
                 _yylimit = BS.length buf,
                 _token = 0,
@@ -143,7 +143,7 @@ main = do
     fh <- openFile fname ReadMode
     let st = State {
         _file = fh,
-        _str = BS.empty,
+        _yyinput = BS.empty,
         _yycursor = 0,
         _token = 0,
         _yylimit = 0,

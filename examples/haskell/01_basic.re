@@ -5,7 +5,7 @@
 import Data.ByteString (ByteString, index)
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int
 }
 
@@ -20,6 +20,6 @@ data State = State {
 */
 
 main :: IO ()
-main = case lexer State{_str = "1234\0", _yycursor = 0} of
+main = case lexer State{_yyinput = "1234\0", _yycursor = 0} of
     True -> return ()
     False -> error "lexer failed!"

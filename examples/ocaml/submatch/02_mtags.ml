@@ -5,7 +5,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     
@@ -36,7 +36,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #38 "ocaml/submatch/02_mtags.ml"
 let rec yy0 (st : state) : (int list) option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.yycursor;
@@ -56,7 +56,7 @@ and yy2 (st : state) : (int list) option =
 
 and yy3 (st : state) : (int list) option =
 	st.yymarker <- st.yycursor;
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '\x00' ->
 			
@@ -80,14 +80,14 @@ and yy4 (st : state) : (int list) option =
 	st.t4 <- st.yytm4;
 #32 "ocaml/submatch/02_mtags.re"
 	
-        let x = s2n st.str st.t1 st.t2 in
-        let xs = List.rev (List.map2 (fun x y -> s2n st.str x y) st.t3 st.t4) in
+        let x = s2n st.yyinput st.t1 st.t2 in
+        let xs = List.rev (List.map2 (fun x y -> s2n st.yyinput x y) st.t3 st.t4) in
         Some (x :: xs)
 
 #88 "ocaml/submatch/02_mtags.ml"
 
 and yy5 (st : state) : (int list) option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '0'..'9' ->
 			st.yytm3 <- st.yycursor :: st.yytm3;
@@ -100,7 +100,7 @@ and yy6 (st : state) : (int list) option =
 	(yy2 [@tailcall]) st
 
 and yy7 (st : state) : (int list) option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '\x00' ->
 			
@@ -118,7 +118,7 @@ and yy7 (st : state) : (int list) option =
 		| _ -> (yy6 [@tailcall]) st
 
 and yy8 (st : state) : (int list) option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '\x00' ->
 			st.yytm4 <- st.yycursor :: st.yytm4;
@@ -141,7 +141,7 @@ and parse (st : state) : (int list) option =
 
 let test (str: string) (result: (int list) option) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
         

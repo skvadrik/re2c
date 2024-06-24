@@ -3,7 +3,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable t1: int;
@@ -35,9 +35,9 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
     @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\x00] {
         Some {
-            major = s2n st.str st.t1 st.t2;
-            minor = s2n st.str st.t3 st.t4;
-            patch = if st.t5 = -1 then 0 else s2n st.str st.t5 (st.yycursor - 1)
+            major = s2n st.yyinput st.t1 st.t2;
+            minor = s2n st.yyinput st.t3 st.t4;
+            patch = if st.t5 = -1 then 0 else s2n st.yyinput st.t5 (st.yycursor - 1)
         }
     }
     * { None }
@@ -45,7 +45,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 let test (str: string) (result: semver option) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
         t1 = -1;

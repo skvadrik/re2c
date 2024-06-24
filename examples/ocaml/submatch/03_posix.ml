@@ -11,7 +11,7 @@ let yymaxnmatch = 4
 
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yynmatch: int; (* number of capturing groups *)
@@ -42,7 +42,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #44 "ocaml/submatch/03_posix.ml"
 let rec yy0 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '0'..'9' ->
 			st.yyt1 <- st.yycursor;
@@ -62,7 +62,7 @@ and yy2 (st : state) : semver option =
 
 and yy3 (st : state) : semver option =
 	st.yymarker <- st.yycursor;
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '.' ->
 			st.yycursor <- st.yycursor + 1;
@@ -73,7 +73,7 @@ and yy3 (st : state) : semver option =
 		| _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '0'..'9' ->
 			st.yyt2 <- st.yycursor;
@@ -86,7 +86,7 @@ and yy5 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '.' ->
 			st.yycursor <- st.yycursor + 1;
@@ -97,7 +97,7 @@ and yy6 (st : state) : semver option =
 		| _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	match yych with
 		| '\x00' ->
 			st.yyt3 <- st.yycursor;
@@ -131,21 +131,21 @@ and yy8 (st : state) : semver option =
         (* Even `yypmatch` values are for opening parentheses, odd values
            are for closing parentheses, the first group is the whole match. *)
         Some {
-            major = s2n st.str st.yypmatch.(2) st.yypmatch.(3);
-            minor = s2n st.str st.yypmatch.(4) st.yypmatch.(5);
+            major = s2n st.yyinput st.yypmatch.(2) st.yypmatch.(3);
+            minor = s2n st.yyinput st.yypmatch.(4) st.yypmatch.(5);
             patch = if st.yypmatch.(6) = -1 then 0
-                else s2n st.str (st.yypmatch.(6) + 1) st.yypmatch.(7)
+                else s2n st.yyinput (st.yypmatch.(6) + 1) st.yypmatch.(7)
         }
 
 #141 "ocaml/submatch/03_posix.ml"
 
 and yy9 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	if (yych <= '\x00') then (yy5 [@tailcall]) st
 	else (yy11 [@tailcall]) st yych
 
 and yy10 (st : state) : semver option =
-	let yych = get st.str st.yycursor in
+	let yych = get st.yyinput st.yycursor in
 	(yy11 [@tailcall]) st yych
 
 and yy11 (st : state) (yych : char) : semver option =
@@ -167,7 +167,7 @@ and parse (st : state) : semver option =
 
 let test (str: string) (result: semver option) =
     let st = {
-        str = str;
+        yyinput = str;
         yycursor = 0;
         yymarker = 0;
         yynmatch = 0;

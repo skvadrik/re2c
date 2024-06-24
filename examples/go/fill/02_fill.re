@@ -11,7 +11,7 @@ const BUFSIZE uint = 4096
 
 type Input struct {
 	file     *os.File
-	str      []byte
+	yyinput  []byte
 	yycursor uint
 	yylimit  uint
 	token    uint
@@ -25,20 +25,20 @@ func fill(in *Input, need uint) int {
 	if in.token < need { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.str[0:], in.str[in.token:in.yylimit])
+	copy(in.yyinput[0:], in.yyinput[in.token:in.yylimit])
 	in.yycursor -= in.token
 	in.yylimit -= in.token
 	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.str[in.yylimit:BUFSIZE])
+	n, _ := in.file.Read(in.yyinput[in.yylimit:BUFSIZE])
 	in.yylimit += uint(n)
 
 	// If read less than expected, this is end of input => add zero padding
 	// so that the lexer can access characters at the end of buffer.
 	if in.yylimit < BUFSIZE {
 		in.eof = true
-		for i := uint(0); i < YYMAXFILL; i += 1 { in.str[in.yylimit+i] = 0 }
+		for i := uint(0); i < YYMAXFILL; i += 1 { in.yyinput[in.yylimit+i] = 0 }
 		in.yylimit += YYMAXFILL
 	}
 
@@ -82,7 +82,7 @@ func main() () {
 	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
 		file:     f,
-		str:      make([]byte, BUFSIZE+YYMAXFILL),
+		yyinput:  make([]byte, BUFSIZE+YYMAXFILL),
 		yycursor: BUFSIZE,
 		yylimit:  BUFSIZE,
 		token:    BUFSIZE,

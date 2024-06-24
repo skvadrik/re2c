@@ -16,7 +16,7 @@ chunk_size = 4096
 
 data State = State {
     _file :: !Handle,
-    _str :: !BS.ByteString,
+    _yyinput :: !BS.ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     _yylimit :: !Int,
@@ -52,7 +52,7 @@ s2n s i j = f i 0 where
 #53 "haskell/submatch/01_stags_fill.hs"
 yy0 :: State -> [SemVer] -> IO [SemVer]
 yy0 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
             let _yyt1 = _yycursor
@@ -80,7 +80,7 @@ yy2 State{..} _vers = do
 yy3 :: State -> [SemVer] -> IO [SemVer]
 yy3 State{..} _vers = do
     let _yymarker = _yycursor
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x2E == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -98,7 +98,7 @@ yy3 State{..} _vers = do
 
 yy4 :: State -> [SemVer] -> IO [SemVer]
 yy4 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
             let _yyt2 = _yycursor
@@ -119,7 +119,7 @@ yy5 State{..} _vers = do
 
 yy6 :: State -> [SemVer] -> IO [SemVer]
 yy6 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x2E == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -137,7 +137,7 @@ yy6 State{..} _vers = do
 
 yy7 :: State -> [SemVer] -> IO [SemVer]
 yy7 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x0A == _c -> do
             let _yyt3 = _yycursor
@@ -169,16 +169,16 @@ yy8 State{..} _vers = do
     _2 <- return $ if _2 == (-1) then (-1) else _2 - 1
 #50 "haskell/submatch/01_stags_fill.re"
     let ver = SemVer {
-        major = s2n _str _1 _2,
-        minor = s2n _str _3 _4,
-        patch = if _5 == (-1) then 0 else s2n _str _5 (_yycursor - 1)
+        major = s2n _yyinput _1 _2,
+        minor = s2n _yyinput _3 _4,
+        patch = if _5 == (-1) then 0 else s2n _yyinput _5 (_yycursor - 1)
     }
     lexer State{..} (ver: _vers)
 #178 "haskell/submatch/01_stags_fill.hs"
 
 yy9 :: State -> [SemVer] -> IO [SemVer]
 yy9 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x30 <= _c && _c <= 0x39 -> do
             let _yyt4 = _yycursor
@@ -194,7 +194,7 @@ yy9 State{..} _vers = do
 
 yy10 :: State -> [SemVer] -> IO [SemVer]
 yy10 State{..} _vers = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x0A == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -232,7 +232,7 @@ fill State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- BS.hGet _file chunk_size
             return (State{
-                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yyinput = BS.concat [(BS.init . BS.drop _token) _yyinput, chunk, "\0"],
                 _yycursor = _yycursor - _token,
                 _yymarker = _yymarker - _token,
                 _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
@@ -252,7 +252,7 @@ main = do
     fh <- openFile fname ReadMode
     let st = State {
         _file = fh,
-        _str = BS.singleton 0,
+        _yyinput = BS.singleton 0,
         _yycursor = 0,
         _yymarker = 0,
         _yylimit = 0,

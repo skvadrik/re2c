@@ -8,7 +8,7 @@ import Data.ByteString (ByteString, index)
 /*!include:re2c "unicode_categories.re" */
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _yymarker :: Int,
     _yyaccept :: Int
@@ -31,7 +31,7 @@ data State = State {
 main :: IO ()
 main = do
     let st = State {
-            _str = "_Ыдентификатор\x00",
+            _yyinput = "_Ыдентификатор\x00",
             _yycursor = 0,
             _yymarker = 0,
             _yyaccept = 0}

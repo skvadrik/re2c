@@ -10,7 +10,7 @@ open String
 type answer = Color | Fish | Dunno
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
 }
@@ -35,7 +35,7 @@ type state = {
 */
 
 let test(str, ans) =
-    let st = {str = str; yycursor = 0; yymarker = 0}
+    let st = {yyinput = str; yycursor = 0; yymarker = 0}
     in if not (lex st = ans) then raise (Failure "error")
 
 let main () =

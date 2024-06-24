@@ -6,7 +6,7 @@ module State where
 import Data.ByteString (ByteString)
 
 data State = State {
-    _str :: !ByteString,
+    _yyinput :: !ByteString,
     _yycursor :: !Int,
     
 _yyt1 :: !Int,

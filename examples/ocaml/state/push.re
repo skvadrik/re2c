@@ -11,7 +11,7 @@ let log format = (if debug then Printf.eprintf else Printf.ifprintf stderr) form
 
 type state = {
     file: in_channel;
-    str: bytes;
+    yyinput: bytes;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yylimit: int;
@@ -27,16 +27,16 @@ let fill(st: state) : status =
     if st.token < 1 then BigPacket else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    blit st.yyinput st.token st.yyinput 0 (st.yylimit - st.token);
     st.yycursor <- st.yycursor - st.token;
     st.yymarker <- st.yymarker - st.token;
     st.yylimit <- st.yylimit - st.token;
     st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = In_channel.input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in
+    let n = In_channel.input st.file st.yyinput st.yylimit (bufsize - st.yylimit - 1) in
     st.yylimit <- st.yylimit + n;
-    set st.str st.yylimit '\x00'; (* append sentinel *)
+    set st.yyinput st.yylimit '\x00'; (* append sentinel *)
 
     Ready)
 
@@ -67,7 +67,7 @@ let test (packets: string list) (sts: status) =
     let st = {
         file = ic;
         (* Sentinel (at `yylimit` offset) is set to null, which triggers YYFILL. *)
-        str = create bufsize;
+        yyinput = create bufsize;
         yycursor = yylimit;
         yymarker = yylimit;
         yylimit = yylimit;

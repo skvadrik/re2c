@@ -11,7 +11,7 @@ import Data.ByteString (ByteString, index)
 
 
 data State = State {
-    _str :: ByteString,
+    _yyinput :: ByteString,
     _yycursor :: Int,
     _yymarker :: Int,
     _yyaccept :: Int
@@ -20,7 +20,7 @@ data State = State {
 
 yy0 :: State -> Bool
 yy0 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     case yych of
         _c | 0x24 == _c || 0x41 <= _c && _c <= 0x5A || 0x5F == _c || 0x61 <= _c && _c <= 0x7A ->
@@ -100,7 +100,7 @@ yy3 :: State -> Bool
 yy3 State{..} =
     let _yyaccept = 0 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x24 == _c || 0x30 <= _c && _c <= 0x39 || 0x41 <= _c && _c <= 0x5A || 0x5F == _c || 0x61 <= _c && _c <= 0x7A ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -207,7 +207,7 @@ yy4 State{..} =
 
 yy5 :: State -> Bool
 yy5 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xAA == _c || 0xB5 == _c || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -217,7 +217,7 @@ yy5 State{..} =
 
 yy6 :: State -> Bool
 yy6 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -227,7 +227,7 @@ yy6 State{..} =
 
 yy7 :: State -> Bool
 yy7 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -237,7 +237,7 @@ yy7 State{..} =
 
 yy8 :: State -> Bool
 yy8 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x86 <= _c && _c <= 0x91 || 0xA0 <= _c && _c <= 0xA4 || 0xAC == _c || 0xAE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -247,7 +247,7 @@ yy8 State{..} =
 
 yy9 :: State -> Bool
 yy9 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xB0 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xB7 || 0xBA <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -257,7 +257,7 @@ yy9 State{..} =
 
 yy10 :: State -> Bool
 yy10 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x86 == _c || 0x88 <= _c && _c <= 0x8A || 0x8C == _c || 0x8E <= _c && _c <= 0xA1 || 0xA3 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -267,7 +267,7 @@ yy10 State{..} =
 
 yy11 :: State -> Bool
 yy11 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB7 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -277,7 +277,7 @@ yy11 State{..} =
 
 yy12 :: State -> Bool
 yy12 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x8A <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -287,7 +287,7 @@ yy12 State{..} =
 
 yy13 :: State -> Bool
 yy13 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -297,7 +297,7 @@ yy13 State{..} =
 
 yy14 :: State -> Bool
 yy14 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x99 == _c || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -307,7 +307,7 @@ yy14 State{..} =
 
 yy15 :: State -> Bool
 yy15 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -317,7 +317,7 @@ yy15 State{..} =
 
 yy16 :: State -> Bool
 yy16 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xAA || 0xAF <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -327,7 +327,7 @@ yy16 State{..} =
 
 yy17 :: State -> Bool
 yy17 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -337,7 +337,7 @@ yy17 State{..} =
 
 yy18 :: State -> Bool
 yy18 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0xAE <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -347,7 +347,7 @@ yy18 State{..} =
 
 yy19 :: State -> Bool
 yy19 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0x95 == _c || 0xA5 <= _c && _c <= 0xA6 || 0xAE <= _c && _c <= 0xAF || 0xBA <= _c && _c <= 0xBC || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -357,7 +357,7 @@ yy19 State{..} =
 
 yy20 :: State -> Bool
 yy20 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0x92 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -367,7 +367,7 @@ yy20 State{..} =
 
 yy21 :: State -> Bool
 yy21 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8D <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -377,7 +377,7 @@ yy21 State{..} =
 
 yy22 :: State -> Bool
 yy22 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA5 || 0xB1 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -387,7 +387,7 @@ yy22 State{..} =
 
 yy23 :: State -> Bool
 yy23 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8A <= _c && _c <= 0xAA || 0xB4 <= _c && _c <= 0xB5 || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -399,7 +399,7 @@ yy24 :: State -> Bool
 yy24 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -495,7 +495,7 @@ yy25 :: State -> Bool
 yy25 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -633,7 +633,7 @@ yy26 :: State -> Bool
 yy26 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -684,7 +684,7 @@ yy27 :: State -> Bool
 yy27 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -717,7 +717,7 @@ yy28 :: State -> Bool
 yy28 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -732,7 +732,7 @@ yy29 :: State -> Bool
 yy29 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -744,7 +744,7 @@ yy30 :: State -> Bool
 yy30 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -759,7 +759,7 @@ yy31 :: State -> Bool
 yy31 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 || 0x94 <= _c && _c <= 0x97 || 0x9D == _c || 0xAE == _c || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -843,7 +843,7 @@ yy32 :: State -> Bool
 yy32 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -861,7 +861,7 @@ yy33 :: State -> Bool
 yy33 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA4 <= _c && _c <= 0xA8 || 0xAA == _c || 0xB0 <= _c && _c <= 0xB3 || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -921,7 +921,7 @@ yy34 :: State -> Bool
 yy34 State{..} =
     let _yyaccept = 1 in
     let _yymarker = _yycursor in
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -976,7 +976,7 @@ yy34 State{..} =
 
 yy35 :: State -> Bool
 yy35 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xAA == _c || 0xB5 == _c || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -992,7 +992,7 @@ yy36 State{..} =
 
 yy37 :: State -> Bool
 yy37 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1002,7 +1002,7 @@ yy37 State{..} =
 
 yy38 :: State -> Bool
 yy38 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1012,7 +1012,7 @@ yy38 State{..} =
 
 yy39 :: State -> Bool
 yy39 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x86 <= _c && _c <= 0x91 || 0xA0 <= _c && _c <= 0xA4 || 0xAC == _c || 0xAE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1022,7 +1022,7 @@ yy39 State{..} =
 
 yy40 :: State -> Bool
 yy40 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xB7 || 0xBA <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1032,7 +1032,7 @@ yy40 State{..} =
 
 yy41 :: State -> Bool
 yy41 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x86 == _c || 0x88 <= _c && _c <= 0x8A || 0x8C == _c || 0x8E <= _c && _c <= 0xA1 || 0xA3 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1042,7 +1042,7 @@ yy41 State{..} =
 
 yy42 :: State -> Bool
 yy42 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB7 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1052,7 +1052,7 @@ yy42 State{..} =
 
 yy43 :: State -> Bool
 yy43 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x83 <= _c && _c <= 0x87 || 0x8A <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1062,7 +1062,7 @@ yy43 State{..} =
 
 yy44 :: State -> Bool
 yy44 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1072,7 +1072,7 @@ yy44 State{..} =
 
 yy45 :: State -> Bool
 yy45 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x99 == _c || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1082,7 +1082,7 @@ yy45 State{..} =
 
 yy46 :: State -> Bool
 yy46 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x91 <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1092,7 +1092,7 @@ yy46 State{..} =
 
 yy47 :: State -> Bool
 yy47 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x82 || 0x84 <= _c && _c <= 0x85 || 0x87 == _c || 0x90 <= _c && _c <= 0xAA || 0xAF <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1102,7 +1102,7 @@ yy47 State{..} =
 
 yy48 :: State -> Bool
 yy48 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x9A || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1112,7 +1112,7 @@ yy48 State{..} =
 
 yy49 :: State -> Bool
 yy49 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA9 || 0xAE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1122,7 +1122,7 @@ yy49 State{..} =
 
 yy50 :: State -> Bool
 yy50 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0x95 <= _c && _c <= 0x9C || 0x9F <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xBC || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1132,7 +1132,7 @@ yy50 State{..} =
 
 yy51 :: State -> Bool
 yy51 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1142,7 +1142,7 @@ yy51 State{..} =
 
 yy52 :: State -> Bool
 yy52 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x8D <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1152,7 +1152,7 @@ yy52 State{..} =
 
 yy53 :: State -> Bool
 yy53 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB1 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1162,7 +1162,7 @@ yy53 State{..} =
 
 yy54 :: State -> Bool
 yy54 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xBA == _c || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1172,7 +1172,7 @@ yy54 State{..} =
 
 yy55 :: State -> Bool
 yy55 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1275,7 +1275,7 @@ yy55 State{..} =
 
 yy56 :: State -> Bool
 yy56 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x84 <= _c && _c <= 0x88 || 0x91 <= _c && _c <= 0x98 || 0x9E == _c || 0xAC == _c || 0xAE == _c || 0xB4 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1402,7 +1402,7 @@ yy56 State{..} =
 
 yy57 :: State -> Bool
 yy57 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1457,7 +1457,7 @@ yy57 State{..} =
 
 yy58 :: State -> Bool
 yy58 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1488,7 +1488,7 @@ yy58 State{..} =
 
 yy59 :: State -> Bool
 yy59 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1501,7 +1501,7 @@ yy59 State{..} =
 
 yy60 :: State -> Bool
 yy60 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1511,7 +1511,7 @@ yy60 State{..} =
 
 yy61 :: State -> Bool
 yy61 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1524,7 +1524,7 @@ yy61 State{..} =
 
 yy62 :: State -> Bool
 yy62 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 || 0x94 <= _c && _c <= 0x97 || 0x9A == _c || 0x9D == _c || 0xA2 == _c || 0xA6 == _c || 0xAA == _c || 0xAE == _c || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1594,7 +1594,7 @@ yy62 State{..} =
 
 yy63 :: State -> Bool
 yy63 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1610,7 +1610,7 @@ yy63 State{..} =
 
 yy64 :: State -> Bool
 yy64 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA4 <= _c && _c <= 0xA8 || 0xAA == _c || 0xB0 <= _c && _c <= 0xB3 || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1671,7 +1671,7 @@ yy64 State{..} =
 
 yy65 :: State -> Bool
 yy65 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1726,7 +1726,7 @@ yy65 State{..} =
 
 yy66 :: State -> Bool
 yy66 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1736,7 +1736,7 @@ yy66 State{..} =
 
 yy67 :: State -> Bool
 yy67 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0x9A == _c || 0xA4 == _c || 0xA8 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1746,7 +1746,7 @@ yy67 State{..} =
 
 yy68 :: State -> Bool
 yy68 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x98 || 0xA0 <= _c && _c <= 0xAA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1756,7 +1756,7 @@ yy68 State{..} =
 
 yy69 :: State -> Bool
 yy69 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1766,7 +1766,7 @@ yy69 State{..} =
 
 yy70 :: State -> Bool
 yy70 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1776,7 +1776,7 @@ yy70 State{..} =
 
 yy71 :: State -> Bool
 yy71 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0x98 <= _c && _c <= 0xA1 || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1786,7 +1786,7 @@ yy71 State{..} =
 
 yy72 :: State -> Bool
 yy72 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x85 <= _c && _c <= 0x8C || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 == _c || 0xB6 <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1796,7 +1796,7 @@ yy72 State{..} =
 
 yy73 :: State -> Bool
 yy73 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8E == _c || 0x9C <= _c && _c <= 0x9D || 0x9F <= _c && _c <= 0xA1 || 0xB0 <= _c && _c <= 0xB1 || 0xBC == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1806,7 +1806,7 @@ yy73 State{..} =
 
 yy74 :: State -> Bool
 yy74 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8A || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1816,7 +1816,7 @@ yy74 State{..} =
 
 yy75 :: State -> Bool
 yy75 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x99 <= _c && _c <= 0x9C || 0x9E == _c || 0xB2 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1826,7 +1826,7 @@ yy75 State{..} =
 
 yy76 :: State -> Bool
 yy76 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8D || 0x8F <= _c && _c <= 0x91 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1836,7 +1836,7 @@ yy76 State{..} =
 
 yy77 :: State -> Bool
 yy77 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0xA0 <= _c && _c <= 0xA1 || 0xB9 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1846,7 +1846,7 @@ yy77 State{..} =
 
 yy78 :: State -> Bool
 yy78 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8C || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1856,7 +1856,7 @@ yy78 State{..} =
 
 yy79 :: State -> Bool
 yy79 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x9C <= _c && _c <= 0x9D || 0x9F <= _c && _c <= 0xA1 || 0xB1 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1866,7 +1866,7 @@ yy79 State{..} =
 
 yy80 :: State -> Bool
 yy80 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 == _c || 0x85 <= _c && _c <= 0x8A || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0x95 || 0x99 <= _c && _c <= 0x9A || 0x9C == _c || 0x9E <= _c && _c <= 0x9F || 0xA3 <= _c && _c <= 0xA4 || 0xA8 <= _c && _c <= 0xAA || 0xAE <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1876,7 +1876,7 @@ yy80 State{..} =
 
 yy81 :: State -> Bool
 yy81 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1886,7 +1886,7 @@ yy81 State{..} =
 
 yy82 :: State -> Bool
 yy82 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1896,7 +1896,7 @@ yy82 State{..} =
 
 yy83 :: State -> Bool
 yy83 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x98 <= _c && _c <= 0x9A || 0xA0 <= _c && _c <= 0xA1 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1906,7 +1906,7 @@ yy83 State{..} =
 
 yy84 :: State -> Bool
 yy84 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x85 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1916,7 +1916,7 @@ yy84 State{..} =
 
 yy85 :: State -> Bool
 yy85 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x9E == _c || 0xA0 <= _c && _c <= 0xA1 || 0xB1 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1926,7 +1926,7 @@ yy85 State{..} =
 
 yy86 :: State -> Bool
 yy86 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xBA || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1936,7 +1936,7 @@ yy86 State{..} =
 
 yy87 :: State -> Bool
 yy87 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8E == _c || 0x94 <= _c && _c <= 0x96 || 0x9F <= _c && _c <= 0xA1 || 0xBA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1946,7 +1946,7 @@ yy87 State{..} =
 
 yy88 :: State -> Bool
 yy88 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x96 || 0x9A <= _c && _c <= 0xB1 || 0xB3 <= _c && _c <= 0xBB || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1956,7 +1956,7 @@ yy88 State{..} =
 
 yy89 :: State -> Bool
 yy89 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1966,7 +1966,7 @@ yy89 State{..} =
 
 yy90 :: State -> Bool
 yy90 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1976,7 +1976,7 @@ yy90 State{..} =
 
 yy91 :: State -> Bool
 yy91 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x82 || 0x84 == _c || 0x86 <= _c && _c <= 0x8A || 0x8C <= _c && _c <= 0xA3 || 0xA5 == _c || 0xA7 <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1986,7 +1986,7 @@ yy91 State{..} =
 
 yy92 :: State -> Bool
 yy92 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 == _c || 0x9C <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -1996,7 +1996,7 @@ yy92 State{..} =
 
 yy93 :: State -> Bool
 yy93 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2006,7 +2006,7 @@ yy93 State{..} =
 
 yy94 :: State -> Bool
 yy94 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x89 <= _c && _c <= 0xAC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2016,7 +2016,7 @@ yy94 State{..} =
 
 yy95 :: State -> Bool
 yy95 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x88 <= _c && _c <= 0x8C ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2026,7 +2026,7 @@ yy95 State{..} =
 
 yy96 :: State -> Bool
 yy96 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2036,7 +2036,7 @@ yy96 State{..} =
 
 yy97 :: State -> Bool
 yy97 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x95 || 0x9A <= _c && _c <= 0x9D || 0xA1 == _c || 0xA5 <= _c && _c <= 0xA6 || 0xAE <= _c && _c <= 0xB0 || 0xB5 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2046,7 +2046,7 @@ yy97 State{..} =
 
 yy98 :: State -> Bool
 yy98 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x8E == _c || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2056,7 +2056,7 @@ yy98 State{..} =
 
 yy99 :: State -> Bool
 yy99 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x87 == _c || 0x8D == _c || 0x90 <= _c && _c <= 0xBA || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2066,7 +2066,7 @@ yy99 State{..} =
 
 yy100 :: State -> Bool
 yy100 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x96 || 0x98 == _c || 0x9A <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2076,7 +2076,7 @@ yy100 State{..} =
 
 yy101 :: State -> Bool
 yy101 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2086,7 +2086,7 @@ yy101 State{..} =
 
 yy102 :: State -> Bool
 yy102 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x82 <= _c && _c <= 0x85 || 0x88 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2096,7 +2096,7 @@ yy102 State{..} =
 
 yy103 :: State -> Bool
 yy103 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0x95 || 0x98 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2106,7 +2106,7 @@ yy103 State{..} =
 
 yy104 :: State -> Bool
 yy104 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9A ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2116,7 +2116,7 @@ yy104 State{..} =
 
 yy105 :: State -> Bool
 yy105 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2126,7 +2126,7 @@ yy105 State{..} =
 
 yy106 :: State -> Bool
 yy106 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2136,7 +2136,7 @@ yy106 State{..} =
 
 yy107 :: State -> Bool
 yy107 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2146,7 +2146,7 @@ yy107 State{..} =
 
 yy108 :: State -> Bool
 yy108 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAC || 0xAF <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2156,7 +2156,7 @@ yy108 State{..} =
 
 yy109 :: State -> Bool
 yy109 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x9A || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2166,7 +2166,7 @@ yy109 State{..} =
 
 yy110 :: State -> Bool
 yy110 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xAE <= _c && _c <= 0xB8 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2176,7 +2176,7 @@ yy110 State{..} =
 
 yy111 :: State -> Bool
 yy111 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x91 || 0xA0 <= _c && _c <= 0xB1 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2186,7 +2186,7 @@ yy111 State{..} =
 
 yy112 :: State -> Bool
 yy112 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 || 0xA0 <= _c && _c <= 0xAC || 0xAE <= _c && _c <= 0xB0 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2196,7 +2196,7 @@ yy112 State{..} =
 
 yy113 :: State -> Bool
 yy113 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2206,7 +2206,7 @@ yy113 State{..} =
 
 yy114 :: State -> Bool
 yy114 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x97 == _c || 0x9C == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2216,7 +2216,7 @@ yy114 State{..} =
 
 yy115 :: State -> Bool
 yy115 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2226,7 +2226,7 @@ yy115 State{..} =
 
 yy116 :: State -> Bool
 yy116 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB8 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2236,7 +2236,7 @@ yy116 State{..} =
 
 yy117 :: State -> Bool
 yy117 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x87 <= _c && _c <= 0xA8 || 0xAA == _c || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2246,7 +2246,7 @@ yy117 State{..} =
 
 yy118 :: State -> Bool
 yy118 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2256,7 +2256,7 @@ yy118 State{..} =
 
 yy119 :: State -> Bool
 yy119 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2266,7 +2266,7 @@ yy119 State{..} =
 
 yy120 :: State -> Bool
 yy120 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xAD || 0xB0 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2276,7 +2276,7 @@ yy120 State{..} =
 
 yy121 :: State -> Bool
 yy121 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAB || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2286,7 +2286,7 @@ yy121 State{..} =
 
 yy122 :: State -> Bool
 yy122 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2296,7 +2296,7 @@ yy122 State{..} =
 
 yy123 :: State -> Bool
 yy123 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2306,7 +2306,7 @@ yy123 State{..} =
 
 yy124 :: State -> Bool
 yy124 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x94 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2316,7 +2316,7 @@ yy124 State{..} =
 
 yy125 :: State -> Bool
 yy125 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA7 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2326,7 +2326,7 @@ yy125 State{..} =
 
 yy126 :: State -> Bool
 yy126 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2336,7 +2336,7 @@ yy126 State{..} =
 
 yy127 :: State -> Bool
 yy127 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x8B ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2346,7 +2346,7 @@ yy127 State{..} =
 
 yy128 :: State -> Bool
 yy128 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 <= _c && _c <= 0xA0 || 0xAE <= _c && _c <= 0xAF || 0xBA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2356,7 +2356,7 @@ yy128 State{..} =
 
 yy129 :: State -> Bool
 yy129 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2366,7 +2366,7 @@ yy129 State{..} =
 
 yy130 :: State -> Bool
 yy130 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2376,7 +2376,7 @@ yy130 State{..} =
 
 yy131 :: State -> Bool
 yy131 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8D <= _c && _c <= 0x8F || 0x9A <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2386,7 +2386,7 @@ yy131 State{..} =
 
 yy132 :: State -> Bool
 yy132 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x90 <= _c && _c <= 0xBA || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2396,7 +2396,7 @@ yy132 State{..} =
 
 yy133 :: State -> Bool
 yy133 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA9 <= _c && _c <= 0xAC || 0xAE <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB6 || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2406,7 +2406,7 @@ yy133 State{..} =
 
 yy134 :: State -> Bool
 yy134 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0x98 <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2416,7 +2416,7 @@ yy134 State{..} =
 
 yy135 :: State -> Bool
 yy135 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x88 <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x97 || 0x99 == _c || 0x9B == _c || 0x9D == _c || 0x9F <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2426,7 +2426,7 @@ yy135 State{..} =
 
 yy136 :: State -> Bool
 yy136 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBC || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2436,7 +2436,7 @@ yy136 State{..} =
 
 yy137 :: State -> Bool
 yy137 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0x8C || 0x90 <= _c && _c <= 0x93 || 0x96 <= _c && _c <= 0x9B || 0xA0 <= _c && _c <= 0xAC || 0xB2 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2446,7 +2446,7 @@ yy137 State{..} =
 
 yy138 :: State -> Bool
 yy138 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xB1 == _c || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2456,7 +2456,7 @@ yy138 State{..} =
 
 yy139 :: State -> Bool
 yy139 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x9C ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2466,7 +2466,7 @@ yy139 State{..} =
 
 yy140 :: State -> Bool
 yy140 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 == _c || 0x87 == _c || 0x8A <= _c && _c <= 0x93 || 0x95 == _c || 0x99 <= _c && _c <= 0x9D || 0xA4 == _c || 0xA6 == _c || 0xA8 == _c || 0xAA <= _c && _c <= 0xAD || 0xAF <= _c && _c <= 0xB9 || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2476,7 +2476,7 @@ yy140 State{..} =
 
 yy141 :: State -> Bool
 yy141 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x89 || 0x8E == _c || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2486,7 +2486,7 @@ yy141 State{..} =
 
 yy142 :: State -> Bool
 yy142 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2496,7 +2496,7 @@ yy142 State{..} =
 
 yy143 :: State -> Bool
 yy143 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAE || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2506,7 +2506,7 @@ yy143 State{..} =
 
 yy144 :: State -> Bool
 yy144 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2516,7 +2516,7 @@ yy144 State{..} =
 
 yy145 :: State -> Bool
 yy145 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA4 || 0xAB <= _c && _c <= 0xAE || 0xB2 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2526,7 +2526,7 @@ yy145 State{..} =
 
 yy146 :: State -> Bool
 yy146 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA5 || 0xA7 == _c || 0xAD == _c || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2536,7 +2536,7 @@ yy146 State{..} =
 
 yy147 :: State -> Bool
 yy147 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA7 || 0xAF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2546,7 +2546,7 @@ yy147 State{..} =
 
 yy148 :: State -> Bool
 yy148 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0xA0 <= _c && _c <= 0xA6 || 0xA8 <= _c && _c <= 0xAE || 0xB0 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2556,7 +2556,7 @@ yy148 State{..} =
 
 yy149 :: State -> Bool
 yy149 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 <= _c && _c <= 0x8E || 0x90 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0x9E ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2566,7 +2566,7 @@ yy149 State{..} =
 
 yy150 :: State -> Bool
 yy150 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xAF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2576,7 +2576,7 @@ yy150 State{..} =
 
 yy151 :: State -> Bool
 yy151 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x87 || 0xA1 <= _c && _c <= 0xA9 || 0xB1 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2586,7 +2586,7 @@ yy151 State{..} =
 
 yy152 :: State -> Bool
 yy152 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x9D <= _c && _c <= 0x9F || 0xA1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2596,7 +2596,7 @@ yy152 State{..} =
 
 yy153 :: State -> Bool
 yy153 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBA || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2606,7 +2606,7 @@ yy153 State{..} =
 
 yy154 :: State -> Bool
 yy154 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2616,7 +2616,7 @@ yy154 State{..} =
 
 yy155 :: State -> Bool
 yy155 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8E || 0xA0 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2626,7 +2626,7 @@ yy155 State{..} =
 
 yy156 :: State -> Bool
 yy156 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2636,7 +2636,7 @@ yy156 State{..} =
 
 yy157 :: State -> Bool
 yy157 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2646,7 +2646,7 @@ yy157 State{..} =
 
 yy158 :: State -> Bool
 yy158 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2656,7 +2656,7 @@ yy158 State{..} =
 
 yy159 :: State -> Bool
 yy159 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2666,7 +2666,7 @@ yy159 State{..} =
 
 yy160 :: State -> Bool
 yy160 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C || 0x90 <= _c && _c <= 0x9F || 0xAA <= _c && _c <= 0xAB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2676,7 +2676,7 @@ yy160 State{..} =
 
 yy161 :: State -> Bool
 yy161 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAE || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2686,7 +2686,7 @@ yy161 State{..} =
 
 yy162 :: State -> Bool
 yy162 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2696,7 +2696,7 @@ yy162 State{..} =
 
 yy163 :: State -> Bool
 yy163 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x97 <= _c && _c <= 0x9F || 0xA2 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2706,7 +2706,7 @@ yy163 State{..} =
 
 yy164 :: State -> Bool
 yy164 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8B <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2716,7 +2716,7 @@ yy164 State{..} =
 
 yy165 :: State -> Bool
 yy165 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x86 || 0xB7 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2726,7 +2726,7 @@ yy165 State{..} =
 
 yy166 :: State -> Bool
 yy166 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x83 <= _c && _c <= 0x85 || 0x87 <= _c && _c <= 0x8A || 0x8C <= _c && _c <= 0xA2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2736,7 +2736,7 @@ yy166 State{..} =
 
 yy167 :: State -> Bool
 yy167 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2746,7 +2746,7 @@ yy167 State{..} =
 
 yy168 :: State -> Bool
 yy168 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xB2 <= _c && _c <= 0xB7 || 0xBB == _c || 0xBD <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2756,7 +2756,7 @@ yy168 State{..} =
 
 yy169 :: State -> Bool
 yy169 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8A <= _c && _c <= 0xA5 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2766,7 +2766,7 @@ yy169 State{..} =
 
 yy170 :: State -> Bool
 yy170 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0xA0 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2776,7 +2776,7 @@ yy170 State{..} =
 
 yy171 :: State -> Bool
 yy171 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2786,7 +2786,7 @@ yy171 State{..} =
 
 yy172 :: State -> Bool
 yy172 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8F == _c || 0xA0 <= _c && _c <= 0xA4 || 0xA6 <= _c && _c <= 0xAF || 0xBA <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2796,7 +2796,7 @@ yy172 State{..} =
 
 yy173 :: State -> Bool
 yy173 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA8 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2806,7 +2806,7 @@ yy173 State{..} =
 
 yy174 :: State -> Bool
 yy174 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x84 <= _c && _c <= 0x8B || 0xA0 <= _c && _c <= 0xB6 || 0xBA == _c || 0xBE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2816,7 +2816,7 @@ yy174 State{..} =
 
 yy175 :: State -> Bool
 yy175 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAF || 0xB1 == _c || 0xB5 <= _c && _c <= 0xB6 || 0xB9 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2826,7 +2826,7 @@ yy175 State{..} =
 
 yy176 :: State -> Bool
 yy176 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x82 == _c || 0x9B <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xAA || 0xB2 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2836,7 +2836,7 @@ yy176 State{..} =
 
 yy177 :: State -> Bool
 yy177 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x86 || 0x89 <= _c && _c <= 0x8E || 0x91 <= _c && _c <= 0x96 || 0xA0 <= _c && _c <= 0xA6 || 0xA8 <= _c && _c <= 0xAE || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2846,7 +2846,7 @@ yy177 State{..} =
 
 yy178 :: State -> Bool
 yy178 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9A || 0x9C <= _c && _c <= 0xA7 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2856,7 +2856,7 @@ yy178 State{..} =
 
 yy179 :: State -> Bool
 yy179 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2866,7 +2866,7 @@ yy179 State{..} =
 
 yy180 :: State -> Bool
 yy180 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA3 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2876,7 +2876,7 @@ yy180 State{..} =
 
 yy181 :: State -> Bool
 yy181 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x8B <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2886,7 +2886,7 @@ yy181 State{..} =
 
 yy182 :: State -> Bool
 yy182 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAD || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2896,7 +2896,7 @@ yy182 State{..} =
 
 yy183 :: State -> Bool
 yy183 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2906,7 +2906,7 @@ yy183 State{..} =
 
 yy184 :: State -> Bool
 yy184 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x93 <= _c && _c <= 0x97 || 0x9D == _c || 0x9F <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBC || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2916,7 +2916,7 @@ yy184 State{..} =
 
 yy185 :: State -> Bool
 yy185 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x81 || 0x83 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2926,7 +2926,7 @@ yy185 State{..} =
 
 yy186 :: State -> Bool
 yy186 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x93 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2936,7 +2936,7 @@ yy186 State{..} =
 
 yy187 :: State -> Bool
 yy187 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2946,7 +2946,7 @@ yy187 State{..} =
 
 yy188 :: State -> Bool
 yy188 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F || 0x92 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2956,7 +2956,7 @@ yy188 State{..} =
 
 yy189 :: State -> Bool
 yy189 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0xB0 <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2966,7 +2966,7 @@ yy189 State{..} =
 
 yy190 :: State -> Bool
 yy190 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xB0 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2976,7 +2976,7 @@ yy190 State{..} =
 
 yy191 :: State -> Bool
 yy191 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2986,7 +2986,7 @@ yy191 State{..} =
 
 yy192 :: State -> Bool
 yy192 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA1 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -2996,7 +2996,7 @@ yy192 State{..} =
 
 yy193 :: State -> Bool
 yy193 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x9A || 0xA6 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3006,7 +3006,7 @@ yy193 State{..} =
 
 yy194 :: State -> Bool
 yy194 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3016,7 +3016,7 @@ yy194 State{..} =
 
 yy195 :: State -> Bool
 yy195 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x87 || 0x8A <= _c && _c <= 0x8F || 0x92 <= _c && _c <= 0x97 || 0x9A <= _c && _c <= 0x9C ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3026,7 +3026,7 @@ yy195 State{..} =
 
 yy196 :: State -> Bool
 yy196 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3138,7 +3138,7 @@ yy196 State{..} =
 
 yy197 :: State -> Bool
 yy197 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3256,7 +3256,7 @@ yy197 State{..} =
 
 yy198 :: State -> Bool
 yy198 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8D || 0x90 == _c || 0x92 <= _c && _c <= 0x94 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3275,7 +3275,7 @@ yy198 State{..} =
 
 yy199 :: State -> Bool
 yy199 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3288,7 +3288,7 @@ yy199 State{..} =
 
 yy200 :: State -> Bool
 yy200 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x98 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3301,7 +3301,7 @@ yy200 State{..} =
 
 yy201 :: State -> Bool
 yy201 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xA7 || 0xB9 == _c || 0xBC == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3338,7 +3338,7 @@ yy201 State{..} =
 
 yy202 :: State -> Bool
 yy202 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xAA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3354,7 +3354,7 @@ yy202 State{..} =
 
 yy203 :: State -> Bool
 yy203 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x86 <= _c && _c <= 0x8A || 0xB0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3379,7 +3379,7 @@ yy203 State{..} =
 
 yy204 :: State -> Bool
 yy204 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0x96 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3422,7 +3422,7 @@ yy204 State{..} =
 
 yy205 :: State -> Bool
 yy205 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3456,7 +3456,7 @@ yy205 State{..} =
 
 yy206 :: State -> Bool
 yy206 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9A || 0x9C <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3469,7 +3469,7 @@ yy206 State{..} =
 
 yy207 :: State -> Bool
 yy207 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9B || 0x9D <= _c && _c <= 0x9F || 0xA1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3485,7 +3485,7 @@ yy207 State{..} =
 
 yy208 :: State -> Bool
 yy208 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB9 || 0xBB <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3498,7 +3498,7 @@ yy208 State{..} =
 
 yy209 :: State -> Bool
 yy209 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3511,7 +3511,7 @@ yy209 State{..} =
 
 yy210 :: State -> Bool
 yy210 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xA7 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3524,7 +3524,7 @@ yy210 State{..} =
 
 yy211 :: State -> Bool
 yy211 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3534,7 +3534,7 @@ yy211 State{..} =
 
 yy212 :: State -> Bool
 yy212 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9B || 0xA0 <= _c && _c <= 0xAA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3544,7 +3544,7 @@ yy212 State{..} =
 
 yy213 :: State -> Bool
 yy213 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x93 <= _c && _c <= 0xA1 || 0xA3 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3554,7 +3554,7 @@ yy213 State{..} =
 
 yy214 :: State -> Bool
 yy214 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3564,7 +3564,7 @@ yy214 State{..} =
 
 yy215 :: State -> Bool
 yy215 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8C || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 == _c || 0xB6 <= _c && _c <= 0xB9 || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3574,7 +3574,7 @@ yy215 State{..} =
 
 yy216 :: State -> Bool
 yy216 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x87 <= _c && _c <= 0x88 || 0x8B <= _c && _c <= 0x8E || 0x97 == _c || 0x9C <= _c && _c <= 0x9D || 0x9F <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xB1 || 0xBC == _c || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3584,7 +3584,7 @@ yy216 State{..} =
 
 yy217 :: State -> Bool
 yy217 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8A || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xB9 || 0xBC == _c || 0xBE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3594,7 +3594,7 @@ yy217 State{..} =
 
 yy218 :: State -> Bool
 yy218 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x87 <= _c && _c <= 0x88 || 0x8B <= _c && _c <= 0x8D || 0x91 == _c || 0x99 <= _c && _c <= 0x9C || 0x9E == _c || 0xA6 <= _c && _c <= 0xB5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3604,7 +3604,7 @@ yy218 State{..} =
 
 yy219 :: State -> Bool
 yy219 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8D || 0x8F <= _c && _c <= 0x91 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3614,7 +3614,7 @@ yy219 State{..} =
 
 yy220 :: State -> Bool
 yy220 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x87 <= _c && _c <= 0x89 || 0x8B <= _c && _c <= 0x8D || 0x90 == _c || 0xA0 <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF || 0xB9 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3624,7 +3624,7 @@ yy220 State{..} =
 
 yy221 :: State -> Bool
 yy221 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8C || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3634,7 +3634,7 @@ yy221 State{..} =
 
 yy222 :: State -> Bool
 yy222 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x87 <= _c && _c <= 0x88 || 0x8B <= _c && _c <= 0x8D || 0x96 <= _c && _c <= 0x97 || 0x9C <= _c && _c <= 0x9D || 0x9F <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF || 0xB1 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3644,7 +3644,7 @@ yy222 State{..} =
 
 yy223 :: State -> Bool
 yy223 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8A || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0x95 || 0x99 <= _c && _c <= 0x9A || 0x9C == _c || 0x9E <= _c && _c <= 0x9F || 0xA3 <= _c && _c <= 0xA4 || 0xA8 <= _c && _c <= 0xAA || 0xAE <= _c && _c <= 0xB9 || 0xBE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3654,7 +3654,7 @@ yy223 State{..} =
 
 yy224 :: State -> Bool
 yy224 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x86 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8D || 0x90 == _c || 0x97 == _c || 0xA6 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3664,7 +3664,7 @@ yy224 State{..} =
 
 yy225 :: State -> Bool
 yy225 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB9 || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3674,7 +3674,7 @@ yy225 State{..} =
 
 yy226 :: State -> Bool
 yy226 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8D || 0x95 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0x9A || 0xA0 <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3684,7 +3684,7 @@ yy226 State{..} =
 
 yy227 :: State -> Bool
 yy227 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3694,7 +3694,7 @@ yy227 State{..} =
 
 yy228 :: State -> Bool
 yy228 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8D || 0x95 <= _c && _c <= 0x96 || 0x9E == _c || 0xA0 <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3704,7 +3704,7 @@ yy228 State{..} =
 
 yy229 :: State -> Bool
 yy229 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3714,7 +3714,7 @@ yy229 State{..} =
 
 yy230 :: State -> Bool
 yy230 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0x8E || 0x94 <= _c && _c <= 0x97 || 0x9F <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAF || 0xBA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3724,7 +3724,7 @@ yy230 State{..} =
 
 yy231 :: State -> Bool
 yy231 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x96 || 0x9A <= _c && _c <= 0xB1 || 0xB3 <= _c && _c <= 0xBB || 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3734,7 +3734,7 @@ yy231 State{..} =
 
 yy232 :: State -> Bool
 yy232 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x8A == _c || 0x8F <= _c && _c <= 0x94 || 0x96 == _c || 0x98 <= _c && _c <= 0x9F || 0xA6 <= _c && _c <= 0xAF || 0xB2 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3744,7 +3744,7 @@ yy232 State{..} =
 
 yy233 :: State -> Bool
 yy233 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3754,7 +3754,7 @@ yy233 State{..} =
 
 yy234 :: State -> Bool
 yy234 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8E || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3764,7 +3764,7 @@ yy234 State{..} =
 
 yy235 :: State -> Bool
 yy235 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x82 || 0x84 == _c || 0x86 <= _c && _c <= 0x8A || 0x8C <= _c && _c <= 0xA3 || 0xA5 == _c || 0xA7 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3774,7 +3774,7 @@ yy235 State{..} =
 
 yy236 :: State -> Bool
 yy236 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 == _c || 0x88 <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x99 || 0x9C <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3784,7 +3784,7 @@ yy236 State{..} =
 
 yy237 :: State -> Bool
 yy237 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x98 <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xA9 || 0xB5 == _c || 0xB7 == _c || 0xB9 == _c || 0xBE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3794,7 +3794,7 @@ yy237 State{..} =
 
 yy238 :: State -> Bool
 yy238 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x89 <= _c && _c <= 0xAC || 0xB1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3804,7 +3804,7 @@ yy238 State{..} =
 
 yy239 :: State -> Bool
 yy239 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 <= _c && _c <= 0x97 || 0x99 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3814,7 +3814,7 @@ yy239 State{..} =
 
 yy240 :: State -> Bool
 yy240 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x86 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3824,7 +3824,7 @@ yy240 State{..} =
 
 yy241 :: State -> Bool
 yy241 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x90 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3834,7 +3834,7 @@ yy241 State{..} =
 
 yy242 :: State -> Bool
 yy242 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9A || 0x9D <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3844,7 +3844,7 @@ yy242 State{..} =
 
 yy243 :: State -> Bool
 yy243 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C || 0x8E <= _c && _c <= 0x94 || 0xA0 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3854,7 +3854,7 @@ yy243 State{..} =
 
 yy244 :: State -> Bool
 yy244 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0xA0 <= _c && _c <= 0xAC || 0xAE <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3864,7 +3864,7 @@ yy244 State{..} =
 
 yy245 :: State -> Bool
 yy245 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0x97 == _c || 0x9C <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xA9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3874,7 +3874,7 @@ yy245 State{..} =
 
 yy246 :: State -> Bool
 yy246 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8B <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3884,7 +3884,7 @@ yy246 State{..} =
 
 yy247 :: State -> Bool
 yy247 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3894,7 +3894,7 @@ yy247 State{..} =
 
 yy248 :: State -> Bool
 yy248 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xAB || 0xB0 <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3904,7 +3904,7 @@ yy248 State{..} =
 
 yy249 :: State -> Bool
 yy249 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x86 <= _c && _c <= 0xAD || 0xB0 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3914,7 +3914,7 @@ yy249 State{..} =
 
 yy250 :: State -> Bool
 yy250 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3924,7 +3924,7 @@ yy250 State{..} =
 
 yy251 :: State -> Bool
 yy251 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9B || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3934,7 +3934,7 @@ yy251 State{..} =
 
 yy252 :: State -> Bool
 yy252 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xBC || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3944,7 +3944,7 @@ yy252 State{..} =
 
 yy253 :: State -> Bool
 yy253 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x90 <= _c && _c <= 0x99 || 0xA7 == _c || 0xB0 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3954,7 +3954,7 @@ yy253 State{..} =
 
 yy254 :: State -> Bool
 yy254 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8B || 0x90 <= _c && _c <= 0x99 || 0xAB <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3964,7 +3964,7 @@ yy254 State{..} =
 
 yy255 :: State -> Bool
 yy255 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB7 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3974,7 +3974,7 @@ yy255 State{..} =
 
 yy256 :: State -> Bool
 yy256 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x8D <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3984,7 +3984,7 @@ yy256 State{..} =
 
 yy257 :: State -> Bool
 yy257 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x92 || 0x94 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -3994,7 +3994,7 @@ yy257 State{..} =
 
 yy258 :: State -> Bool
 yy258 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB9 || 0xBB <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4004,7 +4004,7 @@ yy258 State{..} =
 
 yy259 :: State -> Bool
 yy259 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8D == _c || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4014,7 +4014,7 @@ yy259 State{..} =
 
 yy260 :: State -> Bool
 yy260 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x94 == _c || 0xB1 == _c || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4024,7 +4024,7 @@ yy260 State{..} =
 
 yy261 :: State -> Bool
 yy261 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x9C || 0xA1 == _c || 0xA5 <= _c && _c <= 0xB0 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4034,7 +4034,7 @@ yy261 State{..} =
 
 yy262 :: State -> Bool
 yy262 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA4 || 0xAB <= _c && _c <= 0xB3 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4044,7 +4044,7 @@ yy262 State{..} =
 
 yy263 :: State -> Bool
 yy263 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA7 || 0xAF == _c || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4054,7 +4054,7 @@ yy263 State{..} =
 
 yy264 :: State -> Bool
 yy264 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 <= _c && _c <= 0x8E || 0x90 <= _c && _c <= 0x96 || 0x98 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4064,7 +4064,7 @@ yy264 State{..} =
 
 yy265 :: State -> Bool
 yy265 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 <= _c && _c <= 0x87 || 0xA1 <= _c && _c <= 0xAF || 0xB1 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4074,7 +4074,7 @@ yy265 State{..} =
 
 yy266 :: State -> Bool
 yy266 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 || 0x99 <= _c && _c <= 0x9A || 0x9D <= _c && _c <= 0x9F || 0xA1 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4084,7 +4084,7 @@ yy266 State{..} =
 
 yy267 :: State -> Bool
 yy267 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8C || 0x90 <= _c && _c <= 0xAB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4094,7 +4094,7 @@ yy267 State{..} =
 
 yy268 :: State -> Bool
 yy268 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAF || 0xB4 <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4104,7 +4104,7 @@ yy268 State{..} =
 
 yy269 :: State -> Bool
 yy269 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA7 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4114,7 +4114,7 @@ yy269 State{..} =
 
 yy270 :: State -> Bool
 yy270 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x90 <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xB7 || 0xBB == _c || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4124,7 +4124,7 @@ yy270 State{..} =
 
 yy271 :: State -> Bool
 yy271 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0xA0 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4134,7 +4134,7 @@ yy271 State{..} =
 
 yy272 :: State -> Bool
 yy272 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x8F <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4144,7 +4144,7 @@ yy272 State{..} =
 
 yy273 :: State -> Bool
 yy273 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4154,7 +4154,7 @@ yy273 State{..} =
 
 yy274 :: State -> Bool
 yy274 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xB6 || 0xBA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4164,7 +4164,7 @@ yy274 State{..} =
 
 yy275 :: State -> Bool
 yy275 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x9B <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xAF || 0xB2 <= _c && _c <= 0xB6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4174,7 +4174,7 @@ yy275 State{..} =
 
 yy276 :: State -> Bool
 yy276 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xAC <= _c && _c <= 0xAD || 0xB0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4184,7 +4184,7 @@ yy276 State{..} =
 
 yy277 :: State -> Bool
 yy277 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x93 <= _c && _c <= 0x97 || 0x9D <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBC || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4194,7 +4194,7 @@ yy277 State{..} =
 
 yy278 :: State -> Bool
 yy278 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F || 0xA0 <= _c && _c <= 0xAF || 0xB3 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4204,7 +4204,7 @@ yy278 State{..} =
 
 yy279 :: State -> Bool
 yy279 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8D <= _c && _c <= 0x8F || 0xB0 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4214,7 +4214,7 @@ yy279 State{..} =
 
 yy280 :: State -> Bool
 yy280 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x99 || 0xA1 <= _c && _c <= 0xBA || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4224,7 +4224,7 @@ yy280 State{..} =
 
 yy281 :: State -> Bool
 yy281 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4342,7 +4342,7 @@ yy281 State{..} =
 
 yy282 :: State -> Bool
 yy282 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x86 == _c || 0x90 == _c || 0x92 == _c || 0x98 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4451,7 +4451,7 @@ yy282 State{..} =
 
 yy283 :: State -> Bool
 yy283 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xA7 || 0xB9 == _c || 0xBC == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4488,7 +4488,7 @@ yy283 State{..} =
 
 yy284 :: State -> Bool
 yy284 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x86 <= _c && _c <= 0x8A || 0xB0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4513,7 +4513,7 @@ yy284 State{..} =
 
 yy285 :: State -> Bool
 yy285 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x85 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4574,7 +4574,7 @@ yy285 State{..} =
 
 yy286 :: State -> Bool
 yy286 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4611,7 +4611,7 @@ yy286 State{..} =
 
 yy287 :: State -> Bool
 yy287 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 <= _c && _c <= 0x86 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4624,7 +4624,7 @@ yy287 State{..} =
 
 yy288 :: State -> Bool
 yy288 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8B || 0x8D <= _c && _c <= 0xA6 || 0xA8 <= _c && _c <= 0xBA || 0xBC <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4634,7 +4634,7 @@ yy288 State{..} =
 
 yy289 :: State -> Bool
 yy289 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8D || 0x90 <= _c && _c <= 0x9D ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4644,7 +4644,7 @@ yy289 State{..} =
 
 yy290 :: State -> Bool
 yy290 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4654,7 +4654,7 @@ yy290 State{..} =
 
 yy291 :: State -> Bool
 yy291 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4664,7 +4664,7 @@ yy291 State{..} =
 
 yy292 :: State -> Bool
 yy292 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9C || 0xA0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4674,7 +4674,7 @@ yy292 State{..} =
 
 yy293 :: State -> Bool
 yy293 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x90 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4684,7 +4684,7 @@ yy293 State{..} =
 
 yy294 :: State -> Bool
 yy294 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9F || 0xAD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4694,7 +4694,7 @@ yy294 State{..} =
 
 yy295 :: State -> Bool
 yy295 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x90 <= _c && _c <= 0xB5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4704,7 +4704,7 @@ yy295 State{..} =
 
 yy296 :: State -> Bool
 yy296 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x88 <= _c && _c <= 0x8F || 0x91 <= _c && _c <= 0x95 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4714,7 +4714,7 @@ yy296 State{..} =
 
 yy297 :: State -> Bool
 yy297 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4724,7 +4724,7 @@ yy297 State{..} =
 
 yy298 :: State -> Bool
 yy298 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x93 || 0x98 <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4734,7 +4734,7 @@ yy298 State{..} =
 
 yy299 :: State -> Bool
 yy299 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA7 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4744,7 +4744,7 @@ yy299 State{..} =
 
 yy300 :: State -> Bool
 yy300 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0xA0 <= _c && _c <= 0xA7 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4754,7 +4754,7 @@ yy300 State{..} =
 
 yy301 :: State -> Bool
 yy301 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x88 == _c || 0x8A <= _c && _c <= 0xB5 || 0xB7 <= _c && _c <= 0xB8 || 0xBC == _c || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4764,7 +4764,7 @@ yy301 State{..} =
 
 yy302 :: State -> Bool
 yy302 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0xA0 <= _c && _c <= 0xB6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4774,7 +4774,7 @@ yy302 State{..} =
 
 yy303 :: State -> Bool
 yy303 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xB2 || 0xB4 <= _c && _c <= 0xB5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4784,7 +4784,7 @@ yy303 State{..} =
 
 yy304 :: State -> Bool
 yy304 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0xA0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4794,7 +4794,7 @@ yy304 State{..} =
 
 yy305 :: State -> Bool
 yy305 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB7 || 0xBE <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4804,7 +4804,7 @@ yy305 State{..} =
 
 yy306 :: State -> Bool
 yy306 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x90 <= _c && _c <= 0x93 || 0x95 <= _c && _c <= 0x97 || 0x99 <= _c && _c <= 0xB5 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4814,7 +4814,7 @@ yy306 State{..} =
 
 yy307 :: State -> Bool
 yy307 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4824,7 +4824,7 @@ yy307 State{..} =
 
 yy308 :: State -> Bool
 yy308 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9C ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4834,7 +4834,7 @@ yy308 State{..} =
 
 yy309 :: State -> Bool
 yy309 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x89 <= _c && _c <= 0xA4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4844,7 +4844,7 @@ yy309 State{..} =
 
 yy310 :: State -> Bool
 yy310 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x95 || 0xA0 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4854,7 +4854,7 @@ yy310 State{..} =
 
 yy311 :: State -> Bool
 yy311 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4864,7 +4864,7 @@ yy311 State{..} =
 
 yy312 :: State -> Bool
 yy312 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4874,7 +4874,7 @@ yy312 State{..} =
 
 yy313 :: State -> Bool
 yy313 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9C || 0xA7 == _c || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4884,7 +4884,7 @@ yy313 State{..} =
 
 yy314 :: State -> Bool
 yy314 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4894,7 +4894,7 @@ yy314 State{..} =
 
 yy315 :: State -> Bool
 yy315 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xB6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4904,7 +4904,7 @@ yy315 State{..} =
 
 yy316 :: State -> Bool
 yy316 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 <= _c && _c <= 0xB7 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4914,7 +4914,7 @@ yy316 State{..} =
 
 yy317 :: State -> Bool
 yy317 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4924,7 +4924,7 @@ yy317 State{..} =
 
 yy318 :: State -> Bool
 yy318 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xA8 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4934,7 +4934,7 @@ yy318 State{..} =
 
 yy319 :: State -> Bool
 yy319 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 <= _c && _c <= 0xA6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4944,7 +4944,7 @@ yy319 State{..} =
 
 yy320 :: State -> Bool
 yy320 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 == _c || 0x90 <= _c && _c <= 0xB2 || 0xB6 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4954,7 +4954,7 @@ yy320 State{..} =
 
 yy321 :: State -> Bool
 yy321 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x83 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4964,7 +4964,7 @@ yy321 State{..} =
 
 yy322 :: State -> Bool
 yy322 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x81 <= _c && _c <= 0x84 || 0x9A == _c || 0x9C == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4974,7 +4974,7 @@ yy322 State{..} =
 
 yy323 :: State -> Bool
 yy323 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 || 0x93 <= _c && _c <= 0xAB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4984,7 +4984,7 @@ yy323 State{..} =
 
 yy324 :: State -> Bool
 yy324 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 == _c || 0x8A <= _c && _c <= 0x8D || 0x8F <= _c && _c <= 0x9D || 0x9F <= _c && _c <= 0xA8 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -4994,7 +4994,7 @@ yy324 State{..} =
 
 yy325 :: State -> Bool
 yy325 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0x9D <= _c && _c <= 0xA1 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5004,7 +5004,7 @@ yy325 State{..} =
 
 yy326 :: State -> Bool
 yy326 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x87 <= _c && _c <= 0x8A || 0x9F == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5014,7 +5014,7 @@ yy326 State{..} =
 
 yy327 :: State -> Bool
 yy327 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 <= _c && _c <= 0x85 || 0x87 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5024,7 +5024,7 @@ yy327 State{..} =
 
 yy328 :: State -> Bool
 yy328 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5034,7 +5034,7 @@ yy328 State{..} =
 
 yy329 :: State -> Bool
 yy329 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x98 <= _c && _c <= 0x9B ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5044,7 +5044,7 @@ yy329 State{..} =
 
 yy330 :: State -> Bool
 yy330 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5054,7 +5054,7 @@ yy330 State{..} =
 
 yy331 :: State -> Bool
 yy331 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xB8 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5064,7 +5064,7 @@ yy331 State{..} =
 
 yy332 :: State -> Bool
 yy332 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5074,7 +5074,7 @@ yy332 State{..} =
 
 yy333 :: State -> Bool
 yy333 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9F || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5084,7 +5084,7 @@ yy333 State{..} =
 
 yy334 :: State -> Bool
 yy334 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xA7 || 0xAA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5094,7 +5094,7 @@ yy334 State{..} =
 
 yy335 :: State -> Bool
 yy335 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x90 || 0xA1 == _c || 0xA3 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5104,7 +5104,7 @@ yy335 State{..} =
 
 yy336 :: State -> Bool
 yy336 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x8B <= _c && _c <= 0xB2 || 0xBA == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5114,7 +5114,7 @@ yy336 State{..} =
 
 yy337 :: State -> Bool
 yy337 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 == _c || 0x9C <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5124,7 +5124,7 @@ yy337 State{..} =
 
 yy338 :: State -> Bool
 yy338 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x9D == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5134,7 +5134,7 @@ yy338 State{..} =
 
 yy339 :: State -> Bool
 yy339 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0xAE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5144,7 +5144,7 @@ yy339 State{..} =
 
 yy340 :: State -> Bool
 yy340 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0xB2 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5154,7 +5154,7 @@ yy340 State{..} =
 
 yy341 :: State -> Bool
 yy341 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5164,7 +5164,7 @@ yy341 State{..} =
 
 yy342 :: State -> Bool
 yy342 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 <= _c && _c <= 0x89 || 0x8B <= _c && _c <= 0xB0 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5174,7 +5174,7 @@ yy342 State{..} =
 
 yy343 :: State -> Bool
 yy343 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x86 == _c || 0xA0 <= _c && _c <= 0xA5 || 0xA7 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5184,7 +5184,7 @@ yy343 State{..} =
 
 yy344 :: State -> Bool
 yy344 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x98 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5194,7 +5194,7 @@ yy344 State{..} =
 
 yy345 :: State -> Bool
 yy345 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xB2 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5204,7 +5204,7 @@ yy345 State{..} =
 
 yy346 :: State -> Bool
 yy346 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5214,7 +5214,7 @@ yy346 State{..} =
 
 yy347 :: State -> Bool
 yy347 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xAD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5224,7 +5224,7 @@ yy347 State{..} =
 
 yy348 :: State -> Bool
 yy348 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0xA3 <= _c && _c <= 0xB7 || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5234,7 +5234,7 @@ yy348 State{..} =
 
 yy349 :: State -> Bool
 yy349 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x90 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5244,7 +5244,7 @@ yy349 State{..} =
 
 yy350 :: State -> Bool
 yy350 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x93 <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5254,7 +5254,7 @@ yy350 State{..} =
 
 yy351 :: State -> Bool
 yy351 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA0 <= _c && _c <= 0xA1 || 0xA3 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5264,7 +5264,7 @@ yy351 State{..} =
 
 yy352 :: State -> Bool
 yy352 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0x92 || 0xA4 <= _c && _c <= 0xA7 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5274,7 +5274,7 @@ yy352 State{..} =
 
 yy353 :: State -> Bool
 yy353 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5284,7 +5284,7 @@ yy353 State{..} =
 
 yy354 :: State -> Bool
 yy354 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xB0 <= _c && _c <= 0xBC ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5294,7 +5294,7 @@ yy354 State{..} =
 
 yy355 :: State -> Bool
 yy355 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5304,7 +5304,7 @@ yy355 State{..} =
 
 yy356 :: State -> Bool
 yy356 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x94 || 0x96 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5314,7 +5314,7 @@ yy356 State{..} =
 
 yy357 :: State -> Bool
 yy357 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9C || 0x9E <= _c && _c <= 0x9F || 0xA2 == _c || 0xA5 <= _c && _c <= 0xA6 || 0xA9 <= _c && _c <= 0xAC || 0xAE <= _c && _c <= 0xB9 || 0xBB == _c || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5324,7 +5324,7 @@ yy357 State{..} =
 
 yy358 :: State -> Bool
 yy358 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5334,7 +5334,7 @@ yy358 State{..} =
 
 yy359 :: State -> Bool
 yy359 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x87 <= _c && _c <= 0x8A || 0x8D <= _c && _c <= 0x94 || 0x96 <= _c && _c <= 0x9C || 0x9E <= _c && _c <= 0xB9 || 0xBB <= _c && _c <= 0xBE ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5344,7 +5344,7 @@ yy359 State{..} =
 
 yy360 :: State -> Bool
 yy360 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x86 == _c || 0x8A <= _c && _c <= 0x90 || 0x92 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5354,7 +5354,7 @@ yy360 State{..} =
 
 yy361 :: State -> Bool
 yy361 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA5 || 0xA8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5364,7 +5364,7 @@ yy361 State{..} =
 
 yy362 :: State -> Bool
 yy362 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x82 <= _c && _c <= 0x9A || 0x9C <= _c && _c <= 0xBA || 0xBC <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5374,7 +5374,7 @@ yy362 State{..} =
 
 yy363 :: State -> Bool
 yy363 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x94 || 0x96 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5384,7 +5384,7 @@ yy363 State{..} =
 
 yy364 :: State -> Bool
 yy364 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8E || 0x90 <= _c && _c <= 0xAE || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5394,7 +5394,7 @@ yy364 State{..} =
 
 yy365 :: State -> Bool
 yy365 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5404,7 +5404,7 @@ yy365 State{..} =
 
 yy366 :: State -> Bool
 yy366 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x84 <= _c && _c <= 0x8B ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5414,7 +5414,7 @@ yy366 State{..} =
 
 yy367 :: State -> Bool
 yy367 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAC || 0xB7 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5424,7 +5424,7 @@ yy367 State{..} =
 
 yy368 :: State -> Bool
 yy368 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x8E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5434,7 +5434,7 @@ yy368 State{..} =
 
 yy369 :: State -> Bool
 yy369 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5444,7 +5444,7 @@ yy369 State{..} =
 
 yy370 :: State -> Bool
 yy370 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x8B == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5454,7 +5454,7 @@ yy370 State{..} =
 
 yy371 :: State -> Bool
 yy371 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x9F || 0xA1 <= _c && _c <= 0xA2 || 0xA4 == _c || 0xA7 == _c || 0xA9 <= _c && _c <= 0xB2 || 0xB4 <= _c && _c <= 0xB7 || 0xB9 == _c || 0xBB == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5464,7 +5464,7 @@ yy371 State{..} =
 
 yy372 :: State -> Bool
 yy372 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 == _c || 0x87 == _c || 0x89 == _c || 0x8B == _c || 0x8D <= _c && _c <= 0x8F || 0x91 <= _c && _c <= 0x92 || 0x94 == _c || 0x97 == _c || 0x99 == _c || 0x9B == _c || 0x9D == _c || 0x9F == _c || 0xA1 <= _c && _c <= 0xA2 || 0xA4 == _c || 0xA7 <= _c && _c <= 0xAA || 0xAC <= _c && _c <= 0xB2 || 0xB4 <= _c && _c <= 0xB7 || 0xB9 <= _c && _c <= 0xBC || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5474,7 +5474,7 @@ yy372 State{..} =
 
 yy373 :: State -> Bool
 yy373 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x8B <= _c && _c <= 0x9B || 0xA1 <= _c && _c <= 0xA3 || 0xA5 <= _c && _c <= 0xA9 || 0xAB <= _c && _c <= 0xBB ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5484,7 +5484,7 @@ yy373 State{..} =
 
 yy374 :: State -> Bool
 yy374 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x96 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5494,7 +5494,7 @@ yy374 State{..} =
 
 yy375 :: State -> Bool
 yy375 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA1 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5504,7 +5504,7 @@ yy375 State{..} =
 
 yy376 :: State -> Bool
 yy376 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA0 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5514,7 +5514,7 @@ yy376 State{..} =
 
 yy377 :: State -> Bool
 yy377 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5524,7 +5524,7 @@ yy377 State{..} =
 
 yy378 :: State -> Bool
 yy378 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xBD == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5534,7 +5534,7 @@ yy378 State{..} =
 
 yy379 :: State -> Bool
 yy379 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x90 || 0xA0 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5544,7 +5544,7 @@ yy379 State{..} =
 
 yy380 :: State -> Bool
 yy380 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x90 <= _c && _c <= 0xBA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5554,7 +5554,7 @@ yy380 State{..} =
 
 yy381 :: State -> Bool
 yy381 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9D || 0xA0 <= _c && _c <= 0xA9 || 0xB0 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5564,7 +5564,7 @@ yy381 State{..} =
 
 yy382 :: State -> Bool
 yy382 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x86 || 0x8C <= _c && _c <= 0x93 || 0x95 <= _c && _c <= 0x97 || 0x99 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBA || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5574,7 +5574,7 @@ yy382 State{..} =
 
 yy383 :: State -> Bool
 yy383 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x89 <= _c && _c <= 0xA6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5584,7 +5584,7 @@ yy383 State{..} =
 
 yy384 :: State -> Bool
 yy384 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA7 || 0xB0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5594,7 +5594,7 @@ yy384 State{..} =
 
 yy385 :: State -> Bool
 yy385 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0xA6 <= _c && _c <= 0xAF || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5604,7 +5604,7 @@ yy385 State{..} =
 
 yy386 :: State -> Bool
 yy386 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x90 <= _c && _c <= 0xA8 || 0xB0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5614,7 +5614,7 @@ yy386 State{..} =
 
 yy387 :: State -> Bool
 yy387 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB4 || 0xB6 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5624,7 +5624,7 @@ yy387 State{..} =
 
 yy388 :: State -> Bool
 yy388 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 <= _c && _c <= 0x86 || 0x90 <= _c && _c <= 0xB3 || 0xB6 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5634,7 +5634,7 @@ yy388 State{..} =
 
 yy389 :: State -> Bool
 yy389 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x89 <= _c && _c <= 0x8C || 0x90 <= _c && _c <= 0x9A || 0x9C == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5644,7 +5644,7 @@ yy389 State{..} =
 
 yy390 :: State -> Bool
 yy390 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x91 || 0x93 <= _c && _c <= 0xB7 || 0xBE == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5654,7 +5654,7 @@ yy390 State{..} =
 
 yy391 :: State -> Bool
 yy391 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAA || 0xB0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5664,7 +5664,7 @@ yy391 State{..} =
 
 yy392 :: State -> Bool
 yy392 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x85 <= _c && _c <= 0x8C || 0x8F <= _c && _c <= 0x90 || 0x93 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xB0 || 0xB2 <= _c && _c <= 0xB3 || 0xB5 <= _c && _c <= 0xB9 || 0xBB <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5674,7 +5674,7 @@ yy392 State{..} =
 
 yy393 :: State -> Bool
 yy393 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x87 <= _c && _c <= 0x88 || 0x8B <= _c && _c <= 0x8D || 0x90 == _c || 0x97 == _c || 0x9D <= _c && _c <= 0xA3 || 0xA6 <= _c && _c <= 0xAC || 0xB0 <= _c && _c <= 0xB4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5684,7 +5684,7 @@ yy393 State{..} =
 
 yy394 :: State -> Bool
 yy394 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x90 <= _c && _c <= 0x99 || 0x9E <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5694,7 +5694,7 @@ yy394 State{..} =
 
 yy395 :: State -> Bool
 yy395 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x85 || 0x87 == _c || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5704,7 +5704,7 @@ yy395 State{..} =
 
 yy396 :: State -> Bool
 yy396 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB5 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5714,7 +5714,7 @@ yy396 State{..} =
 
 yy397 :: State -> Bool
 yy397 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x98 <= _c && _c <= 0x9D ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5724,7 +5724,7 @@ yy397 State{..} =
 
 yy398 :: State -> Bool
 yy398 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x84 == _c || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5734,7 +5734,7 @@ yy398 State{..} =
 
 yy399 :: State -> Bool
 yy399 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9A || 0x9D <= _c && _c <= 0xAB || 0xB0 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5744,7 +5744,7 @@ yy399 State{..} =
 
 yy400 :: State -> Bool
 yy400 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xA9 || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5754,7 +5754,7 @@ yy400 State{..} =
 
 yy401 :: State -> Bool
 yy401 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x97 || 0x9A <= _c && _c <= 0xA1 || 0xA3 <= _c && _c <= 0xA4 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5764,7 +5764,7 @@ yy401 State{..} =
 
 yy402 :: State -> Bool
 yy402 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x87 == _c || 0x90 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5774,7 +5774,7 @@ yy402 State{..} =
 
 yy403 :: State -> Bool
 yy403 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x99 || 0x9D == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5784,7 +5784,7 @@ yy403 State{..} =
 
 yy404 :: State -> Bool
 yy404 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x8A <= _c && _c <= 0xB6 || 0xB8 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5794,7 +5794,7 @@ yy404 State{..} =
 
 yy405 :: State -> Bool
 yy405 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 == _c || 0x90 <= _c && _c <= 0x99 || 0xB2 <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5804,7 +5804,7 @@ yy405 State{..} =
 
 yy406 :: State -> Bool
 yy406 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8F || 0x92 <= _c && _c <= 0xA7 || 0xA9 <= _c && _c <= 0xB6 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5814,7 +5814,7 @@ yy406 State{..} =
 
 yy407 :: State -> Bool
 yy407 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 <= _c && _c <= 0x89 || 0x8B <= _c && _c <= 0xB6 || 0xBA == _c || 0xBC <= _c && _c <= 0xBD || 0xBF == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5824,7 +5824,7 @@ yy407 State{..} =
 
 yy408 :: State -> Bool
 yy408 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x90 <= _c && _c <= 0x99 || 0xA0 <= _c && _c <= 0xA5 || 0xA7 <= _c && _c <= 0xA8 || 0xAA <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5834,7 +5834,7 @@ yy408 State{..} =
 
 yy409 :: State -> Bool
 yy409 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8E || 0x90 <= _c && _c <= 0x91 || 0x93 <= _c && _c <= 0x98 || 0xA0 <= _c && _c <= 0xA9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5844,7 +5844,7 @@ yy409 State{..} =
 
 yy410 :: State -> Bool
 yy410 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x9E || 0xA0 <= _c && _c <= 0xA9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5854,7 +5854,7 @@ yy410 State{..} =
 
 yy411 :: State -> Bool
 yy411 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x83 || 0x90 <= _c && _c <= 0x99 || 0xA3 <= _c && _c <= 0xB7 || 0xBD <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5864,7 +5864,7 @@ yy411 State{..} =
 
 yy412 :: State -> Bool
 yy412 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8A || 0x8F <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5874,7 +5874,7 @@ yy412 State{..} =
 
 yy413 :: State -> Bool
 yy413 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x87 || 0x8F <= _c && _c <= 0x9F ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5884,7 +5884,7 @@ yy413 State{..} =
 
 yy414 :: State -> Bool
 yy414 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x88 || 0x90 <= _c && _c <= 0x99 || 0x9D <= _c && _c <= 0x9E ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5894,7 +5894,7 @@ yy414 State{..} =
 
 yy415 :: State -> Bool
 yy415 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0xA5 <= _c && _c <= 0xA9 || 0xAD <= _c && _c <= 0xB2 || 0xBB <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5904,7 +5904,7 @@ yy415 State{..} =
 
 yy416 :: State -> Bool
 yy416 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x85 <= _c && _c <= 0x8B || 0xAA <= _c && _c <= 0xAD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5914,7 +5914,7 @@ yy416 State{..} =
 
 yy417 :: State -> Bool
 yy417 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x82 <= _c && _c <= 0x84 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5924,7 +5924,7 @@ yy417 State{..} =
 
 yy418 :: State -> Bool
 yy418 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x82 || 0x84 <= _c && _c <= 0x8B || 0x8E <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5934,7 +5934,7 @@ yy418 State{..} =
 
 yy419 :: State -> Bool
 yy419 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB6 || 0xBB <= _c && _c <= 0xBF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5944,7 +5944,7 @@ yy419 State{..} =
 
 yy420 :: State -> Bool
 yy420 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAC || 0xB5 == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5954,7 +5954,7 @@ yy420 State{..} =
 
 yy421 :: State -> Bool
 yy421 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x84 == _c || 0x9B <= _c && _c <= 0x9F || 0xA1 <= _c && _c <= 0xAF ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5964,7 +5964,7 @@ yy421 State{..} =
 
 yy422 :: State -> Bool
 yy422 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x86 || 0x88 <= _c && _c <= 0x98 || 0x9B <= _c && _c <= 0xA1 || 0xA3 <= _c && _c <= 0xA4 || 0xA6 <= _c && _c <= 0xAA ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5974,7 +5974,7 @@ yy422 State{..} =
 
 yy423 :: State -> Bool
 yy423 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xAC || 0xB0 <= _c && _c <= 0xBD ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5984,7 +5984,7 @@ yy423 State{..} =
 
 yy424 :: State -> Bool
 yy424 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x89 || 0x8E == _c ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -5994,7 +5994,7 @@ yy424 State{..} =
 
 yy425 :: State -> Bool
 yy425 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0xB9 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -6004,7 +6004,7 @@ yy425 State{..} =
 
 yy426 :: State -> Bool
 yy426 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x84 || 0x90 <= _c && _c <= 0x96 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -6014,7 +6014,7 @@ yy426 State{..} =
 
 yy427 :: State -> Bool
 yy427 State{..} =
-    let yych = index _str _yycursor in
+    let yych = index _yyinput _yycursor in
     case yych of
         _c | 0x80 <= _c && _c <= 0x8B || 0x90 <= _c && _c <= 0x99 ->
             let __ = _yycursor + 1 in let _yycursor = __ in
@@ -6031,7 +6031,7 @@ lexer State{..} =
 main :: IO ()
 main = do
     let st = State {
-            _str = "_Ыдентификатор\x00",
+            _yyinput = "_Ыдентификатор\x00",
             _yycursor = 0,
             _yymarker = 0,
             _yyaccept = 0}

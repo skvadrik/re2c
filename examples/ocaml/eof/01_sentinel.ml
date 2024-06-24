@@ -5,7 +5,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
 }
 
@@ -13,7 +13,7 @@ type state = {
 
 #15 "ocaml/eof/01_sentinel.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	yyrecord.yycursor <- yyrecord.yycursor + 1;
 	match yych with
 		| '\x00' -> (yy1 [@tailcall]) yyrecord count
@@ -32,7 +32,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 #33 "ocaml/eof/01_sentinel.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	match yych with
 		| ' ' ->
 			yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -45,7 +45,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 #46 "ocaml/eof/01_sentinel.ml"
 
 and yy5 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	match yych with
 		| 'a'..'z' ->
 			yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -63,8 +63,8 @@ and lex (yyrecord : state) (count : int) : int =
 #19 "ocaml/eof/01_sentinel.re"
 
 
-let test(str, count) =
-    let st = {str = str; yycursor = 0}
+let test(yyinput, count) =
+    let st = {yyinput = yyinput; yycursor = 0}
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =

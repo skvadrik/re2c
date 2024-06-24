@@ -3,7 +3,7 @@
 open String
 
 type state = {
-    str: string;
+    yyinput: string;
     mutable yycursor: int;
 }
 
@@ -18,8 +18,8 @@ type state = {
     [ ]+   { lex yyrecord count }
 */
 
-let test(str, count) =
-    let st = {str = str; yycursor = 0}
+let test(yyinput, count) =
+    let st = {yyinput = yyinput; yycursor = 0}
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =

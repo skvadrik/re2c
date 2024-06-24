@@ -10,7 +10,7 @@ const bufsize = 10
 struct State {
 mut:
     file     os.File
-    str      []u8
+    yyinput  []u8
     yycursor int
     yymarker int
     yylimit  int
@@ -35,7 +35,7 @@ fn fill(mut st &State) Status {
     if free < 1 { return .lex_big_packet }
 
     // Shift buffer contents (discard already processed data).
-    copy(mut &st.str, st.str[shift..shift+used])
+    copy(mut &st.yyinput, st.yyinput[shift..shift+used])
     st.yycursor -= shift
     st.yymarker -= shift
     st.yylimit -= shift
@@ -43,10 +43,10 @@ fn fill(mut st &State) Status {
 
     // Fill free space at the end of buffer with new data.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
-    st.str[st.yylimit] = 0 // append sentinel symbol
+    st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
     return .lex_ready
 }
@@ -80,7 +80,7 @@ fn test(expect Status, packets []string) {
     mut st := &State{
         file:     fr,
         // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-        str:      []u8{len: bufsize + 1},
+        yyinput:  []u8{len: bufsize + 1},
         yycursor: bufsize,
         yymarker: bufsize,
         yylimit:  bufsize,
@@ -106,7 +106,7 @@ fn test(expect Status, packets []string) {
                 send += 1
             }
             status = fill(mut st)
-            log.debug("filled buffer $st.str, status $status")
+            log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break
             }

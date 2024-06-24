@@ -2,7 +2,7 @@
 
 class State:
     def __init__(self, str):
-        self.str = str
+        self.yyinput = str
         self.yycursor = 0
         
         self.yyt1 = 0

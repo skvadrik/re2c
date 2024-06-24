@@ -14,7 +14,7 @@ debug = when False
 
 data State = State {
     _pipe :: !(Chan BS.ByteString),
-    _str :: !BS.ByteString,
+    _yyinput :: !BS.ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
     _yylimit :: !Int,
@@ -29,7 +29,7 @@ data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
 yy0 :: State -> IO (State, Status)
 yy0 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x61 <= _c && _c <= 0x7A -> do
             _yycursor <- return $ _yycursor + 1
@@ -54,7 +54,7 @@ yy2 !State{..} = do
 yy3 :: State -> IO (State, Status)
 yy3 !State{..} = do
     let _yymarker = _yycursor
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x3B == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -76,7 +76,7 @@ yy4 !State{..} = do
 
 yy5 :: State -> IO (State, Status)
 yy5 !State{..} = do
-    yych <- return $ BS.index _str _yycursor
+    yych <- return $ BS.index _yyinput _yycursor
     case yych of
         _c | 0x3B == _c -> do
             _yycursor <- return $ _yycursor + 1
@@ -129,7 +129,7 @@ fill st@State{..} = do
             -- read new chunk from file and reappend terminating null at the end.
             chunk <- readChan _pipe
             return (State {
-                _str = BS.concat [(BS.init . BS.drop _token) _str, chunk, "\0"],
+                _yyinput = BS.concat [(BS.init . BS.drop _token) _yyinput, chunk, "\0"],
                 _yycursor = _yycursor - _token,
                 _yymarker = _yymarker - _token,
                 _yylimit = _yylimit - _token + BS.length chunk, -- exclude terminating null
@@ -168,7 +168,7 @@ test packets expect = do
     pipe <- newChan -- emulate pipe using a chan of bytestrings
     let st = State {
         _pipe = pipe,
-        _str = BS.singleton 0, -- null sentinel triggers YYFILL
+        _yyinput = BS.singleton 0, -- null sentinel triggers YYFILL
         _yycursor = 0,
         _yymarker = 0,
         _token = 0,

@@ -10,7 +10,7 @@ const bufsize = 4096
 struct State {
     file     os.File
 mut:
-    str  []u8
+    yyinput  []u8
     yycursor int
     yymarker int
     yylimit  int
@@ -25,7 +25,7 @@ fn fill(mut st &State) int {
     if st.token < 1 { return -2 }
 
     // Shift buffer contents (discard everything up to the current token).
-    copy(mut &st.str, st.str[st.token..st.yylimit])
+    copy(mut &st.yyinput, st.yyinput[st.token..st.yylimit])
     st.yycursor -= st.token
     st.yymarker -= st.token
     st.yylimit -= st.token
@@ -33,10 +33,10 @@ fn fill(mut st &State) int {
 
     // Fill free space at the end of buffer with new data from file.
     pos := st.file.tell() or { 0 }
-    if n := st.file.read_bytes_into(u64(pos), mut st.str[st.yylimit..bufsize]) {
+    if n := st.file.read_bytes_into(u64(pos), mut st.yyinput[st.yylimit..bufsize]) {
         st.yylimit += n
     }
-    st.str[st.yylimit] = 0 // append sentinel symbol
+    st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
     // If read less than expected, this is the end of input.
     st.eof = st.yylimit < bufsize
@@ -52,7 +52,7 @@ loop:
 //line "v/fill/01_fill.v":53
     mut yych := 0
 yyFillLabel0:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         0x27 { unsafe { goto yy5 } }
@@ -75,7 +75,7 @@ yy2:
 yy3:
     yyrecord.yycursor += 1
 yyFillLabel1:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else {
@@ -95,7 +95,7 @@ yy5:
     yyrecord.yycursor += 1
     yyrecord.yymarker = yyrecord.yycursor
 yyFillLabel2:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     if yych >= 0x01 {
         unsafe { goto yy7 }
     }
@@ -108,7 +108,7 @@ yyFillLabel2:
 yy6:
     yyrecord.yycursor += 1
 yyFillLabel3:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
 yy7:
     match yych {
         0x27 { unsafe { goto yy8 } }
@@ -131,7 +131,7 @@ yy8:
 yy9:
     yyrecord.yycursor += 1
 yyFillLabel4:
-    yych = yyrecord.str[yyrecord.yycursor]
+    yych = yyrecord.yyinput[yyrecord.yycursor]
     if yych <= 0x00 {
         if yyrecord.yylimit <= yyrecord.yycursor {
             if fill(mut yyrecord) == 0 {
@@ -169,7 +169,7 @@ fn main() {
     mut st := &State{
         file:     fr,
         // Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
-        str:      []u8{len: bufsize + 1},
+        yyinput:  []u8{len: bufsize + 1},
         yycursor: bufsize,
         yymarker: bufsize,
         yylimit:  bufsize,

@@ -8,7 +8,7 @@ let bufsize = 4096
 
 type state = {
     file: in_channel;
-    str: bytes;
+    yyinput: bytes;
     mutable yycursor: int;
     mutable yymarker: int;
     mutable yylimit: int;
@@ -25,25 +25,25 @@ let fill(st: state) : status =
     if st.token < 1 then LongLexeme else (
 
     (* Shift buffer contents (discard everything up to the current token). *)
-    blit st.str st.token st.str 0 (st.yylimit - st.token);
+    blit st.yyinput st.token st.yyinput 0 (st.yylimit - st.token);
     st.yycursor <- st.yycursor - st.token;
     st.yymarker <- st.yymarker - st.token;
     st.yylimit <- st.yylimit - st.token;
     st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
-    let n = input st.file st.str st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
+    let n = input st.file st.yyinput st.yylimit (bufsize - st.yylimit - 1) in (* -1 for sentinel *)
     st.yylimit <- st.yylimit + n;
     if n = 0 then
         st.eof <- true; (* end of file *)
-        set st.str st.yylimit '\x00'; (* append sentinel *)
+        set st.yyinput st.yylimit '\x00'; (* append sentinel *)
 
     Ok)
 
 
 #45 "ocaml/fill/01_fill.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	match yych with
 		| ' ' ->
 			yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -69,7 +69,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 #70 "ocaml/fill/01_fill.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	match yych with
 		| ' ' ->
 			yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -89,7 +89,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
 	yyrecord.yymarker <- yyrecord.yycursor;
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	if (yych <= '\x00') then (
 		if (yyrecord.yylimit <= yyrecord.yycursor) then (
 			if (fill yyrecord = Ok) then (yy5 [@tailcall]) yyrecord count
@@ -103,7 +103,7 @@ and yy5 (yyrecord : state) (count : int) : int =
 	)
 
 and yy6 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	(yy7 [@tailcall]) yyrecord count yych
 
 and yy7 (yyrecord : state) (count : int) (yych : char) : int =
@@ -129,7 +129,7 @@ and yy8 (yyrecord : state) (count : int) : int =
 #130 "ocaml/fill/01_fill.ml"
 
 and yy9 (yyrecord : state) (count : int) : int =
-	let yych = get yyrecord.str yyrecord.yycursor in
+	let yych = get yyrecord.yyinput yyrecord.yycursor in
 	if (yych <= '\x00') then (
 		if (yyrecord.yylimit <= yyrecord.yycursor) then (
 			if (fill yyrecord = Ok) then (yy9 [@tailcall]) yyrecord count
@@ -177,7 +177,7 @@ let main () =
             let yylimit = bufsize - 1 in
             let st = {
                 file = ic;
-                str = create bufsize;
+                yyinput = create bufsize;
                 yycursor = yylimit;
                 yymarker = yylimit;
                 yylimit = yylimit;

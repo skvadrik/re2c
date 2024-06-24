@@ -143,6 +143,7 @@ Ret Input::lex_conf(Opt& opts) {
     "define:YYCOPYSTAG"                  { RET_CONF_CODE(api_stag_copy); }
     "define:YYCTYPE"                     { RET_CONF_CODE(api_char_type); }
     "define:YYCTXMARKER"                 { RET_CONF_CODE(api_ctxmarker); }
+    "define:YYINPUT"                     { RET_CONF_CODE(api_input); }
     "define:YYCURSOR"                    { RET_CONF_CODE(api_cursor); }
     "define:YYDEBUG"                     { RET_CONF_CODE(api_debug); }
     "define:YYFILL"                      { RET_CONF_CODE(api_fill); }
@@ -593,6 +594,7 @@ start:
     "getstate"   { RET_VAR(StxVarId::GETSTATE); }
     "index"      { RET_VAR(StxVarId::INDEX); }
     "init"       { RET_VAR(StxVarId::INIT); }
+    "input"      { RET_VAR(StxVarId::INPUT); }
     "label"      { RET_VAR(StxVarId::LABEL); }
     "lessthan"   { RET_VAR(StxVarId::LESSTHAN); }
     "lhs"        { RET_VAR(StxVarId::LHS); }

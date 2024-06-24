@@ -97,6 +97,7 @@ conf:define:YYFILL = "yyfill";
 conf:define:YYGETACCEPT = "yygetaccept";
 conf:define:YYGETCOND = "yygetcond";
 conf:define:YYGETSTATE = "yygetstate";
+conf:define:YYINPUT = "_yyinput";
 conf:define:YYLESSTHAN = "yylessthan";
 conf:define:YYLIMIT = "_yylimit";
 conf:define:YYMARKER = "_yymarker";
@@ -202,8 +203,8 @@ code:yydebug = topindent debug nl;
 code:yypeek =
     topindent (api.record
         ? (monadic
-            ? char " <- return $ " peek " _str " cursor
-            : "let " char " = " peek " _str " cursor " in")
+            ? char " <- return $ " peek " " input " " cursor
+            : "let " char " = " peek " " input " " cursor " in")
         : (monadic
             ? char " <- " peek
             : "let " char " = " peek " in")
