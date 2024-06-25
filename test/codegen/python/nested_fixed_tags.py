@@ -89,5 +89,5 @@ assert lex_tags(b"\0") == -1
 assert lex_tags(b"ba\0") == 1
 assert lex_captures(b"\0") == -1
 assert lex_captures(b"a\0") == 0
-codegen/python/nested_fixed_tags.re:23:25: warning: rule matches empty string [-Wmatch-empty-string]
-codegen/python/nested_fixed_tags.re:31:17: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/python/nested_fixed_tags.re:24:25: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/python/nested_fixed_tags.re:32:17: warning: rule matches empty string [-Wmatch-empty-string]

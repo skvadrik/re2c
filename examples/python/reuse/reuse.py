@@ -6,15 +6,15 @@
 # blocks add only encoding-specific configurations.
 
 
-def lex_utf8(str):
-    cur = 0
+def lex_utf8(yyinput):
+    yycursor = 0
     
     yystate = 0
     while True:
         match yystate:
             case 0:
-                yych = str[cur]
-                cur += 1
+                yych = yyinput[yycursor]
+                yycursor += 1
                 if yych == 0xE2:
                     yystate = 2
                     continue
@@ -23,68 +23,68 @@ def lex_utf8(str):
             case 1:
                 return None
             case 2:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych != 0x88:
                     yystate = 1
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych == 0x80:
-                    cur += 1
+                    yycursor += 1
                     yystate = 4
                     continue
                 yystate = 3
                 continue
             case 3:
-                cur = mar
+                yycursor = yymarker
                 yystate = 1
                 continue
             case 4:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych != 0x78:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0x20:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0xE2:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0x88:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0x83:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0x79:
                     yystate = 3
                     continue
-                cur += 1
-                return cur
+                yycursor += 1
+                return yycursor
             case _:
                 raise "internal lexer error"
 
 
-def lex_utf32(str):
-    cur = 0
+def lex_utf32(yyinput):
+    yycursor = 0
     
     yystate = 0
     while True:
         match yystate:
             case 0:
-                yych = str[cur]
-                cur += 1
+                yych = yyinput[yycursor]
+                yycursor += 1
                 if yych == 0x00002200:
                     yystate = 2
                     continue
@@ -93,35 +93,35 @@ def lex_utf32(str):
             case 1:
                 return None
             case 2:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych != 0x00000078:
                     yystate = 1
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych == 0x00000020:
-                    cur += 1
+                    yycursor += 1
                     yystate = 4
                     continue
                 yystate = 3
                 continue
             case 3:
-                cur = mar
+                yycursor = yymarker
                 yystate = 1
                 continue
             case 4:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych != 0x00002203:
                     yystate = 3
                     continue
-                cur += 1
-                yych = str[cur]
+                yycursor += 1
+                yych = yyinput[yycursor]
                 if yych != 0x00000079:
                     yystate = 3
                     continue
-                cur += 1
-                return cur
+                yycursor += 1
+                return yycursor
             case _:
                 raise "internal lexer error"
 

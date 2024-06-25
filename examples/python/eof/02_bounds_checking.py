@@ -4,9 +4,9 @@
 YYMAXFILL = 1
 
 
-def lex(str):
-    cur = 0
-    lim = len(str)
+def lex(yyinput):
+    yycursor = 0
+    yylimit = len(yyinput)
     count = 0
 
     while True:
@@ -15,10 +15,10 @@ def lex(str):
         while True:
             match yystate:
                 case 0:
-                    if cur + 1 > lim:
+                    if yylimit <= yycursor:
                         return -1
-                    yych = str[cur]
-                    cur += 1;
+                    yych = yyinput[yycursor]
+                    yycursor += 1
                     if yych <= 0x20:
                         if yych <= 0x00:
                             yystate = 1
@@ -36,23 +36,23 @@ def lex(str):
                         continue
                 case 1:
                     # check that it is the sentinel, not some unexpected null
-                    return count if cur == lim - YYMAXFILL + 1 else -1
+                    return count if yycursor == yylimit - YYMAXFILL + 1 else -1
                 case 2:
                     return -1
                 case 3:
-                    if cur + 1 > lim:
+                    if yylimit <= yycursor:
                         return -1
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych == 0x20:
-                        cur += 1;
+                        yycursor += 1
                         yystate = 3
                         continue
                     break
                 case 4:
-                    if cur + 1 > lim:
+                    if yylimit <= yycursor:
                         return -1
-                    yych = str[cur]
-                    cur += 1;
+                    yych = yyinput[yycursor]
+                    yycursor += 1
                     if yych == 0x27:
                         yystate = 5
                         continue
@@ -65,9 +65,9 @@ def lex(str):
                     count += 1
                     break
                 case 6:
-                    if cur + 1 > lim:
+                    if yylimit <= yycursor:
                         return -1
-                    cur += 1;
+                    yycursor += 1
                     yystate = 4
                     continue
                 case _:

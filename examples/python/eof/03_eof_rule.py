@@ -2,9 +2,9 @@
 # re2py $INPUT -o $OUTPUT
 
 # expect a null-terminated string
-def lex(str):
-    cur = 0
-    lim = len(str) - 1 # terminating null not included
+def lex(yyinput):
+    yycursor = 0
+    yylimit = len(yyinput) - 1 # terminating null not included
     count = 0
 
     while True:
@@ -13,28 +13,28 @@ def lex(str):
         while True:
             match yystate:
                 case 0:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych <= 0x20:
                         if yych <= 0x00:
-                            if cur >= lim:
+                            if yylimit <= yycursor:
                                 yystate = 9
                                 continue
-                            cur += 1
+                            yycursor += 1
                             yystate = 1
                             continue
                         if yych >= 0x20:
-                            cur += 1
+                            yycursor += 1
                             yystate = 3
                             continue
-                        cur += 1
+                        yycursor += 1
                         yystate = 1
                         continue
                     else:
                         if yych == 0x27:
-                            cur += 1
+                            yycursor += 1
                             yystate = 5
                             continue
-                        cur += 1
+                        yycursor += 1
                         yystate = 1
                         continue
                 case 1:
@@ -43,12 +43,12 @@ def lex(str):
                 case 2:
                     return -1
                 case 3:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych <= 0x00:
                         yystate = 4
                         continue
                     if yych == 0x20:
-                        cur += 1
+                        yycursor += 1
                         yystate = 3
                         continue
                     yystate = 4
@@ -56,61 +56,61 @@ def lex(str):
                 case 4:
                     break
                 case 5:
-                    mar = cur
-                    yych = str[cur]
+                    yymarker = yycursor
+                    yych = yyinput[yycursor]
                     if yych >= 0x01:
                         yystate = 7
                         continue
-                    if cur >= lim:
+                    if yylimit <= yycursor:
                         yystate = 2
                         continue
-                    cur += 1
+                    yycursor += 1
                     yystate = 6
                     continue
                 case 6:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     yystate = 7
                     continue
                 case 7:
                     if yych <= 0x27:
                         if yych <= 0x00:
-                            if cur >= lim:
+                            if yylimit <= yycursor:
                                 yystate = 10
                                 continue
-                            cur += 1
+                            yycursor += 1
                             yystate = 6
                             continue
                         if yych <= 0x26:
-                            cur += 1
+                            yycursor += 1
                             yystate = 6
                             continue
-                        cur += 1
+                        yycursor += 1
                     else:
                         if yych == 0x5C:
-                            cur += 1
+                            yycursor += 1
                             yystate = 8
                             continue
-                        cur += 1
+                        yycursor += 1
                         yystate = 6
                         continue
                     count += 1
                     break
                 case 8:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych <= 0x00:
-                        if cur >= lim:
+                        if yylimit <= yycursor:
                             yystate = 10
                             continue
-                        cur += 1
+                        yycursor += 1
                         yystate = 6
                         continue
-                    cur += 1
+                    yycursor += 1
                     yystate = 6
                     continue
                 case 9:
                     return count
                 case 10:
-                    cur = mar
+                    yycursor = yymarker
                     yystate = 2
                     continue
                 case _:

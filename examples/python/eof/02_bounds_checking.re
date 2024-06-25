@@ -2,24 +2,21 @@
 
 /*!max:re2c*/
 
-def lex(str):
-    cur = 0
-    lim = len(str)
+def lex(yyinput):
+    yycursor = 0
+    yylimit = len(yyinput)
     count = 0
 
     while True:
     /*!re2c
-        re2c:define:YYPEEK     = "str[cur]";
-        re2c:define:YYSKIP     = "cur += 1;";
-        re2c:define:YYLESSTHAN = "cur + @@ > lim";
-        re2c:define:YYFILL     = "return -1";
+        re2c:define:YYFILL = "return -1";
         re2c:indent:top = 2;
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             # check that it is the sentinel, not some unexpected null
-            return count if cur == lim - YYMAXFILL + 1 else -1
+            return count if yycursor == yylimit - YYMAXFILL + 1 else -1
         }
         str {
             count += 1

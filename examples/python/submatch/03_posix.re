@@ -8,20 +8,13 @@ SemVer = namedtuple('SemVer', 'major minor patch')
 /*!maxnmatch:re2c*/
 NONE = -1
 
-def parse(str):
-    cur = 0
+def parse(yyinput):
+    yycursor = 0
 
     # A list for capturing parentheses (twice the number of groups).
     yypmatch = [None] * (YYMAXNMATCH * 2)
 
     /*!re2c
-        re2c:define:YYPEEK      = "str[cur]";
-        re2c:define:YYSKIP      = "cur += 1";
-        re2c:define:YYBACKUP    = "mar = cur";
-        re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSTAGP     = "@@{tag} = cur";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
         re2c:yyfill:enable = 0;
         re2c:posix-captures = 1;
         re2c:indent:top = 1;
@@ -34,9 +27,9 @@ def parse(str):
 
             # Even `yypmatch` values are for opening parentheses, odd values
             # are for closing parentheses, the first group is the whole match.
-            major = int(str[yypmatch[2]:yypmatch[3]])
-            minor = int(str[yypmatch[4]:yypmatch[5]])
-            patch = 0 if yypmatch[6] == NONE else int(str[yypmatch[6] + 1:yypmatch[7]])
+            major = int(yyinput[yypmatch[2]:yypmatch[3]])
+            minor = int(yyinput[yypmatch[4]:yypmatch[5]])
+            patch = 0 if yypmatch[6] == NONE else int(yyinput[yypmatch[6] + 1:yypmatch[7]])
             return SemVer(major, minor, patch)
         }
         * { return None }

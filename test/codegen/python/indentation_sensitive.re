@@ -1,6 +1,7 @@
 # re2py $INPUT -o $OUTPUT
 
 /*!re2c
+    re2c:api = custom;
     re2c:indent:top = 1;
 
     * { *** }

@@ -1,4 +1,4 @@
-supported_apis = ["generic", "record"];
+supported_apis = ["default", "generic", "record"];
 supported_api_styles = ["free-form"];
 // "recursive_functions" works syntactically, but causes stack overflows due to non-tail recusion
 supported_code_models = ["loop_switch"];
@@ -12,7 +12,7 @@ standalone_single_quotes = 0;
 indentation_sensitive = 1;
 wrap_blocks_in_braces = 0;
 
-conf:api = custom;
+conf:api = default;
 conf:api:style = free-form;
 conf:api:sigil = "@@";
 conf:define:YYGETCOND:naked = 0;
@@ -187,125 +187,133 @@ code:fingerprint =
 code:abort = topindent "raise \"internal lexer error\"" nl;
 
 code:yydebug =
-    topindent (api.record
+    topindent (api.generic
+        ? debug
+    : (api.record
         ? debug "(" record ")"
-        : debug
-    ) nl;
+        : debug "(" state ", " char ")"
+    )) nl;
 
 code:yypeek =
-    topindent (api.record
-        ? char " = " input "[" cursor "]"
-        : char " = " peek
+    topindent (api.generic
+        ? char " = " peek
+        : char " = " input "[" cursor "]"
     ) nl;
 
 code:yyskip =
-    topindent (api.record
-        ? cursor " += 1"
-        : skip
+    topindent (api.generic
+        ? skip
+        : cursor " += 1"
     ) nl;
 
 code:yybackup =
-    topindent (api.record
-        ? marker " = " cursor
-        : backup
+    topindent (api.generic
+        ? backup
+        : marker " = " cursor
     ) nl;
 
 code:yybackupctx =
-    topindent (api.record
-        ? ctxmarker " = " cursor
-        : backupctx
+    topindent (api.generic
+        ? backupctx
+        : ctxmarker " = " cursor
     ) nl;
 
 code:yyrestore =
-    topindent (api.record
-        ? cursor " = " marker
-        : restore
+    topindent (api.generic
+        ? restore
+        : cursor " = " marker
     ) nl;
 
 code:yyrestorectx =
-    topindent (api.record
-        ? cursor " = " ctxmarker
-        : restorectx
+    topindent (api.generic
+        ? restorectx
+        : cursor " = " ctxmarker
     ) nl;
 
 code:yyrestoretag =
-    topindent (api.record
-        ? cursor " = " tag
-        : restoretag
+    topindent (api.generic
+        ? restoretag
+        : cursor " = " tag
     ) nl;
 
 code:yyshift =
-    topindent (api.record
-        ? cursor " -= " offset
-        : shift
+    topindent (api.generic
+        ? shift
+        : cursor " -= " offset
     ) nl;
 
 code:yyshiftstag =
-    topindent (nested ? "if " tag " != " (api.record ? "-1" : neg) ": ") (api.record
-        ? tag " -= " offset
-        : shiftstag
+    topindent (nested ? "if " tag " != " (api.generic ? neg : "-1") ": ") (api.generic
+        ? shiftstag
+        : tag " -= " offset
     )  nl;
 
 code:yyshiftmtag = topindent shiftmtag nl;
 
 code:yystagp =
-    topindent (api.record
-        ? tag " = " cursor
-        : stagp
+    topindent (api.generic
+        ? stagp
+        : tag " = " cursor
     ) nl;
 
 code:yymtagp = topindent mtagp nl;
 
 code:yystagn =
-    topindent (api.record
-        ? tag " = -1"
-        : stagn
+    topindent (api.generic
+        ? stagn
+        : tag " = -1"
     ) nl;
 
 code:yymtagn = topindent mtagn nl;
 
 code:yycopystag =
-    topindent (api.record
-        ? lhs " = " rhs
-        : copystag
+    topindent (api.generic
+        ? copystag
+        : lhs " = " rhs
     ) nl;
 
 code:yycopymtag =
-    topindent (api.record
-        ? lhs " = " rhs
-        : copymtag
+    topindent (api.generic
+        ? copymtag
+        : lhs " = " rhs
     ) nl;
 
 code:yygetaccept =
-    (api.record
-        ? (storable_state ? record ".") var
-        : getaccept);
+    (api.generic
+        ? getaccept
+        : (api.record & storable_state ? record ".") var);
 
 code:yysetaccept =
-    topindent (api.record
-        ? (storable_state ? record ".") var " = " val
-        : setaccept
+    topindent (api.generic
+        ? setaccept
+        : (api.record & storable_state ? record ".") var " = " val
     ) nl;
 
-code:yygetcond = (api.record ? record "." var : getcond);
+code:yygetcond =
+    (api.generic
+        ? getcond
+        : (api.record ? record ".") var);
 
 code:yysetcond =
-    topindent (api.record
-        ? record "." var " = " val
-        : setcond
+    topindent (api.generic
+        ? setcond
+        : (api.record ? record ".") var " = " val
     ) nl;
 
-code:yygetstate = (api.record ? record "." var : getstate);
+code:yygetstate =
+     (api.generic
+         ? getstate
+         : (api.record ? record ".") var);
 
 code:yysetstate =
-    topindent (api.record
-        ? record "." var " = " val
-        : setstate
+    topindent (api.generic
+        ? setstate
+        : (api.record ? record ".") var " = " val
     ) nl;
 
 code:yylessthan =
-    (api.record
-        ? (many
+    (api.generic
+        ? lessthan
+        : (many
             ? "(" limit " - " cursor ") < " need
-            : limit " <= " cursor)
-        : lessthan);
+            : limit " <= " cursor));
