@@ -4,15 +4,15 @@
 package main
 
 // Expect a null-terminated string.
-func lex(str string) int {
-	var cur int
+func lex(yyinput string) int {
+	yycursor := 0
 	count := 0
 
 	for { 
 //line "go/eof/01_sentinel.go":13
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -24,18 +24,18 @@ func lex(str string) int {
 		goto yy2
 	}
 yy1:
-	cur += 1
-//line "go/eof/01_sentinel.re":16
+	yycursor += 1
+//line "go/eof/01_sentinel.re":15
 	{ return count }
 //line "go/eof/01_sentinel.go":31
 yy2:
-	cur += 1
-//line "go/eof/01_sentinel.re":15
+	yycursor += 1
+//line "go/eof/01_sentinel.re":14
 	{ return -1 }
 //line "go/eof/01_sentinel.go":36
 yy3:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -43,12 +43,12 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/01_sentinel.re":18
+//line "go/eof/01_sentinel.re":17
 	{ continue }
 //line "go/eof/01_sentinel.go":49
 yy5:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z':
 		goto yy5
@@ -56,11 +56,11 @@ yy5:
 		goto yy6
 	}
 yy6:
-//line "go/eof/01_sentinel.re":17
+//line "go/eof/01_sentinel.re":16
 	{ count += 1; continue }
 //line "go/eof/01_sentinel.go":62
 }
-//line "go/eof/01_sentinel.re":19
+//line "go/eof/01_sentinel.re":18
 
 	}
 }

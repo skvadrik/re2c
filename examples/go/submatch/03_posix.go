@@ -19,8 +19,8 @@ func s2n(s string) int { // convert pre-parsed string to a number
 	return n
 }
 
-func parse(str string) *SemVer {
-	var cur, mar int
+func parse(yyinput string) *SemVer {
+	var yycursor, yymarker int
 
 	// Allocate memory for capturing parentheses (twice the number of groups).
 	yypmatch := make([]int, YYMAXNMATCH*2)
@@ -41,24 +41,24 @@ func parse(str string) *SemVer {
 //line "go/submatch/03_posix.go":42
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		yyt1 = cur
+		yyt1 = yycursor
 		goto yy3
 	default:
 		goto yy1
 	}
 yy1:
-	cur += 1
+	yycursor += 1
 yy2:
-//line "go/submatch/03_posix.re":54
+//line "go/submatch/03_posix.re":48
 	{ return nil }
 //line "go/submatch/03_posix.go":58
 yy3:
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -68,21 +68,21 @@ yy3:
 		goto yy2
 	}
 yy4:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		yyt2 = cur
+		yyt2 = yycursor
 		goto yy7
 	default:
 		goto yy5
 	}
 yy5:
-	cur = mar
+	yycursor = yymarker
 	goto yy2
 yy6:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '.':
 		goto yy4
@@ -92,17 +92,17 @@ yy6:
 		goto yy5
 	}
 yy7:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
-		yyt3 = cur
+		yyt3 = yycursor
 		yyt4 = -1
 		yyt5 = -1
 		goto yy8
 	case '.':
-		yyt3 = cur
-		yyt5 = cur
+		yyt3 = yycursor
+		yyt5 = yycursor
 		goto yy9
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
@@ -110,7 +110,7 @@ yy7:
 		goto yy5
 	}
 yy8:
-	cur += 1
+	yycursor += 1
 	yynmatch = 4
 	yypmatch[2] = yyt1
 	yypmatch[4] = yyt2
@@ -118,38 +118,38 @@ yy8:
 	yypmatch[6] = yyt5
 	yypmatch[7] = yyt4
 	yypmatch[0] = yyt1
-	yypmatch[1] = cur
+	yypmatch[1] = yycursor
 	yypmatch[3] = yyt2
-	yypmatch[3] += -1
-//line "go/submatch/03_posix.re":41
+	yypmatch[3] -= 1
+//line "go/submatch/03_posix.re":35
 	{
 			// `yynmatch` is the number of capturing groups
 			if yynmatch != 4 { panic("expected 4 submatch groups") }
 
 			// Even `yypmatch` values are for opening parentheses, odd values
 			// are for closing parentheses, the first group is the whole match.
-			major := s2n(str[yypmatch[2]:yypmatch[3]])
-			minor := s2n(str[yypmatch[4]:yypmatch[5]])
+			major := s2n(yyinput[yypmatch[2]:yypmatch[3]])
+			minor := s2n(yyinput[yypmatch[4]:yypmatch[5]])
 			patch := 0
-			if yypmatch[6] != -1 { patch = s2n(str[yypmatch[6]+1:yypmatch[7]]) }
+			if yypmatch[6] != -1 { patch = s2n(yyinput[yypmatch[6]+1:yypmatch[7]]) }
 
 			return &SemVer{major, minor, patch}
 		}
 //line "go/submatch/03_posix.go":139
 yy9:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x00) {
 		goto yy5
 	}
 	goto yy11
 yy10:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 yy11:
 	switch (yych) {
 	case 0x00:
-		yyt4 = cur
+		yyt4 = yycursor
 		goto yy8
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy10
@@ -157,7 +157,7 @@ yy11:
 		goto yy5
 	}
 }
-//line "go/submatch/03_posix.re":55
+//line "go/submatch/03_posix.re":49
 
 }
 

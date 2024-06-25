@@ -60,8 +60,8 @@ func unwind(trie mtagTrie, x int, y int, str string) Ver {
 	return ver
 }
 
-func parse(str string) []int {
-	var cur, mar int
+func parse(yyinput string) []int {
+	var yycursor, yymarker int
 	trie := make([]mtagElem, 0)
 
 	// User-defined tag variables that are available in semantic action.
@@ -85,32 +85,32 @@ var yyt1 int
 //line "go/submatch/02_mtags.go":86
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		yyt1 = cur
+		yyt1 = yycursor
 		goto yy3
 	default:
 		goto yy1
 	}
 yy1:
-	cur += 1
+	yycursor += 1
 yy2:
-//line "go/submatch/02_mtags.re":93
+//line "go/submatch/02_mtags.re":88
 	{ return nil }
 //line "go/submatch/02_mtags.go":102
 yy3:
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		yytm4 = add_mtag(&trie, yytm4, tagNone)
 		yytm3 = add_mtag(&trie, yytm3, tagNone)
-		yyt2 = cur
+		yyt2 = yycursor
 		goto yy4
 	case '.':
-		yyt2 = cur
+		yyt2 = yycursor
 		goto yy5
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
@@ -118,43 +118,43 @@ yy3:
 		goto yy2
 	}
 yy4:
-	cur += 1
+	yycursor += 1
 	t1 = yyt1
 	t2 = yyt2
 	t3 = yytm3
 	t4 = yytm4
-//line "go/submatch/02_mtags.re":87
+//line "go/submatch/02_mtags.re":82
 	{
 			ver := make([]int, 0)
-			ver = append(ver, s2n(str[t1:t2]))
-			ver = append(ver, unwind(trie, t3, t4, str)...)
+			ver = append(ver, s2n(yyinput[t1:t2]))
+			ver = append(ver, unwind(trie, t3, t4, yyinput)...)
 			return ver
 		}
 //line "go/submatch/02_mtags.go":134
 yy5:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
-		yytm3 = add_mtag(&trie, yytm3, cur)
+		yytm3 = add_mtag(&trie, yytm3, yycursor)
 		goto yy8
 	default:
 		goto yy6
 	}
 yy6:
-	cur = mar
+	yycursor = yymarker
 	goto yy2
 yy7:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		yytm4 = add_mtag(&trie, yytm4, tagNone)
 		yytm3 = add_mtag(&trie, yytm3, tagNone)
-		yyt2 = cur
+		yyt2 = yycursor
 		goto yy4
 	case '.':
-		yyt2 = cur
+		yyt2 = yycursor
 		goto yy5
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy7
@@ -162,14 +162,14 @@ yy7:
 		goto yy6
 	}
 yy8:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
-		yytm4 = add_mtag(&trie, yytm4, cur)
+		yytm4 = add_mtag(&trie, yytm4, yycursor)
 		goto yy4
 	case '.':
-		yytm4 = add_mtag(&trie, yytm4, cur)
+		yytm4 = add_mtag(&trie, yytm4, yycursor)
 		goto yy5
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy8
@@ -177,7 +177,7 @@ yy8:
 		goto yy6
 	}
 }
-//line "go/submatch/02_mtags.re":94
+//line "go/submatch/02_mtags.re":89
 
 }
 

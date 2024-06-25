@@ -13,20 +13,20 @@ const YYMAXFILL = 1
 // Expects YYMAXFILL-padded string.
 func lex(str string) int {
 	// Pad string with YYMAXFILL zeroes at the end.
-	buf := str + strings.Repeat("\000", int(YYMAXFILL))
+	yyinput := str + strings.Repeat("\000", int(YYMAXFILL))
 
-	var cur int
-	lim := len(buf)
+	yycursor := 0
+	yylimit := len(yyinput)
 	count := 0
 
 	for { 
 //line "go/eof/02_bounds_checking.go":24
 {
 	var yych byte
-	if (lim - cur < 1) {
+	if (yylimit <= yycursor) {
 		return -1
 	}
-	yych = buf[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy1
@@ -38,24 +38,24 @@ func lex(str string) int {
 		goto yy2
 	}
 yy1:
-	cur += 1
-//line "go/eof/02_bounds_checking.re":26
+	yycursor += 1
+//line "go/eof/02_bounds_checking.re":24
 	{
 			// Check that it is the sentinel, not some unexpected null.
-			if cur - 1 == len(str) { return count } else { return -1 }
+			if yycursor - 1 == len(str) { return count } else { return -1 }
 		}
 //line "go/eof/02_bounds_checking.go":48
 yy2:
-	cur += 1
-//line "go/eof/02_bounds_checking.re":32
+	yycursor += 1
+//line "go/eof/02_bounds_checking.re":30
 	{ return -1 }
 //line "go/eof/02_bounds_checking.go":53
 yy3:
-	cur += 1
-	if (lim - cur < 1) {
+	yycursor += 1
+	if (yylimit <= yycursor) {
 		return -1
 	}
-	yych = buf[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -63,15 +63,15 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/02_bounds_checking.re":31
+//line "go/eof/02_bounds_checking.re":29
 	{ continue }
 //line "go/eof/02_bounds_checking.go":69
 yy5:
-	cur += 1
-	if (lim - cur < 1) {
+	yycursor += 1
+	if (yylimit <= yycursor) {
 		return -1
 	}
-	yych = buf[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '\'':
 		goto yy6
@@ -81,18 +81,18 @@ yy5:
 		goto yy5
 	}
 yy6:
-	cur += 1
-//line "go/eof/02_bounds_checking.re":30
+	yycursor += 1
+//line "go/eof/02_bounds_checking.re":28
 	{ count += 1; continue }
 //line "go/eof/02_bounds_checking.go":88
 yy7:
-	cur += 1
-	if (lim - cur < 1) {
+	yycursor += 1
+	if (yylimit <= yycursor) {
 		return -1
 	}
 	goto yy5
 }
-//line "go/eof/02_bounds_checking.re":33
+//line "go/eof/02_bounds_checking.re":31
 
 	}
 }

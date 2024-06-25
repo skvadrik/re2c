@@ -12,18 +12,17 @@ type State struct {
 }
 /*!header:re2c:off*/
 
-func lex(st *lexer.State) int {
+func lex(yyrecord *lexer.State) int {
 	var t int
 	/*!re2c
 		re2c:header = "lexer/state.go";
+		re2c:api = record;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYINPUT = "yyrecord.Data";
+		re2c:define:YYCURSOR = "yyrecord.Cur";
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE  = byte;
-		re2c:define:YYPEEK   = "st.Data[st.Cur]";
-		re2c:define:YYSKIP   = "st.Cur++";
-		re2c:define:YYSTAGP  = "@@ = st.Cur";
-		re2c:tags            = 1;
-		re2c:tags:expression = "st.@@";
-		re2c:tags:prefix     = "Tag";
+		re2c:tags = 1;
+		re2c:tags:prefix = "Tag";
 
 		[a]* @t [b]* { return t }
 	*/

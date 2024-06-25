@@ -58,8 +58,8 @@ func unwind(trie mtagTrie, x int, y int, str string) Ver {
 	return ver
 }
 
-func parse(str string) []int {
-	var cur, mar int
+func parse(yyinput string) []int {
+	var yycursor, yymarker int
 	trie := make([]mtagElem, 0)
 
 	// User-defined tag variables that are available in semantic action.
@@ -72,22 +72,17 @@ func parse(str string) []int {
 	/*!re2c
 		re2c:tags = 1;
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE   = byte;
-		re2c:define:YYPEEK    = "str[cur]";
-		re2c:define:YYSKIP    = "cur += 1";
-		re2c:define:YYBACKUP  = "mar = cur";
-		re2c:define:YYRESTORE = "cur = mar";
-		re2c:define:YYSTAGP   = "@@ = cur";
-		re2c:define:YYSTAGN   = "@@ = tagNone";
-		re2c:define:YYMTAGP   = "@@ = add_mtag(&trie, @@, cur)";
-		re2c:define:YYMTAGN   = "@@ = add_mtag(&trie, @@, tagNone)";
+		re2c:api = default;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYMTAGP = "@@ = add_mtag(&trie, @@, yycursor)";
+		re2c:define:YYMTAGN = "@@ = add_mtag(&trie, @@, tagNone)";
 
 		num = [0-9]+;
 
 		@t1 num @t2 ("." #t3 num #t4)* [\x00] {
 			ver := make([]int, 0)
-			ver = append(ver, s2n(str[t1:t2]))
-			ver = append(ver, unwind(trie, t3, t4, str)...)
+			ver = append(ver, s2n(yyinput[t1:t2]))
+			ver = append(ver, unwind(trie, t3, t4, yyinput)...)
 			return ver
 		}
 		* { return nil }

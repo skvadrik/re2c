@@ -2,12 +2,12 @@
 //go:generate re2go $INPUT -o $OUTPUT -i
 package main
 
-func lex(str string) {
-	var cursor int
+func lex(yyinput string) {
+	var yycursor int
 	
 {
 	var yych byte
-	yych = str[cursor]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '1','2','3','4','5','6','7','8','9':
 		goto yy2
@@ -15,11 +15,11 @@ func lex(str string) {
 		goto yy1
 	}
 yy1:
-	cursor += 1
+	yycursor += 1
 	{ panic("error!") }
 yy2:
-	cursor += 1
-	yych = str[cursor]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		goto yy2
