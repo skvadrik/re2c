@@ -18,15 +18,15 @@ class Ans(Enum):
 
 
 
-def lex(str):
-    cur = 0
+def lex(yyinput):
+    yycursor = 0
     
     yystate = 0
     while True:
         match yystate:
             case 0:
-                yych = str[cur]
-                cur += 1
+                yych = yyinput[yycursor]
+                yycursor += 1
                 match yych:
                     case 0x65:
                         yystate = 3
@@ -52,90 +52,90 @@ def lex(str):
             case 2:
                 return Ans.DUNNO
             case 3:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x65:
-                    cur += 1
+                    yycursor += 1
                     yystate = 8
                     continue
                 yystate = 2
                 continue
             case 4:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x61:
-                    cur += 1
+                    yycursor += 1
                     yystate = 10
                     continue
                 yystate = 2
                 continue
             case 5:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x61:
-                    cur += 1
+                    yycursor += 1
                     yystate = 11
                     continue
                 yystate = 2
                 continue
             case 6:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x65:
-                    cur += 1
+                    yycursor += 1
                     yystate = 12
                     continue
                 yystate = 2
                 continue
             case 7:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x61:
-                    cur += 1
+                    yycursor += 1
                     yystate = 13
                     continue
                 yystate = 2
                 continue
             case 8:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6C:
-                    cur += 1
+                    yycursor += 1
                     yystate = 14
                     continue
                 yystate = 9
                 continue
             case 9:
-                cur = mar
+                yycursor = yymarker
                 yystate = 2
                 continue
             case 10:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x64:
-                    cur += 1
+                    yycursor += 1
                     yystate = 15
                     continue
                 yystate = 9
                 continue
             case 11:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x67:
-                    cur += 1
+                    yycursor += 1
                     yystate = 16
                     continue
                 yystate = 9
                 continue
             case 12:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x64:
-                    cur += 1
+                    yycursor += 1
                     yystate = 17
                     continue
                 yystate = 9
                 continue
             case 13:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6C:
-                    cur += 1
+                    yycursor += 1
                     yystate = 18
                     continue
                 yystate = 9
@@ -143,17 +143,17 @@ def lex(str):
             case 14:
                 return Ans.FISH
             case 15:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x64:
-                    cur += 1
+                    yycursor += 1
                     yystate = 19
                     continue
                 yystate = 9
                 continue
             case 16:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x65:
-                    cur += 1
+                    yycursor += 1
                     yystate = 20
                     continue
                 yystate = 9
@@ -161,73 +161,73 @@ def lex(str):
             case 17:
                 return Ans.COLOR
             case 18:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6D:
-                    cur += 1
+                    yycursor += 1
                     yystate = 21
                     continue
                 yystate = 9
                 continue
             case 19:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6F:
-                    cur += 1
+                    yycursor += 1
                     yystate = 22
                     continue
                 yystate = 9
                 continue
             case 20:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6E:
-                    cur += 1
+                    yycursor += 1
                     yystate = 23
                     continue
                 yystate = 9
                 continue
             case 21:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6F:
-                    cur += 1
+                    yycursor += 1
                     yystate = 24
                     continue
                 yystate = 9
                 continue
             case 22:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x63:
-                    cur += 1
+                    yycursor += 1
                     yystate = 25
                     continue
                 yystate = 9
                 continue
             case 23:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x74:
-                    cur += 1
+                    yycursor += 1
                     yystate = 26
                     continue
                 yystate = 9
                 continue
             case 24:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6E:
-                    cur += 1
+                    yycursor += 1
                     yystate = 14
                     continue
                 yystate = 9
                 continue
             case 25:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x6B:
-                    cur += 1
+                    yycursor += 1
                     yystate = 14
                     continue
                 yystate = 9
                 continue
             case 26:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x61:
-                    cur += 1
+                    yycursor += 1
                     yystate = 17
                     continue
                 yystate = 9

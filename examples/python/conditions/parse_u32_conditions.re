@@ -2,20 +2,13 @@
 
 /*!conditions:re2c*/
 
-def parse_u32(str):
-    cur = 0
-    cond = YYC_INIT
+def parse_u32(yyinput):
+    yycursor = 0
+    yycond = YYC_INIT
     num = 0
 
     while True:
     /*!re2c
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
-        re2c:define:YYSHIFT   = "cur += @@";
-        re2c:define:YYGETCOND = "cond";
-        re2c:define:YYSETCOND = "cond = @@";
         re2c:yyfill:enable = 0;
         re2c:indent:top = 2;
 
@@ -26,27 +19,27 @@ def parse_u32(str):
         <INIT> * { return None }
 
         <BIN> [01] {
-            num = num * 2 + (str[cur - 1] - 48)
+            num = num * 2 + (yyinput[yycursor - 1] - 48)
             break
         }
         <OCT> [0-7] {
-            num = num * 8 + (str[cur - 1] - 48)
+            num = num * 8 + (yyinput[yycursor - 1] - 48)
             break
         }
         <DEC> [0-9] {
-            num = num * 10 + (str[cur - 1] - 48)
+            num = num * 10 + (yyinput[yycursor - 1] - 48)
             break
         }
         <HEX> [0-9] {
-            num = num * 16 + (str[cur - 1] - 48)
+            num = num * 16 + (yyinput[yycursor - 1] - 48)
             break
         }
         <HEX> [a-f] {
-            num = num * 16 + (str[cur - 1] - 87)
+            num = num * 16 + (yyinput[yycursor - 1] - 87)
             break
         }
         <HEX> [A-F] {
-            num = num * 16 + (str[cur - 1] - 55)
+            num = num * 16 + (yyinput[yycursor - 1] - 55)
             break
         }
 

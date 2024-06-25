@@ -7,24 +7,24 @@ SemVer = namedtuple('SemVer', 'major minor patch')
 
 NONE = -1
 
-def parse(str):
-    cur = 0
+def parse(yyinput):
+    yycursor = 0
     
     yystate = 0
     while True:
         match yystate:
             case 0:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych <= 0x2F:
-                    cur += 1
+                    yycursor += 1
                     yystate = 1
                     continue
                 if yych <= 0x39:
-                    yyt1 = cur
-                    cur += 1
+                    yyt1 = yycursor
+                    yycursor += 1
                     yystate = 3
                     continue
-                cur += 1
+                yycursor += 1
                 yystate = 1
                 continue
             case 1:
@@ -33,66 +33,66 @@ def parse(str):
             case 2:
                 return None
             case 3:
-                mar = cur
-                yych = str[cur]
+                yymarker = yycursor
+                yych = yyinput[yycursor]
                 if yych == 0x2E:
-                    cur += 1
+                    yycursor += 1
                     yystate = 4
                     continue
                 if yych <= 0x2F:
                     yystate = 2
                     continue
                 if yych <= 0x39:
-                    cur += 1
+                    yycursor += 1
                     yystate = 6
                     continue
                 yystate = 2
                 continue
             case 4:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych <= 0x2F:
                     yystate = 5
                     continue
                 if yych <= 0x39:
-                    yyt2 = cur
-                    cur += 1
+                    yyt2 = yycursor
+                    yycursor += 1
                     yystate = 7
                     continue
                 yystate = 5
                 continue
             case 5:
-                cur = mar
+                yycursor = yymarker
                 yystate = 2
                 continue
             case 6:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych == 0x2E:
-                    cur += 1
+                    yycursor += 1
                     yystate = 4
                     continue
                 if yych <= 0x2F:
                     yystate = 5
                     continue
                 if yych <= 0x39:
-                    cur += 1
+                    yycursor += 1
                     yystate = 6
                     continue
                 yystate = 5
                 continue
             case 7:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych <= 0x2E:
                     if yych <= 0x00:
-                        yyt3 = cur
-                        yyt4 = NONE
-                        cur += 1
+                        yyt3 = yycursor
+                        yyt4 = -1
+                        yycursor += 1
                         yystate = 8
                         continue
                     if yych <= 0x2D:
                         yystate = 5
                         continue
-                    yyt3 = cur
-                    cur += 1
+                    yyt3 = yycursor
+                    yycursor += 1
                     yystate = 9
                     continue
                 else:
@@ -100,7 +100,7 @@ def parse(str):
                         yystate = 5
                         continue
                     if yych <= 0x39:
-                        cur += 1
+                        yycursor += 1
                         yystate = 7
                         continue
                     yystate = 5
@@ -111,34 +111,34 @@ def parse(str):
                 t4 = yyt3
                 t5 = yyt4
                 t2 = yyt2
-                t2 += -1
-                major = int(str[t1:t2]);
-                minor = int(str[t3:t4]);
-                patch = int(str[t5:cur - 1]) if t5 != NONE else 0
+                t2 -= 1
+                major = int(yyinput[t1:t2]);
+                minor = int(yyinput[t3:t4]);
+                patch = int(yyinput[t5:yycursor - 1]) if t5 != NONE else 0
                 return SemVer(major, minor, patch)
             case 9:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych <= 0x2F:
                     yystate = 5
                     continue
                 if yych >= 0x3A:
                     yystate = 5
                     continue
-                yyt4 = cur
-                cur += 1
+                yyt4 = yycursor
+                yycursor += 1
                 yystate = 10
                 continue
             case 10:
-                yych = str[cur]
+                yych = yyinput[yycursor]
                 if yych <= 0x00:
-                    cur += 1
+                    yycursor += 1
                     yystate = 8
                     continue
                 if yych <= 0x2F:
                     yystate = 5
                     continue
                 if yych <= 0x39:
-                    cur += 1
+                    yycursor += 1
                     yystate = 10
                     continue
                 yystate = 5

@@ -2,8 +2,8 @@
 # re2py $INPUT -o $OUTPUT
 
 # expect a null-terminated string
-def lex(str):
-    cur = 0
+def lex(yyinput):
+    yycursor = 0
     count = 0
 
     while True:
@@ -12,8 +12,8 @@ def lex(str):
         while True:
             match yystate:
                 case 0:
-                    yych = str[cur]
-                    cur += 1
+                    yych = yyinput[yycursor]
+                    yycursor += 1
                     if yych <= 0x20:
                         if yych <= 0x00:
                             yystate = 1
@@ -37,19 +37,19 @@ def lex(str):
                 case 2:
                     return -1
                 case 3:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych == 0x20:
-                        cur += 1
+                        yycursor += 1
                         yystate = 3
                         continue
                     break
                 case 4:
-                    yych = str[cur]
+                    yych = yyinput[yycursor]
                     if yych <= 0x60:
                         yystate = 5
                         continue
                     if yych <= 0x7A:
-                        cur += 1
+                        yycursor += 1
                         yystate = 4
                         continue
                     yystate = 5

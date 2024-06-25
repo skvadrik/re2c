@@ -8,6 +8,7 @@ def lex(str):
 
     while True:
     /*!re2c
+        re2c:api = custom;
         re2c:define:YYPEEK = "str[cur] if cur < lim else 0";
         re2c:define:YYSKIP = "cur += 1";
         re2c:yyfill:enable = 0;
