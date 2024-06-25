@@ -79,8 +79,7 @@ void combine_code(Code* code) {
 void codegen_fixup(Output& output) {
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
-            if (b->opts->api == Api::DEFAULT) {
-                // Folding skip/peek/backup expressions is only possible with default input API.
+            if (b->opts->api == Api::DEFAULT && b->opts->specialize_skip_peek_backup()) {
                 combine_list(b->code);
             }
         }

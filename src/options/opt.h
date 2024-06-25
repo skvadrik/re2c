@@ -777,6 +777,15 @@ struct opt_t {
 #undef MUTCODE
     bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
     bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
+    bool specialize_skip_peek_backup() const {
+        return code_yyskip_yypeek != nullptr
+            && code_yypeek_yyskip != nullptr
+            && code_yyskip_yybackup != nullptr
+            && code_yybackup_yyskip != nullptr
+            && code_yybackup_yypeek != nullptr
+            && code_yyskip_yybackup_yypeek != nullptr
+            && code_yybackup_yypeek_yyskip != nullptr;
+    }
 
   private:
     void eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const;
