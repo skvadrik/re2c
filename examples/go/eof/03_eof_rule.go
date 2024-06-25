@@ -4,36 +4,36 @@
 package main
 
 // Expects a null-terminated string.
-func lex(str string) int {
-	var cur, mar int
-	lim := len(str) - 1 // lim points at the terminating null
+func lex(yyinput string) int {
+	var yycursor, yymarker int
+	yylimit := len(yyinput) - 1 // lim points at the terminating null
 	count := 0
 
 	for { 
 //line "go/eof/03_eof_rule.go":14
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
 	case '\'':
 		goto yy5
 	default:
-		if (lim <= cur) {
+		if (yylimit <= yycursor) {
 			goto yy10
 		}
 		goto yy1
 	}
 yy1:
-	cur += 1
+	yycursor += 1
 yy2:
-//line "go/eof/03_eof_rule.re":22
+//line "go/eof/03_eof_rule.re":18
 	{ return -1 }
 //line "go/eof/03_eof_rule.go":34
 yy3:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case ' ':
 		goto yy3
@@ -41,22 +41,22 @@ yy3:
 		goto yy4
 	}
 yy4:
-//line "go/eof/03_eof_rule.re":25
+//line "go/eof/03_eof_rule.re":21
 	{ continue }
 //line "go/eof/03_eof_rule.go":47
 yy5:
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych >= 0x01) {
 		goto yy7
 	}
-	if (lim <= cur) {
+	if (yylimit <= yycursor) {
 		goto yy2
 	}
 yy6:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 yy7:
 	switch (yych) {
 	case '\'':
@@ -64,35 +64,35 @@ yy7:
 	case '\\':
 		goto yy9
 	default:
-		if (lim <= cur) {
+		if (yylimit <= yycursor) {
 			goto yy11
 		}
 		goto yy6
 	}
 yy8:
-	cur += 1
-//line "go/eof/03_eof_rule.re":24
+	yycursor += 1
+//line "go/eof/03_eof_rule.re":20
 	{ count += 1; continue }
 //line "go/eof/03_eof_rule.go":77
 yy9:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x00) {
-		if (lim <= cur) {
+		if (yylimit <= yycursor) {
 			goto yy11
 		}
 		goto yy6
 	}
 	goto yy6
 yy10:
-//line "go/eof/03_eof_rule.re":23
+//line "go/eof/03_eof_rule.re":19
 	{ return count }
 //line "go/eof/03_eof_rule.go":91
 yy11:
-	cur = mar
+	yycursor = yymarker
 	goto yy2
 }
-//line "go/eof/03_eof_rule.re":26
+//line "go/eof/03_eof_rule.re":22
 
 	}
 }

@@ -3,15 +3,12 @@ package main
 
 /*!include:re2c "unicode_categories.re" */
 
-func lex(str string) int {
-	var cur, mar int
+func lex(yyinput string) int {
+	var yycursor, yymarker int
 	/*!re2c
+		re2c:api = default;
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE   = byte;
-		re2c:define:YYPEEK    = "str[cur]";
-		re2c:define:YYSKIP    = "cur += 1";
-		re2c:define:YYBACKUP  = "mar = cur";
-		re2c:define:YYRESTORE = "cur = mar";
+		re2c:define:YYCTYPE = byte;
 
 		// Simplified "Unicode Identifier and Pattern Syntax"
 		// (see https://unicode.org/reports/tr31)

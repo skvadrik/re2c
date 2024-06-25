@@ -5,13 +5,13 @@ package main
 
 
 
-func lex(str string) int {
-	var cur, mar int
+func lex(yyinput string) int {
+	var yycursor, yymarker int
 	
 {
 	var yych byte
 	yyaccept := 0
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	if (yych <= 0xD6) {
 		if (yych <= 0xC3) {
 			if (yych <= '^') {
@@ -152,14 +152,14 @@ func lex(str string) int {
 		}
 	}
 yy1:
-	cur += 1
+	yycursor += 1
 yy2:
 	{ return 1 }
 yy3:
 	yyaccept = 0
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0xD6) {
 		if (yych <= 0xC2) {
 			if (yych <= 'Z') {
@@ -311,8 +311,8 @@ yy3:
 yy4:
 	{ return 0 }
 yy5:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB4) {
 		if (yych == 0xAA) {
 			goto yy3
@@ -328,8 +328,8 @@ yy5:
 		goto yy2
 	}
 yy6:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
 			goto yy2
@@ -348,8 +348,8 @@ yy6:
 		goto yy2
 	}
 yy7:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -358,8 +358,8 @@ yy7:
 	}
 	goto yy2
 yy8:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
@@ -392,8 +392,8 @@ yy8:
 		}
 	}
 yy9:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xB0,0xB1,0xB2,0xB3,0xB4:
 		fallthrough
@@ -407,8 +407,8 @@ yy9:
 		goto yy2
 	}
 yy10:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8B) {
 		if (yych <= 0x86) {
 			if (yych <= 0x85) {
@@ -441,8 +441,8 @@ yy10:
 		}
 	}
 yy11:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -454,8 +454,8 @@ yy11:
 	}
 	goto yy2
 yy12:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -470,8 +470,8 @@ yy12:
 	}
 	goto yy2
 yy13:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -483,8 +483,8 @@ yy13:
 	}
 	goto yy2
 yy14:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x7F) {
 			goto yy2
@@ -506,8 +506,8 @@ yy14:
 		goto yy2
 	}
 yy15:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -516,8 +516,8 @@ yy15:
 	}
 	goto yy2
 yy16:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy2
 	}
@@ -532,8 +532,8 @@ yy16:
 	}
 	goto yy2
 yy17:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy2
 	}
@@ -542,8 +542,8 @@ yy17:
 	}
 	goto yy2
 yy18:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAD) {
 		if (yych <= 0x7F) {
 			goto yy2
@@ -562,8 +562,8 @@ yy18:
 		goto yy2
 	}
 yy19:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x94) {
 			if (yych <= 0x7F) {
@@ -602,8 +602,8 @@ yy19:
 		}
 	}
 yy20:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x90) {
 		goto yy3
 	}
@@ -615,8 +615,8 @@ yy20:
 	}
 	goto yy2
 yy21:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8C) {
 		goto yy2
 	}
@@ -625,8 +625,8 @@ yy21:
 	}
 	goto yy2
 yy22:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -638,8 +638,8 @@ yy22:
 	}
 	goto yy2
 yy23:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB3) {
 		if (yych <= 0x89) {
 			goto yy2
@@ -659,9 +659,9 @@ yy23:
 	}
 yy24:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA0:
 		goto yy67
@@ -728,9 +728,9 @@ yy24:
 	}
 yy25:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		goto yy96
@@ -829,9 +829,9 @@ yy25:
 	}
 yy26:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0xB0) {
 		if (yych <= 0x83) {
 			if (yych <= 0x80) {
@@ -891,9 +891,9 @@ yy26:
 	}
 yy27:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
@@ -933,9 +933,9 @@ yy27:
 	}
 yy28:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0xB6) {
 		if (yych <= 0x7F) {
 			goto yy2
@@ -955,9 +955,9 @@ yy28:
 	}
 yy29:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -967,9 +967,9 @@ yy29:
 	goto yy2
 yy30:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -982,9 +982,9 @@ yy30:
 	goto yy2
 yy31:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x90,0x91:
 		fallthrough
@@ -1049,9 +1049,9 @@ yy31:
 	}
 yy32:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy2
 	}
@@ -1067,9 +1067,9 @@ yy32:
 	goto yy2
 yy33:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA4,0xA5,0xA6,0xA7,0xA8:
 		fallthrough
@@ -1116,9 +1116,9 @@ yy33:
 	}
 yy34:
 	yyaccept = 1
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x90:
 		goto yy196
@@ -1160,8 +1160,8 @@ yy34:
 		goto yy2
 	}
 yy35:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB4) {
 		if (yych == 0xAA) {
 			goto yy3
@@ -1175,15 +1175,15 @@ yy35:
 		}
 	}
 yy36:
-	cur = mar
+	yycursor = yymarker
 	if (yyaccept == 0) {
 		goto yy4
 	} else {
 		goto yy2
 	}
 yy37:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1202,8 +1202,8 @@ yy37:
 		goto yy36
 	}
 yy38:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1212,8 +1212,8 @@ yy38:
 	}
 	goto yy36
 yy39:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
@@ -1246,8 +1246,8 @@ yy39:
 		}
 	}
 yy40:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB7) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1270,8 +1270,8 @@ yy40:
 		}
 	}
 yy41:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8B) {
 		if (yych <= 0x86) {
 			if (yych <= 0x85) {
@@ -1304,8 +1304,8 @@ yy41:
 		}
 	}
 yy42:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1317,8 +1317,8 @@ yy42:
 	}
 	goto yy36
 yy43:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1340,8 +1340,8 @@ yy43:
 		goto yy36
 	}
 yy44:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1353,8 +1353,8 @@ yy44:
 	}
 	goto yy36
 yy45:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1376,8 +1376,8 @@ yy45:
 		goto yy36
 	}
 yy46:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1396,8 +1396,8 @@ yy46:
 		goto yy36
 	}
 yy47:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x82) {
 			if (yych <= 0x80) {
@@ -1433,8 +1433,8 @@ yy47:
 		}
 	}
 yy48:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -1449,8 +1449,8 @@ yy48:
 	}
 	goto yy36
 yy49:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1465,8 +1465,8 @@ yy49:
 	}
 	goto yy36
 yy50:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x93) {
 			if (yych <= 0x7F) {
@@ -1496,8 +1496,8 @@ yy50:
 		}
 	}
 yy51:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -1506,8 +1506,8 @@ yy51:
 	}
 	goto yy36
 yy52:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1522,8 +1522,8 @@ yy52:
 	}
 	goto yy36
 yy53:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1532,8 +1532,8 @@ yy53:
 	}
 	goto yy36
 yy54:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB9) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1552,8 +1552,8 @@ yy54:
 		goto yy36
 	}
 yy55:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA0:
 		goto yy211
@@ -1623,8 +1623,8 @@ yy55:
 		goto yy36
 	}
 yy56:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		fallthrough
@@ -1724,8 +1724,8 @@ yy56:
 		goto yy36
 	}
 yy57:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAF) {
 		if (yych <= 0x82) {
 			if (yych <= 0x7F) {
@@ -1788,8 +1788,8 @@ yy57:
 		}
 	}
 yy58:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		if (yych <= 0x81) {
 			if (yych <= 0x7F) {
@@ -1828,8 +1828,8 @@ yy58:
 		}
 	}
 yy59:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB6) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -1848,8 +1848,8 @@ yy59:
 		goto yy36
 	}
 yy60:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1858,8 +1858,8 @@ yy60:
 	}
 	goto yy36
 yy61:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1871,8 +1871,8 @@ yy61:
 	}
 	goto yy36
 yy62:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80,0x81,0x82,0x83,0x84,0x85,0x86,0x87,0x88,0x89,0x8A,0x8B,0x8C,0x8D,0x8E,0x8F,0x90,0x91:
 		fallthrough
@@ -1936,8 +1936,8 @@ yy62:
 		goto yy36
 	}
 yy63:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -1952,8 +1952,8 @@ yy63:
 	}
 	goto yy36
 yy64:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA4,0xA5,0xA6,0xA7,0xA8:
 		fallthrough
@@ -2001,8 +2001,8 @@ yy64:
 		goto yy36
 	}
 yy65:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x90:
 		goto yy281
@@ -2044,15 +2044,15 @@ yy65:
 		goto yy36
 	}
 yy66:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0xA0) {
 		goto yy287
 	}
 	goto yy36
 yy67:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -2078,8 +2078,8 @@ yy67:
 		}
 	}
 yy68:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -2094,8 +2094,8 @@ yy68:
 	}
 	goto yy36
 yy69:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -2107,8 +2107,8 @@ yy69:
 	}
 	goto yy36
 yy70:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		goto yy36
 	}
@@ -2120,8 +2120,8 @@ yy70:
 	}
 	goto yy36
 yy71:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych == 0x90) {
 			goto yy3
@@ -2140,8 +2140,8 @@ yy71:
 		goto yy36
 	}
 yy72:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych == 0x80) {
@@ -2187,8 +2187,8 @@ yy72:
 		}
 	}
 yy73:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x8D) {
@@ -2221,8 +2221,8 @@ yy73:
 		}
 	}
 yy74:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x84) {
@@ -2264,8 +2264,8 @@ yy74:
 		}
 	}
 yy75:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9D) {
 		if (yych <= 0x98) {
 			goto yy36
@@ -2287,8 +2287,8 @@ yy75:
 		goto yy36
 	}
 yy76:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x84) {
@@ -2327,8 +2327,8 @@ yy76:
 		}
 	}
 yy77:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych == 0x90) {
 			goto yy3
@@ -2344,8 +2344,8 @@ yy77:
 		goto yy36
 	}
 yy78:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x84) {
@@ -2387,8 +2387,8 @@ yy78:
 		}
 	}
 yy79:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x9B) {
 			goto yy36
@@ -2407,8 +2407,8 @@ yy79:
 		goto yy36
 	}
 yy80:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x83:
 		fallthrough
@@ -2434,15 +2434,15 @@ yy80:
 		goto yy36
 	}
 yy81:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x90) {
 		goto yy3
 	}
 	goto yy36
 yy82:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x84) {
@@ -2472,8 +2472,8 @@ yy82:
 		}
 	}
 yy83:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		goto yy36
 	}
@@ -2488,8 +2488,8 @@ yy83:
 	}
 	goto yy36
 yy84:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x84) {
 			if (yych == 0x80) {
@@ -2525,8 +2525,8 @@ yy84:
 		}
 	}
 yy85:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych == 0x9E) {
 			goto yy3
@@ -2545,8 +2545,8 @@ yy85:
 		goto yy36
 	}
 yy86:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x84) {
 			goto yy36
@@ -2569,8 +2569,8 @@ yy86:
 		}
 	}
 yy87:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x96) {
 		if (yych == 0x8E) {
 			goto yy3
@@ -2596,8 +2596,8 @@ yy87:
 		}
 	}
 yy88:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB1) {
 		if (yych <= 0x84) {
 			goto yy36
@@ -2623,8 +2623,8 @@ yy88:
 		}
 	}
 yy89:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -2633,8 +2633,8 @@ yy89:
 	}
 	goto yy36
 yy90:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x80) {
 		goto yy36
 	}
@@ -2646,8 +2646,8 @@ yy90:
 	}
 	goto yy36
 yy91:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA3) {
 		if (yych <= 0x84) {
 			if (yych <= 0x80) {
@@ -2690,8 +2690,8 @@ yy91:
 		}
 	}
 yy92:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x85) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -2713,15 +2713,15 @@ yy92:
 		goto yy36
 	}
 yy93:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x80) {
 		goto yy3
 	}
 	goto yy36
 yy94:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -2733,8 +2733,8 @@ yy94:
 	}
 	goto yy36
 yy95:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x87) {
 		goto yy36
 	}
@@ -2743,8 +2743,8 @@ yy95:
 	}
 	goto yy36
 yy96:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -2756,8 +2756,8 @@ yy96:
 	}
 	goto yy36
 yy97:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA1) {
 		if (yych <= 0x99) {
 			if (yych <= 0x8F) {
@@ -2799,8 +2799,8 @@ yy97:
 		}
 	}
 yy98:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -2822,8 +2822,8 @@ yy98:
 		goto yy36
 	}
 yy99:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8C) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
@@ -2856,8 +2856,8 @@ yy99:
 		}
 	}
 yy100:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
@@ -2896,8 +2896,8 @@ yy100:
 		}
 	}
 yy101:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
@@ -2930,8 +2930,8 @@ yy101:
 		}
 	}
 yy102:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x85) {
 		if (yych == 0x80) {
 			goto yy3
@@ -2957,8 +2957,8 @@ yy102:
 		}
 	}
 yy103:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -2980,8 +2980,8 @@ yy103:
 		goto yy36
 	}
 yy104:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -2990,8 +2990,8 @@ yy104:
 	}
 	goto yy36
 yy105:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3006,8 +3006,8 @@ yy105:
 	}
 	goto yy36
 yy106:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3022,8 +3022,8 @@ yy106:
 	}
 	goto yy36
 yy107:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x80) {
 		goto yy36
 	}
@@ -3032,8 +3032,8 @@ yy107:
 	}
 	goto yy36
 yy108:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3048,8 +3048,8 @@ yy108:
 	}
 	goto yy36
 yy109:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x80) {
 		goto yy36
 	}
@@ -3064,8 +3064,8 @@ yy109:
 	}
 	goto yy36
 yy110:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3080,8 +3080,8 @@ yy110:
 	}
 	goto yy36
 yy111:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3103,8 +3103,8 @@ yy111:
 		goto yy36
 	}
 yy112:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3123,8 +3123,8 @@ yy112:
 		goto yy36
 	}
 yy113:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3133,8 +3133,8 @@ yy113:
 	}
 	goto yy36
 yy114:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x97) {
 		goto yy3
 	}
@@ -3143,8 +3143,8 @@ yy114:
 	}
 	goto yy36
 yy115:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -3153,8 +3153,8 @@ yy115:
 	}
 	goto yy36
 yy116:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3163,8 +3163,8 @@ yy116:
 	}
 	goto yy36
 yy117:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3193,8 +3193,8 @@ yy117:
 		}
 	}
 yy118:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3203,8 +3203,8 @@ yy118:
 	}
 	goto yy36
 yy119:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3213,8 +3213,8 @@ yy119:
 	}
 	goto yy36
 yy120:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -3229,8 +3229,8 @@ yy120:
 	}
 	goto yy36
 yy121:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3245,8 +3245,8 @@ yy121:
 	}
 	goto yy36
 yy122:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3255,8 +3255,8 @@ yy122:
 	}
 	goto yy36
 yy123:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3271,8 +3271,8 @@ yy123:
 	}
 	goto yy36
 yy124:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3281,15 +3281,15 @@ yy124:
 	}
 	goto yy36
 yy125:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0xA7) {
 		goto yy3
 	}
 	goto yy36
 yy126:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		goto yy36
 	}
@@ -3298,8 +3298,8 @@ yy126:
 	}
 	goto yy36
 yy127:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		goto yy36
 	}
@@ -3308,8 +3308,8 @@ yy127:
 	}
 	goto yy36
 yy128:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAD) {
 		if (yych <= 0x82) {
 			goto yy36
@@ -3331,8 +3331,8 @@ yy128:
 		goto yy36
 	}
 yy129:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3341,8 +3341,8 @@ yy129:
 	}
 	goto yy36
 yy130:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3351,8 +3351,8 @@ yy130:
 	}
 	goto yy36
 yy131:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8C) {
 		goto yy36
 	}
@@ -3367,8 +3367,8 @@ yy131:
 	}
 	goto yy36
 yy132:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3390,8 +3390,8 @@ yy132:
 		goto yy36
 	}
 yy133:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA9,0xAA,0xAB,0xAC:
 		fallthrough
@@ -3405,8 +3405,8 @@ yy133:
 		goto yy36
 	}
 yy134:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3428,8 +3428,8 @@ yy134:
 		goto yy36
 	}
 yy135:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x98) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
@@ -3471,8 +3471,8 @@ yy135:
 		}
 	}
 yy136:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB5) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3491,8 +3491,8 @@ yy136:
 		goto yy36
 	}
 yy137:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x95) {
 		if (yych <= 0x85) {
 			if (yych <= 0x81) {
@@ -3537,8 +3537,8 @@ yy137:
 		}
 	}
 yy138:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0xB1) {
 		goto yy3
 	}
@@ -3547,8 +3547,8 @@ yy138:
 	}
 	goto yy36
 yy139:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -3557,8 +3557,8 @@ yy139:
 	}
 	goto yy36
 yy140:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x82:
 		fallthrough
@@ -3586,8 +3586,8 @@ yy140:
 		goto yy36
 	}
 yy141:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x84) {
 			goto yy36
@@ -3609,8 +3609,8 @@ yy141:
 		goto yy36
 	}
 yy142:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3619,8 +3619,8 @@ yy142:
 	}
 	goto yy36
 yy143:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3632,8 +3632,8 @@ yy143:
 	}
 	goto yy36
 yy144:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3645,8 +3645,8 @@ yy144:
 	}
 	goto yy36
 yy145:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAA) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3668,8 +3668,8 @@ yy145:
 		goto yy36
 	}
 yy146:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA7) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3695,8 +3695,8 @@ yy146:
 		}
 	}
 yy147:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3708,8 +3708,8 @@ yy147:
 	}
 	goto yy36
 yy148:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA7) {
 		if (yych <= 0x96) {
 			if (yych <= 0x7F) {
@@ -3742,8 +3742,8 @@ yy148:
 		}
 	}
 yy149:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8E) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3769,15 +3769,15 @@ yy149:
 		}
 	}
 yy150:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0xAF) {
 		goto yy3
 	}
 	goto yy36
 yy151:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA9) {
 		if (yych <= 0x84) {
 			goto yy36
@@ -3806,8 +3806,8 @@ yy151:
 		}
 	}
 yy152:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9C) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3826,8 +3826,8 @@ yy152:
 		goto yy36
 	}
 yy153:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3839,8 +3839,8 @@ yy153:
 	}
 	goto yy36
 yy154:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		goto yy36
 	}
@@ -3852,8 +3852,8 @@ yy154:
 	}
 	goto yy36
 yy155:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3868,8 +3868,8 @@ yy155:
 	}
 	goto yy36
 yy156:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAF) {
 		goto yy36
 	}
@@ -3878,8 +3878,8 @@ yy156:
 	}
 	goto yy36
 yy157:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3888,8 +3888,8 @@ yy157:
 	}
 	goto yy36
 yy158:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3898,8 +3898,8 @@ yy158:
 	}
 	goto yy36
 yy159:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -3908,8 +3908,8 @@ yy159:
 	}
 	goto yy36
 yy160:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -3931,8 +3931,8 @@ yy160:
 		goto yy36
 	}
 yy161:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3944,8 +3944,8 @@ yy161:
 	}
 	goto yy36
 yy162:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3960,8 +3960,8 @@ yy162:
 	}
 	goto yy36
 yy163:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x96) {
 		goto yy36
 	}
@@ -3976,8 +3976,8 @@ yy163:
 	}
 	goto yy36
 yy164:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -3992,8 +3992,8 @@ yy164:
 	}
 	goto yy36
 yy165:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x81) {
 		goto yy36
 	}
@@ -4008,8 +4008,8 @@ yy165:
 	}
 	goto yy36
 yy166:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x85) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4035,8 +4035,8 @@ yy166:
 		}
 	}
 yy167:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x81) {
 		goto yy36
 	}
@@ -4045,8 +4045,8 @@ yy167:
 	}
 	goto yy36
 yy168:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xBA) {
 		if (yych <= 0xB1) {
 			goto yy36
@@ -4065,8 +4065,8 @@ yy168:
 		goto yy36
 	}
 yy169:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x89) {
 		goto yy36
 	}
@@ -4081,8 +4081,8 @@ yy169:
 	}
 	goto yy36
 yy170:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4097,8 +4097,8 @@ yy170:
 	}
 	goto yy36
 yy171:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		goto yy36
 	}
@@ -4107,8 +4107,8 @@ yy171:
 	}
 	goto yy36
 yy172:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA4) {
 		if (yych == 0x8F) {
 			goto yy3
@@ -4134,8 +4134,8 @@ yy172:
 		}
 	}
 yy173:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4144,8 +4144,8 @@ yy173:
 	}
 	goto yy36
 yy174:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x82) {
 			if (yych <= 0x7F) {
@@ -4181,8 +4181,8 @@ yy174:
 		}
 	}
 yy175:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB1) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4208,8 +4208,8 @@ yy175:
 		}
 	}
 yy176:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x80) {
 			if (yych <= 0x7F) {
@@ -4242,8 +4242,8 @@ yy176:
 		}
 	}
 yy177:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x88) {
 			if (yych <= 0x80) {
@@ -4282,8 +4282,8 @@ yy177:
 		}
 	}
 yy178:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9B) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4305,8 +4305,8 @@ yy178:
 		goto yy36
 	}
 yy179:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4315,8 +4315,8 @@ yy179:
 	}
 	goto yy36
 yy180:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4331,8 +4331,8 @@ yy180:
 	}
 	goto yy36
 yy181:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4347,8 +4347,8 @@ yy181:
 	}
 	goto yy36
 yy182:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4363,8 +4363,8 @@ yy182:
 	}
 	goto yy36
 yy183:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4373,8 +4373,8 @@ yy183:
 	}
 	goto yy36
 yy184:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9E) {
 		if (yych <= 0x92) {
 			if (yych <= 0x7F) {
@@ -4413,8 +4413,8 @@ yy184:
 		}
 	}
 yy185:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4433,8 +4433,8 @@ yy185:
 		goto yy36
 	}
 yy186:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x92) {
 		goto yy36
 	}
@@ -4443,8 +4443,8 @@ yy186:
 	}
 	goto yy36
 yy187:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4453,8 +4453,8 @@ yy187:
 	}
 	goto yy36
 yy188:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4469,8 +4469,8 @@ yy188:
 	}
 	goto yy36
 yy189:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4485,8 +4485,8 @@ yy189:
 	}
 	goto yy36
 yy190:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAF) {
 		goto yy36
 	}
@@ -4498,8 +4498,8 @@ yy190:
 	}
 	goto yy36
 yy191:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4508,8 +4508,8 @@ yy191:
 	}
 	goto yy36
 yy192:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA0) {
 		goto yy36
 	}
@@ -4518,8 +4518,8 @@ yy192:
 	}
 	goto yy36
 yy193:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x80) {
 		goto yy36
 	}
@@ -4534,8 +4534,8 @@ yy193:
 	}
 	goto yy36
 yy194:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4544,8 +4544,8 @@ yy194:
 	}
 	goto yy36
 yy195:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x81) {
 			goto yy36
@@ -4574,8 +4574,8 @@ yy195:
 		}
 	}
 yy196:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		goto yy288
@@ -4659,8 +4659,8 @@ yy196:
 		goto yy36
 	}
 yy197:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		goto yy316
@@ -4742,8 +4742,8 @@ yy197:
 		goto yy36
 	}
 yy198:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4772,8 +4772,8 @@ yy198:
 		}
 	}
 yy199:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4785,8 +4785,8 @@ yy199:
 	}
 	goto yy36
 yy200:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -4798,8 +4798,8 @@ yy200:
 	}
 	goto yy36
 yy201:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7:
 		fallthrough
@@ -4829,8 +4829,8 @@ yy201:
 		goto yy36
 	}
 yy202:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4849,8 +4849,8 @@ yy202:
 		goto yy36
 	}
 yy203:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8A) {
 		if (yych <= 0x83) {
 			if (yych <= 0x7F) {
@@ -4886,8 +4886,8 @@ yy203:
 		}
 	}
 yy204:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x90:
 		fallthrough
@@ -4919,8 +4919,8 @@ yy204:
 		goto yy36
 	}
 yy205:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA2) {
 		if (yych <= 0x85) {
 			if (yych <= 0x83) {
@@ -4965,8 +4965,8 @@ yy205:
 		}
 	}
 yy206:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -4978,8 +4978,8 @@ yy206:
 	}
 	goto yy36
 yy207:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9C) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -4998,8 +4998,8 @@ yy207:
 		goto yy36
 	}
 yy208:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -5011,8 +5011,8 @@ yy208:
 	}
 	goto yy36
 yy209:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -5024,8 +5024,8 @@ yy209:
 	}
 	goto yy36
 yy210:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -5037,8 +5037,8 @@ yy210:
 	}
 	goto yy36
 yy211:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -5047,8 +5047,8 @@ yy211:
 	}
 	goto yy36
 yy212:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -5063,8 +5063,8 @@ yy212:
 	}
 	goto yy36
 yy213:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x92) {
 		goto yy36
 	}
@@ -5076,8 +5076,8 @@ yy213:
 	}
 	goto yy36
 yy214:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA5) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -5096,8 +5096,8 @@ yy214:
 		goto yy36
 	}
 yy215:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x7F) {
@@ -5146,8 +5146,8 @@ yy215:
 		}
 	}
 yy216:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9B) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
@@ -5204,8 +5204,8 @@ yy216:
 		}
 	}
 yy217:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB0) {
 		if (yych <= 0x8E) {
 			if (yych <= 0x83) {
@@ -5272,8 +5272,8 @@ yy217:
 		}
 	}
 yy218:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
@@ -5321,8 +5321,8 @@ yy218:
 		}
 	}
 yy219:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8D) {
 			if (yych <= 0x80) {
@@ -5368,8 +5368,8 @@ yy219:
 		}
 	}
 yy220:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
@@ -5414,8 +5414,8 @@ yy220:
 		}
 	}
 yy221:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x80) {
@@ -5464,8 +5464,8 @@ yy221:
 		}
 	}
 yy222:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
@@ -5514,8 +5514,8 @@ yy222:
 		}
 	}
 yy223:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x82,0x83:
 		fallthrough
@@ -5543,8 +5543,8 @@ yy223:
 		goto yy36
 	}
 yy224:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
@@ -5580,8 +5580,8 @@ yy224:
 		}
 	}
 yy225:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x7F) {
@@ -5614,8 +5614,8 @@ yy225:
 		}
 	}
 yy226:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
@@ -5657,8 +5657,8 @@ yy226:
 		}
 	}
 yy227:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
@@ -5700,8 +5700,8 @@ yy227:
 		}
 	}
 yy228:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x96) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
@@ -5750,8 +5750,8 @@ yy228:
 		}
 	}
 yy229:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8C) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -5777,8 +5777,8 @@ yy229:
 		}
 	}
 yy230:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x93) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
@@ -5823,8 +5823,8 @@ yy230:
 		}
 	}
 yy231:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x83) {
 			if (yych <= 0x81) {
@@ -5854,8 +5854,8 @@ yy231:
 		}
 	}
 yy232:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x95) {
 		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
@@ -5900,8 +5900,8 @@ yy232:
 		}
 	}
 yy233:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x80) {
 		goto yy36
 	}
@@ -5910,8 +5910,8 @@ yy233:
 	}
 	goto yy36
 yy234:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -5923,8 +5923,8 @@ yy234:
 	}
 	goto yy36
 yy235:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8A) {
 		if (yych <= 0x83) {
 			if (yych <= 0x80) {
@@ -5960,8 +5960,8 @@ yy235:
 		}
 	}
 yy236:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x87) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
@@ -5994,8 +5994,8 @@ yy236:
 		}
 	}
 yy237:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB4) {
 		if (yych <= 0x97) {
 			if (yych == 0x80) {
@@ -6037,8 +6037,8 @@ yy237:
 		}
 	}
 yy238:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x88) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6060,8 +6060,8 @@ yy238:
 		goto yy36
 	}
 yy239:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x85) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6080,15 +6080,15 @@ yy239:
 		goto yy36
 	}
 yy240:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x86) {
 		goto yy3
 	}
 	goto yy36
 yy241:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6103,8 +6103,8 @@ yy241:
 	}
 	goto yy36
 yy242:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6119,8 +6119,8 @@ yy242:
 	}
 	goto yy36
 yy243:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6142,8 +6142,8 @@ yy243:
 		goto yy36
 	}
 yy244:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAC) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6172,8 +6172,8 @@ yy244:
 		}
 	}
 yy245:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6202,8 +6202,8 @@ yy245:
 		}
 	}
 yy246:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x8A) {
 			goto yy36
@@ -6225,8 +6225,8 @@ yy246:
 		goto yy36
 	}
 yy247:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6241,8 +6241,8 @@ yy247:
 	}
 	goto yy36
 yy248:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6264,8 +6264,8 @@ yy248:
 		goto yy36
 	}
 yy249:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x85) {
 		goto yy36
 	}
@@ -6280,8 +6280,8 @@ yy249:
 	}
 	goto yy36
 yy250:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6296,8 +6296,8 @@ yy250:
 	}
 	goto yy36
 yy251:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6312,8 +6312,8 @@ yy251:
 	}
 	goto yy36
 yy252:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6332,8 +6332,8 @@ yy252:
 		goto yy36
 	}
 yy253:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6362,8 +6362,8 @@ yy253:
 		}
 	}
 yy254:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6385,8 +6385,8 @@ yy254:
 		goto yy36
 	}
 yy255:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6395,8 +6395,8 @@ yy255:
 	}
 	goto yy36
 yy256:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6411,8 +6411,8 @@ yy256:
 	}
 	goto yy36
 yy257:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -6424,8 +6424,8 @@ yy257:
 	}
 	goto yy36
 yy258:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6437,8 +6437,8 @@ yy258:
 	}
 	goto yy36
 yy259:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x8D) {
 		goto yy3
 	}
@@ -6447,8 +6447,8 @@ yy259:
 	}
 	goto yy36
 yy260:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x94) {
 		if (yych == 0x80) {
 			goto yy3
@@ -6471,8 +6471,8 @@ yy260:
 		}
 	}
 yy261:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x8F) {
 			goto yy36
@@ -6494,8 +6494,8 @@ yy261:
 		goto yy36
 	}
 yy262:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6510,8 +6510,8 @@ yy262:
 	}
 	goto yy36
 yy263:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAE) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6530,8 +6530,8 @@ yy263:
 		goto yy36
 	}
 yy264:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
@@ -6564,8 +6564,8 @@ yy264:
 		}
 	}
 yy265:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAF) {
 		if (yych <= 0x84) {
 			goto yy36
@@ -6594,8 +6594,8 @@ yy265:
 		}
 	}
 yy266:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6624,8 +6624,8 @@ yy266:
 		}
 	}
 yy267:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6640,8 +6640,8 @@ yy267:
 	}
 	goto yy36
 yy268:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB3) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6660,8 +6660,8 @@ yy268:
 		goto yy36
 	}
 yy269:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6670,8 +6670,8 @@ yy269:
 	}
 	goto yy36
 yy270:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x85) {
 			if (yych <= 0x7F) {
@@ -6707,8 +6707,8 @@ yy270:
 		}
 	}
 yy271:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6723,8 +6723,8 @@ yy271:
 	}
 	goto yy36
 yy272:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8E) {
 		if (yych == 0x80) {
 			goto yy3
@@ -6743,8 +6743,8 @@ yy272:
 		goto yy36
 	}
 yy273:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -6753,8 +6753,8 @@ yy273:
 	}
 	goto yy36
 yy274:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6783,8 +6783,8 @@ yy274:
 		}
 	}
 yy275:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9D) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6813,8 +6813,8 @@ yy275:
 		}
 	}
 yy276:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAB) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6836,8 +6836,8 @@ yy276:
 		goto yy36
 	}
 yy277:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x92) {
 			if (yych <= 0x7F) {
@@ -6876,8 +6876,8 @@ yy277:
 		}
 	}
 yy278:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -6899,8 +6899,8 @@ yy278:
 		goto yy36
 	}
 yy279:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAF) {
 		if (yych <= 0x8C) {
 			goto yy36
@@ -6919,8 +6919,8 @@ yy279:
 		goto yy36
 	}
 yy280:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x8F) {
 			goto yy36
@@ -6939,8 +6939,8 @@ yy280:
 		goto yy36
 	}
 yy281:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		goto yy288
@@ -7026,8 +7026,8 @@ yy281:
 		goto yy36
 	}
 yy282:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x80:
 		fallthrough
@@ -7113,8 +7113,8 @@ yy282:
 		goto yy36
 	}
 yy283:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0xA0,0xA1,0xA2,0xA3,0xA4,0xA5,0xA6,0xA7:
 		fallthrough
@@ -7144,8 +7144,8 @@ yy283:
 		goto yy36
 	}
 yy284:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8A) {
 		if (yych <= 0x83) {
 			if (yych <= 0x7F) {
@@ -7181,8 +7181,8 @@ yy284:
 		}
 	}
 yy285:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x85:
 		goto yy415
@@ -7226,8 +7226,8 @@ yy285:
 		goto yy36
 	}
 yy286:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x84) {
 			if (yych == 0x80) {
@@ -7273,8 +7273,8 @@ yy286:
 		}
 	}
 yy287:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		goto yy36
 	}
@@ -7286,8 +7286,8 @@ yy287:
 	}
 	goto yy36
 yy288:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA7) {
 		if (yych <= 0x8B) {
 			if (yych <= 0x7F) {
@@ -7317,8 +7317,8 @@ yy288:
 		}
 	}
 yy289:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7333,8 +7333,8 @@ yy289:
 	}
 	goto yy36
 yy290:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7343,8 +7343,8 @@ yy290:
 	}
 	goto yy36
 yy291:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7353,8 +7353,8 @@ yy291:
 	}
 	goto yy36
 yy292:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7369,8 +7369,8 @@ yy292:
 	}
 	goto yy36
 yy293:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7379,8 +7379,8 @@ yy293:
 	}
 	goto yy36
 yy294:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7395,8 +7395,8 @@ yy294:
 	}
 	goto yy36
 yy295:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7411,8 +7411,8 @@ yy295:
 	}
 	goto yy36
 yy296:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x87) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -7431,8 +7431,8 @@ yy296:
 		goto yy36
 	}
 yy297:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7447,8 +7447,8 @@ yy297:
 	}
 	goto yy36
 yy298:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7463,8 +7463,8 @@ yy298:
 	}
 	goto yy36
 yy299:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7479,8 +7479,8 @@ yy299:
 	}
 	goto yy36
 yy300:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7495,8 +7495,8 @@ yy300:
 	}
 	goto yy36
 yy301:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB5) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
@@ -7532,8 +7532,8 @@ yy301:
 		}
 	}
 yy302:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7548,8 +7548,8 @@ yy302:
 	}
 	goto yy36
 yy303:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -7561,8 +7561,8 @@ yy303:
 	}
 	goto yy36
 yy304:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7577,8 +7577,8 @@ yy304:
 	}
 	goto yy36
 yy305:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7593,8 +7593,8 @@ yy305:
 	}
 	goto yy36
 yy306:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x93) {
 		if (yych == 0x80) {
 			goto yy3
@@ -7620,8 +7620,8 @@ yy306:
 		}
 	}
 yy307:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -7630,8 +7630,8 @@ yy307:
 	}
 	goto yy36
 yy308:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7640,8 +7640,8 @@ yy308:
 	}
 	goto yy36
 yy309:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7653,8 +7653,8 @@ yy309:
 	}
 	goto yy36
 yy310:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7669,8 +7669,8 @@ yy310:
 	}
 	goto yy36
 yy311:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7679,8 +7679,8 @@ yy311:
 	}
 	goto yy36
 yy312:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7689,8 +7689,8 @@ yy312:
 	}
 	goto yy36
 yy313:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -7712,8 +7712,8 @@ yy313:
 		goto yy36
 	}
 yy314:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7722,8 +7722,8 @@ yy314:
 	}
 	goto yy36
 yy315:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -7732,8 +7732,8 @@ yy315:
 	}
 	goto yy36
 yy316:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		goto yy36
 	}
@@ -7742,8 +7742,8 @@ yy316:
 	}
 	goto yy36
 yy317:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		goto yy36
 	}
@@ -7752,8 +7752,8 @@ yy317:
 	}
 	goto yy36
 yy318:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -7762,8 +7762,8 @@ yy318:
 	}
 	goto yy36
 yy319:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		goto yy36
 	}
@@ -7772,8 +7772,8 @@ yy319:
 	}
 	goto yy36
 yy320:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych == 0x84) {
 			goto yy3
@@ -7789,8 +7789,8 @@ yy320:
 		goto yy36
 	}
 yy321:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x82) {
 		goto yy36
 	}
@@ -7799,8 +7799,8 @@ yy321:
 	}
 	goto yy36
 yy322:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x80) {
 			goto yy36
@@ -7819,8 +7819,8 @@ yy322:
 		goto yy36
 	}
 yy323:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7832,8 +7832,8 @@ yy323:
 	}
 	goto yy36
 yy324:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8D) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
@@ -7872,8 +7872,8 @@ yy324:
 		}
 	}
 yy325:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x90) {
 		goto yy3
 	}
@@ -7885,8 +7885,8 @@ yy325:
 	}
 	goto yy36
 yy326:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x86) {
 		goto yy36
 	}
@@ -7898,8 +7898,8 @@ yy326:
 	}
 	goto yy36
 yy327:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		goto yy36
 	}
@@ -7911,8 +7911,8 @@ yy327:
 	}
 	goto yy36
 yy328:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7921,8 +7921,8 @@ yy328:
 	}
 	goto yy36
 yy329:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x97) {
 		goto yy36
 	}
@@ -7931,15 +7931,15 @@ yy329:
 	}
 	goto yy36
 yy330:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x84) {
 		goto yy3
 	}
 	goto yy36
 yy331:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7951,8 +7951,8 @@ yy331:
 	}
 	goto yy36
 yy332:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7961,8 +7961,8 @@ yy332:
 	}
 	goto yy36
 yy333:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -7974,8 +7974,8 @@ yy333:
 	}
 	goto yy36
 yy334:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -7990,8 +7990,8 @@ yy334:
 	}
 	goto yy36
 yy335:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8010,8 +8010,8 @@ yy335:
 		goto yy36
 	}
 yy336:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8A) {
 		if (yych == 0x80) {
 			goto yy3
@@ -8027,8 +8027,8 @@ yy336:
 		goto yy36
 	}
 yy337:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x90) {
 		goto yy3
 	}
@@ -8040,8 +8040,8 @@ yy337:
 	}
 	goto yy36
 yy338:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8053,8 +8053,8 @@ yy338:
 	}
 	goto yy36
 yy339:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8066,8 +8066,8 @@ yy339:
 	}
 	goto yy36
 yy340:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x80) {
 		goto yy3
 	}
@@ -8079,8 +8079,8 @@ yy340:
 	}
 	goto yy36
 yy341:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8089,8 +8089,8 @@ yy341:
 	}
 	goto yy36
 yy342:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x87) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8109,8 +8109,8 @@ yy342:
 		goto yy36
 	}
 yy343:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA5) {
 		if (yych == 0x86) {
 			goto yy3
@@ -8136,8 +8136,8 @@ yy343:
 		}
 	}
 yy344:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8149,8 +8149,8 @@ yy344:
 	}
 	goto yy36
 yy345:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -8159,8 +8159,8 @@ yy345:
 	}
 	goto yy36
 yy346:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8169,8 +8169,8 @@ yy346:
 	}
 	goto yy36
 yy347:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -8179,8 +8179,8 @@ yy347:
 	}
 	goto yy36
 yy348:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA2) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8202,8 +8202,8 @@ yy348:
 		goto yy36
 	}
 yy349:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8215,8 +8215,8 @@ yy349:
 	}
 	goto yy36
 yy350:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x92) {
 		goto yy36
 	}
@@ -8225,8 +8225,8 @@ yy350:
 	}
 	goto yy36
 yy351:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		goto yy36
 	}
@@ -8238,8 +8238,8 @@ yy351:
 	}
 	goto yy36
 yy352:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA3) {
 		if (yych <= 0x8F) {
 			goto yy36
@@ -8261,8 +8261,8 @@ yy352:
 		goto yy36
 	}
 yy353:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8271,8 +8271,8 @@ yy353:
 	}
 	goto yy36
 yy354:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8287,8 +8287,8 @@ yy354:
 	}
 	goto yy36
 yy355:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8303,8 +8303,8 @@ yy355:
 	}
 	goto yy36
 yy356:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8316,8 +8316,8 @@ yy356:
 	}
 	goto yy36
 yy357:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x9F) {
 			if (yych <= 0x7F) {
@@ -8363,8 +8363,8 @@ yy357:
 		}
 	}
 yy358:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8376,8 +8376,8 @@ yy358:
 	}
 	goto yy36
 yy359:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
@@ -8416,8 +8416,8 @@ yy359:
 		}
 	}
 yy360:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8443,8 +8443,8 @@ yy360:
 		}
 	}
 yy361:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8459,8 +8459,8 @@ yy361:
 	}
 	goto yy36
 yy362:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych == 0x80) {
 			goto yy3
@@ -8486,8 +8486,8 @@ yy362:
 		}
 	}
 yy363:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x95) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8506,8 +8506,8 @@ yy363:
 		goto yy36
 	}
 yy364:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8526,8 +8526,8 @@ yy364:
 		goto yy36
 	}
 yy365:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x89) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8546,8 +8546,8 @@ yy365:
 		goto yy36
 	}
 yy366:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8559,8 +8559,8 @@ yy366:
 	}
 	goto yy36
 yy367:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8575,15 +8575,15 @@ yy367:
 	}
 	goto yy36
 yy368:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x8E) {
 		goto yy3
 	}
 	goto yy36
 yy369:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8592,8 +8592,8 @@ yy369:
 	}
 	goto yy36
 yy370:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8605,8 +8605,8 @@ yy370:
 	}
 	goto yy36
 yy371:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA6) {
 		if (yych <= 0x9F) {
 			if (yych <= 0x7F) {
@@ -8657,8 +8657,8 @@ yy371:
 		}
 	}
 yy372:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x82:
 		fallthrough
@@ -8702,8 +8702,8 @@ yy372:
 		goto yy36
 	}
 yy373:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA0) {
 		if (yych <= 0x89) {
 			if (yych <= 0x7F) {
@@ -8736,8 +8736,8 @@ yy373:
 		}
 	}
 yy374:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8746,8 +8746,8 @@ yy374:
 	}
 	goto yy36
 yy375:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8762,8 +8762,8 @@ yy375:
 	}
 	goto yy36
 yy376:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8772,8 +8772,8 @@ yy376:
 	}
 	goto yy36
 yy377:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8782,15 +8782,15 @@ yy377:
 	}
 	goto yy36
 yy378:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0xBD) {
 		goto yy3
 	}
 	goto yy36
 yy379:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8802,8 +8802,8 @@ yy379:
 	}
 	goto yy36
 yy380:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8818,8 +8818,8 @@ yy380:
 	}
 	goto yy36
 yy381:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8841,8 +8841,8 @@ yy381:
 		goto yy36
 	}
 yy382:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x94) {
 		if (yych <= 0x84) {
 			if (yych <= 0x7F) {
@@ -8884,8 +8884,8 @@ yy382:
 		}
 	}
 yy383:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8897,8 +8897,8 @@ yy383:
 	}
 	goto yy36
 yy384:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8913,8 +8913,8 @@ yy384:
 	}
 	goto yy36
 yy385:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA5) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -8933,8 +8933,8 @@ yy385:
 		goto yy36
 	}
 yy386:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		goto yy36
 	}
@@ -8949,8 +8949,8 @@ yy386:
 	}
 	goto yy36
 yy387:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -8962,8 +8962,8 @@ yy387:
 	}
 	goto yy36
 yy388:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x83) {
 			goto yy36
@@ -8982,8 +8982,8 @@ yy388:
 		goto yy36
 	}
 yy389:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8C) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9009,8 +9009,8 @@ yy389:
 		}
 	}
 yy390:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x92) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9029,8 +9029,8 @@ yy390:
 		goto yy36
 	}
 yy391:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9045,8 +9045,8 @@ yy391:
 	}
 	goto yy36
 yy392:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xA8) {
 		if (yych <= 0x8C) {
 			if (yych <= 0x7F) {
@@ -9095,8 +9095,8 @@ yy392:
 		}
 	}
 yy393:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x90) {
 		if (yych <= 0x88) {
 			if (yych <= 0x7F) {
@@ -9148,8 +9148,8 @@ yy393:
 		}
 	}
 yy394:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9171,8 +9171,8 @@ yy394:
 		goto yy36
 	}
 yy395:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x86) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9194,8 +9194,8 @@ yy395:
 		goto yy36
 	}
 yy396:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9210,8 +9210,8 @@ yy396:
 	}
 	goto yy36
 yy397:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x80) {
 		goto yy3
 	}
@@ -9223,8 +9223,8 @@ yy397:
 	}
 	goto yy36
 yy398:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		if (yych == 0x80) {
 			goto yy3
@@ -9243,8 +9243,8 @@ yy398:
 		goto yy36
 	}
 yy399:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9C) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9266,8 +9266,8 @@ yy399:
 		goto yy36
 	}
 yy400:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9279,8 +9279,8 @@ yy400:
 	}
 	goto yy36
 yy401:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9299,8 +9299,8 @@ yy401:
 		goto yy36
 	}
 yy402:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych == 0x87) {
 		goto yy3
 	}
@@ -9312,8 +9312,8 @@ yy402:
 	}
 	goto yy36
 yy403:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9325,8 +9325,8 @@ yy403:
 	}
 	goto yy36
 yy404:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x89) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9345,8 +9345,8 @@ yy404:
 		goto yy36
 	}
 yy405:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych == 0x80) {
 			goto yy3
@@ -9365,8 +9365,8 @@ yy405:
 		goto yy36
 	}
 yy406:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9385,8 +9385,8 @@ yy406:
 		goto yy36
 	}
 yy407:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xB6) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
@@ -9419,8 +9419,8 @@ yy407:
 		}
 	}
 yy408:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9F) {
 		if (yych <= 0x87) {
 			if (yych <= 0x7F) {
@@ -9453,8 +9453,8 @@ yy408:
 		}
 	}
 yy409:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x91) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9480,8 +9480,8 @@ yy409:
 		}
 	}
 yy410:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9493,8 +9493,8 @@ yy410:
 	}
 	goto yy36
 yy411:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x99) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9523,8 +9523,8 @@ yy411:
 		}
 	}
 yy412:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9539,8 +9539,8 @@ yy412:
 	}
 	goto yy36
 yy413:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9555,8 +9555,8 @@ yy413:
 	}
 	goto yy36
 yy414:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x8F) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9578,8 +9578,8 @@ yy414:
 		goto yy36
 	}
 yy415:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0xAC) {
 		if (yych <= 0xA4) {
 			goto yy36
@@ -9601,8 +9601,8 @@ yy415:
 		goto yy36
 	}
 yy416:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x84) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9624,8 +9624,8 @@ yy416:
 		goto yy36
 	}
 yy417:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x81) {
 		goto yy36
 	}
@@ -9634,8 +9634,8 @@ yy417:
 	}
 	goto yy36
 yy418:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x83) {
 		if (yych <= 0x7F) {
 			goto yy36
@@ -9657,8 +9657,8 @@ yy418:
 		goto yy36
 	}
 yy419:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9673,8 +9673,8 @@ yy419:
 	}
 	goto yy36
 yy420:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9686,8 +9686,8 @@ yy420:
 	}
 	goto yy36
 yy421:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych == 0x84) {
 			goto yy3
@@ -9703,8 +9703,8 @@ yy421:
 		goto yy36
 	}
 yy422:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x9A) {
 		if (yych <= 0x86) {
 			if (yych <= 0x7F) {
@@ -9737,8 +9737,8 @@ yy422:
 		}
 	}
 yy423:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9753,8 +9753,8 @@ yy423:
 	}
 	goto yy36
 yy424:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9766,8 +9766,8 @@ yy424:
 	}
 	goto yy36
 yy425:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9776,8 +9776,8 @@ yy425:
 	}
 	goto yy36
 yy426:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}
@@ -9792,8 +9792,8 @@ yy426:
 	}
 	goto yy36
 yy427:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	if (yych <= 0x7F) {
 		goto yy36
 	}

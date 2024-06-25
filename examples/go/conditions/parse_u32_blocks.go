@@ -10,12 +10,12 @@ var (
 	eOverflow = errors.New("overflow error")
 )
 
-func parse_u32(str string) (uint32, error) {
-	var cur, mar int
+func parse_u32(yyinput string) (uint32, error) {
+	var yycursor, yymarker int
 	result := uint64(0)
 
 	add := func(base uint64, offset byte) {
-		result = result * base + uint64(str[cur-1] - offset)
+		result = result * base + uint64(yyinput[yycursor-1] - offset)
 		if result >= u32Limit {
 			result = u32Limit
 		}
@@ -24,7 +24,7 @@ func parse_u32(str string) (uint32, error) {
 	
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0':
 		goto yy2
@@ -34,12 +34,12 @@ func parse_u32(str string) (uint32, error) {
 		goto yy1
 	}
 yy1:
-	cur += 1
+	yycursor += 1
 	{ goto err }
 yy2:
-	cur += 1
-	mar = cur
-	yych = str[cur]
+	yycursor += 1
+	yymarker = yycursor
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 'B':
 		fallthrough
@@ -55,12 +55,12 @@ yy2:
 yy3:
 	{ goto oct }
 yy4:
-	cur += 1
-	cur += -1
+	yycursor += 1
+	yycursor -= 1
 	{ goto dec }
 yy5:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1':
 		goto yy8
@@ -68,11 +68,11 @@ yy5:
 		goto yy6
 	}
 yy6:
-	cur = mar
+	yycursor = yymarker
 	goto yy3
 yy7:
-	cur += 1
-	yych = str[cur]
+	yycursor += 1
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case '0','1','2','3','4','5','6','7','8','9':
 		fallthrough
@@ -84,12 +84,12 @@ yy7:
 		goto yy6
 	}
 yy8:
-	cur += 1
-	cur += -1
+	yycursor += 1
+	yycursor -= 1
 	{ goto bin }
 yy9:
-	cur += 1
-	cur += -1
+	yycursor += 1
+	yycursor -= 1
 	{ goto hex }
 }
 
@@ -97,7 +97,7 @@ bin:
 	
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy11
@@ -107,13 +107,13 @@ bin:
 		goto yy12
 	}
 yy11:
-	cur += 1
+	yycursor += 1
 	{ goto end }
 yy12:
-	cur += 1
+	yycursor += 1
 	{ goto err }
 yy13:
-	cur += 1
+	yycursor += 1
 	{ add(2, '0'); goto bin }
 }
 
@@ -121,7 +121,7 @@ oct:
 	
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy15
@@ -131,13 +131,13 @@ oct:
 		goto yy16
 	}
 yy15:
-	cur += 1
+	yycursor += 1
 	{ goto end }
 yy16:
-	cur += 1
+	yycursor += 1
 	{ goto err }
 yy17:
-	cur += 1
+	yycursor += 1
 	{ add(8, '0'); goto oct }
 }
 
@@ -145,7 +145,7 @@ dec:
 	
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy19
@@ -155,13 +155,13 @@ dec:
 		goto yy20
 	}
 yy19:
-	cur += 1
+	yycursor += 1
 	{ goto end }
 yy20:
-	cur += 1
+	yycursor += 1
 	{ goto err }
 yy21:
-	cur += 1
+	yycursor += 1
 	{ add(10, '0'); goto dec }
 }
 
@@ -169,7 +169,7 @@ hex:
 	
 {
 	var yych byte
-	yych = str[cur]
+	yych = yyinput[yycursor]
 	switch (yych) {
 	case 0x00:
 		goto yy23
@@ -183,19 +183,19 @@ hex:
 		goto yy24
 	}
 yy23:
-	cur += 1
+	yycursor += 1
 	{ goto end }
 yy24:
-	cur += 1
+	yycursor += 1
 	{ goto err }
 yy25:
-	cur += 1
+	yycursor += 1
 	{ add(16, '0');    goto hex }
 yy26:
-	cur += 1
+	yycursor += 1
 	{ add(16, 'A'-10); goto hex }
 yy27:
-	cur += 1
+	yycursor += 1
 	{ add(16, 'a'-10); goto hex }
 }
 
