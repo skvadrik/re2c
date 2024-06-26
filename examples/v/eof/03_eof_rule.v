@@ -3,89 +3,89 @@
 // re2v $INPUT -o $OUTPUT
 
 // Expects a null-terminated string.
-fn lex(str string) int {
-    mut cur, mut mar := 0, 0
-    lim := str.len - 1 // lim points at the terminating null
+fn lex(yyinput string) int {
+    mut yycursor, mut yymarker := 0, 0
+    yylimit := yyinput.len - 1 // yylimit points at the terminating null
     mut count := 0
 
 loop: 
 //line "v/eof/03_eof_rule.v":13
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         0x27 { unsafe { goto yy5 } }
         else {
-            if lim <= cur {
+            if yylimit <= yycursor {
                 unsafe { goto yy10 }
             }
             unsafe { goto yy1 }
         }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/eof/03_eof_rule.re":21
+//line "v/eof/03_eof_rule.re":16
     return -1
 //line "v/eof/03_eof_rule.v":31
 yy3:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/03_eof_rule.re":24
+//line "v/eof/03_eof_rule.re":19
     unsafe { goto loop }
 //line "v/eof/03_eof_rule.v":42
 yy5:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     if yych >= 0x01 {
         unsafe { goto yy7 }
     }
-    if lim <= cur {
+    if yylimit <= yycursor {
         unsafe { goto yy2 }
     }
 yy6:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
 yy7:
     match yych {
         0x27 { unsafe { goto yy8 } }
         0x5C { unsafe { goto yy9 } }
         else {
-            if lim <= cur {
+            if yylimit <= yycursor {
                 unsafe { goto yy11 }
             }
             unsafe { goto yy6 }
         }
     }
 yy8:
-    cur += 1
-//line "v/eof/03_eof_rule.re":23
+    yycursor += 1
+//line "v/eof/03_eof_rule.re":18
     count += 1; unsafe { goto loop }
 //line "v/eof/03_eof_rule.v":71
 yy9:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych <= 0x00 {
-        if lim <= cur {
+        if yylimit <= yycursor {
             unsafe { goto yy11 }
         }
         unsafe { goto yy6 }
     }
     unsafe { goto yy6 }
 yy10:
-//line "v/eof/03_eof_rule.re":22
+//line "v/eof/03_eof_rule.re":17
     return count
 //line "v/eof/03_eof_rule.v":85
 yy11:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
-//line "v/eof/03_eof_rule.re":26
+//line "v/eof/03_eof_rule.re":21
 
 }
 

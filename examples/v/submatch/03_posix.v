@@ -20,8 +20,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?SemVer {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?SemVer {
+    mut yycursor, mut yymarker := 0, 0
 
     // Allocate memory for capturing parentheses (twice the number of groups).
     mut yypmatch := []int{len: yymaxnmatch * 2}
@@ -41,70 +41,70 @@ fn parse(str string) ?SemVer {
     
 //line "v/submatch/03_posix.v":43
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt1 = cur
+            yyt1 = yycursor
             unsafe { goto yy3 }
         }
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/submatch/03_posix.re":54
+//line "v/submatch/03_posix.re":47
     return none
 //line "v/submatch/03_posix.v":58
 yy3:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
         else { unsafe { goto yy2 } }
     }
 yy4:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy7 }
         }
         else { unsafe { goto yy5 } }
     }
 yy5:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
 yy6:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
         else { unsafe { goto yy5 } }
     }
 yy7:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x00 {
-            yyt3 = cur
+            yyt3 = yycursor
             yyt4 = -1
             yyt5 = -1
             unsafe { goto yy8 }
         }
         0x2E {
-            yyt3 = cur
-            yyt5 = cur
+            yyt3 = yycursor
+            yyt5 = yycursor
             unsafe { goto yy9 }
         }
         0x30...0x39 { unsafe { goto yy7 } }
         else { unsafe { goto yy5 } }
     }
 yy8:
-    cur += 1
+    yycursor += 1
     yynmatch = 4
     yypmatch[2] = yyt1
     yypmatch[4] = yyt2
@@ -112,10 +112,10 @@ yy8:
     yypmatch[6] = yyt5
     yypmatch[7] = yyt4
     yypmatch[0] = yyt1
-    yypmatch[1] = cur
+    yypmatch[1] = yycursor
     yypmatch[3] = yyt2
-    yypmatch[3] += -1
-//line "v/submatch/03_posix.re":42
+    yypmatch[3]-= 1
+//line "v/submatch/03_posix.re":35
     
             // `yynmatch` is the number of capturing groups
             if yynmatch != 4 { panic("expected 4 submatch groups") }
@@ -123,32 +123,32 @@ yy8:
             // Even `yypmatch` values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
             return SemVer {
-                major: s2n(str[yypmatch[2]..yypmatch[3]]),
-                minor: s2n(str[yypmatch[4]..yypmatch[5]]),
-                patch: if yypmatch[6] == -1 { 0 } else { s2n(str[yypmatch[6] + 1..yypmatch[7]]) }
+                major: s2n(yyinput[yypmatch[2]..yypmatch[3]]),
+                minor: s2n(yyinput[yypmatch[4]..yypmatch[5]]),
+                patch: if yypmatch[6] == -1 {0} else {s2n(yyinput[yypmatch[6] + 1..yypmatch[7]])}
             }
 
 //line "v/submatch/03_posix.v":132
 yy9:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych <= 0x00 {
         unsafe { goto yy5 }
     }
     unsafe { goto yy11 }
 yy10:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
 yy11:
     match yych {
         0x00 {
-            yyt4 = cur
+            yyt4 = yycursor
             unsafe { goto yy8 }
         }
         0x30...0x39 { unsafe { goto yy10 } }
         else { unsafe { goto yy5 } }
     }
-//line "v/submatch/03_posix.re":55
+//line "v/submatch/03_posix.re":48
 
 }
 

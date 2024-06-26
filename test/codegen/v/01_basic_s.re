@@ -3,6 +3,7 @@
 fn lex(str string) {
     mut cursor := 0
     /*!re2c
+        re2c:api = custom;
         re2c:define:YYCTYPE = u8;
         re2c:define:YYPEEK = "str[cursor]";
         re2c:define:YYSKIP = "cursor += 1";

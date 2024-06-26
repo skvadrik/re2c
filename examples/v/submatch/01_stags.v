@@ -14,8 +14,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?SemVer {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?SemVer {
+    mut yycursor, mut yymarker := 0, 0
 
     // User-defined tag variables that are available in semantic action.
     mut t1, mut t2, mut t3, mut t4, mut t5 := 0, 0, 0, 0, 0
@@ -33,102 +33,102 @@ mut yyt1 := -1
     
 //line "v/submatch/01_stags.v":35
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt1 = cur
+            yyt1 = yycursor
             unsafe { goto yy3 }
         }
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/submatch/01_stags.re":45
+//line "v/submatch/01_stags.re":38
     return none
 //line "v/submatch/01_stags.v":50
 yy3:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
         else { unsafe { goto yy2 } }
     }
 yy4:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy7 }
         }
         else { unsafe { goto yy5 } }
     }
 yy5:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
 yy6:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x2E { unsafe { goto yy4 } }
         0x30...0x39 { unsafe { goto yy6 } }
         else { unsafe { goto yy5 } }
     }
 yy7:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x00 {
-            yyt3 = cur
+            yyt3 = yycursor
             yyt4 = -1
             unsafe { goto yy8 }
         }
         0x2E {
-            yyt3 = cur
+            yyt3 = yycursor
             unsafe { goto yy9 }
         }
         0x30...0x39 { unsafe { goto yy7 } }
         else { unsafe { goto yy5 } }
     }
 yy8:
-    cur += 1
+    yycursor += 1
     t1 = yyt1
     t3 = yyt2
     t4 = yyt3
     t5 = yyt4
     t2 = yyt2
-    t2 += -1
-//line "v/submatch/01_stags.re":38
+    t2-= 1
+//line "v/submatch/01_stags.re":31
     
             return SemVer{
-                major: s2n(str[t1..t2]),
-                minor: s2n(str[t3..t4]),
-                patch: if t5 == -1 { 0 } else { s2n(str[t5..cur - 1]) }
+                major: s2n(yyinput[t1..t2]),
+                minor: s2n(yyinput[t3..t4]),
+                patch: if t5 == -1 { 0 } else { s2n(yyinput[t5..yycursor - 1]) }
             }
 
 //line "v/submatch/01_stags.v":113
 yy9:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt4 = cur
+            yyt4 = yycursor
             unsafe { goto yy10 }
         }
         else { unsafe { goto yy5 } }
     }
 yy10:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy8 } }
         0x30...0x39 { unsafe { goto yy10 } }
         else { unsafe { goto yy5 } }
     }
-//line "v/submatch/01_stags.re":46
+//line "v/submatch/01_stags.re":39
 
 }
 

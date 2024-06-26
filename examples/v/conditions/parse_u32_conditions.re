@@ -4,10 +4,10 @@
 
 const u32_lim = u64(1) << 32
 
-fn parse_u32(str string) ?u32 {
-    mut cur, mut mar := 0, 0
+fn parse_u32(yyinput string) ?u32 {
+    mut yycursor, mut yymarker := 0, 0
     mut n := u64(0)
-    mut cond := YYCONDTYPE.yycinit
+    mut yycond := YYCONDTYPE.yycinit
 
     adddgt := fn (num u64, base u64, digit u8) u64 {
         n := num * base + u64(digit)
@@ -15,15 +15,8 @@ fn parse_u32(str string) ?u32 {
     }
 
     /*!re2c
-        re2c:yyfill:enable    = 0;
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYSHIFT   = "cur += @@{shift}";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
-        re2c:define:YYGETCOND = "cond";
-        re2c:define:YYSETCOND = "cond = @@";
+        re2c:yyfill:enable = 0;
+        re2c:define:YYCTYPE = u8;
 
         <*> * { return none }
 
@@ -34,12 +27,12 @@ fn parse_u32(str string) ?u32 {
 
         <bin, oct, dec, hex> "\x00" { return if n < u32_lim { u32(n) } else { none } }
 
-        <bin> [01]  { n = adddgt(n, 2,  str[cur-1] - 48); unsafe{ goto yyc_bin } }
-        <oct> [0-7] { n = adddgt(n, 8,  str[cur-1] - 48); unsafe{ goto yyc_oct } }
-        <dec> [0-9] { n = adddgt(n, 10, str[cur-1] - 48); unsafe{ goto yyc_dec } }
-        <hex> [0-9] { n = adddgt(n, 16, str[cur-1] - 48); unsafe{ goto yyc_hex } }
-        <hex> [a-f] { n = adddgt(n, 16, str[cur-1] - 87); unsafe{ goto yyc_hex } }
-        <hex> [A-F] { n = adddgt(n, 16, str[cur-1] - 55); unsafe{ goto yyc_hex } }
+        <bin> [01]  { n = adddgt(n, 2,  yyinput[yycursor-1] - 48); unsafe{ goto yyc_bin } }
+        <oct> [0-7] { n = adddgt(n, 8,  yyinput[yycursor-1] - 48); unsafe{ goto yyc_oct } }
+        <dec> [0-9] { n = adddgt(n, 10, yyinput[yycursor-1] - 48); unsafe{ goto yyc_dec } }
+        <hex> [0-9] { n = adddgt(n, 16, yyinput[yycursor-1] - 48); unsafe{ goto yyc_hex } }
+        <hex> [a-f] { n = adddgt(n, 16, yyinput[yycursor-1] - 87); unsafe{ goto yyc_hex } }
+        <hex> [A-F] { n = adddgt(n, 16, yyinput[yycursor-1] - 55); unsafe{ goto yyc_hex } }
     */
 }
 

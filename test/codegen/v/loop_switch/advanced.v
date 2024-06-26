@@ -180,7 +180,7 @@ yyl:
             }
             2 {
                 st.state = yycmedia_type
-//line "codegen/v/loop_switch/advanced.re":188
+//line "codegen/v/loop_switch/advanced.re":189
                 return .lex_bad_packet
 //line "codegen/v/loop_switch/advanced.v":186
             }
@@ -385,7 +385,7 @@ yyl:
                 p3 = st.yytm5
                 p4 = st.yytm6
                 st.state = yycmedia_type
-//line "codegen/v/loop_switch/advanced.re":166
+//line "codegen/v/loop_switch/advanced.re":167
                 
             mt := st.buf[l1..l2].str()
             log.debug("media type: $mt")
@@ -605,7 +605,7 @@ yyl:
             }
             21 {
                 st.state = yycmedia_type
-//line "codegen/v/loop_switch/advanced.re":189
+//line "codegen/v/loop_switch/advanced.re":190
                 unsafe { goto end }
 //line "codegen/v/loop_switch/advanced.v":611
             }
@@ -640,7 +640,7 @@ yyl:
             }
             24 {
                 st.state = yycheader
-//line "codegen/v/loop_switch/advanced.re":188
+//line "codegen/v/loop_switch/advanced.re":189
                 return .lex_bad_packet
 //line "codegen/v/loop_switch/advanced.v":646
             }
@@ -927,7 +927,7 @@ yyl:
                 f1 = st.yytm1
                 f2 = st.yytm3
                 st.state = yycheader
-//line "codegen/v/loop_switch/advanced.re":180
+//line "codegen/v/loop_switch/advanced.re":181
                 
             folds := unwind(st.trie, f1, f2, st.buf)
             log.debug("folds: $folds")
@@ -1047,7 +1047,7 @@ yyl:
             }
             43 {
                 st.state = yycheader
-//line "codegen/v/loop_switch/advanced.re":189
+//line "codegen/v/loop_switch/advanced.re":190
                 unsafe { goto end }
 //line "codegen/v/loop_switch/advanced.v":1053
             }
@@ -1302,7 +1302,7 @@ yyl:
             else { panic("internal lexer error") }
         }
     }
-//line "codegen/v/loop_switch/advanced.re":190
+//line "codegen/v/loop_switch/advanced.re":191
 
 end:
     return .lex_end
@@ -1332,7 +1332,7 @@ fn test(expect Status, packets []string) {
 
 		yyt1: tag_none,
 		yyt2: tag_none,
-//line "codegen/v/loop_switch/advanced.re":214
+//line "codegen/v/loop_switch/advanced.re":215
 
         
 //line "codegen/v/loop_switch/advanced.v":1339
@@ -1347,7 +1347,7 @@ fn test(expect Status, packets []string) {
 		yytm7: mtag_root,
 		yytm8: mtag_root,
 		yytm9: mtag_root,
-//line "codegen/v/loop_switch/advanced.re":215
+//line "codegen/v/loop_switch/advanced.re":216
 
         accept: 0,
     }

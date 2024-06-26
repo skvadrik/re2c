@@ -10,20 +10,20 @@ const yymaxfill = 1
 // Expects yymaxfill-padded string.
 fn lex(str string) int {
     // Pad string with yymaxfill zeroes at the end.
-    mut buf := []u8{len: str.len + yymaxfill}
-    copy(mut &buf, str.bytes())
+    mut yyinput := []u8{len: str.len + yymaxfill}
+    copy(mut &yyinput, str.bytes())
 
-    mut cur := 0
-    lim := buf.len
+    mut yycursor := 0
+    yylimit := yyinput.len
     mut count := 0
 
 loop: 
 //line "v/eof/02_bounds_checking.v":22
     mut yych := 0
-    if lim - cur < 1 {
+    if yylimit <= yycursor {
         return -1
     }
-    yych = buf[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy1 } }
         0x20 { unsafe { goto yy3 } }
@@ -31,55 +31,55 @@ loop:
         else { unsafe { goto yy2 } }
     }
 yy1:
-    cur += 1
-//line "v/eof/02_bounds_checking.re":24
+    yycursor += 1
+//line "v/eof/02_bounds_checking.re":21
     
         // Check that it is the sentinel, not some unexpected null.
-        if cur - 1 == str.len { return count } else { return -1 }
+        if yycursor - 1 == str.len { return count } else { return -1 }
 
 //line "v/eof/02_bounds_checking.v":41
 yy2:
-    cur += 1
-//line "v/eof/02_bounds_checking.re":30
+    yycursor += 1
+//line "v/eof/02_bounds_checking.re":27
     return -1
 //line "v/eof/02_bounds_checking.v":46
 yy3:
-    cur += 1
-    if lim - cur < 1 {
+    yycursor += 1
+    if yylimit <= yycursor {
         return -1
     }
-    yych = buf[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/02_bounds_checking.re":29
+//line "v/eof/02_bounds_checking.re":26
     unsafe { goto loop }
 //line "v/eof/02_bounds_checking.v":60
 yy5:
-    cur += 1
-    if lim - cur < 1 {
+    yycursor += 1
+    if yylimit <= yycursor {
         return -1
     }
-    yych = buf[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x27 { unsafe { goto yy6 } }
         0x5C { unsafe { goto yy7 } }
         else { unsafe { goto yy5 } }
     }
 yy6:
-    cur += 1
-//line "v/eof/02_bounds_checking.re":28
+    yycursor += 1
+//line "v/eof/02_bounds_checking.re":25
     count += 1; unsafe { goto loop }
 //line "v/eof/02_bounds_checking.v":76
 yy7:
-    cur += 1
-    if lim - cur < 1 {
+    yycursor += 1
+    if yylimit <= yycursor {
         return -1
     }
     unsafe { goto yy5 }
-//line "v/eof/02_bounds_checking.re":32
+//line "v/eof/02_bounds_checking.re":29
 
 }
 

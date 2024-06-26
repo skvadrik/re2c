@@ -7,6 +7,7 @@ mut:
 }
 
 /*!re2c
+    re2c:api = custom;
     re2c:define:YYFN = ["lex", "mut st;State"];
     re2c:define:YYCTYPE = u8;
     re2c:define:YYPEEK = "st.str[st.cur]";
