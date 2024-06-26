@@ -117,6 +117,7 @@ fn lex(mut st &State) Status {
     mut p4 := mtag_root
 loop:
     /*!re2c
+        re2c:api = custom;
         re2c:eof = 0;
         re2c:tags = 1;
         re2c:tags:expression   = "st.@@";

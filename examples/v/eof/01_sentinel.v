@@ -3,14 +3,14 @@
 // re2v $INPUT -o $OUTPUT
 
 // Expect a null-terminated string.
-fn lex(str string) int {
-    mut cur := 0
+fn lex(yyinput string) int {
+    mut yycursor := 0
     mut count := 0
 
 loop: 
 //line "v/eof/01_sentinel.v":12
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy1 } }
         0x20 { unsafe { goto yy3 } }
@@ -18,38 +18,38 @@ loop:
         else { unsafe { goto yy2 } }
     }
 yy1:
-    cur += 1
-//line "v/eof/01_sentinel.re":15
+    yycursor += 1
+//line "v/eof/01_sentinel.re":13
     return count
 //line "v/eof/01_sentinel.v":25
 yy2:
-    cur += 1
-//line "v/eof/01_sentinel.re":14
+    yycursor += 1
+//line "v/eof/01_sentinel.re":12
     return -1
 //line "v/eof/01_sentinel.v":30
 yy3:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/01_sentinel.re":17
+//line "v/eof/01_sentinel.re":15
     unsafe { goto loop }
 //line "v/eof/01_sentinel.v":41
 yy5:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x61...0x7A { unsafe { goto yy5 } }
         else { unsafe { goto yy6 } }
     }
 yy6:
-//line "v/eof/01_sentinel.re":16
+//line "v/eof/01_sentinel.re":14
     count += 1; unsafe { goto loop }
 //line "v/eof/01_sentinel.v":52
-//line "v/eof/01_sentinel.re":18
+//line "v/eof/01_sentinel.re":16
 
 }
 

@@ -15,8 +15,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?SemVer {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?SemVer {
+    mut yycursor, mut yymarker := 0, 0
 
     // Allocate memory for capturing parentheses (twice the number of groups).
     mut yypmatch := []int{len: yymaxnmatch * 2}
@@ -27,14 +27,7 @@ fn parse(str string) ?SemVer {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "str[cur]";
-        re2c:define:YYSKIP      = "cur += 1";
-        re2c:define:YYBACKUP    = "mar = cur";
-        re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSTAGP     = "@@{tag} = cur";
-        re2c:define:YYSTAGN     = "@@{tag} = -1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
+        re2c:define:YYCTYPE = u8;
         re2c:posix-captures = 1;
 
         num = [0-9]+;
@@ -46,9 +39,9 @@ fn parse(str string) ?SemVer {
             // Even `yypmatch` values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
             return SemVer {
-                major: s2n(str[yypmatch[2]..yypmatch[3]]),
-                minor: s2n(str[yypmatch[4]..yypmatch[5]]),
-                patch: if yypmatch[6] == -1 { 0 } else { s2n(str[yypmatch[6] + 1..yypmatch[7]]) }
+                major: s2n(yyinput[yypmatch[2]..yypmatch[3]]),
+                minor: s2n(yyinput[yypmatch[4]..yypmatch[5]]),
+                patch: if yypmatch[6] == -1 {0} else {s2n(yyinput[yypmatch[6] + 1..yypmatch[7]])}
             }
         }
         * { return none }

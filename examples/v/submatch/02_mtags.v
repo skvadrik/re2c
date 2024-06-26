@@ -55,8 +55,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?[]int {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?[]int {
+    mut yycursor, mut yymarker := 0, 0
     mut trie := []MtagElem{}
 
     // User-defined tag variables that are available in semantic action.
@@ -80,98 +80,98 @@ mut yyt1 := tag_none
     
 //line "v/submatch/02_mtags.v":82
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yyt1 = cur
+            yyt1 = yycursor
             unsafe { goto yy3 }
         }
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/submatch/02_mtags.re":89
+//line "v/submatch/02_mtags.re":83
     return none
 //line "v/submatch/02_mtags.v":97
 yy3:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x00 {
             yytm4 = add_mtag(mut &trie, yytm4, tag_none)
             yytm3 = add_mtag(mut &trie, yytm3, tag_none)
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy4 }
         }
         0x2E {
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy5 }
         }
         0x30...0x39 { unsafe { goto yy7 } }
         else { unsafe { goto yy2 } }
     }
 yy4:
-    cur += 1
+    yycursor += 1
     t1 = yyt1
     t2 = yyt2
     t3 = yytm3
     t4 = yytm4
-//line "v/submatch/02_mtags.re":83
+//line "v/submatch/02_mtags.re":77
     
             mut ver := []int{}
-            ver = arrays.concat(ver, s2n(str[t1..t2]))
-            ver = arrays.append(ver, unwind(trie, t3, t4, str))
+            ver = arrays.concat(ver, s2n(yyinput[t1..t2]))
+            ver = arrays.append(ver, unwind(trie, t3, t4, yyinput))
             return ver
 
 //line "v/submatch/02_mtags.v":129
 yy5:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
-            yytm3 = add_mtag(mut &trie, yytm3, cur)
+            yytm3 = add_mtag(mut &trie, yytm3, yycursor)
             unsafe { goto yy8 }
         }
         else { unsafe { goto yy6 } }
     }
 yy6:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
 yy7:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x00 {
             yytm4 = add_mtag(mut &trie, yytm4, tag_none)
             yytm3 = add_mtag(mut &trie, yytm3, tag_none)
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy4 }
         }
         0x2E {
-            yyt2 = cur
+            yyt2 = yycursor
             unsafe { goto yy5 }
         }
         0x30...0x39 { unsafe { goto yy7 } }
         else { unsafe { goto yy6 } }
     }
 yy8:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x00 {
-            yytm4 = add_mtag(mut &trie, yytm4, cur)
+            yytm4 = add_mtag(mut &trie, yytm4, yycursor)
             unsafe { goto yy4 }
         }
         0x2E {
-            yytm4 = add_mtag(mut &trie, yytm4, cur)
+            yytm4 = add_mtag(mut &trie, yytm4, yycursor)
             unsafe { goto yy5 }
         }
         0x30...0x39 { unsafe { goto yy8 } }
         else { unsafe { goto yy6 } }
     }
-//line "v/submatch/02_mtags.re":90
+//line "v/submatch/02_mtags.re":84
 
 }
 

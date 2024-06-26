@@ -53,8 +53,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?[]int {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?[]int {
+    mut yycursor, mut yymarker := 0, 0
     mut trie := []MtagElem{}
 
     // User-defined tag variables that are available in semantic action.
@@ -68,22 +68,16 @@ fn parse(str string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE   = byte;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
-        re2c:define:YYSTAGP   = "@@ = cur";
-        re2c:define:YYSTAGN   = "@@ = tag_none";
-        re2c:define:YYMTAGP   = "@@ = add_mtag(mut &trie, @@, cur)";
-        re2c:define:YYMTAGN   = "@@ = add_mtag(mut &trie, @@, tag_none)";
+        re2c:define:YYCTYPE = byte;
+        re2c:define:YYMTAGP = "@@ = add_mtag(mut &trie, @@, yycursor)";
+        re2c:define:YYMTAGN = "@@ = add_mtag(mut &trie, @@, tag_none)";
 
         num = [0-9]+;
 
         @t1 num @t2 ("." #t3 num #t4)* [\x00] {
             mut ver := []int{}
-            ver = arrays.concat(ver, s2n(str[t1..t2]))
-            ver = arrays.append(ver, unwind(trie, t3, t4, str))
+            ver = arrays.concat(ver, s2n(yyinput[t1..t2]))
+            ver = arrays.append(ver, unwind(trie, t3, t4, yyinput))
             return ver
         }
         * { return none }

@@ -1,19 +1,14 @@
 // re2v $INPUT -o $OUTPUT
 
 // Expects a null-terminated string.
-fn lex(str string) int {
-    mut cur, mut mar := 0, 0
-    lim := str.len - 1 // lim points at the terminating null
+fn lex(yyinput string) int {
+    mut yycursor, mut yymarker := 0, 0
+    yylimit := yyinput.len - 1 // yylimit points at the terminating null
     mut count := 0
 
 loop: /*!re2c
     re2c:eof = 0;
-    re2c:define:YYCTYPE    = u8;
-    re2c:define:YYPEEK     = "str[cur]";
-    re2c:define:YYSKIP     = "cur += 1";
-    re2c:define:YYBACKUP   = "mar = cur";
-    re2c:define:YYRESTORE  = "cur = mar";
-    re2c:define:YYLESSTHAN = "lim <= cur";
+    re2c:define:YYCTYPE = u8;
     re2c:yyfill:enable = 0;
 
     str = ['] ([^'\\] | [\\][^])* ['];

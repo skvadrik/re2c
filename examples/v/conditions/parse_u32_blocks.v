@@ -3,8 +3,8 @@
 
 const u32_lim = u64(1) << 32
 
-fn parse_u32(str string) ?u32 {
-    mut cur, mut mar := 0, 0
+fn parse_u32(yyinput string) ?u32 {
+    mut yycursor, mut yymarker := 0, 0
     mut n := u64(0)
     mut yych := 0
 
@@ -13,19 +13,19 @@ fn parse_u32(str string) ?u32 {
         return if n >= u32_lim { u32_lim } else { n }
     }
     
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x30 { unsafe { goto yy2 } }
         0x31...0x39 { unsafe { goto yy4 } }
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
     return none
 yy2:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x42, 0x62 { unsafe { goto yy5 } }
         0x58, 0x78 { unsafe { goto yy7 } }
@@ -34,92 +34,92 @@ yy2:
 yy3:
     unsafe{ goto oct }
 yy4:
-    cur += 1
-    cur += -1
+    yycursor += 1
+    yycursor -= 1
     unsafe{ goto dec }
 yy5:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x31 { unsafe { goto yy8 } }
         else { unsafe { goto yy6 } }
     }
 yy6:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy3 }
 yy7:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x30...0x39, 0x41...0x46, 0x61...0x66 { unsafe { goto yy9 } }
         else { unsafe { goto yy6 } }
     }
 yy8:
-    cur += 1
-    cur += -1
+    yycursor += 1
+    yycursor -= 1
     unsafe{ goto bin }
 yy9:
-    cur += 1
-    cur += -1
+    yycursor += 1
+    yycursor -= 1
     unsafe{ goto hex }
 
 bin:
     
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy11 } }
         0x30...0x31 { unsafe { goto yy13 } }
         else { unsafe { goto yy12 } }
     }
 yy11:
-    cur += 1
+    yycursor += 1
     unsafe{ goto end }
 yy12:
-    cur += 1
+    yycursor += 1
     return none
 yy13:
-    cur += 1
-    n = adddgt(n, 2, str[cur-1] - 48); unsafe{ goto bin }
+    yycursor += 1
+    n = adddgt(n, 2, yyinput[yycursor-1] - 48); unsafe{ goto bin }
 
 oct:
     
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy15 } }
         0x30...0x37 { unsafe { goto yy17 } }
         else { unsafe { goto yy16 } }
     }
 yy15:
-    cur += 1
+    yycursor += 1
     unsafe{ goto end }
 yy16:
-    cur += 1
+    yycursor += 1
     return none
 yy17:
-    cur += 1
-    n = adddgt(n, 8, str[cur-1] - 48); unsafe{ goto oct }
+    yycursor += 1
+    n = adddgt(n, 8, yyinput[yycursor-1] - 48); unsafe{ goto oct }
 
 dec:
     
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy19 } }
         0x30...0x39 { unsafe { goto yy21 } }
         else { unsafe { goto yy20 } }
     }
 yy19:
-    cur += 1
+    yycursor += 1
     unsafe{ goto end }
 yy20:
-    cur += 1
+    yycursor += 1
     return none
 yy21:
-    cur += 1
-    n = adddgt(n, 10, str[cur-1] - 48); unsafe{ goto dec }
+    yycursor += 1
+    n = adddgt(n, 10, yyinput[yycursor-1] - 48); unsafe{ goto dec }
 
 hex:
     
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy23 } }
         0x30...0x39 { unsafe { goto yy25 } }
@@ -128,20 +128,20 @@ hex:
         else { unsafe { goto yy24 } }
     }
 yy23:
-    cur += 1
+    yycursor += 1
     unsafe{ goto end }
 yy24:
-    cur += 1
+    yycursor += 1
     return none
 yy25:
-    cur += 1
-    n = adddgt(n, 16, str[cur-1] - 48); unsafe{ goto hex }
+    yycursor += 1
+    n = adddgt(n, 16, yyinput[yycursor-1] - 48); unsafe{ goto hex }
 yy26:
-    cur += 1
-    n = adddgt(n, 16, str[cur-1] - 55); unsafe{ goto hex }
+    yycursor += 1
+    n = adddgt(n, 16, yyinput[yycursor-1] - 55); unsafe{ goto hex }
 yy27:
-    cur += 1
-    n = adddgt(n, 16, str[cur-1] - 87); unsafe{ goto hex }
+    yycursor += 1
+    n = adddgt(n, 16, yyinput[yycursor-1] - 87); unsafe{ goto hex }
 
 end:
     if n < u32_lim {

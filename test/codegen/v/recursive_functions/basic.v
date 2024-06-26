@@ -20,7 +20,7 @@ fn yy0(mut st State) {
 }
 
 fn yy1(mut st State) {
-//line "codegen/v/recursive_functions/basic.re":19
+//line "codegen/v/recursive_functions/basic.re":20
     panic("error!")
 //line "codegen/v/recursive_functions/basic.v":26
 }
@@ -37,7 +37,7 @@ fn yy2(mut st State) {
 }
 
 fn yy3(mut st State) {
-//line "codegen/v/recursive_functions/basic.re":18
+//line "codegen/v/recursive_functions/basic.re":19
     return
 //line "codegen/v/recursive_functions/basic.v":43
 }
@@ -46,7 +46,7 @@ fn lex(mut st State) {
     yy0(mut st)
 }
 
-//line "codegen/v/recursive_functions/basic.re":20
+//line "codegen/v/recursive_functions/basic.re":21
 
 
 fn main() {

@@ -1,11 +1,9 @@
 // re2v $INPUT -o $OUTPUT -i
 
-fn lex(str string) {
-    mut cursor := 0
+fn lex(yyinput string) {
+    mut yycursor := 0
     /*!re2c
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK = "str[cursor]";
-        re2c:define:YYSKIP = "cursor += 1";
         re2c:yyfill:enable = 0;
 
         number = [1-9][0-9]*;

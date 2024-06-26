@@ -26,7 +26,7 @@ yyl:
                 }
             }
             1 {
-//line "codegen/v/loop_switch/basic.re":14
+//line "codegen/v/loop_switch/basic.re":15
                 panic("error!")
 //line "codegen/v/loop_switch/basic.v":32
             }
@@ -45,14 +45,14 @@ yyl:
                 }
             }
             3 {
-//line "codegen/v/loop_switch/basic.re":13
+//line "codegen/v/loop_switch/basic.re":14
                 return
 //line "codegen/v/loop_switch/basic.v":51
             }
             else { panic("internal lexer error") }
         }
     }
-//line "codegen/v/loop_switch/basic.re":15
+//line "codegen/v/loop_switch/basic.re":16
 
 }
 

@@ -97,5 +97,5 @@ fn main() {
     assert_eq(lex_captures("\0"), -1)
     assert_eq(lex_captures("a\0"), 0)
 }
-codegen/v/nested_fixed_tags.re:21:25: warning: rule matches empty string [-Wmatch-empty-string]
-codegen/v/nested_fixed_tags.re:34:17: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/v/nested_fixed_tags.re:22:25: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/v/nested_fixed_tags.re:35:17: warning: rule matches empty string [-Wmatch-empty-string]

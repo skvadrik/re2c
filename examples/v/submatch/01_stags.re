@@ -12,8 +12,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
     return n
 }
 
-fn parse(str string) ?SemVer {
-    mut cur, mut mar := 0, 0
+fn parse(yyinput string) ?SemVer {
+    mut yycursor, mut yymarker := 0, 0
 
     // User-defined tag variables that are available in semantic action.
     mut t1, mut t2, mut t3, mut t4, mut t5 := 0, 0, 0, 0, 0
@@ -23,23 +23,16 @@ fn parse(str string) ?SemVer {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "str[cur]";
-        re2c:define:YYSKIP      = "cur += 1";
-        re2c:define:YYBACKUP    = "mar = cur";
-        re2c:define:YYRESTORE   = "cur = mar";
-        re2c:define:YYSTAGP     = "@@{tag} = cur";
-        re2c:define:YYSTAGN     = "@@{tag} = -1";
-        re2c:define:YYSHIFTSTAG = "@@{tag} += @@{shift}";
+        re2c:define:YYCTYPE = u8;
         re2c:tags = 1;
 
         num = [0-9]+;
 
         @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\x00] {
             return SemVer{
-                major: s2n(str[t1..t2]),
-                minor: s2n(str[t3..t4]),
-                patch: if t5 == -1 { 0 } else { s2n(str[t5..cur - 1]) }
+                major: s2n(yyinput[t1..t2]),
+                minor: s2n(yyinput[t3..t4]),
+                patch: if t5 == -1 { 0 } else { s2n(yyinput[t5..yycursor - 1]) }
             }
         }
         * { return none }

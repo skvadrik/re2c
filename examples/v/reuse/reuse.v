@@ -5,139 +5,139 @@
 // This example supports multiple input encodings: UTF-8 and UTF-32.
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding-specific configurations.
-//line "v/reuse/reuse.re":15
+//line "v/reuse/reuse.re":11
 
 
-fn lex_utf8(str []u8) int {
-    mut cur, mut mar := 0, 0
+fn lex_utf8(yyinput []u8) int {
+    mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/reuse.v":15
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0xE2 { unsafe { goto yy3 } }
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/reuse/reuse.re":14
+//line "v/reuse/reuse.re":10
     return 1
 //line "v/reuse/reuse.v":27
 yy3:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x88 { unsafe { goto yy4 } }
         else { unsafe { goto yy2 } }
     }
 yy4:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x80 { unsafe { goto yy6 } }
         else { unsafe { goto yy5 } }
     }
 yy5:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
 yy6:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x78 { unsafe { goto yy7 } }
         else { unsafe { goto yy5 } }
     }
 yy7:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy8 } }
         else { unsafe { goto yy5 } }
     }
 yy8:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0xE2 { unsafe { goto yy9 } }
         else { unsafe { goto yy5 } }
     }
 yy9:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x88 { unsafe { goto yy10 } }
         else { unsafe { goto yy5 } }
     }
 yy10:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x83 { unsafe { goto yy11 } }
         else { unsafe { goto yy5 } }
     }
 yy11:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x79 { unsafe { goto yy12 } }
         else { unsafe { goto yy5 } }
     }
 yy12:
-    cur += 1
-//line "v/reuse/reuse.re":13
+    yycursor += 1
+//line "v/reuse/reuse.re":9
     return 0
 //line "v/reuse/reuse.v":92
-//line "v/reuse/reuse.re":22
+//line "v/reuse/reuse.re":18
 
 }
 
-fn lex_utf32(str []u32) int {
-    mut cur, mut mar := 0, 0
+fn lex_utf32(yyinput []u32) int {
+    mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/reuse.v":100
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     if yych == 0x00002200 {
         unsafe { goto yy15 }
     }
-    cur += 1
+    yycursor += 1
 yy14:
-//line "v/reuse/reuse.re":14
+//line "v/reuse/reuse.re":10
     return 1
 //line "v/reuse/reuse.v":110
 yy15:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     if yych != 0x00000078 {
         unsafe { goto yy14 }
     }
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych == 0x00000020 {
         unsafe { goto yy17 }
     }
 yy16:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy14 }
 yy17:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych != 0x00002203 {
         unsafe { goto yy16 }
     }
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     if yych != 0x00000079 {
         unsafe { goto yy16 }
     }
-    cur += 1
-//line "v/reuse/reuse.re":13
+    yycursor += 1
+//line "v/reuse/reuse.re":9
     return 0
 //line "v/reuse/reuse.v":140
-//line "v/reuse/reuse.re":30
+//line "v/reuse/reuse.re":26
 
 }
 

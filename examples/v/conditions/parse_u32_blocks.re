@@ -2,8 +2,8 @@
 
 const u32_lim = u64(1) << 32
 
-fn parse_u32(str string) ?u32 {
-    mut cur, mut mar := 0, 0
+fn parse_u32(yyinput string) ?u32 {
+    mut yycursor, mut yymarker := 0, 0
     mut n := u64(0)
     mut yych := 0
 
@@ -13,12 +13,7 @@ fn parse_u32(str string) ?u32 {
     }
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "str[cur]";
-        re2c:define:YYSKIP    = "cur += 1";
-        re2c:define:YYSHIFT   = "cur += @@{shift}";
-        re2c:define:YYBACKUP  = "mar = cur";
-        re2c:define:YYRESTORE = "cur = mar";
+        re2c:define:YYCTYPE = u8;
         re2c:variable:yych:emit = 0;
 
         end = "\x00";
@@ -32,27 +27,27 @@ fn parse_u32(str string) ?u32 {
 bin:
     /*!re2c
         end   { unsafe{ goto end } }
-        [01]  { n = adddgt(n, 2, str[cur-1] - 48); unsafe{ goto bin } }
+        [01]  { n = adddgt(n, 2, yyinput[yycursor-1] - 48); unsafe{ goto bin } }
         *     { return none }
     */
 oct:
     /*!re2c
         end   { unsafe{ goto end } }
-        [0-7] { n = adddgt(n, 8, str[cur-1] - 48); unsafe{ goto oct } }
+        [0-7] { n = adddgt(n, 8, yyinput[yycursor-1] - 48); unsafe{ goto oct } }
         *     { return none }
     */
 dec:
     /*!re2c
         end   { unsafe{ goto end } }
-        [0-9] { n = adddgt(n, 10, str[cur-1] - 48); unsafe{ goto dec } }
+        [0-9] { n = adddgt(n, 10, yyinput[yycursor-1] - 48); unsafe{ goto dec } }
         *     { return none }
     */
 hex:
     /*!re2c
         end   { unsafe{ goto end } }
-        [0-9] { n = adddgt(n, 16, str[cur-1] - 48); unsafe{ goto hex } }
-        [a-f] { n = adddgt(n, 16, str[cur-1] - 87); unsafe{ goto hex } }
-        [A-F] { n = adddgt(n, 16, str[cur-1] - 55); unsafe{ goto hex } }
+        [0-9] { n = adddgt(n, 16, yyinput[yycursor-1] - 48); unsafe{ goto hex } }
+        [a-f] { n = adddgt(n, 16, yyinput[yycursor-1] - 87); unsafe{ goto hex } }
+        [A-F] { n = adddgt(n, 16, yyinput[yycursor-1] - 55); unsafe{ goto hex } }
         *     { return none }
     */
 end:

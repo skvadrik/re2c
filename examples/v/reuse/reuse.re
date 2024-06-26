@@ -5,25 +5,21 @@
 // blocks add only encoding-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK    = "str[cur]";
-    re2c:define:YYSKIP    = "cur += 1";
-    re2c:define:YYBACKUP  = "mar = cur";
-    re2c:define:YYRESTORE = "cur = mar";
 
     "∀x ∃y" { return 0 }
     *       { return 1 }
 */
 
-fn lex_utf8(str []u8) int {
-    mut cur, mut mar := 0, 0
+fn lex_utf8(yyinput []u8) int {
+    mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf8 = 1;
         re2c:define:YYCTYPE = u8;
     */
 }
 
-fn lex_utf32(str []u32) int {
-    mut cur, mut mar := 0, 0
+fn lex_utf32(yyinput []u32) int {
+    mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf32 = 1;
         re2c:define:YYCTYPE = u32;

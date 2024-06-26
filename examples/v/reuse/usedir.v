@@ -20,12 +20,12 @@ enum What {
 //line "v/reuse/usedir.re":23
 
 
-fn lex(str string) What {
-    mut cur, mut mar := 0, 0
+fn lex(yyinput string) What {
+    mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/usedir.v":27
     mut yych := 0
-    yych = str[cur]
+    yych = yyinput[yycursor]
     match yych {
         0x65 { unsafe { goto yy3 } }
         0x68 { unsafe { goto yy4 } }
@@ -35,177 +35,177 @@ fn lex(str string) What {
         else { unsafe { goto yy1 } }
     }
 yy1:
-    cur += 1
+    yycursor += 1
 yy2:
-//line "v/reuse/usedir.re":37
+//line "v/reuse/usedir.re":33
     return .dunno
 //line "v/reuse/usedir.v":43
 yy3:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x65 { unsafe { goto yy8 } }
         else { unsafe { goto yy2 } }
     }
 yy4:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x61 { unsafe { goto yy10 } }
         else { unsafe { goto yy2 } }
     }
 yy5:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x61 { unsafe { goto yy11 } }
         else { unsafe { goto yy2 } }
     }
 yy6:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x65 { unsafe { goto yy12 } }
         else { unsafe { goto yy2 } }
     }
 yy7:
-    cur += 1
-    mar = cur
-    yych = str[cur]
+    yycursor += 1
+    yymarker = yycursor
+    yych = yyinput[yycursor]
     match yych {
         0x61 { unsafe { goto yy13 } }
         else { unsafe { goto yy2 } }
     }
 yy8:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6C { unsafe { goto yy14 } }
         else { unsafe { goto yy9 } }
     }
 yy9:
-    cur = mar
+    yycursor = yymarker
     unsafe { goto yy2 }
 yy10:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x64 { unsafe { goto yy15 } }
         else { unsafe { goto yy9 } }
     }
 yy11:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x67 { unsafe { goto yy16 } }
         else { unsafe { goto yy9 } }
     }
 yy12:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x64 { unsafe { goto yy17 } }
         else { unsafe { goto yy9 } }
     }
 yy13:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6C { unsafe { goto yy18 } }
         else { unsafe { goto yy9 } }
     }
 yy14:
-    cur += 1
+    yycursor += 1
 //line "v/reuse/usedir.re":22
     return .fish
 //line "v/reuse/usedir.v":126
 yy15:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x64 { unsafe { goto yy19 } }
         else { unsafe { goto yy9 } }
     }
 yy16:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x65 { unsafe { goto yy20 } }
         else { unsafe { goto yy9 } }
     }
 yy17:
-    cur += 1
+    yycursor += 1
 //line "v/reuse/usedir.re":17
     return .color
 //line "v/reuse/usedir.v":145
 yy18:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6D { unsafe { goto yy21 } }
         else { unsafe { goto yy9 } }
     }
 yy19:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6F { unsafe { goto yy22 } }
         else { unsafe { goto yy9 } }
     }
 yy20:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6E { unsafe { goto yy23 } }
         else { unsafe { goto yy9 } }
     }
 yy21:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6F { unsafe { goto yy24 } }
         else { unsafe { goto yy9 } }
     }
 yy22:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x63 { unsafe { goto yy25 } }
         else { unsafe { goto yy9 } }
     }
 yy23:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x74 { unsafe { goto yy26 } }
         else { unsafe { goto yy9 } }
     }
 yy24:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6E { unsafe { goto yy14 } }
         else { unsafe { goto yy9 } }
     }
 yy25:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x6B { unsafe { goto yy14 } }
         else { unsafe { goto yy9 } }
     }
 yy26:
-    cur += 1
-    yych = str[cur]
+    yycursor += 1
+    yych = yyinput[yycursor]
     match yych {
         0x61 { unsafe { goto yy17 } }
         else { unsafe { goto yy9 } }
     }
-//line "v/reuse/usedir.re":38
+//line "v/reuse/usedir.re":34
 
 }
 
