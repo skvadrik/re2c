@@ -19,17 +19,14 @@ enum Ans { Color, Fish, Dunno }
     "haddock" | "salmon" | "eel" { return Ans::Fish; }
 */
 
-fn lex(str: &[u8]) -> Ans {
-    assert!(str.len() > 0); // expect nonempty input
+fn lex(yyinput: &[u8]) -> Ans {
+    assert!(yyinput.len() > 0); // expect nonempty input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
     /*!re2c
+        re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:define:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;

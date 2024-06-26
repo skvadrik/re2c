@@ -10,10 +10,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<SemVer> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<SemVer> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
 
     // User-defined tag variables that are available in semantic action.
     let (t1, mut t2, t3, t4, t5);
@@ -30,16 +30,16 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt1 = cur;
-						cur += 1;
+						yyt1 = yycursor;
+						yycursor += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
 					_ => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 1;
 						continue 'yyl;
 					}
@@ -51,16 +51,16 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 			}
 			2 => { return None; },
 			3 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x2E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -71,11 +71,11 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			4 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -86,20 +86,20 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			5 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 2;
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x2E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -110,23 +110,23 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			7 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
-						yyt3 = cur;
-						yyt4 = NONE;
-						cur += 1;
+						yyt3 = yycursor;
+						yyt4 = usize::MAX;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					0x2E => {
-						yyt3 = cur;
-						cur += 1;
+						yyt3 = yycursor;
+						yycursor += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -142,20 +142,20 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				t4 = yyt3;
 				t5 = yyt4;
 				t2 = yyt2;
-				t2 -= --1isize as usize;
+				t2 -= 1;
 				{
-            let major = s2n(&str[t1..t2]);
-            let minor = s2n(&str[t3..t4]);
-            let patch = if t5 != NONE {s2n(&str[t5..cur - 1])} else {0};
+            let major = s2n(&yyinput[t1..t2]);
+            let minor = s2n(&yyinput[t3..t4]);
+            let patch = if t5 != NONE {s2n(&yyinput[t5..yycursor - 1])} else {0};
             return Some(SemVer(major, minor, patch));
         }
 			}
 			9 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt4 = cur;
-						cur += 1;
+						yyt4 = yycursor;
+						yycursor += 1;
 						yystate = 10;
 						continue 'yyl;
 					}
@@ -166,15 +166,15 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			10 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 10;
 						continue 'yyl;
 					}

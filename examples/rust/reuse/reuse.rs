@@ -6,9 +6,9 @@
 // blocks add only encoding-specific configurations.
 
 
-fn lex_utf8(str: &[u8]) -> Option<usize> {
-    assert!(str.len() > 0); // expect nonempty input
-    let (mut cur, mut mar) = (0, 0);
+fn lex_utf8(yyinput: &[u8]) -> Option<usize> {
+    assert!(yyinput.len() > 0); // expect nonempty input
+    let (mut yycursor, mut yymarker) = (0, 0);
     
 {
 	#[allow(unused_assignments)]
@@ -17,8 +17,8 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0xE2 => {
 						yystate = 3;
@@ -36,11 +36,11 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 			}
 			2 => { return None; },
 			3 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x88 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
@@ -51,10 +51,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			4 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x80 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -65,15 +65,15 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			5 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 2;
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x78 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -84,10 +84,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			7 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x20 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
@@ -98,10 +98,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			8 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0xE2 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
@@ -112,10 +112,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			9 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x88 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 10;
 						continue 'yyl;
 					}
@@ -126,10 +126,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			10 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x83 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 11;
 						continue 'yyl;
 					}
@@ -140,10 +140,10 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 				}
 			}
 			11 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x79 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 12;
 						continue 'yyl;
 					}
@@ -153,7 +153,7 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 					}
 				}
 			}
-			12 => { return Some(cur); },
+			12 => { return Some(yycursor); },
 			_ => panic!("internal lexer error"),
 		}
 	}
@@ -161,9 +161,9 @@ fn lex_utf8(str: &[u8]) -> Option<usize> {
 
 }
 
-fn lex_utf32(str: &[u32]) -> Option<usize> {
-    assert!(str.len() > 0); // expect nonempty input
-    let (mut cur, mut mar) = (0, 0);
+fn lex_utf32(yyinput: &[u32]) -> Option<usize> {
+    assert!(yyinput.len() > 0); // expect nonempty input
+    let (mut yycursor, mut yymarker) = (0, 0);
     
 {
 	#[allow(unused_assignments)]
@@ -172,8 +172,8 @@ fn lex_utf32(str: &[u32]) -> Option<usize> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				if yych == 0x00002200 {
 					yystate = 2;
 					continue 'yyl;
@@ -183,16 +183,16 @@ fn lex_utf32(str: &[u32]) -> Option<usize> {
 			}
 			1 => { return None; },
 			2 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				if yych != 0x00000078 {
 					yystate = 1;
 					continue 'yyl;
 				}
-				cur += 1;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yycursor += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				if yych == 0x00000020 {
-					cur += 1;
+					yycursor += 1;
 					yystate = 4;
 					continue 'yyl;
 				}
@@ -200,24 +200,24 @@ fn lex_utf32(str: &[u32]) -> Option<usize> {
 				continue 'yyl;
 			}
 			3 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 1;
 				continue 'yyl;
 			}
 			4 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				if yych != 0x00002203 {
 					yystate = 3;
 					continue 'yyl;
 				}
-				cur += 1;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yycursor += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				if yych != 0x00000079 {
 					yystate = 3;
 					continue 'yyl;
 				}
-				cur += 1;
-				{ return Some(cur); }
+				yycursor += 1;
+				{ return Some(yycursor); }
 			}
 			_ => panic!("internal lexer error"),
 		}

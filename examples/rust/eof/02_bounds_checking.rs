@@ -6,15 +6,15 @@ const YYMAXFILL: usize = 1;
 
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
-    let mut cur = 0;
-    let lim = s.len() + YYMAXFILL;
+    let mut yycursor = 0;
+    let yylimit = s.len() + YYMAXFILL;
 
     // Copy string to a buffer and add YYMAXFILL zero padding.
-    let mut buf = Vec::with_capacity(lim);
-    buf.extend_from_slice(s);
-    buf.extend([0 as u8; YYMAXFILL]);
+    let mut yyinput = Vec::with_capacity(yylimit);
+    yyinput.extend_from_slice(s);
+    yyinput.extend([0 as u8; YYMAXFILL]);
 
-    'lex: loop {
+    'lex: loop { 
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
@@ -22,11 +22,11 @@ fn lex(s: &[u8]) -> isize {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				if cur + 1 > lim {
+				if yylimit <= yycursor {
 					return -1;
 				}
-				yych = unsafe {*buf.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x00 => {
 						yystate = 1;
@@ -48,17 +48,17 @@ fn lex(s: &[u8]) -> isize {
 			}
 			1 => {
             // Check that it is the sentinel, not some unexpected null.
-            return if cur == s.len() + 1 { count } else { -1 }
+            return if yycursor == s.len() + 1 { count } else { -1 }
         },
 			2 => { return -1; },
 			3 => {
-				if cur + 1 > lim {
+				if yylimit <= yycursor {
 					return -1;
 				}
-				yych = unsafe {*buf.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x20 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
@@ -70,11 +70,11 @@ fn lex(s: &[u8]) -> isize {
 			}
 			4 => { continue 'lex; },
 			5 => {
-				if cur + 1 > lim {
+				if yylimit <= yycursor {
 					return -1;
 				}
-				yych = unsafe {*buf.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x27 => {
 						yystate = 6;
@@ -92,10 +92,10 @@ fn lex(s: &[u8]) -> isize {
 			}
 			6 => { count += 1; continue 'lex; },
 			7 => {
-				if cur + 1 > lim {
+				if yylimit <= yycursor {
 					return -1;
 				}
-				cur += 1;
+				yycursor += 1;
 				yystate = 5;
 				continue 'yyl;
 			}

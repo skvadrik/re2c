@@ -48,10 +48,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<Ver> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<Ver> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
     let mut mt: MtagTrie = Vec::new();
 
     // User-defined tag variables that are available in semantic action.
@@ -62,15 +62,10 @@ fn parse(str: &[u8]) -> Option<Ver> {
     /*!mtags:re2c format = 'let mut @@ = MTAG_ROOT;'; */
 
     /*!re2c
-        re2c:define:YYCTYPE   = u8;
-        re2c:define:YYPEEK    = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP    = "cur += 1;";
-        re2c:define:YYBACKUP  = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
-        re2c:define:YYSTAGP   = "@@ = cur;";
-        re2c:define:YYSTAGN   = "@@ = NONE;";
-        re2c:define:YYMTAGP   = "@@ = add_mtag(&mut mt, @@, cur);";
-        re2c:define:YYMTAGN   = "@@ = add_mtag(&mut mt, @@, NONE);";
+        re2c:api = default;
+        re2c:define:YYCTYPE = u8;
+        re2c:define:YYMTAGP = "@@ = add_mtag(&mut mt, @@, yycursor);";
+        re2c:define:YYMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
@@ -78,8 +73,8 @@ fn parse(str: &[u8]) -> Option<Ver> {
 
         @t1 num @t2 ("." #t3 num #t4)* [\x00] {
             let mut ver: Ver = Vec::new();
-            ver.push(s2n(&str[t1..t2]));
-            unwind(&mt, t3, t4, str, &mut ver);
+            ver.push(s2n(&yyinput[t1..t2]));
+            unwind(&mt, t3, t4, yyinput, &mut ver);
             return Some(ver);
         }
         * { return None; }

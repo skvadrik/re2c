@@ -14,10 +14,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<SemVer> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<SemVer> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
 
     // Allocate memory for capturing parentheses (twice the number of groups).
     let yynmatch: usize;
@@ -35,16 +35,16 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt1 = cur;
-						cur += 1;
+						yyt1 = yycursor;
+						yycursor += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
 					_ => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 1;
 						continue 'yyl;
 					}
@@ -56,16 +56,16 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 			}
 			2 => { return None; },
 			3 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x2E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -76,11 +76,11 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			4 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -91,20 +91,20 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			5 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 2;
 				continue 'yyl;
 			}
 			6 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x2E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 6;
 						continue 'yyl;
 					}
@@ -115,25 +115,25 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				}
 			}
 			7 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
-						yyt3 = cur;
-						yyt4 = NONE;
-						yyt5 = NONE;
-						cur += 1;
+						yyt3 = yycursor;
+						yyt4 = usize::MAX;
+						yyt5 = usize::MAX;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					0x2E => {
-						yyt3 = cur;
-						yyt5 = cur;
-						cur += 1;
+						yyt3 = yycursor;
+						yyt5 = yycursor;
+						yycursor += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -151,25 +151,25 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				yypmatch[6] = yyt5;
 				yypmatch[7] = yyt4;
 				yypmatch[0] = yyt1;
-				yypmatch[1] = cur;
+				yypmatch[1] = yycursor;
 				yypmatch[3] = yyt2;
-				yypmatch[3] -= --1isize as usize;
+				yypmatch[3] -= 1;
 				{
             // `yynmatch` is the number of capturing groups
             assert_eq!(yynmatch, 4);
 
             // Even `yypmatch` values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
-            let major = s2n(&str[yypmatch[2]..yypmatch[3]]);
-            let minor = s2n(&str[yypmatch[4]..yypmatch[5]]);
+            let major = s2n(&yyinput[yypmatch[2]..yypmatch[3]]);
+            let minor = s2n(&yyinput[yypmatch[4]..yypmatch[5]]);
             let patch = if yypmatch[6] == NONE {0}
-                else {s2n(&str[yypmatch[6] + 1..yypmatch[7]])};
+                else {s2n(&yyinput[yypmatch[6] + 1..yypmatch[7]])};
 
             return Some(SemVer(major, minor, patch));
         }
 			}
 			9 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				if yych <= 0x00 {
 					yystate = 5;
 					continue 'yyl;
@@ -178,20 +178,20 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 				continue 'yyl;
 			}
 			10 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				yystate = 11;
 				continue 'yyl;
 			}
 			11 => {
 				match yych {
 					0x00 => {
-						yyt4 = cur;
-						cur += 1;
+						yyt4 = yycursor;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 10;
 						continue 'yyl;
 					}
