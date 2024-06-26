@@ -14,10 +14,10 @@ enum Ans { Color, Fish, Dunno }
 
 
 
-fn lex(str: &[u8]) -> Ans {
-    assert!(str.len() > 0); // expect nonempty input
+fn lex(yyinput: &[u8]) -> Ans {
+    assert!(yyinput.len() > 0); // expect nonempty input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
     
 {
 	#[allow(unused_assignments)]
@@ -26,8 +26,8 @@ fn lex(str: &[u8]) -> Ans {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x65 => {
 						yystate = 3;
@@ -61,11 +61,11 @@ fn lex(str: &[u8]) -> Ans {
 			}
 			2 => { return Ans::Dunno; },
 			3 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x65 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
@@ -76,11 +76,11 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			4 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x61 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 10;
 						continue 'yyl;
 					}
@@ -91,11 +91,11 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			5 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x61 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 11;
 						continue 'yyl;
 					}
@@ -106,11 +106,11 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			6 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x65 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 12;
 						continue 'yyl;
 					}
@@ -121,11 +121,11 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			7 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x61 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 13;
 						continue 'yyl;
 					}
@@ -136,10 +136,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			8 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6C => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 14;
 						continue 'yyl;
 					}
@@ -150,15 +150,15 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			9 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 2;
 				continue 'yyl;
 			}
 			10 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x64 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 15;
 						continue 'yyl;
 					}
@@ -169,10 +169,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			11 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x67 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 16;
 						continue 'yyl;
 					}
@@ -183,10 +183,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			12 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x64 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 17;
 						continue 'yyl;
 					}
@@ -197,10 +197,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			13 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6C => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 18;
 						continue 'yyl;
 					}
@@ -212,10 +212,10 @@ fn lex(str: &[u8]) -> Ans {
 			}
 			14 => { return Ans::Fish; },
 			15 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x64 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 19;
 						continue 'yyl;
 					}
@@ -226,10 +226,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			16 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x65 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 20;
 						continue 'yyl;
 					}
@@ -241,10 +241,10 @@ fn lex(str: &[u8]) -> Ans {
 			}
 			17 => { return Ans::Color; },
 			18 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6D => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 21;
 						continue 'yyl;
 					}
@@ -255,10 +255,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			19 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6F => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 22;
 						continue 'yyl;
 					}
@@ -269,10 +269,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			20 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 23;
 						continue 'yyl;
 					}
@@ -283,10 +283,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			21 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6F => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 24;
 						continue 'yyl;
 					}
@@ -297,10 +297,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			22 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x63 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 25;
 						continue 'yyl;
 					}
@@ -311,10 +311,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			23 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x74 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 26;
 						continue 'yyl;
 					}
@@ -325,10 +325,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			24 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6E => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 14;
 						continue 'yyl;
 					}
@@ -339,10 +339,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			25 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x6B => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 14;
 						continue 'yyl;
 					}
@@ -353,10 +353,10 @@ fn lex(str: &[u8]) -> Ans {
 				}
 			}
 			26 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x61 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 17;
 						continue 'yyl;
 					}

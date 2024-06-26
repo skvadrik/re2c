@@ -49,10 +49,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<Ver> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<Ver> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
     let mut mt: MtagTrie = Vec::new();
 
     // User-defined tag variables that are available in semantic action.
@@ -70,16 +70,16 @@ fn parse(str: &[u8]) -> Option<Ver> {
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yyt1 = cur;
-						cur += 1;
+						yyt1 = yycursor;
+						yycursor += 1;
 						yystate = 3;
 						continue 'yyl;
 					}
 					_ => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 1;
 						continue 'yyl;
 					}
@@ -91,25 +91,25 @@ fn parse(str: &[u8]) -> Option<Ver> {
 			}
 			2 => { return None; },
 			3 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
 						yytm4 = add_mtag(&mut mt, yytm4, NONE);
 						yytm3 = add_mtag(&mut mt, yytm3, NONE);
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x2E => {
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -126,17 +126,17 @@ fn parse(str: &[u8]) -> Option<Ver> {
 				t4 = yytm4;
 				{
             let mut ver: Ver = Vec::new();
-            ver.push(s2n(&str[t1..t2]));
-            unwind(&mt, t3, t4, str, &mut ver);
+            ver.push(s2n(&yyinput[t1..t2]));
+            unwind(&mt, t3, t4, yyinput, &mut ver);
             return Some(ver);
         }
 			}
 			5 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 => {
-						yytm3 = add_mtag(&mut mt, yytm3, cur);
-						cur += 1;
+						yytm3 = add_mtag(&mut mt, yytm3, yycursor);
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
@@ -147,29 +147,29 @@ fn parse(str: &[u8]) -> Option<Ver> {
 				}
 			}
 			6 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 2;
 				continue 'yyl;
 			}
 			7 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
 						yytm4 = add_mtag(&mut mt, yytm4, NONE);
 						yytm3 = add_mtag(&mut mt, yytm3, NONE);
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x2E => {
-						yyt2 = cur;
-						cur += 1;
+						yyt2 = yycursor;
+						yycursor += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -180,22 +180,22 @@ fn parse(str: &[u8]) -> Option<Ver> {
 				}
 			}
 			8 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x00 => {
-						yytm4 = add_mtag(&mut mt, yytm4, cur);
-						cur += 1;
+						yytm4 = add_mtag(&mut mt, yytm4, yycursor);
+						yycursor += 1;
 						yystate = 4;
 						continue 'yyl;
 					}
 					0x2E => {
-						yytm4 = add_mtag(&mut mt, yytm4, cur);
-						cur += 1;
+						yytm4 = add_mtag(&mut mt, yytm4, yycursor);
+						yycursor += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					0x30 ..= 0x39 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}

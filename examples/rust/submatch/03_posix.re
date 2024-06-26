@@ -12,10 +12,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<SemVer> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<SemVer> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
 
     // Allocate memory for capturing parentheses (twice the number of groups).
     let yynmatch: usize;
@@ -26,14 +26,8 @@ fn parse(str: &[u8]) -> Option<SemVer> {
     /*!stags:re2c format = 'let mut @@{tag} = NONE;'; */
 
     /*!re2c
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP      = "cur += 1;";
-        re2c:define:YYBACKUP    = "mar = cur;";
-        re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} -= -@@{shift}isize as usize;";
+        re2c:api = default;
+        re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:posix-captures = 1;
 
@@ -45,10 +39,10 @@ fn parse(str: &[u8]) -> Option<SemVer> {
 
             // Even `yypmatch` values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
-            let major = s2n(&str[yypmatch[2]..yypmatch[3]]);
-            let minor = s2n(&str[yypmatch[4]..yypmatch[5]]);
+            let major = s2n(&yyinput[yypmatch[2]..yypmatch[3]]);
+            let minor = s2n(&yyinput[yypmatch[4]..yypmatch[5]]);
             let patch = if yypmatch[6] == NONE {0}
-                else {s2n(&str[yypmatch[6] + 1..yypmatch[7]])};
+                else {s2n(&yyinput[yypmatch[6] + 1..yypmatch[7]])};
 
             return Some(SemVer(major, minor, patch));
         }

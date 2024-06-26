@@ -16,23 +16,23 @@ fn add(num: &mut u64, str: &[u8], cur: usize, offs: u8, base: u64) {
     *num = std::cmp::min(*num * base + digit as u64, ERROR);
 }
 
-fn parse_u32(str: &[u8]) -> Option<u32> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse_u32(yyinput: &[u8]) -> Option<u32> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
-    let mut cond = YYC_INIT;
+    let (mut yycursor, mut yymarker) = (0, 0);
+    let mut yycond = YYC_INIT;
     let mut num = 0u64; // Store number in u64 to simplify overflow checks.
 
-    'lex: loop {
+    'lex: loop { 
 {
 	#[allow(unused_assignments)]
 	let mut yych : u8 = 0;
-	let mut yystate : usize = cond;
+	let mut yystate : usize = yycond;
 	'yyl: loop {
 		match yystate {
 			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x30 => {
 						yystate = 2;
@@ -50,18 +50,18 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			}
 			1 => { return None; },
 			2 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
+				yymarker = yycursor;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x42 |
 					0x62 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 5;
 						continue 'yyl;
 					}
 					0x58 |
 					0x78 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 7;
 						continue 'yyl;
 					}
@@ -72,21 +72,21 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				}
 			}
 			3 => {
-				cond = YYC_OCT;
+				yycond = YYC_OCT;
 				yystate = YYC_OCT;
 				continue 'yyl;
 			}
 			4 => {
-				cur = (cur as isize + -1) as usize;
-				cond = YYC_DEC;
+				yycursor -= 1;
+				yycond = YYC_DEC;
 				yystate = YYC_DEC;
 				continue 'yyl;
 			}
 			5 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x31 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 8;
 						continue 'yyl;
 					}
@@ -97,17 +97,17 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				}
 			}
 			6 => {
-				cur = mar;
+				yycursor = yymarker;
 				yystate = 3;
 				continue 'yyl;
 			}
 			7 => {
-				yych = unsafe {*str.get_unchecked(cur)};
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
 				match yych {
 					0x30 ..= 0x39 |
 					0x41 ..= 0x46 |
 					0x61 ..= 0x66 => {
-						cur += 1;
+						yycursor += 1;
 						yystate = 9;
 						continue 'yyl;
 					}
@@ -118,20 +118,20 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 				}
 			}
 			8 => {
-				cur = (cur as isize + -1) as usize;
-				cond = YYC_BIN;
+				yycursor -= 1;
+				yycond = YYC_BIN;
 				yystate = YYC_BIN;
 				continue 'yyl;
 			}
 			9 => {
-				cur = (cur as isize + -1) as usize;
-				cond = YYC_HEX;
+				yycursor -= 1;
+				yycond = YYC_HEX;
 				yystate = YYC_HEX;
 				continue 'yyl;
 			}
 			10 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x30 ..= 0x31 => {
 						yystate = 12;
@@ -146,10 +146,10 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			11 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			12 => { add(&mut num, str, cur, 48, 2);  continue 'lex; },
+			12 => { add(&mut num, yyinput, yycursor, 48, 2);  continue 'lex; },
 			13 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x30 ..= 0x37 => {
 						yystate = 15;
@@ -164,10 +164,10 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			14 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			15 => { add(&mut num, str, cur, 48, 8);  continue 'lex; },
+			15 => { add(&mut num, yyinput, yycursor, 48, 8);  continue 'lex; },
 			16 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 18;
@@ -182,10 +182,10 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			17 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			18 => { add(&mut num, str, cur, 48, 10); continue 'lex; },
+			18 => { add(&mut num, yyinput, yycursor, 48, 10); continue 'lex; },
 			19 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				cur += 1;
+				yych = unsafe {*yyinput.get_unchecked(yycursor)};
+				yycursor += 1;
 				match yych {
 					0x30 ..= 0x39 => {
 						yystate = 21;
@@ -208,9 +208,9 @@ fn parse_u32(str: &[u8]) -> Option<u32> {
 			20 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			21 => { add(&mut num, str, cur, 48, 16); continue 'lex; },
-			22 => { add(&mut num, str, cur, 55, 16); continue 'lex; },
-			23 => { add(&mut num, str, cur, 87, 16); continue 'lex; },
+			21 => { add(&mut num, yyinput, yycursor, 48, 16); continue 'lex; },
+			22 => { add(&mut num, yyinput, yycursor, 55, 16); continue 'lex; },
+			23 => { add(&mut num, yyinput, yycursor, 87, 16); continue 'lex; },
 			_ => panic!("internal lexer error"),
 		}
 	}

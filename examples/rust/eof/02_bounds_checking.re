@@ -4,26 +4,24 @@
 
 fn lex(s: &[u8]) -> isize {
     let mut count = 0;
-    let mut cur = 0;
-    let lim = s.len() + YYMAXFILL;
+    let mut yycursor = 0;
+    let yylimit = s.len() + YYMAXFILL;
 
     // Copy string to a buffer and add YYMAXFILL zero padding.
-    let mut buf = Vec::with_capacity(lim);
-    buf.extend_from_slice(s);
-    buf.extend([0 as u8; YYMAXFILL]);
+    let mut yyinput = Vec::with_capacity(yylimit);
+    yyinput.extend_from_slice(s);
+    yyinput.extend([0 as u8; YYMAXFILL]);
 
-    'lex: loop {/*!re2c
-        re2c:define:YYCTYPE    = u8;
-        re2c:define:YYPEEK     = "*buf.get_unchecked(cur)";
-        re2c:define:YYSKIP     = "cur += 1;";
-        re2c:define:YYFILL     = "return -1;";
-        re2c:define:YYLESSTHAN = "cur + @@ > lim";
+    'lex: loop { /*!re2c
+        re2c:api = default;
+        re2c:define:YYCTYPE = u8;
+        re2c:define:YYFILL = "return -1;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return if cur == s.len() + 1 { count } else { -1 }
+            return if yycursor == s.len() + 1 { count } else { -1 }
         }
         str  { count += 1; continue 'lex; }
         [ ]+ { continue 'lex; }

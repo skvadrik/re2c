@@ -9,10 +9,10 @@ fn s2n(str: &[u8]) -> u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn parse(str: &[u8]) -> Option<SemVer> {
-    assert_eq!(str.last(), Some(&0)); // expect null-terminated input
+fn parse(yyinput: &[u8]) -> Option<SemVer> {
+    assert_eq!(yyinput.last(), Some(&0)); // expect null-terminated input
 
-    let (mut cur, mut mar) = (0, 0);
+    let (mut yycursor, mut yymarker) = (0, 0);
 
     // User-defined tag variables that are available in semantic action.
     let (t1, mut t2, t3, t4, t5);
@@ -22,23 +22,17 @@ fn parse(str: &[u8]) -> Option<SemVer> {
     /*!stags:re2c format = 'let mut @@{tag} = NONE;'; */
 
     /*!re2c
-        re2c:define:YYCTYPE     = u8;
-        re2c:define:YYPEEK      = "*str.get_unchecked(cur)";
-        re2c:define:YYSKIP      = "cur += 1;";
-        re2c:define:YYBACKUP    = "mar = cur;";
-        re2c:define:YYRESTORE   = "cur = mar;";
-        re2c:define:YYSTAGP     = "@@{tag} = cur;";
-        re2c:define:YYSTAGN     = "@@{tag} = NONE;";
-        re2c:define:YYSHIFTSTAG = "@@{tag} -= -@@{shift}isize as usize;";
+        re2c:api = default;
+        re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
         num = [0-9]+;
 
         @t1 num @t2 "." @t3 num @t4 ("." @t5 num)? [\x00] {
-            let major = s2n(&str[t1..t2]);
-            let minor = s2n(&str[t3..t4]);
-            let patch = if t5 != NONE {s2n(&str[t5..cur - 1])} else {0};
+            let major = s2n(&yyinput[t1..t2]);
+            let minor = s2n(&yyinput[t3..t4]);
+            let patch = if t5 != NONE {s2n(&yyinput[t5..yycursor - 1])} else {0};
             return Some(SemVer(major, minor, patch));
         }
         * { return None; }
