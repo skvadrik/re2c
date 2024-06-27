@@ -17,6 +17,7 @@ enum class Lang: uint32_t {
     D,
     GO,
     HASKELL,
+    JAVA,
     OCAML,
     PYTHON,
     RUST,

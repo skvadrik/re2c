@@ -63,13 +63,14 @@ extern const char* DEFAULT_SYNTAX_C;
 extern const char* DEFAULT_SYNTAX_D;
 extern const char* DEFAULT_SYNTAX_GO;
 extern const char* DEFAULT_SYNTAX_HASKELL;
+extern const char* DEFAULT_SYNTAX_JAVA;
 extern const char* DEFAULT_SYNTAX_OCAML;
 extern const char* DEFAULT_SYNTAX_PYTHON;
 extern const char* DEFAULT_SYNTAX_RUST;
 extern const char* DEFAULT_SYNTAX_V;
 
 
-#line 73 "src/parse/conf_parser.h"
+#line 74 "src/parse/conf_parser.h"
 
 /* Token kinds.  */
 #ifndef CONF_TOKENTYPE
@@ -95,7 +96,7 @@ extern const char* DEFAULT_SYNTAX_V;
 #if ! defined CONF_STYPE && ! defined CONF_STYPE_IS_DECLARED
 union CONF_STYPE
 {
-#line 45 "../src/parse/conf_parser.ypp"
+#line 46 "../src/parse/conf_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -109,7 +110,7 @@ union CONF_STYPE
     re2c::StxGOpt gopt;
     re2c::StxLOpt lopt;
 
-#line 113 "src/parse/conf_parser.h"
+#line 114 "src/parse/conf_parser.h"
 
 };
 typedef union CONF_STYPE CONF_STYPE;

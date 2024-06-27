@@ -73,7 +73,7 @@
 #define yynerrs         conf_nerrs
 
 /* First part of user prologue.  */
-#line 17 "../src/parse/conf_parser.ypp"
+#line 18 "../src/parse/conf_parser.ypp"
 
 
 #pragma GCC diagnostic push
@@ -543,10 +543,10 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    82,    82,    83,    84,    85,    86,    89,    90,    99,
-     100,   109,   110,   113,   116,   122,   124,   130,   131,   132,
-     133,   136,   138,   143,   144,   147,   148,   151,   152,   155,
-     156,   157,   158,   161,   163,   165
+       0,    83,    83,    84,    85,    86,    87,    90,    91,   100,
+     101,   110,   111,   114,   117,   123,   125,   131,   132,   133,
+     134,   137,   139,   144,   145,   148,   149,   152,   153,   156,
+     157,   158,   159,   162,   164,   166
 };
 #endif
 
@@ -1167,37 +1167,37 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* conf: '=' num  */
-#line 82 "../src/parse/conf_parser.ypp"
+#line 83 "../src/parse/conf_parser.ypp"
            { in.save_conf_num((yyvsp[0].num)); }
 #line 1173 "src/parse/conf_parser.cc"
     break;
 
   case 3: /* conf: '=' str  */
-#line 83 "../src/parse/conf_parser.ypp"
+#line 84 "../src/parse/conf_parser.ypp"
            { in.save_conf_str((yyvsp[0].str)); }
 #line 1179 "src/parse/conf_parser.cc"
     break;
 
   case 4: /* conf: '=' list  */
-#line 84 "../src/parse/conf_parser.ypp"
+#line 85 "../src/parse/conf_parser.ypp"
            { in.save_conf_list((yyvsp[0].list)); }
 #line 1185 "src/parse/conf_parser.cc"
     break;
 
   case 5: /* conf: CONF_CODE '=' code_exprs  */
-#line 85 "../src/parse/conf_parser.ypp"
+#line 86 "../src/parse/conf_parser.ypp"
                            { *(yyvsp[-2].codeptr) = (yyvsp[0].codes); }
 #line 1191 "src/parse/conf_parser.cc"
     break;
 
   case 6: /* conf: CONF_CODE '=' CONF_CODE  */
-#line 86 "../src/parse/conf_parser.ypp"
+#line 87 "../src/parse/conf_parser.ypp"
                            { *(yyvsp[-2].codeptr) = *(yyvsp[0].codeptr); }
 #line 1197 "src/parse/conf_parser.cc"
     break;
 
   case 8: /* num: '(' opt_or '?' num ':' num ')'  */
-#line 90 "../src/parse/conf_parser.ypp"
+#line 91 "../src/parse/conf_parser.ypp"
                                  {
     if ((yyvsp[-5].opt)->kind != StxOptKind::IMM) {
         in.error_at_cur("mutable predicate is not allowed in numeric configuration");
@@ -1209,7 +1209,7 @@ yyreduce:
     break;
 
   case 10: /* str: '(' opt_or '?' str ':' str ')'  */
-#line 100 "../src/parse/conf_parser.ypp"
+#line 101 "../src/parse/conf_parser.ypp"
                                  {
     if ((yyvsp[-5].opt)->kind != StxOptKind::IMM) {
         in.error_at_cur("mutable predicate is not allowed in string configuration");
@@ -1221,19 +1221,19 @@ yyreduce:
     break;
 
   case 11: /* list: '[' ']'  */
-#line 109 "../src/parse/conf_parser.ypp"
+#line 110 "../src/parse/conf_parser.ypp"
                 { (yyval.list) = in.get_tmp_list(); }
 #line 1227 "src/parse/conf_parser.cc"
     break;
 
   case 12: /* list: '[' elems ']'  */
-#line 110 "../src/parse/conf_parser.ypp"
+#line 111 "../src/parse/conf_parser.ypp"
                 { (yyval.list) = (yyvsp[-1].list); }
 #line 1233 "src/parse/conf_parser.cc"
     break;
 
   case 13: /* elems: CONF_STRING  */
-#line 113 "../src/parse/conf_parser.ypp"
+#line 114 "../src/parse/conf_parser.ypp"
               {
     (yyval.list) = in.get_tmp_list();
     (yyval.list)->push_back((yyvsp[0].str));
@@ -1242,7 +1242,7 @@ yyreduce:
     break;
 
   case 14: /* elems: elems ',' CONF_STRING  */
-#line 116 "../src/parse/conf_parser.ypp"
+#line 117 "../src/parse/conf_parser.ypp"
                           {
     (yyval.list) = (yyvsp[-2].list);
     (yyval.list)->push_back((yyvsp[0].str));
@@ -1251,7 +1251,7 @@ yyreduce:
     break;
 
   case 15: /* code_exprs: %empty  */
-#line 122 "../src/parse/conf_parser.ypp"
+#line 123 "../src/parse/conf_parser.ypp"
          {
     (yyval.codes) = opts.new_code_list();
 }
@@ -1259,7 +1259,7 @@ yyreduce:
     break;
 
   case 16: /* code_exprs: code_exprs code_expr  */
-#line 124 "../src/parse/conf_parser.ypp"
+#line 125 "../src/parse/conf_parser.ypp"
                          {
     (yyval.codes) = (yyvsp[-1].codes);
     append((yyvsp[-1].codes), (yyvsp[0].code));
@@ -1268,19 +1268,19 @@ yyreduce:
     break;
 
   case 17: /* code_expr: CONF_STRING  */
-#line 130 "../src/parse/conf_parser.ypp"
+#line 131 "../src/parse/conf_parser.ypp"
               { (yyval.code) = opts.make_code_str((yyvsp[0].str)); }
 #line 1274 "src/parse/conf_parser.cc"
     break;
 
   case 18: /* code_expr: CONF_VAR  */
-#line 131 "../src/parse/conf_parser.ypp"
+#line 132 "../src/parse/conf_parser.ypp"
               { (yyval.code) = opts.make_code_var((yyvsp[0].var)); }
 #line 1280 "src/parse/conf_parser.cc"
     break;
 
   case 21: /* code_opt: '(' opt_or '?' code_exprs ')'  */
-#line 136 "../src/parse/conf_parser.ypp"
+#line 137 "../src/parse/conf_parser.ypp"
                                 {
     (yyval.code) = opts.make_code_cond((yyvsp[-3].opt), (yyvsp[-1].codes), nullptr);
 }
@@ -1288,7 +1288,7 @@ yyreduce:
     break;
 
   case 22: /* code_opt: '(' opt_or '?' code_exprs ':' code_exprs ')'  */
-#line 138 "../src/parse/conf_parser.ypp"
+#line 139 "../src/parse/conf_parser.ypp"
                                                  {
     (yyval.code) = opts.make_code_cond((yyvsp[-5].opt), (yyvsp[-3].codes), (yyvsp[-1].codes));
 }
@@ -1296,49 +1296,49 @@ yyreduce:
     break;
 
   case 24: /* opt_or: opt_and '|' opt_or  */
-#line 144 "../src/parse/conf_parser.ypp"
+#line 145 "../src/parse/conf_parser.ypp"
                      { (yyval.opt) = opts.make_opt_or((yyvsp[-2].opt), (yyvsp[0].opt)); }
 #line 1302 "src/parse/conf_parser.cc"
     break;
 
   case 26: /* opt_and: opt_neg '&' opt_and  */
-#line 148 "../src/parse/conf_parser.ypp"
+#line 149 "../src/parse/conf_parser.ypp"
                       { (yyval.opt) = opts.make_opt_and((yyvsp[-2].opt), (yyvsp[0].opt)); }
 #line 1308 "src/parse/conf_parser.cc"
     break;
 
   case 28: /* opt_neg: '!' opt  */
-#line 152 "../src/parse/conf_parser.ypp"
+#line 153 "../src/parse/conf_parser.ypp"
           { (yyval.opt) = opts.make_opt_neg((yyvsp[0].opt)); }
 #line 1314 "src/parse/conf_parser.cc"
     break;
 
   case 29: /* opt: CONF_COND  */
-#line 155 "../src/parse/conf_parser.ypp"
+#line 156 "../src/parse/conf_parser.ypp"
             { (yyval.opt) = opts.make_opt_imm((yyvsp[0].cond)); }
 #line 1320 "src/parse/conf_parser.cc"
     break;
 
   case 30: /* opt: CONF_GOPT  */
-#line 156 "../src/parse/conf_parser.ypp"
+#line 157 "../src/parse/conf_parser.ypp"
             { (yyval.opt) = opts.make_opt_global((yyvsp[0].gopt)); }
 #line 1326 "src/parse/conf_parser.cc"
     break;
 
   case 31: /* opt: CONF_LOPT  */
-#line 157 "../src/parse/conf_parser.ypp"
+#line 158 "../src/parse/conf_parser.ypp"
             { (yyval.opt) = opts.make_opt_local((yyvsp[0].lopt)); }
 #line 1332 "src/parse/conf_parser.cc"
     break;
 
   case 32: /* opt: '(' opt_or ')'  */
-#line 158 "../src/parse/conf_parser.ypp"
+#line 159 "../src/parse/conf_parser.ypp"
                  { (yyval.opt) = (yyvsp[-1].opt); }
 #line 1338 "src/parse/conf_parser.cc"
     break;
 
   case 33: /* code_list: '[' CONF_VAR ':' code_exprs ']'  */
-#line 161 "../src/parse/conf_parser.ypp"
+#line 162 "../src/parse/conf_parser.ypp"
                                   {
     (yyval.code) = opts.make_code_list((yyvsp[-3].var), 0, -1, (yyvsp[-1].codes));
 }
@@ -1346,7 +1346,7 @@ yyreduce:
     break;
 
   case 34: /* code_list: '[' CONF_VAR '{' CONF_NUMBER '}' ':' code_exprs ']'  */
-#line 163 "../src/parse/conf_parser.ypp"
+#line 164 "../src/parse/conf_parser.ypp"
                                                         {
     (yyval.code) = opts.make_code_list((yyvsp[-6].var), (yyvsp[-4].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
@@ -1354,7 +1354,7 @@ yyreduce:
     break;
 
   case 35: /* code_list: '[' CONF_VAR '{' CONF_NUMBER ':' CONF_NUMBER '}' ':' code_exprs ']'  */
-#line 165 "../src/parse/conf_parser.ypp"
+#line 166 "../src/parse/conf_parser.ypp"
                                                                         {
     (yyval.code) = opts.make_code_list((yyvsp[-8].var), (yyvsp[-6].num), (yyvsp[-4].num), (yyvsp[-1].codes));
 }
@@ -1555,7 +1555,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 169 "../src/parse/conf_parser.ypp"
+#line 170 "../src/parse/conf_parser.ypp"
 
 
 #pragma GCC diagnostic pop
@@ -1590,6 +1590,7 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
             case Lang::D: src = DEFAULT_SYNTAX_D; break;
             case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
             case Lang::HASKELL: src = DEFAULT_SYNTAX_HASKELL; break;
+            case Lang::JAVA: src = DEFAULT_SYNTAX_JAVA; break;
             case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
             case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
             case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;

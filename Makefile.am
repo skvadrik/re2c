@@ -143,6 +143,7 @@ re2c_GEN_SRC = \
 	src/default_syntax_d.cc \
 	src/default_syntax_go.cc \
 	src/default_syntax_haskell.cc \
+	src/default_syntax_java.cc \
 	src/default_syntax_ocaml.cc \
 	src/default_syntax_python.cc \
 	src/default_syntax_rust.cc \
@@ -183,6 +184,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_d.cc \
 	bootstrap/src/default_syntax_go.cc \
 	bootstrap/src/default_syntax_haskell.cc \
+	bootstrap/src/default_syntax_java.cc \
 	bootstrap/src/default_syntax_ocaml.cc \
 	bootstrap/src/default_syntax_python.cc \
 	bootstrap/src/default_syntax_rust.cc \
@@ -329,6 +331,7 @@ dist_stdlib_DATA = \
 	include/syntax/d \
 	include/syntax/go \
 	include/syntax/haskell \
+	include/syntax/java \
 	include/syntax/ocaml \
 	include/syntax/python \
 	include/syntax/rust \
@@ -555,6 +558,14 @@ bin_PROGRAMS += re2hs
 re2hs_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::HASKELL -DRE2C_PROG=\"re2hs\"
 re2hs_SOURCES = $(re2c_SOURCES)
 nodist_re2hs_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2java
+if WITH_JAVA
+bin_PROGRAMS += re2java
+re2java_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::JAVA -DRE2C_PROG=\"re2java\"
+re2java_SOURCES = $(re2c_SOURCES)
+nodist_re2java_SOURCES = $(nodist_re2c_SOURCES)
 endif
 
 # re2ocaml
