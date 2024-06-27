@@ -4,7 +4,7 @@ for f in $(find -name '*.re'); do
     cd $(dirname $f)
 
     pyfile="$(basename ${f%.re}.py)"
-    pytest="example.rs"
+    pytest="example.py"
 
     cat "$pyfile" \
         | egrep -v 'warning: rule .*matches empty string \[-Wmatch-empty-string\]' \
