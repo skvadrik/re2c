@@ -576,7 +576,11 @@ static void gen_goto(
 
     if (!jump.elide) {
         if (!opts->loop_switch) {
-            o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
+            if (opts->lang == Lang::V) {
+                o.cstr("unsafe { goto ").str(opts->label_prefix).label(*jump.to->label).cstr(" }");
+            } else {
+                o.cstr("goto ").str(opts->label_prefix).label(*jump.to->label);
+            }
             append(stmts, code_stmt(alc, o.flush()));
         } else if (jump.to->label->used) {
             const char* next = o.label(*jump.to->label).flush();
@@ -1475,6 +1479,14 @@ static void gen_cond_enum(Scratchbuf& buf,
                         .cstr(opts->storable_state ? "isize" : "usize").cstr(" = ").u32(c.number);
                 append(block, code_stmt(alc, buf.flush()));
             }
+        } else if (opts->lang == Lang::V) {
+            start = "";
+            end = "";
+            DCHECK(opts->loop_switch);
+            for (const StartCond& c : conds) {
+                buf.cstr("const ").str(c.name).cstr(" = ").u32(c.number);
+                append(block, code_stmt(alc, buf.flush()));
+            }
         } else {
             UNREACHABLE(); // no such language
         }
@@ -1750,6 +1762,9 @@ LOCAL_NODISCARD(Ret gen_yymax(Output&  output, Code* code)) {
             break;
         case Lang::RUST:
             code->text = buf.cstr("const ").cstr(varname).cstr(": usize = ").u64(max).flush();
+            break;
+        case Lang::V:
+            code->text = buf.cstr(varname).cstr(" := ").u64(max).flush();
             break;
         }
     }

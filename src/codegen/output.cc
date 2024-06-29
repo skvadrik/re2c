@@ -139,7 +139,7 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
 void Output::gen_version_time() {
     const opt_t* opts = block().opts;
 
-    scratchbuf.cstr(opts->lang == Lang::GO ? "// Code generated" : "/* Generated").cstr(" by re2c");
+    scratchbuf.cstr(opts->lang == Lang::GO || opts->lang == Lang::V ? "// Code generated" : "/* Generated").cstr(" by re2c");
     if (opts->version) {
         scratchbuf.cstr(" " PACKAGE_VERSION);
     }
@@ -148,7 +148,7 @@ void Output::gen_version_time() {
         time_t now = time(nullptr);
         scratchbuf.stream().write(ctime(&now), 24);
     }
-    scratchbuf.cstr(opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
+    scratchbuf.cstr(opts->lang == Lang::GO || opts->lang == Lang::V ? ", DO NOT EDIT." : " */");
 
     gen_stmt(code_textraw(allocator, scratchbuf.flush()));
 }
