@@ -86,6 +86,9 @@ AM_CONDITIONAL([WITH_HASKELL], [test "x$enable_haskell" != "xno"])
 # --enable-java
 AC_ARG_ENABLE([java], [AS_HELP_STRING([--enable-java], [build re2java executable])])
 AM_CONDITIONAL([WITH_JAVA], [test "x$enable_java" != "xno"])
+# --enable-js
+AC_ARG_ENABLE([js], [AS_HELP_STRING([--enable-js], [build re2js executable])])
+AM_CONDITIONAL([WITH_JS], [test "x$enable_js" != "xno"])
 # --enable-ocaml
 AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
 AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])
