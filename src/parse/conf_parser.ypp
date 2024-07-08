@@ -13,6 +13,7 @@ extern const char* DEFAULT_SYNTAX_OCAML;
 extern const char* DEFAULT_SYNTAX_PYTHON;
 extern const char* DEFAULT_SYNTAX_RUST;
 extern const char* DEFAULT_SYNTAX_V;
+extern const char* DEFAULT_SYNTAX_ZIG;
 
 }
 
@@ -208,6 +209,7 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
             case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
             case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
             case Lang::V: src = DEFAULT_SYNTAX_V; break;
+            case Lang::ZIG: src = DEFAULT_SYNTAX_ZIG; break;
         }
 
         size_t flen = strlen(src);

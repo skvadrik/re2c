@@ -76,7 +76,7 @@ AM_COND_IF([WITH_LIBS], [
 
 # --enable-dlang
 AC_ARG_ENABLE([dlang], [AS_HELP_STRING([--enable-dlang], [build re2d executable])])
-AM_CONDITIONAL([WITH_DLANG], [test "x$enable_golang" != "xno"])
+AM_CONDITIONAL([WITH_DLANG], [test "x$enable_dlang" != "xno"])
 # --enable-golang
 AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
 AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
@@ -100,7 +100,10 @@ AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
 # --enable-vlang
 AC_ARG_ENABLE([vlang], [AS_HELP_STRING([--enable-vlang], [build re2v executable])])
-AM_CONDITIONAL([WITH_VLANG], [test "x$enable_golang" != "xno"])
+AM_CONDITIONAL([WITH_VLANG], [test "x$enable_vlang" != "xno"])
+# --enable-zig
+AC_ARG_ENABLE([zig], [AS_HELP_STRING([--enable-zig], [build re2zig executable])])
+AM_CONDITIONAL([WITH_ZIG], [test "x$enable_zig" != "xno"])
 
 
 # --enable-benchmarks

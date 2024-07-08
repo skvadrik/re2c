@@ -22,7 +22,8 @@ enum class Lang: uint32_t {
     OCAML,
     PYTHON,
     RUST,
-    V
+    V,
+    ZIG
 };
 
 enum class Api: uint32_t {

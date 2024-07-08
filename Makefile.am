@@ -148,7 +148,8 @@ re2c_GEN_SRC = \
 	src/default_syntax_ocaml.cc \
 	src/default_syntax_python.cc \
 	src/default_syntax_rust.cc \
-	src/default_syntax_v.cc
+	src/default_syntax_v.cc \
+	src/default_syntax_zig.cc
 re2c_GEN_HDR = \
 	src/options/parser.h \
 	src/options/conf_parser.h \
@@ -190,7 +191,8 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_ocaml.cc \
 	bootstrap/src/default_syntax_python.cc \
 	bootstrap/src/default_syntax_rust.cc \
-	bootstrap/src/default_syntax_v.cc
+	bootstrap/src/default_syntax_v.cc \
+	bootstrap/src/default_syntax_zig.cc
 
 # custom sources
 re2c_CUSTOM_HELP = doc/help.rst
@@ -339,6 +341,7 @@ dist_stdlib_DATA = \
 	include/syntax/python \
 	include/syntax/rust \
 	include/syntax/v \
+	include/syntax/zig \
 	include/unicode_categories.re
 
 BAZELFILES := \
@@ -609,4 +612,12 @@ bin_PROGRAMS += re2v
 re2v_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::V -DRE2C_PROG=\"re2v\"
 re2v_SOURCES = $(re2c_SOURCES)
 nodist_re2v_SOURCES = $(nodist_re2c_SOURCES)
+endif
+
+# re2zig
+if WITH_ZIG
+bin_PROGRAMS += re2zig
+re2zig_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::ZIG -DRE2C_PROG=\"re2zig\"
+re2zig_SOURCES = $(re2c_SOURCES)
+nodist_re2zig_SOURCES = $(nodist_re2c_SOURCES)
 endif
