@@ -47,7 +47,7 @@ namespace re2c {
     space      = [ \t];
     ws         = (space | [\r\n]);
     eol        = "\r"? "\n";
-    eoc        = "*" "/";
+    eoc        = "*" "/" | "%}";
     ws_or_eoc  = ws | eoc;
     linedir    = eol space* "#" space* "line" space+;
     lineinf    = lineno (space+ dstring)? eol;
@@ -145,68 +145,59 @@ loop:
     location = cur_loc();
     ptr = cur;
 /*!local:re2c
-    space* "%{" {
-        if (pos != ptr) {
-            // re2c does not parse user-defined code outside of re2c blocks, therefore it can
-            // confuse `%{` in the middle of a string or a comment with a block start. To avoid this
-            // recognize `%{` as a block start only on a new line, possibly preceded by whitespaces.
-            goto loop;
-        }
+    "%{" / eol {
         out.gen_raw(tok, ptr);
-        block_name.clear();
+        CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::GLOBAL);
     }
 
     "/*!re2c" {
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
-        if (block_name == "local") {
-            RET_FAIL(error_at_cur("ill-formed local block, expected `local:re2c`"));
-        }
         RET_BLOCK(InputBlock::GLOBAL);
     }
 
-    "/*!local:re2c" {
+    "/*!local:re2c" | "%{local" {
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::LOCAL);
     }
 
-    "/*!rules:re2c" {
+    "/*!rules:re2c" | "%{rules" {
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::RULES);
     }
 
-    "/*!use:re2c" {
+    "/*!use:re2c" | "%{use" {
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::USE);
     }
 
-    "/*!max:re2c" {
+    "/*!max:re2c" | "%{max" {
         CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, DCONF_FORMAT));
         goto next;
     }
 
-    "/*!maxnmatch:re2c" {
+    "/*!maxnmatch:re2c" | "%{maxnmatch" {
         CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, DCONF_FORMAT));
         goto next;
     }
 
-    "/*!stags:re2c" {
+    "/*!stags:re2c" | "%{stags" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::STAGS, allow));
         goto next;
     }
 
-    "/*!mtags:re2c" {
+    "/*!mtags:re2c" | "%{mtags" {
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::MTAGS, allow));
         goto next;
     }
 
-    "/*!conditions:re2c" | "/*!types:re2c" {
+    "/*!conditions:re2c" | "/*!types:re2c" | "%{conditions" {
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
@@ -214,20 +205,20 @@ loop:
         goto next;
     }
 
-    "/*!getstate:re2c" {
+    "/*!getstate:re2c" | "%{getstate" {
         out.state_goto = true;
         if (!opts->storable_state) {
-            RET_FAIL(error_at_cur("`getstate:re2c` without `-f --storable-state` option"));
+            RET_FAIL(error_at_cur("`getstate` without `-f --storable-state` option"));
         } else if (opts->code_model == CodeModel::LOOP_SWITCH) {
             RET_FAIL(error_at_cur(
-                    "`getstate:re2c` is incompatible with --loop-switch code model, it requires"
+                    "`getstate` is incompatible with --loop-switch code model, it requires"
                     " cross-block `goto` transitions or function calls"));
         }
         CHECK_RET(lex_special_block(out, CodeKind::STATE_GOTO, 0));
         goto next;
     }
 
-    "/*!header:re2c:on" {
+    "/*!header:re2c:on" | "%{header:on" {
         out.gen_raw(tok, ptr);
         out.header_mode(true);
         out.need_header = true;
@@ -235,41 +226,37 @@ loop:
         goto next;
     }
 
-    "/*!header:re2c:off" {
+    "/*!header:re2c:off" | "%{header:off" {
         out.gen_raw(tok, ptr);
         out.header_mode(false);
         if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
-    "/*!header:re2c" {
-        RET_FAIL(error_at_cur(
-                "ill-formed header directive: expected `/*!header:re2c:<on|off>` followed by a"
-                " space, a newline or the end of block `*" "/`"));
+    "/*!header:re2c" | "%{header" {
+        RET_FAIL(error_at_cur("ill-formed `header` directive: expected `:on` or `:off`"));
     }
 
-    "/*!include:re2c" space+ @x dstring @y / ws_or_eoc {
+    ("/*!include:re2c" | "%{include") space+ @x dstring @y / ws_or_eoc {
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
         if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         goto next;
     }
-    "/*!include:re2c" {
-        RET_FAIL(error_at_cur(
-                "ill-formed include directive: expected `/*!include:re2c \"<file>\" *" "/`"));
+    "/*!include:re2c" | "%{include" {
+        RET_FAIL(error_at_cur("ill-formed `include` directive: expected filename in quotes"));
     }
 
-    "/*!ignore:re2c" / ws_or_eoc {
+    ("/*!ignore:re2c" | "%{ignore") / ws_or_eoc {
         out.gen_raw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
         CHECK_RET(lex_block_end(out, true));
         goto next;
     }
-    "/*!ignore:re2c" {
-        RET_FAIL(error_at_cur(
-                "ill-formed start of `ignore:re2c` block: expected a space, a newline, or the end"
-                " of block `*" "/`"));
+    "/*!ignore:re2c" | "%{ignore" {
+        RET_FAIL(error_at_cur("ill-formed `ignore` block: "
+                "expected a space, a newline, or the end of block"));
     }
 
     eof {
@@ -303,8 +290,8 @@ Ret Input::lex_opt_name(std::string& name) {
 /*!local:re2c
     "" {
         RET_FAIL(error_at_cur(
-                "ill-formed start of a block: expected a space, a newline, a colon followed by a"
-                " block name, or the end of block `*" "/`"));
+                "ill-formed start of a block: expected a space, a newline, a colon "
+                "followed by a block name, or the end of block"));
     }
 
     ""       / ws_or_eoc { name.clear();              return Ret::OK; }
@@ -755,9 +742,9 @@ loop_backtick: /*!re2c
 
 Ret Input::lex_c_comment() {
 loop: /*!re2c
-    eoc { return Ret::OK; }
-    eol { next_line(); goto loop; }
-    *   { goto loop; }
+    "*" "/" { return Ret::OK; }
+    eol     { next_line(); goto loop; }
+    *       { goto loop; }
 */
 }
 
