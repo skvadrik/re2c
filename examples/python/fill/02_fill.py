@@ -57,7 +57,7 @@ def lex(yyrecord):
     count = 0
     while True:
         yyrecord.token = yyrecord.yycursor
-        
+    
         yystate = 0
         while True:
             match yystate:

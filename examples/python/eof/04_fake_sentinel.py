@@ -7,8 +7,7 @@ def lex(str):
     lim = len(str)
     count = 0
 
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:

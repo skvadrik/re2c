@@ -9,8 +9,7 @@ def lex(yyinput):
     yylimit = len(yyinput)
     count = 0
 
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:

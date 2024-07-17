@@ -16,7 +16,7 @@ def parse(yyinput):
     # A list for capturing parentheses (twice the number of groups).
     yypmatch = [None] * (YYMAXNMATCH * 2)
 
-    
+
     yystate = 0
     while True:
         match yystate:

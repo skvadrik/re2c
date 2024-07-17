@@ -13,26 +13,26 @@ class Ans(Enum):
     FISH = 2
     DUNNO = 3
 
-/*!rules:re2c:colors
+%{rules:colors
     *                            { raise "ah" }
     "red" | "salmon" | "magenta" { return Ans.COLOR }
-*/
+%}
 
-/*!rules:re2c:fish
+%{rules:fish
     *                            { raise "oh" }
     "haddock" | "salmon" | "eel" { return Ans.FISH }
-*/
+%}
 
 def lex(yyinput):
     yycursor = 0
-    /*!re2c
-        re2c:yyfill:enable = 0;
-        re2c:indent:top = 1;
+%{
+    re2c:yyfill:enable = 0;
+    re2c:indent:top = 1;
 
-        !use:fish;
-        !use:colors;
-        * { return Ans.DUNNO } // overrides inherited '*' rules
-    */
+    !use:fish;
+    !use:colors;
+    * { return Ans.DUNNO } // overrides inherited '*' rules
+%}
 
 assert lex(b"salmon") == Ans.FISH
 assert lex(b"what?") == Ans.DUNNO

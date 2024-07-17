@@ -13,7 +13,7 @@ class Num(Enum):
 
 def lex(yyinput):
     yycursor = 0
-    
+
     yyaccept = 0
     yystate = 0
     while True:

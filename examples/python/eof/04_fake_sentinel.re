@@ -6,8 +6,7 @@ def lex(str):
     lim = len(str)
     count = 0
 
-    while True:
-    /*!re2c
+    while True: %{
         re2c:api = custom;
         re2c:define:YYPEEK = "str[cur] if cur < lim else 0";
         re2c:define:YYSKIP = "cur += 1";
@@ -21,7 +20,7 @@ def lex(str):
             count += 1
             break
         }
-    */
+    %}
 
 assert lex(b"") == 0
 assert lex(b"one two three") == 3

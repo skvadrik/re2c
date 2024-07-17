@@ -1,14 +1,13 @@
 # re2py $INPUT -o $OUTPUT -c
 
-/*!conditions:re2c*/
+%{conditions %}
 
 def parse_u32(yyinput):
     yycursor = 0
     yycond = YYC_INIT
     num = 0
 
-    while True:
-    /*!re2c
+    while True: %{
         re2c:yyfill:enable = 0;
         re2c:indent:top = 2;
 
@@ -44,7 +43,7 @@ def parse_u32(yyinput):
         }
 
         <BIN, OCT, DEC, HEX> * { return num }
-    */
+    %}
 
 assert parse_u32(b"\0") == None
 assert parse_u32(b"1234567890\0") == 1234567890

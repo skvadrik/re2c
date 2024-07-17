@@ -6,8 +6,7 @@ def lex(yyinput):
     yylimit = len(yyinput) - 1 # terminating null not included
     count = 0
 
-    while True:
-    /*!re2c
+    while True: %{
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
         re2c:indent:top = 2;
@@ -21,7 +20,7 @@ def lex(yyinput):
             count += 1
             break
         }
-    */
+    %}
 
 def test(str, count):
     # termunating null not included in `lim`

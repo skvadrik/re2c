@@ -6,7 +6,7 @@ from lexer.state import State
 
 
 def lex(yyrecord):
-    
+
     yystate = 0
     while True:
         match yystate:
@@ -52,4 +52,4 @@ class State:
         self.yycursor = 0
         
         self.yyt1 = 0
-python/headers/header.re:21:21: warning: rule matches empty string [-Wmatch-empty-string]
+python/headers/header.re:21:17: warning: rule matches empty string [-Wmatch-empty-string]

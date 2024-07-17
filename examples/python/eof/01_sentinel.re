@@ -5,8 +5,7 @@ def lex(yyinput):
     yycursor = 0
     count = 0
 
-    while True:
-    /*!re2c
+    while True: %{
         re2c:yyfill:enable = 0;
         re2c:indent:top = 2;
 
@@ -17,7 +16,7 @@ def lex(yyinput):
             count += 1
             break
         }
-    */
+    %}
 
 assert lex(b"\0") == 0
 assert lex(b"one two three\0") == 3

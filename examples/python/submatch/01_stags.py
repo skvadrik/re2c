@@ -9,7 +9,7 @@ NONE = -1
 
 def parse(yyinput):
     yycursor = 0
-    
+
     yystate = 0
     while True:
         match yystate:
@@ -112,8 +112,8 @@ def parse(yyinput):
                 t5 = yyt4
                 t2 = yyt2
                 t2 -= 1
-                major = int(yyinput[t1:t2]);
-                minor = int(yyinput[t3:t4]);
+                major = int(yyinput[t1:t2])
+                minor = int(yyinput[t3:t4])
                 patch = int(yyinput[t5:yycursor - 1]) if t5 != NONE else 0
                 return SemVer(major, minor, patch)
             case 9:

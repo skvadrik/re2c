@@ -50,21 +50,21 @@ def fill(st):
 def lex(yyrecord, recv):
     while True:
         yyrecord.token = yyrecord.yycursor
-        /*!re2c
-            re2c:api = record;
-            re2c:define:YYFILL = "return Status.WAITING, recv";
-            re2c:eof = 0;
-            re2c:indent:top = 2;
+    %{
+        re2c:api = record;
+        re2c:define:YYFILL = "return Status.WAITING, recv";
+        re2c:eof = 0;
+        re2c:indent:top = 2;
 
-            packet = [a-z]+[;];
+        packet = [a-z]+[;];
 
-            *      { return Status.BAD_PACKET, recv }
-            $      { return Status.END, recv }
-            packet {
-                recv += 1
-                break
-            }
-        */
+        *      { return Status.BAD_PACKET, recv }
+        $      { return Status.END, recv }
+        packet {
+            recv += 1
+            break
+        }
+    %}
 
 def test(packets, expect):
     # Create a "socket" (open the same file for reading and writing).

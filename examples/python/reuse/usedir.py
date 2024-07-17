@@ -20,7 +20,7 @@ class Ans(Enum):
 
 def lex(yyinput):
     yycursor = 0
-    
+
     yystate = 0
     while True:
         match yystate:

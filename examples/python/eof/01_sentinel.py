@@ -6,8 +6,7 @@ def lex(yyinput):
     yycursor = 0
     count = 0
 
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:

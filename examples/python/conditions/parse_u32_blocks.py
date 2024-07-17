@@ -7,11 +7,12 @@ class State:
         self.yycursor = 0
         self.yymarker = 0
 
+# Common re2c definitions shared between all functions.
 
 
 def parse_u32(str):
     st = State(str)
-    
+
     yystate = 0
     while True:
         match yystate:
@@ -118,8 +119,7 @@ def parse_u32(str):
 
 def parse_bin(st):
     n = 0
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:
@@ -145,8 +145,7 @@ def parse_bin(st):
 
 def parse_oct(st):
     n = 0
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:
@@ -172,8 +171,7 @@ def parse_oct(st):
 
 def parse_dec(st):
     n = 0
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:
@@ -199,8 +197,7 @@ def parse_dec(st):
 
 def parse_hex(st):
     n = 0
-    while True:
-    
+    while True: 
         yystate = 0
         while True:
             match yystate:

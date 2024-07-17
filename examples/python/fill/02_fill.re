@@ -4,7 +4,7 @@ from enum import Enum
 import os
 
 BUFSIZE = 4096
-/*!max:re2c*/
+%{max %}
 
 class State:
     def __init__(self, fname):
@@ -55,24 +55,24 @@ def lex(yyrecord):
     count = 0
     while True:
         yyrecord.token = yyrecord.yycursor
-        /*!re2c
-            re2c:api = record;
-            re2c:define:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
-            re2c:indent:top = 2;
+    %{
+        re2c:api = record;
+        re2c:define:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
+        re2c:indent:top = 2;
 
-            str = ['] ([^'\\] | [\\][^])* ['];
+        str = ['] ([^'\\] | [\\][^])* ['];
 
-            [\x00] {
-                # Check that it is the sentinel, not some unexpected null.
-                return count if yyrecord.token == yyrecord.yylimit - YYMAXFILL else -1
-            }
-            str {
-                count += 1
-                break
-            }
-            [ ]+ { break }
-            *    { return -1 }
-        */
+        [\x00] {
+            # Check that it is the sentinel, not some unexpected null.
+            return count if yyrecord.token == yyrecord.yylimit - YYMAXFILL else -1
+        }
+        str {
+            count += 1
+            break
+        }
+        [ ]+ { break }
+        *    { return -1 }
+    %}
 
 def main():
     fname = "input"

@@ -53,22 +53,22 @@ def fill(st):
 def lex(yyrecord, count):
     while True:
         yyrecord.token = yyrecord.yycursor
-        /*!re2c
-            re2c:api = record;
-            re2c:define:YYFILL = "fill(yyrecord) == Status.OK";
-            re2c:eof = 0;
-            re2c:indent:top = 2;
+    %{
+        re2c:api = record;
+        re2c:define:YYFILL = "fill(yyrecord) == Status.OK";
+        re2c:eof = 0;
+        re2c:indent:top = 2;
 
-            str = ['] ([^'\\] | [\\][^])* ['];
+        str = ['] ([^'\\] | [\\][^])* ['];
 
-            *    { return -1 }
-            $    { return count }
-            [ ]+ { break }
-            str  {
-                count += 1
-                break
-            }
-        */
+        *    { return -1 }
+        $    { return count }
+        [ ]+ { break }
+        str  {
+            count += 1
+            break
+        }
+    %}
 
 def main():
     fname = "input"

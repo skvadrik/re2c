@@ -44,6 +44,10 @@ def fill(st):
     st.yycursor -= st.token;
     st.yymarker -= st.token;
     st.yylimit -= st.token;
+    
+    if st.yyt1 != -1: st.yyt1 -= st.token
+    if st.yyt2 != -1: st.yyt2 -= st.token
+    if st.yyt3 != -1: st.yyt3 -= st.token
     st.token = 0;
 
     # Fill free space at the end of buffer with new data from file.
@@ -62,7 +66,7 @@ def lex(st, count):
     vers = []
     while True:
         st.token = st.yycursor
-        
+    
         yystate = 0
         while True:
             match yystate:
@@ -209,8 +213,8 @@ def lex(st, count):
                     t4 = yyt3
                     t1 = yyt1
                     t1 -= 1
-                    major = int(st.yyinput[st.token:t1]);
-                    minor = int(st.yyinput[t2:t3]);
+                    major = int(st.yyinput[st.token:t1])
+                    minor = int(st.yyinput[t2:t3])
                     patch = int(st.yyinput[t4:st.yycursor - 1]) if t4 != -1 else 0
                     vers.append(SemVer(major, minor, patch))
                     break

@@ -17,7 +17,7 @@ class State:
         self.yymarker = self.yylimit
         self.token = self.yylimit
         self.eof = False
-        /*!stags:re2c format = "\n        self.@@ = -1"; */
+        %{stags format = "\n        self.@@ = -1"; %}
 
     def __del__(self):
         self.file.close()
@@ -40,6 +40,7 @@ def fill(st):
     st.yycursor -= st.token;
     st.yymarker -= st.token;
     st.yylimit -= st.token;
+    %{stags format = "\n    if st.@@ != -1: st.@@ -= st.token"; %}
     st.token = 0;
 
     # Fill free space at the end of buffer with new data from file.
@@ -58,26 +59,26 @@ def lex(st, count):
     vers = []
     while True:
         st.token = st.yycursor
-        /*!re2c
-            re2c:api = record;
-            re2c:variable:yyrecord = st;
-            re2c:define:YYFILL = "fill(st) == Status.OK";
-            re2c:eof = 0;
-            re2c:indent:top = 2;
-            re2c:tags = 1;
+    %{
+        re2c:api = record;
+        re2c:variable:yyrecord = st;
+        re2c:define:YYFILL = "fill(st) == Status.OK";
+        re2c:eof = 0;
+        re2c:indent:top = 2;
+        re2c:tags = 1;
 
-            num = [0-9]+;
+        num = [0-9]+;
 
-            num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
-                major = int(st.yyinput[st.token:t1]);
-                minor = int(st.yyinput[t2:t3]);
-                patch = int(st.yyinput[t4:st.yycursor - 1]) if t4 != -1 else 0
-                vers.append(SemVer(major, minor, patch))
-                break
-            }
-            $ { return vers }
-            * { return None }
-        */
+        num @t1 "." @t2 num @t3 ("." @t4 num)? [\n] {
+            major = int(st.yyinput[st.token:t1])
+            minor = int(st.yyinput[t2:t3])
+            patch = int(st.yyinput[t4:st.yycursor - 1]) if t4 != -1 else 0
+            vers.append(SemVer(major, minor, patch))
+            break
+        }
+        $ { return vers }
+        * { return None }
+    %}
 
 def main():
     fname = "input"

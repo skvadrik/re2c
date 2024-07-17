@@ -54,7 +54,7 @@ def fill(st):
 def lex(yyrecord, count):
     while True:
         yyrecord.token = yyrecord.yycursor
-        
+    
         yystate = 0
         while True:
             match yystate:

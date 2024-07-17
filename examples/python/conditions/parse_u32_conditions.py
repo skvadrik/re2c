@@ -13,8 +13,7 @@ def parse_u32(yyinput):
     yycond = YYC_INIT
     num = 0
 
-    while True:
-    
+    while True: 
         yystate = yycond
         while True:
             match yystate:
