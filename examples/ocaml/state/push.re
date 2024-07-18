@@ -40,7 +40,7 @@ let fill(st: state) : status =
 
     Ready)
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;status", "yyrecord;state"];
     re2c:define:YYCTYPE = "char";
     re2c:define:YYFILL  = "Waiting";
@@ -51,7 +51,7 @@ let fill(st: state) : status =
     *      { BadPacket }
     $      { End }
     packet { yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord }
-*/
+%}
 
 and lex_loop st =
     st.token <- st.yycursor;

@@ -2,7 +2,7 @@
 
 open String
 
-/*!include:re2c "unicode_categories.re" */
+%{include "unicode_categories.re" %}
 
 type state = {
     yyinput: string;
@@ -11,7 +11,7 @@ type state = {
     mutable yyaccept: int;
 }
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;bool", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
@@ -23,7 +23,7 @@ type state = {
 
     identifier { true }
     *          { false }
-*/
+%}
 
 let main () =
     let st = {

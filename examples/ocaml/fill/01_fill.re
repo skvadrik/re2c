@@ -38,7 +38,7 @@ let fill(st: state) : status =
 
     Ok)
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:define:YYCTYPE = "char";
     re2c:define:YYFILL = "fill yyrecord = Ok";
@@ -50,7 +50,7 @@ let fill(st: state) : status =
     $    { count }
     str  { lex_loop yyrecord (count + 1) }
     [ ]+ { lex_loop yyrecord count }
-*/
+%}
 
 and lex_loop st count =
     st.token <- st.yycursor;

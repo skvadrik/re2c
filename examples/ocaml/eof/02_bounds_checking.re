@@ -10,8 +10,8 @@ type state = {
     yylimit: int;
 }
 
-/*!max:re2c*/
-/*!re2c
+%{max %}
+%{
     re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:define:YYFILL = "raise Fill;";
 
@@ -24,7 +24,7 @@ type state = {
     str  { lex yyrecord (count + 1) }
     [ ]+ { lex yyrecord count }
     *    { -1 }
-*/
+%}
 
 let test(str, count) =
     let buf = cat str (make yymaxfill '\x00') in

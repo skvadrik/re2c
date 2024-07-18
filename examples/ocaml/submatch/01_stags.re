@@ -11,7 +11,7 @@ type state = {
     mutable t3: int;
     mutable t4: int;
     mutable t5: int;
-    /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
+    %{stags format = "\n\tmutable @@{tag}: int;"; %}
 }
 
 type semver = {
@@ -25,7 +25,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         if i >= j then n else f s (i + 1) j (n * 10 + Char.code s.[i] - 48)
     in f str i1 i2 0
 
-/*!local:re2c
+%{local
     re2c:define:YYFN = ["parse;semver option", "st;state"];
     re2c:variable:yyrecord = "st";
     re2c:tags = 1;
@@ -41,7 +41,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         }
     }
     * { None }
-*/
+%}
 
 let test (str: string) (result: semver option) =
     let st = {
@@ -53,7 +53,7 @@ let test (str: string) (result: semver option) =
         t3 = -1;
         t4 = -1;
         t5 = -1;
-        /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
+        %{stags format = "\n\t\t@@{tag} = -1;"; %}
     }
     in if not (parse st = result) then raise (Failure "error")
 

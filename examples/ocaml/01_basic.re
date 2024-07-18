@@ -7,7 +7,7 @@ type state = {
     mutable yycursor: int;
 }
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;bool", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
@@ -15,7 +15,7 @@ type state = {
 
     number { true }
     *      { false }
-*/
+%}
 
 let main () =
     let st = {yyinput = "1234\x00"; yycursor = 0}

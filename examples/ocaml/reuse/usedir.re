@@ -15,24 +15,24 @@ type state = {
     mutable yymarker: int;
 }
 
-/*!rules:re2c:colors
+%{rules:colors
     *                            { raise (Failure "ah"); }
     "red" | "salmon" | "magenta" { Color }
-*/
+%}
 
-/*!rules:re2c:fish
+%{rules:fish
     *                            { raise (Failure "oh"); }
     "haddock" | "salmon" | "eel" { Fish }
-*/
+%}
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;answer", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
     !use:fish;
     !use:colors;
     * { Dunno } // overrides inherited '*' rules
-*/
+%}
 
 let test(str, ans) =
     let st = {yyinput = str; yycursor = 0; yymarker = 0}

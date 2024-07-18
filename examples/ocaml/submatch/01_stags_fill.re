@@ -17,7 +17,7 @@ type state = {
     mutable t3: int;
     mutable t4: int;
     mutable t5: int;
-    /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
+    %{stags format = "\n\tmutable @@{tag}: int;"; %}
 }
 
 type status = Ok | Eof | LongLexeme
@@ -44,7 +44,7 @@ let fill(st: state) : status =
     st.yycursor <- st.yycursor - st.token;
     st.yymarker <- st.yymarker - st.token;
     st.yylimit <- st.yylimit - st.token;
-    /*!stags:re2c format = '\n\tst.@@ <- if st.@@ = -1 then -1 else st.@@ - st.token;'; */
+    %{stags format = "\n\tst.@@ <- if st.@@ = -1 then -1 else st.@@ - st.token;"; %}
     st.token <- 0;
 
     (* Fill free space at the end of buffer with new data from file. *)
@@ -56,7 +56,7 @@ let fill(st: state) : status =
 
     Ok)
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;(semver list) option", "st;state", "vers;semver list"];
     re2c:define:YYFILL = "fill st = Ok";
     re2c:variable:yyrecord = "st";
@@ -74,7 +74,7 @@ let fill(st: state) : status =
     }
     $ { Some (List.rev vers) }
     * { None }
-*/
+%}
 
 and lex_loop st vers =
     st.token <- st.yycursor;
@@ -110,7 +110,7 @@ let main () =
                 t3 = -1;
                 t4 = -1;
                 t5 = -1;
-                /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
+                %{stags format = "\n\t\t@@{tag} = -1;"; %}
             } in if (lex_loop st [] <> expect) then
                 raise (Failure "error"));
 

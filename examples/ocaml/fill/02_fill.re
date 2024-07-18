@@ -2,7 +2,7 @@
 
 open Bytes
 
-/*!max:re2c*/
+%{max %}
 let bufsize = 4096
 
 exception Fill
@@ -47,7 +47,7 @@ let fill (st: state) (need: int) : status =
 
     Ok)
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:define:YYFILL = "if not (fill yyrecord @@ = Ok) then raise Fill;";
 
@@ -60,7 +60,7 @@ let fill (st: state) (need: int) : status =
     str  { lex_loop yyrecord (count + 1) }
     [ ]+ { lex_loop yyrecord count }
     *    { -1 }
-*/
+%}
 
 and lex_loop st count =
     st.token <- st.yycursor;

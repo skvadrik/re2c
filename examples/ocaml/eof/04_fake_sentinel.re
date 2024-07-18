@@ -7,7 +7,7 @@ type state = {
 }
 
 (* expect a string without terminating null *)
-/*!re2c
+%{
     re2c:api = custom;
     re2c:define:YYFN = ["lex;int", "st;state", "count;int"];
     re2c:define:YYCTYPE = char;
@@ -19,7 +19,7 @@ type state = {
     [\x00] { count }
     [a-z]+ { lex st (count + 1) }
     [ ]+   { lex st count }
-*/
+%}
 
 let test(str, count) =
     let st = {str = str; cur = 0; lim = String.length str}

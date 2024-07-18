@@ -8,7 +8,7 @@ type state = {
 }
 
 (* expect a null-terminated string *)
-/*!re2c
+%{
     re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:yyfill:enable = 0;
 
@@ -16,7 +16,7 @@ type state = {
     [\x00] { count }
     [a-z]+ { lex yyrecord (count + 1) }
     [ ]+   { lex yyrecord count }
-*/
+%}
 
 let test(yyinput, count) =
     let st = {yyinput = yyinput; yycursor = 0}

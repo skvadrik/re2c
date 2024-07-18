@@ -6,10 +6,10 @@ type state = {
     yyinput: string;
     mutable yycursor: int;
     mutable yymarker: int;
-    /*!stags:re2c format = '\n\tmutable @@{tag}: int;'; */
+    %{stags format = "\n\tmutable @@{tag}: int;"; %}
     mutable t1: int;
     mutable t2: int;
-    /*!mtags:re2c format = '\n\tmutable @@{tag}: int list;'; */
+    %{mtags format = "\n\tmutable @@{tag}: int list;"; %}
     mutable t3: int list;
     mutable t4: int list;
 }
@@ -19,7 +19,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         if i >= j then n else f s (i + 1) j (n * 10 + Char.code s.[i] - 48)
     in f str i1 i2 0
 
-/*!local:re2c
+%{local
     re2c:define:YYFN = ["parse;(int list) option", "st;state"];
     re2c:define:YYMTAGP = "@@ <- st.yycursor :: @@;";
     re2c:define:YYMTAGN = ""; // alternatively could add `-1` to the list
@@ -35,17 +35,17 @@ let s2n (str: string) (i1: int) (i2: int) : int =
         Some (x :: xs)
     }
     * { None }
-*/
+%}
 
 let test (str: string) (result: (int list) option) =
     let st = {
         yyinput = str;
         yycursor = 0;
         yymarker = 0;
-        /*!stags:re2c format = '\n\t\t@@{tag} = -1;'; */
+        %{stags format = "\n\t\t@@{tag} = -1;"; %}
         t1 = -1;
         t2 = -1;
-        /*!mtags:re2c format = '\n\t\t@@{tag} = [];'; */
+        %{mtags format = "\n\t\t@@{tag} = [];"; %}
         t3 = [];
         t4 = [];
     }

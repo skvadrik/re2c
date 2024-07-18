@@ -11,22 +11,22 @@ type 'a state = {
     mutable yymarker: int;
 }
 
-/*!rules:re2c
+%{rules
     re2c:yyfill:enable = 0;
 
     "∀x ∃y" { Some yyrecord.yycursor }
     *       { None }
-*/
+%}
 
-/*!use:re2c
+%{use
     re2c:define:YYFN = ["lex8;int option", "yyrecord;char state"];
     re2c:encoding:utf8 = 1;
-*/
+%}
 
-/*!use:re2c
+%{use
     re2c:define:YYFN = ["lex32;int option", "yyrecord;int state"];
     re2c:encoding:utf32 = 1;
-*/
+%}
 
 let main() =
     let st8 = {

@@ -4,7 +4,7 @@ open Int64
 open Option
 open String
 
-/*!conditions:re2c*/
+%{conditions %}
 
 type state = {
     yyinput: string;
@@ -20,7 +20,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             let n' = add (mul (of_int n) (of_int base)) (of_int dgt)
             in if n' > (of_int32 Int32.max_int) then None else Some (to_int n')
 
-/*!re2c
+%{
     re2c:define:YYFN = ["parse;int option", "st;state", "num;int option"];
     re2c:variable:yyrecord = "st";
     re2c:yyfill:enable = 0;
@@ -39,7 +39,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
     <hex> [A-F] { yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16) }
 
     <bin, oct, dec, hex> * { num }
-*/
+%}
 
 let test (yyinput: string) (result: int option) =
     let st = {yyinput = yyinput; yycursor = 0; yymarker = 0; yycond = YYC_init} in
