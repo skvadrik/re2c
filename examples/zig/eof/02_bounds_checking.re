@@ -2,7 +2,7 @@
 
 const std = @import("std");
 
-/*!max:re2c*/
+%{max %}
 
 fn lex(str: []const u8) !i32 {
     // Create a copy of the input string padded with yymaxfill zeroes at the end.
@@ -16,7 +16,7 @@ fn lex(str: []const u8) !i32 {
     var count: i32 = 0;
 
     loop: while (true) {
-        /*!re2c
+        %{
             re2c:define:YYCTYPE = u8;
             re2c:define:YYFILL = "return -1;";
 
@@ -29,7 +29,7 @@ fn lex(str: []const u8) !i32 {
             str  { count += 1; continue :loop; }
             [ ]+ { continue :loop; }
             *    { return -1; }
-        */
+        %}
     }
 }
 

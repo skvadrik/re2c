@@ -47,7 +47,7 @@ fn lex(yyrecord: *State) Status {
     var yych: u8 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
-        /*!re2c
+        %{
             re2c:api = record;
             re2c:eof = 0;
             re2c:define:YYCTYPE = u8;
@@ -58,7 +58,7 @@ fn lex(yyrecord: *State) Status {
             *      { return Status.bad_packet; }
             $      { return Status.end; }
             packet { yyrecord.received += 1; continue :loop; }
-        */
+        %}
     }
 }
 

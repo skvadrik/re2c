@@ -2,19 +2,19 @@
 
 const std = @import("std");
 
-/*!include:re2c "definitions.zig" */
+%{include "definitions.zig" %}
 
 fn lex(yyinput: [:0]const u8) Num {
     var yycursor: u32 = 0;
     var yymarker: u32 = 0;
-    /*!re2c
+    %{
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = u8;
 
         *      { return Num.nan; }
         number { return Num.integer; }
         !include "extra_rules.re.inc";
-    */
+    %}
 }
 
 test {

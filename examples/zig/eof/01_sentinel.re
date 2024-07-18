@@ -8,7 +8,7 @@ fn lex(yyinput: [:0]const u8) i32 {
     var count: i32 = 0;
 
     loop: while (true) {
-        /*!re2c
+        %{
             re2c:define:YYCTYPE = u8;
             re2c:yyfill:enable = 0;
 
@@ -16,7 +16,7 @@ fn lex(yyinput: [:0]const u8) i32 {
             [\x00] { return count; }
             [a-z]+ { count += 1; continue :loop; }
             [ ]+   { continue :loop; }
-        */
+        %}
     }
 }
 

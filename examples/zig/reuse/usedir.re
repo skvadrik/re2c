@@ -10,27 +10,27 @@ const std = @import("std");
 
 const Ans = enum {color, fish, dunno};
 
-/*!rules:re2c:colors
+%{rules:colors
     *                            { @panic("ah"); }
     "red" | "salmon" | "magenta" { return Ans.color; }
-*/
+%}
 
-/*!rules:re2c:fish
+%{rules:fish
     *                            { @panic("oh"); }
     "haddock" | "salmon" | "eel" { return Ans.fish; }
-*/
+%}
 
 fn lex(yyinput: [:0]const u8) Ans {
     var yycursor: usize = 0;
     var yymarker: usize = 0;
-    /*!re2c
+    %{
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;
         * { return Ans.dunno; } // overrides inherited '*' rules
-    */
+    %}
 }
 
 test {

@@ -10,12 +10,13 @@ const State = struct {
     num: u64,
 };
 
-/*!re2c // Common re2c definitions shared between all functions.
+// Common re2c definitions shared between all functions.
+%{
     re2c:api = record;
     re2c:variable:yyrecord = st;
     re2c:yyfill:enable = 0;
     re2c:define:YYCTYPE = u8;
-*/
+%}
 
 const ERROR: u64 = @as(u64, std.math.maxInt(u32)) + 1; // overflow
 
@@ -32,47 +33,43 @@ fn maybeU32(num: u64) ?u32 {
 
 fn parse_u32(s: [:0]const u8) ?u32 {
     var st = State {.yyinput = s, .yycursor = 0, .yymarker = 0, .num = 0};
-    /*!re2c
+    %{
         '0b' / [01]        { return parse_bin(&st); }
         "0"                { return parse_oct(&st); }
         "" / [1-9]         { return parse_dec(&st); }
         '0x' / [0-9a-fA-F] { return parse_hex(&st); }
         *                  { return null; }
-    */
+    %}
 }
 
 fn parse_bin(st: *State) ?u32 {
-    bin: while (true) {
-    /*!re2c
+    bin: while (true) {%{
         [01] { add(st, 48, 2); continue :bin; }
         *    { return maybeU32(st.num); }
-    */}
+    %}}
 }
 
 fn parse_oct(st: *State) ?u32 {
-    oct: while (true) {
-    /*!re2c
+    oct: while (true) {%{
         [0-7] { add(st, 48, 8); continue :oct; }
         *     { return maybeU32(st.num); }
-    */}
+    %}}
 }
 
 fn parse_dec(st: *State) ?u32 {
-    dec: while (true) {
-    /*!re2c
+    dec: while (true) {%{
         [0-9] { add(st, 48, 10); continue :dec; }
         *     { return maybeU32(st.num); }
-    */}
+    %}}
 }
 
 fn parse_hex(st: *State) ?u32 {
-    hex: while (true) {
-    /*!re2c
+    hex: while (true) {%{
         [0-9] { add(st, 48, 16); continue :hex; }
         [a-f] { add(st, 87, 16); continue :hex; }
         [A-F] { add(st, 55, 16); continue :hex; }
         *     { return maybeU32(st.num); }
-    */}
+    %}}
 }
 
 test {

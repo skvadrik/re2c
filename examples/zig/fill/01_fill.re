@@ -41,7 +41,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
-        /*!re2c
+        %{
             re2c:api = record;
             re2c:eof = 0;
             re2c:define:YYCTYPE = u8;
@@ -53,7 +53,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
             $    { return count; }
             str  { count += 1; continue :loop; }
             [ ]+ { continue :loop; }
-        */
+        %}
     }
 }
 

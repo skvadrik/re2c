@@ -2,7 +2,7 @@
 
 const std = @import("std");
 
-/*!conditions:re2c*/
+%{conditions %}
 
 const ERROR: u64 = @as(u64, std.math.maxInt(u32)) + 1; // overflow
 
@@ -18,7 +18,7 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
     var num: u64 = 0; // Store number in u64 to simplify overflow checks.
 
     loop: while(true) {
-    /*!re2c
+    %{
         re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -38,7 +38,7 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
         <bin, oct, dec, hex> * {
             return if (num < ERROR) @intCast(num) else null;
         }
-    */}
+    %}}
 }
 
 test {

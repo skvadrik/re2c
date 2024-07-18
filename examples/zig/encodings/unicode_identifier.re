@@ -2,13 +2,13 @@
 
 const std = @import("std");
 
-/*!include:re2c "unicode_categories.re" */
+%{include "unicode_categories.re" %}
 
 fn lex(yyinput: [:0]const u8) bool {
     var yycursor: u32 = 0;
     var yymarker: u32 = 0;
 
-    /*!re2c
+    %{
         re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -20,7 +20,7 @@ fn lex(yyinput: [:0]const u8) bool {
 
         identifier { return true; }
         *          { return false; }
-    */
+    %}
 }
 
 test {

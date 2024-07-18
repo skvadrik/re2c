@@ -2,7 +2,7 @@
 
 const std = @import("std");
 
-/*!max:re2c*/
+%{max %}
 const bufsize = 4096;
 
 const State = struct {
@@ -45,7 +45,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
-        /*!re2c
+        %{
             re2c:api = record;
             re2c:define:YYCTYPE = u8;
             re2c:define:YYFILL = "{ if (fill(yyrecord, @@, file) != 0) return -2; }";
@@ -59,7 +59,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
             str  { count += 1; continue :loop; }
             [ ]+ { continue :loop; }
             *    { return -1; }
-        */
+        %}
     }
 }
 

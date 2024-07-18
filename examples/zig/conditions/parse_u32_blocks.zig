@@ -11,6 +11,7 @@ const State = struct {
     num: u64,
 };
 
+// Common re2c definitions shared between all functions.
 
 
 const ERROR: u64 = @as(u64, std.math.maxInt(u32)) + 1; // overflow
@@ -130,7 +131,6 @@ fn parse_u32(s: [:0]const u8) ?u32 {
 
 fn parse_bin(st: *State) ?u32 {
     bin: while (true) {
-    
     var yych: u8 = 0;
     var yystate: u32 = 0;
     while (true) {
@@ -159,7 +159,6 @@ fn parse_bin(st: *State) ?u32 {
 
 fn parse_oct(st: *State) ?u32 {
     oct: while (true) {
-    
     var yych: u8 = 0;
     var yystate: u32 = 0;
     while (true) {
@@ -188,7 +187,6 @@ fn parse_oct(st: *State) ?u32 {
 
 fn parse_dec(st: *State) ?u32 {
     dec: while (true) {
-    
     var yych: u8 = 0;
     var yystate: u32 = 0;
     while (true) {
@@ -217,7 +215,6 @@ fn parse_dec(st: *State) ?u32 {
 
 fn parse_hex(st: *State) ?u32 {
     hex: while (true) {
-    
     var yych: u8 = 0;
     var yystate: u32 = 0;
     while (true) {

@@ -78,7 +78,7 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
 
     loop: while (true) {
         st.token = st.yycursor;
-    
+        
     var yych: u8 = 0;
     var yystate: u32 = 0;
     while (true) {
@@ -228,12 +228,12 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
                 t1 = st.yyt1;
                 t1 -= 1;
                 
-            try vers.append(SemVer {
-                .major = s2n(st.yyinput[st.token..t1]),
-                .minor = s2n(st.yyinput[t2..t3]),
-                .patch = if (t4 == none) 0 else s2n(st.yyinput[t4..st.yycursor - 1]),
-            });
-            continue :loop;
+                try vers.append(SemVer {
+                    .major = s2n(st.yyinput[st.token..t1]),
+                    .minor = s2n(st.yyinput[t2..t3]),
+                    .patch = if (t4 == none) 0 else s2n(st.yyinput[t4..st.yycursor - 1]),
+                });
+                continue :loop;
 
             },
             9 => {

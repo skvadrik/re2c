@@ -6,29 +6,29 @@
 
 const std = @import("std");
 
-/*!rules:re2c
+%{rules
     re2c:yyfill:enable = 0;
 
     "∀x ∃y" { return yycursor; }
     *       { return null; }
-*/
+%}
 
 fn lex_utf8(yyinput: []const u8) ?usize {
     var yycursor: usize = 0;
     var yymarker: usize = 0;
-    /*!use:re2c
+    %{use
         re2c:encoding:utf8 = 1;
         re2c:define:YYCTYPE = u8;
-    */
+    %}
 }
 
 fn lex_utf32(yyinput: []const u32) ?usize {
     var yycursor: usize = 0;
     var yymarker: usize = 0;
-    /*!use:re2c
+    %{use
         re2c:encoding:utf32 = 1;
         re2c:define:YYCTYPE = u32;
-    */
+    %}
 }
 
 test {
