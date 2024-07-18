@@ -5,7 +5,7 @@
 import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
-/*!conditions:re2c*/
+%{conditions %}
 
 data State = State {
     _yyinput :: !ByteString,
@@ -17,7 +17,7 @@ data State = State {
 peek_digit :: ByteString -> Int -> Int -> Int
 peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
-/*!re2c
+%{
     re2c:define:YYFN = ["parse;Maybe Int", "State{..};State", "_num;Int"];
     re2c:yyfill:enable = 0;
 
@@ -35,7 +35,7 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
     <hex> [A-F] { yyfnhex State{..} $ _num * 16 + (peek_digit _yyinput _yycursor 55) }
 
     <bin, oct, dec, hex> * { Just _num }
-*/
+%}
 
 test :: ByteString -> Maybe Int -> IO ()
 test str expect = do

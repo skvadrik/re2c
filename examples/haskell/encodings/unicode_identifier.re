@@ -5,7 +5,7 @@
 import Control.Monad (when)
 import Data.ByteString (ByteString, index)
 
-/*!include:re2c "unicode_categories.re" */
+%{include "unicode_categories.re" %}
 
 data State = State {
     _yyinput :: ByteString,
@@ -14,7 +14,7 @@ data State = State {
     _yyaccept :: Int
 }
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;Bool", "State{..};State"];
     re2c:yyfill:enable = 0;
 
@@ -26,7 +26,7 @@ data State = State {
 
     identifier { True }
     *          { False }
-*/
+%}
 
 main :: IO ()
 main = do

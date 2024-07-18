@@ -24,7 +24,7 @@ data State = State {
 
 data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;IO (State, Status)", "State{..};State;!State{..}"];
     re2c:define:YYPEEK = "BS.index";
     re2c:define:YYFILL = "return (State{..}, Waiting)";
@@ -36,7 +36,7 @@ data Status = End | Ready | Waiting | BadPacket deriving (Eq)
     *      { return (State{..}, BadPacket) }
     $      { return (State{..}, End) }
     packet { lexer State{_token = _yycursor, _recv = _recv + 1, ..} }
-*/
+%}
 
 fill :: State -> IO (State, Status)
 fill st@State{..} = do

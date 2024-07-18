@@ -13,7 +13,7 @@ data State = State {
 }
 
 -- Expect a string without terminating null.
-/*!re2c
+%{
     re2c:api = custom;
     re2c:define:YYFN = ["lexer;Int", "State{..};State"];
     re2c:define:YYPEEK = "if _cur < _lim then BS.index _str _cur else 0";
@@ -24,7 +24,7 @@ data State = State {
     [\x00] { _cnt }
     [a-z]+ { lexer State{_cnt = _cnt + 1, ..} }
     [ ]+   { lexer State{..} }
-*/
+%}
 
 main :: IO ()
 main = do

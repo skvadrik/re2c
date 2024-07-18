@@ -12,7 +12,7 @@ data State = State {
 }
 
 -- expect a null-terminated string
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;Int", "State{..};State"];
     re2c:yyfill:enable = 0;
 
@@ -20,7 +20,7 @@ data State = State {
     [\x00] { _count }
     [a-z]+ { lexer State{_count = _count + 1, ..} }
     [ ]+   { lexer State{..} }
-*/
+%}
 
 main :: IO ()
 main = do

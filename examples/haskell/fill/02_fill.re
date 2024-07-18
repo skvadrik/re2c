@@ -21,7 +21,7 @@ data State = State {
     _count :: !Int
 }
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;IO Int", "State{..};State;!State{..}"];
     re2c:define:YYPEEK = "BS.index";
 
@@ -37,10 +37,10 @@ data State = State {
     [\x00] { return $ if _yycursor == _yylimit - yymaxfill + 1 then _count else (-1) }
     str    { lexer State{_token = _yycursor, _count = _count + 1, ..} }
     [ ]+   { lexer State{_token = _yycursor, ..} }
-*/
+%}
 
 yymaxfill :: Int
-/*!max:re2c*/
+%{max %}
 
 fill :: State -> Int -> IO State
 fill !st@State{..} !need =

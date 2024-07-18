@@ -17,9 +17,9 @@ data FillException = UnexpectedFill deriving (Show)
 instance Exception FillException
 
 yymaxfill :: Int
-/*!max:re2c*/
+%{max %}
 
-/*!re2c
+%{
     re2c:define:YYFN  = ["lexer;IO Int", "State{..};State"];
     re2c:define:YYPEEK = "BS.index";
     re2c:define:YYFILL = "throw UnexpectedFill";
@@ -34,7 +34,7 @@ yymaxfill :: Int
     str  { lexer State{_count = _count + 1, ..} }
     [ ]+ { lexer State{..} }
     *    { return (-1) }
-*/
+%}
 
 main :: IO ()
 main = do

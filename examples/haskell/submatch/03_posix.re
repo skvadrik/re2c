@@ -13,7 +13,7 @@ data State = State {
     _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
-    /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
+    %{stags format = "\n@@{tag} :: !Int,"; %}
     -- use record fields instead of canonical POSIX `yypmatch` array,
     -- as mutable arrays are non-idiomatic in Haskell
     _0 :: !Int,
@@ -36,7 +36,7 @@ s2n :: ByteString -> Int -> Int -> Int
 s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (index s k) - 48))
 
-/*!re2c
+%{
     re2c:define:YYFN = ["parse;Maybe SemVer", "State{..};State"];
     re2c:define:YYCTYPE = "Word8";
     re2c:posix-captures = 1;
@@ -55,7 +55,7 @@ s2n s i j = f i 0 where
         }
     }
     * { Nothing }
-*/
+%}
 
 test :: ByteString -> Maybe SemVer -> IO ()
 test str expect = do
@@ -63,7 +63,7 @@ test str expect = do
         _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
-        /*!stags:re2c format = '\n@@{tag} = none,'; */
+        %{stags format = "\n@@{tag} = none,"; %}
         _0 = none,
         _1 = none,
         _2 = none,

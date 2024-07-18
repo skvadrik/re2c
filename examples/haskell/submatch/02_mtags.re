@@ -9,10 +9,10 @@ data State = State {
     _yyinput :: !ByteString,
     _yycursor :: !Int,
     _yymarker :: !Int,
-    /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
+    %{stags format = "\n@@{tag} :: !Int,"; %}
     _1 :: !Int,
     _2 :: !Int,
-    /*!mtags:re2c format = '\n@@{tag} :: ![Int],'; */
+    %{mtags format = "\n@@{tag} :: ![Int],"; %}
     _3 :: ![Int],
     _4 :: ![Int]
 }
@@ -21,7 +21,7 @@ s2n :: ByteString -> Int -> Int -> Int
 s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (index s k) - 48))
 
-/*!re2c
+%{
     re2c:define:YYFN = ["parse;Maybe [Int]", "State{..};State"];
     re2c:define:YYMTAGP = "let tag = _yycursor : @@{tag} in let @@{tag} = tag in";
     re2c:define:YYMTAGN = ""; // alternatively could add -1 to the list
@@ -34,7 +34,7 @@ s2n s i j = f i 0 where
         Just $ (s2n _yyinput _1 _2) : (reverse $ zipWith (\i j -> s2n _yyinput i j) _3 _4)
     }
     * { Nothing }
-*/
+%}
 
 test :: ByteString -> Maybe [Int] -> IO ()
 test str expect = do
@@ -42,10 +42,10 @@ test str expect = do
         _yyinput = str,
         _yycursor = 0,
         _yymarker = 0,
-        /*!stags:re2c format = '\n@@{tag} = (-1),'; */
+        %{stags format = "\n@@{tag} = (-1),"; %}
         _1 = (-1),
         _2 = (-1),
-        /*!mtags:re2c format = '\n@@{tag} = [],'; */
+        %{mtags format = "\n@@{tag} = [],"; %}
         _3 = [],
         _4 = []
     }

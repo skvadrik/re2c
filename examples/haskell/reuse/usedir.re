@@ -19,24 +19,24 @@ data State = State {
     _yymarker :: Int
 }
 
-/*!rules:re2c:colors
+%{rules:colors
     *                            { error "ah" }
     "red" | "salmon" | "magenta" { Color }
-*/
+%}
 
-/*!rules:re2c:fish
+%{rules:fish
     *                            { error "oh" }
     "haddock" | "salmon" | "eel" { Fish }
-*/
+%}
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;Answer", "State{..};State"];
     re2c:yyfill:enable = 0;
 
     !use:fish;
     !use:colors;
     * { Dunno } // overrides inherited '*' rules
-*/
+%}
 
 main :: IO ()
 main = do

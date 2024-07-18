@@ -19,7 +19,7 @@ data State = State {
     _yylimit :: !Int,
     _token :: !Int,
     _eof :: !Bool,
-    /*!stags:re2c format = '\n@@{tag} :: !Int,'; */
+    %{stags format = "\n@@{tag} :: !Int,"; %}
     _1 :: !Int,
     _2 :: !Int,
     _3 :: !Int,
@@ -37,7 +37,7 @@ s2n :: BS.ByteString -> Int -> Int -> Int
 s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;IO [SemVer]", "State{..};State", "_vers;[SemVer]"];
     re2c:define:YYPEEK = "BS.index";
     re2c:define:YYFILL = "(State{..}, yyfill) <- fill State{..}";
@@ -57,7 +57,7 @@ s2n s i j = f i 0 where
     }
     $ { return _vers }
     * { error "lexer failed" }
-*/
+%}
 
 fill :: State -> IO (State, Bool)
 fill State{..} = do
@@ -94,7 +94,7 @@ main = do
         _yylimit = 0,
         _token = 0,
         _eof = False,
-        /*!stags:re2c format = '\n@@{tag} = (-1),'; */
+        %{stags format = "\n@@{tag} = (-1),"; %}
         _1 = (-1),
         _2 = (-1),
         _3 = (-1),

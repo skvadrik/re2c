@@ -15,7 +15,7 @@ data State = State {
 }
 
 -- expect a null-terminated string
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;Int", "State{..};State"];
     re2c:define:YYCTYPE = "Word8";
     re2c:define:YYPEEK = "BS.index";
@@ -28,7 +28,7 @@ data State = State {
     $    { _count }
     str  { lexer State{_count = _count + 1, ..} }
     [ ]+ { lexer State{..} }
-*/
+%}
 
 main :: IO ()
 main = do

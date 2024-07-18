@@ -9,7 +9,7 @@ data State = State {
     _yycursor :: Int
 }
 
-/*!re2c
+%{
     re2c:define:YYFN = ["lexer;Bool", "State{..};State"];
     re2c:yyfill:enable = 0;
 
@@ -17,7 +17,7 @@ data State = State {
 
     number { True }
     *      { False }
-*/
+%}
 
 main :: IO ()
 main = case lexer State{_yyinput = "1234\0", _yycursor = 0} of
