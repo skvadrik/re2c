@@ -250,7 +250,7 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::MTAGP, StxVarId::TAG}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yystagn, \
-        ({StxVarId::STAGN, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::STAGN, StxVarId::TAG, StxVarId::NEG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yymtagn, \
         ({StxVarId::MTAGN, StxVarId::TAG}), ({}), ({}) \
@@ -542,6 +542,7 @@ enum class StxVarId : uint32_t {
     MUTCODE(api_accept_set) \
     MUTCODE(api_debug) \
     MUTCODE(tags_expression) \
+    MUTCODE(tags_negative) \
     MUTCODE(cond_div) \
     MUTCODE(cond_goto) \
     /* end */

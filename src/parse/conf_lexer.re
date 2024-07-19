@@ -134,6 +134,7 @@ Ret Input::lex_conf(Opt& opts) {
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
     "tags:expression" { RET_CONF_CODE(tags_expression); }
+    "tags:negative"   { RET_CONF_CODE(tags_negative); }
     "invert-captures" { RET_CONF_BOOL(invert_captures); }
 
     "define:YYBACKUP"                    { RET_CONF_CODE(api_backup); }

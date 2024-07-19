@@ -26,6 +26,7 @@
     re2c:invert-captures = 0;
     re2c:tags:prefix = "";
     re2c:tags:expression = "";
+    re2c:tags:negative = "";
 
     re2c:yyfn:sep = ";";
 

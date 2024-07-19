@@ -118,6 +118,7 @@ conf:define:YYSKIP = "YYSKIP";
 conf:define:YYSTAGN = "YYSTAGN";
 conf:define:YYSTAGP = "YYSTAGP";
 conf:tags:expression = (api.record ? record "->") sigil;
+conf:tags:negative = (api.generic ? "@@" : "NULL");
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil ";";
 
@@ -278,7 +279,7 @@ code:yyshift =
     ) nl;
 
 code:yyshiftstag =
-    topindent (nested ? "if (" tag " != " (api.generic ? neg : "NULL") ") ") (api.generic
+    topindent (nested ? "if (" tag " != " neg ") ") (api.generic
         ? shiftstag (api_style.functions ? "(" tag ", -" offset ");")
         : tag " -= " offset ";"
     ) nl;
@@ -296,7 +297,7 @@ code:yymtagp = topindent mtagp (api_style.functions ? "(" tag ");") nl;
 code:yystagn =
     topindent (api.generic
         ? stagn (api_style.functions ? "(" tag ");")
-        : tag " = NULL;"
+        : tag " = " neg ";"
     ) nl;
 
 code:yymtagn = topindent mtagn (api_style.functions ? "(" tag ");") nl;

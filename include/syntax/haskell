@@ -119,6 +119,7 @@ conf:define:YYSKIP = "yyskip";
 conf:define:YYSTAGN = "yystagn";
 conf:define:YYSTAGP = "yystagp";
 conf:tags:expression = sigil;
+conf:tags:negative = (api.generic ? "@@" : "(-1)");
 conf:cond:divider = "";
 conf:cond:goto = "";
 
@@ -269,8 +270,8 @@ code:yyshift =
 code:yyshiftstag =
     topindent (api.record
         ? (monadic
-            ? tag " <- return $ if " tag " == (-1) then (-1) else " tag " - " offset
-            :         "let __ = if " tag " == (-1) then (-1) else " tag " - " offset
+            ? tag " <- return $ if " tag " == " neg " then " neg " else " tag " - " offset
+            :         "let __ = if " tag " == " neg " then " neg " else " tag " - " offset
                 " in let " tag " = __ in")
         : shiftstag
     ) nl;
@@ -290,8 +291,8 @@ code:yymtagp = topindent mtagp nl;
 code:yystagn =
     topindent (api.record
         ? (monadic
-            ? "let " tag " = (-1)"
-            : "let " tag " = (-1) in")
+            ? "let " tag " = " neg
+            : "let " tag " = " neg " in")
         : stagn
     ) nl;
 

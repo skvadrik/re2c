@@ -960,8 +960,10 @@ class RenderTagOps : public RenderCallback {
             rctx.os << code->tag1;
             break;
         case StxVarId::RHS:
-        case StxVarId::NEG:
             rctx.os << code->tag2;
+            break;
+        case StxVarId::NEG:
+            argsubst(rctx.os, opts->tags_negative, opts->api_sigil, "tag", true, code->tag2);
             break;
         case StxVarId::CURSOR:
             rctx.os << opts->api_cursor;

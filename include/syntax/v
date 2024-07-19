@@ -118,6 +118,7 @@ conf:define:YYSKIP = "yyskip";
 conf:define:YYSTAGN = "yystagn";
 conf:define:YYSTAGP = "yystagp";
 conf:tags:expression = (api.record ? record ".") sigil;
+conf:tags:negative = (api.generic ? "@@" : "-1");
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "unsafe { goto " sigil " }";
 
@@ -288,7 +289,7 @@ code:yymtagp = topindent mtagp nl;
 code:yystagn =
     topindent (api.generic
         ? stagn
-        : tag " = -1"
+        : tag " = " neg
     ) nl;
 
 code:yymtagn = topindent mtagn nl;

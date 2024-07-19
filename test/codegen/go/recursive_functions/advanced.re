@@ -115,6 +115,7 @@ func fill(st *State) int {
 	re2c:api = record;
 	re2c:eof = 0;
 	re2c:tags = 1;
+	re2c:tags:negative = "tagNone";
 	re2c:variable:yyrecord = st;
 	re2c:define:YYFN = ["lex;int", "st;*State"];
 	re2c:define:YYCTYPE = "byte";

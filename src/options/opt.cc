@@ -158,6 +158,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.state_set_naked = defaults.state_set_naked;
         real.tags_prefix = defaults.tags_prefix;
         real.tags_expression = defaults.tags_expression;
+        real.tags_negative = defaults.tags_negative;
         real.char_emit = defaults.char_emit;
         real.char_conv = defaults.char_conv;
         real.char_literals = defaults.char_literals;

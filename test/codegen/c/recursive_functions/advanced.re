@@ -87,7 +87,8 @@ static void mtag(struct mtag** pmt, const unsigned char* b, const unsigned char*
 /*!re2c
     re2c:api:style = free-form;
     re2c:eof = 0;
-    re2c:flags:tags = 1;
+    re2c:tags = 1;
+    re2c:tags:negative = "NULL";
     re2c:tags:expression   = "c->@@";
     re2c:variable:yyaccept = "c->accept";
     re2c:define:YYCTYPE    = "unsigned char";

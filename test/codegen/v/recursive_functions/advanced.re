@@ -117,6 +117,7 @@ fn fill(mut st &State) Status {
     re2c:api = record;
     re2c:eof = 0;
     re2c:tags = 1;
+    re2c:tags:negative = "tag_none";
     re2c:variable:yyrecord = st;
     re2c:define:YYCTYPE = u8;
     re2c:define:YYFN = ["lex;Status", "mut st;State"];

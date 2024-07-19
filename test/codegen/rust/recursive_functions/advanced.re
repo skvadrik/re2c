@@ -111,6 +111,7 @@ fn fill(st: &mut ConState) -> ConStatus {
 /*!re2c
     re2c:eof = 0;
     re2c:tags = 1;
+    re2c:tags:negative = "NONE";
     re2c:api = record;
     re2c:variable:yyrecord = "st";
     re2c:define:YYFN       = ["lex;ConStatus", "st;&mut ConState"];

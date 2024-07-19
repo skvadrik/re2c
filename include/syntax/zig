@@ -118,6 +118,7 @@ conf:define:YYSKIP = "yyskip";
 conf:define:YYSTAGN = "yystagn";
 conf:define:YYSTAGP = "yystagp";
 conf:tags:expression = (api.record ? record ".") sigil;
+conf:tags:negative = (api.generic ? "@@" : "std.math.maxInt(usize)");
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil ";";
 
@@ -284,7 +285,7 @@ code:yyshift =
     ) nl;
 
 code:yyshiftstag =
-    topindent (nested ? "if (" tag " != " (api.generic ? neg : "std.math.maxInt(usize)") ") ")
+    topindent (nested ? "if (" tag " != " neg ") ")
     (api.generic
         ? shiftstag
         : tag " -= " offset ";"
@@ -303,7 +304,7 @@ code:yymtagp = topindent mtagp nl;
 code:yystagn =
     topindent (api.generic
         ? stagn
-        : tag " = std.math.maxInt(usize);"
+        : tag " = " neg ";"
     ) nl;
 
 code:yymtagn = topindent mtagn nl;
