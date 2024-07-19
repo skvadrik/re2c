@@ -494,6 +494,15 @@ scan:
         RET_TOK(TOKEN_REGEXP);
     }
 
+    [0-9] {
+        if (!globopts->flex_syntax) {
+            RET_FAIL(error_at_tok("unexpected character: '%c'", *tok));
+        }
+        ast.temp_chars.push_back({*tok, tok_loc()});
+        yylval->regexp = ast.str(tok_loc(), false);
+        RET_TOK(TOKEN_REGEXP);
+    }
+
     "!include" space+ @x dstring @y space* ";" / ws_or_eoc {
         CHECK_RET(include(getstr(x + 1, y - 1), tok));
         goto scan;
