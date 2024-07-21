@@ -73,7 +73,7 @@ Input::~Input() {
     }
 }
 
-void Input::reset() {
+void Input::reset_lexer() {
     reset_ptrs();
 
     for (InputFile* in: files) {

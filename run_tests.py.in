@@ -601,8 +601,10 @@ def init_context(base_path, skeleton=False, keep_temp_files=False,
     top_dir = os.path.normpath(TOP_SRCDIR)
     if os.path.isabs(TOP_SRCDIR):
         _ctx.incpaths += ['-I', os.path.join(top_dir, 'include')]
+        _ctx.incpaths += ['-I', os.path.join(top_dir, 'include/syntax')]
     else:
         _ctx.incpaths += ['-I', os.path.join('..', top_dir, 'include')]
+        _ctx.incpaths += ['-I', os.path.join('..', top_dir, 'include/syntax')]
 
     # Set tools paths
 

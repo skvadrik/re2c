@@ -19,14 +19,6 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
         glob.set_default_line_dirs(false);
     }
 
-    // append directory separator '/' to all paths that do not have it
-    for (std::string& p : const_cast<std::vector<std::string>&>(glob.include_paths)) {
-        const char c = p.empty() ? 0 : *p.rbegin();
-        if (c != '/' && c != '\\') {
-            p.push_back('/');
-        }
-    }
-
     if (!glob.dep_file.empty() && glob.output_file.empty()) {
         RET_FAIL(error("cannot generate dep file, output file not specified"));
     }

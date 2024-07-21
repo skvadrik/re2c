@@ -1575,48 +1575,52 @@ namespace re2c {
 
 Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
     in_syntax_file = true;
-    if (!globopts->syntax_file.empty()) {
-        CHECK_RET(open(globopts->syntax_file, nullptr));
-    } else {
-        // use the default syntax config that is provided as a string
 
-        InputFile* in = new InputFile(0);
-        files.push_back(in);
-        msg.filenames.push_back("<default syntax file>");
+    // First, apply the default syntax config that is provided as a string.
+    InputFile* in = new InputFile(0);
+    files.push_back(in);
+    msg.filenames.push_back("<default syntax file>");
 
-        const char* src = nullptr;
-        switch (lang) {
-            case Lang::C: src = DEFAULT_SYNTAX_C; break;
-            case Lang::D: src = DEFAULT_SYNTAX_D; break;
-            case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
-            case Lang::HASKELL: src = DEFAULT_SYNTAX_HASKELL; break;
-            case Lang::JAVA: src = DEFAULT_SYNTAX_JAVA; break;
-            case Lang::JS: src = DEFAULT_SYNTAX_JS; break;
-            case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
-            case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
-            case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
-            case Lang::V: src = DEFAULT_SYNTAX_V; break;
-            case Lang::ZIG: src = DEFAULT_SYNTAX_ZIG; break;
-        }
-
-        size_t flen = strlen(src);
-
-        // TODO: use the maximum of all YYMAXFlLL values
-        if (flen + maxfill() > BSIZE) {
-            delete[] bot;
-            BSIZE = flen;
-            bot = new uint8_t[BSIZE + maxfill()];
-        }
-
-        // fill in buffer from the config string
-        memcpy(bot, src, flen);
-        memset(bot + flen, 0, maxfill());
-
-        cur = mar = ctx = tok = ptr = pos = bot;
-        lim = bot + flen + maxfill();
+    const char* src = nullptr;
+    switch (lang) {
+        case Lang::C: src = DEFAULT_SYNTAX_C; break;
+        case Lang::D: src = DEFAULT_SYNTAX_D; break;
+        case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+        case Lang::HASKELL: src = DEFAULT_SYNTAX_HASKELL; break;
+        case Lang::JAVA: src = DEFAULT_SYNTAX_JAVA; break;
+        case Lang::JS: src = DEFAULT_SYNTAX_JS; break;
+        case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
+        case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
+        case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
+        case Lang::V: src = DEFAULT_SYNTAX_V; break;
+        case Lang::ZIG: src = DEFAULT_SYNTAX_ZIG; break;
     }
 
+    size_t flen = strlen(src);
+
+    if (flen + maxfill() > BSIZE) {
+        delete[] bot;
+        BSIZE = flen;
+        bot = new uint8_t[BSIZE + maxfill()];
+    }
+
+    // fill in buffer from the config string
+    memcpy(bot, src, flen);
+    memset(bot + flen, 0, maxfill());
+
+    cur = mar = ctx = tok = ptr = pos = bot;
+    lim = bot + flen + maxfill();
+
     CHECK_RET(lex_syntax_file(opts));
+    reset_lexer();
+
+    // Second, apply user-supplied syntax config (if any).
+    // This order gives the user an opportunity to overrided only some configurations.
+    if (!globopts->syntax_file.empty()) {
+        CHECK_RET(open(globopts->syntax_file, &globopts->syntax_file));
+        CHECK_RET(lex_syntax_file(opts));
+        reset_lexer();
+    }
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
     CHECK_RET(opts.check_code_##name());
@@ -1624,7 +1628,6 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
 #undef CODE_TEMPLATE
 
     in_syntax_file = false;
-    reset(); // clean up before lexing source files
     return Ret::OK;
 }
 

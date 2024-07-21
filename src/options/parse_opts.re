@@ -318,16 +318,24 @@ opt_fixed_tags: /*!local:re2c
 */
 
 end:
+    if (global.source_file.empty()) {
+        RET_FAIL(error("no source file"));
+    }
+
+    // Append directory separator '/' to all include paths that don't have it.
+    for (std::string& p : const_cast<std::vector<std::string>&>(global.include_paths)) {
+        const char c = p.empty() ? 0 : *p.rbegin();
+        if (c != '/' && c != '\\') {
+            p.push_back('/');
+        }
+    }
+
     return Ret::OK;
 }
 
 Ret Opt::parse(char** argv, Input& input) {
     Lang lang = RE2C_LANG;
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
-
-    if (glob.source_file.empty()) {
-        RET_FAIL(error("no source file"));
-    }
 
     // Load syntax file (it must have file index 0).
     CHECK_RET(input.load_syntax_config(*this, lang));

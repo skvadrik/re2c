@@ -106,7 +106,7 @@ class Input: private LexerState {
     std::vector<std::string>* get_tmp_list();
 
   private:
-    void reset();
+    void reset_lexer();
 
     bool read(size_t want) NODISCARD;
     bool fill(size_t need) NODISCARD;
