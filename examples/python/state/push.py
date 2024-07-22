@@ -166,7 +166,7 @@ def lex(yyrecord, recv):
 
 
 def test(packets, expect):
-    # Create a "socket" (open the same file for reading and writing).
+    # Create a pipe (open the same file for reading and writing).
     fname = "pipe"
     fw = open(fname, "wb")
     fr = open(fname, "rb")

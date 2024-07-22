@@ -70,7 +70,7 @@ loop:
 }
 
 fn test(expect Status, packets []string) {
-    // Create a "socket" (open the same file for reading and writing).
+    // Create a pipe (open the same file for reading and writing).
     fname := "pipe"
     mut fw := os.create(fname) or { panic("cannot create file") }
     mut fr := os.open(fname) or { panic("cannot open file") }

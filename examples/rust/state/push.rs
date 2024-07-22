@@ -179,7 +179,7 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
 }
 
 fn test(packets: Vec<&[u8]>, expect: Status) {
-    // Create a "socket" (open the same file for reading and writing).
+    // Create a pipe (open the same file for reading and writing).
     let fname = "pipe";
     let mut fw: File = match File::create(fname) {
         Err(why) => panic!("cannot open {}: {}", fname, why),
