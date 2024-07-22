@@ -37,7 +37,7 @@ fn lex(yyinput string) What {
 yy1:
     yycursor += 1
 yy2:
-//line "v/reuse/usedir.re":33
+//line "v/reuse/usedir.re":32
     return .dunno
 //line "v/reuse/usedir.v":43
 yy3:
@@ -205,7 +205,7 @@ yy26:
         0x61 { unsafe { goto yy17 } }
         else { unsafe { goto yy9 } }
     }
-//line "v/reuse/usedir.re":34
+//line "v/reuse/usedir.re":33
 
 }
 

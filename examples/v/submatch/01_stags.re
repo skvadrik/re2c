@@ -23,7 +23,6 @@ fn parse(yyinput string) ?SemVer {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
         re2c:tags = 1;
 
         num = [0-9]+;

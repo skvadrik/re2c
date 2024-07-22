@@ -90,7 +90,7 @@ const char* DEFAULT_SYNTAX_V =
     "conf:define:YYCONDTYPE = \"YYCONDTYPE\";\n"
     "conf:define:YYCOPYMTAG = sigil \"{lhs} = \" sigil \"{rhs}\";\n"
     "conf:define:YYCOPYSTAG = sigil \"{lhs} = \" sigil \"{rhs}\";\n"
-    "conf:define:YYCTYPE = \"YYCTYPE\";\n"
+    "conf:define:YYCTYPE = \"u8\";\n"
     "conf:define:YYCTXMARKER = (api.record ? record \".\") \"yyctxmarker\";\n"
     "conf:define:YYCURSOR = (api.record ? record \".\") \"yycursor\";\n"
     "conf:define:YYDEBUG = \"yydebug\";\n"

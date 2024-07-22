@@ -52,7 +52,7 @@ fn parse(yyinput string) ?SemVer {
 yy1:
     yycursor += 1
 yy2:
-//line "v/submatch/03_posix.re":47
+//line "v/submatch/03_posix.re":46
     return none
 //line "v/submatch/03_posix.v":58
 yy3:
@@ -115,7 +115,7 @@ yy8:
     yypmatch[1] = yycursor
     yypmatch[3] = yyt2
     yypmatch[3]-= 1
-//line "v/submatch/03_posix.re":35
+//line "v/submatch/03_posix.re":34
     
             // `yynmatch` is the number of capturing groups
             if yynmatch != 4 { panic("expected 4 submatch groups") }
@@ -148,7 +148,7 @@ yy11:
         0x30...0x39 { unsafe { goto yy10 } }
         else { unsafe { goto yy5 } }
     }
-//line "v/submatch/03_posix.re":48
+//line "v/submatch/03_posix.re":47
 
 }
 

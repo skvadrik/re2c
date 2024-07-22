@@ -7,7 +7,6 @@ fn lex(yyinput string) int {
 
 loop: /*!re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = u8;
 
     *      { return -1 }
     [\x00] { return count }

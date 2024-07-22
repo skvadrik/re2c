@@ -26,7 +26,6 @@ fn lex(yyinput string) What {
     mut yycursor, mut yymarker := 0, 0
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;

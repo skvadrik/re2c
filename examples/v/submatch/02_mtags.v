@@ -91,7 +91,7 @@ mut yyt1 := tag_none
 yy1:
     yycursor += 1
 yy2:
-//line "v/submatch/02_mtags.re":83
+//line "v/submatch/02_mtags.re":82
     return none
 //line "v/submatch/02_mtags.v":97
 yy3:
@@ -118,7 +118,7 @@ yy4:
     t2 = yyt2
     t3 = yytm3
     t4 = yytm4
-//line "v/submatch/02_mtags.re":77
+//line "v/submatch/02_mtags.re":76
     
             mut ver := []int{}
             ver = arrays.concat(ver, s2n(yyinput[t1..t2]))
@@ -171,7 +171,7 @@ yy8:
         0x30...0x39 { unsafe { goto yy8 } }
         else { unsafe { goto yy6 } }
     }
-//line "v/submatch/02_mtags.re":84
+//line "v/submatch/02_mtags.re":83
 
 }
 

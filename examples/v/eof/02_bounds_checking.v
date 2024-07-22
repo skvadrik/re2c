@@ -32,7 +32,7 @@ loop:
     }
 yy1:
     yycursor += 1
-//line "v/eof/02_bounds_checking.re":21
+//line "v/eof/02_bounds_checking.re":20
     
         // Check that it is the sentinel, not some unexpected null.
         if yycursor - 1 == str.len { return count } else { return -1 }
@@ -40,7 +40,7 @@ yy1:
 //line "v/eof/02_bounds_checking.v":41
 yy2:
     yycursor += 1
-//line "v/eof/02_bounds_checking.re":27
+//line "v/eof/02_bounds_checking.re":26
     return -1
 //line "v/eof/02_bounds_checking.v":46
 yy3:
@@ -54,7 +54,7 @@ yy3:
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/02_bounds_checking.re":26
+//line "v/eof/02_bounds_checking.re":25
     unsafe { goto loop }
 //line "v/eof/02_bounds_checking.v":60
 yy5:
@@ -70,7 +70,7 @@ yy5:
     }
 yy6:
     yycursor += 1
-//line "v/eof/02_bounds_checking.re":25
+//line "v/eof/02_bounds_checking.re":24
     count += 1; unsafe { goto loop }
 //line "v/eof/02_bounds_checking.v":76
 yy7:
@@ -79,7 +79,7 @@ yy7:
         return -1
     }
     unsafe { goto yy5 }
-//line "v/eof/02_bounds_checking.re":29
+//line "v/eof/02_bounds_checking.re":28
 
 }
 

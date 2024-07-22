@@ -25,7 +25,7 @@ loop:
 yy1:
     yycursor += 1
 yy2:
-//line "v/eof/03_eof_rule.re":16
+//line "v/eof/03_eof_rule.re":15
     return -1
 //line "v/eof/03_eof_rule.v":31
 yy3:
@@ -36,7 +36,7 @@ yy3:
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/03_eof_rule.re":19
+//line "v/eof/03_eof_rule.re":18
     unsafe { goto loop }
 //line "v/eof/03_eof_rule.v":42
 yy5:
@@ -65,7 +65,7 @@ yy7:
     }
 yy8:
     yycursor += 1
-//line "v/eof/03_eof_rule.re":18
+//line "v/eof/03_eof_rule.re":17
     count += 1; unsafe { goto loop }
 //line "v/eof/03_eof_rule.v":71
 yy9:
@@ -79,13 +79,13 @@ yy9:
     }
     unsafe { goto yy6 }
 yy10:
-//line "v/eof/03_eof_rule.re":17
+//line "v/eof/03_eof_rule.re":16
     return count
 //line "v/eof/03_eof_rule.v":85
 yy11:
     yycursor = yymarker
     unsafe { goto yy2 }
-//line "v/eof/03_eof_rule.re":21
+//line "v/eof/03_eof_rule.re":20
 
 }
 

@@ -12,10 +12,9 @@ fn lex(str string) int {
 
 loop: /*!re2c
     re2c:api = custom;
-    re2c:yyfill:enable  = 0;
-    re2c:define:YYCTYPE = u8;
-    re2c:define:YYPEEK  = "peek(str, cur)";
-    re2c:define:YYSKIP  = "cur += 1";
+    re2c:yyfill:enable = 0;
+    re2c:define:YYPEEK = "peek(str, cur)";
+    re2c:define:YYSKIP = "cur += 1";
 
     *      { return -1 }
     [\x00] { return count }

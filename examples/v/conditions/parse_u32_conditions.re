@@ -16,7 +16,6 @@ fn parse_u32(yyinput string) ?u32 {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
 
         <*> * { return none }
 

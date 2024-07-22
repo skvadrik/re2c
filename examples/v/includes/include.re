@@ -5,7 +5,6 @@
 fn lex(yyinput string) Result {
     mut yycursor, mut yymarker := 0, 0
     /*!re2c
-        re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         *      { return .fail }

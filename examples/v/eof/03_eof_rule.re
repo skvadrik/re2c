@@ -8,7 +8,6 @@ fn lex(yyinput string) int {
 
 loop: /*!re2c
     re2c:eof = 0;
-    re2c:define:YYCTYPE = u8;
     re2c:yyfill:enable = 0;
 
     str = ['] ([^'\\] | [\\][^])* ['];

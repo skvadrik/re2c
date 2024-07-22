@@ -24,12 +24,12 @@ loop:
     }
 yy1:
     cur += 1
-//line "v/eof/04_fake_sentinel.re":21
+//line "v/eof/04_fake_sentinel.re":20
     return count
 //line "v/eof/04_fake_sentinel.v":30
 yy2:
     cur += 1
-//line "v/eof/04_fake_sentinel.re":20
+//line "v/eof/04_fake_sentinel.re":19
     return -1
 //line "v/eof/04_fake_sentinel.v":35
 yy3:
@@ -40,7 +40,7 @@ yy3:
         else { unsafe { goto yy4 } }
     }
 yy4:
-//line "v/eof/04_fake_sentinel.re":23
+//line "v/eof/04_fake_sentinel.re":22
     unsafe { goto loop }
 //line "v/eof/04_fake_sentinel.v":46
 yy5:
@@ -51,10 +51,10 @@ yy5:
         else { unsafe { goto yy6 } }
     }
 yy6:
-//line "v/eof/04_fake_sentinel.re":22
+//line "v/eof/04_fake_sentinel.re":21
     count += 1; unsafe { goto loop }
 //line "v/eof/04_fake_sentinel.v":57
-//line "v/eof/04_fake_sentinel.re":25
+//line "v/eof/04_fake_sentinel.re":24
 
 }
 

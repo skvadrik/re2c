@@ -50,7 +50,7 @@ fn lex(str string) {
     }
 yy1:
     cursor += 1
-//line "codegen/v/01_basic_b.re":15
+//line "codegen/v/01_basic_b.re":14
     panic("error!")
 //line "codegen/v/01_basic_b.v":56
 yy2:
@@ -59,10 +59,10 @@ yy2:
     if (yybm[0+yych] & 128) != 0 {
         unsafe { goto yy2 }
     }
-//line "codegen/v/01_basic_b.re":14
+//line "codegen/v/01_basic_b.re":13
     return
 //line "codegen/v/01_basic_b.v":65
-//line "codegen/v/01_basic_b.re":16
+//line "codegen/v/01_basic_b.re":15
 
 }
 

@@ -44,7 +44,7 @@ mut yyt1 := -1
 yy1:
     yycursor += 1
 yy2:
-//line "v/submatch/01_stags.re":38
+//line "v/submatch/01_stags.re":37
     return none
 //line "v/submatch/01_stags.v":50
 yy3:
@@ -101,7 +101,7 @@ yy8:
     t5 = yyt4
     t2 = yyt2
     t2-= 1
-//line "v/submatch/01_stags.re":31
+//line "v/submatch/01_stags.re":30
     
             return SemVer{
                 major: s2n(yyinput[t1..t2]),
@@ -128,7 +128,7 @@ yy10:
         0x30...0x39 { unsafe { goto yy10 } }
         else { unsafe { goto yy5 } }
     }
-//line "v/submatch/01_stags.re":39
+//line "v/submatch/01_stags.re":38
 
 }
 
