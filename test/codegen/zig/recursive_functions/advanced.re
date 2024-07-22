@@ -121,7 +121,6 @@ fn fill(st: *State, file: anytype) Status {
     re2c:tags = 1;
     re2c:tags:negative = "none";
     re2c:variable:yyrecord = st;
-    re2c:define:YYCTYPE = u8;
     re2c:define:YYFN = ["lex;Status", "st;*State"];
     re2c:define:YYFILL = "return Status.waiting;";
     re2c:define:YYMTAGP = "@@ = add_mtag(st.trie, @@, st.yycursor) catch none;";

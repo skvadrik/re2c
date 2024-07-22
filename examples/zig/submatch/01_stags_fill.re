@@ -76,7 +76,6 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
             re2c:eof = 0;
             re2c:tags = 1;
             re2c:variable:yyrecord = st;
-            re2c:define:YYCTYPE = u8;
             re2c:define:YYFILL = "fill(st, file) == 0";
 
             num = [0-9]+;

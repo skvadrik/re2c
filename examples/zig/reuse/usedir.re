@@ -25,7 +25,6 @@ fn lex(yyinput: [:0]const u8) Ans {
     var yymarker: usize = 0;
     %{
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;

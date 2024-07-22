@@ -16,7 +16,6 @@ fn lex(yyrecord: *state.State) usize {
     %{
         re2c:header = "lexer/state.zig";
         re2c:api = record;
-        re2c:define:YYCTYPE = "u8";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

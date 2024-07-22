@@ -47,7 +47,6 @@ fn lex(yyrecord: *State, file: anytype) i32 {
         yyrecord.token = yyrecord.yycursor;
         %{
             re2c:api = record;
-            re2c:define:YYCTYPE = u8;
             re2c:define:YYFILL = "{ if (fill(yyrecord, @@, file) != 0) return -2; }";
 
             str = ['] ([^'\\] | [\\][^])* ['];

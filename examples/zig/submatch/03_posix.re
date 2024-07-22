@@ -30,7 +30,6 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
     %{stags format = "var @@: usize = none;"; %}
 
     %{
-        re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:posix-captures = 1;
 

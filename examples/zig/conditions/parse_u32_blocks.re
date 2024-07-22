@@ -15,7 +15,6 @@ const State = struct {
     re2c:api = record;
     re2c:variable:yyrecord = st;
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = u8;
 %}
 
 const ERROR: u64 = @as(u64, std.math.maxInt(u32)) + 1; // overflow

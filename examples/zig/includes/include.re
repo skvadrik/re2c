@@ -9,7 +9,6 @@ fn lex(yyinput: [:0]const u8) Num {
     var yymarker: u32 = 0;
     %{
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
 
         *      { return Num.nan; }
         number { return Num.integer; }

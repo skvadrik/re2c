@@ -9,7 +9,6 @@ fn lex(yyinput: [:0]const u8) i32 {
 
     loop: while (true) {
         %{
-            re2c:define:YYCTYPE = u8;
             re2c:yyfill:enable = 0;
 
             *      { return -1; }

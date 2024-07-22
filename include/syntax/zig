@@ -89,7 +89,7 @@ conf:define:YYCONDTYPE = "YYCond";
 conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCTXMARKER = (api.record ? record ".") "yyctxmarker";
-conf:define:YYCTYPE = "YYChar";
+conf:define:YYCTYPE = "u8";
 conf:define:YYCURSOR = (api.record ? record ".") "yycursor";
 conf:define:YYDEBUG = "yydebug";
 conf:define:YYFILL = "yyfill";

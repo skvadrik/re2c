@@ -137,5 +137,5 @@ test {
     try std.testing.expectEqual(lex_captures(""), -1);
     try std.testing.expectEqual(lex_captures("a"), 0);
 }
-codegen/zig/nested_fixed_tags.re:27:25: warning: rule matches empty string [-Wmatch-empty-string]
-codegen/zig/nested_fixed_tags.re:41:17: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/zig/nested_fixed_tags.re:26:25: warning: rule matches empty string [-Wmatch-empty-string]
+codegen/zig/nested_fixed_tags.re:40:17: warning: rule matches empty string [-Wmatch-empty-string]

@@ -91,7 +91,7 @@ const char* DEFAULT_SYNTAX_ZIG =
     "conf:define:YYCOPYMTAG = sigil \"{lhs} = \" sigil \"{rhs};\";\n"
     "conf:define:YYCOPYSTAG = sigil \"{lhs} = \" sigil \"{rhs};\";\n"
     "conf:define:YYCTXMARKER = (api.record ? record \".\") \"yyctxmarker\";\n"
-    "conf:define:YYCTYPE = \"YYChar\";\n"
+    "conf:define:YYCTYPE = \"u8\";\n"
     "conf:define:YYCURSOR = (api.record ? record \".\") \"yycursor\";\n"
     "conf:define:YYDEBUG = \"yydebug\";\n"
     "conf:define:YYFILL = \"yyfill\";\n"

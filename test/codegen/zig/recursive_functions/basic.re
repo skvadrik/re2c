@@ -10,7 +10,6 @@ const State = struct {
 /*!re2c
     re2c:api = custom;
     re2c:define:YYFN = ["lex;bool", "st;*State"];
-    re2c:define:YYCTYPE = u8;
     re2c:define:YYPEEK = "st.str[st.cur]";
     re2c:define:YYSKIP = "st.cur += 1;";
     re2c:yyfill:enable = 0;

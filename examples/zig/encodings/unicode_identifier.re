@@ -9,7 +9,6 @@ fn lex(yyinput: [:0]const u8) bool {
     var yymarker: u32 = 0;
 
     %{
-        re2c:define:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         // Simplified "Unicode Identifier and Pattern Syntax"

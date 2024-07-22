@@ -73,4 +73,4 @@ pub const State = struct {
     yycursor: usize,
     yyt1: usize,
 };
-zig/headers/header.re:23:21: warning: rule matches empty string [-Wmatch-empty-string]
+zig/headers/header.re:22:21: warning: rule matches empty string [-Wmatch-empty-string]
