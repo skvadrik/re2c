@@ -21,12 +21,12 @@ let rec yy0 (st : state) (count : int) : int =
 		| _ -> (yy2 [@tailcall]) st count
 
 and yy1 (st : state) (count : int) : int =
-#19 "ocaml/eof/04_fake_sentinel.re"
+#18 "ocaml/eof/04_fake_sentinel.re"
 	count
 #27 "ocaml/eof/04_fake_sentinel.ml"
 
 and yy2 (st : state) (count : int) : int =
-#18 "ocaml/eof/04_fake_sentinel.re"
+#17 "ocaml/eof/04_fake_sentinel.re"
 	-1
 #32 "ocaml/eof/04_fake_sentinel.ml"
 
@@ -39,7 +39,7 @@ and yy3 (st : state) (count : int) : int =
 		| _ -> (yy4 [@tailcall]) st count
 
 and yy4 (st : state) (count : int) : int =
-#21 "ocaml/eof/04_fake_sentinel.re"
+#20 "ocaml/eof/04_fake_sentinel.re"
 	lex st count
 #45 "ocaml/eof/04_fake_sentinel.ml"
 
@@ -52,14 +52,14 @@ and yy5 (st : state) (count : int) : int =
 		| _ -> (yy6 [@tailcall]) st count
 
 and yy6 (st : state) (count : int) : int =
-#20 "ocaml/eof/04_fake_sentinel.re"
+#19 "ocaml/eof/04_fake_sentinel.re"
 	lex st (count + 1)
 #58 "ocaml/eof/04_fake_sentinel.ml"
 
 and lex (st : state) (count : int) : int =
 	(yy0 [@tailcall]) st count
 
-#22 "ocaml/eof/04_fake_sentinel.re"
+#21 "ocaml/eof/04_fake_sentinel.re"
 
 
 let test(str, count) =

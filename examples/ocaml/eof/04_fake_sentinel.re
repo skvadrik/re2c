@@ -10,7 +10,6 @@ type state = {
 %{
     re2c:api = custom;
     re2c:define:YYFN = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYCTYPE = char;
     re2c:define:YYPEEK = "if st.cur < st.lim then st.str.[st.cur] else '\\x00'";
     re2c:define:YYSKIP = "st.cur <- st.cur + 1;";
     re2c:yyfill:enable = 0;

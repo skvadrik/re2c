@@ -56,7 +56,7 @@ and yy1 (st : state) : semver option =
 	(yy2 [@tailcall]) st
 
 and yy2 (st : state) : semver option =
-#47 "ocaml/submatch/03_posix.re"
+#46 "ocaml/submatch/03_posix.re"
 	None
 #62 "ocaml/submatch/03_posix.ml"
 
@@ -126,7 +126,7 @@ and yy8 (st : state) : semver option =
 	st.yypmatch.(1) <- st.yycursor;
 	st.yypmatch.(3) <- st.yyt2;
 	st.yypmatch.(3) <- st.yypmatch.(3) - 1;
-#37 "ocaml/submatch/03_posix.re"
+#36 "ocaml/submatch/03_posix.re"
 	
         (* Even `yypmatch` values are for opening parentheses, odd values
            are for closing parentheses, the first group is the whole match. *)
@@ -162,7 +162,7 @@ and yy11 (st : state) (yych : char) : semver option =
 and parse (st : state) : semver option =
 	(yy0 [@tailcall]) st
 
-#48 "ocaml/submatch/03_posix.re"
+#47 "ocaml/submatch/03_posix.re"
 
 
 let test (str: string) (result: semver option) =
@@ -180,7 +180,7 @@ let test (str: string) (result: semver option) =
 		yyt3 = -1;
 		yyt4 = -1;
 		yyt5 = -1;
-#57 "ocaml/submatch/03_posix.re"
+#56 "ocaml/submatch/03_posix.re"
 
     }
     in if not (parse st = result) then raise (Failure "error")

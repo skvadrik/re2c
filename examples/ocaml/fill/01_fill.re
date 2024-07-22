@@ -40,7 +40,6 @@ let fill(st: state) : status =
 
 %{
     re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
-    re2c:define:YYCTYPE = "char";
     re2c:define:YYFILL = "fill yyrecord = Ok";
     re2c:eof = 0;
 

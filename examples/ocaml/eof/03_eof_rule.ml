@@ -35,7 +35,7 @@ and yy1 (yyrecord : state) (count : int) : int =
 	(yy2 [@tailcall]) yyrecord count
 
 and yy2 (yyrecord : state) (count : int) : int =
-#21 "ocaml/eof/03_eof_rule.re"
+#20 "ocaml/eof/03_eof_rule.re"
 	-1
 #41 "ocaml/eof/03_eof_rule.ml"
 
@@ -48,7 +48,7 @@ and yy3 (yyrecord : state) (count : int) : int =
 		| _ -> (yy4 [@tailcall]) yyrecord count
 
 and yy4 (yyrecord : state) (count : int) : int =
-#24 "ocaml/eof/03_eof_rule.re"
+#23 "ocaml/eof/03_eof_rule.re"
 	lex yyrecord count
 #54 "ocaml/eof/03_eof_rule.ml"
 
@@ -87,7 +87,7 @@ and yy7 (yyrecord : state) (count : int) (yych : char) : int =
 			)
 
 and yy8 (yyrecord : state) (count : int) : int =
-#23 "ocaml/eof/03_eof_rule.re"
+#22 "ocaml/eof/03_eof_rule.re"
 	lex yyrecord (count + 1)
 #93 "ocaml/eof/03_eof_rule.ml"
 
@@ -106,7 +106,7 @@ and yy9 (yyrecord : state) (count : int) : int =
 	)
 
 and yy10 (yyrecord : state) (count : int) : int =
-#22 "ocaml/eof/03_eof_rule.re"
+#21 "ocaml/eof/03_eof_rule.re"
 	count
 #112 "ocaml/eof/03_eof_rule.ml"
 
@@ -117,7 +117,7 @@ and yy11 (yyrecord : state) (count : int) : int =
 and lex (yyrecord : state) (count : int) : int =
 	(yy0 [@tailcall]) yyrecord count
 
-#25 "ocaml/eof/03_eof_rule.re"
+#24 "ocaml/eof/03_eof_rule.re"
 
 
 let test(str, count) =

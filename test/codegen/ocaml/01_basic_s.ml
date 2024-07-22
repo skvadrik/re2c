@@ -17,7 +17,7 @@ let rec yy0 (st : state) : bool =
 	else (yy1 [@tailcall]) st
 
 and yy1 (st : state) : bool =
-#19 "codegen/ocaml/01_basic_s.re"
+#18 "codegen/ocaml/01_basic_s.re"
 	false
 #23 "codegen/ocaml/01_basic_s.ml"
 
@@ -33,14 +33,14 @@ and yy2 (st : state) : bool =
 	)
 
 and yy3 (st : state) : bool =
-#18 "codegen/ocaml/01_basic_s.re"
+#17 "codegen/ocaml/01_basic_s.re"
 	true
 #39 "codegen/ocaml/01_basic_s.ml"
 
 and lex (st : state) : bool =
 	(yy0 [@tailcall]) st
 
-#20 "codegen/ocaml/01_basic_s.re"
+#19 "codegen/ocaml/01_basic_s.re"
 
 
 let main () =

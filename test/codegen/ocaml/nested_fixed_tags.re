@@ -17,7 +17,6 @@ type state = {
 
 /*!re2c
     re2c:api = custom;
-    re2c:define:YYCTYPE = char;
     re2c:define:YYPEEK = "st.str.[st.cur]";
     re2c:define:YYSKIP = "st.cur <- st.cur + 1;";
     re2c:define:YYBACKUP = "st.mar <- st.cur;";
