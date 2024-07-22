@@ -1617,6 +1617,7 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
     // Second, apply user-supplied syntax config (if any).
     // This order gives the user an opportunity to overrided only some configurations.
     if (!globopts->syntax_file.empty()) {
+        // Pass itself as parent to `open` to enable search in include paths.
         CHECK_RET(open(globopts->syntax_file, &globopts->syntax_file));
         CHECK_RET(lex_syntax_file(opts));
         reset_lexer();
