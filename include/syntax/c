@@ -88,18 +88,18 @@ conf:define:YYBACKUPCTX = "YYBACKUPCTX";
 conf:define:YYCONDTYPE = "YYCONDTYPE";
 conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
-conf:define:YYCTXMARKER = (api.record ? record "->yyctxmarker" : "YYCTXMARKER");
+conf:define:YYCTXMARKER = (api.record ? yyrecord "->yyctxmarker" : "YYCTXMARKER");
 conf:define:YYCTYPE = "YYCTYPE";
-conf:define:YYCURSOR = (api.record ? record "->yycursor" : "YYCURSOR");
+conf:define:YYCURSOR = (api.record ? yyrecord "->yycursor" : "YYCURSOR");
 conf:define:YYDEBUG = "YYDEBUG";
 conf:define:YYFILL = "YYFILL";
 conf:define:YYGETACCEPT = sigil "{var}";
 conf:define:YYGETCOND = "YYGETCONDITION"; // historic default
 conf:define:YYGETSTATE = "YYGETSTATE";
-conf:define:YYINPUT = (api.record ? record "->yyinput" : "YYINPUT");
+conf:define:YYINPUT = (api.record ? yyrecord "->yyinput" : "YYINPUT");
 conf:define:YYLESSTHAN = "YYLESSTHAN";
-conf:define:YYLIMIT = (api.record ? record "->yylimit" : "YYLIMIT");
-conf:define:YYMARKER = (api.record ? record "->yymarker" : "YYMARKER");
+conf:define:YYLIMIT = (api.record ? yyrecord "->yylimit" : "YYLIMIT");
+conf:define:YYMARKER = (api.record ? yyrecord "->yymarker" : "YYMARKER");
 conf:define:YYMAXFILL = "YYMAXFILL";
 conf:define:YYMAXNMATCH = "YYMAXNMATCH";
 conf:define:YYMTAGN = "YYMTAGN";
@@ -117,7 +117,7 @@ conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
 conf:define:YYSKIP = "YYSKIP";
 conf:define:YYSTAGN = "YYSTAGN";
 conf:define:YYSTAGP = "YYSTAGP";
-conf:tags:expression = (api.record ? record "->") sigil;
+conf:tags:expression = (api.record ? yyrecord "->") sigil;
 conf:tags:negative = (api.generic ? "@@" : "NULL");
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil ";";
@@ -224,160 +224,165 @@ code:abort = topindent "abort();" nl;
 
 code:yydebug =
     topindent (api.generic
-        ? debug (api_style.functions ? "();")
+        ? YYDEBUG (api_style.functions ? "();")
     : (api.record
-        ? debug "(" record ");"
-        : debug "(" state ", " char ");"
+        ? YYDEBUG "(" yyrecord ");"
+        : YYDEBUG "(" state ", " yych ");"
     )) nl;
 
 code:yypeek =
-    topindent (code_model.recursive_functions ? ctype " ") char " = " (api.generic
-        ? peek (api_style.functions ? "()")
-        : typecast "*" cursor
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = " (api.generic
+        ? YYPEEK (api_style.functions ? "()")
+        : typecast "*" YYCURSOR
     ) ";" nl;
 
 code:yyskip =
     topindent (api.generic
-        ? skip (api_style.functions ? "();")
-        : "++" cursor ";"
+        ? YYSKIP (api_style.functions ? "();")
+        : "++" YYCURSOR ";"
     ) nl;
 
 code:yybackup =
     topindent (api.generic
-        ? backup (api_style.functions ? "();")
-        : marker " = " cursor ";"
+        ? YYBACKUP (api_style.functions ? "();")
+        : YYMARKER " = " YYCURSOR ";"
     ) nl;
 
 code:yybackupctx =
     topindent (api.generic
-        ? backupctx (api_style.functions ? "();")
-        : ctxmarker " = " cursor ";"
+        ? YYBACKUPCTX (api_style.functions ? "();")
+        : YYCTXMARKER " = " YYCURSOR ";"
     ) nl;
+
+code:yyskip_yypeek =
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
+        typecast "*++" YYCURSOR ";" nl;
+
+code:yypeek_yyskip =
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
+        typecast "*" YYCURSOR "++;" nl;
+
+code:yyskip_yybackup =
+    topindent YYMARKER " = ++" YYCURSOR ";" nl;
+
+code:yybackup_yyskip =
+    topindent YYMARKER " = " YYCURSOR "++;" nl;
+
+code:yybackup_yypeek =
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
+        typecast "*(" YYMARKER " = " YYCURSOR ");" nl;
+
+code:yyskip_yybackup_yypeek =
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
+        typecast "*(" YYMARKER " = ++" YYCURSOR ");" nl;
+
+code:yybackup_yypeek_yyskip =
+    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
+        typecast "*(" YYMARKER " = " YYCURSOR "++);" nl;
 
 code:yyrestore =
     topindent (api.generic
-        ? restore (api_style.functions ? "();")
-        : cursor " = " marker ";"
+        ? YYRESTORE (api_style.functions ? "();")
+        : YYCURSOR " = " YYMARKER ";"
     ) nl;
 
 code:yyrestorectx =
     topindent (api.generic
-        ? restorectx (api_style.functions ? "();")
-        : cursor " = " ctxmarker ";"
+        ? YYRESTORECTX (api_style.functions ? "();")
+        : YYCURSOR " = " YYCTXMARKER ";"
     ) nl;
 
 code:yyrestoretag =
     topindent (api.generic
-        ? restoretag (api_style.functions ? "(" tag ");")
-        : cursor " = " tag ";"
+        ? YYRESTORETAG (api_style.functions ? "(" tag ");")
+        : YYCURSOR " = " tag ";"
     ) nl;
 
 code:yyshift =
     topindent (api.generic
-        ? shift (api_style.functions ? "(-" offset ");")
-        : cursor " -= " offset ";"
+        ? YYSHIFT (api_style.functions ? "(-" offset ");")
+        : YYCURSOR " -= " offset ";"
     ) nl;
 
 code:yyshiftstag =
     topindent (nested ? "if (" tag " != " neg ") ") (api.generic
-        ? shiftstag (api_style.functions ? "(" tag ", -" offset ");")
+        ? YYSHIFTSTAG (api_style.functions ? "(" tag ", -" offset ");")
         : tag " -= " offset ";"
     ) nl;
 
-code:yyshiftmtag = topindent shiftmtag (api_style.functions ? "(" tag ", -" offset ");") nl;
+code:yyshiftmtag =
+    topindent YYSHIFTMTAG (api_style.functions ? "(" tag ", -" offset ");") nl;
 
 code:yystagp =
     topindent (api.generic
-        ? stagp (api_style.functions ? "(" tag ");")
-        : tag " = " cursor ";"
+        ? YYSTAGP (api_style.functions ? "(" tag ");")
+        : tag " = " YYCURSOR ";"
     ) nl;
 
-code:yymtagp = topindent mtagp (api_style.functions ? "(" tag ");") nl;
+code:yymtagp =
+    topindent YYMTAGP (api_style.functions ? "(" tag ");") nl;
 
 code:yystagn =
     topindent (api.generic
-        ? stagn (api_style.functions ? "(" tag ");")
+        ? YYSTAGN (api_style.functions ? "(" tag ");")
         : tag " = " neg ";"
     ) nl;
 
-code:yymtagn = topindent mtagn (api_style.functions ? "(" tag ");") nl;
+code:yymtagn =
+    topindent YYMTAGN (api_style.functions ? "(" tag ");") nl;
 
 code:yycopystag =
     topindent (api.generic
-        ? copystag // function style is not supported, as there's no sensible default
+        ? YYCOPYSTAG // function style is not supported, as there's no sensible default
         : lhs " = " rhs ";"
     ) nl;
 
 code:yycopymtag =
     topindent (api.generic
-        ? copymtag // function style is not supported, as there's no sensible default
+        ? YYCOPYMTAG // function style is not supported, as there's no sensible default
         : lhs " = " rhs ";"
     ) nl;
 
-code:yyskip_yypeek =
-    topindent (code_model.recursive_functions ? ctype " ") char " = "
-        typecast "*++" cursor ";" nl;
-
-code:yypeek_yyskip =
-    topindent (code_model.recursive_functions ? ctype " ") char " = "
-        typecast "*" cursor "++;" nl;
-
-code:yyskip_yybackup = topindent marker " = ++" cursor ";" nl;
-
-code:yybackup_yyskip = topindent marker " = " cursor "++;" nl;
-
-code:yybackup_yypeek =
-    topindent (code_model.recursive_functions ? ctype " ") char " = "
-        typecast "*(" marker " = " cursor ");" nl;
-
-code:yyskip_yybackup_yypeek =
-    topindent (code_model.recursive_functions ? ctype " ") char " = "
-        typecast "*(" marker " = ++" cursor ");" nl;
-
-code:yybackup_yypeek_yyskip =
-    topindent (code_model.recursive_functions ? ctype " ") char " = "
-        typecast "*(" marker " = " cursor "++);" nl;
-
 code:yygetaccept =
     (api.generic
-        ? getaccept // function style is not supported, as there's no sensible default
+        ? YYGETACCEPT // function style is not supported, as there's no sensible default
     : (api.record & (storable_state | code_model.recursive_functions)
-        ? record "->" var
+        ? yyrecord "->" var
         : var));
 
 code:yysetaccept =
     topindent (api.generic
-        ? setaccept // function style is not supported, as there's no sensible default
+        ? YYSETACCEPT // function style is not supported, as there's no sensible default
     : (api.record & (storable_state | code_model.recursive_functions)
-        ? record "->" var " = " val ";"
+        ? yyrecord "->" var " = " val ";"
         : var " = " val ";"
     )) nl;
 
 code:yygetcond =
     (api.record
-        ? record "->" var
-        : getcond (api_style.functions ? "()"));
+        ? yyrecord "->" var
+        : YYGETCOND (api_style.functions ? "()"));
 
 code:yysetcond =
     topindent (api.record
-        ? record "->" var " = " val ";"
-        : setcond (api_style.functions ? "(" val ");")
+        ? yyrecord "->" var " = " val ";"
+        : YYSETCOND (api_style.functions ? "(" val ");")
     ) nl;
 
 code:yygetstate =
     (api.record
-        ? record "->" var
-        : getstate (api_style.functions ? "()"));
+        ? yyrecord "->" var
+        : YYGETSTATE (api_style.functions ? "()"));
 
 code:yysetstate =
     topindent (api.record
-        ? record "->" var " = " val ";"
-        : setstate (api_style.functions ? "(" val ");")
+        ? yyrecord "->" var " = " val ";"
+        : YYSETSTATE (api_style.functions ? "(" val ");")
     ) nl;
 
 code:yylessthan =
     (api.generic
-        ? lessthan (api_style.functions ? "(" need ")")
+        ? YYLESSTHAN (api_style.functions ? "(" need ")")
         : (many
-            ? "(" limit " - " cursor ") < " need
-            : limit " <= " cursor));
+            ? "(" YYLIMIT " - " YYCURSOR ") < " need
+            : YYLIMIT " <= " YYCURSOR));

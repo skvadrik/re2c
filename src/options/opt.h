@@ -296,62 +296,30 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGNAME, "argname") \
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
-    STX_LOCAL_VAR(BACKUP, "backup") \
-    STX_LOCAL_VAR(BACKUPCTX, "backupctx") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \
-    STX_LOCAL_VAR(CHAR, "char") \
     STX_LOCAL_VAR(COND, "cond") \
-    STX_LOCAL_VAR(COPYMTAG, "copymtag") \
-    STX_LOCAL_VAR(COPYSTAG, "copystag") \
-    STX_LOCAL_VAR(CTYPE, "ctype") \
-    STX_LOCAL_VAR(CTXMARKER, "ctxmarker") \
-    STX_LOCAL_VAR(CURSOR, "cursor") \
     STX_LOCAL_VAR(DATE, "date") \
-    STX_LOCAL_VAR(DEBUG, "debug") \
     STX_LOCAL_VAR(ELEM, "elem") \
     STX_LOCAL_VAR(EXPR, "expr") \
     STX_LOCAL_VAR(FN, "fn") \
     STX_LOCAL_VAR(FILE, "file") \
     STX_LOCAL_VAR(FNDECL, "fndecl") \
     STX_LOCAL_VAR(FNDEF, "fndef") \
-    STX_LOCAL_VAR(GETACCEPT, "getaccept") \
-    STX_LOCAL_VAR(GETCOND, "getcond") \
-    STX_LOCAL_VAR(GETSTATE, "getstate") \
     STX_LOCAL_VAR(INDEX, "index") \
     STX_LOCAL_VAR(INIT, "init") \
-    STX_LOCAL_VAR(INPUT, "input") \
     STX_LOCAL_VAR(LABEL, "label") \
-    STX_LOCAL_VAR(LESSTHAN, "lessthan") \
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
-    STX_LOCAL_VAR(LIMIT, "limit") \
-    STX_LOCAL_VAR(MARKER, "marker") \
-    STX_LOCAL_VAR(MTAGN, "mtagn") \
-    STX_LOCAL_VAR(MTAGP, "mtagp") \
     STX_LOCAL_VAR(NAME, "name") \
     STX_LOCAL_VAR(NEED, "need") \
     STX_LOCAL_VAR(NEG, "neg") \
     STX_LOCAL_VAR(OFFSET, "offset") \
-    STX_LOCAL_VAR(PEEK, "peek") \
-    STX_LOCAL_VAR(RECORD, "record") \
-    STX_LOCAL_VAR(RESTORE, "restore") \
-    STX_LOCAL_VAR(RESTORECTX, "restorectx") \
-    STX_LOCAL_VAR(RESTORETAG, "restoretag") \
     STX_LOCAL_VAR(RETVAL, "retval") \
     STX_LOCAL_VAR(RHS, "rhs") \
     STX_LOCAL_VAR(ROW, "row") \
-    STX_LOCAL_VAR(SETACCEPT, "setaccept") \
-    STX_LOCAL_VAR(SETCOND, "setcond") \
-    STX_LOCAL_VAR(SETSTATE, "setstate") \
     STX_LOCAL_VAR(SIGIL, "sigil") \
     STX_LOCAL_VAR(SIZE, "size") \
-    STX_LOCAL_VAR(SHIFT, "shift") \
-    STX_LOCAL_VAR(SHIFTMTAG, "shiftmtag") \
-    STX_LOCAL_VAR(SHIFTSTAG, "shiftstag") \
-    STX_LOCAL_VAR(SKIP, "skip") \
-    STX_LOCAL_VAR(STAGN, "stagn") \
-    STX_LOCAL_VAR(STAGP, "stagp") \
     STX_LOCAL_VAR(STATE, "state") \
     STX_LOCAL_VAR(STMT, "stmt") \
     STX_LOCAL_VAR(TAG, "tag") \
@@ -359,7 +327,40 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(TYPECAST, "typecast") \
     STX_LOCAL_VAR(VAL, "val") \
     STX_LOCAL_VAR(VAR, "var") \
-    STX_LOCAL_VAR(VER, "version")
+    STX_LOCAL_VAR(VER, "version") \
+    /* vars for API primitives */ \
+    STX_LOCAL_VAR(BACKUP, "YYBACKUP") \
+    STX_LOCAL_VAR(BACKUPCTX, "YYBACKUPCTX") \
+    STX_LOCAL_VAR(CHAR, "yych") \
+    STX_LOCAL_VAR(COPYMTAG, "YYCOPYMTAG") \
+    STX_LOCAL_VAR(COPYSTAG, "YYCOPYSTAG") \
+    STX_LOCAL_VAR(CTYPE, "YYCTYPE") \
+    STX_LOCAL_VAR(CTXMARKER, "YYCTXMARKER") \
+    STX_LOCAL_VAR(CURSOR, "YYCURSOR") \
+    STX_LOCAL_VAR(DEBUG, "YYDEBUG") \
+    STX_LOCAL_VAR(GETACCEPT, "YYGETACCEPT") \
+    STX_LOCAL_VAR(GETCOND, "YYGETCOND") \
+    STX_LOCAL_VAR(GETSTATE, "YYGETSTATE") \
+    STX_LOCAL_VAR(INPUT, "YYINPUT") \
+    STX_LOCAL_VAR(LESSTHAN, "YYLESSTHAN") \
+    STX_LOCAL_VAR(LIMIT, "YYLIMIT") \
+    STX_LOCAL_VAR(MARKER, "YYMARKER") \
+    STX_LOCAL_VAR(MTAGN, "YYMTAGN") \
+    STX_LOCAL_VAR(MTAGP, "YYMTAGP") \
+    STX_LOCAL_VAR(PEEK, "YYPEEK") \
+    STX_LOCAL_VAR(RECORD, "yyrecord") \
+    STX_LOCAL_VAR(RESTORE, "YYRESTORE") \
+    STX_LOCAL_VAR(RESTORECTX, "YYRESTORECTX") \
+    STX_LOCAL_VAR(RESTORETAG, "YYRESTORETAG") \
+    STX_LOCAL_VAR(SETACCEPT, "YYSETACCEPT") \
+    STX_LOCAL_VAR(SETCOND, "YYSETCOND") \
+    STX_LOCAL_VAR(SETSTATE, "YYSETSTATE") \
+    STX_LOCAL_VAR(SHIFT, "YYSHIFT") \
+    STX_LOCAL_VAR(SHIFTMTAG, "YYSHIFTMTAG") \
+    STX_LOCAL_VAR(SHIFTSTAG, "YYSHIFTSTAG") \
+    STX_LOCAL_VAR(SKIP, "YYSKIP") \
+    STX_LOCAL_VAR(STAGN, "YYSTAGN") \
+    STX_LOCAL_VAR(STAGP, "YYSTAGP")
 
 // global variables in syntax files
 #define RE2C_STX_GLOBAL_VARS \

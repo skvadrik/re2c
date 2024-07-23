@@ -199,72 +199,72 @@ code:line_info = "#" line " \"" file "\"" nl;
 
 code:abort = topindent "error \"internal lexer error\"" nl;
 
-code:yydebug = topindent debug nl;
+code:yydebug = topindent YYDEBUG nl;
 
 code:yypeek =
     topindent (api.record
         ? (monadic
-            ? char " <- return $ " peek " " input " " cursor
-            : "let " char " = " peek " " input " " cursor " in")
+            ? yych " <- return $ " YYPEEK " " YYINPUT " " YYCURSOR
+            : "let " yych " = " YYPEEK " " YYINPUT " " YYCURSOR " in")
         : (monadic
-            ? char " <- " peek
-            : "let " char " = " peek " in")
+            ? yych " <- " YYPEEK
+            : "let " yych " = " YYPEEK " in")
     ) nl;
 
 code:yyskip =
     topindent (api.record
         ? (monadic
-            ? cursor " <- return $ " cursor " + 1"
-            : "let __ = " cursor " + 1 in let " cursor " = __ in")
-        : skip
+            ? YYCURSOR " <- return $ " YYCURSOR " + 1"
+            : "let __ = " YYCURSOR " + 1 in let " YYCURSOR " = __ in")
+        : YYSKIP
     ) nl;
 
 code:yybackup =
     topindent (api.record
         ? (monadic
-            ? "let " marker " = " cursor
-            : "let " marker " = " cursor " in")
-        : backup
+            ? "let " YYMARKER " = " YYCURSOR
+            : "let " YYMARKER " = " YYCURSOR " in")
+        : YYBACKUP
     ) nl;
 
 code:yybackupctx =
     topindent (api.record
         ? (monadic
-            ? "let " ctxmarker " = " cursor
-            : "let " ctxmarker " = " cursor " in")
-        : backupctx
+            ? "let " YYCTXMARKER " = " YYCURSOR
+            : "let " YYCTXMARKER " = " YYCURSOR " in")
+        : YYBACKUPCTX
     ) nl;
 
 code:yyrestore =
     topindent (api.record
         ? (monadic
-            ? "let " cursor " = " marker
-            : "let " cursor " = " marker " in")
-        : restore
+            ? "let " YYCURSOR " = " YYMARKER
+            : "let " YYCURSOR " = " YYMARKER " in")
+        : YYRESTORE
     ) nl;
 
 code:yyrestorectx =
     topindent (api.record
         ? (monadic
-            ? "let " cursor " = " ctxmarker
-            : "let " cursor " = " ctxmarker " in")
-        : restorectx
+            ? "let " YYCURSOR " = " YYCTXMARKER
+            : "let " YYCURSOR " = " YYCTXMARKER " in")
+        : YYRESTORECTX
     ) nl;
 
 code:yyrestoretag =
     topindent (api.record
         ? (monadic
-            ? "let " cursor " = " tag
-            : "let " cursor " = " tag " in")
-        : restoretag
+            ? "let " YYCURSOR " = " tag
+            : "let " YYCURSOR " = " tag " in")
+        : YYRESTORETAG
     ) nl;
 
 code:yyshift =
     topindent (api.record
         ? (monadic
-            ? cursor " <- return $ " cursor " - " offset
-            : "let __ = " cursor " - " offset " in let " cursor " = __ in")
-        : shift
+            ? YYCURSOR " <- return $ " YYCURSOR " - " offset
+            : "let __ = " YYCURSOR " - " offset " in let " YYCURSOR " = __ in")
+        : YYSHIFT
     ) nl;
 
 code:yyshiftstag =
@@ -273,37 +273,40 @@ code:yyshiftstag =
             ? tag " <- return $ if " tag " == " neg " then " neg " else " tag " - " offset
             :         "let __ = if " tag " == " neg " then " neg " else " tag " - " offset
                 " in let " tag " = __ in")
-        : shiftstag
+        : YYSHIFTSTAG
     ) nl;
 
-code:yyshiftmtag = topindent shiftmtag nl;
+code:yyshiftmtag =
+    topindent YYSHIFTMTAG nl;
 
 code:yystagp =
     topindent (api.record
         ? (monadic
-            ? "let " tag " = " cursor
-            : "let " tag " = " cursor " in")
-        : stagp
+            ? "let " tag " = " YYCURSOR
+            : "let " tag " = " YYCURSOR " in")
+        : YYSTAGP
     ) nl;
 
-code:yymtagp = topindent mtagp nl;
+code:yymtagp =
+    topindent YYMTAGP nl;
 
 code:yystagn =
     topindent (api.record
         ? (monadic
             ? "let " tag " = " neg
             : "let " tag " = " neg " in")
-        : stagn
+        : YYSTAGN
     ) nl;
 
-code:yymtagn = topindent mtagn nl;
+code:yymtagn =
+    topindent YYMTAGN nl;
 
 code:yycopystag =
     topindent (api.record
         ? (monadic
             ? "let " lhs " = " rhs
             : "let " lhs " = " rhs " in")
-        : copystag
+        : YYCOPYSTAG
     ) nl;
 
 code:yycopymtag =
@@ -311,40 +314,43 @@ code:yycopymtag =
         ? (monadic
             ? "let " lhs " = " rhs
             : "let " lhs " = " rhs " in")
-        : copymtag
+        : YYCOPYMTAG
     ) nl;
 
-code:yygetaccept = (api.record ? var : getaccept);
+code:yygetaccept =
+    (api.record ? var : YYGETACCEPT);
 
 code:yysetaccept =
     topindent (api.record
         ? (monadic
             ? "let " var " = " val
             : "let " var " = " val " in")
-        : setaccept
+        : YYSETACCEPT
     ) nl;
 
-code:yygetcond = (api.record ? var : getcond);
+code:yygetcond =
+    (api.record ? var : YYGETCOND);
 
 code:yysetcond =
     topindent (api.record
         ? (monadic
             ? "let " var " = " val
             : "let " var " = " val " in")
-        : setcond
+        : YYSETCOND
     ) nl;
 
-code:yygetstate = (api.record ? var : getstate);
+code:yygetstate =
+    (api.record ? var : YYGETSTATE);
 
 code:yysetstate =
     topindent (api.record
         ? (monadic
             ? "let " var " = " val
             : "let " var " = " val " in")
-        : setstate
+        : YYSETSTATE
     ) nl;
 
 code:yylessthan =
     (api.record
-        ? cursor " >= " limit // YYFILL check can only be used with EOF rule $
-        : lessthan);
+        ? YYCURSOR " >= " YYLIMIT // YYFILL check can only be used with EOF rule $
+        : YYLESSTHAN);

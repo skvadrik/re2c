@@ -89,17 +89,17 @@ conf:define:YYCONDTYPE = "YYCond";
 conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
 conf:define:YYCTYPE = "YYChar";
-conf:define:YYCTXMARKER = (api.record ? record ".") "yyctxmarker";
-conf:define:YYCURSOR = (api.record ? record ".") "yycursor";
+conf:define:YYCTXMARKER = (api.record ? yyrecord ".") "yyctxmarker";
+conf:define:YYCURSOR = (api.record ? yyrecord ".") "yycursor";
 conf:define:YYDEBUG = "yydebug";
 conf:define:YYFILL = "yyfill";
 conf:define:YYGETACCEPT = sigil "{var}";
 conf:define:YYGETCOND = "yygetcond";
 conf:define:YYGETSTATE = "yygetstate";
-conf:define:YYINPUT = (api.record ? record ".") "yyinput";
+conf:define:YYINPUT = (api.record ? yyrecord ".") "yyinput";
 conf:define:YYLESSTHAN = "yylessthan";
-conf:define:YYLIMIT = (api.record ? record ".") "yylimit";
-conf:define:YYMARKER = (api.record ? record ".") "yymarker";
+conf:define:YYLIMIT = (api.record ? yyrecord ".") "yylimit";
+conf:define:YYMARKER = (api.record ? yyrecord ".") "yymarker";
 conf:define:YYMAXFILL = "YYMAXFILL";
 conf:define:YYMAXNMATCH = "YYMAXNMATCH";
 conf:define:YYMTAGN = "yymtagn";
@@ -117,7 +117,7 @@ conf:define:YYSHIFTMTAG = "yyshiftmtag";
 conf:define:YYSKIP = "yyskip";
 conf:define:YYSTAGN = "yystagn";
 conf:define:YYSTAGP = "yystagp";
-conf:tags:expression = (api.record ? record ".") sigil;
+conf:tags:expression = (api.record ? yyrecord ".") sigil;
 conf:tags:negative = (api.generic ? "@@" : "-1");
 conf:cond:divider = "";
 conf:cond:goto = "";
@@ -184,130 +184,133 @@ code:abort = topindent "throw new IllegalStateException(\"internal lexer error\"
 
 code:yydebug =
     topindent (api.generic
-        ? debug
+        ? YYDEBUG
     : (api.record
-        ? debug "(" record ");"
-        : debug "(" state ", " char ");"
+        ? YYDEBUG "(" yyrecord ");"
+        : YYDEBUG "(" state ", " yych ");"
     )) nl;
 
 // No YYFILL specialization for default/record API,
 // as there's no uniform syntax for strings and arrays.
-code:yypeek = topindent char " = " peek ";" nl;
+code:yypeek = topindent yych " = " YYPEEK ";" nl;
 
 code:yyskip =
     topindent (api.generic
-        ? skip
-        : cursor " += 1;"
+        ? YYSKIP
+        : YYCURSOR " += 1;"
     ) nl;
 
 code:yybackup =
     topindent (api.generic
-        ? backup
-        : marker " = " cursor ";"
+        ? YYBACKUP
+        : YYMARKER " = " YYCURSOR ";"
     ) nl;
 
 code:yybackupctx =
     topindent (api.generic
-        ? backupctx
-        : ctxmarker " = " cursor ";"
+        ? YYBACKUPCTX
+        : YYCTXMARKER " = " YYCURSOR ";"
     ) nl;
 
 code:yyrestore =
     topindent (api.generic
-        ? restore
-        : cursor " = " marker ";"
+        ? YYRESTORE
+        : YYCURSOR " = " YYMARKER ";"
     ) nl;
 
 code:yyrestorectx =
     topindent (api.generic
-        ? restorectx
-        : cursor " = " ctxmarker ";"
+        ? YYRESTORECTX
+        : YYCURSOR " = " YYCTXMARKER ";"
     ) nl;
 
 code:yyrestoretag =
     topindent (api.generic
-        ? restoretag
-        : cursor " = " tag ";"
+        ? YYRESTORETAG
+        : YYCURSOR " = " tag ";"
     ) nl;
 
 code:yyshift =
     topindent (api.generic
-        ? shift
-        : cursor " -= " offset ";"
+        ? YYSHIFT
+        : YYCURSOR " -= " offset ";"
     ) nl;
 
 code:yyshiftstag =
     topindent (nested ? "if (" tag " != " neg ") ") (api.generic
-        ? shiftstag
+        ? YYSHIFTSTAG
         : tag " -= " offset ";"
     ) nl;
 
-code:yyshiftmtag = topindent shiftmtag nl;
+code:yyshiftmtag =
+    topindent YYSHIFTMTAG nl;
 
 code:yystagp =
     topindent (api.generic
-        ? stagp
-        : tag " = " cursor ";"
+        ? YYSTAGP
+        : tag " = " YYCURSOR ";"
     ) nl;
 
-code:yymtagp = topindent mtagp nl;
+code:yymtagp =
+    topindent YYMTAGP nl;
 
 code:yystagn =
     topindent (api.generic
-        ? stagn
+        ? YYSTAGN
         : tag " = " neg ";"
     ) nl;
 
-code:yymtagn = topindent mtagn nl;
+code:yymtagn =
+    topindent YYMTAGN nl;
 
 code:yycopystag =
     topindent (api.generic
-        ? copystag
+        ? YYCOPYSTAG
         : lhs " = " rhs ";"
     ) nl;
 
 code:yycopymtag =
     topindent (api.generic
-        ? copymtag
+        ? YYCOPYMTAG
         : lhs " = " rhs ";"
     ) nl;
 
 code:yygetaccept =
     (api.generic
-        ? getaccept
-        : (api.record & storable_state ? record ".") var);
+        ? YYGETACCEPT
+        : (api.record & storable_state ? yyrecord ".") var);
 
 code:yysetaccept =
     topindent (api.generic
-        ? setaccept
-        : (api.record & storable_state ? record ".") var " = " val ";"
+        ? YYSETACCEPT
+        : (api.record & storable_state ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yygetcond =
     (api.generic
-        ? getcond
-        : (api.record ? record ".") var);
+        ? YYGETCOND
+        : (api.record ? yyrecord ".") var);
 
 code:yysetcond =
     topindent (api.generic
-        ? setcond
-        : (api.record ? record ".") var " = " val ";"
+        ? YYSETCOND
+        : (api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yygetstate =
      (api.generic
-         ? getstate
-         : (api.record ? record ".") var);
+         ? YYGETSTATE
+         : (api.record ? yyrecord ".") var);
 
 code:yysetstate =
     topindent (api.generic
-        ? setstate
-        : (api.record ? record ".") var " = " val ";"
+        ? YYSETSTATE
+        : (api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yylessthan =
     (api.generic
-        ? lessthan
+        ? YYLESSTHAN
         : (many
-            ? "(" limit " - " cursor ") < " need
-            : limit " <= " cursor));
+            ? "(" YYLIMIT " - " YYCURSOR ") < " need
+            : YYLIMIT " <= " YYCURSOR));
