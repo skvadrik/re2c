@@ -184,7 +184,7 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::PEEK, StxVarId::INPUT, StxVarId::CURSOR, \
-            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
+            StxVarId::CAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip, \
         ({StxVarId::SKIP, StxVarId::CURSOR, StxVarId::RECORD}), ({}), ({}) \
@@ -197,12 +197,12 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yypeek, \
-        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::TYPECAST, \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::CAST, \
             StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yypeek_yyskip, \
-        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::TYPECAST, \
-            StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::CURSOR, StxVarId::CAST, StxVarId::RECORD}), \
+        ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yybackup, \
         ({StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
@@ -212,15 +212,15 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
+            StxVarId::CAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyskip_yybackup_yypeek, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
+            StxVarId::CAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yybackup_yypeek_yyskip, \
         ({StxVarId::CHAR, StxVarId::CTYPE, StxVarId::INPUT, StxVarId::CURSOR, StxVarId::MARKER, \
-            StxVarId::TYPECAST, StxVarId::RECORD}), ({}), ({}) \
+            StxVarId::CAST, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestore, \
         ({StxVarId::RESTORE, StxVarId::CURSOR, StxVarId::MARKER, StxVarId::RECORD}), ({}), ({}) \
@@ -297,6 +297,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
     STX_LOCAL_VAR(BRANCH, "branch") \
+    STX_LOCAL_VAR(CAST, "cast") \
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(COND, "cond") \
     STX_LOCAL_VAR(DATE, "date") \
@@ -324,7 +325,6 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(STMT, "stmt") \
     STX_LOCAL_VAR(TAG, "tag") \
     STX_LOCAL_VAR(TYPE, "type") \
-    STX_LOCAL_VAR(TYPECAST, "typecast") \
     STX_LOCAL_VAR(VAL, "val") \
     STX_LOCAL_VAR(VAR, "var") \
     STX_LOCAL_VAR(VER, "version") \

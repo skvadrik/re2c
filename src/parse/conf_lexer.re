@@ -572,6 +572,7 @@ start:
     "argtype"      { RET_VAR(StxVarId::ARGTYPE); }
     "array"        { RET_VAR(StxVarId::ARRAY); }
     "branch"       { RET_VAR(StxVarId::BRANCH); }
+    "cast"         { RET_VAR(StxVarId::CAST); }
     "case"         { RET_VAR(StxVarId::CASE); }
     "cond"         { RET_VAR(StxVarId::COND); }
     "date"         { RET_VAR(StxVarId::DATE); }
@@ -599,7 +600,6 @@ start:
     "stmt"         { RET_VAR(StxVarId::STMT); }
     "tag"          { RET_VAR(StxVarId::TAG); }
     "type"         { RET_VAR(StxVarId::TYPE); }
-    "typecast"     { RET_VAR(StxVarId::TYPECAST); }
     "val"          { RET_VAR(StxVarId::VAL); }
     "var"          { RET_VAR(StxVarId::VAR); }
     "version"      { RET_VAR(StxVarId::VER); }

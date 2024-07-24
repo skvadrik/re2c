@@ -910,12 +910,12 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
+            case StxVarId::CAST: yych_conv(rctx.os, rctx.opts); break;
             case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
             case StxVarId::CTYPE: rctx.os << rctx.opts->api_char_type; break;
             case StxVarId::INPUT: rctx.os << rctx.opts->api_input; break;
             case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
             case StxVarId::MARKER: rctx.os << rctx.opts->api_marker; break;
-            case StxVarId::TYPECAST: yych_conv(rctx.os, rctx.opts); break;
             case StxVarId::PEEK: rctx.os << rctx.opts->api_peek; break;
             case StxVarId::SKIP: rctx.os << rctx.opts->api_skip; break;
             case StxVarId::BACKUP: rctx.os << rctx.opts->api_backup; break;
