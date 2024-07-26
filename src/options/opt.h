@@ -116,6 +116,24 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(assign, \
         ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(cmp_eq, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cmp_ne, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cmp_lt, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cmp_gt, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cmp_le, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cmp_ge, \
+        ({}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(if_then_else, \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
         ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \

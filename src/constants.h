@@ -164,6 +164,16 @@ enum class CharLit {
     CHAR_OR_HEX
 };
 
+enum CmpKind { // used as array indices => not a `enum class`
+    CMP_EQ,
+    CMP_NE,
+    CMP_GT,
+    CMP_LT,
+    CMP_GE,
+    CMP_LE,
+    CMP_COUNT // number of elements
+};
+
 static constexpr uint32_t NOEOF = ~0u - 1;
 
 static constexpr size_t MAX_NFA_DEPTH  = 1000 * 1000;

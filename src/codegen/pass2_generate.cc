@@ -530,7 +530,8 @@ static void gen_fill(
         if (eof_rule && !opts->storable_state) {
             // End-of-input rule $ without a storable state: check YYFILL return value. If it
             // succeeds (returns zero) then go to YYFILL label and rematch.
-            const char* call = o.cstr(opts->fill_naked ? "" : " == 0").flush();
+            if (!opts->fill_naked) o.cstr(" ").cstr(output.block().relops[CMP_EQ]).cstr(" 0");
+            const char* call = o.flush();
             if (!opts->var_fill.empty()) {
                 append(fill, opts->fill_naked ? code_text(alc, call) : code_stmt(alc, call));
                 call = opts->var_fill.c_str(); // replace call with its result
@@ -626,8 +627,8 @@ static const char* gen_cond(Output& output, const CodeCmp* cond) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
 
-    buf.str(opts->var_char).cstr(" ").str(cond->cmp).cstr(" ");
-    print_char_or_hex(buf.stream(), cond->val, opts);
+    buf.str(opts->var_char).cstr(" ").str(output.block().relops[cond->kind]).cstr(" ");
+    print_char_or_hex(buf.stream(), cond->rhs, opts);
     return buf.flush();
 }
 
@@ -883,8 +884,8 @@ static CodeList* emit_accept_binary(Output& output,
     CodeList* stmts = code_list(alc);
     if (l < r) {
         const size_t m = (l + r) >> 1;
-        const char* if_cond = o.cstr(var).cstr(r == l + 1 ? " == " : " <= ").u64(m)
-                .flush();
+        const char* cmp = output.block().relops[r == l + 1 ? CMP_EQ : CMP_LE];
+        const char* if_cond = o.cstr(var).cstr(" ").cstr(cmp).cstr(" ").u64(m).flush();
         CodeList* if_then = emit_accept_binary(output, dfa, var, acc, l, m);
         CodeList* if_else = emit_accept_binary(output, dfa, var, acc, m + 1, r);
         append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
@@ -1569,7 +1570,8 @@ static CodeList* gen_cond_goto_binary(
         const size_t middle = lower + (upper - lower + 1) / 2;
         CodeList* if_then = gen_cond_goto_binary(output, getcond, lower, middle - 1);
         CodeList* if_else = gen_cond_goto_binary(output, getcond, middle, upper);
-        const char* cond = buf.cstr(getcond).cstr(" < ").u64(middle).flush();
+        const char* cond =
+            buf.cstr(getcond).cstr(" ").cstr(block.relops[CMP_LT]).cstr(" ").u64(middle).flush();
         append(stmts, code_if_then_else(alc, cond, if_then, if_else));
     }
     return stmts;

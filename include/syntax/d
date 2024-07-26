@@ -144,6 +144,13 @@ code:type_yybm = "immutable char";
 
 code:assign = topindent lhs " = " rhs ";" nl;
 
+code:cmp_eq = "==";
+code:cmp_ne = "!=";
+code:cmp_lt = "<";
+code:cmp_gt = ">";
+code:cmp_le = "<=";
+code:cmp_ge = ">=";
+
 code:if_then_else =
     [branch{0}: topindent "if (" cond ") {" nl
         indent [stmt: stmt] dedent]

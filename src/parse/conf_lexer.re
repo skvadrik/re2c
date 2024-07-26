@@ -511,6 +511,12 @@ start:
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
     "code:assign"                 { RET_CODE(code_assign); }
+    "code:cmp_eq"                 { RET_CODE(code_cmp_eq); }
+    "code:cmp_ne"                 { RET_CODE(code_cmp_ne); }
+    "code:cmp_lt"                 { RET_CODE(code_cmp_lt); }
+    "code:cmp_gt"                 { RET_CODE(code_cmp_gt); }
+    "code:cmp_le"                 { RET_CODE(code_cmp_le); }
+    "code:cmp_ge"                 { RET_CODE(code_cmp_ge); }
     "code:if_then_else"           { RET_CODE(code_if_then_else); }
     "code:if_then_else_oneline"   { RET_CODE(code_if_then_else_oneline); }
     "code:switch"                 { RET_CODE(code_switch); }

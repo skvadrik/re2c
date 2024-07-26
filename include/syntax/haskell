@@ -144,6 +144,13 @@ code:type_cond_enum = (storable_state? "int" : "uint");
 
 // code:assign
 
+code:cmp_eq = "==";
+code:cmp_ne = "/=";
+code:cmp_lt = "<";
+code:cmp_gt = ">";
+code:cmp_le = "<=";
+code:cmp_ge = ">=";
+
 code:if_then_else =
     [branch{0}: topindent (many ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
         indent [stmt: stmt] dedent]

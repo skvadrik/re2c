@@ -40,7 +40,7 @@ function lex(yyinput) {
                             }
                         } else {
                             if (yych <= 0x7A) {
-                                if (yych != 0x60) {
+                                if (yych !== 0x60) {
                                     yystate = 3
                                     continue yyl
                                 }
@@ -86,7 +86,7 @@ function lex(yyinput) {
                             }
                         } else {
                             if (yych <= 0xD3) {
-                                if (yych == 0xD2) {
+                                if (yych === 0xD2) {
                                     yystate = 12
                                     continue yyl
                                 }
@@ -218,7 +218,7 @@ function lex(yyinput) {
                     if (yych <= 0xC2) {
                         if (yych <= 0x5A) {
                             if (yych <= 0x2F) {
-                                if (yych == 0x24) {
+                                if (yych === 0x24) {
                                     yycursor += 1;
                                     yystate = 3
                                     continue yyl
@@ -241,7 +241,7 @@ function lex(yyinput) {
                             }
                         } else {
                             if (yych <= 0x60) {
-                                if (yych == 0x5F) {
+                                if (yych === 0x5F) {
                                     yycursor += 1;
                                     yystate = 3
                                     continue yyl
@@ -445,7 +445,7 @@ function lex(yyinput) {
                                     yystate = 65
                                     continue yyl
                                 }
-                                if (yych == 0xF3) {
+                                if (yych === 0xF3) {
                                     yycursor += 1;
                                     yystate = 66
                                     continue yyl
@@ -461,7 +461,7 @@ function lex(yyinput) {
             case 5:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xB4) {
-                    if (yych == 0xAA) {
+                    if (yych === 0xAA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -474,7 +474,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBA) {
+                    if (yych === 0xBA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -497,7 +497,7 @@ function lex(yyinput) {
                     yystate = 2
                     continue yyl
                 } else {
-                    if (yych == 0xB7) {
+                    if (yych === 0xB7) {
                         yystate = 2
                         continue yyl
                     }
@@ -561,7 +561,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xAE) {
+                        if (yych === 0xAE) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -618,7 +618,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA1) {
-                        if (yych == 0x8D) {
+                        if (yych === 0x8D) {
                             yystate = 2
                             continue yyl
                         }
@@ -645,7 +645,7 @@ function lex(yyinput) {
                     yystate = 2
                     continue yyl
                 }
-                if (yych == 0xB6) {
+                if (yych === 0xB6) {
                     yystate = 2
                     continue yyl
                 }
@@ -684,7 +684,7 @@ function lex(yyinput) {
                     yystate = 2
                     continue yyl
                 }
-                if (yych == 0xB0) {
+                if (yych === 0xB0) {
                     yystate = 2
                     continue yyl
                 }
@@ -790,7 +790,7 @@ function lex(yyinput) {
                     yystate = 2
                     continue yyl
                 } else {
-                    if (yych == 0xB0) {
+                    if (yych === 0xB0) {
                         yystate = 2
                         continue yyl
                     }
@@ -850,7 +850,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -861,7 +861,7 @@ function lex(yyinput) {
                 }
             case 20:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x90) {
+                if (yych === 0x90) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -901,7 +901,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xB1) {
+                if (yych === 0xB1) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -928,7 +928,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBA) {
+                    if (yych === 0xBA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -1829,7 +1829,7 @@ function lex(yyinput) {
             case 35:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xB4) {
-                    if (yych == 0xAA) {
+                    if (yych === 0xAA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -1842,7 +1842,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBA) {
+                    if (yych === 0xBA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -1852,7 +1852,7 @@ function lex(yyinput) {
                 }
             case 36:
                 yycursor = yymarker;
-                if (yyaccept == 0) {
+                if (yyaccept === 0) {
                     yystate = 4
                     continue yyl
                 } else {
@@ -1874,7 +1874,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xB7) {
+                    if (yych === 0xB7) {
                         yystate = 36
                         continue yyl
                     }
@@ -1938,7 +1938,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xAE) {
+                        if (yych === 0xAE) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -1954,7 +1954,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0xB5) {
+                    if (yych === 0xB5) {
                         yystate = 36
                         continue yyl
                     }
@@ -1971,7 +1971,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -2006,7 +2006,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA1) {
-                        if (yych == 0x8D) {
+                        if (yych === 0x8D) {
                             yystate = 36
                             continue yyl
                         }
@@ -2033,7 +2033,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB6) {
+                if (yych === 0xB6) {
                     yystate = 36
                     continue yyl
                 }
@@ -2082,7 +2082,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB0) {
+                if (yych === 0xB0) {
                     yystate = 36
                     continue yyl
                 }
@@ -2140,7 +2140,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xBE) {
+                    if (yych === 0xBE) {
                         yystate = 36
                         continue yyl
                     }
@@ -2274,7 +2274,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xBC) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -2282,7 +2282,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -2359,7 +2359,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBD) {
+                    if (yych === 0xBD) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3239,7 +3239,7 @@ function lex(yyinput) {
                 }
             case 66:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0xA0) {
+                if (yych === 0xA0) {
                     yycursor += 1;
                     yystate = 287
                     continue yyl
@@ -3275,7 +3275,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xA8) {
+                        if (yych === 0xA8) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3312,7 +3312,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB5) {
+                if (yych === 0xB5) {
                     yystate = 36
                     continue yyl
                 }
@@ -3334,7 +3334,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBD) {
+                if (yych === 0xBD) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -3344,7 +3344,7 @@ function lex(yyinput) {
             case 71:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x97) {
-                    if (yych == 0x90) {
+                    if (yych === 0x90) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3373,7 +3373,7 @@ function lex(yyinput) {
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xA8) {
                     if (yych <= 0x8C) {
-                        if (yych == 0x80) {
+                        if (yych === 0x80) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3409,7 +3409,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -3426,7 +3426,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xBD) {
+                            if (yych === 0xBD) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -3475,7 +3475,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBC) {
+                        if (yych === 0xBC) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3519,7 +3519,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB4) {
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -3531,7 +3531,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xB7) {
+                        if (yych === 0xB7) {
                             yystate = 36
                             continue yyl
                         }
@@ -3592,7 +3592,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x92) {
+                        if (yych === 0x92) {
                             yystate = 36
                             continue yyl
                         }
@@ -3606,7 +3606,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB4) {
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -3623,7 +3623,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3635,7 +3635,7 @@ function lex(yyinput) {
             case 77:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x9F) {
-                    if (yych == 0x90) {
+                    if (yych === 0x90) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3648,7 +3648,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xB9) {
+                    if (yych === 0xB9) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3691,7 +3691,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB4) {
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -3708,7 +3708,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3737,7 +3737,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xB1) {
+                    if (yych === 0xB1) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3793,7 +3793,7 @@ function lex(yyinput) {
                 }
             case 81:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x90) {
+                if (yych === 0x90) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -3826,7 +3826,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB9) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -3834,7 +3834,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3869,7 +3869,7 @@ function lex(yyinput) {
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x91) {
                     if (yych <= 0x84) {
-                        if (yych == 0x80) {
+                        if (yych === 0x80) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3877,7 +3877,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x8D) {
+                        if (yych === 0x8D) {
                             yystate = 36
                             continue yyl
                         }
@@ -3891,7 +3891,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB4) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -3908,7 +3908,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3920,7 +3920,7 @@ function lex(yyinput) {
             case 85:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x9F) {
-                    if (yych == 0x9E) {
+                    if (yych === 0x9E) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -3952,7 +3952,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x8D) {
+                    if (yych === 0x8D) {
                         yystate = 36
                         continue yyl
                     }
@@ -3969,7 +3969,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -3981,7 +3981,7 @@ function lex(yyinput) {
             case 87:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x96) {
-                    if (yych == 0x8E) {
+                    if (yych === 0x8E) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -4045,7 +4045,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -4073,7 +4073,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB1) {
+                if (yych === 0xB1) {
                     yystate = 36
                     continue yyl
                 }
@@ -4092,7 +4092,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x83) {
+                        if (yych === 0x83) {
                             yystate = 36
                             continue yyl
                         }
@@ -4104,7 +4104,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x8B) {
+                        if (yych === 0x8B) {
                             yystate = 36
                             continue yyl
                         }
@@ -4114,7 +4114,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB0) {
-                        if (yych == 0xA5) {
+                        if (yych === 0xA5) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -4136,7 +4136,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xBD) {
+                            if (yych === 0xBD) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -4180,7 +4180,7 @@ function lex(yyinput) {
                 }
             case 93:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x80) {
+                if (yych === 0x80) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -4193,7 +4193,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x88) {
+                if (yych === 0x88) {
                     yystate = 36
                     continue yyl
                 }
@@ -4228,7 +4228,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -4340,7 +4340,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0x87) {
+                        if (yych === 0x87) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -4407,7 +4407,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0x99) {
-                        if (yych == 0x98) {
+                        if (yych === 0x98) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -4459,7 +4459,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB5) {
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -4483,7 +4483,7 @@ function lex(yyinput) {
             case 102:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x85) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -4733,7 +4733,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xAD) {
+                    if (yych === 0xAD) {
                         yystate = 36
                         continue yyl
                     }
@@ -4760,12 +4760,12 @@ function lex(yyinput) {
                 continue yyl
             case 114:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x97) {
+                if (yych === 0x97) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x9C) {
+                if (yych === 0x9C) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -4960,7 +4960,7 @@ function lex(yyinput) {
                 continue yyl
             case 125:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0xA7) {
+                if (yych === 0xA7) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -5195,7 +5195,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0x9C) {
-                        if (yych == 0x9A) {
+                        if (yych === 0x9A) {
                             yystate = 36
                             continue yyl
                         }
@@ -5207,7 +5207,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x9E) {
+                        if (yych === 0x9E) {
                             yystate = 36
                             continue yyl
                         }
@@ -5235,7 +5235,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xBD) {
+                    if (yych === 0xBD) {
                         yystate = 36
                         continue yyl
                     }
@@ -5299,7 +5299,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xB5) {
+                        if (yych === 0xB5) {
                             yystate = 36
                             continue yyl
                         }
@@ -5314,12 +5314,12 @@ function lex(yyinput) {
                 }
             case 138:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0xB1) {
+                if (yych === 0xB1) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -5440,7 +5440,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xAF) {
+                if (yych === 0xAF) {
                     yystate = 36
                     continue yyl
                 }
@@ -5457,7 +5457,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x9F) {
+                if (yych === 0x9F) {
                     yystate = 36
                     continue yyl
                 }
@@ -5507,7 +5507,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0xA6) {
+                    if (yych === 0xA6) {
                         yystate = 36
                         continue yyl
                     }
@@ -5548,7 +5548,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xAF) {
+                if (yych === 0xAF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -5581,7 +5581,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB6) {
-                        if (yych == 0xAF) {
+                        if (yych === 0xAF) {
                             yystate = 36
                             continue yyl
                         }
@@ -5609,7 +5609,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x87) {
+                    if (yych === 0x87) {
                         yystate = 36
                         continue yyl
                     }
@@ -5641,7 +5641,7 @@ function lex(yyinput) {
                 }
             case 150:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0xAF) {
+                if (yych === 0xAF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -5705,7 +5705,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA0) {
+                    if (yych === 0xA0) {
                         yystate = 36
                         continue yyl
                     }
@@ -5723,7 +5723,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xBB) {
+                if (yych === 0xBB) {
                     yystate = 36
                     continue yyl
                 }
@@ -5740,7 +5740,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB0) {
+                if (yych === 0xB0) {
                     yystate = 36
                     continue yyl
                 }
@@ -5868,7 +5868,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -5970,7 +5970,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x82) {
+                    if (yych === 0x82) {
                         yystate = 36
                         continue yyl
                     }
@@ -6028,7 +6028,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xBC) {
+                    if (yych === 0xBC) {
                         yystate = 36
                         continue yyl
                     }
@@ -6100,7 +6100,7 @@ function lex(yyinput) {
             case 172:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xA4) {
-                    if (yych == 0x8F) {
+                    if (yych === 0x8F) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -6207,7 +6207,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0xB0) {
+                    if (yych === 0xB0) {
                         yystate = 36
                         continue yyl
                     }
@@ -6249,7 +6249,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0x82) {
+                        if (yych === 0x82) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -6328,7 +6328,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xAF) {
+                        if (yych === 0xAF) {
                             yystate = 36
                             continue yyl
                         }
@@ -6486,7 +6486,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0x9D) {
+                        if (yych === 0x9D) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -6496,7 +6496,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB7) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -6508,7 +6508,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yystate = 36
                             continue yyl
                         }
@@ -6536,7 +6536,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0x85) {
+                    if (yych === 0x85) {
                         yystate = 36
                         continue yyl
                     }
@@ -6624,7 +6624,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB5) {
+                if (yych === 0xB5) {
                     yystate = 36
                     continue yyl
                 }
@@ -7346,7 +7346,7 @@ function lex(yyinput) {
                         yystate = 368
                         continue yyl
                     } else {
-                        if (yych == 0x8B) {
+                        if (yych === 0x8B) {
                             yycursor += 1;
                             yystate = 332
                             continue yyl
@@ -7404,7 +7404,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x9B) {
+                if (yych === 0x9B) {
                     yycursor += 1;
                     yystate = 374
                     continue yyl
@@ -7432,7 +7432,7 @@ function lex(yyinput) {
                     yystate = 291
                     continue yyl
                 } else {
-                    if (yych == 0xA0) {
+                    if (yych === 0xA0) {
                         yycursor += 1;
                         yystate = 162
                         continue yyl
@@ -7451,7 +7451,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xBA) {
+                if (yych === 0xBA) {
                     yycursor += 1;
                     yystate = 375
                     continue yyl
@@ -7540,7 +7540,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xA2) {
+                if (yych === 0xA2) {
                     yystate = 36
                     continue yyl
                 }
@@ -7566,7 +7566,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xB0) {
+                    if (yych === 0xB0) {
                         yystate = 36
                         continue yyl
                     }
@@ -7586,7 +7586,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x84) {
+                        if (yych === 0x84) {
                             yystate = 36
                             continue yyl
                         }
@@ -7617,7 +7617,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -7678,7 +7678,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0x97) {
+                            if (yych === 0x97) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -7721,7 +7721,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xBE) {
+                            if (yych === 0xBE) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -7766,7 +7766,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         } else {
-                            if (yych == 0xA9) {
+                            if (yych === 0xA9) {
                                 yystate = 36
                                 continue yyl
                             }
@@ -7905,7 +7905,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x84) {
+                        if (yych === 0x84) {
                             yystate = 36
                             continue yyl
                         }
@@ -7917,7 +7917,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x92) {
+                        if (yych === 0x92) {
                             yystate = 36
                             continue yyl
                         }
@@ -7931,7 +7931,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -7978,7 +7978,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x8A) {
+                        if (yych === 0x8A) {
                             yystate = 36
                             continue yyl
                         }
@@ -8035,7 +8035,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x84) {
+                        if (yych === 0x84) {
                             yystate = 36
                             continue yyl
                         }
@@ -8066,7 +8066,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -8141,7 +8141,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x9E) {
+                        if (yych === 0x9E) {
                             yystate = 36
                             continue yyl
                         }
@@ -8158,7 +8158,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xB1) {
+                            if (yych === 0xB1) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -8233,7 +8233,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x89) {
+                        if (yych === 0x89) {
                             yystate = 36
                             continue yyl
                         }
@@ -8243,7 +8243,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0x96) {
-                        if (yych == 0x90) {
+                        if (yych === 0x90) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -8295,7 +8295,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB9) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -8332,7 +8332,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x89) {
+                        if (yych === 0x89) {
                             yystate = 36
                             continue yyl
                         }
@@ -8346,7 +8346,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0x9F) {
-                        if (yych == 0x97) {
+                        if (yych === 0x97) {
                             yystate = 36
                             continue yyl
                         }
@@ -8392,7 +8392,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x8D) {
+                        if (yych === 0x8D) {
                             yystate = 36
                             continue yyl
                         }
@@ -8406,7 +8406,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB4) {
-                        if (yych == 0xA9) {
+                        if (yych === 0xA9) {
                             yystate = 36
                             continue yyl
                         }
@@ -8444,7 +8444,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x85) {
+                        if (yych === 0x85) {
                             yystate = 36
                             continue yyl
                         }
@@ -8471,7 +8471,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA3) {
-                        if (yych == 0x9E) {
+                        if (yych === 0x9E) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -8514,7 +8514,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x84) {
+                    if (yych === 0x84) {
                         yystate = 36
                         continue yyl
                     }
@@ -8560,7 +8560,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x89) {
+                        if (yych === 0x89) {
                             yystate = 36
                             continue yyl
                         }
@@ -8635,7 +8635,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xBB) {
-                        if (yych == 0xB2) {
+                        if (yych === 0xB2) {
                             yystate = 36
                             continue yyl
                         }
@@ -8643,7 +8643,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -8687,7 +8687,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA5) {
-                        if (yych == 0x97) {
+                        if (yych === 0x97) {
                             yystate = 36
                             continue yyl
                         }
@@ -8736,7 +8736,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x8F) {
+                if (yych === 0x8F) {
                     yystate = 36
                     continue yyl
                 }
@@ -8763,7 +8763,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x85) {
+                        if (yych === 0x85) {
                             yystate = 36
                             continue yyl
                         }
@@ -8785,7 +8785,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xA6) {
+                        if (yych === 0xA6) {
                             yystate = 36
                             continue yyl
                         }
@@ -8810,7 +8810,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0x86) {
+                        if (yych === 0x86) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -8850,7 +8850,7 @@ function lex(yyinput) {
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xB4) {
                     if (yych <= 0x97) {
-                        if (yych == 0x80) {
+                        if (yych === 0x80) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -8877,7 +8877,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB8) {
-                        if (yych == 0xB6) {
+                        if (yych === 0xB6) {
                             yystate = 36
                             continue yyl
                         }
@@ -8954,7 +8954,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0x98) {
+                    if (yych === 0x98) {
                         yystate = 36
                         continue yyl
                     }
@@ -8968,7 +8968,7 @@ function lex(yyinput) {
                 }
             case 240:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x86) {
+                if (yych === 0x86) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -9307,7 +9307,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBF) {
+                    if (yych === 0xBF) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -9430,7 +9430,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x93) {
+                if (yych === 0x93) {
                     yystate = 36
                     continue yyl
                 }
@@ -9447,7 +9447,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xBA) {
+                if (yych === 0xBA) {
                     yystate = 36
                     continue yyl
                 }
@@ -9460,12 +9460,12 @@ function lex(yyinput) {
                 continue yyl
             case 259:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x8D) {
+                if (yych === 0x8D) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -9475,7 +9475,7 @@ function lex(yyinput) {
             case 260:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x94) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -9497,7 +9497,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -9580,7 +9580,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBF) {
+                    if (yych === 0xBF) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -9614,7 +9614,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0x9E) {
-                        if (yych == 0x97) {
+                        if (yych === 0x97) {
                             yystate = 36
                             continue yyl
                         }
@@ -9756,7 +9756,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xBE) {
+                    if (yych === 0xBE) {
                         yystate = 36
                         continue yyl
                     }
@@ -9858,7 +9858,7 @@ function lex(yyinput) {
             case 272:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x8E) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -10055,7 +10055,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xBD) {
+                        if (yych === 0xBD) {
                             yystate = 36
                             continue yyl
                         }
@@ -10115,7 +10115,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xB5) {
+                    if (yych === 0xB5) {
                         yystate = 36
                         continue yyl
                     }
@@ -10147,7 +10147,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBF) {
+                    if (yych === 0xBF) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -10665,7 +10665,7 @@ function lex(yyinput) {
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x9F) {
                     if (yych <= 0x84) {
-                        if (yych == 0x80) {
+                        if (yych === 0x80) {
                             yycursor += 1;
                             yystate = 422
                             continue yyl
@@ -10683,7 +10683,7 @@ function lex(yyinput) {
                             yystate = 424
                             continue yyl
                         }
-                        if (yych == 0x8B) {
+                        if (yych === 0x8B) {
                             yycursor += 1;
                             yystate = 425
                             continue yyl
@@ -10693,7 +10693,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA5) {
-                        if (yych == 0xA3) {
+                        if (yych === 0xA3) {
                             yycursor += 1;
                             yystate = 426
                             continue yyl
@@ -10775,7 +10775,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xBD) {
-                        if (yych == 0xBB) {
+                        if (yych === 0xBB) {
                             yystate = 36
                             continue yyl
                         }
@@ -10783,7 +10783,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -10934,7 +10934,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0x90) {
+                    if (yych === 0x90) {
                         yystate = 36
                         continue yyl
                     }
@@ -11050,7 +11050,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x89) {
+                        if (yych === 0x89) {
                             yystate = 36
                             continue yyl
                         }
@@ -11077,7 +11077,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -11114,7 +11114,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB3) {
+                if (yych === 0xB3) {
                     yystate = 36
                     continue yyl
                 }
@@ -11172,7 +11172,7 @@ function lex(yyinput) {
             case 306:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x93) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11239,7 +11239,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x88) {
+                if (yych === 0x88) {
                     yystate = 36
                     continue yyl
                 }
@@ -11411,7 +11411,7 @@ function lex(yyinput) {
             case 320:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x8F) {
-                    if (yych == 0x84) {
+                    if (yych === 0x84) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11424,7 +11424,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xB6) {
+                    if (yych === 0xB6) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11460,7 +11460,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0x9B) {
+                    if (yych === 0x9B) {
                         yystate = 36
                         continue yyl
                     }
@@ -11478,7 +11478,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x92) {
+                if (yych === 0x92) {
                     yystate = 36
                     continue yyl
                 }
@@ -11505,7 +11505,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x89) {
+                        if (yych === 0x89) {
                             yystate = 36
                             continue yyl
                         }
@@ -11547,7 +11547,7 @@ function lex(yyinput) {
                 }
             case 325:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x90) {
+                if (yych === 0x90) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11574,7 +11574,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x9F) {
+                if (yych === 0x9F) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11587,7 +11587,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x86) {
+                if (yych === 0x86) {
                     yystate = 36
                     continue yyl
                 }
@@ -11626,7 +11626,7 @@ function lex(yyinput) {
                 continue yyl
             case 330:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x84) {
+                if (yych === 0x84) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11644,7 +11644,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xB8) {
+                if (yych === 0xB8) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11675,7 +11675,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11719,7 +11719,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA2) {
+                    if (yych === 0xA2) {
                         yystate = 36
                         continue yyl
                     }
@@ -11734,7 +11734,7 @@ function lex(yyinput) {
             case 336:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x8A) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11747,7 +11747,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBA) {
+                    if (yych === 0xBA) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11757,7 +11757,7 @@ function lex(yyinput) {
                 }
             case 337:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x90) {
+                if (yych === 0x90) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11784,7 +11784,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x9D) {
+                if (yych === 0x9D) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11797,7 +11797,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x89) {
+                if (yych === 0x89) {
                     yystate = 36
                     continue yyl
                 }
@@ -11810,7 +11810,7 @@ function lex(yyinput) {
                 continue yyl
             case 340:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x80) {
+                if (yych === 0x80) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -11854,7 +11854,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0x8A) {
+                    if (yych === 0x8A) {
                         yystate = 36
                         continue yyl
                     }
@@ -11869,7 +11869,7 @@ function lex(yyinput) {
             case 343:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0xA5) {
-                    if (yych == 0x86) {
+                    if (yych === 0x86) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -11915,7 +11915,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x98) {
+                if (yych === 0x98) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12004,7 +12004,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x90) {
+                if (yych === 0x90) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12030,7 +12030,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xA2) {
+                if (yych === 0xA2) {
                     yystate = 36
                     continue yyl
                 }
@@ -12136,7 +12136,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x95) {
+                if (yych === 0x95) {
                     yystate = 36
                     continue yyl
                 }
@@ -12155,7 +12155,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x9D) {
+                        if (yych === 0x9D) {
                             yystate = 36
                             continue yyl
                         }
@@ -12163,7 +12163,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0xA2) {
+                        if (yych === 0xA2) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -12182,7 +12182,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xAD) {
+                        if (yych === 0xAD) {
                             yystate = 36
                             continue yyl
                         }
@@ -12219,7 +12219,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x84) {
+                if (yych === 0x84) {
                     yystate = 36
                     continue yyl
                 }
@@ -12273,7 +12273,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xBA) {
+                        if (yych === 0xBA) {
                             yystate = 36
                             continue yyl
                         }
@@ -12293,7 +12293,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x85) {
+                    if (yych === 0x85) {
                         yystate = 36
                         continue yyl
                     }
@@ -12348,7 +12348,7 @@ function lex(yyinput) {
             case 362:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x9A) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -12398,7 +12398,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xB5) {
+                    if (yych === 0xB5) {
                         yystate = 36
                         continue yyl
                     }
@@ -12425,7 +12425,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xAF) {
+                    if (yych === 0xAF) {
                         yystate = 36
                         continue yyl
                     }
@@ -12452,7 +12452,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA9) {
+                    if (yych === 0xA9) {
                         yystate = 36
                         continue yyl
                     }
@@ -12470,7 +12470,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x83) {
+                if (yych === 0x83) {
                     yystate = 36
                     continue yyl
                 }
@@ -12505,7 +12505,7 @@ function lex(yyinput) {
                 continue yyl
             case 368:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x8E) {
+                if (yych === 0x8E) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12536,7 +12536,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x8B) {
+                if (yych === 0x8B) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12551,7 +12551,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x84) {
+                        if (yych === 0x84) {
                             yystate = 36
                             continue yyl
                         }
@@ -12568,7 +12568,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xA4) {
+                            if (yych === 0xA4) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -12588,7 +12588,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         } else {
-                            if (yych == 0xB3) {
+                            if (yych === 0xB3) {
                                 yystate = 36
                                 continue yyl
                             }
@@ -12606,7 +12606,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         } else {
-                            if (yych == 0xBB) {
+                            if (yych === 0xBB) {
                                 yycursor += 1;
                                 yystate = 3
                                 continue yyl
@@ -12690,7 +12690,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA9) {
-                        if (yych == 0xA4) {
+                        if (yych === 0xA4) {
                             yystate = 36
                             continue yyl
                         }
@@ -12774,7 +12774,7 @@ function lex(yyinput) {
                 continue yyl
             case 378:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0xBD) {
+                if (yych === 0xBD) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12792,7 +12792,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xA0) {
+                if (yych === 0xA0) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -12888,7 +12888,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xB7) {
-                        if (yych == 0x98) {
+                        if (yych === 0x98) {
                             yystate = 36
                             continue yyl
                         }
@@ -12905,7 +12905,7 @@ function lex(yyinput) {
                             yystate = 3
                             continue yyl
                         }
-                        if (yych == 0xBF) {
+                        if (yych === 0xBF) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -12920,7 +12920,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x88) {
+                if (yych === 0x88) {
                     yystate = 36
                     continue yyl
                 }
@@ -12973,7 +12973,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBF) {
+                    if (yych === 0xBF) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -13009,7 +13009,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0xB5) {
+                if (yych === 0xB5) {
                     yystate = 36
                     continue yyl
                 }
@@ -13040,7 +13040,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xB6) {
+                    if (yych === 0xB6) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -13077,7 +13077,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     } else {
-                        if (yych == 0x9C) {
+                        if (yych === 0x9C) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -13106,7 +13106,7 @@ function lex(yyinput) {
                         yystate = 3
                         continue yyl
                     }
-                    if (yych == 0xBE) {
+                    if (yych === 0xBE) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -13144,7 +13144,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0x84) {
+                        if (yych === 0x84) {
                             yystate = 36
                             continue yyl
                         }
@@ -13175,7 +13175,7 @@ function lex(yyinput) {
                             yystate = 36
                             continue yyl
                         }
-                        if (yych == 0xB1) {
+                        if (yych === 0xB1) {
                             yystate = 36
                             continue yyl
                         }
@@ -13246,7 +13246,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA3) {
-                        if (yych == 0x97) {
+                        if (yych === 0x97) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -13370,7 +13370,7 @@ function lex(yyinput) {
                 continue yyl
             case 397:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x80) {
+                if (yych === 0x80) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -13389,7 +13389,7 @@ function lex(yyinput) {
             case 398:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x83) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -13457,7 +13457,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xBF) {
+                if (yych === 0xBF) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -13479,7 +13479,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA2) {
+                    if (yych === 0xA2) {
                         yystate = 36
                         continue yyl
                     }
@@ -13493,7 +13493,7 @@ function lex(yyinput) {
                 }
             case 402:
                 yych = yyinput.charCodeAt(yycursor)
-                if (yych == 0x87) {
+                if (yych === 0x87) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -13520,7 +13520,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x9D) {
+                if (yych === 0x9D) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -13542,7 +13542,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xB7) {
+                    if (yych === 0xB7) {
                         yystate = 36
                         continue yyl
                     }
@@ -13557,7 +13557,7 @@ function lex(yyinput) {
             case 405:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x8F) {
-                    if (yych == 0x80) {
+                    if (yych === 0x80) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -13597,7 +13597,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA8) {
+                    if (yych === 0xA8) {
                         yystate = 36
                         continue yyl
                     }
@@ -13625,7 +13625,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0x8A) {
+                        if (yych === 0x8A) {
                             yystate = 36
                             continue yyl
                         }
@@ -13635,7 +13635,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xBB) {
-                        if (yych == 0xBA) {
+                        if (yych === 0xBA) {
                             yycursor += 1;
                             yystate = 3
                             continue yyl
@@ -13643,7 +13643,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     } else {
-                        if (yych == 0xBE) {
+                        if (yych === 0xBE) {
                             yystate = 36
                             continue yyl
                         }
@@ -13682,7 +13682,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA8) {
-                        if (yych == 0xA6) {
+                        if (yych === 0xA6) {
                             yystate = 36
                             continue yyl
                         }
@@ -13710,7 +13710,7 @@ function lex(yyinput) {
                         yystate = 36
                         continue yyl
                     }
-                    if (yych == 0x8F) {
+                    if (yych === 0x8F) {
                         yystate = 36
                         continue yyl
                     }
@@ -13746,7 +13746,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 }
-                if (yych == 0x9F) {
+                if (yych === 0x9F) {
                     yystate = 36
                     continue yyl
                 }
@@ -14017,7 +14017,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0xB5) {
+                if (yych === 0xB5) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl
@@ -14027,7 +14027,7 @@ function lex(yyinput) {
             case 421:
                 yych = yyinput.charCodeAt(yycursor)
                 if (yych <= 0x9A) {
-                    if (yych == 0x84) {
+                    if (yych === 0x84) {
                         yycursor += 1;
                         yystate = 3
                         continue yyl
@@ -14035,7 +14035,7 @@ function lex(yyinput) {
                     yystate = 36
                     continue yyl
                 } else {
-                    if (yych == 0xA0) {
+                    if (yych === 0xA0) {
                         yystate = 36
                         continue yyl
                     }
@@ -14073,7 +14073,7 @@ function lex(yyinput) {
                     }
                 } else {
                     if (yych <= 0xA4) {
-                        if (yych == 0xA2) {
+                        if (yych === 0xA2) {
                             yystate = 36
                             continue yyl
                         }
@@ -14127,7 +14127,7 @@ function lex(yyinput) {
                     yystate = 3
                     continue yyl
                 }
-                if (yych == 0x8E) {
+                if (yych === 0x8E) {
                     yycursor += 1;
                     yystate = 3
                     continue yyl

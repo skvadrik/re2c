@@ -32,7 +32,8 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       max_nmatch(1),
       start_label(nullptr),
       fill_goto(),
-      fn_common(nullptr)
+      fn_common(nullptr),
+      relops()
     {}
 
 OutputBlock::~OutputBlock() {

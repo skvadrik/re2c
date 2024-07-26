@@ -144,7 +144,7 @@ function lex_utf32(yyinput) {
             case 0:
                 yych = yyinput.at(yycursor)
                 yycursor += 1;
-                if (yych == 0x00002200) {
+                if (yych === 0x00002200) {
                     yystate = 2
                     continue yyl
                 }
@@ -155,13 +155,13 @@ function lex_utf32(yyinput) {
             case 2:
                 yymarker = yycursor;
                 yych = yyinput.at(yycursor)
-                if (yych != 0x00000078) {
+                if (yych !== 0x00000078) {
                     yystate = 1
                     continue yyl
                 }
                 yycursor += 1;
                 yych = yyinput.at(yycursor)
-                if (yych == 0x00000020) {
+                if (yych === 0x00000020) {
                     yycursor += 1;
                     yystate = 4
                     continue yyl
@@ -174,13 +174,13 @@ function lex_utf32(yyinput) {
                 continue yyl
             case 4:
                 yych = yyinput.at(yycursor)
-                if (yych != 0x00002203) {
+                if (yych !== 0x00002203) {
                     yystate = 3
                     continue yyl
                 }
                 yycursor += 1;
                 yych = yyinput.at(yycursor)
-                if (yych != 0x00000079) {
+                if (yych !== 0x00000079) {
                     yystate = 3
                     continue yyl
                 }

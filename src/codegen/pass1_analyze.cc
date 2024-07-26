@@ -149,7 +149,7 @@ static CodeGoIfB* code_goifb(OutAllocator& alc,
     CodeGoIf::Kind ekind = h > 4 ? CodeGoIf::Kind::BINARY : CodeGoIf::Kind::LINEAR;
 
     CodeGoIfB* x = alc.alloct<CodeGoIfB>(1);
-    x->cond = code_cmp(alc, "<=", s[l - 1].ub - 1);
+    x->cond = code_cmp(alc, CMP_LE, s[l - 1].ub - 1);
     x->gothen = code_goif(alc, tkind, &s[0], l, next, skip, eof, opts);
     x->goelse = code_goif(alc, ekind, &s[l], h, next, skip, eof, opts);
     return x;
@@ -203,7 +203,7 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
             add_branch(x, nullptr, s[0].to, next, s[0], skip, eof, opts);
             break;
         } else if (n == 2 && s[0].to == next && may_elide) {
-            CodeCmp* cmp = code_cmp(alc, ">=", s[0].ub);
+            CodeCmp* cmp = code_cmp(alc, CMP_GE, s[0].ub);
             add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
             add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
             break;
@@ -213,7 +213,7 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags
                 && may_elide) {
-            CodeCmp* cmp = code_cmp(alc, "!=", s[0].ub);
+            CodeCmp* cmp = code_cmp(alc, CMP_NE, s[0].ub);
             add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
             add_branch(x, nullptr, nullptr, next, s[1], skip, eof, opts);
             break;
@@ -221,12 +221,12 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
                 && s[1].ub - s[0].ub == 1
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
-            CodeCmp* cmp = code_cmp(alc, "==", s[0].ub);
+            CodeCmp* cmp = code_cmp(alc, CMP_EQ, s[0].ub);
             add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
             n -= 2;
             s += 2;
         } else {
-            CodeCmp* cmp = code_cmp(alc, "<=", s[0].ub - 1);
+            CodeCmp* cmp = code_cmp(alc, CMP_LE, s[0].ub - 1);
             add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
             n -= 1;
             s += 1;
@@ -558,6 +558,15 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     return Ret::OK;
 }
 
+static void gen_relational_ops(Scratchbuf& buf, const char* relops[], const opt_t* opts) {
+    relops[CMP_EQ] = opts->gen_code_cmp_eq(buf);
+    relops[CMP_NE] = opts->gen_code_cmp_ne(buf);
+    relops[CMP_LT] = opts->gen_code_cmp_lt(buf);
+    relops[CMP_GT] = opts->gen_code_cmp_gt(buf);
+    relops[CMP_LE] = opts->gen_code_cmp_le(buf);
+    relops[CMP_GE] = opts->gen_code_cmp_ge(buf);
+}
+
 LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
     OutputBlock& block = output.block();
     Adfas& dfas = block.dfas;
@@ -572,7 +581,9 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         return Ret::OK;
     }
 
+    // Precompute some parts of the code.
     CHECK_RET(gen_fn_common(output.allocator, &block.fn_common, opts));
+    gen_relational_ops(output.scratchbuf, block.relops, opts);
 
     const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
 

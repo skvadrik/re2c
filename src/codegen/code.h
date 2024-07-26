@@ -84,8 +84,8 @@ struct CodeGoSw {
 };
 
 struct CodeCmp {
-    const char* cmp;
-    uint32_t val;
+    CmpKind kind;
+    uint32_t rhs;
 };
 
 // binary if
@@ -752,10 +752,10 @@ inline CodeBitmap* code_bitmap(OutAllocator& alc, uint32_t nchars) {
     return x;
 }
 
-inline CodeCmp* code_cmp(OutAllocator& alc, const char* cmp, uint32_t val) {
+inline CodeCmp* code_cmp(OutAllocator& alc, CmpKind kind, uint32_t rhs) {
     CodeCmp* x = alc.alloct<CodeCmp>(1);
-    x->cmp = cmp;
-    x->val = val;
+    x->kind = kind;
+    x->rhs = rhs;
     return x;
 }
 

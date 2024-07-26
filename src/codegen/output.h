@@ -122,6 +122,8 @@ struct OutputBlock {
 
     // precomputed YYFN parts with block-level options (in rec/func mode)
     CodeFnCommon* fn_common;
+    // precomputed relational operators
+    const char* relops[CMP_COUNT];
 
     OutputBlock(InputBlock kind, const std::string& name, const loc_t& loc);
     ~OutputBlock();
