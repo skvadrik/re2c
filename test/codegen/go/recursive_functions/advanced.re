@@ -67,8 +67,8 @@ type State struct {
 	yymarker int
 	yylimit  int
 	token    int
-	yycond   int
-	yystate  int
+	yyc      int
+	yyst     int
 	trie     mtagTrie
 	/*!stags:re2c format = '\n\t@@ int'; */
 	/*!mtags:re2c format = '\n\t@@ int'; */
@@ -117,6 +117,8 @@ func fill(st *State) int {
 	re2c:tags = 1;
 	re2c:tags:negative = "tagNone";
 	re2c:variable:yyrecord = st;
+	re2c:variable:yycond = yyc;
+	re2c:variable:yystate = yyst;
 	re2c:define:YYFN = ["lex;int", "st;*State"];
 	re2c:define:YYCTYPE = "byte";
 	re2c:define:YYFILL = "return lexWaiting";
@@ -187,8 +189,8 @@ func test(packets []string) int {
 		yymarker: SIZE,
 		yylimit:  SIZE,
 		token:    SIZE,
-		yycond:   yycmedia_type,
-		yystate:  -1,
+		yyc:      yycmedia_type,
+		yyst:     -1,
 		trie:     make([]mtagElem, 0),
 		/*!stags:re2c format = '\n\t\t@@: tagNone,'; */
 		/*!mtags:re2c format = '\n\t\t@@: mtagRoot,'; */

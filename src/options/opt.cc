@@ -267,7 +267,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (glob.code_model != CodeModel::GOTO_LABEL) {
         // In code models other than goto/label there is no `goto`.
-        real.var_cond = defaults.var_cond;
         real.var_cond_table = defaults.var_cond_table;
         real.cond_div = defaults.cond_div;
         real.cond_div_param = defaults.cond_div_param;
