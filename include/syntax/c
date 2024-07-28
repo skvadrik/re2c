@@ -353,38 +353,47 @@ code:yycopymtag =
 code:yygetaccept =
     (api.generic
         ? YYGETACCEPT // function style is not supported, as there's no sensible default
-    : (api.record & (storable_state | code_model.recursive_functions)
-        ? yyrecord "->" var
-        : var));
+        : (api.record & (storable_state | code_model.recursive_functions) ? yyrecord "->") var);
 
 code:yysetaccept =
     topindent (api.generic
         ? YYSETACCEPT // function style is not supported, as there's no sensible default
-    : (api.record & (storable_state | code_model.recursive_functions)
-        ? yyrecord "->" var " = " val ";"
-        : var " = " val ";"
-    )) nl;
-
-code:yygetcond =
-    (api.record
-        ? yyrecord "->" var
-        : YYGETCOND (api_style.functions ? "()"));
-
-code:yysetcond =
-    topindent (api.record
-        ? yyrecord "->" var " = " val ";"
-        : YYSETCOND (api_style.functions ? "(" val ");")
+        : (api.record & (storable_state | code_model.recursive_functions) ? yyrecord "->")
+            var " = " val ";"
     ) nl;
 
-code:yygetstate =
-    (api.record
-        ? yyrecord "->" var
-        : YYGETSTATE (api_style.functions ? "()"));
+// Historically simple API did not provide default definition for YYGETCOND.
+// Changing it would break backwards compatibility, as there may be a macro definition
+// not based on `yycond` that re2c is unable to see, e.g. included from a header file.
+code:yygetcond =
+    (api.generic | api.pointers
+        ? YYGETCOND (api_style.functions ? "()")
+        : yyrecord "->" var);
 
+// Historically simple API did not provide default definition for YYSETCOND.
+// Changing it would break backwards compatibility, as there may be a macro definition
+// not based on `yycond` that re2c is unable to see, e.g. included from a header file.
+code:yysetcond =
+    topindent (api.generic | api.pointers
+        ? YYSETCOND (api_style.functions ? "(" val ");")
+        : yyrecord "->" var " = " val ";"
+    ) nl;
+
+// Historically simple API did not provide default definition for YYGETSTATE.
+// Changing it would break backwards compatibility, as there may be a macro definition
+// not based on `yystate` that re2c is unable to see, e.g. included from a header file.
+code:yygetstate =
+    (api.generic | api.pointers
+        ? YYGETSTATE (api_style.functions ? "()")
+        : yyrecord "->" var);
+
+// Historically simple API did not provide default definition for YYSETSTATE.
+// Changing it would break backwards compatibility, as there may be a macro definition
+// not based on `yystate` that re2c is unable to see, e.g. included from a header file.
 code:yysetstate =
-    topindent (api.record
-        ? yyrecord "->" var " = " val ";"
-        : YYSETSTATE (api_style.functions ? "(" val ");")
+    topindent (api.generic | api.pointers
+        ? YYSETSTATE (api_style.functions ? "(" val ");")
+        : yyrecord "->" var " = " val ";"
     ) nl;
 
 code:yylessthan =

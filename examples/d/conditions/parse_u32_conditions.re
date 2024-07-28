@@ -11,14 +11,12 @@ private void add(ulong BASE)(ref ulong u, int d) {
 
 private ulong parse_u32(const(char)* s) {
     const(char)* yycursor = s, yymarker;
-    YYCond c = YYCond.yycinit;
+    YYCond yycond = YYCond.yycinit;
     ulong u = 0;
 
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = char;
-        re2c:define:YYGETCOND = "c";
-        re2c:define:YYSETCOND = "c = @@;";
 
         <*> * { return ERROR; }
         <init> '0b' / [01]        :=> bin

@@ -19,13 +19,13 @@ private void add(ulong BASE)(ref ulong u, int d) {
 
 private ulong parse_u32(const(char)* s) {
     const(char)* yycursor = s, yymarker;
-    YYCond c = YYCond.yycinit;
+    YYCond yycond = YYCond.yycinit;
     ulong u = 0;
 
     
 {
 	char yych;
-	switch (c) {
+	switch (yycond) {
 		case YYCond.yycinit: goto yyc_init;
 		case YYCond.yycbin: goto yyc_bin;
 		case YYCond.yycdec: goto yyc_dec;
@@ -54,12 +54,12 @@ yy2:
 		default: goto yy3;
 	}
 yy3:
-	c = YYCond.yycoct;
+	yycond = YYCond.yycoct;
 	goto yyc_oct;
 yy4:
 	++yycursor;
 	yycursor -= 1;
-	c = YYCond.yycdec;
+	yycond = YYCond.yycdec;
 	goto yyc_dec;
 yy5:
 	yych = *++yycursor;
@@ -81,12 +81,12 @@ yy7:
 yy8:
 	++yycursor;
 	yycursor -= 1;
-	c = YYCond.yycbin;
+	yycond = YYCond.yycbin;
 	goto yyc_bin;
 yy9:
 	++yycursor;
 	yycursor -= 1;
-	c = YYCond.yychex;
+	yycond = YYCond.yychex;
 	goto yyc_hex;
 /* *********************************** */
 yyc_bin:
