@@ -1,4 +1,4 @@
-supported_apis = ["default", "generic", "record"];
+supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["functions", "free-form"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot", "skeleton"];
@@ -366,7 +366,7 @@ code:yysetaccept =
 // Changing it would break backwards compatibility, as there may be a macro definition
 // not based on `yycond` that re2c is unable to see, e.g. included from a header file.
 code:yygetcond =
-    (api.generic | api.pointers
+    (api.generic | api.simple
         ? YYGETCOND (api_style.functions ? "()")
         : yyrecord "->" var);
 
@@ -374,7 +374,7 @@ code:yygetcond =
 // Changing it would break backwards compatibility, as there may be a macro definition
 // not based on `yycond` that re2c is unable to see, e.g. included from a header file.
 code:yysetcond =
-    topindent (api.generic | api.pointers
+    topindent (api.generic | api.simple
         ? YYSETCOND (api_style.functions ? "(" val ");")
         : yyrecord "->" var " = " val ";"
     ) nl;
@@ -383,7 +383,7 @@ code:yysetcond =
 // Changing it would break backwards compatibility, as there may be a macro definition
 // not based on `yystate` that re2c is unable to see, e.g. included from a header file.
 code:yygetstate =
-    (api.generic | api.pointers
+    (api.generic | api.simple
         ? YYGETSTATE (api_style.functions ? "()")
         : yyrecord "->" var);
 
@@ -391,7 +391,7 @@ code:yygetstate =
 // Changing it would break backwards compatibility, as there may be a macro definition
 // not based on `yystate` that re2c is unable to see, e.g. included from a header file.
 code:yysetstate =
-    topindent (api.generic | api.pointers
+    topindent (api.generic | api.simple
         ? YYSETSTATE (api_style.functions ? "(" val ");")
         : yyrecord "->" var " = " val ";"
     ) nl;

@@ -1,6 +1,6 @@
 #include "src/parse/conf_parser.h"
 const char* DEFAULT_SYNTAX_PYTHON =
-    "supported_apis = [\"default\", \"generic\", \"record\"];\n"
+    "supported_apis = [\"simple\", \"generic\", \"record\"];\n"
     "supported_api_styles = [\"free-form\"];\n"
     "// \"recursive_functions\" works syntactically, but causes stack overflows due to non-tail recusion\n"
     "supported_code_models = [\"loop_switch\"];\n"

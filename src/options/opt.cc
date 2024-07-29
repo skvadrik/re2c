@@ -226,7 +226,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
 
     // set implied options
     if (glob.target == Target::SKELETON) {
-        real.api = Api::CUSTOM;
+        real.api = Api::GENERIC;
         real.indent_str = "    ";
         real.indent_top = 0;
     }
@@ -275,8 +275,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
 
     // errors
-    if (real.api == Api::DEFAULT && !glob.supported_apis_contains("default")) {
-        RET_FAIL(error("default API is not supported for this backend"));
+    if (real.api == Api::SIMPLE && !glob.supported_apis_contains("simple")) {
+        RET_FAIL(error("simple API is not supported for this backend"));
     }
     if (real.api_style == ApiStyle::FUNCTIONS && !glob.supported_api_styles_contains("functions")) {
         RET_FAIL(error("function-like API style is not supported for this backend"));
@@ -799,10 +799,10 @@ static bool eval_cond(
         return callback->eval_cond(cond->lopt);
     case StxOptKind::GLOB:
         switch (cond->gopt) {
-        case StxGOpt::API_DEFAULT:
-            return opts->api == Api::DEFAULT;
-        case StxGOpt::API_CUSTOM:
-            return opts->api == Api::CUSTOM;
+        case StxGOpt::API_SIMPLE:
+            return opts->api == Api::SIMPLE;
+        case StxGOpt::API_GENERIC:
+            return opts->api == Api::GENERIC;
         case StxGOpt::API_RECORD:
             return opts->api == Api::RECORD;
         case StxGOpt::API_STYLE_FUNCTIONS:

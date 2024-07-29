@@ -7,7 +7,7 @@ def lex(str):
     count = 0
 
     while True: %{
-        re2c:api = custom;
+        re2c:api = generic;
         re2c:define:YYPEEK = "str[cur] if cur < lim else 0";
         re2c:define:YYSKIP = "cur += 1";
         re2c:yyfill:enable = 0;

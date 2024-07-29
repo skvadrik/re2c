@@ -27,8 +27,8 @@ enum class Lang: uint32_t {
 };
 
 enum class Api: uint32_t {
-    DEFAULT,
-    CUSTOM,
+    SIMPLE,
+    GENERIC,
     RECORD
 };
 
@@ -182,8 +182,8 @@ static constexpr size_t MAX_DFA_STATES = 1000 * 100;
 static constexpr size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
 
 enum class StxGOpt {
-    API_DEFAULT,
-    API_CUSTOM,
+    API_SIMPLE,
+    API_GENERIC,
     API_RECORD,
     API_STYLE_FUNCTIONS,
     API_STYLE_FREEFORM,

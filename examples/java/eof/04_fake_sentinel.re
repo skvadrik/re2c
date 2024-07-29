@@ -9,7 +9,7 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:api = custom;
+                re2c:api = generic;
                 re2c:define:YYCTYPE = "byte";
                 re2c:define:YYPEEK = "(yycursor < yyinput.length) ? yyinput[yycursor] : 0";
                 re2c:define:YYSKIP = "yycursor += 1;";

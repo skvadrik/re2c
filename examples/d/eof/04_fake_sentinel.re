@@ -14,7 +14,7 @@ private int lex(immutable char[] s) {
 
     for (;;) {
     /*!re2c
-        re2c:api = custom;
+        re2c:api = generic;
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = char;
         re2c:define:YYPEEK  = "cur < lim ? *cur : 0";  // fake null

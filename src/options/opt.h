@@ -56,7 +56,7 @@ using StxCodes = list_t<StxCode>;
 
 #define RE2C_CHECKED_LISTS \
     CHECKED_LIST(supported_apis, \
-            ({"default", "generic", "record"})) \
+            ({"simple", "generic", "record"})) \
     CHECKED_LIST(supported_api_styles, \
             ({"free-form", "functions"})) \
     CHECKED_LIST(supported_code_models, \
@@ -445,7 +445,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, case_inverted, false) \
     MUTOPT(EmptyClass, empty_class, EmptyClass::MATCH_EMPTY) \
     /* API */ \
-    MUTOPT(Api, api, Api::CUSTOM) \
+    MUTOPT(Api, api, Api::GENERIC) \
     MUTOPT(ApiStyle, api_style, ApiStyle::FUNCTIONS) \
     MUTOPT(std::string, api_sigil, RE2C_SIGIL) \
     /* variables */ \

@@ -11,7 +11,7 @@ fn lex(str string) int {
     mut count := 0
 
 loop: /*!re2c
-    re2c:api = custom;
+    re2c:api = generic;
     re2c:yyfill:enable = 0;
     re2c:define:YYPEEK = "peek(str, cur)";
     re2c:define:YYSKIP = "cur += 1";

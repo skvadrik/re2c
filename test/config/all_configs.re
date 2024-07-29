@@ -1,6 +1,9 @@
 // re2c $INPUT -o $OUTPUT
 /*!re2c
-    re2c:api = custom;
+    re2c:api = generic;
+    re2c:api = simple;
+    re2c:api = record;
+    re2c:flags:input = custom;
     re2c:flags:input = default;
     re2c:api:style = free-form;
     re2c:api:sigil = "";

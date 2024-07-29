@@ -9,7 +9,7 @@ fn lex(str: []const u8) i32 {
 
     loop: while (true) {
         %{
-            re2c:api = custom;
+            re2c:api = generic;
             re2c:yyfill:enable = 0;
             // YYPEEK returns "fake" terminating null if cursor has reached limit.
             re2c:define:YYPEEK = "if (cur >= str.len) 0 else str[cur]";

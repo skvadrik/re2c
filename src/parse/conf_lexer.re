@@ -256,11 +256,11 @@ input:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'default', 'custom', 'record')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'simple', 'generic', 'record'"));
     }
-    "default" { SETOPT(api, Api::DEFAULT); goto end; }
-    "custom"  { SETOPT(api, Api::CUSTOM);  goto end; }
-    "record"  { SETOPT(api, Api::RECORD);  goto end; }
+    "simple" | "default" { SETOPT(api, Api::SIMPLE);  goto end; }
+    "generic" | "custom" { SETOPT(api, Api::GENERIC); goto end; }
+    "record"             { SETOPT(api, Api::RECORD);  goto end; }
 */
 
 api_style:
@@ -669,8 +669,8 @@ start:
     //
     // These options are part of the syntax file API.
 
-    "api.pointers"                   { RET_GOPT(StxGOpt::API_DEFAULT); }
-    "api.generic"                    { RET_GOPT(StxGOpt::API_CUSTOM); }
+    "api.simple"                     { RET_GOPT(StxGOpt::API_SIMPLE); }
+    "api.generic"                    { RET_GOPT(StxGOpt::API_GENERIC); }
     "api.record"                     { RET_GOPT(StxGOpt::API_RECORD); }
     "api_style.functions"            { RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
     "api_style.freeform"             { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
