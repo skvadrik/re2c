@@ -225,7 +225,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "            : YYPEEK)\n"
     "        : (unsafe\n"
     "            ? \"unsafe {*\" YYINPUT \".\" YYPEEK \"(\" YYCURSOR \")}\"\n"
-    "            : YYINPUT \"[\" YYCURSOR \"]\")\n"
+    "            : YYINPUT \"[\" YYCURSOR \"]\") (cast ? \" as \" YYCTYPE)\n"
     "    ) \";\" nl;\n"
     "\n"
     "code:yyskip =\n"

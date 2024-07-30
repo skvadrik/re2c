@@ -201,6 +201,7 @@ enum class StxGOpt {
 };
 
 enum class StxLOpt {
+    CAST,
     CHAR_LITERALS,
     HAVE_ARGS,
     HAVE_COND,

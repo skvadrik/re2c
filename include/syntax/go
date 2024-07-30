@@ -228,7 +228,7 @@ code:yydebug =
 code:yypeek =
     topindent yych (code_model.recursive_functions ? " := " : " = ") (api.generic
         ? YYPEEK (api_style.functions ? "()")
-        : YYINPUT "[" YYCURSOR "]"
+        : (cast ? YYCTYPE "(") YYINPUT "[" YYCURSOR "]" (cast ? ")")
     ) nl;
 
 code:yyskip =

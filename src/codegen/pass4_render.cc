@@ -840,12 +840,6 @@ class RenderRecFuncs : public RenderCallback {
     FORBID_COPY(RenderRecFuncs);
 };
 
-static inline void yych_conv(std::ostream& os, const opt_t* opts) {
-    if (opts->char_conv) {
-        os << "(" <<  opts->api_char_type << ")";
-    }
-}
-
 class RenderAssign : public RenderCallback {
     RenderContext& rctx;
     const CodeAssign* code;
@@ -910,7 +904,6 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::CAST: yych_conv(rctx.os, rctx.opts); break;
             case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
             case StxVarId::CTYPE: rctx.os << rctx.opts->api_char_type; break;
             case StxVarId::INPUT: rctx.os << rctx.opts->api_input; break;
@@ -923,6 +916,14 @@ class RenderSkipPeekBackupRestore : public RenderCallback {
             case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
             default: render_global_var(rctx, var); break;
         }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::CAST) {
+            return rctx.opts->char_conv;
+        }
+        UNREACHABLE();
+        return false;
     }
 };
 

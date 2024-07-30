@@ -223,7 +223,7 @@ code:yypeek =
             : YYPEEK)
         : (unsafe
             ? "unsafe {*" YYINPUT "." YYPEEK "(" YYCURSOR ")}"
-            : YYINPUT "[" YYCURSOR "]")
+            : YYINPUT "[" YYCURSOR "]") (cast ? " as " YYCTYPE)
     ) ";" nl;
 
 code:yyskip =

@@ -230,7 +230,7 @@ const char* DEFAULT_SYNTAX_GO =
     "code:yypeek =\n"
     "    topindent yych (code_model.recursive_functions ? \" := \" : \" = \") (api.generic\n"
     "        ? YYPEEK (api_style.functions ? \"()\")\n"
-    "        : YYINPUT \"[\" YYCURSOR \"]\"\n"
+    "        : (cast ? YYCTYPE \"(\") YYINPUT \"[\" YYCURSOR \"]\" (cast ? \")\")\n"
     "    ) nl;\n"
     "\n"
     "code:yyskip =\n"

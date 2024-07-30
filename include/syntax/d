@@ -230,7 +230,7 @@ code:yydebug =
 code:yypeek =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = " (api.generic
         ? YYPEEK
-        : cast "*" YYCURSOR
+        : (cast ? "cast(" YYCTYPE ")") "*" YYCURSOR
     ) ";" nl;
 
 code:yyskip =
@@ -253,11 +253,11 @@ code:yybackupctx =
 
 code:yyskip_yypeek =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
-        cast "*++" YYCURSOR ";" nl;
+        (cast ? "cast(" YYCTYPE ")") "*++" YYCURSOR ";" nl;
 
 code:yypeek_yyskip =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
-        cast "*" YYCURSOR "++;" nl;
+        (cast ? "cast(" YYCTYPE ")") "*" YYCURSOR "++;" nl;
 
 code:yyskip_yybackup =
     topindent YYMARKER " = ++" YYCURSOR ";" nl;
@@ -267,15 +267,15 @@ code:yybackup_yyskip =
 
 code:yybackup_yypeek =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
-        cast "*(" YYMARKER " = " YYCURSOR ");" nl;
+        (cast ? "cast(" YYCTYPE ")") "*(" YYMARKER " = " YYCURSOR ");" nl;
 
 code:yyskip_yybackup_yypeek =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
-        cast "*(" YYMARKER " = ++" YYCURSOR ");" nl;
+        (cast ? "cast(" YYCTYPE ")") "*(" YYMARKER " = ++" YYCURSOR ");" nl;
 
 code:yybackup_yypeek_yyskip =
     topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = "
-        cast "*(" YYMARKER " = " YYCURSOR "++);" nl;
+        (cast ? "cast(" YYCTYPE ")") "*(" YYMARKER " = " YYCURSOR "++);" nl;
 
 code:yyrestore =
     topindent (api.generic

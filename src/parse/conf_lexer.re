@@ -578,7 +578,6 @@ start:
     "argtype"      { RET_VAR(StxVarId::ARGTYPE); }
     "array"        { RET_VAR(StxVarId::ARRAY); }
     "branch"       { RET_VAR(StxVarId::BRANCH); }
-    "cast"         { RET_VAR(StxVarId::CAST); }
     "case"         { RET_VAR(StxVarId::CASE); }
     "cond"         { RET_VAR(StxVarId::COND); }
     "date"         { RET_VAR(StxVarId::DATE); }
@@ -687,6 +686,7 @@ start:
     //
     // These options are part of the syntax file API.
 
+    "cast"            { RET_LOPT(StxLOpt::CAST); }
     "char_literals"   { RET_LOPT(StxLOpt::CHAR_LITERALS); }
     "have_args"       { RET_LOPT(StxLOpt::HAVE_ARGS); }
     "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
