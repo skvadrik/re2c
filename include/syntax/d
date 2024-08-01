@@ -138,9 +138,9 @@ code:array_elem = array "[" index "]";
 
 code:type_int = "int";
 code:type_uint = "uint";
-// code:type_cond_enum
+code:type_cond_enum = <undefined>;
 code:type_yybm = "immutable char";
-// code:type_yytarget
+code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " = " rhs ";" nl;
 
@@ -195,6 +195,8 @@ code:enum =
     dedent "};" nl;
 
 code:enum_elem = type "." name;
+
+code:fndecl = <undefined>;
 
 code:fndef =
     topindent type " " name "("

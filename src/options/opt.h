@@ -36,6 +36,7 @@ namespace re2c {
 
 class Input;
 class Msg;
+class Warn;
 class RenderCallback;
 class Scratchbuf;
 struct StxCode;
@@ -603,7 +604,7 @@ struct StxCodeList {
     StxCodes* code;
 };
 
-enum class StxCodeType {STR, VAR, COND, LIST};
+enum class StxCodeType {STR, VAR, COND, LIST, UD};
 
 struct StxCode {
     StxCodeType type;
@@ -615,6 +616,8 @@ struct StxCode {
     };
     StxCode* next;
 };
+
+bool is_undefined(const StxCodes* code);
 
 // Constant options.
 struct conopt_t {
@@ -670,7 +673,7 @@ struct conopt_t {
 #undef CHECKED_LIST
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
     bool have_conf_code_##name() const { \
-        return code_##name != nullptr; \
+        return !is_undefined(code_##name); \
     }
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
@@ -794,16 +797,20 @@ struct opt_t {
     std::string gen_##name(const StxCodes* code) const;
     RE2C_MUTCODES
 #undef MUTCODE
-    bool specialize_oneline_if() const { return code_if_then_else_oneline != nullptr; }
-    bool specialize_oneline_switch() const { return code_switch_cases_oneline != nullptr; }
+    bool specialize_oneline_if() const {
+        return !is_undefined(code_if_then_else_oneline);
+    }
+    bool specialize_oneline_switch() const {
+        return !is_undefined(code_switch_cases_oneline);
+    }
     bool specialize_skip_peek_backup() const {
-        return code_yyskip_yypeek != nullptr
-            && code_yypeek_yyskip != nullptr
-            && code_yyskip_yybackup != nullptr
-            && code_yybackup_yyskip != nullptr
-            && code_yybackup_yypeek != nullptr
-            && code_yyskip_yybackup_yypeek != nullptr
-            && code_yybackup_yypeek_yyskip != nullptr;
+        return !is_undefined(code_yyskip_yypeek)
+            && !is_undefined(code_yypeek_yyskip)
+            && !is_undefined(code_yyskip_yybackup)
+            && !is_undefined(code_yybackup_yyskip)
+            && !is_undefined(code_yybackup_yypeek)
+            && !is_undefined(code_yyskip_yybackup_yypeek)
+            && !is_undefined(code_yybackup_yypeek_yyskip);
     }
 
   private:
@@ -886,7 +893,7 @@ struct Opt {
 #undef STX_OPT
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
     /* void set_code_##name(const StxCodes* code); */ \
-    Ret check_code_##name() NODISCARD;
+    Ret check_code_##name(Warn& warn) NODISCARD;
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
     void init_encoding(Enc::Type type, bool on);
@@ -901,6 +908,7 @@ struct Opt {
     StxCode* make_code_var(StxVarId id);
     StxCode* make_code_cond(StxOpt* opt, StxCodes* code_then, StxCodes* code_else);
     StxCode* make_code_list(StxVarId var, int32_t lbound, int32_t rbound, StxCodes* code);
+    StxCodes* make_code_undefined();
     StxOpt* make_opt_global(StxGOpt opt);
     StxOpt* make_opt_local(StxLOpt opt);
     StxOpt* make_opt_imm(bool b);

@@ -128,15 +128,15 @@ code:var_global = topindent "let " name " = " init nl;
 code:const_local = topindent "let " name " = " init " in" nl;
 code:const_global = topindent "let " name " = " init nl;
 
-// code:array_local
-// code:array_global
+code:array_local = <undefined>;
+code:array_global = <undefined>;
 code:array_elem = array ".(" index ")";
 
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_cond_enum = (storable_state? "int" : "uint");
-// code:type_yybm
-// code:type_yytarget
+code:type_yybm = <undefined>;
+code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " <- " rhs ";" nl;
 
@@ -191,6 +191,12 @@ code:enum =
 
 code:enum_elem = name;
 
+code:loop = <undefined>;
+
+code:goto = <undefined>;
+
+code:fndecl = <undefined>;
+
 code:fndef =
     name [arg: " (" argname " : " argtype ")"] " : " type " =" nl
         indent [stmt: stmt] dedent;
@@ -241,6 +247,14 @@ code:yybackupctx =
         ? YYCTXMARKER " <- " YYCURSOR ";"
         : YYBACKUPCTX
     ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
     topindent (api.record

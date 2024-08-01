@@ -138,7 +138,7 @@ code:array_elem = array "[" index "]";
 
 code:type_int = "int";
 code:type_uint = "unsigned int";
-// code:type_cond_enum
+code:type_cond_enum = <undefined>;
 code:type_yybm = "static const unsigned char";
 code:type_yytarget = "static const void*";
 

@@ -66,6 +66,7 @@ extern "C" {
 %token CONF_CODE
 %token CONF_GOPT
 %token CONF_LOPT
+%token CONF_UD
 
 %type <str> CONF_STRING str
 %type <num> CONF_NUMBER num
@@ -86,7 +87,8 @@ conf
 | '=' str  { in.save_conf_str($2); }
 | '=' list { in.save_conf_list($2); };
 | CONF_CODE '=' code_exprs { *$1 = $3; }
-| CONF_CODE '=' CONF_CODE  { *$1 = *$3; };
+| CONF_CODE '=' CONF_CODE  { *$1 = *$3; }
+| CONF_CODE '=' CONF_UD    { *$1 = opts.make_code_undefined(); };
 
 num
 : CONF_NUMBER
@@ -225,22 +227,23 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
     lim = bot + flen + maxfill();
 
     CHECK_RET(lex_syntax_file(opts));
-    reset_lexer();
 
     // Second, apply user-supplied syntax config (if any).
     // This order gives the user an opportunity to overrided only some configurations.
     if (!globopts->syntax_file.empty()) {
+        reset_lexer();
         // Pass itself as parent to `open` to enable search in include paths.
         CHECK_RET(open(globopts->syntax_file, &globopts->syntax_file));
         CHECK_RET(lex_syntax_file(opts));
-        reset_lexer();
     }
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
-    CHECK_RET(opts.check_code_##name());
+    CHECK_RET(opts.check_code_##name(msg.warn));
     RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 
+    // Reset should happen after the check, as warnings may need use config filename.
+    reset_lexer();
     in_syntax_file = false;
     return Ret::OK;
 }

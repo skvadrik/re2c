@@ -504,8 +504,12 @@ RE2C_STX_OPTS
 /* void Opt::set_code_##name(const StxCodes* code) { \
     const_cast<conopt_t&>(glob).code_##name = code; \
 } */ \
-Ret Opt::check_code_##name() { \
-    if (glob.code_##name == nullptr) return Ret::OK; \
+Ret Opt::check_code_##name(Warn& warn) { \
+    if (glob.code_##name == nullptr) { \
+        /* we don't have a specific location => start of the current of syntax file */ \
+        warn.undefined_syntax_config(ATSTART, "code:" #name); \
+        const_cast<conopt_t&>(glob).code_##name = make_code_undefined(); \
+    } \
     static const std::unordered_set<StxVarId> vs vars; \
     static const std::unordered_set<StxVarId> lvs list_vars; \
     static const std::unordered_set<StxLOpt> cs conds; \
@@ -626,6 +630,7 @@ Ret Opt::validate_conf_code(
 
         switch (x->type) {
         case StxCodeType::STR:
+        case StxCodeType::UD:
             // no option names to check here
             break;
         case StxCodeType::VAR:
@@ -688,6 +693,12 @@ StxCode* Opt::make_code_str(const char* str) {
 StxCode* Opt::make_code_var(StxVarId var) {
     StxCode* x = make_code(StxCodeType::VAR);
     x->var = var;
+    return x;
+}
+
+StxCodes* Opt::make_code_undefined() {
+    StxCodes* x = new_code_list();
+    append(x, make_code(StxCodeType::UD));
     return x;
 }
 
@@ -919,6 +930,8 @@ RE2C_MUTCODES
 
 void opt_t::eval_code_conf(
         StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const {
+    CHECK(code != nullptr);
+
     stack_code_t& stack = stack_code;
     size_t bottom = stack.size();
     push_list_on_stack(code->head);
@@ -957,6 +970,9 @@ void opt_t::eval_code_conf(
                 push_list_on_stack(x->list.code->head);
             }
             break;
+        case StxCodeType::UD:
+            os << "<undefined>";
+            break;
         }
     }
 }
@@ -964,6 +980,13 @@ void opt_t::eval_code_conf(
 void opt_t::eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const {
     RenderCallback dummy;
     eval_code_conf(id, code, os, dummy);
+}
+
+bool is_undefined(const StxCodes* code) {
+    CHECK(code != nullptr);
+    return code->head != nullptr
+        && code->head->next == nullptr
+        && code->head->type == StxCodeType::UD;
 }
 
 } // namespace re2c

@@ -648,6 +648,9 @@ start:
     "dedent"    { RET_VAR(StxVarId::DEDENT); }
     "topindent" { RET_VAR(StxVarId::TOPINDENT); }
 
+    // special undefined value
+    "<undefined>" { RET_TOK(CONF_UD); }
+
     // Global (immutable) conditionals.
     //
     // A subset of constant options that is exported for use in syntax files.

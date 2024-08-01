@@ -129,8 +129,8 @@ code:var_global = topindent "let " name " = " init nl;
 code:const_local = topindent "let " name " = " init " in" nl;
 code:const_global = topindent name " = " init nl;
 
-// code:array_local
-// code:array_global
+code:array_local = <undefined>;
+code:array_global = <undefined>;
 
 // `code:array_elem` is used to generate operations on POSIX `yypmatch` array.
 // Override it to generate an identifier instead, as mutable arrays are non-idiomatic in Haskell.
@@ -139,10 +139,10 @@ code:array_elem = array index;
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_cond_enum = (storable_state? "int" : "uint");
-// code:type_yybm
-// code:type_yytarget
+code:type_yybm = <undefined>;
+code:type_yytarget = <undefined>;
 
-// code:assign
+code:assign = <undefined>;
 
 code:cmp_eq = "==";
 code:cmp_ne = "/=";
@@ -171,6 +171,8 @@ code:switch_cases = topindent "_c | "
         indent [stmt: stmt] dedent
     ];
 
+code:switch_cases_oneline = <undefined>;
+
 code:switch_case_range = (many
     ? [val{0}: val] " <= _c && _c <= " [val{-1}: val]
     : [val{0}: val] " == _c");
@@ -184,6 +186,12 @@ code:enum =
     nl;
 
 code:enum_elem = name;
+
+code:loop = <undefined>;
+
+code:goto = <undefined>;
+
+code:fndecl = <undefined>;
 
 code:fndef =
     name " :: " [arg: argtype " -> "] type nl
@@ -241,6 +249,14 @@ code:yybackupctx =
             : "let " YYCTXMARKER " = " YYCURSOR " in")
         : YYBACKUPCTX
     ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
     topindent (api.record

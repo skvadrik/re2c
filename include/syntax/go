@@ -140,9 +140,9 @@ code:array_elem = array "[" index "]";
 
 code:type_int = "int";
 code:type_uint = "uint";
-// code:type_cond_enum
+code:type_cond_enum = <undefined>;
 code:type_yybm = "byte";
-// code:type_yytarget
+code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " = " rhs nl;
 
@@ -160,6 +160,8 @@ code:if_then_else =
         indent [stmt: stmt] dedent]
     topindent "}" nl;
 
+code:if_then_else_oneline = <undefined>;
+
 code:switch =
     topindent "switch (" expr ") {" nl
     [case: case]
@@ -170,6 +172,8 @@ code:switch_cases =
         indent topindent "fallthrough" dedent nl]
     [case{-1}: topindent case nl]
         indent [stmt: stmt] dedent;
+
+code:switch_cases_oneline = <undefined>;
 
 code:switch_case_range = "case " [val{0}: val] [val{1:-1}: "," val] ":";
 
@@ -190,6 +194,8 @@ code:enum =
     dedent ")" nl;
 
 code:enum_elem = name;
+
+code:fndecl = <undefined>;
 
 code:fndef =
     topindent "func " name "("
@@ -248,6 +254,14 @@ code:yybackupctx =
         ? YYBACKUPCTX (api_style.functions ? "()")
         : YYCTXMARKER " = " YYCURSOR
     ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
     topindent (api.generic

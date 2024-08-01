@@ -89,7 +89,8 @@ extern const char* DEFAULT_SYNTAX_ZIG;
     CONF_VAR = 261,                /* CONF_VAR  */
     CONF_CODE = 262,               /* CONF_CODE  */
     CONF_GOPT = 263,               /* CONF_GOPT  */
-    CONF_LOPT = 264                /* CONF_LOPT  */
+    CONF_LOPT = 264,               /* CONF_LOPT  */
+    CONF_UD = 265                  /* CONF_UD  */
   };
   typedef enum conf_tokentype conf_token_kind_t;
 #endif
@@ -112,7 +113,7 @@ union CONF_STYPE
     re2c::StxGOpt gopt;
     re2c::StxLOpt lopt;
 
-#line 116 "src/parse/conf_parser.h"
+#line 117 "src/parse/conf_parser.h"
 
 };
 typedef union CONF_STYPE CONF_STYPE;

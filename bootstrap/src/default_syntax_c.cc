@@ -140,7 +140,7 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "code:type_int = \"int\";\n"
     "code:type_uint = \"unsigned int\";\n"
-    "// code:type_cond_enum\n"
+    "code:type_cond_enum = <undefined>;\n"
     "code:type_yybm = \"static const unsigned char\";\n"
     "code:type_yytarget = \"static const void*\";\n"
     "\n"

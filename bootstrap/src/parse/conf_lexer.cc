@@ -5370,7 +5370,8 @@ start:
 		case '8':
 		case '9': goto yy957;
 		case ';': goto yy958;
-		case 'Y': goto yy959;
+		case '<': goto yy959;
+		case 'Y': goto yy960;
 		case '_':
 		case 'g':
 		case 'j':
@@ -5379,38 +5380,38 @@ start:
 		case 'q':
 		case 'w':
 		case 'x':
-		case 'z': goto yy960;
-		case 'a': goto yy963;
-		case 'b': goto yy964;
-		case 'c': goto yy965;
-		case 'd': goto yy966;
-		case 'e': goto yy967;
-		case 'f': goto yy968;
-		case 'h': goto yy969;
-		case 'i': goto yy970;
-		case 'l': goto yy971;
-		case 'm': goto yy972;
-		case 'n': goto yy973;
-		case 'o': goto yy974;
-		case 'r': goto yy975;
-		case 's': goto yy976;
-		case 't': goto yy977;
-		case 'u': goto yy978;
-		case 'v': goto yy979;
-		case 'y': goto yy980;
+		case 'z': goto yy961;
+		case 'a': goto yy964;
+		case 'b': goto yy965;
+		case 'c': goto yy966;
+		case 'd': goto yy967;
+		case 'e': goto yy968;
+		case 'f': goto yy969;
+		case 'h': goto yy970;
+		case 'i': goto yy971;
+		case 'l': goto yy972;
+		case 'm': goto yy973;
+		case 'n': goto yy974;
+		case 'o': goto yy975;
+		case 'r': goto yy976;
+		case 's': goto yy977;
+		case 't': goto yy978;
+		case 'u': goto yy979;
+		case 'v': goto yy980;
+		case 'y': goto yy981;
 		default: goto yy947;
 	}
 yy946:
 	++cur;
 #line 479 "../src/parse/conf_lexer.re"
 	{ RET_FAIL(error_at_cur("unexpected end of input in configuration")); }
-#line 5408 "src/parse/conf_lexer.cc"
+#line 5409 "src/parse/conf_lexer.cc"
 yy947:
 	++cur;
 yy948:
-#line 703 "../src/parse/conf_lexer.re"
+#line 706 "../src/parse/conf_lexer.re"
 	{ RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
-#line 5414 "src/parse/conf_lexer.cc"
+#line 5415 "src/parse/conf_lexer.cc"
 yy949:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -5420,17 +5421,17 @@ yy949:
 	}
 #line 483 "../src/parse/conf_lexer.re"
 	{ goto start; }
-#line 5424 "src/parse/conf_lexer.cc"
+#line 5425 "src/parse/conf_lexer.cc"
 yy950:
 	++cur;
 #line 481 "../src/parse/conf_lexer.re"
 	{ next_line(); goto start; }
-#line 5429 "src/parse/conf_lexer.cc"
+#line 5430 "src/parse/conf_lexer.cc"
 yy951:
 	++cur;
 #line 499 "../src/parse/conf_lexer.re"
 	{ RET_TOK(cur[-1]); }
-#line 5434 "src/parse/conf_lexer.cc"
+#line 5435 "src/parse/conf_lexer.cc"
 yy952:
 	++cur;
 #line 492 "../src/parse/conf_lexer.re"
@@ -5440,21 +5441,21 @@ yy952:
         yylval->str = copystr(tmp_str, alc);
         RET_TOK(CONF_STRING);
     }
-#line 5444 "src/parse/conf_lexer.cc"
+#line 5445 "src/parse/conf_lexer.cc"
 yy953:
 	yych = *++cur;
 	if (yych <= '0') goto yy948;
-	if (yych <= '9') goto yy981;
+	if (yych <= '9') goto yy982;
 	goto yy948;
 yy954:
 	yyaccept = 0;
 	yych = *(mar = ++cur);
-	if (yych == '/') goto yy982;
+	if (yych == '/') goto yy983;
 	goto yy948;
 yy955:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 yy956:
 #line 485 "../src/parse/conf_lexer.re"
@@ -5464,7 +5465,7 @@ yy956:
         }
         RET_TOK(CONF_NUMBER);
     }
-#line 5468 "src/parse/conf_lexer.cc"
+#line 5469 "src/parse/conf_lexer.cc"
 yy957:
 	++cur;
 	if (lim <= cur) YYFILL(1);
@@ -5472,4828 +5473,4874 @@ yy957:
 	if (yybm[0+yych] & 32) {
 		goto yy957;
 	}
-	if (yych == '_') goto yy960;
+	if (yych == '_') goto yy961;
 	if (yych <= '`') goto yy956;
-	if (yych <= 'z') goto yy960;
+	if (yych <= 'z') goto yy961;
 	goto yy956;
 yy958:
 	++cur;
 #line 477 "../src/parse/conf_lexer.re"
 	{ RET_TOK(CONF_EOF); }
-#line 5484 "src/parse/conf_lexer.cc"
+#line 5485 "src/parse/conf_lexer.cc"
 yy959:
 	yyaccept = 0;
 	yych = *(mar = ++cur);
-	if (yych == 'Y') goto yy984;
+	if (yych == 'u') goto yy985;
 	goto yy948;
 yy960:
+	yyaccept = 0;
+	yych = *(mar = ++cur);
+	if (yych == 'Y') goto yy986;
+	goto yy948;
+yy961:
 	++cur;
 	if (lim <= cur) YYFILL(1);
 	yych = *cur;
-yy961:
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
 yy962:
-#line 699 "../src/parse/conf_lexer.re"
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+yy963:
+#line 702 "../src/parse/conf_lexer.re"
 	{
         RET_FAIL(error_at_tok("unknown variable or option: '%.*s'", int(cur - tok), tok));
     }
-#line 5503 "src/parse/conf_lexer.cc"
-yy963:
-	yych = *++cur;
-	if (yych == 'p') goto yy985;
-	if (yych == 'r') goto yy986;
-	goto yy961;
+#line 5509 "src/parse/conf_lexer.cc"
 yy964:
 	yych = *++cur;
-	if (yych == 'r') goto yy987;
-	goto yy961;
+	if (yych == 'p') goto yy987;
+	if (yych == 'r') goto yy988;
+	goto yy962;
 yy965:
 	yych = *++cur;
-	if (yych <= 'g') {
-		if (yych == 'a') goto yy988;
-		goto yy961;
-	} else {
-		if (yych <= 'h') goto yy989;
-		if (yych == 'o') goto yy990;
-		goto yy961;
-	}
+	if (yych == 'r') goto yy989;
+	goto yy962;
 yy966:
 	yych = *++cur;
-	if (yych == 'a') goto yy991;
-	if (yych == 'e') goto yy992;
-	goto yy961;
+	if (yych <= 'g') {
+		if (yych == 'a') goto yy990;
+		goto yy962;
+	} else {
+		if (yych <= 'h') goto yy991;
+		if (yych == 'o') goto yy992;
+		goto yy962;
+	}
 yy967:
 	yych = *++cur;
-	if (yych == 'l') goto yy993;
-	if (yych == 'x') goto yy994;
-	goto yy961;
+	if (yych == 'a') goto yy993;
+	if (yych == 'e') goto yy994;
+	goto yy962;
 yy968:
 	yych = *++cur;
-	if (yych == 'i') goto yy995;
-	if (yych == 'n') goto yy996;
-	goto yy961;
+	if (yych == 'l') goto yy995;
+	if (yych == 'x') goto yy996;
+	goto yy962;
 yy969:
 	yych = *++cur;
-	if (yych == 'a') goto yy998;
-	goto yy961;
+	if (yych == 'i') goto yy997;
+	if (yych == 'n') goto yy998;
+	goto yy962;
 yy970:
 	yych = *++cur;
-	if (yych == 'n') goto yy999;
-	goto yy961;
+	if (yych == 'a') goto yy1000;
+	goto yy962;
 yy971:
 	yych = *++cur;
-	if (yych <= 'h') {
-		if (yych == 'a') goto yy1000;
-		if (yych <= 'g') goto yy961;
-		goto yy1001;
-	} else {
-		if (yych <= 'i') goto yy1002;
-		if (yych == 'o') goto yy1003;
-		goto yy961;
-	}
+	if (yych == 'n') goto yy1001;
+	goto yy962;
 yy972:
 	yych = *++cur;
-	if (yych == 'a') goto yy1004;
-	if (yych == 'o') goto yy1005;
-	goto yy961;
+	if (yych <= 'h') {
+		if (yych == 'a') goto yy1002;
+		if (yych <= 'g') goto yy962;
+		goto yy1003;
+	} else {
+		if (yych <= 'i') goto yy1004;
+		if (yych == 'o') goto yy1005;
+		goto yy962;
+	}
 yy973:
 	yych = *++cur;
-	if (yych <= 'd') {
-		if (yych == 'a') goto yy1006;
-		goto yy961;
-	} else {
-		if (yych <= 'e') goto yy1007;
-		if (yych == 'l') goto yy1008;
-		goto yy961;
-	}
+	if (yych == 'a') goto yy1006;
+	if (yych == 'o') goto yy1007;
+	goto yy962;
 yy974:
 	yych = *++cur;
-	if (yych == 'f') goto yy1009;
-	goto yy961;
+	if (yych <= 'd') {
+		if (yych == 'a') goto yy1008;
+		goto yy962;
+	} else {
+		if (yych <= 'e') goto yy1009;
+		if (yych == 'l') goto yy1010;
+		goto yy962;
+	}
 yy975:
 	yych = *++cur;
-	if (yych <= 'g') {
-		if (yych == 'e') goto yy1010;
-		goto yy961;
-	} else {
-		if (yych <= 'h') goto yy1011;
-		if (yych == 'o') goto yy1012;
-		goto yy961;
-	}
+	if (yych == 'f') goto yy1011;
+	goto yy962;
 yy976:
 	yych = *++cur;
-	if (yych == 'i') goto yy1013;
-	if (yych == 't') goto yy1014;
-	goto yy961;
+	if (yych <= 'g') {
+		if (yych == 'e') goto yy1012;
+		goto yy962;
+	} else {
+		if (yych <= 'h') goto yy1013;
+		if (yych == 'o') goto yy1014;
+		goto yy962;
+	}
 yy977:
 	yych = *++cur;
-	if (yych <= 'n') {
-		if (yych == 'a') goto yy1015;
-		goto yy961;
-	} else {
-		if (yych <= 'o') goto yy1016;
-		if (yych == 'y') goto yy1017;
-		goto yy961;
-	}
+	if (yych == 'i') goto yy1015;
+	if (yych == 't') goto yy1016;
+	goto yy962;
 yy978:
 	yych = *++cur;
-	if (yych == 'n') goto yy1018;
-	goto yy961;
+	if (yych <= 'n') {
+		if (yych == 'a') goto yy1017;
+		goto yy962;
+	} else {
+		if (yych <= 'o') goto yy1018;
+		if (yych == 'y') goto yy1019;
+		goto yy962;
+	}
 yy979:
 	yych = *++cur;
-	if (yych == 'a') goto yy1019;
-	if (yych == 'e') goto yy1020;
-	goto yy961;
+	if (yych == 'n') goto yy1020;
+	goto yy962;
 yy980:
 	yych = *++cur;
-	if (yych == 'y') goto yy1021;
-	goto yy961;
+	if (yych == 'a') goto yy1021;
+	if (yych == 'e') goto yy1022;
+	goto yy962;
 yy981:
-	++cur;
-	if (lim <= cur) YYFILL(1);
-	yych = *cur;
-	if (yych <= '/') goto yy956;
-	if (yych <= '9') goto yy981;
-	goto yy956;
+	yych = *++cur;
+	if (yych == 'y') goto yy1023;
+	goto yy962;
 yy982:
 	++cur;
 	if (lim <= cur) YYFILL(1);
 	yych = *cur;
+	if (yych <= '/') goto yy956;
+	if (yych <= '9') goto yy982;
+	goto yy956;
+yy983:
+	++cur;
+	if (lim <= cur) YYFILL(1);
+	yych = *cur;
 	if (yybm[0+yych] & 128) {
-		goto yy982;
+		goto yy983;
 	}
 	if (yych >= 0x01) goto yy950;
-yy983:
+yy984:
 	cur = mar;
 	if (yyaccept <= 2) {
 		if (yyaccept <= 1) {
 			if (yyaccept == 0) {
 				goto yy948;
 			} else {
-				goto yy962;
+				goto yy963;
 			}
 		} else {
-			goto yy1276;
+			goto yy1283;
 		}
 	} else {
 		if (yyaccept == 3) {
-			goto yy1321;
+			goto yy1329;
 		} else {
-			goto yy1392;
+			goto yy1401;
 		}
-	}
-yy984:
-	yych = *++cur;
-	switch (yych) {
-		case 'B': goto yy1022;
-		case 'C': goto yy1023;
-		case 'D': goto yy1024;
-		case 'G': goto yy1025;
-		case 'I': goto yy1026;
-		case 'L': goto yy1027;
-		case 'M': goto yy1028;
-		case 'P': goto yy1029;
-		case 'R': goto yy1030;
-		case 'S': goto yy1031;
-		default: goto yy983;
 	}
 yy985:
 	yych = *++cur;
-	if (yych == 'i') goto yy1032;
-	goto yy961;
+	if (yych == 'n') goto yy1024;
+	goto yy984;
 yy986:
 	yych = *++cur;
-	if (yych == 'g') goto yy1033;
-	if (yych == 'r') goto yy1034;
-	goto yy961;
+	switch (yych) {
+		case 'B': goto yy1025;
+		case 'C': goto yy1026;
+		case 'D': goto yy1027;
+		case 'G': goto yy1028;
+		case 'I': goto yy1029;
+		case 'L': goto yy1030;
+		case 'M': goto yy1031;
+		case 'P': goto yy1032;
+		case 'R': goto yy1033;
+		case 'S': goto yy1034;
+		default: goto yy984;
+	}
 yy987:
 	yych = *++cur;
-	if (yych == 'a') goto yy1035;
-	goto yy961;
+	if (yych == 'i') goto yy1035;
+	goto yy962;
 yy988:
 	yych = *++cur;
-	if (yych == 's') goto yy1036;
-	goto yy961;
+	if (yych == 'g') goto yy1036;
+	if (yych == 'r') goto yy1037;
+	goto yy962;
 yy989:
 	yych = *++cur;
-	if (yych == 'a') goto yy1037;
-	goto yy961;
+	if (yych == 'a') goto yy1038;
+	goto yy962;
 yy990:
 	yych = *++cur;
-	if (yych == 'd') goto yy1038;
-	if (yych == 'n') goto yy1039;
-	goto yy961;
+	if (yych == 's') goto yy1039;
+	goto yy962;
 yy991:
 	yych = *++cur;
-	if (yych == 't') goto yy1040;
-	goto yy961;
+	if (yych == 'a') goto yy1040;
+	goto yy962;
 yy992:
 	yych = *++cur;
 	if (yych == 'd') goto yy1041;
-	goto yy961;
+	if (yych == 'n') goto yy1042;
+	goto yy962;
 yy993:
 	yych = *++cur;
-	if (yych == 'e') goto yy1042;
-	goto yy961;
+	if (yych == 't') goto yy1043;
+	goto yy962;
 yy994:
 	yych = *++cur;
-	if (yych == 'p') goto yy1043;
-	goto yy961;
+	if (yych == 'd') goto yy1044;
+	goto yy962;
 yy995:
 	yych = *++cur;
-	if (yych == 'l') goto yy1044;
-	goto yy961;
+	if (yych == 'e') goto yy1045;
+	goto yy962;
 yy996:
 	yych = *++cur;
-	if (yych <= '_') {
-		if (yych <= '/') goto yy997;
-		if (yych <= '9') goto yy960;
-		if (yych >= '_') goto yy960;
-	} else {
-		if (yych <= 'c') {
-			if (yych >= 'a') goto yy960;
-		} else {
-			if (yych <= 'd') goto yy1045;
-			if (yych <= 'z') goto yy960;
-		}
-	}
+	if (yych == 'p') goto yy1046;
+	goto yy962;
 yy997:
-#line 586 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::FN); }
-#line 5726 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'l') goto yy1047;
+	goto yy962;
 yy998:
 	yych = *++cur;
-	if (yych == 'v') goto yy1046;
-	goto yy961;
+	if (yych <= '_') {
+		if (yych <= '/') goto yy999;
+		if (yych <= '9') goto yy961;
+		if (yych >= '_') goto yy961;
+	} else {
+		if (yych <= 'c') {
+			if (yych >= 'a') goto yy961;
+		} else {
+			if (yych <= 'd') goto yy1048;
+			if (yych <= 'z') goto yy961;
+		}
+	}
 yy999:
-	yych = *++cur;
-	if (yych == 'd') goto yy1047;
-	if (yych == 'i') goto yy1048;
-	goto yy961;
+#line 586 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::FN); }
+#line 5736 "src/parse/conf_lexer.cc"
 yy1000:
 	yych = *++cur;
-	if (yych == 'b') goto yy1049;
-	goto yy961;
+	if (yych == 'v') goto yy1049;
+	goto yy962;
 yy1001:
 	yych = *++cur;
-	if (yych == 's') goto yy1050;
-	goto yy961;
+	if (yych == 'd') goto yy1050;
+	if (yych == 'i') goto yy1051;
+	goto yy962;
 yy1002:
 	yych = *++cur;
-	if (yych == 'n') goto yy1051;
-	goto yy961;
+	if (yych == 'b') goto yy1052;
+	goto yy962;
 yy1003:
 	yych = *++cur;
-	if (yych == 'o') goto yy1052;
-	goto yy961;
+	if (yych == 's') goto yy1053;
+	goto yy962;
 yy1004:
 	yych = *++cur;
-	if (yych == 'n') goto yy1053;
-	goto yy961;
+	if (yych == 'n') goto yy1054;
+	goto yy962;
 yy1005:
 	yych = *++cur;
-	if (yych == 'n') goto yy1054;
-	goto yy961;
+	if (yych == 'o') goto yy1055;
+	goto yy962;
 yy1006:
 	yych = *++cur;
-	if (yych == 'm') goto yy1055;
-	goto yy961;
+	if (yych == 'n') goto yy1056;
+	goto yy962;
 yy1007:
 	yych = *++cur;
-	if (yych <= 'f') {
-		if (yych == 'e') goto yy1056;
-		goto yy961;
-	} else {
-		if (yych <= 'g') goto yy1057;
-		if (yych == 's') goto yy1058;
-		goto yy961;
-	}
+	if (yych == 'n') goto yy1057;
+	goto yy962;
 yy1008:
 	yych = *++cur;
+	if (yych == 'm') goto yy1058;
+	goto yy962;
+yy1009:
+	yych = *++cur;
+	if (yych <= 'f') {
+		if (yych == 'e') goto yy1059;
+		goto yy962;
+	} else {
+		if (yych <= 'g') goto yy1060;
+		if (yych == 's') goto yy1061;
+		goto yy962;
+	}
+yy1010:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 646 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::NEWLINE); }
-#line 5781 "src/parse/conf_lexer.cc"
-yy1009:
-	yych = *++cur;
-	if (yych == 'f') goto yy1059;
-	goto yy961;
-yy1010:
-	yych = *++cur;
-	if (yych == 't') goto yy1060;
-	goto yy961;
+#line 5791 "src/parse/conf_lexer.cc"
 yy1011:
 	yych = *++cur;
-	if (yych == 's') goto yy1061;
-	goto yy961;
+	if (yych == 'f') goto yy1062;
+	goto yy962;
 yy1012:
 	yych = *++cur;
-	if (yych == 'w') goto yy1062;
-	goto yy961;
+	if (yych == 't') goto yy1063;
+	goto yy962;
 yy1013:
 	yych = *++cur;
-	if (yych == 'g') goto yy1063;
-	if (yych == 'z') goto yy1064;
-	goto yy961;
+	if (yych == 's') goto yy1064;
+	goto yy962;
 yy1014:
 	yych = *++cur;
-	if (yych <= 'l') {
-		if (yych == 'a') goto yy1065;
-		goto yy961;
-	} else {
-		if (yych <= 'm') goto yy1066;
-		if (yych == 'o') goto yy1067;
-		goto yy961;
-	}
+	if (yych == 'w') goto yy1065;
+	goto yy962;
 yy1015:
 	yych = *++cur;
-	if (yych == 'g') goto yy1068;
-	goto yy961;
+	if (yych == 'g') goto yy1066;
+	if (yych == 'z') goto yy1067;
+	goto yy962;
 yy1016:
 	yych = *++cur;
-	if (yych == 'p') goto yy1069;
-	goto yy961;
+	if (yych <= 'l') {
+		if (yych == 'a') goto yy1068;
+		goto yy962;
+	} else {
+		if (yych <= 'm') goto yy1069;
+		if (yych == 'o') goto yy1070;
+		goto yy962;
+	}
 yy1017:
 	yych = *++cur;
-	if (yych == 'p') goto yy1070;
-	goto yy961;
+	if (yych == 'g') goto yy1071;
+	goto yy962;
 yy1018:
 	yych = *++cur;
-	if (yych == 's') goto yy1071;
-	goto yy961;
+	if (yych == 'p') goto yy1072;
+	goto yy962;
 yy1019:
 	yych = *++cur;
-	if (yych == 'l') goto yy1072;
-	if (yych == 'r') goto yy1073;
-	goto yy961;
+	if (yych == 'p') goto yy1073;
+	goto yy962;
 yy1020:
 	yych = *++cur;
-	if (yych == 'r') goto yy1074;
-	goto yy961;
+	if (yych == 's') goto yy1074;
+	goto yy962;
 yy1021:
 	yych = *++cur;
-	if (yych == 'c') goto yy1075;
+	if (yych == 'l') goto yy1075;
 	if (yych == 'r') goto yy1076;
-	goto yy961;
+	goto yy962;
 yy1022:
 	yych = *++cur;
-	if (yych == 'A') goto yy1077;
-	goto yy983;
+	if (yych == 'r') goto yy1077;
+	goto yy962;
 yy1023:
 	yych = *++cur;
-	if (yych <= 'S') {
-		if (yych == 'O') goto yy1078;
-		goto yy983;
-	} else {
-		if (yych <= 'T') goto yy1079;
-		if (yych <= 'U') goto yy1080;
-		goto yy983;
-	}
+	if (yych == 'c') goto yy1078;
+	if (yych == 'r') goto yy1079;
+	goto yy962;
 yy1024:
 	yych = *++cur;
-	if (yych == 'E') goto yy1081;
-	goto yy983;
+	if (yych == 'd') goto yy1080;
+	goto yy984;
 yy1025:
 	yych = *++cur;
-	if (yych == 'E') goto yy1082;
-	goto yy983;
+	if (yych == 'A') goto yy1081;
+	goto yy984;
 yy1026:
 	yych = *++cur;
-	if (yych == 'N') goto yy1083;
-	goto yy983;
+	if (yych <= 'S') {
+		if (yych == 'O') goto yy1082;
+		goto yy984;
+	} else {
+		if (yych <= 'T') goto yy1083;
+		if (yych <= 'U') goto yy1084;
+		goto yy984;
+	}
 yy1027:
 	yych = *++cur;
-	if (yych == 'E') goto yy1084;
-	if (yych == 'I') goto yy1085;
-	goto yy983;
+	if (yych == 'E') goto yy1085;
+	goto yy984;
 yy1028:
 	yych = *++cur;
-	if (yych == 'A') goto yy1086;
-	if (yych == 'T') goto yy1087;
-	goto yy983;
+	if (yych == 'E') goto yy1086;
+	goto yy984;
 yy1029:
 	yych = *++cur;
-	if (yych == 'E') goto yy1088;
-	goto yy983;
+	if (yych == 'N') goto yy1087;
+	goto yy984;
 yy1030:
 	yych = *++cur;
-	if (yych == 'E') goto yy1089;
-	goto yy983;
+	if (yych == 'E') goto yy1088;
+	if (yych == 'I') goto yy1089;
+	goto yy984;
 yy1031:
 	yych = *++cur;
-	switch (yych) {
-		case 'E': goto yy1090;
-		case 'H': goto yy1091;
-		case 'K': goto yy1092;
-		case 'T': goto yy1093;
-		default: goto yy983;
-	}
+	if (yych == 'A') goto yy1090;
+	if (yych == 'T') goto yy1091;
+	goto yy984;
 yy1032:
+	yych = *++cur;
+	if (yych == 'E') goto yy1092;
+	goto yy984;
+yy1033:
+	yych = *++cur;
+	if (yych == 'E') goto yy1093;
+	goto yy984;
+yy1034:
+	yych = *++cur;
+	switch (yych) {
+		case 'E': goto yy1094;
+		case 'H': goto yy1095;
+		case 'K': goto yy1096;
+		case 'T': goto yy1097;
+		default: goto yy984;
+	}
+yy1035:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
-	if (yych == '.') goto yy1094;
-	if (yych == '_') goto yy1095;
-	goto yy961;
-yy1033:
+	if (yych == '.') goto yy1098;
+	if (yych == '_') goto yy1099;
+	goto yy962;
+yy1036:
 	yych = *++cur;
 	if (yych <= '`') {
 		if (yych <= '9') {
-			if (yych >= '0') goto yy960;
+			if (yych >= '0') goto yy961;
 		} else {
-			if (yych == '_') goto yy960;
+			if (yych == '_') goto yy961;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych == 'n') goto yy1096;
-			goto yy960;
+			if (yych == 'n') goto yy1100;
+			goto yy961;
 		} else {
-			if (yych <= 't') goto yy1097;
-			if (yych <= 'z') goto yy960;
+			if (yych <= 't') goto yy1101;
+			if (yych <= 'z') goto yy961;
 		}
 	}
 #line 576 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::ARG); }
-#line 5921 "src/parse/conf_lexer.cc"
-yy1034:
-	yych = *++cur;
-	if (yych == 'a') goto yy1098;
-	goto yy961;
-yy1035:
-	yych = *++cur;
-	if (yych == 'n') goto yy1099;
-	goto yy961;
-yy1036:
-	yych = *++cur;
-	if (yych == 'e') goto yy1100;
-	if (yych == 't') goto yy1102;
-	goto yy961;
+#line 5935 "src/parse/conf_lexer.cc"
 yy1037:
 	yych = *++cur;
-	if (yych == 'r') goto yy1103;
-	goto yy961;
+	if (yych == 'a') goto yy1102;
+	goto yy962;
 yy1038:
 	yych = *++cur;
-	if (yych == 'e') goto yy1104;
-	goto yy961;
+	if (yych == 'n') goto yy1103;
+	goto yy962;
 yy1039:
 	yych = *++cur;
-	if (yych == 'd') goto yy1105;
-	goto yy961;
+	if (yych == 'e') goto yy1104;
+	if (yych == 't') goto yy1106;
+	goto yy962;
 yy1040:
 	yych = *++cur;
-	if (yych == 'e') goto yy1106;
-	goto yy961;
+	if (yych == 'r') goto yy1107;
+	goto yy962;
 yy1041:
 	yych = *++cur;
-	if (yych == 'e') goto yy1107;
-	goto yy961;
+	if (yych == 'e') goto yy1108;
+	goto yy962;
 yy1042:
 	yych = *++cur;
-	if (yych == 'm') goto yy1108;
-	goto yy961;
+	if (yych == 'd') goto yy1109;
+	goto yy962;
 yy1043:
 	yych = *++cur;
-	if (yych == 'r') goto yy1109;
-	goto yy961;
+	if (yych == 'e') goto yy1110;
+	goto yy962;
 yy1044:
 	yych = *++cur;
-	if (yych == 'e') goto yy1110;
-	goto yy961;
+	if (yych == 'e') goto yy1111;
+	goto yy962;
 yy1045:
 	yych = *++cur;
-	if (yych == 'e') goto yy1111;
-	goto yy961;
+	if (yych == 'm') goto yy1112;
+	goto yy962;
 yy1046:
 	yych = *++cur;
-	if (yych == 'e') goto yy1112;
-	goto yy961;
+	if (yych == 'r') goto yy1113;
+	goto yy962;
 yy1047:
 	yych = *++cur;
-	if (yych == 'e') goto yy1113;
-	goto yy961;
+	if (yych == 'e') goto yy1114;
+	goto yy962;
 yy1048:
 	yych = *++cur;
-	if (yych == 't') goto yy1114;
-	goto yy961;
+	if (yych == 'e') goto yy1115;
+	goto yy962;
 yy1049:
 	yych = *++cur;
-	if (yych == 'e') goto yy1115;
-	goto yy961;
+	if (yych == 'e') goto yy1116;
+	goto yy962;
 yy1050:
 	yych = *++cur;
+	if (yych == 'e') goto yy1117;
+	goto yy962;
+yy1051:
+	yych = *++cur;
+	if (yych == 't') goto yy1118;
+	goto yy962;
+yy1052:
+	yych = *++cur;
+	if (yych == 'e') goto yy1119;
+	goto yy962;
+yy1053:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 593 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::LHS); }
-#line 5994 "src/parse/conf_lexer.cc"
-yy1051:
-	yych = *++cur;
-	if (yych == 'e') goto yy1116;
-	goto yy961;
-yy1052:
-	yych = *++cur;
-	if (yych == 'p') goto yy1117;
-	goto yy961;
-yy1053:
-	yych = *++cur;
-	if (yych == 'y') goto yy1118;
-	goto yy961;
+#line 6008 "src/parse/conf_lexer.cc"
 yy1054:
 	yych = *++cur;
-	if (yych == 'a') goto yy1119;
-	goto yy961;
+	if (yych == 'e') goto yy1120;
+	goto yy962;
 yy1055:
 	yych = *++cur;
-	if (yych == 'e') goto yy1120;
-	goto yy961;
+	if (yych == 'p') goto yy1121;
+	goto yy962;
 yy1056:
 	yych = *++cur;
-	if (yych == 'd') goto yy1121;
-	goto yy961;
+	if (yych == 'y') goto yy1122;
+	goto yy962;
 yy1057:
 	yych = *++cur;
+	if (yych == 'a') goto yy1123;
+	goto yy962;
+yy1058:
+	yych = *++cur;
+	if (yych == 'e') goto yy1124;
+	goto yy962;
+yy1059:
+	yych = *++cur;
+	if (yych == 'd') goto yy1125;
+	goto yy962;
+yy1060:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 596 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::NEG); }
-#line 6026 "src/parse/conf_lexer.cc"
-yy1058:
-	yych = *++cur;
-	if (yych == 't') goto yy1122;
-	goto yy961;
-yy1059:
-	yych = *++cur;
-	if (yych == 's') goto yy1123;
-	goto yy961;
-yy1060:
-	yych = *++cur;
-	if (yych == 'v') goto yy1124;
-	goto yy961;
+#line 6040 "src/parse/conf_lexer.cc"
 yy1061:
 	yych = *++cur;
+	if (yych == 't') goto yy1126;
+	goto yy962;
+yy1062:
+	yych = *++cur;
+	if (yych == 's') goto yy1127;
+	goto yy962;
+yy1063:
+	yych = *++cur;
+	if (yych == 'v') goto yy1128;
+	goto yy962;
+yy1064:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 600 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::RHS); }
-#line 6046 "src/parse/conf_lexer.cc"
-yy1062:
+#line 6060 "src/parse/conf_lexer.cc"
+yy1065:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 601 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::ROW); }
-#line 6054 "src/parse/conf_lexer.cc"
-yy1063:
-	yych = *++cur;
-	if (yych == 'i') goto yy1125;
-	goto yy961;
-yy1064:
-	yych = *++cur;
-	if (yych == 'e') goto yy1126;
-	goto yy961;
-yy1065:
-	yych = *++cur;
-	if (yych == 'r') goto yy1127;
-	if (yych == 't') goto yy1128;
-	goto yy961;
+#line 6068 "src/parse/conf_lexer.cc"
 yy1066:
 	yych = *++cur;
-	if (yych == 't') goto yy1129;
-	goto yy961;
+	if (yych == 'i') goto yy1129;
+	goto yy962;
 yy1067:
 	yych = *++cur;
-	if (yych == 'r') goto yy1130;
-	goto yy961;
+	if (yych == 'e') goto yy1130;
+	goto yy962;
 yy1068:
 	yych = *++cur;
+	if (yych == 'r') goto yy1131;
+	if (yych == 't') goto yy1132;
+	goto yy962;
+yy1069:
+	yych = *++cur;
+	if (yych == 't') goto yy1133;
+	goto yy962;
+yy1070:
+	yych = *++cur;
+	if (yych == 'r') goto yy1134;
+	goto yy962;
+yy1071:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 606 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::TAG); }
-#line 6083 "src/parse/conf_lexer.cc"
-yy1069:
-	yych = *++cur;
-	if (yych == 'i') goto yy1131;
-	goto yy961;
-yy1070:
-	yych = *++cur;
-	if (yych == 'e') goto yy1132;
-	goto yy961;
-yy1071:
-	yych = *++cur;
-	if (yych == 'a') goto yy1133;
-	goto yy961;
+#line 6097 "src/parse/conf_lexer.cc"
 yy1072:
 	yych = *++cur;
+	if (yych == 'i') goto yy1135;
+	goto yy962;
+yy1073:
+	yych = *++cur;
+	if (yych == 'e') goto yy1136;
+	goto yy962;
+yy1074:
+	yych = *++cur;
+	if (yych == 'a') goto yy1137;
+	goto yy962;
+yy1075:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 608 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::VAL); }
-#line 6103 "src/parse/conf_lexer.cc"
-yy1073:
+#line 6117 "src/parse/conf_lexer.cc"
+yy1076:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 609 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::VAR); }
-#line 6111 "src/parse/conf_lexer.cc"
-yy1074:
-	yych = *++cur;
-	if (yych == 's') goto yy1134;
-	goto yy961;
-yy1075:
-	yych = *++cur;
-	if (yych == 'h') goto yy1135;
-	goto yy961;
-yy1076:
-	yych = *++cur;
-	if (yych == 'e') goto yy1136;
-	goto yy961;
+#line 6125 "src/parse/conf_lexer.cc"
 yy1077:
 	yych = *++cur;
-	if (yych == 'C') goto yy1137;
-	goto yy983;
+	if (yych == 's') goto yy1138;
+	goto yy962;
 yy1078:
 	yych = *++cur;
-	if (yych == 'P') goto yy1138;
-	goto yy983;
+	if (yych == 'h') goto yy1139;
+	goto yy962;
 yy1079:
 	yych = *++cur;
-	if (yych <= 'W') goto yy983;
-	if (yych <= 'X') goto yy1139;
-	if (yych <= 'Y') goto yy1140;
-	goto yy983;
+	if (yych == 'e') goto yy1140;
+	goto yy962;
 yy1080:
 	yych = *++cur;
-	if (yych == 'R') goto yy1141;
-	goto yy983;
+	if (yych == 'e') goto yy1141;
+	goto yy984;
 yy1081:
 	yych = *++cur;
-	if (yych == 'B') goto yy1142;
-	goto yy983;
+	if (yych == 'C') goto yy1142;
+	goto yy984;
 yy1082:
 	yych = *++cur;
-	if (yych == 'T') goto yy1143;
-	goto yy983;
+	if (yych == 'P') goto yy1143;
+	goto yy984;
 yy1083:
 	yych = *++cur;
-	if (yych == 'P') goto yy1144;
-	goto yy983;
+	if (yych <= 'W') goto yy984;
+	if (yych <= 'X') goto yy1144;
+	if (yych <= 'Y') goto yy1145;
+	goto yy984;
 yy1084:
 	yych = *++cur;
-	if (yych == 'S') goto yy1145;
-	goto yy983;
+	if (yych == 'R') goto yy1146;
+	goto yy984;
 yy1085:
 	yych = *++cur;
-	if (yych == 'M') goto yy1146;
-	goto yy983;
+	if (yych == 'B') goto yy1147;
+	goto yy984;
 yy1086:
 	yych = *++cur;
-	if (yych == 'R') goto yy1147;
-	goto yy983;
+	if (yych == 'T') goto yy1148;
+	goto yy984;
 yy1087:
 	yych = *++cur;
-	if (yych == 'A') goto yy1148;
-	goto yy983;
+	if (yych == 'P') goto yy1149;
+	goto yy984;
 yy1088:
 	yych = *++cur;
-	if (yych == 'E') goto yy1149;
-	goto yy983;
+	if (yych == 'S') goto yy1150;
+	goto yy984;
 yy1089:
 	yych = *++cur;
-	if (yych == 'S') goto yy1150;
-	goto yy983;
+	if (yych == 'M') goto yy1151;
+	goto yy984;
 yy1090:
 	yych = *++cur;
-	if (yych == 'T') goto yy1151;
-	goto yy983;
+	if (yych == 'R') goto yy1152;
+	goto yy984;
 yy1091:
 	yych = *++cur;
-	if (yych == 'I') goto yy1152;
-	goto yy983;
+	if (yych == 'A') goto yy1153;
+	goto yy984;
 yy1092:
 	yych = *++cur;
-	if (yych == 'I') goto yy1153;
-	goto yy983;
+	if (yych == 'E') goto yy1154;
+	goto yy984;
 yy1093:
 	yych = *++cur;
-	if (yych == 'A') goto yy1154;
-	goto yy983;
+	if (yych == 'S') goto yy1155;
+	goto yy984;
 yy1094:
 	yych = *++cur;
-	if (yych <= 'q') {
-		if (yych == 'g') goto yy1155;
-		goto yy983;
-	} else {
-		if (yych <= 'r') goto yy1156;
-		if (yych <= 's') goto yy1157;
-		goto yy983;
-	}
+	if (yych == 'T') goto yy1156;
+	goto yy984;
 yy1095:
 	yych = *++cur;
-	if (yych == 's') goto yy1158;
-	goto yy961;
+	if (yych == 'I') goto yy1157;
+	goto yy984;
 yy1096:
 	yych = *++cur;
-	if (yych == 'a') goto yy1159;
-	goto yy961;
+	if (yych == 'I') goto yy1158;
+	goto yy984;
 yy1097:
 	yych = *++cur;
-	if (yych == 'y') goto yy1160;
-	goto yy961;
+	if (yych == 'A') goto yy1159;
+	goto yy984;
 yy1098:
 	yych = *++cur;
-	if (yych == 'y') goto yy1161;
-	goto yy961;
+	if (yych <= 'q') {
+		if (yych == 'g') goto yy1160;
+		goto yy984;
+	} else {
+		if (yych <= 'r') goto yy1161;
+		if (yych <= 's') goto yy1162;
+		goto yy984;
+	}
 yy1099:
 	yych = *++cur;
-	if (yych == 'c') goto yy1162;
-	goto yy961;
+	if (yych == 's') goto yy1163;
+	goto yy962;
 yy1100:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1101;
-		if (yych <= '9') goto yy960;
-	} else {
-		if (yych <= '_') goto yy1163;
-		if (yych <= '`') goto yy1101;
-		if (yych <= 'z') goto yy960;
-	}
+	if (yych == 'a') goto yy1164;
+	goto yy962;
 yy1101:
-#line 581 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::CASE); }
-#line 6237 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'y') goto yy1165;
+	goto yy962;
 yy1102:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 689 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::CAST); }
-#line 6245 "src/parse/conf_lexer.cc"
+	if (yych == 'y') goto yy1166;
+	goto yy962;
 yy1103:
 	yych = *++cur;
-	if (yych == '_') goto yy1164;
-	goto yy961;
+	if (yych == 'c') goto yy1167;
+	goto yy962;
 yy1104:
-	yyaccept = 1;
-	yych = *(mar = ++cur);
-	if (yych == ':') goto yy1165;
-	if (yych == '_') goto yy1166;
-	goto yy961;
-yy1105:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1105;
+		if (yych <= '9') goto yy961;
+	} else {
+		if (yych <= '_') goto yy1168;
+		if (yych <= '`') goto yy1105;
+		if (yych <= 'z') goto yy961;
 	}
-#line 582 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::COND); }
-#line 6263 "src/parse/conf_lexer.cc"
+yy1105:
+#line 581 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::CASE); }
+#line 6255 "src/parse/conf_lexer.cc"
 yy1106:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 583 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::DATE); }
-#line 6271 "src/parse/conf_lexer.cc"
+#line 692 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::CAST); }
+#line 6263 "src/parse/conf_lexer.cc"
 yy1107:
 	yych = *++cur;
-	if (yych == 'n') goto yy1167;
-	goto yy961;
+	if (yych == '_') goto yy1169;
+	goto yy962;
 yy1108:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 584 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::ELEM); }
-#line 6283 "src/parse/conf_lexer.cc"
+	yyaccept = 1;
+	yych = *(mar = ++cur);
+	if (yych == ':') goto yy1170;
+	if (yych == '_') goto yy1171;
+	goto yy962;
 yy1109:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 585 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::EXPR); }
-#line 6291 "src/parse/conf_lexer.cc"
+#line 582 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::COND); }
+#line 6281 "src/parse/conf_lexer.cc"
 yy1110:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 587 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::FILE); }
-#line 6299 "src/parse/conf_lexer.cc"
+#line 583 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::DATE); }
+#line 6289 "src/parse/conf_lexer.cc"
 yy1111:
 	yych = *++cur;
-	if (yych == 'c') goto yy1168;
-	if (yych == 'f') goto yy1169;
-	goto yy961;
+	if (yych == 'n') goto yy1172;
+	goto yy962;
 yy1112:
 	yych = *++cur;
-	if (yych == '_') goto yy1170;
-	goto yy961;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 584 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::ELEM); }
+#line 6301 "src/parse/conf_lexer.cc"
 yy1113:
 	yych = *++cur;
-	if (yych == 'n') goto yy1171;
-	if (yych == 'x') goto yy1172;
-	goto yy961;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 585 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::EXPR); }
+#line 6309 "src/parse/conf_lexer.cc"
 yy1114:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 591 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::INIT); }
-#line 6321 "src/parse/conf_lexer.cc"
+#line 587 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::FILE); }
+#line 6317 "src/parse/conf_lexer.cc"
 yy1115:
 	yych = *++cur;
-	if (yych == 'l') goto yy1173;
-	goto yy961;
+	if (yych == 'c') goto yy1173;
+	if (yych == 'f') goto yy1174;
+	goto yy962;
 yy1116:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 594 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::LINE); }
-#line 6333 "src/parse/conf_lexer.cc"
+	if (yych == '_') goto yy1175;
+	goto yy962;
 yy1117:
 	yych = *++cur;
-	if (yych == '_') goto yy1174;
-	goto yy961;
+	if (yych == 'n') goto yy1176;
+	if (yych == 'x') goto yy1177;
+	goto yy962;
 yy1118:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 696 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::MANY); }
-#line 6345 "src/parse/conf_lexer.cc"
+#line 591 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::INIT); }
+#line 6339 "src/parse/conf_lexer.cc"
 yy1119:
 	yych = *++cur;
-	if (yych == 'd') goto yy1175;
-	goto yy961;
+	if (yych == 'l') goto yy1178;
+	goto yy962;
 yy1120:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
+	}
+#line 594 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::LINE); }
+#line 6351 "src/parse/conf_lexer.cc"
+yy1121:
+	yych = *++cur;
+	if (yych == '_') goto yy1179;
+	goto yy962;
+yy1122:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 699 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::MANY); }
+#line 6363 "src/parse/conf_lexer.cc"
+yy1123:
+	yych = *++cur;
+	if (yych == 'd') goto yy1180;
+	goto yy962;
+yy1124:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
 	}
 #line 595 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::NAME); }
-#line 6357 "src/parse/conf_lexer.cc"
-yy1121:
+#line 6375 "src/parse/conf_lexer.cc"
+yy1125:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 597 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::NEED); }
-#line 6365 "src/parse/conf_lexer.cc"
-yy1122:
-	yych = *++cur;
-	if (yych == 'e') goto yy1176;
-	goto yy961;
-yy1123:
-	yych = *++cur;
-	if (yych == 'e') goto yy1177;
-	goto yy961;
-yy1124:
-	yych = *++cur;
-	if (yych == 'a') goto yy1178;
-	goto yy961;
-yy1125:
-	yych = *++cur;
-	if (yych == 'l') goto yy1179;
-	goto yy961;
+#line 6383 "src/parse/conf_lexer.cc"
 yy1126:
 	yych = *++cur;
+	if (yych == 'e') goto yy1181;
+	goto yy962;
+yy1127:
+	yych = *++cur;
+	if (yych == 'e') goto yy1182;
+	goto yy962;
+yy1128:
+	yych = *++cur;
+	if (yych == 'a') goto yy1183;
+	goto yy962;
+yy1129:
+	yych = *++cur;
+	if (yych == 'l') goto yy1184;
+	goto yy962;
+yy1130:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 603 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SIZE); }
-#line 6389 "src/parse/conf_lexer.cc"
-yy1127:
+#line 6407 "src/parse/conf_lexer.cc"
+yy1131:
 	yych = *++cur;
-	if (yych == 't') goto yy1180;
-	goto yy961;
-yy1128:
+	if (yych == 't') goto yy1185;
+	goto yy962;
+yy1132:
 	yych = *++cur;
-	if (yych == 'e') goto yy1181;
-	goto yy961;
-yy1129:
+	if (yych == 'e') goto yy1186;
+	goto yy962;
+yy1133:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 605 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::STMT); }
-#line 6405 "src/parse/conf_lexer.cc"
-yy1130:
+#line 6423 "src/parse/conf_lexer.cc"
+yy1134:
 	yych = *++cur;
-	if (yych == 'a') goto yy1182;
-	goto yy961;
-yy1131:
+	if (yych == 'a') goto yy1187;
+	goto yy962;
+yy1135:
 	yych = *++cur;
-	if (yych == 'n') goto yy1183;
-	goto yy961;
-yy1132:
+	if (yych == 'n') goto yy1188;
+	goto yy962;
+yy1136:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 607 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::TYPE); }
-#line 6421 "src/parse/conf_lexer.cc"
-yy1133:
+#line 6439 "src/parse/conf_lexer.cc"
+yy1137:
 	yych = *++cur;
-	if (yych == 'f') goto yy1184;
-	goto yy961;
-yy1134:
+	if (yych == 'f') goto yy1189;
+	goto yy962;
+yy1138:
 	yych = *++cur;
-	if (yych == 'i') goto yy1185;
-	goto yy961;
-yy1135:
+	if (yych == 'i') goto yy1190;
+	goto yy962;
+yy1139:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 614 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::CHAR); }
-#line 6437 "src/parse/conf_lexer.cc"
-yy1136:
-	yych = *++cur;
-	if (yych == 'c') goto yy1186;
-	goto yy961;
-yy1137:
-	yych = *++cur;
-	if (yych == 'K') goto yy1187;
-	goto yy983;
-yy1138:
-	yych = *++cur;
-	if (yych == 'Y') goto yy1188;
-	goto yy983;
-yy1139:
-	yych = *++cur;
-	if (yych == 'M') goto yy1189;
-	goto yy983;
+#line 6455 "src/parse/conf_lexer.cc"
 yy1140:
 	yych = *++cur;
-	if (yych == 'P') goto yy1190;
-	goto yy983;
+	if (yych == 'c') goto yy1191;
+	goto yy962;
 yy1141:
 	yych = *++cur;
-	if (yych == 'S') goto yy1191;
-	goto yy983;
+	if (yych == 'f') goto yy1192;
+	goto yy984;
 yy1142:
 	yych = *++cur;
-	if (yych == 'U') goto yy1192;
-	goto yy983;
+	if (yych == 'K') goto yy1193;
+	goto yy984;
 yy1143:
 	yych = *++cur;
-	if (yych <= 'B') {
-		if (yych == 'A') goto yy1193;
-		goto yy983;
-	} else {
-		if (yych <= 'C') goto yy1194;
-		if (yych == 'S') goto yy1195;
-		goto yy983;
-	}
+	if (yych == 'Y') goto yy1194;
+	goto yy984;
 yy1144:
 	yych = *++cur;
-	if (yych == 'U') goto yy1196;
-	goto yy983;
+	if (yych == 'M') goto yy1195;
+	goto yy984;
 yy1145:
 	yych = *++cur;
-	if (yych == 'S') goto yy1197;
-	goto yy983;
+	if (yych == 'P') goto yy1196;
+	goto yy984;
 yy1146:
 	yych = *++cur;
-	if (yych == 'I') goto yy1198;
-	goto yy983;
+	if (yych == 'S') goto yy1197;
+	goto yy984;
 yy1147:
 	yych = *++cur;
-	if (yych == 'K') goto yy1199;
-	goto yy983;
+	if (yych == 'U') goto yy1198;
+	goto yy984;
 yy1148:
 	yych = *++cur;
-	if (yych == 'G') goto yy1200;
-	goto yy983;
+	if (yych <= 'B') {
+		if (yych == 'A') goto yy1199;
+		goto yy984;
+	} else {
+		if (yych <= 'C') goto yy1200;
+		if (yych == 'S') goto yy1201;
+		goto yy984;
+	}
 yy1149:
 	yych = *++cur;
-	if (yych == 'K') goto yy1201;
-	goto yy983;
+	if (yych == 'U') goto yy1202;
+	goto yy984;
 yy1150:
 	yych = *++cur;
-	if (yych == 'T') goto yy1202;
-	goto yy983;
+	if (yych == 'S') goto yy1203;
+	goto yy984;
 yy1151:
 	yych = *++cur;
-	if (yych <= 'B') {
-		if (yych == 'A') goto yy1203;
-		goto yy983;
-	} else {
-		if (yych <= 'C') goto yy1204;
-		if (yych == 'S') goto yy1205;
-		goto yy983;
-	}
+	if (yych == 'I') goto yy1204;
+	goto yy984;
 yy1152:
 	yych = *++cur;
-	if (yych == 'F') goto yy1206;
-	goto yy983;
+	if (yych == 'K') goto yy1205;
+	goto yy984;
 yy1153:
 	yych = *++cur;
-	if (yych == 'P') goto yy1207;
-	goto yy983;
+	if (yych == 'G') goto yy1206;
+	goto yy984;
 yy1154:
 	yych = *++cur;
-	if (yych == 'G') goto yy1208;
-	goto yy983;
+	if (yych == 'K') goto yy1207;
+	goto yy984;
 yy1155:
 	yych = *++cur;
-	if (yych == 'e') goto yy1209;
-	goto yy983;
+	if (yych == 'T') goto yy1208;
+	goto yy984;
 yy1156:
 	yych = *++cur;
-	if (yych == 'e') goto yy1210;
-	goto yy983;
+	if (yych <= 'B') {
+		if (yych == 'A') goto yy1209;
+		goto yy984;
+	} else {
+		if (yych <= 'C') goto yy1210;
+		if (yych == 'S') goto yy1211;
+		goto yy984;
+	}
 yy1157:
 	yych = *++cur;
-	if (yych == 'i') goto yy1211;
-	goto yy983;
+	if (yych == 'F') goto yy1212;
+	goto yy984;
 yy1158:
 	yych = *++cur;
-	if (yych == 't') goto yy1212;
-	goto yy961;
+	if (yych == 'P') goto yy1213;
+	goto yy984;
 yy1159:
 	yych = *++cur;
-	if (yych == 'm') goto yy1213;
-	goto yy961;
+	if (yych == 'G') goto yy1214;
+	goto yy984;
 yy1160:
 	yych = *++cur;
-	if (yych == 'p') goto yy1214;
-	goto yy961;
+	if (yych == 'e') goto yy1215;
+	goto yy984;
 yy1161:
 	yych = *++cur;
+	if (yych == 'e') goto yy1216;
+	goto yy984;
+yy1162:
+	yych = *++cur;
+	if (yych == 'i') goto yy1217;
+	goto yy984;
+yy1163:
+	yych = *++cur;
+	if (yych == 't') goto yy1218;
+	goto yy962;
+yy1164:
+	yych = *++cur;
+	if (yych == 'm') goto yy1219;
+	goto yy962;
+yy1165:
+	yych = *++cur;
+	if (yych == 'p') goto yy1220;
+	goto yy962;
+yy1166:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 579 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::ARRAY); }
-#line 6557 "src/parse/conf_lexer.cc"
-yy1162:
+#line 6579 "src/parse/conf_lexer.cc"
+yy1167:
 	yych = *++cur;
-	if (yych == 'h') goto yy1215;
-	goto yy961;
-yy1163:
+	if (yych == 'h') goto yy1221;
+	goto yy962;
+yy1168:
 	yych = *++cur;
-	if (yych == 'r') goto yy1216;
-	goto yy961;
-yy1164:
+	if (yych == 'r') goto yy1222;
+	goto yy962;
+yy1169:
 	yych = *++cur;
-	if (yych == 'l') goto yy1217;
-	goto yy961;
-yy1165:
+	if (yych == 'l') goto yy1223;
+	goto yy962;
+yy1170:
 	yych = *++cur;
 	if (yych <= 'h') {
 		if (yych <= 'a') {
 			if (yych <= '^') {
-				if (yych <= '/') goto yy983;
-				if (yych <= '9') goto yy1218;
-				goto yy983;
+				if (yych <= '/') goto yy984;
+				if (yych <= '9') goto yy1224;
+				goto yy984;
 			} else {
-				if (yych <= '_') goto yy1218;
-				if (yych <= '`') goto yy983;
-				goto yy1221;
+				if (yych <= '_') goto yy1224;
+				if (yych <= '`') goto yy984;
+				goto yy1227;
 			}
 		} else {
 			if (yych <= 'd') {
-				if (yych == 'c') goto yy1222;
-				goto yy1218;
+				if (yych == 'c') goto yy1228;
+				goto yy1224;
 			} else {
-				if (yych <= 'e') goto yy1223;
-				if (yych <= 'f') goto yy1224;
-				if (yych <= 'g') goto yy1225;
-				goto yy1218;
+				if (yych <= 'e') goto yy1229;
+				if (yych <= 'f') goto yy1230;
+				if (yych <= 'g') goto yy1231;
+				goto yy1224;
 			}
 		}
 	} else {
 		if (yych <= 's') {
 			if (yych <= 'l') {
-				if (yych <= 'i') goto yy1226;
-				if (yych <= 'k') goto yy1218;
-				goto yy1227;
+				if (yych <= 'i') goto yy1232;
+				if (yych <= 'k') goto yy1224;
+				goto yy1233;
 			} else {
-				if (yych <= 'q') goto yy1218;
-				if (yych <= 'r') goto yy1228;
-				goto yy1229;
+				if (yych <= 'q') goto yy1224;
+				if (yych <= 'r') goto yy1234;
+				goto yy1235;
 			}
 		} else {
 			if (yych <= 'v') {
-				if (yych <= 't') goto yy1230;
-				if (yych <= 'u') goto yy1218;
-				goto yy1231;
+				if (yych <= 't') goto yy1236;
+				if (yych <= 'u') goto yy1224;
+				goto yy1237;
 			} else {
-				if (yych == 'y') goto yy1232;
-				if (yych <= 'z') goto yy1218;
-				goto yy983;
+				if (yych == 'y') goto yy1238;
+				if (yych <= 'z') goto yy1224;
+				goto yy984;
 			}
 		}
 	}
-yy1166:
+yy1171:
 	yych = *++cur;
-	if (yych == 'm') goto yy1233;
-	goto yy961;
-yy1167:
+	if (yych == 'm') goto yy1239;
+	goto yy962;
+yy1172:
 	yych = *++cur;
-	if (yych == 't') goto yy1234;
-	goto yy961;
-yy1168:
+	if (yych == 't') goto yy1240;
+	goto yy962;
+yy1173:
 	yych = *++cur;
-	if (yych == 'l') goto yy1235;
-	goto yy961;
-yy1169:
+	if (yych == 'l') goto yy1241;
+	goto yy962;
+yy1174:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 589 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::FNDEF); }
-#line 6636 "src/parse/conf_lexer.cc"
-yy1170:
+#line 6658 "src/parse/conf_lexer.cc"
+yy1175:
 	yych = *++cur;
 	switch (yych) {
-		case 'a': goto yy1236;
-		case 'c': goto yy1237;
-		case 'd': goto yy1238;
-		case 'i': goto yy1239;
-		case 'r': goto yy1240;
-		case 't': goto yy1241;
-		case 'v': goto yy1242;
-		default: goto yy961;
+		case 'a': goto yy1242;
+		case 'c': goto yy1243;
+		case 'd': goto yy1244;
+		case 'i': goto yy1245;
+		case 'r': goto yy1246;
+		case 't': goto yy1247;
+		case 'v': goto yy1248;
+		default: goto yy962;
 	}
-yy1171:
+yy1176:
 	yych = *++cur;
-	if (yych == 't') goto yy1243;
-	goto yy961;
-yy1172:
+	if (yych == 't') goto yy1249;
+	goto yy962;
+yy1177:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 590 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::INDEX); }
-#line 6660 "src/parse/conf_lexer.cc"
-yy1173:
+#line 6682 "src/parse/conf_lexer.cc"
+yy1178:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 592 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::LABEL); }
-#line 6668 "src/parse/conf_lexer.cc"
-yy1174:
-	yych = *++cur;
-	if (yych == 'l') goto yy1244;
-	goto yy961;
-yy1175:
-	yych = *++cur;
-	if (yych == 'i') goto yy1245;
-	goto yy961;
-yy1176:
-	yych = *++cur;
-	if (yych == 'd') goto yy1246;
-	goto yy961;
-yy1177:
-	yych = *++cur;
-	if (yych == 't') goto yy1247;
-	goto yy961;
-yy1178:
-	yych = *++cur;
-	if (yych == 'l') goto yy1248;
-	goto yy961;
+#line 6690 "src/parse/conf_lexer.cc"
 yy1179:
 	yych = *++cur;
+	if (yych == 'l') goto yy1250;
+	goto yy962;
+yy1180:
+	yych = *++cur;
+	if (yych == 'i') goto yy1251;
+	goto yy962;
+yy1181:
+	yych = *++cur;
+	if (yych == 'd') goto yy1252;
+	goto yy962;
+yy1182:
+	yych = *++cur;
+	if (yych == 't') goto yy1253;
+	goto yy962;
+yy1183:
+	yych = *++cur;
+	if (yych == 'l') goto yy1254;
+	goto yy962;
+yy1184:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 602 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SIGIL); }
-#line 6696 "src/parse/conf_lexer.cc"
-yy1180:
+#line 6718 "src/parse/conf_lexer.cc"
+yy1185:
 	yych = *++cur;
-	if (yych == '_') goto yy1249;
-	goto yy961;
-yy1181:
+	if (yych == '_') goto yy1255;
+	goto yy962;
+yy1186:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 604 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::STATE); }
-#line 6708 "src/parse/conf_lexer.cc"
-yy1182:
-	yych = *++cur;
-	if (yych == 'b') goto yy1250;
-	goto yy961;
-yy1183:
-	yych = *++cur;
-	if (yych == 'd') goto yy1251;
-	goto yy961;
-yy1184:
-	yych = *++cur;
-	if (yych == 'e') goto yy1252;
-	goto yy961;
-yy1185:
-	yych = *++cur;
-	if (yych == 'o') goto yy1253;
-	goto yy961;
-yy1186:
-	yych = *++cur;
-	if (yych == 'o') goto yy1254;
-	goto yy961;
+#line 6730 "src/parse/conf_lexer.cc"
 yy1187:
 	yych = *++cur;
-	if (yych == 'U') goto yy1255;
-	goto yy983;
+	if (yych == 'b') goto yy1256;
+	goto yy962;
 yy1188:
 	yych = *++cur;
-	if (yych == 'M') goto yy1256;
-	if (yych == 'S') goto yy1257;
-	goto yy983;
+	if (yych == 'd') goto yy1257;
+	goto yy962;
 yy1189:
 	yych = *++cur;
-	if (yych == 'A') goto yy1258;
-	goto yy983;
+	if (yych == 'e') goto yy1258;
+	goto yy962;
 yy1190:
 	yych = *++cur;
-	if (yych == 'E') goto yy1259;
-	goto yy983;
+	if (yych == 'o') goto yy1259;
+	goto yy962;
 yy1191:
 	yych = *++cur;
-	if (yych == 'O') goto yy1260;
-	goto yy983;
+	if (yych == 'o') goto yy1260;
+	goto yy962;
 yy1192:
 	yych = *++cur;
-	if (yych == 'G') goto yy1261;
-	goto yy983;
+	if (yych == 'i') goto yy1261;
+	goto yy984;
 yy1193:
 	yych = *++cur;
-	if (yych == 'C') goto yy1262;
-	goto yy983;
+	if (yych == 'U') goto yy1262;
+	goto yy984;
 yy1194:
 	yych = *++cur;
-	if (yych == 'O') goto yy1263;
-	goto yy983;
+	if (yych == 'M') goto yy1263;
+	if (yych == 'S') goto yy1264;
+	goto yy984;
 yy1195:
 	yych = *++cur;
-	if (yych == 'T') goto yy1264;
-	goto yy983;
+	if (yych == 'A') goto yy1265;
+	goto yy984;
 yy1196:
 	yych = *++cur;
-	if (yych == 'T') goto yy1265;
-	goto yy983;
+	if (yych == 'E') goto yy1266;
+	goto yy984;
 yy1197:
 	yych = *++cur;
-	if (yych == 'T') goto yy1266;
-	goto yy983;
+	if (yych == 'O') goto yy1267;
+	goto yy984;
 yy1198:
 	yych = *++cur;
-	if (yych == 'T') goto yy1267;
-	goto yy983;
+	if (yych == 'G') goto yy1268;
+	goto yy984;
 yy1199:
 	yych = *++cur;
-	if (yych == 'E') goto yy1268;
-	goto yy983;
+	if (yych == 'C') goto yy1269;
+	goto yy984;
 yy1200:
 	yych = *++cur;
-	if (yych == 'N') goto yy1269;
-	if (yych == 'P') goto yy1270;
-	goto yy983;
+	if (yych == 'O') goto yy1270;
+	goto yy984;
 yy1201:
+	yych = *++cur;
+	if (yych == 'T') goto yy1271;
+	goto yy984;
+yy1202:
+	yych = *++cur;
+	if (yych == 'T') goto yy1272;
+	goto yy984;
+yy1203:
+	yych = *++cur;
+	if (yych == 'T') goto yy1273;
+	goto yy984;
+yy1204:
+	yych = *++cur;
+	if (yych == 'T') goto yy1274;
+	goto yy984;
+yy1205:
+	yych = *++cur;
+	if (yych == 'E') goto yy1275;
+	goto yy984;
+yy1206:
+	yych = *++cur;
+	if (yych == 'N') goto yy1276;
+	if (yych == 'P') goto yy1277;
+	goto yy984;
+yy1207:
 	++cur;
 #line 630 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::PEEK); }
-#line 6791 "src/parse/conf_lexer.cc"
-yy1202:
+#line 6817 "src/parse/conf_lexer.cc"
+yy1208:
 	yych = *++cur;
-	if (yych == 'O') goto yy1271;
-	goto yy983;
-yy1203:
+	if (yych == 'O') goto yy1278;
+	goto yy984;
+yy1209:
 	yych = *++cur;
-	if (yych == 'C') goto yy1272;
-	goto yy983;
-yy1204:
+	if (yych == 'C') goto yy1279;
+	goto yy984;
+yy1210:
 	yych = *++cur;
-	if (yych == 'O') goto yy1273;
-	goto yy983;
-yy1205:
+	if (yych == 'O') goto yy1280;
+	goto yy984;
+yy1211:
 	yych = *++cur;
-	if (yych == 'T') goto yy1274;
-	goto yy983;
-yy1206:
+	if (yych == 'T') goto yy1281;
+	goto yy984;
+yy1212:
 	yych = *++cur;
-	if (yych == 'T') goto yy1275;
-	goto yy983;
-yy1207:
+	if (yych == 'T') goto yy1282;
+	goto yy984;
+yy1213:
 	++cur;
 #line 641 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SKIP); }
-#line 6816 "src/parse/conf_lexer.cc"
-yy1208:
-	yych = *++cur;
-	if (yych == 'N') goto yy1277;
-	if (yych == 'P') goto yy1278;
-	goto yy983;
-yy1209:
-	yych = *++cur;
-	if (yych == 'n') goto yy1279;
-	goto yy983;
-yy1210:
-	yych = *++cur;
-	if (yych == 'c') goto yy1280;
-	goto yy983;
-yy1211:
-	yych = *++cur;
-	if (yych == 'm') goto yy1281;
-	goto yy983;
-yy1212:
-	yych = *++cur;
-	if (yych == 'y') goto yy1282;
-	goto yy961;
-yy1213:
-	yych = *++cur;
-	if (yych == 'e') goto yy1283;
-	goto yy961;
+#line 6842 "src/parse/conf_lexer.cc"
 yy1214:
 	yych = *++cur;
-	if (yych == 'e') goto yy1284;
-	goto yy961;
+	if (yych == 'N') goto yy1284;
+	if (yych == 'P') goto yy1285;
+	goto yy984;
 yy1215:
 	yych = *++cur;
+	if (yych == 'n') goto yy1286;
+	goto yy984;
+yy1216:
+	yych = *++cur;
+	if (yych == 'c') goto yy1287;
+	goto yy984;
+yy1217:
+	yych = *++cur;
+	if (yych == 'm') goto yy1288;
+	goto yy984;
+yy1218:
+	yych = *++cur;
+	if (yych == 'y') goto yy1289;
+	goto yy962;
+yy1219:
+	yych = *++cur;
+	if (yych == 'e') goto yy1290;
+	goto yy962;
+yy1220:
+	yych = *++cur;
+	if (yych == 'e') goto yy1291;
+	goto yy962;
+yy1221:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 580 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::BRANCH); }
-#line 6853 "src/parse/conf_lexer.cc"
-yy1216:
+#line 6879 "src/parse/conf_lexer.cc"
+yy1222:
 	yych = *++cur;
-	if (yych == 'a') goto yy1285;
-	goto yy961;
-yy1217:
+	if (yych == 'a') goto yy1292;
+	goto yy962;
+yy1223:
 	yych = *++cur;
-	if (yych == 'i') goto yy1286;
-	goto yy961;
-yy1218:
+	if (yych == 'i') goto yy1293;
+	goto yy962;
+yy1224:
 	++cur;
 	if (lim <= cur) YYFILL(1);
 	yych = *cur;
-yy1219:
+yy1225:
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1220;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1226;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1220;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1226;
+		if (yych <= 'z') goto yy1224;
 	}
-yy1220:
+yy1226:
 #line 571 "../src/parse/conf_lexer.re"
 	{
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
     }
-#line 6879 "src/parse/conf_lexer.cc"
-yy1221:
-	yych = *++cur;
-	if (yych <= 'q') {
-		if (yych == 'b') goto yy1287;
-		goto yy1219;
-	} else {
-		if (yych <= 'r') goto yy1288;
-		if (yych <= 's') goto yy1289;
-		goto yy1219;
-	}
-yy1222:
-	yych = *++cur;
-	if (yych == 'm') goto yy1290;
-	if (yych == 'o') goto yy1291;
-	goto yy1219;
-yy1223:
-	yych = *++cur;
-	if (yych == 'n') goto yy1292;
-	goto yy1219;
-yy1224:
-	yych = *++cur;
-	if (yych == 'i') goto yy1293;
-	if (yych == 'n') goto yy1294;
-	goto yy1219;
-yy1225:
-	yych = *++cur;
-	if (yych == 'o') goto yy1295;
-	goto yy1219;
-yy1226:
-	yych = *++cur;
-	if (yych == 'f') goto yy1296;
-	goto yy1219;
+#line 6905 "src/parse/conf_lexer.cc"
 yy1227:
 	yych = *++cur;
-	if (yych == 'i') goto yy1297;
-	if (yych == 'o') goto yy1298;
-	goto yy1219;
+	if (yych <= 'q') {
+		if (yych == 'b') goto yy1294;
+		goto yy1225;
+	} else {
+		if (yych <= 'r') goto yy1295;
+		if (yych <= 's') goto yy1296;
+		goto yy1225;
+	}
 yy1228:
 	yych = *++cur;
-	if (yych == 'e') goto yy1299;
-	goto yy1219;
+	if (yych == 'm') goto yy1297;
+	if (yych == 'o') goto yy1298;
+	goto yy1225;
 yy1229:
 	yych = *++cur;
-	if (yych == 'w') goto yy1300;
-	goto yy1219;
+	if (yych == 'n') goto yy1299;
+	goto yy1225;
 yy1230:
 	yych = *++cur;
-	if (yych == 'a') goto yy1301;
-	if (yych == 'y') goto yy1302;
-	goto yy1219;
+	if (yych == 'i') goto yy1300;
+	if (yych == 'n') goto yy1301;
+	goto yy1225;
 yy1231:
 	yych = *++cur;
-	if (yych == 'a') goto yy1303;
-	goto yy1219;
+	if (yych == 'o') goto yy1302;
+	goto yy1225;
 yy1232:
 	yych = *++cur;
-	if (yych == 'y') goto yy1304;
-	goto yy1219;
+	if (yych == 'f') goto yy1303;
+	goto yy1225;
 yy1233:
 	yych = *++cur;
+	if (yych == 'i') goto yy1304;
 	if (yych == 'o') goto yy1305;
-	goto yy961;
+	goto yy1225;
 yy1234:
 	yych = *++cur;
+	if (yych == 'e') goto yy1306;
+	goto yy1225;
+yy1235:
+	yych = *++cur;
+	if (yych == 'w') goto yy1307;
+	goto yy1225;
+yy1236:
+	yych = *++cur;
+	if (yych == 'a') goto yy1308;
+	if (yych == 'y') goto yy1309;
+	goto yy1225;
+yy1237:
+	yych = *++cur;
+	if (yych == 'a') goto yy1310;
+	goto yy1225;
+yy1238:
+	yych = *++cur;
+	if (yych == 'y') goto yy1311;
+	goto yy1225;
+yy1239:
+	yych = *++cur;
+	if (yych == 'o') goto yy1312;
+	goto yy962;
+yy1240:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 648 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::DEDENT); }
-#line 6949 "src/parse/conf_lexer.cc"
-yy1235:
+#line 6975 "src/parse/conf_lexer.cc"
+yy1241:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 588 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::FNDECL); }
-#line 6957 "src/parse/conf_lexer.cc"
-yy1236:
-	yych = *++cur;
-	if (yych == 'r') goto yy1306;
-	goto yy961;
-yy1237:
-	yych = *++cur;
-	if (yych == 'o') goto yy1307;
-	goto yy961;
-yy1238:
-	yych = *++cur;
-	if (yych == 'a') goto yy1308;
-	goto yy961;
-yy1239:
-	yych = *++cur;
-	if (yych == 'n') goto yy1309;
-	goto yy961;
-yy1240:
-	yych = *++cur;
-	if (yych == 'e') goto yy1310;
-	goto yy961;
-yy1241:
-	yych = *++cur;
-	if (yych == 'y') goto yy1311;
-	goto yy961;
+#line 6983 "src/parse/conf_lexer.cc"
 yy1242:
 	yych = *++cur;
-	if (yych == 'e') goto yy1312;
-	goto yy961;
+	if (yych == 'r') goto yy1313;
+	goto yy962;
 yy1243:
 	yych = *++cur;
+	if (yych == 'o') goto yy1314;
+	goto yy962;
+yy1244:
+	yych = *++cur;
+	if (yych == 'a') goto yy1315;
+	goto yy962;
+yy1245:
+	yych = *++cur;
+	if (yych == 'n') goto yy1316;
+	goto yy962;
+yy1246:
+	yych = *++cur;
+	if (yych == 'e') goto yy1317;
+	goto yy962;
+yy1247:
+	yych = *++cur;
+	if (yych == 'y') goto yy1318;
+	goto yy962;
+yy1248:
+	yych = *++cur;
+	if (yych == 'e') goto yy1319;
+	goto yy962;
+yy1249:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 647 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::INDENT); }
-#line 6993 "src/parse/conf_lexer.cc"
-yy1244:
-	yych = *++cur;
-	if (yych == 'a') goto yy1313;
-	goto yy961;
-yy1245:
-	yych = *++cur;
-	if (yych == 'c') goto yy1314;
-	goto yy961;
-yy1246:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 697 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::NESTED); }
-#line 7009 "src/parse/conf_lexer.cc"
-yy1247:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 598 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::OFFSET); }
-#line 7017 "src/parse/conf_lexer.cc"
-yy1248:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 599 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::RETVAL); }
-#line 7025 "src/parse/conf_lexer.cc"
-yy1249:
-	yych = *++cur;
-	if (yych == 'c') goto yy1315;
-	goto yy961;
+#line 7019 "src/parse/conf_lexer.cc"
 yy1250:
 	yych = *++cur;
-	if (yych == 'l') goto yy1316;
-	goto yy961;
+	if (yych == 'a') goto yy1320;
+	goto yy962;
 yy1251:
 	yych = *++cur;
-	if (yych == 'e') goto yy1317;
-	goto yy961;
+	if (yych == 'c') goto yy1321;
+	goto yy962;
 yy1252:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
-#line 681 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::UNSAFE); }
-#line 7045 "src/parse/conf_lexer.cc"
+#line 700 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::NESTED); }
+#line 7035 "src/parse/conf_lexer.cc"
 yy1253:
 	yych = *++cur;
-	if (yych == 'n') goto yy1318;
-	goto yy961;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 598 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::OFFSET); }
+#line 7043 "src/parse/conf_lexer.cc"
 yy1254:
 	yych = *++cur;
-	if (yych == 'r') goto yy1319;
-	goto yy961;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 599 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::RETVAL); }
+#line 7051 "src/parse/conf_lexer.cc"
 yy1255:
 	yych = *++cur;
-	if (yych == 'P') goto yy1320;
-	goto yy983;
+	if (yych == 'c') goto yy1322;
+	goto yy962;
 yy1256:
 	yych = *++cur;
-	if (yych == 'T') goto yy1322;
-	goto yy983;
+	if (yych == 'l') goto yy1323;
+	goto yy962;
 yy1257:
 	yych = *++cur;
-	if (yych == 'T') goto yy1323;
-	goto yy983;
+	if (yych == 'e') goto yy1324;
+	goto yy962;
 yy1258:
 	yych = *++cur;
-	if (yych == 'R') goto yy1324;
-	goto yy983;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 684 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::UNSAFE); }
+#line 7071 "src/parse/conf_lexer.cc"
 yy1259:
+	yych = *++cur;
+	if (yych == 'n') goto yy1325;
+	goto yy962;
+yy1260:
+	yych = *++cur;
+	if (yych == 'r') goto yy1326;
+	goto yy962;
+yy1261:
+	yych = *++cur;
+	if (yych == 'n') goto yy1327;
+	goto yy984;
+yy1262:
+	yych = *++cur;
+	if (yych == 'P') goto yy1328;
+	goto yy984;
+yy1263:
+	yych = *++cur;
+	if (yych == 'T') goto yy1330;
+	goto yy984;
+yy1264:
+	yych = *++cur;
+	if (yych == 'T') goto yy1331;
+	goto yy984;
+yy1265:
+	yych = *++cur;
+	if (yych == 'R') goto yy1332;
+	goto yy984;
+yy1266:
 	++cur;
 #line 617 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::CTYPE); }
-#line 7074 "src/parse/conf_lexer.cc"
-yy1260:
+#line 7104 "src/parse/conf_lexer.cc"
+yy1267:
 	yych = *++cur;
-	if (yych == 'R') goto yy1325;
-	goto yy983;
-yy1261:
+	if (yych == 'R') goto yy1333;
+	goto yy984;
+yy1268:
 	++cur;
 #line 620 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::DEBUG); }
-#line 7083 "src/parse/conf_lexer.cc"
-yy1262:
+#line 7113 "src/parse/conf_lexer.cc"
+yy1269:
 	yych = *++cur;
-	if (yych == 'C') goto yy1326;
-	goto yy983;
-yy1263:
+	if (yych == 'C') goto yy1334;
+	goto yy984;
+yy1270:
 	yych = *++cur;
-	if (yych == 'N') goto yy1327;
-	goto yy983;
-yy1264:
+	if (yych == 'N') goto yy1335;
+	goto yy984;
+yy1271:
 	yych = *++cur;
-	if (yych == 'A') goto yy1328;
-	goto yy983;
-yy1265:
+	if (yych == 'A') goto yy1336;
+	goto yy984;
+yy1272:
 	++cur;
 #line 624 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::INPUT); }
-#line 7100 "src/parse/conf_lexer.cc"
-yy1266:
+#line 7130 "src/parse/conf_lexer.cc"
+yy1273:
 	yych = *++cur;
-	if (yych == 'H') goto yy1329;
-	goto yy983;
-yy1267:
+	if (yych == 'H') goto yy1337;
+	goto yy984;
+yy1274:
 	++cur;
 #line 626 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::LIMIT); }
-#line 7109 "src/parse/conf_lexer.cc"
-yy1268:
+#line 7139 "src/parse/conf_lexer.cc"
+yy1275:
 	yych = *++cur;
-	if (yych == 'R') goto yy1330;
-	goto yy983;
-yy1269:
+	if (yych == 'R') goto yy1338;
+	goto yy984;
+yy1276:
 	++cur;
 #line 628 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::MTAGN); }
-#line 7118 "src/parse/conf_lexer.cc"
-yy1270:
-	++cur;
-#line 629 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::MTAGP); }
-#line 7123 "src/parse/conf_lexer.cc"
-yy1271:
-	yych = *++cur;
-	if (yych == 'R') goto yy1331;
-	goto yy983;
-yy1272:
-	yych = *++cur;
-	if (yych == 'C') goto yy1332;
-	goto yy983;
-yy1273:
-	yych = *++cur;
-	if (yych == 'N') goto yy1333;
-	goto yy983;
-yy1274:
-	yych = *++cur;
-	if (yych == 'A') goto yy1334;
-	goto yy983;
-yy1275:
-	yyaccept = 2;
-	yych = *(mar = ++cur);
-	if (yych == 'M') goto yy1335;
-	if (yych == 'S') goto yy1336;
-yy1276:
-#line 638 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::SHIFT); }
 #line 7148 "src/parse/conf_lexer.cc"
 yy1277:
 	++cur;
-#line 642 "../src/parse/conf_lexer.re"
-	{ RET_VAR(StxVarId::STAGN); }
+#line 629 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::MTAGP); }
 #line 7153 "src/parse/conf_lexer.cc"
 yy1278:
+	yych = *++cur;
+	if (yych == 'R') goto yy1339;
+	goto yy984;
+yy1279:
+	yych = *++cur;
+	if (yych == 'C') goto yy1340;
+	goto yy984;
+yy1280:
+	yych = *++cur;
+	if (yych == 'N') goto yy1341;
+	goto yy984;
+yy1281:
+	yych = *++cur;
+	if (yych == 'A') goto yy1342;
+	goto yy984;
+yy1282:
+	yyaccept = 2;
+	yych = *(mar = ++cur);
+	if (yych == 'M') goto yy1343;
+	if (yych == 'S') goto yy1344;
+yy1283:
+#line 638 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::SHIFT); }
+#line 7178 "src/parse/conf_lexer.cc"
+yy1284:
+	++cur;
+#line 642 "../src/parse/conf_lexer.re"
+	{ RET_VAR(StxVarId::STAGN); }
+#line 7183 "src/parse/conf_lexer.cc"
+yy1285:
 	++cur;
 #line 643 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::STAGP); }
-#line 7158 "src/parse/conf_lexer.cc"
-yy1279:
+#line 7188 "src/parse/conf_lexer.cc"
+yy1286:
 	yych = *++cur;
-	if (yych == 'e') goto yy1337;
-	goto yy983;
-yy1280:
+	if (yych == 'e') goto yy1345;
+	goto yy984;
+yy1287:
 	yych = *++cur;
-	if (yych == 'o') goto yy1338;
-	goto yy983;
-yy1281:
+	if (yych == 'o') goto yy1346;
+	goto yy984;
+yy1288:
 	yych = *++cur;
-	if (yych == 'p') goto yy1339;
-	goto yy983;
-yy1282:
+	if (yych == 'p') goto yy1347;
+	goto yy984;
+yy1289:
 	yych = *++cur;
-	if (yych == 'l') goto yy1340;
-	goto yy961;
-yy1283:
+	if (yych == 'l') goto yy1348;
+	goto yy962;
+yy1290:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 577 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::ARGNAME); }
-#line 7182 "src/parse/conf_lexer.cc"
-yy1284:
+#line 7212 "src/parse/conf_lexer.cc"
+yy1291:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 578 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::ARGTYPE); }
-#line 7190 "src/parse/conf_lexer.cc"
-yy1285:
-	yych = *++cur;
-	if (yych == 'n') goto yy1341;
-	goto yy961;
-yy1286:
-	yych = *++cur;
-	if (yych == 't') goto yy1342;
-	goto yy961;
-yy1287:
-	yych = *++cur;
-	if (yych == 'o') goto yy1343;
-	goto yy1219;
-yy1288:
-	yych = *++cur;
-	if (yych == 'r') goto yy1344;
-	goto yy1219;
-yy1289:
-	yych = *++cur;
-	if (yych == 's') goto yy1345;
-	goto yy1219;
-yy1290:
-	yych = *++cur;
-	if (yych == 'p') goto yy1346;
-	goto yy1219;
-yy1291:
-	yych = *++cur;
-	if (yych == 'n') goto yy1347;
-	goto yy1219;
+#line 7220 "src/parse/conf_lexer.cc"
 yy1292:
 	yych = *++cur;
-	if (yych == 'u') goto yy1348;
-	goto yy1219;
+	if (yych == 'n') goto yy1349;
+	goto yy962;
 yy1293:
 	yych = *++cur;
-	if (yych == 'n') goto yy1349;
-	goto yy1219;
+	if (yych == 't') goto yy1350;
+	goto yy962;
 yy1294:
 	yych = *++cur;
-	if (yych <= 'b') goto yy1219;
-	if (yych <= 'c') goto yy1350;
-	if (yych <= 'd') goto yy1351;
-	goto yy1219;
+	if (yych == 'o') goto yy1351;
+	goto yy1225;
 yy1295:
 	yych = *++cur;
-	if (yych == 't') goto yy1352;
-	goto yy1219;
+	if (yych == 'r') goto yy1352;
+	goto yy1225;
 yy1296:
 	yych = *++cur;
-	if (yych == '_') goto yy1353;
-	goto yy1219;
+	if (yych == 's') goto yy1353;
+	goto yy1225;
 yy1297:
 	yych = *++cur;
-	if (yych == 'n') goto yy1354;
-	goto yy1219;
+	if (yych == 'p') goto yy1354;
+	goto yy1225;
 yy1298:
 	yych = *++cur;
-	if (yych == 'o') goto yy1355;
-	goto yy1219;
+	if (yych == 'n') goto yy1355;
+	goto yy1225;
 yy1299:
 	yych = *++cur;
-	if (yych == 'c') goto yy1356;
-	goto yy1219;
+	if (yych == 'u') goto yy1356;
+	goto yy1225;
 yy1300:
 	yych = *++cur;
-	if (yych == 'i') goto yy1357;
-	goto yy1219;
+	if (yych == 'n') goto yy1357;
+	goto yy1225;
 yy1301:
 	yych = *++cur;
-	if (yych == 'i') goto yy1358;
-	goto yy1219;
+	if (yych <= 'b') goto yy1225;
+	if (yych <= 'c') goto yy1358;
+	if (yych <= 'd') goto yy1359;
+	goto yy1225;
 yy1302:
 	yych = *++cur;
-	if (yych == 'p') goto yy1359;
-	goto yy1219;
+	if (yych == 't') goto yy1360;
+	goto yy1225;
 yy1303:
 	yych = *++cur;
-	if (yych == 'r') goto yy1360;
-	goto yy1219;
+	if (yych == '_') goto yy1361;
+	goto yy1225;
 yy1304:
 	yych = *++cur;
-	switch (yych) {
-		case 'b': goto yy1361;
-		case 'c': goto yy1362;
-		case 'd': goto yy1363;
-		case 'g': goto yy1364;
-		case 'l': goto yy1365;
-		case 'm': goto yy1366;
-		case 'p': goto yy1367;
-		case 'r': goto yy1368;
-		case 's': goto yy1369;
-		default: goto yy1219;
-	}
+	if (yych == 'n') goto yy1362;
+	goto yy1225;
 yy1305:
 	yych = *++cur;
-	if (yych == 'd') goto yy1370;
-	goto yy961;
+	if (yych == 'o') goto yy1363;
+	goto yy1225;
 yy1306:
 	yych = *++cur;
-	if (yych == 'g') goto yy1371;
-	goto yy961;
+	if (yych == 'c') goto yy1364;
+	goto yy1225;
 yy1307:
 	yych = *++cur;
-	if (yych == 'n') goto yy1372;
-	goto yy961;
+	if (yych == 'i') goto yy1365;
+	goto yy1225;
 yy1308:
 	yych = *++cur;
-	if (yych == 't') goto yy1373;
-	goto yy961;
+	if (yych == 'i') goto yy1366;
+	goto yy1225;
 yy1309:
 	yych = *++cur;
-	if (yych == 'i') goto yy1374;
-	goto yy961;
+	if (yych == 'p') goto yy1367;
+	goto yy1225;
 yy1310:
 	yych = *++cur;
-	if (yych == 't') goto yy1375;
-	goto yy961;
+	if (yych == 'r') goto yy1368;
+	goto yy1225;
 yy1311:
 	yych = *++cur;
-	if (yych == 'p') goto yy1376;
-	goto yy961;
+	switch (yych) {
+		case 'b': goto yy1369;
+		case 'c': goto yy1370;
+		case 'd': goto yy1371;
+		case 'g': goto yy1372;
+		case 'l': goto yy1373;
+		case 'm': goto yy1374;
+		case 'p': goto yy1375;
+		case 'r': goto yy1376;
+		case 's': goto yy1377;
+		default: goto yy1225;
+	}
 yy1312:
 	yych = *++cur;
-	if (yych == 'r') goto yy1377;
-	goto yy961;
+	if (yych == 'd') goto yy1378;
+	goto yy962;
 yy1313:
 	yych = *++cur;
-	if (yych == 'b') goto yy1378;
-	goto yy961;
+	if (yych == 'g') goto yy1379;
+	goto yy962;
 yy1314:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 682 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::MONADIC); }
-#line 7326 "src/parse/conf_lexer.cc"
+	if (yych == 'n') goto yy1380;
+	goto yy962;
 yy1315:
 	yych = *++cur;
-	if (yych == 'o') goto yy1379;
-	goto yy961;
+	if (yych == 't') goto yy1381;
+	goto yy962;
 yy1316:
 	yych = *++cur;
-	if (yych == 'e') goto yy1380;
-	goto yy961;
+	if (yych == 'i') goto yy1382;
+	goto yy962;
 yy1317:
 	yych = *++cur;
-	if (yych == 'n') goto yy1381;
-	goto yy961;
+	if (yych == 't') goto yy1383;
+	goto yy962;
 yy1318:
 	yych = *++cur;
+	if (yych == 'p') goto yy1384;
+	goto yy962;
+yy1319:
+	yych = *++cur;
+	if (yych == 'r') goto yy1385;
+	goto yy962;
+yy1320:
+	yych = *++cur;
+	if (yych == 'b') goto yy1386;
+	goto yy962;
+yy1321:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
+	}
+#line 685 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::MONADIC); }
+#line 7356 "src/parse/conf_lexer.cc"
+yy1322:
+	yych = *++cur;
+	if (yych == 'o') goto yy1387;
+	goto yy962;
+yy1323:
+	yych = *++cur;
+	if (yych == 'e') goto yy1388;
+	goto yy962;
+yy1324:
+	yych = *++cur;
+	if (yych == 'n') goto yy1389;
+	goto yy962;
+yy1325:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
 	}
 #line 610 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::VER); }
-#line 7346 "src/parse/conf_lexer.cc"
-yy1319:
+#line 7376 "src/parse/conf_lexer.cc"
+yy1326:
 	yych = *++cur;
-	if (yych == 'd') goto yy1382;
-	goto yy961;
-yy1320:
+	if (yych == 'd') goto yy1390;
+	goto yy962;
+yy1327:
+	yych = *++cur;
+	if (yych == 'e') goto yy1391;
+	goto yy984;
+yy1328:
 	yyaccept = 3;
 	yych = *(mar = ++cur);
-	if (yych == 'C') goto yy1383;
-yy1321:
+	if (yych == 'C') goto yy1392;
+yy1329:
 #line 612 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::BACKUP); }
-#line 7358 "src/parse/conf_lexer.cc"
-yy1322:
+#line 7392 "src/parse/conf_lexer.cc"
+yy1330:
 	yych = *++cur;
-	if (yych == 'A') goto yy1384;
-	goto yy983;
-yy1323:
+	if (yych == 'A') goto yy1393;
+	goto yy984;
+yy1331:
 	yych = *++cur;
-	if (yych == 'A') goto yy1385;
-	goto yy983;
-yy1324:
+	if (yych == 'A') goto yy1394;
+	goto yy984;
+yy1332:
 	yych = *++cur;
-	if (yych == 'K') goto yy1386;
-	goto yy983;
-yy1325:
+	if (yych == 'K') goto yy1395;
+	goto yy984;
+yy1333:
 	++cur;
 #line 619 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::CURSOR); }
-#line 7375 "src/parse/conf_lexer.cc"
-yy1326:
+#line 7409 "src/parse/conf_lexer.cc"
+yy1334:
 	yych = *++cur;
-	if (yych == 'E') goto yy1387;
-	goto yy983;
-yy1327:
+	if (yych == 'E') goto yy1396;
+	goto yy984;
+yy1335:
 	yych = *++cur;
-	if (yych == 'D') goto yy1388;
-	goto yy983;
-yy1328:
+	if (yych == 'D') goto yy1397;
+	goto yy984;
+yy1336:
 	yych = *++cur;
-	if (yych == 'T') goto yy1389;
-	goto yy983;
-yy1329:
+	if (yych == 'T') goto yy1398;
+	goto yy984;
+yy1337:
 	yych = *++cur;
-	if (yych == 'A') goto yy1390;
-	goto yy983;
-yy1330:
+	if (yych == 'A') goto yy1399;
+	goto yy984;
+yy1338:
 	++cur;
 #line 627 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::MARKER); }
-#line 7396 "src/parse/conf_lexer.cc"
-yy1331:
-	yych = *++cur;
-	if (yych == 'E') goto yy1391;
-	goto yy983;
-yy1332:
-	yych = *++cur;
-	if (yych == 'E') goto yy1393;
-	goto yy983;
-yy1333:
-	yych = *++cur;
-	if (yych == 'D') goto yy1394;
-	goto yy983;
-yy1334:
-	yych = *++cur;
-	if (yych == 'T') goto yy1395;
-	goto yy983;
-yy1335:
-	yych = *++cur;
-	if (yych == 'T') goto yy1396;
-	goto yy983;
-yy1336:
-	yych = *++cur;
-	if (yych == 'T') goto yy1397;
-	goto yy983;
-yy1337:
-	yych = *++cur;
-	if (yych == 'r') goto yy1398;
-	goto yy983;
-yy1338:
-	yych = *++cur;
-	if (yych == 'r') goto yy1399;
-	goto yy983;
+#line 7430 "src/parse/conf_lexer.cc"
 yy1339:
 	yych = *++cur;
-	if (yych == 'l') goto yy1400;
-	goto yy983;
+	if (yych == 'E') goto yy1400;
+	goto yy984;
 yy1340:
 	yych = *++cur;
-	if (yych == 'e') goto yy1401;
-	goto yy961;
+	if (yych == 'E') goto yy1402;
+	goto yy984;
 yy1341:
 	yych = *++cur;
-	if (yych == 'g') goto yy1402;
-	goto yy961;
+	if (yych == 'D') goto yy1403;
+	goto yy984;
 yy1342:
 	yych = *++cur;
-	if (yych == 'e') goto yy1403;
-	goto yy961;
+	if (yych == 'T') goto yy1404;
+	goto yy984;
 yy1343:
 	yych = *++cur;
-	if (yych == 'r') goto yy1404;
-	goto yy1219;
+	if (yych == 'T') goto yy1405;
+	goto yy984;
 yy1344:
 	yych = *++cur;
-	if (yych == 'a') goto yy1405;
-	goto yy1219;
+	if (yych == 'T') goto yy1406;
+	goto yy984;
 yy1345:
 	yych = *++cur;
-	if (yych == 'i') goto yy1406;
-	goto yy1219;
+	if (yych == 'r') goto yy1407;
+	goto yy984;
 yy1346:
 	yych = *++cur;
-	if (yych == '_') goto yy1407;
-	goto yy1219;
+	if (yych == 'r') goto yy1408;
+	goto yy984;
 yy1347:
 	yych = *++cur;
-	if (yych == 's') goto yy1408;
-	goto yy1219;
+	if (yych == 'l') goto yy1409;
+	goto yy984;
 yy1348:
 	yych = *++cur;
-	if (yych == 'm') goto yy1409;
-	goto yy1219;
+	if (yych == 'e') goto yy1410;
+	goto yy962;
 yy1349:
 	yych = *++cur;
 	if (yych == 'g') goto yy1411;
-	goto yy1219;
+	goto yy962;
 yy1350:
 	yych = *++cur;
-	if (yych == 'a') goto yy1412;
-	goto yy1219;
+	if (yych == 'e') goto yy1412;
+	goto yy962;
 yy1351:
 	yych = *++cur;
-	if (yych == 'e') goto yy1413;
-	goto yy1219;
+	if (yych == 'r') goto yy1413;
+	goto yy1225;
 yy1352:
 	yych = *++cur;
-	if (yych == 'o') goto yy1414;
-	goto yy1219;
+	if (yych == 'a') goto yy1414;
+	goto yy1225;
 yy1353:
 	yych = *++cur;
-	if (yych == 't') goto yy1416;
-	goto yy1219;
+	if (yych == 'i') goto yy1415;
+	goto yy1225;
 yy1354:
 	yych = *++cur;
-	if (yych == 'e') goto yy1417;
-	goto yy1219;
+	if (yych == '_') goto yy1416;
+	goto yy1225;
 yy1355:
 	yych = *++cur;
-	if (yych == 'p') goto yy1418;
-	goto yy1219;
+	if (yych == 's') goto yy1417;
+	goto yy1225;
 yy1356:
 	yych = *++cur;
-	if (yych == 'u') goto yy1420;
-	goto yy1219;
+	if (yych == 'm') goto yy1418;
+	goto yy1225;
 yy1357:
 	yych = *++cur;
-	if (yych == 't') goto yy1421;
-	goto yy1219;
+	if (yych == 'g') goto yy1420;
+	goto yy1225;
 yy1358:
 	yych = *++cur;
-	if (yych == 'l') goto yy1422;
-	goto yy1219;
+	if (yych == 'a') goto yy1421;
+	goto yy1225;
 yy1359:
 	yych = *++cur;
-	if (yych == 'e') goto yy1423;
-	goto yy1219;
+	if (yych == 'e') goto yy1422;
+	goto yy1225;
 yy1360:
 	yych = *++cur;
-	if (yych == '_') goto yy1424;
-	goto yy1219;
+	if (yych == 'o') goto yy1423;
+	goto yy1225;
 yy1361:
 	yych = *++cur;
-	if (yych == 'a') goto yy1425;
-	goto yy1219;
+	if (yych == 't') goto yy1425;
+	goto yy1225;
 yy1362:
 	yych = *++cur;
-	if (yych == 'o') goto yy1426;
-	goto yy1219;
+	if (yych == 'e') goto yy1426;
+	goto yy1225;
 yy1363:
 	yych = *++cur;
-	if (yych == 'e') goto yy1427;
-	goto yy1219;
+	if (yych == 'p') goto yy1427;
+	goto yy1225;
 yy1364:
 	yych = *++cur;
-	if (yych == 'e') goto yy1428;
-	goto yy1219;
+	if (yych == 'u') goto yy1429;
+	goto yy1225;
 yy1365:
 	yych = *++cur;
-	if (yych == 'e') goto yy1429;
-	goto yy1219;
+	if (yych == 't') goto yy1430;
+	goto yy1225;
 yy1366:
 	yych = *++cur;
-	if (yych == 't') goto yy1430;
-	goto yy1219;
+	if (yych == 'l') goto yy1431;
+	goto yy1225;
 yy1367:
 	yych = *++cur;
-	if (yych == 'e') goto yy1431;
-	goto yy1219;
+	if (yych == 'e') goto yy1432;
+	goto yy1225;
 yy1368:
 	yych = *++cur;
-	if (yych == 'e') goto yy1432;
-	goto yy1219;
+	if (yych == '_') goto yy1433;
+	goto yy1225;
 yy1369:
 	yych = *++cur;
-	switch (yych) {
-		case 'e': goto yy1433;
-		case 'h': goto yy1434;
-		case 'k': goto yy1435;
-		case 't': goto yy1436;
-		default: goto yy1219;
-	}
+	if (yych == 'a') goto yy1434;
+	goto yy1225;
 yy1370:
 	yych = *++cur;
-	if (yych == 'e') goto yy1437;
-	goto yy961;
+	if (yych == 'o') goto yy1435;
+	goto yy1225;
 yy1371:
 	yych = *++cur;
-	if (yych == 's') goto yy1438;
-	goto yy961;
+	if (yych == 'e') goto yy1436;
+	goto yy1225;
 yy1372:
 	yych = *++cur;
-	if (yych == 'd') goto yy1439;
-	goto yy961;
+	if (yych == 'e') goto yy1437;
+	goto yy1225;
 yy1373:
 	yych = *++cur;
-	if (yych == 'e') goto yy1440;
-	goto yy961;
+	if (yych == 'e') goto yy1438;
+	goto yy1225;
 yy1374:
 	yych = *++cur;
-	if (yych == 't') goto yy1441;
-	goto yy961;
+	if (yych == 't') goto yy1439;
+	goto yy1225;
 yy1375:
 	yych = *++cur;
-	if (yych == 'v') goto yy1442;
-	goto yy961;
+	if (yych == 'e') goto yy1440;
+	goto yy1225;
 yy1376:
 	yych = *++cur;
-	if (yych == 'e') goto yy1443;
-	goto yy961;
+	if (yych == 'e') goto yy1441;
+	goto yy1225;
 yy1377:
 	yych = *++cur;
-	if (yych == 's') goto yy1444;
-	goto yy961;
+	switch (yych) {
+		case 'e': goto yy1442;
+		case 'h': goto yy1443;
+		case 'k': goto yy1444;
+		case 't': goto yy1445;
+		default: goto yy1225;
+	}
 yy1378:
 	yych = *++cur;
-	if (yych == 'e') goto yy1445;
-	goto yy961;
+	if (yych == 'e') goto yy1446;
+	goto yy962;
 yy1379:
 	yych = *++cur;
-	if (yych == 'n') goto yy1446;
-	goto yy961;
+	if (yych == 's') goto yy1447;
+	goto yy962;
 yy1380:
 	yych = *++cur;
-	if (yych == '_') goto yy1447;
-	goto yy961;
+	if (yych == 'd') goto yy1448;
+	goto yy962;
 yy1381:
 	yych = *++cur;
-	if (yych == 't') goto yy1448;
-	goto yy961;
+	if (yych == 'e') goto yy1449;
+	goto yy962;
 yy1382:
 	yych = *++cur;
+	if (yych == 't') goto yy1450;
+	goto yy962;
+yy1383:
+	yych = *++cur;
+	if (yych == 'v') goto yy1451;
+	goto yy962;
+yy1384:
+	yych = *++cur;
+	if (yych == 'e') goto yy1452;
+	goto yy962;
+yy1385:
+	yych = *++cur;
+	if (yych == 's') goto yy1453;
+	goto yy962;
+yy1386:
+	yych = *++cur;
+	if (yych == 'e') goto yy1454;
+	goto yy962;
+yy1387:
+	yych = *++cur;
+	if (yych == 'n') goto yy1455;
+	goto yy962;
+yy1388:
+	yych = *++cur;
+	if (yych == '_') goto yy1456;
+	goto yy962;
+yy1389:
+	yych = *++cur;
+	if (yych == 't') goto yy1457;
+	goto yy962;
+yy1390:
+	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
 	}
 #line 631 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::RECORD); }
-#line 7613 "src/parse/conf_lexer.cc"
-yy1383:
+#line 7647 "src/parse/conf_lexer.cc"
+yy1391:
 	yych = *++cur;
-	if (yych == 'T') goto yy1449;
-	goto yy983;
-yy1384:
+	if (yych == 'd') goto yy1458;
+	goto yy984;
+yy1392:
 	yych = *++cur;
-	if (yych == 'G') goto yy1450;
-	goto yy983;
-yy1385:
+	if (yych == 'T') goto yy1459;
+	goto yy984;
+yy1393:
 	yych = *++cur;
-	if (yych == 'G') goto yy1451;
-	goto yy983;
-yy1386:
+	if (yych == 'G') goto yy1460;
+	goto yy984;
+yy1394:
 	yych = *++cur;
-	if (yych == 'E') goto yy1452;
-	goto yy983;
-yy1387:
+	if (yych == 'G') goto yy1461;
+	goto yy984;
+yy1395:
 	yych = *++cur;
-	if (yych == 'P') goto yy1453;
-	goto yy983;
-yy1388:
+	if (yych == 'E') goto yy1462;
+	goto yy984;
+yy1396:
+	yych = *++cur;
+	if (yych == 'P') goto yy1463;
+	goto yy984;
+yy1397:
 	++cur;
 #line 622 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::GETCOND); }
-#line 7638 "src/parse/conf_lexer.cc"
-yy1389:
+#line 7676 "src/parse/conf_lexer.cc"
+yy1398:
 	yych = *++cur;
-	if (yych == 'E') goto yy1454;
-	goto yy983;
-yy1390:
+	if (yych == 'E') goto yy1464;
+	goto yy984;
+yy1399:
 	yych = *++cur;
-	if (yych == 'N') goto yy1455;
-	goto yy983;
-yy1391:
+	if (yych == 'N') goto yy1465;
+	goto yy984;
+yy1400:
 	yyaccept = 4;
 	yych = *(mar = ++cur);
-	if (yych == 'C') goto yy1456;
-	if (yych == 'T') goto yy1457;
-yy1392:
+	if (yych == 'C') goto yy1466;
+	if (yych == 'T') goto yy1467;
+yy1401:
 #line 632 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::RESTORE); }
-#line 7655 "src/parse/conf_lexer.cc"
-yy1393:
+#line 7693 "src/parse/conf_lexer.cc"
+yy1402:
 	yych = *++cur;
-	if (yych == 'P') goto yy1458;
-	goto yy983;
-yy1394:
+	if (yych == 'P') goto yy1468;
+	goto yy984;
+yy1403:
 	++cur;
 #line 636 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SETCOND); }
-#line 7664 "src/parse/conf_lexer.cc"
-yy1395:
-	yych = *++cur;
-	if (yych == 'E') goto yy1459;
-	goto yy983;
-yy1396:
-	yych = *++cur;
-	if (yych == 'A') goto yy1460;
-	goto yy983;
-yy1397:
-	yych = *++cur;
-	if (yych == 'A') goto yy1461;
-	goto yy983;
-yy1398:
-	yych = *++cur;
-	if (yych == 'i') goto yy1462;
-	goto yy983;
-yy1399:
-	yych = *++cur;
-	if (yych == 'd') goto yy1463;
-	goto yy983;
-yy1400:
-	yych = *++cur;
-	if (yych == 'e') goto yy1464;
-	goto yy983;
-yy1401:
-	yyaccept = 1;
-	yych = *(mar = ++cur);
-	if (yych == '.') goto yy1465;
-	goto yy961;
-yy1402:
-	yych = *++cur;
-	if (yych == 'e') goto yy1466;
-	goto yy961;
-yy1403:
-	yych = *++cur;
-	if (yych == 'r') goto yy1467;
-	goto yy961;
+#line 7702 "src/parse/conf_lexer.cc"
 yy1404:
 	yych = *++cur;
-	if (yych == 't') goto yy1468;
-	goto yy1219;
+	if (yych == 'E') goto yy1469;
+	goto yy984;
 yy1405:
 	yych = *++cur;
-	if (yych == 'y') goto yy1470;
-	goto yy1219;
+	if (yych == 'A') goto yy1470;
+	goto yy984;
 yy1406:
 	yych = *++cur;
-	if (yych == 'g') goto yy1471;
-	goto yy1219;
+	if (yych == 'A') goto yy1471;
+	goto yy984;
 yy1407:
 	yych = *++cur;
-	switch (yych) {
-		case 'e': goto yy1472;
-		case 'g': goto yy1473;
-		case 'l': goto yy1474;
-		case 'n': goto yy1475;
-		default: goto yy1219;
-	}
+	if (yych == 'i') goto yy1472;
+	goto yy984;
 yy1408:
 	yych = *++cur;
-	if (yych == 't') goto yy1476;
-	goto yy1219;
+	if (yych == 'd') goto yy1473;
+	goto yy984;
 yy1409:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1410;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1477;
-		if (yych <= '`') goto yy1410;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1474;
+	goto yy984;
 yy1410:
-#line 529 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_enum); }
-#line 7740 "src/parse/conf_lexer.cc"
+	yyaccept = 1;
+	yych = *(mar = ++cur);
+	if (yych == '.') goto yy1475;
+	goto yy962;
 yy1411:
 	yych = *++cur;
-	if (yych == 'e') goto yy1478;
-	goto yy1219;
+	if (yych == 'e') goto yy1476;
+	goto yy962;
 yy1412:
 	yych = *++cur;
-	if (yych == 'l') goto yy1479;
-	goto yy1219;
+	if (yych == 'r') goto yy1477;
+	goto yy962;
 yy1413:
 	yych = *++cur;
-	if (yych == 'c') goto yy1480;
-	if (yych == 'f') goto yy1481;
-	goto yy1219;
+	if (yych == 't') goto yy1478;
+	goto yy1225;
 yy1414:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1415;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1415;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'y') goto yy1480;
+	goto yy1225;
 yy1415:
-#line 528 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_goto); }
-#line 7766 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'g') goto yy1481;
+	goto yy1225;
 yy1416:
 	yych = *++cur;
-	if (yych == 'h') goto yy1483;
-	goto yy1219;
+	switch (yych) {
+		case 'e': goto yy1482;
+		case 'g': goto yy1483;
+		case 'l': goto yy1484;
+		case 'n': goto yy1485;
+		default: goto yy1225;
+	}
 yy1417:
 	yych = *++cur;
-	if (yych == '_') goto yy1484;
-	goto yy1219;
+	if (yych == 't') goto yy1486;
+	goto yy1225;
 yy1418:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1419;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1419;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= '_') goto yy1487;
+		if (yych <= '`') goto yy1419;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1419:
-#line 527 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_loop); }
-#line 7787 "src/parse/conf_lexer.cc"
+#line 529 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_enum); }
+#line 7778 "src/parse/conf_lexer.cc"
 yy1420:
 	yych = *++cur;
-	if (yych == 'r') goto yy1485;
-	goto yy1219;
+	if (yych == 'e') goto yy1488;
+	goto yy1225;
 yy1421:
 	yych = *++cur;
-	if (yych == 'c') goto yy1486;
-	goto yy1219;
+	if (yych == 'l') goto yy1489;
+	goto yy1225;
 yy1422:
 	yych = *++cur;
-	if (yych == 'c') goto yy1487;
-	goto yy1219;
+	if (yych == 'c') goto yy1490;
+	if (yych == 'f') goto yy1491;
+	goto yy1225;
 yy1423:
 	yych = *++cur;
-	if (yych == '_') goto yy1488;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1424;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1424;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1424:
-	yych = *++cur;
-	if (yych == 'g') goto yy1489;
-	if (yych == 'l') goto yy1490;
-	goto yy1219;
+#line 528 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_goto); }
+#line 7804 "src/parse/conf_lexer.cc"
 yy1425:
 	yych = *++cur;
-	if (yych == 'c') goto yy1491;
-	goto yy1219;
+	if (yych == 'h') goto yy1493;
+	goto yy1225;
 yy1426:
 	yych = *++cur;
-	if (yych == 'p') goto yy1492;
-	goto yy1219;
+	if (yych == '_') goto yy1494;
+	goto yy1225;
 yy1427:
 	yych = *++cur;
-	if (yych == 'b') goto yy1493;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1428;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1428;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1428:
-	yych = *++cur;
-	if (yych == 't') goto yy1494;
-	goto yy1219;
+#line 527 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_loop); }
+#line 7825 "src/parse/conf_lexer.cc"
 yy1429:
 	yych = *++cur;
-	if (yych == 's') goto yy1495;
-	goto yy1219;
+	if (yych == 'r') goto yy1495;
+	goto yy1225;
 yy1430:
 	yych = *++cur;
-	if (yych == 'a') goto yy1496;
-	goto yy1219;
+	if (yych == 'c') goto yy1496;
+	goto yy1225;
 yy1431:
 	yych = *++cur;
-	if (yych == 'e') goto yy1497;
-	goto yy1219;
+	if (yych == 'c') goto yy1497;
+	goto yy1225;
 yy1432:
 	yych = *++cur;
-	if (yych == 's') goto yy1498;
-	goto yy1219;
+	if (yych == '_') goto yy1498;
+	goto yy1225;
 yy1433:
 	yych = *++cur;
-	if (yych == 't') goto yy1499;
-	goto yy1219;
+	if (yych == 'g') goto yy1499;
+	if (yych == 'l') goto yy1500;
+	goto yy1225;
 yy1434:
 	yych = *++cur;
-	if (yych == 'i') goto yy1500;
-	goto yy1219;
+	if (yych == 'c') goto yy1501;
+	goto yy1225;
 yy1435:
 	yych = *++cur;
-	if (yych == 'i') goto yy1501;
-	goto yy1219;
+	if (yych == 'p') goto yy1502;
+	goto yy1225;
 yy1436:
 	yych = *++cur;
-	if (yych == 'a') goto yy1502;
-	goto yy1219;
+	if (yych == 'b') goto yy1503;
+	goto yy1225;
 yy1437:
 	yych = *++cur;
-	if (yych == 'l') goto yy1503;
-	goto yy961;
+	if (yych == 't') goto yy1504;
+	goto yy1225;
 yy1438:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 691 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::HAVE_ARGS); }
-#line 7868 "src/parse/conf_lexer.cc"
+	if (yych == 's') goto yy1505;
+	goto yy1225;
 yy1439:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 692 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::HAVE_COND); }
-#line 7876 "src/parse/conf_lexer.cc"
+	if (yych == 'a') goto yy1506;
+	goto yy1225;
 yy1440:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 678 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::HAVE_DATE); }
-#line 7884 "src/parse/conf_lexer.cc"
+	if (yych == 'e') goto yy1507;
+	goto yy1225;
 yy1441:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 693 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::HAVE_INIT); }
-#line 7892 "src/parse/conf_lexer.cc"
+	if (yych == 's') goto yy1508;
+	goto yy1225;
 yy1442:
 	yych = *++cur;
-	if (yych == 'a') goto yy1504;
-	goto yy961;
+	if (yych == 't') goto yy1509;
+	goto yy1225;
 yy1443:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 695 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::HAVE_TYPE); }
-#line 7904 "src/parse/conf_lexer.cc"
+	if (yych == 'i') goto yy1510;
+	goto yy1225;
 yy1444:
 	yych = *++cur;
-	if (yych == 'i') goto yy1505;
-	goto yy961;
+	if (yych == 'i') goto yy1511;
+	goto yy1225;
 yy1445:
 	yych = *++cur;
-	if (yych == 'l') goto yy1506;
-	goto yy961;
+	if (yych == 'a') goto yy1512;
+	goto yy1225;
 yy1446:
 	yych = *++cur;
-	if (yych == 'd') goto yy1507;
-	goto yy961;
+	if (yych == 'l') goto yy1513;
+	goto yy962;
 yy1447:
 	yych = *++cur;
-	if (yych == 's') goto yy1508;
-	goto yy961;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 694 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::HAVE_ARGS); }
+#line 7906 "src/parse/conf_lexer.cc"
 yy1448:
 	yych = *++cur;
 	if (yybm[0+yych] & 64) {
-		goto yy960;
+		goto yy961;
+	}
+#line 695 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::HAVE_COND); }
+#line 7914 "src/parse/conf_lexer.cc"
+yy1449:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 681 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::HAVE_DATE); }
+#line 7922 "src/parse/conf_lexer.cc"
+yy1450:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 696 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::HAVE_INIT); }
+#line 7930 "src/parse/conf_lexer.cc"
+yy1451:
+	yych = *++cur;
+	if (yych == 'a') goto yy1514;
+	goto yy962;
+yy1452:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 698 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::HAVE_TYPE); }
+#line 7942 "src/parse/conf_lexer.cc"
+yy1453:
+	yych = *++cur;
+	if (yych == 'i') goto yy1515;
+	goto yy962;
+yy1454:
+	yych = *++cur;
+	if (yych == 'l') goto yy1516;
+	goto yy962;
+yy1455:
+	yych = *++cur;
+	if (yych == 'd') goto yy1517;
+	goto yy962;
+yy1456:
+	yych = *++cur;
+	if (yych == 's') goto yy1518;
+	goto yy962;
+yy1457:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
 	}
 #line 649 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::TOPINDENT); }
-#line 7928 "src/parse/conf_lexer.cc"
-yy1449:
+#line 7966 "src/parse/conf_lexer.cc"
+yy1458:
 	yych = *++cur;
-	if (yych == 'X') goto yy1509;
-	goto yy983;
-yy1450:
+	if (yych == '>') goto yy1519;
+	goto yy984;
+yy1459:
+	yych = *++cur;
+	if (yych == 'X') goto yy1520;
+	goto yy984;
+yy1460:
 	++cur;
 #line 615 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::COPYMTAG); }
-#line 7937 "src/parse/conf_lexer.cc"
-yy1451:
+#line 7979 "src/parse/conf_lexer.cc"
+yy1461:
 	++cur;
 #line 616 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::COPYSTAG); }
-#line 7942 "src/parse/conf_lexer.cc"
-yy1452:
+#line 7984 "src/parse/conf_lexer.cc"
+yy1462:
 	yych = *++cur;
-	if (yych == 'R') goto yy1510;
-	goto yy983;
-yy1453:
+	if (yych == 'R') goto yy1521;
+	goto yy984;
+yy1463:
 	yych = *++cur;
-	if (yych == 'T') goto yy1511;
-	goto yy983;
-yy1454:
+	if (yych == 'T') goto yy1522;
+	goto yy984;
+yy1464:
 	++cur;
 #line 623 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::GETSTATE); }
-#line 7955 "src/parse/conf_lexer.cc"
-yy1455:
+#line 7997 "src/parse/conf_lexer.cc"
+yy1465:
 	++cur;
 #line 625 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::LESSTHAN); }
-#line 7960 "src/parse/conf_lexer.cc"
-yy1456:
+#line 8002 "src/parse/conf_lexer.cc"
+yy1466:
 	yych = *++cur;
-	if (yych == 'T') goto yy1512;
-	goto yy983;
-yy1457:
+	if (yych == 'T') goto yy1523;
+	goto yy984;
+yy1467:
 	yych = *++cur;
-	if (yych == 'A') goto yy1513;
-	goto yy983;
-yy1458:
+	if (yych == 'A') goto yy1524;
+	goto yy984;
+yy1468:
 	yych = *++cur;
-	if (yych == 'T') goto yy1514;
-	goto yy983;
-yy1459:
+	if (yych == 'T') goto yy1525;
+	goto yy984;
+yy1469:
 	++cur;
 #line 637 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SETSTATE); }
-#line 7977 "src/parse/conf_lexer.cc"
-yy1460:
-	yych = *++cur;
-	if (yych == 'G') goto yy1515;
-	goto yy983;
-yy1461:
-	yych = *++cur;
-	if (yych == 'G') goto yy1516;
-	goto yy983;
-yy1462:
-	yych = *++cur;
-	if (yych == 'c') goto yy1517;
-	goto yy983;
-yy1463:
-	++cur;
-#line 673 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::API_RECORD); }
-#line 7994 "src/parse/conf_lexer.cc"
-yy1464:
-	++cur;
-#line 671 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::API_SIMPLE); }
-#line 7999 "src/parse/conf_lexer.cc"
-yy1465:
-	yych = *++cur;
-	if (yych == 'f') goto yy1518;
-	goto yy983;
-yy1466:
-	yych = *++cur;
-	if (yych == 's') goto yy1519;
-	goto yy961;
-yy1467:
-	yych = *++cur;
-	if (yych == 'a') goto yy1520;
-	goto yy961;
-yy1468:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1469;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1469;
-		if (yych <= 'z') goto yy1218;
-	}
-yy1469:
-#line 538 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_abort); }
-#line 8024 "src/parse/conf_lexer.cc"
+#line 8019 "src/parse/conf_lexer.cc"
 yy1470:
 	yych = *++cur;
-	if (yych == '_') goto yy1521;
-	goto yy1219;
+	if (yych == 'G') goto yy1526;
+	goto yy984;
 yy1471:
 	yych = *++cur;
-	if (yych == 'n') goto yy1522;
-	goto yy1219;
+	if (yych == 'G') goto yy1527;
+	goto yy984;
 yy1472:
 	yych = *++cur;
-	if (yych == 'q') goto yy1524;
-	goto yy1219;
+	if (yych == 'c') goto yy1528;
+	goto yy984;
 yy1473:
-	yych = *++cur;
-	if (yych == 'e') goto yy1526;
-	if (yych == 't') goto yy1528;
-	goto yy1219;
+	++cur;
+#line 676 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::API_RECORD); }
+#line 8036 "src/parse/conf_lexer.cc"
 yy1474:
-	yych = *++cur;
-	if (yych == 'e') goto yy1530;
-	if (yych == 't') goto yy1532;
-	goto yy1219;
+	++cur;
+#line 674 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::API_SIMPLE); }
+#line 8041 "src/parse/conf_lexer.cc"
 yy1475:
 	yych = *++cur;
-	if (yych == 'e') goto yy1534;
-	goto yy1219;
+	if (yych == 'f') goto yy1529;
+	goto yy984;
 yy1476:
 	yych = *++cur;
-	if (yych == '_') goto yy1536;
-	goto yy1219;
+	if (yych == 's') goto yy1530;
+	goto yy962;
 yy1477:
 	yych = *++cur;
-	if (yych == 'e') goto yy1537;
-	goto yy1219;
+	if (yych == 'a') goto yy1531;
+	goto yy962;
 yy1478:
 	yych = *++cur;
-	if (yych == 'r') goto yy1538;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1479;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1479;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1479:
-	yych = *++cur;
-	if (yych == 'l') goto yy1539;
-	goto yy1219;
+#line 538 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_abort); }
+#line 8066 "src/parse/conf_lexer.cc"
 yy1480:
 	yych = *++cur;
-	if (yych == 'l') goto yy1541;
-	goto yy1219;
+	if (yych == '_') goto yy1532;
+	goto yy1225;
 yy1481:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1482;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1482;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'n') goto yy1533;
+	goto yy1225;
 yy1482:
-#line 532 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_fndef); }
-#line 8083 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'q') goto yy1535;
+	goto yy1225;
 yy1483:
 	yych = *++cur;
-	if (yych == 'e') goto yy1543;
-	goto yy1219;
+	if (yych == 'e') goto yy1537;
+	if (yych == 't') goto yy1539;
+	goto yy1225;
 yy1484:
 	yych = *++cur;
-	if (yych == 'i') goto yy1544;
-	goto yy1219;
+	if (yych == 'e') goto yy1541;
+	if (yych == 't') goto yy1543;
+	goto yy1225;
 yy1485:
 	yych = *++cur;
-	if (yych == 's') goto yy1545;
-	goto yy1219;
+	if (yych == 'e') goto yy1545;
+	goto yy1225;
 yy1486:
 	yych = *++cur;
-	if (yych == 'h') goto yy1546;
-	goto yy1219;
+	if (yych == '_') goto yy1547;
+	goto yy1225;
 yy1487:
 	yych = *++cur;
-	if (yych == 'a') goto yy1548;
-	goto yy1219;
+	if (yych == 'e') goto yy1548;
+	goto yy1225;
 yy1488:
 	yych = *++cur;
-	if (yych <= 'i') {
-		if (yych == 'c') goto yy1549;
-		if (yych <= 'h') goto yy1219;
-		goto yy1550;
-	} else {
-		if (yych <= 'u') {
-			if (yych <= 't') goto yy1219;
-			goto yy1551;
-		} else {
-			if (yych == 'y') goto yy1552;
-			goto yy1219;
-		}
-	}
+	if (yych == 'r') goto yy1549;
+	goto yy1225;
 yy1489:
 	yych = *++cur;
-	if (yych == 'l') goto yy1553;
-	goto yy1219;
+	if (yych == 'l') goto yy1550;
+	goto yy1225;
 yy1490:
 	yych = *++cur;
-	if (yych == 'o') goto yy1554;
-	goto yy1219;
+	if (yych == 'l') goto yy1552;
+	goto yy1225;
 yy1491:
 	yych = *++cur;
-	if (yych == 'k') goto yy1555;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1492;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1492;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1492:
-	yych = *++cur;
-	if (yych == 'y') goto yy1556;
-	goto yy1219;
+#line 532 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_fndef); }
+#line 8125 "src/parse/conf_lexer.cc"
 yy1493:
 	yych = *++cur;
-	if (yych == 'u') goto yy1557;
-	goto yy1219;
+	if (yych == 'e') goto yy1554;
+	goto yy1225;
 yy1494:
 	yych = *++cur;
-	if (yych <= 'b') {
-		if (yych == 'a') goto yy1558;
-		goto yy1219;
-	} else {
-		if (yych <= 'c') goto yy1559;
-		if (yych == 's') goto yy1560;
-		goto yy1219;
-	}
+	if (yych == 'i') goto yy1555;
+	goto yy1225;
 yy1495:
 	yych = *++cur;
-	if (yych == 's') goto yy1561;
-	goto yy1219;
+	if (yych == 's') goto yy1556;
+	goto yy1225;
 yy1496:
 	yych = *++cur;
-	if (yych == 'g') goto yy1562;
-	goto yy1219;
+	if (yych == 'h') goto yy1557;
+	goto yy1225;
 yy1497:
 	yych = *++cur;
-	if (yych == 'k') goto yy1563;
-	goto yy1219;
+	if (yych == 'a') goto yy1559;
+	goto yy1225;
 yy1498:
 	yych = *++cur;
-	if (yych == 't') goto yy1565;
-	goto yy1219;
+	if (yych <= 'i') {
+		if (yych == 'c') goto yy1560;
+		if (yych <= 'h') goto yy1225;
+		goto yy1561;
+	} else {
+		if (yych <= 'u') {
+			if (yych <= 't') goto yy1225;
+			goto yy1562;
+		} else {
+			if (yych == 'y') goto yy1563;
+			goto yy1225;
+		}
+	}
 yy1499:
 	yych = *++cur;
-	if (yych <= 'b') {
-		if (yych == 'a') goto yy1566;
-		goto yy1219;
-	} else {
-		if (yych <= 'c') goto yy1567;
-		if (yych == 's') goto yy1568;
-		goto yy1219;
-	}
+	if (yych == 'l') goto yy1564;
+	goto yy1225;
 yy1500:
 	yych = *++cur;
-	if (yych == 'f') goto yy1569;
-	goto yy1219;
+	if (yych == 'o') goto yy1565;
+	goto yy1225;
 yy1501:
 	yych = *++cur;
-	if (yych == 'p') goto yy1570;
-	goto yy1219;
+	if (yych == 'k') goto yy1566;
+	goto yy1225;
 yy1502:
 	yych = *++cur;
-	if (yych == 'g') goto yy1572;
-	goto yy1219;
+	if (yych == 'y') goto yy1567;
+	goto yy1225;
 yy1503:
-	yyaccept = 1;
-	yych = *(mar = ++cur);
-	if (yych == '.') goto yy1573;
-	goto yy961;
+	yych = *++cur;
+	if (yych == 'u') goto yy1568;
+	goto yy1225;
 yy1504:
 	yych = *++cur;
-	if (yych == 'l') goto yy1574;
-	goto yy961;
+	if (yych <= 'b') {
+		if (yych == 'a') goto yy1569;
+		goto yy1225;
+	} else {
+		if (yych <= 'c') goto yy1570;
+		if (yych == 's') goto yy1571;
+		goto yy1225;
+	}
 yy1505:
 	yych = *++cur;
-	if (yych == 'o') goto yy1575;
-	goto yy961;
+	if (yych == 's') goto yy1572;
+	goto yy1225;
 yy1506:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 683 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::LOOP_LABEL); }
-#line 8207 "src/parse/conf_lexer.cc"
+	if (yych == 'g') goto yy1573;
+	goto yy1225;
 yy1507:
 	yych = *++cur;
-	if (yych == 'i') goto yy1576;
-	goto yy961;
+	if (yych == 'k') goto yy1574;
+	goto yy1225;
 yy1508:
 	yych = *++cur;
-	if (yych == 't') goto yy1577;
-	goto yy961;
+	if (yych == 't') goto yy1576;
+	goto yy1225;
 yy1509:
+	yych = *++cur;
+	if (yych <= 'b') {
+		if (yych == 'a') goto yy1577;
+		goto yy1225;
+	} else {
+		if (yych <= 'c') goto yy1578;
+		if (yych == 's') goto yy1579;
+		goto yy1225;
+	}
+yy1510:
+	yych = *++cur;
+	if (yych == 'f') goto yy1580;
+	goto yy1225;
+yy1511:
+	yych = *++cur;
+	if (yych == 'p') goto yy1581;
+	goto yy1225;
+yy1512:
+	yych = *++cur;
+	if (yych == 'g') goto yy1583;
+	goto yy1225;
+yy1513:
+	yyaccept = 1;
+	yych = *(mar = ++cur);
+	if (yych == '.') goto yy1584;
+	goto yy962;
+yy1514:
+	yych = *++cur;
+	if (yych == 'l') goto yy1585;
+	goto yy962;
+yy1515:
+	yych = *++cur;
+	if (yych == 'o') goto yy1586;
+	goto yy962;
+yy1516:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 686 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::LOOP_LABEL); }
+#line 8249 "src/parse/conf_lexer.cc"
+yy1517:
+	yych = *++cur;
+	if (yych == 'i') goto yy1587;
+	goto yy962;
+yy1518:
+	yych = *++cur;
+	if (yych == 't') goto yy1588;
+	goto yy962;
+yy1519:
+	++cur;
+#line 652 "../src/parse/conf_lexer.re"
+	{ RET_TOK(CONF_UD); }
+#line 8262 "src/parse/conf_lexer.cc"
+yy1520:
 	++cur;
 #line 613 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::BACKUPCTX); }
-#line 8220 "src/parse/conf_lexer.cc"
-yy1510:
+#line 8267 "src/parse/conf_lexer.cc"
+yy1521:
 	++cur;
 #line 618 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::CTXMARKER); }
-#line 8225 "src/parse/conf_lexer.cc"
-yy1511:
+#line 8272 "src/parse/conf_lexer.cc"
+yy1522:
 	++cur;
 #line 621 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::GETACCEPT); }
-#line 8230 "src/parse/conf_lexer.cc"
-yy1512:
+#line 8277 "src/parse/conf_lexer.cc"
+yy1523:
 	yych = *++cur;
-	if (yych == 'X') goto yy1578;
-	goto yy983;
-yy1513:
+	if (yych == 'X') goto yy1589;
+	goto yy984;
+yy1524:
 	yych = *++cur;
-	if (yych == 'G') goto yy1579;
-	goto yy983;
-yy1514:
+	if (yych == 'G') goto yy1590;
+	goto yy984;
+yy1525:
 	++cur;
 #line 635 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SETACCEPT); }
-#line 8243 "src/parse/conf_lexer.cc"
-yy1515:
+#line 8290 "src/parse/conf_lexer.cc"
+yy1526:
 	++cur;
 #line 639 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SHIFTMTAG); }
-#line 8248 "src/parse/conf_lexer.cc"
-yy1516:
+#line 8295 "src/parse/conf_lexer.cc"
+yy1527:
 	++cur;
 #line 640 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::SHIFTSTAG); }
-#line 8253 "src/parse/conf_lexer.cc"
-yy1517:
-	++cur;
-#line 672 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::API_GENERIC); }
-#line 8258 "src/parse/conf_lexer.cc"
-yy1518:
-	yych = *++cur;
-	if (yych == 'r') goto yy1580;
-	if (yych == 'u') goto yy1581;
-	goto yy983;
-yy1519:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 680 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::CASE_RANGES); }
-#line 8271 "src/parse/conf_lexer.cc"
-yy1520:
-	yych = *++cur;
-	if (yych == 'l') goto yy1582;
-	goto yy961;
-yy1521:
-	yych = *++cur;
-	if (yych <= 'f') {
-		if (yych == 'e') goto yy1583;
-		goto yy1219;
-	} else {
-		if (yych <= 'g') goto yy1584;
-		if (yych == 'l') goto yy1585;
-		goto yy1219;
-	}
-yy1522:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1523;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1523;
-		if (yych <= 'z') goto yy1218;
-	}
-yy1523:
-#line 513 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_assign); }
-#line 8298 "src/parse/conf_lexer.cc"
-yy1524:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1525;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1525;
-		if (yych <= 'z') goto yy1218;
-	}
-yy1525:
-#line 514 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_eq); }
-#line 8311 "src/parse/conf_lexer.cc"
-yy1526:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1527;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1527;
-		if (yych <= 'z') goto yy1218;
-	}
-yy1527:
-#line 519 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_ge); }
-#line 8324 "src/parse/conf_lexer.cc"
+#line 8300 "src/parse/conf_lexer.cc"
 yy1528:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1529;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1529;
-		if (yych <= 'z') goto yy1218;
-	}
+	++cur;
+#line 675 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::API_GENERIC); }
+#line 8305 "src/parse/conf_lexer.cc"
 yy1529:
-#line 517 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_gt); }
-#line 8337 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'r') goto yy1591;
+	if (yych == 'u') goto yy1592;
+	goto yy984;
 yy1530:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1531;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1531;
-		if (yych <= 'z') goto yy1218;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
 	}
+#line 683 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::CASE_RANGES); }
+#line 8318 "src/parse/conf_lexer.cc"
 yy1531:
-#line 518 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_le); }
-#line 8350 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'l') goto yy1593;
+	goto yy962;
 yy1532:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1533;
-		if (yych <= '9') goto yy1218;
+	if (yych <= 'f') {
+		if (yych == 'e') goto yy1594;
+		goto yy1225;
 	} else {
-		if (yych == '`') goto yy1533;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'g') goto yy1595;
+		if (yych == 'l') goto yy1596;
+		goto yy1225;
 	}
 yy1533:
-#line 516 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_lt); }
-#line 8363 "src/parse/conf_lexer.cc"
-yy1534:
 	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1535;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1534;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1535;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1534;
+		if (yych <= 'z') goto yy1224;
 	}
+yy1534:
+#line 513 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_assign); }
+#line 8345 "src/parse/conf_lexer.cc"
 yy1535:
-#line 515 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_cmp_ne); }
-#line 8376 "src/parse/conf_lexer.cc"
-yy1536:
 	yych = *++cur;
-	if (yych == 'g') goto yy1586;
-	if (yych == 'l') goto yy1587;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1536;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1536;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1536:
+#line 514 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_eq); }
+#line 8358 "src/parse/conf_lexer.cc"
 yy1537:
 	yych = *++cur;
-	if (yych == 'l') goto yy1588;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1538;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1538;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1538:
-	yych = *++cur;
-	if (yych == 'p') goto yy1589;
-	goto yy1219;
+#line 519 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_ge); }
+#line 8371 "src/parse/conf_lexer.cc"
 yy1539:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1540;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1540;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1540:
-#line 533 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_fncall); }
-#line 8402 "src/parse/conf_lexer.cc"
+#line 517 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_gt); }
+#line 8384 "src/parse/conf_lexer.cc"
 yy1541:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1542;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1542;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1542:
-#line 531 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_fndecl); }
-#line 8415 "src/parse/conf_lexer.cc"
+#line 518 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_le); }
+#line 8397 "src/parse/conf_lexer.cc"
 yy1543:
 	yych = *++cur;
-	if (yych == 'n') goto yy1590;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1544;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1544;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1544:
-	yych = *++cur;
-	if (yych == 'n') goto yy1591;
-	goto yy1219;
+#line 516 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_lt); }
+#line 8410 "src/parse/conf_lexer.cc"
 yy1545:
 	yych = *++cur;
-	if (yych == 'i') goto yy1592;
-	goto yy1219;
-yy1546:
-	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1547;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1546;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych <= '_') goto yy1593;
-		if (yych <= '`') goto yy1547;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1546;
+		if (yych <= 'z') goto yy1224;
 	}
+yy1546:
+#line 515 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_cmp_ne); }
+#line 8423 "src/parse/conf_lexer.cc"
 yy1547:
-#line 522 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_switch); }
-#line 8441 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'g') goto yy1597;
+	if (yych == 'l') goto yy1598;
+	goto yy1225;
 yy1548:
 	yych = *++cur;
-	if (yych == 'l') goto yy1594;
-	goto yy1219;
+	if (yych == 'l') goto yy1599;
+	goto yy1225;
 yy1549:
 	yych = *++cur;
-	if (yych == 'o') goto yy1595;
-	goto yy1219;
+	if (yych == 'p') goto yy1600;
+	goto yy1225;
 yy1550:
 	yych = *++cur;
-	if (yych == 'n') goto yy1596;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1551;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1551;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1551:
-	yych = *++cur;
-	if (yych == 'i') goto yy1597;
-	goto yy1219;
+#line 533 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_fncall); }
+#line 8449 "src/parse/conf_lexer.cc"
 yy1552:
 	yych = *++cur;
-	if (yych == 'y') goto yy1598;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1553;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1553;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1553:
-	yych = *++cur;
-	if (yych == 'o') goto yy1599;
-	goto yy1219;
+#line 531 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_fndecl); }
+#line 8462 "src/parse/conf_lexer.cc"
 yy1554:
 	yych = *++cur;
-	if (yych == 'c') goto yy1600;
-	goto yy1219;
+	if (yych == 'n') goto yy1601;
+	goto yy1225;
 yy1555:
 	yych = *++cur;
-	if (yych == 'u') goto yy1601;
-	goto yy1219;
+	if (yych == 'n') goto yy1602;
+	goto yy1225;
 yy1556:
 	yych = *++cur;
-	if (yych == 'm') goto yy1602;
-	if (yych == 's') goto yy1603;
-	goto yy1219;
+	if (yych == 'i') goto yy1603;
+	goto yy1225;
 yy1557:
 	yych = *++cur;
-	if (yych == 'g') goto yy1604;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1558;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1604;
+		if (yych <= '`') goto yy1558;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1558:
-	yych = *++cur;
-	if (yych == 'c') goto yy1606;
-	goto yy1219;
+#line 522 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_switch); }
+#line 8488 "src/parse/conf_lexer.cc"
 yy1559:
 	yych = *++cur;
-	if (yych == 'o') goto yy1607;
-	goto yy1219;
+	if (yych == 'l') goto yy1605;
+	goto yy1225;
 yy1560:
 	yych = *++cur;
-	if (yych == 't') goto yy1608;
-	goto yy1219;
+	if (yych == 'o') goto yy1606;
+	goto yy1225;
 yy1561:
 	yych = *++cur;
-	if (yych == 't') goto yy1609;
-	goto yy1219;
+	if (yych == 'n') goto yy1607;
+	goto yy1225;
 yy1562:
 	yych = *++cur;
-	if (yych == 'n') goto yy1610;
-	if (yych == 'p') goto yy1612;
-	goto yy1219;
+	if (yych == 'i') goto yy1608;
+	goto yy1225;
 yy1563:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1564;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1614;
-		if (yych <= '`') goto yy1564;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'y') goto yy1609;
+	goto yy1225;
 yy1564:
-#line 540 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yypeek); }
-#line 8517 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'o') goto yy1610;
+	goto yy1225;
 yy1565:
 	yych = *++cur;
-	if (yych == 'o') goto yy1615;
-	goto yy1219;
+	if (yych == 'c') goto yy1611;
+	goto yy1225;
 yy1566:
 	yych = *++cur;
-	if (yych == 'c') goto yy1616;
-	goto yy1219;
+	if (yych == 'u') goto yy1612;
+	goto yy1225;
 yy1567:
 	yych = *++cur;
-	if (yych == 'o') goto yy1617;
-	goto yy1219;
+	if (yych == 'm') goto yy1613;
+	if (yych == 's') goto yy1614;
+	goto yy1225;
 yy1568:
 	yych = *++cur;
-	if (yych == 't') goto yy1618;
-	goto yy1219;
+	if (yych == 'g') goto yy1615;
+	goto yy1225;
 yy1569:
 	yych = *++cur;
-	if (yych == 't') goto yy1619;
-	goto yy1219;
+	if (yych == 'c') goto yy1617;
+	goto yy1225;
 yy1570:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1571;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1620;
-		if (yych <= '`') goto yy1571;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'o') goto yy1618;
+	goto yy1225;
 yy1571:
-#line 541 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyskip); }
-#line 8551 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 't') goto yy1619;
+	goto yy1225;
 yy1572:
+	yych = *++cur;
+	if (yych == 't') goto yy1620;
+	goto yy1225;
+yy1573:
 	yych = *++cur;
 	if (yych == 'n') goto yy1621;
 	if (yych == 'p') goto yy1623;
-	goto yy1219;
-yy1573:
-	yych = *++cur;
-	if (yych <= 'k') {
-		if (yych == 'g') goto yy1625;
-		goto yy983;
-	} else {
-		if (yych <= 'l') goto yy1626;
-		if (yych == 'r') goto yy1627;
-		goto yy983;
-	}
+	goto yy1225;
 yy1574:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1575;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1625;
+		if (yych <= '`') goto yy1575;
+		if (yych <= 'z') goto yy1224;
 	}
-#line 694 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::HAVE_RETVAL); }
-#line 8574 "src/parse/conf_lexer.cc"
 yy1575:
-	yych = *++cur;
-	if (yych == 'n') goto yy1628;
-	goto yy961;
+#line 540 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yypeek); }
+#line 8564 "src/parse/conf_lexer.cc"
 yy1576:
 	yych = *++cur;
-	if (yych == 't') goto yy1629;
-	goto yy961;
+	if (yych == 'o') goto yy1626;
+	goto yy1225;
 yy1577:
 	yych = *++cur;
-	if (yych == 'a') goto yy1630;
-	goto yy961;
+	if (yych == 'c') goto yy1627;
+	goto yy1225;
 yy1578:
+	yych = *++cur;
+	if (yych == 'o') goto yy1628;
+	goto yy1225;
+yy1579:
+	yych = *++cur;
+	if (yych == 't') goto yy1629;
+	goto yy1225;
+yy1580:
+	yych = *++cur;
+	if (yych == 't') goto yy1630;
+	goto yy1225;
+yy1581:
+	yych = *++cur;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1582;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1631;
+		if (yych <= '`') goto yy1582;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1582:
+#line 541 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyskip); }
+#line 8598 "src/parse/conf_lexer.cc"
+yy1583:
+	yych = *++cur;
+	if (yych == 'n') goto yy1632;
+	if (yych == 'p') goto yy1634;
+	goto yy1225;
+yy1584:
+	yych = *++cur;
+	if (yych <= 'k') {
+		if (yych == 'g') goto yy1636;
+		goto yy984;
+	} else {
+		if (yych <= 'l') goto yy1637;
+		if (yych == 'r') goto yy1638;
+		goto yy984;
+	}
+yy1585:
+	yych = *++cur;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 697 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::HAVE_RETVAL); }
+#line 8621 "src/parse/conf_lexer.cc"
+yy1586:
+	yych = *++cur;
+	if (yych == 'n') goto yy1639;
+	goto yy962;
+yy1587:
+	yych = *++cur;
+	if (yych == 't') goto yy1640;
+	goto yy962;
+yy1588:
+	yych = *++cur;
+	if (yych == 'a') goto yy1641;
+	goto yy962;
+yy1589:
 	++cur;
 #line 633 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::RESTORECTX); }
-#line 8591 "src/parse/conf_lexer.cc"
-yy1579:
+#line 8638 "src/parse/conf_lexer.cc"
+yy1590:
 	++cur;
 #line 634 "../src/parse/conf_lexer.re"
 	{ RET_VAR(StxVarId::RESTORETAG); }
-#line 8596 "src/parse/conf_lexer.cc"
-yy1580:
-	yych = *++cur;
-	if (yych == 'e') goto yy1631;
-	goto yy983;
-yy1581:
-	yych = *++cur;
-	if (yych == 'n') goto yy1632;
-	goto yy983;
-yy1582:
-	yych = *++cur;
-	if (yych == 's') goto yy1633;
-	goto yy961;
-yy1583:
-	yych = *++cur;
-	if (yych == 'l') goto yy1634;
-	goto yy1219;
-yy1584:
-	yych = *++cur;
-	if (yych == 'l') goto yy1635;
-	goto yy1219;
-yy1585:
-	yych = *++cur;
-	if (yych == 'o') goto yy1636;
-	goto yy1219;
-yy1586:
-	yych = *++cur;
-	if (yych == 'l') goto yy1637;
-	goto yy1219;
-yy1587:
-	yych = *++cur;
-	if (yych == 'o') goto yy1638;
-	goto yy1219;
-yy1588:
-	yych = *++cur;
-	if (yych == 'e') goto yy1639;
-	goto yy1219;
-yy1589:
-	yych = *++cur;
-	if (yych == 'r') goto yy1640;
-	goto yy1219;
-yy1590:
-	yych = *++cur;
-	if (yych == '_') goto yy1641;
-	goto yy1219;
+#line 8643 "src/parse/conf_lexer.cc"
 yy1591:
 	yych = *++cur;
-	if (yych == 'f') goto yy1642;
-	goto yy1219;
+	if (yych == 'e') goto yy1642;
+	goto yy984;
 yy1592:
 	yych = *++cur;
-	if (yych == 'v') goto yy1643;
-	goto yy1219;
+	if (yych == 'n') goto yy1643;
+	goto yy984;
 yy1593:
 	yych = *++cur;
-	if (yych == 'c') goto yy1644;
-	goto yy1219;
+	if (yych == 's') goto yy1644;
+	goto yy962;
 yy1594:
 	yych = *++cur;
 	if (yych == 'l') goto yy1645;
-	goto yy1219;
+	goto yy1225;
 yy1595:
 	yych = *++cur;
-	if (yych == 'n') goto yy1647;
-	goto yy1219;
+	if (yych == 'l') goto yy1646;
+	goto yy1225;
 yy1596:
 	yych = *++cur;
-	if (yych == 't') goto yy1648;
-	goto yy1219;
+	if (yych == 'o') goto yy1647;
+	goto yy1225;
 yy1597:
 	yych = *++cur;
-	if (yych == 'n') goto yy1650;
-	goto yy1219;
+	if (yych == 'l') goto yy1648;
+	goto yy1225;
 yy1598:
 	yych = *++cur;
-	if (yych == 'b') goto yy1651;
-	if (yych == 't') goto yy1652;
-	goto yy1219;
+	if (yych == 'o') goto yy1649;
+	goto yy1225;
 yy1599:
 	yych = *++cur;
-	if (yych == 'b') goto yy1653;
-	goto yy1219;
+	if (yych == 'e') goto yy1650;
+	goto yy1225;
 yy1600:
 	yych = *++cur;
-	if (yych == 'a') goto yy1654;
-	goto yy1219;
+	if (yych == 'r') goto yy1651;
+	goto yy1225;
 yy1601:
 	yych = *++cur;
-	if (yych == 'p') goto yy1655;
-	goto yy1219;
+	if (yych == '_') goto yy1652;
+	goto yy1225;
 yy1602:
 	yych = *++cur;
-	if (yych == 't') goto yy1657;
-	goto yy1219;
+	if (yych == 'f') goto yy1653;
+	goto yy1225;
 yy1603:
 	yych = *++cur;
-	if (yych == 't') goto yy1658;
-	goto yy1219;
+	if (yych == 'v') goto yy1654;
+	goto yy1225;
 yy1604:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1605;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1605;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'c') goto yy1655;
+	goto yy1225;
 yy1605:
-#line 539 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yydebug); }
-#line 8706 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'l') goto yy1656;
+	goto yy1225;
 yy1606:
 	yych = *++cur;
-	if (yych == 'c') goto yy1659;
-	goto yy1219;
+	if (yych == 'n') goto yy1658;
+	goto yy1225;
 yy1607:
 	yych = *++cur;
-	if (yych == 'n') goto yy1660;
-	goto yy1219;
+	if (yych == 't') goto yy1659;
+	goto yy1225;
 yy1608:
 	yych = *++cur;
-	if (yych == 'a') goto yy1661;
-	goto yy1219;
+	if (yych == 'n') goto yy1661;
+	goto yy1225;
 yy1609:
 	yych = *++cur;
-	if (yych == 'h') goto yy1662;
-	goto yy1219;
+	if (yych == 'b') goto yy1662;
+	if (yych == 't') goto yy1663;
+	goto yy1225;
 yy1610:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1611;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1611;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'b') goto yy1664;
+	goto yy1225;
 yy1611:
-#line 551 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yymtagn); }
-#line 8735 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'a') goto yy1665;
+	goto yy1225;
 yy1612:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1613;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1613;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'p') goto yy1666;
+	goto yy1225;
 yy1613:
-#line 553 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yymtagp); }
-#line 8748 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 't') goto yy1668;
+	goto yy1225;
 yy1614:
 	yych = *++cur;
-	if (yych == 'y') goto yy1663;
-	goto yy1219;
+	if (yych == 't') goto yy1669;
+	goto yy1225;
 yy1615:
 	yych = *++cur;
-	if (yych == 'r') goto yy1664;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1616;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1616;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1616:
-	yych = *++cur;
-	if (yych == 'c') goto yy1665;
-	goto yy1219;
+#line 539 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yydebug); }
+#line 8753 "src/parse/conf_lexer.cc"
 yy1617:
 	yych = *++cur;
-	if (yych == 'n') goto yy1666;
-	goto yy1219;
+	if (yych == 'c') goto yy1670;
+	goto yy1225;
 yy1618:
 	yych = *++cur;
-	if (yych == 'a') goto yy1667;
-	goto yy1219;
+	if (yych == 'n') goto yy1671;
+	goto yy1225;
 yy1619:
 	yych = *++cur;
-	if (yych <= '`') {
-		if (yych <= '9') {
-			if (yych >= '0') goto yy1218;
-		} else {
-			if (yych == '_') goto yy1218;
-		}
-	} else {
-		if (yych <= 'r') {
-			if (yych == 'm') goto yy1668;
-			goto yy1218;
-		} else {
-			if (yych <= 's') goto yy1669;
-			if (yych <= 'z') goto yy1218;
-		}
-	}
-#line 547 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyshift); }
-#line 8788 "src/parse/conf_lexer.cc"
+	if (yych == 'a') goto yy1672;
+	goto yy1225;
 yy1620:
 	yych = *++cur;
-	if (yych == 'y') goto yy1670;
-	goto yy1219;
+	if (yych == 'h') goto yy1673;
+	goto yy1225;
 yy1621:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1622;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1622;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1622:
-#line 550 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yystagn); }
-#line 8805 "src/parse/conf_lexer.cc"
+#line 551 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yymtagn); }
+#line 8782 "src/parse/conf_lexer.cc"
 yy1623:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1624;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1624;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1624:
-#line 552 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yystagp); }
-#line 8818 "src/parse/conf_lexer.cc"
+#line 553 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yymtagp); }
+#line 8795 "src/parse/conf_lexer.cc"
 yy1625:
 	yych = *++cur;
-	if (yych == 'o') goto yy1671;
-	goto yy983;
+	if (yych == 'y') goto yy1674;
+	goto yy1225;
 yy1626:
 	yych = *++cur;
-	if (yych == 'o') goto yy1672;
-	goto yy983;
+	if (yych == 'r') goto yy1675;
+	goto yy1225;
 yy1627:
 	yych = *++cur;
-	if (yych == 'e') goto yy1673;
-	goto yy983;
+	if (yych == 'c') goto yy1676;
+	goto yy1225;
 yy1628:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 679 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::HAVE_VER); }
-#line 8838 "src/parse/conf_lexer.cc"
+	if (yych == 'n') goto yy1677;
+	goto yy1225;
 yy1629:
 	yych = *++cur;
-	if (yych == 'i') goto yy1674;
-	goto yy961;
+	if (yych == 'a') goto yy1678;
+	goto yy1225;
 yy1630:
 	yych = *++cur;
-	if (yych == 't') goto yy1675;
-	goto yy961;
+	if (yych <= '`') {
+		if (yych <= '9') {
+			if (yych >= '0') goto yy1224;
+		} else {
+			if (yych == '_') goto yy1224;
+		}
+	} else {
+		if (yych <= 'r') {
+			if (yych == 'm') goto yy1679;
+			goto yy1224;
+		} else {
+			if (yych <= 's') goto yy1680;
+			if (yych <= 'z') goto yy1224;
+		}
+	}
+#line 547 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyshift); }
+#line 8835 "src/parse/conf_lexer.cc"
 yy1631:
 	yych = *++cur;
-	if (yych == 'e') goto yy1676;
-	goto yy983;
+	if (yych == 'y') goto yy1681;
+	goto yy1225;
 yy1632:
 	yych = *++cur;
-	if (yych == 'c') goto yy1677;
-	goto yy983;
-yy1633:
-	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1633;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1633;
+		if (yych <= 'z') goto yy1224;
 	}
-#line 690 "../src/parse/conf_lexer.re"
-	{ RET_LOPT(StxLOpt::CHAR_LITERALS); }
-#line 8862 "src/parse/conf_lexer.cc"
+yy1633:
+#line 550 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yystagn); }
+#line 8852 "src/parse/conf_lexer.cc"
 yy1634:
 	yych = *++cur;
-	if (yych == 'e') goto yy1678;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1635;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1635;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1635:
-	yych = *++cur;
-	if (yych == 'o') goto yy1679;
-	goto yy1219;
+#line 552 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yystagp); }
+#line 8865 "src/parse/conf_lexer.cc"
 yy1636:
 	yych = *++cur;
-	if (yych == 'c') goto yy1680;
-	goto yy1219;
+	if (yych == 'o') goto yy1682;
+	goto yy984;
 yy1637:
 	yych = *++cur;
-	if (yych == 'o') goto yy1681;
-	goto yy1219;
+	if (yych == 'o') goto yy1683;
+	goto yy984;
 yy1638:
 	yych = *++cur;
-	if (yych == 'c') goto yy1682;
-	goto yy1219;
+	if (yych == 'e') goto yy1684;
+	goto yy984;
 yy1639:
 	yych = *++cur;
-	if (yych == 'm') goto yy1683;
-	goto yy1219;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 682 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::HAVE_VER); }
+#line 8885 "src/parse/conf_lexer.cc"
 yy1640:
 	yych = *++cur;
 	if (yych == 'i') goto yy1685;
-	goto yy1219;
+	goto yy962;
 yy1641:
 	yych = *++cur;
-	if (yych == 'e') goto yy1686;
-	goto yy1219;
+	if (yych == 't') goto yy1686;
+	goto yy962;
 yy1642:
 	yych = *++cur;
-	if (yych == 'o') goto yy1687;
-	goto yy1219;
+	if (yych == 'e') goto yy1687;
+	goto yy984;
 yy1643:
 	yych = *++cur;
-	if (yych == 'e') goto yy1689;
-	goto yy1219;
+	if (yych == 'c') goto yy1688;
+	goto yy984;
 yy1644:
 	yych = *++cur;
-	if (yych == 'a') goto yy1690;
-	goto yy1219;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 693 "../src/parse/conf_lexer.re"
+	{ RET_LOPT(StxLOpt::CHAR_LITERALS); }
+#line 8909 "src/parse/conf_lexer.cc"
 yy1645:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1646;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1646;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1689;
+	goto yy1225;
 yy1646:
-#line 534 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_tailcall); }
-#line 8919 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'o') goto yy1690;
+	goto yy1225;
 yy1647:
 	yych = *++cur;
-	if (yych == 'd') goto yy1691;
-	goto yy1219;
+	if (yych == 'c') goto yy1691;
+	goto yy1225;
 yy1648:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1649;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1649;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'o') goto yy1692;
+	goto yy1225;
 yy1649:
-#line 508 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_type_int); }
-#line 8936 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'c') goto yy1693;
+	goto yy1225;
 yy1650:
 	yych = *++cur;
-	if (yych == 't') goto yy1692;
-	goto yy1219;
+	if (yych == 'm') goto yy1694;
+	goto yy1225;
 yy1651:
 	yych = *++cur;
-	if (yych == 'm') goto yy1694;
-	goto yy1219;
+	if (yych == 'i') goto yy1696;
+	goto yy1225;
 yy1652:
 	yych = *++cur;
-	if (yych == 'a') goto yy1696;
-	goto yy1219;
+	if (yych == 'e') goto yy1697;
+	goto yy1225;
 yy1653:
 	yych = *++cur;
-	if (yych == 'a') goto yy1697;
-	goto yy1219;
+	if (yych == 'o') goto yy1698;
+	goto yy1225;
 yy1654:
 	yych = *++cur;
-	if (yych == 'l') goto yy1698;
-	goto yy1219;
+	if (yych == 'e') goto yy1700;
+	goto yy1225;
 yy1655:
 	yych = *++cur;
-	if (yych <= '_') {
-		if (yych <= '/') goto yy1656;
-		if (yych <= '9') goto yy1218;
-		if (yych >= '_') goto yy1700;
-	} else {
-		if (yych <= 'b') {
-			if (yych >= 'a') goto yy1218;
-		} else {
-			if (yych <= 'c') goto yy1701;
-			if (yych <= 'z') goto yy1218;
-		}
-	}
+	if (yych == 'a') goto yy1701;
+	goto yy1225;
 yy1656:
-#line 542 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yybackup); }
-#line 8974 "src/parse/conf_lexer.cc"
-yy1657:
 	yych = *++cur;
-	if (yych == 'a') goto yy1702;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1657;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1657;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1657:
+#line 534 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_tailcall); }
+#line 8966 "src/parse/conf_lexer.cc"
 yy1658:
 	yych = *++cur;
-	if (yych == 'a') goto yy1703;
-	goto yy1219;
+	if (yych == 'd') goto yy1702;
+	goto yy1225;
 yy1659:
 	yych = *++cur;
-	if (yych == 'e') goto yy1704;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1660;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1660;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1660:
-	yych = *++cur;
-	if (yych == 'd') goto yy1705;
-	goto yy1219;
+#line 508 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_type_int); }
+#line 8983 "src/parse/conf_lexer.cc"
 yy1661:
 	yych = *++cur;
-	if (yych == 't') goto yy1707;
-	goto yy1219;
+	if (yych == 't') goto yy1703;
+	goto yy1225;
 yy1662:
 	yych = *++cur;
-	if (yych == 'a') goto yy1708;
-	goto yy1219;
+	if (yych == 'm') goto yy1705;
+	goto yy1225;
 yy1663:
 	yych = *++cur;
-	if (yych == 'y') goto yy1709;
-	goto yy1219;
+	if (yych == 'a') goto yy1707;
+	goto yy1225;
 yy1664:
 	yych = *++cur;
-	if (yych == 'e') goto yy1710;
-	goto yy1219;
+	if (yych == 'a') goto yy1708;
+	goto yy1225;
 yy1665:
 	yych = *++cur;
-	if (yych == 'e') goto yy1711;
-	goto yy1219;
+	if (yych == 'l') goto yy1709;
+	goto yy1225;
 yy1666:
 	yych = *++cur;
-	if (yych == 'd') goto yy1712;
-	goto yy1219;
+	if (yych <= '_') {
+		if (yych <= '/') goto yy1667;
+		if (yych <= '9') goto yy1224;
+		if (yych >= '_') goto yy1711;
+	} else {
+		if (yych <= 'b') {
+			if (yych >= 'a') goto yy1224;
+		} else {
+			if (yych <= 'c') goto yy1712;
+			if (yych <= 'z') goto yy1224;
+		}
+	}
 yy1667:
-	yych = *++cur;
-	if (yych == 't') goto yy1714;
-	goto yy1219;
+#line 542 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yybackup); }
+#line 9021 "src/parse/conf_lexer.cc"
 yy1668:
 	yych = *++cur;
-	if (yych == 't') goto yy1715;
-	goto yy1219;
+	if (yych == 'a') goto yy1713;
+	goto yy1225;
 yy1669:
 	yych = *++cur;
-	if (yych == 't') goto yy1716;
-	goto yy1219;
+	if (yych == 'a') goto yy1714;
+	goto yy1225;
 yy1670:
 	yych = *++cur;
-	if (yych == 'y') goto yy1717;
-	goto yy1219;
+	if (yych == 'e') goto yy1715;
+	goto yy1225;
 yy1671:
 	yych = *++cur;
-	if (yych == 't') goto yy1718;
-	goto yy983;
+	if (yych == 'd') goto yy1716;
+	goto yy1225;
 yy1672:
 	yych = *++cur;
-	if (yych == 'o') goto yy1719;
-	goto yy983;
+	if (yych == 't') goto yy1718;
+	goto yy1225;
 yy1673:
 	yych = *++cur;
-	if (yych == 'c') goto yy1720;
-	goto yy983;
+	if (yych == 'a') goto yy1719;
+	goto yy1225;
 yy1674:
 	yych = *++cur;
-	if (yych == 'o') goto yy1721;
-	goto yy961;
+	if (yych == 'y') goto yy1720;
+	goto yy1225;
 yy1675:
 	yych = *++cur;
-	if (yych == 'e') goto yy1722;
-	goto yy961;
+	if (yych == 'e') goto yy1721;
+	goto yy1225;
 yy1676:
 	yych = *++cur;
-	if (yych == 'f') goto yy1723;
-	goto yy983;
+	if (yych == 'e') goto yy1722;
+	goto yy1225;
 yy1677:
 	yych = *++cur;
-	if (yych == 't') goto yy1724;
-	goto yy983;
+	if (yych == 'd') goto yy1723;
+	goto yy1225;
 yy1678:
 	yych = *++cur;
-	if (yych == 'm') goto yy1725;
-	goto yy1219;
+	if (yych == 't') goto yy1725;
+	goto yy1225;
 yy1679:
 	yych = *++cur;
-	if (yych == 'b') goto yy1727;
-	goto yy1219;
+	if (yych == 't') goto yy1726;
+	goto yy1225;
 yy1680:
 	yych = *++cur;
-	if (yych == 'a') goto yy1728;
-	goto yy1219;
+	if (yych == 't') goto yy1727;
+	goto yy1225;
 yy1681:
 	yych = *++cur;
-	if (yych == 'b') goto yy1729;
-	goto yy1219;
+	if (yych == 'y') goto yy1728;
+	goto yy1225;
 yy1682:
 	yych = *++cur;
-	if (yych == 'a') goto yy1730;
-	goto yy1219;
+	if (yych == 't') goto yy1729;
+	goto yy984;
 yy1683:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1684;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1684;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'o') goto yy1730;
+	goto yy984;
 yy1684:
-#line 530 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_enum_elem); }
-#line 9091 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'c') goto yy1731;
+	goto yy984;
 yy1685:
 	yych = *++cur;
-	if (yych == 'n') goto yy1731;
-	goto yy1219;
+	if (yych == 'o') goto yy1732;
+	goto yy962;
 yy1686:
 	yych = *++cur;
-	if (yych == 'l') goto yy1732;
-	goto yy1219;
+	if (yych == 'e') goto yy1733;
+	goto yy962;
 yy1687:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1688;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1688;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'f') goto yy1734;
+	goto yy984;
 yy1688:
-#line 537 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_line_info); }
-#line 9112 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 't') goto yy1735;
+	goto yy984;
 yy1689:
 	yych = *++cur;
-	if (yych == '_') goto yy1733;
-	goto yy1219;
+	if (yych == 'm') goto yy1736;
+	goto yy1225;
 yy1690:
 	yych = *++cur;
-	if (yych == 's') goto yy1734;
-	goto yy1219;
+	if (yych == 'b') goto yy1738;
+	goto yy1225;
 yy1691:
 	yych = *++cur;
-	if (yych == '_') goto yy1735;
-	goto yy1219;
+	if (yych == 'a') goto yy1739;
+	goto yy1225;
 yy1692:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1693;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1693;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'b') goto yy1740;
+	goto yy1225;
 yy1693:
-#line 509 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_type_uint); }
-#line 9137 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'a') goto yy1741;
+	goto yy1225;
 yy1694:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1695;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1695;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1695:
-#line 511 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_type_yybm); }
-#line 9150 "src/parse/conf_lexer.cc"
+#line 530 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_enum_elem); }
+#line 9138 "src/parse/conf_lexer.cc"
 yy1696:
 	yych = *++cur;
-	if (yych == 'r') goto yy1736;
-	goto yy1219;
+	if (yych == 'n') goto yy1742;
+	goto yy1225;
 yy1697:
 	yych = *++cur;
-	if (yych == 'l') goto yy1737;
-	goto yy1219;
+	if (yych == 'l') goto yy1743;
+	goto yy1225;
 yy1698:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1699;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1699;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1699:
-#line 501 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_var_local); }
-#line 9171 "src/parse/conf_lexer.cc"
+#line 537 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_line_info); }
+#line 9159 "src/parse/conf_lexer.cc"
 yy1700:
 	yych = *++cur;
-	if (yych == 'y') goto yy1739;
-	goto yy1219;
+	if (yych == '_') goto yy1744;
+	goto yy1225;
 yy1701:
 	yych = *++cur;
-	if (yych == 't') goto yy1740;
-	goto yy1219;
+	if (yych == 's') goto yy1745;
+	goto yy1225;
 yy1702:
 	yych = *++cur;
-	if (yych == 'g') goto yy1741;
-	goto yy1219;
+	if (yych == '_') goto yy1746;
+	goto yy1225;
 yy1703:
 	yych = *++cur;
-	if (yych == 'g') goto yy1743;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1704;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1704;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1704:
-	yych = *++cur;
-	if (yych == 'p') goto yy1745;
-	goto yy1219;
+#line 509 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_type_uint); }
+#line 9184 "src/parse/conf_lexer.cc"
 yy1705:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1706;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1706;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1706:
-#line 565 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yygetcond); }
-#line 9204 "src/parse/conf_lexer.cc"
+#line 511 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_type_yybm); }
+#line 9197 "src/parse/conf_lexer.cc"
 yy1707:
 	yych = *++cur;
-	if (yych == 'e') goto yy1746;
-	goto yy1219;
+	if (yych == 'r') goto yy1747;
+	goto yy1225;
 yy1708:
 	yych = *++cur;
-	if (yych == 'n') goto yy1748;
-	goto yy1219;
+	if (yych == 'l') goto yy1748;
+	goto yy1225;
 yy1709:
 	yych = *++cur;
-	if (yych == 's') goto yy1750;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1710;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1710;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1710:
+#line 501 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_var_local); }
+#line 9218 "src/parse/conf_lexer.cc"
+yy1711:
+	yych = *++cur;
+	if (yych == 'y') goto yy1750;
+	goto yy1225;
+yy1712:
+	yych = *++cur;
+	if (yych == 't') goto yy1751;
+	goto yy1225;
+yy1713:
+	yych = *++cur;
+	if (yych == 'g') goto yy1752;
+	goto yy1225;
+yy1714:
+	yych = *++cur;
+	if (yych == 'g') goto yy1754;
+	goto yy1225;
+yy1715:
+	yych = *++cur;
+	if (yych == 'p') goto yy1756;
+	goto yy1225;
+yy1716:
+	yych = *++cur;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1717;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1717;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1717:
+#line 565 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yygetcond); }
+#line 9251 "src/parse/conf_lexer.cc"
+yy1718:
+	yych = *++cur;
+	if (yych == 'e') goto yy1757;
+	goto yy1225;
+yy1719:
+	yych = *++cur;
+	if (yych == 'n') goto yy1759;
+	goto yy1225;
+yy1720:
+	yych = *++cur;
+	if (yych == 's') goto yy1761;
+	goto yy1225;
+yy1721:
 	yych = *++cur;
 	if (yych <= '`') {
 		if (yych <= '9') {
-			if (yych >= '0') goto yy1218;
+			if (yych >= '0') goto yy1224;
 		} else {
-			if (yych == '_') goto yy1218;
+			if (yych == '_') goto yy1224;
 		}
 	} else {
 		if (yych <= 's') {
-			if (yych == 'c') goto yy1751;
-			goto yy1218;
+			if (yych == 'c') goto yy1762;
+			goto yy1224;
 		} else {
-			if (yych <= 't') goto yy1752;
-			if (yych <= 'z') goto yy1218;
+			if (yych <= 't') goto yy1763;
+			if (yych <= 'z') goto yy1224;
 		}
 	}
 #line 544 "../src/parse/conf_lexer.re"
 	{ RET_CODE(code_yyrestore); }
-#line 9236 "src/parse/conf_lexer.cc"
-yy1711:
-	yych = *++cur;
-	if (yych == 'p') goto yy1753;
-	goto yy1219;
-yy1712:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1713;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1713;
-		if (yych <= 'z') goto yy1218;
-	}
-yy1713:
-#line 566 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yysetcond); }
-#line 9253 "src/parse/conf_lexer.cc"
-yy1714:
-	yych = *++cur;
-	if (yych == 'e') goto yy1754;
-	goto yy1219;
-yy1715:
-	yych = *++cur;
-	if (yych == 'a') goto yy1756;
-	goto yy1219;
-yy1716:
-	yych = *++cur;
-	if (yych == 'a') goto yy1757;
-	goto yy1219;
-yy1717:
-	yych = *++cur;
-	if (yych == 'b') goto yy1758;
-	if (yych == 'p') goto yy1759;
-	goto yy1219;
-yy1718:
-	yych = *++cur;
-	if (yych == 'o') goto yy1760;
-	goto yy983;
-yy1719:
-	yych = *++cur;
-	if (yych == 'p') goto yy1761;
-	goto yy983;
-yy1720:
-	yych = *++cur;
-	if (yych == 'u') goto yy1762;
-	goto yy983;
-yy1721:
-	yych = *++cur;
-	if (yych == 'n') goto yy1763;
-	goto yy961;
+#line 9283 "src/parse/conf_lexer.cc"
 yy1722:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
-	}
-#line 677 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::STORABLE_STATE); }
-#line 9294 "src/parse/conf_lexer.cc"
+	if (yych == 'p') goto yy1764;
+	goto yy1225;
 yy1723:
 	yych = *++cur;
-	if (yych == 'o') goto yy1764;
-	goto yy983;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1724;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1724;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1724:
-	yych = *++cur;
-	if (yych == 'i') goto yy1765;
-	goto yy983;
+#line 566 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yysetcond); }
+#line 9300 "src/parse/conf_lexer.cc"
 yy1725:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1726;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1726;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1765;
+	goto yy1225;
 yy1726:
-#line 507 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_array_elem); }
-#line 9315 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'a') goto yy1767;
+	goto yy1225;
 yy1727:
 	yych = *++cur;
-	if (yych == 'a') goto yy1766;
-	goto yy1219;
+	if (yych == 'a') goto yy1768;
+	goto yy1225;
 yy1728:
 	yych = *++cur;
-	if (yych == 'l') goto yy1767;
-	goto yy1219;
+	if (yych == 'b') goto yy1769;
+	if (yych == 'p') goto yy1770;
+	goto yy1225;
 yy1729:
 	yych = *++cur;
-	if (yych == 'a') goto yy1769;
-	goto yy1219;
+	if (yych == 'o') goto yy1771;
+	goto yy984;
 yy1730:
 	yych = *++cur;
-	if (yych == 'l') goto yy1770;
-	goto yy1219;
+	if (yych == 'p') goto yy1772;
+	goto yy984;
 yy1731:
 	yych = *++cur;
-	if (yych == 't') goto yy1772;
-	goto yy1219;
+	if (yych == 'u') goto yy1773;
+	goto yy984;
 yy1732:
 	yych = *++cur;
-	if (yych == 's') goto yy1774;
-	goto yy1219;
+	if (yych == 'n') goto yy1774;
+	goto yy962;
 yy1733:
 	yych = *++cur;
-	if (yych == 'f') goto yy1775;
-	goto yy1219;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
+	}
+#line 680 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::STORABLE_STATE); }
+#line 9341 "src/parse/conf_lexer.cc"
 yy1734:
 	yych = *++cur;
-	if (yych == 'e') goto yy1776;
-	goto yy1219;
+	if (yych == 'o') goto yy1775;
+	goto yy984;
 yy1735:
 	yych = *++cur;
-	if (yych == 'e') goto yy1777;
-	goto yy1219;
+	if (yych == 'i') goto yy1776;
+	goto yy984;
 yy1736:
 	yych = *++cur;
-	if (yych == 'g') goto yy1778;
-	goto yy1219;
-yy1737:
-	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1738;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1737;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1738;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1737;
+		if (yych <= 'z') goto yy1224;
 	}
+yy1737:
+#line 507 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_array_elem); }
+#line 9362 "src/parse/conf_lexer.cc"
 yy1738:
-#line 502 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_var_global); }
-#line 9368 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'a') goto yy1777;
+	goto yy1225;
 yy1739:
 	yych = *++cur;
-	if (yych == 'y') goto yy1779;
-	goto yy1219;
+	if (yych == 'l') goto yy1778;
+	goto yy1225;
 yy1740:
 	yych = *++cur;
-	if (yych == 'x') goto yy1780;
-	goto yy1219;
+	if (yych == 'a') goto yy1780;
+	goto yy1225;
 yy1741:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1742;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1742;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'l') goto yy1781;
+	goto yy1225;
 yy1742:
-#line 554 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yycopymtag); }
-#line 9389 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 't') goto yy1783;
+	goto yy1225;
 yy1743:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1744;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1744;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 's') goto yy1785;
+	goto yy1225;
 yy1744:
-#line 555 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yycopystag); }
-#line 9402 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'f') goto yy1786;
+	goto yy1225;
 yy1745:
 	yych = *++cur;
-	if (yych == 't') goto yy1782;
-	goto yy1219;
+	if (yych == 'e') goto yy1787;
+	goto yy1225;
 yy1746:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1747;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1747;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1788;
+	goto yy1225;
 yy1747:
-#line 567 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yygetstate); }
-#line 9419 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'g') goto yy1789;
+	goto yy1225;
 yy1748:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1749;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1749;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1749:
-#line 569 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yylessthan); }
-#line 9432 "src/parse/conf_lexer.cc"
+#line 502 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_var_global); }
+#line 9415 "src/parse/conf_lexer.cc"
 yy1750:
 	yych = *++cur;
-	if (yych == 'k') goto yy1784;
-	goto yy1219;
+	if (yych == 'y') goto yy1790;
+	goto yy1225;
 yy1751:
 	yych = *++cur;
-	if (yych == 't') goto yy1785;
-	goto yy1219;
+	if (yych == 'x') goto yy1791;
+	goto yy1225;
 yy1752:
 	yych = *++cur;
-	if (yych == 'a') goto yy1786;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1753;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1753;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1753:
-	yych = *++cur;
-	if (yych == 't') goto yy1787;
-	goto yy1219;
+#line 554 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yycopymtag); }
+#line 9436 "src/parse/conf_lexer.cc"
 yy1754:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1755;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1755;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1755:
-#line 568 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yysetstate); }
-#line 9461 "src/parse/conf_lexer.cc"
+#line 555 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yycopystag); }
+#line 9449 "src/parse/conf_lexer.cc"
 yy1756:
 	yych = *++cur;
-	if (yych == 'g') goto yy1789;
-	goto yy1219;
+	if (yych == 't') goto yy1793;
+	goto yy1225;
 yy1757:
 	yych = *++cur;
-	if (yych == 'g') goto yy1791;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1758;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1758;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1758:
-	yych = *++cur;
-	if (yych == 'a') goto yy1793;
-	goto yy1219;
+#line 567 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yygetstate); }
+#line 9466 "src/parse/conf_lexer.cc"
 yy1759:
 	yych = *++cur;
-	if (yych == 'e') goto yy1794;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1760;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1760;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1760:
-	yych = *++cur;
-	if (yych == '_') goto yy1795;
-	goto yy983;
+#line 569 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yylessthan); }
+#line 9479 "src/parse/conf_lexer.cc"
 yy1761:
 	yych = *++cur;
-	if (yych == '_') goto yy1796;
-	goto yy983;
+	if (yych == 'k') goto yy1795;
+	goto yy1225;
 yy1762:
 	yych = *++cur;
-	if (yych == 'r') goto yy1797;
-	goto yy983;
+	if (yych == 't') goto yy1796;
+	goto yy1225;
 yy1763:
 	yych = *++cur;
-	if (yych == 's') goto yy1798;
-	goto yy961;
+	if (yych == 'a') goto yy1797;
+	goto yy1225;
 yy1764:
 	yych = *++cur;
-	if (yych == 'r') goto yy1799;
-	goto yy983;
+	if (yych == 't') goto yy1798;
+	goto yy1225;
 yy1765:
 	yych = *++cur;
-	if (yych == 'o') goto yy1800;
-	goto yy983;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1766;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1766;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1766:
-	yych = *++cur;
-	if (yych == 'l') goto yy1801;
-	goto yy1219;
+#line 568 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yysetstate); }
+#line 9508 "src/parse/conf_lexer.cc"
 yy1767:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1768;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1768;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'g') goto yy1800;
+	goto yy1225;
 yy1768:
-#line 505 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_array_local); }
-#line 9518 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'g') goto yy1802;
+	goto yy1225;
 yy1769:
 	yych = *++cur;
-	if (yych == 'l') goto yy1803;
-	goto yy1219;
+	if (yych == 'a') goto yy1804;
+	goto yy1225;
 yy1770:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1771;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1771;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1805;
+	goto yy1225;
 yy1771:
-#line 503 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_const_local); }
-#line 9535 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == '_') goto yy1806;
+	goto yy984;
 yy1772:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1773;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1773;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == '_') goto yy1807;
+	goto yy984;
 yy1773:
-#line 536 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_fingerprint); }
-#line 9548 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'r') goto yy1808;
+	goto yy984;
 yy1774:
 	yych = *++cur;
-	if (yych == 'e') goto yy1805;
-	goto yy1219;
+	if (yych == 's') goto yy1809;
+	goto yy962;
 yy1775:
 	yych = *++cur;
-	if (yych == 'u') goto yy1807;
-	goto yy1219;
+	if (yych == 'r') goto yy1810;
+	goto yy984;
 yy1776:
 	yych = *++cur;
-	if (yych == '_') goto yy1808;
-	if (yych == 's') goto yy1809;
-	goto yy1219;
+	if (yych == 'o') goto yy1811;
+	goto yy984;
 yy1777:
 	yych = *++cur;
-	if (yych == 'n') goto yy1811;
-	goto yy1219;
+	if (yych == 'l') goto yy1812;
+	goto yy1225;
 yy1778:
 	yych = *++cur;
-	if (yych == 'e') goto yy1812;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1779;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1779;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1779:
-	yych = *++cur;
-	if (yych == 'p') goto yy1813;
-	if (yych == 's') goto yy1814;
-	goto yy1219;
+#line 505 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_array_local); }
+#line 9565 "src/parse/conf_lexer.cc"
 yy1780:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1781;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1781;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'l') goto yy1814;
+	goto yy1225;
 yy1781:
-#line 543 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yybackupctx); }
-#line 9587 "src/parse/conf_lexer.cc"
-yy1782:
 	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1783;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1782;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1783;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1782;
+		if (yych <= 'z') goto yy1224;
 	}
+yy1782:
+#line 503 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_const_local); }
+#line 9582 "src/parse/conf_lexer.cc"
 yy1783:
-#line 563 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yygetaccept); }
-#line 9600 "src/parse/conf_lexer.cc"
-yy1784:
 	yych = *++cur;
-	if (yych == 'i') goto yy1815;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1784;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1784;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1784:
+#line 536 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_fingerprint); }
+#line 9595 "src/parse/conf_lexer.cc"
 yy1785:
 	yych = *++cur;
-	if (yych == 'x') goto yy1816;
-	goto yy1219;
+	if (yych == 'e') goto yy1816;
+	goto yy1225;
 yy1786:
 	yych = *++cur;
-	if (yych == 'g') goto yy1818;
-	goto yy1219;
+	if (yych == 'u') goto yy1818;
+	goto yy1225;
 yy1787:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1788;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1788;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == '_') goto yy1819;
+	if (yych == 's') goto yy1820;
+	goto yy1225;
 yy1788:
-#line 564 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yysetaccept); }
-#line 9625 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'n') goto yy1822;
+	goto yy1225;
 yy1789:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1790;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1790;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1823;
+	goto yy1225;
 yy1790:
-#line 548 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyshiftmtag); }
-#line 9638 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'p') goto yy1824;
+	if (yych == 's') goto yy1825;
+	goto yy1225;
 yy1791:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1792;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1792;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1792:
-#line 549 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyshiftstag); }
-#line 9651 "src/parse/conf_lexer.cc"
+#line 543 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yybackupctx); }
+#line 9634 "src/parse/conf_lexer.cc"
 yy1793:
 	yych = *++cur;
-	if (yych == 'c') goto yy1820;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1794;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1794;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1794:
-	yych = *++cur;
-	if (yych == 'e') goto yy1821;
-	goto yy1219;
+#line 563 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yygetaccept); }
+#line 9647 "src/parse/conf_lexer.cc"
 yy1795:
 	yych = *++cur;
-	if (yych == 'l') goto yy1822;
-	goto yy983;
+	if (yych == 'i') goto yy1826;
+	goto yy1225;
 yy1796:
 	yych = *++cur;
-	if (yych == 's') goto yy1823;
-	goto yy983;
+	if (yych == 'x') goto yy1827;
+	goto yy1225;
 yy1797:
 	yych = *++cur;
-	if (yych == 's') goto yy1824;
-	goto yy983;
+	if (yych == 'g') goto yy1829;
+	goto yy1225;
 yy1798:
 	yych = *++cur;
-	if (yybm[0+yych] & 64) {
-		goto yy960;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1799;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1799;
+		if (yych <= 'z') goto yy1224;
 	}
-#line 676 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::START_CONDITIONS); }
-#line 9679 "src/parse/conf_lexer.cc"
 yy1799:
-	yych = *++cur;
-	if (yych == 'm') goto yy1825;
-	goto yy983;
+#line 564 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yysetaccept); }
+#line 9672 "src/parse/conf_lexer.cc"
 yy1800:
 	yych = *++cur;
-	if (yych == 'n') goto yy1826;
-	goto yy983;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1801;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1801;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1801:
-	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1802;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1802;
-		if (yych <= 'z') goto yy1218;
-	}
+#line 548 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyshiftmtag); }
+#line 9685 "src/parse/conf_lexer.cc"
 yy1802:
-#line 506 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_array_global); }
-#line 9700 "src/parse/conf_lexer.cc"
-yy1803:
 	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1804;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1803;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1804;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1803;
+		if (yych <= 'z') goto yy1224;
 	}
+yy1803:
+#line 549 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyshiftstag); }
+#line 9698 "src/parse/conf_lexer.cc"
 yy1804:
-#line 504 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_const_global); }
-#line 9713 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'c') goto yy1831;
+	goto yy1225;
 yy1805:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1806;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1827;
-		if (yych <= '`') goto yy1806;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1832;
+	goto yy1225;
 yy1806:
-#line 520 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_if_then_else); }
-#line 9727 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'l') goto yy1833;
+	goto yy984;
 yy1807:
 	yych = *++cur;
-	if (yych == 'n') goto yy1828;
-	goto yy1219;
+	if (yych == 's') goto yy1834;
+	goto yy984;
 yy1808:
 	yych = *++cur;
-	if (yych == 'd') goto yy1829;
-	if (yych == 'r') goto yy1830;
-	goto yy1219;
+	if (yych == 's') goto yy1835;
+	goto yy984;
 yy1809:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1810;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1831;
-		if (yych <= '`') goto yy1810;
-		if (yych <= 'z') goto yy1218;
+	if (yybm[0+yych] & 64) {
+		goto yy961;
 	}
+#line 679 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::START_CONDITIONS); }
+#line 9726 "src/parse/conf_lexer.cc"
 yy1810:
-#line 523 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_switch_cases); }
-#line 9750 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'm') goto yy1836;
+	goto yy984;
 yy1811:
 	yych = *++cur;
-	if (yych == 'u') goto yy1832;
-	goto yy1219;
+	if (yych == 'n') goto yy1837;
+	goto yy984;
 yy1812:
 	yych = *++cur;
-	if (yych == 't') goto yy1833;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1813;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1813;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1813:
-	yych = *++cur;
-	if (yych == 'e') goto yy1835;
-	goto yy1219;
+#line 506 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_array_global); }
+#line 9747 "src/parse/conf_lexer.cc"
 yy1814:
 	yych = *++cur;
-	if (yych == 'k') goto yy1836;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1815;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1815;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1815:
-	yych = *++cur;
-	if (yych == 'p') goto yy1837;
-	goto yy1219;
+#line 504 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_const_global); }
+#line 9760 "src/parse/conf_lexer.cc"
 yy1816:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1817;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1817;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= '_') goto yy1838;
+		if (yych <= '`') goto yy1817;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1817:
-#line 545 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyrestorectx); }
-#line 9783 "src/parse/conf_lexer.cc"
+#line 520 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_if_then_else); }
+#line 9774 "src/parse/conf_lexer.cc"
 yy1818:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1819;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1819;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'n') goto yy1839;
+	goto yy1225;
 yy1819:
-#line 546 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyrestoretag); }
-#line 9796 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'd') goto yy1840;
+	if (yych == 'r') goto yy1841;
+	goto yy1225;
 yy1820:
 	yych = *++cur;
-	if (yych == 'k') goto yy1839;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1821;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1842;
+		if (yych <= '`') goto yy1821;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1821:
-	yych = *++cur;
-	if (yych == 'k') goto yy1840;
-	goto yy1219;
+#line 523 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_switch_cases); }
+#line 9797 "src/parse/conf_lexer.cc"
 yy1822:
 	yych = *++cur;
-	if (yych == 'a') goto yy1842;
-	goto yy983;
+	if (yych == 'u') goto yy1843;
+	goto yy1225;
 yy1823:
 	yych = *++cur;
-	if (yych == 'w') goto yy1843;
-	goto yy983;
+	if (yych == 't') goto yy1844;
+	goto yy1225;
 yy1824:
 	yych = *++cur;
-	if (yych == 'i') goto yy1844;
-	goto yy983;
+	if (yych == 'e') goto yy1846;
+	goto yy1225;
 yy1825:
-	++cur;
-#line 675 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
-#line 9821 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'k') goto yy1847;
+	goto yy1225;
 yy1826:
 	yych = *++cur;
-	if (yych == 's') goto yy1845;
-	goto yy983;
+	if (yych == 'p') goto yy1848;
+	goto yy1225;
 yy1827:
 	yych = *++cur;
-	if (yych == 'o') goto yy1846;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1828;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1828;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1828:
-	yych = *++cur;
-	if (yych == 'c') goto yy1847;
-	goto yy1219;
+#line 545 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyrestorectx); }
+#line 9830 "src/parse/conf_lexer.cc"
 yy1829:
 	yych = *++cur;
-	if (yych == 'e') goto yy1848;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1830;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1830;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1830:
-	yych = *++cur;
-	if (yych == 'a') goto yy1849;
-	goto yy1219;
+#line 546 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyrestoretag); }
+#line 9843 "src/parse/conf_lexer.cc"
 yy1831:
 	yych = *++cur;
-	if (yych == 'o') goto yy1850;
-	goto yy1219;
+	if (yych == 'k') goto yy1850;
+	goto yy1225;
 yy1832:
 	yych = *++cur;
-	if (yych == 'm') goto yy1851;
-	goto yy1219;
+	if (yych == 'k') goto yy1851;
+	goto yy1225;
 yy1833:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1834;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1834;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'a') goto yy1853;
+	goto yy984;
 yy1834:
-#line 512 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_type_yytarget); }
-#line 9862 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'w') goto yy1854;
+	goto yy984;
 yy1835:
 	yych = *++cur;
-	if (yych == 'e') goto yy1853;
-	goto yy1219;
+	if (yych == 'i') goto yy1855;
+	goto yy984;
 yy1836:
-	yych = *++cur;
-	if (yych == 'i') goto yy1854;
-	goto yy1219;
+	++cur;
+#line 678 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
+#line 9868 "src/parse/conf_lexer.cc"
 yy1837:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1838;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1838;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 's') goto yy1856;
+	goto yy984;
 yy1838:
-#line 557 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yypeek_yyskip); }
-#line 9883 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'o') goto yy1857;
+	goto yy1225;
 yy1839:
 	yych = *++cur;
-	if (yych == 'u') goto yy1855;
-	goto yy1219;
+	if (yych == 'c') goto yy1858;
+	goto yy1225;
 yy1840:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1841;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1841;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1859;
+	goto yy1225;
 yy1841:
-#line 556 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyskip_yypeek); }
-#line 9900 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'a') goto yy1860;
+	goto yy1225;
 yy1842:
 	yych = *++cur;
-	if (yych == 'b') goto yy1856;
-	goto yy983;
+	if (yych == 'o') goto yy1861;
+	goto yy1225;
 yy1843:
 	yych = *++cur;
-	if (yych == 'i') goto yy1857;
-	goto yy983;
+	if (yych == 'm') goto yy1862;
+	goto yy1225;
 yy1844:
 	yych = *++cur;
-	if (yych == 'v') goto yy1858;
-	goto yy983;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1845;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1845;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1845:
-	++cur;
-#line 674 "../src/parse/conf_lexer.re"
-	{ RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
-#line 9917 "src/parse/conf_lexer.cc"
+#line 512 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_type_yytarget); }
+#line 9909 "src/parse/conf_lexer.cc"
 yy1846:
 	yych = *++cur;
-	if (yych == 'n') goto yy1859;
-	goto yy1219;
+	if (yych == 'e') goto yy1864;
+	goto yy1225;
 yy1847:
 	yych = *++cur;
-	if (yych == 't') goto yy1860;
-	goto yy1219;
+	if (yych == 'i') goto yy1865;
+	goto yy1225;
 yy1848:
 	yych = *++cur;
-	if (yych == 'f') goto yy1861;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1849;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1849;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1849:
-	yych = *++cur;
-	if (yych == 'n') goto yy1862;
-	goto yy1219;
+#line 557 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yypeek_yyskip); }
+#line 9930 "src/parse/conf_lexer.cc"
 yy1850:
 	yych = *++cur;
-	if (yych == 'n') goto yy1863;
-	goto yy1219;
+	if (yych == 'u') goto yy1866;
+	goto yy1225;
 yy1851:
 	yych = *++cur;
 	if (yych <= '^') {
 		if (yych <= '/') goto yy1852;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '9') goto yy1224;
 	} else {
 		if (yych == '`') goto yy1852;
-		if (yych <= 'z') goto yy1218;
+		if (yych <= 'z') goto yy1224;
 	}
 yy1852:
-#line 510 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_type_cond_enum); }
-#line 9950 "src/parse/conf_lexer.cc"
+#line 556 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyskip_yypeek); }
+#line 9947 "src/parse/conf_lexer.cc"
 yy1853:
 	yych = *++cur;
-	if (yych == 'k') goto yy1864;
-	goto yy1219;
+	if (yych == 'b') goto yy1867;
+	goto yy984;
 yy1854:
 	yych = *++cur;
-	if (yych == 'p') goto yy1866;
-	goto yy1219;
+	if (yych == 'i') goto yy1868;
+	goto yy984;
 yy1855:
 	yych = *++cur;
-	if (yych == 'p') goto yy1868;
-	goto yy1219;
+	if (yych == 'v') goto yy1869;
+	goto yy984;
 yy1856:
-	yych = *++cur;
-	if (yych == 'e') goto yy1870;
-	goto yy983;
+	++cur;
+#line 677 "../src/parse/conf_lexer.re"
+	{ RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
+#line 9964 "src/parse/conf_lexer.cc"
 yy1857:
 	yych = *++cur;
-	if (yych == 't') goto yy1871;
-	goto yy983;
+	if (yych == 'n') goto yy1870;
+	goto yy1225;
 yy1858:
 	yych = *++cur;
-	if (yych == 'e') goto yy1872;
-	goto yy983;
+	if (yych == 't') goto yy1871;
+	goto yy1225;
 yy1859:
 	yych = *++cur;
-	if (yych == 'e') goto yy1873;
-	goto yy1219;
+	if (yych == 'f') goto yy1872;
+	goto yy1225;
 yy1860:
 	yych = *++cur;
-	if (yych == 'i') goto yy1874;
-	goto yy1219;
+	if (yych == 'n') goto yy1873;
+	goto yy1225;
 yy1861:
 	yych = *++cur;
-	if (yych == 'a') goto yy1875;
-	goto yy1219;
+	if (yych == 'n') goto yy1874;
+	goto yy1225;
 yy1862:
 	yych = *++cur;
-	if (yych == 'g') goto yy1876;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1863;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1863;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1863:
-	yych = *++cur;
-	if (yych == 'e') goto yy1877;
-	goto yy1219;
+#line 510 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_type_cond_enum); }
+#line 9997 "src/parse/conf_lexer.cc"
 yy1864:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1865;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1878;
-		if (yych <= '`') goto yy1865;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'k') goto yy1875;
+	goto yy1225;
 yy1865:
-#line 560 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yybackup_yypeek); }
-#line 10008 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'p') goto yy1877;
+	goto yy1225;
 yy1866:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1867;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1867;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'p') goto yy1879;
+	goto yy1225;
 yy1867:
-#line 559 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yybackup_yyskip); }
-#line 10021 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'e') goto yy1881;
+	goto yy984;
 yy1868:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1869;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych <= '_') goto yy1879;
-		if (yych <= '`') goto yy1869;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 't') goto yy1882;
+	goto yy984;
 yy1869:
-#line 558 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_yyskip_yybackup); }
-#line 10035 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'e') goto yy1883;
+	goto yy984;
 yy1870:
 	yych = *++cur;
-	if (yych == 'l') goto yy1880;
-	goto yy983;
+	if (yych == 'e') goto yy1884;
+	goto yy1225;
 yy1871:
 	yych = *++cur;
-	if (yych == 'c') goto yy1881;
-	goto yy983;
+	if (yych == 'i') goto yy1885;
+	goto yy1225;
 yy1872:
 	yych = *++cur;
-	if (yych == '_') goto yy1882;
-	goto yy983;
+	if (yych == 'a') goto yy1886;
+	goto yy1225;
 yy1873:
 	yych = *++cur;
-	if (yych == 'l') goto yy1883;
-	goto yy1219;
+	if (yych == 'g') goto yy1887;
+	goto yy1225;
 yy1874:
 	yych = *++cur;
-	if (yych == 'o') goto yy1884;
-	goto yy1219;
+	if (yych == 'e') goto yy1888;
+	goto yy1225;
 yy1875:
 	yych = *++cur;
-	if (yych == 'u') goto yy1885;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1876;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1889;
+		if (yych <= '`') goto yy1876;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1876:
-	yych = *++cur;
-	if (yych == 'e') goto yy1886;
-	goto yy1219;
+#line 560 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yybackup_yypeek); }
+#line 10055 "src/parse/conf_lexer.cc"
 yy1877:
 	yych = *++cur;
-	if (yych == 'l') goto yy1888;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1878;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1878;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1878:
-	yych = *++cur;
-	if (yych == 'y') goto yy1889;
-	goto yy1219;
+#line 559 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yybackup_yyskip); }
+#line 10068 "src/parse/conf_lexer.cc"
 yy1879:
 	yych = *++cur;
-	if (yych == 'y') goto yy1890;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1880;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych <= '_') goto yy1890;
+		if (yych <= '`') goto yy1880;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1880:
-	++cur;
-#line 659 "../src/parse/conf_lexer.re"
-	{ RET_COND(globopts->code_model == CodeModel::GOTO_LABEL); }
-#line 10080 "src/parse/conf_lexer.cc"
+#line 558 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_yyskip_yybackup); }
+#line 10082 "src/parse/conf_lexer.cc"
 yy1881:
 	yych = *++cur;
-	if (yych == 'h') goto yy1891;
-	goto yy983;
+	if (yych == 'l') goto yy1891;
+	goto yy984;
 yy1882:
 	yych = *++cur;
-	if (yych == 'f') goto yy1892;
-	goto yy983;
+	if (yych == 'c') goto yy1892;
+	goto yy984;
 yy1883:
 	yych = *++cur;
-	if (yych == 'i') goto yy1893;
-	goto yy1219;
+	if (yych == '_') goto yy1893;
+	goto yy984;
 yy1884:
 	yych = *++cur;
-	if (yych == 'n') goto yy1894;
-	goto yy1219;
+	if (yych == 'l') goto yy1894;
+	goto yy1225;
 yy1885:
 	yych = *++cur;
-	if (yych == 'l') goto yy1895;
-	goto yy1219;
+	if (yych == 'o') goto yy1895;
+	goto yy1225;
 yy1886:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1887;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1887;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'u') goto yy1896;
+	goto yy1225;
 yy1887:
-#line 525 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_switch_case_range); }
-#line 10113 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'e') goto yy1897;
+	goto yy1225;
 yy1888:
 	yych = *++cur;
-	if (yych == 'i') goto yy1896;
-	goto yy1219;
+	if (yych == 'l') goto yy1899;
+	goto yy1225;
 yy1889:
 	yych = *++cur;
-	if (yych == 'y') goto yy1897;
-	goto yy1219;
+	if (yych == 'y') goto yy1900;
+	goto yy1225;
 yy1890:
 	yych = *++cur;
-	if (yych == 'y') goto yy1898;
-	goto yy1219;
+	if (yych == 'y') goto yy1901;
+	goto yy1225;
 yy1891:
 	++cur;
-#line 660 "../src/parse/conf_lexer.re"
-	{ RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH); }
-#line 10130 "src/parse/conf_lexer.cc"
+#line 662 "../src/parse/conf_lexer.re"
+	{ RET_COND(globopts->code_model == CodeModel::GOTO_LABEL); }
+#line 10127 "src/parse/conf_lexer.cc"
 yy1892:
 	yych = *++cur;
-	if (yych == 'u') goto yy1899;
-	goto yy983;
+	if (yych == 'h') goto yy1902;
+	goto yy984;
 yy1893:
 	yych = *++cur;
-	if (yych == 'n') goto yy1900;
-	goto yy1219;
+	if (yych == 'f') goto yy1903;
+	goto yy984;
 yy1894:
 	yych = *++cur;
-	if (yych == 's') goto yy1901;
-	goto yy1219;
+	if (yych == 'i') goto yy1904;
+	goto yy1225;
 yy1895:
 	yych = *++cur;
-	if (yych == 't') goto yy1903;
-	goto yy1219;
+	if (yych == 'n') goto yy1905;
+	goto yy1225;
 yy1896:
 	yych = *++cur;
-	if (yych == 'n') goto yy1905;
-	goto yy1219;
+	if (yych == 'l') goto yy1906;
+	goto yy1225;
 yy1897:
 	yych = *++cur;
-	if (yych == 's') goto yy1906;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1898;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1898;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1898:
-	yych = *++cur;
-	if (yych == 'p') goto yy1907;
-	goto yy1219;
+#line 525 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_switch_case_range); }
+#line 10160 "src/parse/conf_lexer.cc"
 yy1899:
 	yych = *++cur;
-	if (yych == 'n') goto yy1908;
-	goto yy983;
+	if (yych == 'i') goto yy1907;
+	goto yy1225;
 yy1900:
 	yych = *++cur;
-	if (yych == 'e') goto yy1909;
-	goto yy1219;
+	if (yych == 'y') goto yy1908;
+	goto yy1225;
 yy1901:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1902;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1902;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'y') goto yy1909;
+	goto yy1225;
 yy1902:
-#line 535 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_recursive_functions); }
-#line 10179 "src/parse/conf_lexer.cc"
+	++cur;
+#line 663 "../src/parse/conf_lexer.re"
+	{ RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH); }
+#line 10177 "src/parse/conf_lexer.cc"
 yy1903:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1904;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1904;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'u') goto yy1910;
+	goto yy984;
 yy1904:
-#line 526 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_switch_case_default); }
-#line 10192 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'n') goto yy1911;
+	goto yy1225;
 yy1905:
 	yych = *++cur;
-	if (yych == 'e') goto yy1911;
-	goto yy1219;
+	if (yych == 's') goto yy1912;
+	goto yy1225;
 yy1906:
 	yych = *++cur;
-	if (yych == 'k') goto yy1913;
-	goto yy1219;
+	if (yych == 't') goto yy1914;
+	goto yy1225;
 yy1907:
 	yych = *++cur;
-	if (yych == 'e') goto yy1914;
-	goto yy1219;
+	if (yych == 'n') goto yy1916;
+	goto yy1225;
 yy1908:
 	yych = *++cur;
-	if (yych == 'c') goto yy1915;
-	goto yy983;
+	if (yych == 's') goto yy1917;
+	goto yy1225;
 yy1909:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1910;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1910;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'p') goto yy1918;
+	goto yy1225;
 yy1910:
-#line 521 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_if_then_else_oneline); }
-#line 10221 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'n') goto yy1919;
+	goto yy984;
 yy1911:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1912;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1912;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'e') goto yy1920;
+	goto yy1225;
 yy1912:
-#line 524 "../src/parse/conf_lexer.re"
-	{ RET_CODE(code_switch_cases_oneline); }
-#line 10234 "src/parse/conf_lexer.cc"
-yy1913:
 	yych = *++cur;
-	if (yych == 'i') goto yy1916;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1913;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1913;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1913:
+#line 535 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_recursive_functions); }
+#line 10226 "src/parse/conf_lexer.cc"
 yy1914:
 	yych = *++cur;
-	if (yych == 'e') goto yy1917;
-	goto yy1219;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1915;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1915;
+		if (yych <= 'z') goto yy1224;
+	}
 yy1915:
-	yych = *++cur;
-	if (yych == 't') goto yy1918;
-	goto yy983;
+#line 526 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_switch_case_default); }
+#line 10239 "src/parse/conf_lexer.cc"
 yy1916:
 	yych = *++cur;
-	if (yych == 'p') goto yy1919;
-	goto yy1219;
+	if (yych == 'e') goto yy1922;
+	goto yy1225;
 yy1917:
 	yych = *++cur;
-	if (yych == 'k') goto yy1921;
-	goto yy1219;
+	if (yych == 'k') goto yy1924;
+	goto yy1225;
 yy1918:
 	yych = *++cur;
-	if (yych == 'i') goto yy1923;
-	goto yy983;
+	if (yych == 'e') goto yy1925;
+	goto yy1225;
 yy1919:
 	yych = *++cur;
-	if (yych <= '^') {
-		if (yych <= '/') goto yy1920;
-		if (yych <= '9') goto yy1218;
-	} else {
-		if (yych == '`') goto yy1920;
-		if (yych <= 'z') goto yy1218;
-	}
+	if (yych == 'c') goto yy1926;
+	goto yy984;
 yy1920:
+	yych = *++cur;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1921;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1921;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1921:
+#line 521 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_if_then_else_oneline); }
+#line 10268 "src/parse/conf_lexer.cc"
+yy1922:
+	yych = *++cur;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1923;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1923;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1923:
+#line 524 "../src/parse/conf_lexer.re"
+	{ RET_CODE(code_switch_cases_oneline); }
+#line 10281 "src/parse/conf_lexer.cc"
+yy1924:
+	yych = *++cur;
+	if (yych == 'i') goto yy1927;
+	goto yy1225;
+yy1925:
+	yych = *++cur;
+	if (yych == 'e') goto yy1928;
+	goto yy1225;
+yy1926:
+	yych = *++cur;
+	if (yych == 't') goto yy1929;
+	goto yy984;
+yy1927:
+	yych = *++cur;
+	if (yych == 'p') goto yy1930;
+	goto yy1225;
+yy1928:
+	yych = *++cur;
+	if (yych == 'k') goto yy1932;
+	goto yy1225;
+yy1929:
+	yych = *++cur;
+	if (yych == 'i') goto yy1934;
+	goto yy984;
+yy1930:
+	yych = *++cur;
+	if (yych <= '^') {
+		if (yych <= '/') goto yy1931;
+		if (yych <= '9') goto yy1224;
+	} else {
+		if (yych == '`') goto yy1931;
+		if (yych <= 'z') goto yy1224;
+	}
+yy1931:
 #line 562 "../src/parse/conf_lexer.re"
 	{ RET_CODE(code_yybackup_yypeek_yyskip); }
-#line 10271 "src/parse/conf_lexer.cc"
-yy1921:
+#line 10318 "src/parse/conf_lexer.cc"
+yy1932:
 	yych = *++cur;
 	if (yych <= '^') {
-		if (yych <= '/') goto yy1922;
-		if (yych <= '9') goto yy1218;
+		if (yych <= '/') goto yy1933;
+		if (yych <= '9') goto yy1224;
 	} else {
-		if (yych == '`') goto yy1922;
-		if (yych <= 'z') goto yy1218;
+		if (yych == '`') goto yy1933;
+		if (yych <= 'z') goto yy1224;
 	}
-yy1922:
+yy1933:
 #line 561 "../src/parse/conf_lexer.re"
 	{ RET_CODE(code_yyskip_yybackup_yypeek); }
-#line 10284 "src/parse/conf_lexer.cc"
-yy1923:
+#line 10331 "src/parse/conf_lexer.cc"
+yy1934:
 	yych = *++cur;
-	if (yych != 'o') goto yy983;
+	if (yych != 'o') goto yy984;
 	yych = *++cur;
-	if (yych != 'n') goto yy983;
+	if (yych != 'n') goto yy984;
 	yych = *++cur;
-	if (yych != 's') goto yy983;
+	if (yych != 's') goto yy984;
 	++cur;
-#line 661 "../src/parse/conf_lexer.re"
+#line 664 "../src/parse/conf_lexer.re"
 	{ RET_COND(globopts->code_model == CodeModel::REC_FUNC); }
-#line 10295 "src/parse/conf_lexer.cc"
+#line 10342 "src/parse/conf_lexer.cc"
 }
-#line 704 "../src/parse/conf_lexer.re"
+#line 707 "../src/parse/conf_lexer.re"
 
 
     UNREACHABLE();
@@ -10326,7 +10373,7 @@ start:
     tok = cur;
     location = cur_loc();
 
-#line 10330 "src/parse/conf_lexer.cc"
+#line 10377 "src/parse/conf_lexer.cc"
 {
 	uint8_t yych;
 	static const unsigned char yybm[] = {
@@ -10366,801 +10413,801 @@ start:
 	if ((lim - cur) < 24) YYFILL(24);
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
-		goto yy1928;
+		goto yy1939;
 	}
 	if (yych <= 'b') {
 		if (yych <= '\n') {
-			if (yych <= 0x00) goto yy1925;
-			if (yych <= 0x08) goto yy1926;
-			goto yy1929;
+			if (yych <= 0x00) goto yy1936;
+			if (yych <= 0x08) goto yy1937;
+			goto yy1940;
 		} else {
-			if (yych == '/') goto yy1930;
-			if (yych <= 'a') goto yy1926;
-			goto yy1931;
+			if (yych == '/') goto yy1941;
+			if (yych <= 'a') goto yy1937;
+			goto yy1942;
 		}
 	} else {
 		if (yych <= 'r') {
-			if (yych <= 'c') goto yy1932;
-			if (yych == 'i') goto yy1933;
-			goto yy1926;
+			if (yych <= 'c') goto yy1943;
+			if (yych == 'i') goto yy1944;
+			goto yy1937;
 		} else {
-			if (yych <= 's') goto yy1934;
-			if (yych == 'w') goto yy1935;
-			goto yy1926;
+			if (yych <= 's') goto yy1945;
+			if (yych == 'w') goto yy1946;
+			goto yy1937;
 		}
 	}
-yy1925:
+yy1936:
 	++cur;
-#line 736 "../src/parse/conf_lexer.re"
+#line 739 "../src/parse/conf_lexer.re"
 	{ return Ret::OK; }
-#line 10397 "src/parse/conf_lexer.cc"
-yy1926:
+#line 10444 "src/parse/conf_lexer.cc"
+yy1937:
 	++cur;
-yy1927:
-#line 759 "../src/parse/conf_lexer.re"
+yy1938:
+#line 762 "../src/parse/conf_lexer.re"
 	{ RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
-#line 10403 "src/parse/conf_lexer.cc"
-yy1928:
+#line 10450 "src/parse/conf_lexer.cc"
+yy1939:
 	++cur;
 	if (lim <= cur) YYFILL(1);
 	yych = *cur;
 	if (yybm[0+yych] & 64) {
-		goto yy1928;
+		goto yy1939;
 	}
-#line 740 "../src/parse/conf_lexer.re"
+#line 743 "../src/parse/conf_lexer.re"
 	{ goto start; }
-#line 10413 "src/parse/conf_lexer.cc"
-yy1929:
+#line 10460 "src/parse/conf_lexer.cc"
+yy1940:
 	++cur;
-#line 738 "../src/parse/conf_lexer.re"
+#line 741 "../src/parse/conf_lexer.re"
 	{ next_line(); goto start; }
-#line 10418 "src/parse/conf_lexer.cc"
-yy1930:
+#line 10465 "src/parse/conf_lexer.cc"
+yy1941:
 	yych = *(mar = ++cur);
-	if (yych == '/') goto yy1936;
-	goto yy1927;
-yy1931:
+	if (yych == '/') goto yy1947;
+	goto yy1938;
+yy1942:
 	yych = *(mar = ++cur);
-	if (yych == 'a') goto yy1938;
-	goto yy1927;
-yy1932:
+	if (yych == 'a') goto yy1949;
+	goto yy1938;
+yy1943:
 	yych = *(mar = ++cur);
-	if (yych == 'o') goto yy1939;
-	goto yy1927;
-yy1933:
+	if (yych == 'o') goto yy1950;
+	goto yy1938;
+yy1944:
 	yych = *(mar = ++cur);
-	if (yych <= 'l') goto yy1927;
-	if (yych <= 'm') goto yy1940;
-	if (yych <= 'n') goto yy1941;
-	goto yy1927;
-yy1934:
+	if (yych <= 'l') goto yy1938;
+	if (yych <= 'm') goto yy1951;
+	if (yych <= 'n') goto yy1952;
+	goto yy1938;
+yy1945:
 	yych = *(mar = ++cur);
 	if (yych <= 's') {
-		if (yych == 'e') goto yy1942;
-		goto yy1927;
+		if (yych == 'e') goto yy1953;
+		goto yy1938;
 	} else {
-		if (yych <= 't') goto yy1943;
-		if (yych <= 'u') goto yy1944;
-		goto yy1927;
+		if (yych <= 't') goto yy1954;
+		if (yych <= 'u') goto yy1955;
+		goto yy1938;
 	}
-yy1935:
+yy1946:
 	yych = *(mar = ++cur);
-	if (yych == 'r') goto yy1945;
-	goto yy1927;
-yy1936:
+	if (yych == 'r') goto yy1956;
+	goto yy1938;
+yy1947:
 	++cur;
 	if (lim <= cur) YYFILL(1);
 	yych = *cur;
 	if (yybm[0+yych] & 128) {
-		goto yy1936;
+		goto yy1947;
 	}
-	if (yych >= 0x01) goto yy1929;
-yy1937:
-	cur = mar;
-	goto yy1927;
-yy1938:
-	yych = *++cur;
-	if (yych == 'c') goto yy1946;
-	goto yy1937;
-yy1939:
-	yych = *++cur;
-	if (yych == 'd') goto yy1947;
-	if (yych == 'n') goto yy1948;
-	goto yy1937;
-yy1940:
-	yych = *++cur;
-	if (yych == 'p') goto yy1949;
-	goto yy1937;
-yy1941:
-	yych = *++cur;
-	if (yych == 'd') goto yy1950;
-	goto yy1937;
-yy1942:
-	yych = *++cur;
-	if (yych == 'm') goto yy1951;
-	goto yy1937;
-yy1943:
-	yych = *++cur;
-	if (yych == 'a') goto yy1952;
-	goto yy1937;
-yy1944:
-	yych = *++cur;
-	if (yych == 'p') goto yy1953;
-	goto yy1937;
-yy1945:
-	yych = *++cur;
-	if (yych == 'a') goto yy1954;
-	goto yy1937;
-yy1946:
-	yych = *++cur;
-	if (yych == 'k') goto yy1955;
-	goto yy1937;
-yy1947:
-	yych = *++cur;
-	if (yych == 'e') goto yy1956;
-	goto yy1937;
+	if (yych >= 0x01) goto yy1940;
 yy1948:
-	yych = *++cur;
-	if (yych == 'f') goto yy1957;
-	goto yy1937;
+	cur = mar;
+	goto yy1938;
 yy1949:
 	yych = *++cur;
-	if (yych == 'l') goto yy1958;
-	goto yy1937;
+	if (yych == 'c') goto yy1957;
+	goto yy1948;
 yy1950:
 	yych = *++cur;
-	if (yych == 'e') goto yy1959;
-	goto yy1937;
+	if (yych == 'd') goto yy1958;
+	if (yych == 'n') goto yy1959;
+	goto yy1948;
 yy1951:
 	yych = *++cur;
-	if (yych == 'i') goto yy1960;
-	goto yy1937;
+	if (yych == 'p') goto yy1960;
+	goto yy1948;
 yy1952:
 	yych = *++cur;
-	if (yych == 'n') goto yy1961;
-	goto yy1937;
+	if (yych == 'd') goto yy1961;
+	goto yy1948;
 yy1953:
 	yych = *++cur;
-	if (yych == 'p') goto yy1962;
-	goto yy1937;
+	if (yych == 'm') goto yy1962;
+	goto yy1948;
 yy1954:
 	yych = *++cur;
-	if (yych == 'p') goto yy1963;
-	goto yy1937;
+	if (yych == 'a') goto yy1963;
+	goto yy1948;
 yy1955:
 	yych = *++cur;
-	if (yych == 't') goto yy1964;
-	goto yy1937;
+	if (yych == 'p') goto yy1964;
+	goto yy1948;
 yy1956:
 	yych = *++cur;
-	if (yych == ':') goto yy1965;
-	goto yy1937;
+	if (yych == 'a') goto yy1965;
+	goto yy1948;
 yy1957:
 	yych = *++cur;
-	if (yych == ':') goto yy1966;
-	goto yy1937;
+	if (yych == 'k') goto yy1966;
+	goto yy1948;
 yy1958:
 	yych = *++cur;
-	if (yych == 'i') goto yy1967;
-	goto yy1937;
+	if (yych == 'e') goto yy1967;
+	goto yy1948;
 yy1959:
 	yych = *++cur;
-	if (yych == 'n') goto yy1968;
-	goto yy1937;
+	if (yych == 'f') goto yy1968;
+	goto yy1948;
 yy1960:
 	yych = *++cur;
-	if (yych == 'c') goto yy1969;
-	goto yy1937;
+	if (yych == 'l') goto yy1969;
+	goto yy1948;
 yy1961:
 	yych = *++cur;
-	if (yych == 'd') goto yy1970;
-	goto yy1937;
+	if (yych == 'e') goto yy1970;
+	goto yy1948;
 yy1962:
 	yych = *++cur;
-	if (yych == 'o') goto yy1971;
-	goto yy1937;
+	if (yych == 'i') goto yy1971;
+	goto yy1948;
 yy1963:
 	yych = *++cur;
-	if (yych == '_') goto yy1972;
-	goto yy1937;
+	if (yych == 'n') goto yy1972;
+	goto yy1948;
 yy1964:
 	yych = *++cur;
-	if (yych == 'i') goto yy1973;
-	goto yy1937;
+	if (yych == 'p') goto yy1973;
+	goto yy1948;
 yy1965:
-	++cur;
-	cur -= 5;
-#line 757 "../src/parse/conf_lexer.re"
-	{ if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
-#line 10576 "src/parse/conf_lexer.cc"
-yy1966:
-	++cur;
-#line 742 "../src/parse/conf_lexer.re"
-	{ CHECK_RET(lex_conf(opts)); goto start; }
-#line 10581 "src/parse/conf_lexer.cc"
-yy1967:
 	yych = *++cur;
-	if (yych == 'c') goto yy1974;
-	goto yy1937;
-yy1968:
+	if (yych == 'p') goto yy1974;
+	goto yy1948;
+yy1966:
 	yych = *++cur;
 	if (yych == 't') goto yy1975;
-	goto yy1937;
+	goto yy1948;
+yy1967:
+	yych = *++cur;
+	if (yych == ':') goto yy1976;
+	goto yy1948;
+yy1968:
+	yych = *++cur;
+	if (yych == ':') goto yy1977;
+	goto yy1948;
 yy1969:
 	yych = *++cur;
-	if (yych == 'o') goto yy1976;
-	goto yy1937;
+	if (yych == 'i') goto yy1978;
+	goto yy1948;
 yy1970:
 	yych = *++cur;
-	if (yych == 'a') goto yy1977;
-	goto yy1937;
+	if (yych == 'n') goto yy1979;
+	goto yy1948;
 yy1971:
 	yych = *++cur;
-	if (yych == 'r') goto yy1978;
-	goto yy1937;
+	if (yych == 'c') goto yy1980;
+	goto yy1948;
 yy1972:
 	yych = *++cur;
-	if (yych == 'b') goto yy1979;
-	goto yy1937;
+	if (yych == 'd') goto yy1981;
+	goto yy1948;
 yy1973:
 	yych = *++cur;
-	if (yych == 'c') goto yy1980;
-	goto yy1937;
+	if (yych == 'o') goto yy1982;
+	goto yy1948;
 yy1974:
 	yych = *++cur;
-	if (yych == 'i') goto yy1981;
-	goto yy1937;
+	if (yych == '_') goto yy1983;
+	goto yy1948;
 yy1975:
 	yych = *++cur;
-	if (yych == 'a') goto yy1982;
-	goto yy1937;
+	if (yych == 'i') goto yy1984;
+	goto yy1948;
 yy1976:
-	yych = *++cur;
-	if (yych == 'l') goto yy1983;
-	goto yy1937;
+	++cur;
+	cur -= 5;
+#line 760 "../src/parse/conf_lexer.re"
+	{ if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
+#line 10623 "src/parse/conf_lexer.cc"
 yy1977:
-	yych = *++cur;
-	if (yych == 'l') goto yy1984;
-	goto yy1937;
+	++cur;
+#line 745 "../src/parse/conf_lexer.re"
+	{ CHECK_RET(lex_conf(opts)); goto start; }
+#line 10628 "src/parse/conf_lexer.cc"
 yy1978:
 	yych = *++cur;
-	if (yych == 't') goto yy1985;
-	goto yy1937;
+	if (yych == 'c') goto yy1985;
+	goto yy1948;
 yy1979:
 	yych = *++cur;
-	if (yych == 'l') goto yy1986;
-	goto yy1937;
+	if (yych == 't') goto yy1986;
+	goto yy1948;
 yy1980:
 	yych = *++cur;
-	if (yych == 'k') goto yy1987;
-	goto yy1937;
+	if (yych == 'o') goto yy1987;
+	goto yy1948;
 yy1981:
 	yych = *++cur;
-	if (yych == 't') goto yy1988;
-	goto yy1937;
+	if (yych == 'a') goto yy1988;
+	goto yy1948;
 yy1982:
 	yych = *++cur;
-	if (yych == 't') goto yy1989;
-	goto yy1937;
+	if (yych == 'r') goto yy1989;
+	goto yy1948;
 yy1983:
 	yych = *++cur;
-	if (yych == 'o') goto yy1990;
-	goto yy1937;
+	if (yych == 'b') goto yy1990;
+	goto yy1948;
 yy1984:
 	yych = *++cur;
-	if (yych == 'o') goto yy1991;
-	goto yy1937;
+	if (yych == 'c') goto yy1991;
+	goto yy1948;
 yy1985:
 	yych = *++cur;
-	if (yych == 'e') goto yy1992;
-	goto yy1937;
+	if (yych == 'i') goto yy1992;
+	goto yy1948;
 yy1986:
 	yych = *++cur;
-	if (yych == 'o') goto yy1993;
-	goto yy1937;
+	if (yych == 'a') goto yy1993;
+	goto yy1948;
 yy1987:
 	yych = *++cur;
-	if (yych == '_') goto yy1994;
-	goto yy1937;
+	if (yych == 'l') goto yy1994;
+	goto yy1948;
 yy1988:
 	yych = *++cur;
-	if (yych == '_') goto yy1995;
-	goto yy1937;
+	if (yych == 'l') goto yy1995;
+	goto yy1948;
 yy1989:
 	yych = *++cur;
-	if (yych == 'i') goto yy1996;
-	goto yy1937;
+	if (yych == 't') goto yy1996;
+	goto yy1948;
 yy1990:
 	yych = *++cur;
-	if (yych == 'n') goto yy1997;
-	goto yy1937;
+	if (yych == 'l') goto yy1997;
+	goto yy1948;
 yy1991:
 	yych = *++cur;
-	if (yych == 'n') goto yy1998;
-	goto yy1937;
+	if (yych == 'k') goto yy1998;
+	goto yy1948;
 yy1992:
 	yych = *++cur;
-	if (yych == 'd') goto yy1999;
-	goto yy1937;
+	if (yych == 't') goto yy1999;
+	goto yy1948;
 yy1993:
 	yych = *++cur;
-	if (yych == 'c') goto yy2000;
-	goto yy1937;
+	if (yych == 't') goto yy2000;
+	goto yy1948;
 yy1994:
 	yych = *++cur;
-	if (yych == 'q') goto yy2001;
-	goto yy1937;
+	if (yych == 'o') goto yy2001;
+	goto yy1948;
 yy1995:
 	yych = *++cur;
-	if (yych == 'b') goto yy2002;
-	goto yy1937;
+	if (yych == 'o') goto yy2002;
+	goto yy1948;
 yy1996:
 	yych = *++cur;
-	if (yych == 'o') goto yy2003;
-	goto yy1937;
+	if (yych == 'e') goto yy2003;
+	goto yy1948;
 yy1997:
 	yych = *++cur;
-	if (yych == 's') goto yy2004;
-	goto yy1937;
+	if (yych == 'o') goto yy2004;
+	goto yy1948;
 yy1998:
 	yych = *++cur;
-	if (yych == 'e') goto yy2005;
-	goto yy1937;
+	if (yych == '_') goto yy2005;
+	goto yy1948;
 yy1999:
 	yych = *++cur;
 	if (yych == '_') goto yy2006;
-	goto yy1937;
+	goto yy1948;
 yy2000:
 	yych = *++cur;
-	if (yych == 'k') goto yy2007;
-	goto yy1937;
+	if (yych == 'i') goto yy2007;
+	goto yy1948;
 yy2001:
 	yych = *++cur;
-	if (yych == 'u') goto yy2008;
-	goto yy1937;
+	if (yych == 'n') goto yy2008;
+	goto yy1948;
 yy2002:
 	yych = *++cur;
-	if (yych == 'o') goto yy2009;
-	goto yy1937;
+	if (yych == 'n') goto yy2009;
+	goto yy1948;
 yy2003:
 	yych = *++cur;
-	if (yych == 'n') goto yy2010;
-	goto yy1937;
+	if (yych == 'd') goto yy2010;
+	goto yy1948;
 yy2004:
-	++cur;
-#line 750 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_BOOL(semicolons); }
-#line 10734 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'c') goto yy2011;
+	goto yy1948;
 yy2005:
 	yych = *++cur;
-	if (yych == '_') goto yy2011;
-	goto yy1937;
+	if (yych == 'q') goto yy2012;
+	goto yy1948;
 yy2006:
 	yych = *++cur;
-	switch (yych) {
-		case 'a': goto yy2012;
-		case 'c': goto yy2013;
-		case 'f': goto yy2014;
-		case 't': goto yy2015;
-		default: goto yy1937;
-	}
+	if (yych == 'b') goto yy2013;
+	goto yy1948;
 yy2007:
 	yych = *++cur;
-	if (yych == 's') goto yy2016;
-	goto yy1937;
+	if (yych == 'o') goto yy2014;
+	goto yy1948;
 yy2008:
 	yych = *++cur;
-	if (yych == 'o') goto yy2017;
-	goto yy1937;
+	if (yych == 's') goto yy2015;
+	goto yy1948;
 yy2009:
 	yych = *++cur;
-	if (yych == 'o') goto yy2018;
-	goto yy1937;
+	if (yych == 'e') goto yy2016;
+	goto yy1948;
 yy2010:
 	yych = *++cur;
-	if (yych == '_') goto yy2019;
-	goto yy1937;
+	if (yych == '_') goto yy2017;
+	goto yy1948;
 yy2011:
 	yych = *++cur;
-	if (yych == 's') goto yy2020;
-	goto yy1937;
+	if (yych == 'k') goto yy2018;
+	goto yy1948;
 yy2012:
 	yych = *++cur;
-	if (yych == 'p') goto yy2021;
-	goto yy1937;
+	if (yych == 'u') goto yy2019;
+	goto yy1948;
 yy2013:
 	yych = *++cur;
-	if (yych == 'o') goto yy2022;
-	goto yy1937;
+	if (yych == 'o') goto yy2020;
+	goto yy1948;
 yy2014:
 	yych = *++cur;
-	if (yych == 'e') goto yy2023;
-	goto yy1937;
+	if (yych == 'n') goto yy2021;
+	goto yy1948;
 yy2015:
-	yych = *++cur;
-	if (yych == 'a') goto yy2024;
-	goto yy1937;
+	++cur;
+#line 753 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_BOOL(semicolons); }
+#line 10781 "src/parse/conf_lexer.cc"
 yy2016:
 	yych = *++cur;
-	if (yych == '_') goto yy2025;
-	goto yy1937;
+	if (yych == '_') goto yy2022;
+	goto yy1948;
 yy2017:
 	yych = *++cur;
-	if (yych == 't') goto yy2026;
-	goto yy1937;
+	switch (yych) {
+		case 'a': goto yy2023;
+		case 'c': goto yy2024;
+		case 'f': goto yy2025;
+		case 't': goto yy2026;
+		default: goto yy1948;
+	}
 yy2018:
 	yych = *++cur;
-	if (yych == 'l') goto yy2027;
-	goto yy1937;
+	if (yych == 's') goto yy2027;
+	goto yy1948;
 yy2019:
 	yych = *++cur;
-	if (yych == 's') goto yy2028;
-	goto yy1937;
+	if (yych == 'o') goto yy2028;
+	goto yy1948;
 yy2020:
 	yych = *++cur;
-	if (yych == 'i') goto yy2029;
-	goto yy1937;
+	if (yych == 'o') goto yy2029;
+	goto yy1948;
 yy2021:
 	yych = *++cur;
-	if (yych == 'i') goto yy2030;
-	goto yy1937;
+	if (yych == '_') goto yy2030;
+	goto yy1948;
 yy2022:
 	yych = *++cur;
-	if (yych == 'd') goto yy2031;
-	goto yy1937;
+	if (yych == 's') goto yy2031;
+	goto yy1948;
 yy2023:
 	yych = *++cur;
-	if (yych == 'a') goto yy2032;
-	goto yy1937;
+	if (yych == 'p') goto yy2032;
+	goto yy1948;
 yy2024:
 	yych = *++cur;
-	if (yych == 'r') goto yy2033;
-	goto yy1937;
+	if (yych == 'o') goto yy2033;
+	goto yy1948;
 yy2025:
 	yych = *++cur;
-	if (yych == 'i') goto yy2034;
-	goto yy1937;
+	if (yych == 'e') goto yy2034;
+	goto yy1948;
 yy2026:
 	yych = *++cur;
-	if (yych == 'e') goto yy2035;
-	goto yy1937;
+	if (yych == 'a') goto yy2035;
+	goto yy1948;
 yy2027:
 	yych = *++cur;
 	if (yych == '_') goto yy2036;
-	goto yy1937;
+	goto yy1948;
 yy2028:
 	yych = *++cur;
-	if (yych == 'e') goto yy2037;
-	goto yy1937;
+	if (yych == 't') goto yy2037;
+	goto yy1948;
 yy2029:
 	yych = *++cur;
-	if (yych == 'n') goto yy2038;
-	goto yy1937;
+	if (yych == 'l') goto yy2038;
+	goto yy1948;
 yy2030:
 	yych = *++cur;
-	if (yych == '_') goto yy2039;
-	if (yych == 's') goto yy2040;
-	goto yy1937;
+	if (yych == 's') goto yy2039;
+	goto yy1948;
 yy2031:
 	yych = *++cur;
-	if (yych == 'e') goto yy2041;
-	goto yy1937;
+	if (yych == 'i') goto yy2040;
+	goto yy1948;
 yy2032:
 	yych = *++cur;
-	if (yych == 't') goto yy2042;
-	goto yy1937;
+	if (yych == 'i') goto yy2041;
+	goto yy1948;
 yy2033:
 	yych = *++cur;
-	if (yych == 'g') goto yy2043;
-	goto yy1937;
+	if (yych == 'd') goto yy2042;
+	goto yy1948;
 yy2034:
 	yych = *++cur;
-	if (yych == 'n') goto yy2044;
-	goto yy1937;
+	if (yych == 'a') goto yy2043;
+	goto yy1948;
 yy2035:
 	yych = *++cur;
-	if (yych == 'd') goto yy2045;
-	goto yy1937;
+	if (yych == 'r') goto yy2044;
+	goto yy1948;
 yy2036:
 	yych = *++cur;
-	if (yych == 'c') goto yy2046;
-	goto yy1937;
+	if (yych == 'i') goto yy2045;
+	goto yy1948;
 yy2037:
 	yych = *++cur;
-	if (yych == 'n') goto yy2047;
-	goto yy1937;
+	if (yych == 'e') goto yy2046;
+	goto yy1948;
 yy2038:
 	yych = *++cur;
-	if (yych == 'g') goto yy2048;
-	goto yy1937;
+	if (yych == '_') goto yy2047;
+	goto yy1948;
 yy2039:
 	yych = *++cur;
-	if (yych == 's') goto yy2049;
-	goto yy1937;
+	if (yych == 'e') goto yy2048;
+	goto yy1948;
 yy2040:
-	++cur;
-#line 744 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_LIST(supported_apis); }
-#line 10885 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'n') goto yy2049;
+	goto yy1948;
 yy2041:
 	yych = *++cur;
 	if (yych == '_') goto yy2050;
-	goto yy1937;
+	if (yych == 's') goto yy2051;
+	goto yy1948;
 yy2042:
 	yych = *++cur;
-	if (yych == 'u') goto yy2051;
-	goto yy1937;
+	if (yych == 'e') goto yy2052;
+	goto yy1948;
 yy2043:
 	yych = *++cur;
-	if (yych == 'e') goto yy2052;
-	goto yy1937;
+	if (yych == 't') goto yy2053;
+	goto yy1948;
 yy2044:
 	yych = *++cur;
-	if (yych == '_') goto yy2053;
-	goto yy1937;
+	if (yych == 'g') goto yy2054;
+	goto yy1948;
 yy2045:
 	yych = *++cur;
-	if (yych == '_') goto yy2054;
-	goto yy1937;
+	if (yych == 'n') goto yy2055;
+	goto yy1948;
 yy2046:
 	yych = *++cur;
-	if (yych == 'o') goto yy2055;
-	goto yy1937;
+	if (yych == 'd') goto yy2056;
+	goto yy1948;
 yy2047:
 	yych = *++cur;
-	if (yych == 's') goto yy2056;
-	goto yy1937;
+	if (yych == 'c') goto yy2057;
+	goto yy1948;
 yy2048:
 	yych = *++cur;
-	if (yych == 'l') goto yy2057;
-	goto yy1937;
+	if (yych == 'n') goto yy2058;
+	goto yy1948;
 yy2049:
 	yych = *++cur;
-	if (yych == 't') goto yy2058;
-	goto yy1937;
+	if (yych == 'g') goto yy2059;
+	goto yy1948;
 yy2050:
 	yych = *++cur;
-	if (yych == 'm') goto yy2059;
-	goto yy1937;
+	if (yych == 's') goto yy2060;
+	goto yy1948;
 yy2051:
-	yych = *++cur;
-	if (yych == 'r') goto yy2060;
-	goto yy1937;
+	++cur;
+#line 747 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_LIST(supported_apis); }
+#line 10932 "src/parse/conf_lexer.cc"
 yy2052:
 	yych = *++cur;
-	if (yych == 't') goto yy2061;
-	goto yy1937;
+	if (yych == '_') goto yy2061;
+	goto yy1948;
 yy2053:
 	yych = *++cur;
-	if (yych == 'b') goto yy2062;
-	goto yy1937;
+	if (yych == 'u') goto yy2062;
+	goto yy1948;
 yy2054:
 	yych = *++cur;
-	if (yych == 's') goto yy2063;
-	goto yy1937;
+	if (yych == 'e') goto yy2063;
+	goto yy1948;
 yy2055:
 	yych = *++cur;
-	if (yych == 'n') goto yy2064;
-	goto yy1937;
+	if (yych == '_') goto yy2064;
+	goto yy1948;
 yy2056:
 	yych = *++cur;
-	if (yych == 'i') goto yy2065;
-	goto yy1937;
+	if (yych == '_') goto yy2065;
+	goto yy1948;
 yy2057:
 	yych = *++cur;
-	if (yych == 'e') goto yy2066;
-	goto yy1937;
+	if (yych == 'o') goto yy2066;
+	goto yy1948;
 yy2058:
 	yych = *++cur;
-	if (yych == 'y') goto yy2067;
-	goto yy1937;
+	if (yych == 's') goto yy2067;
+	goto yy1948;
 yy2059:
 	yych = *++cur;
-	if (yych == 'o') goto yy2068;
-	goto yy1937;
+	if (yych == 'l') goto yy2068;
+	goto yy1948;
 yy2060:
 	yych = *++cur;
-	if (yych == 'e') goto yy2069;
-	goto yy1937;
+	if (yych == 't') goto yy2069;
+	goto yy1948;
 yy2061:
 	yych = *++cur;
-	if (yych == 's') goto yy2070;
-	goto yy1937;
+	if (yych == 'm') goto yy2070;
+	goto yy1948;
 yy2062:
 	yych = *++cur;
 	if (yych == 'r') goto yy2071;
-	goto yy1937;
+	goto yy1948;
 yy2063:
 	yych = *++cur;
 	if (yych == 't') goto yy2072;
-	goto yy1937;
+	goto yy1948;
 yy2064:
 	yych = *++cur;
-	if (yych == 'v') goto yy2073;
-	goto yy1937;
+	if (yych == 'b') goto yy2073;
+	goto yy1948;
 yy2065:
 	yych = *++cur;
-	if (yych == 't') goto yy2074;
-	goto yy1937;
+	if (yych == 's') goto yy2074;
+	goto yy1948;
 yy2066:
 	yych = *++cur;
-	if (yych == '_') goto yy2075;
-	goto yy1937;
+	if (yych == 'n') goto yy2075;
+	goto yy1948;
 yy2067:
 	yych = *++cur;
-	if (yych == 'l') goto yy2076;
-	goto yy1937;
+	if (yych == 'i') goto yy2076;
+	goto yy1948;
 yy2068:
 	yych = *++cur;
-	if (yych == 'd') goto yy2077;
-	goto yy1937;
+	if (yych == 'e') goto yy2077;
+	goto yy1948;
 yy2069:
 	yych = *++cur;
-	if (yych == 's') goto yy2078;
-	goto yy1937;
+	if (yych == 'y') goto yy2078;
+	goto yy1948;
 yy2070:
-	++cur;
-#line 747 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_LIST(supported_targets); }
-#line 11006 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'o') goto yy2079;
+	goto yy1948;
 yy2071:
 	yych = *++cur;
-	if (yych == 'a') goto yy2079;
-	goto yy1937;
+	if (yych == 'e') goto yy2080;
+	goto yy1948;
 yy2072:
 	yych = *++cur;
-	if (yych == 'r') goto yy2080;
-	goto yy1937;
+	if (yych == 's') goto yy2081;
+	goto yy1948;
 yy2073:
 	yych = *++cur;
-	if (yych == 'e') goto yy2081;
-	goto yy1937;
+	if (yych == 'r') goto yy2082;
+	goto yy1948;
 yy2074:
 	yych = *++cur;
-	if (yych == 'i') goto yy2082;
-	goto yy1937;
+	if (yych == 't') goto yy2083;
+	goto yy1948;
 yy2075:
 	yych = *++cur;
-	if (yych == 'q') goto yy2083;
-	goto yy1937;
+	if (yych == 'v') goto yy2084;
+	goto yy1948;
 yy2076:
 	yych = *++cur;
-	if (yych == 'e') goto yy2084;
-	goto yy1937;
+	if (yych == 't') goto yy2085;
+	goto yy1948;
 yy2077:
 	yych = *++cur;
-	if (yych == 'e') goto yy2085;
-	goto yy1937;
+	if (yych == '_') goto yy2086;
+	goto yy1948;
 yy2078:
-	++cur;
-#line 748 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_LIST(supported_features); }
-#line 11039 "src/parse/conf_lexer.cc"
+	yych = *++cur;
+	if (yych == 'l') goto yy2087;
+	goto yy1948;
 yy2079:
 	yych = *++cur;
-	if (yych == 'c') goto yy2086;
-	goto yy1937;
+	if (yych == 'd') goto yy2088;
+	goto yy1948;
 yy2080:
 	yych = *++cur;
-	if (yych == 'i') goto yy2087;
-	goto yy1937;
+	if (yych == 's') goto yy2089;
+	goto yy1948;
 yy2081:
-	yych = *++cur;
-	if (yych == 'r') goto yy2088;
-	goto yy1937;
+	++cur;
+#line 750 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_LIST(supported_targets); }
+#line 11053 "src/parse/conf_lexer.cc"
 yy2082:
 	yych = *++cur;
-	if (yych == 'v') goto yy2089;
-	goto yy1937;
+	if (yych == 'a') goto yy2090;
+	goto yy1948;
 yy2083:
 	yych = *++cur;
-	if (yych == 'u') goto yy2090;
-	goto yy1937;
+	if (yych == 'r') goto yy2091;
+	goto yy1948;
 yy2084:
 	yych = *++cur;
-	if (yych == 's') goto yy2091;
-	goto yy1937;
+	if (yych == 'e') goto yy2092;
+	goto yy1948;
 yy2085:
 	yych = *++cur;
-	if (yych == 'l') goto yy2092;
-	goto yy1937;
+	if (yych == 'i') goto yy2093;
+	goto yy1948;
 yy2086:
 	yych = *++cur;
-	if (yych == 'e') goto yy2093;
-	goto yy1937;
+	if (yych == 'q') goto yy2094;
+	goto yy1948;
 yy2087:
 	yych = *++cur;
-	if (yych == 'n') goto yy2094;
-	goto yy1937;
+	if (yych == 'e') goto yy2095;
+	goto yy1948;
 yy2088:
 	yych = *++cur;
-	if (yych == 's') goto yy2095;
-	goto yy1937;
-yy2089:
-	yych = *++cur;
 	if (yych == 'e') goto yy2096;
-	goto yy1937;
-yy2090:
-	yych = *++cur;
-	if (yych == 'o') goto yy2097;
-	goto yy1937;
-yy2091:
-	++cur;
-#line 745 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_LIST(supported_api_styles); }
-#line 11092 "src/parse/conf_lexer.cc"
-yy2092:
-	yych = *++cur;
-	if (yych == 's') goto yy2098;
-	goto yy1937;
-yy2093:
-	yych = *++cur;
-	if (yych == 's') goto yy2099;
-	goto yy1937;
-yy2094:
-	yych = *++cur;
-	if (yych == 'g') goto yy2100;
-	goto yy1937;
-yy2095:
-	yych = *++cur;
-	if (yych == 'i') goto yy2101;
-	goto yy1937;
-yy2096:
-	++cur;
-#line 754 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_BOOL(indentation_sensitive); }
-#line 11113 "src/parse/conf_lexer.cc"
-yy2097:
-	yych = *++cur;
-	if (yych == 't') goto yy2102;
-	goto yy1937;
-yy2098:
-	++cur;
-#line 746 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_LIST(supported_code_models); }
-#line 11122 "src/parse/conf_lexer.cc"
-yy2099:
-	++cur;
-#line 755 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_BOOL(wrap_blocks_in_braces); }
-#line 11127 "src/parse/conf_lexer.cc"
-yy2100:
-	yych = *++cur;
-	if (yych == 's') goto yy2103;
-	goto yy1937;
-yy2101:
-	yych = *++cur;
-	if (yych == 'o') goto yy2104;
-	goto yy1937;
-yy2102:
-	yych = *++cur;
-	if (yych == 'e') goto yy2105;
-	goto yy1937;
-yy2103:
-	++cur;
-#line 752 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_BOOL(backtick_quoted_strings); }
-#line 11144 "src/parse/conf_lexer.cc"
-yy2104:
-	yych = *++cur;
-	if (yych == 'n') goto yy2106;
-	goto yy1937;
-yy2105:
-	yych = *++cur;
-	if (yych == 's') goto yy2107;
-	goto yy1937;
-yy2106:
+	goto yy1948;
+yy2089:
 	++cur;
 #line 751 "../src/parse/conf_lexer.re"
-	{ SAVE_CONF_BOOL(implicit_bool_conversion); }
-#line 11157 "src/parse/conf_lexer.cc"
+	{ SAVE_CONF_LIST(supported_features); }
+#line 11086 "src/parse/conf_lexer.cc"
+yy2090:
+	yych = *++cur;
+	if (yych == 'c') goto yy2097;
+	goto yy1948;
+yy2091:
+	yych = *++cur;
+	if (yych == 'i') goto yy2098;
+	goto yy1948;
+yy2092:
+	yych = *++cur;
+	if (yych == 'r') goto yy2099;
+	goto yy1948;
+yy2093:
+	yych = *++cur;
+	if (yych == 'v') goto yy2100;
+	goto yy1948;
+yy2094:
+	yych = *++cur;
+	if (yych == 'u') goto yy2101;
+	goto yy1948;
+yy2095:
+	yych = *++cur;
+	if (yych == 's') goto yy2102;
+	goto yy1948;
+yy2096:
+	yych = *++cur;
+	if (yych == 'l') goto yy2103;
+	goto yy1948;
+yy2097:
+	yych = *++cur;
+	if (yych == 'e') goto yy2104;
+	goto yy1948;
+yy2098:
+	yych = *++cur;
+	if (yych == 'n') goto yy2105;
+	goto yy1948;
+yy2099:
+	yych = *++cur;
+	if (yych == 's') goto yy2106;
+	goto yy1948;
+yy2100:
+	yych = *++cur;
+	if (yych == 'e') goto yy2107;
+	goto yy1948;
+yy2101:
+	yych = *++cur;
+	if (yych == 'o') goto yy2108;
+	goto yy1948;
+yy2102:
+	++cur;
+#line 748 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_LIST(supported_api_styles); }
+#line 11139 "src/parse/conf_lexer.cc"
+yy2103:
+	yych = *++cur;
+	if (yych == 's') goto yy2109;
+	goto yy1948;
+yy2104:
+	yych = *++cur;
+	if (yych == 's') goto yy2110;
+	goto yy1948;
+yy2105:
+	yych = *++cur;
+	if (yych == 'g') goto yy2111;
+	goto yy1948;
+yy2106:
+	yych = *++cur;
+	if (yych == 'i') goto yy2112;
+	goto yy1948;
 yy2107:
 	++cur;
-#line 753 "../src/parse/conf_lexer.re"
+#line 757 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_BOOL(indentation_sensitive); }
+#line 11160 "src/parse/conf_lexer.cc"
+yy2108:
+	yych = *++cur;
+	if (yych == 't') goto yy2113;
+	goto yy1948;
+yy2109:
+	++cur;
+#line 749 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_LIST(supported_code_models); }
+#line 11169 "src/parse/conf_lexer.cc"
+yy2110:
+	++cur;
+#line 758 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_BOOL(wrap_blocks_in_braces); }
+#line 11174 "src/parse/conf_lexer.cc"
+yy2111:
+	yych = *++cur;
+	if (yych == 's') goto yy2114;
+	goto yy1948;
+yy2112:
+	yych = *++cur;
+	if (yych == 'o') goto yy2115;
+	goto yy1948;
+yy2113:
+	yych = *++cur;
+	if (yych == 'e') goto yy2116;
+	goto yy1948;
+yy2114:
+	++cur;
+#line 755 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_BOOL(backtick_quoted_strings); }
+#line 11191 "src/parse/conf_lexer.cc"
+yy2115:
+	yych = *++cur;
+	if (yych == 'n') goto yy2117;
+	goto yy1948;
+yy2116:
+	yych = *++cur;
+	if (yych == 's') goto yy2118;
+	goto yy1948;
+yy2117:
+	++cur;
+#line 754 "../src/parse/conf_lexer.re"
+	{ SAVE_CONF_BOOL(implicit_bool_conversion); }
+#line 11204 "src/parse/conf_lexer.cc"
+yy2118:
+	++cur;
+#line 756 "../src/parse/conf_lexer.re"
 	{ SAVE_CONF_BOOL(standalone_single_quotes); }
-#line 11162 "src/parse/conf_lexer.cc"
+#line 11209 "src/parse/conf_lexer.cc"
 }
-#line 760 "../src/parse/conf_lexer.re"
+#line 763 "../src/parse/conf_lexer.re"
 
 
     UNREACHABLE();

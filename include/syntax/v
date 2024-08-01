@@ -123,7 +123,7 @@ conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "unsafe { goto " sigil " }";
 
 code:var_local = topindent "mut " name " := " init nl;
-// code:var_global
+code:var_global = <undefined>;
 
 code:const_local = topindent "const " name " = " init nl;
 code:const_global = code:const_local;
@@ -132,14 +132,14 @@ code:array_local =
     topindent name " := [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "]" nl;
-// code:array_global
+code:array_global = <undefined>;
 code:array_elem = array "[" index "]";
 
 code:type_int = "int";
 code:type_uint = "u32";
-// code:type_cond_enum
+code:type_cond_enum = <undefined>;
 code:type_yybm = "u8";
-// code:type_yytarget
+code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " = " rhs nl;
 
@@ -156,6 +156,8 @@ code:if_then_else =
     [branch{1:-1}: topindent "} else " (have_cond? "if " cond " ") "{" nl
         indent [stmt: stmt] dedent]
     topindent "}" nl;
+
+code:if_then_else_oneline = <undefined>;
 
 code:switch =
     topindent "match " expr " {" nl
@@ -192,6 +194,8 @@ code:enum = (code_model.loop_switch
     "}" nl);
 
 code:enum_elem = (!code_model.loop_switch ? ".") name;
+
+code:fndecl = <undefined>;
 
 code:fndef =
     topindent "fn " name "("
@@ -250,6 +254,14 @@ code:yybackupctx =
         ? YYBACKUPCTX
         : YYCTXMARKER " = " YYCURSOR
     ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
     topindent (api.generic

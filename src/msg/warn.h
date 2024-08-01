@@ -26,7 +26,8 @@ struct Skeleton;
     W(UNDEFINED_CONTROL_FLOW, "undefined-control-flow"), \
     W(UNREACHABLE_RULES, "unreachable-rules"), \
     W(USELESS_ESCAPE, "useless-escape"), \
-    W(SENTINEL_IN_MIDRULE, "sentinel-in-midrule"),
+    W(SENTINEL_IN_MIDRULE, "sentinel-in-midrule"), \
+    W(UNDEFINED_SYNTAX_CONFIG, "undefined-syntax-config"),
 
 class Warn {
   public:
@@ -75,6 +76,7 @@ class Warn {
     void unreachable_rule(const std::string& cond, const Rule& rule);
     void useless_escape(const loc_t& loc, const uint8_t* str, const uint8_t* end);
     void sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32_t sentinel);
+    void undefined_syntax_config(const loc_t& loc, const char* name);
 };
 
 } // namespace re2c
