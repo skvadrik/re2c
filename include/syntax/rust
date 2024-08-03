@@ -1,8 +1,13 @@
+// supported feature lists -----------------------------------------------------
+
 supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs", "case_ranges", "unsafe"];
+
+
+// language-specific options ---------------------------------------------------
 
 semicolons = 1;
 implicit_bool_conversion = 0;
@@ -10,6 +15,23 @@ backtick_quoted_strings = 0;
 standalone_single_quotes = 1;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+conf:target = code;
+conf:code-model = loop-switch;
+conf:input-encoding = ascii;
+conf:date = 1;
+conf:version = 1;
+conf:conditions = 0;
+conf:storable-state = 0;
+conf:flex-syntax = 0;
+conf:verbose = 0;
+conf:line-dirs = 0;
+
+
+// mutable configurations ------------------------------------------------------
 
 conf:api = custom;
 conf:api:style = free-form;
@@ -83,6 +105,9 @@ conf:label:yyloop = "'yyl"; // In Rust `continue` statements have labels, use it
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
+
+// mutable code configuration --------------------------------------------------
+
 conf:define:YYBACKUP = "YYBACKUP";
 conf:define:YYBACKUPCTX = "YYBACKUPCTX";
 conf:define:YYCONDTYPE = "YYCONDTYPE";
@@ -121,6 +146,9 @@ conf:tags:expression = (api.record ? yyrecord ".") sigil;
 conf:tags:negative = (api.generic ? "@@" : "usize::MAX");
 conf:cond:divider = "";
 conf:cond:goto = "";
+
+
+// code templates --------------------------------------------------------------
 
 code:var_local =
     // In Rust uninitialized variable is an error, but if the compiler is able to see

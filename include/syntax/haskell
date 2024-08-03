@@ -1,8 +1,13 @@
+// supported feature lists -----------------------------------------------------
+
 supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["recursive_functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs", "monadic"];
+
+
+// language-specific options ---------------------------------------------------
 
 semicolons = 1;
 //semicolons = 0;
@@ -11,6 +16,23 @@ backtick_quoted_strings = 0;
 standalone_single_quotes = 1; // TODO: what about identifiers?
 indentation_sensitive = 1;
 wrap_blocks_in_braces = 0;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+conf:target = code;
+conf:code-model = recursive-functions;
+conf:input-encoding = ascii;
+conf:date = 1;
+conf:version = 1;
+conf:conditions = 0;
+conf:storable-state = 0;
+conf:flex-syntax = 0;
+conf:verbose = 0;
+conf:line-dirs = 1;
+
+
+// mutable configurations ------------------------------------------------------
 
 conf:api = record;
 conf:api:style = free-form;
@@ -84,6 +106,9 @@ conf:label:yyloop = "";
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
+
+// mutable code configuration --------------------------------------------------
+
 conf:define:YYBACKUP = "yybackup";
 conf:define:YYBACKUPCTX = "yybackupctx";
 conf:define:YYCONDTYPE = "YYCONDTYPE";
@@ -122,6 +147,9 @@ conf:tags:expression = sigil;
 conf:tags:negative = (api.generic ? "@@" : "(-1)");
 conf:cond:divider = "";
 conf:cond:goto = "";
+
+
+// code templates --------------------------------------------------------------
 
 code:var_local = topindent "let " name " = " init " in" nl;
 code:var_global = topindent "let " name " = " init nl;

@@ -1,8 +1,13 @@
+// supported feature lists -----------------------------------------------------
+
 supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form", "functions"];
 supported_code_models = ["goto_label", "loop_switch", "recursive_functions"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs", "bitmaps"];
+
+
+// language-specific options ---------------------------------------------------
 
 semicolons = 0;
 implicit_bool_conversion = 0;
@@ -10,6 +15,23 @@ backtick_quoted_strings = 1;
 standalone_single_quotes = 0;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+conf:target = code;
+conf:code-model = goto-label;
+conf:input-encoding = ascii;
+conf:date = 1;
+conf:version = 1;
+conf:conditions = 0;
+conf:storable-state = 0;
+conf:flex-syntax = 0;
+conf:verbose = 0;
+conf:line-dirs = 1;
+
+
+// mutable configurations ------------------------------------------------------
 
 conf:api = custom;
 conf:api:style = free-form;
@@ -83,6 +105,9 @@ conf:label:yyloop = "yyl"; // In Go `continue` statements have labels, use it to
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
+
+// mutable code configuration --------------------------------------------------
+
 conf:define:YYBACKUP = "YYBACKUP";
 conf:define:YYBACKUPCTX = "YYBACKUPCTX";
 conf:define:YYCONDTYPE = "YYCONDTYPE";
@@ -121,6 +146,9 @@ conf:tags:expression = (api.record ? yyrecord ".") sigil;
 conf:tags:negative = (api.generic ? "@@" : "-1");
 conf:cond:divider = "/* *********************************** */";
 conf:cond:goto = "goto " sigil;
+
+
+// code templates --------------------------------------------------------------
 
 code:var_local = topindent (have_init? name " := " init : "var " name " " type) nl;
 code:var_global = topindent "var " name " " type (have_init? " = " init) nl;

@@ -1,8 +1,13 @@
+// supported feature lists -----------------------------------------------------
+
 supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["loop_switch"];
 supported_targets = ["code", "dot"];
 supported_features = ["nested_ifs"];
+
+
+// language-specific options ---------------------------------------------------
 
 semicolons = 0;
 implicit_bool_conversion = 0;
@@ -10,6 +15,23 @@ backtick_quoted_strings = 0;
 standalone_single_quotes = 0;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+conf:target = code;
+conf:code-model = loop-switch;
+conf:input-encoding = ascii;
+conf:date = 1;
+conf:version = 1;
+conf:conditions = 0;
+conf:storable-state = 0;
+conf:flex-syntax = 0;
+conf:verbose = 0;
+conf:line-dirs = 0;
+
+
+// mutable configurations ------------------------------------------------------
 
 conf:api = default;
 conf:api:style = free-form;
@@ -83,6 +105,9 @@ conf:label:yyloop = "yyl"; // In Java `continue` statements have labels, use it 
 conf:label:yyNext = "";
 conf:label:start = 0;
 
+
+// mutable code configuration --------------------------------------------------
+
 conf:define:YYBACKUP = "yybackup";
 conf:define:YYBACKUPCTX = "yybackupctx";
 conf:define:YYCONDTYPE = "YYCond";
@@ -121,6 +146,9 @@ conf:tags:expression = (api.record ? yyrecord ".") sigil;
 conf:tags:negative = (api.generic ? "@@" : "-1");
 conf:cond:divider = "";
 conf:cond:goto = "";
+
+
+// code templates --------------------------------------------------------------
 
 code:var_local = topindent "var " name " = " init nl;
 code:var_global = code:var_local;

@@ -9,47 +9,32 @@ namespace re2c {
 // This function should only change global options.
 LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
-        glob.set_default_line_dirs(false);
+        glob.set_line_dirs(false);
     } else if (glob.target == Target::SKELETON) {
-        glob.set_default_storable_state(false);
-        glob.set_default_line_dirs(false);
-    }
-
-    if (!glob.have_conf_code_line_info()) {
-        glob.set_default_line_dirs(false);
+        glob.set_storable_state(false);
+        glob.set_line_dirs(false);
     }
 
     if (!glob.dep_file.empty() && glob.output_file.empty()) {
         RET_FAIL(error("cannot generate dep file, output file not specified"));
     }
 
-    if (glob.is_default_code_model && !glob.supported_code_models.empty()) {
-        // Set code model based on syntax file.
-        const std::string& code_model = glob.supported_code_models.front();
-        if (code_model == "goto_label") {
-            glob.set_default_code_model(CodeModel::GOTO_LABEL);
-        } else if (code_model == "loop_switch") {
-            glob.set_default_code_model(CodeModel::LOOP_SWITCH);
-        } else if (code_model == "recursive_functions") {
-            glob.set_default_code_model(CodeModel::REC_FUNC);
-        }
-    } else {
-        // Check that the chosen code model is supported for the given backend.
-        const char* model_name = nullptr;
-        switch (glob.code_model) {
+    // Check that the chosen code model is supported for the given backend.
+    const char* model_name = nullptr;
+    switch (glob.code_model) {
         case CodeModel::GOTO_LABEL: model_name = "goto_label"; break;
         case CodeModel::LOOP_SWITCH: model_name = "loop_switch"; break;
         case CodeModel::REC_FUNC: model_name = "recursive_functions"; break;
-        }
-        if (!glob.supported_code_models_contains(model_name)) {
-            RET_FAIL(error("code model is not suppoted for this backend"));
-        }
     }
+    if (!glob.supported_code_models_contains(model_name)) {
+        RET_FAIL(error("code model is not suppoted for this backend"));
+    }
+
     if (glob.code_model != CodeModel::GOTO_LABEL) {
         // In loop/switch or rec/func mode enable eager-skip always (not only in cases when YYFILL
         // labels are used) to avoid special handling of initial state when there are transitions
         // into it.
-        glob.set_default_eager_skip(true);
+        glob.set_eager_skip(true);
     }
 
     if (glob.target == Target::SKELETON) {

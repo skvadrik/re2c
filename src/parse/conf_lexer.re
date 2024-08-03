@@ -21,6 +21,14 @@ namespace re2c {
     } \
 } while(0)
 
+// Immutable options are only allowed in syntax files.
+#define SETCONOPT(opt, val) do { \
+    if (!in_syntax_file) { \
+        RET_FAIL(error_at_cur("this configuration is only allowed in syntax files")); \
+    } \
+    const_cast<conopt_t&>(opts.glob).init_##opt(val); \
+} while (0)
+
 // In syntax file mode do not overwrite user-defined options.
 #define SETOPT(opt, val) do { \
     if (in_syntax_file) { \
@@ -33,6 +41,12 @@ namespace re2c {
 #define RET_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(opts)); \
     SETOPT(conf, tmp_num != 0); \
+    return Ret::OK; \
+} while(0)
+
+#define RET_STXCONF_BOOL(conf) do { \
+    CHECK_RET(lex_conf_bool(opts)); \
+    SETCONOPT(conf, tmp_num != 0); \
     return Ret::OK; \
 } while(0)
 
@@ -100,6 +114,21 @@ namespace re2c {
 
 Ret Input::lex_conf(Opt& opts) {
 /*!local:re2c
+    // immutable configurations (syntax file only)
+
+    "target"         { goto target; }
+    "code-model"     { goto code_model; }
+    "input-encoding" { goto input_enc; }
+    "date"           { RET_STXCONF_BOOL(date); }
+    "version"        { RET_STXCONF_BOOL(version); }
+    "conditions"     { RET_STXCONF_BOOL(start_conditions); }
+    "storable-state" { RET_STXCONF_BOOL(storable_state); }
+    "flex-syntax"    { RET_STXCONF_BOOL(flex_syntax); }
+    "verbose"        { RET_STXCONF_BOOL(verbose); }
+    "line-dirs"      { RET_STXCONF_BOOL(line_dirs); }
+
+    // mutable configurations (syntax file and source file)
+
     "api" | "flags:input" { goto input; }
     "api:style"           { goto api_style; }
     "api:sigil"           { RET_CONF_STR(api_sigil); }
@@ -252,11 +281,44 @@ Ret Input::lex_conf(Opt& opts) {
     }
 */
 
+target:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'code', 'skeleton', 'dot')"));
+    }
+    "code"     { SETCONOPT(target, Target::CODE);     goto end; }
+    "skeleton" { SETCONOPT(target, Target::SKELETON); goto end; }
+    "dot"      { SETCONOPT(target, Target::DOT);      goto end; }
+*/
+
+code_model:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value"
+            " (expected: 'goto-label', 'loop-switch', 'recursive-functions')"));
+    }
+    "goto-label"          { SETCONOPT(code_model, CodeModel::GOTO_LABEL);  goto end; }
+    "loop-switch"         { SETCONOPT(code_model, CodeModel::LOOP_SWITCH); goto end; }
+    "recursive-functions" { SETCONOPT(code_model, CodeModel::REC_FUNC);    goto end; }
+*/
+
+input_enc:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'ascii', 'utf8')"));
+    }
+    "ascii" { SETCONOPT(input_encoding, Enc::Type::ASCII); goto end; }
+    "utf8"  { SETCONOPT(input_encoding, Enc::Type::UTF8);  goto end; }
+*/
+
 input:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'simple', 'generic', 'record'"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'simple', 'generic', 'record')"));
     }
     "simple" | "default" { SETOPT(api, Api::SIMPLE);  goto end; }
     "generic" | "custom" { SETOPT(api, Api::GENERIC); goto end; }

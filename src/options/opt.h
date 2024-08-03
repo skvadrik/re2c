@@ -659,9 +659,10 @@ struct conopt_t {
         const_cast<type&>(name) = val; \
         is_default_##name = false; \
     } \
-    void set_default_##name(const type & val) { \
-        const_cast<type&>(name) = val; \
-        is_default_##name = true; \
+    void init_##name(const type &arg) { \
+        if (is_default_##name) { \
+            const_cast<type&>(name) = arg; \
+        } \
     }
     RE2C_CONSTOPTS
 #undef CONSTOPT
