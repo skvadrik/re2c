@@ -1,1 +1,1 @@
-re2c: error: `computed_gotos` feature is not supported for this backend
+re2c: error: `computed-gotos` feature is not supported for this backend

@@ -2,9 +2,9 @@
 
 supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
-supported_code_models = ["recursive_functions"];
+supported_code_models = ["recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested_ifs", "monadic"];
+supported_features = ["nested-ifs", "monadic"];
 
 
 // language-specific options ---------------------------------------------------

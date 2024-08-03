@@ -3,9 +3,9 @@
 supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 // "recursive_functions" works syntactically, but causes stack overflows due to non-tail recusion
-supported_code_models = ["loop_switch"];
+supported_code_models = ["loop-switch"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested_ifs"];
+supported_features = ["nested-ifs"];
 
 
 // language-specific options ---------------------------------------------------

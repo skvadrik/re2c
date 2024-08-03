@@ -6,6 +6,16 @@
 
 namespace re2c {
 
+static const char* code_model_name(CodeModel model) {
+    switch (model) {
+        case CodeModel::GOTO_LABEL: return "goto-label";
+        case CodeModel::LOOP_SWITCH: return "loop-switch";
+        case CodeModel::REC_FUNC: return "recursive-functions";
+    };
+    UNREACHABLE();
+    return nullptr;
+}
+
 // This function should only change global options.
 LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     if (glob.target == Target::DOT) {
@@ -20,13 +30,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
     }
 
     // Check that the chosen code model is supported for the given backend.
-    const char* model_name = nullptr;
-    switch (glob.code_model) {
-        case CodeModel::GOTO_LABEL: model_name = "goto_label"; break;
-        case CodeModel::LOOP_SWITCH: model_name = "loop_switch"; break;
-        case CodeModel::REC_FUNC: model_name = "recursive_functions"; break;
-    }
-    if (!glob.supported_code_models_contains(model_name)) {
+    if (!glob.supported_code_models_contains(code_model_name(glob.code_model))) {
         RET_FAIL(error("code model is not suppoted for this backend"));
     }
 
@@ -269,17 +273,17 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.api_style == ApiStyle::FREEFORM && !glob.supported_api_styles_contains("free-form")) {
         RET_FAIL(error("free-form API style is not supported for this backend"));
     }
-    if (!is_default.computed_gotos && !glob.supported_features_contains("computed_gotos")) {
-        RET_FAIL(error("`computed_gotos` feature is not supported for this backend"));
+    if (!is_default.computed_gotos && !glob.supported_features_contains("computed-gotos")) {
+        RET_FAIL(error("`computed-gotos` feature is not supported for this backend"));
     }
     if (!is_default.bitmaps && !glob.supported_features_contains("bitmaps")) {
         RET_FAIL(error("`bitmaps` feature is not supported for this backend"));
     }
-    if (!is_default.nested_ifs && !glob.supported_features_contains("nested_ifs")) {
-        RET_FAIL(error("`nested_ifs` feature is not supported for this backend"));
+    if (!is_default.nested_ifs && !glob.supported_features_contains("nested-ifs")) {
+        RET_FAIL(error("`nested-ifs` feature is not supported for this backend"));
     }
-    if (!is_default.case_ranges && !glob.supported_features_contains("case_ranges")) {
-        RET_FAIL(error("`case_ranges` feature is not supported for this backend"));
+    if (!is_default.case_ranges && !glob.supported_features_contains("case-ranges")) {
+        RET_FAIL(error("`case-ranges` feature is not supported for this backend"));
     }
     if (!is_default.unsafe && !glob.supported_features_contains("unsafe")) {
         RET_FAIL(error("`unsafe` feature is not supported for this backend"));

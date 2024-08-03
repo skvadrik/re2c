@@ -47,7 +47,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     globopts.set_nested_negative_tags(!(cflags & (REG_NFA | REG_MULTIPASS)));
 
     opts.set_supported_api_styles({"functions"});
-    opts.set_supported_code_models({"goto_label"});
+    opts.set_supported_code_models({"goto-label"});
     opts.init_tags_history((cflags & REG_SUBHIST) != 0);
     opts.init_tags_automatic((cflags & REG_AUTOTAGS) != 0);
     opts.init_tags_posix_syntax(true);

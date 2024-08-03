@@ -61,11 +61,11 @@ using StxCodes = list_t<StxCode>;
     CHECKED_LIST(supported_api_styles, \
             ({"free-form", "functions"})) \
     CHECKED_LIST(supported_code_models, \
-            ({"goto_label", "loop_switch", "recursive_functions"})) \
+            ({"goto-label", "loop-switch", "recursive-functions"})) \
     CHECKED_LIST(supported_targets, \
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
-            ({"nested_ifs", "bitmaps", "computed_gotos", "case_ranges", "unsafe", "monadic"}))
+            ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \

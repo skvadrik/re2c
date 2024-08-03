@@ -55,10 +55,10 @@ size_t LexerState::maxfill_conf() { return 30; }
     return Ret::OK; \
 } while(0)
 
-#define RET_CONF_FEATURE(conf) do { \
+#define RET_CONF_FEAT(conf, name) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    if (tmp_num != 0 && !opts.glob.supported_features_contains(#conf)) { \
-        RET_FAIL(error_at_cur("'%s' feature is not supported for this backend", #conf)); \
+    if (tmp_num != 0 && !opts.glob.supported_features_contains(name)) { \
+        RET_FAIL(error_at_cur("`%s` feature is not supported for this backend", name)); \
     } \
     SETOPT(conf, tmp_num != 0); \
     return Ret::OK; \
@@ -1336,7 +1336,7 @@ yy234:
 	}
 yy235:
 #line 248 "../src/parse/conf_lexer.re"
-	{ RET_CONF_FEATURE(bitmaps); }
+	{ RET_CONF_FEAT(bitmaps, "bitmaps"); }
 #line 1341 "src/parse/conf_lexer.cc"
 yy236:
 	yych = *++cur;
@@ -1397,7 +1397,7 @@ yy241:
 	}
 yy242:
 #line 250 "../src/parse/conf_lexer.re"
-	{ RET_CONF_FEATURE(computed_gotos); }
+	{ RET_CONF_FEAT(computed_gotos, "computed-gotos"); }
 #line 1402 "src/parse/conf_lexer.cc"
 yy243:
 	yych = *++cur;
@@ -1413,7 +1413,7 @@ yy245:
 		goto yy2;
 	}
 #line 252 "../src/parse/conf_lexer.re"
-	{ RET_CONF_FEATURE(nested_ifs); }
+	{ RET_CONF_FEAT(nested_ifs, "nested-ifs"); }
 #line 1418 "src/parse/conf_lexer.cc"
 yy246:
 	yych = *++cur;
@@ -2508,7 +2508,7 @@ yy465:
 		goto yy2;
 	}
 #line 255 "../src/parse/conf_lexer.re"
-	{ RET_CONF_FEATURE(case_ranges); }
+	{ RET_CONF_FEAT(case_ranges, "case-ranges"); }
 #line 2513 "src/parse/conf_lexer.cc"
 yy466:
 	yych = *++cur;
@@ -5652,7 +5652,7 @@ end:
 
 #undef SETOPT
 #undef RET_CONF_BOOL
-#undef RET_CONF_FEATURE
+#undef RET_CONF_FEAT
 #undef RET_CONF_STR
 #undef RET_CONF_ENC
 #undef RET_CONF_NUM_NONNEG

@@ -50,10 +50,10 @@ namespace re2c {
     return Ret::OK; \
 } while(0)
 
-#define RET_CONF_FEATURE(conf) do { \
+#define RET_CONF_FEAT(conf, name) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    if (tmp_num != 0 && !opts.glob.supported_features_contains(#conf)) { \
-        RET_FAIL(error_at_cur("'%s' feature is not supported for this backend", #conf)); \
+    if (tmp_num != 0 && !opts.glob.supported_features_contains(name)) { \
+        RET_FAIL(error_at_cur("`%s` feature is not supported for this backend", name)); \
     } \
     SETOPT(conf, tmp_num != 0); \
     return Ret::OK; \
@@ -245,14 +245,14 @@ Ret Input::lex_conf(Opt& opts) {
     "state:abort"     { RET_CONF_BOOL(state_abort); }
     "state:nextlabel" { RET_CONF_BOOL(state_next); }
 
-    "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_FEATURE(bitmaps); }
+    "flags:"? "bit-vectors"    | "flags:b"    { RET_CONF_FEAT(bitmaps, "bitmaps"); }
     "flags:"? "debug-output"   | "flags:d"    { RET_CONF_BOOL(debug); }
-    "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_FEATURE(computed_gotos); }
+    "flags:"? "computed-gotos" | "flags:g"    { RET_CONF_FEAT(computed_gotos, "computed-gotos"); }
     ("computed-gotos" | "cgoto") ":threshold" { RET_CONF_NUM_NONNEG(computed_gotos_threshold); }
-    "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_FEATURE(nested_ifs); }
+    "flags:"? "nested-ifs"     | "flags:s"    { RET_CONF_FEAT(nested_ifs, "nested-ifs"); }
     "flags:"? "case-insensitive"              { RET_CONF_BOOL(case_insensitive); }
     "flags:"? "case-inverted"                 { RET_CONF_BOOL(case_inverted); }
-    "flags:"? "case-ranges"                   { RET_CONF_FEATURE(case_ranges); }
+    "flags:"? "case-ranges"                   { RET_CONF_FEAT(case_ranges, "case-ranges"); }
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
     "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
 
@@ -376,7 +376,7 @@ end:
 
 #undef SETOPT
 #undef RET_CONF_BOOL
-#undef RET_CONF_FEATURE
+#undef RET_CONF_FEAT
 #undef RET_CONF_STR
 #undef RET_CONF_ENC
 #undef RET_CONF_NUM_NONNEG
