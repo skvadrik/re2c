@@ -13,7 +13,7 @@ semicolons = 1;
 //semicolons = 0;
 implicit_bool_conversion = 0;
 backtick_quoted_strings = 0;
-standalone_single_quotes = 1; // TODO: what about identifiers?
+standalone_single_quotes = 1; // Haskell allows using single quotes in identifiers
 indentation_sensitive = 1;
 wrap_blocks_in_braces = 0;
 
