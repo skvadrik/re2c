@@ -232,8 +232,9 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
     // This order gives the user an opportunity to overrided only some configurations.
     if (!globopts->syntax_file.empty()) {
         reset_lexer();
-        // Pass itself as parent to `open` to enable search in include paths.
-        CHECK_RET(open(globopts->syntax_file, &globopts->syntax_file));
+        // Pass ./ as parent path to enable search in the current directory.
+        std::string path = "./";
+        CHECK_RET(open(globopts->syntax_file, &path));
         CHECK_RET(lex_syntax_file(opts));
     }
 
