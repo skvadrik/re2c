@@ -1601,24 +1601,27 @@ Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
         case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
         case Lang::V: src = DEFAULT_SYNTAX_V; break;
         case Lang::ZIG: src = DEFAULT_SYNTAX_ZIG; break;
+        case Lang::NONE: break; // no language => no default syntax config
     }
 
-    size_t flen = strlen(src);
+    if (src != nullptr) {
+        size_t flen = strlen(src);
 
-    if (flen + maxfill() > BSIZE) {
-        delete[] bot;
-        BSIZE = flen;
-        bot = new uint8_t[BSIZE + maxfill()];
+        if (flen + maxfill() > BSIZE) {
+            delete[] bot;
+            BSIZE = flen;
+            bot = new uint8_t[BSIZE + maxfill()];
+        }
+
+        // fill in buffer from the config string
+        memcpy(bot, src, flen);
+        memset(bot + flen, 0, maxfill());
+
+        cur = mar = ctx = tok = ptr = pos = bot;
+        lim = bot + flen + maxfill();
+
+        CHECK_RET(lex_syntax_file(opts));
     }
-
-    // fill in buffer from the config string
-    memcpy(bot, src, flen);
-    memset(bot + flen, 0, maxfill());
-
-    cur = mar = ctx = tok = ptr = pos = bot;
-    lim = bot + flen + maxfill();
-
-    CHECK_RET(lex_syntax_file(opts));
 
     // Second, apply user-supplied syntax config (if any).
     // This order gives the user an opportunity to overrided only some configurations.

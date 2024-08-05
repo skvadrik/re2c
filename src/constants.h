@@ -23,7 +23,8 @@ enum class Lang: uint32_t {
     PYTHON,
     RUST,
     V,
-    ZIG
+    ZIG,
+    NONE // no language (no default syntax config will be loaded)
 };
 
 enum class Api: uint32_t {
