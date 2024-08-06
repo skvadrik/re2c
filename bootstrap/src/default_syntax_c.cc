@@ -14,6 +14,7 @@ const char* DEFAULT_SYNTAX_C =
     "semicolons = 1;\n"
     "implicit_bool_conversion = 1;\n"
     "backtick_quoted_strings = 0;\n"
+    "single_quoted_strings = 0;\n"
     "standalone_single_quotes = 1; // C++14 allowed using ' as a digit separator in numeric literals\n"
     "indentation_sensitive = 0;\n"
     "wrap_blocks_in_braces = 1;\n"

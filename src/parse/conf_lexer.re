@@ -815,6 +815,7 @@ start:
     "semicolons"               { SAVE_CONF_BOOL(semicolons); }
     "implicit_bool_conversion" { SAVE_CONF_BOOL(implicit_bool_conversion); }
     "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
+    "single_quoted_strings"    { SAVE_CONF_BOOL(single_quoted_strings); }
     "standalone_single_quotes" { SAVE_CONF_BOOL(standalone_single_quotes); }
     "indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }
     "wrap_blocks_in_braces"    { SAVE_CONF_BOOL(wrap_blocks_in_braces); }

@@ -12,6 +12,7 @@ supported_features = ["nested-ifs", "bitmaps", "computed-gotos", "case-ranges"];
 semicolons = 1;
 implicit_bool_conversion = 1;
 backtick_quoted_strings = 0;
+single_quoted_strings = 0;
 standalone_single_quotes = 1; // C++14 allowed using ' as a digit separator in numeric literals
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;

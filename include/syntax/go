@@ -12,6 +12,7 @@ supported_features = ["nested-ifs", "bitmaps"];
 semicolons = 0;
 implicit_bool_conversion = 0;
 backtick_quoted_strings = 1;
+single_quoted_strings = 0;
 standalone_single_quotes = 0;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
