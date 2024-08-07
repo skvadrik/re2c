@@ -757,7 +757,7 @@ Ret Input::lex_sqchar_or_standalone_in_code() {
 /*!local:re2c
     !use:char_lit;
     char_lit ['] { return Ret::OK; }
-    ""           { return globopts->standalone_single_quotes ? Ret::OK : Ret::FAIL; }
+    ""           { return Ret::OK; } // standalone single quote => ignore
 */
 }
 
@@ -765,7 +765,7 @@ Ret Input::lex_bqchar_or_standalone_in_code() {
 /*!local:re2c
     !use:char_lit;
     char_lit [`] { return Ret::OK; }
-    ""           { return Ret::OK; } // standalone backtick => skip
+    ""           { return Ret::OK; } // standalone backtick => ignore
 */
 }
 

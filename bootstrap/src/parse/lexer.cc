@@ -3982,7 +3982,7 @@ Ret Input::lex_sqchar_or_standalone_in_code() {
 	}
 yy460:
 #line 760 "../src/parse/lexer.re"
-	{ return globopts->standalone_single_quotes ? Ret::OK : Ret::FAIL; }
+	{ return Ret::OK; }
 #line 3987 "src/parse/lexer.cc"
 yy461:
 	yych = *++cur;

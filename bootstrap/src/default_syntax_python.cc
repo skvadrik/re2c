@@ -16,7 +16,6 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "implicit_bool_conversion = 0;\n"
     "backtick_quoted_strings = 0;\n"
     "single_quoted_strings = 1;\n"
-    "standalone_single_quotes = 0;\n"
     "indentation_sensitive = 1;\n"
     "wrap_blocks_in_braces = 0;\n"
     "\n"
