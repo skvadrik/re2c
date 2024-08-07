@@ -137,6 +137,7 @@ class Input: private LexerState {
     Ret lex_sqstring_in_code() NODISCARD;
     Ret lex_bqstring_in_code() NODISCARD;
     Ret lex_sqchar_or_standalone_in_code() NODISCARD;
+    Ret lex_bqchar_or_standalone_in_code() NODISCARD;
     Ret try_lex_literal_in_code(uint8_t quote) NODISCARD;
     Ret lex_c_comment() NODISCARD;
     Ret lex_cpp_comment() NODISCARD;

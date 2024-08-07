@@ -733,26 +733,39 @@ loop: /*!re2c
 */
 }
 
-Ret Input::lex_sqchar_or_standalone_in_code() {
-    // Single-quoted char literals may contain closing curly brace, e.g. '}'.
-    // We must lex all possible forms (not only those with a closing brace), as otherwise we
-    // might erroneously lex closing single quote as the beginning of another literal, e.g.
-    // in 'a'}'b' we would recognize '}' as a literal rather than a closing brace of a block.
-/*!local:re2c
+// Generalized rule for char literals (covering various languages).
+///
+// Char literals may contain closing curly brace, e.g. '}'. We must lex all possible forms of
+// char literals, otherwise we might erroneously lex closing single quote as the beginning of
+// another literal and overlook a real closing brace (e.g. in 'a'}'b' we might recognize '}'
+// as a literal).
+//
+/*!rules:re2c:char_lit
     re2c:flags:utf-8 = 1;
+    char_lit =
+        esc [ux][{] hex_digit+ [}] | // hex escape \u{X...X}
+        esc [x] hex_digit{2}       | // 2-byte hex escape
+        esc [u] hex_digit{4}       | // 4-byte hex escape \uXXXX
+        esc [U] hex_digit{8}       | // 8-byte hex escape \UXXXXXXXX
+        esc [o][{] oct_digit+ [}]  | // octal escape \o{X...X}
+        esc oct_digit{3}           | // octal escape \XXX
+        esc ['\\?abfnrtv0]         | // special escape sequences
+        [^]                        ; // any UTF-8 encoded Unicode symbol, unescaped
+*/
 
-    // Generalized rules for single-quoted char literals (covering various languages).
-    esc [ux][{] hex_digit+ [}]['] | // hex escape \u{X...X}
-    esc [x] hex_digit{2}      ['] | // 2-byte hex escape
-    esc [u] hex_digit{4}      ['] | // 4-byte hex escape \uXXXX
-    esc [U] hex_digit{8}      ['] | // 8-byte hex escape \UXXXXXXXX
-    esc [o][{] oct_digit+ [}] ['] | // octal escape \o{X...X}
-    esc oct_digit{3}          ['] | // octal escape \XXX
-    esc ['\\?abfnrtv0]        ['] | // special escape sequences
-    [^]                       ['] { // any UTF-8 encoded Unicode symbol, unescaped
-        return Ret::OK;
-    }
-    "" { return globopts->standalone_single_quotes ? Ret::OK : Ret::FAIL; }
+Ret Input::lex_sqchar_or_standalone_in_code() {
+/*!local:re2c
+    !use:char_lit;
+    char_lit ['] { return Ret::OK; }
+    ""           { return globopts->standalone_single_quotes ? Ret::OK : Ret::FAIL; }
+*/
+}
+
+Ret Input::lex_bqchar_or_standalone_in_code() {
+/*!local:re2c
+    !use:char_lit;
+    char_lit [`] { return Ret::OK; }
+    ""           { return Ret::OK; } // standalone backtick => skip
 */
 }
 
@@ -769,7 +782,7 @@ Ret Input::try_lex_literal_in_code(uint8_t quote) {
     case '`':
         return globopts->backtick_quoted_strings
             ? lex_bqstring_in_code()
-            : Ret::OK; // skip
+            : lex_bqchar_or_standalone_in_code();
     default:
         return Ret::FAIL;
     }
