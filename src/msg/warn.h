@@ -17,23 +17,24 @@ class path_t;
 struct Rule;
 struct Skeleton;
 
-#define RE2C_WARNING_TYPES \
-    W(CONDITION_ORDER, "condition-order"), \
-    W(EMPTY_CHARACTER_CLASS, "empty-character-class"), \
-    W(MATCH_EMPTY_STRING, "match-empty-string"), \
-    W(NONDETERMINISTIC_TAGS, "nondeterministic-tags"), \
-    W(SWAPPED_RANGE, "swapped-range"), \
-    W(UNDEFINED_CONTROL_FLOW, "undefined-control-flow"), \
-    W(UNREACHABLE_RULES, "unreachable-rules"), \
-    W(USELESS_ESCAPE, "useless-escape"), \
-    W(SENTINEL_IN_MIDRULE, "sentinel-in-midrule"), \
-    W(UNDEFINED_SYNTAX_CONFIG, "undefined-syntax-config"),
+#define RE2C_WARNINGS \
+    W(UNDEFINED_CONTROL_FLOW, "undefined-control-flow", true) \
+    W(UNDEFINED_SYNTAX_CONFIG, "undefined-syntax-config", true) \
+    W(SENTINEL_IN_MIDRULE, "sentinel-in-midrule", true) \
+    W(UNREACHABLE_RULES, "unreachable-rules", true) \
+    W(USELESS_ESCAPE, "useless-escape", true) \
+    W(SWAPPED_RANGE, "swapped-range", true) \
+    W(CONDITION_ORDER, "condition-order", true) \
+    W(EMPTY_CHARACTER_CLASS, "empty-character-class", false) \
+    W(MATCH_EMPTY_STRING, "match-empty-string", false) \
+    W(NONDETERMINISTIC_TAGS, "nondeterministic-tags", false) \
+    /* end */
 
 class Warn {
   public:
     enum type_t {
-#define W(x, y) x
-        RE2C_WARNING_TYPES
+#define W(kind, name, on) kind,
+        RE2C_WARNINGS
 #undef W
         TYPES // count
     };

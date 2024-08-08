@@ -15,15 +15,15 @@ namespace re2c {
 struct loc_t;
 
 const char* Warn::names [TYPES] = {
-#define W(x, y) y
-    RE2C_WARNING_TYPES
+#define W(kind, name, on) name,
+    RE2C_WARNINGS
 #undef W
 };
 
 Warn::Warn(Msg& msg): mask(), error_accuml(false), msg(msg) {
-    for (uint32_t i = 0; i < TYPES; ++i) {
-        mask[i] = SILENT;
-    }
+#define W(kind, name, on) mask[kind] = on ? WARNING : SILENT;
+    RE2C_WARNINGS
+#undef W
 }
 
 Ret Warn::check() const {
