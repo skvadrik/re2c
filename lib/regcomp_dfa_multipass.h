@@ -252,7 +252,7 @@ inline MpTdfa::MpTdfa(Tnfa&& nfa, const opt_t* opts, int flags)
       states(),
       result(new regoff_t[nfa.tags.size()]),
       log() {
-    if (opts->tags_posix_semantics) {
+    if (opts->captures_posix) {
         determinization_multipass<pdetctx_t>(std::move(nfa), *this);
     } else {
         determinization_multipass<ldetctx_t>(std::move(nfa), *this);

@@ -500,10 +500,11 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, tags, false) \
     MUTOPT(bool, tags_automatic, false) \
     MUTOPT(bool, tags_history, false) \
-    MUTOPT(bool, tags_posix_syntax, false) \
-    MUTOPT(bool, tags_posix_semantics, false) \
+    MUTOPT(bool, captures, false) \
+    MUTOPT(bool, captures_posix, false) \
+    MUTOPT(bool, captures_array, false) \
+    MUTOPT(bool, captures_invert, false) \
     MUTOPT(std::string, tags_prefix, "yyt") \
-    MUTOPT(bool, invert_captures, false) \
     /* functions */ \
     MUTOPT(std::vector<std::string>, api_fn, \
             {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \

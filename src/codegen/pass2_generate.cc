@@ -241,7 +241,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     Scratchbuf& o = output.scratchbuf;
     std::vector<const char*> fintags;
 
-    if (rule.ncap > 0 && !opts->var_nmatch.empty()) {
+    if (rule.ncap > 0 && opts->captures_array) {
         const char* lhs = fintag_expr(output, opts->var_nmatch.c_str());
         const char* rhs = o.u64(rule.ncap).flush();
         append(stmts, code_assign(alc, lhs, rhs));
@@ -353,19 +353,27 @@ class GenArrayElem : public RenderCallback {
 
 void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fintags) {
     const opt_t* opts = output.block().opts;
+    Scratchbuf& buf = output.scratchbuf;
+
     fintags.clear();
     if (trailing(tag)) {
         // empty list
     } else if (!capture(tag)) {
         // named tag
         fintags.push_back(fintag_expr(output, output.scratchbuf.str(tag.name).flush()));
-    } else {
-        // capture tag, maps to a range of parentheses
-        Scratchbuf& buf = output.scratchbuf;
+    } else if (opts->captures_array) {
+        // capture tag, maps to a range of parentheses, stored in the form of `yypmatch` array
         const char* yypmatch = fintag_expr(output, opts->var_pmatch.c_str());
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             GenArrayElem callback(buf.stream(), yypmatch, i);
             fintags.push_back(opts->gen_code_array_elem(buf, callback));
+        }
+    } else {
+        // capture tag, maps to a range of parentheses, stored in the form of variables
+        for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
+            const char* sfx = i % 2 == 0 ? "l" : "r";// left or right capturing parenthesis
+            const char* name = buf.str(opts->tags_prefix).cstr(sfx).u64(i / 2).flush();
+            fintags.push_back(fintag_expr(output, name));
         }
     }
 }

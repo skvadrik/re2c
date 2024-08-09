@@ -114,8 +114,9 @@ opt_short: /*!local:re2c
     "8" { opts.set_encoding(Enc::Type::UTF8, true);   goto opt_short; }
 
     "P" {
-        opts.set_tags_posix_syntax(true);
-        opts.set_tags_posix_semantics(true);
+        opts.set_captures(true);
+        opts.set_captures_posix(true);
+        opts.set_captures_array(true);
         goto opt_short;
     }
 
@@ -163,7 +164,7 @@ opt_long: /*!local:re2c
     "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }
     "tags"                  end { opts.set_tags(true);               goto opt; }
     "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
-    "invert-captures"       end { opts.set_invert_captures(true);    goto opt; }
+    "invert-captures"       end { opts.set_captures_invert(true);    goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
     "utf32"  | "unicode"    end { opts.set_encoding(Enc::Type::UTF32, true);  goto opt; }
@@ -171,13 +172,26 @@ opt_long: /*!local:re2c
     "utf16"  | "utf-16"     end { opts.set_encoding(Enc::Type::UTF16, true);  goto opt; }
     "utf8"   | "utf-8"      end { opts.set_encoding(Enc::Type::UTF8, true);   goto opt; }
 
-    "leftmost-captures" end {
-        opts.set_tags_posix_syntax(true);
+    "leftmost-"? "captures" end {
+        opts.set_captures(true);
+        opts.set_captures_array(true);
         goto opt;
     }
     "posix-captures" end {
-        opts.set_tags_posix_syntax(true);
-        opts.set_tags_posix_semantics(true);
+        opts.set_captures(true);
+        opts.set_captures_posix(true);
+        opts.set_captures_array(true);
+        goto opt;
+    }
+    "leftmost-"? "captvars" end {
+        opts.set_captures(true);
+        opts.set_captures_array(false);
+        goto opt;
+    }
+    "posix-captvars" end {
+        opts.set_captures(true);
+        opts.set_captures_posix(true);
+        opts.set_captures_array(false);
         goto opt;
     }
 

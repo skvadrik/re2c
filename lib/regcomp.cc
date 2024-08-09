@@ -50,8 +50,9 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     opts.set_supported_code_models({"goto-label"});
     opts.init_tags_history((cflags & REG_SUBHIST) != 0);
     opts.init_tags_automatic((cflags & REG_AUTOTAGS) != 0);
-    opts.init_tags_posix_syntax(true);
-    opts.init_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
+    opts.init_captures(true);
+    opts.init_captures_posix((cflags & REG_LEFTMOST) == 0);
+    opts.init_captures_array(true);
 
     CHECK_RET(opts.fix_global_and_defaults());
 

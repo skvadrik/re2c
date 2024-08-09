@@ -16,14 +16,14 @@ data State = State {
     %{stags format = "\n@@{tag} :: !Int,"; %}
     -- use record fields instead of canonical POSIX `yypmatch` array,
     -- as mutable arrays are non-idiomatic in Haskell
-    _0 :: !Int,
-    _1 :: !Int,
-    _2 :: !Int,
-    _3 :: !Int,
-    _4 :: !Int,
-    _5 :: !Int,
-    _6 :: !Int,
-    _7 :: !Int
+    _yytl0 :: !Int,
+    _yytr0 :: !Int,
+    _yytl1 :: !Int,
+    _yytr1 :: !Int,
+    _yytl2 :: !Int,
+    _yytr2 :: !Int,
+    _yytl3 :: !Int,
+    _yytr3 :: !Int
 }
 
 data SemVer = SemVer {
@@ -39,7 +39,7 @@ s2n s i j = f i 0 where
 %{
     re2c:define:YYFN = ["parse;Maybe SemVer", "State{..};State"];
     re2c:define:YYCTYPE = "Word8";
-    re2c:posix-captures = 1;
+    re2c:posix-captvars = 1;
     re2c:variable:yypmatch = _;
     re2c:yyfill:enable = 0;
 
@@ -49,9 +49,9 @@ s2n s i j = f i 0 where
         -- Even `yypmatch` values are for opening parentheses, odd values
         -- are for closing parentheses, the first group is the whole match.
         Just SemVer {
-            major = s2n _yyinput _2 _3,
-            minor = s2n _yyinput _4 _5,
-            patch = if _6 == none then 0 else s2n _yyinput (_6 + 1) _7
+            major = s2n _yyinput _yytl1 _yytr1,
+            minor = s2n _yyinput _yytl2 _yytr2,
+            patch = if _yytl3 == none then 0 else s2n _yyinput (_yytl3 + 1) _yytr3
         }
     }
     * { Nothing }
@@ -64,14 +64,14 @@ test str expect = do
         _yycursor = 0,
         _yymarker = 0,
         %{stags format = "\n@@{tag} = none,"; %}
-        _0 = none,
-        _1 = none,
-        _2 = none,
-        _3 = none,
-        _4 = none,
-        _5 = none,
-        _6 = none,
-        _7 = none
+        _yytl0 = none,
+        _yytr0 = none,
+        _yytl1 = none,
+        _yytr1 = none,
+        _yytl2 = none,
+        _yytr2 = none,
+        _yytl3 = none,
+        _yytr3 = none
     }
     when (parse s /= expect) $ error "failed!"
 

@@ -213,7 +213,7 @@ static void emit_skeleton_function_action(Output& output, CodeList* code, const 
 
 static void emit_skeleton_stags(Output& output, CodeList* code, const Adfa& dfa) {
     const opt_t* opts = output.block().opts;
-    if (dfa.stagvars.empty() && !opts->tags_posix_syntax) return;
+    if (dfa.stagvars.empty() && !opts->captures) return;
 
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
@@ -510,7 +510,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     append(block, code_stmt(alc, "const YYCTYPE *limit = NULL"));
     append(block, code_stmt(alc, "const YYCTYPE *token = NULL"));
     append(block, code_stmt(alc, "const YYCTYPE *eof = NULL"));
-    if (opts->tags_posix_syntax) {
+    if (opts->captures) {
         append(block, code_stmt(alc, "size_t yynmatch"));
         text = o.cstr("const YYCTYPE *yypmatch[").u64(dfa.max_nmatch).cstr(" * 2]").flush();
         append(block, code_stmt(alc, text));

@@ -85,7 +85,7 @@ LOCAL_NODISCARD(Regexp* fictive_tags(RESpec& spec, int32_t height)) {
 
 LOCAL_NODISCARD(bool is_capture_mode(uint8_t mode, const opt_t* opts)) {
     return mode == CAPTURE ||
-        mode == (opts->invert_captures ? CAPTURE_IF_INVERTED : CAPTURE_IF_NOT_INVERTED);
+        mode == (opts->captures_invert ? CAPTURE_IF_INVERTED : CAPTURE_IF_NOT_INVERTED);
 }
 
 LOCAL_NODISCARD(bool is_capture(const AstNode* a, const opt_t* opts)) {
@@ -130,7 +130,7 @@ LOCAL_NODISCARD(Regexp* structural_tags(
     } else if (spec.opts->tags_automatic) {
         // Full parsing: automatically add tags as if this sub-regexp was a capture.
         return capture_tags(spec, x, false, &x.ast, pncap);
-    } else if (spec.opts->tags_posix_semantics && is_capture_mode(x.ast->has_caps, spec.opts)) {
+    } else if (spec.opts->captures_posix && is_capture_mode(x.ast->has_caps, spec.opts)) {
         // POSIX submatch extraction: add fictive structural tags.
         // See note [POSIX subexpression hierarchy].
         return fictive_tags(spec, x.height);
@@ -323,7 +323,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (is_capture(ast, spec.opts) && spec.opts->tags_posix_syntax) goto error;
+            if (is_capture(ast, spec.opts) && spec.opts->captures) goto error;
             x.ast = ast->cap.ast; // replace on stack
             break;
 
@@ -426,7 +426,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             if (ast->tag.name && !opts->tags) {
                 RET_FAIL(spec.msg.error(
                         ast->loc, "tags are only allowed with '-T, --tags' option"));
-            } else if (opts->tags_posix_syntax) {
+            } else if (opts->captures) {
                 RET_FAIL(spec.msg.error(
                         ast->loc, "simple tags are not allowed with '--posix-captures' option"));
             }
@@ -436,7 +436,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::CAP:
-            if (!opts->tags_posix_syntax) { // ordinary group, replace with subexpr on stack
+            if (!opts->captures) { // ordinary group, replace with subexpr on stack
                 x.ast = ast->cap.ast;
             } else { // capturing or non-capturing group
                 if (x.succ == 0) { // 1st visit: push successor
@@ -495,7 +495,7 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
                 ++x.succ;
                 const uint32_t m = ast->iter.max;
                 ast = ast->iter.ast;
-                if ((opts->tags_posix_semantics && is_capture(ast, opts)) || opts->tags_automatic) {
+                if ((opts->captures_posix && is_capture(ast, opts)) || opts->tags_automatic) {
                     x.re1 = capture_tags(spec, x, m > 1, &ast, pncap);
                 }
                 if (m > 0) {

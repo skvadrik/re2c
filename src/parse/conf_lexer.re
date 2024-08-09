@@ -153,18 +153,39 @@ Ret Input::lex_conf(Opt& opts) {
 
     "yyfn:sep" { RET_CONF_STR(fn_sep); }
 
-    "flags:"? "tags" | "flags:T"  { RET_CONF_BOOL(tags); }
-    "flags:"? "leftmost-captures" { RET_CONF_BOOL(tags_posix_syntax); }
+    "flags:"? "tags" | "flags:T" {
+        RET_CONF_BOOL(tags);
+    }
+    "flags:"? "leftmost-"? "captures" {
+        CHECK_RET(lex_conf_bool(opts));
+        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures_array, true);
+        return Ret::OK;
+    }
     "flags:"? "posix-captures" | "flags:P" {
         CHECK_RET(lex_conf_bool(opts));
-        SETOPT(tags_posix_syntax, tmp_num != 0);
-        SETOPT(tags_posix_semantics, tmp_num != 0);
+        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures_posix, tmp_num != 0);
+        SETOPT(captures_array, true);
+        return Ret::OK;
+    }
+    "leftmost-"? "captvars" {
+        CHECK_RET(lex_conf_bool(opts));
+        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures_array, false);
+        return Ret::OK;
+    }
+    "posix-captvars" {
+        CHECK_RET(lex_conf_bool(opts));
+        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures_posix, tmp_num != 0);
+        SETOPT(captures_array, false);
         return Ret::OK;
     }
     "tags:prefix"     { RET_CONF_STR(tags_prefix); }
     "tags:expression" { RET_CONF_CODE(tags_expression); }
     "tags:negative"   { RET_CONF_CODE(tags_negative); }
-    "invert-captures" { RET_CONF_BOOL(invert_captures); }
+    "invert-captures" { RET_CONF_BOOL(captures_invert); }
 
     "define:YYBACKUP"                    { RET_CONF_CODE(api_backup); }
     "define:YYBACKUPCTX"                 { RET_CONF_CODE(api_backup_ctx); }

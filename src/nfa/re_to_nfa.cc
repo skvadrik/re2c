@@ -266,7 +266,7 @@ static void one_re_to_nfa(
 
                     // POSIX: empty alternative first (speed up GOR1 by first exploring paths w/o
                     // optional empty repetitions). Leftmost greedy: non-empty alternative first.
-                    if (spec.opts->tags_posix_semantics) {
+                    if (spec.opts->captures_posix) {
                         std::swap(x.start->out1, x.start->out2);
                     }
                 }

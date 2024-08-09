@@ -52,7 +52,7 @@ conf:variable:yyctable = ""; // unused
 conf:variable:yyaccept = "_yyaccept";
 conf:variable:yytarget = ""; // unused
 conf:variable:yystate = "_yystate";
-conf:variable:yynmatch = ""; // no array for `yypmatch` in Haskell => no need for `yynmatch`
+conf:variable:yynmatch = "yynmatch";
 conf:variable:yypmatch = "yypmatch";
 conf:variable:yyrecord = "yyrecord";
 conf:variable:yych = "yych";
@@ -70,9 +70,11 @@ conf:yyfill:enable = 1;
 conf:yyfill:parameter = 1;
 conf:yyfill:check = 1;
 conf:tags = 0;
-conf:leftmost-captures = 0;
-conf:posix-captures = 0;
 conf:tags:prefix = "_yyt";
+conf:captures = 0;
+conf:captvars = 0;
+conf:posix-captures = 0;
+conf:posix-captvars = 0;
 conf:invert-captures = 0;
 conf:cond:abort = 1;
 conf:cond:prefix = "yyc_";
@@ -159,10 +161,7 @@ code:const_global = topindent name " = " init nl;
 
 code:array_local = <undefined>;
 code:array_global = <undefined>;
-
-// `code:array_elem` is used to generate operations on POSIX `yypmatch` array.
-// Override it to generate an identifier instead, as mutable arrays are non-idiomatic in Haskell.
-code:array_elem = array index;
+code:array_elem = <undefined>;
 
 code:type_int = "int";
 code:type_uint = "uint";

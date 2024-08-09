@@ -15,12 +15,12 @@ data State = State {
     /*!stags:re2c:b1:b2 format = '\n@@{tag} :: !Int,'; */
     x :: !Int,
     y :: !Int,
-    yypmatch0 :: !Int,
-    yypmatch1 :: !Int,
-    yypmatch2 :: !Int,
-    yypmatch3 :: !Int,
-    yypmatch4 :: !Int,
-    yypmatch5 :: !Int
+    _yytl0 :: !Int,
+    _yytr0 :: !Int,
+    _yytl1 :: !Int,
+    _yytr1 :: !Int,
+    _yytl2 :: !Int,
+    _yytr2 :: !Int
 } deriving (Show)
 
 /*!re2c
@@ -48,9 +48,9 @@ data State = State {
 
 /*!re2c:b2
     re2c:define:YYFN = ["lex_captures;Int", "_s;State"];
-    re2c:posix-captures = 1;
+    re2c:posix-captvars = 1;
 
-    (([a]))? { _s.yypmatch4 }
+    (([a]))? { _s._yytl2 }
 */
 
 make_state :: BS.ByteString -> State
@@ -62,12 +62,12 @@ make_state str =
         /*!stags:re2c:b1:b2 format = '\n@@{tag} = none,'; */
         x = none,
         y = none,
-        yypmatch0 = none,
-        yypmatch1 = none,
-        yypmatch2 = none,
-        yypmatch3 = none,
-        yypmatch4 = none,
-        yypmatch5 = none
+        _yytl0 = none,
+        _yytr0 = none,
+        _yytl1 = none,
+        _yytr1 = none,
+        _yytl2 = none,
+        _yytr2 = none
     }
 
 main :: IO ()

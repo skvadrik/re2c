@@ -28,14 +28,14 @@ _yyt5 :: !Int,
 
     -- use record fields instead of canonical POSIX `yypmatch` array,
     -- as mutable arrays are non-idiomatic in Haskell
-    _0 :: !Int,
-    _1 :: !Int,
-    _2 :: !Int,
-    _3 :: !Int,
-    _4 :: !Int,
-    _5 :: !Int,
-    _6 :: !Int,
-    _7 :: !Int
+    _yytl0 :: !Int,
+    _yytr0 :: !Int,
+    _yytl1 :: !Int,
+    _yytr1 :: !Int,
+    _yytl2 :: !Int,
+    _yytr2 :: !Int,
+    _yytl3 :: !Int,
+    _yytr3 :: !Int
 }
 
 data SemVer = SemVer {
@@ -138,22 +138,22 @@ yy7 State{..} =
 
 yy8 :: State -> Maybe SemVer
 yy8 State{..} =
-    let _2 = _yyt1 in
-    let _4 = _yyt2 in
-    let _5 = _yyt3 in
-    let _6 = _yyt5 in
-    let _7 = _yyt4 in
-    let _0 = _yyt1 in
-    let _1 = _yycursor in
-    let _3 = _yyt2 in
-    let __ = if _3 == (-1) then (-1) else _3 - 1 in let _3 = __ in
+    let _yytl1 = _yyt1 in
+    let _yytl2 = _yyt2 in
+    let _yytr2 = _yyt3 in
+    let _yytl3 = _yyt5 in
+    let _yytr3 = _yyt4 in
+    let _yytl0 = _yyt1 in
+    let _yytr0 = _yycursor in
+    let _yytr1 = _yyt2 in
+    let __ = if _yytr1 == (-1) then (-1) else _yytr1 - 1 in let _yytr1 = __ in
 #48 "haskell/submatch/03_posix.re"
     -- Even `yypmatch` values are for opening parentheses, odd values
     -- are for closing parentheses, the first group is the whole match.
     Just SemVer {
-        major = s2n _yyinput _2 _3,
-        minor = s2n _yyinput _4 _5,
-        patch = if _6 == none then 0 else s2n _yyinput (_6 + 1) _7
+        major = s2n _yyinput _yytl1 _yytr1,
+        minor = s2n _yyinput _yytl2 _yytr2,
+        patch = if _yytl3 == none then 0 else s2n _yyinput (_yytl3 + 1) _yytr3
     }
 #159 "haskell/submatch/03_posix.hs"
 
@@ -204,14 +204,14 @@ _yyt4 = none,
 _yyt5 = none,
 #66 "haskell/submatch/03_posix.re"
 
-        _0 = none,
-        _1 = none,
-        _2 = none,
-        _3 = none,
-        _4 = none,
-        _5 = none,
-        _6 = none,
-        _7 = none
+        _yytl0 = none,
+        _yytr0 = none,
+        _yytl1 = none,
+        _yytr1 = none,
+        _yytl2 = none,
+        _yytr2 = none,
+        _yytl3 = none,
+        _yytr3 = none
     }
     when (parse s /= expect) $ error "failed!"
 

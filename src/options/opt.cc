@@ -183,10 +183,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!glob.storable_state && glob.code_model == CodeModel::GOTO_LABEL) {
         real.state_abort = defaults.state_abort;
     }
-    if (real.tags_posix_semantics) {
-        real.tags_posix_syntax = true;
-    }
-    if (real.tags_posix_syntax) {
+    if (real.captures) {
         real.tags = true;
     }
     if (!real.tags) {

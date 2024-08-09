@@ -18,12 +18,12 @@ _yyt1 :: !Int,
 _yyt2 :: !Int,
     x :: !Int,
     y :: !Int,
-    yypmatch0 :: !Int,
-    yypmatch1 :: !Int,
-    yypmatch2 :: !Int,
-    yypmatch3 :: !Int,
-    yypmatch4 :: !Int,
-    yypmatch5 :: !Int
+    _yytl0 :: !Int,
+    _yytr0 :: !Int,
+    _yytl1 :: !Int,
+    _yytr1 :: !Int,
+    _yytl2 :: !Int,
+    _yytr2 :: !Int
 } deriving (Show)
 
 
@@ -92,15 +92,15 @@ yy5 _s =
 
 yy6 :: State -> Int
 yy6 _s =
-    let _t = _s{yypmatch0 = _s._yyt1} in let _s = _t in
-    let _t = _s{yypmatch3 = _s._yyt2} in let _s = _t in
-    let _t = _s{yypmatch5 = _s._yyt2} in let _s = _t in
-    let _t = _s{yypmatch1 = _s.cur} in let _s = _t in
-    let _t = _s{yypmatch2 = _s._yyt2} in let _s = _t in
+    let _t = _s{_yytl0 = _s._yyt1} in let _s = _t in
+    let _t = _s{_yytr1 = _s._yyt2} in let _s = _t in
+    let _t = _s{_yytr2 = _s._yyt2} in let _s = _t in
+    let _t = _s{_yytr0 = _s.cur} in let _s = _t in
+    let _t = _s{_yytl1 = _s._yyt2} in let _s = _t in
     let _t = _s{_yyt2 = none} in let _s = _t in
-    let _t = if _s.yypmatch2 == none then _s else _s{yypmatch2 = _s.yypmatch2 + (-1)} in let _s = _t in
-    let _t = _s{yypmatch4 = _s.yypmatch2} in let _s = _t in
-    _s.yypmatch4
+    let _t = if _s._yytl1 == none then _s else _s{_yytl1 = _s._yytl1 + (-1)} in let _s = _t in
+    let _t = _s{_yytl2 = _s._yytl1} in let _s = _t in
+    _s._yytl2
 
 yy7 :: State -> Int
 yy7 _s =
@@ -124,12 +124,12 @@ _yyt1 = none,
 _yyt2 = none,
         x = none,
         y = none,
-        yypmatch0 = none,
-        yypmatch1 = none,
-        yypmatch2 = none,
-        yypmatch3 = none,
-        yypmatch4 = none,
-        yypmatch5 = none
+        _yytl0 = none,
+        _yytr0 = none,
+        _yytl1 = none,
+        _yytr1 = none,
+        _yytl2 = none,
+        _yytr2 = none
     }
 
 main :: IO ()
