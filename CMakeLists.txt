@@ -401,7 +401,8 @@ set(re2c_docs_sources
     "examples/c/submatch/01_stags_fill.re"
     "examples/c/submatch/01_stags.re"
     "examples/c/submatch/02_mtags.re"
-    "examples/c/submatch/03_posix.re"
+    "examples/c/submatch/03_captures.re"
+    "examples/c/submatch/04_posix_captures.re"
     "examples/go/01_basic.re"
     "examples/go/01_basic.go"
     "examples/go/conditions/parse_u32_blocks.re"
@@ -423,7 +424,8 @@ set(re2c_docs_sources
     "examples/go/submatch/01_stags_fill.re"
     "examples/go/submatch/01_stags.re"
     "examples/go/submatch/02_mtags.re"
-    "examples/go/submatch/03_posix.re"
+    "examples/go/submatch/03_captures.re"
+    "examples/go/submatch/04_posix_captures.re"
     "examples/rust/01_basic.re"
     "examples/rust/01_basic.rs"
     "examples/rust/conditions/parse_u32_blocks.re"
@@ -445,7 +447,8 @@ set(re2c_docs_sources
     "examples/rust/submatch/01_stags_fill.re"
     "examples/rust/submatch/01_stags.re"
     "examples/rust/submatch/02_mtags.re"
-    "examples/rust/submatch/03_posix.re"
+    "examples/rust/submatch/03_captures.re"
+    "examples/rust/submatch/04_posix_captures.re"
 )
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}"    "${re2c_manpage_bootstrap_c}"  "c")
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}"   "${re2c_manpage_bootstrap_go}" "go")

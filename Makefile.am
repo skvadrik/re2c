@@ -268,7 +268,8 @@ re2c_SRC_DOC_EXT = \
 	examples/c/submatch/01_stags_fill.re \
 	examples/c/submatch/01_stags.re \
 	examples/c/submatch/02_mtags.re \
-	examples/c/submatch/03_posix.re \
+	examples/c/submatch/03_captures.re \
+	examples/c/submatch/04_posix_captures.re \
 	examples/go/01_basic.re \
 	examples/go/01_basic.go \
 	examples/go/conditions/parse_u32_blocks.re \
@@ -290,7 +291,8 @@ re2c_SRC_DOC_EXT = \
 	examples/go/submatch/01_stags_fill.re \
 	examples/go/submatch/01_stags.re \
 	examples/go/submatch/02_mtags.re \
-	examples/go/submatch/03_posix.re \
+	examples/go/submatch/03_captures.re \
+	examples/go/submatch/04_posix_captures.re \
 	examples/rust/01_basic.re \
 	examples/rust/01_basic.rs \
 	examples/rust/conditions/parse_u32_blocks.re \
@@ -312,7 +314,8 @@ re2c_SRC_DOC_EXT = \
 	examples/rust/submatch/01_stags_fill.re \
 	examples/rust/submatch/01_stags.re \
 	examples/rust/submatch/02_mtags.re \
-	examples/rust/submatch/03_posix.re
+	examples/rust/submatch/03_captures.re \
+	examples/rust/submatch/04_posix_captures.re
 
 DOC_C = doc/re2c.1
 DOCS = $(DOC_C)

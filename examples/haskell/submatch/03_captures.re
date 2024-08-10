@@ -14,8 +14,6 @@ data State = State {
     _yycursor :: !Int,
     _yymarker :: !Int,
     %{stags format = "\n@@{tag} :: !Int,"; %}
-    -- use record fields instead of canonical POSIX `yypmatch` array,
-    -- as mutable arrays are non-idiomatic in Haskell
     _yytl0 :: !Int,
     _yytr0 :: !Int,
     _yytl1 :: !Int,
@@ -39,15 +37,13 @@ s2n s i j = f i 0 where
 %{
     re2c:define:YYFN = ["parse;Maybe SemVer", "State{..};State"];
     re2c:define:YYCTYPE = "Word8";
-    re2c:posix-captvars = 1;
+    re2c:captvars = 1;
     re2c:variable:yypmatch = _;
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;
 
     (num) "." (num) ("." num)? [\x00] {
-        -- Even `yypmatch` values are for opening parentheses, odd values
-        -- are for closing parentheses, the first group is the whole match.
         Just SemVer {
             major = s2n _yyinput _yytl1 _yytr1,
             minor = s2n _yyinput _yytl2 _yytr2,
