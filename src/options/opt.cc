@@ -857,18 +857,18 @@ static inline bool eval_list_bounds(size_t size, int32_t& lbound, int32_t& rboun
 
 #define CODE_TEMPLATE(name, vars, list_vars, conds) \
 const char* opt_t::gen_code_##name(Scratchbuf& buf, RenderCallback& callback) const { \
-    eval_code_conf(StxCodeId::STX_##name, code_##name, buf.stream(), callback); \
+    eval_code_conf(StxCodeId::STX_##name, #name, code_##name, buf.stream(), callback); \
     return buf.flush(); \
 } \
 const char* opt_t::gen_code_##name(Scratchbuf& buf) const { \
-    eval_code_conf(StxCodeId::STX_##name, code_##name, buf.stream()); \
+    eval_code_conf(StxCodeId::STX_##name, #name, code_##name, buf.stream()); \
     return buf.flush(); \
 } \
 void opt_t::render_code_##name(std::ostream& os, RenderCallback& callback) const { \
-    eval_code_conf(StxCodeId::STX_##name, code_##name, os, callback); \
+    eval_code_conf(StxCodeId::STX_##name, #name, code_##name, os, callback); \
 } \
 void opt_t::render_code_##name(std::ostream& os) const { \
-    eval_code_conf(StxCodeId::STX_##name, code_##name, os); \
+    eval_code_conf(StxCodeId::STX_##name, #name, code_##name, os); \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
@@ -908,17 +908,17 @@ class GenOpt : public RenderCallback {
 
 #define MUTCODE(name) \
 std::string opt_t::gen_##name(const StxCodes* code) const { \
-    if (code == nullptr) return "<undefined>"; \
+    if (code == nullptr) return "<undefined code:" #name ">"; \
     std::ostringstream os; \
     GenOpt callback(os, this, StxCodeId::STX_##name); \
-    eval_code_conf(StxCodeId::STX_##name, code, os, callback); \
+    eval_code_conf(StxCodeId::STX_##name, #name, code, os, callback); \
     return os.str(); \
 }
 RE2C_MUTCODES
 #undef MUTCODE
 
-void opt_t::eval_code_conf(
-        StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const {
+void opt_t::eval_code_conf(StxCodeId id, const char* name, const StxCodes* code, std::ostream& os,
+        RenderCallback& callback) const {
     CHECK(code != nullptr);
 
     stack_code_t& stack = stack_code;
@@ -960,15 +960,16 @@ void opt_t::eval_code_conf(
             }
             break;
         case StxCodeType::UD:
-            os << "<undefined>";
+            os << "<undefined code:" << name << ">";
             break;
         }
     }
 }
 
-void opt_t::eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const {
+void opt_t::eval_code_conf(StxCodeId id, const char* name, const StxCodes* code,
+        std::ostream& os) const {
     RenderCallback dummy;
-    eval_code_conf(id, code, os, dummy);
+    eval_code_conf(id, name, code, os, dummy);
 }
 
 bool is_undefined(const StxCodes* code) {

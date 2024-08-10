@@ -815,9 +815,10 @@ struct opt_t {
     }
 
   private:
-    void eval_code_conf(StxCodeId id, const StxCodes* code, std::ostream& os) const;
-    void eval_code_conf(
-        StxCodeId id, const StxCodes* code, std::ostream& os, RenderCallback& callback) const;
+    void eval_code_conf(StxCodeId id, const char* name, const StxCodes* code,
+        std::ostream& os) const;
+    void eval_code_conf(StxCodeId id, const char* name, const StxCodes* code,
+        std::ostream& os, RenderCallback& callback) const;
     void push_list_on_stack(const StxCode* x) const;
 
     FORBID_COPY(opt_t);
