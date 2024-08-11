@@ -74,6 +74,7 @@ class Input: private LexerState {
     enum class ConfKind {NONE, STR, NUM, LIST, CODE} conf_kind;
     std::string tmp_str;
     int32_t tmp_num;
+    bool tmp_bool;
     std::vector<std::string> tmp_list;
     const StxCodes* tmp_code;
 
@@ -175,6 +176,7 @@ inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
       conf_kind(ConfKind::NONE),
       tmp_str(),
       tmp_num(),
+      tmp_bool(),
       tmp_list(),
       tmp_code(),
       in_syntax_file(false) {}
@@ -220,6 +222,7 @@ inline const InputFile& Input::get_cinput() const {
 inline void Input::save_conf_num(int32_t num) {
     conf_kind = ConfKind::NUM;
     tmp_num = num;
+    tmp_bool = num != 0;
 }
 
 inline void Input::save_conf_str(const char* str) {

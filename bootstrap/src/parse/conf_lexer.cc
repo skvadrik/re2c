@@ -45,22 +45,22 @@ size_t LexerState::maxfill_conf() { return 30; }
 
 #define RET_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    SETOPT(conf, tmp_num != 0); \
+    SETOPT(conf, tmp_bool); \
     return Ret::OK; \
 } while(0)
 
 #define RET_STXCONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    SETCONOPT(conf, tmp_num != 0); \
+    SETCONOPT(conf, tmp_bool); \
     return Ret::OK; \
 } while(0)
 
 #define RET_CONF_FEAT(conf, name) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    if (tmp_num != 0 && !opts.glob.supported_features_contains(name)) { \
+    if (tmp_bool && !opts.glob.supported_features_contains(name)) { \
         RET_FAIL(error_at_cur("`%s` feature is not supported for this backend", name)); \
     } \
-    SETOPT(conf, tmp_num != 0); \
+    SETOPT(conf, tmp_bool); \
     return Ret::OK; \
 } while(0)
 
@@ -79,9 +79,9 @@ size_t LexerState::maxfill_conf() { return 30; }
 #define RET_CONF_ENC(enc) do { \
     CHECK_RET(lex_conf_bool(opts)); \
     if (in_syntax_file) { \
-        opts.init_encoding(enc, tmp_num != 0); \
+        opts.init_encoding(enc, tmp_bool); \
     } else { \
-        opts.set_encoding(enc, tmp_num != 0); \
+        opts.set_encoding(enc, tmp_bool); \
     } \
     return Ret::OK; \
 } while(0)
@@ -1343,8 +1343,8 @@ yy240:
 #line 165 "../src/parse/conf_lexer.re"
 	{
         CHECK_RET(lex_conf_bool(opts));
-        SETOPT(captures, tmp_num != 0);
-        SETOPT(captures_posix, tmp_num != 0);
+        SETOPT(captures, tmp_bool);
+        SETOPT(captures_posix, tmp_bool);
         SETOPT(captures_array, true);
         return Ret::OK;
     }
@@ -1689,7 +1689,7 @@ yy293:
 #line 159 "../src/parse/conf_lexer.re"
 	{
         CHECK_RET(lex_conf_bool(opts));
-        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures, tmp_bool);
         SETOPT(captures_array, true);
         return Ret::OK;
     }
@@ -1702,7 +1702,7 @@ yy294:
 #line 172 "../src/parse/conf_lexer.re"
 	{
         CHECK_RET(lex_conf_bool(opts));
-        SETOPT(captures, tmp_num != 0);
+        SETOPT(captures, tmp_bool);
         SETOPT(captures_array, false);
         return Ret::OK;
     }
@@ -3906,8 +3906,8 @@ yy738:
 #line 178 "../src/parse/conf_lexer.re"
 	{
         CHECK_RET(lex_conf_bool(opts));
-        SETOPT(captures, tmp_num != 0);
-        SETOPT(captures_posix, tmp_num != 0);
+        SETOPT(captures, tmp_bool);
+        SETOPT(captures_posix, tmp_bool);
         SETOPT(captures_array, false);
         return Ret::OK;
     }
@@ -11200,7 +11200,7 @@ yy2099:
 
 #define SAVE_CONF_BOOL(conf) do { \
     CHECK_RET(lex_conf_bool(opts)); \
-    opts.set_##conf(tmp_num != 0); \
+    opts.set_##conf(tmp_bool); \
     goto start; \
 } while(0)
 
