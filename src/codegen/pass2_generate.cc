@@ -371,9 +371,7 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
     } else {
         // capture tag, maps to a range of parentheses, stored in the form of variables
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
-            const char* sfx = i % 2 == 0 ? "l" : "r";// left or right capturing parenthesis
-            const char* name = buf.str(opts->tags_prefix).cstr(sfx).u64(i / 2).flush();
-            fintags.push_back(fintag_expr(output, name));
+            fintags.push_back(fintag_expr(output, buf.str(captvar_name(i, opts)).flush()));
         }
     }
 }
@@ -815,7 +813,6 @@ static void gen_godot(
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
-    const std::string& prefix = opts->tags_prefix;
     const uint32_t n = go->ncases;
     const char* text;
 
@@ -837,9 +834,9 @@ static void gen_godot(
             const tcmd_t* cmd = dfa.tcpool[c->jump.tags];
             for (const tcmd_t* p = cmd; p; p = p->next) {
                 bool is_mtag = dfa.mtagvers.find(p->lhs) != dfa.mtagvers.end();
-                o.cstr("<").str(vartag_name(p->lhs, prefix, is_mtag));
+                o.cstr("<").str(vartag_name(p->lhs, opts, is_mtag));
                 if (tcmd_t::iscopy(p)) {
-                    o.cstr("~").str(vartag_name(p->rhs, prefix, is_mtag));
+                    o.cstr("~").str(vartag_name(p->rhs, opts, is_mtag));
                 }
                 o.cstr(">");
             }
@@ -1361,7 +1358,10 @@ LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, CodeList* code)) {
 }
 
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags) {
-    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+    DCHECK(code->kind == CodeKind::STAGS
+        || code->kind == CodeKind::MTAGS
+        || code->kind == CodeKind::SVARS
+        || code->kind == CodeKind::MVARS);
 
     const char* fmt = code->fmt.format;
     const char* sep = code->fmt.separator;
@@ -1388,18 +1388,23 @@ void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& 
     code->raw.data = buf.flush();
 }
 
-static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, bool multival) {
+static void add_tags_from_blocks(const blocks_t& blocks, tagnames_t& tags, CodeKind kind) {
     for (OutputBlock* b : blocks) {
-        if (multival) {
-            tags.insert(b->mtags.begin(), b->mtags.end());
-        } else {
-            tags.insert(b->stags.begin(), b->stags.end());
+        switch (kind) {
+            case CodeKind::STAGS: tags.insert(b->stags.begin(), b->stags.end()); break;
+            case CodeKind::MTAGS: tags.insert(b->mtags.begin(), b->mtags.end()); break;
+            case CodeKind::SVARS: tags.insert(b->svars.begin(), b->svars.end()); break;
+            case CodeKind::MVARS: tags.insert(b->mvars.begin(), b->mvars.end()); break;
+            default: UNREACHABLE(); break;
         }
     }
 }
 
 LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
-    DCHECK(code->kind == CodeKind::STAGS || code->kind == CodeKind::MTAGS);
+    DCHECK(code->kind == CodeKind::STAGS
+        || code->kind == CodeKind::MTAGS
+        || code->kind == CodeKind::SVARS
+        || code->kind == CodeKind::MVARS);
 
     OutputBlock& block = output.block();
     Scratchbuf& buf = output.scratchbuf;
@@ -1410,18 +1415,23 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
         return Ret::OK;
     }
 
-    bool multival = (code->kind == CodeKind::MTAGS);
-
     tagnames_t tags;
     if (code->fmt.block_names == nullptr) {
         // Gather tags from all blocks in the output and header files.
-        add_tags_from_blocks(output.cblocks, tags, multival);
-        add_tags_from_blocks(output.hblocks, tags, multival);
+        add_tags_from_blocks(output.cblocks, tags, code->kind);
+        add_tags_from_blocks(output.hblocks, tags, code->kind);
     } else {
         // Gather tags from the blocks on the list.
-        const char* directive = multival ? "mtags:re2c" : "stags:re2c";
+        const char* directive = nullptr;
+        switch (code->kind) {
+            case CodeKind::STAGS: directive = "stags:re2c"; break;
+            case CodeKind::MTAGS: directive = "mtags:re2c"; break;
+            case CodeKind::SVARS: directive = "svars:re2c"; break;
+            case CodeKind::MVARS: directive = "mvars:re2c"; break;
+            default: UNREACHABLE(); break;
+        }
         CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, directive));
-        add_tags_from_blocks(output.tmpblocks, tags, multival);
+        add_tags_from_blocks(output.tmpblocks, tags, code->kind);
     }
     gen_tags(buf, opts, code, tags);
     return Ret::OK;
@@ -2122,6 +2132,8 @@ LOCAL_NODISCARD(Ret codegen_generate_block(Output& output)) {
             break;
         case CodeKind::STAGS:
         case CodeKind::MTAGS:
+        case CodeKind::SVARS:
+        case CodeKind::MVARS:
             CHECK_RET(expand_tags_directive(output, code));
             break;
         case CodeKind::COND_ENUM:
@@ -2152,17 +2164,24 @@ Ret codegen_generate(Output& output) {
     return Ret::OK;
 }
 
-std::string vartag_name(tagver_t ver, const std::string& prefix, bool is_mtag) {
-    std::ostringstream s;
+std::string captvar_name(size_t index, const opt_t* opts) {
+    std::ostringstream os;
+    // Add suffix "l" for the left parenthesis and "r" for the right one.
+    os << opts->tags_prefix << (index % 2 == 0 ? "l" : "r") << index / 2;
+    return os.str();
+}
+
+std::string vartag_name(tagver_t ver, const opt_t* opts, bool is_mtag) {
+    std::ostringstream os;
     // S-tags and m-tags should not overlap, so m-tags have an additional "m" prefix (note that tag
     // variables in different conditions may have identical numbers).
-    s << prefix << (is_mtag ? "m" : "") << ver;
-    return s.str();
+    os << opts->tags_prefix << (is_mtag ? "m" : "") << ver;
+    return os.str();
 }
 
 std::string vartag_expr(tagver_t ver, const opt_t* opts, bool is_mtag) {
     std::ostringstream os(opts->tags_expression);
-    std::string name = vartag_name(ver, opts->tags_prefix, is_mtag);
+    std::string name = vartag_name(ver, opts, is_mtag);
     argsubst(os, opts->api_sigil, "tag", true, name);
     return os.str();
 }

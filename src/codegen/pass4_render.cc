@@ -1617,6 +1617,8 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
+    case CodeKind::SVARS:
+    case CodeKind::MVARS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:

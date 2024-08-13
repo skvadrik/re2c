@@ -26,6 +26,8 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       conds(),
       stags(),
       mtags(),
+      svars(),
+      mvars(),
       opts(nullptr),
       dfas(),
       max_fill(1),

@@ -126,6 +126,8 @@ enum class CodeKind: uint32_t {
     STATE_GOTO,
     STAGS,
     MTAGS,
+    SVARS,
+    MVARS,
     MAXFILL,
     MAXNMATCH,
     VAR,

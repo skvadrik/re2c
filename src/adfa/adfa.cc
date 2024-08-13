@@ -461,11 +461,15 @@ Ret Adfa::calc_stats(OutputBlock& out) {
                 mtagvars.insert(tag.name);
             } else if (tag.name) {
                 stagvars.insert(tag.name);
+            } else if (capture(tag) && !opts->captures_array) {
+                for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
+                    stagvars.insert(captvar_name(i, opts));
+                }
             }
         }
         for (tagver_t v = 1; v <= maxtagver; ++v) {
             bool is_mtag = mtagvers.find(v) != mtagvers.end();
-            const std::string s = vartag_name(v, opts->tags_prefix, is_mtag);
+            const std::string s = vartag_name(v, opts, is_mtag);
             if (is_mtag) {
                 mtagnames.insert(s);
             } else {
@@ -474,6 +478,8 @@ Ret Adfa::calc_stats(OutputBlock& out) {
         }
         out.stags.insert(stagnames.begin(), stagnames.end());
         out.mtags.insert(mtagnames.begin(), mtagnames.end());
+        out.svars.insert(stagvars.begin(), stagvars.end());
+        out.mvars.insert(mtagvars.begin(), mtagvars.end());
     }
 
     return Ret::OK;

@@ -197,6 +197,18 @@ loop:
         goto next;
     }
 
+    "/*!svars:re2c" | "%{svars" {
+        uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
+        CHECK_RET(lex_special_block(out, CodeKind::SVARS, allow));
+        goto next;
+    }
+
+    "/*!mvars:re2c" | "%{mvars" {
+        uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
+        CHECK_RET(lex_special_block(out, CodeKind::MVARS, allow));
+        goto next;
+    }
+
     "/*!conditions:re2c" | "/*!types:re2c" | "%{conditions" {
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
