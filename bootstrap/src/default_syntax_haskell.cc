@@ -6,7 +6,7 @@ const char* DEFAULT_SYNTAX_HASKELL =
     "supported_api_styles = [\"free-form\"];\n"
     "supported_code_models = [\"recursive-functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"nested-ifs\", \"monadic\"];\n"
+    "supported_features = [\"nested-ifs\", \"monadic\", \"tags\", \"captvars\"];\n"
     "\n"
     "\n"
     "// language-specific options ---------------------------------------------------\n"

@@ -6,7 +6,7 @@ const char* DEFAULT_SYNTAX_JS =
     "supported_api_styles = [\"free-form\"];\n"
     "supported_code_models = [\"loop-switch\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"nested-ifs\"];\n"
+    "supported_features = [\"nested-ifs\", \"tags\", \"captures\", \"captvars\"];\n"
     "\n"
     "\n"
     "// language-specific options ---------------------------------------------------\n"

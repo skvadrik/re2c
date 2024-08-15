@@ -288,6 +288,17 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (!is_default.monadic && !glob.supported_features_contains("monadic")) {
         RET_FAIL(error("`monadic` feature is not supported for this backend"));
     }
+    if (!is_default.tags && !glob.supported_features_contains("tags")) {
+        RET_FAIL(error("`tags` feature is not supported for this backend"));
+    }
+    if (!is_default.captures && !is_default.captures_array && real.captures_array
+            && !glob.supported_features_contains("captures")) {
+        RET_FAIL(error("`captures` feature is not supported for this backend"));
+    }
+    if (!is_default.captures && !is_default.captures_array && !real.captures_array
+            && !glob.supported_features_contains("captvars")) {
+        RET_FAIL(error("`captvars` feature is not supported for this backend"));
+    }
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.computed_gotos) {
             RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "

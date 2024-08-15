@@ -4,7 +4,7 @@ supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "monadic"];
+supported_features = ["nested-ifs", "monadic", "tags", "captvars"];
 
 
 // language-specific options ---------------------------------------------------

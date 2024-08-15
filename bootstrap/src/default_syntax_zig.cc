@@ -6,7 +6,7 @@ const char* DEFAULT_SYNTAX_ZIG =
     "supported_api_styles = [\"free-form\"];\n"
     "supported_code_models = [\"loop-switch\", \"recursive-functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"nested-ifs\", \"case-ranges\"];\n"
+    "supported_features = [\"nested-ifs\", \"case-ranges\", \"tags\", \"captures\", \"captvars\"];\n"
     "\n"
     "\n"
     "// language-specific options ---------------------------------------------------\n"

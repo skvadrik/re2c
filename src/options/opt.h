@@ -65,7 +65,8 @@ using StxCodes = list_t<StxCode>;
     CHECKED_LIST(supported_targets, \
             ({"code", "dot", "skeleton"})) \
     CHECKED_LIST(supported_features, \
-            ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic"}))
+            ({"nested-ifs", "bitmaps", "computed-gotos", "case-ranges", "unsafe", "monadic", \
+                "tags", "captures", "captvars"}))
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \

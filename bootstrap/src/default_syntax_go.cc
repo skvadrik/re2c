@@ -6,7 +6,7 @@ const char* DEFAULT_SYNTAX_GO =
     "supported_api_styles = [\"free-form\", \"functions\"];\n"
     "supported_code_models = [\"goto-label\", \"loop-switch\", \"recursive-functions\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
-    "supported_features = [\"nested-ifs\", \"bitmaps\"];\n"
+    "supported_features = [\"nested-ifs\", \"bitmaps\", \"tags\", \"captures\", \"captvars\"];\n"
     "\n"
     "\n"
     "// language-specific options ---------------------------------------------------\n"
