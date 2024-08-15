@@ -152,7 +152,7 @@ conf:cond:goto = "";
 
 // code templates --------------------------------------------------------------
 
-code:var_local = topindent "var " name " = " init nl;
+code:var_local = topindent "let " name " = " init nl;
 code:var_global = code:var_local;
 
 code:const_local = topindent "const " name " = " init nl;

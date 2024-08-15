@@ -1,7 +1,7 @@
 // re2js $INPUT -o $OUTPUT
 
 function lex(yyinput) {
-    var yycursor = 0;
+    let yycursor = 0;
     /*!re2c
         re2c:yyfill:enable = 0;
 

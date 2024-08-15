@@ -23,8 +23,8 @@ function fill(st, need) {
     st.token = 0;
 
     // Read a new chunk of data from file and append it to `yyinput`.
-    var want = BUFSIZE - st.yylimit - 1 // -1 for sentinel
-    var nread = fs.readSync(st.file, st.yyinput, st.yylimit, want)
+    let want = BUFSIZE - st.yylimit - 1 // -1 for sentinel
+    let nread = fs.readSync(st.file, st.yyinput, st.yylimit, want)
     st.yylimit += nread
     if (nread < want) {
         st.eof = true // end of file
@@ -40,8 +40,8 @@ function lex(yyrecord, count) {
         yyrecord.token = yyrecord.yycursor
         
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -123,15 +123,15 @@ function lex(yyrecord, count) {
 }
 
 function main() {
-    var fname = "input"
+    let fname = "input"
 
     // Create input file.
-    var content = "'qu\0tes' 'are' 'fine: \\'' ".repeat(BUFSIZE)
+    let content = "'qu\0tes' 'are' 'fine: \\'' ".repeat(BUFSIZE)
     fs.writeFileSync(fname, content, function(err) { if (err) throw err; })
 
     // Init lexer state.
-    var limit = BUFSIZE - 1 // exclude terminating null
-    var st = {
+    let limit = BUFSIZE - 1 // exclude terminating null
+    let st = {
         file: fs.openSync(fname, 'r'),
         yyinput: Buffer.alloc(BUFSIZE),
         yylimit: limit,

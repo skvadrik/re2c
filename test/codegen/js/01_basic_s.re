@@ -1,7 +1,7 @@
 // re2js $INPUT -o $OUTPUT -s
 
 function lex(str) {
-    var cur = 0
+    let cur = 0
     /*!re2c
         re2c:api = custom;
         re2c:define:YYPEEK = "str.charCodeAt(cur)";

@@ -9,15 +9,15 @@ const YYC_HEX = 19
 
 
 function parse_u32(yyinput) {
-    var yycursor = 0
-    var yycond = YYC_INIT
-    var n = 0
+    let yycursor = 0
+    let yycond = YYC_INIT
+    let n = 0
 
     loop: while (true) {
     
         {
-            var yych = 0
-            var yystate = yycond
+            let yych = 0
+            let yystate = yycond
             yyl: while (true) {
                 switch (yystate) {
                     case 0:

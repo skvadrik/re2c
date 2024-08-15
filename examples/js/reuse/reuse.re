@@ -12,14 +12,14 @@
 */
 
 function lex_utf8(yyinput) {
-    var yycursor = 0
+    let yycursor = 0
     /*!use:re2c
         re2c:encoding:utf8 = 1;
     */
 }
 
 function lex_utf32(yyinput) {
-    var yycursor = 0
+    let yycursor = 0
     /*!use:re2c
         re2c:encoding:utf32 = 1;
     */

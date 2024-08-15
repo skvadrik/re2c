@@ -50,8 +50,8 @@ let t4
 
         
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:

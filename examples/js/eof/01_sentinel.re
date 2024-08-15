@@ -2,8 +2,8 @@
 
 // expects a null-terminated string
 function lex(yyinput) {
-    var yycursor = 0;
-    var count = 0
+    let yycursor = 0;
+    let count = 0
 
     loop: while (true) {
     /*!re2c

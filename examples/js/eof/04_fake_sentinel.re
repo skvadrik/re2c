@@ -2,9 +2,9 @@
 
 // expects a string without terminating null
 function lex(str) {
-    var cur = 0;
-    var lim = str.length
-    var count = 0
+    let cur = 0;
+    let lim = str.length
+    let count = 0
 
     loop: while (true) {
     /*!re2c

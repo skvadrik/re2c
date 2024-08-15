@@ -3,9 +3,9 @@
 /*!max:re2c*/
 
 function lex(yyinput) {
-    var yycursor = 0;
-    var yylimit = yyinput.length
-    var count = 0
+    let yycursor = 0;
+    let yylimit = yyinput.length
+    let count = 0
 
     loop: while (true) {
     /*!re2c
@@ -25,7 +25,7 @@ function lex(yyinput) {
 }
 
 function test(s, n) {
-    var padded_s = s + "\0".repeat(YYMAXFILL)
+    let padded_s = s + "\0".repeat(YYMAXFILL)
     if (lex(padded_s) != n) throw "error!"
 }
 

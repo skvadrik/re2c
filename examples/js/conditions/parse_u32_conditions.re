@@ -3,9 +3,9 @@
 /*!conditions:re2c*/
 
 function parse_u32(yyinput) {
-    var yycursor = 0
-    var yycond = YYC_INIT
-    var n = 0
+    let yycursor = 0
+    let yycond = YYC_INIT
+    let n = 0
 
     loop: while (true) {
     /*!re2c

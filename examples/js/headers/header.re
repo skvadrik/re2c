@@ -1,6 +1,6 @@
 // re2js $INPUT -o $OUTPUT --header lexer/state.js
 
-var state = require('./lexer/state.js');
+let state = require('./lexer/state.js');
 
 /*!header:re2c:on*/
 exports.mk_state = function(str) {
@@ -13,7 +13,7 @@ exports.mk_state = function(str) {
 /*!header:re2c:off*/
 
 function lex(yyrecord) {
-    var t
+    let t
     /*!re2c
         re2c:api = record;
         re2c:tags = 1;

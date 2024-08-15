@@ -17,7 +17,7 @@ const assert = require('assert');
 */
 
 function lex_tags(str) {
-    var cur = 0
+    let cur = 0
     /*!re2c
         re2c:tags = 1;
         ([b] @x [a] @y)? { return x == -1 ? -1 : y - x }
@@ -25,8 +25,8 @@ function lex_tags(str) {
 }
 
 function lex_captures(str) {
-    var cur = 0
-    var yypmatch = Array(YYMAXNMATCH * 2).fill(-1)
+    let cur = 0
+    let yypmatch = Array(YYMAXNMATCH * 2).fill(-1)
     /*!re2c
         re2c:posix-captures = 1;
         (([a]))? { return yypmatch[4] }

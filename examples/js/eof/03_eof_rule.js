@@ -3,15 +3,15 @@
 
 // expects a null-terminated string
 function lex(yyinput) {
-    var yycursor = 0;
-    var yylimit = yyinput.length - 1 // terminating null not included
-    var count = 0
+    let yycursor = 0;
+    let yylimit = yyinput.length - 1 // terminating null not included
+    let count = 0
 
     loop: while (true) {
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:

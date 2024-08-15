@@ -154,7 +154,7 @@ const char* DEFAULT_SYNTAX_JS =
     "\n"
     "// code templates --------------------------------------------------------------\n"
     "\n"
-    "code:var_local = topindent \"var \" name \" = \" init nl;\n"
+    "code:var_local = topindent \"let \" name \" = \" init nl;\n"
     "code:var_global = code:var_local;\n"
     "\n"
     "code:const_local = topindent \"const \" name \" = \" init nl;\n"

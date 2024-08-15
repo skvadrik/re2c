@@ -9,11 +9,11 @@ const YYMAXNMATCH = 3
 
 
 function lex_tags(str) {
-    var cur = 0
+    let cur = 0
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -64,12 +64,12 @@ function lex_tags(str) {
 }
 
 function lex_captures(str) {
-    var cur = 0
-    var yypmatch = Array(YYMAXNMATCH * 2).fill(-1)
+    let cur = 0
+    let yypmatch = Array(YYMAXNMATCH * 2).fill(-1)
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:

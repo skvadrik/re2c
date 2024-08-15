@@ -7,7 +7,7 @@
 */
 
 function parse_u32(str) {
-    var st = {
+    let st = {
         yyinput: str,
         yycursor: 0,
         yymarker: 0

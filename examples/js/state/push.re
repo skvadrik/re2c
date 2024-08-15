@@ -28,8 +28,8 @@ function fill(st) {
     st.token = 0;
 
     // Read a new chunk of data from file and append it to `yyinput`.
-    var want = BUFSIZE - st.yylimit - 1 // -1 for sentinel
-    var nread = fs.readSync(st.file, st.yyinput, st.yylimit, want)
+    let want = BUFSIZE - st.yylimit - 1 // -1 for sentinel
+    let nread = fs.readSync(st.file, st.yyinput, st.yylimit, want)
     st.yylimit += nread
     st.yyinput.writeUInt8(0, st.yylimit) // sentinel
 
@@ -56,13 +56,13 @@ function lex(yyrecord) {
 
 function test(packets, expect) {
     // Emulate a "pipe" by opening the same file for reading and writing.
-    var fname = "input"
-    var fw = fs.openSync(fname, 'w');
-    var fr = fs.openSync(fname, 'r');
+    let fname = "input"
+    let fw = fs.openSync(fname, 'w');
+    let fr = fs.openSync(fname, 'r');
 
     // Init lexer state.
-    var limit = BUFSIZE - 1 // exclude terminating null
-    var st = {
+    let limit = BUFSIZE - 1 // exclude terminating null
+    let st = {
         file: fr,
         yyinput: Buffer.alloc(BUFSIZE),
         yylimit: limit,
@@ -76,8 +76,8 @@ function test(packets, expect) {
     // Main loop. The buffer contains incomplete data which appears packet by
     // packet. When the lexer needs more input it saves its internal state and
     // returns to the caller which should provide more input and resume lexing.
-    var send = 0
-    var status
+    let send = 0
+    let status
     loop: while (true) {
         status = lex(st)
 

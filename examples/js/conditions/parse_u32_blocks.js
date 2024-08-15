@@ -4,15 +4,15 @@
 
 
 function parse_u32(str) {
-    var st = {
+    let st = {
         yyinput: str,
         yycursor: 0,
         yymarker: 0
     }
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -129,8 +129,8 @@ function parse_bin(st) {
     loop: while (true) {
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -163,8 +163,8 @@ function parse_oct(st) {
     loop: while (true) {
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -203,8 +203,8 @@ function parse_dec(st) {
     loop: while (true) {
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
@@ -245,8 +245,8 @@ function parse_hex(st) {
     loop: while (true) {
     
 {
-    var yych = 0
-    var yystate = 0
+    let yych = 0
+    let yystate = 0
     yyl: while (true) {
         switch (yystate) {
             case 0:
