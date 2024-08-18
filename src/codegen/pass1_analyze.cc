@@ -22,6 +22,8 @@ static bool matches(
     // If skip has been factored out, it must be in both states.
     if (go1->skip != go2->skip) return false;
 
+    if (go1->tags != go2->tags) return false;
+
     for (;;) {
         for (; b1 < e1 && b1->to != s1; ++b1) {
             lb1 = b1->ub;
@@ -39,9 +41,8 @@ static bool matches(
         if (!(lb1 == lb2 && b1->ub == b2->ub)
                 // If there is YYSKIP on one transition but not the other, quit.
                 || (opts->eager_skip && consume(b1->to) != consume(b2->to))
-                // If there are tags on either transition, quit.
-                // TODO: allow tags if they are identical
-                || !(b1->tags == TCID0 && b2->tags == TCID0)) {
+                // If tags are not identical, quit.
+                || b1->tags != b2->tags) {
             return false;
         }
         ++b1;
