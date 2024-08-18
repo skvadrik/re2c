@@ -137,6 +137,7 @@ struct CodeGoBm {
     const CodeBmState* bitmap;
     CodeGoSwIf* hgo;
     CodeGoSwIf* lgo;
+    bool skip;
 };
 
 struct CodeGoCpTable {

@@ -12,11 +12,15 @@
 namespace re2c {
 
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
-static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
+static bool matches(
+        const opt_t* opts, const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
     const Span
     *b1 = go1->span, *e1 = &b1[go1->span_count],
      *b2 = go2->span, *e2 = &b2[go2->span_count];
     uint32_t lb1 = 0, lb2 = 0;
+
+    // If skip has been factored out, it must be in both states.
+    if (go1->skip != go2->skip) return false;
 
     for (;;) {
         for (; b1 < e1 && b1->to != s1; ++b1) {
@@ -31,12 +35,13 @@ static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const
         if (b2 == e2) {
             return false;
         }
-        // Еags are forbidden: transitions on different symbols might go to the same state, but
-        // they may have different tag sets.
-        if (lb1 != lb2
-                || b1->ub != b2->ub
-                || b1->tags != TCID0
-                || b2->tags != TCID0) {
+        // If transitions have different chracter ranges, quit.
+        if (!(lb1 == lb2 && b1->ub == b2->ub)
+                // If there is YYSKIP on one transition but not the other, quit.
+                || (opts->eager_skip && consume(b1->to) != consume(b2->to))
+                // If there are tags on either transition, quit.
+                // TODO: allow tags if they are identical
+                || !(b1->tags == TCID0 && b2->tags == TCID0)) {
             return false;
         }
         ++b1;
@@ -44,17 +49,20 @@ static bool matches(const CodeGo* go1, const State* s1, const CodeGo* go2, const
     }
 }
 
-static void insert_bitmap(OutAllocator& alc, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+static void insert_bitmap(Output& output, CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+    const opt_t* opts = output.block().opts;
+
     for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
-        if (matches(b->go, b->state, go, s)) return;
+        if (matches(opts, b->go, b->state, go, s)) return;
     }
     // bitmap list is constructed in reverse
-    prepend(bitmap->states, code_bmstate(alc, go, s));
+    prepend(bitmap->states, code_bmstate(output.allocator, go, s));
 }
 
-static CodeBmState* find_bitmap(const CodeBitmap* bitmap, const CodeGo* go, const State* s) {
+static CodeBmState* find_bitmap(
+        const opt_t* opts, const CodeBitmap* bitmap, const CodeGo* go, const State* s) {
     for (CodeBmState* b = bitmap->states->head; b; b = b->next) {
-        if (b->state == s && matches(b->go, b->state, go, s)) return b;
+        if (b->state == s && matches(opts, b->go, b->state, go, s)) return b;
     }
     return nullptr;
 }
@@ -308,6 +316,7 @@ static CodeGoBm* code_gobm(OutAllocator& alc,
                            uint32_t hspan_count,
                            const CodeBmState* bm,
                            State* next,
+                           bool skip,
                            uint32_t eof,
                            const opt_t* opts) {
     CodeGoBm* x = alc.alloct<CodeGoBm>(1);
@@ -318,12 +327,13 @@ static CodeGoBm* code_gobm(OutAllocator& alc,
     Span* bspan = allocate<Span>(span_count); // temporary
     uint32_t bspan_count = unmap (bspan, span, span_count, bm->state);
     x->lgo = bspan_count == 0 ? nullptr
-            : code_goswif(alc, bspan, bspan_count, next, false, eof, opts);
+            : code_goswif(alc, bspan, bspan_count, next, skip, eof, opts);
     // If there are any low spans, then next state for high spans must be NULL to trigger explicit
     // goto generation in linear `if`.
     x->hgo = hspan_count == 0 ? nullptr
-            : code_goswif(alc, hspan, hspan_count, x->lgo ? nullptr : next, false, eof, opts);
+            : code_goswif(alc, hspan, hspan_count, x->lgo ? nullptr : next, skip, eof, opts);
     x->bitmap->state->label->used = true;
+    x->skip = skip;
     operator delete(bspan);
 
     return x;
@@ -434,7 +444,7 @@ static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State
             State* s = go->span[i].to;
             if (!s->is_base) continue;
 
-            const CodeBmState* b = find_bitmap(dfa.bitmap, go, s);
+            const CodeBmState* b = find_bitmap(opts, dfa.bitmap, go, s);
             if (b) {
                 if (bm == nullptr) {
                     bm = b;
@@ -448,26 +458,26 @@ static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State
     const uint32_t eof = from->go.span_count == 1 && !consume(from->go.span[0].to)
             ? NOEOF : opts->fill_eof;
     const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
-    const bool part_skip = opts->eager_skip && !go->skip;
+    const bool skip = opts->eager_skip && !go->skip;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
         go->godot = code_gosw(alc, go->span, go->span_count, false, eof);
     } else if (opts->computed_gotos
-               && !part_skip
+               && !skip
                && dspan_count >= opts->computed_gotos_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CPGOTO;
         go->gocp = code_gocp(
                 alc, go->span, go->span_count, hspan, hspan_count, from->next, eof, opts);
-    } else if (opts->bitmaps && !part_skip && bitmap_count > 0) {
+    } else if (opts->bitmaps && bitmap_count > 0) {
         go->kind = CodeGo::Kind::BITMAP;
         go->gobm = code_gobm(
-                alc, go->span, go->span_count, hspan, hspan_count, bm, from->next, eof, opts);
+                alc, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof, opts);
         dfa.bitmap->used = true;
     } else {
         go->kind = CodeGo::Kind::SWITCH_IF;
-        go->goswif = code_goswif(alc, go->span, go->span_count, from->next, part_skip, eof, opts);
+        go->goswif = code_goswif(alc, go->span, go->span_count, from->next, skip, eof, opts);
     }
 }
 
@@ -595,7 +605,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
             for (State* s = dfa->head; s; s = s->next) {
                 if (s->is_base) {
                     DCHECK(s->next);
-                    insert_bitmap(alc, dfa->bitmap, &s->next->go, s);
+                    insert_bitmap(output, dfa->bitmap, &s->next->go, s);
                 }
             }
         }

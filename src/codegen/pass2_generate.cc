@@ -747,7 +747,8 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     const char* elif_cond = o.flush();
 
     CodeList* if_else = code_list(alc);
-    const CodeJump jump = {go->bitmap->state, TCID0, false, false, false};
+    const CodeJump jump =
+        {go->bitmap->state, TCID0, go->skip && consume(go->bitmap->state), false, false};
     gen_goto(output, dfa, if_else, from, jump);
 
     CodeList* stmts = code_list(alc);
