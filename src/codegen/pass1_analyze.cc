@@ -284,57 +284,81 @@ static CodeGoSwIf* code_goswif(OutAllocator& alc,
     return x;
 }
 
-// Find all spans that map to the given state. For each of them find upper adjacent span that maps
-// to another state (if any, otherwize try the lower one). If the input contains a single span that
-// maps to the given state, then the output contains zero spans.
-static uint32_t unmap(Span* new_span, const Span* old_span, uint32_t old_nspans, const State* x) {
-    uint32_t new_nspans = 0;
-    for (uint32_t i = 0; i < old_nspans; ++i) {
-        if (old_span[i].to != x) {
-            if (new_nspans > 0
-                    && new_span[new_nspans - 1].to == old_span[i].to
-                    && new_span[new_nspans - 1].tags == old_span[i].tags) {
-                new_span[new_nspans - 1].ub = old_span[i].ub;
+static uint32_t unmap(
+        const Span* span,
+        uint32_t nspans,
+        Span* other,
+        const State* to,
+        CodeJump* jump,
+        bool skip,
+        uint32_t eof) {
+    jump->to = to;
+    jump->tags = TCID_NONE;
+    jump->skip = skip && consume(to);
+    jump->eof = false;
+    jump->elide = false;
+
+    uint32_t n = 0;
+
+    for (const Span* s = span, *e = s + nspans; s != e; ++s) {
+        if (s->to == to) {
+            // Bitmap transition. No need to remove it from this span, as the bitmap
+            // transition will be generated using bitmap table, not the span.
+            // Check that tags on all bitmap transitions are identical.
+            if (jump->tags == TCID_NONE) {
+                jump->tags = s->tags;
             } else {
-                new_span[new_nspans].to = old_span[i].to;
-                new_span[new_nspans].ub = old_span[i].ub;
-                new_span[new_nspans].tags = old_span[i].tags;
-                ++new_nspans;
+                CHECK(jump->tags == s->tags);
+            }
+            // Check if the sentinel symbol (if specified) is in one of the bitmap ranges.
+            jump->eof = jump->eof || is_eof(eof, s->ub);
+        } else {
+            // Non-bitmap transition. Collect it into a separate span that will be handled
+            // by if/else statements following the bitmap transition.
+            if (n > 0 && other[n - 1].to == s->to && other[n - 1].tags == s->tags) {
+                // Merge adjacent ranges if the destination state and tags are the same.
+                other[n - 1].ub = s->ub;
+            } else {
+                // Otherwise start a new character range.
+                other[n].to = s->to;
+                other[n].ub = s->ub;
+                other[n].tags = s->tags;
+                ++n;
             }
         }
     }
-    if (new_nspans > 0) {
-        new_span[new_nspans - 1].ub = old_span[old_nspans - 1].ub;
-    }
-    return new_nspans;
+
+    return n;
 }
 
-static CodeGoBm* code_gobm(OutAllocator& alc,
-                           const Span* span,
-                           uint32_t span_count,
-                           const Span* hspan,
-                           uint32_t hspan_count,
-                           const CodeBmState* bm,
-                           State* next,
-                           bool skip,
-                           uint32_t eof,
-                           const opt_t* opts) {
+static CodeGoBm* code_gobm(
+        OutAllocator& alc,
+        const Span* span,
+        uint32_t nspans,
+        const Span* hspan,
+        uint32_t hspans,
+        const CodeBmState* bm,
+        State* next,
+        bool skip,
+        uint32_t eof,
+        const opt_t* opts) {
     CodeGoBm* x = alc.alloct<CodeGoBm>(1);
     x->bitmap = bm;
     x->hgo = nullptr;
     x->lgo = nullptr;
 
-    Span* bspan = allocate<Span>(span_count); // temporary
-    uint32_t bspan_count = unmap (bspan, span, span_count, bm->state);
-    x->lgo = bspan_count == 0 ? nullptr
-            : code_goswif(alc, bspan, bspan_count, next, skip, eof, opts);
+    Span* other = allocate<Span>(nspans); // temporary
+    uint32_t nother = unmap(span, nspans, other, bm->state, &x->jump, skip, eof);
+    x->lgo = nother == 0 ? nullptr
+            : code_goswif(alc, other, nother, next, skip, eof, opts);
+    operator delete(other);
+
     // If there are any low spans, then next state for high spans must be NULL to trigger explicit
     // goto generation in linear `if`.
-    x->hgo = hspan_count == 0 ? nullptr
-            : code_goswif(alc, hspan, hspan_count, x->lgo ? nullptr : next, skip, eof, opts);
+    x->hgo = hspans == 0 ? nullptr
+            : code_goswif(alc, hspan, hspans, x->lgo ? nullptr : next, skip, eof, opts);
+
     x->bitmap->state->label->used = true;
-    x->skip = skip;
-    operator delete(bspan);
 
     return x;
 }
