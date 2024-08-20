@@ -104,10 +104,11 @@ Authors
 -------
 
 re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
-Since then it has been maintained and developed by multiple volunteers, most
-notably,
+Marcus Boerger and Dan Nuffer spent several years to turn the original idea into
+a production ready code generator. Since then it has been maintained and
+developed by multiple volunteers, most notably,
 Brian Young (bayoung@acm.org),
-Markus Boerger (helly@users.sourceforge.net),
+`Marcus Boerger <https://github.com/helly25>`_,
 Dan Nuffer (nuffer@users.sourceforge.net),
 `Ulya Trofimovich <https://github.com/skvadrik>`_ (skvadrik@gmail.com),
 `Serghei Iakovlev <https://github.com/sergeyklay>`_,
