@@ -83,14 +83,15 @@ struct CodeGoSw {
     uint32_t ncases;
 };
 
-struct CodeCmp {
-    CmpKind kind;
-    uint32_t rhs;
+struct CodeOp {
+    OpKind kind;
+    const char* lhs;
+    const char* rhs;
 };
 
 // binary if
 struct CodeGoIfB {
-    const CodeCmp* cond;
+    const CodeOp* cond;
     CodeGoIf* gothen;
     CodeGoIf* goelse;
 };
@@ -98,7 +99,7 @@ struct CodeGoIfB {
 // linear if
 struct CodeGoIfL {
     struct Branch {
-        const CodeCmp* cond;
+        const CodeOp* cond;
         CodeJump jump;
     };
 
@@ -753,9 +754,10 @@ inline CodeBitmap* code_bitmap(OutAllocator& alc, uint32_t nchars) {
     return x;
 }
 
-inline CodeCmp* code_cmp(OutAllocator& alc, CmpKind kind, uint32_t rhs) {
-    CodeCmp* x = alc.alloct<CodeCmp>(1);
+inline CodeOp* code_op(OutAllocator& alc, OpKind kind, const char* lhs, const char* rhs) {
+    CodeOp* x = alc.alloct<CodeOp>(1);
     x->kind = kind;
+    x->lhs = lhs;
     x->rhs = rhs;
     return x;
 }

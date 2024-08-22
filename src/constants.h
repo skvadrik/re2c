@@ -167,14 +167,14 @@ enum class CharLit {
     CHAR_OR_HEX
 };
 
-enum CmpKind { // used as array indices => not a `enum class`
-    CMP_EQ,
-    CMP_NE,
-    CMP_GT,
-    CMP_LT,
-    CMP_GE,
-    CMP_LE,
-    CMP_COUNT // number of elements
+enum OpKind { // used as array indices => not a `enum class`
+    OP_CMP_EQ,
+    OP_CMP_NE,
+    OP_CMP_GT,
+    OP_CMP_LT,
+    OP_CMP_GE,
+    OP_CMP_LE,
+    OP_COUNT // number of elements
 };
 
 static constexpr uint32_t NOEOF = ~0u - 1;

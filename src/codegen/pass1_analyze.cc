@@ -2,6 +2,7 @@
 #include <stdint.h>
 
 #include "src/adfa/adfa.h"
+#include "src/codegen/helpers.h"
 #include "src/codegen/output.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
@@ -15,8 +16,8 @@ namespace re2c {
 static bool matches(
         const opt_t* opts, const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
     const Span
-    *b1 = go1->span, *e1 = &b1[go1->span_count],
-     *b2 = go2->span, *e2 = &b2[go2->span_count];
+        *b1 = go1->span, *e1 = &b1[go1->span_count],
+        *b2 = go2->span, *e2 = &b2[go2->span_count];
     uint32_t lb1 = 0, lb2 = 0;
 
     // If skip has been factored out, it must be in both states.
@@ -68,21 +69,29 @@ static CodeBmState* find_bitmap(
     return nullptr;
 }
 
-static CodeGoIf* code_goif(OutAllocator& alc,
-                           CodeGoIf::Kind kind,
-                           const Span* sp,
-                           uint32_t nsp,
-                           State* next,
-                           bool skip,
-                           uint32_t eof,
-                           const opt_t* opts);
+static CodeOp* code_cmp_yych(Output& output, OpKind kind, uint32_t rhs) {
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& buf = output.scratchbuf;
+
+    CodeOp* x = output.allocator.alloct<CodeOp>(1);
+    x->kind = kind;
+    x->lhs = opts->var_char.c_str();
+    print_char_or_hex(buf.stream(), rhs, opts);
+    x->rhs = buf.flush();
+    return x;
+}
+
+static CodeGoIf* code_goif(Output& output, CodeGoIf::Kind kind, const Span* sp, uint32_t nsp,
+        State* next, bool skip, uint32_t eof);
 
 static bool is_eof(uint32_t eof, uint32_t ub) {
     return eof != NOEOF && eof + 1 == ub;
 }
 
 static CodeGoSw* code_gosw(
-        OutAllocator& alc, const Span* spans, uint32_t span_count, bool skip, uint32_t eof) {
+        Output& output, const Span* spans, uint32_t span_count, bool skip, uint32_t eof) {
+    OutAllocator& alc = output.allocator;
+
     CodeGoSw* go = alc.alloct<CodeGoSw>(1);
     go->cases = alc.alloct<CodeGoCase>(span_count);
 
@@ -145,33 +154,22 @@ static CodeGoSw* code_gosw(
     return go;
 }
 
-static CodeGoIfB* code_goifb(OutAllocator& alc,
-                             const Span* s,
-                             uint32_t n,
-                             State* next,
-                             bool skip,
-                             uint32_t eof,
-                             const opt_t* opts) {
+static CodeGoIfB* code_goifb(
+        Output& output, const Span* s, uint32_t n, State* next, bool skip, uint32_t eof) {
     const uint32_t l = n / 2;
     const uint32_t h = n - l;
     CodeGoIf::Kind tkind = l > 4 ? CodeGoIf::Kind::BINARY : CodeGoIf::Kind::LINEAR;
     CodeGoIf::Kind ekind = h > 4 ? CodeGoIf::Kind::BINARY : CodeGoIf::Kind::LINEAR;
 
-    CodeGoIfB* x = alc.alloct<CodeGoIfB>(1);
-    x->cond = code_cmp(alc, CMP_LE, s[l - 1].ub - 1);
-    x->gothen = code_goif(alc, tkind, &s[0], l, next, skip, eof, opts);
-    x->goelse = code_goif(alc, ekind, &s[l], h, next, skip, eof, opts);
+    CodeGoIfB* x = output.allocator.alloct<CodeGoIfB>(1);
+    x->cond = code_cmp_yych(output, OP_CMP_LE, s[l - 1].ub - 1);
+    x->gothen = code_goif(output, tkind, &s[0], l, next, skip, eof);
+    x->goelse = code_goif(output, ekind, &s[l], h, next, skip, eof);
     return x;
 }
 
-static void add_branch(CodeGoIfL* go,
-                       const CodeCmp* cond,
-                       State* to,
-                       State* next,
-                       const Span& sp,
-                       bool skip,
-                       uint32_t eof,
-                       const opt_t* opts) {
+static void add_branch(Output& output, CodeGoIfL* go, const CodeOp* cond, State* to, State* next,
+        const Span& sp, bool skip, uint32_t eof) {
     CodeGoIfL::Branch& b = go->branches[go->nbranches++];
     b.cond = cond;
     if (to) to->label->used = true;
@@ -184,37 +182,32 @@ static void add_branch(CodeGoIfL* go,
     // no fallthrough between cases and we can only elide a transition if we can elide the whole
     // case, which is only possible if there are no other transitions into this state (so its label
     // is unused).
-    b.jump.elide = opts->code_model == CodeModel::GOTO_LABEL && !to;
+    b.jump.elide = output.block().opts->code_model == CodeModel::GOTO_LABEL && !to;
 }
 
-static CodeGoIfL* code_goifl(OutAllocator& alc,
-                             const Span* s,
-                             uint32_t n,
-                             State* next,
-                             bool skip,
-                             uint32_t eof,
-                             const opt_t* opts) {
-    CodeGoIfL* x = alc.alloct<CodeGoIfL>(1);
+static CodeGoIfL* code_goifl(
+        Output& output, const Span* s, uint32_t n, State* next, bool skip, uint32_t eof) {
+    CodeGoIfL* x = output.allocator.alloct<CodeGoIfL>(1);
     x->nbranches = 0;
-    x->branches = alc.alloct<CodeGoIfL::Branch>(n);
+    x->branches = output.allocator.alloct<CodeGoIfL::Branch>(n);
     x->def = eof == NOEOF ? nullptr : next;
 
     // In rec/func mode transition can only be elideed if there is a single branch.
     // Otherwise an IF/ELSE-IF.../ELSE is needed, where every branch ends in a tailcall
     // (in functional languages it is an expression and early returns are not possible).
-    bool may_elide = opts->code_model != CodeModel::REC_FUNC || n == 1;
+    bool may_elide = output.block().opts->code_model != CodeModel::REC_FUNC || n == 1;
 
     for (;;) {
         if (n == 1 && s[0].to == next && may_elide) {
-            add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
+            add_branch(output, x, nullptr, nullptr, next, s[0], skip, eof);
             break;
         } else if (n == 1) {
-            add_branch(x, nullptr, s[0].to, next, s[0], skip, eof, opts);
+            add_branch(output, x, nullptr, s[0].to, next, s[0], skip, eof);
             break;
         } else if (n == 2 && s[0].to == next && may_elide) {
-            CodeCmp* cmp = code_cmp(alc, CMP_GE, s[0].ub);
-            add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
-            add_branch(x, nullptr, nullptr, next, s[0], skip, eof, opts);
+            CodeOp* cmp = code_cmp_yych(output, OP_CMP_GE, s[0].ub);
+            add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
+            add_branch(output, x, nullptr, nullptr, next, s[0], skip, eof);
             break;
         } else if (n == 3
                 && s[1].to == next
@@ -222,21 +215,21 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags
                 && may_elide) {
-            CodeCmp* cmp = code_cmp(alc, CMP_NE, s[0].ub);
-            add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
-            add_branch(x, nullptr, nullptr, next, s[1], skip, eof, opts);
+            CodeOp* cmp = code_cmp_yych(output, OP_CMP_NE, s[0].ub);
+            add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
+            add_branch(output, x, nullptr, nullptr, next, s[1], skip, eof);
             break;
         } else if (n >= 3
                 && s[1].ub - s[0].ub == 1
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
-            CodeCmp* cmp = code_cmp(alc, CMP_EQ, s[0].ub);
-            add_branch(x, cmp, s[1].to, next, s[1], skip, eof, opts);
+            CodeOp* cmp = code_cmp_yych(output, OP_CMP_EQ, s[0].ub);
+            add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
             n -= 2;
             s += 2;
         } else {
-            CodeCmp* cmp = code_cmp(alc, CMP_LE, s[0].ub - 1);
-            add_branch(x, cmp, s[0].to, next, s[0], skip, eof, opts);
+            CodeOp* cmp = code_cmp_yych(output, OP_CMP_LE, s[0].ub - 1);
+            add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
             n -= 1;
             s += 1;
         }
@@ -245,54 +238,37 @@ static CodeGoIfL* code_goifl(OutAllocator& alc,
     return x;
 }
 
-static CodeGoIf* code_goif(OutAllocator& alc,
-                           CodeGoIf::Kind kind,
-                           const Span* sp,
-                           uint32_t nsp,
-                           State* next,
-                           bool skip,
-                           uint32_t eof,
-                           const opt_t* opts) {
-    CodeGoIf* x = alc.alloct<CodeGoIf>(1);
+static CodeGoIf* code_goif(Output& output, CodeGoIf::Kind kind, const Span* sp, uint32_t nsp,
+        State* next, bool skip, uint32_t eof) {
+    CodeGoIf* x = output.allocator.alloct<CodeGoIf>(1);
     x->kind = kind;
     if (kind == CodeGoIf::Kind::BINARY) {
-        x->goifb = code_goifb(alc, sp, nsp, next, skip, eof, opts);
+        x->goifb = code_goifb(output, sp, nsp, next, skip, eof);
     } else {
-        x->goifl = code_goifl(alc, sp, nsp, next, skip, eof, opts);
+        x->goifl = code_goifl(output, sp, nsp, next, skip, eof);
     }
     return x;
 }
 
-static CodeGoSwIf* code_goswif(OutAllocator& alc, 
-                               const Span* sp,
-                               uint32_t nsp,
-                               State* next,
-                               bool skip,
-                               uint32_t eof,
-                               const opt_t* opts) {
-    CodeGoSwIf* x = alc.alloct<CodeGoSwIf>(1);
-    if ((!opts->nested_ifs && nsp > 2)
+static CodeGoSwIf* code_goswif(
+        Output& output, const Span* sp, uint32_t nsp, State* next, bool skip, uint32_t eof) {
+    CodeGoSwIf* x = output.allocator.alloct<CodeGoSwIf>(1);
+    if ((!output.block().opts->nested_ifs && nsp > 2)
             || (nsp > 8 && (sp[nsp - 2].ub - sp[0].ub <= 3 * (nsp - 2)))) {
         x->kind = CodeGoSwIf::Kind::SWITCH;
-        x->gosw = code_gosw(alc, sp, nsp, skip, eof);
+        x->gosw = code_gosw(output, sp, nsp, skip, eof);
     } else if (nsp > 5) {
         x->kind = CodeGoSwIf::Kind::IF;
-        x->goif = code_goif(alc, CodeGoIf::Kind::BINARY, sp, nsp, next, skip, eof, opts);
+        x->goif = code_goif(output, CodeGoIf::Kind::BINARY, sp, nsp, next, skip, eof);
     } else {
         x->kind = CodeGoSwIf::Kind::IF;
-        x->goif = code_goif(alc, CodeGoIf::Kind::LINEAR, sp, nsp, next, skip, eof, opts);
+        x->goif = code_goif(output, CodeGoIf::Kind::LINEAR, sp, nsp, next, skip, eof);
     }
     return x;
 }
 
-static uint32_t unmap(
-        const Span* span,
-        uint32_t nspans,
-        Span* other,
-        const State* to,
-        CodeJump* jump,
-        bool skip,
-        uint32_t eof) {
+static uint32_t unmap(const Span* span, uint32_t nspans, Span* other, const State* to,
+        CodeJump* jump, bool skip, uint32_t eof) {
     jump->to = to;
     jump->tags = TCID_NONE;
     jump->skip = skip && consume(to);
@@ -332,18 +308,9 @@ static uint32_t unmap(
     return n;
 }
 
-static CodeGoBm* code_gobm(
-        OutAllocator& alc,
-        const Span* span,
-        uint32_t nspans,
-        const Span* hspan,
-        uint32_t hspans,
-        const CodeBmState* bm,
-        State* next,
-        bool skip,
-        uint32_t eof,
-        const opt_t* opts) {
-    CodeGoBm* x = alc.alloct<CodeGoBm>(1);
+static CodeGoBm* code_gobm(Output& output, const Span* span, uint32_t nspans, const Span* hspan,
+        uint32_t hspans, const CodeBmState* bm, State* next, bool skip, uint32_t eof) {
+    CodeGoBm* x = output.allocator.alloct<CodeGoBm>(1);
     x->bitmap = bm;
     x->hgo = nullptr;
     x->lgo = nullptr;
@@ -351,22 +318,22 @@ static CodeGoBm* code_gobm(
     Span* other = allocate<Span>(nspans); // temporary
     uint32_t nother = unmap(span, nspans, other, bm->state, &x->jump, skip, eof);
     x->lgo = nother == 0 ? nullptr
-            : code_goswif(alc, other, nother, next, skip, eof, opts);
+            : code_goswif(output, other, nother, next, skip, eof);
     operator delete(other);
 
     // If there are any low spans, then next state for high spans must be NULL to trigger explicit
     // goto generation in linear `if`.
     x->hgo = hspans == 0 ? nullptr
-            : code_goswif(alc, hspan, hspans, x->lgo ? nullptr : next, skip, eof, opts);
+            : code_goswif(output, hspan, hspans, x->lgo ? nullptr : next, skip, eof);
 
     x->bitmap->state->label->used = true;
 
     return x;
 }
 
-static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint32_t span_count) {
-    CodeGoCpTable* x = alc.alloct<CodeGoCpTable>(1);
-    x->table = alc.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
+static CodeGoCpTable* code_gocp_table(Output& output, const Span* span, uint32_t span_count) {
+    CodeGoCpTable* x = output.allocator.alloct<CodeGoCpTable>(1);
+    x->table = output.allocator.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
 
     uint32_t c = 0;
     for (uint32_t i = 0; i < span_count; ++i) {
@@ -380,18 +347,12 @@ static CodeGoCpTable* code_gocp_table(OutAllocator& alc, const Span* span, uint3
     return x;
 }
 
-static CodeGoCp* code_gocp(OutAllocator& alc,
-                           const Span* span,
-                           uint32_t span_count,
-                           const Span* hspan,
-                           uint32_t hspan_count,
-                           State* next,
-                           uint32_t eof,
-                           const opt_t* opts) {
-    CodeGoCp* x = alc.alloct<CodeGoCp>(1);
+static CodeGoCp* code_gocp(Output& output, const Span* span, uint32_t span_count,
+        const Span* hspan, uint32_t hspan_count, State* next, uint32_t eof) {
+    CodeGoCp* x = output.allocator.alloct<CodeGoCp>(1);
     x->hgo = hspan_count == 0 ? nullptr
-            : code_goswif(alc, hspan, hspan_count, next, false, eof, opts);
-    x->table = code_gocp_table(alc, span, span_count);
+            : code_goswif(output, hspan, hspan_count, next, false, eof);
+    x->table = code_gocp_table(output, span, span_count);
     return x;
 }
 
@@ -420,7 +381,9 @@ State* fallback_state_with_eof_rule(
     return fallback;
 }
 
-static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State* from) {
+static void code_go(Output& output, const Adfa& dfa, State* from) {
+    const opt_t* opts = output.block().opts;
+
     // Mark all states that are targets of `yyaccept` switch to as used.
     if (from->action.kind == Action::Kind::ACCEPT) {
         for (const AcceptTrans& a : *from->action.info.accepts) {
@@ -487,22 +450,22 @@ static void code_go(OutAllocator& alc, const Adfa& dfa, const opt_t* opts, State
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
-        go->godot = code_gosw(alc, go->span, go->span_count, false, eof);
+        go->godot = code_gosw(output, go->span, go->span_count, false, eof);
     } else if (opts->computed_gotos
                && !skip
                && dspan_count >= opts->computed_gotos_threshold
                && !low_spans_have_tags) {
         go->kind = CodeGo::Kind::CPGOTO;
         go->gocp = code_gocp(
-                alc, go->span, go->span_count, hspan, hspan_count, from->next, eof, opts);
+                output, go->span, go->span_count, hspan, hspan_count, from->next, eof);
     } else if (opts->bitmaps && bitmap_count > 0) {
         go->kind = CodeGo::Kind::BITMAP;
         go->gobm = code_gobm(
-                alc, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof, opts);
+                output, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof);
         dfa.bitmap->used = true;
     } else {
         go->kind = CodeGo::Kind::SWITCH_IF;
-        go->goswif = code_goswif(alc, go->span, go->span_count, from->next, skip, eof, opts);
+        go->goswif = code_goswif(output, go->span, go->span_count, from->next, skip, eof);
     }
 }
 
@@ -593,13 +556,13 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     return Ret::OK;
 }
 
-static void gen_relational_ops(Scratchbuf& buf, const char* relops[], const opt_t* opts) {
-    relops[CMP_EQ] = opts->gen_code_cmp_eq(buf);
-    relops[CMP_NE] = opts->gen_code_cmp_ne(buf);
-    relops[CMP_LT] = opts->gen_code_cmp_lt(buf);
-    relops[CMP_GT] = opts->gen_code_cmp_gt(buf);
-    relops[CMP_LE] = opts->gen_code_cmp_le(buf);
-    relops[CMP_GE] = opts->gen_code_cmp_ge(buf);
+static void gen_binops(Scratchbuf& buf, const char* binops[], const opt_t* opts) {
+    binops[OP_CMP_EQ] = opts->gen_code_cmp_eq(buf);
+    binops[OP_CMP_NE] = opts->gen_code_cmp_ne(buf);
+    binops[OP_CMP_LT] = opts->gen_code_cmp_lt(buf);
+    binops[OP_CMP_GT] = opts->gen_code_cmp_gt(buf);
+    binops[OP_CMP_LE] = opts->gen_code_cmp_le(buf);
+    binops[OP_CMP_GE] = opts->gen_code_cmp_ge(buf);
 }
 
 LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
@@ -618,7 +581,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
 
     // Precompute some parts of the code.
     CHECK_RET(gen_fn_common(output.allocator, &block.fn_common, opts));
-    gen_relational_ops(output.scratchbuf, block.relops, opts);
+    gen_binops(output.scratchbuf, block.binops, opts);
 
     const std::unique_ptr<Adfa>& first_dfa = *dfas.begin();
 
@@ -683,7 +646,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         // Generate DFA transitions and perform used label analysis: for every transition mark its
         // destination state label as used.
         for (State* s = dfa->head; s; s = s->next) {
-            code_go(alc, *dfa, opts, s);
+            code_go(output, *dfa, s);
         }
 
         // Assign label indices (only to the labels that are used).

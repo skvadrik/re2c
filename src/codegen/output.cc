@@ -35,7 +35,7 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       start_label(nullptr),
       fill_goto(),
       fn_common(nullptr),
-      relops()
+      binops()
     {}
 
 OutputBlock::~OutputBlock() {
