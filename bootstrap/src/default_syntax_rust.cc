@@ -167,7 +167,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "code:array_local = <undefined>;\n"
     "code:array_global = <undefined>;\n"
-    "code:array_elem = array \"[\" index \"]\";\n"
+    "code:array_elem = array \"[\" index (cast ? \" as usize\") \"]\";\n"
     "\n"
     "code:type_int = \"isize\";\n"
     "code:type_uint = \"usize\";\n"

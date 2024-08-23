@@ -334,11 +334,12 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
 class GenArrayElem : public RenderCallback {
     std::ostream& os;
     const char* array;
-    size_t index;
+    const char* index;
+    bool cast;
 
   public:
-    GenArrayElem(std::ostream& os, const char* array, size_t index)
-        : os(os), array(array), index(index) {}
+    GenArrayElem(std::ostream& os, const char* array, const char* index, bool cast)
+        : os(os), array(array), index(index), cast(cast)  {}
 
     void render_var(StxVarId var) override {
         switch (var) {
@@ -346,6 +347,14 @@ class GenArrayElem : public RenderCallback {
             case StxVarId::INDEX: os << index; break;
             default: UNREACHABLE(); break;
         }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::CAST) {
+            return cast;
+        }
+        UNREACHABLE();
+        return false;
     }
 
     FORBID_COPY(GenArrayElem);
@@ -365,7 +374,8 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
         // capture tag, maps to a range of parentheses, stored in the form of `yypmatch` array
         const char* yypmatch = fintag_expr(output, opts->var_pmatch.c_str());
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
-            GenArrayElem callback(buf.stream(), yypmatch, i);
+            const char* index = buf.u64(i).flush();
+            GenArrayElem callback(buf.stream(), yypmatch, index, /*cast*/ false);
             fintags.push_back(opts->gen_code_array_elem(buf, callback));
         }
     } else {
@@ -733,26 +743,29 @@ static CodeList* gen_goswif(
 static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
+    Scratchbuf& buf = output.scratchbuf;
     const char** ops = output.block().binops;
 
+    const char* table = buf.str(bitmap_name(opts, dfa.cond)).flush();
+    const char* index = buf.u32(go->bitmap->offset).cstr("+").str(opts->var_char).flush();
+    GenArrayElem callback(buf.stream(), table, index, /*cast*/ true);
+    const char* elem = opts->gen_code_array_elem(buf, callback);
+
     bool need_compare = !opts->implicit_bool_conversion;
-    if (need_compare) o.cstr("(");
-    o.str(bitmap_name(opts, dfa.cond)).cstr("[").u32(go->bitmap->offset).cstr("+")
-            .str(opts->var_char).cstr("] ").cstr(ops[OP_BIT_AND]).cstr(" ")
-            .yybm_char(go->bitmap->mask, opts, 1);
-    if (need_compare) o.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-    const char* elif_cond = o.flush();
+    if (need_compare) buf.cstr("(");
+    buf.cstr(elem).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ").yybm_char(go->bitmap->mask, opts, 1);
+    if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
+    const char* elif_cond = buf.flush();
 
     CodeList* if_else = code_list(alc);
     gen_goto(output, dfa, if_else, from, go->jump);
 
     CodeList* stmts = code_list(alc);
     if (go->hgo != nullptr) {
-        if (need_compare) o.cstr("(");
-        o.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
-        if (need_compare) o.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-        const char* if_cond = o.flush();
+        if (need_compare) buf.cstr("(");
+        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
+        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
+        const char* if_cond = buf.flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
     } else {

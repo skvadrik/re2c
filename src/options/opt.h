@@ -98,7 +98,7 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
     ) \
     CODE_TEMPLATE(array_elem, \
-        ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
+        ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({StxLOpt::CAST}) \
     ) \
     CODE_TEMPLATE(type_int, \
         ({}), ({}), ({}) \

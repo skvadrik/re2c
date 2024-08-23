@@ -165,7 +165,7 @@ code:const_global = code:const_local;
 
 code:array_local = <undefined>;
 code:array_global = <undefined>;
-code:array_elem = array "[" index "]";
+code:array_elem = array "[" index (cast ? " as usize") "]";
 
 code:type_int = "isize";
 code:type_uint = "usize";
