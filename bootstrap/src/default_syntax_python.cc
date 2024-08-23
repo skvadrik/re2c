@@ -180,6 +180,8 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "code:cmp_le = \"<=\";\n"
     "code:cmp_ge = \">=\";\n"
     "\n"
+    "code:bit_and = \"&\";\n"
+    "\n"
     "code:if_then_else =\n"
     "    [branch{0}: topindent \"if \" cond \":\" nl\n"
     "        indent [stmt: stmt] dedent]\n"

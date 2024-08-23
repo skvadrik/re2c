@@ -181,6 +181,8 @@ code:cmp_gt = ">";
 code:cmp_le = "<=";
 code:cmp_ge = ">=";
 
+code:bit_and = "&";
+
 code:if_then_else =
     [branch{0}: topindent "if " cond " {" nl
         indent [stmt: stmt] dedent]

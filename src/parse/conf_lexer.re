@@ -600,6 +600,7 @@ start:
     "code:cmp_gt"                 { RET_CODE(code_cmp_gt); }
     "code:cmp_le"                 { RET_CODE(code_cmp_le); }
     "code:cmp_ge"                 { RET_CODE(code_cmp_ge); }
+    "code:bit_and"                { RET_CODE(code_bit_and); }
     "code:if_then_else"           { RET_CODE(code_if_then_else); }
     "code:if_then_else_oneline"   { RET_CODE(code_if_then_else_oneline); }
     "code:switch"                 { RET_CODE(code_switch); }

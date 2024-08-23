@@ -180,6 +180,8 @@ const char* DEFAULT_SYNTAX_HASKELL =
     "code:cmp_le = \"<=\";\n"
     "code:cmp_ge = \">=\";\n"
     "\n"
+    "code:bit_and = <undefined>;\n"
+    "\n"
     "code:if_then_else =\n"
     "    [branch{0}: topindent (many ? \"if \" cond \" then\" : \"when (\" cond \") $\") (monadic ? \" do\") nl\n"
     "        indent [stmt: stmt] dedent]\n"

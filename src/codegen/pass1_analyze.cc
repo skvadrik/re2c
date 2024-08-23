@@ -563,6 +563,7 @@ static void gen_binops(Scratchbuf& buf, const char* binops[], const opt_t* opts)
     binops[OP_CMP_GT] = opts->gen_code_cmp_gt(buf);
     binops[OP_CMP_LE] = opts->gen_code_cmp_le(buf);
     binops[OP_CMP_GE] = opts->gen_code_cmp_ge(buf);
+    binops[OP_BIT_AND] = opts->gen_code_bit_and(buf);
 }
 
 LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {

@@ -734,12 +734,14 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& o = output.scratchbuf;
+    const char** ops = output.block().binops;
 
     bool need_compare = !opts->implicit_bool_conversion;
     if (need_compare) o.cstr("(");
     o.str(bitmap_name(opts, dfa.cond)).cstr("[").u32(go->bitmap->offset).cstr("+")
-            .str(opts->var_char).cstr("]").cstr(" & ").yybm_char(go->bitmap->mask, opts, 1);
-    if (need_compare) o.cstr(") != 0");
+            .str(opts->var_char).cstr("] ").cstr(ops[OP_BIT_AND]).cstr(" ")
+            .yybm_char(go->bitmap->mask, opts, 1);
+    if (need_compare) o.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
     const char* elif_cond = o.flush();
 
     CodeList* if_else = code_list(alc);
@@ -748,8 +750,8 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     CodeList* stmts = code_list(alc);
     if (go->hgo != nullptr) {
         if (need_compare) o.cstr("(");
-        o.str(opts->var_char).cstr(" & ~0xFF");
-        if (need_compare) o.cstr(") != 0");
+        o.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
+        if (need_compare) o.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
         const char* if_cond = o.flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
@@ -785,6 +787,7 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
+    const char** ops = output.block().binops;
 
     CodeList* stmts = code_list(alc);
 
@@ -793,7 +796,8 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
     append(if_else, code_goto(alc, buf.flush()));
 
     if (go->hgo != nullptr) {
-        const char* cond = buf.str(opts->var_char).cstr(" & ~0xFF").flush();
+        const char* cond =
+                buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF").flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, cond, if_then, if_else));
     } else {

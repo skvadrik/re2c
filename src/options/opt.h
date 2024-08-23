@@ -136,6 +136,9 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(cmp_ge, \
         ({}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(bit_and, \
+        ({}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(if_then_else, \
         ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
         ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \

@@ -178,6 +178,8 @@ code:cmp_gt = ">";
 code:cmp_le = "<=";
 code:cmp_ge = ">=";
 
+code:bit_and = <undefined>;
+
 code:if_then_else =
     [branch{0}: topindent (many ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
         indent [stmt: stmt] dedent]
