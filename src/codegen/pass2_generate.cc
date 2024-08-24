@@ -1815,6 +1815,20 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     return stmts;
 }
 
+void gen_bitmaps(Output& output, CodeList* code, bool* local_decls) {
+    OutputBlock& b = output.block();
+
+    if (!b.opts->bitmaps) return;
+
+    for (const std::unique_ptr<Adfa>& dfa : b.dfas) {
+        CodeList* bitmap = gen_bitmap(output, dfa->bitmap, dfa->cond);
+        if (bitmap) {
+            *local_decls = true;
+            append(code, bitmap);
+        }
+    }
+}
+
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -1993,6 +2007,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         const char* default_char = sprint_null(opts);
         append(code, code_var(alc, VarType::YYCTYPE, true, opts->var_char.c_str(), default_char));
     }
+
     if (!opts->storable_state && oblock.used_yyaccept && opts->code_model != CodeModel::REC_FUNC) {
         local_decls = true;
         append(code, code_var(alc, VarType::UINT, false, opts->var_accept.c_str(), "0"));
@@ -2005,29 +2020,27 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             local_decls = true;
             append(code, gen_cond_table(output));
         }
-        if (opts->bitmaps) {
-            for (const std::unique_ptr<Adfa>& dfa : dfas) {
-                CodeList* bitmap = gen_bitmap(output, dfa->bitmap, dfa->cond);
-                if (bitmap) {
-                    local_decls = true;
-                    append(code, bitmap);
-                }
-            }
-        }
+
+        gen_bitmaps(output, code, &local_decls);
+
         if (opts->storable_state) {
             CHECK_RET(gen_state_goto_implicit(output, code));
         }
+
         if (!opts->label_start.empty()) {
             // User-defined start label that should be used by user-defined code.
             append(code, code_slabel(alc, buf.str(opts->label_start).flush()));
         }
+
         if (oblock.start_label) {
             // Numeric start label used by the generated code (user-defined one may not exist).
             append(code, code_nlabel(alc, oblock.start_label));
         }
+
         if (is_cond_block) {
             append(code, gen_cond_goto(output));
         }
+
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             if (is_cond_block) {
                 if (opts->cond_div.length()) {
@@ -2046,20 +2059,26 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         local_decls = true;
         append(code, gen_yystate_def(output));
 
+        gen_bitmaps(output, code, &local_decls);
+
         CodeCases* cases = code_cases(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_switch_cases(output, *dfa, cases);
         }
+
         wrap_dfas_in_loop_switch(output, code, cases);
     } else {
         DCHECK(opts->code_model == CodeModel::REC_FUNC);
         // In the rec/func mode DFA states are separate co-recursive functions that tail-call
         // other state functions or themselves.
+
         CodeList* funcs = code_list(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
             gen_dfa_as_recursive_functions(output, *dfa, funcs);
         }
+
         CHECK_RET(gen_start_function(output, *dfas[0], funcs));
+
         append(code, code_recursive_functions(alc, funcs));
     }
 

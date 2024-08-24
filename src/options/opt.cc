@@ -331,10 +331,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         if (real.computed_gotos) {
             RET_FAIL(error("computed gotos are not supported in this code model"));
         }
-        if (real.bitmaps) {
-            // TODO: generate bitmaps before the joined loop/switch for all conditions.
-            RET_FAIL(error("bitmaps are not supported in this code model"));
-        }
     }
 
     return Ret::OK;
