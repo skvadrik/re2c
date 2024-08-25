@@ -4,7 +4,8 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "case-ranges", "tags", "captures", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "case-ranges",
+    "tags", "captures", "captvars"];
 
 
 // language-specific options ---------------------------------------------------
@@ -158,14 +159,19 @@ code:var_global = code:var_local;
 code:const_local = topindent "const " name " = " init ";" nl;
 code:const_global = code:const_local;
 
-code:array_local = <undefined>;
+code:array_local =
+    topindent "const " name " = [" size "]" type "{" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "};" nl;
+
 code:array_global = <undefined>;
+
 code:array_elem = array "[" index "]";
 
 code:type_int = "i32";
 code:type_uint = "u32";
 code:type_cond_enum = "u32";
-code:type_yybm = "const u8";
+code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " = " rhs ";" nl;
