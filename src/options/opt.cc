@@ -332,6 +332,10 @@ LOCAL_NODISCARD(Ret fix_mutopt(
             RET_FAIL(error("computed gotos are not supported in this code model"));
         }
     }
+    if (real.bitmaps && glob.code_model == CodeModel::REC_FUNC) {
+        // TODO: allow bitmaps before in rec/func mode
+        RET_FAIL(error("bitmaps are not supported in this code model"));
+    }
 
     return Ret::OK;
 }
