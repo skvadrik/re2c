@@ -4,7 +4,8 @@ supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "case-ranges", "tags", "captures", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "case-ranges",
+    "tags", "captures", "captvars"];
 
 
 // language-specific options ---------------------------------------------------
@@ -157,14 +158,19 @@ code:var_global = topindent "let " name " = " init nl;
 code:const_local = topindent "let " name " = " init " in" nl;
 code:const_global = topindent "let " name " = " init nl;
 
-code:array_local = <undefined>;
-code:array_global = <undefined>;
+code:array_local =
+    topindent "and " name " = [|" nl indent
+        [row: topindent [elem{0:-2}: elem "; "] [elem{-1}: elem ";"] nl]
+    dedent topindent "|]" nl;
+
+code:array_global = code:array_local;
+
 code:array_elem = array ".(" index ")";
 
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_cond_enum = (storable_state? "int" : "uint");
-code:type_yybm = <undefined>;
+code:type_yybm = "int";
 code:type_yytarget = <undefined>;
 
 code:assign = topindent lhs " <- " rhs ";" nl;
@@ -382,6 +388,6 @@ code:yylessthan =
             : YYLIMIT " <= " YYCURSOR)
         : YYLESSTHAN);
 
-code:yybm_filter = <undefined>;
+code:yybm_filter = yych " land ~0xFF";
 
-code:yybm_match = <undefined>;
+code:yybm_match = "(" yybm ".(" offset " + Char.code " yych ") land " mask ") != 0";

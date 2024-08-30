@@ -1724,18 +1724,20 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     return stmts;
 }
 
-static void gen_bitmaps(Output& output, CodeList* code, bool* local_decls) {
+static bool gen_bitmaps(Output& output, CodeList* code) {
     OutputBlock& b = output.block();
 
-    if (!b.opts->bitmaps) return;
+    if (!b.opts->bitmaps) return false;
 
+    bool have_bitmaps = false;
     for (const std::unique_ptr<Adfa>& dfa : b.dfas) {
         CodeList* bitmap = gen_bitmap(output, dfa->bitmap, dfa->cond);
         if (bitmap) {
-            *local_decls = true;
+            have_bitmaps = true;
             append(code, bitmap);
         }
     }
+    return have_bitmaps;
 }
 
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts) {
@@ -1930,7 +1932,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
             append(code, gen_cond_table(output));
         }
 
-        gen_bitmaps(output, code, &local_decls);
+        local_decls |= gen_bitmaps(output, code);
 
         if (opts->storable_state) {
             CHECK_RET(gen_state_goto_implicit(output, code));
@@ -1968,7 +1970,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         local_decls = true;
         append(code, gen_yystate_def(output));
 
-        gen_bitmaps(output, code, &local_decls);
+        local_decls |= gen_bitmaps(output, code);
 
         CodeCases* cases = code_cases(alc);
         for (const std::unique_ptr<Adfa>& dfa : dfas) {
@@ -1989,6 +1991,8 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         CHECK_RET(gen_start_function(output, *dfas[0], funcs));
 
         append(code, code_recursive_functions(alc, funcs));
+
+        gen_bitmaps(output, code); // no local declarations in rec/func mode => ignore return value
     }
 
     // If needed, wrap the block in braces, so that variable declarations have local scope.
