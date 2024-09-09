@@ -745,36 +745,54 @@ static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, c
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
     const char** ops = output.block().binops;
+    bool need_compare = !opts->implicit_bool_conversion;
+
+    const char* cond1 = nullptr;
+    CodeList* goto1 = nullptr;
+    if (go->hgo) {
+        if (need_compare) buf.cstr("(");
+        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
+        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
+        cond1 = buf.flush();
+        goto1 = gen_goswif(output, dfa, go->hgo, from);
+    }
 
     const char* table = buf.str(bitmap_name(opts, dfa.cond)).flush();
     const char* index = buf.u32(go->bitmap->offset).cstr("+").str(opts->var_char).flush();
     GenArrayElem callback(buf.stream(), table, index, /*cast*/ true);
     const char* elem = opts->gen_code_array_elem(buf, callback);
 
-    bool need_compare = !opts->implicit_bool_conversion;
     if (need_compare) buf.cstr("(");
     buf.cstr(elem).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ").yybm_char(go->bitmap->mask, opts, 1);
     if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-    const char* elif_cond = buf.flush();
+    const char* cond2 = buf.flush();
 
-    CodeList* if_else = code_list(alc);
-    gen_goto(output, dfa, if_else, from, go->jump);
+    CodeList* goto2 = code_list(alc);
+    gen_goto(output, dfa, goto2, from, go->jump);
 
+    CodeList* goto3 = go->lgo ? gen_goswif(output, dfa, go->lgo, from) : nullptr;
+
+    // In rec/func mode we can't generate IF without ELSE -- it would break functional languages.
+    // TODO: generate linear IF during analyze phase and rely on `code_goifl()` logic.
     CodeList* stmts = code_list(alc);
-    if (go->hgo != nullptr) {
-        if (need_compare) buf.cstr("(");
-        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
-        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-        const char* if_cond = buf.flush();
-        CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
-        append(stmts, code_if_then_elif(alc, if_cond, if_then, elif_cond, if_else));
+    Code* ifte = code_if_then_else(alc);
+    if (goto1 != nullptr) {
+        append(ifte->ifte, code_branch(alc, cond1, goto1));
+    }
+    if (goto2 != nullptr) {
+        append(ifte->ifte, code_branch(alc, cond2, goto2));
+    }
+    if (opts->code_model == CodeModel::REC_FUNC) {
+        if (goto3 != nullptr) {
+            append(ifte->ifte, code_branch(alc, nullptr, goto3));
+        }
+        append(stmts, ifte);
     } else {
-        append(stmts, code_if_then_else(alc, elif_cond, if_else, nullptr));
+        append(stmts, ifte);
+        if (goto3 != nullptr) {
+            append(stmts, goto3);
+        }
     }
-    if (go->lgo != nullptr) {
-        append(stmts, gen_goswif(output, dfa, go->lgo, from));
-    }
-
     return stmts;
 }
 
