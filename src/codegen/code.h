@@ -57,6 +57,8 @@ using CodeBmStates = list_t<CodeBmState>;
 struct CodeBitmap {
     CodeBmStates* states;
     uint32_t nchars;
+    uint32_t nelems;
+    const char** elems;
     bool used;
 };
 
@@ -744,6 +746,8 @@ inline CodeBitmap* code_bitmap(OutAllocator& alc, uint32_t nchars) {
     CodeBitmap* x = alc.alloct<CodeBitmap>(1);
     x->states = new_list<CodeBmState>(alc);
     x->nchars = nchars;
+    x->nelems = 0;
+    x->elems = nullptr;
     x->used = false;
     return x;
 }

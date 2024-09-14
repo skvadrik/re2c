@@ -69,6 +69,61 @@ static CodeBmState* find_bitmap(
     return nullptr;
 }
 
+static void init_bitmap(Output& output, CodeBitmap* bitmap) {
+    if (!bitmap->states->head) return;
+
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    static constexpr uint32_t WIDTH = 8;
+    const uint32_t nchars = bitmap->nchars;
+    uint32_t nmaps = 0;
+    for (CodeBmState* b = bitmap->states->head; b; b = b->next) ++nmaps;
+
+    uint32_t nelems = nchars * ((nmaps + WIDTH - 1) / WIDTH);
+    const char** elems = alc.alloct<const char*>(nelems);
+    uint32_t* tmpbuf = alc.alloct<uint32_t>(nelems); // temporary buffer for bitmap generation
+
+    // Generate bitmaps in a temporary buffer and store them as table elements.
+    uint32_t bmidx = 0;
+    for (CodeBmState* b = bitmap->states->head; b; ++bmidx) {
+        const uint32_t offset = bmidx * nchars;
+
+        // For each state generate a table with one bit per character, denoting if there is a
+        // transition on this charater to the destination state. Tables for up to 8 states are
+        // overlayed and compressed in one bitmap.
+        memset(tmpbuf, 0, nchars * sizeof(uint32_t));
+        for (uint32_t mask = 0x80; mask && b; mask >>= 1, b = b->next) {
+            b->offset = offset;
+            b->mask = mask;
+
+            uint32_t c = 0;
+            const Span* span = b->go->span, *last = span + b->go->span_count;
+            for (; span < last; ++span) {
+                if (span->to == b->state) {
+                    for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {
+                        tmpbuf[c] |= mask;
+                    }
+                }
+                c = span->ub;
+            }
+        }
+
+        for (uint32_t i = 0; i < nchars; ++i) {
+            if (opts->bitmaps_hex) {
+                print_hex(buf.stream(), tmpbuf[i], opts);
+            } else {
+                buf.u32(tmpbuf[i]);
+            }
+            elems[bmidx * nchars + i] = buf.flush();
+        }
+    }
+
+    bitmap->nelems = nelems;
+    bitmap->elems = elems;
+}
+
 static const char* code_cmp_yych(Output& output, OpKind kind, uint32_t rhs) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
@@ -593,6 +648,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
                     insert_bitmap(output, dfa->bitmap, &s->next->go, s);
                 }
             }
+            init_bitmap(output, dfa->bitmap);
         }
 
         // Allocate labels for DFA states, but do not assign indices yet: they will be assigned

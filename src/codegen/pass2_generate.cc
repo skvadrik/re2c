@@ -1773,59 +1773,15 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    static constexpr uint32_t WIDTH = 8;
-    const uint32_t nchars = bitmap->nchars;
-    uint32_t nmaps = 0;
-    for (CodeBmState* b = bitmap->states->head; b; b = b->next) ++nmaps;
-
-    uint32_t nelems = nchars * ((nmaps + WIDTH - 1) / WIDTH);
-    const char** elems = alc.alloct<const char*>(nelems);
-    uint32_t* tmpbuf = alc.alloct<uint32_t>(nelems); // temporary buffer for bitmap generation
-
-    // Generate bitmaps in a temporary buffer and store them as table elements.
-    uint32_t bmidx = 0;
-    for (CodeBmState* b = bitmap->states->head; b; ++bmidx) {
-        const uint32_t offset = bmidx * nchars;
-
-        // For each state generate a table with one bit per character, denoting if there is a
-        // transition on this charater to the destination state. Tables for up to 8 states are
-        // overlayed and compressed in one bitmap.
-        memset(tmpbuf, 0, nchars * sizeof(uint32_t));
-        for (uint32_t mask = 0x80; mask && b; mask >>= 1, b = b->next) {
-            b->offset = offset;
-            b->mask = mask;
-
-            uint32_t c = 0;
-            const Span* span = b->go->span, *last = span + b->go->span_count;
-            for (; span < last; ++span) {
-                if (span->to == b->state) {
-                    for (uint32_t u = std::min(span->ub, nchars); c < u; ++c) {
-                        tmpbuf[c] |= mask;
-                    }
-                }
-                c = span->ub;
-            }
-        }
-
-        for (uint32_t i = 0; i < nchars; ++i) {
-            if (opts->bitmaps_hex) {
-                print_hex(buf.stream(), tmpbuf[i], opts);
-            } else {
-                buf.u32(tmpbuf[i]);
-            }
-            elems[bmidx * nchars + i] = buf.flush();
-        }
-    }
-
     const char* name = buf.str(bitmap_name(opts, cond)).flush();
     const char* type = opts->gen_code_type_yybm(buf);
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(alc, name, type, elems, nelems, /*tabulate*/ true));
+    append(stmts, code_array(alc, name, type, bitmap->elems, bitmap->nelems, /*tabulate*/ true));
     return stmts;
 }
 
-void gen_bitmaps(Output& output, CodeList* code, bool* local_decls) {
+static void gen_bitmaps(Output& output, CodeList* code, bool* local_decls) {
     OutputBlock& b = output.block();
 
     if (!b.opts->bitmaps) return;
