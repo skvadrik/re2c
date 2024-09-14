@@ -69,16 +69,12 @@ static CodeBmState* find_bitmap(
     return nullptr;
 }
 
-static CodeOp* code_cmp_yych(Output& output, OpKind kind, uint32_t rhs) {
+static const char* code_cmp_yych(Output& output, OpKind kind, uint32_t rhs) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
-
-    CodeOp* x = output.allocator.alloct<CodeOp>(1);
-    x->kind = kind;
-    x->lhs = opts->var_char.c_str();
+    buf.str(opts->var_char).cstr(" ").cstr(output.block().binops[kind]).cstr(" ");
     print_char_or_hex(buf.stream(), rhs, opts);
-    x->rhs = buf.flush();
-    return x;
+    return buf.flush();
 }
 
 static CodeGoIf* code_goif(Output& output, CodeGoIf::Kind kind, const Span* sp, uint32_t nsp,
@@ -168,7 +164,7 @@ static CodeGoIfB* code_goifb(
     return x;
 }
 
-static void add_branch(Output& output, CodeGoIfL* go, const CodeOp* cond, State* to, State* next,
+static void add_branch(Output& output, CodeGoIfL* go, const char* cond, State* to, State* next,
         const Span& sp, bool skip, uint32_t eof) {
     CodeGoIfL::Branch& b = go->branches[go->nbranches++];
     b.cond = cond;
@@ -205,7 +201,7 @@ static CodeGoIfL* code_goifl(
             add_branch(output, x, nullptr, s[0].to, next, s[0], skip, eof);
             break;
         } else if (n == 2 && s[0].to == next && may_elide) {
-            CodeOp* cmp = code_cmp_yych(output, OP_CMP_GE, s[0].ub);
+            const char* cmp = code_cmp_yych(output, OP_CMP_GE, s[0].ub);
             add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
             add_branch(output, x, nullptr, nullptr, next, s[0], skip, eof);
             break;
@@ -215,7 +211,7 @@ static CodeGoIfL* code_goifl(
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags
                 && may_elide) {
-            CodeOp* cmp = code_cmp_yych(output, OP_CMP_NE, s[0].ub);
+            const char* cmp = code_cmp_yych(output, OP_CMP_NE, s[0].ub);
             add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
             add_branch(output, x, nullptr, nullptr, next, s[1], skip, eof);
             break;
@@ -223,12 +219,12 @@ static CodeGoIfL* code_goifl(
                 && s[1].ub - s[0].ub == 1
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
-            CodeOp* cmp = code_cmp_yych(output, OP_CMP_EQ, s[0].ub);
+            const char* cmp = code_cmp_yych(output, OP_CMP_EQ, s[0].ub);
             add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
             n -= 2;
             s += 2;
         } else {
-            CodeOp* cmp = code_cmp_yych(output, OP_CMP_LE, s[0].ub - 1);
+            const char* cmp = code_cmp_yych(output, OP_CMP_LE, s[0].ub - 1);
             add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
             n -= 1;
             s += 1;

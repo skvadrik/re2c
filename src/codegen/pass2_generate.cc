@@ -639,11 +639,6 @@ static void gen_goto(
     }
 }
 
-static const char* gen_cond(Output& output, const CodeOp* cond) {
-    return output.scratchbuf.cstr(cond->lhs)
-            .cstr(" ").str(output.block().binops[cond->kind]).cstr(" ").cstr(cond->rhs).flush();
-}
-
 static CodeList* gen_gosw(Output& output, const Adfa& dfa, const CodeGoSw* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
@@ -676,10 +671,9 @@ static CodeList* gen_goifb(
         Output& output, const Adfa& dfa, const CodeGoIfB* go, const State* from) {
     OutAllocator& alc = output.allocator;
     CodeList* stmts = code_list(alc);
-    const char* if_cond = gen_cond(output, go->cond);
     CodeList* if_then = gen_goif(output, dfa, go->gothen, from);
     CodeList* if_else = gen_goif(output, dfa, go->goelse, from);
-    append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
+    append(stmts, code_if_then_else(alc, go->cond, if_then, if_else));
     return stmts;
 }
 
@@ -697,10 +691,9 @@ static CodeList* gen_goifl(
         // in the last unconditional branch with the following YYPEEK, as in `yych = *++YYCURSOR`.
         for (; b != e; ++b) {
             if (b->cond) {
-                const char* cond = gen_cond(output, b->cond);
                 CodeList* then = code_list(alc);
                 gen_goto(output, dfa, then, from, b->jump);
-                append(stmts, code_if_then_else(alc, cond, then, nullptr));
+                append(stmts, code_if_then_else(alc, b->cond, then, nullptr));
             } else {
                 DCHECK(b + 1 == e); // the last one
                 gen_goto(output, dfa, stmts, from, b->jump);
@@ -715,10 +708,9 @@ static CodeList* gen_goifl(
         } else {
             Code* ifte = code_if_then_else(alc);
             for (; b != e; ++b) {
-                const char* cond = b->cond ? gen_cond(output, b->cond) : nullptr;
                 CodeList* then = code_list(alc);
                 gen_goto(output, dfa, then, from, b->jump);
-                append(ifte->ifte, code_branch(alc, cond, then));
+                append(ifte->ifte, code_branch(alc, b->cond, then));
             }
             append(stmts, ifte);
         }
