@@ -85,56 +85,52 @@ struct CodeGoSw {
     uint32_t ncases;
 };
 
-// binary if
+struct CodeGoSwIf {
+    union {
+        CodeGoSw* gosw;
+        CodeGoIf* goif;
+    };
+    enum class Kind: uint32_t {
+        SWITCH,
+        IF
+    } kind;
+};
+
+// Binary IF (used for many branches).
 struct CodeGoIfB {
     const char* cond;
     CodeGoIf* gothen;
     CodeGoIf* goelse;
 };
 
-// linear if
-struct CodeGoIfL {
-    struct Branch {
-        const char* cond;
+struct CodeGoBranch {
+    const char* cond;
+    union {
         CodeJump jump;
+        CodeGoSwIf* swif;
     };
+    enum class Kind: uint32_t {
+        JUMP,
+        SWIF
+    } kind;
+};
 
+// Linear IF (used for few branches).
+struct CodeGoIfL {
     size_t nbranches;
-    Branch* branches;
+    CodeGoBranch* branches;
     State* def;
 };
 
 struct CodeGoIf {
-    enum class Kind: uint32_t {
-        BINARY,
-        LINEAR
-    };
-
-    Kind kind;
     union {
         CodeGoIfB* goifb;
         CodeGoIfL* goifl;
     };
-};
-
-struct CodeGoSwIf {
     enum class Kind: uint32_t {
-        SWITCH,
-        IF
-    };
-
-    Kind kind;
-    union {
-        CodeGoSw* gosw;
-        CodeGoIf* goif;
-    };
-};
-
-struct CodeGoBm {
-    const CodeBmState* bitmap;
-    CodeGoSwIf* hgo;
-    CodeGoSwIf* lgo;
-    CodeJump jump;
+        BINARY,
+        LINEAR
+    } kind;
 };
 
 struct CodeGoCpTable {
@@ -152,7 +148,7 @@ struct CodeGo {
     enum class Kind: uint32_t {
         EMPTY,
         SWITCH_IF,
-        BITMAP,
+        LINEAR_IF,
         CPGOTO,
         DOT
     };
@@ -164,9 +160,9 @@ struct CodeGo {
     bool skip;
     union {
         CodeGoSwIf* goswif;
-        CodeGoBm* gobm;
         CodeGoCp* gocp;
         CodeGoSw* godot;
+        CodeGoIfL* goifl;
     };
 };
 

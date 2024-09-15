@@ -175,7 +175,7 @@ yy21:
 	yych = *YYCURSOR;
 yy22:
 	if (yych & ~0xFF) goto yy21;
-	else if (yybm[0+yych] & 128) goto yy21;
+	if (yybm[0+yych] & 128) goto yy21;
 	if (yych <= '\n') goto yy4;
 	goto yy15;
 yy23:

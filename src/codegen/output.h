@@ -171,6 +171,35 @@ struct Output {
     FORBID_COPY(Output);
 };
 
+class GenArrayElem : public RenderCallback {
+    std::ostream& os;
+    const char* array;
+    const char* index;
+    bool cast;
+
+  public:
+    GenArrayElem(std::ostream& os, const char* array, const char* index, bool cast)
+        : os(os), array(array), index(index), cast(cast)  {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ARRAY: os << array; break;
+            case StxVarId::INDEX: os << index; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::CAST) {
+            return cast;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(GenArrayElem);
+};
+
 void init_go(CodeGo* go);
 bool endstate(const State* s);
 bool consume(const State* s);

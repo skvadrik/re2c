@@ -219,28 +219,46 @@ static CodeGoIfB* code_goifb(
     return x;
 }
 
-static void add_branch(Output& output, CodeGoIfL* go, const char* cond, State* to, State* next,
-        const Span& sp, bool skip, uint32_t eof) {
-    CodeGoIfL::Branch& b = go->branches[go->nbranches++];
+static void add_branch_swif(CodeGoIfL* go, const char* cond, CodeGoSwIf* swif) {
+    CodeGoBranch& b = go->branches[go->nbranches++];
     b.cond = cond;
-    if (to) to->label->used = true;
-    b.jump.to = to ? to : next;
-    b.jump.tags = sp.tags;
-    b.jump.skip = skip && consume(sp.to);
-    b.jump.eof = is_eof(eof, sp.ub);
+    b.kind = CodeGoBranch::Kind::SWIF;
+    b.swif = swif;
+}
+
+static void add_branch_jump(CodeGoIfL* go, const char* cond, CodeJump&& jump) {
+    CodeGoBranch& b = go->branches[go->nbranches++];
+    b.cond = cond;
+    b.kind = CodeGoBranch::Kind::JUMP;
+    b.jump = jump;
+}
+
+static void add_branch_jump(CodeGoIfL* go, const char* cond, const opt_t* opts,
+        State* to, State* next, const Span& sp, bool skip, uint32_t eof) {
+    CodeJump jump;
+    jump.to = to ? to : next;
+    jump.tags = sp.tags;
+    jump.skip = skip && consume(sp.to);
+    jump.eof = is_eof(eof, sp.ub);
     // TODO: support transition elision in loop/switch and rec/func modes. This requires used-label
     // analysis before the start of code generation phase, because in some languages (Rust) there is
     // no fallthrough between cases and we can only elide a transition if we can elide the whole
     // case, which is only possible if there are no other transitions into this state (so its label
     // is unused).
-    b.jump.elide = output.block().opts->code_model == CodeModel::GOTO_LABEL && !to;
+    jump.elide = opts->code_model == CodeModel::GOTO_LABEL && !to;
+
+    if (to) to->label->used = true;
+
+    add_branch_jump(go, cond, std::move(jump));
 }
 
 static CodeGoIfL* code_goifl(
         Output& output, const Span* s, uint32_t n, State* next, bool skip, uint32_t eof) {
+    const opt_t* opts = output.block().opts;
+
     CodeGoIfL* x = output.allocator.alloct<CodeGoIfL>(1);
     x->nbranches = 0;
-    x->branches = output.allocator.alloct<CodeGoIfL::Branch>(n);
+    x->branches = output.allocator.alloct<CodeGoBranch>(n);
     x->def = eof == NOEOF ? nullptr : next;
 
     // In rec/func mode transition can only be elideed if there is a single branch.
@@ -250,15 +268,15 @@ static CodeGoIfL* code_goifl(
 
     for (;;) {
         if (n == 1 && s[0].to == next && may_elide) {
-            add_branch(output, x, nullptr, nullptr, next, s[0], skip, eof);
+            add_branch_jump(x, nullptr, opts, nullptr, next, s[0], skip, eof);
             break;
         } else if (n == 1) {
-            add_branch(output, x, nullptr, s[0].to, next, s[0], skip, eof);
+            add_branch_jump(x, nullptr, opts, s[0].to, next, s[0], skip, eof);
             break;
         } else if (n == 2 && s[0].to == next && may_elide) {
             const char* cmp = code_cmp_yych(output, OP_CMP_GE, s[0].ub);
-            add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
-            add_branch(output, x, nullptr, nullptr, next, s[0], skip, eof);
+            add_branch_jump(x, cmp, opts, s[1].to, next, s[1], skip, eof);
+            add_branch_jump(x, nullptr, opts, nullptr, next, s[0], skip, eof);
             break;
         } else if (n == 3
                 && s[1].to == next
@@ -267,20 +285,20 @@ static CodeGoIfL* code_goifl(
                 && s[2].tags == s[0].tags
                 && may_elide) {
             const char* cmp = code_cmp_yych(output, OP_CMP_NE, s[0].ub);
-            add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
-            add_branch(output, x, nullptr, nullptr, next, s[1], skip, eof);
+            add_branch_jump(x, cmp, opts, s[0].to, next, s[0], skip, eof);
+            add_branch_jump(x, nullptr, opts, nullptr, next, s[1], skip, eof);
             break;
         } else if (n >= 3
                 && s[1].ub - s[0].ub == 1
                 && s[2].to == s[0].to
                 && s[2].tags == s[0].tags) {
             const char* cmp = code_cmp_yych(output, OP_CMP_EQ, s[0].ub);
-            add_branch(output, x, cmp, s[1].to, next, s[1], skip, eof);
+            add_branch_jump(x, cmp, opts, s[1].to, next, s[1], skip, eof);
             n -= 2;
             s += 2;
         } else {
             const char* cmp = code_cmp_yych(output, OP_CMP_LE, s[0].ub - 1);
-            add_branch(output, x, cmp, s[0].to, next, s[0], skip, eof);
+            add_branch_jump(x, cmp, opts, s[0].to, next, s[0], skip, eof);
             n -= 1;
             s += 1;
         }
@@ -356,29 +374,61 @@ static uint32_t unmap(const Span* span, uint32_t nspans, Span* other, const Stat
         }
     }
 
+    to->label->used = true;
+
     return n;
 }
 
-static CodeGoBm* code_gobm(Output& output, const Span* span, uint32_t nspans, const Span* hspan,
+static CodeGoIfL* code_gobm(
+        Output& output, const Adfa& dfa, const Span* span, uint32_t nspans, const Span* hspan,
         uint32_t hspans, const CodeBmState* bm, State* next, bool skip, uint32_t eof) {
-    CodeGoBm* x = output.allocator.alloct<CodeGoBm>(1);
-    x->bitmap = bm;
-    x->hgo = nullptr;
-    x->lgo = nullptr;
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& buf = output.scratchbuf;
+    const char** ops = output.block().binops;
+    bool need_compare = !opts->implicit_bool_conversion;
 
+    CodeJump jump;
     Span* other = allocate<Span>(nspans); // temporary
-    uint32_t nother = unmap(span, nspans, other, bm->state, &x->jump, skip, eof);
-    x->lgo = nother == 0 ? nullptr
-            : code_goswif(output, other, nother, next, skip, eof);
+    uint32_t nother = unmap(span, nspans, other, bm->state, &jump, skip, eof);
+
+    CodeGoIfL* x = output.allocator.alloct<CodeGoIfL>(1);
+    x->nbranches = 0;
+    x->branches = output.allocator.alloct<CodeGoBranch>(3);
+    x->def = eof == NOEOF ? nullptr : next;
+
+    if (hspans > 0) {
+        if (need_compare) buf.cstr("(");
+        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
+        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
+        const char* cond = buf.flush();
+
+        // Have low spans => next state must be null to disallow transtion elision in linear IF.
+        State* s = nother > 0 ? nullptr : next;
+        CodeGoSwIf* swif = code_goswif(output, hspan, hspans, s, skip, eof);
+
+        add_branch_swif(x, cond, swif);
+    }
+
+    const char* table = buf.str(bitmap_name(opts, dfa.cond)).flush();
+    const char* index = buf.u32(bm->offset).cstr("+").str(opts->var_char).flush();
+    GenArrayElem callback(buf.stream(), table, index, /*cast*/ true);
+    const char* elem = opts->gen_code_array_elem(buf, callback);
+    if (need_compare) buf.cstr("(");
+    buf.cstr(elem).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ").yybm_char(bm->mask, opts, 1);
+    if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
+    const char* cond = buf.flush();
+
+    add_branch_jump(x, cond, std::move(jump));
+
+    if (nother > 0) {
+        // Rec/func mode => next state must be null to disallow transtion elision in linear IF.
+        State* s = opts->code_model == CodeModel::REC_FUNC ? nullptr : next;
+        CodeGoSwIf* swif = code_goswif(output, other, nother, s, skip, eof);
+
+        add_branch_swif(x, nullptr, swif);
+    }
+
     operator delete(other);
-
-    // If there are any low spans, then next state for high spans must be NULL to trigger explicit
-    // goto generation in linear `if`.
-    x->hgo = hspans == 0 ? nullptr
-            : code_goswif(output, hspan, hspans, x->lgo ? nullptr : next, skip, eof);
-
-    x->bitmap->state->label->used = true;
-
     return x;
 }
 
@@ -510,9 +560,9 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
         go->gocp = code_gocp(
                 output, go->span, go->span_count, hspan, hspan_count, from->next, eof);
     } else if (opts->bitmaps && bitmap_count > 0) {
-        go->kind = CodeGo::Kind::BITMAP;
-        go->gobm = code_gobm(
-                output, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof);
+        go->kind = CodeGo::Kind::LINEAR_IF;
+        go->goifl = code_gobm(
+            output, dfa, go->span, go->span_count, hspan, hspan_count, bm, from->next, skip, eof);
         dfa.bitmap->used = true;
     } else {
         go->kind = CodeGo::Kind::SWITCH_IF;

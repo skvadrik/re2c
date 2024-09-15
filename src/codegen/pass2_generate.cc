@@ -21,6 +21,9 @@
 
 namespace re2c {
 
+static CodeList* gen_goswif(
+        Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from);
+
 class GenGetAccept : public RenderCallback {
     std::ostringstream& os;
     const opt_t* opts;
@@ -330,35 +333,6 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
     }
     append(stmts, fixpostops);
 }
-
-class GenArrayElem : public RenderCallback {
-    std::ostream& os;
-    const char* array;
-    const char* index;
-    bool cast;
-
-  public:
-    GenArrayElem(std::ostream& os, const char* array, const char* index, bool cast)
-        : os(os), array(array), index(index), cast(cast)  {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::ARRAY: os << array; break;
-            case StxVarId::INDEX: os << index; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::CAST) {
-            return cast;
-        }
-        UNREACHABLE();
-        return false;
-    }
-
-    FORBID_COPY(GenArrayElem);
-};
 
 void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fintags) {
     const opt_t* opts = output.block().opts;
@@ -683,7 +657,17 @@ static CodeList* gen_goifl(
     const opt_t* opts = output.block().opts;
 
     CodeList* stmts = code_list(alc);
-    const CodeGoIfL::Branch* b = go->branches, *e = b + go->nbranches;
+    const CodeGoBranch* b = go->branches, *e = b + go->nbranches;
+
+    auto transition = [&](const CodeGoBranch* b) {
+        if (b->kind == CodeGoBranch::Kind::JUMP) {
+            CodeList* code = code_list(alc);
+            gen_goto(output, dfa, code, from, b->jump);
+            return code;
+        } else {
+            return gen_goswif(output, dfa, b->swif, from);
+        }
+    };
 
     if (opts->code_model != CodeModel::REC_FUNC) {
         // In goto/label and loop/switch modes generate a sequence of IF statements.
@@ -691,12 +675,10 @@ static CodeList* gen_goifl(
         // in the last unconditional branch with the following YYPEEK, as in `yych = *++YYCURSOR`.
         for (; b != e; ++b) {
             if (b->cond) {
-                CodeList* then = code_list(alc);
-                gen_goto(output, dfa, then, from, b->jump);
-                append(stmts, code_if_then_else(alc, b->cond, then, nullptr));
+                append(stmts, code_if_then_else(alc, b->cond, transition(b), nullptr));
             } else {
                 DCHECK(b + 1 == e); // the last one
-                gen_goto(output, dfa, stmts, from, b->jump);
+                append(stmts, transition(b));
             }
         }
     } else {
@@ -708,9 +690,7 @@ static CodeList* gen_goifl(
         } else {
             Code* ifte = code_if_then_else(alc);
             for (; b != e; ++b) {
-                CodeList* then = code_list(alc);
-                gen_goto(output, dfa, then, from, b->jump);
-                append(ifte->ifte, code_branch(alc, b->cond, then));
+                append(ifte->ifte, code_branch(alc, b->cond, transition(b)));
             }
             append(stmts, ifte);
         }
@@ -730,62 +710,6 @@ static CodeList* gen_goswif(
     return go->kind == CodeGoSwIf::Kind::SWITCH
            ? gen_gosw(output, dfa, go->gosw, from)
            : gen_goif(output, dfa, go->goif, from);
-}
-
-static CodeList* gen_gobm(Output& output, const Adfa& dfa, const CodeGoBm* go, const State* from) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-    const char** ops = output.block().binops;
-    bool need_compare = !opts->implicit_bool_conversion;
-
-    const char* cond1 = nullptr;
-    CodeList* goto1 = nullptr;
-    if (go->hgo) {
-        if (need_compare) buf.cstr("(");
-        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
-        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-        cond1 = buf.flush();
-        goto1 = gen_goswif(output, dfa, go->hgo, from);
-    }
-
-    const char* table = buf.str(bitmap_name(opts, dfa.cond)).flush();
-    const char* index = buf.u32(go->bitmap->offset).cstr("+").str(opts->var_char).flush();
-    GenArrayElem callback(buf.stream(), table, index, /*cast*/ true);
-    const char* elem = opts->gen_code_array_elem(buf, callback);
-
-    if (need_compare) buf.cstr("(");
-    buf.cstr(elem).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ").yybm_char(go->bitmap->mask, opts, 1);
-    if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-    const char* cond2 = buf.flush();
-
-    CodeList* goto2 = code_list(alc);
-    gen_goto(output, dfa, goto2, from, go->jump);
-
-    CodeList* goto3 = go->lgo ? gen_goswif(output, dfa, go->lgo, from) : nullptr;
-
-    // In rec/func mode we can't generate IF without ELSE -- it would break functional languages.
-    // TODO: generate linear IF during analyze phase and rely on `code_goifl()` logic.
-    CodeList* stmts = code_list(alc);
-    Code* ifte = code_if_then_else(alc);
-    if (goto1 != nullptr) {
-        append(ifte->ifte, code_branch(alc, cond1, goto1));
-    }
-    if (goto2 != nullptr) {
-        append(ifte->ifte, code_branch(alc, cond2, goto2));
-    }
-    if (opts->code_model == CodeModel::REC_FUNC) {
-        if (goto3 != nullptr) {
-            append(ifte->ifte, code_branch(alc, nullptr, goto3));
-        }
-        append(stmts, ifte);
-    } else {
-        append(stmts, ifte);
-        if (goto3 != nullptr) {
-            append(stmts, goto3);
-        }
-    }
-    return stmts;
 }
 
 static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
@@ -892,8 +816,8 @@ static void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const Stat
 
     if (go->kind == CodeGo::Kind::SWITCH_IF) {
         append(stmts, gen_goswif(output, dfa, go->goswif, from));
-    } else if (go->kind == CodeGo::Kind::BITMAP) {
-        append(stmts, gen_gobm(output, dfa, go->gobm, from));
+    } else if (go->kind == CodeGo::Kind::LINEAR_IF) {
+        append(stmts, gen_goifl(output, dfa, go->goifl, from));
     } else if (go->kind == CodeGo::Kind::CPGOTO) {
         append(stmts, gen_gocp(output, dfa, go->gocp, from));
     }
