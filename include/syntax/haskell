@@ -11,7 +11,6 @@ supported_features = ["nested-ifs", "monadic", "tags", "captvars"];
 
 semicolons = 1;
 //semicolons = 0;
-implicit_bool_conversion = 0;
 backtick_quoted_strings = 0;
 single_quoted_strings = 0;
 indentation_sensitive = 1;
@@ -177,8 +176,6 @@ code:cmp_lt = "<";
 code:cmp_gt = ">";
 code:cmp_le = "<=";
 code:cmp_ge = ">=";
-
-code:bit_and = <undefined>;
 
 code:if_then_else =
     [branch{0}: topindent (many ? "if " cond " then" : "when (" cond ") $") (monadic ? " do") nl
@@ -406,3 +403,7 @@ code:yylessthan =
     (api.record
         ? YYCURSOR " >= " YYLIMIT // YYFILL check can only be used with EOF rule $
         : YYLESSTHAN);
+
+code:yybm_filter = <undefined>;
+
+code:yybm_match = <undefined>;

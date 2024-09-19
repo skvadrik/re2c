@@ -11,7 +11,6 @@ supported_features = ["nested-ifs", "bitmaps", "case-ranges", "unsafe",
 // language-specific options ---------------------------------------------------
 
 semicolons = 1;
-implicit_bool_conversion = 0;
 backtick_quoted_strings = 0;
 single_quoted_strings = 0;
 indentation_sensitive = 0;
@@ -170,7 +169,7 @@ code:array_local =
 
 code:array_global = <undefined>;
 
-code:array_elem = array "[" index (cast ? " as usize") "]";
+code:array_elem = array "[" index "]";
 
 code:type_int = "isize";
 code:type_uint = "usize";
@@ -186,8 +185,6 @@ code:cmp_lt = "<";
 code:cmp_gt = ">";
 code:cmp_le = "<=";
 code:cmp_ge = ">=";
-
-code:bit_and = "&";
 
 code:if_then_else =
     [branch{0}: topindent "if " cond " {" nl
@@ -401,3 +398,7 @@ code:yylessthan =
         : (many
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
+
+code:yybm_filter = yych " & ~0xFF";
+
+code:yybm_match = "(" yybm "[" offset "+" yych " as usize] & " mask ") != 0";

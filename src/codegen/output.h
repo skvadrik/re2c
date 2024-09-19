@@ -41,9 +41,6 @@ class Scratchbuf {
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string& s) { os << s; return *this; }
     Scratchbuf& cstr(const char* s) { os << s; return *this; }
-    Scratchbuf& yybm_char(uint32_t u, const opt_t* opts, int width);
-
-    Scratchbuf& u32_width(uint32_t u, int width);
     Scratchbuf& exact_uint(size_t width);
     const char* flush();
 
@@ -169,35 +166,6 @@ struct Output {
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
     FORBID_COPY(Output);
-};
-
-class GenArrayElem : public RenderCallback {
-    std::ostream& os;
-    const char* array;
-    const char* index;
-    bool cast;
-
-  public:
-    GenArrayElem(std::ostream& os, const char* array, const char* index, bool cast)
-        : os(os), array(array), index(index), cast(cast)  {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::ARRAY: os << array; break;
-            case StxVarId::INDEX: os << index; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::CAST) {
-            return cast;
-        }
-        UNREACHABLE();
-        return false;
-    }
-
-    FORBID_COPY(GenArrayElem);
 };
 
 void init_go(CodeGo* go);

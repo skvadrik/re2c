@@ -185,21 +185,6 @@ Scratchbuf& Scratchbuf::label(const Label& l) {
     return unchecked_label(l);
 }
 
-Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {
-    if (opts->bitmaps_hex) {
-        print_hex(os, u, opts);
-    } else {
-        u32_width(u, width);
-    }
-    return *this;
-}
-
-Scratchbuf& Scratchbuf::u32_width(uint32_t u, int width) {
-    os << std::setw(width);
-    os << u;
-    return *this;
-}
-
 Scratchbuf& Scratchbuf::exact_uint(size_t width) {
     if (width == sizeof(char)) {
         os << "unsigned char";

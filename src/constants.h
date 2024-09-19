@@ -174,7 +174,6 @@ enum OpKind { // used as array indices => not a `enum class`
     OP_CMP_LT,
     OP_CMP_GE,
     OP_CMP_LE,
-    OP_BIT_AND,
     OP_COUNT // number of elements
 };
 

@@ -70,7 +70,6 @@ using StxCodes = list_t<StxCode>;
 
 #define RE2C_STX_OPTS \
     STX_OPT(bool, semicolons, false) \
-    STX_OPT(bool, implicit_bool_conversion, false) \
     STX_OPT(bool, backtick_quoted_strings, false) \
     STX_OPT(bool, single_quoted_strings, false) \
     STX_OPT(bool, indentation_sensitive, false) \
@@ -98,7 +97,7 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
     ) \
     CODE_TEMPLATE(array_elem, \
-        ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({StxLOpt::CAST}) \
+        ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_int, \
         ({}), ({}), ({}) \
@@ -134,9 +133,6 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(cmp_ge, \
-        ({}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(bit_and, \
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(if_then_else, \
@@ -305,6 +301,12 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(yylessthan, \
         ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT, \
             StxVarId::RECORD}), ({}), ({StxLOpt::MANY}) \
+    ) \
+    CODE_TEMPLATE(yybm_filter, \
+        ({StxVarId::CHAR}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yybm_match, \
+        ({StxVarId::BITMAP, StxVarId::CHAR, StxVarId::OFFSET, StxVarId::MASK}), ({}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \
@@ -334,6 +336,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(LABEL, "label") \
     STX_LOCAL_VAR(LHS, "lhs") \
     STX_LOCAL_VAR(LINE, "line") \
+    STX_LOCAL_VAR(MASK, "mask") \
     STX_LOCAL_VAR(NAME, "name") \
     STX_LOCAL_VAR(NEED, "need") \
     STX_LOCAL_VAR(NEG, "neg") \
@@ -353,6 +356,7 @@ using StxCodes = list_t<StxCode>;
     /* vars for API primitives */ \
     STX_LOCAL_VAR(BACKUP, "YYBACKUP") \
     STX_LOCAL_VAR(BACKUPCTX, "YYBACKUPCTX") \
+    STX_LOCAL_VAR(BITMAP, "yybm") \
     STX_LOCAL_VAR(CHAR, "yych") \
     STX_LOCAL_VAR(COPYMTAG, "YYCOPYMTAG") \
     STX_LOCAL_VAR(COPYSTAG, "YYCOPYSTAG") \

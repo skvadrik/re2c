@@ -600,7 +600,6 @@ start:
     "code:cmp_gt"                 { RET_CODE(code_cmp_gt); }
     "code:cmp_le"                 { RET_CODE(code_cmp_le); }
     "code:cmp_ge"                 { RET_CODE(code_cmp_ge); }
-    "code:bit_and"                { RET_CODE(code_bit_and); }
     "code:if_then_else"           { RET_CODE(code_if_then_else); }
     "code:if_then_else_oneline"   { RET_CODE(code_if_then_else_oneline); }
     "code:switch"                 { RET_CODE(code_switch); }
@@ -651,6 +650,8 @@ start:
     "code:yygetstate"             { RET_CODE(code_yygetstate); }
     "code:yysetstate"             { RET_CODE(code_yysetstate); }
     "code:yylessthan"             { RET_CODE(code_yylessthan); }
+    "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
+    "code:yybm_match"             { RET_CODE(code_yybm_match); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
@@ -676,6 +677,7 @@ start:
     "label"        { RET_VAR(StxVarId::LABEL); }
     "lhs"          { RET_VAR(StxVarId::LHS); }
     "line"         { RET_VAR(StxVarId::LINE); }
+    "mask"         { RET_VAR(StxVarId::MASK); }
     "name"         { RET_VAR(StxVarId::NAME); }
     "neg"          { RET_VAR(StxVarId::NEG); }
     "need"         { RET_VAR(StxVarId::NEED); }
@@ -695,6 +697,7 @@ start:
     // local variables for API primitives
     "YYBACKUP"     { RET_VAR(StxVarId::BACKUP); }
     "YYBACKUPCTX"  { RET_VAR(StxVarId::BACKUPCTX); }
+    "yybm"         { RET_VAR(StxVarId::BITMAP); }
     "yych"         { RET_VAR(StxVarId::CHAR); }
     "YYCOPYMTAG"   { RET_VAR(StxVarId::COPYMTAG); }
     "YYCOPYSTAG"   { RET_VAR(StxVarId::COPYSTAG); }
@@ -835,7 +838,6 @@ start:
     "supported_features"    { SAVE_CONF_LIST(supported_features); }
 
     "semicolons"               { SAVE_CONF_BOOL(semicolons); }
-    "implicit_bool_conversion" { SAVE_CONF_BOOL(implicit_bool_conversion); }
     "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
     "single_quoted_strings"    { SAVE_CONF_BOOL(single_quoted_strings); }
     "indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }

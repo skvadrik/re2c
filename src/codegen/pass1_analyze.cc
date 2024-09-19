@@ -12,6 +12,44 @@
 
 namespace re2c {
 
+class GenBitmapChecks : public RenderCallback {
+    std::ostream& os;
+    const opt_t* opts;
+    const CodeBmState* bm;
+    const std::string& cond;
+
+  public:
+    GenBitmapChecks(
+            std::ostream& os, const opt_t* opts, const CodeBmState* bm, const std::string& cond)
+        : os(os), opts(opts), bm(bm), cond(cond) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::BITMAP:
+            os << bitmap_name(opts, cond);
+            break;
+        case StxVarId::CHAR:
+            os << opts->var_char;
+            break;
+        case StxVarId::MASK:
+            if (opts->bitmaps_hex) {
+                print_hex(os, bm->mask, opts);
+            } else {
+                os << bm->mask;
+            }
+            break;
+        case StxVarId::OFFSET:
+            os << bm->offset;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenBitmapChecks);
+};
+
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
 static bool matches(
         const opt_t* opts, const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
@@ -384,8 +422,6 @@ static CodeGoIfL* code_gobm(
         uint32_t hspans, const CodeBmState* bm, State* next, bool skip, uint32_t eof) {
     const opt_t* opts = output.block().opts;
     Scratchbuf& buf = output.scratchbuf;
-    const char** ops = output.block().binops;
-    bool need_compare = !opts->implicit_bool_conversion;
 
     CodeJump jump;
     Span* other = allocate<Span>(nspans); // temporary
@@ -396,11 +432,10 @@ static CodeGoIfL* code_gobm(
     x->branches = output.allocator.alloct<CodeGoBranch>(3);
     x->def = eof == NOEOF ? nullptr : next;
 
+    GenBitmapChecks callback(buf.stream(), opts, bm, dfa.cond);
+
     if (hspans > 0) {
-        if (need_compare) buf.cstr("(");
-        buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF");
-        if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-        const char* cond = buf.flush();
+        const char* cond = opts->gen_code_yybm_filter(buf, callback);
 
         // Have low spans => next state must be null to disallow transtion elision in linear IF.
         State* s = nother > 0 ? nullptr : next;
@@ -409,15 +444,8 @@ static CodeGoIfL* code_gobm(
         add_branch_swif(x, cond, swif);
     }
 
-    const char* table = buf.str(bitmap_name(opts, dfa.cond)).flush();
-    const char* index = buf.u32(bm->offset).cstr("+").str(opts->var_char).flush();
-    GenArrayElem callback(buf.stream(), table, index, /*cast*/ true);
-    const char* elem = opts->gen_code_array_elem(buf, callback);
-    if (need_compare) buf.cstr("(");
-    buf.cstr(elem).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ").yybm_char(bm->mask, opts, 1);
-    if (need_compare) buf.cstr(") ").cstr(ops[OP_CMP_NE]).cstr(" 0");
-    const char* cond = buf.flush();
-
+    DCHECK(buf.stream().str().empty()); // check that callback buffer is clean before reuse
+    const char* cond = opts->gen_code_yybm_match(buf, callback);
     add_branch_jump(x, cond, std::move(jump));
 
     if (nother > 0) {
@@ -664,7 +692,6 @@ static void gen_binops(Scratchbuf& buf, const char* binops[], const opt_t* opts)
     binops[OP_CMP_GT] = opts->gen_code_cmp_gt(buf);
     binops[OP_CMP_LE] = opts->gen_code_cmp_le(buf);
     binops[OP_CMP_GE] = opts->gen_code_cmp_ge(buf);
-    binops[OP_BIT_AND] = opts->gen_code_bit_and(buf);
 }
 
 LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {

@@ -24,6 +24,26 @@ namespace re2c {
 static CodeList* gen_goswif(
         Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from);
 
+class GenArrayElem : public RenderCallback {
+    std::ostream& os;
+    const char* array;
+    const char* index;
+
+  public:
+    GenArrayElem(std::ostream& os, const char* array, const char* index)
+        : os(os), array(array), index(index)  {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ARRAY: os << array; break;
+            case StxVarId::INDEX: os << index; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenArrayElem);
+};
+
 class GenGetAccept : public RenderCallback {
     std::ostringstream& os;
     const opt_t* opts;
@@ -349,7 +369,7 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
         const char* yypmatch = fintag_expr(output, opts->var_pmatch.c_str());
         for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
             const char* index = buf.u64(i).flush();
-            GenArrayElem callback(buf.stream(), yypmatch, index, /*cast*/ false);
+            GenArrayElem callback(buf.stream(), yypmatch, index);
             fintags.push_back(opts->gen_code_array_elem(buf, callback));
         }
     } else {
@@ -734,7 +754,6 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
-    const char** ops = output.block().binops;
 
     CodeList* stmts = code_list(alc);
 
@@ -744,7 +763,7 @@ static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, c
 
     if (go->hgo != nullptr) {
         const char* cond =
-                buf.str(opts->var_char).cstr(" ").cstr(ops[OP_BIT_AND]).cstr(" ~0xFF").flush();
+                buf.str(opts->var_char).cstr(" & ~0xFF").flush();
         CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
         append(stmts, code_if_then_else(alc, cond, if_then, if_else));
     } else {

@@ -10,7 +10,6 @@ supported_features = ["nested-ifs", "case-ranges", "tags", "captures", "captvars
 // language-specific options ---------------------------------------------------
 
 semicolons = 0;
-implicit_bool_conversion = 0;
 backtick_quoted_strings = 0;
 single_quoted_strings = 0;
 indentation_sensitive = 0;
@@ -176,8 +175,6 @@ code:cmp_lt = "<";
 code:cmp_gt = ">";
 code:cmp_le = "<=";
 code:cmp_ge = ">=";
-
-code:bit_and = <undefined>;
 
 code:if_then_else =
     [branch{0}: topindent "if (" cond ") then (" nl
@@ -384,3 +381,7 @@ code:yylessthan =
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR)
         : YYLESSTHAN);
+
+code:yybm_filter = <undefined>;
+
+code:yybm_match = <undefined>;

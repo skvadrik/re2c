@@ -17,7 +17,6 @@
 <default syntax file>:1:0: warning: syntax configuration 'code:cmp_gt' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:cmp_le' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:cmp_ge' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
-<default syntax file>:1:0: warning: syntax configuration 'code:bit_and' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:if_then_else' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:if_then_else_oneline' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:switch' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
@@ -68,4 +67,6 @@
 <default syntax file>:1:0: warning: syntax configuration 'code:yygetstate' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:yysetstate' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:yylessthan' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration 'code:yybm_filter' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration 'code:yybm_match' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 re2c: error: code model is not suppoted for this backend
