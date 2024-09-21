@@ -1604,7 +1604,11 @@ static void render(RenderContext& rctx, const Code* code) {
     }
     case CodeKind::ARRAY: {
         RenderArray callback(rctx, &code->array);
-        rctx.opts->render_code_array_local(rctx.os, callback);
+        if (rctx.opts->code_model == CodeModel::REC_FUNC) {
+            rctx.opts->render_code_array_global(rctx.os, callback);
+        } else {
+            rctx.opts->render_code_array_local(rctx.os, callback);
+        }
         break;
     }
     case CodeKind::ENUM: {

@@ -742,11 +742,14 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go) {
         elems[i] = buf.cstr("&&").str(opts->label_prefix).u32(go->table[i]->label->index).flush();
     }
 
+    const char* name = opts->var_computed_gotos_table.c_str();
     const char* type = opts->gen_code_type_yytarget(buf);
+    // In rec/func mode tables are reused across different fnctions, so they must be global.
+    bool local = opts->code_model != CodeModel::REC_FUNC;
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(alc, opts->var_computed_gotos_table.c_str(),
-            type, elems, CodeGoCpTable::TABLE_SIZE, /*tabulate*/ true));
+    append(stmts, code_array(
+            alc, name, type, elems, CodeGoCpTable::TABLE_SIZE, local, /*tabulate*/ true));
     return stmts;
 }
 
@@ -899,8 +902,11 @@ static void emit_accept(
             buf.cstr("&&").str(opts->label_prefix).u32(acc[i].state->label->index);
             elems[i] = buf.flush();
         }
+        const char* name = opts->var_computed_gotos_table.c_str();
         const char* type = opts->gen_code_type_yytarget(buf);
-        append(block, code_array(alc, opts->var_computed_gotos_table.c_str(), type, elems, nacc));
+
+        // In rec/func mode the table can be local, as it's used in the same function.
+        append(block, code_array(alc, name, type, elems, nacc, /*local*/ true));
 
         buf.cstr("*").str(opts->var_computed_gotos_table).cstr("[").cstr(var).cstr("]");
         append(block, code_goto(alc, buf.flush()));
@@ -1622,12 +1628,16 @@ static CodeList* gen_cond_table(Output& output) {
     const StartConds& conds = output.block().conds;
 
     CodeList* code = code_list(alc);
+
     const char** elems = alc.alloct<const char*>(conds.size());
     for (size_t i = 0; i < conds.size(); ++i) {
         elems[i] = buf.cstr("&&").str(opts->cond_label_prefix).str(conds[i].name).flush();
     }
+    const char* name = opts->var_cond_table.c_str();
     const char* type = opts->gen_code_type_yytarget(buf);
-    append(code, code_array(alc, opts->var_cond_table.c_str(), type, elems, conds.size()));
+
+    // In rec/func mode the table can be local, as it's used in the same function.
+    append(code, code_array(alc, name, type, elems, conds.size(), /*local*/ true));
     return code;
 }
 
@@ -1718,9 +1728,12 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
 
     const char* name = buf.str(bitmap_name(opts, cond)).flush();
     const char* type = opts->gen_code_type_yybm(buf);
+    // In rec/func mode tables are reused across different fnctions, so they must be global.
+    bool local = opts->code_model != CodeModel::REC_FUNC;
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(alc, name, type, bitmap->elems, bitmap->nelems, /*tabulate*/ true));
+    append(stmts, code_array(
+            alc, name, type, bitmap->elems, bitmap->nelems, local, /*tabulate*/ true));
     return stmts;
 }
 
