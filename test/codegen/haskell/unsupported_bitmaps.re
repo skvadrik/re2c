@@ -1,1 +1,0 @@
--- re2hs $INPUT -o $OUTPUT -b

@@ -4,7 +4,7 @@ supported_apis = ["record", "generic"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "monadic", "tags", "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "monadic", "tags", "captvars"];
 
 
 // language-specific options ---------------------------------------------------
@@ -159,13 +159,19 @@ code:const_local = topindent "let " name " = " init " in" nl;
 code:const_global = topindent name " = " init nl;
 
 code:array_local = <undefined>;
-code:array_global = <undefined>;
-code:array_elem = <undefined>;
 
-code:type_int = "int";
-code:type_uint = "uint";
-code:type_cond_enum = (storable_state? "int" : "uint");
-code:type_yybm = <undefined>;
+code:array_global =
+    topindent name " :: Array Int " type nl
+    topindent name " = array (0, " size " - 1) $ Prelude.zip [0 .. " size " - 1] [" nl indent
+        [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+        [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem "]"] nl];
+
+code:array_elem = array " ! " index;
+
+code:type_int = <undefined>;
+code:type_uint = <undefined>;
+code:type_cond_enum = <undefined>;
+code:type_yybm = "Word8";
 code:type_yytarget = <undefined>;
 
 code:assign = <undefined>;
@@ -404,6 +410,6 @@ code:yylessthan =
         ? YYCURSOR " >= " YYLIMIT // YYFILL check can only be used with EOF rule $
         : YYLESSTHAN);
 
-code:yybm_filter = <undefined>;
+code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 
-code:yybm_match = <undefined>;
+code:yybm_match = "(" yybm " ! (" offset " + fromIntegral " yych ") .&. " mask ") /= 0";
