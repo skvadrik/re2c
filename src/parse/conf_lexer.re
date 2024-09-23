@@ -384,11 +384,11 @@ char_lit:
     CHECK_RET(lex_conf_assign());
 /*!local:re2c
     * {
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'char', 'hex', 'char_or_hex')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'char', 'hex', 'char-or-hex')"));
     }
     "char"        { SETOPT(char_literals, CharLit::CHAR);        goto end; }
     "hex"         { SETOPT(char_literals, CharLit::HEX);         goto end; }
-    "char_or_hex" { SETOPT(char_literals, CharLit::CHAR_OR_HEX); goto end; }
+    "char-or-hex" { SETOPT(char_literals, CharLit::CHAR_OR_HEX); goto end; }
 */
 
 end:

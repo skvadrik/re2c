@@ -5738,7 +5738,7 @@ char_lit:
 yy1082:
 #line 386 "../src/parse/conf_lexer.re"
 	{
-        RET_FAIL(error_at_cur("bad configuration value (expected: 'char', 'hex', 'char_or_hex')"));
+        RET_FAIL(error_at_cur("bad configuration value (expected: 'char', 'hex', 'char-or-hex')"));
     }
 #line 5744 "src/parse/conf_lexer.cc"
 yy1083:
@@ -5777,7 +5777,7 @@ yy1089:
 yy1090:
 	yyaccept = 1;
 	yych = *(mar = ++cur);
-	if (yych == '_') goto yy1092;
+	if (yych == '-') goto yy1092;
 yy1091:
 #line 389 "../src/parse/conf_lexer.re"
 	{ SETOPT(char_literals, CharLit::CHAR);        goto end; }
@@ -5788,7 +5788,7 @@ yy1092:
 	yych = *++cur;
 	if (yych != 'r') goto yy1086;
 	yych = *++cur;
-	if (yych != '_') goto yy1086;
+	if (yych != '-') goto yy1086;
 	yych = *++cur;
 	if (yych != 'h') goto yy1086;
 	yych = *++cur;
