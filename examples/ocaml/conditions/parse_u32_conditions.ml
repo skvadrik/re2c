@@ -24,156 +24,156 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy1 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0' -> (yy3 [@tailcall]) st num
-		| '1'..'9' -> (yy5 [@tailcall]) st num
-		| _ -> (yy2 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0' -> (yy3 [@tailcall]) st num
+        | '1'..'9' -> (yy5 [@tailcall]) st num
+        | _ -> (yy2 [@tailcall]) st num
 
 and yy2 (st : state) (num : int option) : int option =
-	None
+    None
 
 and yy3 (st : state) (num : int option) : int option =
-	st.yymarker <- st.yycursor;
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| 'B'
-		| 'b' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy6 [@tailcall]) st num
-		| 'X'
-		| 'x' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy8 [@tailcall]) st num
-		| _ -> (yy4 [@tailcall]) st num
+    st.yymarker <- st.yycursor;
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | 'B'
+        | 'b' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy6 [@tailcall]) st num
+        | 'X'
+        | 'x' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy8 [@tailcall]) st num
+        | _ -> (yy4 [@tailcall]) st num
 
 and yy4 (st : state) (num : int option) : int option =
-	st.yycond <- YYC_oct;
-	(yyfnoct [@tailcall]) st num
+    st.yycond <- YYC_oct;
+    (yyfnoct [@tailcall]) st num
 
 and yy5 (st : state) (num : int option) : int option =
-	st.yycursor <- st.yycursor - 1;
-	st.yycond <- YYC_dec;
-	(yyfndec [@tailcall]) st num
+    st.yycursor <- st.yycursor - 1;
+    st.yycond <- YYC_dec;
+    (yyfndec [@tailcall]) st num
 
 and yy6 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'1' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy9 [@tailcall]) st num
-		| _ -> (yy7 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'1' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy9 [@tailcall]) st num
+        | _ -> (yy7 [@tailcall]) st num
 
 and yy7 (st : state) (num : int option) : int option =
-	st.yycursor <- st.yymarker;
-	(yy4 [@tailcall]) st num
+    st.yycursor <- st.yymarker;
+    (yy4 [@tailcall]) st num
 
 and yy8 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'9'
-		| 'A'..'F'
-		| 'a'..'f' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy10 [@tailcall]) st num
-		| _ -> (yy7 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'9'
+        | 'A'..'F'
+        | 'a'..'f' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy10 [@tailcall]) st num
+        | _ -> (yy7 [@tailcall]) st num
 
 and yy9 (st : state) (num : int option) : int option =
-	st.yycursor <- st.yycursor - 1;
-	st.yycond <- YYC_bin;
-	(yyfnbin [@tailcall]) st num
+    st.yycursor <- st.yycursor - 1;
+    st.yycond <- YYC_bin;
+    (yyfnbin [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
-	st.yycursor <- st.yycursor - 1;
-	st.yycond <- YYC_hex;
-	(yyfnhex [@tailcall]) st num
+    st.yycursor <- st.yycursor - 1;
+    st.yycond <- YYC_hex;
+    (yyfnhex [@tailcall]) st num
 
 and yyfninit (st : state) (num : int option) : int option =
-	(yy1 [@tailcall]) st num
+    (yy1 [@tailcall]) st num
 
 and yy11 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'1' -> (yy13 [@tailcall]) st num
-		| _ -> (yy12 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'1' -> (yy13 [@tailcall]) st num
+        | _ -> (yy12 [@tailcall]) st num
 
 and yy12 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy13 (st : state) (num : int option) : int option =
-	yyfnbin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2)
+    yyfnbin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2)
 
 and yyfnbin (st : state) (num : int option) : int option =
-	(yy11 [@tailcall]) st num
+    (yy11 [@tailcall]) st num
 
 and yy14 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'7' -> (yy16 [@tailcall]) st num
-		| _ -> (yy15 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'7' -> (yy16 [@tailcall]) st num
+        | _ -> (yy15 [@tailcall]) st num
 
 and yy15 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy16 (st : state) (num : int option) : int option =
-	yyfnoct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8)
+    yyfnoct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8)
 
 and yyfnoct (st : state) (num : int option) : int option =
-	(yy14 [@tailcall]) st num
+    (yy14 [@tailcall]) st num
 
 and yy17 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'9' -> (yy19 [@tailcall]) st num
-		| _ -> (yy18 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'9' -> (yy19 [@tailcall]) st num
+        | _ -> (yy18 [@tailcall]) st num
 
 and yy18 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy19 (st : state) (num : int option) : int option =
-	yyfndec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10)
+    yyfndec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10)
 
 and yyfndec (st : state) (num : int option) : int option =
-	(yy17 [@tailcall]) st num
+    (yy17 [@tailcall]) st num
 
 and yy20 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'9' -> (yy22 [@tailcall]) st num
-		| 'A'..'F' -> (yy23 [@tailcall]) st num
-		| 'a'..'f' -> (yy24 [@tailcall]) st num
-		| _ -> (yy21 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'9' -> (yy22 [@tailcall]) st num
+        | 'A'..'F' -> (yy23 [@tailcall]) st num
+        | 'a'..'f' -> (yy24 [@tailcall]) st num
+        | _ -> (yy21 [@tailcall]) st num
 
 and yy21 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy22 (st : state) (num : int option) : int option =
-	yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16)
+    yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16)
 
 and yy23 (st : state) (num : int option) : int option =
-	yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16)
+    yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16)
 
 and yy24 (st : state) (num : int option) : int option =
-	yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16)
+    yyfnhex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16)
 
 and yyfnhex (st : state) (num : int option) : int option =
-	(yy20 [@tailcall]) st num
+    (yy20 [@tailcall]) st num
 
 and yy0 (st : state) (num : int option) : int option =
-	match st.yycond with
-		| YYC_init -> (yyfninit [@tailcall]) st num
-		| YYC_bin -> (yyfnbin [@tailcall]) st num
-		| YYC_oct -> (yyfnoct [@tailcall]) st num
-		| YYC_dec -> (yyfndec [@tailcall]) st num
-		| YYC_hex -> (yyfnhex [@tailcall]) st num
+    match st.yycond with
+        | YYC_init -> (yyfninit [@tailcall]) st num
+        | YYC_bin -> (yyfnbin [@tailcall]) st num
+        | YYC_oct -> (yyfnoct [@tailcall]) st num
+        | YYC_dec -> (yyfndec [@tailcall]) st num
+        | YYC_hex -> (yyfnhex [@tailcall]) st num
 
 and parse (st : state) (num : int option) : int option =
-	(yy0 [@tailcall]) st num
+    (yy0 [@tailcall]) st num
 
 
 

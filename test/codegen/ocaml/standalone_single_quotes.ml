@@ -10,28 +10,28 @@ type state = {
 
 
 let rec yy0 (s''t' : state) : bool =
-	let yych = get s''t'.yyinput s''t'.yycursor in
-	s''t'.yycursor <- s''t'.yycursor + 1;
-	match yych with
-		| '1'..'9' -> (yy2 [@tailcall]) s''t'
-		| _ -> (yy1 [@tailcall]) s''t'
+    let yych = get s''t'.yyinput s''t'.yycursor in
+    s''t'.yycursor <- s''t'.yycursor + 1;
+    match yych with
+        | '1'..'9' -> (yy2 [@tailcall]) s''t'
+        | _ -> (yy1 [@tailcall]) s''t'
 
 and yy1 (s''t' : state) : bool =
-	let _y'' = '\'' in let _y''' = '}' in let y' = false in y'
+    let _y'' = '\'' in let _y''' = '}' in let y' = false in y'
 
 and yy2 (s''t' : state) : bool =
-	let yych = get s''t'.yyinput s''t'.yycursor in
-	match yych with
-		| '0'..'9' ->
-			s''t'.yycursor <- s''t'.yycursor + 1;
-			(yy2 [@tailcall]) s''t'
-		| _ -> (yy3 [@tailcall]) s''t'
+    let yych = get s''t'.yyinput s''t'.yycursor in
+    match yych with
+        | '0'..'9' ->
+            s''t'.yycursor <- s''t'.yycursor + 1;
+            (yy2 [@tailcall]) s''t'
+        | _ -> (yy3 [@tailcall]) s''t'
 
 and yy3 (s''t' : state) : bool =
-	let _x' = '}' in let _x'' = '}' in let x'00'' = true in x'00''
+    let _x' = '}' in let _x'' = '}' in let x'00'' = true in x'00''
 
 and l'e'00x''' (s''t' : state) : bool =
-	(yy0 [@tailcall]) s''t'
+    (yy0 [@tailcall]) s''t'
 
 
 

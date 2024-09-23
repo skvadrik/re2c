@@ -8,33 +8,33 @@ open String
 
 
 let rec yy0 (yyrecord : State.state) : int =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| 'a' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy0 [@tailcall]) yyrecord
-		| 'b' ->
-			yyrecord.yyt1 <- yyrecord.yycursor;
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy2 [@tailcall]) yyrecord
-		| _ ->
-			yyrecord.yyt1 <- yyrecord.yycursor;
-			(yy1 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | 'a' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy0 [@tailcall]) yyrecord
+        | 'b' ->
+            yyrecord.yyt1 <- yyrecord.yycursor;
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy2 [@tailcall]) yyrecord
+        | _ ->
+            yyrecord.yyt1 <- yyrecord.yycursor;
+            (yy1 [@tailcall]) yyrecord
 
 and yy1 (yyrecord : State.state) : int =
-	yyrecord.tag <- yyrecord.yyt1;
-	yyrecord.tag
+    yyrecord.tag <- yyrecord.yyt1;
+    yyrecord.tag
 
 and yy2 (yyrecord : State.state) : int =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| 'b' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy2 [@tailcall]) yyrecord
-		| _ -> (yy1 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | 'b' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy2 [@tailcall]) yyrecord
+        | _ -> (yy1 [@tailcall]) yyrecord
 
 and lex (yyrecord : State.state) : int =
-	(yy0 [@tailcall]) yyrecord
+    (yy0 [@tailcall]) yyrecord
 
 
 

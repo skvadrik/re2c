@@ -10,28 +10,28 @@ type state = {
 
 
 let rec yy0 (yyrecord : state) : bool =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	yyrecord.yycursor <- yyrecord.yycursor + 1;
-	match yych with
-		| '1'..'9' -> (yy2 [@tailcall]) yyrecord
-		| _ -> (yy1 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    yyrecord.yycursor <- yyrecord.yycursor + 1;
+    match yych with
+        | '1'..'9' -> (yy2 [@tailcall]) yyrecord
+        | _ -> (yy1 [@tailcall]) yyrecord
 
 and yy1 (yyrecord : state) : bool =
-	false
+    false
 
 and yy2 (yyrecord : state) : bool =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy2 [@tailcall]) yyrecord
-		| _ -> (yy3 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy2 [@tailcall]) yyrecord
+        | _ -> (yy3 [@tailcall]) yyrecord
 
 and yy3 (yyrecord : state) : bool =
-	true
+    true
 
 and lex (yyrecord : state) : bool =
-	(yy0 [@tailcall]) yyrecord
+    (yy0 [@tailcall]) yyrecord
 
 
 

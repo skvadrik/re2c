@@ -10,35 +10,35 @@ type state = {
 
 #12 "codegen/ocaml/01_basic_s.ml"
 let rec yy0 (st : state) : bool =
-	let yych = st.str.[st.cur] in
-	st.cur <- st.cur + 1;
-	if (yych <= '0') then (yy1 [@tailcall]) st
-	else if (yych <= '9') then (yy2 [@tailcall]) st
-	else (yy1 [@tailcall]) st
+    let yych = st.str.[st.cur] in
+    st.cur <- st.cur + 1;
+    if (yych <= '0') then (yy1 [@tailcall]) st
+    else if (yych <= '9') then (yy2 [@tailcall]) st
+    else (yy1 [@tailcall]) st
 
 and yy1 (st : state) : bool =
 #18 "codegen/ocaml/01_basic_s.re"
-	false
+    false
 #23 "codegen/ocaml/01_basic_s.ml"
 
 and yy2 (st : state) : bool =
-	let yych = st.str.[st.cur] in
-	if (yych <= '/') then (
-		(yy3 [@tailcall]) st
-	) else if (yych <= '9') then (
-		st.cur <- st.cur + 1;
-		(yy2 [@tailcall]) st
-	) else (
-		(yy3 [@tailcall]) st
-	)
+    let yych = st.str.[st.cur] in
+    if (yych <= '/') then (
+        (yy3 [@tailcall]) st
+    ) else if (yych <= '9') then (
+        st.cur <- st.cur + 1;
+        (yy2 [@tailcall]) st
+    ) else (
+        (yy3 [@tailcall]) st
+    )
 
 and yy3 (st : state) : bool =
 #17 "codegen/ocaml/01_basic_s.re"
-	true
+    true
 #39 "codegen/ocaml/01_basic_s.ml"
 
 and lex (st : state) : bool =
-	(yy0 [@tailcall]) st
+    (yy0 [@tailcall]) st
 
 #19 "codegen/ocaml/01_basic_s.re"
 

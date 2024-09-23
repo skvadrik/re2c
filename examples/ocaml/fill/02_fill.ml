@@ -55,18 +55,18 @@ let fill (st: state) (need: int) : status =
 
 #57 "ocaml/fill/02_fill.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-	if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	yyrecord.yycursor <- yyrecord.yycursor + 1;
-	match yych with
-		| '\x00' -> (yy1 [@tailcall]) yyrecord count
-		| ' ' -> (yy3 [@tailcall]) yyrecord count
-		| '\'' -> (yy5 [@tailcall]) yyrecord count
-		| _ -> (yy2 [@tailcall]) yyrecord count
+    if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    yyrecord.yycursor <- yyrecord.yycursor + 1;
+    match yych with
+        | '\x00' -> (yy1 [@tailcall]) yyrecord count
+        | ' ' -> (yy3 [@tailcall]) yyrecord count
+        | '\'' -> (yy5 [@tailcall]) yyrecord count
+        | _ -> (yy2 [@tailcall]) yyrecord count
 
 and yy1 (yyrecord : state) (count : int) : int =
 #56 "ocaml/fill/02_fill.re"
-	
+    
         (* check that it is the sentinel, not some unexpected null *)
         if yyrecord.token = yyrecord.yylimit - yymaxfill then count else -1
 
@@ -74,44 +74,44 @@ and yy1 (yyrecord : state) (count : int) : int =
 
 and yy2 (yyrecord : state) (count : int) : int =
 #62 "ocaml/fill/02_fill.re"
-	-1
+    -1
 #79 "ocaml/fill/02_fill.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-	if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| ' ' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy3 [@tailcall]) yyrecord count
-		| _ -> (yy4 [@tailcall]) yyrecord count
+    if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | ' ' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord count
+        | _ -> (yy4 [@tailcall]) yyrecord count
 
 and yy4 (yyrecord : state) (count : int) : int =
 #61 "ocaml/fill/02_fill.re"
-	lex_loop yyrecord count
+    lex_loop yyrecord count
 #93 "ocaml/fill/02_fill.ml"
 
 and yy5 (yyrecord : state) (count : int) : int =
-	if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	yyrecord.yycursor <- yyrecord.yycursor + 1;
-	match yych with
-		| '\'' -> (yy6 [@tailcall]) yyrecord count
-		| '\\' -> (yy7 [@tailcall]) yyrecord count
-		| _ -> (yy5 [@tailcall]) yyrecord count
+    if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    yyrecord.yycursor <- yyrecord.yycursor + 1;
+    match yych with
+        | '\'' -> (yy6 [@tailcall]) yyrecord count
+        | '\\' -> (yy7 [@tailcall]) yyrecord count
+        | _ -> (yy5 [@tailcall]) yyrecord count
 
 and yy6 (yyrecord : state) (count : int) : int =
 #60 "ocaml/fill/02_fill.re"
-	lex_loop yyrecord (count + 1)
+    lex_loop yyrecord (count + 1)
 #107 "ocaml/fill/02_fill.ml"
 
 and yy7 (yyrecord : state) (count : int) : int =
-	if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-	yyrecord.yycursor <- yyrecord.yycursor + 1;
-	(yy5 [@tailcall]) yyrecord count
+    if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
+    yyrecord.yycursor <- yyrecord.yycursor + 1;
+    (yy5 [@tailcall]) yyrecord count
 
 and lex (yyrecord : state) (count : int) : int =
-	(yy0 [@tailcall]) yyrecord count
+    (yy0 [@tailcall]) yyrecord count
 
 #63 "ocaml/fill/02_fill.re"
 

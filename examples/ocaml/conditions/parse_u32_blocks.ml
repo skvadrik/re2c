@@ -22,153 +22,153 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy0 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'1' -> (yy2 [@tailcall]) st num
-		| _ -> (yy1 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'1' -> (yy2 [@tailcall]) st num
+        | _ -> (yy1 [@tailcall]) st num
 
 and yy1 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy2 (st : state) (num : int option) : int option =
-	parse_bin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2)
+    parse_bin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2)
 
 and parse_bin (st : state) (num : int option) : int option =
-	(yy0 [@tailcall]) st num
+    (yy0 [@tailcall]) st num
 
 
 
 
 let rec yy3 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'7' -> (yy5 [@tailcall]) st num
-		| _ -> (yy4 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'7' -> (yy5 [@tailcall]) st num
+        | _ -> (yy4 [@tailcall]) st num
 
 and yy4 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy5 (st : state) (num : int option) : int option =
-	parse_oct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8)
+    parse_oct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8)
 
 and parse_oct (st : state) (num : int option) : int option =
-	(yy3 [@tailcall]) st num
+    (yy3 [@tailcall]) st num
 
 
 
 
 let rec yy6 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'9' -> (yy8 [@tailcall]) st num
-		| _ -> (yy7 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'9' -> (yy8 [@tailcall]) st num
+        | _ -> (yy7 [@tailcall]) st num
 
 and yy7 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy8 (st : state) (num : int option) : int option =
-	parse_dec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10)
+    parse_dec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10)
 
 and parse_dec (st : state) (num : int option) : int option =
-	(yy6 [@tailcall]) st num
+    (yy6 [@tailcall]) st num
 
 
 
 
 let rec yy9 (st : state) (num : int option) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0'..'9' -> (yy11 [@tailcall]) st num
-		| 'A'..'F' -> (yy12 [@tailcall]) st num
-		| 'a'..'f' -> (yy13 [@tailcall]) st num
-		| _ -> (yy10 [@tailcall]) st num
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0'..'9' -> (yy11 [@tailcall]) st num
+        | 'A'..'F' -> (yy12 [@tailcall]) st num
+        | 'a'..'f' -> (yy13 [@tailcall]) st num
+        | _ -> (yy10 [@tailcall]) st num
 
 and yy10 (st : state) (num : int option) : int option =
-	num
+    num
 
 and yy11 (st : state) (num : int option) : int option =
-	parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16)
+    parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16)
 
 and yy12 (st : state) (num : int option) : int option =
-	parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16)
+    parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16)
 
 and yy13 (st : state) (num : int option) : int option =
-	parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16)
+    parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16)
 
 and parse_hex (st : state) (num : int option) : int option =
-	(yy9 [@tailcall]) st num
+    (yy9 [@tailcall]) st num
 
 
 
 
 let rec yy14 (st : state) : int option =
-	let yych = get st.yyinput st.yycursor in
-	st.yycursor <- st.yycursor + 1;
-	match yych with
-		| '0' -> (yy16 [@tailcall]) st
-		| '1'..'9' -> (yy18 [@tailcall]) st
-		| _ -> (yy15 [@tailcall]) st
+    let yych = get st.yyinput st.yycursor in
+    st.yycursor <- st.yycursor + 1;
+    match yych with
+        | '0' -> (yy16 [@tailcall]) st
+        | '1'..'9' -> (yy18 [@tailcall]) st
+        | _ -> (yy15 [@tailcall]) st
 
 and yy15 (st : state) : int option =
-	None
+    None
 
 and yy16 (st : state) : int option =
-	st.yymarker <- st.yycursor;
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| 'B'
-		| 'b' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy19 [@tailcall]) st
-		| 'X'
-		| 'x' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy21 [@tailcall]) st
-		| _ -> (yy17 [@tailcall]) st
+    st.yymarker <- st.yycursor;
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | 'B'
+        | 'b' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy19 [@tailcall]) st
+        | 'X'
+        | 'x' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy21 [@tailcall]) st
+        | _ -> (yy17 [@tailcall]) st
 
 and yy17 (st : state) : int option =
-	parse_oct st (Some 0)
+    parse_oct st (Some 0)
 
 and yy18 (st : state) : int option =
-	st.yycursor <- st.yycursor - 1;
-	parse_dec st (Some 0)
+    st.yycursor <- st.yycursor - 1;
+    parse_dec st (Some 0)
 
 and yy19 (st : state) : int option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'1' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy22 [@tailcall]) st
-		| _ -> (yy20 [@tailcall]) st
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'1' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy22 [@tailcall]) st
+        | _ -> (yy20 [@tailcall]) st
 
 and yy20 (st : state) : int option =
-	st.yycursor <- st.yymarker;
-	(yy17 [@tailcall]) st
+    st.yycursor <- st.yymarker;
+    (yy17 [@tailcall]) st
 
 and yy21 (st : state) : int option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'9'
-		| 'A'..'F'
-		| 'a'..'f' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy23 [@tailcall]) st
-		| _ -> (yy20 [@tailcall]) st
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'9'
+        | 'A'..'F'
+        | 'a'..'f' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy23 [@tailcall]) st
+        | _ -> (yy20 [@tailcall]) st
 
 and yy22 (st : state) : int option =
-	st.yycursor <- st.yycursor - 1;
-	parse_bin st (Some 0)
+    st.yycursor <- st.yycursor - 1;
+    parse_bin st (Some 0)
 
 and yy23 (st : state) : int option =
-	st.yycursor <- st.yycursor - 1;
-	parse_hex st (Some 0)
+    st.yycursor <- st.yycursor - 1;
+    parse_hex st (Some 0)
 
 and parse (st : state) : int option =
-	(yy14 [@tailcall]) st
+    (yy14 [@tailcall]) st
 
 
 

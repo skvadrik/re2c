@@ -22,42 +22,42 @@ type state = {
 
 
 let rec yy0 (st : state) : int =
-	st.mar <- st.cur;
-	let yych = st.str.[st.cur] in
-	match yych with
-		| 'b' ->
-			st.cur <- st.cur + 1;
-			(yy2 [@tailcall]) st
-		| _ ->
-			st.yyt1 <- none;
-			(yy1 [@tailcall]) st
+    st.mar <- st.cur;
+    let yych = st.str.[st.cur] in
+    match yych with
+        | 'b' ->
+            st.cur <- st.cur + 1;
+            (yy2 [@tailcall]) st
+        | _ ->
+            st.yyt1 <- none;
+            (yy1 [@tailcall]) st
 
 and yy1 (st : state) : int =
-	st.y <- st.yyt1;
-	st.x <- st.yyt1;
-	st.yyt1 <- none;
-	if st.x <> st.yyt1 then st.x <- st.x + -1;
-	if st.x = none then none else st.y - st.x
+    st.y <- st.yyt1;
+    st.x <- st.yyt1;
+    st.yyt1 <- none;
+    if st.x <> st.yyt1 then st.x <- st.x + -1;
+    if st.x = none then none else st.y - st.x
 
 and yy2 (st : state) : int =
-	let yych = st.str.[st.cur] in
-	match yych with
-		| 'a' ->
-			st.cur <- st.cur + 1;
-			(yy4 [@tailcall]) st
-		| _ -> (yy3 [@tailcall]) st
+    let yych = st.str.[st.cur] in
+    match yych with
+        | 'a' ->
+            st.cur <- st.cur + 1;
+            (yy4 [@tailcall]) st
+        | _ -> (yy3 [@tailcall]) st
 
 and yy3 (st : state) : int =
-	st.cur <- st.mar;
-	st.yyt1 <- none;
-	(yy1 [@tailcall]) st
+    st.cur <- st.mar;
+    st.yyt1 <- none;
+    (yy1 [@tailcall]) st
 
 and yy4 (st : state) : int =
-	st.yyt1 <- st.cur;
-	(yy1 [@tailcall]) st
+    st.yyt1 <- st.cur;
+    (yy1 [@tailcall]) st
 
 and lex_tags (st : state) : int =
-	(yy0 [@tailcall]) st
+    (yy0 [@tailcall]) st
 
 
 
@@ -66,35 +66,35 @@ let yymaxnmatch = 3
 
 
 let rec yy5 (st : state) : int =
-	let yych = st.str.[st.cur] in
-	match yych with
-		| 'a' ->
-			st.yyt1 <- st.cur;
-			st.cur <- st.cur + 1;
-			(yy7 [@tailcall]) st
-		| _ ->
-			st.yyt1 <- st.cur;
-			st.yyt2 <- none;
-			(yy6 [@tailcall]) st
+    let yych = st.str.[st.cur] in
+    match yych with
+        | 'a' ->
+            st.yyt1 <- st.cur;
+            st.cur <- st.cur + 1;
+            (yy7 [@tailcall]) st
+        | _ ->
+            st.yyt1 <- st.cur;
+            st.yyt2 <- none;
+            (yy6 [@tailcall]) st
 
 and yy6 (st : state) : int =
-	st.yynmatch <- 3;
-	st.yypmatch.(0) <- st.yyt1;
-	st.yypmatch.(3) <- st.yyt2;
-	st.yypmatch.(5) <- st.yyt2;
-	st.yypmatch.(1) <- st.cur;
-	st.yypmatch.(2) <- st.yyt2;
-	st.yyt2 <- none;
-	if st.yypmatch.(2) <> st.yyt2 then st.yypmatch.(2) <- st.yypmatch.(2) + -1;
-	st.yypmatch.(4) <- st.yypmatch.(2);
-	st.yypmatch.(4)
+    st.yynmatch <- 3;
+    st.yypmatch.(0) <- st.yyt1;
+    st.yypmatch.(3) <- st.yyt2;
+    st.yypmatch.(5) <- st.yyt2;
+    st.yypmatch.(1) <- st.cur;
+    st.yypmatch.(2) <- st.yyt2;
+    st.yyt2 <- none;
+    if st.yypmatch.(2) <> st.yyt2 then st.yypmatch.(2) <- st.yypmatch.(2) + -1;
+    st.yypmatch.(4) <- st.yypmatch.(2);
+    st.yypmatch.(4)
 
 and yy7 (st : state) : int =
-	st.yyt2 <- st.cur;
-	(yy6 [@tailcall]) st
+    st.yyt2 <- st.cur;
+    (yy6 [@tailcall]) st
 
 and lex_captures (st : state) : int =
-	(yy5 [@tailcall]) st
+    (yy5 [@tailcall]) st
 
 
 

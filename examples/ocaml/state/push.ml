@@ -43,87 +43,87 @@ let fill(st: state) : status =
 
 
 let rec yy0 (yyrecord : state) : status =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| 'a'..'z' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy3 [@tailcall]) yyrecord
-		| _ ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (
-				yyrecord.yystate <- 0;
-				Waiting
-			) else (
-				yyrecord.yycursor <- yyrecord.yycursor + 1;
-				(yy1 [@tailcall]) yyrecord
-			)
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | 'a'..'z' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy3 [@tailcall]) yyrecord
+        | _ ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (
+                yyrecord.yystate <- 0;
+                Waiting
+            ) else (
+                yyrecord.yycursor <- yyrecord.yycursor + 1;
+                (yy1 [@tailcall]) yyrecord
+            )
 
 and yy1 (yyrecord : state) : status =
-	(yy2 [@tailcall]) yyrecord
+    (yy2 [@tailcall]) yyrecord
 
 and yy2 (yyrecord : state) : status =
-	yyrecord.yystate <- -1;
-	BadPacket
+    yyrecord.yystate <- -1;
+    BadPacket
 
 and yy3 (yyrecord : state) : status =
-	yyrecord.yymarker <- yyrecord.yycursor;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| ';' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy4 [@tailcall]) yyrecord
-		| 'a'..'z' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy5 [@tailcall]) yyrecord
-		| _ ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (
-				yyrecord.yystate <- 1;
-				Waiting
-			) else (
-				(yy2 [@tailcall]) yyrecord
-			)
+    yyrecord.yymarker <- yyrecord.yycursor;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | ';' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy4 [@tailcall]) yyrecord
+        | 'a'..'z' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy5 [@tailcall]) yyrecord
+        | _ ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (
+                yyrecord.yystate <- 1;
+                Waiting
+            ) else (
+                (yy2 [@tailcall]) yyrecord
+            )
 
 and yy4 (yyrecord : state) : status =
-	yyrecord.yystate <- -1;
-	yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord
+    yyrecord.yystate <- -1;
+    yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord
 
 and yy5 (yyrecord : state) : status =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| ';' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy4 [@tailcall]) yyrecord
-		| 'a'..'z' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy5 [@tailcall]) yyrecord
-		| _ ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (
-				yyrecord.yystate <- 2;
-				Waiting
-			) else (
-				(yy6 [@tailcall]) yyrecord
-			)
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | ';' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy4 [@tailcall]) yyrecord
+        | 'a'..'z' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy5 [@tailcall]) yyrecord
+        | _ ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (
+                yyrecord.yystate <- 2;
+                Waiting
+            ) else (
+                (yy6 [@tailcall]) yyrecord
+            )
 
 and yy6 (yyrecord : state) : status =
-	yyrecord.yycursor <- yyrecord.yymarker;
-	(yy2 [@tailcall]) yyrecord
+    yyrecord.yycursor <- yyrecord.yymarker;
+    (yy2 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : state) : status =
-	yyrecord.yystate <- -1;
-	End
+    yyrecord.yystate <- -1;
+    End
 
 and lex (yyrecord : state) : status =
-	match yyrecord.yystate with
-		| -1 -> (yy0 [@tailcall]) yyrecord
-		| 0 ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy7 [@tailcall]) yyrecord
-			else (yy0 [@tailcall]) yyrecord
-		| 1 ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy2 [@tailcall]) yyrecord
-			else (yy3 [@tailcall]) yyrecord
-		| 2 ->
-			if (yyrecord.yylimit <= yyrecord.yycursor) then (yy6 [@tailcall]) yyrecord
-			else (yy5 [@tailcall]) yyrecord
-		| _ -> raise (Failure "internal lexer error")
+    match yyrecord.yystate with
+        | -1 -> (yy0 [@tailcall]) yyrecord
+        | 0 ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (yy7 [@tailcall]) yyrecord
+            else (yy0 [@tailcall]) yyrecord
+        | 1 ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (yy2 [@tailcall]) yyrecord
+            else (yy3 [@tailcall]) yyrecord
+        | 2 ->
+            if (yyrecord.yylimit <= yyrecord.yycursor) then (yy6 [@tailcall]) yyrecord
+            else (yy5 [@tailcall]) yyrecord
+        | _ -> raise (Failure "internal lexer error")
 
 
 

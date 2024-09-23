@@ -17,134 +17,134 @@ type state = {
 
 
 let rec yy0 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	yyrecord.yycursor <- yyrecord.yycursor + 1;
-	match yych with
-		| '.' -> (yy3 [@tailcall]) yyrecord
-		| '0' -> (yy4 [@tailcall]) yyrecord
-		| '1'..'9' -> (yy5 [@tailcall]) yyrecord
-		| _ -> (yy1 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    yyrecord.yycursor <- yyrecord.yycursor + 1;
+    match yych with
+        | '.' -> (yy3 [@tailcall]) yyrecord
+        | '0' -> (yy4 [@tailcall]) yyrecord
+        | '1'..'9' -> (yy5 [@tailcall]) yyrecord
+        | _ -> (yy1 [@tailcall]) yyrecord
 
 and yy1 (yyrecord : state) : number =
-	(yy2 [@tailcall]) yyrecord
+    (yy2 [@tailcall]) yyrecord
 
 and yy2 (yyrecord : state) : number =
-	NaN
+    NaN
 
 and yy3 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy7 [@tailcall]) yyrecord
-		| _ -> (yy2 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy7 [@tailcall]) yyrecord
+        | _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : state) : number =
-	yyrecord.yyaccept <- 0;
-	yyrecord.yymarker <- yyrecord.yycursor;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '.' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy7 [@tailcall]) yyrecord
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy9 [@tailcall]) yyrecord
-		| 'E'
-		| 'e' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy11 [@tailcall]) yyrecord
-		| _ -> (yy2 [@tailcall]) yyrecord
+    yyrecord.yyaccept <- 0;
+    yyrecord.yymarker <- yyrecord.yycursor;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '.' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy7 [@tailcall]) yyrecord
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy9 [@tailcall]) yyrecord
+        | 'E'
+        | 'e' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy11 [@tailcall]) yyrecord
+        | _ -> (yy2 [@tailcall]) yyrecord
 
 and yy5 (yyrecord : state) : number =
-	yyrecord.yyaccept <- 1;
-	yyrecord.yymarker <- yyrecord.yycursor;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '.' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy7 [@tailcall]) yyrecord
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy5 [@tailcall]) yyrecord
-		| 'E'
-		| 'e' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy11 [@tailcall]) yyrecord
-		| _ -> (yy6 [@tailcall]) yyrecord
+    yyrecord.yyaccept <- 1;
+    yyrecord.yymarker <- yyrecord.yycursor;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '.' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy7 [@tailcall]) yyrecord
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy5 [@tailcall]) yyrecord
+        | 'E'
+        | 'e' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy11 [@tailcall]) yyrecord
+        | _ -> (yy6 [@tailcall]) yyrecord
 
 and yy6 (yyrecord : state) : number =
-	Int
+    Int
 
 and yy7 (yyrecord : state) : number =
-	yyrecord.yyaccept <- 2;
-	yyrecord.yymarker <- yyrecord.yycursor;
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy7 [@tailcall]) yyrecord
-		| 'E'
-		| 'e' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy11 [@tailcall]) yyrecord
-		| _ -> (yy8 [@tailcall]) yyrecord
+    yyrecord.yyaccept <- 2;
+    yyrecord.yymarker <- yyrecord.yycursor;
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy7 [@tailcall]) yyrecord
+        | 'E'
+        | 'e' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy11 [@tailcall]) yyrecord
+        | _ -> (yy8 [@tailcall]) yyrecord
 
 and yy8 (yyrecord : state) : number =
-	Float
+    Float
 
 and yy9 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '.' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy7 [@tailcall]) yyrecord
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy9 [@tailcall]) yyrecord
-		| 'E'
-		| 'e' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy11 [@tailcall]) yyrecord
-		| _ -> (yy10 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '.' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy7 [@tailcall]) yyrecord
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy9 [@tailcall]) yyrecord
+        | 'E'
+        | 'e' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy11 [@tailcall]) yyrecord
+        | _ -> (yy10 [@tailcall]) yyrecord
 
 and yy10 (yyrecord : state) : number =
-	yyrecord.yycursor <- yyrecord.yymarker;
-	match yyrecord.yyaccept with
-		| 0 -> (yy2 [@tailcall]) yyrecord
-		| 1 -> (yy6 [@tailcall]) yyrecord
-		| _ -> (yy8 [@tailcall]) yyrecord
+    yyrecord.yycursor <- yyrecord.yymarker;
+    match yyrecord.yyaccept with
+        | 0 -> (yy2 [@tailcall]) yyrecord
+        | 1 -> (yy6 [@tailcall]) yyrecord
+        | _ -> (yy8 [@tailcall]) yyrecord
 
 and yy11 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '+'
-		| '-' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy12 [@tailcall]) yyrecord
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy13 [@tailcall]) yyrecord
-		| _ -> (yy10 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '+'
+        | '-' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy12 [@tailcall]) yyrecord
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy13 [@tailcall]) yyrecord
+        | _ -> (yy10 [@tailcall]) yyrecord
 
 and yy12 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy13 [@tailcall]) yyrecord
-		| _ -> (yy10 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy13 [@tailcall]) yyrecord
+        | _ -> (yy10 [@tailcall]) yyrecord
 
 and yy13 (yyrecord : state) : number =
-	let yych = get yyrecord.yyinput yyrecord.yycursor in
-	match yych with
-		| '0'..'9' ->
-			yyrecord.yycursor <- yyrecord.yycursor + 1;
-			(yy13 [@tailcall]) yyrecord
-		| _ -> (yy8 [@tailcall]) yyrecord
+    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    match yych with
+        | '0'..'9' ->
+            yyrecord.yycursor <- yyrecord.yycursor + 1;
+            (yy13 [@tailcall]) yyrecord
+        | _ -> (yy8 [@tailcall]) yyrecord
 
 and lex (yyrecord : state) : number =
-	(yy0 [@tailcall]) yyrecord
+    (yy0 [@tailcall]) yyrecord
 
 
 

@@ -84,115 +84,115 @@ let fill(st: state) : status =
 
 #86 "ocaml/submatch/01_stags_fill.ml"
 let rec yy0 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'9' ->
-			st.yyt1 <- st.yycursor;
-			st.yycursor <- st.yycursor + 1;
-			(yy3 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy0 [@tailcall]) st vers
-				else (yy11 [@tailcall]) st vers
-			) else (
-				st.yycursor <- st.yycursor + 1;
-				(yy1 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'9' ->
+            st.yyt1 <- st.yycursor;
+            st.yycursor <- st.yycursor + 1;
+            (yy3 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy0 [@tailcall]) st vers
+                else (yy11 [@tailcall]) st vers
+            ) else (
+                st.yycursor <- st.yycursor + 1;
+                (yy1 [@tailcall]) st vers
+            )
 
 and yy1 (st : state) (vers : semver list) : (semver list) option =
-	(yy2 [@tailcall]) st vers
+    (yy2 [@tailcall]) st vers
 
 and yy2 (st : state) (vers : semver list) : (semver list) option =
 #74 "ocaml/submatch/01_stags_fill.re"
-	None
+    None
 #109 "ocaml/submatch/01_stags_fill.ml"
 
 and yy3 (st : state) (vers : semver list) : (semver list) option =
-	st.yymarker <- st.yycursor;
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '.' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy4 [@tailcall]) st vers
-		| '0'..'9' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy6 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy3 [@tailcall]) st vers
-				else (yy2 [@tailcall]) st vers
-			) else (
-				(yy2 [@tailcall]) st vers
-			)
+    st.yymarker <- st.yycursor;
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '.' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy4 [@tailcall]) st vers
+        | '0'..'9' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy6 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy3 [@tailcall]) st vers
+                else (yy2 [@tailcall]) st vers
+            ) else (
+                (yy2 [@tailcall]) st vers
+            )
 
 and yy4 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'9' ->
-			st.yyt2 <- st.yycursor;
-			st.yycursor <- st.yycursor + 1;
-			(yy7 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy4 [@tailcall]) st vers
-				else (yy5 [@tailcall]) st vers
-			) else (
-				(yy5 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'9' ->
+            st.yyt2 <- st.yycursor;
+            st.yycursor <- st.yycursor + 1;
+            (yy7 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy4 [@tailcall]) st vers
+                else (yy5 [@tailcall]) st vers
+            ) else (
+                (yy5 [@tailcall]) st vers
+            )
 
 and yy5 (st : state) (vers : semver list) : (semver list) option =
-	st.yycursor <- st.yymarker;
-	(yy2 [@tailcall]) st vers
+    st.yycursor <- st.yymarker;
+    (yy2 [@tailcall]) st vers
 
 and yy6 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '.' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy4 [@tailcall]) st vers
-		| '0'..'9' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy6 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy6 [@tailcall]) st vers
-				else (yy5 [@tailcall]) st vers
-			) else (
-				(yy5 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '.' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy4 [@tailcall]) st vers
+        | '0'..'9' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy6 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy6 [@tailcall]) st vers
+                else (yy5 [@tailcall]) st vers
+            ) else (
+                (yy5 [@tailcall]) st vers
+            )
 
 and yy7 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '\n' ->
-			st.yyt3 <- st.yycursor;
-			st.yyt4 <- -1;
-			st.yycursor <- st.yycursor + 1;
-			(yy8 [@tailcall]) st vers
-		| '.' ->
-			st.yyt3 <- st.yycursor;
-			st.yycursor <- st.yycursor + 1;
-			(yy9 [@tailcall]) st vers
-		| '0'..'9' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy7 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy7 [@tailcall]) st vers
-				else (yy5 [@tailcall]) st vers
-			) else (
-				(yy5 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '\n' ->
+            st.yyt3 <- st.yycursor;
+            st.yyt4 <- -1;
+            st.yycursor <- st.yycursor + 1;
+            (yy8 [@tailcall]) st vers
+        | '.' ->
+            st.yyt3 <- st.yycursor;
+            st.yycursor <- st.yycursor + 1;
+            (yy9 [@tailcall]) st vers
+        | '0'..'9' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy7 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy7 [@tailcall]) st vers
+                else (yy5 [@tailcall]) st vers
+            ) else (
+                (yy5 [@tailcall]) st vers
+            )
 
 and yy8 (st : state) (vers : semver list) : (semver list) option =
-	st.t1 <- st.yyt1;
-	st.t3 <- st.yyt2;
-	st.t4 <- st.yyt3;
-	st.t5 <- st.yyt4;
-	st.t2 <- st.yyt2;
-	st.t2 <- st.t2 - 1;
+    st.t1 <- st.yyt1;
+    st.t3 <- st.yyt2;
+    st.t4 <- st.yyt3;
+    st.t5 <- st.yyt4;
+    st.t2 <- st.yyt2;
+    st.t2 <- st.t2 - 1;
 #66 "ocaml/submatch/01_stags_fill.re"
-	
+    
         let ver = {
             major = s2n st.yyinput st.t1 st.t2;
             minor = s2n st.yyinput st.t3 st.t4;
@@ -202,44 +202,44 @@ and yy8 (st : state) (vers : semver list) : (semver list) option =
 #203 "ocaml/submatch/01_stags_fill.ml"
 
 and yy9 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '0'..'9' ->
-			st.yyt4 <- st.yycursor;
-			st.yycursor <- st.yycursor + 1;
-			(yy10 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy9 [@tailcall]) st vers
-				else (yy5 [@tailcall]) st vers
-			) else (
-				(yy5 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '0'..'9' ->
+            st.yyt4 <- st.yycursor;
+            st.yycursor <- st.yycursor + 1;
+            (yy10 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy9 [@tailcall]) st vers
+                else (yy5 [@tailcall]) st vers
+            ) else (
+                (yy5 [@tailcall]) st vers
+            )
 
 and yy10 (st : state) (vers : semver list) : (semver list) option =
-	let yych = get st.yyinput st.yycursor in
-	match yych with
-		| '\n' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy8 [@tailcall]) st vers
-		| '0'..'9' ->
-			st.yycursor <- st.yycursor + 1;
-			(yy10 [@tailcall]) st vers
-		| _ ->
-			if (st.yylimit <= st.yycursor) then (
-				if (fill st = Ok) then (yy10 [@tailcall]) st vers
-				else (yy5 [@tailcall]) st vers
-			) else (
-				(yy5 [@tailcall]) st vers
-			)
+    let yych = get st.yyinput st.yycursor in
+    match yych with
+        | '\n' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy8 [@tailcall]) st vers
+        | '0'..'9' ->
+            st.yycursor <- st.yycursor + 1;
+            (yy10 [@tailcall]) st vers
+        | _ ->
+            if (st.yylimit <= st.yycursor) then (
+                if (fill st = Ok) then (yy10 [@tailcall]) st vers
+                else (yy5 [@tailcall]) st vers
+            ) else (
+                (yy5 [@tailcall]) st vers
+            )
 
 and yy11 (st : state) (vers : semver list) : (semver list) option =
 #73 "ocaml/submatch/01_stags_fill.re"
-	Some (List.rev vers)
+    Some (List.rev vers)
 #240 "ocaml/submatch/01_stags_fill.ml"
 
 and lex (st : state) (vers : semver list) : (semver list) option =
-	(yy0 [@tailcall]) st vers
+    (yy0 [@tailcall]) st vers
 
 #75 "ocaml/submatch/01_stags_fill.re"
 
