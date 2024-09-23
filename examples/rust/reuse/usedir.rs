@@ -20,355 +20,355 @@ fn lex(yyinput: &[u8]) -> Ans {
     let (mut yycursor, mut yymarker) = (0, 0);
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x65 => {
-						yystate = 3;
-						continue 'yyl;
-					}
-					0x68 => {
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x6D => {
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x72 => {
-						yystate = 6;
-						continue 'yyl;
-					}
-					0x73 => {
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => { return Ans::Dunno; },
-			3 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x65 => {
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x61 => {
-						yycursor += 1;
-						yystate = 10;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			5 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x61 => {
-						yycursor += 1;
-						yystate = 11;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			6 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x65 => {
-						yycursor += 1;
-						yystate = 12;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			7 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x61 => {
-						yycursor += 1;
-						yystate = 13;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6C => {
-						yycursor += 1;
-						yystate = 14;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			9 => {
-				yycursor = yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			10 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x64 => {
-						yycursor += 1;
-						yystate = 15;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			11 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x67 => {
-						yycursor += 1;
-						yystate = 16;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			12 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x64 => {
-						yycursor += 1;
-						yystate = 17;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			13 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6C => {
-						yycursor += 1;
-						yystate = 18;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			14 => { return Ans::Fish; },
-			15 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x64 => {
-						yycursor += 1;
-						yystate = 19;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			16 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x65 => {
-						yycursor += 1;
-						yystate = 20;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			17 => { return Ans::Color; },
-			18 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6D => {
-						yycursor += 1;
-						yystate = 21;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			19 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6F => {
-						yycursor += 1;
-						yystate = 22;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			20 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6E => {
-						yycursor += 1;
-						yystate = 23;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			21 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6F => {
-						yycursor += 1;
-						yystate = 24;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			22 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x63 => {
-						yycursor += 1;
-						yystate = 25;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			23 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x74 => {
-						yycursor += 1;
-						yystate = 26;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			24 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6E => {
-						yycursor += 1;
-						yystate = 14;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			25 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x6B => {
-						yycursor += 1;
-						yystate = 14;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			26 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x61 => {
-						yycursor += 1;
-						yystate = 17;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x65 => {
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    0x68 => {
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x6D => {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x72 => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                    0x73 => {
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => { return Ans::Dunno; },
+            3 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x65 => {
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x61 => {
+                        yycursor += 1;
+                        yystate = 10;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            5 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x61 => {
+                        yycursor += 1;
+                        yystate = 11;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            6 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x65 => {
+                        yycursor += 1;
+                        yystate = 12;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            7 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x61 => {
+                        yycursor += 1;
+                        yystate = 13;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6C => {
+                        yycursor += 1;
+                        yystate = 14;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            9 => {
+                yycursor = yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            10 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x64 => {
+                        yycursor += 1;
+                        yystate = 15;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            11 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x67 => {
+                        yycursor += 1;
+                        yystate = 16;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            12 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x64 => {
+                        yycursor += 1;
+                        yystate = 17;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            13 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6C => {
+                        yycursor += 1;
+                        yystate = 18;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            14 => { return Ans::Fish; },
+            15 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x64 => {
+                        yycursor += 1;
+                        yystate = 19;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            16 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x65 => {
+                        yycursor += 1;
+                        yystate = 20;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            17 => { return Ans::Color; },
+            18 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6D => {
+                        yycursor += 1;
+                        yystate = 21;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            19 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6F => {
+                        yycursor += 1;
+                        yystate = 22;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            20 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6E => {
+                        yycursor += 1;
+                        yystate = 23;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            21 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6F => {
+                        yycursor += 1;
+                        yystate = 24;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            22 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x63 => {
+                        yycursor += 1;
+                        yystate = 25;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            23 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x74 => {
+                        yycursor += 1;
+                        yystate = 26;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            24 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6E => {
+                        yycursor += 1;
+                        yystate = 14;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            25 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x6B => {
+                        yycursor += 1;
+                        yystate = 14;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            26 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x61 => {
+                        yycursor += 1;
+                        yystate = 17;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }

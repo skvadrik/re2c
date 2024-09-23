@@ -41,174 +41,174 @@ let mut yytr3;
 
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						yyt1 = yycursor;
-						yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					_ => {
-						yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => { return None; },
-			3 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x2E => {
-						yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 6;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						yyt2 = yycursor;
-						yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			5 => {
-				yycursor = yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			6 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x2E => {
-						yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 6;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			7 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x00 => {
-						yyt3 = yycursor;
-						yyt4 = usize::MAX;
-						yyt5 = usize::MAX;
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					0x2E => {
-						yyt3 = yycursor;
-						yyt5 = yycursor;
-						yycursor += 1;
-						yystate = 9;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				yytl1 = yyt1;
-				yytl2 = yyt2;
-				yytr2 = yyt3;
-				yytl3 = yyt5;
-				yytr3 = yyt4;
-				yytl0 = yyt1;
-				yytr0 = yycursor;
-				yytr1 = yyt2;
-				yytr1 -= 1;
-				{
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yyt1 = yycursor;
+                        yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => { return None; },
+            3 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x2E => {
+                        yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yyt2 = yycursor;
+                        yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            5 => {
+                yycursor = yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            6 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x2E => {
+                        yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            7 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x00 => {
+                        yyt3 = yycursor;
+                        yyt4 = usize::MAX;
+                        yyt5 = usize::MAX;
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    0x2E => {
+                        yyt3 = yycursor;
+                        yyt5 = yycursor;
+                        yycursor += 1;
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                yytl1 = yyt1;
+                yytl2 = yyt2;
+                yytr2 = yyt3;
+                yytl3 = yyt5;
+                yytr3 = yyt4;
+                yytl0 = yyt1;
+                yytr0 = yycursor;
+                yytr1 = yyt2;
+                yytr1 -= 1;
+                {
             assert!(yytl0 == 0 && yytr0 == yyinput.len());
             let major = s2n(&yyinput[yytl1..yytr1]);
             let minor = s2n(&yyinput[yytl2..yytr2]);
             let patch = if yytl3 == NONE {0} else {s2n(&yyinput[yytl3 + 1..yytr3])};
             return Some(SemVer(major, minor, patch));
         }
-			}
-			9 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				if yych <= 0x00 {
-					yystate = 5;
-					continue 'yyl;
-				}
-				yystate = 11;
-				continue 'yyl;
-			}
-			10 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yystate = 11;
-				continue 'yyl;
-			}
-			11 => {
-				match yych {
-					0x00 => {
-						yyt4 = yycursor;
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 10;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+            }
+            9 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                if yych <= 0x00 {
+                    yystate = 5;
+                    continue 'yyl;
+                }
+                yystate = 11;
+                continue 'yyl;
+            }
+            10 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yystate = 11;
+                continue 'yyl;
+            }
+            11 => {
+                match yych {
+                    0x00 => {
+                        yyt4 = yycursor;
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 10;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }

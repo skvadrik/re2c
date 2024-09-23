@@ -65,273 +65,273 @@ fn lex(yyrecord: &mut State, nc: &mut isize, wc: &mut isize) -> Status {
         yyrecord.token = yyrecord.yycursor;
     
 {
-	let mut yystate : isize = yyrecord.yystate;
-	'yyl: loop {
-		match yystate {
-			-1 ..= 0 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x09 |
-					0x20 => {
-						yyrecord.yycursor += 1;
-						yystate = 2;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yyrecord.yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 21;
-							return Status::Waiting;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yyrecord.yystate = YYC_INIT;
-				{ return Status::BadPacket; }
-			}
-			2 => {
-				yyrecord.yycursor -= 1;
-				yyrecord.yystate = YYC_SPACES;
-				yystate = YYC_SPACES;
-				continue 'yyl;
-			}
-			3 => {
-				yyrecord.yycursor -= 1;
-				yyrecord.yystate = YYC_NUMBER;
-				yystate = YYC_NUMBER;
-				continue 'yyl;
-			}
-			4 => {
-				yyrecord.yycursor -= 1;
-				yyrecord.yystate = YYC_WORD;
-				yystate = YYC_WORD;
-				continue 'yyl;
-			}
-			5 => {
-				yyrecord.yystate = YYC_INIT;
-				{ return Status::End; }
-			}
-			6 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x09 |
-					0x20 => {
-						yyrecord.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 22;
-							return Status::Waiting;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-				}
-			}
-			7 => {
-				yyrecord.yystate = YYC_SPACES;
-				{ return Status::BadPacket; }
-			}
-			8 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x09 |
-					0x20 => {
-						yyrecord.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 23;
-							return Status::Waiting;
-						}
-						yystate = 9;
-						continue 'yyl;
-					}
-				}
-			}
-			9 => {
-				yyrecord.yystate = YYC_INIT;
-				{ continue 'lex; }
-			}
-			10 => {
-				yyrecord.yystate = YYC_SPACES;
-				{ return Status::End; }
-			}
-			11 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x30 ..= 0x39 => {
-						yyrecord.yycursor += 1;
-						yystate = 13;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 24;
-							return Status::Waiting;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 12;
-						continue 'yyl;
-					}
-				}
-			}
-			12 => {
-				yyrecord.yystate = YYC_NUMBER;
-				{ return Status::BadPacket; }
-			}
-			13 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x30 ..= 0x39 => {
-						yyrecord.yycursor += 1;
-						yystate = 13;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 25;
-							return Status::Waiting;
-						}
-						yystate = 14;
-						continue 'yyl;
-					}
-				}
-			}
-			14 => {
-				yyrecord.yystate = YYC_SPACES;
-				{ *nc += 1; continue 'lex; }
-			}
-			15 => {
-				yyrecord.yystate = YYC_NUMBER;
-				{ return Status::End; }
-			}
-			16 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 18;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 26;
-							return Status::Waiting;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 17;
-						continue 'yyl;
-					}
-				}
-			}
-			17 => {
-				yyrecord.yystate = YYC_WORD;
-				{ return Status::BadPacket; }
-			}
-			18 => {
-				yych = yyrecord.yyinput[yyrecord.yycursor];
-				match yych {
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 18;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 27;
-							return Status::Waiting;
-						}
-						yystate = 19;
-						continue 'yyl;
-					}
-				}
-			}
-			19 => {
-				yyrecord.yystate = YYC_SPACES;
-				{ *wc += 1; continue 'lex; }
-			}
-			20 => {
-				yyrecord.yystate = YYC_WORD;
-				{ return Status::End; }
-			}
-			21 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 5;
-					continue 'yyl;
-				}
-				yystate = 0;
-				continue 'yyl;
-			}
-			22 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 10;
-					continue 'yyl;
-				}
-				yystate = 6;
-				continue 'yyl;
-			}
-			23 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 9;
-					continue 'yyl;
-				}
-				yystate = 8;
-				continue 'yyl;
-			}
-			24 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 15;
-					continue 'yyl;
-				}
-				yystate = 11;
-				continue 'yyl;
-			}
-			25 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 14;
-					continue 'yyl;
-				}
-				yystate = 13;
-				continue 'yyl;
-			}
-			26 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 20;
-					continue 'yyl;
-				}
-				yystate = 16;
-				continue 'yyl;
-			}
-			27 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 19;
-					continue 'yyl;
-				}
-				yystate = 18;
-				continue 'yyl;
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    let mut yystate : isize = yyrecord.yystate;
+    'yyl: loop {
+        match yystate {
+            -1 ..= 0 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x09 |
+                    0x20 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 21;
+                            return Status::Waiting;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yyrecord.yystate = YYC_INIT;
+                { return Status::BadPacket; }
+            }
+            2 => {
+                yyrecord.yycursor -= 1;
+                yyrecord.yystate = YYC_SPACES;
+                yystate = YYC_SPACES;
+                continue 'yyl;
+            }
+            3 => {
+                yyrecord.yycursor -= 1;
+                yyrecord.yystate = YYC_NUMBER;
+                yystate = YYC_NUMBER;
+                continue 'yyl;
+            }
+            4 => {
+                yyrecord.yycursor -= 1;
+                yyrecord.yystate = YYC_WORD;
+                yystate = YYC_WORD;
+                continue 'yyl;
+            }
+            5 => {
+                yyrecord.yystate = YYC_INIT;
+                { return Status::End; }
+            }
+            6 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x09 |
+                    0x20 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 22;
+                            return Status::Waiting;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                }
+            }
+            7 => {
+                yyrecord.yystate = YYC_SPACES;
+                { return Status::BadPacket; }
+            }
+            8 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x09 |
+                    0x20 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 23;
+                            return Status::Waiting;
+                        }
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                }
+            }
+            9 => {
+                yyrecord.yystate = YYC_INIT;
+                { continue 'lex; }
+            }
+            10 => {
+                yyrecord.yystate = YYC_SPACES;
+                { return Status::End; }
+            }
+            11 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 13;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 24;
+                            return Status::Waiting;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 12;
+                        continue 'yyl;
+                    }
+                }
+            }
+            12 => {
+                yyrecord.yystate = YYC_NUMBER;
+                { return Status::BadPacket; }
+            }
+            13 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 13;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 25;
+                            return Status::Waiting;
+                        }
+                        yystate = 14;
+                        continue 'yyl;
+                    }
+                }
+            }
+            14 => {
+                yyrecord.yystate = YYC_SPACES;
+                { *nc += 1; continue 'lex; }
+            }
+            15 => {
+                yyrecord.yystate = YYC_NUMBER;
+                { return Status::End; }
+            }
+            16 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 18;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 26;
+                            return Status::Waiting;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 17;
+                        continue 'yyl;
+                    }
+                }
+            }
+            17 => {
+                yyrecord.yystate = YYC_WORD;
+                { return Status::BadPacket; }
+            }
+            18 => {
+                yych = yyrecord.yyinput[yyrecord.yycursor];
+                match yych {
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 18;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 27;
+                            return Status::Waiting;
+                        }
+                        yystate = 19;
+                        continue 'yyl;
+                    }
+                }
+            }
+            19 => {
+                yyrecord.yystate = YYC_SPACES;
+                { *wc += 1; continue 'lex; }
+            }
+            20 => {
+                yyrecord.yystate = YYC_WORD;
+                { return Status::End; }
+            }
+            21 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 5;
+                    continue 'yyl;
+                }
+                yystate = 0;
+                continue 'yyl;
+            }
+            22 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 10;
+                    continue 'yyl;
+                }
+                yystate = 6;
+                continue 'yyl;
+            }
+            23 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 9;
+                    continue 'yyl;
+                }
+                yystate = 8;
+                continue 'yyl;
+            }
+            24 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 15;
+                    continue 'yyl;
+                }
+                yystate = 11;
+                continue 'yyl;
+            }
+            25 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 14;
+                    continue 'yyl;
+                }
+                yystate = 13;
+                continue 'yyl;
+            }
+            26 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 20;
+                    continue 'yyl;
+                }
+                yystate = 16;
+                continue 'yyl;
+            }
+            27 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 19;
+                    continue 'yyl;
+                }
+                yystate = 18;
+                continue 'yyl;
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }

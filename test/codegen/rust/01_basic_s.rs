@@ -5,44 +5,44 @@ fn lex(s: &[u8]) -> bool {
     let mut cursor = 0;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
-				cursor += 1;
-				if yych <= 0x30 {
-					yystate = 1;
-					continue 'yyl;
-				}
-				if yych <= 0x39 {
-					yystate = 2;
-					continue 'yyl;
-				}
-				yystate = 1;
-				continue 'yyl;
-			}
-			1 => { return false; },
-			2 => {
-				yych = unsafe {*s.get_unchecked(cursor)};
-				if yych <= 0x2F {
-					yystate = 3;
-					continue 'yyl;
-				}
-				if yych <= 0x39 {
-					cursor += 1;
-					yystate = 2;
-					continue 'yyl;
-				}
-				yystate = 3;
-				continue 'yyl;
-			}
-			3 => { return true; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*s.get_unchecked(cursor)};
+                cursor += 1;
+                if yych <= 0x30 {
+                    yystate = 1;
+                    continue 'yyl;
+                }
+                if yych <= 0x39 {
+                    yystate = 2;
+                    continue 'yyl;
+                }
+                yystate = 1;
+                continue 'yyl;
+            }
+            1 => { return false; },
+            2 => {
+                yych = unsafe {*s.get_unchecked(cursor)};
+                if yych <= 0x2F {
+                    yystate = 3;
+                    continue 'yyl;
+                }
+                if yych <= 0x39 {
+                    cursor += 1;
+                    yystate = 2;
+                    continue 'yyl;
+                }
+                yystate = 3;
+                continue 'yyl;
+            }
+            3 => { return true; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }

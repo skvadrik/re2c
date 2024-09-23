@@ -4,17 +4,17 @@
 
 'outer: loop { 
 {
-	#[allow(unused_assignments)]
-	let mut yych : YYCTYPE = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				if YYLESSTHAN {
-					YYFILL
-				}
-				YYSKIP
-				{
+    #[allow(unused_assignments)]
+    let mut yych : YYCTYPE = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                if YYLESSTHAN {
+                    YYFILL
+                }
+                YYSKIP
+                {
         let c0 = '\'';
         let c1 = '\x7F';
         let c2 = '}';
@@ -33,9 +33,9 @@
         let c6 = b'a';
         continue 'outer;
     }
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
  }

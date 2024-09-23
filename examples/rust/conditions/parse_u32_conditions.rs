@@ -25,195 +25,195 @@ fn parse_u32(yyinput: &[u8]) -> Option<u32> {
 
     'lex: loop { 
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = yycond;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x30 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					0x31 ..= 0x39 => {
-						yystate = 4;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return None; },
-			2 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x42 |
-					0x62 => {
-						yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x58 |
-					0x78 => {
-						yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 3;
-						continue 'yyl;
-					}
-				}
-			}
-			3 => {
-				yycond = YYC_OCT;
-				yystate = YYC_OCT;
-				continue 'yyl;
-			}
-			4 => {
-				yycursor -= 1;
-				yycond = YYC_DEC;
-				yystate = YYC_DEC;
-				continue 'yyl;
-			}
-			5 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x31 => {
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			6 => {
-				yycursor = yymarker;
-				yystate = 3;
-				continue 'yyl;
-			}
-			7 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x39 |
-					0x41 ..= 0x46 |
-					0x61 ..= 0x66 => {
-						yycursor += 1;
-						yystate = 9;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				yycursor -= 1;
-				yycond = YYC_BIN;
-				yystate = YYC_BIN;
-				continue 'yyl;
-			}
-			9 => {
-				yycursor -= 1;
-				yycond = YYC_HEX;
-				yystate = YYC_HEX;
-				continue 'yyl;
-			}
-			10 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x30 ..= 0x31 => {
-						yystate = 12;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 11;
-						continue 'yyl;
-					}
-				}
-			}
-			11 => {
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = yycond;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x30 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    0x31 ..= 0x39 => {
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return None; },
+            2 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x42 |
+                    0x62 => {
+                        yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x58 |
+                    0x78 => {
+                        yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                }
+            }
+            3 => {
+                yycond = YYC_OCT;
+                yystate = YYC_OCT;
+                continue 'yyl;
+            }
+            4 => {
+                yycursor -= 1;
+                yycond = YYC_DEC;
+                yystate = YYC_DEC;
+                continue 'yyl;
+            }
+            5 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x31 => {
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            6 => {
+                yycursor = yymarker;
+                yystate = 3;
+                continue 'yyl;
+            }
+            7 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x39 |
+                    0x41 ..= 0x46 |
+                    0x61 ..= 0x66 => {
+                        yycursor += 1;
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                yycursor -= 1;
+                yycond = YYC_BIN;
+                yystate = YYC_BIN;
+                continue 'yyl;
+            }
+            9 => {
+                yycursor -= 1;
+                yycond = YYC_HEX;
+                yystate = YYC_HEX;
+                continue 'yyl;
+            }
+            10 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x30 ..= 0x31 => {
+                        yystate = 12;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 11;
+                        continue 'yyl;
+                    }
+                }
+            }
+            11 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			12 => { add(&mut num, yyinput, yycursor, 48, 2);  continue 'lex; },
-			13 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x30 ..= 0x37 => {
-						yystate = 15;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 14;
-						continue 'yyl;
-					}
-				}
-			}
-			14 => {
+            12 => { add(&mut num, yyinput, yycursor, 48, 2);  continue 'lex; },
+            13 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x30 ..= 0x37 => {
+                        yystate = 15;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 14;
+                        continue 'yyl;
+                    }
+                }
+            }
+            14 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			15 => { add(&mut num, yyinput, yycursor, 48, 8);  continue 'lex; },
-			16 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x30 ..= 0x39 => {
-						yystate = 18;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 17;
-						continue 'yyl;
-					}
-				}
-			}
-			17 => {
+            15 => { add(&mut num, yyinput, yycursor, 48, 8);  continue 'lex; },
+            16 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yystate = 18;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 17;
+                        continue 'yyl;
+                    }
+                }
+            }
+            17 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			18 => { add(&mut num, yyinput, yycursor, 48, 10); continue 'lex; },
-			19 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				yycursor += 1;
-				match yych {
-					0x30 ..= 0x39 => {
-						yystate = 21;
-						continue 'yyl;
-					}
-					0x41 ..= 0x46 => {
-						yystate = 22;
-						continue 'yyl;
-					}
-					0x61 ..= 0x66 => {
-						yystate = 23;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 20;
-						continue 'yyl;
-					}
-				}
-			}
-			20 => {
+            18 => { add(&mut num, yyinput, yycursor, 48, 10); continue 'lex; },
+            19 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                yycursor += 1;
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yystate = 21;
+                        continue 'yyl;
+                    }
+                    0x41 ..= 0x46 => {
+                        yystate = 22;
+                        continue 'yyl;
+                    }
+                    0x61 ..= 0x66 => {
+                        yystate = 23;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 20;
+                        continue 'yyl;
+                    }
+                }
+            }
+            20 => {
             return if num < ERROR { Some(num as u32) } else { None };
         },
-			21 => { add(&mut num, yyinput, yycursor, 48, 16); continue 'lex; },
-			22 => { add(&mut num, yyinput, yycursor, 55, 16); continue 'lex; },
-			23 => { add(&mut num, yyinput, yycursor, 87, 16); continue 'lex; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+            21 => { add(&mut num, yyinput, yycursor, 48, 16); continue 'lex; },
+            22 => { add(&mut num, yyinput, yycursor, 55, 16); continue 'lex; },
+            23 => { add(&mut num, yyinput, yycursor, 87, 16); continue 'lex; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }

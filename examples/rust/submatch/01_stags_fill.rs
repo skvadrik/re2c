@@ -86,213 +86,213 @@ let mut t4;
         st.token = st.yycursor;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						st.yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 0;
-								continue 'yyl;
-							}
-							yystate = 11;
-							continue 'yyl;
-						}
-						st.yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => { return None; },
-			3 => {
-				st.yymarker = st.yycursor;
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x2E => {
-						st.yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						st.yycursor += 1;
-						yystate = 6;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 3;
-								continue 'yyl;
-							}
-						}
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						st.yyt1 = st.yycursor;
-						st.yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 4;
-								continue 'yyl;
-							}
-						}
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			5 => {
-				st.yycursor = st.yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			6 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x2E => {
-						st.yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						st.yycursor += 1;
-						yystate = 6;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 6;
-								continue 'yyl;
-							}
-						}
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			7 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x0A => {
-						st.yyt2 = st.yycursor;
-						st.yyt3 = usize::MAX;
-						st.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					0x2E => {
-						st.yyt2 = st.yycursor;
-						st.yycursor += 1;
-						yystate = 9;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						st.yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 7;
-								continue 'yyl;
-							}
-						}
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				t2 = st.yyt1;
-				t3 = st.yyt2;
-				t4 = st.yyt3;
-				t1 = st.yyt1;
-				t1 -= 1;
-				{
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        st.yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 0;
+                                continue 'yyl;
+                            }
+                            yystate = 11;
+                            continue 'yyl;
+                        }
+                        st.yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => { return None; },
+            3 => {
+                st.yymarker = st.yycursor;
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x2E => {
+                        st.yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        st.yycursor += 1;
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 3;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        st.yyt1 = st.yycursor;
+                        st.yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 4;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            5 => {
+                st.yycursor = st.yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            6 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x2E => {
+                        st.yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        st.yycursor += 1;
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 6;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            7 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x0A => {
+                        st.yyt2 = st.yycursor;
+                        st.yyt3 = usize::MAX;
+                        st.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    0x2E => {
+                        st.yyt2 = st.yycursor;
+                        st.yycursor += 1;
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        st.yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 7;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                t2 = st.yyt1;
+                t3 = st.yyt2;
+                t4 = st.yyt3;
+                t1 = st.yyt1;
+                t1 -= 1;
+                {
             let major = s2n(&st.yyinput[st.token..t1]);
             let minor = s2n(&st.yyinput[t2..t3]);
             let patch = if t4 != NONE {s2n(&st.yyinput[t4..st.yycursor - 1])} else {0};
             vers.push(SemVer(major, minor, patch));
             continue 'parse;
         }
-			}
-			9 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						st.yyt3 = st.yycursor;
-						st.yycursor += 1;
-						yystate = 10;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 9;
-								continue 'yyl;
-							}
-						}
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			10 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x0A => {
-						st.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						st.yycursor += 1;
-						yystate = 10;
-						continue 'yyl;
-					}
-					_ => {
-						if st.yylimit <= st.yycursor {
-							if fill(st) == Fill::Ok {
-								yystate = 10;
-								continue 'yyl;
-							}
-						}
-						yystate = 5;
-						continue 'yyl;
-					}
-				}
-			}
-			11 => { return Some(vers); },
-			_ => panic!("internal lexer error"),
-		}
-	}
+            }
+            9 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        st.yyt3 = st.yycursor;
+                        st.yycursor += 1;
+                        yystate = 10;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 9;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            10 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x0A => {
+                        st.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        st.yycursor += 1;
+                        yystate = 10;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if st.yylimit <= st.yycursor {
+                            if fill(st) == Fill::Ok {
+                                yystate = 10;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                }
+            }
+            11 => { return Some(vers); },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
     }

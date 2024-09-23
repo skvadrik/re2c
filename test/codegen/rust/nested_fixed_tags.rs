@@ -11,64 +11,64 @@ fn lex_tags(str: &[u8]) -> i32 {
     let mut yyt1 = NONE;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				mar = cur;
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x62 => {
-						cur += 1;
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yyt1 = NONE;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				y = yyt1;
-				x = yyt1;
-				yyt1 = NONE;
-				if x != yyt1 {
-					x -= --1isize as usize;
-				}
-				{ return if x == NONE { -1 } else { (y - x) as i32 }; }
-			}
-			2 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x61 => {
-						cur += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 3;
-						continue 'yyl;
-					}
-				}
-			}
-			3 => {
-				cur = mar;
-				yyt1 = NONE;
-				yystate = 1;
-				continue 'yyl;
-			}
-			4 => {
-				yyt1 = cur;
-				yystate = 1;
-				continue 'yyl;
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                mar = cur;
+                yych = unsafe {*str.get_unchecked(cur)};
+                match yych {
+                    0x62 => {
+                        cur += 1;
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yyt1 = NONE;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                y = yyt1;
+                x = yyt1;
+                yyt1 = NONE;
+                if x != yyt1 {
+                    x -= --1isize as usize;
+                }
+                { return if x == NONE { -1 } else { (y - x) as i32 }; }
+            }
+            2 => {
+                yych = unsafe {*str.get_unchecked(cur)};
+                match yych {
+                    0x61 => {
+                        cur += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                }
+            }
+            3 => {
+                cur = mar;
+                yyt1 = NONE;
+                yystate = 1;
+                continue 'yyl;
+            }
+            4 => {
+                yyt1 = cur;
+                yystate = 1;
+                continue 'yyl;
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }
@@ -83,53 +83,53 @@ fn lex_captures(str: &[u8]) -> i32 {
     let mut yyt1 = NONE;let mut yyt2 = NONE;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*str.get_unchecked(cur)};
-				match yych {
-					0x61 => {
-						yyt1 = cur;
-						cur += 1;
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yyt1 = cur;
-						yyt2 = NONE;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yynmatch = 3;
-				yypmatch[0] = yyt1;
-				yypmatch[3] = yyt2;
-				yypmatch[5] = yyt2;
-				yypmatch[1] = cur;
-				yypmatch[2] = yyt2;
-				yyt2 = NONE;
-				if yypmatch[2] != yyt2 {
-					yypmatch[2] -= --1isize as usize;
-				}
-				yypmatch[4] = yypmatch[2];
-				{
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*str.get_unchecked(cur)};
+                match yych {
+                    0x61 => {
+                        yyt1 = cur;
+                        cur += 1;
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yyt1 = cur;
+                        yyt2 = NONE;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yynmatch = 3;
+                yypmatch[0] = yyt1;
+                yypmatch[3] = yyt2;
+                yypmatch[5] = yyt2;
+                yypmatch[1] = cur;
+                yypmatch[2] = yyt2;
+                yyt2 = NONE;
+                if yypmatch[2] != yyt2 {
+                    yypmatch[2] -= --1isize as usize;
+                }
+                yypmatch[4] = yypmatch[2];
+                {
             assert_eq!(yynmatch, 3);
             return if yypmatch[4] == NONE { -1 } else { yypmatch[4] as i32 };
         }
-			}
-			2 => {
-				yyt2 = cur;
-				yystate = 1;
-				continue 'yyl;
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+            }
+            2 => {
+                yyt2 = cur;
+                yystate = 1;
+                continue 'yyl;
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }

@@ -29,103 +29,103 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
     let mut st = State {yyinput: s, yycursor: 0, yymarker: 0, num: 0};
 
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				st.yycursor += 1;
-				match yych {
-					0x30 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					0x31 ..= 0x39 => {
-						yystate = 4;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return None; },
-			2 => {
-				st.yymarker = st.yycursor;
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x42 |
-					0x62 => {
-						st.yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x58 |
-					0x78 => {
-						st.yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 3;
-						continue 'yyl;
-					}
-				}
-			}
-			3 => { return parse_oct(&mut st); },
-			4 => {
-				st.yycursor -= 1;
-				{ return parse_dec(&mut st); }
-			}
-			5 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x30 ..= 0x31 => {
-						st.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			6 => {
-				st.yycursor = st.yymarker;
-				yystate = 3;
-				continue 'yyl;
-			}
-			7 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				match yych {
-					0x30 ..= 0x39 |
-					0x41 ..= 0x46 |
-					0x61 ..= 0x66 => {
-						st.yycursor += 1;
-						yystate = 9;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				st.yycursor -= 1;
-				{ return parse_bin(&mut st); }
-			}
-			9 => {
-				st.yycursor -= 1;
-				{ return parse_hex(&mut st); }
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                st.yycursor += 1;
+                match yych {
+                    0x30 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    0x31 ..= 0x39 => {
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return None; },
+            2 => {
+                st.yymarker = st.yycursor;
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x42 |
+                    0x62 => {
+                        st.yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x58 |
+                    0x78 => {
+                        st.yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                }
+            }
+            3 => { return parse_oct(&mut st); },
+            4 => {
+                st.yycursor -= 1;
+                { return parse_dec(&mut st); }
+            }
+            5 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x30 ..= 0x31 => {
+                        st.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            6 => {
+                st.yycursor = st.yymarker;
+                yystate = 3;
+                continue 'yyl;
+            }
+            7 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                match yych {
+                    0x30 ..= 0x39 |
+                    0x41 ..= 0x46 |
+                    0x61 ..= 0x66 => {
+                        st.yycursor += 1;
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                st.yycursor -= 1;
+                { return parse_bin(&mut st); }
+            }
+            9 => {
+                st.yycursor -= 1;
+                { return parse_hex(&mut st); }
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }
@@ -133,30 +133,30 @@ fn parse_u32(s: & [u8]) -> Option<u32> {
 fn parse_bin(st: &mut State) -> Option<u32> {
     'bin: loop {
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				st.yycursor += 1;
-				match yych {
-					0x30 ..= 0x31 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return maybe!(st.num); },
-			2 => { add(st, 48, 2); continue 'bin; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                st.yycursor += 1;
+                match yych {
+                    0x30 ..= 0x31 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return maybe!(st.num); },
+            2 => { add(st, 48, 2); continue 'bin; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }
@@ -164,30 +164,30 @@ fn parse_bin(st: &mut State) -> Option<u32> {
 fn parse_oct(st: &mut State) -> Option<u32> {
     'oct: loop {
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				st.yycursor += 1;
-				match yych {
-					0x30 ..= 0x37 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return maybe!(st.num); },
-			2 => { add(st, 48, 8); continue 'oct; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                st.yycursor += 1;
+                match yych {
+                    0x30 ..= 0x37 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return maybe!(st.num); },
+            2 => { add(st, 48, 8); continue 'oct; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }
@@ -195,30 +195,30 @@ fn parse_oct(st: &mut State) -> Option<u32> {
 fn parse_dec(st: &mut State) -> Option<u32> {
     'dec: loop {
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				st.yycursor += 1;
-				match yych {
-					0x30 ..= 0x39 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return maybe!(st.num); },
-			2 => { add(st, 48, 10); continue 'dec; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                st.yycursor += 1;
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return maybe!(st.num); },
+            2 => { add(st, 48, 10); continue 'dec; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }
@@ -226,40 +226,40 @@ fn parse_dec(st: &mut State) -> Option<u32> {
 fn parse_hex(st: &mut State) -> Option<u32> {
     'hex: loop {
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
-				st.yycursor += 1;
-				match yych {
-					0x30 ..= 0x39 => {
-						yystate = 2;
-						continue 'yyl;
-					}
-					0x41 ..= 0x46 => {
-						yystate = 3;
-						continue 'yyl;
-					}
-					0x61 ..= 0x66 => {
-						yystate = 4;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => { return maybe!(st.num); },
-			2 => { add(st, 48, 16); continue 'hex; },
-			3 => { add(st, 55, 16); continue 'hex; },
-			4 => { add(st, 87, 16); continue 'hex; },
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*st.yyinput.get_unchecked(st.yycursor)};
+                st.yycursor += 1;
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    0x41 ..= 0x46 => {
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    0x61 ..= 0x66 => {
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => { return maybe!(st.num); },
+            2 => { add(st, 48, 16); continue 'hex; },
+            3 => { add(st, 55, 16); continue 'hex; },
+            4 => { add(st, 87, 16); continue 'hex; },
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }

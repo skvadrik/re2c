@@ -52,145 +52,145 @@ fn lex(yyrecord: &mut State) -> isize {
         yyrecord.token = yyrecord.yycursor;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x20 => {
-						yyrecord.yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					0x27 => {
-						yyrecord.yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							if fill(yyrecord) == Fill::Ok {
-								yystate = 0;
-								continue 'yyl;
-							}
-							yystate = 10;
-							continue 'yyl;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => { return -1; },
-			3 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x20 => {
-						yyrecord.yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							if fill(yyrecord) == Fill::Ok {
-								yystate = 3;
-								continue 'yyl;
-							}
-						}
-						yystate = 4;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => { continue 'lex; },
-			5 => {
-				yyrecord.yymarker = yyrecord.yycursor;
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				if yych >= 0x01 {
-					yystate = 7;
-					continue 'yyl;
-				}
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					if fill(yyrecord) == Fill::Ok {
-						yystate = 5;
-						continue 'yyl;
-					}
-					yystate = 2;
-					continue 'yyl;
-				}
-				yyrecord.yycursor += 1;
-				yystate = 6;
-				continue 'yyl;
-			}
-			6 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				yystate = 7;
-				continue 'yyl;
-			}
-			7 => {
-				match yych {
-					0x27 => {
-						yyrecord.yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					0x5C => {
-						yyrecord.yycursor += 1;
-						yystate = 9;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							if fill(yyrecord) == Fill::Ok {
-								yystate = 6;
-								continue 'yyl;
-							}
-							yystate = 11;
-							continue 'yyl;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => { count += 1; continue 'lex; },
-			9 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				if yych <= 0x00 {
-					if yyrecord.yylimit <= yyrecord.yycursor {
-						if fill(yyrecord) == Fill::Ok {
-							yystate = 9;
-							continue 'yyl;
-						}
-						yystate = 11;
-						continue 'yyl;
-					}
-					yyrecord.yycursor += 1;
-					yystate = 6;
-					continue 'yyl;
-				}
-				yyrecord.yycursor += 1;
-				yystate = 6;
-				continue 'yyl;
-			}
-			10 => { return count; },
-			11 => {
-				yyrecord.yycursor = yyrecord.yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x20 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    0x27 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            if fill(yyrecord) == Fill::Ok {
+                                yystate = 0;
+                                continue 'yyl;
+                            }
+                            yystate = 10;
+                            continue 'yyl;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => { return -1; },
+            3 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x20 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            if fill(yyrecord) == Fill::Ok {
+                                yystate = 3;
+                                continue 'yyl;
+                            }
+                        }
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => { continue 'lex; },
+            5 => {
+                yyrecord.yymarker = yyrecord.yycursor;
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                if yych >= 0x01 {
+                    yystate = 7;
+                    continue 'yyl;
+                }
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    if fill(yyrecord) == Fill::Ok {
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    yystate = 2;
+                    continue 'yyl;
+                }
+                yyrecord.yycursor += 1;
+                yystate = 6;
+                continue 'yyl;
+            }
+            6 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                yystate = 7;
+                continue 'yyl;
+            }
+            7 => {
+                match yych {
+                    0x27 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    0x5C => {
+                        yyrecord.yycursor += 1;
+                        yystate = 9;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            if fill(yyrecord) == Fill::Ok {
+                                yystate = 6;
+                                continue 'yyl;
+                            }
+                            yystate = 11;
+                            continue 'yyl;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => { count += 1; continue 'lex; },
+            9 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                if yych <= 0x00 {
+                    if yyrecord.yylimit <= yyrecord.yycursor {
+                        if fill(yyrecord) == Fill::Ok {
+                            yystate = 9;
+                            continue 'yyl;
+                        }
+                        yystate = 11;
+                        continue 'yyl;
+                    }
+                    yyrecord.yycursor += 1;
+                    yystate = 6;
+                    continue 'yyl;
+                }
+                yyrecord.yycursor += 1;
+                yystate = 6;
+                continue 'yyl;
+            }
+            10 => { return count; },
+            11 => {
+                yyrecord.yycursor = yyrecord.yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }

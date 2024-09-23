@@ -12,53 +12,53 @@ fn lex(yyrecord: &mut State) -> usize {
     let t: usize;
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x61 => {
-						yyrecord.yycursor += 1;
-						yystate = 0;
-						continue 'yyl;
-					}
-					0x62 => {
-						yyrecord.yyt1 = yyrecord.yycursor;
-						yyrecord.yycursor += 1;
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yyrecord.yyt1 = yyrecord.yycursor;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				t = yyrecord.yyt1;
-				{ return t; }
-			}
-			2 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x62 => {
-						yyrecord.yycursor += 1;
-						yystate = 2;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x61 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 0;
+                        continue 'yyl;
+                    }
+                    0x62 => {
+                        yyrecord.yyt1 = yyrecord.yycursor;
+                        yyrecord.yycursor += 1;
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yyrecord.yyt1 = yyrecord.yycursor;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                t = yyrecord.yyt1;
+                { return t; }
+            }
+            2 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x62 => {
+                        yyrecord.yycursor += 1;
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }

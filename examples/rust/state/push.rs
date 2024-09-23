@@ -57,123 +57,123 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
         yyrecord.token = yyrecord.yycursor;
     
 {
-	let mut yystate : isize = yyrecord.yystate;
-	'yyl: loop {
-		match yystate {
-			-1 ..= 0 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 8;
-							return Status::Waiting;
-						}
-						yyrecord.yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => {
-				yyrecord.yystate = -1;
-				{ return Status::BadPacket; }
-			}
-			3 => {
-				yyrecord.yymarker = yyrecord.yycursor;
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x3B => {
-						yyrecord.yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 9;
-							return Status::Waiting;
-						}
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => {
-				yyrecord.yystate = -1;
-				{ *recv += 1; continue 'lex; }
-			}
-			5 => {
-				yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
-				match yych {
-					0x3B => {
-						yyrecord.yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x61 ..= 0x7A => {
-						yyrecord.yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					_ => {
-						if yyrecord.yylimit <= yyrecord.yycursor {
-							yyrecord.yystate = 10;
-							return Status::Waiting;
-						}
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			6 => {
-				yyrecord.yycursor = yyrecord.yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			7 => {
-				yyrecord.yystate = -1;
-				{ return Status::End; }
-			}
-			8 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 7;
-					continue 'yyl;
-				}
-				yystate = 0;
-				continue 'yyl;
-			}
-			9 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 2;
-					continue 'yyl;
-				}
-				yystate = 3;
-				continue 'yyl;
-			}
-			10 => {
-				if yyrecord.yylimit <= yyrecord.yycursor {
-					yystate = 6;
-					continue 'yyl;
-				}
-				yystate = 5;
-				continue 'yyl;
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+    let mut yystate : isize = yyrecord.yystate;
+    'yyl: loop {
+        match yystate {
+            -1 ..= 0 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 8;
+                            return Status::Waiting;
+                        }
+                        yyrecord.yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => {
+                yyrecord.yystate = -1;
+                { return Status::BadPacket; }
+            }
+            3 => {
+                yyrecord.yymarker = yyrecord.yycursor;
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x3B => {
+                        yyrecord.yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 9;
+                            return Status::Waiting;
+                        }
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => {
+                yyrecord.yystate = -1;
+                { *recv += 1; continue 'lex; }
+            }
+            5 => {
+                yych = unsafe {*yyrecord.yyinput.get_unchecked(yyrecord.yycursor)};
+                match yych {
+                    0x3B => {
+                        yyrecord.yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x61 ..= 0x7A => {
+                        yyrecord.yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        if yyrecord.yylimit <= yyrecord.yycursor {
+                            yyrecord.yystate = 10;
+                            return Status::Waiting;
+                        }
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            6 => {
+                yyrecord.yycursor = yyrecord.yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            7 => {
+                yyrecord.yystate = -1;
+                { return Status::End; }
+            }
+            8 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 7;
+                    continue 'yyl;
+                }
+                yystate = 0;
+                continue 'yyl;
+            }
+            9 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 2;
+                    continue 'yyl;
+                }
+                yystate = 3;
+                continue 'yyl;
+            }
+            10 => {
+                if yyrecord.yylimit <= yyrecord.yycursor {
+                    yystate = 6;
+                    continue 'yyl;
+                }
+                yystate = 5;
+                continue 'yyl;
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 }
 }

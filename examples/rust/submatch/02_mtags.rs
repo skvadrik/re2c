@@ -69,150 +69,150 @@ let t4;
 
     
 {
-	#[allow(unused_assignments)]
-	let mut yych : u8 = 0;
-	let mut yystate : usize = 0;
-	'yyl: loop {
-		match yystate {
-			0 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						yyt1 = yycursor;
-						yycursor += 1;
-						yystate = 3;
-						continue 'yyl;
-					}
-					_ => {
-						yycursor += 1;
-						yystate = 1;
-						continue 'yyl;
-					}
-				}
-			}
-			1 => {
-				yystate = 2;
-				continue 'yyl;
-			}
-			2 => { return None; },
-			3 => {
-				yymarker = yycursor;
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x00 => {
-						yytm4 = add_mtag(&mut mt, yytm4, NONE);
-						yytm3 = add_mtag(&mut mt, yytm3, NONE);
-						yyt2 = yycursor;
-						yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x2E => {
-						yyt2 = yycursor;
-						yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 2;
-						continue 'yyl;
-					}
-				}
-			}
-			4 => {
-				t1 = yyt1;
-				t2 = yyt2;
-				t3 = yytm3;
-				t4 = yytm4;
-				{
+    #[allow(unused_assignments)]
+    let mut yych : u8 = 0;
+    let mut yystate : usize = 0;
+    'yyl: loop {
+        match yystate {
+            0 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yyt1 = yycursor;
+                        yycursor += 1;
+                        yystate = 3;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yycursor += 1;
+                        yystate = 1;
+                        continue 'yyl;
+                    }
+                }
+            }
+            1 => {
+                yystate = 2;
+                continue 'yyl;
+            }
+            2 => { return None; },
+            3 => {
+                yymarker = yycursor;
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x00 => {
+                        yytm4 = add_mtag(&mut mt, yytm4, NONE);
+                        yytm3 = add_mtag(&mut mt, yytm3, NONE);
+                        yyt2 = yycursor;
+                        yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x2E => {
+                        yyt2 = yycursor;
+                        yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 2;
+                        continue 'yyl;
+                    }
+                }
+            }
+            4 => {
+                t1 = yyt1;
+                t2 = yyt2;
+                t3 = yytm3;
+                t4 = yytm4;
+                {
             let mut ver: Ver = Vec::new();
             ver.push(s2n(&yyinput[t1..t2]));
             unwind(&mt, t3, t4, yyinput, &mut ver);
             return Some(ver);
         }
-			}
-			5 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x30 ..= 0x39 => {
-						yytm3 = add_mtag(&mut mt, yytm3, yycursor);
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			6 => {
-				yycursor = yymarker;
-				yystate = 2;
-				continue 'yyl;
-			}
-			7 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x00 => {
-						yytm4 = add_mtag(&mut mt, yytm4, NONE);
-						yytm3 = add_mtag(&mut mt, yytm3, NONE);
-						yyt2 = yycursor;
-						yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x2E => {
-						yyt2 = yycursor;
-						yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 7;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			8 => {
-				yych = unsafe {*yyinput.get_unchecked(yycursor)};
-				match yych {
-					0x00 => {
-						yytm4 = add_mtag(&mut mt, yytm4, yycursor);
-						yycursor += 1;
-						yystate = 4;
-						continue 'yyl;
-					}
-					0x2E => {
-						yytm4 = add_mtag(&mut mt, yytm4, yycursor);
-						yycursor += 1;
-						yystate = 5;
-						continue 'yyl;
-					}
-					0x30 ..= 0x39 => {
-						yycursor += 1;
-						yystate = 8;
-						continue 'yyl;
-					}
-					_ => {
-						yystate = 6;
-						continue 'yyl;
-					}
-				}
-			}
-			_ => panic!("internal lexer error"),
-		}
-	}
+            }
+            5 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x30 ..= 0x39 => {
+                        yytm3 = add_mtag(&mut mt, yytm3, yycursor);
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            6 => {
+                yycursor = yymarker;
+                yystate = 2;
+                continue 'yyl;
+            }
+            7 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x00 => {
+                        yytm4 = add_mtag(&mut mt, yytm4, NONE);
+                        yytm3 = add_mtag(&mut mt, yytm3, NONE);
+                        yyt2 = yycursor;
+                        yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x2E => {
+                        yyt2 = yycursor;
+                        yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 7;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            8 => {
+                yych = unsafe {*yyinput.get_unchecked(yycursor)};
+                match yych {
+                    0x00 => {
+                        yytm4 = add_mtag(&mut mt, yytm4, yycursor);
+                        yycursor += 1;
+                        yystate = 4;
+                        continue 'yyl;
+                    }
+                    0x2E => {
+                        yytm4 = add_mtag(&mut mt, yytm4, yycursor);
+                        yycursor += 1;
+                        yystate = 5;
+                        continue 'yyl;
+                    }
+                    0x30 ..= 0x39 => {
+                        yycursor += 1;
+                        yystate = 8;
+                        continue 'yyl;
+                    }
+                    _ => {
+                        yystate = 6;
+                        continue 'yyl;
+                    }
+                }
+            }
+            _ => panic!("internal lexer error"),
+        }
+    }
 }
 
 }
