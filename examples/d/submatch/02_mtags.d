@@ -82,42 +82,42 @@ int yytm3 = MtagRoot;int yytm4 = MtagRoot;
     
 #line 84 "d/submatch/02_mtags.d"
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt1 = yycursor;
-			goto yy3;
-		default: goto yy1;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt1 = yycursor;
+            goto yy3;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 yy2:
 #line 78 "d/submatch/02_mtags.re"
-	{ return false; }
+    { return false; }
 #line 99 "d/submatch/02_mtags.d"
 yy3:
-	yych = *(yymarker = ++yycursor);
-	switch (yych) {
-		case 0x00:
-			add_mtag(mt, yytm4, null);
-			add_mtag(mt, yytm3, null);
-			yyt2 = yycursor;
-			goto yy4;
-		case '.':
-			yyt2 = yycursor;
-			goto yy5;
-		case '0': .. case '9': goto yy7;
-		default: goto yy2;
-	}
+    yych = *(yymarker = ++yycursor);
+    switch (yych) {
+        case 0x00:
+            add_mtag(mt, yytm4, null);
+            add_mtag(mt, yytm3, null);
+            yyt2 = yycursor;
+            goto yy4;
+        case '.':
+            yyt2 = yycursor;
+            goto yy5;
+        case '0': .. case '9': goto yy7;
+        default: goto yy2;
+    }
 yy4:
-	++yycursor;
-	t1 = yyt1;
-	t2 = yyt2;
-	t3 = yytm3;
-	t4 = yytm4;
+    ++yycursor;
+    t1 = yyt1;
+    t2 = yyt2;
+    t3 = yytm3;
+    t4 = yytm4;
 #line 72 "d/submatch/02_mtags.re"
-	{
+    {
             ver = [];
             ver ~= [s2n(t1, t2)];
             unfold(mt, t3, t4, ver);
@@ -125,42 +125,42 @@ yy4:
         }
 #line 127 "d/submatch/02_mtags.d"
 yy5:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			add_mtag(mt, yytm3, yycursor);
-			goto yy8;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            add_mtag(mt, yytm3, yycursor);
+            goto yy8;
+        default: goto yy6;
+    }
 yy6:
-	yycursor = yymarker;
-	goto yy2;
+    yycursor = yymarker;
+    goto yy2;
 yy7:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x00:
-			add_mtag(mt, yytm4, null);
-			add_mtag(mt, yytm3, null);
-			yyt2 = yycursor;
-			goto yy4;
-		case '.':
-			yyt2 = yycursor;
-			goto yy5;
-		case '0': .. case '9': goto yy7;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x00:
+            add_mtag(mt, yytm4, null);
+            add_mtag(mt, yytm3, null);
+            yyt2 = yycursor;
+            goto yy4;
+        case '.':
+            yyt2 = yycursor;
+            goto yy5;
+        case '0': .. case '9': goto yy7;
+        default: goto yy6;
+    }
 yy8:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x00:
-			add_mtag(mt, yytm4, yycursor);
-			goto yy4;
-		case '.':
-			add_mtag(mt, yytm4, yycursor);
-			goto yy5;
-		case '0': .. case '9': goto yy8;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x00:
+            add_mtag(mt, yytm4, yycursor);
+            goto yy4;
+        case '.':
+            add_mtag(mt, yytm4, yycursor);
+            goto yy5;
+        case '0': .. case '9': goto yy8;
+        default: goto yy6;
+    }
 }
 #line 79 "d/submatch/02_mtags.re"
 

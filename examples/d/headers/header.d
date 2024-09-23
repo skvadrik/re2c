@@ -11,31 +11,31 @@ private long lex(ref LexerState yyrecord) {
     const(char)* t;
     
 {
-	char yych;
-	goto yy0;
+    char yych;
+    goto yy0;
 yy1:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yy0:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case 'a': goto yy1;
-		case 'b':
-			yyrecord.yyt1 = yyrecord.yycursor;
-			goto yy3;
-		default:
-			yyrecord.yyt1 = yyrecord.yycursor;
-			goto yy2;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case 'a': goto yy1;
+        case 'b':
+            yyrecord.yyt1 = yyrecord.yycursor;
+            goto yy3;
+        default:
+            yyrecord.yyt1 = yyrecord.yycursor;
+            goto yy2;
+    }
 yy2:
-	t = yyrecord.yyt1;
-	{ return t - yyrecord.str; }
+    t = yyrecord.yyt1;
+    { return t - yyrecord.str; }
 yy3:
-	++yyrecord.yycursor;
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case 'b': goto yy3;
-		default: goto yy2;
-	}
+    ++yyrecord.yycursor;
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case 'b': goto yy3;
+        default: goto yy2;
+    }
 }
 
 }

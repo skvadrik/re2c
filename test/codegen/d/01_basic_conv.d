@@ -7,26 +7,26 @@ bool lex(const(char)* yycursor) {
     
 #line 9 "codegen/d/01_basic_conv.d"
 {
-	byte yych;
-	yych = cast(byte)*yycursor;
-	switch (yych) {
-		case '1': .. case '9': goto yy2;
-		default: goto yy1;
-	}
+    byte yych;
+    yych = cast(byte)*yycursor;
+    switch (yych) {
+        case '1': .. case '9': goto yy2;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 #line 12 "codegen/d/01_basic_conv.re"
-	{ return false; }
+    { return false; }
 #line 21 "codegen/d/01_basic_conv.d"
 yy2:
-	yych = cast(byte)*++yycursor;
-	switch (yych) {
-		case '0': .. case '9': goto yy2;
-		default: goto yy3;
-	}
+    yych = cast(byte)*++yycursor;
+    switch (yych) {
+        case '0': .. case '9': goto yy2;
+        default: goto yy3;
+    }
 yy3:
 #line 11 "codegen/d/01_basic_conv.re"
-	{ return true; }
+    { return true; }
 #line 31 "codegen/d/01_basic_conv.d"
 }
 #line 13 "codegen/d/01_basic_conv.re"

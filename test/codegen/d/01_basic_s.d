@@ -8,23 +8,23 @@ bool lex(const char *s) {
     
 #line 10 "codegen/d/01_basic_s.d"
 {
-	char yych;
-	yych = s[cursor];
-	if (yych <= '0') goto yy1;
-	if (yych <= '9') goto yy2;
+    char yych;
+    yych = s[cursor];
+    if (yych <= '0') goto yy1;
+    if (yych <= '9') goto yy2;
 yy1:
-	++cursor;
+    ++cursor;
 #line 15 "codegen/d/01_basic_s.re"
-	{ return false; }
+    { return false; }
 #line 20 "codegen/d/01_basic_s.d"
 yy2:
-	++cursor;
-	yych = s[cursor];
-	if (yych <= '/') goto yy3;
-	if (yych <= '9') goto yy2;
+    ++cursor;
+    yych = s[cursor];
+    if (yych <= '/') goto yy3;
+    if (yych <= '9') goto yy2;
 yy3:
 #line 14 "codegen/d/01_basic_s.re"
-	{ return true; }
+    { return true; }
 #line 29 "codegen/d/01_basic_s.d"
 }
 #line 16 "codegen/d/01_basic_s.re"

@@ -16,73 +16,73 @@ private int lex_utf8(const(uint8_t)* s) {
     
 #line 18 "d/reuse/reuse.d"
 {
-	uint8_t yych;
-	yych = *yycursor;
-	switch (yych) {
-		case 0xE2: goto yy3;
-		default: goto yy1;
-	}
+    uint8_t yych;
+    yych = *yycursor;
+    switch (yych) {
+        case 0xE2: goto yy3;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 yy2:
 #line 13 "d/reuse/reuse.re"
-	{ return 1; }
+    { return 1; }
 #line 31 "d/reuse/reuse.d"
 yy3:
-	yych = *(yymarker = ++yycursor);
-	switch (yych) {
-		case 0x88: goto yy4;
-		default: goto yy2;
-	}
+    yych = *(yymarker = ++yycursor);
+    switch (yych) {
+        case 0x88: goto yy4;
+        default: goto yy2;
+    }
 yy4:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x80: goto yy6;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x80: goto yy6;
+        default: goto yy5;
+    }
 yy5:
-	yycursor = yymarker;
-	goto yy2;
+    yycursor = yymarker;
+    goto yy2;
 yy6:
-	yych = *++yycursor;
-	switch (yych) {
-		case 'x': goto yy7;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 'x': goto yy7;
+        default: goto yy5;
+    }
 yy7:
-	yych = *++yycursor;
-	switch (yych) {
-		case ' ': goto yy8;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case ' ': goto yy8;
+        default: goto yy5;
+    }
 yy8:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0xE2: goto yy9;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0xE2: goto yy9;
+        default: goto yy5;
+    }
 yy9:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x88: goto yy10;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x88: goto yy10;
+        default: goto yy5;
+    }
 yy10:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x83: goto yy11;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x83: goto yy11;
+        default: goto yy5;
+    }
 yy11:
-	yych = *++yycursor;
-	switch (yych) {
-		case 'y': goto yy12;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 'y': goto yy12;
+        default: goto yy5;
+    }
 yy12:
-	++yycursor;
+    ++yycursor;
 #line 12 "d/reuse/reuse.re"
-	{ return 0; }
+    { return 0; }
 #line 87 "d/reuse/reuse.d"
 }
 #line 21 "d/reuse/reuse.re"
@@ -94,30 +94,30 @@ private int lex_utf32(const(uint32_t)* s) {
     
 #line 96 "d/reuse/reuse.d"
 {
-	uint32_t yych;
-	yych = *yycursor;
-	if (yych == 0x00002200) goto yy15;
-	++yycursor;
+    uint32_t yych;
+    yych = *yycursor;
+    if (yych == 0x00002200) goto yy15;
+    ++yycursor;
 yy14:
 #line 13 "d/reuse/reuse.re"
-	{ return 1; }
+    { return 1; }
 #line 105 "d/reuse/reuse.d"
 yy15:
-	yych = *(yymarker = ++yycursor);
-	if (yych != 'x') goto yy14;
-	yych = *++yycursor;
-	if (yych == ' ') goto yy17;
+    yych = *(yymarker = ++yycursor);
+    if (yych != 'x') goto yy14;
+    yych = *++yycursor;
+    if (yych == ' ') goto yy17;
 yy16:
-	yycursor = yymarker;
-	goto yy14;
+    yycursor = yymarker;
+    goto yy14;
 yy17:
-	yych = *++yycursor;
-	if (yych != 0x00002203) goto yy16;
-	yych = *++yycursor;
-	if (yych != 'y') goto yy16;
-	++yycursor;
+    yych = *++yycursor;
+    if (yych != 0x00002203) goto yy16;
+    yych = *++yycursor;
+    if (yych != 'y') goto yy16;
+    ++yycursor;
 #line 12 "d/reuse/reuse.re"
-	{ return 0; }
+    { return 0; }
 #line 122 "d/reuse/reuse.d"
 }
 #line 29 "d/reuse/reuse.re"

@@ -38,74 +38,74 @@ const(char)* yyt5;
     
 #line 40 "d/submatch/04_posix_captures.d"
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt1 = yycursor;
-			goto yy3;
-		default: goto yy1;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt1 = yycursor;
+            goto yy3;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 yy2:
 #line 42 "d/submatch/04_posix_captures.re"
-	{ return false; }
+    { return false; }
 #line 55 "d/submatch/04_posix_captures.d"
 yy3:
-	yych = *(yymarker = ++yycursor);
-	switch (yych) {
-		case '.': goto yy4;
-		case '0': .. case '9': goto yy6;
-		default: goto yy2;
-	}
+    yych = *(yymarker = ++yycursor);
+    switch (yych) {
+        case '.': goto yy4;
+        case '0': .. case '9': goto yy6;
+        default: goto yy2;
+    }
 yy4:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt2 = yycursor;
-			goto yy7;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt2 = yycursor;
+            goto yy7;
+        default: goto yy5;
+    }
 yy5:
-	yycursor = yymarker;
-	goto yy2;
+    yycursor = yymarker;
+    goto yy2;
 yy6:
-	yych = *++yycursor;
-	switch (yych) {
-		case '.': goto yy4;
-		case '0': .. case '9': goto yy6;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '.': goto yy4;
+        case '0': .. case '9': goto yy6;
+        default: goto yy5;
+    }
 yy7:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x00:
-			yyt3 = yycursor;
-			yyt4 = null;
-			yyt5 = null;
-			goto yy8;
-		case '.':
-			yyt3 = yycursor;
-			yyt5 = yycursor;
-			goto yy9;
-		case '0': .. case '9': goto yy7;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x00:
+            yyt3 = yycursor;
+            yyt4 = null;
+            yyt5 = null;
+            goto yy8;
+        case '.':
+            yyt3 = yycursor;
+            yyt5 = yycursor;
+            goto yy9;
+        case '0': .. case '9': goto yy7;
+        default: goto yy5;
+    }
 yy8:
-	++yycursor;
-	yynmatch = 4;
-	yypmatch[2] = yyt1;
-	yypmatch[4] = yyt2;
-	yypmatch[5] = yyt3;
-	yypmatch[6] = yyt5;
-	yypmatch[7] = yyt4;
-	yypmatch[0] = yyt1;
-	yypmatch[1] = yycursor;
-	yypmatch[3] = yyt2;
-	yypmatch[3] -= 1;
+    ++yycursor;
+    yynmatch = 4;
+    yypmatch[2] = yyt1;
+    yypmatch[4] = yyt2;
+    yypmatch[5] = yyt3;
+    yypmatch[6] = yyt5;
+    yypmatch[7] = yyt4;
+    yypmatch[0] = yyt1;
+    yypmatch[1] = yycursor;
+    yypmatch[3] = yyt2;
+    yypmatch[3] -= 1;
 #line 32 "d/submatch/04_posix_captures.re"
-	{
+    {
             // `yynmatch` is the number of capturing groups
             assert(yynmatch == 4);
             // Even `yypmatch` values are for opening parentheses, odd values
@@ -117,19 +117,19 @@ yy8:
         }
 #line 119 "d/submatch/04_posix_captures.d"
 yy9:
-	yych = *++yycursor;
-	if (yych <= 0x00) goto yy5;
-	goto yy11;
+    yych = *++yycursor;
+    if (yych <= 0x00) goto yy5;
+    goto yy11;
 yy10:
-	yych = *++yycursor;
+    yych = *++yycursor;
 yy11:
-	switch (yych) {
-		case 0x00:
-			yyt4 = yycursor;
-			goto yy8;
-		case '0': .. case '9': goto yy10;
-		default: goto yy5;
-	}
+    switch (yych) {
+        case 0x00:
+            yyt4 = yycursor;
+            goto yy8;
+        case '0': .. case '9': goto yy10;
+        default: goto yy5;
+    }
 }
 #line 43 "d/submatch/04_posix_captures.re"
 

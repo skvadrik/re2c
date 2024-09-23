@@ -42,68 +42,68 @@ const(char)* yyt4;
     
 #line 44 "d/submatch/01_stags.d"
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt1 = yycursor;
-			goto yy3;
-		default: goto yy1;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt1 = yycursor;
+            goto yy3;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 yy2:
 #line 38 "d/submatch/01_stags.re"
-	{ return false; }
+    { return false; }
 #line 59 "d/submatch/01_stags.d"
 yy3:
-	yych = *(yymarker = ++yycursor);
-	switch (yych) {
-		case '.': goto yy4;
-		case '0': .. case '9': goto yy6;
-		default: goto yy2;
-	}
+    yych = *(yymarker = ++yycursor);
+    switch (yych) {
+        case '.': goto yy4;
+        case '0': .. case '9': goto yy6;
+        default: goto yy2;
+    }
 yy4:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt2 = yycursor;
-			goto yy7;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt2 = yycursor;
+            goto yy7;
+        default: goto yy5;
+    }
 yy5:
-	yycursor = yymarker;
-	goto yy2;
+    yycursor = yymarker;
+    goto yy2;
 yy6:
-	yych = *++yycursor;
-	switch (yych) {
-		case '.': goto yy4;
-		case '0': .. case '9': goto yy6;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '.': goto yy4;
+        case '0': .. case '9': goto yy6;
+        default: goto yy5;
+    }
 yy7:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x00:
-			yyt3 = yycursor;
-			yyt4 = null;
-			goto yy8;
-		case '.':
-			yyt3 = yycursor;
-			goto yy9;
-		case '0': .. case '9': goto yy7;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x00:
+            yyt3 = yycursor;
+            yyt4 = null;
+            goto yy8;
+        case '.':
+            yyt3 = yycursor;
+            goto yy9;
+        case '0': .. case '9': goto yy7;
+        default: goto yy5;
+    }
 yy8:
-	++yycursor;
-	t1 = yyt1;
-	t3 = yyt2;
-	t4 = yyt3;
-	t5 = yyt4;
-	t2 = yyt2;
-	t2 -= 1;
+    ++yycursor;
+    t1 = yyt1;
+    t3 = yyt2;
+    t4 = yyt3;
+    t5 = yyt4;
+    t2 = yyt2;
+    t2 -= 1;
 #line 32 "d/submatch/01_stags.re"
-	{
+    {
             ver.major = s2n(t1, t2);
             ver.minor = s2n(t3, t4);
             ver.patch = t5 != null ? s2n(t5, yycursor - 1) : 0;
@@ -111,20 +111,20 @@ yy8:
         }
 #line 113 "d/submatch/01_stags.d"
 yy9:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-			yyt4 = yycursor;
-			goto yy10;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+            yyt4 = yycursor;
+            goto yy10;
+        default: goto yy5;
+    }
 yy10:
-	yych = *++yycursor;
-	switch (yych) {
-		case 0x00: goto yy8;
-		case '0': .. case '9': goto yy10;
-		default: goto yy5;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 0x00: goto yy8;
+        case '0': .. case '9': goto yy10;
+        default: goto yy5;
+    }
 }
 #line 39 "d/submatch/01_stags.re"
 

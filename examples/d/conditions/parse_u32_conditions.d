@@ -4,11 +4,11 @@ module main;
 
 enum ERROR = ulong.max;
 enum YYCond {
-	yycinit,
-	yycbin,
-	yycdec,
-	yychex,
-	yycoct
+    yycinit,
+    yycbin,
+    yycdec,
+    yychex,
+    yycoct
 };
 
 
@@ -24,146 +24,146 @@ private ulong parse_u32(const(char)* s) {
 
     
 {
-	char yych;
-	switch (yycond) {
-		case YYCond.yycinit: goto yyc_init;
-		case YYCond.yycbin: goto yyc_bin;
-		case YYCond.yycdec: goto yyc_dec;
-		case YYCond.yychex: goto yyc_hex;
-		case YYCond.yycoct: goto yyc_oct;
-		default: assert(false);
-	}
+    char yych;
+    switch (yycond) {
+        case YYCond.yycinit: goto yyc_init;
+        case YYCond.yycbin: goto yyc_bin;
+        case YYCond.yycdec: goto yyc_dec;
+        case YYCond.yychex: goto yyc_hex;
+        case YYCond.yycoct: goto yyc_oct;
+        default: assert(false);
+    }
 /* *********************************** */
 yyc_init:
-	yych = *yycursor;
-	switch (yych) {
-		case '0': goto yy2;
-		case '1': .. case '9': goto yy4;
-		default: goto yy1;
-	}
+    yych = *yycursor;
+    switch (yych) {
+        case '0': goto yy2;
+        case '1': .. case '9': goto yy4;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
-	{ return ERROR; }
+    ++yycursor;
+    { return ERROR; }
 yy2:
-	yych = *(yymarker = ++yycursor);
-	switch (yych) {
-		case 'B':
-		case 'b': goto yy5;
-		case 'X':
-		case 'x': goto yy7;
-		default: goto yy3;
-	}
+    yych = *(yymarker = ++yycursor);
+    switch (yych) {
+        case 'B':
+        case 'b': goto yy5;
+        case 'X':
+        case 'x': goto yy7;
+        default: goto yy3;
+    }
 yy3:
-	yycond = YYCond.yycoct;
-	goto yyc_oct;
+    yycond = YYCond.yycoct;
+    goto yyc_oct;
 yy4:
-	++yycursor;
-	yycursor -= 1;
-	yycond = YYCond.yycdec;
-	goto yyc_dec;
+    ++yycursor;
+    yycursor -= 1;
+    yycond = YYCond.yycdec;
+    goto yyc_dec;
 yy5:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '1': goto yy8;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '1': goto yy8;
+        default: goto yy6;
+    }
 yy6:
-	yycursor = yymarker;
-	goto yy3;
+    yycursor = yymarker;
+    goto yy3;
 yy7:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9':
-		case 'A': .. case 'F':
-		case 'a': .. case 'f': goto yy9;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9':
+        case 'A': .. case 'F':
+        case 'a': .. case 'f': goto yy9;
+        default: goto yy6;
+    }
 yy8:
-	++yycursor;
-	yycursor -= 1;
-	yycond = YYCond.yycbin;
-	goto yyc_bin;
+    ++yycursor;
+    yycursor -= 1;
+    yycond = YYCond.yycbin;
+    goto yyc_bin;
 yy9:
-	++yycursor;
-	yycursor -= 1;
-	yycond = YYCond.yychex;
-	goto yyc_hex;
+    ++yycursor;
+    yycursor -= 1;
+    yycond = YYCond.yychex;
+    goto yyc_hex;
 /* *********************************** */
 yyc_bin:
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy11;
-		case '0': .. case '1': goto yy13;
-		default: goto yy12;
-	}
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy11;
+        case '0': .. case '1': goto yy13;
+        default: goto yy12;
+    }
 yy11:
-	++yycursor;
-	{ return u; }
+    ++yycursor;
+    { return u; }
 yy12:
-	++yycursor;
-	{ return ERROR; }
+    ++yycursor;
+    { return ERROR; }
 yy13:
-	++yycursor;
-	{ add!(2)(u,  yycursor[-1] - '0');      goto yyc_bin; }
+    ++yycursor;
+    { add!(2)(u,  yycursor[-1] - '0');      goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy15;
-		case '0': .. case '9': goto yy17;
-		default: goto yy16;
-	}
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy15;
+        case '0': .. case '9': goto yy17;
+        default: goto yy16;
+    }
 yy15:
-	++yycursor;
-	{ return u; }
+    ++yycursor;
+    { return u; }
 yy16:
-	++yycursor;
-	{ return ERROR; }
+    ++yycursor;
+    { return ERROR; }
 yy17:
-	++yycursor;
-	{ add!(10)(u, yycursor[-1] - '0');      goto yyc_dec; }
+    ++yycursor;
+    { add!(10)(u, yycursor[-1] - '0');      goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy19;
-		case '0': .. case '9': goto yy21;
-		case 'A': .. case 'F': goto yy22;
-		case 'a': .. case 'f': goto yy23;
-		default: goto yy20;
-	}
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy19;
+        case '0': .. case '9': goto yy21;
+        case 'A': .. case 'F': goto yy22;
+        case 'a': .. case 'f': goto yy23;
+        default: goto yy20;
+    }
 yy19:
-	++yycursor;
-	{ return u; }
+    ++yycursor;
+    { return u; }
 yy20:
-	++yycursor;
-	{ return ERROR; }
+    ++yycursor;
+    { return ERROR; }
 yy21:
-	++yycursor;
-	{ add!(16)(u, yycursor[-1] - '0');      goto yyc_hex; }
+    ++yycursor;
+    { add!(16)(u, yycursor[-1] - '0');      goto yyc_hex; }
 yy22:
-	++yycursor;
-	{ add!(16)(u, yycursor[-1] - 'A' + 10); goto yyc_hex; }
+    ++yycursor;
+    { add!(16)(u, yycursor[-1] - 'A' + 10); goto yyc_hex; }
 yy23:
-	++yycursor;
-	{ add!(16)(u, yycursor[-1] - 'a' + 10); goto yyc_hex; }
+    ++yycursor;
+    { add!(16)(u, yycursor[-1] - 'a' + 10); goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy25;
-		case '0': .. case '7': goto yy27;
-		default: goto yy26;
-	}
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy25;
+        case '0': .. case '7': goto yy27;
+        default: goto yy26;
+    }
 yy25:
-	++yycursor;
-	{ return u; }
+    ++yycursor;
+    { return u; }
 yy26:
-	++yycursor;
-	{ return ERROR; }
+    ++yycursor;
+    { return ERROR; }
 yy27:
-	++yycursor;
-	{ add!(8)(u,  yycursor[-1] - '0');      goto yyc_oct; }
+    ++yycursor;
+    { add!(8)(u,  yycursor[-1] - '0');      goto yyc_oct; }
 }
 
 }

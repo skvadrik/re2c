@@ -47,17 +47,17 @@ private Status lex(ref State yyrecord, uint* recv) {
     
 #line 49 "d/state/push.d"
 switch (yyrecord.yystate) {
-	case -1: goto yy0;
-	case 0:
-		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy8;
-		goto yyFillLabel0;
-	case 1:
-		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy3;
-		goto yyFillLabel1;
-	case 2:
-		if (yyrecord.yylimit <= yyrecord.yycursor) goto yy7;
-		goto yyFillLabel2;
-	default: assert(false);
+    case -1: goto yy0;
+    case 0:
+        if (yyrecord.yylimit <= yyrecord.yycursor) goto yy8;
+        goto yyFillLabel0;
+    case 1:
+        if (yyrecord.yylimit <= yyrecord.yycursor) goto yy3;
+        goto yyFillLabel1;
+    case 2:
+        if (yyrecord.yylimit <= yyrecord.yycursor) goto yy7;
+        goto yyFillLabel2;
+    default: assert(false);
 }
 #line 45 "d/state/push.re"
 
@@ -68,65 +68,65 @@ switch (yyrecord.yystate) {
 #line 69 "d/state/push.d"
 yy0:
 yyFillLabel0:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case 'a': .. case 'z': goto yy4;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				yyrecord.yystate = 0;
-				return Status.WAITING;
-			}
-			goto yy2;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case 'a': .. case 'z': goto yy4;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                yyrecord.yystate = 0;
+                return Status.WAITING;
+            }
+            goto yy2;
+    }
 yy2:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yy3:
-	yyrecord.yystate = -1;
+    yyrecord.yystate = -1;
 #line 57 "d/state/push.re"
-	{ return Status.BAD_PACKET; }
+    { return Status.BAD_PACKET; }
 #line 88 "d/state/push.d"
 yy4:
-	++yyrecord.yycursor;
-	yyrecord.yymarker = yyrecord.yycursor;
+    ++yyrecord.yycursor;
+    yyrecord.yymarker = yyrecord.yycursor;
 yyFillLabel1:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case ';': goto yy5;
-		case 'a': .. case 'z': goto yy6;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				yyrecord.yystate = 1;
-				return Status.WAITING;
-			}
-			goto yy3;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case ';': goto yy5;
+        case 'a': .. case 'z': goto yy6;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                yyrecord.yystate = 1;
+                return Status.WAITING;
+            }
+            goto yy3;
+    }
 yy5:
-	++yyrecord.yycursor;
-	yyrecord.yystate = -1;
+    ++yyrecord.yycursor;
+    yyrecord.yystate = -1;
 #line 59 "d/state/push.re"
-	{ *recv = *recv + 1; continue; }
+    { *recv = *recv + 1; continue; }
 #line 109 "d/state/push.d"
 yy6:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yyFillLabel2:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case ';': goto yy5;
-		case 'a': .. case 'z': goto yy6;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				yyrecord.yystate = 2;
-				return Status.WAITING;
-			}
-			goto yy7;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case ';': goto yy5;
+        case 'a': .. case 'z': goto yy6;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                yyrecord.yystate = 2;
+                return Status.WAITING;
+            }
+            goto yy7;
+    }
 yy7:
-	yyrecord.yycursor = yyrecord.yymarker;
-	goto yy3;
+    yyrecord.yycursor = yyrecord.yymarker;
+    goto yy3;
 yy8:
-	yyrecord.yystate = -1;
+    yyrecord.yystate = -1;
 #line 58 "d/state/push.re"
-	{ return Status.END; }
+    { return Status.END; }
 #line 131 "d/state/push.d"
 #line 60 "d/state/push.re"
 

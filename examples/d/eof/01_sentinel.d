@@ -11,43 +11,43 @@ private int lex(const(char)* yycursor) {
     
 #line 13 "d/eof/01_sentinel.d"
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy1;
-		case ' ': goto yy3;
-		case 'a': .. case 'z': goto yy5;
-		default: goto yy2;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy1;
+        case ' ': goto yy3;
+        case 'a': .. case 'z': goto yy5;
+        default: goto yy2;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 #line 14 "d/eof/01_sentinel.re"
-	{ return count; }
+    { return count; }
 #line 27 "d/eof/01_sentinel.d"
 yy2:
-	++yycursor;
+    ++yycursor;
 #line 13 "d/eof/01_sentinel.re"
-	{ return -1; }
+    { return -1; }
 #line 32 "d/eof/01_sentinel.d"
 yy3:
-	yych = *++yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		default: goto yy4;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        default: goto yy4;
+    }
 yy4:
 #line 16 "d/eof/01_sentinel.re"
-	{ continue; }
+    { continue; }
 #line 42 "d/eof/01_sentinel.d"
 yy5:
-	yych = *++yycursor;
-	switch (yych) {
-		case 'a': .. case 'z': goto yy5;
-		default: goto yy6;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case 'a': .. case 'z': goto yy5;
+        default: goto yy6;
+    }
 yy6:
 #line 15 "d/eof/01_sentinel.re"
-	{ ++count; continue; }
+    { ++count; continue; }
 #line 52 "d/eof/01_sentinel.d"
 }
 #line 17 "d/eof/01_sentinel.re"

@@ -12,10 +12,10 @@ enum BUFSIZE = 10;
 
 #line 14 "codegen/d/02_storable_state_with_conditions.d"
 enum YYCond {
-	yycINIT = 0,
-	yycSPACES = 6,
-	yycNUMBER = 11,
-	yycWORD = 16
+    yycINIT = 0,
+    yycSPACES = 6,
+    yycNUMBER = 11,
+    yycWORD = 16
 };
 #line 11 "codegen/d/02_storable_state_with_conditions.re"
 
@@ -62,251 +62,251 @@ lex:
     
 #line 64 "codegen/d/02_storable_state_with_conditions.d"
 {
-	int yystate = st.state;
-	while (true) {
-		switch (yystate) {
-			case -1: .. case 0:
-				yych = *st.cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						st.cur += 1;
-						yystate = 2;
-						continue;
-					case '0': .. case '9':
-						st.cur += 1;
-						yystate = 3;
-						continue;
-					case 'a': .. case 'z':
-						st.cur += 1;
-						yystate = 4;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 21;
-							return Status.WAITING;
-						}
-						st.cur += 1;
-						yystate = 1;
-						continue;
-				}
-			case 1:
-				st.state = YYCond.yycINIT;
+    int yystate = st.state;
+    while (true) {
+        switch (yystate) {
+            case -1: .. case 0:
+                yych = *st.cur;
+                switch (yych) {
+                    case '\t':
+                    case ' ':
+                        st.cur += 1;
+                        yystate = 2;
+                        continue;
+                    case '0': .. case '9':
+                        st.cur += 1;
+                        yystate = 3;
+                        continue;
+                    case 'a': .. case 'z':
+                        st.cur += 1;
+                        yystate = 4;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 21;
+                            return Status.WAITING;
+                        }
+                        st.cur += 1;
+                        yystate = 1;
+                        continue;
+                }
+            case 1:
+                st.state = YYCond.yycINIT;
 #line 70 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.BAD_PACKET; }
+                { return Status.BAD_PACKET; }
 #line 98 "codegen/d/02_storable_state_with_conditions.d"
-			case 2:
-				st.cur += -1;
-				st.state = YYCond.yycSPACES;
-				yystate = YYCond.yycSPACES;
-				continue;
-			case 3:
-				st.cur += -1;
-				st.state = YYCond.yycNUMBER;
-				yystate = YYCond.yycNUMBER;
-				continue;
-			case 4:
-				st.cur += -1;
-				st.state = YYCond.yycWORD;
-				yystate = YYCond.yycWORD;
-				continue;
-			case 5:
-				st.state = YYCond.yycINIT;
+            case 2:
+                st.cur += -1;
+                st.state = YYCond.yycSPACES;
+                yystate = YYCond.yycSPACES;
+                continue;
+            case 3:
+                st.cur += -1;
+                st.state = YYCond.yycNUMBER;
+                yystate = YYCond.yycNUMBER;
+                continue;
+            case 4:
+                st.cur += -1;
+                st.state = YYCond.yycWORD;
+                yystate = YYCond.yycWORD;
+                continue;
+            case 5:
+                st.state = YYCond.yycINIT;
 #line 71 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.END; }
+                { return Status.END; }
 #line 118 "codegen/d/02_storable_state_with_conditions.d"
-			case 6:
-				yych = *st.cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						st.cur += 1;
-						yystate = 8;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 22;
-							return Status.WAITING;
-						}
-						st.cur += 1;
-						yystate = 7;
-						continue;
-				}
-			case 7:
-				st.state = YYCond.yycSPACES;
+            case 6:
+                yych = *st.cur;
+                switch (yych) {
+                    case '\t':
+                    case ' ':
+                        st.cur += 1;
+                        yystate = 8;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 22;
+                            return Status.WAITING;
+                        }
+                        st.cur += 1;
+                        yystate = 7;
+                        continue;
+                }
+            case 7:
+                st.state = YYCond.yycSPACES;
 #line 70 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.BAD_PACKET; }
+                { return Status.BAD_PACKET; }
 #line 140 "codegen/d/02_storable_state_with_conditions.d"
-			case 8:
-				yych = *st.cur;
-				switch (yych) {
-					case '\t':
-					case ' ':
-						st.cur += 1;
-						yystate = 8;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 23;
-							return Status.WAITING;
-						}
-						yystate = 9;
-						continue;
-				}
-			case 9:
-				st.state = YYCond.yycINIT;
+            case 8:
+                yych = *st.cur;
+                switch (yych) {
+                    case '\t':
+                    case ' ':
+                        st.cur += 1;
+                        yystate = 8;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 23;
+                            return Status.WAITING;
+                        }
+                        yystate = 9;
+                        continue;
+                }
+            case 9:
+                st.state = YYCond.yycINIT;
 #line 77 "codegen/d/02_storable_state_with_conditions.re"
-				{ continue lex; }
+                { continue lex; }
 #line 161 "codegen/d/02_storable_state_with_conditions.d"
-			case 10:
-				st.state = YYCond.yycSPACES;
+            case 10:
+                st.state = YYCond.yycSPACES;
 #line 71 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.END; }
+                { return Status.END; }
 #line 166 "codegen/d/02_storable_state_with_conditions.d"
-			case 11:
-				yych = *st.cur;
-				switch (yych) {
-					case '0': .. case '9':
-						st.cur += 1;
-						yystate = 13;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 24;
-							return Status.WAITING;
-						}
-						st.cur += 1;
-						yystate = 12;
-						continue;
-				}
-			case 12:
-				st.state = YYCond.yycNUMBER;
+            case 11:
+                yych = *st.cur;
+                switch (yych) {
+                    case '0': .. case '9':
+                        st.cur += 1;
+                        yystate = 13;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 24;
+                            return Status.WAITING;
+                        }
+                        st.cur += 1;
+                        yystate = 12;
+                        continue;
+                }
+            case 12:
+                st.state = YYCond.yycNUMBER;
 #line 70 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.BAD_PACKET; }
+                { return Status.BAD_PACKET; }
 #line 187 "codegen/d/02_storable_state_with_conditions.d"
-			case 13:
-				yych = *st.cur;
-				switch (yych) {
-					case '0': .. case '9':
-						st.cur += 1;
-						yystate = 13;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 25;
-							return Status.WAITING;
-						}
-						yystate = 14;
-						continue;
-				}
-			case 14:
-				st.state = YYCond.yycSPACES;
+            case 13:
+                yych = *st.cur;
+                switch (yych) {
+                    case '0': .. case '9':
+                        st.cur += 1;
+                        yystate = 13;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 25;
+                            return Status.WAITING;
+                        }
+                        yystate = 14;
+                        continue;
+                }
+            case 14:
+                st.state = YYCond.yycSPACES;
 #line 79 "codegen/d/02_storable_state_with_conditions.re"
-				{ *nc += 1; continue lex; }
+                { *nc += 1; continue lex; }
 #line 207 "codegen/d/02_storable_state_with_conditions.d"
-			case 15:
-				st.state = YYCond.yycNUMBER;
+            case 15:
+                st.state = YYCond.yycNUMBER;
 #line 71 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.END; }
+                { return Status.END; }
 #line 212 "codegen/d/02_storable_state_with_conditions.d"
-			case 16:
-				yych = *st.cur;
-				switch (yych) {
-					case 'a': .. case 'z':
-						st.cur += 1;
-						yystate = 18;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 26;
-							return Status.WAITING;
-						}
-						st.cur += 1;
-						yystate = 17;
-						continue;
-				}
-			case 17:
-				st.state = YYCond.yycWORD;
+            case 16:
+                yych = *st.cur;
+                switch (yych) {
+                    case 'a': .. case 'z':
+                        st.cur += 1;
+                        yystate = 18;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 26;
+                            return Status.WAITING;
+                        }
+                        st.cur += 1;
+                        yystate = 17;
+                        continue;
+                }
+            case 17:
+                st.state = YYCond.yycWORD;
 #line 70 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.BAD_PACKET; }
+                { return Status.BAD_PACKET; }
 #line 233 "codegen/d/02_storable_state_with_conditions.d"
-			case 18:
-				yych = *st.cur;
-				switch (yych) {
-					case 'a': .. case 'z':
-						st.cur += 1;
-						yystate = 18;
-						continue;
-					default:
-						if (st.cur >= st.lim) {
-							st.state = 27;
-							return Status.WAITING;
-						}
-						yystate = 19;
-						continue;
-				}
-			case 19:
-				st.state = YYCond.yycSPACES;
+            case 18:
+                yych = *st.cur;
+                switch (yych) {
+                    case 'a': .. case 'z':
+                        st.cur += 1;
+                        yystate = 18;
+                        continue;
+                    default:
+                        if (st.cur >= st.lim) {
+                            st.state = 27;
+                            return Status.WAITING;
+                        }
+                        yystate = 19;
+                        continue;
+                }
+            case 19:
+                st.state = YYCond.yycSPACES;
 #line 80 "codegen/d/02_storable_state_with_conditions.re"
-				{ *wc += 1; continue lex; }
+                { *wc += 1; continue lex; }
 #line 253 "codegen/d/02_storable_state_with_conditions.d"
-			case 20:
-				st.state = YYCond.yycWORD;
+            case 20:
+                st.state = YYCond.yycWORD;
 #line 71 "codegen/d/02_storable_state_with_conditions.re"
-				{ return Status.END; }
+                { return Status.END; }
 #line 258 "codegen/d/02_storable_state_with_conditions.d"
-			case 21:
-				if (st.cur >= st.lim) {
-					yystate = 5;
-					continue;
-				}
-				yystate = 0;
-				continue;
-			case 22:
-				if (st.cur >= st.lim) {
-					yystate = 10;
-					continue;
-				}
-				yystate = 6;
-				continue;
-			case 23:
-				if (st.cur >= st.lim) {
-					yystate = 9;
-					continue;
-				}
-				yystate = 8;
-				continue;
-			case 24:
-				if (st.cur >= st.lim) {
-					yystate = 15;
-					continue;
-				}
-				yystate = 11;
-				continue;
-			case 25:
-				if (st.cur >= st.lim) {
-					yystate = 14;
-					continue;
-				}
-				yystate = 13;
-				continue;
-			case 26:
-				if (st.cur >= st.lim) {
-					yystate = 20;
-					continue;
-				}
-				yystate = 16;
-				continue;
-			case 27:
-				if (st.cur >= st.lim) {
-					yystate = 19;
-					continue;
-				}
-				yystate = 18;
-				continue;
-			default: assert(false);
-		}
-	}
+            case 21:
+                if (st.cur >= st.lim) {
+                    yystate = 5;
+                    continue;
+                }
+                yystate = 0;
+                continue;
+            case 22:
+                if (st.cur >= st.lim) {
+                    yystate = 10;
+                    continue;
+                }
+                yystate = 6;
+                continue;
+            case 23:
+                if (st.cur >= st.lim) {
+                    yystate = 9;
+                    continue;
+                }
+                yystate = 8;
+                continue;
+            case 24:
+                if (st.cur >= st.lim) {
+                    yystate = 15;
+                    continue;
+                }
+                yystate = 11;
+                continue;
+            case 25:
+                if (st.cur >= st.lim) {
+                    yystate = 14;
+                    continue;
+                }
+                yystate = 13;
+                continue;
+            case 26:
+                if (st.cur >= st.lim) {
+                    yystate = 20;
+                    continue;
+                }
+                yystate = 16;
+                continue;
+            case 27:
+                if (st.cur >= st.lim) {
+                    yystate = 19;
+                    continue;
+                }
+                yystate = 18;
+                continue;
+            default: assert(false);
+        }
+    }
 }
 #line 81 "codegen/d/02_storable_state_with_conditions.re"
 

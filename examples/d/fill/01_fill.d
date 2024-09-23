@@ -45,90 +45,90 @@ private int lex(ref Input yyrecord) {
     
 #line 47 "d/fill/01_fill.d"
 {
-	char yych;
+    char yych;
 yyFillLabel0:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		case '\'': goto yy5;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				if (fill(yyrecord) == 0) goto yyFillLabel0;
-				goto yy10;
-			}
-			goto yy1;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        case '\'': goto yy5;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                if (fill(yyrecord) == 0) goto yyFillLabel0;
+                goto yy10;
+            }
+            goto yy1;
+    }
 yy1:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yy2:
 #line 51 "d/fill/01_fill.re"
-	{ return -1; }
+    { return -1; }
 #line 67 "d/fill/01_fill.d"
 yy3:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yyFillLabel1:
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				if (fill(yyrecord) == 0) goto yyFillLabel1;
-			}
-			goto yy4;
-	}
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                if (fill(yyrecord) == 0) goto yyFillLabel1;
+            }
+            goto yy4;
+    }
 yy4:
 #line 54 "d/fill/01_fill.re"
-	{ continue; }
+    { continue; }
 #line 83 "d/fill/01_fill.d"
 yy5:
-	++yyrecord.yycursor;
-	yyrecord.yymarker = yyrecord.yycursor;
+    ++yyrecord.yycursor;
+    yyrecord.yymarker = yyrecord.yycursor;
 yyFillLabel2:
-	yych = *yyrecord.yycursor;
-	if (yych >= 0x01) goto yy7;
-	if (yyrecord.yylimit <= yyrecord.yycursor) {
-		if (fill(yyrecord) == 0) goto yyFillLabel2;
-		goto yy2;
-	}
+    yych = *yyrecord.yycursor;
+    if (yych >= 0x01) goto yy7;
+    if (yyrecord.yylimit <= yyrecord.yycursor) {
+        if (fill(yyrecord) == 0) goto yyFillLabel2;
+        goto yy2;
+    }
 yy6:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yyFillLabel3:
-	yych = *yyrecord.yycursor;
+    yych = *yyrecord.yycursor;
 yy7:
-	switch (yych) {
-		case '\'': goto yy8;
-		case '\\': goto yy9;
-		default:
-			if (yyrecord.yylimit <= yyrecord.yycursor) {
-				if (fill(yyrecord) == 0) goto yyFillLabel3;
-				goto yy11;
-			}
-			goto yy6;
-	}
+    switch (yych) {
+        case '\'': goto yy8;
+        case '\\': goto yy9;
+        default:
+            if (yyrecord.yylimit <= yyrecord.yycursor) {
+                if (fill(yyrecord) == 0) goto yyFillLabel3;
+                goto yy11;
+            }
+            goto yy6;
+    }
 yy8:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 #line 53 "d/fill/01_fill.re"
-	{ ++count; continue; }
+    { ++count; continue; }
 #line 113 "d/fill/01_fill.d"
 yy9:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 yyFillLabel4:
-	yych = *yyrecord.yycursor;
-	if (yych <= 0x00) {
-		if (yyrecord.yylimit <= yyrecord.yycursor) {
-			if (fill(yyrecord) == 0) goto yyFillLabel4;
-			goto yy11;
-		}
-		goto yy6;
-	}
-	goto yy6;
+    yych = *yyrecord.yycursor;
+    if (yych <= 0x00) {
+        if (yyrecord.yylimit <= yyrecord.yycursor) {
+            if (fill(yyrecord) == 0) goto yyFillLabel4;
+            goto yy11;
+        }
+        goto yy6;
+    }
+    goto yy6;
 yy10:
 #line 52 "d/fill/01_fill.re"
-	{ return count; }
+    { return count; }
 #line 129 "d/fill/01_fill.d"
 yy11:
-	yyrecord.yycursor = yyrecord.yymarker;
-	goto yy2;
+    yyrecord.yycursor = yyrecord.yymarker;
+    goto yy2;
 }
 #line 55 "d/fill/01_fill.re"
 

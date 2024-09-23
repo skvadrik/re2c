@@ -25,58 +25,58 @@ loop:
     
 #line 27 "d/eof/02_bounds_checking.d"
 {
-	char yych;
-	if (yylimit <= yycursor) goto fail;
-	yych = *yycursor;
-	switch (yych) {
-		case 0x00: goto yy1;
-		case ' ': goto yy3;
-		case '\'': goto yy5;
-		default: goto yy2;
-	}
+    char yych;
+    if (yylimit <= yycursor) goto fail;
+    yych = *yycursor;
+    switch (yych) {
+        case 0x00: goto yy1;
+        case ' ': goto yy3;
+        case '\'': goto yy5;
+        default: goto yy2;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 #line 26 "d/eof/02_bounds_checking.re"
-	{
+    {
             // Check that it is the sentinel, not some unexpected null.
             if (yycursor - 1 == buf + s.length) goto exit; else goto fail;
         }
 #line 45 "d/eof/02_bounds_checking.d"
 yy2:
-	++yycursor;
+    ++yycursor;
 #line 32 "d/eof/02_bounds_checking.re"
-	{ goto fail; }
+    { goto fail; }
 #line 50 "d/eof/02_bounds_checking.d"
 yy3:
-	++yycursor;
-	if (yylimit <= yycursor) goto fail;
-	yych = *yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		default: goto yy4;
-	}
+    ++yycursor;
+    if (yylimit <= yycursor) goto fail;
+    yych = *yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        default: goto yy4;
+    }
 yy4:
 #line 31 "d/eof/02_bounds_checking.re"
-	{ goto loop; }
+    { goto loop; }
 #line 62 "d/eof/02_bounds_checking.d"
 yy5:
-	++yycursor;
-	if (yylimit <= yycursor) goto fail;
-	yych = *yycursor;
-	switch (yych) {
-		case '\'': goto yy6;
-		case '\\': goto yy7;
-		default: goto yy5;
-	}
+    ++yycursor;
+    if (yylimit <= yycursor) goto fail;
+    yych = *yycursor;
+    switch (yych) {
+        case '\'': goto yy6;
+        case '\\': goto yy7;
+        default: goto yy5;
+    }
 yy6:
-	++yycursor;
+    ++yycursor;
 #line 30 "d/eof/02_bounds_checking.re"
-	{ ++count; goto loop; }
+    { ++count; goto loop; }
 #line 76 "d/eof/02_bounds_checking.d"
 yy7:
-	++yycursor;
-	if (yylimit <= yycursor) goto fail;
-	goto yy5;
+    ++yycursor;
+    if (yylimit <= yycursor) goto fail;
+    goto yy5;
 }
 #line 33 "d/eof/02_bounds_checking.re"
 

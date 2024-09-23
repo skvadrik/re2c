@@ -18,45 +18,45 @@ private int lex(immutable char[] s) {
     
 #line 20 "d/eof/04_fake_sentinel.d"
 {
-	char yych;
-	yych = cur < lim ? *cur : 0;
-	switch (yych) {
-		case 0x00: goto yy1;
-		case ' ': goto yy3;
-		case 'a': .. case 'z': goto yy5;
-		default: goto yy2;
-	}
+    char yych;
+    yych = cur < lim ? *cur : 0;
+    switch (yych) {
+        case 0x00: goto yy1;
+        case ' ': goto yy3;
+        case 'a': .. case 'z': goto yy5;
+        default: goto yy2;
+    }
 yy1:
-	++cur;
+    ++cur;
 #line 24 "d/eof/04_fake_sentinel.re"
-	{ break;{} }
+    { break;{} }
 #line 34 "d/eof/04_fake_sentinel.d"
 yy2:
-	++cur;
+    ++cur;
 #line 23 "d/eof/04_fake_sentinel.re"
-	{ count = -1; break; }
+    { count = -1; break; }
 #line 39 "d/eof/04_fake_sentinel.d"
 yy3:
-	++cur;
-	yych = cur < lim ? *cur : 0;
-	switch (yych) {
-		case ' ': goto yy3;
-		default: goto yy4;
-	}
+    ++cur;
+    yych = cur < lim ? *cur : 0;
+    switch (yych) {
+        case ' ': goto yy3;
+        default: goto yy4;
+    }
 yy4:
 #line 26 "d/eof/04_fake_sentinel.re"
-	{ continue; }
+    { continue; }
 #line 50 "d/eof/04_fake_sentinel.d"
 yy5:
-	++cur;
-	yych = cur < lim ? *cur : 0;
-	switch (yych) {
-		case 'a': .. case 'z': goto yy5;
-		default: goto yy6;
-	}
+    ++cur;
+    yych = cur < lim ? *cur : 0;
+    switch (yych) {
+        case 'a': .. case 'z': goto yy5;
+        default: goto yy6;
+    }
 yy6:
 #line 25 "d/eof/04_fake_sentinel.re"
-	{ ++count; continue;{} }
+    { ++count; continue;{} }
 #line 61 "d/eof/04_fake_sentinel.d"
 }
 #line 27 "d/eof/04_fake_sentinel.re"

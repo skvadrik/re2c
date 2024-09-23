@@ -5,23 +5,23 @@ module main;
 private bool lex(const(char)* yycursor) {
     
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case '1': .. case '9': goto yy2;
-		default: goto yy1;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case '1': .. case '9': goto yy2;
+        default: goto yy1;
+    }
 yy1:
-	++yycursor;
-	{ return false; }
+    ++yycursor;
+    { return false; }
 yy2:
-	yych = *++yycursor;
-	switch (yych) {
-		case '0': .. case '9': goto yy2;
-		default: goto yy3;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case '0': .. case '9': goto yy2;
+        default: goto yy3;
+    }
 yy3:
-	{ return true; }
+    { return true; }
 }
 
 }

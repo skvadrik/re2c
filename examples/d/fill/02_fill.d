@@ -55,58 +55,58 @@ private int lex(ref Input yyrecord) {
     
 #line 57 "d/fill/02_fill.d"
 {
-	char yych;
-	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case 0x00: goto yy1;
-		case ' ': goto yy3;
-		case '\'': goto yy5;
-		default: goto yy2;
-	}
+    char yych;
+    if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case 0x00: goto yy1;
+        case ' ': goto yy3;
+        case '\'': goto yy5;
+        default: goto yy2;
+    }
 yy1:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 #line 57 "d/fill/02_fill.re"
-	{
+    {
             // Check that it is the sentinel, not some unexpected null.
             return yyrecord.token == yyrecord.yylimit - YYMaxFill ? count : -1;
         }
 #line 75 "d/fill/02_fill.d"
 yy2:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 #line 63 "d/fill/02_fill.re"
-	{ return -1; }
+    { return -1; }
 #line 80 "d/fill/02_fill.d"
 yy3:
-	++yyrecord.yycursor;
-	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		default: goto yy4;
-	}
+    ++yyrecord.yycursor;
+    if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        default: goto yy4;
+    }
 yy4:
 #line 62 "d/fill/02_fill.re"
-	{ continue; }
+    { continue; }
 #line 92 "d/fill/02_fill.d"
 yy5:
-	++yyrecord.yycursor;
-	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
-	yych = *yyrecord.yycursor;
-	switch (yych) {
-		case '\'': goto yy6;
-		case '\\': goto yy7;
-		default: goto yy5;
-	}
+    ++yyrecord.yycursor;
+    if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+    yych = *yyrecord.yycursor;
+    switch (yych) {
+        case '\'': goto yy6;
+        case '\\': goto yy7;
+        default: goto yy5;
+    }
 yy6:
-	++yyrecord.yycursor;
+    ++yyrecord.yycursor;
 #line 61 "d/fill/02_fill.re"
-	{ ++count; continue; }
+    { ++count; continue; }
 #line 106 "d/fill/02_fill.d"
 yy7:
-	++yyrecord.yycursor;
-	if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
-	goto yy5;
+    ++yyrecord.yycursor;
+    if (yyrecord.yylimit <= yyrecord.yycursor) if (fill(yyrecord, 1) != 0) return -1;
+    goto yy5;
 }
 #line 64 "d/fill/02_fill.re"
 

@@ -12,64 +12,64 @@ private int lex(immutable char[] s) {
     
 #line 14 "d/eof/03_eof_rule.d"
 {
-	char yych;
-	yych = *yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		case '\'': goto yy5;
-		default:
-			if (yylimit <= yycursor) goto yy10;
-			goto yy1;
-	}
+    char yych;
+    yych = *yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        case '\'': goto yy5;
+        default:
+            if (yylimit <= yycursor) goto yy10;
+            goto yy1;
+    }
 yy1:
-	++yycursor;
+    ++yycursor;
 yy2:
 #line 17 "d/eof/03_eof_rule.re"
-	{ return -1; }
+    { return -1; }
 #line 30 "d/eof/03_eof_rule.d"
 yy3:
-	yych = *++yycursor;
-	switch (yych) {
-		case ' ': goto yy3;
-		default: goto yy4;
-	}
+    yych = *++yycursor;
+    switch (yych) {
+        case ' ': goto yy3;
+        default: goto yy4;
+    }
 yy4:
 #line 20 "d/eof/03_eof_rule.re"
-	{ continue; }
+    { continue; }
 #line 40 "d/eof/03_eof_rule.d"
 yy5:
-	yych = *(yymarker = ++yycursor);
-	if (yych >= 0x01) goto yy7;
-	if (yylimit <= yycursor) goto yy2;
+    yych = *(yymarker = ++yycursor);
+    if (yych >= 0x01) goto yy7;
+    if (yylimit <= yycursor) goto yy2;
 yy6:
-	yych = *++yycursor;
+    yych = *++yycursor;
 yy7:
-	switch (yych) {
-		case '\'': goto yy8;
-		case '\\': goto yy9;
-		default:
-			if (yylimit <= yycursor) goto yy11;
-			goto yy6;
-	}
+    switch (yych) {
+        case '\'': goto yy8;
+        case '\\': goto yy9;
+        default:
+            if (yylimit <= yycursor) goto yy11;
+            goto yy6;
+    }
 yy8:
-	++yycursor;
+    ++yycursor;
 #line 19 "d/eof/03_eof_rule.re"
-	{ ++count; continue; }
+    { ++count; continue; }
 #line 59 "d/eof/03_eof_rule.d"
 yy9:
-	yych = *++yycursor;
-	if (yych <= 0x00) {
-		if (yylimit <= yycursor) goto yy11;
-		goto yy6;
-	}
-	goto yy6;
+    yych = *++yycursor;
+    if (yych <= 0x00) {
+        if (yylimit <= yycursor) goto yy11;
+        goto yy6;
+    }
+    goto yy6;
 yy10:
 #line 18 "d/eof/03_eof_rule.re"
-	{ return count; }
+    { return count; }
 #line 70 "d/eof/03_eof_rule.d"
 yy11:
-	yycursor = yymarker;
-	goto yy2;
+    yycursor = yymarker;
+    goto yy2;
 }
 #line 21 "d/eof/03_eof_rule.re"
 
