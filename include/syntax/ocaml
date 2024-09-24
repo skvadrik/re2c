@@ -167,13 +167,21 @@ code:array_global = code:array_local;
 
 code:array_elem = array ".(" index ")";
 
+code:enum =
+    "type " name " = "
+        [elem{0}:          elem]
+        [elem{1:-1}: " | " elem]
+    nl;
+
+code:enum_elem = name;
+
+code:assign = topindent lhs " <- " rhs ";" nl;
+
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_cond_enum = (storable_state? "int" : "uint");
 code:type_yybm = "int";
 code:type_yytarget = <undefined>;
-
-code:assign = topindent lhs " <- " rhs ";" nl;
 
 code:cmp_eq = "=="; // physical equality, as this is used to compare primitive values
 code:cmp_ne = "!="; // physical inequality, as this is used to compare primitive values
@@ -223,14 +231,6 @@ code:loop = <undefined>;
 code:continue = <undefined>;
 
 code:goto = <undefined>;
-
-code:enum =
-    "type " name " = "
-        [elem{0}:          elem]
-        [elem{1:-1}: " | " elem]
-    nl;
-
-code:enum_elem = name;
 
 code:fndecl = <undefined>;
 
