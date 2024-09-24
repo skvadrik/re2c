@@ -163,16 +163,26 @@ code:array_local =
         [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
         [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem]     nl]
     dedent topindent "};" nl;
+
 code:array_global = code:array_local;
+
 code:array_elem = array "[" index "]";
+
+code:enum =
+    "enum " name " {" nl indent
+        [elem{0:-2}: topindent elem (have_init? " = " init) "," nl]
+        [elem{-1}:   topindent elem (have_init? " = " init) nl]
+    dedent "};" nl;
+
+code:enum_elem = name;
+
+code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "unsigned int";
 code:type_cond_enum = <undefined>;
 code:type_yybm = "static const unsigned char";
 code:type_yytarget = "static const void*";
-
-code:assign = topindent lhs " = " rhs ";" nl;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -221,14 +231,6 @@ code:loop =
 code:continue = topindent "continue;" nl;
 
 code:goto = topindent "goto " label ";" nl;
-
-code:enum =
-    "enum " name " {" nl indent
-        [elem{0:-2}: topindent elem (have_init? " = " init) "," nl]
-        [elem{-1}:   topindent elem (have_init? " = " init) nl]
-    dedent "};" nl;
-
-code:enum_elem = name;
 
 code:fndecl =
     topindent type " " name "("

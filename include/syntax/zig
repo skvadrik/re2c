@@ -167,13 +167,17 @@ code:array_global = <undefined>;
 
 code:array_elem = array "[" index "]";
 
+code:enum = [elem: topindent "const " elem ": " type " = " init ";" nl];
+
+code:enum_elem = name;
+
+code:assign = topindent lhs " = " rhs ";" nl;
+
 code:type_int = "i32";
 code:type_uint = "u32";
 code:type_cond_enum = "u32";
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
-
-code:assign = topindent lhs " = " rhs ";" nl;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -220,10 +224,6 @@ code:loop =
 code:continue = topindent "continue" (loop_label ? " :" label) ";" nl;
 
 code:goto = topindent "goto " label ";" nl;
-
-code:enum = [elem: topindent "const " elem ": " type " = " init ";" nl];
-
-code:enum_elem = name;
 
 code:fndecl = <undefined>;
 

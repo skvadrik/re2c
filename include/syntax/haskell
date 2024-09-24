@@ -168,13 +168,21 @@ code:array_global =
 
 code:array_elem = array " ! " index;
 
+code:enum =
+    "data " name " = "
+        [elem{0:-2}: elem " | "]
+        [elem{-1}: elem] " deriving (Eq, Show)"
+    nl;
+
+code:enum_elem = name;
+
+code:assign = <undefined>;
+
 code:type_int = <undefined>;
 code:type_uint = <undefined>;
 code:type_cond_enum = <undefined>;
 code:type_yybm = "Word8";
 code:type_yytarget = <undefined>;
-
-code:assign = <undefined>;
 
 code:cmp_eq = "==";
 code:cmp_ne = "/=";
@@ -216,14 +224,6 @@ code:loop = <undefined>;
 code:continue = <undefined>;
 
 code:goto = <undefined>;
-
-code:enum =
-    "data " name " = "
-        [elem{0:-2}: elem " | "]
-        [elem{-1}: elem] " deriving (Eq, Show)"
-    nl;
-
-code:enum_elem = name;
 
 code:fndecl = <undefined>;
 

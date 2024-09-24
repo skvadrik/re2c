@@ -161,19 +161,29 @@ code:array_local =
     topindent name " := [" size "]" type "{" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "}" nl;
+
 code:array_global =
     topindent "var " name " = {" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "}" nl;
+
 code:array_elem = array "[" index "]";
+
+code:enum =
+    "const (" nl indent
+        [elem{0}:    topindent elem " = " (have_init ? init : "iota") nl]
+        [elem{1:-1}: topindent elem (have_init ? " = " init) nl]
+    dedent ")" nl;
+
+code:enum_elem = name;
+
+code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
 code:type_cond_enum = <undefined>;
 code:type_yybm = "byte";
 code:type_yytarget = <undefined>;
-
-code:assign = topindent lhs " = " rhs nl;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -217,14 +227,6 @@ code:loop =
 code:continue = topindent "continue" (loop_label ? " " label) nl;
 
 code:goto = topindent "goto " label nl;
-
-code:enum =
-    "const (" nl indent
-        [elem{0}:    topindent elem " = " (have_init ? init : "iota") nl]
-        [elem{1:-1}: topindent elem (have_init ? " = " init) nl]
-    dedent ")" nl;
-
-code:enum_elem = name;
 
 code:fndecl = <undefined>;
 

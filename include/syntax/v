@@ -162,16 +162,27 @@ code:array_local =
     topindent name " := [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "]" nl;
+
 code:array_global = <undefined>;
+
 code:array_elem = array "[" index "]";
+
+// Don't use enum in loop/switch mode, as conditions are assigned to `yystate`.
+code:enum = (code_model.loop_switch
+    ? [elem: "const " elem " = " init nl]
+    : "enum " name " {" nl
+        indent [elem: topindent elem (have_init ? " = " init) nl] dedent
+    "}" nl);
+
+code:enum_elem = (!code_model.loop_switch ? ".") name;
+
+code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = "int";
 code:type_uint = "u32";
 code:type_cond_enum = <undefined>;
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
-
-code:assign = topindent lhs " = " rhs nl;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -217,15 +228,6 @@ code:loop =
 code:continue = topindent "continue" (loop_label ? " " label) nl;
 
 code:goto = topindent "unsafe { goto " label " }" nl;
-
-// Don't use enum in loop/switch mode, as conditions are assigned to `yystate`.
-code:enum = (code_model.loop_switch
-    ? [elem: "const " elem " = " init nl]
-    : "enum " name " {" nl
-        indent [elem: topindent elem (have_init ? " = " init) nl] dedent
-    "}" nl);
-
-code:enum_elem = (!code_model.loop_switch ? ".") name;
 
 code:fndecl = <undefined>;
 

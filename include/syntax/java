@@ -166,13 +166,17 @@ code:array_global = <undefined>;
 
 code:array_elem = array "[" index "]";
 
+code:enum = [elem: topindent "public static final " type " " elem " = " init ";" nl];
+
+code:enum_elem = name;
+
+code:assign = topindent lhs " = " rhs ";" nl;
+
 code:type_int = "int";
 code:type_uint = "int";
 code:type_cond_enum = "int";
 code:type_yybm = "int";
 code:type_yytarget = <undefined>;
-
-code:assign = topindent lhs " = " rhs ";" nl;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -216,10 +220,6 @@ code:loop =
 code:continue = topindent "continue" (loop_label ? " " label) ";" nl;
 
 code:goto = <undefined>;
-
-code:enum = [elem: topindent "public static final " type " " elem " = " init ";" nl];
-
-code:enum_elem = name;
 
 code:fndecl = <undefined>;
 code:fndef = <undefined>;

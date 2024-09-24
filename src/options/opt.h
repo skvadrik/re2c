@@ -99,6 +99,16 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(array_elem, \
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(enum, \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
+        ({StxLOpt::HAVE_INIT}) \
+    ) \
+    CODE_TEMPLATE(enum_elem, \
+        ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(assign, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(type_int, \
         ({}), ({}), ({}) \
     ) \
@@ -113,9 +123,6 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(type_yytarget, \
         ({}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(assign, \
-        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(cmp_eq, \
         ({}), ({}), ({}) \
@@ -166,13 +173,6 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(enum, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
-        ({StxLOpt::HAVE_INIT}) \
-    ) \
-    CODE_TEMPLATE(enum_elem, \
-        ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(fndecl, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
