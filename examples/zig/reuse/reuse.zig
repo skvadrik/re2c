@@ -15,7 +15,7 @@ fn lex_utf8(yyinput: []const u8) ?usize {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -23,17 +23,17 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                 switch (yych) {
                     0xE2 => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return null; },
             3 => {
@@ -43,11 +43,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x88 => {
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -57,18 +57,18 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x80 => {
                         yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             5 => {
                 yycursor = yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             6 => {
                 yych = yyinput[yycursor];
@@ -76,11 +76,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x78 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -90,11 +90,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x20 => {
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -104,11 +104,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0xE2 => {
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -118,11 +118,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x88 => {
                         yycursor += 1;
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -132,11 +132,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x83 => {
                         yycursor += 1;
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -146,11 +146,11 @@ fn lex_utf8(yyinput: []const u8) ?usize {
                     0x79 => {
                         yycursor += 1;
                         yystate = 12;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -167,17 +167,17 @@ fn lex_utf32(yyinput: []const u32) ?usize {
     
     var yych: u32 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
                 yycursor += 1;
                 if (yych == 0x00002200) {
                     yystate = 2;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             1 => { return null; },
             2 => {
@@ -185,34 +185,34 @@ fn lex_utf32(yyinput: []const u32) ?usize {
                 yych = yyinput[yycursor];
                 if (yych != 0x00000078) {
                     yystate = 1;
-                    continue;
+                    continue :yyl;
                 }
                 yycursor += 1;
                 yych = yyinput[yycursor];
                 if (yych == 0x00000020) {
                     yycursor += 1;
                     yystate = 4;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 3;
-                continue;
+                continue :yyl;
             },
             3 => {
                 yycursor = yymarker;
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             4 => {
                 yych = yyinput[yycursor];
                 if (yych != 0x00002203) {
                     yystate = 3;
-                    continue;
+                    continue :yyl;
                 }
                 yycursor += 1;
                 yych = yyinput[yycursor];
                 if (yych != 0x00000079) {
                     yystate = 3;
-                    continue;
+                    continue :yyl;
                 }
                 yycursor += 1;
                 return yycursor;

@@ -366,6 +366,12 @@ inline Code* code_goto(OutAllocator& alc, const char* target) {
     return x;
 }
 
+inline Code* code_continue(OutAllocator& alc, const char* target) {
+    Code* x = new_code(alc, CodeKind::CONTINUE);
+    x->target = target;
+    return x;
+}
+
 inline Code* code_loop(OutAllocator& alc, CodeList* loop) {
     Code* x = new_code(alc, CodeKind::LOOP);
     x->loop = loop;

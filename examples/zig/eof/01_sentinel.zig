@@ -12,7 +12,7 @@ fn lex(yyinput: [:0]const u8) i32 {
         
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -20,19 +20,19 @@ fn lex(yyinput: [:0]const u8) i32 {
                 switch (yych) {
                     0x00 => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                     0x20 => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x61...0x7A => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -44,11 +44,11 @@ fn lex(yyinput: [:0]const u8) i32 {
                     0x20 => {
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -59,11 +59,11 @@ fn lex(yyinput: [:0]const u8) i32 {
                     0x61...0x7A => {
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

@@ -103,7 +103,7 @@ conf:indent:string = "    ";
 conf:indent:top = 0;
 conf:label:prefix = "yy"; // used to generate function names
 conf:label:yyfill = "";
-conf:label:yyloop = "";
+conf:label:yyloop = "yyl";
 conf:label:yyNext = "";
 conf:label:start = 0;
 
@@ -213,9 +213,11 @@ code:switch_case_range = [val{0}: val] (many ? "..." [val{-1}: val]);
 code:switch_case_default = "else";
 
 code:loop =
-    topindent "while (true) {" nl
+    topindent (loop_label ? label ": ") "while (true) {" nl
         indent [stmt: stmt] dedent
     topindent "}" nl;
+
+code:continue = topindent "continue" (loop_label ? " :" label) ";" nl;
 
 code:goto = topindent "goto " label ";" nl;
 

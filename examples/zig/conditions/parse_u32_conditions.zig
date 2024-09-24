@@ -27,7 +27,7 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
     
     var yych: u8 = 0;
     var yystate: u32 = yycond;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -35,15 +35,15 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     0x31...0x39 => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -56,30 +56,30 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                     0x62 => {
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x58,
                     0x78 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             3 => {
                 yycond = yycoct;
                 yystate = yycoct;
-                continue;
+                continue :yyl;
             },
             4 => {
                 yycursor -= 1;
                 yycond = yycdec;
                 yystate = yycdec;
-                continue;
+                continue :yyl;
             },
             5 => {
                 yych = yyinput[yycursor];
@@ -87,18 +87,18 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                     0x30...0x31 => {
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             6 => {
                 yycursor = yymarker;
                 yystate = 3;
-                continue;
+                continue :yyl;
             },
             7 => {
                 yych = yyinput[yycursor];
@@ -108,11 +108,11 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                     0x61...0x66 => {
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -120,13 +120,13 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 yycursor -= 1;
                 yycond = yycbin;
                 yystate = yycbin;
-                continue;
+                continue :yyl;
             },
             9 => {
                 yycursor -= 1;
                 yycond = yychex;
                 yystate = yychex;
-                continue;
+                continue :yyl;
             },
             10 => {
                 yych = yyinput[yycursor];
@@ -134,11 +134,11 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30...0x31 => {
                         yystate = 12;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -152,11 +152,11 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30...0x37 => {
                         yystate = 15;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 14;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -170,11 +170,11 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30...0x39 => {
                         yystate = 18;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 17;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -188,19 +188,19 @@ fn parse_u32(yyinput: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30...0x39 => {
                         yystate = 21;
-                        continue;
+                        continue :yyl;
                     },
                     0x41...0x46 => {
                         yystate = 22;
-                        continue;
+                        continue :yyl;
                     },
                     0x61...0x66 => {
                         yystate = 23;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 20;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

@@ -14,7 +14,7 @@ fn lex(yyinput: [:0]const u8) i32 {
         
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -22,27 +22,27 @@ fn lex(yyinput: [:0]const u8) i32 {
                     0x20 => {
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x27 => {
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (yylimit <= yycursor) {
                             yystate = 10;
-                            continue;
+                            continue :yyl;
                         }
                         yycursor += 1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return -1; },
             3 => {
@@ -51,11 +51,11 @@ fn lex(yyinput: [:0]const u8) i32 {
                     0x20 => {
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -65,41 +65,41 @@ fn lex(yyinput: [:0]const u8) i32 {
                 yych = yyinput[yycursor];
                 if (yych >= 0x01) {
                     yystate = 7;
-                    continue;
+                    continue :yyl;
                 }
                 if (yylimit <= yycursor) {
                     yystate = 2;
-                    continue;
+                    continue :yyl;
                 }
                 yycursor += 1;
                 yystate = 6;
-                continue;
+                continue :yyl;
             },
             6 => {
                 yych = yyinput[yycursor];
                 yystate = 7;
-                continue;
+                continue :yyl;
             },
             7 => {
                 switch (yych) {
                     0x27 => {
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     0x5C => {
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (yylimit <= yycursor) {
                             yystate = 11;
-                            continue;
+                            continue :yyl;
                         }
                         yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -109,21 +109,21 @@ fn lex(yyinput: [:0]const u8) i32 {
                 if (yych <= 0x00) {
                     if (yylimit <= yycursor) {
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     }
                     yycursor += 1;
                     yystate = 6;
-                    continue;
+                    continue :yyl;
                 }
                 yycursor += 1;
                 yystate = 6;
-                continue;
+                continue :yyl;
             },
             10 => { return count; },
             11 => {
                 yycursor = yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }

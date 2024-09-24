@@ -11,7 +11,7 @@ fn lex(yyrecord: *state.State) usize {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyrecord.yyinput[yyrecord.yycursor];
@@ -19,18 +19,18 @@ fn lex(yyrecord: *state.State) usize {
                     0x61 => {
                         yyrecord.yycursor += 1;
                         yystate = 0;
-                        continue;
+                        continue :yyl;
                     },
                     0x62 => {
                         yyrecord.yyt1 = yyrecord.yycursor;
                         yyrecord.yycursor += 1;
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yyrecord.yyt1 = yyrecord.yycursor;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -44,11 +44,11 @@ fn lex(yyrecord: *state.State) usize {
                     0x62 => {
                         yyrecord.yycursor += 1;
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

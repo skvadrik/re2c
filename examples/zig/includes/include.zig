@@ -15,7 +15,7 @@ fn lex(yyinput: [:0]const u8) Num {
     var yych: u8 = 0;
     var yyaccept: u32 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -23,25 +23,25 @@ fn lex(yyinput: [:0]const u8) Num {
                 switch (yych) {
                     0x2E => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x30 => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x31...0x39 => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return Num.nan; },
             3 => {
@@ -50,11 +50,11 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -66,22 +66,22 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x2E => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     0x45,
                     0x65 => {
                         yycursor += 1;
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -93,22 +93,22 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x2E => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x45,
                     0x65 => {
                         yycursor += 1;
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -121,17 +121,17 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     0x45,
                     0x65 => {
                         yycursor += 1;
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -142,22 +142,22 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x2E => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     0x45,
                     0x65 => {
                         yycursor += 1;
                         yystate = 11;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -166,15 +166,15 @@ fn lex(yyinput: [:0]const u8) Num {
                 switch (yyaccept) {
                     0 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     1 => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -185,16 +185,16 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x2D => {
                         yycursor += 1;
                         yystate = 12;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 13;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -204,11 +204,11 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 13;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -218,11 +218,11 @@ fn lex(yyinput: [:0]const u8) Num {
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 13;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

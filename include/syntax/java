@@ -213,11 +213,13 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
+code:continue = topindent "continue" (loop_label ? " " label) ";" nl;
+
+code:goto = <undefined>;
+
 code:enum = [elem: topindent "public static final " type " " elem " = " init ";" nl];
 
 code:enum_elem = name;
-
-code:goto = <undefined>;
 
 code:fndecl = <undefined>;
 code:fndef = <undefined>;

@@ -81,7 +81,7 @@ var t4: usize = 0;
         
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -89,26 +89,26 @@ var t4: usize = 0;
                     0x30...0x39 => {
                         st.yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 0;
-                                continue;
+                                continue :yyl;
                             }
                             yystate = 11;
-                            continue;
+                            continue :yyl;
                         }
                         st.yycursor += 1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return error.SyntaxError; },
             3 => {
@@ -118,22 +118,22 @@ var t4: usize = 0;
                     0x2E => {
                         st.yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         st.yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 3;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -144,24 +144,24 @@ var t4: usize = 0;
                         st.yyt1 = st.yycursor;
                         st.yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 4;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             5 => {
                 st.yycursor = st.yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             6 => {
                 yych = st.yyinput[st.yycursor];
@@ -169,22 +169,22 @@ var t4: usize = 0;
                     0x2E => {
                         st.yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         st.yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 6;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -196,28 +196,28 @@ var t4: usize = 0;
                         st.yyt3 = std.math.maxInt(usize);
                         st.yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     0x2E => {
                         st.yyt2 = st.yycursor;
                         st.yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         st.yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 7;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -243,17 +243,17 @@ var t4: usize = 0;
                         st.yyt3 = st.yycursor;
                         st.yycursor += 1;
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 9;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -263,22 +263,22 @@ var t4: usize = 0;
                     0x0A => {
                         st.yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         st.yycursor += 1;
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
                             if (fill(st, file) == 0) {
                                 yystate = 10;
-                                continue;
+                                continue :yyl;
                             }
                         }
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

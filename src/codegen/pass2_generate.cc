@@ -383,13 +383,11 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
 static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* next) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
 
     append(stmts, code_assign(alc, opts->var_state.c_str(), next));
 
-    buf.cstr("continue");
-    if (!opts->label_loop.empty()) buf.cstr(" ").str(opts->label_loop);
-    append(stmts, code_stmt(alc, buf.flush()));
+    const char* label = opts->label_loop.empty() ? nullptr : opts->label_loop.c_str();
+    append(stmts, code_continue(alc, label));
 }
 
 static CodeList* gen_fill_falllback(

@@ -161,6 +161,9 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(loop, \
         ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
     ) \
+    CODE_TEMPLATE(continue, \
+        ({StxVarId::LABEL}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \

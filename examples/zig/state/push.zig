@@ -50,7 +50,7 @@ fn lex(yyrecord: *State) Status {
         yyrecord.token = yyrecord.yycursor;
         
     var yystate: i32 = yyrecord.yystate;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             -1...0 => {
                 yych = yyrecord.yyinput[yyrecord.yycursor];
@@ -58,7 +58,7 @@ fn lex(yyrecord: *State) Status {
                     0x61...0x7A => {
                         yyrecord.yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
@@ -67,13 +67,13 @@ fn lex(yyrecord: *State) Status {
                         }
                         yyrecord.yycursor += 1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => {
                 yyrecord.yystate = -1;
@@ -86,12 +86,12 @@ fn lex(yyrecord: *State) Status {
                     0x3B => {
                         yyrecord.yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x61...0x7A => {
                         yyrecord.yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
@@ -99,7 +99,7 @@ fn lex(yyrecord: *State) Status {
                             return Status.waiting;
                         }
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -113,12 +113,12 @@ fn lex(yyrecord: *State) Status {
                     0x3B => {
                         yyrecord.yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x61...0x7A => {
                         yyrecord.yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
@@ -126,14 +126,14 @@ fn lex(yyrecord: *State) Status {
                             return Status.waiting;
                         }
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             6 => {
                 yyrecord.yycursor = yyrecord.yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             7 => {
                 yyrecord.yystate = -1;
@@ -142,26 +142,26 @@ fn lex(yyrecord: *State) Status {
             8 => {
                 if (yyrecord.yylimit <= yyrecord.yycursor) {
                     yystate = 7;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 0;
-                continue;
+                continue :yyl;
             },
             9 => {
                 if (yyrecord.yylimit <= yyrecord.yycursor) {
                     yystate = 2;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 3;
-                continue;
+                continue :yyl;
             },
             10 => {
                 if (yyrecord.yylimit <= yyrecord.yycursor) {
                     yystate = 6;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 5;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }

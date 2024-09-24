@@ -50,7 +50,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
         
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
@@ -59,19 +59,19 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                 switch (yych) {
                     0x00 => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                     0x20 => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x27 => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -87,11 +87,11 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                     0x20 => {
                         yyrecord.yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -103,15 +103,15 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                 switch (yych) {
                     0x27 => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     0x5C => {
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -120,7 +120,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                 if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
                 yyrecord.yycursor += 1;
                 yystate = 5;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }

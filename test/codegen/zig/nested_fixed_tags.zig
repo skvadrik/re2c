@@ -16,7 +16,7 @@ fn lex_tags(str: [:0]const u8) isize {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 mar = cur;
@@ -25,12 +25,12 @@ fn lex_tags(str: [:0]const u8) isize {
                     0x62 => {
                         cur += 1;
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yyt1 = -1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -47,11 +47,11 @@ fn lex_tags(str: [:0]const u8) isize {
                     0x61 => {
                         cur += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -59,12 +59,12 @@ fn lex_tags(str: [:0]const u8) isize {
                 cur = mar;
                 yyt1 = -1;
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             4 => {
                 yyt1 = cur;
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }
@@ -86,7 +86,7 @@ var yyt2: isize = -1;
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = str[@intCast(cur)];
@@ -95,13 +95,13 @@ var yyt2: isize = -1;
                         yyt1 = cur;
                         cur += 1;
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yyt1 = cur;
                         yyt2 = -1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -123,7 +123,7 @@ var yyt2: isize = -1;
             2 => {
                 yyt2 = cur;
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }

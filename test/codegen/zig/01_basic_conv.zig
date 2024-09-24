@@ -8,7 +8,7 @@ fn lex(yyinput: [:0]const u8) bool {
     
     var yych: i8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = @intCast(yyinput[yycursor]);
@@ -16,11 +16,11 @@ fn lex(yyinput: [:0]const u8) bool {
                 switch (yych) {
                     0x31...0x39 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -31,11 +31,11 @@ fn lex(yyinput: [:0]const u8) bool {
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

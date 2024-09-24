@@ -220,6 +220,8 @@ const char* DEFAULT_SYNTAX_C =
     "        indent [stmt: stmt] dedent\n"
     "    topindent \"}\" nl;\n"
     "\n"
+    "code:continue = topindent \"continue;\" nl;\n"
+    "\n"
     "code:goto = topindent \"goto \" label \";\" nl;\n"
     "\n"
     "code:enum =\n"
