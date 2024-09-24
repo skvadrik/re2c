@@ -104,7 +104,7 @@ const char* DEFAULT_SYNTAX_GO =
     "conf:indent:top = 0;\n"
     "conf:label:prefix = \"yy\";\n"
     "conf:label:yyfill = \"yyFillLabel\";\n"
-    "conf:label:yyloop = \"yyl\"; // In Go `continue` statements have labels, use it to avoid ambiguity.\n"
+    "conf:label:yyloop = \"yyl\";\n"
     "conf:label:yyNext = \"yyNext\";\n"
     "conf:label:start = 0;\n"
     "\n"

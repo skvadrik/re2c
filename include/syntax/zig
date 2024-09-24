@@ -101,10 +101,10 @@ conf:encoding-policy = ignore;
 conf:empty-class = match-empty;
 conf:indent:string = "    ";
 conf:indent:top = 0;
-conf:label:prefix = "yy";
-conf:label:yyfill = "yyFillLabel";
+conf:label:prefix = "yy"; // used to generate function names
+conf:label:yyfill = "";
 conf:label:yyloop = "";
-conf:label:yyNext = "yyNext";
+conf:label:yyNext = "";
 conf:label:start = 0;
 
 

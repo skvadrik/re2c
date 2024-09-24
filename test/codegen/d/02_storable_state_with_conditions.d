@@ -63,7 +63,7 @@ lex:
 #line 64 "codegen/d/02_storable_state_with_conditions.d"
 {
     int yystate = st.state;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             case -1: .. case 0:
                 yych = *st.cur;
@@ -72,15 +72,15 @@ lex:
                     case ' ':
                         st.cur += 1;
                         yystate = 2;
-                        continue;
+                        continue yyl;
                     case '0': .. case '9':
                         st.cur += 1;
                         yystate = 3;
-                        continue;
+                        continue yyl;
                     case 'a': .. case 'z':
                         st.cur += 1;
                         yystate = 4;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 21;
@@ -88,7 +88,7 @@ lex:
                         }
                         st.cur += 1;
                         yystate = 1;
-                        continue;
+                        continue yyl;
                 }
             case 1:
                 st.state = YYCond.yycINIT;
@@ -99,17 +99,17 @@ lex:
                 st.cur += -1;
                 st.state = YYCond.yycSPACES;
                 yystate = YYCond.yycSPACES;
-                continue;
+                continue yyl;
             case 3:
                 st.cur += -1;
                 st.state = YYCond.yycNUMBER;
                 yystate = YYCond.yycNUMBER;
-                continue;
+                continue yyl;
             case 4:
                 st.cur += -1;
                 st.state = YYCond.yycWORD;
                 yystate = YYCond.yycWORD;
-                continue;
+                continue yyl;
             case 5:
                 st.state = YYCond.yycINIT;
 #line 71 "codegen/d/02_storable_state_with_conditions.re"
@@ -122,7 +122,7 @@ lex:
                     case ' ':
                         st.cur += 1;
                         yystate = 8;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 22;
@@ -130,7 +130,7 @@ lex:
                         }
                         st.cur += 1;
                         yystate = 7;
-                        continue;
+                        continue yyl;
                 }
             case 7:
                 st.state = YYCond.yycSPACES;
@@ -144,14 +144,14 @@ lex:
                     case ' ':
                         st.cur += 1;
                         yystate = 8;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 23;
                             return Status.WAITING;
                         }
                         yystate = 9;
-                        continue;
+                        continue yyl;
                 }
             case 9:
                 st.state = YYCond.yycINIT;
@@ -169,7 +169,7 @@ lex:
                     case '0': .. case '9':
                         st.cur += 1;
                         yystate = 13;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 24;
@@ -177,7 +177,7 @@ lex:
                         }
                         st.cur += 1;
                         yystate = 12;
-                        continue;
+                        continue yyl;
                 }
             case 12:
                 st.state = YYCond.yycNUMBER;
@@ -190,14 +190,14 @@ lex:
                     case '0': .. case '9':
                         st.cur += 1;
                         yystate = 13;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 25;
                             return Status.WAITING;
                         }
                         yystate = 14;
-                        continue;
+                        continue yyl;
                 }
             case 14:
                 st.state = YYCond.yycSPACES;
@@ -215,7 +215,7 @@ lex:
                     case 'a': .. case 'z':
                         st.cur += 1;
                         yystate = 18;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 26;
@@ -223,7 +223,7 @@ lex:
                         }
                         st.cur += 1;
                         yystate = 17;
-                        continue;
+                        continue yyl;
                 }
             case 17:
                 st.state = YYCond.yycWORD;
@@ -236,14 +236,14 @@ lex:
                     case 'a': .. case 'z':
                         st.cur += 1;
                         yystate = 18;
-                        continue;
+                        continue yyl;
                     default:
                         if (st.cur >= st.lim) {
                             st.state = 27;
                             return Status.WAITING;
                         }
                         yystate = 19;
-                        continue;
+                        continue yyl;
                 }
             case 19:
                 st.state = YYCond.yycSPACES;
@@ -258,52 +258,52 @@ lex:
             case 21:
                 if (st.cur >= st.lim) {
                     yystate = 5;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 0;
-                continue;
+                continue yyl;
             case 22:
                 if (st.cur >= st.lim) {
                     yystate = 10;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 6;
-                continue;
+                continue yyl;
             case 23:
                 if (st.cur >= st.lim) {
                     yystate = 9;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 8;
-                continue;
+                continue yyl;
             case 24:
                 if (st.cur >= st.lim) {
                     yystate = 15;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 11;
-                continue;
+                continue yyl;
             case 25:
                 if (st.cur >= st.lim) {
                     yystate = 14;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 13;
-                continue;
+                continue yyl;
             case 26:
                 if (st.cur >= st.lim) {
                     yystate = 20;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 16;
-                continue;
+                continue yyl;
             case 27:
                 if (st.cur >= st.lim) {
                     yystate = 19;
-                    continue;
+                    continue yyl;
                 }
                 yystate = 18;
-                continue;
+                continue yyl;
             default: assert(false);
         }
     }
