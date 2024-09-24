@@ -102,7 +102,7 @@ conf:indent:string = "\t";
 conf:indent:top = 0;
 conf:label:prefix = "yy";
 conf:label:yyfill = "yyFillLabel";
-conf:label:yyloop = "yyl"; // In Go `continue` statements have labels, use it to avoid ambiguity.
+conf:label:yyloop = "yyl";
 conf:label:yyNext = "yyNext";
 conf:label:start = 0;
 
