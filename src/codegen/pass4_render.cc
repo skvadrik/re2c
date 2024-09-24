@@ -595,22 +595,22 @@ class RenderLoop : public RenderCallback {
     FORBID_COPY(RenderLoop);
 };
 
-class RenderGoto : public RenderCallback {
+class RenderJmp : public RenderCallback {
     RenderContext& rctx;
-    const char* target;
+    const char* label;
 
   public:
-    RenderGoto(RenderContext& rctx, const char* target)
-            : rctx(rctx), target(target) {}
+    RenderJmp(RenderContext& rctx, const char* label)
+            : rctx(rctx), label(label) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::LABEL: rctx.os << target; break;
+            case StxVarId::LABEL: rctx.os << label; break;
             default: render_global_var(rctx, var); break;
         }
     }
 
-    FORBID_COPY(RenderGoto);
+    FORBID_COPY(RenderJmp);
 };
 
 class RenderFnDef : public RenderCallback {
@@ -1408,8 +1408,13 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::GOTO: {
-        RenderGoto callback(rctx, code->target);
+        RenderJmp callback(rctx, code->target);
         rctx.opts->render_code_goto(rctx.os, callback);
+        break;
+    }
+    case CodeKind::CONTINUE: {
+        RenderJmp callback(rctx, code->target);
+        rctx.opts->render_code_continue(rctx.os, callback);
         break;
     }
     case CodeKind::TEXT_RAW:

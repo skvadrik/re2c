@@ -214,6 +214,8 @@ code:loop =
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
+code:continue = topindent "continue" (loop_label ? " " label) nl;
+
 code:goto = topindent "goto " label nl;
 
 code:enum =

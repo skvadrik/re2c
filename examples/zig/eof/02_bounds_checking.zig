@@ -21,7 +21,7 @@ fn lex(str: []const u8) !i32 {
         
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 if (yylimit <= yycursor) { return -1; }
@@ -30,19 +30,19 @@ fn lex(str: []const u8) !i32 {
                 switch (yych) {
                     0x00 => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                     0x20 => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x27 => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -58,11 +58,11 @@ fn lex(str: []const u8) !i32 {
                     0x20 => {
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -74,15 +74,15 @@ fn lex(str: []const u8) !i32 {
                 switch (yych) {
                     0x27 => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     0x5C => {
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -91,7 +91,7 @@ fn lex(str: []const u8) !i32 {
                 if (yylimit <= yycursor) { return -1; }
                 yycursor += 1;
                 yystate = 5;
-                continue;
+                continue :yyl;
             },
             else => { @panic("internal lexer error"); },
         }

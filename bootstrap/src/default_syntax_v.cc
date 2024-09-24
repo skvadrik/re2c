@@ -216,6 +216,8 @@ const char* DEFAULT_SYNTAX_V =
     "        indent [stmt: stmt] dedent\n"
     "    topindent \"}\" nl;\n"
     "\n"
+    "code:continue = topindent \"continue\" (loop_label ? \" \" label) nl;\n"
+    "\n"
     "code:goto = topindent \"unsafe { goto \" label \" }\" nl;\n"
     "\n"
     "// Don't use enum in loop/switch mode, as conditions are assigned to `yystate`.\n"

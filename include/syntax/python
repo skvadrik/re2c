@@ -211,11 +211,13 @@ code:loop =
     topindent "while True:" nl
         indent [stmt: stmt] dedent;
 
+code:continue = topindent "continue" nl;
+
+code:goto = <undefined>;
+
 code:enum = [elem: elem " = " init nl];
 
 code:enum_elem = name;
-
-code:goto = <undefined>;
 
 code:fndecl = <undefined>;
 

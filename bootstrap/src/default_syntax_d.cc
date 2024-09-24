@@ -218,6 +218,8 @@ const char* DEFAULT_SYNTAX_D =
     "        indent [stmt: stmt] dedent\n"
     "    topindent \"}\" nl;\n"
     "\n"
+    "code:continue = topindent \"continue\" (loop_label ? \" \" label) \";\" nl;\n"
+    "\n"
     "code:goto = topindent \"goto \" label \";\" nl;\n"
     "\n"
     "code:enum =\n"

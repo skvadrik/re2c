@@ -72,7 +72,7 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -81,18 +81,18 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
                         yyt1 = yycursor;
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yycursor += 1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return error.SyntaxError; },
             3 => {
@@ -105,22 +105,22 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
                         yyt2 = yycursor;
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x2E => {
                         yyt2 = yycursor;
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -143,18 +143,18 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
                         yytm3 = add_mtag(&mt, yytm3, yycursor) catch none;
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             6 => {
                 yycursor = yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             7 => {
                 yych = yyinput[yycursor];
@@ -165,22 +165,22 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
                         yyt2 = yycursor;
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x2E => {
                         yyt2 = yycursor;
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -191,22 +191,22 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
                         yytm4 = add_mtag(&mt, yytm4, yycursor) catch none;
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x2E => {
                         yytm4 = add_mtag(&mt, yytm4, yycursor) catch none;
                         yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

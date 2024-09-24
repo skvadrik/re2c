@@ -25,6 +25,7 @@
 <default syntax file>:1:0: warning: syntax configuration 'code:switch_case_range' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:switch_case_default' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:loop' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration 'code:continue' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:goto' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:enum' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration 'code:enum_elem' is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]

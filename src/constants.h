@@ -136,6 +136,7 @@ enum class CodeKind: uint32_t {
     ENUM,
     STMT,
     GOTO,
+    CONTINUE,
     LOOP,
     TEXT,
     TEXT_RAW,

@@ -211,6 +211,12 @@ code:switch_case_range = (many
 
 code:switch_case_default = "True";
 
+code:loop = <undefined>;
+
+code:continue = <undefined>;
+
+code:goto = <undefined>;
+
 code:enum =
     "data " name " = "
         [elem{0:-2}: elem " | "]
@@ -218,10 +224,6 @@ code:enum =
     nl;
 
 code:enum_elem = name;
-
-code:loop = <undefined>;
-
-code:goto = <undefined>;
 
 code:fndecl = <undefined>;
 
