@@ -3,6 +3,195 @@ Changelog
 
 
 ----
+4.0x
+----
+
+4.0 (2024-??-??)
+~~~~~~~~~~~~~~~~
+
+- Added support for new languages: D, Haskell, Java, JavaScript, OCaml, Python,
+  V, Zig.
+
+- Completely redesigned and reimplemented codegen subsystem based on the new
+  concept of syntax files (`#450 <https://github.com/skvadrik/re2c/issues/450>`_).
+
+- Added new record API for all languages (enabled with ``--api record``,
+  ``re2c:api = record``) and made it the default API for Haskell and OCaml.
+
+- Renamed former "default API" to "simple API", implemented it for all backends
+  except Haskell and OCaml, and enabled by default API for C, D, Java,
+  JavaScript, Python, V and Zig.
+
+- Added new code generation model - recursive functions (enabled with
+  ``--recursive-functions``), primarily to be used for functional languages.
+
+- Added options:
+
+  + ``--syntax <file>``
+  + ``--api simple``
+  + ``--api generic``
+  + ``--api record``
+  + ``--goto-label``
+  + ``--recursive-functions``
+  + ``--lang none``
+  + ``--leftmost-captvars``
+  + ``--posix-captvars``
+  + ``--captvars`` (alias for ``--leftmost-captvars``)
+  + ``--captures`` (alias for ``--leftmost-captures``)
+
+- Added configurations:
+
+  + ``re2c:api = simple`` (alias for ``re2c:api = default``)
+  + ``re2c:api = generic`` (alias for ``re2c:api = custom``)
+  + ``re2c:api = record``
+  + ``re2c:computed_gotos`` (alias for ``re2c:cgoto``)
+  + ``re2c:cond:abort``
+  + ``re2c:tags:negative``
+  + ``re2c:leftmost-captvars``
+  + ``re2c:posix-captvars``
+  + ``re2c:captvars`` (alias for ``re2c:leftmost-captvars``)
+  + ``re2c:captures`` (alias for ``re2c:leftmost-captures``)
+  + ``re2c:monadic``
+  + ``re2c:fn:sep``
+  + ``re2c:define:YYFN``
+  + ``re2c:define:YYINPUT``
+  + ``re2c:define:YYGETACCEPT``
+  + ``re2c:define:YYSETACCEPT``
+  + ``re2c:define:YYCOPYSTAG``
+  + ``re2c:define:YYCOPYMTAG``
+  + ``re2c:define:YYGETCOND`` (alias for ``re2c:define:YYGETCONDITION``)
+  + ``re2c:define:YYSETCOND`` (alias for ``re2c:define:YYSETCONDITION``)
+  + ``re2c:variable:yyfill``
+  + ``re2c:variable:yynmatch``
+  + ``re2c:variable:yypmatch``
+  + ``re2c[:variable]:yych:literals``
+
+- Added directives:
+
+  + ``/*!svars:re2c ... */``
+  + ``/*!mvars:re2c ... */``
+
+- Added syntax file feature lists:
+
+  + ``supported_apis`` with values from the list:
+    ``simple``, ``generic``, ``record``
+
+  + ``supported_api_styles`` with values from the list:
+    ``free-form``, ``functions``
+
+  + ``supported_code_models`` with values from the list:
+    ``goto-label``, ``loop-switch``, ``recursive-functions``
+
+  + ``supported_targets`` with values from the list:
+    ``code``, ``dot``, ``skeleton``
+
+  + ``supported_features`` with values from the list:
+    ``nested-ifs``, ``bitmaps``, ``computed-gotos``, ``case-ranges``,
+    ``tags``, ``captures``, ``captvars``, ``monadic``, ``unsafe``
+
+- Added syntax file language-specific options:
+
+  + ``semicolons``
+  + ``backtick_quoted_strings``
+  + ``single_quoted_strings``
+  + ``indentation_sensitive``
+  + ``wrap_blocks_in_braces``
+
+- Added syntax file code templates:
+
+  + ``code:var_local``
+  + ``code:var_global``
+  + ``code:const_local``
+  + ``code:const_global``
+  + ``code:array_local``
+  + ``code:array_global``
+  + ``code:array_elem``
+  + ``code:enum``
+  + ``code:enum_elem``
+  + ``code:assign``
+  + ``code:type_int``
+  + ``code:type_uint``
+  + ``code:type_cond_enum``
+  + ``code:type_yybm``
+  + ``code:type_yytarget``
+  + ``code:cmp_eq``
+  + ``code:cmp_ne``
+  + ``code:cmp_lt``
+  + ``code:cmp_gt``
+  + ``code:cmp_le``
+  + ``code:cmp_ge``
+  + ``code:if_then_else``
+  + ``code:if_then_else_oneline``
+  + ``code:switch``
+  + ``code:switch_cases``
+  + ``code:switch_cases_oneline``
+  + ``code:switch_case_range``
+  + ``code:switch_case_default``
+  + ``code:loop``
+  + ``code:continue``
+  + ``code:goto``
+  + ``code:fndecl``
+  + ``code:fndef``
+  + ``code:fncall``
+  + ``code:tailcall``
+  + ``code:recursive_functions``
+  + ``code:fingerprint``
+  + ``code:line_info``
+  + ``code:abort``
+  + ``code:yydebug``
+  + ``code:yypeek``
+  + ``code:yyskip``
+  + ``code:yybackup``
+  + ``code:yybackupctx``
+  + ``code:yyskip_yypeek``
+  + ``code:yypeek_yyskip``
+  + ``code:yyskip_yybackup``
+  + ``code:yybackup_yyskip``
+  + ``code:yybackup_yypeek``
+  + ``code:yyskip_yybackup_yypeek``
+  + ``code:yybackup_yypeek_yyskip``
+  + ``code:yyrestore``
+  + ``code:yyrestorectx``
+  + ``code:yyrestoretag``
+  + ``code:yyshift``
+  + ``code:yyshiftstag``
+  + ``code:yyshiftmtag``
+  + ``code:yystagp``
+  + ``code:yymtagp``
+  + ``code:yystagn``
+  + ``code:yymtagn``
+  + ``code:yycopystag``
+  + ``code:yycopymtag``
+  + ``code:yygetaccept``
+  + ``code:yysetaccept``
+  + ``code:yygetcond``
+  + ``code:yysetcond``
+  + ``code:yygetstate``
+  + ``code:yysetstate``
+  + ``code:yylessthan``
+  + ``code:yybm_filter``
+  + ``code:yybm_match``
+
+- Added warning ``-Wundefined-syntax-config``.
+
+- Warnings that indicate serious issues are now turned on by default
+  (and can be disabled with ``-Wno-<warning>`` options.
+
+- Added configure options:
+
+  + ``--enable-syntax`` (Autoconf)
+  + ``RE2C_REBUILD_SYNTAX`` (CMake)
+
+- Dropped support for function-like API style for Rust.
+  (it was hard to use, if at all possible)
+
+- Flex-style opening/closing braces ``%{`` and ``%}`` for block start/end
+  markers now work for all block types and directives.
+
+- Infra work on Github Actions CI.
+
+
+----
 3.0x
 ----
 
