@@ -34,7 +34,7 @@ const char* DEFAULT_SYNTAX_JAVA =
     "\n"
     "// mutable configurations ------------------------------------------------------\n"
     "\n"
-    "conf:api = default;\n"
+    "conf:api = simple;\n"
     "conf:api:style = free-form;\n"
     "conf:api:sigil = \"@@\";\n"
     "conf:define:YYGETCOND:naked = 0;\n"

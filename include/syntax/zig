@@ -33,7 +33,7 @@ conf:line-dirs = 0;
 
 // mutable configurations ------------------------------------------------------
 
-conf:api = default;
+conf:api = simple;
 conf:api:style = free-form;
 conf:api:sigil = "@@";
 conf:define:YYGETCOND:naked = 0;
