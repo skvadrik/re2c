@@ -35,7 +35,7 @@ const char* DEFAULT_SYNTAX_RUST =
     "\n"
     "// mutable configurations ------------------------------------------------------\n"
     "\n"
-    "conf:api = custom;\n"
+    "conf:api = generic;\n"
     "conf:api:style = free-form;\n"
     "conf:api:sigil = \"@@\";\n"
     "conf:define:YYGETCOND:naked = 0;\n"

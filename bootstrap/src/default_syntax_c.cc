@@ -35,7 +35,7 @@ const char* DEFAULT_SYNTAX_C =
     "\n"
     "// mutable configurations ------------------------------------------------------\n"
     "\n"
-    "conf:api = default;\n"
+    "conf:api = simple;\n"
     "conf:api:style = functions;\n"
     "conf:api:sigil = \"@@\";\n"
     "conf:define:YYGETCOND:naked = 0;\n"
