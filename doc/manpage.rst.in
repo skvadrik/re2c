@@ -231,6 +231,4 @@ Similar programs are flex(1), lex(1), quex(http://quex.sourceforge.net).
 
 AUTHORS
 =======
-re2c was originaly written by Peter Bumbulis in 1993.
-Since then it has been developed and maintained by multiple volunteers;
-mots notably, Brain Young, Marcus Boerger, Dan Nuffer and Ulya Trofimovich.
+.. include:: @top_srcdir@/doc/manual/authors.rst_
