@@ -18,6 +18,7 @@ rm -rf src/benchmarks/submatch_*/*
 # Sync with branch (pull manpage files, benchmark results, etc.).
 # Most of the synced files are treated as source code and committed to Git,
 # except for a few helper scripts.
+mkdir -p build
 git fetch $remote \
     && { git archive --remote=. remotes/$remote/$branch BUILD.md \
         | tar -C src/build -xpf - \
