@@ -23,9 +23,11 @@ git fetch $remote \
     && { git archive --remote=. remotes/$remote/$branch BUILD.md \
         | tar -C src/build -xpf - \
         && mv src/build/BUILD.md src/build/build.md; } \
+    && { git archive --remote=. remotes/$remote/$branch LICENSE \
+        | tar -C src/ -xpf -; } \
     && { git archive --remote=. remotes/$remote/$branch doc/manual \
         | tar -C src/ --strip-components=1 -xpf -; } \
-    && { git archive --remote=. remotes/$remote/$branch examples/**/*.{re,c,h,go,rs,txt,inc} \
+    && { git archive --remote=. remotes/$remote/$branch examples/**/*.{re,c,h,d,go,hs,java,js,ml,py,rs,v,zig,inc} \
         | tar -C src/ -xpf -; } \
     && { git archive --remote=. remotes/$remote/$branch \
             benchmarks/submatch_{dfa_aot,dfa_jit,nfa}/results \
