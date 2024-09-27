@@ -7,60 +7,58 @@ import (
 )
 
 /*!max:re2c*/
-const BUFSIZE int = 4096
+const BUFSIZE uint = 4096
 
 type Input struct {
-	file *os.File
-	buf  []byte
-	cur  int
-	tok  int
-	lim  int
-	eof  bool
+	file     *os.File
+	yyinput  []byte
+	yycursor uint
+	yylimit  uint
+	token    uint
+	eof      bool
 }
 
-func fill(in *Input, need int) int {
+func fill(in *Input, need uint) int {
 	if in.eof { return -1 } // unexpected EOF
 
 	// Error: lexeme too long. In real life can reallocate a larger buffer.
-	if in.tok < need { return -2 }
+	if in.token < need { return -2 }
 
 	// Shift buffer contents (discard everything up to the current token).
-	copy(in.buf[0:], in.buf[in.tok:in.lim])
-	in.cur -= in.tok
-	in.lim -= in.tok
-	in.tok = 0
+	copy(in.yyinput[0:], in.yyinput[in.token:in.yylimit])
+	in.yycursor -= in.token
+	in.yylimit -= in.token
+	in.token = 0
 
 	// Fill free space at the end of buffer with new data from file.
-	n, _ := in.file.Read(in.buf[in.lim:BUFSIZE])
-	in.lim += n
+	n, _ := in.file.Read(in.yyinput[in.yylimit:BUFSIZE])
+	in.yylimit += uint(n)
 
 	// If read less than expected, this is end of input => add zero padding
 	// so that the lexer can access characters at the end of buffer.
-	if in.lim < BUFSIZE {
+	if in.yylimit < BUFSIZE {
 		in.eof = true
-		for i := 0; i < YYMAXFILL; i += 1 { in.buf[in.lim+i] = 0 }
-		in.lim += YYMAXFILL
+		for i := uint(0); i < YYMAXFILL; i += 1 { in.yyinput[in.yylimit+i] = 0 }
+		in.yylimit += YYMAXFILL
 	}
 
 	return 0
 }
 
-func lex(in *Input) int {
+func lex(yyrecord *Input) int {
 	count := 0
 	for {
-		in.tok = in.cur
+		yyrecord.token = yyrecord.yycursor
 	/*!re2c
-		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYPEEK     = "in.buf[in.cur]";
-		re2c:define:YYSKIP     = "in.cur += 1";
-		re2c:define:YYLESSTHAN = "in.lim-in.cur < @@";
-		re2c:define:YYFILL     = "if r := fill(in, @@); r != 0 { return r }";
+		re2c:api = record;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYFILL = "if r := fill(yyrecord, @@); r != 0 { return r }";
 
 		str = ['] ([^'\\] | [\\][^])* ['];
 
 		[\x00] {
 			// Check that it is the sentinel, not some unexpected null.
-			if in.tok == in.lim - YYMAXFILL { return count } else { return -1 }
+			if yyrecord.token == yyrecord.yylimit - YYMAXFILL { return count } else { return -1 }
 		}
 		str  { count += 1; continue }
 		[ ]+ { continue }
@@ -76,19 +74,19 @@ func main() () {
 	// Prepare input file: a few times the size of the buffer, containing
 	// strings with zeroes and escaped quotes.
 	f, _ := os.Create(fname)
-	f.WriteString(strings.Repeat(content, BUFSIZE))
+	f.WriteString(strings.Repeat(content, int(BUFSIZE)))
 	f.Seek(0, 0)
-	count := 3 * BUFSIZE // number of quoted strings written to file
+	count := 3 * int(BUFSIZE) // number of quoted strings written to file
 
 	// Prepare lexer state: all offsets are at the end of buffer.
 	// This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
 	in := &Input{
-		file: f,
-		buf:  make([]byte, BUFSIZE+YYMAXFILL),
-		cur:  BUFSIZE,
-		tok:  BUFSIZE,
-		lim:  BUFSIZE,
-		eof:  false,
+		file:     f,
+		yyinput:  make([]byte, BUFSIZE+YYMAXFILL),
+		yycursor: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		eof:      false,
 	}
 
 	// Run the lexer.

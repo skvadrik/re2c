@@ -12,7 +12,7 @@ The new Go code generation backend can be used either with a ``--lang go`` re2c
 option, or as a standalone re2go binary (which is identical to re2c with
 ``--lang go`` set by default).
 The documentation has been split into separate manpages for
-:ref:`re2c <manual/manual_c:user manual (C)>` and
+:ref:`re2c <manual/manual_c:user manual (C/C++)>` and
 :ref:`re2go <manual/manual_go:user manual (Go)>`; they are
 generated from the same text, but have language-specific examples.
 The re2go binary and manpage need to be enabled explicitly with a configuration

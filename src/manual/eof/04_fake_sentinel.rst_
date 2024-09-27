@@ -1,0 +1,11 @@
+Custom checks
+-------------
+
+This example uses a custom end-of-input handling method based on generic API.
+The program counts space-separated single-quoted strings. It is the same as the
+`sentinel`_ example, except that the input is not null-terminated. To cover up
+for the absence of a sentinel character at the end of input, ``YYPEEK`` is
+redefined to perform a bounds check before it reads the next input character.
+This is inefficient because checks are done very often. If the check condition
+fails, ``YYPEEK`` returns the real character, otherwise it returns a fake
+sentinel character.

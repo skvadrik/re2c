@@ -504,11 +504,8 @@ yy35:
 	}
 yy36:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy4;
-	} else {
-		goto yy2;
-	}
+	if (yyaccept == 0) goto yy4;
+	else goto yy2;
 yy37:
 	yych = *++YYCURSOR;
 	switch (yych) {

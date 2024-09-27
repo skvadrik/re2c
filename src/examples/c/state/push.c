@@ -48,7 +48,6 @@ static Status lex(State &st, unsigned int *recv) {
     
 #line 50 "c/state/push.c"
 switch (st.state) {
-	default: goto yy0;
 	case 0:
 		if (st.lim <= st.cur) goto yy8;
 		goto yyFillLabel0;
@@ -58,6 +57,7 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
+	default: goto yy0;
 }
 #line 46 "c/state/push.re"
 
@@ -66,7 +66,6 @@ switch (st.state) {
         st.tok = st.cur;
     
 #line 69 "c/state/push.c"
-{
 yy0:
 yyFillLabel0:
 	yych = *st.cur;
@@ -110,7 +109,7 @@ yy3:
 	st.state = -1;
 #line 63 "c/state/push.re"
 	{ return BAD_PACKET; }
-#line 114 "c/state/push.c"
+#line 113 "c/state/push.c"
 yy4:
 	st.mar = ++st.cur;
 yyFillLabel1:
@@ -155,7 +154,7 @@ yy5:
 	st.state = -1;
 #line 65 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
-#line 159 "c/state/push.c"
+#line 158 "c/state/push.c"
 yy6:
 	++st.cur;
 yyFillLabel2:
@@ -202,15 +201,14 @@ yy8:
 	st.state = -1;
 #line 64 "c/state/push.re"
 	{ return END; }
-#line 206 "c/state/push.c"
-}
+#line 205 "c/state/push.c"
 #line 66 "c/state/push.re"
 
     }
 }
 
 void test(const char **packets, Status expect) {
-    // Create a "socket" (open the same file for reading and writing).
+    // Create a pipe (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");

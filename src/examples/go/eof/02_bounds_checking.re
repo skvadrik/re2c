@@ -8,24 +8,22 @@ import "strings"
 // Expects YYMAXFILL-padded string.
 func lex(str string) int {
 	// Pad string with YYMAXFILL zeroes at the end.
-	buf := str + strings.Repeat("\000", YYMAXFILL)
+	yyinput := str + strings.Repeat("\000", int(YYMAXFILL))
 
-	var cur int
-	lim := len(buf)
+	yycursor := 0
+	yylimit := len(yyinput)
 	count := 0
 
 	for { /*!re2c
-		re2c:define:YYCTYPE    = byte;
-		re2c:define:YYPEEK     = "buf[cur]";
-		re2c:define:YYSKIP     = "cur += 1";
-		re2c:define:YYLESSTHAN = "lim - cur < @@";
-		re2c:define:YYFILL     = "return -1";
+		re2c:api = default;
+		re2c:define:YYCTYPE = byte;
+		re2c:define:YYFILL = "return -1";
 
 		str = ['] ([^'\\] | [\\][^])* ['];
 
 		[\x00] {
 			// Check that it is the sentinel, not some unexpected null.
-			if cur - 1 == len(str) { return count } else { return -1 }
+			if yycursor - 1 == len(str) { return count } else { return -1 }
 		}
 		str  { count += 1; continue }
 		[ ]+ { continue }

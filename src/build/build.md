@@ -5,9 +5,9 @@ How to build
 Dependencies
 ------------
 
-To build re2c from a release tarball one needs only a C++ compiler and Python 3
-(for build-time scripts and for testing). Building on Windows additionally
-requires either CMake or a Mingw build environment.
+To build re2c from a release tarball one needs only a C++ compiler (supporting
+at least C++11) and Python 3 for build-time scripts and for testing. Building on
+Windows additionally requires either CMake or a Mingw build environment.
 
 To develop re2c one also needs CMake or Autotools (both build systems are
 maintained). Other dependencies include Bison (to rebuild parsers), Python 3

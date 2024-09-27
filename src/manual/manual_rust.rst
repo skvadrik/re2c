@@ -92,8 +92,8 @@ Handling the end of input
 .. include:: /manual/eof/02_bounds_checking.rst_
 .. literalinclude:: ../examples/rust/eof/02_bounds_checking.re
     :language: rust
-.. include:: /manual/eof/04_generic_api.rst_
-.. literalinclude:: ../examples/rust/eof/05_generic_api_eof_rule.re
+.. include:: /manual/eof/04_fake_sentinel.rst_
+.. literalinclude:: ../examples/rust/eof/04_fake_sentinel.re
     :language: rust
 
 Buffer refilling
@@ -147,8 +147,8 @@ Submatch extraction
 .. include:: /manual/submatch/submatch_example_stags_fill.rst_
 .. literalinclude:: ../examples/rust/submatch/01_stags_fill.re
     :language: rust
-.. include:: /manual/submatch/submatch_example_posix.rst_
-.. literalinclude:: ../examples/rust/submatch/03_posix.re
+.. include:: /manual/submatch/submatch_example_captures.rst_
+.. literalinclude:: ../examples/rust/submatch/04_posix_captures.re
     :language: rust
 .. include:: /manual/submatch/submatch_example_mtags.rst_
 .. literalinclude:: ../examples/rust/submatch/02_mtags.re

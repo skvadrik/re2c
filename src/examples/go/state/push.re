@@ -11,13 +11,13 @@ import (
 const BUFSIZE int = 10
 
 type State struct {
-	file  *os.File
-	buf   []byte
-	cur   int
-	mar   int
-	tok   int
-	lim   int
-	state int
+	file     *os.File
+	yyinput  []byte
+	yycursor int
+	yymarker int
+	yylimit  int
+	token    int
+	yystate  int
 }
 
 const (
@@ -29,43 +29,37 @@ const (
 )
 
 func fill(st *State) int {
-	shift := st.tok
-	used := st.lim - st.tok
+	shift := st.token
+	used := st.yylimit - st.token
 	free := BUFSIZE - used
 
 	// Error: no space. In real life can reallocate a larger buffer.
 	if free < 1 { return lexPacketTooBig }
 
 	// Shift buffer contents (discard already processed data).
-	copy(st.buf[0:], st.buf[shift:shift+used])
-	st.cur -= shift
-	st.mar -= shift
-	st.lim -= shift
-	st.tok -= shift
+	copy(st.yyinput[0:], st.yyinput[shift:shift+used])
+	st.yycursor -= shift
+	st.yymarker -= shift
+	st.yylimit -= shift
+	st.token -= shift
 
 	// Fill free space at the end of buffer with new data.
-	n, _ := st.file.Read(st.buf[st.lim:BUFSIZE])
-	st.lim += n
-	st.buf[st.lim] = 0 // append sentinel symbol
+	n, _ := st.file.Read(st.yyinput[st.yylimit:BUFSIZE])
+	st.yylimit += n
+	st.yyinput[st.yylimit] = 0 // append sentinel symbol
 
 	return lexReady
 }
 
-func lex(st *State, recv *int) int {
+func lex(yyrecord *State, recv *int) int {
 	var yych byte
 	/*!getstate:re2c*/
 loop:
-	st.tok = st.cur
+	yyrecord.token = yyrecord.yycursor
 	/*!re2c
+		re2c:api = record;
 		re2c:eof = 0;
-		re2c:define:YYPEEK     = "st.buf[st.cur]";
-		re2c:define:YYSKIP     = "st.cur += 1";
-		re2c:define:YYBACKUP   = "st.mar = st.cur";
-		re2c:define:YYRESTORE  = "st.cur = st.mar";
-		re2c:define:YYLESSTHAN = "st.lim <= st.cur";
-		re2c:define:YYFILL     = "return lexWaitingForInput";
-		re2c:define:YYGETSTATE = "st.state";
-		re2c:define:YYSETSTATE = "st.state = @@{state}";
+		re2c:define:YYFILL = "return lexWaitingForInput";
 
 		packet = [a-z]+[;];
 
@@ -76,7 +70,7 @@ loop:
 }
 
 func test(expect int, packets []string) {
-	// Create a "socket" (open the same file for reading and writing).
+	// Create a pipe (open the same file for reading and writing).
 	fname := "pipe"
 	fw, _ := os.Create(fname)
 	fr, _ := os.Open(fname)
@@ -84,14 +78,14 @@ func test(expect int, packets []string) {
 	// Initialize lexer state: `state` value is -1, all offsets are at the end
 	// of buffer.
 	st := &State{
-		file:  fr,
-		// Sentinel at `lim` offset is set to zero, which triggers YYFILL.
-		buf:   make([]byte, BUFSIZE+1),
-		cur:   BUFSIZE,
-		mar:   BUFSIZE,
-		tok:   BUFSIZE,
-		lim:   BUFSIZE,
-		state: -1,
+		file:     fr,
+		// Sentinel at `yylimit` offset is set to zero, which triggers YYFILL.
+		yyinput:  make([]byte, BUFSIZE+1),
+		yycursor: BUFSIZE,
+		yymarker: BUFSIZE,
+		yylimit:  BUFSIZE,
+		token:    BUFSIZE,
+		yystate:  -1,
 	}
 
 	// Main loop. The buffer contains incomplete data which appears packet by
