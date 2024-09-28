@@ -218,7 +218,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/eof/01_sentinel.rst_ \
 	doc/manual/eof/02_bounds_checking.rst_ \
 	doc/manual/eof/03_eof_rule.rst_ \
-	doc/manual/eof/04_generic_api.rst_ \
+	doc/manual/eof/04_fake_sentinel.rst_ \
 	doc/manual/eof/eof.rst_ \
 	doc/manual/fill/01_fill.rst_ \
 	doc/manual/fill/02_fill.rst_ \
@@ -233,7 +233,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/skeleton/skeleton.rst_ \
 	doc/manual/state/state.rst_ \
 	doc/manual/submatch/submatch_example_mtags.rst_ \
-	doc/manual/submatch/submatch_example_posix.rst_ \
+	doc/manual/submatch/submatch_example_captures.rst_ \
 	doc/manual/submatch/submatch_example_stags_fill.rst_ \
 	doc/manual/submatch/submatch_example_stags.rst_ \
 	doc/manual/submatch/submatch.rst_ \
