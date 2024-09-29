@@ -2,7 +2,7 @@
 
 set -e
 
-for lang in {c,go,rust}; do
+for lang in {c,d,go,haskell,java,js,ocaml,python,rust,v,zig}; do
     python3 build/split_man.py src/manual/manual.rst.in src/manual/manual_$lang.rst $lang
 done
 
