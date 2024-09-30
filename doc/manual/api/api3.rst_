@@ -1,13 +1,5 @@
-Here is a list of API primitives that may be used by the generated
-code in order to interface with the outer program.
-Which primitives are needed depends on multiple factors, including
-the complexity of regular expressions, input representation,
-buffering, the use of various features and so on.
-All the necessary primitives should be defined by the user in the form
-of macros, functions, variables, free-form pieces of code, or any other
-suitable form.
-re2c does not (and cannot) check the definitions, so if anything is
-missing or defined incorrectly the generated code will not compile.
+Here is a full list of API primitives that may be used by the generated code in
+order to interface with the outer program.
 
 ``YYCTYPE``
     The type of the input characters (code units).
