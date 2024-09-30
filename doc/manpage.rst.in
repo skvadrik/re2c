@@ -39,12 +39,12 @@ Syntax
 
 .. include:: @top_srcdir@/doc/manual/syntax/syntax.rst_
 
-Program interface
-=================
+Program interface (API)
+=======================
 
-.. include:: @top_srcdir@/doc/manual/syntax/api1.rst_
-.. include:: @top_srcdir@/doc/manual/syntax/api2_RE2C_LANG.rst_
-.. include:: @top_srcdir@/doc/manual/syntax/api3.rst_
+.. include:: @top_srcdir@/doc/manual/api/api1.rst_
+.. include:: @top_srcdir@/doc/manual/api/api2_RE2C_LANG.rst_
+.. include:: @top_srcdir@/doc/manual/api/api3.rst_
 
 Options
 =======
@@ -69,10 +69,6 @@ Warnings can be invividually enabled, disabled and turned into an error.
 Blocks and directives
 =====================
 .. include:: @top_srcdir@/doc/manual/directives/directives.rst_
-
-API primitives
-==============
-.. include:: @top_srcdir@/doc/manual/api/interface.rst_
 
 Configurations
 ==============
