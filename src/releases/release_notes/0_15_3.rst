@@ -6,7 +6,7 @@ Most of the problems were reported and fixed by Oleksii Taran (on OS X)
 and Sergei Trofimovich (on FreeBSD and Windows).
 Thank you for your help!
 
-:ref:`Skeleton <manual/manual_c:skeleton programs>` coverage has been improved.
+:ref:`Skeleton <manual/manual_re2c:skeleton programs>` coverage has been improved.
 
 See the changelog :ref:`releases/changelog/changelog:0.15.3 (2015-12-02)` for details.
 

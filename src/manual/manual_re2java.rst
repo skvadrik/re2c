@@ -1,5 +1,5 @@
 ++++++++++++++++++++++++++++
-User manual (C)
+User manual (Java)
 ++++++++++++++++++++++++++++
 
 
@@ -12,7 +12,7 @@ User manual (C)
 
 .. raw:: html
 
-    <p style="color:gray";><i>Note: examples are in C++ (but can be easily adapted to C).</i></p>
+    <p style="color:gray";><i>Note: This manual is for Java, but it refers to re2c as the general program.</i></p>
 
 Introduction
 ============
@@ -21,26 +21,26 @@ Introduction
 Here is an example of a small program that checks if a given string contains a
 decimal number:
 
-.. literalinclude:: ../examples/c/01_basic.re
-    :language: c
+.. literalinclude:: ../examples/java/01_basic.re
+    :language: java
 
 In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
 the generated code:
 
-.. literalinclude:: ../examples/c/01_basic.c
-    :language: c
+.. literalinclude:: ../examples/java/01_basic.java
+    :language: java
 
 Syntax
 ======
 
 .. include:: /manual/syntax/syntax.rst_
 
-Program interface
-=================
+Program interface (API)
+=======================
 
-.. include:: /manual/syntax/api1.rst_
-.. include:: /manual/syntax/api2_c.rst_
-.. include:: /manual/syntax/api3.rst_
+.. include:: /manual/api/api1.rst_
+.. include:: /manual/api/api2_java.rst_
+.. include:: /manual/api/api3.rst_
 
 Options
 =======
@@ -68,10 +68,6 @@ Blocks and directives
 =====================
 .. include:: /manual/directives/directives.rst_
 
-API primitives
-==============
-.. include:: /manual/api/interface.rst_
-
 Configurations
 ==============
 .. include:: /manual/configurations/configurations.rst_
@@ -84,45 +80,45 @@ Handling the end of input
 =========================
 .. include:: /manual/eof/eof.rst_
 .. include:: /manual/eof/01_sentinel.rst_
-.. literalinclude:: ../examples/c/eof/01_sentinel.re
-    :language: c
+.. literalinclude:: ../examples/java/eof/01_sentinel.re
+    :language: java
 .. include:: /manual/eof/03_eof_rule.rst_
-.. literalinclude:: ../examples/c/eof/03_eof_rule.re
-    :language: c
+.. literalinclude:: ../examples/java/eof/03_eof_rule.re
+    :language: java
 .. include:: /manual/eof/02_bounds_checking.rst_
-.. literalinclude:: ../examples/c/eof/02_bounds_checking.re
-    :language: c
+.. literalinclude:: ../examples/java/eof/02_bounds_checking.re
+    :language: java
 .. include:: /manual/eof/04_fake_sentinel.rst_
-.. literalinclude:: ../examples/c/eof/04_fake_sentinel.re
-    :language: c
+.. literalinclude:: ../examples/java/eof/04_fake_sentinel.re
+    :language: java
 
 Buffer refilling
 ================
 .. include:: /manual/fill/fill.rst_
 .. include:: /manual/fill/01_fill.rst_
-.. literalinclude:: ../examples/c/fill/01_fill.re
-    :language: c
+.. literalinclude:: ../examples/java/fill/01_fill.re
+    :language: java
 .. include:: /manual/fill/02_fill.rst_
-.. literalinclude:: ../examples/c/fill/02_fill.re
-    :language: c
+.. literalinclude:: ../examples/java/fill/02_fill.re
+    :language: java
 
 Multiple blocks
 ===============
 .. include:: /manual/conditions/blocks.rst_
-.. literalinclude:: ../examples/c/conditions/parse_u32_blocks.re
-    :language: c
+.. literalinclude:: ../examples/java/conditions/parse_u32_blocks.re
+    :language: java
 
 Start conditions
 ================
 .. include:: /manual/conditions/conditions.rst_
-.. literalinclude:: ../examples/c/conditions/parse_u32_conditions.re
-    :language: c
+.. literalinclude:: ../examples/java/conditions/parse_u32_conditions.re
+    :language: java
 
 Storable state
 ==============
 .. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/c/state/push.re
-    :language: c
+.. literalinclude:: ../examples/java/state/push.re
+    :language: java
 
 Reusable blocks
 ===============
@@ -130,65 +126,65 @@ Reusable blocks
 
 Example of a ``!use`` directive:
 
-.. literalinclude:: ../examples/c/reuse/usedir.re
-    :language: c
+.. literalinclude:: ../examples/java/reuse/usedir.re
+    :language: java
 
 Example of a ``/*!use:re2c ... */`` block:
 
-.. literalinclude:: ../examples/c/reuse/reuse.re
-    :language: c
+.. literalinclude:: ../examples/java/reuse/reuse.re
+    :language: java
 
 Submatch extraction
 ===================
 .. include:: /manual/submatch/submatch.rst_
 .. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/c/submatch/01_stags.re
-    :language: c
+.. literalinclude:: ../examples/java/submatch/01_stags.re
+    :language: java
 .. include:: /manual/submatch/submatch_example_stags_fill.rst_
-.. literalinclude:: ../examples/c/submatch/01_stags_fill.re
-    :language: c
+.. literalinclude:: ../examples/java/submatch/01_stags_fill.re
+    :language: java
 .. include:: /manual/submatch/submatch_example_captures.rst_
-.. literalinclude:: ../examples/c/submatch/04_posix_captures.re
-    :language: c
+.. literalinclude:: ../examples/java/submatch/03_captures.re
+    :language: java
 .. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/c/submatch/02_mtags.re
-    :language: c
+.. literalinclude:: ../examples/java/submatch/02_mtags.re
+    :language: java
 
 Encoding support
 ================
 .. include:: /manual/encodings/encodings.rst_
-.. literalinclude:: ../examples/c/encodings/unicode_identifier.re
-    :language: c
+.. literalinclude:: ../examples/java/encodings/unicode_identifier.re
+    :language: java
 
 Include files
 =============
 .. include:: /manual/includes/includes.rst_
 
-Include file 1 (definitions.h):
+Include file 1 (definitions.java):
 
-.. literalinclude:: ../examples/c/includes/definitions.h
-    :language: c
+.. literalinclude:: ../examples/java/includes/definitions.java
+    :language: java
 
 Include file 2 (extra_rules.re.inc):
 
-.. literalinclude:: ../examples/c/includes/extra_rules.re.inc
+.. literalinclude:: ../examples/java/includes/extra_rules.re.inc
 
 Input file:
 
-.. literalinclude:: ../examples/c/includes/include.re
-    :language: c
+.. literalinclude:: ../examples/java/includes/include.re
+    :language: java
 
 Header files
 ============
 .. include:: /manual/headers/headers.rst_
 
-.. literalinclude:: ../examples/c/headers/header.re
-    :language: c
+.. literalinclude:: ../examples/java/headers/header.re
+    :language: java
 
 The generated header file:
 
-.. literalinclude:: ../examples/c/headers/lexer/state.h
-    :language: c
+.. literalinclude:: ../examples/java/headers/lexer/state.java
+    :language: java
 
 Skeleton programs
 =================
@@ -200,4 +196,4 @@ Visualization and debug
 .. include:: /manual/dot/dot.rst_
 .. include:: /manual/dot/example.rst
 
-.. include:: /examples/examples_c.rst
+.. include:: /examples/examples_java.rst

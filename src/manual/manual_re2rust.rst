@@ -1,5 +1,5 @@
 ++++++++++++++++++++++++++++
-User manual (RE2C_LANG_NAME)
+User manual (Rust)
 ++++++++++++++++++++++++++++
 
 
@@ -12,7 +12,7 @@ User manual (RE2C_LANG_NAME)
 
 .. raw:: html
 
-    <p style="color:gray";><i>RE2C_DISCLAIMER</i></p>
+    <p style="color:gray";><i>Note: This manual is for Rust, but it refers to re2c as the general program.</i></p>
 
 Introduction
 ============
@@ -21,14 +21,14 @@ Introduction
 Here is an example of a small program that checks if a given string contains a
 decimal number:
 
-.. literalinclude:: ../examples/RE2C_LANG/01_basic.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/01_basic.re
+    :language: rust
 
 In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
 the generated code:
 
-.. literalinclude:: ../examples/RE2C_LANG/01_basic.RE2C_SOURCE_EXT
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/01_basic.rs
+    :language: rust
 
 Syntax
 ======
@@ -39,7 +39,7 @@ Program interface (API)
 =======================
 
 .. include:: /manual/api/api1.rst_
-.. include:: /manual/api/api2_RE2C_LANG.rst_
+.. include:: /manual/api/api2_rust.rst_
 .. include:: /manual/api/api3.rst_
 
 Options
@@ -80,45 +80,45 @@ Handling the end of input
 =========================
 .. include:: /manual/eof/eof.rst_
 .. include:: /manual/eof/01_sentinel.rst_
-.. literalinclude:: ../examples/RE2C_LANG/eof/01_sentinel.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/eof/01_sentinel.re
+    :language: rust
 .. include:: /manual/eof/03_eof_rule.rst_
-.. literalinclude:: ../examples/RE2C_LANG/eof/03_eof_rule.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/eof/03_eof_rule.re
+    :language: rust
 .. include:: /manual/eof/02_bounds_checking.rst_
-.. literalinclude:: ../examples/RE2C_LANG/eof/02_bounds_checking.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/eof/02_bounds_checking.re
+    :language: rust
 .. include:: /manual/eof/04_fake_sentinel.rst_
-.. literalinclude:: ../examples/RE2C_LANG/eof/04_fake_sentinel.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/eof/04_fake_sentinel.re
+    :language: rust
 
 Buffer refilling
 ================
 .. include:: /manual/fill/fill.rst_
 .. include:: /manual/fill/01_fill.rst_
-.. literalinclude:: ../examples/RE2C_LANG/fill/01_fill.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/fill/01_fill.re
+    :language: rust
 .. include:: /manual/fill/02_fill.rst_
-.. literalinclude:: ../examples/RE2C_LANG/fill/02_fill.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/fill/02_fill.re
+    :language: rust
 
 Multiple blocks
 ===============
 .. include:: /manual/conditions/blocks.rst_
-.. literalinclude:: ../examples/RE2C_LANG/conditions/parse_u32_blocks.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/conditions/parse_u32_blocks.re
+    :language: rust
 
 Start conditions
 ================
 .. include:: /manual/conditions/conditions.rst_
-.. literalinclude:: ../examples/RE2C_LANG/conditions/parse_u32_conditions.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/conditions/parse_u32_conditions.re
+    :language: rust
 
 Storable state
 ==============
 .. include:: /manual/state/state.rst_
-.. literalinclude:: ../examples/RE2C_LANG/state/push.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/state/push.re
+    :language: rust
 
 Reusable blocks
 ===============
@@ -126,65 +126,65 @@ Reusable blocks
 
 Example of a ``!use`` directive:
 
-.. literalinclude:: ../examples/RE2C_LANG/reuse/usedir.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/reuse/usedir.re
+    :language: rust
 
 Example of a ``/*!use:re2c ... */`` block:
 
-.. literalinclude:: ../examples/RE2C_LANG/reuse/reuse.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/reuse/reuse.re
+    :language: rust
 
 Submatch extraction
 ===================
 .. include:: /manual/submatch/submatch.rst_
 .. include:: /manual/submatch/submatch_example_stags.rst_
-.. literalinclude:: ../examples/RE2C_LANG/submatch/01_stags.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/submatch/01_stags.re
+    :language: rust
 .. include:: /manual/submatch/submatch_example_stags_fill.rst_
-.. literalinclude:: ../examples/RE2C_LANG/submatch/01_stags_fill.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/submatch/01_stags_fill.re
+    :language: rust
 .. include:: /manual/submatch/submatch_example_captures.rst_
-.. literalinclude:: ../examples/RE2C_LANG/submatch/03_captures.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/submatch/03_captures.re
+    :language: rust
 .. include:: /manual/submatch/submatch_example_mtags.rst_
-.. literalinclude:: ../examples/RE2C_LANG/submatch/02_mtags.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/submatch/02_mtags.re
+    :language: rust
 
 Encoding support
 ================
 .. include:: /manual/encodings/encodings.rst_
-.. literalinclude:: ../examples/RE2C_LANG/encodings/unicode_identifier.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/encodings/unicode_identifier.re
+    :language: rust
 
 Include files
 =============
 .. include:: /manual/includes/includes.rst_
 
-Include file 1 (definitions.RE2C_HEADER_EXT):
+Include file 1 (definitions.rs):
 
-.. literalinclude:: ../examples/RE2C_LANG/includes/definitions.RE2C_HEADER_EXT
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/includes/definitions.rs
+    :language: rust
 
 Include file 2 (extra_rules.re.inc):
 
-.. literalinclude:: ../examples/RE2C_LANG/includes/extra_rules.re.inc
+.. literalinclude:: ../examples/rust/includes/extra_rules.re.inc
 
 Input file:
 
-.. literalinclude:: ../examples/RE2C_LANG/includes/include.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/includes/include.re
+    :language: rust
 
 Header files
 ============
 .. include:: /manual/headers/headers.rst_
 
-.. literalinclude:: ../examples/RE2C_LANG/headers/header.re
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/headers/header.re
+    :language: rust
 
 The generated header file:
 
-.. literalinclude:: ../examples/RE2C_LANG/headers/lexer/state.RE2C_HEADER_EXT
-    :language: RE2C_LANG
+.. literalinclude:: ../examples/rust/headers/lexer/state.rs
+    :language: rust
 
 Skeleton programs
 =================
@@ -196,4 +196,4 @@ Visualization and debug
 .. include:: /manual/dot/dot.rst_
 .. include:: /manual/dot/example.rst
 
-.. include:: /examples/examples_RE2C_LANG.rst
+.. include:: /examples/examples_rust.rst

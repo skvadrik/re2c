@@ -2,8 +2,8 @@
 
 set -e
 
-for lang in {c,d,go,haskell,java,js,ocaml,python,rust,v,zig}; do
-    python3 build/split_man.py src/manual/manual.rst.in src/manual/manual_$lang.rst $lang
+for lang in {c,d,go,hs,java,js,ocaml,py,rust,v,zig}; do
+    python3 build/split_man.py src/manual/manual.rst.in src/manual/manual_re2$lang.rst
 done
 
 sphinx-build -b html src obj || { echo "failed!"; exit 1; }

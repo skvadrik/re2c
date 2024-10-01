@@ -22,7 +22,7 @@ Very soon it became clear that some of the changes in code generation are hard t
 For example, even a minor rebalancing of ``if`` and ``switch`` statements
 may change the generated code significantly.
 It was clear that re2c needed an automatic verification tool,
-which lead to the idea of generating :ref:`skeleton programs <manual/manual_c:skeleton programs>`.
+which lead to the idea of generating :ref:`skeleton programs <manual/manual_re2c:skeleton programs>`.
 
 Meanwhile some work was done on adding warnings,
 updating the build system and fixing various bugs.

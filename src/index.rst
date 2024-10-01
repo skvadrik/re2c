@@ -5,13 +5,21 @@ re2c
 .. toctree::
     :hidden:
 
-    Release notes       </releases/release_notes>
-    How to build        </build/build>
-    User manual (C)     </manual/manual_c>
-    User manual (Go)    </manual/manual_go>
-    User manual (Rust)  </manual/manual_rust>
-    Benchmarks          </benchmarks/benchmarks>
-    Changelog           </releases/changelog/changelog>
+    Release notes         </releases/release_notes>
+    How to build          </build/build>
+    User manual (C/C++)   </manual/manual_re2c>
+    User manual (D)       </manual/manual_re2d>
+    User manual (Go)      </manual/manual_re2go>
+    User manual (Haskell) </manual/manual_re2hs>
+    User manual (Java)    </manual/manual_re2java>
+    User manual (JS)      </manual/manual_re2js>
+    User manual (OCaml)   </manual/manual_re2ocaml>
+    User manual (Python)  </manual/manual_re2py>
+    User manual (Rust)    </manual/manual_re2rust>
+    User manual (V)       </manual/manual_re2v>
+    User manual (Zig)     </manual/manual_re2zig>
+    Benchmarks            </benchmarks/benchmarks>
+    Changelog             </releases/changelog/changelog>
 
 re2c is a free and open-source lexer generator for C/C++, Go and Rust with a
 focus on generating fast code. It compiles regular expression specifications to
@@ -38,9 +46,9 @@ etc.
     :width:  2em
 
 |feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
-See the user manuals (`C/C++ <manual/manual_c.html>`_,
-`Go <manual/manual_go.html>`_, `Rust <manual/manual_rust.html>`_) for a complete
-overview with examples.
+See the user manuals (`C/C++ <manual/manual_re2c.html>`_,
+`Go <manual/manual_re2go.html>`_, `Rust <manual/manual_re2rust.html>`_) for a
+complete overview with examples.
 
 Download
 --------
