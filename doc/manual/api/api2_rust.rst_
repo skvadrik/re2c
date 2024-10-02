@@ -4,8 +4,8 @@ program:
 
 **Simple API**
     (*added in version 4.0*)
-    This is a basic API that can be enabled with option ``--api simple`` or
-    configuration ``re2c:api = simple``. It consists of the following
+    This is a basic API that can be enabled with ``--api simple`` option or
+    ``re2c:api = simple`` configuration. It consists of the following
     primitives: ``YYINPUT`` (which should be defined as a sequence of code
     units, e.g. a string) and ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``,
     ``YYLIMIT`` (which should be defined as indices in ``YYINPUT``).
@@ -15,8 +15,8 @@ program:
 **Record API**
     (*added in version 4.0*)
     Record API is useful in cases when lexer state must be stored in a struct.
-    It is enabled with option ``--api record`` or configuration
-    ``re2c:api = record``. This API consists of a variable ``yyrecord`` (the
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
     name can be overridden with ``re2c:variable:yyrecord``) that should be
     defined as a struct with fields ``yyinput``, ``yycursor``, ``yymarker``,
     ``yyctxmarker``, ``yylimit`` (only the fields used by the generated code
@@ -25,9 +25,7 @@ program:
     |
 
 **Generic API**
-    (*added in version 0.14*)
-    This is the default API for the Rust backend. It is enabled with
-    ``--api generic`` option or ``re2c:api = generic`` configuration.
+    This is the most flexible API and the default API for the Rust backend.
     This API contains primitives for generic operations:
     ``YYPEEK``,
     ``YYSKIP``,

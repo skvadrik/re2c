@@ -242,8 +242,8 @@ should be defined as pointers of type \fBYYCTYPE*\fP\&.
 .B \fBRecord API\fP
 (\fIadded in version 4.0\fP)
 Record API is useful in cases when lexer state must be stored in a struct.
-It is enabled with option \fB\-\-api record\fP or configuration
-\fBre2c:api = record\fP\&. This API consists of a variable \fByyrecord\fP (the
+It is enabled with \fB\-\-api record\fP option or \fBre2c:api = record\fP
+configuration. This API consists of a variable \fByyrecord\fP (the
 name can be overridden with \fBre2c:variable:yyrecord\fP) that should be
 defined as a struct with fields \fByycursor\fP, \fByymarker\fP, \fByyctxmarker\fP,
 \fByylimit\fP (only the fields used by the generated code need to be defined,
@@ -255,8 +255,8 @@ and their names can be configured).
 .TP
 .B \fBGeneric API\fP
 (\fIadded in version 0.14\fP)
-This is the most flexible API provided by re2c. It is enabled with
-\fB\-\-api generic\fP option or \fBre2c:api = generic\fP configuration.
+This is the most flexible API. It is enabled with \fB\-\-api generic\fP option
+or \fBre2c:api = generic\fP configuration.
 This API contains primitives for generic operations:
 \fBYYPEEK\fP,
 \fBYYSKIP\fP,
@@ -2795,53 +2795,64 @@ int main() {
 .SH SUBMATCH EXTRACTION
 .sp
 re2c has two options for submatch extraction.
+.INDENT 0.0
+.TP
+.B \fBTags\fP
+The first option is to use standalone \fItags\fP of the form \fB@stag\fP or
+\fB#mtag\fP, where \fBstag\fP and \fBmtag\fP are arbitrary used\-defined names.
+Tags are enabled with \fB\-T \-\-tags\fP option or \fBre2c:tags = 1\fP
+configuration. Semantically tags are position markers: they can be
+inserted anywhere in a regular expression, and they bind to the
+corresponding position (or multiple positions) in the input string.
+\fIS\-tags\fP bind to the last matching position, and \fIm\-tags\fP bind to a list of
+positions (they may be used in repetition subexpressions, where a single
+position in a regular expression corresponds to multiple positions in the
+input string). All tags should be defined by the user, either manually or
+with the help of \fBsvars:re2c\fP and \fBmvars:re2c\fP directives.
+If there is more than one way tags can be matched against the input,
+ambiguity is resolved using leftmost greedy disambiguation strategy.
+.TP
+.B \fBCaptures\fP
+The second option is to use \fIcapturing groups\fP\&. They are enabled with
+\fB\-\-captures\fP option or \fBre2c:captures = 1\fP configuration. There are two
+flavours for different disambiguation policies, \fB\-\-leftmost\-captures\fP
+(the default) is for leftmost greedy policy, and, \fB\-\-posix\-captures\fP is
+for POSIX longest\-match policy. In this mode all parenthesized
+subexpressions are considered capturing groups, and a bang can be used to
+mark non\-capturing groups: \fB(! ... )\fP\&. With \fB\-\-invert\-captures\fP option or
+\fBre2c:invert\-captures = 1\fP configuration the meaning of bang is inverted.
+The number of groups for the matching rule is stored in a variable
+\fByynmatch\fP (the whole regular expression is group number zero), and
+submatch results are stored in \fByypmatch\fP array. Both \fByynmatch\fP and
+\fByypmatch\fP should be defined by the user, and \fByypmatch\fP size must be at
+least \fB[yynmatch * 2]\fP\&. re2c provides a directive \fBmaxnmatch:re2c\fP
+that defines \fBYYMAXNMATCH\fP, a constant that equals to the maximum value of
+\fByynmatch\fP among all rules.
+.TP
+.B \fBCaptvars\fP
+Another way to use capturing groups is the \fB\-\-captvars\fP option or
+\fBre2c:captvars = 1\fP configuration. The only difference with \fB\-\-captures\fP
+is in the way the generated code stores submatch results: instead of
+\fByynmatch\fP and \fByypmatch\fP re2c generates variables \fByytl<k>\fP and
+\fByytr<k>\fP for \fIk\fP\-th capturing group (the user should declare these with
+\fBsvars:re2c\fP directive). Captures with variables support two dismbiguation
+policies: \fB\-\-leftmost\-captvars\fP or \fBre2c:leftmost\-captvars = 1\fP for
+leftmost greedy policy (the default one) and \fB\-\-posix\-captvars\fP or
+\fBre2c:posix\-captvars\fP for POSIX longest\-match policy.
+.UNINDENT
 .sp
-The first option is \fB\-T \-\-tags\fP\&. With this option one can use standalone tags
-of the form \fB@stag\fP and \fB#mtag\fP, where \fBstag\fP and \fBmtag\fP are arbitrary
-used\-defined names. Tags can be used anywhere inside of a regular expression;
-semantically they are just position markers. Tags of the form \fB@stag\fP are
-called s\-tags: they denote a single submatch value (the last input position
-where this tag matched). Tags of the form \fB#mtag\fP are called m\-tags: they
-denote multiple submatch values (the whole history of repetitions of this tag).
-All tags should be defined by the user as variables with the corresponding
-names. With standalone tags re2c uses leftmost greedy disambiguation: submatch
-positions correspond to the leftmost matching path through the regular
-expression.
-.sp
-The second option is \fB\-P \-\-posix\-captures\fP: it enables POSIX\-compliant
-capturing groups. In this mode parentheses in regular expressions denote the
-beginning and the end of capturing groups; the whole regular expression is group
-number zero. The number of groups for the matching rule is stored in a variable
-\fByynmatch\fP, and submatch results are stored in \fByypmatch\fP array. Both
-\fByynmatch\fP and \fByypmatch\fP should be defined by the user, and \fByypmatch\fP
-size must be at least \fB[yynmatch * 2]\fP\&. re2c provides a directive
-\fB/*!maxnmatch:re2c*/\fP that defines \fBYYMAXNMATCH\fP: a constant  equal to the
-maximal value of \fByynmatch\fP among all rules. Note that re2c implements
-POSIX\-compliant disambiguation: each subexpression matches as long as possible,
-and subexpressions that start earlier in regular expression have priority over
-those starting later. Capturing groups are translated into s\-tags under the
-hood, therefore we use the word \(dqtag\(dq to describe them as well.
-.sp
-With both \fB\-P \-\-posix\-captures\fP and \fBT \-\-tags\fP options re2c uses efficient
-submatch extraction algorithm described in the
-\fI\%Tagged Deterministic Finite Automata with Lookahead\fP
-paper. The overhead on submatch extraction in the generated lexer grows with the
-number of tags \-\-\- if this number is moderate, the overhead is barely
-noticeable. In the lexer tags are implemented using a number of tag variables
-generated by re2c. There is no one\-to\-one correspondence between tag variables
-and tags: a single variable may be reused for different tags, and one tag may
-require multiple variables to hold all its ambiguous values. Eventually
-ambiguity is resolved, and only one final variable per tag survives. When a rule
-matches, all its tags are set to the values of the corresponding tag variables.
-The exact number of tag variables is unknown to the user; this number is
-determined by re2c. However, tag variables should be defined by the user as a
-part of the lexer state and updated by \fBYYFILL\fP, therefore re2c provides
-directives \fB/*!stags:re2c*/\fP and \fB/*!mtags:re2c*/\fP that can be used to
-declare, initialize and manipulate tag variables. These directives have two
-optional configurations: \fBformat = \(dq@@\(dq;\fP (specifies the template where \fB@@\fP
-is substituted with the name of each tag variable), and \fBseparator = \(dq\(dq;\fP
-(specifies the piece of code used to join the generated pieces for different
-tag variables).
+Under the hood all these options translate into tags and
+\fI\%Tagged Deterministic Finite Automata with Lookahead\fP\&.
+The core idea of TDFA is to minimize the overhead on submatch extraction.
+In the extreme, if there\(aqre no tags or captures in a regular expression, TDFA is
+just an ordinary DFA. If the number of tags is moderate, the overhead is barely
+noticeable. The generated TDFA uses a number of \fItag variables\fP which do not map
+directly to tags: a single variable may be used for different tags, and a tag
+may require multiple variables to hold all its possible values. Eventually
+ambiguity is resolved, and only one final variable per tag survives. Tag
+variables should be defined using \fBstags:re2c\fP or \fBmtags:re2c\fP directives.
+If the lexer state is stored, tag variables should be part of it. They also
+need to be updated  by \fBYYFILL\fP\&.
 .sp
 S\-tags support the following operations:
 .INDENT 0.0
@@ -3069,7 +3080,7 @@ int main() {
 .UNINDENT
 .UNINDENT
 .sp
-Here is an example of using POSIX capturing groups to parse semantic versions.
+Here is an example of using capturing groups to parse semantic versions.
 .INDENT 0.0
 .INDENT 3.5
 .sp
@@ -3078,9 +3089,6 @@ Here is an example of using POSIX capturing groups to parse semantic versions.
 // re2c $INPUT \-o $OUTPUT
 #include <assert.h>
 #include <stddef.h>
-
-// Maximum number of capturing groups among all rules.
-/*!maxnmatch:re2c*/
 
 struct SemVer { int major, minor, patch; };
 
@@ -3093,9 +3101,8 @@ static int s2n(const char *s, const char *e) { // pre\-parsed string to number
 static bool lex(const char *str, SemVer &ver) {
     const char *YYCURSOR = str, *YYMARKER;
 
-    // Allocate memory for capturing parentheses (twice the number of groups).
-    const char *yypmatch[YYMAXNMATCH * 2];
-    size_t yynmatch;
+    // Final tag variables available in semantic action.
+    /*!svars:re2c format = \(aqconst char *@@;\en\(aq; */
 
     // Intermediate tag variables used by the lexer (must be autogenerated).
     /*!stags:re2c format = \(aqconst char *@@;\en\(aq; */
@@ -3103,18 +3110,15 @@ static bool lex(const char *str, SemVer &ver) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:define:YYCTYPE = char;
-        re2c:posix\-captures = 1;
+        re2c:captvars = 1;
 
         num = [0\-9]+;
 
         (num) \(dq.\(dq (num) (\(dq.\(dq num)? [\ex00] {
-            // \(gayynmatch\(ga is the number of capturing groups
-            assert(yynmatch == 4);
-            // Even \(gayypmatch\(ga values are for opening parentheses, odd values
-            // are for closing parentheses, the first group is the whole match.
-            ver.major = s2n(yypmatch[2], yypmatch[3]);
-            ver.minor = s2n(yypmatch[4], yypmatch[5]);
-            ver.patch = yypmatch[6] ? s2n(yypmatch[6] + 1, yypmatch[7]) : 0;
+            (void) yytl0; (void) yytr0; // some variables are unused
+            ver.major = s2n(yytl1, yytr1);
+            ver.minor = s2n(yytl2, yytr2);
+            ver.patch = yytl3 ? s2n(yytl3 + 1, yytr3) : 0;
             return true;
         }
         * { return false; }
