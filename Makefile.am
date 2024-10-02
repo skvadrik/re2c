@@ -164,14 +164,19 @@ nodist_re2c_SOURCES = $(re2c_GEN)
 BUILT_SOURCES = $(re2c_GEN_SRC)
 
 # bootstrap sources
-re2c_BOOT_DOC_C = bootstrap/doc/re2c.1
-re2c_BOOT_DOC_GO = bootstrap/doc/re2go.1
-re2c_BOOT_DOC_RUST = bootstrap/doc/re2rust.1
 re2c_BOOT_HELP = bootstrap/src/msg/help.cc
 re2c_BOOT = \
-	$(re2c_BOOT_DOC_C) \
-	$(re2c_BOOT_DOC_GO) \
-	$(re2c_BOOT_DOC_RUST) \
+	bootstrap/doc/re2c.1 \
+	bootstrap/doc/re2d.1 \
+	bootstrap/doc/re2go.1 \
+	bootstrap/doc/re2hs.1 \
+	bootstrap/doc/re2java.1 \
+	bootstrap/doc/re2js.1 \
+	bootstrap/doc/re2ocaml.1 \
+	bootstrap/doc/re2py.1 \
+	bootstrap/doc/re2rust.1 \
+	bootstrap/doc/re2v.1 \
+	bootstrap/doc/re2zig.1 \
 	$(re2c_BOOT_HELP) \
 	bootstrap/src/msg/ver_to_vernum.cc \
 	bootstrap/src/options/parse_opts.cc \
@@ -207,6 +212,8 @@ re2c_CUSTOM = \
 
 # docs
 re2c_SRC_DOC = doc/manpage.rst
+# To build the list of examples for all backends, run:
+# find examples -regex '.*\.re\|.*\(state\|01_basic\|definitions\)\..*' -printf '\t%p \\\n' | sort
 re2c_SRC_DOC_EXT = \
 	doc/manual/api/api1.rst_ \
 	doc/manual/api/api2_c.rst_ \
@@ -246,8 +253,8 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/syntax/syntax.rst_ \
 	doc/manual/warnings/warnings_general.rst_ \
 	doc/manual/warnings/warnings_list.rst_ \
-	examples/c/01_basic.re \
 	examples/c/01_basic.c \
+	examples/c/01_basic.re \
 	examples/c/conditions/parse_u32_blocks.re \
 	examples/c/conditions/parse_u32_conditions.re \
 	examples/c/encodings/unicode_identifier.re \
@@ -255,12 +262,16 @@ re2c_SRC_DOC_EXT = \
 	examples/c/eof/02_bounds_checking.re \
 	examples/c/eof/03_eof_rule.re \
 	examples/c/eof/04_fake_sentinel.re \
+	examples/c/eof/05_fake_sentinel_eof_rule.re \
 	examples/c/fill/01_fill.re \
 	examples/c/fill/02_fill.re \
+	examples/c/generic_api/ifstream.re \
 	examples/c/headers/header.re \
 	examples/c/headers/lexer/state.h \
-	examples/c/includes/include.re \
 	examples/c/includes/definitions.h \
+	examples/c/includes/include.re \
+	examples/c/real_world/cxx98.re \
+	examples/c/reuse/braille.re \
 	examples/c/reuse/reuse.re \
 	examples/c/reuse/usedir.re \
 	examples/c/state/push.re \
@@ -269,8 +280,36 @@ re2c_SRC_DOC_EXT = \
 	examples/c/submatch/02_mtags.re \
 	examples/c/submatch/03_captures.re \
 	examples/c/submatch/04_posix_captures.re \
-	examples/go/01_basic.re \
+	examples/c/submatch/http_rfc7230.re \
+	examples/c/submatch/parse_etc_passwd.re \
+	examples/c/submatch/parse_options.re \
+	examples/c/submatch/parse_records.re \
+	examples/c/submatch/uri_rfc3986.re \
+	examples/d/01_basic.d \
+	examples/d/01_basic.re \
+	examples/d/conditions/parse_u32_blocks.re \
+	examples/d/conditions/parse_u32_conditions.re \
+	examples/d/encodings/unicode_identifier.re \
+	examples/d/eof/01_sentinel.re \
+	examples/d/eof/02_bounds_checking.re \
+	examples/d/eof/03_eof_rule.re \
+	examples/d/eof/04_fake_sentinel.re \
+	examples/d/fill/01_fill.re \
+	examples/d/fill/02_fill.re \
+	examples/d/headers/header.re \
+	examples/d/headers/lexer/state.d \
+	examples/d/includes/definitions.d \
+	examples/d/includes/include.re \
+	examples/d/reuse/reuse.re \
+	examples/d/reuse/usedir.re \
+	examples/d/state/push.re \
+	examples/d/submatch/01_stags_fill.re \
+	examples/d/submatch/01_stags.re \
+	examples/d/submatch/02_mtags.re \
+	examples/d/submatch/03_captures.re \
+	examples/d/submatch/04_posix_captures.re \
 	examples/go/01_basic.go \
+	examples/go/01_basic.re \
 	examples/go/conditions/parse_u32_blocks.re \
 	examples/go/conditions/parse_u32_conditions.re \
 	examples/go/encodings/unicode_identifier.re \
@@ -282,8 +321,8 @@ re2c_SRC_DOC_EXT = \
 	examples/go/fill/02_fill.re \
 	examples/go/headers/header.re \
 	examples/go/headers/lexer/state.go \
-	examples/go/includes/include.re \
 	examples/go/includes/definitions.go \
+	examples/go/includes/include.re \
 	examples/go/reuse/reuse.re \
 	examples/go/reuse/usedir.re \
 	examples/go/state/push.re \
@@ -292,6 +331,120 @@ re2c_SRC_DOC_EXT = \
 	examples/go/submatch/02_mtags.re \
 	examples/go/submatch/03_captures.re \
 	examples/go/submatch/04_posix_captures.re \
+	examples/haskell/01_basic.hs \
+	examples/haskell/01_basic.re \
+	examples/haskell/conditions/parse_u32_blocks.re \
+	examples/haskell/conditions/parse_u32_conditions.re \
+	examples/haskell/encodings/unicode_identifier.re \
+	examples/haskell/eof/01_sentinel.re \
+	examples/haskell/eof/02_bounds_checking.re \
+	examples/haskell/eof/03_eof_rule.re \
+	examples/haskell/eof/04_fake_sentinel.re \
+	examples/haskell/fill/01_fill.re \
+	examples/haskell/fill/02_fill.re \
+	examples/haskell/headers/header.re \
+	examples/haskell/headers/lexer/state.hs \
+	examples/haskell/includes/definitions.hs \
+	examples/haskell/includes/include.re \
+	examples/haskell/reuse/reuse.re \
+	examples/haskell/reuse/usedir.re \
+	examples/haskell/state/push.re \
+	examples/haskell/submatch/01_stags_fill.re \
+	examples/haskell/submatch/01_stags.re \
+	examples/haskell/submatch/02_mtags.re \
+	examples/haskell/submatch/03_captures.re \
+	examples/java/01_basic.java \
+	examples/java/01_basic.re \
+	examples/java/conditions/parse_u32_blocks.re \
+	examples/java/conditions/parse_u32_conditions.re \
+	examples/java/encodings/unicode_identifier.re \
+	examples/java/eof/01_sentinel.re \
+	examples/java/eof/02_bounds_checking.re \
+	examples/java/eof/03_eof_rule.re \
+	examples/java/eof/04_fake_sentinel.re \
+	examples/java/fill/01_fill.re \
+	examples/java/fill/02_fill.re \
+	examples/java/headers/header.re \
+	examples/java/headers/lexer/state.java \
+	examples/java/includes/definitions.java \
+	examples/java/includes/include.re \
+	examples/java/reuse/reuse.re \
+	examples/java/reuse/usedir.re \
+	examples/java/state/push.re \
+	examples/java/submatch/01_stags_fill.re \
+	examples/java/submatch/01_stags.re \
+	examples/java/submatch/02_mtags.re \
+	examples/java/submatch/03_captures.re \
+	examples/java/submatch/04_posix_captures.re \
+	examples/js/01_basic.js \
+	examples/js/01_basic.re \
+	examples/js/conditions/parse_u32_blocks.re \
+	examples/js/conditions/parse_u32_conditions.re \
+	examples/js/encodings/unicode_identifier.re \
+	examples/js/eof/01_sentinel.re \
+	examples/js/eof/02_bounds_checking.re \
+	examples/js/eof/03_eof_rule.re \
+	examples/js/eof/04_fake_sentinel.re \
+	examples/js/fill/01_fill.re \
+	examples/js/fill/02_fill.re \
+	examples/js/headers/header.re \
+	examples/js/headers/lexer/state.js \
+	examples/js/includes/definitions.js \
+	examples/js/includes/include.re \
+	examples/js/reuse/reuse.re \
+	examples/js/reuse/usedir.re \
+	examples/js/state/push.re \
+	examples/js/submatch/01_stags_fill.re \
+	examples/js/submatch/01_stags.re \
+	examples/js/submatch/02_mtags.re \
+	examples/js/submatch/03_captures.re \
+	examples/js/submatch/04_posix_captures.re \
+	examples/ocaml/01_basic.ml \
+	examples/ocaml/01_basic.re \
+	examples/ocaml/conditions/parse_u32_blocks.re \
+	examples/ocaml/conditions/parse_u32_conditions.re \
+	examples/ocaml/encodings/unicode_identifier.re \
+	examples/ocaml/eof/01_sentinel.re \
+	examples/ocaml/eof/02_bounds_checking.re \
+	examples/ocaml/eof/03_eof_rule.re \
+	examples/ocaml/eof/04_fake_sentinel.re \
+	examples/ocaml/fill/01_fill.re \
+	examples/ocaml/fill/02_fill.re \
+	examples/ocaml/headers/header.re \
+	examples/ocaml/headers/lexer/state.ml \
+	examples/ocaml/includes/definitions.ml \
+	examples/ocaml/includes/include.re \
+	examples/ocaml/reuse/reuse.re \
+	examples/ocaml/reuse/usedir.re \
+	examples/ocaml/state/push.re \
+	examples/ocaml/submatch/01_stags_fill.re \
+	examples/ocaml/submatch/01_stags.re \
+	examples/ocaml/submatch/02_mtags.re \
+	examples/ocaml/submatch/03_captures.re \
+	examples/ocaml/submatch/04_posix_captures.re \
+	examples/python/01_basic.py \
+	examples/python/01_basic.re \
+	examples/python/conditions/parse_u32_blocks.re \
+	examples/python/conditions/parse_u32_conditions.re \
+	examples/python/encodings/unicode_identifier.re \
+	examples/python/eof/01_sentinel.re \
+	examples/python/eof/02_bounds_checking.re \
+	examples/python/eof/03_eof_rule.re \
+	examples/python/eof/04_fake_sentinel.re \
+	examples/python/fill/01_fill.re \
+	examples/python/fill/02_fill.re \
+	examples/python/headers/header.re \
+	examples/python/headers/lexer/state.py \
+	examples/python/includes/definitions.py \
+	examples/python/includes/include.re \
+	examples/python/reuse/reuse.re \
+	examples/python/reuse/usedir.re \
+	examples/python/state/push.re \
+	examples/python/submatch/01_stags_fill.re \
+	examples/python/submatch/01_stags.re \
+	examples/python/submatch/02_mtags.re \
+	examples/python/submatch/03_captures.re \
+	examples/python/submatch/04_posix_captures.re \
 	examples/rust/01_basic.re \
 	examples/rust/01_basic.rs \
 	examples/rust/conditions/parse_u32_blocks.re \
@@ -305,8 +458,9 @@ re2c_SRC_DOC_EXT = \
 	examples/rust/fill/02_fill.re \
 	examples/rust/headers/header.re \
 	examples/rust/headers/lexer/state.rs \
-	examples/rust/includes/include.re \
 	examples/rust/includes/definitions.rs \
+	examples/rust/includes/include.re \
+	examples/rust/real_world/c.re \
 	examples/rust/reuse/reuse.re \
 	examples/rust/reuse/usedir.re \
 	examples/rust/state/push.re \
@@ -314,19 +468,84 @@ re2c_SRC_DOC_EXT = \
 	examples/rust/submatch/01_stags.re \
 	examples/rust/submatch/02_mtags.re \
 	examples/rust/submatch/03_captures.re \
-	examples/rust/submatch/04_posix_captures.re
+	examples/rust/submatch/04_posix_captures.re \
+	examples/v/01_basic.re \
+	examples/v/01_basic.v \
+	examples/v/conditions/parse_u32_blocks.re \
+	examples/v/conditions/parse_u32_conditions.re \
+	examples/v/encodings/unicode_identifier.re \
+	examples/v/eof/01_sentinel.re \
+	examples/v/eof/02_bounds_checking.re \
+	examples/v/eof/03_eof_rule.re \
+	examples/v/eof/04_fake_sentinel.re \
+	examples/v/fill/01_fill.re \
+	examples/v/fill/02_fill.re \
+	examples/v/headers/header.re \
+	examples/v/headers/lexer/state.v \
+	examples/v/includes/definitions.v \
+	examples/v/includes/include.re \
+	examples/v/reuse/reuse.re \
+	examples/v/reuse/usedir.re \
+	examples/v/state/push.re \
+	examples/v/submatch/01_stags_fill.re \
+	examples/v/submatch/01_stags.re \
+	examples/v/submatch/02_mtags.re \
+	examples/v/submatch/03_captures.re \
+	examples/v/submatch/04_posix_captures.re \
+	examples/zig/01_basic.re \
+	examples/zig/01_basic.zig \
+	examples/zig/conditions/parse_u32_blocks.re \
+	examples/zig/conditions/parse_u32_conditions.re \
+	examples/zig/encodings/unicode_identifier.re \
+	examples/zig/eof/01_sentinel.re \
+	examples/zig/eof/02_bounds_checking.re \
+	examples/zig/eof/03_eof_rule.re \
+	examples/zig/eof/04_fake_sentinel.re \
+	examples/zig/fill/01_fill.re \
+	examples/zig/fill/02_fill.re \
+	examples/zig/headers/header.re \
+	examples/zig/headers/lexer/state.zig \
+	examples/zig/includes/definitions.zig \
+	examples/zig/includes/include.re \
+	examples/zig/reuse/reuse.re \
+	examples/zig/reuse/usedir.re \
+	examples/zig/state/push.re \
+	examples/zig/submatch/01_stags_fill.re \
+	examples/zig/submatch/01_stags.re \
+	examples/zig/submatch/02_mtags.re \
+	examples/zig/submatch/03_captures.re \
+	examples/zig/submatch/04_posix_captures.re
 
-DOC_C = doc/re2c.1
-DOCS = $(DOC_C)
-
-if WITH_GOLANG
-DOC_GO = doc/re2go.1
-DOCS += $(DOC_GO)
+DOCS = doc/re2c.1
+if WITH_DLANG
+DOCS += doc/re2d.1
 endif
-
+if WITH_GOLANG
+DOCS += doc/re2go.1
+endif
+if WITH_HASKELL
+DOCS += doc/re2hs.1
+endif
+if WITH_JAVA
+DOCS += doc/re2java.1
+endif
+if WITH_JS
+DOCS += doc/re2js.1
+endif
+if WITH_OCAML
+DOCS += doc/re2ocaml.1
+endif
+if WITH_PYTHON
+DOCS += doc/re2py.1
+endif
 if WITH_RUST
-DOC_RUST = doc/re2rust.1
-DOCS += $(DOC_RUST)
+DOCS += doc/re2rust.1
+endif
+if WITH_VLANG
+DOCS += doc/re2v.1
+endif
+if WITH_ZIG
+DOCS += doc/re2zig.1
 endif
 
 man_MANS = $(DOCS)
@@ -438,27 +657,13 @@ docs: $(DOCS) $(re2c_GEN_HELP)
 RST2TXT = $(top_srcdir)/build/rst2txt.py
 RST2MAN = $(top_srcdir)/build/rst2man.py
 SPLITMAN = $(top_srcdir)/build/split_man.py
-# generate manpage for C
-$(DOC_C): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
+# generate manpage
+doc/re2%.1: $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).c c \
-		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).c > $@ \
-		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_C) \
-		&& rm $(top_builddir)/$(re2c_SRC_DOC).c
-# generate manpage for Go
-$(DOC_GO): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
-	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).go go \
-		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).go > $@ \
-		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_GO) \
-		&& rm $(top_builddir)/$(re2c_SRC_DOC).go
-# generate manpage for Rust
-$(DOC_RUST): $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
-	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$(re2c_SRC_DOC).rust rust \
-		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$(re2c_SRC_DOC).rust > $@ \
-		&& cp $@ $(top_srcdir)/$(re2c_BOOT_DOC_RUST) \
-		&& rm $(top_builddir)/$(re2c_SRC_DOC).rust
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$@.rst \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$@.rst > $@ \
+		&& cp $@ $(top_srcdir)/bootstrap/$@ \
+		&& rm $(top_builddir)/$@.rst
 # generate help
 $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(RST2TXT)
 	$(AM_V_at)$(MKDIR_P) $(@D)
@@ -467,18 +672,10 @@ $(re2c_GEN_HELP): $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(RST2TXT)
 else
 docs: $(DOCS) $(re2c_GEN_HELP)
 	$(AM_V_at)echo "Reconfigure with --enable-docs to rebuild docs"
-# copy bootstrap manpage for C
-$(DOC_C): $(re2c_BOOT_DOC_C)
+# copy bootstrap manpage
+doc/re2%.1: bootstrap/doc/re2%.1
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_C) $@
-# copy bootstrap manpage for Go
-$(DOC_GO): $(re2c_BOOT_DOC_GO)
-	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_GO) $@
-# copy bootstrap manpage for Rust
-$(DOC_RUST): $(re2c_BOOT_DOC_RUST)
-	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)cp $(top_srcdir)/$(re2c_BOOT_DOC_RUST) $@
+	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$@ $@
 # copy bootstrap help
 $(re2c_GEN_HELP): $(re2c_BOOT_HELP)
 	$(AM_V_at)$(MKDIR_P) $(@D)

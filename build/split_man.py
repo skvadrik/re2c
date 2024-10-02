@@ -5,15 +5,19 @@ Generates language-specific manpages by replacing placeholder tokens in the
 input manpage.
 """
 
+import os
+import re
 import sys
 
-if len(sys.argv) != 4:
-    print('usage:', sys.argv[0], '<input> <output> <lang>')
+if len(sys.argv) != 3:
+    print('usage:', sys.argv[0], '<input> <output>')
     exit(1)
 
 input = sys.argv[1]
 output = sys.argv[2]
-lang = sys.argv[3].lower().encode('utf-8')
+
+# Extract language name from the output filename.
+lang = re.search('re2([a-z]+)', os.path.basename(output)).group(1).encode('utf-8')
 
 hdr_ext = None
 disclaimer = None
@@ -28,7 +32,8 @@ elif lang == b'd':
 elif lang == b'go':
     src_ext = b'go'
     lang_name = b'Go'
-elif lang == b'haskell':
+elif lang == b'hs':
+    lang = b'haskell'
     src_ext = b'hs'
     lang_name = b'Haskell'
 elif lang == b'java':
@@ -40,7 +45,8 @@ elif lang == b'js':
 elif lang == b'ocaml':
     src_ext = b'ml'
     lang_name = b'OCaml'
-elif lang == b'python':
+elif lang == b'py':
+    lang = b'python'
     src_ext = b'py'
     lang_name = b'Python'
 elif lang == b'rust':

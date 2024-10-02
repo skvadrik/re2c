@@ -159,7 +159,7 @@ Submatch extraction
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_captures.rst_
-.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/04_posix_captures.re
+.. include:: @top_srcdir@/examples/RE2C_LANG/submatch/03_captures.re
     :literal:
     :code: RE2C_LANG
 .. include:: @top_srcdir@/doc/manual/submatch/submatch_example_mtags.rst_

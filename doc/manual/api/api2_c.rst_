@@ -12,8 +12,8 @@ program:
 **Record API**
     (*added in version 4.0*)
     Record API is useful in cases when lexer state must be stored in a struct.
-    It is enabled with option ``--api record`` or configuration
-    ``re2c:api = record``. This API consists of a variable ``yyrecord`` (the
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
     name can be overridden with ``re2c:variable:yyrecord``) that should be
     defined as a struct with fields ``yycursor``, ``yymarker``, ``yyctxmarker``,
     ``yylimit`` (only the fields used by the generated code need to be defined,
@@ -23,8 +23,8 @@ program:
 
 **Generic API**
     (*added in version 0.14*)
-    This is the most flexible API provided by re2c. It is enabled with
-    ``--api generic`` option or ``re2c:api = generic`` configuration.
+    This is the most flexible API. It is enabled with ``--api generic`` option
+    or ``re2c:api = generic`` configuration.
     This API contains primitives for generic operations:
     ``YYPEEK``,
     ``YYSKIP``,
