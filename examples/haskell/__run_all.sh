@@ -21,11 +21,17 @@ for f in $(find -name '*.re'); do
         head -n $l "$hstest" > "$hstest".mod && mv "$hstest".mod "$hstest"
     fi
 
-    extra_args=`egrep -o -- '--header [^ ]+' "$hstest" | sed -E 's/--header (.*)/-i \1/'`
-
     echo "$f"
-    ghc "$hstest" $extra_args -O2 -Wall -o example && ./example \
-        || { echo "*** error ***"; exit 1; }
+    # header test requires special handling for Haskell - temporarily rename it to State.hs
+    if $(grep -q -- '--header' "$hstest"); then
+        ln -s lexer/state.hs State.hs \
+            && ghc "$hstest" -O2 -Wall -o example && ./example \
+            || { echo "*** error ***"; exit 1; }
+        rm State.hs
+    else
+        ghc "$hstest" -O2 -Wall -o example && ./example \
+            || { echo "*** error ***"; exit 1; }
+    fi
 
     rm -f "$hstest" example $(find -name '*.o' -o -name '*.hi')
     cd $root_dir
