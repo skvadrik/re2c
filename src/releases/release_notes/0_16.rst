@@ -20,7 +20,7 @@ the generated code for all the tests in testsuite must remain the same.
 However, in the case of DFA minimization the generated code changes dramatically.
 It is impossible to verify the changes manually.
 
-One possible verification tool is the :ref:`skeleton<manual/manual_re2c:skeleton programs>` feature.
+One possible verification tool is the :ref:`skeleton<manual/manual_c:skeleton programs>` feature.
 Because skeleton is constructed prior to DFA minimization, it cannot be affected by any errors in its implementation.
 
 Another way to verify DFA minimization is by implementing two different algorithms

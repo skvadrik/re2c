@@ -37,17 +37,17 @@ etc.
 
 |feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
 See the user manuals (
-`C/C++ <manual/manual_re2c.html>`_,
-`D <manual/manual_re2d.html>`_,
-`Go <manual/manual_re2go.html>`_,
-`Haskell <manual/manual_re2hs.html>`_,
-`Java <manual/manual_re2java.html>`_,
-`JS <manual/manual_re2js.html>`_,
-`OCaml <manual/manual_re2ocaml.html>`_,
-`Python <manual/manual_re2py.html>`_,
-`Rust <manual/manual_re2rust.html>`_
-`V <manual/manual_re2v.html>`_,
-`Zig <manual/manual_re2zig.html>`_,
+`C/C++ <manual/manual_c.html>`_,
+`D <manual/manual_d.html>`_,
+`Go <manual/manual_go.html>`_,
+`Haskell <manual/manual_hs.html>`_,
+`Java <manual/manual_java.html>`_,
+`JS <manual/manual_js.html>`_,
+`OCaml <manual/manual_ocaml.html>`_,
+`Python <manual/manual_py.html>`_,
+`Rust <manual/manual_rust.html>`_
+`V <manual/manual_v.html>`_,
+`Zig <manual/manual_zig.html>`_,
 ) for a
 complete overview with examples.
 
