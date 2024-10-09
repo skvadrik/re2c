@@ -223,7 +223,6 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/conditions/blocks.rst_ \
 	doc/manual/conditions/conditions.rst_ \
 	doc/manual/configurations/configurations.rst_ \
-	doc/manual/directives/directives.rst_ \
 	doc/manual/dot/dot.rst_ \
 	doc/manual/encodings/encodings.rst_ \
 	doc/manual/eof/01_sentinel.rst_ \
