@@ -35,7 +35,7 @@ storable state mode it is impossible to jump from the ``YYGETSTATE`` switch to a
 DFA state, therefore a separate ``getstate:re2c`` detached from the lexer block
 is not supported. Most of these implementation details are hidden from the user.
 
-:ref:`Generic API <manual/manual_rust:program interface (api)>` is set by default
+:ref:`Generic API <manual/manual_rust:program interface>` is set by default
 for Rust, as the use of pointer arithmetic is unsafe and generally discouraged.
 The ``YYPEEK`` operation is automatically wrapped in ``unsafe`` because it should
 avoid bounds checks, which are done by the lexer in a

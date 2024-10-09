@@ -35,8 +35,8 @@ Syntax
 
 .. include:: /manual/syntax/syntax.rst_
 
-Program interface (API)
-=======================
+Program interface
+=================
 
 .. include:: /manual/api/api1.rst_
 .. include:: /manual/api/api2_python.rst_
@@ -63,10 +63,6 @@ Warnings can be invividually enabled, disabled and turned into an error.
 
 .. include:: /manual/warnings/warnings_general.rst_
 .. include:: /manual/warnings/warnings_list.rst_
-
-Blocks and directives
-=====================
-.. include:: /manual/directives/directives.rst_
 
 Configurations
 ==============
