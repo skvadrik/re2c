@@ -14,6 +14,8 @@ User manual (C/C++)
 
     <p style="color:gray";><i>Note: examples are in C++ (but can be easily adapted to C).</i></p>
 
+.. |re2c| replace:: re2c
+
 Introduction
 ============
 .. include:: /manual/syntax/intro.rst_

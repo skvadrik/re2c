@@ -12,7 +12,9 @@ User manual (JavaScript)
 
 .. raw:: html
 
-    <p style="color:gray";><i>Note: This manual is for JavaScript, but it refers to re2c as the general program.</i></p>
+    <p style="color:gray";><i></i></p>
+
+.. |re2c| replace:: re2js
 
 Introduction
 ============

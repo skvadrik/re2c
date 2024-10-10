@@ -14,6 +14,8 @@ User manual (RE2C_LANG_NAME)
 
     <p style="color:gray";><i>RE2C_DISCLAIMER</i></p>
 
+.. |re2c| replace:: RE2C_PROG
+
 Introduction
 ============
 .. include:: /manual/syntax/intro.rst_
