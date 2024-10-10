@@ -18,9 +18,10 @@ output = sys.argv[2]
 
 # Extract language name from the output filename.
 lang = re.search('re2([a-z]+)', os.path.basename(output)).group(1).encode('utf-8')
-
+prog = b're2' + lang
 hdr_ext = None
-disclaimer = None
+disclaimer = b''
+
 if lang == b'c':
     src_ext = b'c'
     hdr_ext = b'h'
@@ -63,15 +64,13 @@ else:
     exit(1)
 if hdr_ext == None:
     hdr_ext = src_ext
-if disclaimer == None:
-    disclaimer = (b'Note: This manual is for ' + lang_name +
-        b', but it refers to re2c as the general program.')
 
 with open(input, 'rb') as input_file:
     file_bytes = input_file.read()
 
 file_bytes = file_bytes.replace(b'RE2C_LANG_NAME', lang_name)
 file_bytes = file_bytes.replace(b'RE2C_LANG', lang)
+file_bytes = file_bytes.replace(b'RE2C_PROG', prog)
 file_bytes = file_bytes.replace(b'RE2C_SOURCE_EXT', src_ext)
 file_bytes = file_bytes.replace(b'RE2C_HEADER_EXT', hdr_ext)
 file_bytes = file_bytes.replace(b'RE2C_DISCLAIMER', disclaimer)

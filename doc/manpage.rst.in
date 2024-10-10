@@ -1,12 +1,14 @@
-++++
-re2c
-++++
++++++++++
+RE2C_PROG
++++++++++
 
-======================================================
-generate fast lexical analyzers for C/C++, Go and Rust
-======================================================
+==================================================
+generate fast lexical analyzers for RE2C_LANG_NAME
+==================================================
 
 :Manual section: 1
+
+.. |re2c| replace:: RE2C_PROG
 
 SYNOPSIS
 ========

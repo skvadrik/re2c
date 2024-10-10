@@ -9,7 +9,7 @@ any code unit (the only way to match any code unit regardless of the encoding
 is the default rule ``*``).
 The generated lexer works with a stream of code units: ``yych`` stores a code
 unit, and ``YYCTYPE`` is the code unit type. Regular expressions, on the other
-hand, are specified in terms of code points. When re2c compiles regular
+hand, are specified in terms of code points. When |re2c| compiles regular
 expressions to automata it translates code points to code units. This is
 generally not a simple mapping: in variable-length encodings a single code point
 range may get translated to a complex code unit graph.
@@ -38,14 +38,14 @@ The following encodings are supported:
   fixed-length Unicode encoding with code space ``[0-0x10FFFF]`` and 4-byte code
   points and code units.
 
-Include file ``include/unicode_categories.re`` provides re2c definitions for the
+Include file ``include/unicode_categories.re`` provides |re2c| definitions for the
 standard Unicode categories.
 
 Option ``--input-encoding`` specifies source file encoding, which can be used to
 enable Unicode literals in regular expressions. For example
-``--input-encoding utf8`` tells re2c that the source file is in UTF8 (it differs
+``--input-encoding utf8`` tells |re2c| that the source file is in UTF8 (it differs
 from ``--utf8`` which sets input text encoding). Option ``--encoding-policy``
-specifies the way re2c handles Unicode surrogates (code points in range
+specifies the way |re2c| handles Unicode surrogates (code points in range
 ``[0xD800-0xDFFF]``).
 
 Below is an example of a lexer for UTF8 encoded Unicode identifiers.

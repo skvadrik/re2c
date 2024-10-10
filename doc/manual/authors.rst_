@@ -1,4 +1,4 @@
-re2c was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
+|re2c| was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
 Marcus Boerger and Dan Nuffer spent several years to turn the original idea into
 a production ready code generator. Since then it has been maintained and
 developed by multiple volunteers, most notably,

@@ -1,6 +1,6 @@
 
 ``--dfa-minimization <moore | table>``
-    Internal option: DFA minimization algorithm used by re2c. The ``moore``
+    Internal option: DFA minimization algorithm used by |re2c|. The ``moore``
     option is the Moore algorithm (it is the default). The ``table`` option is
     the "table filling" algorithm. Both algorithms should produce the same DFA
     up to states relabeling; table filling is simpler and much slower and serves

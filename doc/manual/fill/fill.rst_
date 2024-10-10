@@ -15,7 +15,7 @@ single input position, but a set of interrelated positions:
 - marker: the position of the most recent match, if any (``YYMARKER`` in default
   API or ``YYBACKUP``/``YYRESTORE`` in generic API)
 
-- token: the start of the current lexeme (implicit in re2c API, as it is not
+- token: the start of the current lexeme (implicit in |re2c| API, as it is not
   needed for the normal lexer operation and can be defined and updated by the
   user)
 

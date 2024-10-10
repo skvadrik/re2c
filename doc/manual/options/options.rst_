@@ -29,7 +29,7 @@
 
 ``--computed-gotos -g``
     Optimize conditional jumps using non-standard "computed goto" extension
-    (which must be supported by the compiler). re2c generates jump tables
+    (which must be supported by the compiler). |re2c| generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
     threshold can be configured with ``cgoto:threshold`` configuration. This
     option implies ``--bit-vectors``. It is supported only for C.
@@ -37,7 +37,7 @@
 ``--conditions --start-conditions -c``
     Enable support of Flex-like "conditions": multiple interrelated lexers
     within one block. This is an alternative to manually specifying different
-    re2c blocks connected with ``goto`` or function calls.
+    |re2c| blocks connected with ``goto`` or function calls.
 
 ``--depfile FILE``
     Write dependency information to ``FILE`` in the form of a Makefile rule
@@ -47,20 +47,20 @@
     This option depends on the ``--output`` option.
 
 ``--ebcdic --ecb -e``
-    Generate a lexer that reads input in EBCDIC encoding. re2c assumes that the
-    character range is 0 -- 0xFF and character size is 1 byte.
+    Generate a lexer that reads input in EBCDIC encoding. |re2c| assumes that
+    the character range is 0 -- 0xFF and character size is 1 byte.
 
 ``--empty-class <match-empty | match-none | error>``
-    Define the way re2c treats empty character classes. With ``match-empty``
+    Define the way |re2c| treats empty character classes. With ``match-empty``
     (the default) empty class matches empty input (which is illogical, but
     backwards-compatible). With ``match-none`` empty class always fails to match.
     With ``error`` empty class raises a compilation error.
 
 ``--encoding-policy <fail | substitute | ignore>``
-    Define the way re2c treats Unicode surrogates.
-    With ``fail`` re2c aborts with an error when a surrogate is encountered.
-    With ``substitute`` re2c silently replaces surrogates with the error code
-    point 0xFFFD. With ``ignore`` (the default) re2c treats surrogates as
+    Define the way |re2c| treats Unicode surrogates.
+    With ``fail`` |re2c| aborts with an error when a surrogate is encountered.
+    With ``substitute`` |re2c| silently replaces surrogates with the error code
+    point 0xFFFD. With ``ignore`` (the default) |re2c| treats surrogates as
     normal code points. The Unicode standard says that standalone surrogates
     are invalid, but real-world libraries and programs behave in different ways.
 
@@ -79,14 +79,14 @@
 ``-I PATH``
     Add ``PATH`` to the list of locations which are used when searching for
     include files. This option is useful in combination with ``include:re2c``
-    directive. re2c looks for ``FILE`` in the directory of the parent file and
+    directive. |re2c| looks for ``FILE`` in the directory of the parent file and
     in the include locations specified with ``-I`` option.
 
 ``--input-encoding <ascii | utf8>``
-    Specify the way re2c parses regular expressions.
-    With ``ascii`` (the default) re2c handles input as ASCII-encoded: any
+    Specify the way |re2c| parses regular expressions.
+    With ``ascii`` (the default) |re2c| handles input as ASCII-encoded: any
     sequence of code units is a sequence of standalone 1-byte characters.
-    With ``utf8`` re2c handles input as UTF8-encoded and recognizes multibyte
+    With ``utf8`` |re2c| handles input as UTF8-encoded and recognizes multibyte
     characters.
 
 ``--invert-captures``
@@ -96,7 +96,7 @@
 
 ``--lang <c | go | rust>``
     Specify the output language. Supported languages are C, Go and Rust.
-    The default is C for re2c, Go for re2go and Rust for re2rust.
+    The default is C for |re2c|, Go for re2go and Rust for re2rust.
 
 ``--leftmost-captures``
     Enable submatch extraction with leftmost greedy capturing groups.
@@ -168,21 +168,21 @@
     Enable submatch extraction with tags.
 
 ``--ucs2 --wide-chars -w``
-    Generate a lexer that reads UCS2-encoded input. re2c assumes that the
+    Generate a lexer that reads UCS2-encoded input. |re2c| assumes that the
     character range is 0 -- 0xFFFF and character size is 2 bytes.
     This option implies ``--nested-ifs``.
 
 ``--utf8 --utf-8 -8``
-    Generate a lexer that reads input in UTF-8 encoding. re2c assumes that the
+    Generate a lexer that reads input in UTF-8 encoding. |re2c| assumes that the
     character range is 0 -- 0x10FFFF and character size is 1 byte.
 
 ``--utf16 --utf-16 -x``
-    Generate a lexer that reads UTF16-encoded input. re2c assumes that the
+    Generate a lexer that reads UTF16-encoded input. |re2c| assumes that the
     character range is 0 -- 0x10FFFF and character size is 2 bytes.
     This option implies ``--nested-ifs``.
 
 ``--utf32 --unicode -u``
-    Generate a lexer that reads UTF32-encoded input. re2c assumes that the
+    Generate a lexer that reads UTF32-encoded input. |re2c| assumes that the
     character range is 0 -- 0x10FFFF and character size is 4 bytes.
     This option implies ``--nested-ifs``.
 

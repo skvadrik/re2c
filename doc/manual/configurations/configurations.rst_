@@ -298,7 +298,7 @@
 
 ``re2c:tags:expression``
     Specifies the expression used for tag variables.
-    By default re2c generates expressions of the form ``yyt<N>``. This might
+    By default |re2c| generates expressions of the form ``yyt<N>``. This might
     be inconvenient, for example if tag variables are defined as fields in a
     struct. All occurrences of ``@@{tag}`` or ``@@`` are replaced with the
     actual tag name. For example, ``re2c:tags:expression = "s.@@";`` results
@@ -314,7 +314,7 @@
     set). This configuration does not affect code generation: its purpose is to
     verify that the sentinel is not allowed in the middle of a rule, and ensure
     that the lexer won't read past the end of buffer. The default value is
-    `-1`` (in that case re2c assumes that the sentinel is zero, which is the
+    `-1`` (in that case |re2c| assumes that the sentinel is zero, which is the
     most common case). Only decimal numbers are recognized.
 
 ``re2c:state:abort``
@@ -356,7 +356,7 @@
     The default is non-zero.
 
 ``re2c:variable:yych:conversion``, ``re2c:yych:conversion``
-    If set to non-zero, re2c automatically generates a conversion to ``YYCTYPE``
+    If set to non-zero, |re2c| automatically generates a conversion to ``YYCTYPE``
     every time ``yych`` is read. The default is to zero (no conversion).
 
 ``re2c:variable:yyctable``

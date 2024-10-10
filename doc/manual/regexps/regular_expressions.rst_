@@ -1,5 +1,5 @@
 
-re2c uses the following syntax for regular expressions:
+|re2c| uses the following syntax for regular expressions:
 
 *    ``"foo"`` case-sensitive string literal
 
