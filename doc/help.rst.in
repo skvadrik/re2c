@@ -1,6 +1,8 @@
 Usage
 =====
 
+.. |re2c| replace:: re2c
+
 .. include:: @top_srcdir@/doc/manual/synopsis.rst_
 
 OPTIONS

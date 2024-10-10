@@ -11,9 +11,9 @@ state with no outgoing transitions, and the matching automatically stops. The
 third condition, end of input, is different: it may happen in any state, and the
 lexer should be able to handle it. Checking for the end of input interrupts the
 normal lexer workflow and adds conditional branches to the generated program,
-therefore it is necessary to minimize the number of such checks. re2c supports a
-few different methods for handling the end of input. Which one to use depends on
-the complexity of regular expressions, the need for buffering, performance
+therefore it is necessary to minimize the number of such checks. |re2c| supports
+a few different methods for handling the end of input. Which one to use depends
+on the complexity of regular expressions, the need for buffering, performance
 considerations and other factors. Here is a list of methods:
 
 - **Sentinel.**

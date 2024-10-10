@@ -2,9 +2,7 @@ extern const char* help;
 const char* help =
 "USAGE\n"
 "\n"
-"        re2c    [ OPTIONS ] [ WARNINGS ] INPUT\n"
-"        re2go   [ OPTIONS ] [ WARNINGS ] INPUT\n"
-"        re2rust [ OPTIONS ] [ WARNINGS ] INPUT\n"
+"    re2c [ OPTIONS ] [ WARNINGS ] INPUT\n"
 "\n"
 "    Input can be either a file or - for stdin.\n"
 "\n"

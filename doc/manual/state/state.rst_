@@ -1,6 +1,6 @@
-With ``--storable-state`` option re2c generates a lexer that can store
+With ``--storable-state`` option |re2c| generates a lexer that can store
 its current state, return to the caller, and later resume operations exactly
-where it left off. The default mode of operation in re2c is a "pull" model,
+where it left off. The default mode of operation in |re2c| is a "pull" model,
 in which the lexer "pulls" more input whenever it needs it. This may be
 unacceptable in cases when the input becomes available piece by piece (for
 example, if the lexer is invoked by the parser, or if the lexer program

@@ -1,4 +1,4 @@
-re2c has two options for submatch extraction.
+|re2c| has two options for submatch extraction.
 
 **Tags**
     The first option is to use standalone *tags* of the form ``@stag`` or
@@ -28,7 +28,7 @@ re2c has two options for submatch extraction.
    ``yynmatch`` (the whole regular expression is group number zero), and
    submatch results are stored in ``yypmatch`` array. Both ``yynmatch`` and
    ``yypmatch`` should be defined by the user, and ``yypmatch`` size must be at
-   least ``[yynmatch * 2]``. re2c provides a directive ``maxnmatch:re2c``
+   least ``[yynmatch * 2]``. |re2c| provides a directive ``maxnmatch:re2c``
    that defines ``YYMAXNMATCH``, a constant that equals to the maximum value of
    ``yynmatch`` among all rules.
 
@@ -36,7 +36,7 @@ re2c has two options for submatch extraction.
    Another way to use capturing groups is the ``--captvars`` option or
    ``re2c:captvars = 1`` configuration. The only difference with ``--captures``
    is in the way the generated code stores submatch results: instead of
-   ``yynmatch`` and ``yypmatch`` re2c generates variables ``yytl<k>`` and
+   ``yynmatch`` and ``yypmatch`` |re2c| generates variables ``yytl<k>`` and
    ``yytr<k>`` for *k*-th capturing group (the user should declare these with
    ``svars:re2c`` directive). Captures with variables support two dismbiguation
    policies: ``--leftmost-captvars`` or ``re2c:leftmost-captvars = 1`` for

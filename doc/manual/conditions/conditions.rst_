@@ -1,8 +1,8 @@
 Start conditions are enabled with ``--start-conditions`` option. They provide a
-way to encode multiple interrelated automata within the same re2c block.
+way to encode multiple interrelated automata within the same |re2c| block.
 
 Each condition corresponds to a single automaton and has a unique name specified
-by the user and a unique internal number defined by re2c. The numbers are used
+by the user and a unique internal number defined by |re2c|. The numbers are used
 to switch between conditions: the generated code uses ``YYGETCONDITION`` and
 ``YYSETCONDITION`` primitives to get the current condition or set it to the
 given number. Use ``/*!conditions:re2c*/`` directive or the ``--header`` option
@@ -47,21 +47,21 @@ conditions. The rule syntax is extended as follows:
         ``cond``.
 
 
-The code re2c generates for conditions depends on whether re2c uses goto/label
+The code |re2c| generates for conditions depends on whether |re2c| uses goto/label
 approach or loop/switch approach to encode the automata.
 
 In languages that have ``goto`` statement (such as C/C++ and Go) conditions are
 naturally implemented as blocks of code prefixed with labels of the form
 ``yyc_<cond>``, where ``cond`` is a condition name (label prefix can be changed
 with ``re2c:cond:prefix``). Transitions between conditions are implemented using
-``goto`` and condition labels. Before all conditions re2c generates an initial
+``goto`` and condition labels. Before all conditions |re2c| generates an initial
 switch on ``YYGETSTATE`` that jumps to the start state of the current condition.
 The shortcut rules ``:=>`` bypass the initial switch and jump directly to the
 specified condition (``re2c:cond:goto`` can be used to change the default
 behavior). The rules with semantic actions do not automatically jump to the next
 condition; this should be done by the user-defined action code.
 
-In languages that do not have ``goto`` (such as Rust) re2c reuses the
+In languages that do not have ``goto`` (such as Rust) |re2c| reuses the
 ``yystate`` variable to store condition numbers. Each condition gets a numeric
 identifier equal to the number of its start state, and a switch between
 conditions is no different than a switch between DFA states of a single
