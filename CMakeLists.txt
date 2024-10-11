@@ -85,7 +85,6 @@ ac_check_headers("io.h")
 # docs (manpages and help)
 set(re2c_manpage_source  "${CMAKE_CURRENT_BINARY_DIR}/doc/manpage.rst")
 set(re2c_help_source     "${CMAKE_CURRENT_BINARY_DIR}/doc/help.rst")
-set(re2c_help_bootstrap  "${CMAKE_CURRENT_SOURCE_DIR}/bootstrap/src/msg/help.cc")
 set(re2c_manpage_c       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2c.1")
 set(re2c_manpage_d       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2d.1")
 set(re2c_manpage_go      "${CMAKE_CURRENT_BINARY_DIR}/doc/re2go.1")
@@ -97,12 +96,21 @@ set(re2c_manpage_python  "${CMAKE_CURRENT_BINARY_DIR}/doc/re2py.1")
 set(re2c_manpage_rust    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
 set(re2c_manpage_v       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2v.1")
 set(re2c_manpage_zig     "${CMAKE_CURRENT_BINARY_DIR}/doc/re2zig.1")
-set(re2c_help            "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help.cc")
+set(re2c_help_c          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2c.cc")
+set(re2c_help_d          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2d.cc")
+set(re2c_help_go         "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2go.cc")
+set(re2c_help_haskell    "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2hs.cc")
+set(re2c_help_java       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2java.cc")
+set(re2c_help_js         "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2js.cc")
+set(re2c_help_ocaml      "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2ocaml.cc")
+set(re2c_help_python     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2py.cc")
+set(re2c_help_rust       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2rust.cc")
+set(re2c_help_v          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2v.cc")
+set(re2c_help_zig        "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2zig.cc")
 set(re2c_rst2man         "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
 set(re2c_rst2txt         "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2txt.py")
 set(re2c_splitman        "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py")
 set(re2c_docs
-    "${re2c_help}"
     "${re2c_manpage_c}"
     "$<$<BOOL:${RE2C_BUILD_RE2D}>:${re2c_manpage_d}>"
     "$<$<BOOL:${RE2C_BUILD_RE2GO}>:${re2c_manpage_go}>"
@@ -263,17 +271,18 @@ file(GLOB_RECURSE re2c_docs_sources CONFIGURE_DEPENDS
     "doc/manual/*"
     "${re2c_manpage_source}"
 )
+re2c_gen_help("${re2c_help_source}" "${re2c_help_c}")
 re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_c}")
-re2c_gen_help("${re2c_help_source}" "${re2c_help}" "${re2c_help_bootstrap}")
 add_custom_target(docs DEPENDS "${re2c_docs}")
 
 # re2c
-add_executable(re2c ${re2c_sources})
+add_executable(re2c ${re2c_sources} "${re2c_help_c}")
 
 # re2d
 if (RE2C_BUILD_RE2D)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_d}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_d}")
-    add_executable(re2d ${re2c_sources})
+    add_executable(re2d ${re2c_sources} "${re2c_help_d}")
     target_compile_definitions(re2d PUBLIC
         "RE2C_LANG=Lang::D"
         "RE2C_PROG=\"re2d\""
@@ -282,8 +291,9 @@ endif()
 
 # re2go
 if (RE2C_BUILD_RE2GO)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_go}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_go}")
-    add_executable(re2go ${re2c_sources})
+    add_executable(re2go ${re2c_sources} "${re2c_help_go}")
     target_compile_definitions(re2go PUBLIC
         "RE2C_LANG=Lang::GO"
         "RE2C_PROG=\"re2go\""
@@ -292,8 +302,9 @@ endif()
 
 # re2hs
 if (RE2C_BUILD_RE2HS)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_haskell}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_haskell}")
-    add_executable(re2hs ${re2c_sources})
+    add_executable(re2hs ${re2c_sources} "${re2c_help_haskell}")
     target_compile_definitions(re2hs PUBLIC
         "RE2C_LANG=Lang::HASKELL"
         "RE2C_PROG=\"re2hs\""
@@ -302,8 +313,9 @@ endif()
 
 # re2java
 if (RE2C_BUILD_RE2JAVA)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_java}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_java}")
-    add_executable(re2java ${re2c_sources})
+    add_executable(re2java ${re2c_sources} "${re2c_help_java}")
     target_compile_definitions(re2java PUBLIC
         "RE2C_LANG=Lang::JAVA"
         "RE2C_PROG=\"re2java\""
@@ -312,8 +324,9 @@ endif()
 
 # re2js
 if (RE2C_BUILD_RE2JS)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_js}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_js}")
-    add_executable(re2js ${re2c_sources})
+    add_executable(re2js ${re2c_sources} "${re2c_help_js}")
     target_compile_definitions(re2js PUBLIC
         "RE2C_LANG=Lang::JS"
         "RE2C_PROG=\"re2js\""
@@ -322,8 +335,9 @@ endif()
 
 # re2ocaml
 if (RE2C_BUILD_RE2OCAML)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_ocaml}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_ocaml}")
-    add_executable(re2ocaml ${re2c_sources})
+    add_executable(re2ocaml ${re2c_sources} "${re2c_help_ocaml}")
     target_compile_definitions(re2ocaml PUBLIC
         "RE2C_LANG=Lang::OCAML"
         "RE2C_PROG=\"re2ocaml\""
@@ -332,8 +346,9 @@ endif()
 
 # re2py
 if (RE2C_BUILD_RE2PY)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_python}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_python}")
-    add_executable(re2py ${re2c_sources})
+    add_executable(re2py ${re2c_sources} "${re2c_help_python}")
     target_compile_definitions(re2py PUBLIC
         "RE2C_LANG=Lang::PYTHON"
         "RE2C_PROG=\"re2py\""
@@ -342,8 +357,9 @@ endif()
 
 # re2rust
 if (RE2C_BUILD_RE2RUST)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_rust}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_rust}")
-    add_executable(re2rust ${re2c_sources})
+    add_executable(re2rust ${re2c_sources} "${re2c_help_rust}")
     target_compile_definitions(re2rust PUBLIC
         "RE2C_LANG=Lang::RUST"
         "RE2C_PROG=\"re2rust\""
@@ -352,8 +368,9 @@ endif()
 
 # re2v
 if (RE2C_BUILD_RE2V)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_v}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_v}")
-    add_executable(re2v ${re2c_sources})
+    add_executable(re2v ${re2c_sources} "${re2c_help_v}")
     target_compile_definitions(re2v PUBLIC
         "RE2C_LANG=Lang::V"
         "RE2C_PROG=\"re2v\""
@@ -362,8 +379,9 @@ endif()
 
 # re2zig
 if (RE2C_BUILD_RE2ZIG)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_zig}")
     re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_zig}")
-    add_executable(re2zig ${re2c_sources})
+    add_executable(re2zig ${re2c_sources} "${re2c_help_zig}")
     target_compile_definitions(re2zig PUBLIC
         "RE2C_LANG=Lang::ZIG"
         "RE2C_PROG=\"re2zig\""
