@@ -1,7 +1,7 @@
 Usage
 =====
 
-.. |re2c| replace:: re2c
+.. |re2c| replace:: RE2C_PROG
 
 .. include:: @top_srcdir@/doc/manual/synopsis.rst_
 
