@@ -22,9 +22,8 @@ single input position, but a set of interrelated positions:
 - context marker: the position of the trailing context (``YYCTXMARKER`` in
   C pointer API or ``YYBACKUPCTX``/``YYRESTORECTX`` in generic API)
 
-- tag variables: submatch positions (defined with ``/*!stags:re2c*/`` and
-  ``/*!mtags:re2c*/`` directives and
-  ``YYSTAGP``/``YYSTAGN``/``YYMTAGP``/``YYMTAGN`` in generic API)
+- tag variables: submatch positions (defined with ``stags`` and ``mtags`` blocks
+  and generic API primitives ``YYSTAGP``/``YYSTAGN``/``YYMTAGP``/``YYMTAGN``)
 
 Not all these are used in every case, but if used, they must be updated by
 ``YYFILL``. All active positions are contained in the segment between token and

@@ -19,14 +19,14 @@ Previously all re2c blocks were anonymous. Now it is possible to give block a
 name: for example, ``/*!re2c:woot42 ... */`` defines a global block named
 ``woot42``. The name can be used to refer to this block in other parts of the
 program (for example in
-:ref:`directives <manual/manual_c:syntax>`). Rules blocks can
+:ref:`directives <manual/manual_c:basics>`). Rules blocks can
 have names as well: a block ``/*!rules:re2c:woot42 ... */`` can be mentioned in
 a use block ``/*!use:woot42 ... */`` or in a use directive ``!use:woot42;``.
 Use blocks cannot have their own name; if you need to have a named block that
 reuses another block, do that with the new ``!use`` directive.
 
 **Block lists in directives.**
-Previously re2c :ref:`directives <manual/manual_c:syntax>`
+Previously re2c :ref:`directives <manual/manual_c:basics>`
 such as ``max:re2c``, ``stags:re2c``, ``getstate:re2c`` etc. were global: they
 accumulated the information across all blocks in the file. Now it is possible to
 specify a list of colon-separated block names in each directive: for example
@@ -55,7 +55,7 @@ The in-block include directive works in the same way as the out-of-block one:
 the contents of the file are inserted verbatim in place of the directive.
 
 **Configurable directives.**
-More :ref:`directives <manual/manual_c:syntax>` can now be
+More :ref:`directives <manual/manual_c:basics>` can now be
 customized with configurations that define the form of the generated code.
 Directives ``max:re2c`` and ``maxnmatch:re2c`` now have an optional ``format``
 configuration that accepts a template string with interpolated variable

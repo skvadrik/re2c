@@ -1,0 +1,42 @@
+With ``--storable-state`` option |re2c| generates a lexer that can store
+its current state, return to the caller, and later resume operations exactly
+where it left off. The default mode of operation in |re2c| is a "pull" model,
+in which the lexer "pulls" more input whenever it needs it. This may be
+unacceptable in cases when the input becomes available piece by piece (for
+example, if the lexer is invoked by the parser, or if the lexer program
+communicates via a socket protocol with some other program that must wait for a
+reply from the lexer before it transmits the next message). Storable state
+feature is intended exactly for such cases: it allows one to generate lexers that
+work in a "push" model. When the lexer needs more input, it stores its state and
+returns to the caller. Later, when more input becomes available, the caller
+resumes the lexer exactly where it stopped. There are a few changes necessary
+compared to the "pull" model:
+
+* Define ``YYSETSTATE()`` and ``YYGETSTATE(state)`` primitives.
+
+* Define ``yych``, ``yyaccept`` (if used) and ``state`` variables as a part of
+  persistent lexer state. The ``state`` variable should be initialized to ``-1``.
+
+* ``YYFILL`` should return to the outer program instead of trying to supply more
+  input. Return code should indicate that lexer needs more input.
+
+* The outer program should recognize situations when lexer needs more input and
+  respond appropriately.
+
+* Optionally use ``getstate`` block to generate ``YYGETSTATE`` switch detached
+  from the main lexer. This only works for languages that have ``goto`` (not in
+  ``--loop-switch`` mode).
+
+* Use ``re2c:eof`` and the `sentinel with bounds checks`_ method to handle the
+  end of input. Padding-based method may not work because it is unclear when to
+  append padding: the current end of input may not be the ultimate end of input,
+  and appending padding too early may cut off a partially read greedy lexeme.
+  Furthermore, due to high-level program logic getting more input may depend on
+  processing the lexeme at the end of buffer (which already is blocked due to
+  the end-of-input condition).
+
+Here is an example of a "push" model lexer that simulates reading packets from a
+socket. The lexer loops until it encounters the end of input and returns to the
+calling function. The calling function provides more input by "sending" the next
+packet and resumes lexing. This process stops when all the packets have been
+sent, or when there is an error.

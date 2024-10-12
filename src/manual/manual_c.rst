@@ -6,7 +6,7 @@ User manual (C/C++)
 .. toctree::
     :hidden:
 
-    warnings/warnings
+    basics/warnings/warnings
 
 |
 
@@ -15,10 +15,11 @@ User manual (C/C++)
     <p style="color:gray";><i>Note: examples are in C++ (but can be easily adapted to C).</i></p>
 
 .. |re2c| replace:: re2c
+.. |lang_name| replace:: C/C++
 
 Introduction
 ============
-.. include:: /manual/syntax/intro.rst_
+.. include:: /manual/intro.rst_
 
 Here is an example of a small program that checks if a given string contains a
 decimal number:
@@ -26,53 +27,58 @@ decimal number:
 .. literalinclude:: ../examples/c/01_basic.re
     :language: c
 
-In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
-the generated code:
+In the output |re2c| replaced the middle block with the generated code:
 
 .. literalinclude:: ../examples/c/01_basic.c
     :language: c
 
-Syntax
+Basics
 ======
+.. include:: /manual/basics/syntax.rst_
 
-.. include:: /manual/syntax/syntax.rst_
+Blocks
+------
+.. include:: /manual/basics/blocks.rst_
+
+Configurations
+--------------
+.. include:: /manual/basics/configurations.rst_
+
+Regular expressions
+-------------------
+.. include:: /manual/basics/regular_expressions.rst_
+
+Directives
+----------
+.. include:: /manual/basics/directives.rst_
 
 Program interface
-=================
-
-.. include:: /manual/api/api1.rst_
-.. include:: /manual/api/api2_c.rst_
-.. include:: /manual/api/api3.rst_
+-----------------
+.. include:: /manual/basics/api/api1.rst_
+.. include:: /manual/basics/api/api2_c.rst_
+.. include:: /manual/basics/api/api3.rst_
 
 Options
-=======
+-------
 
 Some of the options have corresponding `configurations`_,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.
 Internal options are useful for experimenting with the algorithms used in re2c.
 
-.. include:: /manual/options/options.rst_
-.. include:: /manual/options/debug.rst_
-.. include:: /manual/options/internal.rst_
+.. include:: /manual/basics/options/options.rst_
+.. include:: /manual/basics/options/debug.rst_
+.. include:: /manual/basics/options/internal.rst_
 
 Warnings
-========
+--------
 
 See the :ref:`warnings page <detailed-warnings>` for detailed descriptions of individual warnings.
 
 Warnings can be invividually enabled, disabled and turned into an error.
 
-.. include:: /manual/warnings/warnings_general.rst_
-.. include:: /manual/warnings/warnings_list.rst_
-
-Configurations
-==============
-.. include:: /manual/configurations/configurations.rst_
-
-Regular expressions
-===================
-.. include:: /manual/regexps/regular_expressions.rst_
+.. include:: /manual/basics/warnings/warnings_general.rst_
+.. include:: /manual/basics/warnings/warnings_list.rst_
 
 Handling the end of input
 =========================
@@ -100,27 +106,30 @@ Buffer refilling
 .. literalinclude:: ../examples/c/fill/02_fill.re
     :language: c
 
+Features
+========
+
 Multiple blocks
-===============
-.. include:: /manual/conditions/blocks.rst_
+---------------
+.. include:: /manual/features/conditions/blocks.rst_
 .. literalinclude:: ../examples/c/conditions/parse_u32_blocks.re
     :language: c
 
 Start conditions
-================
-.. include:: /manual/conditions/conditions.rst_
+----------------
+.. include:: /manual/features/conditions/conditions.rst_
 .. literalinclude:: ../examples/c/conditions/parse_u32_conditions.re
     :language: c
 
 Storable state
-==============
-.. include:: /manual/state/state.rst_
+--------------
+.. include:: /manual/features/state/state.rst_
 .. literalinclude:: ../examples/c/state/push.re
     :language: c
 
 Reusable blocks
-===============
-.. include:: /manual/reuse/reuse.rst_
+---------------
+.. include:: /manual/features/reuse/reuse.rst_
 
 Example of a ``!use`` directive:
 
@@ -133,30 +142,30 @@ Example of a ``/*!use:re2c ... */`` block:
     :language: c
 
 Submatch extraction
-===================
-.. include:: /manual/submatch/submatch.rst_
-.. include:: /manual/submatch/submatch_example_stags.rst_
+-------------------
+.. include:: /manual/features/submatch/submatch.rst_
+.. include:: /manual/features/submatch/submatch_example_stags.rst_
 .. literalinclude:: ../examples/c/submatch/01_stags.re
     :language: c
-.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. include:: /manual/features/submatch/submatch_example_stags_fill.rst_
 .. literalinclude:: ../examples/c/submatch/01_stags_fill.re
     :language: c
-.. include:: /manual/submatch/submatch_example_captures.rst_
+.. include:: /manual/features/submatch/submatch_example_captures.rst_
 .. literalinclude:: ../examples/c/submatch/03_captures.re
     :language: c
-.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. include:: /manual/features/submatch/submatch_example_mtags.rst_
 .. literalinclude:: ../examples/c/submatch/02_mtags.re
     :language: c
 
 Encoding support
-================
-.. include:: /manual/encodings/encodings.rst_
+----------------
+.. include:: /manual/features/encodings/encodings.rst_
 .. literalinclude:: ../examples/c/encodings/unicode_identifier.re
     :language: c
 
 Include files
-=============
-.. include:: /manual/includes/includes.rst_
+-------------
+.. include:: /manual/features/includes/includes.rst_
 
 Include file 1 (definitions.h):
 
@@ -173,8 +182,8 @@ Input file:
     :language: c
 
 Header files
-============
-.. include:: /manual/headers/headers.rst_
+------------
+.. include:: /manual/features/headers/headers.rst_
 
 .. literalinclude:: ../examples/c/headers/header.re
     :language: c
@@ -185,13 +194,13 @@ The generated header file:
     :language: c
 
 Skeleton programs
-=================
-.. include:: /manual/skeleton/skeleton.rst_
-.. include:: /manual/skeleton/skeleton_example.rst
+-----------------
+.. include:: /manual/features/skeleton/skeleton.rst_
+.. include:: /manual/features/skeleton/skeleton_example.rst
 
 Visualization and debug
-=======================
-.. include:: /manual/dot/dot.rst_
-.. include:: /manual/dot/example.rst
+-----------------------
+.. include:: /manual/features/dot/dot.rst_
+.. include:: /manual/features/dot/example.rst
 
 .. include:: /examples/examples_c.rst

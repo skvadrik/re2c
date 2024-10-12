@@ -6,7 +6,7 @@ User manual (Haskell)
 .. toctree::
     :hidden:
 
-    warnings/warnings
+    basics/warnings/warnings
 
 |
 
@@ -15,10 +15,11 @@ User manual (Haskell)
     <p style="color:gray";><i></i></p>
 
 .. |re2c| replace:: re2hs
+.. |lang_name| replace:: Haskell
 
 Introduction
 ============
-.. include:: /manual/syntax/intro.rst_
+.. include:: /manual/intro.rst_
 
 Here is an example of a small program that checks if a given string contains a
 decimal number:
@@ -26,53 +27,58 @@ decimal number:
 .. literalinclude:: ../examples/haskell/01_basic.re
     :language: haskell
 
-In the output everything between ``/*!re2c`` and ``*/`` has been replaced with
-the generated code:
+In the output |re2c| replaced the middle block with the generated code:
 
 .. literalinclude:: ../examples/haskell/01_basic.hs
     :language: haskell
 
-Syntax
+Basics
 ======
+.. include:: /manual/basics/syntax.rst_
 
-.. include:: /manual/syntax/syntax.rst_
+Blocks
+------
+.. include:: /manual/basics/blocks.rst_
+
+Configurations
+--------------
+.. include:: /manual/basics/configurations.rst_
+
+Regular expressions
+-------------------
+.. include:: /manual/basics/regular_expressions.rst_
+
+Directives
+----------
+.. include:: /manual/basics/directives.rst_
 
 Program interface
-=================
-
-.. include:: /manual/api/api1.rst_
-.. include:: /manual/api/api2_haskell.rst_
-.. include:: /manual/api/api3.rst_
+-----------------
+.. include:: /manual/basics/api/api1.rst_
+.. include:: /manual/basics/api/api2_haskell.rst_
+.. include:: /manual/basics/api/api3.rst_
 
 Options
-=======
+-------
 
 Some of the options have corresponding `configurations`_,
 others are global and cannot be changed after re2c starts reading the input file.
 Debug options generally require building re2c in debug configuration.
 Internal options are useful for experimenting with the algorithms used in re2c.
 
-.. include:: /manual/options/options.rst_
-.. include:: /manual/options/debug.rst_
-.. include:: /manual/options/internal.rst_
+.. include:: /manual/basics/options/options.rst_
+.. include:: /manual/basics/options/debug.rst_
+.. include:: /manual/basics/options/internal.rst_
 
 Warnings
-========
+--------
 
 See the :ref:`warnings page <detailed-warnings>` for detailed descriptions of individual warnings.
 
 Warnings can be invividually enabled, disabled and turned into an error.
 
-.. include:: /manual/warnings/warnings_general.rst_
-.. include:: /manual/warnings/warnings_list.rst_
-
-Configurations
-==============
-.. include:: /manual/configurations/configurations.rst_
-
-Regular expressions
-===================
-.. include:: /manual/regexps/regular_expressions.rst_
+.. include:: /manual/basics/warnings/warnings_general.rst_
+.. include:: /manual/basics/warnings/warnings_list.rst_
 
 Handling the end of input
 =========================
@@ -100,27 +106,30 @@ Buffer refilling
 .. literalinclude:: ../examples/haskell/fill/02_fill.re
     :language: haskell
 
+Features
+========
+
 Multiple blocks
-===============
-.. include:: /manual/conditions/blocks.rst_
+---------------
+.. include:: /manual/features/conditions/blocks.rst_
 .. literalinclude:: ../examples/haskell/conditions/parse_u32_blocks.re
     :language: haskell
 
 Start conditions
-================
-.. include:: /manual/conditions/conditions.rst_
+----------------
+.. include:: /manual/features/conditions/conditions.rst_
 .. literalinclude:: ../examples/haskell/conditions/parse_u32_conditions.re
     :language: haskell
 
 Storable state
-==============
-.. include:: /manual/state/state.rst_
+--------------
+.. include:: /manual/features/state/state.rst_
 .. literalinclude:: ../examples/haskell/state/push.re
     :language: haskell
 
 Reusable blocks
-===============
-.. include:: /manual/reuse/reuse.rst_
+---------------
+.. include:: /manual/features/reuse/reuse.rst_
 
 Example of a ``!use`` directive:
 
@@ -133,30 +142,30 @@ Example of a ``/*!use:re2c ... */`` block:
     :language: haskell
 
 Submatch extraction
-===================
-.. include:: /manual/submatch/submatch.rst_
-.. include:: /manual/submatch/submatch_example_stags.rst_
+-------------------
+.. include:: /manual/features/submatch/submatch.rst_
+.. include:: /manual/features/submatch/submatch_example_stags.rst_
 .. literalinclude:: ../examples/haskell/submatch/01_stags.re
     :language: haskell
-.. include:: /manual/submatch/submatch_example_stags_fill.rst_
+.. include:: /manual/features/submatch/submatch_example_stags_fill.rst_
 .. literalinclude:: ../examples/haskell/submatch/01_stags_fill.re
     :language: haskell
-.. include:: /manual/submatch/submatch_example_captures.rst_
+.. include:: /manual/features/submatch/submatch_example_captures.rst_
 .. literalinclude:: ../examples/haskell/submatch/03_captures.re
     :language: haskell
-.. include:: /manual/submatch/submatch_example_mtags.rst_
+.. include:: /manual/features/submatch/submatch_example_mtags.rst_
 .. literalinclude:: ../examples/haskell/submatch/02_mtags.re
     :language: haskell
 
 Encoding support
-================
-.. include:: /manual/encodings/encodings.rst_
+----------------
+.. include:: /manual/features/encodings/encodings.rst_
 .. literalinclude:: ../examples/haskell/encodings/unicode_identifier.re
     :language: haskell
 
 Include files
-=============
-.. include:: /manual/includes/includes.rst_
+-------------
+.. include:: /manual/features/includes/includes.rst_
 
 Include file 1 (definitions.hs):
 
@@ -173,8 +182,8 @@ Input file:
     :language: haskell
 
 Header files
-============
-.. include:: /manual/headers/headers.rst_
+------------
+.. include:: /manual/features/headers/headers.rst_
 
 .. literalinclude:: ../examples/haskell/headers/header.re
     :language: haskell
@@ -185,13 +194,13 @@ The generated header file:
     :language: haskell
 
 Skeleton programs
-=================
-.. include:: /manual/skeleton/skeleton.rst_
-.. include:: /manual/skeleton/skeleton_example.rst
+-----------------
+.. include:: /manual/features/skeleton/skeleton.rst_
+.. include:: /manual/features/skeleton/skeleton_example.rst
 
 Visualization and debug
-=======================
-.. include:: /manual/dot/dot.rst_
-.. include:: /manual/dot/example.rst
+-----------------------
+.. include:: /manual/features/dot/dot.rst_
+.. include:: /manual/features/dot/example.rst
 
 .. include:: /examples/examples_haskell.rst
