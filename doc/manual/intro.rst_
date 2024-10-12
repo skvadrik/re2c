@@ -1,0 +1,6 @@
+|re2c| works as a preprocessor. It reads the input file (which is usually a
+program in |lang_name|, but can be anything) and looks for blocks of code
+enclosed in special-form start/end markers. The text outside of these blocks is
+copied verbatim into the output file. The contents of the blocks are processed
+by |re2c|. It translates them to code in |lang_name| and outputs the generated
+code in place of the block.

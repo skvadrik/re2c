@@ -17,5 +17,5 @@ one buffer, see the `YYFILL with sentinel`_ section for an example that uses
 is in the initial state it will match the end-of-input rule ``$``, otherwise it
 may fallback to a previously matched rule (including default rule ``*``) or go
 to a default state, causing
-`-Wundefined-control-flow <https://re2c.org/manual/warnings/warnings.html#wundefined-control-flow>`_.
+`-Wundefined-control-flow <https://re2c.org/manual/basics/warnings/warnings.html#wundefined-control-flow>`_.
 

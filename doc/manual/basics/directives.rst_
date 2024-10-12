@@ -1,0 +1,17 @@
+Here is a full list of directives supported by |re2c|:
+
+
+``!use:<name>;``
+    An in-block use directive that merges a previously defined rules block with
+    the specified name into the current block. Named definitions, configurations
+    and rules of the referenced block are added to the current ones. Conflicts
+    between overlapping rules and configurations are resolved in the usual way:
+    the first rule takes priority, and the latest configuration overrides the
+    preceding ones. One exception is the special rules ``*``, ``$`` and ``<!>``
+    for which a block-local definition always takes priority. A use directive
+    can be placed anywhere inside of a block, and multiple use directives are
+    allowed.
+
+``!include <file>;``
+    This directive is the same as ``include`` block: it inserts ``<file>``
+    contents verbatim in place of the durective.

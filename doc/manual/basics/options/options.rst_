@@ -42,7 +42,7 @@
 ``--depfile FILE``
     Write dependency information to ``FILE`` in the form of a Makefile rule
     ``<output-file> : <input-file> [include-file ...]``. This allows one to
-    track build dependencies in the presence of ``include:re2c`` directives,
+    track build dependencies in the presence of ``include`` blocks/directives,
     so that updating include files triggers regeneration of the output file.
     This option depends on the ``--output`` option.
 
@@ -71,16 +71,16 @@
     double-quoted strings.
 
 ``--header --type-header -t HEADER``
-    Generate a ``HEADER`` file. The contents of the file can be specified with
-    directives ``header:re2c:on`` and ``header:re2c:off``.
-    If conditions are used the header will have a condition enum automatically
-    appended to it (unless there is an explicit ``conditions:re2c`` directive).
+    Generate a ``HEADER`` file. The contents of the file can be specified using
+    special blocks ``header:on`` and ``header:off``. If conditions are used, the
+    generated header will have a condition enum automatically appended to it
+    (unless there is an explicit ``conditions`` block).
 
 ``-I PATH``
     Add ``PATH`` to the list of locations which are used when searching for
-    include files. This option is useful in combination with ``include:re2c``
-    directive. |re2c| looks for ``FILE`` in the directory of the parent file and
-    in the include locations specified with ``-I`` option.
+    include files. This option is useful in combination with ``include`` block
+    or directive. |re2c| looks for ``FILE`` in the directory of the parent file
+    and in the include locations specified with ``-I`` option.
 
 ``--input-encoding <ascii | utf8>``
     Specify the way |re2c| parses regular expressions.

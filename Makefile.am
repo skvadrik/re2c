@@ -224,43 +224,46 @@ re2c_SRC_DOC = doc/manpage.rst
 # To build the list of examples for all backends, run:
 # find examples -regex '.*\.re\|.*\(state\|01_basic\|definitions\)\..*' -printf '\t%p \\\n' | sort
 re2c_SRC_DOC_EXT = \
-	doc/manual/api/api1.rst_ \
-	doc/manual/api/api2_c.rst_ \
-	doc/manual/api/api2_go.rst_ \
-	doc/manual/api/api2_rust.rst_ \
-	doc/manual/api/api3.rst_ \
-	doc/manual/conditions/blocks.rst_ \
-	doc/manual/conditions/conditions.rst_ \
-	doc/manual/configurations/configurations.rst_ \
-	doc/manual/dot/dot.rst_ \
-	doc/manual/encodings/encodings.rst_ \
+	doc/manual/basics/api/api1.rst_ \
+	doc/manual/basics/api/api2_c.rst_ \
+	doc/manual/basics/api/api2_go.rst_ \
+	doc/manual/basics/api/api2_rust.rst_ \
+	doc/manual/basics/api/api3.rst_ \
+	doc/manual/basics/blocks.rst_ \
+	doc/manual/basics/directives.rst_ \
+	doc/manual/basics/configurations.rst_ \
+	doc/manual/basics/regular_expressions.rst_ \
+	doc/manual/basics/syntax.rst_ \
+	doc/manual/basics/options/debug.rst_ \
+	doc/manual/basics/options/internal.rst_ \
+	doc/manual/basics/options/options.rst_ \
+	doc/manual/basics/warnings/warnings_general.rst_ \
+	doc/manual/basics/warnings/warnings_list.rst_ \
 	doc/manual/eof/01_sentinel.rst_ \
 	doc/manual/eof/02_bounds_checking.rst_ \
 	doc/manual/eof/03_eof_rule.rst_ \
 	doc/manual/eof/04_fake_sentinel.rst_ \
 	doc/manual/eof/eof.rst_ \
+	doc/manual/features/conditions/blocks.rst_ \
+	doc/manual/features/conditions/conditions.rst_ \
+	doc/manual/features/dot/dot.rst_ \
+	doc/manual/features/encodings/encodings.rst_ \
+	doc/manual/features/headers/headers.rst_ \
+	doc/manual/features/includes/includes.rst_ \
+	doc/manual/features/reuse/reuse.rst_ \
+	doc/manual/features/skeleton/skeleton.rst_ \
+	doc/manual/features/state/state.rst_ \
+	doc/manual/features/submatch/submatch_example_mtags.rst_ \
+	doc/manual/features/submatch/submatch_example_captures.rst_ \
+	doc/manual/features/submatch/submatch_example_stags_fill.rst_ \
+	doc/manual/features/submatch/submatch_example_stags.rst_ \
+	doc/manual/features/submatch/submatch.rst_ \
 	doc/manual/fill/01_fill.rst_ \
 	doc/manual/fill/02_fill.rst_ \
 	doc/manual/fill/fill.rst_ \
-	doc/manual/headers/headers.rst_ \
-	doc/manual/includes/includes.rst_ \
-	doc/manual/options/debug.rst_ \
-	doc/manual/options/internal.rst_ \
-	doc/manual/options/options.rst_ \
-	doc/manual/regexps/regular_expressions.rst_ \
-	doc/manual/reuse/reuse.rst_ \
-	doc/manual/skeleton/skeleton.rst_ \
-	doc/manual/state/state.rst_ \
-	doc/manual/submatch/submatch_example_mtags.rst_ \
-	doc/manual/submatch/submatch_example_captures.rst_ \
-	doc/manual/submatch/submatch_example_stags_fill.rst_ \
-	doc/manual/submatch/submatch_example_stags.rst_ \
-	doc/manual/submatch/submatch.rst_ \
+	doc/manual/authors.rst_ \
+	doc/manual/intro.rst_ \
 	doc/manual/synopsis.rst_ \
-	doc/manual/syntax/intro.rst_ \
-	doc/manual/syntax/syntax.rst_ \
-	doc/manual/warnings/warnings_general.rst_ \
-	doc/manual/warnings/warnings_list.rst_ \
 	examples/c/01_basic.c \
 	examples/c/01_basic.re \
 	examples/c/conditions/parse_u32_blocks.re \
