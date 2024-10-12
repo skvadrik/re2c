@@ -23,7 +23,7 @@ compared to the "pull" model:
 * The outer program should recognize situations when lexer needs more input and
   respond appropriately.
 
-* Optionally use ``getstate:re2c`` to generate ``YYGETSTATE`` switch detached
+* Optionally use ``getstate`` block to generate ``YYGETSTATE`` switch detached
   from the main lexer. This only works for languages that have ``goto`` (not in
   ``--loop-switch`` mode).
 

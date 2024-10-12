@@ -48,7 +48,7 @@ order to interface with the outer program.
 
 ``YYMAXFILL``
     An integral constant equal to the maximum value of the argument to
-    ``YYFILL``.  It can be generated with ``/*!max:re2c*/`` directive.
+    ``YYFILL``.  It can be generated with a ``max`` block.
 
 ``YYLESSTHAN``
     A generic API primitive with one argument ``len``.
@@ -159,12 +159,11 @@ order to interface with the outer program.
 
 ``YYMAXNMATCH``
     An integral constant equal to the maximal number of POSIX capturing groups
-    in a rule. It is generated with ``/*!maxnmatch:re2c*/`` directive.
+    in a rule. It is generated with a ``maxnmatch`` block.
 
 ``YYCONDTYPE``
     The type of the condition enum.
-    It should be generated either with the ``/*!types:re2c*/``
-    directive or the ``-t`` ``--type-header`` option.
+    It can be generated either with ``conditions`` block or ``--header`` option.
 
 ``YYGETCONDITION``
     An API primitive with zero arguments.

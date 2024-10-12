@@ -11,9 +11,9 @@
     positions (they may be used in repetition subexpressions, where a single
     position in a regular expression corresponds to multiple positions in the
     input string). All tags should be defined by the user, either manually or
-    with the help of ``svars:re2c`` and ``mvars:re2c`` directives.
-    If there is more than one way tags can be matched against the input,
-    ambiguity is resolved using leftmost greedy disambiguation strategy.
+    with the help of ``svars`` and ``mvars`` blocks. If there is more than one
+    way tags can be matched against the input, ambiguity is resolved using
+    leftmost greedy disambiguation strategy.
 
 **Captures**
    The second option is to use *capturing groups*. They are enabled with
@@ -28,17 +28,16 @@
    ``yynmatch`` (the whole regular expression is group number zero), and
    submatch results are stored in ``yypmatch`` array. Both ``yynmatch`` and
    ``yypmatch`` should be defined by the user, and ``yypmatch`` size must be at
-   least ``[yynmatch * 2]``. |re2c| provides a directive ``maxnmatch:re2c``
-   that defines ``YYMAXNMATCH``, a constant that equals to the maximum value of
-   ``yynmatch`` among all rules.
+   least ``[yynmatch * 2]``. Use ``maxnmatch`` block to  define ``YYMAXNMATCH``,
+   a constant that equals to the maximum value of ``yynmatch`` among all rules.
 
 **Captvars**
    Another way to use capturing groups is the ``--captvars`` option or
    ``re2c:captvars = 1`` configuration. The only difference with ``--captures``
    is in the way the generated code stores submatch results: instead of
    ``yynmatch`` and ``yypmatch`` |re2c| generates variables ``yytl<k>`` and
-   ``yytr<k>`` for *k*-th capturing group (the user should declare these with
-   ``svars:re2c`` directive). Captures with variables support two dismbiguation
+   ``yytr<k>`` for *k*-th capturing group (the user should declare these using
+   an ``svars`` block). Captures with variables support two dismbiguation
    policies: ``--leftmost-captvars`` or ``re2c:leftmost-captvars = 1`` for
    leftmost greedy policy (the default one) and ``--posix-captvars`` or
    ``re2c:posix-captvars`` for POSIX longest-match policy.
@@ -52,9 +51,9 @@ noticeable. The generated TDFA uses a number of *tag variables* which do not map
 directly to tags: a single variable may be used for different tags, and a tag
 may require multiple variables to hold all its possible values. Eventually
 ambiguity is resolved, and only one final variable per tag survives. Tag
-variables should be defined using ``stags:re2c`` or ``mtags:re2c`` directives.
-If the lexer state is stored, tag variables should be part of it. They also
-need to be updated  by ``YYFILL``.
+variables should be defined using ``stags`` or ``mtags`` blocks. If lexer state
+is stored, tag variables should be part of it. They also need to be updated  by
+``YYFILL``.
 
 S-tags support the following operations:
 

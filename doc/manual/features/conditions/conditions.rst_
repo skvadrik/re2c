@@ -5,8 +5,8 @@ Each condition corresponds to a single automaton and has a unique name specified
 by the user and a unique internal number defined by |re2c|. The numbers are used
 to switch between conditions: the generated code uses ``YYGETCONDITION`` and
 ``YYSETCONDITION`` primitives to get the current condition or set it to the
-given number. Use ``/*!conditions:re2c*/`` directive or the ``--header`` option
-to generate numeric condition identifiers. Configuration
+given number. Use ``conditions`` block, ``--header`` option or ``re2c:header``
+configuration to generate numeric condition identifiers. Configuration
 ``re2c:cond:enumprefix`` specifies the generated identifier prefix.
 
 In condition mode every rule must be prefixed with a list of comma-separated
@@ -74,4 +74,4 @@ The program below uses start conditions to parse binary, octal, decimal and
 hexadecimal numbers. There is a single block where each base has its own
 condition, and the initial condition is connected to all of them. User-defined
 variable ``cond`` stores the current condition number; it is initialized to the
-number of the initial condition generated with ``/*!conditions:re2c*/``.
+number of the initial condition generated with ``conditions`` block.

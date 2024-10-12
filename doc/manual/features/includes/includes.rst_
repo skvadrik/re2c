@@ -1,0 +1,13 @@
+|re2c| allows one to include other files using a block of the form
+``/*!include:re2c FILE */`` or ``%{include FILE %}``, or an in-block directive
+``!include FILE ;``, where ``FILE`` is a path to the file to be included.
+|re2c| looks for include files in the directory of the including file and in
+include locations, which can be specified with the ``-I`` option. Include
+blocks/directives in |re2c| work in the same way as C/C++ ``#include``: ``FILE``
+contents are copy-pasted verbatim in place of the block/directive. Include files
+may have further includes of their own. Use ``--depfile`` option to track build
+dependencies of the output file on include files.
+|re2c| provides some predefined include files that can be found in the
+``include/`` subdirectory of the project. These files contain definitions that
+may be useful to other projects (such as Unicode categories) and form something
+like a standard library for |re2c|. Below is an example of using include files.

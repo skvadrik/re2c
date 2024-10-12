@@ -1,0 +1,73 @@
+|re2c| uses the following syntax for regular expressions:
+
+``"foo"``
+    Case-sensitive string literal.
+
+``'foo'``
+    Case-insensitive string literal.
+
+``[a-xyz]``, ``[^a-xyz]``
+    Character class (possibly negated).
+
+``.``
+    Any character except newline.
+
+``R \ S``
+    Difference of character classes ``R`` and ``S``.
+
+``R*``
+    Zero or more occurrences of ``R``.
+
+``R+``
+    One or more occurrences of ``R``.
+
+``R?``
+    Optional ``R``.
+
+``R{n}``
+    Repetition of ``R`` exactly ``n`` times.
+
+``R{n,}``
+    Repetition of ``R`` at least ``n`` times.
+
+``R{n,m}``
+    Repetition of ``R`` from ``n`` to ``m`` times.
+
+``(R)``
+    Just ``R``; parentheses are used to override precedence. If submatch
+    extraction is enabled, ``(R)`` is a capturing or a non-capturing group
+    depending on ``--invert-captures`` option.
+
+``(!R)``
+    If submatch extraction is enabled, ``(!R)`` is a non-capturing or a
+    capturing group depending on ``--invert-captures`` option.
+
+``R S``
+    Concatenation: ``R`` followed by ``S``.
+
+``R | S``
+    Alternative: ``R or S``.
+
+``R / S``
+    Lookahead: ``R`` followed by ``S``, but ``S`` is not consumed.
+
+``name``
+    Regular expression defined as ``name`` (or literal string ``"name"`` in
+    Flex compatibility mode).
+
+``{name}``
+    Regular expression defined as ``name`` in Flex compatibility mode.
+
+``@stag``
+    An *s-tag*: saves the last input position at which ``@stag`` matches in a
+    variable named ``stag``.
+
+``#mtag``
+    An *m-tag*: saves all input positions at which ``#mtag`` matches in a
+    variable named ``mtag``.
+
+Character classes and string literals may contain the following escape
+sequences: ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``,
+octal escapes ``\ooo`` and hexadecimal escapes ``\xhh``, ``\uhhhh`` and
+``\Uhhhhhhhh``.
+

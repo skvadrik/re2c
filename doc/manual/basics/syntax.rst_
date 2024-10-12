@@ -1,0 +1,42 @@
+A |re2c| program consists of a sequence of *blocks* intermixed with code in the
+target language. A block may contain *definitions*, *configurations*, *rules*
+and *directives* in any order:
+
+``<name> = <regular expression>;``
+    A *definition* binds a name to a regular expression. Names may contain
+    alphanumeric characters and underscore. The `regular expressions`_ section
+    gives an overview of |re2c| syntax for regular expressions. Once defined,
+    the name can be used in other regular expressions and in rules. Recursion in
+    named definitions is not allowed, and each name should be defined before it
+    is used. A block inherits named definitions from the global scope.
+    Redefining a name that exists in the current scope is an error.
+
+``<configuration> = <value>;``
+    A *configuration* allows one to change |re2c| behavior and customize the
+    generated code. For a full list of configurations supported by |re2c| see
+    the `configurations`_ section. Depending on a particular configuration, the
+    value can be a keyword, a nonnegative integer number or a one-line string
+    which should be enclosed in double or single quotes unless it consists of
+    alphanumeric characters. A block inherits configurations from the global
+    scope and may redefine them or add new ones. Configurations defined inside
+    of a block affect the whole block, even if they appear at the end of it.
+
+``<regular expression> { <code> }``
+    A *rule* binds a regular expression to a semantic action (a block of code in
+    the target language). If the regular expression matches, the associated
+    semantic action is executed. If multiple rules match, the longest match
+    takes precedence. If multiple rules match the same string, the earliest one
+    takes precedence. There are two special rules: the default rule ``*`` and
+    the end of input rule ``$``. The default rule should always be defined, it
+    has the lowest priority regardless of its place in the block, and it matches
+    any code unit (not necessarily a valid character, see the
+    `encoding support`_ section). The end of input rule should be defined if the
+    corresponding method for `handling the end of input`_ is used. If
+    `start conditions`_ are used, rules have more complex syntax.
+
+``!<directive>;``
+    A *directive* is one of the special predefined statements. Each directive
+    has a unique purpose. For example, the ``!use`` directive merges a rules
+    block into the current one (see the `reusable blocks`_ section), and the
+    ``!include`` directive allows one to include an outer file (see the
+    `include files`_ section).

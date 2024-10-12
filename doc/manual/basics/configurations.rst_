@@ -1,3 +1,4 @@
+Here is a full list of configurations supported by |re2c|:
 
 ``re2c:api``, ``re2c:flags:input``
     Same as the ``--api`` option.
@@ -326,8 +327,8 @@
     Controls if the ``YYGETSTATE`` switch is followed by an ``yyNext`` label
     (the default value is zero, which corresponds to no label).
     Alternatively one can use ``re2c:label:start`` to generate a specific start
-    label, or an explicit ``getstate:re2c`` directive to generate the
-    ``YYGETSTATE`` switch separately from the lexer block.
+    label, or an explicit ``getstate`` block to generate the ``YYGETSTATE``
+    switch separately from the lexer block.
 
 ``re2c:unsafe``, ``re2c:flags:unsafe``
     Same as the ``--no-unsafe`` option, but can be configured on per-block
