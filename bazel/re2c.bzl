@@ -1,4 +1,4 @@
-# re2c generator rules - assuming that re2c is available as '@re2c//:re2c'.
+"""re2c generator rules - assuming that re2c is available as '@re2c//:re2c'."""
 
 load("@bazel_skylib//lib:paths.bzl", "paths")
 

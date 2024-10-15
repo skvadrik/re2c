@@ -1,6 +1,6 @@
-package(default_visibility = ["//visibility:private"])
-
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+
+package(default_visibility = ["//visibility:private"])
 
 exports_files([
     "re2c_config.h",
@@ -10,4 +10,13 @@ bzl_library(
     name = "re2c_bzl",
     srcs = ["re2c.bzl"],
     visibility = ["//visibility:public"],
+)
+
+sh_test(
+    name = "re2c_bazel_test",
+    srcs = ["re2c_bazel_test.sh"],
+    data = [
+        "//:re2c_config",
+        "//:re2c",
+    ],
 )
