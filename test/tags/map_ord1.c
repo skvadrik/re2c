@@ -8,8 +8,8 @@
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy2;
 		default:
 			yyt1 = NULL;

@@ -36,6 +36,11 @@ AM_COND_IF([REBUILD_DOCS], [
 ])
 
 
+# --enable-syntax
+AC_ARG_ENABLE([syntax], [AS_HELP_STRING([--enable-syntax], [regenerate syntax files])])
+AM_CONDITIONAL([REBUILD_SYNTAX], [test "x$enable_syntax" = "xyes"])
+
+
 # --enable-lexers
 AC_ARG_ENABLE([lexers], [AS_HELP_STRING([--enable-lexers], [regenerate lexers])])
 AM_CONDITIONAL([REBUILD_LEXERS], [test "x$enable_lexers" = "xyes"])
@@ -69,14 +74,36 @@ AM_COND_IF([WITH_LIBS], [
 ])
 
 
+# --enable-dlang
+AC_ARG_ENABLE([dlang], [AS_HELP_STRING([--enable-dlang], [build re2d executable])])
+AM_CONDITIONAL([WITH_DLANG], [test "x$enable_dlang" != "xno"])
 # --enable-golang
 AC_ARG_ENABLE([golang], [AS_HELP_STRING([--enable-golang], [build re2go executable])])
 AM_CONDITIONAL([WITH_GOLANG], [test "x$enable_golang" != "xno"])
-
-
+# --enable-haskell
+AC_ARG_ENABLE([haskell], [AS_HELP_STRING([--enable-haskell], [build re2hs executable])])
+AM_CONDITIONAL([WITH_HASKELL], [test "x$enable_haskell" != "xno"])
+# --enable-java
+AC_ARG_ENABLE([java], [AS_HELP_STRING([--enable-java], [build re2java executable])])
+AM_CONDITIONAL([WITH_JAVA], [test "x$enable_java" != "xno"])
+# --enable-js
+AC_ARG_ENABLE([js], [AS_HELP_STRING([--enable-js], [build re2js executable])])
+AM_CONDITIONAL([WITH_JS], [test "x$enable_js" != "xno"])
+# --enable-ocaml
+AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
+AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])
+# --enable-python
+AC_ARG_ENABLE([python], [AS_HELP_STRING([--enable-python], [build re2py executable])])
+AM_CONDITIONAL([WITH_PYTHON], [test "x$enable_python" != "xno"])
 # --enable-rust
 AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
+# --enable-vlang
+AC_ARG_ENABLE([vlang], [AS_HELP_STRING([--enable-vlang], [build re2v executable])])
+AM_CONDITIONAL([WITH_VLANG], [test "x$enable_vlang" != "xno"])
+# --enable-zig
+AC_ARG_ENABLE([zig], [AS_HELP_STRING([--enable-zig], [build re2zig executable])])
+AM_CONDITIONAL([WITH_ZIG], [test "x$enable_zig" != "xno"])
 
 
 # --enable-benchmarks
@@ -158,7 +185,10 @@ TRY_CXXFLAG([-Weverything], m4_join([ ],
     [-Wno-shadow-field-in-constructor] dnl using same names in ctor seems more like a feature
     [-Wno-undefined-func-template] dnl explicit specialization to reduce build dependencies
     [-Wno-c++98-compat], dnl allow using C++11 features like `nullptr`
-    [-Wno-c++98-compat-pedantic]))
+    [-Wno-c++98-compat-pedantic],
+    [-Wno-unsafe-pointer-arithmetic],
+    [-Wno-unsafe-buffer-usage],
+    [-Wno-switch-enum]))
 
 
 # needed for POSIX file API

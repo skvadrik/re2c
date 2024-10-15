@@ -48,7 +48,6 @@ static Status lex(State &st, unsigned int *recv) {
     
 #line 50 "c/state/push.c"
 switch (st.state) {
-	default: goto yy0;
 	case 0:
 		if (st.lim <= st.cur) goto yy8;
 		goto yyFillLabel0;
@@ -58,6 +57,7 @@ switch (st.state) {
 	case 2:
 		if (st.lim <= st.cur) goto yy7;
 		goto yyFillLabel2;
+	default: goto yy0;
 }
 #line 46 "c/state/push.re"
 
@@ -208,7 +208,7 @@ yy8:
 }
 
 void test(const char **packets, Status expect) {
-    // Create a "socket" (open the same file for reading and writing).
+    // Create a pipe (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");

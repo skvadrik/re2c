@@ -1,0 +1,404 @@
+// supported feature lists -----------------------------------------------------
+
+supported_apis = ["simple", "generic", "record"];
+supported_api_styles = ["free-form"];
+supported_code_models = ["loop-switch", "recursive-functions"];
+supported_targets = ["code", "dot"];
+supported_features = ["nested-ifs", "bitmaps", "case-ranges", "unsafe",
+    "tags", "captures", "captvars"];
+
+
+// language-specific options ---------------------------------------------------
+
+semicolons = 1;
+backtick_quoted_strings = 0;
+single_quoted_strings = 0;
+indentation_sensitive = 0;
+wrap_blocks_in_braces = 1;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+conf:target = code;
+conf:code-model = loop-switch;
+conf:input-encoding = ascii;
+conf:date = 1;
+conf:version = 1;
+conf:conditions = 0;
+conf:storable-state = 0;
+conf:flex-syntax = 0;
+conf:verbose = 0;
+conf:line-dirs = 0;
+
+
+// mutable configurations ------------------------------------------------------
+
+conf:api = custom;
+conf:api:style = free-form;
+conf:api:sigil = "@@";
+conf:define:YYGETCOND:naked = 0;
+conf:define:YYSETCOND:naked = 0;
+conf:define:YYSETCOND@cond = "@@";
+conf:define:YYGETSTATE:naked = 0;
+conf:define:YYSETSTATE:naked = 0;
+conf:define:YYSETSTATE@state = "@@";
+conf:define:YYFILL@len = "@@";
+conf:define:YYFILL:naked = 0;
+conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+conf:yyfn:sep = ";";
+conf:variable:yycond = "yycond";
+conf:variable:yyctable = "yyctable";
+conf:variable:yyaccept = "yyaccept";
+conf:variable:yytarget = "yytarget";
+conf:variable:yystate = "yystate";
+conf:variable:yynmatch = "yynmatch";
+conf:variable:yypmatch = "yypmatch";
+conf:variable:yyrecord = "yyrecord";
+conf:variable:yych = "yych";
+conf:variable:yych:conversion = 0;
+conf:variable:yych:literals = hex;
+conf:variable:yych:emit = (code_model.recursive_functions ? 0 : 1);
+conf:variable:yybm = "yybm";
+conf:variable:yybm:hex = 0;
+conf:variable:yyfill = "";
+conf:variable:yystable = ""; // deprecated
+conf:header = "";
+conf:eof = -1;
+conf:sentinel = -1;
+conf:yyfill:enable = 1;
+conf:yyfill:parameter = 1;
+conf:yyfill:check = 1;
+conf:tags = 0;
+conf:tags:prefix = "yyt";
+conf:captures = 0;
+conf:captvars = 0;
+conf:posix-captures = 0;
+conf:posix-captvars = 0;
+conf:invert-captures = 0;
+conf:cond:abort = 1;
+conf:cond:prefix = "yyc_";
+conf:cond:enumprefix = "YYC_";
+conf:cond:divider@cond = "@@";
+conf:cond:goto@cond = "@@";
+conf:state:abort = 1;
+conf:state:nextlabel = 0;
+conf:bit-vectors = 0;
+conf:debug-output = 0;
+conf:computed-gotos = 0;
+conf:computed-gotos:threshold = 9;
+conf:nested-ifs = 0;
+conf:case-insensitive = 0;
+conf:case-inverted = 0;
+conf:case-ranges = 1;
+conf:unsafe = 1;
+conf:monadic = 0;
+conf:encoding:ebcdic = 0;
+conf:encoding:utf32 = 0;
+conf:encoding:ucs2 = 0;
+conf:encoding:utf16 = 0;
+conf:encoding:utf8 = 0;
+conf:encoding-policy = ignore;
+conf:empty-class = match-empty;
+conf:indent:string = "    ";
+conf:indent:top = 0;
+conf:label:prefix = "yy";
+conf:label:yyfill = "yyFillLabel";
+conf:label:yyloop = "'yyl"; // In Rust `continue` statements have labels, use it to avoid ambiguity.
+conf:label:yyNext = "yyNext";
+conf:label:start = 0;
+
+
+// mutable code configuration --------------------------------------------------
+
+conf:define:YYBACKUP = "YYBACKUP";
+conf:define:YYBACKUPCTX = "YYBACKUPCTX";
+conf:define:YYCONDTYPE = "YYCONDTYPE";
+conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
+conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
+conf:define:YYCTYPE = "YYCTYPE";
+conf:define:YYCTXMARKER = (api.generic ? "YYCTXMARKER" : (api.record ? yyrecord ".") "yyctxmarker");
+conf:define:YYCURSOR = (api.generic ? "YYCURSOR" : (api.record ? yyrecord ".") "yycursor");
+conf:define:YYDEBUG = "YYDEBUG";
+conf:define:YYFILL = "YYFILL";
+conf:define:YYGETACCEPT = sigil "{var}";
+conf:define:YYGETCOND = "YYGETCONDITION"; // historic default
+conf:define:YYGETSTATE = "YYGETSTATE";
+conf:define:YYINPUT = (api.generic ? "YYINPUT" : (api.record ? yyrecord ".") "yyinput");
+conf:define:YYLESSTHAN = "YYLESSTHAN";
+conf:define:YYLIMIT = (api.generic ? "YYLIMIT" : (api.record ? yyrecord ".") "yylimit");
+conf:define:YYMARKER = (api.generic ? "YYMARKER" : (api.record ? yyrecord ".") "yymarker");
+conf:define:YYMAXFILL = "YYMAXFILL";
+conf:define:YYMAXNMATCH = "YYMAXNMATCH";
+conf:define:YYMTAGN = "YYMTAGN";
+conf:define:YYMTAGP = "YYMTAGP";
+conf:define:YYPEEK = (api.generic ? "YYPEEK" : "get_unchecked");
+conf:define:YYRESTORE = "YYRESTORE";
+conf:define:YYRESTORECTX = "YYRESTORECTX";
+conf:define:YYRESTORETAG = "YYRESTORETAG";
+conf:define:YYSETACCEPT = sigil "{var} = " sigil "{val};";
+conf:define:YYSETCOND = "YYSETCONDITION"; // historic default
+conf:define:YYSETSTATE = "YYSETSTATE";
+conf:define:YYSHIFT = "YYSHIFT";
+conf:define:YYSHIFTSTAG = "YYSHIFTSTAG";
+conf:define:YYSHIFTMTAG = "YYSHIFTMTAG";
+conf:define:YYSKIP = "YYSKIP";
+conf:define:YYSTAGN = "YYSTAGN";
+conf:define:YYSTAGP = "YYSTAGP";
+conf:tags:expression = (api.record ? yyrecord ".") sigil;
+conf:tags:negative = (api.generic ? "@@" : "usize::MAX");
+conf:cond:divider = "";
+conf:cond:goto = "";
+
+
+// code templates --------------------------------------------------------------
+
+code:var_local =
+    // In Rust uninitialized variable is an error, but if the compiler is able to see
+    // that all paths overwrite the initial value, it warns about unused assignments.
+    (!have_init ? topindent "#[allow(unused_assignments)]" nl)
+    topindent "let mut " name " : " type " = " init ";" nl;
+code:var_global = topindent "static mut " name " : " type " = " init ";" nl;
+
+code:const_local = topindent "const " name ": " type " = " init ";" nl;
+code:const_global = code:const_local;
+
+code:array_local =
+    topindent "let " name ": [" type "; " size "] = [" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "];" nl;
+
+code:array_global = <undefined>;
+
+code:array_elem = array "[" index "]";
+
+code:type_int = "isize";
+code:type_uint = "usize";
+code:type_cond_enum = (storable_state? "isize" : "usize");
+code:type_yybm = "u8";
+code:type_yytarget = <undefined>;
+
+code:assign = topindent lhs " = " rhs ";" nl;
+
+code:cmp_eq = "==";
+code:cmp_ne = "!=";
+code:cmp_lt = "<";
+code:cmp_gt = ">";
+code:cmp_le = "<=";
+code:cmp_ge = ">=";
+
+code:if_then_else =
+    [branch{0}: topindent "if " cond " {" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent "} else " (have_cond? "if " cond " ") "{" nl
+        indent [stmt: stmt] dedent]
+    topindent "}" nl;
+
+code:if_then_else_oneline = <undefined>;
+
+code:switch =
+    topindent "match " expr " {" nl
+        indent [case: case] dedent
+    topindent "}" nl;
+
+code:switch_cases =
+    [case{0:-2}: topindent case " |" nl]
+    [case{-1}:   topindent case " => {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl];
+
+code:switch_cases_oneline =
+    [case{0:-2}: topindent case " |" nl]
+    [case{-1}:   topindent case " => " [stmt: stmt] "," nl];
+
+code:switch_case_range = [val{0}: val] (many ? " ..= " [val{-1}: val]);
+
+code:switch_case_default = "_";
+
+code:loop =
+    topindent (loop_label? label ": ") "loop {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
+
+code:enum = [elem: topindent "const " elem ": " type " = " init ";" nl];
+
+code:enum_elem = name;
+
+code:goto = <undefined>;
+
+code:fndecl = <undefined>;
+
+code:fndef =
+    topindent "fn " name "("
+        [arg{0:-2}: argname ": " argtype ", "]
+        [arg{-1}:   argname ": " argtype]
+    ")" (have_type ? " -> " type) " {" nl
+        indent [stmt: stmt] dedent
+    "}" nl;
+
+code:fncall = topindent name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:tailcall = code:fncall;
+
+code:recursive_functions = [fn: fndef nl];
+
+code:fingerprint =
+    "/* Generated by re2rust" (have_version? " " version) (have_date? " on " date) " */" nl;
+
+// No line directives in Rust: https://github.com/rust-lang/rfcs/issues/1862.
+code:line_info = <undefined>;
+
+code:abort = topindent "panic!(\"internal lexer error\")" nl;
+
+code:yydebug =
+    topindent (api.generic
+        ? YYDEBUG
+    : (api.record
+        ? YYDEBUG "(" yyrecord ");"
+        : YYDEBUG "(" state ", " yych ");"
+    )) nl;
+
+code:yypeek =
+    topindent (code_model.recursive_functions ? "let ") yych " = " (api.generic
+        ? (unsafe
+            ? "unsafe {" YYPEEK "}"
+            : YYPEEK)
+        : (unsafe
+            ? "unsafe {*" YYINPUT "." YYPEEK "(" YYCURSOR ")}"
+            : YYINPUT "[" YYCURSOR "]") (cast ? " as " YYCTYPE)
+    ) ";" nl;
+
+code:yyskip =
+    topindent (api.generic
+        ? YYSKIP
+        : YYCURSOR " += 1;"
+    ) nl;
+
+code:yybackup =
+    topindent (api.generic
+        ? YYBACKUP
+        : YYMARKER " = " YYCURSOR ";"
+    ) nl;
+
+code:yybackupctx =
+    topindent (api.generic
+        ? YYBACKUPCTX
+        : YYCTXMARKER " = " YYCURSOR ";"
+    ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
+
+code:yyrestore =
+    topindent (api.generic
+        ? YYRESTORE
+        : YYCURSOR " = " YYMARKER ";"
+    ) nl;
+
+code:yyrestorectx =
+    topindent (api.generic
+        ? YYRESTORECTX
+        : YYCURSOR " = " YYCTXMARKER ";"
+    ) nl;
+
+code:yyrestoretag =
+    topindent (api.generic
+        ? YYRESTORETAG
+        : YYCURSOR " = " tag ";"
+    ) nl;
+
+code:yyshift =
+    topindent (api.generic
+        ? YYSHIFT
+        : YYCURSOR " -= " offset ";"
+    ) nl;
+
+code:yyshiftstag =
+    (nested ? topindent "if " tag " != " neg " {" nl indent)
+        topindent (api.generic
+            ? YYSHIFTSTAG
+            : tag " -= " offset ";"
+        ) nl
+    (nested ? dedent topindent "}" nl);
+
+code:yyshiftmtag =
+    topindent YYSHIFTMTAG nl;
+
+code:yystagp =
+    topindent (api.generic
+        ? YYSTAGP
+        : tag " = " YYCURSOR ";"
+    ) nl;
+
+code:yymtagp =
+    topindent YYMTAGP nl;
+
+code:yystagn =
+    topindent (api.generic
+        ? YYSTAGN
+        : tag " = " neg ";"
+    ) nl;
+
+code:yymtagn =
+    topindent YYMTAGN nl;
+
+code:yycopystag =
+    topindent (api.generic
+        ? YYCOPYSTAG
+        : lhs " = " rhs ";"
+    ) nl;
+
+code:yycopymtag =
+    topindent (api.generic
+        ? YYCOPYMTAG
+        : lhs " = " rhs ";"
+    ) nl;
+
+code:yygetaccept =
+    (api.generic
+        ? YYGETACCEPT
+        : (api.record & (storable_state | code_model.recursive_functions) ? yyrecord ".") var);
+
+code:yysetaccept =
+    topindent (api.generic
+        ? YYSETACCEPT
+        : (api.record & (storable_state | code_model.recursive_functions) ? yyrecord ".")
+            var " = " val ";"
+    ) nl;
+
+code:yygetcond =
+    (api.generic
+        ? YYGETCOND
+        : (api.record ? yyrecord ".") var);
+
+code:yysetcond =
+    topindent (api.generic
+        ? YYSETCOND
+        : (api.record ? yyrecord ".") var " = " val ";"
+    ) nl;
+
+code:yygetstate =
+    (api.generic
+        ? YYGETSTATE
+        : (api.record ? yyrecord ".") var);
+
+code:yysetstate =
+    topindent (api.generic
+        ? YYSETSTATE
+        : (api.record ? yyrecord "." var) " = " val ";"
+    ) nl;
+
+code:yylessthan =
+    (api.generic
+        ? YYLESSTHAN
+        : (many
+            ? "(" YYLIMIT " - " YYCURSOR ") < " need
+            : YYLIMIT " <= " YYCURSOR));
+
+code:yybm_filter = yych " & ~0xFF";
+
+code:yybm_match = "(" yybm "[" offset "+" yych " as usize] & " mask ") != 0";

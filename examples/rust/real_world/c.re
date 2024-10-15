@@ -283,6 +283,9 @@ impl Input {
 // Some of this lexer was taken from the C lex grammar at
 // http://www.quut.com/c/ANSI-C-grammar-l.html
 fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
+    // The input must be null-terminated, otherwise the function has UB.
+    assert_eq!(input.data.last(), Some(&0));
+
     if input.eof { return Ok(None) }
 
     input.token = input.cursor;

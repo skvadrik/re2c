@@ -73,6 +73,18 @@ Input::~Input() {
     }
 }
 
+void Input::reset_lexer() {
+    reset_ptrs();
+
+    for (InputFile* in: files) {
+        delete in;
+    }
+    files.clear();
+    msg.filenames.clear();
+
+    location = ATSTART;
+}
+
 size_t Input::get_input_index() const {
     // Find index of the current input file: the one corresponding to the buffer fragment that
     // contains the cursor.
@@ -168,10 +180,22 @@ bool Input::read(size_t want) {
     for (size_t i = files.size(); i --> 0; ) {
         InputFile* in = files[i];
         const size_t have = fread(lim, 1, want, in->file);
-        in->so = lim;
-        lim += have;
-        in->eo = lim;
-        want -= have;
+        if (have > 0) {
+            in->so = lim;
+            lim += have;
+            in->eo = lim;
+            want -= have;
+        } else if (in->so == ENDPOS) {
+            // Empty file: first time we read from it and have nothing.
+            DCHECK(in->eo == ENDPOS);
+            in->so = in->eo = lim;
+        } else {
+            // We have reached the end of file. Don't adjust start and end pointers, as
+            // YYLIMIT may point outside of this file. This may happen if the previous `read()`
+            // invocation drained this file, then read some data from the parent file, and
+            // then YYFILL got triggered while YYCURSOR was still in this file, so this file
+            // could not be popped off the stack yet.
+        }
 
         // buffer filled
         if (want == 0) return true;
@@ -223,7 +247,7 @@ bool Input::fill(size_t need) {
         shift_ptrs_and_fpos(-static_cast<ptrdiff_t>(free));
     } else {
         BSIZE += std::max(BSIZE, need);
-        uint8_t* buf = new uint8_t[BSIZE + YYMAXFILL];
+        uint8_t* buf = new uint8_t[BSIZE + maxfill()];
         if (buf == nullptr) {
             error("out of memory");
             return false;
@@ -240,8 +264,8 @@ bool Input::fill(size_t need) {
     CHECK(lim + free <= bot + BSIZE);
     if (!read(free)) {
         eof = lim;
-        memset(lim, 0, YYMAXFILL);
-        lim += YYMAXFILL;
+        memset(lim, 0, maxfill());
+        lim += maxfill();
     }
 
     return true;

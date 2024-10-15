@@ -1,14 +1,15 @@
 // re2rust $INPUT -o $OUTPUT
 
-// Expect a null-terminated string.
-fn lex(s: &[u8]) -> isize {
-    let mut cur = 0;
+fn lex(yyinput: &[u8]) -> isize {
+    // The input must be null-terminated, otherwise the function has UB.
+    assert_eq!(yyinput.last(), Some(&0));
+
+    let mut yycursor = 0;
     let mut count = 0;
 
-    'lex: loop {/*!re2c
+    'lex: loop { /*!re2c
+        re2c:api = default;
         re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK  = "*s.get_unchecked(cur)";
-        re2c:define:YYSKIP  = "cur += 1;";
         re2c:yyfill:enable = 0;
 
         *      { return -1; }

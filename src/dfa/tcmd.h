@@ -29,6 +29,7 @@ struct tcmd_t {
 using tcid_t = uint32_t;
 
 static constexpr tcid_t TCID0 = 0;
+static constexpr tcid_t TCID_NONE = std::numeric_limits<tcid_t>::max();
 
 class tcpool_t {
     using index_t = lookup_t<const tcmd_t*>;

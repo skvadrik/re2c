@@ -68,7 +68,7 @@ static Status lex(State &st, unsigned int *recv) {
 }
 
 void test(const char **packets, Status expect) {
-    // Create a "socket" (open the same file for reading and writing).
+    // Create a pipe (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");

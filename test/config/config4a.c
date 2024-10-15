@@ -14,9 +14,9 @@ char *scan(char *p)
 
 #line 16 "config/config4a.c"
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
+		default: goto yy0;
 	}
 yy0:
 	if (YYLIMIT <= YYCURSOR) {

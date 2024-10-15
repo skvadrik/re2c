@@ -24,17 +24,14 @@ int main ()
 #line 25 "conditions/condtype_yysetcondition.c"
 {
 	unsigned char yych;
-	if (YYGETCONDITION() < 1) {
-		goto yyc_b;
-	} else {
-		goto yyc_a;
-	}
+	if (YYGETCONDITION() < 1) goto yyc_b;
+	else goto yyc_a;
 /* *********************************** */
 yyc_b:
 	++YYCURSOR;
 #line 25 "conditions/condtype_yysetcondition.re"
 	{ printf ("b\n"); break; }
-#line 38 "conditions/condtype_yysetcondition.c"
+#line 35 "conditions/condtype_yysetcondition.c"
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
@@ -43,12 +40,12 @@ yyc_a:
 	YYSETCONDITION(yycb);
 #line 28 "conditions/condtype_yysetcondition.re"
 	{ printf ("a => b\n"); continue; }
-#line 47 "conditions/condtype_yysetcondition.c"
+#line 44 "conditions/condtype_yysetcondition.c"
 yy2:
 	++YYCURSOR;
 #line 27 "conditions/condtype_yysetcondition.re"
 	{ printf ("a\n");      continue; }
-#line 52 "conditions/condtype_yysetcondition.c"
+#line 49 "conditions/condtype_yysetcondition.c"
 }
 #line 29 "conditions/condtype_yysetcondition.re"
 

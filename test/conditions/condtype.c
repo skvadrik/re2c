@@ -10,11 +10,8 @@ int main ()
 #line 11 "conditions/condtype.c"
 {
 	unsigned char yych;
-	if (YYGETCONDITION() < 1) {
-		goto yyc_a;
-	} else {
-		goto yyc_b;
-	}
+	if (YYGETCONDITION() < 1) goto yyc_a;
+	else goto yyc_b;
 /* *********************************** */
 yyc_a:
 	yych = *YYCURSOR;
@@ -23,7 +20,7 @@ yy1:
 	++YYCURSOR;
 #line 10 "conditions/condtype.re"
 	{}
-#line 27 "conditions/condtype.c"
+#line 24 "conditions/condtype.c"
 /* *********************************** */
 yyc_b:
 	yych = *YYCURSOR;
@@ -32,7 +29,7 @@ yy3:
 	++YYCURSOR;
 #line 11 "conditions/condtype.re"
 	{}
-#line 36 "conditions/condtype.c"
+#line 33 "conditions/condtype.c"
 }
 #line 12 "conditions/condtype.re"
 

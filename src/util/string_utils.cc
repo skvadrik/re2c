@@ -112,4 +112,15 @@ bool s_to_i32_unsafe(const uint8_t* s, const uint8_t* s_end, int32_t& number) {
     return true;
 }
 
+void strrreplace(std::string& s, const std::string& s1, const std::string& s2) {
+    const size_t l1 = s1.length(), l2 = s2.length();
+    if (l1 != 0) {
+        std::string::size_type pos = s.find(s1);
+        while (pos != std::string::npos) {
+            s.replace(pos, l1, s2);
+            pos = s.find(s1, pos + l2);
+        }
+    }
+}
+
 } // namespace re2c

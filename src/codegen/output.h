@@ -13,6 +13,7 @@
 #include "src/codegen/code.h"
 #include "src/dfa/tcmd.h"
 #include "src/msg/location.h"
+#include "src/options/opt.h"
 #include "src/util/allocator.h"
 #include "src/util/attribute.h"
 
@@ -40,9 +41,6 @@ class Scratchbuf {
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string& s) { os << s; return *this; }
     Scratchbuf& cstr(const char* s) { os << s; return *this; }
-    Scratchbuf& yybm_char(uint32_t u, const opt_t* opts, int width);
-
-    Scratchbuf& u32_width(uint32_t u, int width);
     Scratchbuf& exact_uint(size_t width);
     const char* flush();
 
@@ -61,10 +59,34 @@ struct RenderContext {
     const std::string& file;
     uint32_t line;
     uint32_t ind;
+    bool oneline_mode;
 
     RenderContext(const Msg& msg, const std::string& file)
-        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0) {}
+        : os(), msg(msg), opts(nullptr), file(file), line(1), ind(0), oneline_mode(false) {}
     FORBID_COPY(RenderContext);
+};
+
+class RenderCallback {
+  public:
+    virtual void render_var(StxVarId /*var*/) {
+        UNREACHABLE();
+    }
+    virtual size_t get_list_size(StxVarId /*var*/) const {
+        UNREACHABLE();
+        return 0;
+    }
+    virtual void start_list(StxVarId /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
+        UNREACHABLE();
+    }
+    virtual bool next_in_list(StxVarId /*var*/) {
+        UNREACHABLE();
+        return false;
+    }
+    virtual bool eval_cond(StxLOpt /*opt*/) {
+        UNREACHABLE();
+        return false;
+    }
+    virtual ~RenderCallback() = default;
 };
 
 struct StartCond {
@@ -85,6 +107,8 @@ struct OutputBlock {
     StartConds conds;
     tagnames_t stags;
     tagnames_t mtags;
+    tagnames_t svars;
+    tagnames_t mvars;
     const opt_t* opts;
     Adfas dfas;
 
@@ -95,12 +119,19 @@ struct OutputBlock {
     Label* start_label;          // start label of this block
     storable_states_t fill_goto; // transitions to YYFILL states
 
+    // precomputed YYFN parts with block-level options (in rec/func mode)
+    CodeFnCommon* fn_common;
+    // precomputed relational operators
+    const char* binops[OP_COUNT];
+
     OutputBlock(InputBlock kind, const std::string& name, const loc_t& loc);
     ~OutputBlock();
     FORBID_COPY(OutputBlock);
 };
 
 struct Output {
+    OutAllocator& allocator;
+    Msg& msg;
     blocks_t cblocks;  // .c file
     blocks_t hblocks;  // .h file
     blocks_t* pblocks; // selector
@@ -112,14 +143,15 @@ struct Output {
     bool warn_condition_order;
     bool need_header;
     bool done_mtag_defs;
-    Msg& msg;
     std::set<std::string> skeletons;
-    OutAllocator& allocator;
     Scratchbuf scratchbuf;
     OutputBlock* current_block;
 
-    // "final" options accumulated for all non-reuse blocks
+    // whole-program options accumulated for all non-reuse blocks
     const opt_t* total_opts;
+
+    // precomputed YYFN parts with whole-program options (in rec/func mode)
+    CodeFnCommon* fn_common;
 
     Output(OutAllocator& alc, Msg& msg);
     ~Output();
@@ -130,7 +162,6 @@ struct Output {
     void header_mode(bool on);
     bool in_header() const;
     void gen_raw(const uint8_t* s, const uint8_t* e, bool newline = false);
-    void gen_version_time();
     void gen_stmt(Code* stmt);
     Ret gen_prolog(Opt& opts, const loc_t& loc);
     void gen_epilog();
@@ -145,17 +176,18 @@ State* fallback_state_with_eof_rule(
 std::string bitmap_name(const opt_t* opts, const std::string& cond);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
-CodeList* gen_goto_after_fill(Output& output, const Adfa& dfa, const State* from, const State* to);
+CodeList* gen_goto_after_fill(
+        Output& output, const Adfa& dfa, const State* from, const CodeJump* jump);
 void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* stmts);
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases);
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases);
-void expand_fintags(const Tag& tag, std::vector<std::string>& fintags);
-std::string vartag_name(
-        tagver_t ver, const std::string& prefix, const std::set<tagver_t>& mtagvers);
-std::string vartag_expr(tagver_t ver, const opt_t* opts, const std::set<tagver_t>& mtagvers);
+void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fintags);
+std::string captvar_name(size_t index, const opt_t* opts);
+std::string vartag_name(tagver_t ver, const opt_t* opts, bool is_mtag);
+std::string vartag_expr(tagver_t ver, const opt_t* opts, bool is_mtag);
 void gen_peek_expr(std::ostream& os, const opt_t* opts);
 
-void codegen_analyze(Output& output);
+Ret codegen_analyze(Output& output) NODISCARD;
 Ret codegen_generate(Output& output) NODISCARD;
 void codegen_fixup(Output& output);
 Ret codegen_render(Output& outptu) NODISCARD;

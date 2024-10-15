@@ -62,12 +62,8 @@ static int fill(input_t *in, size_t need)
 
 static int lex(input_t *in, long *count)
 {
-    const char
-        *s1, *u1, *h1, *h3, *h5, *r1, *p1, *p3, *q1, *f1,
-        *s2, *u2, *h2, *h4, *h6, *r2, *p2, *p4, *q2, *f2;
-    long c;
-
-    c = 0;
+    /*!svars:re2c format = "const char *@@;\n"; */
+    long c = 0;
 loop:
     in->tok = in->cur;
 /*!re2c

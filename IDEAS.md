@@ -41,6 +41,6 @@ requires some research. Does TDFA present any special difficulties?
 ## Location support
 
 It would be good to have something like Bison locations (automatic tracking of
-line/column/filename inforamtion). This is primarily useful for tokenizers and
+line/column/filename information). This is primarily useful for tokenizers and
 large lexers.
 

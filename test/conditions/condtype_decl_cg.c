@@ -18,9 +18,9 @@ int main ()
 #line 19 "conditions/condtype_decl_cg.c"
 {
 	unsigned char yych;
-	static void *yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_a,
-		&&yyc_b,
+		&&yyc_b
 	};
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */

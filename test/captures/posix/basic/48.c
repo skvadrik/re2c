@@ -22,14 +22,16 @@ yy2:
 			yyt1 = YYCURSOR;
 			goto yy4;
 		default:
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy3;
 	}
 yy3:
 	yynmatch = 2;
 	yypmatch[2] = yyt1;
 	yypmatch[3] = yyt2;
-	yypmatch[0] = yyt1 - 1;
+	yypmatch[0] = yyt1;
+	yypmatch[0] -= 1;
 	yypmatch[1] = YYCURSOR;
 	{}
 yy4:

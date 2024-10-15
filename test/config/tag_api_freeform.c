@@ -31,8 +31,10 @@ yy2:
 	}
 yy3:
 	x = yyt1;
-	y = YYCURSOR - 1;
-	z = YYCURSOR - 1;
+	y = YYCURSOR;
+	y -= 1;
+	z = YYCURSOR;
+	z -= 1;
 	{ a }
 }
 
@@ -213,9 +215,12 @@ yy23:
 	}
 yy24:
 	z = yyt1;
-	x = yyt1 - 1;
-	y = yyt1 - 1;
-	YYCURSOR = yyt1 - 1;
+	x = yyt1;
+	x -= 1;
+	y = yyt1;
+	y -= 1;
+	YYCURSOR = yyt1;
+	YYCURSOR -= 1;
 	{ c }
 }
 

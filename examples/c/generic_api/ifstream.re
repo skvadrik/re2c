@@ -8,7 +8,7 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     std::streampos mar;
     for (;;) {
     /*!re2c
-        re2c:api= custom;
+        re2c:api = generic;
         re2c:api:style = free-form;
         re2c:define:YYCTYPE   = char;
         re2c:define:YYPEEK    = "in.peek()";

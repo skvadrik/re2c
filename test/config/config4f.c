@@ -15,9 +15,9 @@ char *scan(char *p)
 
 #line 17 "config/config4f.c"
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
+		default: goto yy0;
 	}
 #line 15 "config/config4f.re"
 

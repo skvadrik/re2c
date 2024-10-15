@@ -5,8 +5,8 @@
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
+		default: goto yy0;
 	}
 yy0:
 	goto yy1;
@@ -31,8 +31,8 @@ yy3:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy4;
 		case 1: goto yyFillLabel1;
+		default: goto yy4;
 	}
 yyNext:
 yy4:
@@ -59,8 +59,8 @@ yy7:
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy8;
 		case 2: goto yyFillLabel2;
+		default: goto yy8;
 	}
 yy8:
 	goto yy9;
@@ -86,8 +86,8 @@ yy11:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy12;
 		case 3: goto yyFillLabel3;
+		default: goto yy12;
 	}
 yyNext:
 yy12:
@@ -114,8 +114,8 @@ yy15:
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy16;
 		case 4: goto yyFillLabel4;
+		default: goto yy16;
 	}
 yy16:
 	goto yy17;
@@ -141,8 +141,8 @@ yy19:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy20;
 		case 5: goto yyFillLabel5;
+		default: goto yy20;
 	}
 yyNext:
 yy20:
@@ -169,8 +169,8 @@ yy23:
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy24;
 		case 6: goto yyFillLabel6;
+		default: goto yy24;
 	}
 Lstart:
 yy24:
@@ -197,8 +197,8 @@ yy27:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy28;
 		case 7: goto yyFillLabel7;
+		default: goto yy28;
 	}
 yyNext:
 Lstart:
@@ -227,8 +227,8 @@ yy31:
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy32;
 		case 8: goto yyFillLabel8;
+		default: goto yy32;
 	}
 Lstart:
 yy32:
@@ -256,8 +256,8 @@ yy35:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy36;
 		case 9: goto yyFillLabel9;
+		default: goto yy36;
 	}
 yyNext:
 Lstart:
@@ -286,8 +286,8 @@ yy39:
 // re2c:state:nextlabel = 0;
 
 	switch (YYGETSTATE()) {
-		default: goto yy40;
 		case 10: goto yyFillLabel10;
+		default: goto yy40;
 	}
 Lstart:
 yy40:
@@ -315,8 +315,8 @@ yy43:
 // re2c:state:nextlabel = 1;
 
 	switch (YYGETSTATE()) {
-		default: goto yy44;
 		case 11: goto yyFillLabel11;
+		default: goto yy44;
 	}
 yyNext:
 Lstart:

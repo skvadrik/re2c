@@ -10,7 +10,7 @@ void scan(unsigned char* in)
 		if (limit1 <= cursor1) fill1(1);
 		yych = *cursor1;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 				&&yy2, &&yy2, &&yy1, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 				&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
@@ -77,9 +77,9 @@ void scan(unsigned short* in)
 		if (limit2 <= cursor2) fill2(1);
 		yych = *cursor2;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
-				&&yy10, &&yy10, &&yy9,  &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
+				&&yy10, &&yy10,  &&yy9, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
 				&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
 				&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
 				&&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10, &&yy10,
@@ -144,7 +144,7 @@ void scan(unsigned int* in)
 		if (limit3 <= cursor3) fill3(1);
 		yych = *cursor3;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 				&&yy18, &&yy18, &&yy17, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,
 				&&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18, &&yy18,

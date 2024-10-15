@@ -6,11 +6,13 @@
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) {
-		yyt1 = yyt3 = YYCURSOR;
+		yyt1 = YYCURSOR;
+		yyt3 = YYCURSOR;
 		goto yy2;
 	}
-	yyt2 = yyt3 = NULL;
 	yyt1 = YYCURSOR;
+	yyt2 = NULL;
+	yyt3 = NULL;
 yy1:
 	yynmatch = 2;
 	yypmatch[0] = yyt1;
@@ -22,8 +24,9 @@ yy2:
 	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy3;
 	YYCURSOR = YYMARKER;
-	yyt2 = yyt3 = NULL;
 	yyt1 = YYCURSOR;
+	yyt2 = NULL;
+	yyt3 = NULL;
 	goto yy1;
 yy3:
 	++YYCURSOR;

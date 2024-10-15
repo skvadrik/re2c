@@ -220,11 +220,8 @@ yy14:
 #line 221 "eof/eof_10_fill.c"
 yy15:
 	in->cur = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy2;
-	} else {
-		goto yy11;
-	}
+	if (yyaccept == 0) goto yy2;
+	else goto yy11;
 }
 #line 58 "eof/eof_10_fill.re"
 

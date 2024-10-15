@@ -49,49 +49,46 @@ loop:
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
 	yych = *YYCURSOR;
 	{
-		static void *yytarget[256] = {
-			&&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy1,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy7,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy8,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy9,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy10, &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
+		static const void* yytarget[256] = {
+			 &&yy2,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy1,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy7,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy8,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy9,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5, &&yy10,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,  &&yy5,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
 			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
 			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
 			&&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11, &&yy11,
 			&&yy12, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy13,
 			&&yy13, &&yy13, &&yy13, &&yy13, &&yy13, &&yy14, &&yy13, &&yy13,
-			&&yy15, &&yy16, &&yy16, &&yy16, &&yy17, &&yy3,  &&yy3,  &&yy3,
-			&&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3
+			&&yy15, &&yy16, &&yy16, &&yy16, &&yy17,  &&yy3,  &&yy3,  &&yy3,
+			 &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3,  &&yy3
 		};
 		goto *yytarget[yych];
 	}
 yy1:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy6;
-	} else {
-		goto yy4;
-	}
+	if (yyaccept == 0) goto yy6;
+	else goto yy4;
 yy2:
 	++YYCURSOR;
 	{

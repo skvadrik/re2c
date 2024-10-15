@@ -60,17 +60,26 @@ static void combine_list(CodeList* stmts) {
 }
 
 void combine_code(Code* code) {
-    // don't recurse into other constructs because they have no skip/peek/backup
-    if (code->kind == CodeKind::BLOCK) {
+    switch (code->kind) {
+    case CodeKind::BLOCK:
         combine_list(code->block.stmts);
+        break;
+    case CodeKind::FNDEF:
+        combine_list(code->fndef.body);
+        break;
+    case CodeKind::REC_FUNCS:
+        combine_list(code->rfuncs);
+        break;
+    default:
+        // don't recurse into other constructs because they have no skip/peek/backup
+        break;
     }
 }
 
 void codegen_fixup(Output& output) {
     for (const blocks_t& bs : {output.cblocks, output.hblocks}) {
         for (OutputBlock* b : bs) {
-            if (b->opts->api == Api::DEFAULT) {
-                // Folding skip/peek/backup expressions is only possible with default input API.
+            if (b->opts->api == Api::SIMPLE && b->opts->specialize_skip_peek_backup()) {
                 combine_list(b->code);
             }
         }

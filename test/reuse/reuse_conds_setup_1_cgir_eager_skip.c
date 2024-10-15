@@ -12,9 +12,9 @@ void scan(unsigned char* in)
 
 {
 	YYCTYPE yych;
-	static void *yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
-		&&yyc_r2,
+		&&yyc_r2
 	};
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
@@ -106,9 +106,9 @@ void scan(unsigned short* in)
 
 {
 	YYCTYPE yych;
-	static void *yyctable[2] = {
+	static const void* yyctable[2] = {
 		&&yyc_r1,
-		&&yyc_r2,
+		&&yyc_r2
 	};
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */

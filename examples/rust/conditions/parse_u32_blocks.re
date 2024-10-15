@@ -2,20 +2,17 @@
 
 // Store u32 number in u64 during parsing to simplify overflow hadling.
 struct State<'a> {
-    str: &'a [u8],
-    cur: usize,
-    mar: usize,
+    yyinput: &'a [u8],
+    yycursor: usize,
+    yymarker: usize,
     num: u64,
 }
 
 /*!re2c // Common re2c definitions shared between all functions.
+    re2c:api = record;
+    re2c:variable:yyrecord = st;
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE   = u8;
-    re2c:define:YYPEEK    = "*st.str.get_unchecked(st.cur)";
-    re2c:define:YYSKIP    = "st.cur += 1;";
-    re2c:define:YYBACKUP  = "st.mar = st.cur;";
-    re2c:define:YYRESTORE = "st.cur = st.mar;";
-    re2c:define:YYSHIFT   = "st.cur = (st.cur as isize + @@) as usize;";
+    re2c:define:YYCTYPE = u8;
 */
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
@@ -26,12 +23,14 @@ macro_rules! maybe { // Convert the number from u64 to optional u32.
 
 // Add digit with the given base, checking for overflow.
 fn add(st: &mut State, offs: u8, base: u64) {
-    let digit = unsafe { st.str.get_unchecked(st.cur - 1) } - offs;
+    let digit = unsafe { st.yyinput.get_unchecked(st.yycursor - 1) } - offs;
     st.num = std::cmp::min(st.num * base + digit as u64, ERROR);
 }
 
 fn parse_u32(s: & [u8]) -> Option<u32> {
-    let mut st = State {str: s, cur: 0, mar: 0, num: 0};
+    assert_eq!(s.last(), Some(&0)); // expect null-terminated input
+
+    let mut st = State {yyinput: s, yycursor: 0, yymarker: 0, num: 0};
 /*!re2c
     '0b' / [01]        { return parse_bin(&mut st); }
     "0"                { return parse_oct(&mut st); }

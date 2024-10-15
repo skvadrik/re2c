@@ -59,11 +59,8 @@ char scan(Scanner *s)
 #line 60 "conditions/condition_05_cs.c"
 		{
 			unsigned char yych;
-			if (cond < 1) {
-				goto yyc_normal;
-			} else {
-				goto yyc_comment;
-			}
+			if (cond < 1) goto yyc_normal;
+			else goto yyc_comment;
 /* *********************************** */
 yyc_normal:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
@@ -76,7 +73,7 @@ yy1:
 				fputc(*s->tok, stdout);
 				continue;
 			}
-#line 80 "conditions/condition_05_cs.c"
+#line 77 "conditions/condition_05_cs.c"
 yy2:
 			yych = *++s->cur;
 			if (yych != '*') goto yy1;
@@ -85,7 +82,7 @@ yy2:
 			{
 				goto yyc_comment;
 			}
-#line 89 "conditions/condition_05_cs.c"
+#line 86 "conditions/condition_05_cs.c"
 /* *********************************** */
 yyc_comment:
 			if ((s->lim - s->cur) < 2) { if(fill(s, 2) >= 0) break; }
@@ -97,7 +94,7 @@ yy4:
 			{
 				goto yyc_comment;
 			}
-#line 101 "conditions/condition_05_cs.c"
+#line 98 "conditions/condition_05_cs.c"
 yy5:
 			yych = *++s->cur;
 			if (yych != '/') goto yy4;
@@ -106,7 +103,7 @@ yy5:
 			{
 				continue;
 			}
-#line 110 "conditions/condition_05_cs.c"
+#line 107 "conditions/condition_05_cs.c"
 		}
 #line 88 "conditions/condition_05_cs.re"
 

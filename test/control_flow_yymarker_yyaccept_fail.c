@@ -47,16 +47,13 @@ yy8:
 	}
 yy9:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy2;
-	} else {
-		goto yy7;
-	}
+	if (yyaccept == 0) goto yy2;
+	else goto yy7;
 yy10:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_yyaccept_fail.re"
 	{ action1 }
-#line 60 "control_flow_yymarker_yyaccept_fail.c"
+#line 57 "control_flow_yymarker_yyaccept_fail.c"
 }
 #line 8 "control_flow_yymarker_yyaccept_fail.re"
 

@@ -1,6 +1,9 @@
 // re2c $INPUT -o $OUTPUT
 /*!re2c
-    re2c:api = custom;
+    re2c:api = generic;
+    re2c:api = simple;
+    re2c:api = record;
+    re2c:flags:input = custom;
     re2c:flags:input = default;
     re2c:api:style = free-form;
     re2c:api:sigil = "";
@@ -26,6 +29,9 @@
     re2c:invert-captures = 0;
     re2c:tags:prefix = "";
     re2c:tags:expression = "";
+    re2c:tags:negative = "";
+
+    re2c:yyfn:sep = ";";
 
     re2c:define:YYBACKUP = "";
     re2c:define:YYBACKUPCTX = "";
@@ -37,10 +43,14 @@
     re2c:define:YYFILL = "";
     re2c:define:YYFILL@len = "";
     re2c:define:YYFILL:naked = 0;
-    re2c:define:YYGETCONDITION = "";
-    re2c:define:YYGETCONDITION:naked = 0;
+    re2c:define:YYFN = ["name;type"];
+    re2c:define:YYGETCOND = "";
+    re2c:define:YYGETCOND:naked = 0;
+    re2c:define:YYGETCONDITION = ""; // deprecated
+    re2c:define:YYGETCONDITION:naked = 0; // deprecated
     re2c:define:YYGETSTATE = "";
     re2c:define:YYGETSTATE:naked = 0;
+    re2c:define:YYINPUT = "";
     re2c:define:YYLESSTHAN = "";
     re2c:define:YYLIMIT = "";
     re2c:define:YYMARKER = "";
@@ -50,9 +60,12 @@
     re2c:define:YYRESTORE = "";
     re2c:define:YYRESTORECTX = "";
     re2c:define:YYRESTORETAG = "";
-    re2c:define:YYSETCONDITION = "";
-    re2c:define:YYSETCONDITION@cond = "";
-    re2c:define:YYSETCONDITION:naked = 0;
+    re2c:define:YYSETCOND = "";
+    re2c:define:YYSETCOND@cond = "";
+    re2c:define:YYSETCOND:naked = 0;
+    re2c:define:YYSETCONDITION = ""; // deprecated
+    re2c:define:YYSETCONDITION@cond = ""; // deprecated
+    re2c:define:YYSETCONDITION:naked = 0; // deprecated
     re2c:define:YYSETSTATE = "";
     re2c:define:YYSETSTATE:naked = 0;
     re2c:define:YYSETSTATE@state = "";
@@ -63,10 +76,14 @@
     re2c:define:YYSTAGN = "";
     re2c:define:YYSTAGP = "";
 
+    re2c:variable:yycond = "";
     re2c:variable:yyctable = "";
     re2c:variable:yyaccept = "";
     re2c:variable:yytarget = "";
     re2c:variable:yystate = "";
+    re2c:variable:yynmatch = "";
+    re2c:variable:yypmatch = "";
+    re2c:variable:yyrecord = "";
     re2c:variable:yych = "";
     re2c:variable:yych:conversion = 0;
     re2c:yych:conversion = 0;
@@ -75,6 +92,7 @@
     re2c:variable:yybm = "";
     re2c:variable:yybm:hex = 0;
     re2c:yybm:hex = 0;
+    re2c:variable:yyfill = "";
     re2c:variable:yystable = "";
 
     re2c:cond:prefix = "";
@@ -109,8 +127,8 @@
     re2c:flags:case-inverted = 0;
     re2c:case-ranges = 0;
     re2c:flags:case-ranges = 0;
-    re2c:unsafe = 0;
-    re2c:flags:unsafe = 0;
+    // re2c:unsafe = 0; // unsupported for C backend
+    // re2c:monadic = 0; // unsupported for C backend
 
     re2c:encoding:ebcdic = 0;
     re2c:flags:ecb = 0;

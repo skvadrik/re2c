@@ -371,8 +371,8 @@ void Adfa::prepare(const opt_t* opts) {
         defstate->action.set_accept(&accepts);
     }
 
-    // Initial state is special in goto/label mode, but not in loop/switch mode.
-    if (!opts->loop_switch) {
+    // Initial state is special only in goto/label mode.
+    if (opts->code_model == CodeModel::GOTO_LABEL) {
         head->action.set_initial();
     }
 
@@ -387,7 +387,8 @@ void Adfa::prepare(const opt_t* opts) {
     for (State* s = head; s; s = s->next) {
         if (opts->fill_enable && consume(s) && !endstate(s) &&
                 (opts->fill_eof != NOEOF ||
-                (s->fill > 0 && (opts->storable_state || opts->loop_switch)))) {
+                (s->fill > 0 &&
+                        (opts->storable_state || opts->code_model != CodeModel::GOTO_LABEL)))) {
             s->fill_state = s;
         }
     }
@@ -460,11 +461,16 @@ Ret Adfa::calc_stats(OutputBlock& out) {
                 mtagvars.insert(tag.name);
             } else if (tag.name) {
                 stagvars.insert(tag.name);
+            } else if (capture(tag) && !opts->captures_array) {
+                for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
+                    stagvars.insert(captvar_name(i, opts));
+                }
             }
         }
         for (tagver_t v = 1; v <= maxtagver; ++v) {
-            const std::string s = vartag_name(v, opts->tags_prefix, mtagvers);
-            if (mtagvers.find(v) != mtagvers.end()) {
+            bool is_mtag = mtagvers.find(v) != mtagvers.end();
+            const std::string s = vartag_name(v, opts, is_mtag);
+            if (is_mtag) {
                 mtagnames.insert(s);
             } else {
                 stagnames.insert(s);
@@ -472,6 +478,8 @@ Ret Adfa::calc_stats(OutputBlock& out) {
         }
         out.stags.insert(stagnames.begin(), stagnames.end());
         out.mtags.insert(mtagnames.begin(), mtagnames.end());
+        out.svars.insert(stagvars.begin(), stagvars.end());
+        out.mvars.insert(mtagvars.begin(), mtagvars.end());
     }
 
     return Ret::OK;

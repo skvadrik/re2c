@@ -17,10 +17,10 @@ enum YYCONDTYPE {
 // normal block, 2 states (+1 from other normal blocks), 2 conditions
 
 	switch (GETSTATE_LAST()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
 		case 10: goto yyFillLabel10;
+		default: goto yy0;
 	}
 yy0:
 	switch (YYGETCONDITION()) {
@@ -74,11 +74,11 @@ yy6:
 // reuse block, 4 states, 4 conditions
 
 	switch (GETSTATE_REUSE_1()) {
-		default: goto yy7;
 		case 2: goto yyFillLabel2;
 		case 3: goto yyFillLabel3;
 		case 4: goto yyFillLabel4;
 		case 5: goto yyFillLabel5;
+		default: goto yy7;
 	}
 yy7:
 	switch (YYGETCONDITION()) {
@@ -174,11 +174,11 @@ yy19:
 // reuse block, 4 states, 3 conditions
 
 	switch (GETSTATE_REUSE_2()) {
-		default: goto yy20;
 		case 6: goto yyFillLabel6;
 		case 7: goto yyFillLabel7;
 		case 8: goto yyFillLabel8;
 		case 9: goto yyFillLabel9;
+		default: goto yy20;
 	}
 yy20:
 	switch (YYGETCONDITION()) {

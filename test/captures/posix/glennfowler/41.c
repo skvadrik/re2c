@@ -8,14 +8,17 @@
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 		case 'a':
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy2;
 		case 'b':
-			yyt1 = yyt2 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			goto yy4;
 		default:
-			yyt2 = yyt3 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
+			yyt3 = NULL;
 			goto yy1;
 	}
 yy1:
@@ -38,8 +41,9 @@ yy3:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
 		case 0:
-			yyt2 = yyt3 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
+			yyt3 = NULL;
 			goto yy1;
 		case 1:
 			yyt3 = YYCURSOR;

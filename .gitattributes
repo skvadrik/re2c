@@ -1,2 +1,3 @@
 * text=auto
 test/newlines/** -text
+test/codegen/python/indentation_sensitive_crlf.re -text

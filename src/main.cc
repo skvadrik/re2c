@@ -136,13 +136,14 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     Msg msg;
 
-    // Options. This includes global immutable options inherited from command-line arguments and
-    // mutable options that may be changed by configurations as the input program is parsed.
-    conopt_t globopts;
-    Opt opts(globopts, msg);
-    CHECK_RET(parse_opts(argv, globopts, opts, msg));
+    // Options. This includes global immutable options inherited from command-line arguments,
+    // configurations specified in the syntax file and mutable options that may be changed by
+    // configurations in each block as the input program is parsed.
+    Opt opts(out_alc, msg);
+    const conopt_t& globopts = opts.global();
+    Input input(out_alc, &globopts, msg);
+    CHECK_RET(opts.parse(argv, input));
 
-    Input input(&globopts, msg);
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
     Output output(out_alc, msg);
@@ -186,7 +187,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
             }
             output.gen_stmt(code_dfas(out_alc));
         }
-        output.gen_stmt(code_line_info_input(out_alc, b.opts->lang, input.cur_loc()));
+        if (globopts.line_dirs) output.gen_stmt(code_line_info_input(out_alc, input.cur_loc()));
 
         // Do not accumulate whole-program options for rules/reuse/local blocks. Global blocks add
         // their named definitions and configurations to the global scope, local blocks don't.
@@ -205,7 +206,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     ast_alc.clear(); // Release memory used for AST.
 
     // Early codegen pass that gathers whole-program information.
-    codegen_analyze(output);
+    CHECK_RET(codegen_analyze(output));
 
     // Main codegen pass that generates code.
     CHECK_RET(codegen_generate(output));

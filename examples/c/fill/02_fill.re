@@ -8,61 +8,61 @@
 
 struct Input {
     FILE *file;
-    char buf[BUFSIZE + YYMAXFILL], *lim, *cur, *tok;
+    char buffer[BUFSIZE + YYMAXFILL];
+    char *yylimit;
+    char *yycursor;
+    char *token;
     bool eof;
 };
 
 static int fill(Input &in, size_t need) {
     if (in.eof) return 1;
 
-    const size_t shift = in.tok - in.buf;
-    const size_t used = in.lim - in.tok;
+    const size_t shift = in.token - in.buffer;
+    const size_t used = in.yylimit - in.token;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < need) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(in.buf, in.tok, used);
-    in.lim -= shift;
-    in.cur -= shift;
-    in.tok -= shift;
+    memmove(in.buffer, in.token, used);
+    in.yylimit -= shift;
+    in.yycursor -= shift;
+    in.token -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    in.lim += fread(in.lim, 1, BUFSIZE - used, in.file);
+    in.yylimit += fread(in.yylimit, 1, BUFSIZE - used, in.file);
 
     // If read less than expected, this is end of input => add zero padding
     // so that the lexer can access characters at the end of buffer.
-    if (in.lim < in.buf + BUFSIZE) {
+    if (in.yylimit < in.buffer + BUFSIZE) {
         in.eof = true;
-        memset(in.lim, 0, YYMAXFILL);
-        in.lim += YYMAXFILL;
+        memset(in.yylimit, 0, YYMAXFILL);
+        in.yylimit += YYMAXFILL;
     }
 
     return 0;
 }
 
-static int lex(Input &in) {
+static int lex(Input *yyrecord) {
     int count = 0;
-    for (;;) {
-        in.tok = in.cur;
+loop:
+    yyrecord->token = yyrecord->yycursor;
     /*!re2c
-        re2c:api:style = free-form;
-        re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in.cur;
-        re2c:define:YYLIMIT  = in.lim;
-        re2c:define:YYFILL   = "if (fill(in, @@) != 0) return -1;";
+        re2c:api = record;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYFILL = "if (fill(*yyrecord, @@) != 0) return -1;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
         [\x00] {
             // Check that it is the sentinel, not some unexpected null.
-            return in.tok == in.lim - YYMAXFILL ? count : -1;
+            return yyrecord->token == yyrecord->yylimit - YYMAXFILL ? count : -1;
         }
-        str  { ++count; continue; }
-        [ ]+ { continue; }
+        str  { ++count; goto loop; }
+        [ ]+ { goto loop; }
         *    { return -1; }
     */
-    }
 }
 
 int main() {
@@ -79,14 +79,14 @@ int main() {
     int count = 3 * BUFSIZE; // number of quoted strings written to file
 
     // Initialize lexer state: all pointers are at the end of buffer.
-    // This immediately triggers YYFILL, as the check `in.cur < in.lim` fails.
+    // This immediately triggers YYFILL, as the check `in.yycursor < in.yylimit` fails.
     Input in;
     in.file = fopen(fname, "r");
-    in.cur = in.tok = in.lim = in.buf + BUFSIZE;
+    in.yycursor = in.token = in.yylimit = in.buffer + BUFSIZE;
     in.eof = 0;
 
     // Run the lexer.
-    assert(lex(in) == count);
+    assert(lex(&in) == count);
 
     // Cleanup: remove input file.
     fclose(in.file);

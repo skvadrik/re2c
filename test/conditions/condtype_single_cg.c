@@ -5,8 +5,8 @@
 #line 6 "conditions/condtype_single_cg.c"
 {
 	YYCTYPE yych;
-	static void *yyctable[1] = {
-		&&yyc_a,
+	static const void* yyctable[1] = {
+		&&yyc_a
 	};
 	goto *yyctable[YYGETCONDITION()];
 /* *********************************** */

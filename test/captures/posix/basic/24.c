@@ -14,8 +14,8 @@
 			yyt1 = YYCURSOR;
 			goto yy3;
 		default:
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy1;
 	}
 yy1:
@@ -24,7 +24,7 @@ yy1:
 	yypmatch[3] = yyt2;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 2;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 2;
 	{}
 yy2:
 	yyaccept = 1;
@@ -48,8 +48,8 @@ yy4:
 	YYCURSOR = YYMARKER;
 	switch (yyaccept) {
 		case 0:
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy1;
 		case 1:
 			yyt2 = NULL;

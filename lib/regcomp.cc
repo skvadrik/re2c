@@ -35,21 +35,32 @@ using namespace re2c::libre2c;
 #define CHECK_RET(x) do { if (x != Ret::OK) return 1; } while(0)
 
 int regcomp(regex_t* preg, const char* pattern, int cflags) {
-    conopt_t globopts;
-    globopts.nested_negative_tags = !(cflags & (REG_NFA | REG_MULTIPASS));
-    globopts.flex_syntax = true;
+    AstAllocator ast_alc;
+    OutAllocator out_alc;
+
     Msg msg;
-    Opt opts(globopts, msg);
-    opts.set_tags_history((cflags & REG_SUBHIST) != 0);
-    opts.set_tags_automatic((cflags & REG_AUTOTAGS) != 0);
-    opts.set_tags_posix_syntax(true);
-    opts.set_tags_posix_semantics((cflags & REG_LEFTMOST) == 0);
+    Opt opts(out_alc, msg);
+
+    conopt_t& globopts = const_cast<conopt_t&>(opts.global());
+    globopts.set_target(re2c::Target::CODE);
+    globopts.set_flex_syntax(true);
+    globopts.set_nested_negative_tags(!(cflags & (REG_NFA | REG_MULTIPASS)));
+
+    opts.set_supported_api_styles({"functions"});
+    opts.set_supported_code_models({"goto-label"});
+    opts.init_tags_history((cflags & REG_SUBHIST) != 0);
+    opts.init_tags_automatic((cflags & REG_AUTOTAGS) != 0);
+    opts.init_captures(true);
+    opts.init_captures_posix((cflags & REG_LEFTMOST) == 0);
+    opts.init_captures_array(true);
+
+    CHECK_RET(opts.fix_global_and_defaults());
+
     const opt_t* opt;
     CHECK_RET(opts.snapshot(&opt));
+
     preg->flags = cflags;
 
-    AstAllocator ast_alc;
-    OutAllocator out_alc; // unused but required by AST constructor
     Ast ast(ast_alc, out_alc);
     const AstNode* a = parse(pattern, ast);
 

@@ -5,9 +5,9 @@
 // normal block, 1 state
 
 	switch (GETSTATE_LAST()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 4: goto yyFillLabel4;
+		default: goto yy0;
 	}
 yy0:
 	if (YYLIMIT <= YYCURSOR) {
@@ -33,10 +33,10 @@ yy3:
 // reuse block, 3 states
 
 	switch (GETSTATE_REUSE_1()) {
-		default: goto yy4;
 		case 1: goto yyFillLabel1;
 		case 2: goto yyFillLabel2;
 		case 3: goto yyFillLabel3;
+		default: goto yy4;
 	}
 yy4:
 	if (YYLIMIT <= YYCURSOR) {
@@ -116,8 +116,8 @@ yy14:
 // reuse block, 1 state
 
 	switch (GETSTATE_REUSE_2()) {
-		default: goto yy15;
 		case 5: goto yyFillLabel5;
+		default: goto yy15;
 	}
 yy15:
 	if (YYLIMIT <= YYCURSOR) {

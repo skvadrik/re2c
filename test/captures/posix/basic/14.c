@@ -11,8 +11,8 @@
 			yyt1 = YYCURSOR;
 			goto yy2;
 		case 'c':
-			yyt2 = NULL;
 			yyt1 = YYCURSOR;
+			yyt2 = NULL;
 			goto yy4;
 		default: goto yy1;
 	}
@@ -46,7 +46,7 @@ yy4:
 	yypmatch[5] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 1;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 1;
 	{}
 }
 

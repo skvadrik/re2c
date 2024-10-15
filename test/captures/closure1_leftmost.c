@@ -19,8 +19,9 @@
 			yyt1 = YYCURSOR;
 			goto yy2;
 		default:
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
 			yyt3 = NULL;
-			yyt1 = yyt2 = YYCURSOR;
 			goto yy1;
 	}
 yy1:
@@ -41,8 +42,8 @@ yy2:
 	switch (yych) {
 		case 'a': goto yy2;
 		default:
-			yyt3 = NULL;
 			yyt2 = YYCURSOR;
+			yyt3 = NULL;
 			goto yy1;
 	}
 }

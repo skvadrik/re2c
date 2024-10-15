@@ -8,13 +8,16 @@
 	yych = *(YYMARKER = YYCURSOR);
 	switch (yych) {
 		case 'a':
-			yyt1 = yyt4 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy2;
 		case 'b':
-			yyt1 = yyt4 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy4;
 		case 'c':
-			yyt1 = yyt4 = YYCURSOR;
+			yyt1 = YYCURSOR;
+			yyt4 = YYCURSOR;
 			goto yy6;
 		default: goto yy1;
 	}

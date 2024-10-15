@@ -1,0 +1,259 @@
+%code requires {
+
+#include "src/constants.h"
+#include "src/options/opt.h"
+
+extern const char* DEFAULT_SYNTAX_C;
+extern const char* DEFAULT_SYNTAX_D;
+extern const char* DEFAULT_SYNTAX_GO;
+extern const char* DEFAULT_SYNTAX_HASKELL;
+extern const char* DEFAULT_SYNTAX_JAVA;
+extern const char* DEFAULT_SYNTAX_JS;
+extern const char* DEFAULT_SYNTAX_OCAML;
+extern const char* DEFAULT_SYNTAX_PYTHON;
+extern const char* DEFAULT_SYNTAX_RUST;
+extern const char* DEFAULT_SYNTAX_V;
+extern const char* DEFAULT_SYNTAX_ZIG;
+
+}
+
+%{
+
+#pragma GCC diagnostic push
+#include "src/util/nowarn_in_bison.h"
+
+#include "src/msg/msg.h"
+#include "src/options/opt.h"
+#include "src/parse/input.h"
+#include "src/parse/conf_parser.h"
+
+using namespace re2c;
+
+extern "C" {
+    static void yyerror(Input& in, Opt& opts, const char* s);
+    static int yylex(CONF_STYPE* yylval, Input& in, Opt& opts);
+}
+
+%}
+
+%start conf
+
+%define api.pure full
+%define api.prefix {conf_}
+%lex-param {re2c::Input& in}
+%lex-param {re2c::Opt& opts}
+%parse-param {re2c::Input& in}
+%parse-param {re2c::Opt& opts}
+
+%union {
+    const char* str;
+    int32_t num;
+    bool cond;
+    std::vector<std::string>* list;
+    re2c::StxVarId var;
+    re2c::StxCode* code;
+    re2c::StxCodes* codes;
+    const re2c::StxCodes** codeptr;
+    re2c::StxOpt* opt;
+    re2c::StxGOpt gopt;
+    re2c::StxLOpt lopt;
+};
+
+%token CONF_NUMBER
+%token CONF_STRING
+%token CONF_COND
+%token CONF_VAR
+%token CONF_CODE
+%token CONF_GOPT
+%token CONF_LOPT
+%token CONF_UD
+
+%type <str> CONF_STRING str
+%type <num> CONF_NUMBER num
+%type <cond> CONF_COND
+%type <list> list elems
+%type <var> CONF_VAR
+%type <code> code_opt code_expr code_list
+%type <codes> code_exprs
+%type <codeptr> CONF_CODE
+%type <opt> opt opt_neg opt_and opt_or
+%type <gopt> CONF_GOPT
+%type <lopt> CONF_LOPT
+
+%%
+
+conf
+: '=' num  { in.save_conf_num($2); }
+| '=' str  { in.save_conf_str($2); }
+| '=' list { in.save_conf_list($2); };
+| CONF_CODE '=' code_exprs { *$1 = $3; }
+| CONF_CODE '=' CONF_CODE  { *$1 = *$3; }
+| CONF_CODE '=' CONF_UD    { *$1 = opts.make_code_undefined(); };
+
+num
+: CONF_NUMBER
+| '(' opt_or '?' num ':' num ')' {
+    if ($2->kind != StxOptKind::IMM) {
+        in.error_at_cur("mutable predicate is not allowed in numeric configuration");
+        YYABORT;
+    }
+    $$ = $2->imm ? $4 : $6;
+};
+
+str
+: CONF_STRING
+| '(' opt_or '?' str ':' str ')' {
+    if ($2->kind != StxOptKind::IMM) {
+        in.error_at_cur("mutable predicate is not allowed in string configuration");
+        YYABORT;
+    }
+    $$ = $2->imm ? $4 : $6;
+};
+
+list
+: '[' ']'       { $$ = in.get_tmp_list(); }
+| '[' elems ']' { $$ = $2; };
+
+elems
+: CONF_STRING {
+    $$ = in.get_tmp_list();
+    $$->push_back($1);
+} | elems ',' CONF_STRING {
+    $$ = $1;
+    $$->push_back($3);
+};
+
+code_exprs
+: %empty {
+    $$ = opts.new_code_list();
+} | code_exprs code_expr {
+    $$ = $1;
+    append($1, $2);
+};
+
+code_expr
+: CONF_STRING { $$ = opts.make_code_str($1); }
+| CONF_VAR    { $$ = opts.make_code_var($1); }
+| code_opt
+| code_list;
+
+code_opt
+: '(' opt_or '?' code_exprs ')' {
+    $$ = opts.make_code_cond($2, $4, nullptr);
+} | '(' opt_or '?' code_exprs ':' code_exprs ')' {
+    $$ = opts.make_code_cond($2, $4, $6);
+};
+
+opt_or
+: opt_and
+| opt_and '|' opt_or { $$ = opts.make_opt_or($1, $3); };
+
+opt_and
+: opt_neg
+| opt_neg '&' opt_and { $$ = opts.make_opt_and($1, $3); };
+
+opt_neg
+: opt
+| '!' opt { $$ = opts.make_opt_neg($2); };
+
+opt
+: CONF_COND { $$ = opts.make_opt_imm($1); }
+| CONF_GOPT { $$ = opts.make_opt_global($1); }
+| CONF_LOPT { $$ = opts.make_opt_local($1); }
+| '(' opt_or ')' { $$ = $2; };
+
+code_list
+: '[' CONF_VAR ':' code_exprs ']' {
+    $$ = opts.make_code_list($2, 0, -1, $4);
+} | '[' CONF_VAR '{' CONF_NUMBER '}' ':' code_exprs ']' {
+    $$ = opts.make_code_list($2, $4, $4, $7);
+} | '[' CONF_VAR '{' CONF_NUMBER ':' CONF_NUMBER '}' ':' code_exprs ']' {
+    $$ = opts.make_code_list($2, $4, $6, $9);
+};
+
+%%
+
+#pragma GCC diagnostic pop
+
+extern "C" {
+    static void yyerror(re2c::Input& in, Opt&, const char* s) {
+        in.error_at_tok("%s", s);
+    }
+
+    static int yylex(CONF_STYPE* yylval, re2c::Input& in, Opt& opts) {
+        int token;
+        return in.lex_conf_token(yylval, token, opts) == Ret::OK ? token : CONF_error;
+    }
+}
+
+namespace re2c {
+
+Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
+    in_syntax_file = true;
+
+    // First, apply the default syntax config that is provided as a string.
+    InputFile* in = new InputFile(0);
+    files.push_back(in);
+    msg.filenames.push_back("<default syntax file>");
+
+    const char* src = nullptr;
+    switch (lang) {
+        case Lang::C: src = DEFAULT_SYNTAX_C; break;
+        case Lang::D: src = DEFAULT_SYNTAX_D; break;
+        case Lang::GO: src = DEFAULT_SYNTAX_GO; break;
+        case Lang::HASKELL: src = DEFAULT_SYNTAX_HASKELL; break;
+        case Lang::JAVA: src = DEFAULT_SYNTAX_JAVA; break;
+        case Lang::JS: src = DEFAULT_SYNTAX_JS; break;
+        case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
+        case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
+        case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
+        case Lang::V: src = DEFAULT_SYNTAX_V; break;
+        case Lang::ZIG: src = DEFAULT_SYNTAX_ZIG; break;
+        case Lang::NONE: break; // no language => no default syntax config
+    }
+
+    if (src != nullptr) {
+        size_t flen = strlen(src);
+
+        if (flen + maxfill() > BSIZE) {
+            delete[] bot;
+            BSIZE = flen;
+            bot = new uint8_t[BSIZE + maxfill()];
+        }
+
+        // fill in buffer from the config string
+        memcpy(bot, src, flen);
+        memset(bot + flen, 0, maxfill());
+
+        cur = mar = ctx = tok = ptr = pos = bot;
+        lim = bot + flen + maxfill();
+
+        CHECK_RET(lex_syntax_file(opts));
+    }
+
+    // Second, apply user-supplied syntax config (if any).
+    // This order gives the user an opportunity to overrided only some configurations.
+    if (!globopts->syntax_file.empty()) {
+        reset_lexer();
+        // Pass ./ as parent path to enable search in the current directory.
+        std::string path = "./";
+        CHECK_RET(open(globopts->syntax_file, &path));
+        CHECK_RET(lex_syntax_file(opts));
+    }
+
+#define CODE_TEMPLATE(name, vars, list_vars, conds) \
+    CHECK_RET(opts.check_code_##name(msg.warn));
+    RE2C_CODE_TEMPLATES
+#undef CODE_TEMPLATE
+
+    // Reset should happen after the check, as warnings may need use config filename.
+    reset_lexer();
+    in_syntax_file = false;
+    return Ret::OK;
+}
+
+Ret Input::parse_conf(Opt& opts) {
+    return conf_parse(*this, opts) == 0 ? Ret::OK : Ret::FAIL;
+}
+
+} // namespace re2c

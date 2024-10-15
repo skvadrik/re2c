@@ -79,11 +79,11 @@ void scan(Scanner *s)
 	s->tok = s->cur;
 
 	switch (s->state) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
 		case 1: goto yyFillLabel1;
 		case 2: goto yyFillLabel2;
 		case 3: goto yyFillLabel3;
+		default: goto yy0;
 	}
 
 	for(;;)
@@ -91,11 +91,11 @@ void scan(Scanner *s)
 		s->tok = s->cur;
 
 		{
-			static void *yyctable[4] = {
+			static const void* yyctable[4] = {
 				&&yyc_Normal,
 				&&yyc_Comment,
 				&&yyc_Skiptoeol,
-				&&yyc_String,
+				&&yyc_String
 			};
 yy0:
 			goto *yyctable[s->cond];
@@ -108,7 +108,7 @@ yyc_Normal:
 yyFillLabel0:
 			s->yych = *s->cur;
 			{
-				static void *yytarget[256] = {
+				static const void* yytarget[256] = {
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
 					&&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2, &&yy2,
@@ -201,39 +201,39 @@ yy12:
 yy13:
 			s->yych = *++s->cur;
 			{
-				static void *yytarget[256] = {
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy15, &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy16,
-					&&yy17, &&yy18, &&yy9,  &&yy9,  &&yy9,  &&yy19, &&yy9,  &&yy20,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy21, &&yy22, &&yy23, &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
-					&&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9
+				static const void* yytarget[256] = {
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9, &&yy15,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9, &&yy16,
+					&&yy17, &&yy18,  &&yy9,  &&yy9,  &&yy9, &&yy19,  &&yy9, &&yy20,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9, &&yy21, &&yy22, &&yy23,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,
+					 &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9,  &&yy9
 				};
 				goto *yytarget[s->yych];
 			}
@@ -340,7 +340,7 @@ yyc_Skiptoeol:
 yyFillLabel2:
 			s->yych = *s->cur;
 			{
-				static void *yytarget[256] = {
+				static const void* yytarget[256] = {
 					&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,
 					&&yy28, &&yy28, &&yy30, &&yy28, &&yy28, &&yy31, &&yy28, &&yy28,
 					&&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28, &&yy28,

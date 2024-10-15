@@ -4,19 +4,19 @@
 
 // global `getstate:re2c` (start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto Ly1;
 	case 2: goto Lz2;
+	default: goto yy0;
 }
 
 
 // `getstate:re2c` for y, x, z (start in y)
 switch (YYGETSTATE()) {
-	default: goto yy2;
 	case 1: goto Ly1;
 	case 0: goto yyFillLabel0;
 	case 2: goto Lz2;
+	default: goto yy2;
 }
 
 
@@ -72,18 +72,18 @@ Lz2:
 
 // `getstate:re2c` for y, x, z (start in y)
 switch (YYGETSTATE()) {
-	default: goto yy2;
 	case 1: goto Ly1;
 	case 0: goto yyFillLabel0;
 	case 2: goto Lz2;
+	default: goto yy2;
 }
 
 
 // global `getstate:re2c` (start in x)
 switch (YYGETSTATE()) {
-	default: goto yy0;
 	case 0: goto yyFillLabel0;
 	case 1: goto Ly1;
 	case 2: goto Lz2;
+	default: goto yy0;
 }
 

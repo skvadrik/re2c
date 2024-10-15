@@ -7,8 +7,8 @@
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
 	yych = *(YYMARKER = YYCURSOR);
 	if (yych >= 0x01) {
-		yyt2 = NULL;
 		yyt1 = YYCURSOR;
+		yyt2 = NULL;
 		goto yy2;
 	}
 yy1:
@@ -48,8 +48,8 @@ yy6:
 		yyt2 = YYCURSOR;
 		goto yy9;
 	}
-	yyt3 = NULL;
 	yyt2 = YYCURSOR;
+	yyt3 = NULL;
 yy7:
 	yynmatch = 3;
 	yypmatch[0] = yyt1;
@@ -57,9 +57,9 @@ yy7:
 	yypmatch[5] = yyt3;
 	yypmatch[1] = YYCURSOR;
 	yypmatch[2] = yyt2;
-	if (yyt2 != NULL) yypmatch[2] -= 2;
 	yypmatch[4] = yyt3;
-	if (yyt3 != NULL) yypmatch[4] -= 2;
+	if (yypmatch[2] != NULL) yypmatch[2] -= 2;
+	if (yypmatch[4] != NULL) yypmatch[4] -= 2;
 	{}
 yy8:
 	yyaccept = 1;

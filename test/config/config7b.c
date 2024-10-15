@@ -8,7 +8,7 @@
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	{
-		static void *yytarget[256] = {
+		static const void* yytarget[256] = {
 			&&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,
 			&&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,
 			&&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1, &&yy1,

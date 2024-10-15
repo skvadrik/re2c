@@ -1578,7 +1578,8 @@ yy47:
 			YYMTAGN(in->yytm8);
 			YYMTAGN(in->yytm7);
 			YYMTAGN(in->yytm6);
-			in->yyt4 = in->yyt5 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
 			goto yy49;
 		case '!':
 		case '#':
@@ -1658,7 +1659,8 @@ yy47:
 		case '|':
 		case '~':
 			YYMTAGP(in->yytm6);
-			in->yyt4 = in->yyt5 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
 			goto yy50;
 		default: goto yy8;
 	}
@@ -1696,7 +1698,8 @@ yy48:
 		case 0x1E:
 		case 0x7F: goto yy8;
 		case '\n':
-			in->yyt4 = in->yyt5 = YYCURSOR;
+			in->yyt4 = YYCURSOR;
+			in->yyt5 = YYCURSOR;
 			goto yy52;
 		default:
 			in->yyt4 = YYCURSOR;
@@ -1713,19 +1716,19 @@ yy49:
 	h2 = in->yytm7;
 	h3 = in->yytm8;
 	m2 = in->yyt2;
-	if (in->yyt2 != NULL) m2 -= 1;
 	rt2 = in->yyt3;
-	if (in->yyt3 != NULL) rt2 -= 9;
 	v3 = in->yyt3;
-	if (in->yyt3 != NULL) v3 -= 8;
 	v1 = in->yyt4;
-	if (in->yyt4 != NULL) v1 -= 13;
 	v2 = in->yyt4;
-	if (in->yyt4 != NULL) v2 -= 5;
 	s1 = in->yyt4;
-	if (in->yyt4 != NULL) s1 -= 4;
 	s2 = in->yyt4;
-	if (in->yyt4 != NULL) s2 -= 1;
+	if (m2 != NULL) m2 -= 1;
+	if (rt2 != NULL) rt2 -= 9;
+	if (v3 != NULL) v3 -= 8;
+	if (v1 != NULL) v1 -= 13;
+	if (v2 != NULL) v2 -= 5;
+	if (s1 != NULL) s1 -= 4;
+	if (s2 != NULL) s2 -= 1;
 	{
 #ifndef VERIFY
         c += 1;
@@ -1881,7 +1884,9 @@ yy52:
 			YYMTAGN(in->yytm8);
 			YYMTAGN(in->yytm7);
 			YYMTAGN(in->yytm6);
-			in->yyt1 = in->yyt2 = in->yyt3 = NULL;
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
 			goto yy49;
 		case '!':
 		case '#':
@@ -1961,7 +1966,9 @@ yy52:
 		case '|':
 		case '~':
 			YYMTAGP(in->yytm6);
-			in->yyt1 = in->yyt2 = in->yyt3 = NULL;
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
 			goto yy50;
 		default: goto yy8;
 	}

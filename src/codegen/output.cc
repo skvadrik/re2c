@@ -1,6 +1,5 @@
 #include <ctype.h>
 #include <stdio.h>
-#include <time.h>
 #include <iomanip>
 
 #include "config.h"
@@ -27,19 +26,26 @@ OutputBlock::OutputBlock(InputBlock kind, const std::string& name, const loc_t& 
       conds(),
       stags(),
       mtags(),
+      svars(),
+      mvars(),
       opts(nullptr),
       dfas(),
       max_fill(1),
       max_nmatch(1),
       start_label(nullptr),
-      fill_goto() {}
+      fill_goto(),
+      fn_common(nullptr),
+      binops()
+    {}
 
 OutputBlock::~OutputBlock() {
     delete opts;
 }
 
 Output::Output(OutAllocator& alc, Msg& msg)
-    : cblocks(),
+    : allocator(alc),
+      msg(msg),
+      cblocks(),
       hblocks(),
       pblocks(&cblocks),
       tmpblocks(),
@@ -50,12 +56,12 @@ Output::Output(OutAllocator& alc, Msg& msg)
       warn_condition_order(true),
       need_header(false),
       done_mtag_defs(false),
-      msg(msg),
       skeletons(),
-      allocator(alc),
       scratchbuf(allocator),
       current_block(nullptr),
-      total_opts(nullptr) {}
+      total_opts(nullptr),
+      fn_common(nullptr)
+    {}
 
 Output::~Output() {
     for (OutputBlock* b : cblocks) delete b;
@@ -136,32 +142,15 @@ Ret Output::new_block(Opt& opts, InputBlock kind, std::string name, const loc_t&
     return Ret::OK;
 }
 
-void Output::gen_version_time() {
-    const opt_t* opts = block().opts;
-
-    scratchbuf.cstr(opts->lang == Lang::GO ? "// Code generated" : "/* Generated").cstr(" by re2c");
-    if (opts->version) {
-        scratchbuf.cstr(" " PACKAGE_VERSION);
-    }
-    if (opts->date) {
-        scratchbuf.cstr(" on ");
-        time_t now = time(nullptr);
-        scratchbuf.stream().write(ctime(&now), 24);
-    }
-    scratchbuf.cstr(opts->lang == Lang::GO ? ", DO NOT EDIT." : " */");
-
-    gen_stmt(code_textraw(allocator, scratchbuf.flush()));
-}
-
 Ret Output::gen_prolog(Opt& opts, const loc_t& loc) {
     header_mode(true);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
-    gen_version_time();
+    gen_stmt(code_fingerprint(allocator));
 
     header_mode(false);
     CHECK_RET(new_block(opts, InputBlock::GLOBAL, "", loc));
-    gen_version_time();
-    gen_stmt(code_line_info_input(allocator, block().opts->lang, loc));
+    gen_stmt(code_fingerprint(allocator));
+    if (block().opts->line_dirs) gen_stmt(code_line_info_input(allocator, loc));
 
     if (block().opts->target == Target::SKELETON) {
         gen_stmt(emit_skeleton_prolog(*this));
@@ -194,21 +183,6 @@ Scratchbuf& Scratchbuf::unchecked_label(const Label& l) {
 Scratchbuf& Scratchbuf::label(const Label& l) {
     CHECK(l.used);
     return unchecked_label(l);
-}
-
-Scratchbuf& Scratchbuf::yybm_char(uint32_t u, const opt_t* opts, int width) {
-    if (opts->bitmaps_hex) {
-        print_hex(os, u, opts->encoding.cunit_size());
-    } else {
-        u32_width(u, width);
-    }
-    return *this;
-}
-
-Scratchbuf& Scratchbuf::u32_width(uint32_t u, int width) {
-    os << std::setw(width);
-    os << u;
-    return *this;
 }
 
 Scratchbuf& Scratchbuf::exact_uint(size_t width) {

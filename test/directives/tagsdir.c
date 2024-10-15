@@ -103,17 +103,18 @@ y2_m3;
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'a') {
-		yyt1 = yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy2;
 	}
-	yyt2 = NULL;
 	yyt1 = YYCURSOR;
+	yyt2 = NULL;
 yy1:
 	x1 = yyt1;
 	x2 = yyt2;
 #line 49 "directives/tagsdir.re"
 	{ a }
-#line 117 "directives/tagsdir.c"
+#line 118 "directives/tagsdir.c"
 yy2:
 	++YYCURSOR;
 	goto yy1;
@@ -123,25 +124,26 @@ yy2:
 
 // re2c:y1
 
-#line 127 "directives/tagsdir.c"
+#line 128 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'b') {
 		YYMTAGP(yytm3);
-		yyt1 = yyt2 = YYCURSOR;
+		yyt1 = YYCURSOR;
+		yyt2 = YYCURSOR;
 		goto yy5;
 	}
 	YYMTAGN(yytm3);
-	yyt2 = NULL;
 	yyt1 = YYCURSOR;
+	yyt2 = NULL;
 yy4:
 	y1 = yyt1;
 	y2 = yyt2;
 	y3 = yytm3;
 #line 54 "directives/tagsdir.re"
 	{ b }
-#line 145 "directives/tagsdir.c"
+#line 147 "directives/tagsdir.c"
 yy5:
 	++YYCURSOR;
 	goto yy4;
@@ -152,22 +154,23 @@ yy5:
 
 // re2c:x2
 
-#line 156 "directives/tagsdir.c"
+#line 158 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'a') {
-		x2_1 = x2_2 = YYCURSOR;
+		x2_1 = YYCURSOR;
+		x2_2 = YYCURSOR;
 		goto yy8;
 	}
-	x2_2 = NULL;
 	x2_1 = YYCURSOR;
+	x2_2 = NULL;
 yy7:
 	x1 = x2_1;
 	x2 = x2_2;
 #line 49 "directives/tagsdir.re"
 	{ a }
-#line 171 "directives/tagsdir.c"
+#line 174 "directives/tagsdir.c"
 yy8:
 	++YYCURSOR;
 	goto yy7;
@@ -177,25 +180,26 @@ yy8:
 
 // re2c:y2
 
-#line 181 "directives/tagsdir.c"
+#line 184 "directives/tagsdir.c"
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
 	if (yych == 'b') {
 		YYMTAGP(y2_m3);
-		y2_1 = y2_2 = YYCURSOR;
+		y2_1 = YYCURSOR;
+		y2_2 = YYCURSOR;
 		goto yy11;
 	}
 	YYMTAGN(y2_m3);
-	y2_2 = NULL;
 	y2_1 = YYCURSOR;
+	y2_2 = NULL;
 yy10:
 	y1 = y2_1;
 	y2 = y2_2;
 	y3 = y2_m3;
 #line 54 "directives/tagsdir.re"
 	{ b }
-#line 199 "directives/tagsdir.c"
+#line 203 "directives/tagsdir.c"
 yy11:
 	++YYCURSOR;
 	goto yy10;

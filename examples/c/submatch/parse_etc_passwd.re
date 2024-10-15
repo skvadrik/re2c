@@ -6,7 +6,8 @@
 /*!max:re2c*/
 
 static int lex(const char *YYCURSOR) {
-    const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
+    const char *YYMARKER;
+    /*!svars:re2c format = 'const char *@@;'; */
     /*!stags:re2c format = 'const char *@@;'; */
 
     for (;;) {

@@ -2,7 +2,6 @@
 // re2c $INPUT -o $OUTPUT -fi --tags
 
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0:
 			if (YYLIMIT <= YYCURSOR) goto yy13;
 			goto yyFillLabel0;
@@ -27,6 +26,7 @@
 		case 6:
 			if (YYLIMIT <= YYCURSOR) goto yy9;
 			goto yyFillLabel6;
+		default: goto yy0;
 	}
 yy0:
 yyFillLabel0:

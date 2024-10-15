@@ -46,7 +46,7 @@ yy4:
 yy5:
 	q = yyt1;
 	p = yyt1;
-	if (yyt1 != NULL) p -= 1;
+	if (p != NULL) p -= 1;
 	{ p q }
 yy6:
 	yyaccept = 1;
@@ -62,7 +62,7 @@ yy6:
 yy7:
 	s = yyt1;
 	r = yyt1;
-	if (yyt1 != NULL) r -= 1;
+	if (r != NULL) r -= 1;
 	{ r s }
 yy8:
 	++YYCURSOR;

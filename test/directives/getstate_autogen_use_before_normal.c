@@ -9,8 +9,8 @@
 // expect local state switch for a use block
 
 	switch (YYGETSTATE()) {
-		default: goto yy0;
 		case 0: goto yyFillLabel0;
+		default: goto yy0;
 	}
 yy0:
 	goto yy1;
@@ -35,9 +35,9 @@ yy3:
 // expect global implicit state switch for blocks 'b' and 'c'
 
 	switch (YYGETSTATE()) {
-		default: goto yy4;
 		case 1: goto yyFillLabel1;
 		case 3: goto yyFillLabel3;
+		default: goto yy4;
 	}
 yy4:
 	goto yy5;
@@ -62,8 +62,8 @@ yy7:
 // expect local state switch for a use block
 
 	switch (YYGETSTATE()) {
-		default: goto yy8;
 		case 2: goto yyFillLabel2;
+		default: goto yy8;
 	}
 yy8:
 	goto yy9;

@@ -15,15 +15,15 @@ namespace re2c {
 struct loc_t;
 
 const char* Warn::names [TYPES] = {
-#define W(x, y) y
-    RE2C_WARNING_TYPES
+#define W(kind, name, on) name,
+    RE2C_WARNINGS
 #undef W
 };
 
 Warn::Warn(Msg& msg): mask(), error_accuml(false), msg(msg) {
-    for (uint32_t i = 0; i < TYPES; ++i) {
-        mask[i] = SILENT;
-    }
+#define W(kind, name, on) mask[kind] = on ? WARNING : SILENT;
+    RE2C_WARNINGS
+#undef W
 }
 
 Ret Warn::check() const {
@@ -197,6 +197,16 @@ void Warn::sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32
                     defined ? sentinel : 0,
                     defined ? "" : " (note: if a different sentinel symbol is used,"
                     " specify it with 're2c:sentinel' configuration)");
+    }
+}
+
+void Warn::undefined_syntax_config(const loc_t& loc, const char* name) {
+    if (mask[UNDEFINED_SYNTAX_CONFIG] & WARNING) {
+        const bool e = mask[UNDEFINED_SYNTAX_CONFIG] & ERROR;
+        error_accuml |= e;
+        msg.warning(names[UNDEFINED_SYNTAX_CONFIG], loc, e,
+            "syntax configuration '%s' is not defined "
+            "(set it to <undefined> explicitly to silence the warning)", name);
     }
 }
 

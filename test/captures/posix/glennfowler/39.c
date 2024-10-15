@@ -31,11 +31,8 @@ yy2:
 	}
 yy3:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy1;
-	} else {
-		goto yy6;
-	}
+	if (yyaccept == 0) goto yy1;
+	else goto yy6;
 yy4:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
@@ -57,8 +54,10 @@ yy5:
 	}
 yy6:
 	yynmatch = 2;
-	yypmatch[0] = yypmatch[2] = yyt1;
-	yypmatch[1] = yypmatch[3] = YYCURSOR;
+	yypmatch[0] = yyt1;
+	yypmatch[2] = yyt1;
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yypmatch[1];
 	{}
 yy7:
 	yyaccept = 1;

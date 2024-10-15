@@ -1,6 +1,8 @@
+#include <time.h>
+
 #include "config.h"
-#include "src/codegen/output.h"
 #include "src/codegen/helpers.h"
+#include "src/codegen/output.h"
 #include "src/msg/msg.h"
 #include "src/options/opt.h"
 #include "src/util/check.h"
@@ -9,6 +11,72 @@
 namespace re2c {
 
 static void render(RenderContext& rctx, const Code* code);
+
+static bool oneline_stmt_list(const CodeList* list) {
+    static const std::unordered_set<CodeKind> oneliners {
+        CodeKind::STMT,
+        CodeKind::TEXT,
+#define ONELINE_CODE(name, kind) kind,
+        RE2C_ONELINE_CODES
+#undef ONELINE_CODE
+    };
+
+    return list->head != nullptr
+            && list->head->next == nullptr
+            && oneliners.find(list->head->kind) != oneliners.end();
+}
+
+static void render_nl(RenderContext& rctx) {
+    if (!rctx.oneline_mode) {
+        rctx.os << std::endl;
+        ++rctx.line;
+    }
+}
+
+template<typename Elem>
+static inline void find_list_bounds(
+        const Elem* head, size_t lbound, size_t rbound, const Elem** curr, const Elem** last) {
+    const Elem* e = head;
+    size_t i = 0;
+
+    for (; i < lbound; ++i) e = e->next;
+    *curr = e;
+
+    for (; i <= rbound; ++i) e = e->next;
+    *last = e;
+}
+
+static void render_global_var(RenderContext& rctx, StxVarId var) {
+    switch (var) {
+    case StxVarId::NEWLINE:
+        render_nl(rctx);
+        break;
+    case StxVarId::INDENT:
+        ++rctx.ind;
+        break;
+    case StxVarId::DEDENT:
+        DCHECK(rctx.ind > 0);
+        --rctx.ind;
+        break;
+    case StxVarId::TOPINDENT:
+        rctx.os << indent(rctx.ind, rctx.opts->indent_str);
+        break;
+    default:
+        UNREACHABLE();
+        break;
+    }
+}
+
+class RenderSimple : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderSimple(RenderContext& rctx): rctx(rctx) {}
+
+    virtual void render_var(StxVarId var) override {
+        render_global_var(rctx, var);
+    }
+};
 
 static uint32_t count_lines_text(const char* text) {
     DCHECK(text);
@@ -20,86 +88,29 @@ static uint32_t count_lines_text(const char* text) {
 }
 
 static inline void render_stmt_end(RenderContext& rctx, bool semi) {
-    if (semi && rctx.opts->lang != Lang::GO) rctx.os << ";";
-    rctx.os << std::endl;
-    ++rctx.line;
+    if (semi && rctx.opts->semicolons) rctx.os << ";";
+    render_nl(rctx);
+}
+
+static void render_maybe_oneline(RenderContext& rctx, const Code* code, bool oneline) {
+    // backup mode and indent
+    bool mode = rctx.oneline_mode;
+    uint32_t ind = rctx.ind;
+
+    rctx.oneline_mode = oneline;
+    rctx.ind = oneline ? 0 : rctx.ind;
+
+    render(rctx, code);
+
+    // restore mode and indent
+    rctx.oneline_mode = mode;
+    rctx.ind = ind;
 }
 
 static void render_list(RenderContext& rctx, const CodeList* code) {
     for (const Code* s = code->head; s; s = s->next) {
         render(rctx, s);
     }
-}
-
-static void render_line_info(
-        std::ostream& o, uint32_t line, const std::string& fname, const opt_t* opts) {
-    if (!opts->line_dirs) return;
-
-    switch (opts->lang) {
-    case Lang::GO:
-        // Go: //line <filename>:<line-number>
-        o << "//line \"" << fname << "\":" << line << "\n";
-        break;
-    case Lang::C:
-        // C/C++: #line <line-number> <filename>
-        o << "#line " << line << " \"" << fname << "\"\n";
-        break;
-    case Lang::RUST:
-        // For Rust line directives should be removed by `remove_empty` pass.
-        UNREACHABLE();
-    }
-}
-
-static bool oneline_if(const CodeIfTE* code, const opt_t* opts) {
-    const Code* first = code->if_code->head;
-    return opts->lang == Lang::C // Go and Rust require braces
-           && code->oneline
-           && code->else_code == nullptr
-           && first
-           && first->next == nullptr
-           && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT);
-}
-
-static void render_if_nonl(RenderContext& rctx, const char* cond, const Code* then, bool oneline) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    if (cond) {
-        DCHECK(count_lines_text(cond) == 0);
-        bool wrap = opts->lang != Lang::RUST;
-        os << "if " << (wrap ? "(" : "") << cond << (wrap ? ")" : "")  << " ";
-    }
-
-    if (oneline) {
-        DCHECK(count_lines_text(then->text) == 0);
-        os << then->text;
-        if (then->kind == CodeKind::STMT) os << ";";
-    } else {
-        os << "{" << std::endl;
-        ++rctx.line;
-        for (const Code* s = then; s; s = s->next) {
-            ++rctx.ind;
-            render(rctx, s);
-            --rctx.ind;
-        }
-        os << indent(rctx.ind, opts->indent_str) << "}";
-    }
-}
-
-static void render_if_then_else(RenderContext& rctx, const CodeIfTE* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    bool oneline = oneline_if(code, opts);
-
-    os << indent(rctx.ind, opts->indent_str);
-    render_if_nonl(rctx, code->if_cond, code->if_code->head, oneline);
-    if (code->else_code) {
-        os << " else ";
-        render_if_nonl(rctx, code->else_cond, code->else_code->head, oneline);
-    }
-    os << std::endl;
-    ++rctx.line;
 }
 
 static void render_block(RenderContext& rctx, const CodeBlock* code) {
@@ -124,515 +135,908 @@ static void render_block(RenderContext& rctx, const CodeBlock* code) {
     }
 }
 
-static const char* var_type_c(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "int";
-    case VarType::UINT:
-        return "unsigned int";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
+class RenderVar : public RenderCallback {
+    RenderContext& rctx;
+    const CodeVar* code;
 
-static const char* var_type_go(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "int";
-    case VarType::UINT:
-        return "uint";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
+  public:
+    RenderVar(RenderContext& rctx, const CodeVar* code): rctx(rctx), code(code) {}
 
-static const char* var_type_rust(VarType type, const opt_t* opts) {
-    switch (type) {
-    case VarType::INT:
-        return "isize";
-    case VarType::UINT:
-        return "usize";
-    case VarType::YYCTYPE:
-        return opts->api_char_type.c_str();
-    }
-    return nullptr;
-}
-
-static void render_var(RenderContext& rctx, const CodeVar* var) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    const std::string& ind = indent(rctx.ind, opts->indent_str);
-    switch (opts->lang) {
-    case Lang::C:
-        os << ind << var_type_c(var->type, opts) << " " << var->name;
-        if (var->init) os << " = " << var->init;
-        os << ";" << std::endl;
-        ++rctx.line;
-        break;
-
-    case Lang::GO:
-        os << ind;
-        if (var->init) {
-            os << var->name << " := " << var->init;
-        } else {
-            os << "var " << var->name << " " << var_type_go(var->type, opts);
-        }
-        os << std::endl;
-        ++rctx.line;
-        break;
-
-    case Lang::RUST:
-        // In Rust uninitialized variable is an error, but if the compiler is able to see that all
-        // paths overwrite the initial value, it warns about unused assignments.
-        if (!var->init) os << ind << "#[allow(unused_assignments)]" << std::endl;
-        os << ind << "let mut " << var->name << " : " << var_type_rust(var->type, opts) << " = "
-                << (var->init ? var->init : "0") << ";" << std::endl;
-        rctx.line += 2;
-        break;
-    }
-}
-
-static bool case_on_same_line(const CodeCase* code, const opt_t* opts) {
-    const Code* first = code->body->head;
-    return first
-           && first->next == nullptr
-           && (first->kind == CodeKind::STMT || first->kind == CodeKind::TEXT)
-           && opts->lang != Lang::GO; // gofmt prefers cases on a new line
-}
-
-static void render_number(RenderContext& rctx, int64_t num, VarType type) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const Enc& enc = opts->encoding;
-    bool hex = opts->lang == Lang::RUST || enc.type() == Enc::Type::EBCDIC;
-
-    switch (type) {
-    case VarType::UINT:
-        DCHECK(num >= 0);
-        os << static_cast<uint32_t>(num);
-        break;
-    case VarType::INT:
-        os << num;
-        break;
-    case VarType::YYCTYPE:
-        DCHECK(num >= 0);
-        print_char_or_hex(os, static_cast<uint32_t>(num), enc.cunit_size(), hex, /*dot*/ false);
-        break;
-    }
-}
-
-static void render_case_range(
-        RenderContext& rctx, int64_t low, int64_t upp, bool last, VarType type) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const Enc& enc = opts->encoding;
-
-    os << indent(rctx.ind, opts->indent_str);
-
-    switch (opts->lang) {
-    case Lang::C:
-        os << "case ";
-        render_number(rctx, low, type);
-        if (low != upp) {
-            os << " ... ";
-            render_number(rctx, upp, type);
-        } else if (opts->debug && type == VarType::YYCTYPE && enc.type() == Enc::Type::EBCDIC) {
-            uint32_t c = enc.decode_unsafe(static_cast<uint32_t>(low));
-            if (is_print(c)) os << " /* " << static_cast<char>(c) << " */";
-        }
-        os << ":";
-        if (!last) {
-            os << std::endl;
-            ++rctx.line;
-        }
-        break;
-
-    case Lang::GO:
-        os << "case ";
-        render_number(rctx, low, type);
-        for (int64_t c = low + 1; c <= upp; ++c) {
-            os << ",";
-            render_number(rctx, c, type);
-        }
-        os << ":";
-        if (!last) {
-            os << std::endl;
-            os << indent(rctx.ind + 1, opts->indent_str) << "fallthrough" << std::endl;
-            rctx.line += 2;
-        }
-        break;
-
-    case Lang::RUST:
-        render_number(rctx, low, type);
-        if (low != upp) {
-            os << " ..= ";
-            render_number(rctx, upp, type);
-        }
-        if (last) {
-            os << " =>";
-        } else {
-            os << " |" << std::endl;
-            ++rctx.line;
-        }
-        break;
-    }
-}
-
-static void render_case(RenderContext& rctx, const CodeCase* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const uint32_t ind = rctx.ind;
-    const Code* first = code->body->head;
-
-    const char* s_case, *s_then, *s_default;
-    if (opts->lang == Lang::RUST) {
-        s_case = "";
-        s_then = " =>";
-        s_default = "_";
-    } else {
-        s_case = "case ";
-        s_then = ":";
-        s_default = "default";
-    }
-
-    switch (code->kind) {
-    case CodeCase::Kind::DEFAULT:
-        os << indent(ind, opts->indent_str) << s_default << s_then;
-        break;
-    case CodeCase::Kind::NUMBER:
-        os << indent(ind, opts->indent_str) << s_case << code->number << s_then;
-        break;
-    case CodeCase::Kind::STRING:
-        os << indent(ind, opts->indent_str) << s_case << code->string << s_then;
-        break;
-    case CodeCase::Kind::RANGES: {
-        const size_t nranges = code->ranges->size;
-        const int64_t* ranges = code->ranges->elems;
-        const VarType type = code->ranges->type;
-
-        for (uint32_t i = 0; i < nranges; ++i) {
-            const bool last = i == nranges - 1;
-            const int64_t low = ranges[2*i], upp = ranges[2*i + 1];
-            DCHECK(low < upp);
-
-            if (opts->lang != Lang::C || opts->case_ranges) {
-                render_case_range(rctx, low, upp - 1, last, type);
-            } else {
-                for (int64_t c = low; c < upp; ++c) {
-                    render_case_range(rctx, c, c, last && c == upp - 1, type);
-                }
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
+            rctx.os << code->name;
+            break;
+        case StxVarId::INIT:
+            DCHECK(code->init != nullptr);
+            rctx.os << code->init;
+            break;
+        case StxVarId::TYPE:
+            switch (code->type) {
+            case VarType::INT:
+                rctx.opts->render_code_type_int(rctx.os);
+                break;
+            case VarType::UINT:
+                rctx.opts->render_code_type_uint(rctx.os);
+                break;
+            case VarType::YYCTYPE:
+                rctx.os << rctx.opts->api_char_type;
+                break;
             }
-        }
-        break;
-    }}
-
-    if (case_on_same_line(code, opts)) {
-        os << " " << first->text;
-        rctx.line += count_lines_text(first->text);
-        render_stmt_end(rctx, first->kind == CodeKind::STMT);
-    } else {
-        // For Rust wrap multi-line cases in braces.
-        if (opts->lang == Lang::RUST) os << " {";
-        os << std::endl;
-        ++rctx.line;
-        for (const Code* s = first; s; s = s->next) {
-            ++rctx.ind;
-            render(rctx, s);
-            --rctx.ind;
-        }
-        if (opts->lang == Lang::RUST) {
-            os << indent(rctx.ind, opts->indent_str) << "}" << std::endl;
-            ++rctx.line;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
         }
     }
-}
 
-static void render_switch(RenderContext& rctx, const CodeSwitch* code) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const uint32_t ind = rctx.ind;
-
-    os << indent(ind, opts->indent_str);
-    if (opts->lang == Lang::RUST) {
-        os << "match " << code->expr;
-    } else {
-        os << "switch (" << code->expr << ")";
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_INIT) {
+            return !code->is_default;
+        }
+        UNREACHABLE();
+        return false;
     }
-    os << " {\n";
-    ++rctx.line;
 
-    // Do not indent switch cases for Go, as gofmt prefers them unindented.
-    if (opts->lang != Lang::GO) ++rctx.ind;
-    for (const CodeCase* c = code->cases->head; c; c = c->next) {
-        render_case(rctx, c);
+    FORBID_COPY(RenderVar);
+};
+
+class RenderIfThenElse : public RenderCallback {
+    RenderContext& rctx;
+    const CodeBranches* code;
+    const CodeBranch* curr_branch;
+    const CodeBranch* last_branch;
+    size_t nbranches;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmts;
+    bool oneline;
+
+  public:
+    RenderIfThenElse(RenderContext& rctx, const CodeBranches* code, bool oneline)
+            : rctx(rctx)
+            , code(code)
+            , curr_branch(nullptr)
+            , last_branch(nullptr)
+            , nbranches(0)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nstmts(0)
+            , oneline(oneline) {
+        for (const CodeBranch* b = code->head; b; b = b->next) ++nbranches;
     }
-    if (opts->lang != Lang::GO) --rctx.ind;
 
-    os << indent(ind, opts->indent_str) << "}\n";
-    ++rctx.line;
-}
-
-static void render_arg(RenderContext& rctx, const CodeArg* arg) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    const char* s = arg->arg, *p = s;
-    for (; *s; ++s) {
-        // remove unescaped newlines and render on a new line
-        if (*s == '\n') {
-            os.write(p, s - p);
-            p = s + 1;
-            os << std::endl << indent(rctx.ind + 1, opts->indent_str);
-            ++rctx.line;
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::COND: rctx.os << curr_branch->cond; break;
+            case StxVarId::STMT: render_maybe_oneline(rctx, curr_stmt, oneline); break;
+            default: render_global_var(rctx, var); break;
         }
     }
-    os.write(p, s - p);
-}
 
-static void render_func(RenderContext& rctx, const CodeFunc* func) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-    const CodeArg* first = func->args->head;
-
-    os << indent(rctx.ind, opts->indent_str) << func->name;
-    ++rctx.line;
-
-    // Estimate total length of function call (in characters). Arguments are rendered on one line if
-    // the total length does not exceed 80 characters (including indentation and the text preceding
-    // the list of arguments) , otherwise each argument and the closing parenthesis are rendered on
-    // a new line.
-    size_t total = rctx.ind * opts->indent_str.length() + strlen(func->name);
-    for (const CodeArg* a = first; a; a = a->next) {
-        total += strlen(a->arg) + 2; // +2 for ", "
-    }
-
-    if (total < 80) {
-        os << "(";
-        for (const CodeArg* a = first; a; a = a->next) {
-            if (a != first) os << ", ";
-            render_arg(rctx, a);
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+        case StxVarId::BRANCH:
+            return nbranches;
+        case StxVarId::STMT: {
+            size_t n = 0;
+            if (curr_branch->code != nullptr) {
+                for (const Code* s = curr_branch->code->head; s; s = s->next) ++n;
+            }
+            const_cast<size_t&>(nstmts) = n;
+            return nstmts;
         }
-        os << ")";
-    } else {
-        ++rctx.ind;
-
-        // An argument may be broken into multiple lines by inserting unescaped newline characters
-        // in the argument string. The text after each newline is "hanged after" the the argument
-        // (rendered on the next line with one extra level of indentation).
-        os << std::endl;
-        for (const CodeArg* a = first; a; a = a->next) {
-            const char* sep = a == first ? "( " : ", ";
-            os << indent(rctx.ind, opts->indent_str) << sep;
-            render_arg(rctx, a);
-            os << std::endl;
-            ++rctx.line;
+        default:
+            UNREACHABLE();
+            return 0;
         }
-        os << indent(rctx.ind, opts->indent_str) << ")";
-
-        --rctx.ind;
     }
 
-    os << func->semi << std::endl;
-    ++rctx.line;
-}
-
-static void render_loop(RenderContext& rctx, const CodeList* loop) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    switch (opts->lang) {
-    case Lang::C:
-        os << indent(rctx.ind, opts->indent_str) << "for (;;)";
-        break;
-    case Lang::GO:
-        // In Go label is on a separate line with zero indent.
-        if (!opts->label_loop.empty()) {
-            os << opts->label_loop << ":" << std::endl;
-            ++rctx.line;
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::BRANCH:
+            DCHECK(rbound < nbranches);
+            find_list_bounds(code->head, lbound, rbound, &curr_branch, &last_branch);
+            break;
+        case StxVarId::STMT:
+            DCHECK(rbound < nstmts);
+            find_list_bounds(curr_branch->code->head, lbound, rbound, &curr_stmt, &last_stmt);
+            break;
+        default:
+            UNREACHABLE();
+            break;
         }
-        os << indent(rctx.ind, opts->indent_str) << "for";
-        break;
-    case Lang::RUST:
-        os << indent(rctx.ind, opts->indent_str);
-        // In Rust label is on the same line, preceding the `loop` keyword.
-        if (!opts->label_loop.empty()) os << opts->label_loop << ": ";
-        os << "loop";
-        break;
     }
-    os << " {" << std::endl;
-    ++rctx.line;
 
-    ++rctx.ind;
-    render_list(rctx, loop);
-    --rctx.ind;
-
-    os << indent(rctx.ind, opts->indent_str) << "}" << std::endl;
-    ++rctx.line;
-}
-
-static inline void yych_conv(std::ostream& os, const opt_t* opts) {
-    if (opts->char_conv) {
-        os << "(" <<  opts->api_char_type << ")";
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::BRANCH:
+            curr_branch = curr_branch->next;
+            return curr_branch != last_branch;
+        case StxVarId::STMT:
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
+        }
     }
-}
 
-void gen_peek_expr(std::ostream& os, const opt_t* opts) {
-    yych_conv(os, opts);
-    if (opts->api == Api::DEFAULT) {
-        os << "*" << opts->api_cursor;
-    } else if (opts->lang == Lang::RUST) {
-        if (opts->unsafe) os << "unsafe {";
-        os << opts->api_peek;
-        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
-        if (opts->unsafe) os << "}";
-    } else {
-        os << opts->api_peek;
-        if (opts->api_style == ApiStyle::FUNCTIONS) os << "()";
+    bool eval_cond(StxLOpt opt) override {
+        switch (opt) {
+            case StxLOpt::HAVE_COND: return curr_branch->cond != nullptr;
+            case StxLOpt::MANY: return nbranches > 1;
+            default: break;
+        }
+        UNREACHABLE();
+        return false;
     }
-}
 
-static void render_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
+    FORBID_COPY(RenderIfThenElse);
+};
 
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    gen_peek_expr(os, opts);
-    render_stmt_end(rctx, true);
-}
+class RenderSwitchCaseDefault : public RenderCallback {
+    RenderContext& rctx;
 
-static void render_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
+  public:
+    RenderSwitchCaseDefault(RenderContext& rctx): rctx(rctx) {}
 
-    os << indent(rctx.ind, opts->indent_str);
-    if (opts->api == Api::CUSTOM) {
-        os << opts->api_skip;
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            os << "()";
-            render_stmt_end(rctx, true);
+    void render_var(StxVarId var) override {
+        render_global_var(rctx, var);
+    }
+};
+
+class RenderSwitchCaseRange : public RenderCallback {
+    RenderContext& rctx;
+    const CodeCase* code;
+    size_t curr_range;
+    size_t curr_sym;
+    size_t last_sym;
+    size_t nsyms;
+
+  public:
+    RenderSwitchCaseRange(RenderContext& rctx, const CodeCase* code, size_t nrange)
+            : rctx(rctx)
+            , code(code)
+            , curr_range(nrange)
+            , curr_sym(0)
+            , last_sym(0)
+            , nsyms(1) {
+        if (code->kind == CodeCase::Kind::RANGES) {
+            const int64_t* ranges = code->ranges->elems;
+            nsyms = static_cast<size_t>(ranges[2*curr_range + 1] - ranges[2*curr_range]);
+        }
+    }
+
+    void render_var(StxVarId var) override {
+        if (var == StxVarId::VAL) {
+            switch (code->kind) {
+            case CodeCase::Kind::DEFAULT:
+                UNREACHABLE();
+                break;
+            case CodeCase::Kind::NUMBER:
+                rctx.os << code->number;
+                break;
+            case CodeCase::Kind::STRING:
+                rctx.os << code->string;
+                break;
+            case CodeCase::Kind::RANGES: {
+                DCHECK(curr_range < code->ranges->size && curr_sym < nsyms);
+                int64_t sym = code->ranges->elems[2*curr_range] + static_cast<int64_t>(curr_sym);
+                switch (code->ranges->type) {
+                case VarType::UINT:
+                    DCHECK(sym >= 0);
+                    rctx.os << sym;
+                    break;
+                case VarType::INT:
+                    rctx.os << sym;
+                    break;
+                case VarType::YYCTYPE:
+                    DCHECK(sym >= 0);
+                    print_char_or_hex(rctx.os, static_cast<uint32_t>(sym), rctx.opts);
+                    break;
+                }
+                break;
+            }}
         } else {
-            render_stmt_end(rctx, false);
+            render_global_var(rctx, var);
         }
-    } else {
-        os << "++" << opts->api_cursor;
-        render_stmt_end(rctx, true);
     }
-}
 
-static void render_backup(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::VAL) {
+            return nsyms;
+        }
+        UNREACHABLE();
+        return 0;
+    }
 
-    os << indent(rctx.ind, opts->indent_str);
-    if (opts->api == Api::CUSTOM) {
-        os << opts->api_backup;
-        if (opts->api_style == ApiStyle::FUNCTIONS) {
-            os << "()";
-            render_stmt_end(rctx, true);
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::VAL) {
+            curr_sym = lbound;
+            last_sym = rbound;
         } else {
-            render_stmt_end(rctx, false);
+            UNREACHABLE();
         }
-    } else {
-        os << opts->api_marker << " = " << opts->api_cursor;
-        render_stmt_end(rctx, true);
     }
-}
 
-static void render_skip_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*++" << opts->api_cursor;
-    render_stmt_end(rctx, true);
-}
-
-static void render_peek_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*" << opts->api_cursor << "++";
-    render_stmt_end(rctx, true);
-}
-
-static void render_skip_backup(RenderContext& rctx) {
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    rctx.os << indent(rctx.ind, opts->indent_str) << opts->api_marker << " = ++" << opts->api_cursor;
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_skip(RenderContext& rctx) {
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    rctx.os << indent(rctx.ind, opts->indent_str) << opts->api_marker << " = " << opts->api_cursor
-            << "++";
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = " << opts->api_cursor << ")";
-    render_stmt_end(rctx, true);
-}
-
-static void render_skip_backup_peek(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = ++" << opts->api_cursor << ")";
-    render_stmt_end(rctx, true);
-}
-
-static void render_backup_peek_skip(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    DCHECK(opts->api == Api::DEFAULT);
-    os << indent(rctx.ind, opts->indent_str) << opts->var_char << " = ";
-    yych_conv(os, opts);
-    os << "*(" << opts->api_marker << " = " << opts->api_cursor << "++)";
-    render_stmt_end(rctx, true);
-}
-
-static void render_abort(RenderContext& rctx) {
-    std::ostringstream& os = rctx.os;
-    const opt_t* opts = rctx.opts;
-
-    os << indent(rctx.ind, opts->indent_str);
-    switch (opts->lang) {
-    case Lang::C:
-        DCHECK(opts->state_abort);
-        os << "abort();";
-        break;
-    case Lang::GO:
-        os << "panic(\"internal lexer error\")";
-        break;
-    case Lang::RUST:
-        os << "panic!(\"internal lexer error\")";
-        break;
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::VAL) {
+            return ++curr_sym <= last_sym;
+        }
+        UNREACHABLE();
+        return false;
     }
-    os << std::endl;
-    ++rctx.line;
-}
+
+    bool eval_cond(StxLOpt opt) override {
+        switch (opt) {
+        case StxLOpt::MANY:
+            return nsyms > 1;
+        case StxLOpt::CHAR_LITERALS:
+            return code->kind == CodeCase::Kind::RANGES
+                    && rctx.opts->char_literals == CharLit::CHAR;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    FORBID_COPY(RenderSwitchCaseRange);
+};
+
+class RenderSwitchCaseBlock : public RenderCallback {
+    RenderContext& rctx;
+    const CodeCase* code;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmt;
+    size_t curr_range;
+    size_t last_range;
+    size_t nranges;
+    bool oneline;
+
+  public:
+    RenderSwitchCaseBlock(RenderContext& rctx, const CodeCase* code, bool oneline)
+            : rctx(rctx)
+            , code(code)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nstmt(0)
+            , curr_range(0)
+            , last_range(0)
+            , nranges(code->kind == CodeCase::Kind::RANGES ? code->ranges->size : 1)
+            , oneline(oneline) {
+        for (const Code* s = code->body->head; s; s = s->next) ++nstmt;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::CASE:
+            switch (code->kind) {
+            case CodeCase::Kind::DEFAULT: {
+                RenderSwitchCaseDefault callback(rctx);
+                rctx.opts->render_code_switch_case_default(rctx.os, callback);
+                break;
+            }
+            case CodeCase::Kind::NUMBER:
+            case CodeCase::Kind::STRING:
+            case CodeCase::Kind::RANGES: {
+                RenderSwitchCaseRange callback(rctx, code, curr_range);
+                rctx.opts->render_code_switch_case_range(rctx.os, callback);
+                break;
+            }}
+            break;
+        case StxVarId::STMT:
+            render_maybe_oneline(rctx, curr_stmt, oneline);
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+        case StxVarId::CASE:
+            return nranges;
+        case StxVarId::STMT:
+            return nstmt;
+        default:
+            UNREACHABLE();
+            return 0;
+        }
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::CASE:
+            curr_range = lbound;
+            last_range = rbound;
+            break;
+        case StxVarId::STMT:
+            DCHECK(rbound < nstmt);
+            find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::CASE:
+            return code->kind == CodeCase::Kind::RANGES && ++curr_range <= last_range;
+        case StxVarId::STMT:
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    FORBID_COPY(RenderSwitchCaseBlock);
+};
+
+class RenderSwitch : public RenderCallback {
+    RenderContext& rctx;
+    const CodeSwitch* code;
+    const CodeCase* curr_case;
+    const CodeCase* last_case;
+    size_t ncases;
+
+  public:
+    RenderSwitch(RenderContext& rctx, const CodeSwitch* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_case(nullptr)
+            , last_case(nullptr)
+            , ncases(0) {
+        for (const CodeCase* c = code->cases->head; c; c = c->next) ++ncases;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::EXPR:
+            rctx.os << code->expr;
+            break;
+        case StxVarId::CASE:
+            if (rctx.opts->specialize_oneline_switch() && oneline_stmt_list(curr_case->body)) {
+                RenderSwitchCaseBlock callback(rctx, curr_case, true);
+                rctx.opts->render_code_switch_cases_oneline(rctx.os, callback);
+            } else {
+                RenderSwitchCaseBlock callback(rctx, curr_case, false);
+                rctx.opts->render_code_switch_cases(rctx.os, callback);
+            }
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::CASE) {
+            return ncases;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::CASE) {
+            DCHECK(rbound < ncases);
+            find_list_bounds(code->cases->head, lbound, rbound, &curr_case, &last_case);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::CASE) {
+            curr_case = curr_case->next;
+            return curr_case != last_case;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderSwitch);
+};
+
+class RenderLoop : public RenderCallback {
+    RenderContext& rctx;
+    const CodeList* code;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmts;
+
+  public:
+    RenderLoop(RenderContext& rctx, const CodeList* code)
+            : rctx(rctx), code(code), curr_stmt(nullptr), last_stmt(nullptr), nstmts(0) {
+        for (const Code* s = code->head; s; s = s->next) ++nstmts;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LABEL: rctx.os << rctx.opts->label_loop; break;
+            case StxVarId::STMT: render(rctx, curr_stmt); break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::STMT) {
+            return nstmts;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::STMT) {
+            DCHECK(rbound < nstmts);
+            find_list_bounds(code->head, lbound, rbound, &curr_stmt, &last_stmt);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::STMT) {
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderLoop);
+};
+
+class RenderGoto : public RenderCallback {
+    RenderContext& rctx;
+    const char* target;
+
+  public:
+    RenderGoto(RenderContext& rctx, const char* target)
+            : rctx(rctx), target(target) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LABEL: rctx.os << target; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderGoto);
+};
+
+class RenderFnDef : public RenderCallback {
+    RenderContext& rctx;
+    const CodeFnDef* code;
+    const CodeParam* curr_param;
+    const CodeParam* last_param;
+    size_t nparams;
+    const Code* curr_stmt;
+    const Code* last_stmt;
+    size_t nstmts;
+
+  public:
+    RenderFnDef(RenderContext& rctx, const CodeFnDef* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_param(nullptr)
+            , last_param(nullptr)
+            , nparams(0)
+            , curr_stmt(nullptr)
+            , last_stmt(nullptr)
+            , nstmts(0) {
+        for (const CodeParam* p = code->params->head; p; p = p->next) ++nparams;
+        for (const Code* s = code->body->head; s; s = s->next) ++nstmts;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
+            rctx.os << code->name;
+            break;
+        case StxVarId::TYPE:
+            rctx.os << code->type;
+            break;
+        case StxVarId::ARGNAME:
+            rctx.os << curr_param->name;
+            break;
+        case StxVarId::ARGTYPE:
+            rctx.os << curr_param->type;
+            break;
+        case StxVarId::STMT:
+            render(rctx, curr_stmt);
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+            case StxVarId::ARG: return nparams;
+            case StxVarId::STMT: return nstmts;
+            default: UNREACHABLE(); return 0;
+        }
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::ARG:
+            DCHECK(rbound < nparams);
+            find_list_bounds(code->params->head, lbound, rbound, &curr_param, &last_param);
+            break;
+        case StxVarId::STMT:
+            DCHECK(rbound < nstmts);
+            find_list_bounds(code->body->head, lbound, rbound, &curr_stmt, &last_stmt);
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+        case StxVarId::ARG:
+            curr_param = curr_param->next;
+            return curr_param != last_param;
+        case StxVarId::STMT:
+            curr_stmt = curr_stmt->next;
+            return curr_stmt != last_stmt;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_TYPE) {
+            return code->type != nullptr;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderFnDef);
+};
+
+class RenderFnCall : public RenderCallback {
+    RenderContext& rctx;
+    const CodeFnCall* code;
+    const CodeArg* curr_arg;
+    const CodeArg* last_arg;
+    size_t nargs;
+
+  public:
+    RenderFnCall(RenderContext& rctx, const CodeFnCall* code)
+            : rctx(rctx)
+            , code(code)
+            , curr_arg(nullptr)
+            , last_arg(nullptr)
+            , nargs(0) {
+        for (const CodeArg* a = code->args->head; a; a = a->next) ++nargs;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::NAME: rctx.os << code->name; break;
+            case StxVarId::RETVAL: rctx.os << code->retval; break;
+            case StxVarId::ARG: rctx.os << curr_arg->arg; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::ARG) {
+            return nargs;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::ARG) {
+            DCHECK(rbound < nargs);
+            find_list_bounds(code->args->head, lbound, rbound, &curr_arg, &last_arg);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::ARG) {
+            curr_arg = curr_arg->next;
+            return curr_arg != last_arg;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        switch (opt) {
+        case StxLOpt::HAVE_ARGS:
+            return nargs > 0;
+        case StxLOpt::HAVE_RETVAL:
+            return code->retval != nullptr;
+        default:
+            UNREACHABLE();
+            return false;
+        }
+    }
+
+    FORBID_COPY(RenderFnCall);
+};
+
+class RenderRecFuncs : public RenderCallback {
+    RenderContext& rctx;
+    const CodeList* fns;
+    const Code* curr_fn;
+    const Code* last_fn;
+    size_t nfuncs;
+
+  public:
+    RenderRecFuncs(RenderContext& rctx, const CodeList* fns)
+            : rctx(rctx)
+            , fns(fns)
+            , curr_fn(nullptr)
+            , last_fn(nullptr)
+            , nfuncs(0) {
+        for (const Code* x = fns->head; x; x = x->next) ++nfuncs;
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::FNDECL: {
+            RenderFnDef callback(rctx, &curr_fn->fndef);
+            rctx.opts->render_code_fndecl(rctx.os, callback);
+            break;
+        }
+        case StxVarId::FNDEF: {
+            RenderFnDef callback(rctx, &curr_fn->fndef);
+            rctx.opts->render_code_fndef(rctx.os, callback);
+            break;
+        }
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::FN) {
+            return nfuncs;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::FN) {
+            DCHECK(rbound < nfuncs);
+            find_list_bounds(fns->head, lbound, rbound, &curr_fn, &last_fn);
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::FN) {
+            curr_fn = curr_fn->next;
+            return curr_fn != last_fn;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderRecFuncs);
+};
+
+class RenderAssign : public RenderCallback {
+    RenderContext& rctx;
+    const CodeAssign* code;
+
+  public:
+    RenderAssign(RenderContext& rctx, const CodeAssign* code)
+            : rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LHS: rctx.os << code->lhs; break;
+            case StxVarId::RHS: rctx.os << code->rhs; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderAssign);
+};
+
+class RenderDebug : public RenderCallback {
+    RenderContext& rctx;
+    const CodeDebug* code;
+
+  public:
+    RenderDebug(RenderContext& rctx, const CodeDebug* code): rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::DEBUG: {
+            std::ostringstream s(rctx.opts->api_debug);
+            argsubst(s, rctx.opts->api_sigil, "state", false, code->state);
+            argsubst(s, rctx.opts->api_sigil, "char", false, rctx.opts->var_char);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::STATE:
+            rctx.os << code->state;
+            break;
+        case StxVarId::CHAR:
+            rctx.os << rctx.opts->var_char;
+            break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderDebug);
+};
+
+// One callback class is used for all combinations of YYSKIP, YYPEEK and YYBACKUP primitives,
+// plus YYRESTORE, as they all have very similar variables. This should not cause variable misuse,
+// as the variables for each configuration are checked after parsing syntax file.
+class RenderSkipPeekBackupRestore : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderSkipPeekBackupRestore(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::CHAR: rctx.os << rctx.opts->var_char; break;
+            case StxVarId::CTYPE: rctx.os << rctx.opts->api_char_type; break;
+            case StxVarId::INPUT: rctx.os << rctx.opts->api_input; break;
+            case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
+            case StxVarId::MARKER: rctx.os << rctx.opts->api_marker; break;
+            case StxVarId::PEEK: rctx.os << rctx.opts->api_peek; break;
+            case StxVarId::SKIP: rctx.os << rctx.opts->api_skip; break;
+            case StxVarId::BACKUP: rctx.os << rctx.opts->api_backup; break;
+            case StxVarId::RESTORE: rctx.os << rctx.opts->api_restore; break;
+            case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::CAST) {
+            return rctx.opts->char_conv;
+        }
+        UNREACHABLE();
+        return false;
+    }
+};
+
+class RenderBackupRestoreCtx : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderBackupRestoreCtx(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::CTXMARKER: rctx.os << rctx.opts->api_ctxmarker; break;
+            case StxVarId::CURSOR: rctx.os << rctx.opts->api_cursor; break;
+            case StxVarId::BACKUPCTX: rctx.os << rctx.opts->api_backup_ctx; break;
+            case StxVarId::RESTORECTX: rctx.os << rctx.opts->api_restore_ctx; break;
+            case StxVarId::RECORD: rctx.os << rctx.opts->var_record; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+};
+
+class RenderTagOps : public RenderCallback {
+    RenderContext& rctx;
+    const CodeTag* code;
+
+  public:
+    RenderTagOps(RenderContext& rctx, const CodeTag* code)
+            : rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        const opt_t* opts = rctx.opts;
+        switch (var) {
+        case StxVarId::TAG:
+        case StxVarId::LHS:
+            rctx.os << code->tag1;
+            break;
+        case StxVarId::RHS:
+            rctx.os << code->tag2;
+            break;
+        case StxVarId::NEG:
+            argsubst(rctx.os, opts->tags_negative, opts->api_sigil, "tag", true, code->tag2);
+            break;
+        case StxVarId::CURSOR:
+            rctx.os << opts->api_cursor;
+            break;
+        case StxVarId::OFFSET:
+            rctx.os << code->dist;
+            break;
+        case StxVarId::RESTORETAG:
+            argsubst(rctx.os, opts->api_restore_tag, opts->api_sigil, "tag", true, code->tag1);
+            break;
+        case StxVarId::SHIFT:
+            argsubst(rctx.os, opts->api_shift, opts->api_sigil, "shift", true, -code->dist);
+            break;
+        case StxVarId::SHIFTSTAG: {
+            std::ostringstream s(opts->api_stag_shift);
+            argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+            argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::SHIFTMTAG: {
+            std::ostringstream s(opts->api_mtag_shift);
+            argsubst(s, opts->api_sigil, "tag", false, code->tag1);
+            argsubst(s, opts->api_sigil, "shift", false, -code->dist);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::STAGP:
+            argsubst(rctx.os, opts->api_stag_pos, opts->api_sigil, "tag", true, code->tag1);
+            break;
+        case StxVarId::STAGN:
+            argsubst(rctx.os, opts->api_stag_neg, opts->api_sigil, "tag", true, code->tag1);
+            break;
+        case StxVarId::MTAGP:
+            argsubst(rctx.os, opts->api_mtag_pos, opts->api_sigil, "tag", true, code->tag1);
+            break;
+        case StxVarId::MTAGN:
+            argsubst(rctx.os, opts->api_mtag_neg, opts->api_sigil, "tag", true, code->tag1);
+            break;
+        case StxVarId::COPYSTAG: {
+            std::ostringstream s(opts->api_stag_copy);
+            argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
+            argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::COPYMTAG: {
+            std::ostringstream s(opts->api_mtag_copy);
+            argsubst(s, opts->api_sigil, "lhs", false, code->tag1);
+            argsubst(s, opts->api_sigil, "rhs", false, code->tag2);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::RECORD:
+            rctx.os << opts->var_record;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::NESTED) {
+            return code->tag2 != nullptr; // for nested tags there is a negative tag
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderTagOps);
+};
 
 static void render_label(RenderContext& rctx, const CodeLabel& label) {
     if (label.kind == CodeLabel::Kind::SLABEL) {
@@ -645,6 +1049,310 @@ static void render_label(RenderContext& rctx, const CodeLabel& label) {
     }
 }
 
+class RenderArray : public RenderCallback {
+    RenderContext& rctx;
+    const CodeArray* code;
+    const size_t ncols;
+    const size_t nrows;
+    size_t curr_col;
+    size_t last_col;
+    size_t curr_row;
+    size_t last_row;
+    size_t maxlen;
+
+  public:
+    RenderArray(RenderContext& rctx, const CodeArray* code)
+            : rctx(rctx)
+            , code(code)
+            , ncols(code->tabulate ? 8 : 1)
+            , nrows(code->size / ncols)
+            , curr_col(0)
+            , last_col(0)
+            , curr_row(0)
+            , last_row(0)
+            , maxlen(0) {
+        CHECK(nrows * ncols == code->size);
+
+        for (size_t i = 0; i < code->size; ++i) {
+            maxlen = std::max(maxlen, strlen(code->elems[i]));
+        }
+    }
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
+            rctx.os << code->name;
+            break;
+        case StxVarId::TYPE:
+            rctx.os << code->type;
+            break;
+        case StxVarId::SIZE:
+            rctx.os << code->size;
+            break;
+        case StxVarId::ROW:
+            break; // do nothing
+        case StxVarId::ELEM: {
+            const char* e = code->elems[curr_row * ncols + curr_col];
+            if (code->tabulate) {
+                rctx.os << indent(static_cast<uint32_t>(maxlen - strlen(e)), " ");
+            }
+            rctx.os << e;
+            break;
+        }
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        switch (var) {
+            case StxVarId::ROW: return nrows;
+            case StxVarId::ELEM: return ncols;
+            default: UNREACHABLE(); return 0;
+        }
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        switch (var) {
+        case StxVarId::ROW:
+            DCHECK(rbound < nrows);
+            curr_row = lbound;
+            last_row = rbound;
+            break;
+        case StxVarId::ELEM:
+            DCHECK(rbound < ncols);
+            curr_col = lbound;
+            last_col = rbound;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ROW: return ++curr_row <= last_row;
+            case StxVarId::ELEM: return ++curr_col <= last_col;
+            default: UNREACHABLE(); return false;
+        }
+    }
+
+    FORBID_COPY(RenderArray);
+};
+
+class RenderEnum : public RenderCallback {
+    RenderContext& rctx;
+    const CodeEnum* code;
+    size_t curr_elem;
+    size_t last_elem;
+
+  public:
+    RenderEnum(RenderContext& rctx, const CodeEnum* code)
+            : rctx(rctx), code(code), curr_elem(0), last_elem(0) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::NAME:
+            rctx.os << code->name;
+            break;
+        case StxVarId::TYPE:
+            rctx.opts->render_code_type_cond_enum(rctx.os);
+            break;
+        case StxVarId::ELEM:
+            rctx.os << code->elem_ids[curr_elem];
+            break;
+        case StxVarId::INIT:
+            rctx.os << code->elem_nums[curr_elem];
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    size_t get_list_size(StxVarId var) const override {
+        if (var == StxVarId::ELEM) {
+            return code->size;
+        }
+        UNREACHABLE();
+        return 0;
+    }
+
+    void start_list(StxVarId var, size_t lbound, size_t rbound) override {
+        if (var == StxVarId::ELEM) {
+            curr_elem = lbound;
+            last_elem = rbound;
+        } else {
+            UNREACHABLE();
+        }
+    }
+
+    bool next_in_list(StxVarId var) override {
+        if (var == StxVarId::ELEM) {
+            return ++curr_elem <= last_elem;
+        } else {
+            UNREACHABLE();
+        }
+        return false;
+    }
+
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::HAVE_INIT) {
+            return code->elem_nums != nullptr;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
+    FORBID_COPY(RenderEnum);
+};
+
+class RenderFingerprint : public RenderCallback {
+    RenderContext& rctx;
+
+  public:
+    RenderFingerprint(RenderContext& rctx): rctx(rctx) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::VER:
+            rctx.os << PACKAGE_VERSION;
+            break;
+        case StxVarId::DATE: {
+            time_t now = time(nullptr);
+            rctx.os.write(ctime(&now), 24);
+            break;
+        }
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderFingerprint);
+};
+
+class RenderLineInfo : public RenderCallback {
+    RenderContext& rctx;
+    uint32_t line;
+    const std::string& file;
+
+  public:
+    RenderLineInfo(RenderContext& rctx, uint32_t line, const std::string& file)
+            : rctx(rctx), line(line), file(file) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::LINE: rctx.os << line; break;
+            case StxVarId::FILE: rctx.os << file; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderLineInfo);
+};
+
+class RenderSetAccept : public RenderCallback {
+    RenderContext& rctx;
+    size_t val;
+
+  public:
+    RenderSetAccept(RenderContext& rctx, size_t val)
+        : rctx(rctx), val(val) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETACCEPT: {
+            std::ostringstream s(rctx.opts->api_accept_set);
+            argsubst(s, rctx.opts->api_sigil, "var", false, rctx.opts->var_accept);
+            argsubst(s, rctx.opts->api_sigil, "val", false, val);
+            rctx.os << s.str();
+            break;
+        }
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_accept;
+            break;
+        case StxVarId::VAL:
+            rctx.os << val;
+            break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetAccept);
+};
+
+class RenderSetCond : public RenderCallback {
+    RenderContext& rctx;
+    const char* cond;
+
+  public:
+    RenderSetCond(RenderContext& rctx, const char* cond)
+        : rctx(rctx), cond(cond) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETCOND:
+            argsubst(
+                rctx.os, rctx.opts->api_cond_set, rctx.opts->cond_set_param, "cond", true, cond);
+            break;
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_cond;
+            break;
+        case StxVarId::VAL:
+            rctx.os << cond;
+            break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetCond);
+};
+
+class RenderSetState : public RenderCallback {
+    RenderContext& rctx;
+    const char* state;
+
+  public:
+    RenderSetState(RenderContext& rctx, const char* state)
+        : rctx(rctx), state(state) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::SETSTATE:
+            argsubst(rctx.os,
+                rctx.opts->api_state_set, rctx.opts->state_set_param, "state", true, state);
+            break;
+        case StxVarId::VAR:
+            rctx.os << rctx.opts->var_state;
+            break;
+        case StxVarId::VAL:
+            rctx.os << state;
+            break;
+        case StxVarId::RECORD:
+            rctx.os << rctx.opts->var_record;
+            break;
+        default:
+            render_global_var(rctx, var);
+            break;
+        }
+    }
+
+    FORBID_COPY(RenderSetState);
+};
+
 static void render(RenderContext& rctx, const Code* code) {
     std::ostringstream& os = rctx.os;
     const opt_t* opts = rctx.opts;
@@ -654,21 +1362,56 @@ static void render(RenderContext& rctx, const Code* code) {
     switch (code->kind) {
     case CodeKind::EMPTY:
         break;
-    case CodeKind::IF_THEN_ELSE:
-        render_if_then_else(rctx, &code->ifte);
+    case CodeKind::IF_THEN_ELSE: {
+        bool oneline = rctx.opts->specialize_oneline_if();
+        for (const CodeBranch* b = code->ifte->head; oneline && b; b = b->next) {
+            oneline = oneline && oneline_stmt_list(b->code);
+        }
+        RenderIfThenElse callback(rctx, code->ifte, oneline);
+        if (oneline) {
+            rctx.opts->render_code_if_then_else_oneline(rctx.os, callback);
+        } else {
+            rctx.opts->render_code_if_then_else(rctx.os, callback);
+        }
         break;
-    case CodeKind::SWITCH:
-        render_switch(rctx, &code->swch);
+    }
+    case CodeKind::SWITCH: {
+        RenderSwitch callback(rctx, &code->swch);
+        rctx.opts->render_code_switch(rctx.os, callback);
         break;
+    }
     case CodeKind::BLOCK:
         render_block(rctx, &code->block);
         break;
-    case CodeKind::FUNC:
-        render_func(rctx, &code->func);
+    case CodeKind::FNDEF: {
+        RenderFnDef callback(rctx, &code->fndef);
+        rctx.opts->render_code_fndef(rctx.os, callback);
         break;
-    case CodeKind::LOOP:
-        render_loop(rctx, code->loop);
+    }
+    case CodeKind::FNCALL: {
+        RenderFnCall callback(rctx, &code->fncall);
+        if (code->fncall.tailcall) {
+            rctx.opts->render_code_tailcall(rctx.os, callback);
+        } else {
+            rctx.opts->render_code_fncall(rctx.os, callback);
+        }
         break;
+    }
+    case CodeKind::REC_FUNCS: {
+        RenderRecFuncs callback(rctx, code->rfuncs);
+        rctx.opts->render_code_recursive_functions(rctx.os, callback);
+        break;
+    }
+    case CodeKind::LOOP: {
+        RenderLoop callback(rctx, code->loop);
+        rctx.opts->render_code_loop(rctx.os, callback);
+        break;
+    }
+    case CodeKind::GOTO: {
+        RenderGoto callback(rctx, code->target);
+        rctx.opts->render_code_goto(rctx.os, callback);
+        break;
+    }
     case CodeKind::TEXT_RAW:
         os << code->text << std::endl;
         line += count_lines_text(code->text) + 1;
@@ -679,8 +1422,9 @@ static void render(RenderContext& rctx, const Code* code) {
         render_stmt_end(rctx, true);
         break;
     case CodeKind::TEXT:
-        os << indent(ind, opts->indent_str) << code->text << std::endl;
-        line += count_lines_text(code->text) + 1;
+        os << indent(ind, opts->indent_str) << code->text;
+        line += count_lines_text(code->text);
+        render_stmt_end(rctx, false);
         break;
     case CodeKind::RAW:
         os.write(code->raw.data, static_cast<std::streamsize>(code->raw.size));
@@ -688,55 +1432,197 @@ static void render(RenderContext& rctx, const Code* code) {
             if (code->raw.data[i] == '\n') ++line;
         }
         break;
-    case CodeKind::ABORT:
-        render_abort(rctx);
+    case CodeKind::ASSIGN: {
+        RenderAssign callback(rctx, &code->assign);
+        rctx.opts->render_code_assign(rctx.os, callback);
         break;
-    case CodeKind::SKIP:
-        render_skip(rctx);
+    }
+    case CodeKind::ABORT: {
+        RenderSimple callback(rctx);
+        rctx.opts->render_code_abort(rctx.os, callback);
         break;
-    case CodeKind::PEEK:
-        render_peek(rctx);
+    }
+    case CodeKind::DEBUG: {
+        RenderDebug callback(rctx, &code->debug);
+        rctx.opts->render_code_yydebug(rctx.os, callback);
         break;
-    case CodeKind::BACKUP:
-        render_backup(rctx);
+    }
+    case CodeKind::SKIP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yyskip(rctx.os, callback);
         break;
-    case CodeKind::PEEK_SKIP:
-        render_peek_skip(rctx);
+    }
+    case CodeKind::PEEK: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yypeek(rctx.os, callback);
         break;
-    case CodeKind::SKIP_PEEK:
-        render_skip_peek(rctx);
+    }
+    case CodeKind::BACKUP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yybackup(rctx.os, callback);
         break;
-    case CodeKind::SKIP_BACKUP:
-        render_skip_backup(rctx);
+    }
+    case CodeKind::BACKUPCTX: {
+        RenderBackupRestoreCtx callback(rctx);
+        rctx.opts->render_code_yybackupctx(rctx.os, callback);
         break;
-    case CodeKind::BACKUP_SKIP:
-        render_backup_skip(rctx);
+    }
+    case CodeKind::RESTORE: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yyrestore(rctx.os, callback);
         break;
-    case CodeKind::BACKUP_PEEK:
-        render_backup_peek(rctx);
+    }
+    case CodeKind::RESTORECTX: {
+        RenderBackupRestoreCtx callback(rctx);
+        rctx.opts->render_code_yyrestorectx(rctx.os, callback);
         break;
-    case CodeKind::BACKUP_PEEK_SKIP:
-        render_backup_peek_skip(rctx);
+    }
+    case CodeKind::RESTORETAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yyrestoretag(rctx.os, callback);
         break;
-    case CodeKind::SKIP_BACKUP_PEEK:
-        render_skip_backup_peek(rctx);
+    }
+    case CodeKind::SHIFT: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yyshift(rctx.os, callback);
         break;
-    case CodeKind::LINE_INFO_INPUT:
-        render_line_info(os, code->loc.line, rctx.msg.filenames[code->loc.file], opts);
-        ++line;
+    }
+    case CodeKind::SHIFTSTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yyshiftstag(rctx.os, callback);
         break;
-    case CodeKind::LINE_INFO_OUTPUT:
-        render_line_info(os, rctx.line + 1, rctx.file, opts);
-        ++line;
+    }
+    case CodeKind::SHIFTMTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yyshiftstag(rctx.os, callback);
         break;
-    case CodeKind::VAR:
-        render_var(rctx, &code->var);
+    }
+    case CodeKind::STAGN: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yystagn(rctx.os, callback);
         break;
+    }
+    case CodeKind::STAGP: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yystagp(rctx.os, callback);
+        break;
+    }
+    case CodeKind::MTAGN: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yymtagn(rctx.os, callback);
+        break;
+    }
+    case CodeKind::MTAGP: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yymtagp(rctx.os, callback);
+        break;
+    }
+    case CodeKind::COPYSTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yycopystag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::COPYMTAG: {
+        RenderTagOps callback(rctx, &code->tag);
+        rctx.opts->render_code_yycopymtag(rctx.os, callback);
+        break;
+    }
+    case CodeKind::PEEK_SKIP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yypeek_yyskip(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SKIP_PEEK: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yyskip_yypeek(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SKIP_BACKUP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yyskip_yybackup(rctx.os, callback);
+        break;
+    }
+    case CodeKind::BACKUP_SKIP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yybackup_yyskip(rctx.os, callback);
+        break;
+    }
+    case CodeKind::BACKUP_PEEK: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yybackup_yypeek(rctx.os, callback);
+        break;
+    }
+    case CodeKind::BACKUP_PEEK_SKIP: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yybackup_yypeek_yyskip(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SKIP_BACKUP_PEEK: {
+        RenderSkipPeekBackupRestore callback(rctx);
+        rctx.opts->render_code_yyskip_yybackup_yypeek(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETACCEPT: {
+        RenderSetAccept callback(rctx, code->accept);
+        rctx.opts->render_code_yysetaccept(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETCOND: {
+        RenderSetCond callback(rctx, code->cond);
+        rctx.opts->render_code_yysetcond(rctx.os, callback);
+        break;
+    }
+    case CodeKind::SETSTATE: {
+        RenderSetState callback(rctx, code->state);
+        rctx.opts->render_code_yysetstate(rctx.os, callback);
+        break;
+    }
+    case CodeKind::LINE_INFO_INPUT: {
+        RenderLineInfo callback(rctx, code->loc.line, rctx.msg.filenames[code->loc.file]);
+        rctx.opts->render_code_line_info(rctx.os, callback);
+        break;
+    }
+    case CodeKind::LINE_INFO_OUTPUT: {
+        RenderLineInfo callback(rctx, rctx.line + 1, rctx.file);
+        rctx.opts->render_code_line_info(rctx.os, callback);
+        break;
+    }
+    case CodeKind::FINGERPRINT: {
+        RenderFingerprint callback(rctx);
+        rctx.opts->render_code_fingerprint(rctx.os, callback);
+        break;
+    }
+    case CodeKind::VAR: {
+        RenderVar callback(rctx, &code->var);
+        rctx.opts->render_code_var_local(rctx.os, callback);
+        break;
+    }
+    case CodeKind::CONST: {
+        RenderVar callback(rctx, &code->var); // same code item as for `CodeKind::VAR`
+        rctx.opts->render_code_const_global(rctx.os, callback);
+        break;
+    }
+    case CodeKind::ARRAY: {
+        RenderArray callback(rctx, &code->array);
+        if (rctx.opts->code_model == CodeModel::REC_FUNC) {
+            rctx.opts->render_code_array_global(rctx.os, callback);
+        } else {
+            rctx.opts->render_code_array_local(rctx.os, callback);
+        }
+        break;
+    }
+    case CodeKind::ENUM: {
+        RenderEnum callback(rctx, &code->enumr);
+        rctx.opts->render_code_enum(rctx.os, callback);
+        break;
+    }
     case CodeKind::LABEL:
         render_label(rctx, code->label);
         break;
     case CodeKind::STAGS:
     case CodeKind::MTAGS:
+    case CodeKind::SVARS:
+    case CodeKind::MVARS:
     case CodeKind::MAXFILL:
     case CodeKind::MAXNMATCH:
     case CodeKind::COND_ENUM:

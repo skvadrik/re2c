@@ -14,18 +14,34 @@ enum class Target: uint32_t {
 
 enum class Lang: uint32_t {
     C,
+    D,
     GO,
-    RUST
+    HASKELL,
+    JAVA,
+    JS,
+    OCAML,
+    PYTHON,
+    RUST,
+    V,
+    ZIG,
+    NONE // no language (no default syntax config will be loaded)
 };
 
 enum class Api: uint32_t {
-    DEFAULT,
-    CUSTOM
+    SIMPLE,
+    GENERIC,
+    RECORD
 };
 
 enum class ApiStyle: uint32_t {
     FUNCTIONS,
     FREEFORM
+};
+
+enum class CodeModel: uint32_t {
+    GOTO_LABEL,
+    LOOP_SWITCH,
+    REC_FUNC
 };
 
 enum class FixedTags: uint32_t {
@@ -75,10 +91,15 @@ enum class CodeKind: uint32_t {
     IF_THEN_ELSE,
     SWITCH,
     BLOCK,
-    FUNC,
+    FNDEF,
+    FNCALL,
     SKIP,
     PEEK,
     BACKUP,
+    BACKUPCTX,
+    RESTORE,
+    RESTORECTX,
+    RESTORETAG,
     PEEK_SKIP,
     SKIP_PEEK,
     SKIP_BACKUP,
@@ -86,23 +107,45 @@ enum class CodeKind: uint32_t {
     BACKUP_PEEK,
     BACKUP_PEEK_SKIP,
     SKIP_BACKUP_PEEK,
+    SETACCEPT,
+    SETCOND,
+    SETSTATE,
     LINE_INFO_INPUT,
     LINE_INFO_OUTPUT,
+    FINGERPRINT,
     COND_ENUM,
+    SHIFT,
+    SHIFTSTAG,
+    SHIFTMTAG,
+    STAGP,
+    STAGN,
+    MTAGP,
+    MTAGN,
+    COPYSTAG,
+    COPYMTAG,
     STATE_GOTO,
     STAGS,
     MTAGS,
+    SVARS,
+    MVARS,
     MAXFILL,
     MAXNMATCH,
     VAR,
+    CONST,
+    ARRAY,
+    ENUM,
     STMT,
+    GOTO,
     LOOP,
     TEXT,
     TEXT_RAW,
     RAW,
     DFAS,
     LABEL,
-    ABORT
+    ABORT,
+    DEBUG,
+    REC_FUNCS,
+    ASSIGN
 };
 
 // Types of variables in codegen (independent of the language language).
@@ -118,12 +161,59 @@ enum DirConf: uint32_t {
     DCONF_SEPARATOR = 2u
 };
 
+enum class CharLit {
+    CHAR,
+    HEX,
+    CHAR_OR_HEX
+};
+
+enum OpKind { // used as array indices => not a `enum class`
+    OP_CMP_EQ,
+    OP_CMP_NE,
+    OP_CMP_GT,
+    OP_CMP_LT,
+    OP_CMP_GE,
+    OP_CMP_LE,
+    OP_COUNT // number of elements
+};
+
 static constexpr uint32_t NOEOF = ~0u - 1;
 
 static constexpr size_t MAX_NFA_DEPTH  = 1000 * 1000;
 static constexpr size_t MAX_NFA_STATES = 1000 * 1000 * 100;
 static constexpr size_t MAX_DFA_STATES = 1000 * 100;
 static constexpr size_t MAX_DFA_SIZE   = 1000 * 1000 * 50;
+
+enum class StxGOpt {
+    API_SIMPLE,
+    API_GENERIC,
+    API_RECORD,
+    API_STYLE_FUNCTIONS,
+    API_STYLE_FREEFORM,
+    CODE_MODEL_GOTO_LABEL,
+    CODE_MODEL_LOOP_SWITCH,
+    CODE_MODEL_REC_FUNC,
+    START_CONDITIONS,
+    STORABLE_STATE,
+    HAVE_DATE,
+    HAVE_VER,
+    CASE_RANGES,
+    UNSAFE,
+    MONADIC,
+    LOOP_LABEL
+};
+
+enum class StxLOpt {
+    CAST,
+    CHAR_LITERALS,
+    HAVE_ARGS,
+    HAVE_COND,
+    HAVE_INIT,
+    HAVE_TYPE,
+    HAVE_RETVAL,
+    MANY,
+    NESTED
+};
 
 enum class Ret: uint32_t {
     OK,   // all good

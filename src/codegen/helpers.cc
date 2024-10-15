@@ -1,32 +1,20 @@
 #include <iostream>
 
 #include "src/codegen/helpers.h"
+#include "src/options/opt.h"
 
 namespace re2c {
-
-static bool is_space(uint32_t c) {
-    switch (c) {
-    case '\t':
-    case '\f':
-    case '\v':
-    case '\n':
-    case '\r':
-    case ' ':
-        return true;
-    default:
-        return false;
-    }
-}
 
 static inline char hex(uint32_t c) {
     static const char* HEX_TABLE = "0123456789ABCDEF";
     return HEX_TABLE[c & 0x0F];
 }
 
-static void print_char(std::ostream& o, uint32_t c, bool dot) {
+static void print_char(std::ostream& o, uint32_t c, const opt_t* opts) {
+    bool dot = opts->target == Target::DOT;
     switch (c) {
     case '\'':
-        o << (dot ? "'"     : "\\'");
+        o << (dot ? "'" : "\\'");
         break;
     case '"':
         o << (dot ? "\\\""  : "\"");
@@ -56,56 +44,71 @@ static void print_char(std::ostream& o, uint32_t c, bool dot) {
         o << "\\\\"; // both .dot and C/C++ code expect "\\"
         break;
     default:
-        o << static_cast<char> (c);
+        if (is_print(c) || is_space(c)) {
+            o << static_cast<char> (c);
+        } else {
+            CHECK(opts->encoding.cunit_size() == 1);
+            o << (dot ? "\\\\x" : "\\x") << hex(c >> 4u) << hex(c);
+        }
         break;
     }
 }
 
-bool is_print(uint32_t c) {
-    return c >= 0x20 && c < 0x7F;
-}
-
-void print_hex(std::ostream& o, uint32_t c, uint32_t szcunit) {
+void print_hex(std::ostream& o, uint32_t c, const opt_t* opts) {
+    uint32_t szcunit = opts->encoding.cunit_size();
     o << "0x";
-
     if (szcunit >= 4) {
         o << hex(c >> 28u) << hex(c >> 24u) << hex(c >> 20u) << hex(c >> 16u);
     }
-
     if (szcunit >= 2) {
         o << hex(c >> 12u) << hex(c >> 8u);
     }
-
     o << hex(c >> 4u) << hex(c);
 }
 
-void print_char_or_hex(std::ostream& o, uint32_t c, uint32_t szcunit, bool hex, bool dot) {
-    if (!hex && (is_print(c) || is_space(c))) {
+static bool print_as_char(uint32_t c, const opt_t* opts) {
+    switch (opts->char_literals) {
+    case CharLit::CHAR:
+        return opts->encoding.cunit_size() == 1;
+    case CharLit::HEX:
+        return false;
+    case CharLit::CHAR_OR_HEX:
+        return (is_print(c) || is_space(c)) && opts->encoding.type() != Enc::Type::EBCDIC;
+    }
+    UNREACHABLE();
+    return false;
+}
+
+void print_char_or_hex(std::ostream& o, uint32_t c, const opt_t* opts) {
+    if (print_as_char(c, opts)) {
         o << '\'';
-        print_char(o, c, dot);
+        print_char(o, c, opts);
         o << '\'';
     } else {
-        print_hex(o, c, szcunit);
+        print_hex(o, c, opts);
     }
 }
 
-static void print_char_for_span(
-        std::ostream& o, uint32_t c, uint32_t szcunit, bool ebcdic, bool dot) {
-    if (!ebcdic && c != ']' && is_print(c)) {
-        print_char(o, c, dot);
+static void print_char_for_span(std::ostream& o, uint32_t c, const opt_t* opts) {
+    if (opts->encoding.type() != Enc::Type::EBCDIC && c != ']' && is_print(c)) {
+        print_char(o, c, opts);
     } else {
-        print_hex(o, c, szcunit);
+        print_hex(o, c, opts);
     }
 }
 
-void print_span(std::ostream& o, uint32_t l, uint32_t u, uint32_t szcunit, bool ebcdic, bool dot) {
+void print_span(std::ostream& o, uint32_t l, uint32_t u, const opt_t* opts) {
     o << "[";
-    print_char_for_span(o, l, szcunit, ebcdic, dot);
+    print_char_for_span(o, l, opts);
     if (u - l > 1) {
         o << "-";
-        print_char_for_span(o, u - 1, szcunit, ebcdic, dot);
+        print_char_for_span(o, u - 1, opts);
     }
     o << "]";
+}
+
+const char* sprint_null(const opt_t* opts) {
+    return print_as_char(0, opts) ? "'\x00'" : "0";
 }
 
 } // namespace re2c

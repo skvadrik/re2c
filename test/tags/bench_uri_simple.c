@@ -431,24 +431,53 @@ yy9:
 		case 'y':
 		case 'z':
 		case '~':
-			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
 			in->yyt12 = in->cur;
 			goto yy11;
 		case '#':
-			in->yyt4 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy13;
 		case '/':
-			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
 			in->yyt12 = in->cur;
 			goto yy14;
 		case '?':
-			in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = NULL;
-			in->yyt3 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
 			goto yy15;
 		default:
-			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt7 = in->yyt8 = in->yyt9 = in->yyt10 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy10;
 	}
 yy10:
@@ -572,15 +601,19 @@ yy12:
 		case 'z':
 		case '~': goto yy11;
 		case '#':
-			in->yyt4 = in->yyt13 = NULL;
 			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt13 = NULL;
 			goto yy13;
 		case '?':
 			in->yyt3 = in->cur;
 			goto yy15;
 		default:
-			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt13 = NULL;
 			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt13 = NULL;
 			goto yy10;
 	}
 yy13:
@@ -671,7 +704,8 @@ yy13:
 			in->yyt5 = in->cur;
 			goto yy16;
 		default:
-			in->yyt5 = in->yyt6 = in->cur;
+			in->yyt5 = in->cur;
+			in->yyt6 = in->cur;
 			goto yy10;
 	}
 yy14:
@@ -768,11 +802,14 @@ yy15:
 			in->yyt13 = in->cur;
 			goto yy18;
 		case '#':
-			in->yyt4 = in->yyt13 = in->cur;
+			in->yyt4 = in->cur;
+			in->yyt13 = in->cur;
 			goto yy13;
 		default:
-			in->yyt5 = in->yyt6 = NULL;
-			in->yyt4 = in->yyt13 = in->cur;
+			in->yyt4 = in->cur;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt13 = in->cur;
 			goto yy10;
 	}
 yy16:
@@ -948,12 +985,15 @@ yy17:
 		case 'y':
 		case 'z':
 		case '~':
-			in->yyt7 = in->yyt8 = NULL;
-			in->yyt3 = in->yyt9 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
+			in->yyt9 = in->cur;
 			goto yy19;
 		case '[':
 		case ']':
-			in->yyt7 = in->yyt8 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = NULL;
 			in->yyt9 = in->cur;
 			goto yy20;
 		default: goto yy12;
@@ -1049,8 +1089,9 @@ yy18:
 			in->yyt4 = in->cur;
 			goto yy13;
 		default:
-			in->yyt5 = in->yyt6 = NULL;
 			in->yyt4 = in->cur;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
 			goto yy10;
 	}
 yy19:
@@ -1138,26 +1179,41 @@ yy19:
 		case 'z':
 		case '~': goto yy19;
 		case '#':
-			in->yyt4 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt10 = in->cur;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy13;
 		case '/':
+			in->yyt10 = in->cur;
 			in->yyt11 = NULL;
-			in->yyt10 = in->yyt12 = in->cur;
+			in->yyt12 = in->cur;
 			goto yy11;
 		case '?':
+			in->yyt3 = in->cur;
+			in->yyt10 = in->cur;
 			in->yyt11 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt12 = in->cur;
 			goto yy15;
 		case '@':
+			in->yyt4 = in->cur;
+			in->yyt10 = in->cur;
 			in->yyt11 = NULL;
-			in->yyt4 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt12 = in->cur;
 			goto yy21;
 		case '[':
 		case ']': goto yy20;
 		default:
-			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt10 = in->cur;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy10;
 	}
 yy20:
@@ -1247,21 +1303,34 @@ yy20:
 		case 'z':
 		case '~': goto yy20;
 		case '#':
-			in->yyt4 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt10 = in->cur;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy13;
 		case '/':
 		case '@':
+			in->yyt10 = in->cur;
 			in->yyt11 = NULL;
-			in->yyt10 = in->yyt12 = in->cur;
+			in->yyt12 = in->cur;
 			goto yy11;
 		case '?':
+			in->yyt3 = in->cur;
+			in->yyt10 = in->cur;
 			in->yyt11 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt12 = in->cur;
 			goto yy15;
 		default:
-			in->yyt4 = in->yyt5 = in->yyt6 = in->yyt11 = in->yyt13 = NULL;
-			in->yyt3 = in->yyt10 = in->yyt12 = in->cur;
+			in->yyt3 = in->cur;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt10 = in->cur;
+			in->yyt11 = NULL;
+			in->yyt12 = in->cur;
+			in->yyt13 = NULL;
 			goto yy10;
 	}
 yy21:

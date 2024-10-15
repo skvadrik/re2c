@@ -102,83 +102,83 @@ std:
 	{
 		YYCTYPE yych;
 		unsigned int yyaccept = 0;
-		static void *yyctable[3] = {
+		static const void* yyctable[3] = {
 			&&yyc_JS,
 			&&yyc_STR_P1,
-			&&yyc_STR_P2,
+			&&yyc_STR_P2
 		};
-		static const unsigned char yybm_JS[] = {
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,  64,   0,   0,   0,  64,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			 64,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			128, 128, 128, 128, 128, 128, 128, 128, 
-			128, 128,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
-			  0,   0,   0,   0,   0,   0,   0,   0, 
+		static const unsigned char yybm_JS[256] = {
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,  64,   0,   0,   0,  64,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			 64,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			128, 128, 128, 128, 128, 128, 128, 128,
+			128, 128,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0,
+			  0,   0,   0,   0,   0,   0,   0,   0
 		};
 		goto *yyctable[YYGETCONDITION()];
 /* *********************************** */
 yyc_JS:
 		yych = *YYCURSOR;
 		{
-			static void *yytarget[256] = {
-				&&yy1,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy4,  &&yy7,  &&yy2,  &&yy2,  &&yy8,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy4,  &&yy2,  &&yy9,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy10, &&yy11, &&yy2,  &&yy2,
+			static const void* yytarget[256] = {
+				 &&yy1,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy4,  &&yy7,  &&yy2,  &&yy2,  &&yy8,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy4,  &&yy2,  &&yy9,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2, &&yy10, &&yy11,  &&yy2,  &&yy2,
 				&&yy12, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14, &&yy14,
-				&&yy14, &&yy14, &&yy15, &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy16, &&yy2,  &&yy17, &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy18, &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy19, &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy20, &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy21, &&yy2,  &&yy22, &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
-				&&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2
+				&&yy14, &&yy14, &&yy15,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2, &&yy16,  &&yy2, &&yy17,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2, &&yy18,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2, &&yy19,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2, &&yy20,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2, &&yy21,  &&yy2, &&yy22,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,
+				 &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2,  &&yy2
 			};
 			goto *yytarget[yych];
 		}
@@ -202,9 +202,7 @@ yy3:
 yy4:
 		yych = *++YYCURSOR;
 yy5:
-		if (yybm_JS[0+yych] & 64) {
-			goto yy4;
-		}
+		if (yybm_JS[0+yych] & 64) goto yy4;
 yy6:
 		{ goto std; }
 yy7:
@@ -268,9 +266,7 @@ yy13:
 yy14:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
-		if (yybm_JS[0+yych] & 128) {
-			goto yy14;
-		}
+		if (yybm_JS[0+yych] & 128) goto yy14;
 		if (yych <= 'D') {
 			if (yych == '.') goto yy23;
 			goto yy13;
@@ -316,11 +312,8 @@ yy23:
 yy24:
 		YYCURSOR = YYMARKER;
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy13;
-			} else {
-				goto yy3;
-			}
+			if (yyaccept == 0) goto yy13;
+			else goto yy3;
 		} else {
 			goto yy30;
 		}
@@ -409,7 +402,7 @@ yy39:
 yyc_STR_P1:
 		yych = *YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
 				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
 				&&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41, &&yy41,
@@ -482,7 +475,7 @@ yy44:
 		yyaccept = 0;
 		yych = *(YYMARKER = ++YYCURSOR);
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
 				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
 				&&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45, &&yy45,
@@ -580,7 +573,7 @@ yy55:
 yy56:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
@@ -619,11 +612,8 @@ yy56:
 yy57:
 		YYCURSOR = YYMARKER;
 		if (yyaccept <= 1) {
-			if (yyaccept == 0) {
-				goto yy45;
-			} else {
-				goto yy47;
-			}
+			if (yyaccept == 0) goto yy45;
+			else goto yy47;
 		} else {
 			goto yy74;
 		}
@@ -640,7 +630,7 @@ yy59:
 yy60:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
@@ -691,7 +681,7 @@ yy61:
 yy62:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
 				&&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57, &&yy57,
@@ -939,7 +929,7 @@ yy83:
 yy84:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
@@ -977,15 +967,12 @@ yy84:
 		}
 yy85:
 		YYCURSOR = YYMARKER;
-		if (yyaccept == 0) {
-			goto yy83;
-		} else {
-			goto yy100;
-		}
+		if (yyaccept == 0) goto yy83;
+		else goto yy100;
 yy86:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
@@ -1036,7 +1023,7 @@ yy87:
 yy88:
 		yych = *++YYCURSOR;
 		{
-			static void *yytarget[256] = {
+			static const void* yytarget[256] = {
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,
 				&&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85, &&yy85,

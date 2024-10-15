@@ -9,7 +9,8 @@
 		yyt1 = YYCURSOR;
 		goto yy2;
 	}
-	yyt1 = yyt2 = YYCURSOR;
+	yyt1 = YYCURSOR;
+	yyt2 = YYCURSOR;
 yy1:
 	yynmatch = 3;
 	yypmatch[2] = yyt1;

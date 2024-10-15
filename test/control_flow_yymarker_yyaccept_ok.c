@@ -40,16 +40,13 @@ yy6:
 	}
 yy7:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy1;
-	} else {
-		goto yy5;
-	}
+	if (yyaccept == 0) goto yy1;
+	else goto yy5;
 yy8:
 	++YYCURSOR;
 #line 4 "control_flow_yymarker_yyaccept_ok.re"
 	{ action1 }
-#line 53 "control_flow_yymarker_yyaccept_ok.c"
+#line 50 "control_flow_yymarker_yyaccept_ok.c"
 }
 #line 8 "control_flow_yymarker_yyaccept_ok.re"
 

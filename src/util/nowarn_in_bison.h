@@ -7,6 +7,7 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wunused-macros"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #pragma GCC diagnostic ignored "-Wmissing-variable-declarations"
 #pragma GCC diagnostic ignored "-Wunreachable-code"
 #pragma GCC diagnostic ignored "-Wunreachable-code-break"
@@ -30,6 +31,9 @@
 #endif
 
 #ifdef YYPUSH
+#endif
+
+#ifdef yydebug
 #endif
 
 #endif // _RE2C_UTIL_NOWARN_IN_BISON_

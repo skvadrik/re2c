@@ -24,7 +24,6 @@ class Msg {
   public:
     inline Msg(): filenames(), warn(*this), locfmt(LOCFMT_GNU), error_seen(false) {}
 
-    size_t register_filename(const std::string& filename);
     void error(const loc_t& loc, const char* fmt, ...) RE2C_ATTR((format(printf, 3, 4)));
     void verror(const loc_t& loc, const char* fmt, va_list args) RE2C_ATTR((format(printf, 3, 0)));
     void warning(const char* type, const loc_t& loc, bool error, const char* fmt, ...)

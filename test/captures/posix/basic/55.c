@@ -17,8 +17,27 @@ yy1:
 yy2:
 	++YYCURSOR;
 	yynmatch = 10;
-	yypmatch[0] = yypmatch[2] = yypmatch[4] = yypmatch[6] = yypmatch[8] = yypmatch[10] = yypmatch[12] = yypmatch[14] = yypmatch[16] = yypmatch[18] = YYCURSOR - 1;
-	yypmatch[1] = yypmatch[3] = yypmatch[5] = yypmatch[7] = yypmatch[9] = yypmatch[11] = yypmatch[13] = yypmatch[15] = yypmatch[17] = yypmatch[19] = YYCURSOR;
+	yypmatch[0] = YYCURSOR;
+	yypmatch[0] -= 1;
+	yypmatch[2] = yypmatch[0];
+	yypmatch[4] = yypmatch[0];
+	yypmatch[6] = yypmatch[0];
+	yypmatch[8] = yypmatch[0];
+	yypmatch[10] = yypmatch[0];
+	yypmatch[12] = yypmatch[0];
+	yypmatch[14] = yypmatch[0];
+	yypmatch[16] = yypmatch[0];
+	yypmatch[18] = yypmatch[0];
+	yypmatch[1] = YYCURSOR;
+	yypmatch[3] = yypmatch[1];
+	yypmatch[5] = yypmatch[1];
+	yypmatch[7] = yypmatch[1];
+	yypmatch[9] = yypmatch[1];
+	yypmatch[11] = yypmatch[1];
+	yypmatch[13] = yypmatch[1];
+	yypmatch[15] = yypmatch[1];
+	yypmatch[17] = yypmatch[1];
+	yypmatch[19] = yypmatch[1];
 	{}
 }
 

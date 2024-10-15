@@ -50,11 +50,8 @@ yy6:
 	}
 yy7:
 	YYCURSOR = YYMARKER;
-	if (yyaccept == 0) {
-		goto yy2;
-	} else {
-		goto yy5;
-	}
+	if (yyaccept == 0) goto yy2;
+	else goto yy5;
 yy8:
 	yych = *++YYCURSOR;
 	if (yych <= 0x00) goto yy10;
