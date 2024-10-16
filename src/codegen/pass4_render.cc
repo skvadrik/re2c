@@ -171,7 +171,7 @@ class RenderVar : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_INIT) {
+        if (opt == StxLOpt::INIT) {
             return !code->is_default;
         }
         UNREACHABLE();
@@ -264,7 +264,7 @@ class RenderIfThenElse : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
-            case StxLOpt::HAVE_COND: return curr_branch->cond != nullptr;
+            case StxLOpt::COND: return curr_branch->cond != nullptr;
             case StxLOpt::MANY: return nbranches > 1;
             default: break;
         }
@@ -699,7 +699,7 @@ class RenderFnDef : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_TYPE) {
+        if (opt == StxLOpt::TYPE) {
             return code->type != nullptr;
         }
         UNREACHABLE();
@@ -763,9 +763,9 @@ class RenderFnCall : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
-        case StxLOpt::HAVE_ARGS:
+        case StxLOpt::ARGS:
             return nargs > 0;
-        case StxLOpt::HAVE_RETVAL:
+        case StxLOpt::RETVAL:
             return code->retval != nullptr;
         default:
             UNREACHABLE();
@@ -1199,7 +1199,7 @@ class RenderEnum : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_INIT) {
+        if (opt == StxLOpt::INIT) {
             return code->elem_nums != nullptr;
         }
         UNREACHABLE();

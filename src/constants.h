@@ -196,8 +196,8 @@ enum class StxGOpt {
     CODE_MODEL_REC_FUNC,
     START_CONDITIONS,
     STORABLE_STATE,
-    HAVE_DATE,
-    HAVE_VER,
+    DATE,
+    VER,
     CASE_RANGES,
     UNSAFE,
     MONADIC,
@@ -207,11 +207,11 @@ enum class StxGOpt {
 enum class StxLOpt {
     CAST,
     CHAR_LITERALS,
-    HAVE_ARGS,
-    HAVE_COND,
-    HAVE_INIT,
-    HAVE_TYPE,
-    HAVE_RETVAL,
+    ARGS,
+    COND,
+    INIT,
+    TYPE,
+    RETVAL,
     MANY,
     NESTED
 };

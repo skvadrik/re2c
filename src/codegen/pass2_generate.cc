@@ -330,7 +330,7 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
                 }
             } else {
                 // Pick one of the base tags to store negative value (with generic API we cannot
-                // rely on a NULL constant). `code:yyshiftstag` or YYSHIFTSTAG will compare the tag
+                // rely on a NULL constant). `::yyshiftstag` or YYSHIFTSTAG will compare the tag
                 // to it before shifting. These operations must go after all uses of the base tag.
                 if (negtag == nullptr) negtag = base;
                 append(fixops, code_copy_tag(alc, *first, base, false));

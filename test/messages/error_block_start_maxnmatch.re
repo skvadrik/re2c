@@ -4,4 +4,4 @@
 /*!maxnmatch:re2c	*/ // ok, space
 /*!maxnmatch:re2c
 */ // ok, newline
-/*!maxnmatch:re2cx */ // bad
+/*!maxnmatch:re2x */ // bad

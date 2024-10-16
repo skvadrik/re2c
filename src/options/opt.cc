@@ -500,13 +500,13 @@ RE2C_STX_OPTS
 Ret Opt::check_code_##name(Warn& warn) { \
     if (glob.code_##name == nullptr) { \
         /* we don't have a specific location => start of the current of syntax file */ \
-        warn.undefined_syntax_config(ATSTART, "code:" #name); \
+        warn.undefined_syntax_config(ATSTART, "::" #name); \
         const_cast<conopt_t&>(glob).code_##name = make_code_undefined(); \
     } \
     static const std::unordered_set<StxVarId> vs vars; \
     static const std::unordered_set<StxVarId> lvs list_vars; \
     static const std::unordered_set<StxLOpt> cs conds; \
-    return validate_conf_code(glob.code_##name, "code:" #name, vs, lvs, cs); \
+    return validate_conf_code(glob.code_##name, "::" #name, vs, lvs, cs); \
 }
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
@@ -835,9 +835,9 @@ static bool eval_cond(
             return opts->start_conditions;
         case StxGOpt::STORABLE_STATE:
             return opts->storable_state;
-        case StxGOpt::HAVE_DATE:
+        case StxGOpt::DATE:
             return opts->date;
-        case StxGOpt::HAVE_VER:
+        case StxGOpt::VER:
             return opts->version;
         case StxGOpt::CASE_RANGES:
             return opts->case_ranges;
@@ -912,7 +912,7 @@ class GenOpt : public RenderCallback {
 
 #define MUTCODE(name) \
 std::string opt_t::gen_##name(const StxCodes* code) const { \
-    if (code == nullptr) return "<undefined code:" #name ">"; \
+    if (code == nullptr) return "<undefined code template ::" #name ">"; \
     std::ostringstream os; \
     GenOpt callback(os, this, StxCodeId::STX_##name); \
     eval_code_conf(StxCodeId::STX_##name, #name, code, os, callback); \
@@ -964,7 +964,7 @@ void opt_t::eval_code_conf(StxCodeId id, const char* name, const StxCodes* code,
             }
             break;
         case StxCodeType::UD:
-            os << "<undefined code:" << name << ">";
+            os << "<undefined code template ::" << name << ">";
             break;
         }
     }

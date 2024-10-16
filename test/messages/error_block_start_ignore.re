@@ -4,4 +4,4 @@
 /*!ignore:re2c	*/ // ok, space
 /*!ignore:re2c
 */ // ok, newline
-/*!ignore:re2cx */ // bad
+/*!ignore:re2 */ // bad

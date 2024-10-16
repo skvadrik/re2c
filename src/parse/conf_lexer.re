@@ -187,49 +187,49 @@ Ret Input::lex_conf(Opt& opts) {
     "tags:negative"   { RET_CONF_CODE(tags_negative); }
     "invert-captures" { RET_CONF_BOOL(captures_invert); }
 
-    "define:YYBACKUP"                    { RET_CONF_CODE(api_backup); }
-    "define:YYBACKUPCTX"                 { RET_CONF_CODE(api_backup_ctx); }
-    "define:YYCONDTYPE"                  { RET_CONF_CODE(api_cond_type); }
-    "define:YYCOPYMTAG"                  { RET_CONF_CODE(api_mtag_copy); }
-    "define:YYCOPYSTAG"                  { RET_CONF_CODE(api_stag_copy); }
-    "define:YYCTYPE"                     { RET_CONF_CODE(api_char_type); }
-    "define:YYCTXMARKER"                 { RET_CONF_CODE(api_ctxmarker); }
-    "define:YYINPUT"                     { RET_CONF_CODE(api_input); }
-    "define:YYCURSOR"                    { RET_CONF_CODE(api_cursor); }
-    "define:YYDEBUG"                     { RET_CONF_CODE(api_debug); }
-    "define:YYFILL"                      { RET_CONF_CODE(api_fill); }
-    "define:YYFILL@len"                  { RET_CONF_STR(fill_param); }
-    "define:YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
-    "define:YYGETACCEPT"                 { RET_CONF_CODE(api_accept_get); }
-    "define:YYGETCOND" "ITION"?          { RET_CONF_CODE(api_cond_get); }
-    "define:YYGETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_get_naked); }
-    "define:YYGETSTATE"                  { RET_CONF_CODE(api_state_get); }
-    "define:YYGETSTATE:naked"            { RET_CONF_BOOL(state_get_naked); }
-    "define:YYLESSTHAN"                  { RET_CONF_CODE(api_less_than); }
-    "define:YYLIMIT"                     { RET_CONF_CODE(api_limit); }
-    "define:YYMARKER"                    { RET_CONF_CODE(api_marker); }
-    "define:YYMAXFILL"                   { RET_CONF_CODE(api_maxfill); }
-    "define:YYMAXNMATCH"                 { RET_CONF_CODE(api_maxnmatch); }
-    "define:YYMTAGN"                     { RET_CONF_CODE(api_mtag_neg); }
-    "define:YYMTAGP"                     { RET_CONF_CODE(api_mtag_pos); }
-    "define:YYPEEK"                      { RET_CONF_CODE(api_peek); }
-    "define:YYRESTORE"                   { RET_CONF_CODE(api_restore); }
-    "define:YYRESTORECTX"                { RET_CONF_CODE(api_restore_ctx); }
-    "define:YYRESTORETAG"                { RET_CONF_CODE(api_restore_tag); }
-    "define:YYSETACCEPT"                 { RET_CONF_CODE(api_accept_set); }
-    "define:YYSETCOND" "ITION"?          { RET_CONF_CODE(api_cond_set); }
-    "define:YYSETCOND" "ITION"? "@cond"  { RET_CONF_STR(cond_set_param); }
-    "define:YYSETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_set_naked); }
-    "define:YYSETSTATE"                  { RET_CONF_CODE(api_state_set); }
-    "define:YYSETSTATE:naked"            { RET_CONF_BOOL(state_set_naked); }
-    "define:YYSETSTATE@state"            { RET_CONF_STR(state_set_param); }
-    "define:YYSHIFT"                     { RET_CONF_CODE(api_shift); }
-    "define:YYSHIFTSTAG"                 { RET_CONF_CODE(api_stag_shift); }
-    "define:YYSHIFTMTAG"                 { RET_CONF_CODE(api_mtag_shift); }
-    "define:YYSKIP"                      { RET_CONF_CODE(api_skip); }
-    "define:YYSTAGN"                     { RET_CONF_CODE(api_stag_neg); }
-    "define:YYSTAGP"                     { RET_CONF_CODE(api_stag_pos); }
-    "define:YYFN" {
+    "define:"? "YYBACKUP"                    { RET_CONF_CODE(api_backup); }
+    "define:"? "YYBACKUPCTX"                 { RET_CONF_CODE(api_backup_ctx); }
+    "define:"? "YYCONDTYPE"                  { RET_CONF_CODE(api_cond_type); }
+    "define:"? "YYCOPYMTAG"                  { RET_CONF_CODE(api_mtag_copy); }
+    "define:"? "YYCOPYSTAG"                  { RET_CONF_CODE(api_stag_copy); }
+    "define:"? "YYCTYPE"                     { RET_CONF_CODE(api_char_type); }
+    "define:"? "YYCTXMARKER"                 { RET_CONF_CODE(api_ctxmarker); }
+    "define:"? "YYINPUT"                     { RET_CONF_CODE(api_input); }
+    "define:"? "YYCURSOR"                    { RET_CONF_CODE(api_cursor); }
+    "define:"? "YYDEBUG"                     { RET_CONF_CODE(api_debug); }
+    "define:"? "YYFILL"                      { RET_CONF_CODE(api_fill); }
+    "define:"? "YYFILL@len"                  { RET_CONF_STR(fill_param); }
+    "define:"? "YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
+    "define:"? "YYGETACCEPT"                 { RET_CONF_CODE(api_accept_get); }
+    "define:"? "YYGETCOND" "ITION"?          { RET_CONF_CODE(api_cond_get); }
+    "define:"? "YYGETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_get_naked); }
+    "define:"? "YYGETSTATE"                  { RET_CONF_CODE(api_state_get); }
+    "define:"? "YYGETSTATE:naked"            { RET_CONF_BOOL(state_get_naked); }
+    "define:"? "YYLESSTHAN"                  { RET_CONF_CODE(api_less_than); }
+    "define:"? "YYLIMIT"                     { RET_CONF_CODE(api_limit); }
+    "define:"? "YYMARKER"                    { RET_CONF_CODE(api_marker); }
+    "define:"? "YYMAXFILL"                   { RET_CONF_CODE(api_maxfill); }
+    "define:"? "YYMAXNMATCH"                 { RET_CONF_CODE(api_maxnmatch); }
+    "define:"? "YYMTAGN"                     { RET_CONF_CODE(api_mtag_neg); }
+    "define:"? "YYMTAGP"                     { RET_CONF_CODE(api_mtag_pos); }
+    "define:"? "YYPEEK"                      { RET_CONF_CODE(api_peek); }
+    "define:"? "YYRESTORE"                   { RET_CONF_CODE(api_restore); }
+    "define:"? "YYRESTORECTX"                { RET_CONF_CODE(api_restore_ctx); }
+    "define:"? "YYRESTORETAG"                { RET_CONF_CODE(api_restore_tag); }
+    "define:"? "YYSETACCEPT"                 { RET_CONF_CODE(api_accept_set); }
+    "define:"? "YYSETCOND" "ITION"?          { RET_CONF_CODE(api_cond_set); }
+    "define:"? "YYSETCOND" "ITION"? "@cond"  { RET_CONF_STR(cond_set_param); }
+    "define:"? "YYSETCOND" "ITION"? ":naked" { RET_CONF_BOOL(cond_set_naked); }
+    "define:"? "YYSETSTATE"                  { RET_CONF_CODE(api_state_set); }
+    "define:"? "YYSETSTATE:naked"            { RET_CONF_BOOL(state_set_naked); }
+    "define:"? "YYSETSTATE@state"            { RET_CONF_STR(state_set_param); }
+    "define:"? "YYSHIFT"                     { RET_CONF_CODE(api_shift); }
+    "define:"? "YYSHIFTSTAG"                 { RET_CONF_CODE(api_stag_shift); }
+    "define:"? "YYSHIFTMTAG"                 { RET_CONF_CODE(api_mtag_shift); }
+    "define:"? "YYSKIP"                      { RET_CONF_CODE(api_skip); }
+    "define:"? "YYSTAGN"                     { RET_CONF_CODE(api_stag_neg); }
+    "define:"? "YYSTAGP"                     { RET_CONF_CODE(api_stag_pos); }
+    "define:"? "YYFN" {
         CHECK_RET(lex_conf_list(opts));
         if (tmp_list.size() < 1) {
             RET_FAIL(error_at_tok("`re2c:define:YYFN` value should be a nonempty list of strings"));
@@ -238,22 +238,22 @@ Ret Input::lex_conf(Opt& opts) {
         return Ret::OK;
     }
 
-    "variable:"  "yycond"          { RET_CONF_STR(var_cond); }
-    "variable:"  "yyctable"        { RET_CONF_STR(var_cond_table); }
-    "variable:"  "yyaccept"        { RET_CONF_STR(var_accept); }
-    "variable:"  "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }
-    "variable:"  "yystate"         { RET_CONF_STR(var_state); }
-    "variable:"  "yynmatch"        { RET_CONF_STR(var_nmatch); }
-    "variable:"  "yypmatch"        { RET_CONF_STR(var_pmatch); }
-    "variable:"  "yyrecord"        { RET_CONF_STR(var_record); }
-    "variable:"  "yych"            { RET_CONF_STR(var_char); }
+    "variable:"? "yycond"          { RET_CONF_STR(var_cond); }
+    "variable:"? "yyctable"        { RET_CONF_STR(var_cond_table); }
+    "variable:"? "yyaccept"        { RET_CONF_STR(var_accept); }
+    "variable:"? "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }
+    "variable:"? "yystate"         { RET_CONF_STR(var_state); }
+    "variable:"? "yynmatch"        { RET_CONF_STR(var_nmatch); }
+    "variable:"? "yypmatch"        { RET_CONF_STR(var_pmatch); }
+    "variable:"? "yyrecord"        { RET_CONF_STR(var_record); }
+    "variable:"? "yych"            { RET_CONF_STR(var_char); }
     "variable:"? "yych:conversion" { RET_CONF_BOOL(char_conv); }
     "variable:"? "yych:literals"   { goto char_lit; }
     "variable:"? "yych:emit"       { RET_CONF_BOOL(char_emit); }
-    "variable:"  "yybm"            { RET_CONF_STR(var_bitmaps); }
+    "variable:"? "yybm"            { RET_CONF_STR(var_bitmaps); }
     "variable:"? "yybm:hex"        { RET_CONF_BOOL(bitmaps_hex); }
-    "variable:"  "yyfill"          { RET_CONF_STR(var_fill); }
-    "variable:"  "yystable"        { return lex_conf_string(opts); } // deprecated
+    "variable:"? "yyfill"          { RET_CONF_STR(var_fill); }
+    "variable:"? "yystable"        { return lex_conf_string(opts); } // deprecated
 
     "cond:abort"                         { RET_CONF_BOOL(cond_abort); }
     "cond:prefix" | "condprefix"         { RET_CONF_STR(cond_label_prefix); }
@@ -549,7 +549,7 @@ Ret Input::lex_conf_code(Opt& opts) {
 } while(0)
 
 Ret Input::lex_conf_token(CONF_STYPE* yylval, int& token, Opt& opts) {
-    if (conf_kind == ConfKind::CODE) { // one of pre-lexed `conf:` configuratins
+    if (conf_kind == ConfKind::CODE) { // one of pre-lexed code templates
         conf_kind = ConfKind::NONE;
         yylval->codeptr = &tmp_code;
         RET_TOK(CONF_CODE);
@@ -581,81 +581,81 @@ start:
 
     [=?!&|:,(){}[\]] { RET_TOK(cur[-1]); }
 
-    "code:var_local"              { RET_CODE(code_var_local); }
-    "code:var_global"             { RET_CODE(code_var_global); }
-    "code:const_local"            { RET_CODE(code_const_local); }
-    "code:const_global"           { RET_CODE(code_const_global); }
-    "code:array_local"            { RET_CODE(code_array_local); }
-    "code:array_global"           { RET_CODE(code_array_global); }
-    "code:array_elem"             { RET_CODE(code_array_elem); }
-    "code:type_int"               { RET_CODE(code_type_int); }
-    "code:type_uint"              { RET_CODE(code_type_uint); }
-    "code:type_cond_enum"         { RET_CODE(code_type_cond_enum); }
-    "code:type_yybm"              { RET_CODE(code_type_yybm); }
-    "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
-    "code:assign"                 { RET_CODE(code_assign); }
-    "code:cmp_eq"                 { RET_CODE(code_cmp_eq); }
-    "code:cmp_ne"                 { RET_CODE(code_cmp_ne); }
-    "code:cmp_lt"                 { RET_CODE(code_cmp_lt); }
-    "code:cmp_gt"                 { RET_CODE(code_cmp_gt); }
-    "code:cmp_le"                 { RET_CODE(code_cmp_le); }
-    "code:cmp_ge"                 { RET_CODE(code_cmp_ge); }
-    "code:if_then_else"           { RET_CODE(code_if_then_else); }
-    "code:if_then_else_oneline"   { RET_CODE(code_if_then_else_oneline); }
-    "code:switch"                 { RET_CODE(code_switch); }
-    "code:switch_cases"           { RET_CODE(code_switch_cases); }
-    "code:switch_cases_oneline"   { RET_CODE(code_switch_cases_oneline); }
-    "code:switch_case_range"      { RET_CODE(code_switch_case_range); }
-    "code:switch_case_default"    { RET_CODE(code_switch_case_default); }
-    "code:loop"                   { RET_CODE(code_loop); }
-    "code:continue"               { RET_CODE(code_continue); }
-    "code:goto"                   { RET_CODE(code_goto); }
-    "code:enum"                   { RET_CODE(code_enum); }
-    "code:enum_elem"              { RET_CODE(code_enum_elem); }
-    "code:fndecl"                 { RET_CODE(code_fndecl); }
-    "code:fndef"                  { RET_CODE(code_fndef); }
-    "code:fncall"                 { RET_CODE(code_fncall); }
-    "code:tailcall"               { RET_CODE(code_tailcall); }
-    "code:recursive_functions"    { RET_CODE(code_recursive_functions); }
-    "code:fingerprint"            { RET_CODE(code_fingerprint); }
-    "code:line_info"              { RET_CODE(code_line_info); }
-    "code:abort"                  { RET_CODE(code_abort); }
-    "code:yydebug"                { RET_CODE(code_yydebug); }
-    "code:yypeek"                 { RET_CODE(code_yypeek); }
-    "code:yyskip"                 { RET_CODE(code_yyskip); }
-    "code:yybackup"               { RET_CODE(code_yybackup); }
-    "code:yybackupctx"            { RET_CODE(code_yybackupctx); }
-    "code:yyrestore"              { RET_CODE(code_yyrestore); }
-    "code:yyrestorectx"           { RET_CODE(code_yyrestorectx); }
-    "code:yyrestoretag"           { RET_CODE(code_yyrestoretag); }
-    "code:yyshift"                { RET_CODE(code_yyshift); }
-    "code:yyshiftmtag"            { RET_CODE(code_yyshiftmtag); }
-    "code:yyshiftstag"            { RET_CODE(code_yyshiftstag); }
-    "code:yystagn"                { RET_CODE(code_yystagn); }
-    "code:yymtagn"                { RET_CODE(code_yymtagn); }
-    "code:yystagp"                { RET_CODE(code_yystagp); }
-    "code:yymtagp"                { RET_CODE(code_yymtagp); }
-    "code:yycopymtag"             { RET_CODE(code_yycopymtag); }
-    "code:yycopystag"             { RET_CODE(code_yycopystag); }
-    "code:yyskip_yypeek"          { RET_CODE(code_yyskip_yypeek); }
-    "code:yypeek_yyskip"          { RET_CODE(code_yypeek_yyskip); }
-    "code:yyskip_yybackup"        { RET_CODE(code_yyskip_yybackup); }
-    "code:yybackup_yyskip"        { RET_CODE(code_yybackup_yyskip); }
-    "code:yybackup_yypeek"        { RET_CODE(code_yybackup_yypeek); }
-    "code:yyskip_yybackup_yypeek" { RET_CODE(code_yyskip_yybackup_yypeek); }
-    "code:yybackup_yypeek_yyskip" { RET_CODE(code_yybackup_yypeek_yyskip); }
-    "code:yygetaccept"            { RET_CODE(code_yygetaccept); }
-    "code:yysetaccept"            { RET_CODE(code_yysetaccept); }
-    "code:yygetcond"              { RET_CODE(code_yygetcond); }
-    "code:yysetcond"              { RET_CODE(code_yysetcond); }
-    "code:yygetstate"             { RET_CODE(code_yygetstate); }
-    "code:yysetstate"             { RET_CODE(code_yysetstate); }
-    "code:yylessthan"             { RET_CODE(code_yylessthan); }
-    "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
-    "code:yybm_match"             { RET_CODE(code_yybm_match); }
+    "::var_local"              { RET_CODE(code_var_local); }
+    "::var_global"             { RET_CODE(code_var_global); }
+    "::const_local"            { RET_CODE(code_const_local); }
+    "::const_global"           { RET_CODE(code_const_global); }
+    "::array_local"            { RET_CODE(code_array_local); }
+    "::array_global"           { RET_CODE(code_array_global); }
+    "::array_elem"             { RET_CODE(code_array_elem); }
+    "::type_int"               { RET_CODE(code_type_int); }
+    "::type_uint"              { RET_CODE(code_type_uint); }
+    "::type_cond_enum"         { RET_CODE(code_type_cond_enum); }
+    "::type_yybm"              { RET_CODE(code_type_yybm); }
+    "::type_yytarget"          { RET_CODE(code_type_yytarget); }
+    "::assign"                 { RET_CODE(code_assign); }
+    "::cmp_eq"                 { RET_CODE(code_cmp_eq); }
+    "::cmp_ne"                 { RET_CODE(code_cmp_ne); }
+    "::cmp_lt"                 { RET_CODE(code_cmp_lt); }
+    "::cmp_gt"                 { RET_CODE(code_cmp_gt); }
+    "::cmp_le"                 { RET_CODE(code_cmp_le); }
+    "::cmp_ge"                 { RET_CODE(code_cmp_ge); }
+    "::if_then_else"           { RET_CODE(code_if_then_else); }
+    "::if_then_else_oneline"   { RET_CODE(code_if_then_else_oneline); }
+    "::switch"                 { RET_CODE(code_switch); }
+    "::switch_cases"           { RET_CODE(code_switch_cases); }
+    "::switch_cases_oneline"   { RET_CODE(code_switch_cases_oneline); }
+    "::switch_case_range"      { RET_CODE(code_switch_case_range); }
+    "::switch_case_default"    { RET_CODE(code_switch_case_default); }
+    "::loop"                   { RET_CODE(code_loop); }
+    "::continue"               { RET_CODE(code_continue); }
+    "::goto"                   { RET_CODE(code_goto); }
+    "::enum"                   { RET_CODE(code_enum); }
+    "::enum_elem"              { RET_CODE(code_enum_elem); }
+    "::fndecl"                 { RET_CODE(code_fndecl); }
+    "::fndef"                  { RET_CODE(code_fndef); }
+    "::fncall"                 { RET_CODE(code_fncall); }
+    "::tailcall"               { RET_CODE(code_tailcall); }
+    "::recursive_functions"    { RET_CODE(code_recursive_functions); }
+    "::fingerprint"            { RET_CODE(code_fingerprint); }
+    "::line_info"              { RET_CODE(code_line_info); }
+    "::abort"                  { RET_CODE(code_abort); }
+    "::yydebug"                { RET_CODE(code_yydebug); }
+    "::yypeek"                 { RET_CODE(code_yypeek); }
+    "::yyskip"                 { RET_CODE(code_yyskip); }
+    "::yybackup"               { RET_CODE(code_yybackup); }
+    "::yybackupctx"            { RET_CODE(code_yybackupctx); }
+    "::yyrestore"              { RET_CODE(code_yyrestore); }
+    "::yyrestorectx"           { RET_CODE(code_yyrestorectx); }
+    "::yyrestoretag"           { RET_CODE(code_yyrestoretag); }
+    "::yyshift"                { RET_CODE(code_yyshift); }
+    "::yyshiftmtag"            { RET_CODE(code_yyshiftmtag); }
+    "::yyshiftstag"            { RET_CODE(code_yyshiftstag); }
+    "::yystagn"                { RET_CODE(code_yystagn); }
+    "::yymtagn"                { RET_CODE(code_yymtagn); }
+    "::yystagp"                { RET_CODE(code_yystagp); }
+    "::yymtagp"                { RET_CODE(code_yymtagp); }
+    "::yycopymtag"             { RET_CODE(code_yycopymtag); }
+    "::yycopystag"             { RET_CODE(code_yycopystag); }
+    "::yyskip_yypeek"          { RET_CODE(code_yyskip_yypeek); }
+    "::yypeek_yyskip"          { RET_CODE(code_yypeek_yyskip); }
+    "::yyskip_yybackup"        { RET_CODE(code_yyskip_yybackup); }
+    "::yybackup_yyskip"        { RET_CODE(code_yybackup_yyskip); }
+    "::yybackup_yypeek"        { RET_CODE(code_yybackup_yypeek); }
+    "::yyskip_yybackup_yypeek" { RET_CODE(code_yyskip_yybackup_yypeek); }
+    "::yybackup_yypeek_yyskip" { RET_CODE(code_yybackup_yypeek_yyskip); }
+    "::yygetaccept"            { RET_CODE(code_yygetaccept); }
+    "::yysetaccept"            { RET_CODE(code_yysetaccept); }
+    "::yygetcond"              { RET_CODE(code_yygetcond); }
+    "::yysetcond"              { RET_CODE(code_yysetcond); }
+    "::yygetstate"             { RET_CODE(code_yygetstate); }
+    "::yysetstate"             { RET_CODE(code_yysetstate); }
+    "::yylessthan"             { RET_CODE(code_yylessthan); }
+    "::yybm_filter"            { RET_CODE(code_yybm_filter); }
+    "::yybm_match"             { RET_CODE(code_yybm_match); }
 
-    "code:" [a-z0-9_]+ {
-        RET_FAIL(error_at_tok("unknown configuration: '%.*s'", int(cur - tok), tok));
+    "::" [a-z0-9_]+ {
+        RET_FAIL(error_at_tok("unknown code template: '%.*s'", int(cur - tok), tok));
     }
 
     // local variables
@@ -742,53 +742,57 @@ start:
     // Global (immutable) conditionals.
     //
     // A subset of constant options that is exported for use in syntax files.
-    // These options may be used both in `conf:*` configurations before the input file is parsed
-    // and in `code:*` configurations that are evaluated during codegen.
+    // These options may be used both in configurations before the input file is parsed and
+    // in code templates that are evaluated during codegen.
     //
     // These options are part of the syntax file API.
 
-    "code_model.goto_label"          { RET_COND(globopts->code_model == CodeModel::GOTO_LABEL); }
-    "code_model.loop_switch"         { RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH); }
-    "code_model.recursive_functions" { RET_COND(globopts->code_model == CodeModel::REC_FUNC); }
+    ".code_model.goto_label"          { RET_COND(globopts->code_model == CodeModel::GOTO_LABEL); }
+    ".code_model.loop_switch"         { RET_COND(globopts->code_model == CodeModel::LOOP_SWITCH); }
+    ".code_model.recursive_functions" { RET_COND(globopts->code_model == CodeModel::REC_FUNC); }
 
     // Global (mutable) conditionals.
     //
-    // A subset of options is exported for use in `code:*` configurations in syntax files.
+    // A subset of options is exported for use in code templates in syntax files.
     // Both constant and mutable options are allowed here, as they are used during codegen,
     // when block-level options are already known.
     //
     // These options are part of the syntax file API.
 
-    "api.simple"                     { RET_GOPT(StxGOpt::API_SIMPLE); }
-    "api.generic"                    { RET_GOPT(StxGOpt::API_GENERIC); }
-    "api.record"                     { RET_GOPT(StxGOpt::API_RECORD); }
-    "api_style.functions"            { RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
-    "api_style.freeform"             { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
-    "start_conditions"               { RET_GOPT(StxGOpt::START_CONDITIONS); }
-    "storable_state"                 { RET_GOPT(StxGOpt::STORABLE_STATE); }
-    "have_date"                      { RET_GOPT(StxGOpt::HAVE_DATE); }
-    "have_version"                   { RET_GOPT(StxGOpt::HAVE_VER); }
-    "case_ranges"                    { RET_GOPT(StxGOpt::CASE_RANGES); }
-    "unsafe"                         { RET_GOPT(StxGOpt::UNSAFE); }
-    "monadic"                        { RET_GOPT(StxGOpt::MONADIC); }
-    "loop_label"                     { RET_GOPT(StxGOpt::LOOP_LABEL); }
+    ".api.simple"          { RET_GOPT(StxGOpt::API_SIMPLE); }
+    ".api.generic"         { RET_GOPT(StxGOpt::API_GENERIC); }
+    ".api.record"          { RET_GOPT(StxGOpt::API_RECORD); }
+    ".api_style.functions" { RET_GOPT(StxGOpt::API_STYLE_FUNCTIONS); }
+    ".api_style.freeform"  { RET_GOPT(StxGOpt::API_STYLE_FREEFORM); }
+    ".start_conditions"    { RET_GOPT(StxGOpt::START_CONDITIONS); }
+    ".storable_state"      { RET_GOPT(StxGOpt::STORABLE_STATE); }
+    ".date"                { RET_GOPT(StxGOpt::DATE); }
+    ".version"             { RET_GOPT(StxGOpt::VER); }
+    ".case_ranges"         { RET_GOPT(StxGOpt::CASE_RANGES); }
+    ".unsafe"              { RET_GOPT(StxGOpt::UNSAFE); }
+    ".monadic"             { RET_GOPT(StxGOpt::MONADIC); }
+    ".loop_label"          { RET_GOPT(StxGOpt::LOOP_LABEL); }
 
-    // Local conditionals (specific to each `code:*` configuration in syntax file).
+    // Local conditionals (specific to each code template configuration in syntax file).
     //
     // These options are part of the syntax file API.
 
-    "cast"            { RET_LOPT(StxLOpt::CAST); }
-    "char_literals"   { RET_LOPT(StxLOpt::CHAR_LITERALS); }
-    "have_args"       { RET_LOPT(StxLOpt::HAVE_ARGS); }
-    "have_cond"       { RET_LOPT(StxLOpt::HAVE_COND); }
-    "have_init"       { RET_LOPT(StxLOpt::HAVE_INIT); }
-    "have_retval"     { RET_LOPT(StxLOpt::HAVE_RETVAL); }
-    "have_type"       { RET_LOPT(StxLOpt::HAVE_TYPE); }
-    "many"            { RET_LOPT(StxLOpt::MANY); }
-    "nested"          { RET_LOPT(StxLOpt::NESTED); }
+    ".cast"                { RET_LOPT(StxLOpt::CAST); }
+    ".char_literals"       { RET_LOPT(StxLOpt::CHAR_LITERALS); }
+    ".args"                { RET_LOPT(StxLOpt::ARGS); }
+    ".cond"                { RET_LOPT(StxLOpt::COND); }
+    ".init"                { RET_LOPT(StxLOpt::INIT); }
+    ".retval"              { RET_LOPT(StxLOpt::RETVAL); }
+    ".type"                { RET_LOPT(StxLOpt::TYPE); }
+    ".many"                { RET_LOPT(StxLOpt::MANY); }
+    ".nested"              { RET_LOPT(StxLOpt::NESTED); }
+
+    "." [a-z0-9_.]+ {
+        RET_FAIL(error_at_tok("unknown conditional: '%.*s'", int(cur - tok), tok));
+    }
 
     [a-z0-9_]+ {
-        RET_FAIL(error_at_tok("unknown variable or option: '%.*s'", int(cur - tok), tok));
+        RET_FAIL(error_at_tok("unknown variable: '%.*s'", int(cur - tok), tok));
     }
 
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
@@ -830,21 +834,22 @@ start:
 
     space+ { goto start; }
 
-    "conf:" { CHECK_RET(lex_conf(opts)); goto start; }
+    "" / "::" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
 
-    "supported_apis"        { SAVE_CONF_LIST(supported_apis); }
-    "supported_api_styles"  { SAVE_CONF_LIST(supported_api_styles); }
-    "supported_code_models" { SAVE_CONF_LIST(supported_code_models); }
-    "supported_targets"     { SAVE_CONF_LIST(supported_targets); }
-    "supported_features"    { SAVE_CONF_LIST(supported_features); }
+    ":" { CHECK_RET(lex_conf(opts)); goto start; }
 
-    "semicolons"               { SAVE_CONF_BOOL(semicolons); }
-    "backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
-    "single_quoted_strings"    { SAVE_CONF_BOOL(single_quoted_strings); }
-    "indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }
-    "wrap_blocks_in_braces"    { SAVE_CONF_BOOL(wrap_blocks_in_braces); }
+    ":supported_apis"        { SAVE_CONF_LIST(supported_apis); }
+    ":supported_api_styles"  { SAVE_CONF_LIST(supported_api_styles); }
+    ":supported_code_models" { SAVE_CONF_LIST(supported_code_models); }
+    ":supported_targets"     { SAVE_CONF_LIST(supported_targets); }
+    ":supported_features"    { SAVE_CONF_LIST(supported_features); }
 
-    "" / "code:" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
+    ":semicolons"               { SAVE_CONF_BOOL(semicolons); }
+    ":backtick_quoted_strings"  { SAVE_CONF_BOOL(backtick_quoted_strings); }
+    ":single_quoted_strings"    { SAVE_CONF_BOOL(single_quoted_strings); }
+    ":indentation_sensitive"    { SAVE_CONF_BOOL(indentation_sensitive); }
+    ":wrap_blocks_in_braces"    { SAVE_CONF_BOOL(wrap_blocks_in_braces); }
+
 
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */

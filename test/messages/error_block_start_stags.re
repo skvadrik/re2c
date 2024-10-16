@@ -4,4 +4,4 @@
 /*!stags:re2c	*/ // ok, space
 /*!stags:re2c
 */ // ok, newline
-/*!stags:re2cx */ // bad
+/*!stags:re2XXX */ // bad

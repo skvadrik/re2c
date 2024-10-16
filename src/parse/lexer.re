@@ -57,6 +57,7 @@ namespace re2c {
     esc_hex    = esc ("x" hex_digit{2} | [uX] hex_digit{4} | "U" hex_digit{8});
     esc_oct    = esc [0-3] [0-7]{2}; // max 1-byte octal value is '\377'
     esc_simple = esc [abfnrtv\\];
+    start      = @s "re2" [a-zA-Z_]* @e; // "re2c", "re2rust", etc.
 */
 
 /*!header:re2c:on*/
@@ -135,7 +136,7 @@ struct LexerState {
 
 Ret Input::lex_program(Output& out, std::string& block_name, InputBlock& kind) {
     const opt_t* opts = out.block().opts;
-    const uint8_t* x, *y;
+    const uint8_t* x, *y, *s, *e;
 
     if (is_eof()) RET_BLOCK(InputBlock::END);
 
@@ -151,65 +152,76 @@ loop:
         RET_BLOCK(InputBlock::GLOBAL);
     }
 
-    "/*!re2c" {
+    "/*!" start {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::GLOBAL);
     }
 
-    "/*!local:re2c" | "%{local" {
+    "/*!local:" start | "%{local" {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::LOCAL);
     }
 
-    "/*!rules:re2c" | "%{rules" {
+    "/*!rules:" start | "%{rules" {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::RULES);
     }
 
-    "/*!use:re2c" | "%{use" {
+    "/*!use:" start | "%{use" {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_opt_name(block_name));
         RET_BLOCK(InputBlock::USE);
     }
 
-    "/*!max:re2c" | "%{max" {
+    "/*!max:" start | "%{max" {
+        CHECK_RET(check_start(s, e));
         CHECK_RET(lex_special_block(out, CodeKind::MAXFILL, DCONF_FORMAT));
         goto next;
     }
 
-    "/*!maxnmatch:re2c" | "%{maxnmatch" {
+    "/*!maxnmatch:" start | "%{maxnmatch" {
+        CHECK_RET(check_start(s, e));
         CHECK_RET(lex_special_block(out, CodeKind::MAXNMATCH, DCONF_FORMAT));
         goto next;
     }
 
-    "/*!stags:re2c" | "%{stags" {
+    "/*!stags:" start | "%{stags" {
+        CHECK_RET(check_start(s, e));
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::STAGS, allow));
         goto next;
     }
 
-    "/*!mtags:re2c" | "%{mtags" {
+    "/*!mtags:" start | "%{mtags" {
+        CHECK_RET(check_start(s, e));
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::MTAGS, allow));
         goto next;
     }
 
-    "/*!svars:re2c" | "%{svars" {
+    "/*!svars:" start | "%{svars" {
+        CHECK_RET(check_start(s, e));
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::SVARS, allow));
         goto next;
     }
 
-    "/*!mvars:re2c" | "%{mvars" {
+    "/*!mvars:" start | "%{mvars" {
+        CHECK_RET(check_start(s, e));
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
         CHECK_RET(lex_special_block(out, CodeKind::MVARS, allow));
         goto next;
     }
 
-    "/*!conditions:re2c" | "/*!types:re2c" | "%{conditions" {
+    ("/*!conditions:" | "/*!types:") start | "%{conditions" {
+        CHECK_RET(check_start(s, e));
         out.cond_enum_autogen = false;
         out.warn_condition_order = false; // see note [condition order]
         uint32_t allow = DCONF_FORMAT | DCONF_SEPARATOR;
@@ -217,7 +229,8 @@ loop:
         goto next;
     }
 
-    "/*!getstate:re2c" | "%{getstate" {
+    "/*!getstate:" start | "%{getstate" {
+        CHECK_RET(check_start(s, e));
         out.state_goto = true;
         if (!opts->storable_state) {
             RET_FAIL(error_at_cur("`getstate` without `-f --storable-state` option"));
@@ -230,7 +243,8 @@ loop:
         goto next;
     }
 
-    "/*!header:re2c:on" | "%{header:on" {
+    "/*!header:" start ":on" | "%{header:on" {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         out.header_mode(true);
         out.need_header = true;
@@ -238,35 +252,39 @@ loop:
         goto next;
     }
 
-    "/*!header:re2c:off" | "%{header:off" {
+    "/*!header:" start ":off" | "%{header:off" {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         out.header_mode(false);
         if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         CHECK_RET(lex_block_end(out));
         goto next;
     }
-    "/*!header:re2c" | "%{header" {
+    "/*!header:" start | "%{header" {
+        CHECK_RET(check_start(s, e));
         RET_FAIL(error_at_cur("ill-formed `header` directive: expected `:on` or `:off`"));
     }
 
-    ("/*!include:re2c" | "%{include") space+ @x dstring @y / ws_or_eoc {
+    ("/*!include:" start | "%{include") space+ @x dstring @y / ws_or_eoc {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         CHECK_RET(lex_block_end(out));
         CHECK_RET(include(getstr(x + 1, y - 1), ptr));
         if (globopts->line_dirs) out.gen_stmt(code_line_info_input(alc, cur_loc()));
         goto next;
     }
-    "/*!include:re2c" | "%{include" {
+    "/*!include:" start | "%{include" {
         RET_FAIL(error_at_cur("ill-formed `include` directive: expected filename in quotes"));
     }
 
-    ("/*!ignore:re2c" | "%{ignore") / ws_or_eoc {
+    ("/*!ignore:" start | "%{ignore") / ws_or_eoc {
+        CHECK_RET(check_start(s, e));
         out.gen_raw(tok, ptr);
         // allows arbitrary garbage before the end of the comment
         CHECK_RET(lex_block_end(out, true));
         goto next;
     }
-    "/*!ignore:re2c" | "%{ignore" {
+    "/*!ignore:" start | "%{ignore" {
         RET_FAIL(error_at_cur("ill-formed `ignore` block: "
                 "expected a space, a newline, or the end of block"));
     }
@@ -296,6 +314,25 @@ loop:
 }
 
 #undef RET_BLOCK
+
+Ret Input::check_start(const uint8_t* s, const uint8_t* e) {
+    if (s == nullptr) {
+        // Block start of the form `%{`, nothing to check.
+    } else {
+        // Check that for target language `x` block start is `re2x` or `re2c` (the latter
+        // was allowed historically for languages other than C/C++, so we must keep it).
+        DCHECK(s != nullptr && e >= s);
+        size_t n = static_cast<size_t>(e - s);
+        auto match = [s, n](const char* name) {
+            return n == strlen(name) && memcmp(s, name, n) == 0;
+        };
+        if (!match(RE2C_PROG) && !match("re2c")) {
+            RET_FAIL(error_at_tok("invalid block start `/*!%.*s`, expected `/*!%s`",
+                    static_cast<int>(n), reinterpret_cast<const char*>(s), RE2C_PROG));
+        }
+    }
+    return Ret::OK;
+}
 
 Ret Input::lex_opt_name(std::string& name) {
     tok = cur;
@@ -483,7 +520,7 @@ scan:
         RET_TOK(TOKEN_ID);
     }
 
-    "re2c:" { RET_TOK(TOKEN_CONF); }
+    "re2c"? ":" { RET_TOK(TOKEN_CONF); }
 
     name {
         bool yes;
