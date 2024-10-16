@@ -60,4 +60,4 @@ yy7:
 	{}
 }
 
-tags/topsort1.re:4:21: warning: tag 'p' has 5th degree of nondeterminism [-Wnondeterministic-tags]
+tags/topsort1.re:4:21: warning: tag `p` has 5th degree of nondeterminism [-Wnondeterministic-tags]

@@ -54,5 +54,5 @@ yy7:
 }
 
 tags/topsort2.re:4:28: warning: rule matches empty string [-Wmatch-empty-string]
-tags/topsort2.re:4:28: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/topsort2.re:4:28: warning: tag 'q' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/topsort2.re:4:28: warning: tag `p` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/topsort2.re:4:28: warning: tag `q` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

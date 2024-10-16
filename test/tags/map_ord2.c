@@ -81,4 +81,4 @@ yy10:
 }
 
 tags/map_ord2.re:5:24: warning: rule matches empty string [-Wmatch-empty-string]
-tags/map_ord2.re:5:24: warning: tag 't' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/map_ord2.re:5:24: warning: tag `t` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

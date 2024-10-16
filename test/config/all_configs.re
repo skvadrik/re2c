@@ -1,10 +1,11 @@
 // re2c $INPUT -o $OUTPUT
 /*!re2c
-    re2c:api = generic;
     re2c:api = simple;
     re2c:api = record;
-    re2c:flags:input = custom;
-    re2c:flags:input = default;
+    re2c:api = generic;
+    re2c:api = custom; // deprecated alias
+    re2c:api = default; // deprecated alias
+    re2c:flags:input = generic;
     re2c:api:style = free-form;
     re2c:api:sigil = "";
 
@@ -22,6 +23,7 @@
     re2c:tags = 0;
     re2c:flags:tags = 0;
     re2c:flags:T = 0;
+    re2c:captures = 0;
     re2c:leftmost-captures = 0;
     re2c:posix-captures = 0;
     re2c:flags:posix-captures = 0;
@@ -33,66 +35,108 @@
 
     re2c:yyfn:sep = ";";
 
+    re2c:YYBACKUP = "";
     re2c:define:YYBACKUP = "";
+    re2c:YYBACKUPCTX = "";
     re2c:define:YYBACKUPCTX = "";
+    re2c:YYCONDTYPE = "";
     re2c:define:YYCONDTYPE = "";
+    re2c:YYCTYPE = "";
     re2c:define:YYCTYPE = "";
+    re2c:YYCTXMARKER = "";
     re2c:define:YYCTXMARKER = "";
+    re2c:YYCURSOR = "";
     re2c:define:YYCURSOR = "";
+    re2c:YYDEBUG = "";
     re2c:define:YYDEBUG = "";
+    re2c:YYFILL = "";
     re2c:define:YYFILL = "";
     re2c:define:YYFILL@len = "";
     re2c:define:YYFILL:naked = 0;
+    re2c:YYFN = ["name;type"];
     re2c:define:YYFN = ["name;type"];
+    re2c:YYGETCOND = "";
     re2c:define:YYGETCOND = "";
     re2c:define:YYGETCOND:naked = 0;
     re2c:define:YYGETCONDITION = ""; // deprecated
     re2c:define:YYGETCONDITION:naked = 0; // deprecated
+    re2c:YYGETSTATE = "";
     re2c:define:YYGETSTATE = "";
+    re2c:YYGETSTATE:naked = 0;
     re2c:define:YYGETSTATE:naked = 0;
+    re2c:YYINPUT = "";
     re2c:define:YYINPUT = "";
+    re2c:YYLESSTHAN = "";
     re2c:define:YYLESSTHAN = "";
+    re2c:YYLIMIT = "";
     re2c:define:YYLIMIT = "";
+    re2c:YYMARKER = "";
     re2c:define:YYMARKER = "";
+    re2c:YYMTAGN = "";
     re2c:define:YYMTAGN = "";
+    re2c:YYMTAGP = "";
     re2c:define:YYMTAGP = "";
+    re2c:YYPEEK = "";
     re2c:define:YYPEEK = "";
+    re2c:YYRESTORE = "";
     re2c:define:YYRESTORE = "";
+    re2c:YYRESTORECTX = "";
     re2c:define:YYRESTORECTX = "";
+    re2c:YYRESTORETAG = "";
     re2c:define:YYRESTORETAG = "";
+    re2c:YYSETCOND = "";
     re2c:define:YYSETCOND = "";
     re2c:define:YYSETCOND@cond = "";
     re2c:define:YYSETCOND:naked = 0;
     re2c:define:YYSETCONDITION = ""; // deprecated
     re2c:define:YYSETCONDITION@cond = ""; // deprecated
     re2c:define:YYSETCONDITION:naked = 0; // deprecated
+    re2c:YYSETSTATE = "";
     re2c:define:YYSETSTATE = "";
     re2c:define:YYSETSTATE:naked = 0;
     re2c:define:YYSETSTATE@state = "";
+    re2c:YYSHIFT = "";
     re2c:define:YYSHIFT = "";
+    re2c:YYSHIFTSTAG = "";
     re2c:define:YYSHIFTSTAG = "";
+    re2c:YYSHIFTMTAG = "";
     re2c:define:YYSHIFTMTAG = "";
+    re2c:YYSKIP = "";
     re2c:define:YYSKIP = "";
+    re2c:YYSTAGN = "";
     re2c:define:YYSTAGN = "";
+    re2c:YYSTAGP = "";
     re2c:define:YYSTAGP = "";
 
+    re2c:yycond = "";
     re2c:variable:yycond = "";
+    re2c:yyctable = "";
     re2c:variable:yyctable = "";
+    re2c:yyaccept = "";
     re2c:variable:yyaccept = "";
+    re2c:yytarget = "";
     re2c:variable:yytarget = "";
+    re2c:yystate = "";
     re2c:variable:yystate = "";
+    re2c:yynmatch = "";
     re2c:variable:yynmatch = "";
+    re2c:yypmatch = "";
     re2c:variable:yypmatch = "";
+    re2c:yyrecord = "";
     re2c:variable:yyrecord = "";
+    re2c:yych = "";
     re2c:variable:yych = "";
-    re2c:variable:yych:conversion = 0;
     re2c:yych:conversion = 0;
-    re2c:variable:yych:emit = 0;
+    re2c:variable:yych:conversion = 0;
     re2c:yych:emit = 0;
+    re2c:variable:yych:emit = 0;
+    re2c:yybm = "";
     re2c:variable:yybm = "";
-    re2c:variable:yybm:hex = 0;
     re2c:yybm:hex = 0;
+    re2c:variable:yybm:hex = 0;
+    re2c:yyfill = "";
     re2c:variable:yyfill = "";
+    re2c:yystable = "";
     re2c:variable:yystable = "";
 
     re2c:cond:prefix = "";
@@ -146,17 +190,13 @@
     re2c:flags:utf-8 = 0;
     re2c:flags:8 = 0;
 
-    re2c:flags:encoding-policy = ignore;
     re2c:encoding-policy = ignore;
-    re2c:flags:encoding-policy = substitute;
     re2c:encoding-policy = substitute;
-    re2c:flags:encoding-policy = fail;
     re2c:encoding-policy = fail;
+    re2c:flags:encoding-policy = fail;
 
-    re2c:empty-class  = match-empty;
-    re2c:flags:empty-class = match-empty;
+    re2c:empty-class = match-empty;
     re2c:empty-class = match-none;
-    re2c:flags:empty-class = match-none;
     re2c:empty-class = error;
     re2c:flags:empty-class = error;
 
@@ -169,8 +209,8 @@
     re2c:label:yyFillLabel = "";
     re2c:label:yyloop = "";
     re2c:label:yyNext = "";
+    re2c:label:start = "";
     re2c:label:start = 0;
     re2c:startlabel = "";
-    re2c:label:start = 0;
-    re2c:startlabel = "";
+    re2c:startlabel = 0;
 */

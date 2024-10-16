@@ -1507,4 +1507,4 @@ yy120:
 
 }
 real_world/php20150211_phpdbg_lexer.re:61:20: warning: escape has no effect: '\.' [-Wuseless-escape]
-real_world/php20150211_phpdbg_lexer.re:45:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+real_world/php20150211_phpdbg_lexer.re:45:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

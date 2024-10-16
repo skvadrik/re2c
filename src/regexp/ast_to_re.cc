@@ -158,7 +158,7 @@ LOCAL_NODISCARD(Ret check_tags_used_once(
         const char* name = tags[t].name;
         if (name && !names.insert(name).second) {
             RET_FAIL(spec.msg.error(rule.semact->loc,
-                                    "tag '%s' is used multiple times in the same rule",
+                                    "tag `%s` is used multiple times in the same rule",
                                     name));
         }
     }

@@ -112,14 +112,14 @@ Ret Input::include(const std::string& filename, uint8_t* at) {
     // second time when it has been fully read. The second time is needed to generate a line
     // directive marking the end of the include file and the continuation of the parent file. In
     // order to make the lexer stop at the boundary between files and do the second call, we
-    // "unread" the directive on the first call (push it back to the parent file before filling the
-    // buffer with the contents of include file), and let the lexer scan the directive twice.
+    // "unread" the `include` block on the first call (push it back to the parent file before
+    // filling the buffer with the contents of include file), and let the lexer scan it twice.
     //
     // To avoid infinite recursion we need to differentiate the two calls. We do this by inspecting
     // the files on stack. First, we pop all finished files: there may be sibling includes before
     // this one in the parent file. They must be finished by now, meaning that the token pointer has
-    // moved past their end pointer (even if another directive immediately precedes this one,
-    // "unreading" the directive has the effect of inserting an artificial boundary between include
+    // moved past their end pointer (even if another `include` block immediately precedes this one,
+    // "unreading" the block has the effect of inserting an artificial boundary between include
     // files). However if the current include file is already on stack, then `at` must point exactly
     // at the end of it (not past the end), so we will not pop it.
     //
@@ -131,7 +131,7 @@ Ret Input::include(const std::string& filename, uint8_t* at) {
     CHECK(tok <= at); // ensure that we won't pop the include file itself
     pop_finished_files();
 
-    const size_t fidx = get_input_index(); // index of the parent file with the directive
+    const size_t fidx = get_input_index(); // index of the parent file with the `include` block
     const size_t last = files.size() - 1; // index of the topmost file
     if (fidx == last) {
         // This is the first call, go on.
@@ -150,7 +150,7 @@ Ret Input::include(const std::string& filename, uint8_t* at) {
     // files. In the file stack, however, outer files go before nested files (nested are at the
     // top). We want to break from the unreading cycle early, therefore we go in reverse order of
     // file offsets in buffer and break as soon as the end offset is less than cursor (current
-    // position). `at` points at the start of include directive.
+    // position). `at` points at the start of `include` block.
     for (InputFile* in : files) {
         if (in->so >= at) {
             // unread whole fragment

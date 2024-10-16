@@ -450,9 +450,8 @@ Ret Adfa::calc_stats(OutputBlock& out) {
 
     // error if tags are not enabled, but we need them
     if (!opts->tags && maxtagver > 1) {
-        RET_FAIL(msg.error(loc,
-                           "overlapping trailing contexts need multiple context markers, use "
-                           "'-t, --tags' option and '/*!stags:re2c ... */' directive"));
+        RET_FAIL(msg.error(loc, "overlapping trailing contexts need multiple context markers"
+                ", use --tags option and `stags` block"));
     }
 
     if (!oldstyle_ctxmarker) {

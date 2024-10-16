@@ -376,19 +376,19 @@ yy45:
 	{ b }
 }
 
-config/tag_api_functions.re:25:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:33:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:41:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:41:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:41:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:49:20: warning: tag 'x' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:49:20: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:49:20: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:25:20: warning: tag `x` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:33:20: warning: tag `x` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:41:20: warning: tag `x` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:41:20: warning: tag `y` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:41:20: warning: tag `z` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:49:20: warning: tag `x` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:49:20: warning: tag `y` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:49:20: warning: tag `z` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_functions.re:57:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_functions.re:58:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_functions.re:59:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_functions.re:57:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:59:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:59:25: warning: tag `z` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_functions.re:54:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'
@@ -397,7 +397,7 @@ config/tag_api_functions.re:66:25: warning: rule matches empty string [-Wmatch-e
 config/tag_api_functions.re:67:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_functions.re:68:25: warning: rule matches empty string [-Wmatch-empty-string]
 config/tag_api_functions.re:66:25: warning: trailing context has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-config/tag_api_functions.re:68:25: warning: tag 'z' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+config/tag_api_functions.re:68:25: warning: tag `z` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
 config/tag_api_functions.re:63:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x64-\xFF]'
 	'\x63 [\x0-\x62\x64-\xFF]'

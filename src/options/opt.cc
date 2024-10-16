@@ -301,8 +301,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.computed_gotos) {
-            RET_FAIL(error("configuration 're2c:eof' cannot be used with options -b, --bit-vectors "
-                           "and -g, --computed gotos"));
+            RET_FAIL(error("`re2c:eof` configuration cannot be used with options --bit-vectors "
+                           "and --computed gotos"));
         }
         if (real.fill_eof >= real.encoding.cunit_count()) {
             RET_FAIL(error("EOF exceeds maximum code unit value for given encoding"));
@@ -316,7 +316,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
             RET_FAIL(error("sentinel exceeds maximum code unit value for given encoding"));
         }
         if (real.fill_enable || real.fill_eof != NOEOF) {
-            RET_FAIL(error("re2c:sentinel configuration is not needed in the presence of bounds "
+            RET_FAIL(error("`re2c:sentinel` configuration is not needed in the presence of bounds "
                            "checking or EOF rule"));
         }
     }
@@ -478,7 +478,7 @@ Ret Opt::check_##name() { \
     static const std::unordered_set<std::string> alw allowed; \
     for (const std::string& elem : glob.name) { \
         if (std::find(alw.begin(), alw.end(), elem) == alw.end()) { \
-            RET_FAIL(error("unknown element '%s' in list '%s'", elem.c_str(), #name)); \
+            RET_FAIL(error("unknown element `%s` in list `%s`", elem.c_str(), #name)); \
         } \
     } \
     return Ret::OK; \
@@ -566,7 +566,7 @@ const char* Opt::var_name(StxVarId id) {
 // is this a known configuration-specific conditional?
 Ret Opt::check_cond(StxLOpt opt, const char* conf, const std::unordered_set<StxLOpt>& conds) const {
     if (conds.find(opt) != conds.end()) return Ret::OK;
-    RET_FAIL(error("unknown conditional in configuration '%s'", conf));
+    RET_FAIL(error("unknown conditional in configuration `%s`", conf));
 }
 
 Ret Opt::check_var(
@@ -591,7 +591,7 @@ Ret Opt::check_var(
     const std::unordered_set<StxVarId>& v = is_list_var ? list_vars : vars;
     if (std::find(v.begin(), v.end(), var) != v.end()) return Ret::OK;
 
-    RET_FAIL(error("unknown variable '%s' in configuration '%s'", var_name(var), conf));
+    RET_FAIL(error("unknown variable `%s` in configuration `%s`", var_name(var), conf));
 }
 
 // validate that all option and variable names used in the given code do exist
@@ -628,7 +628,7 @@ Ret Opt::validate_conf_code(
             break;
         case StxCodeType::VAR:
             if (oneline && x->var == StxVarId::NEWLINE && ++newlines > 1) {
-                RET_FAIL(error("'%s' should be a one-line configuration", conf));
+                RET_FAIL(error("`%s` should be a one-line configuration", conf));
             }
             CHECK_RET(check_var(x->var, conf, vars, list_vars));
             break;
@@ -835,9 +835,9 @@ static bool eval_cond(
             return opts->start_conditions;
         case StxGOpt::STORABLE_STATE:
             return opts->storable_state;
-        case StxGOpt::HAVE_DATE:
+        case StxGOpt::DATE:
             return opts->date;
-        case StxGOpt::HAVE_VER:
+        case StxGOpt::VER:
             return opts->version;
         case StxGOpt::CASE_RANGES:
             return opts->case_ranges;

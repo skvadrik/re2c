@@ -527,6 +527,6 @@ yy18:
 }
 
 }
-eager_skip_with_bitmaps.re:245:9: warning: tag 'b0' has 9th degree of nondeterminism [-Wnondeterministic-tags]
-eager_skip_with_bitmaps.re:245:9: warning: tag 'a1' has 5th degree of nondeterminism [-Wnondeterministic-tags]
-eager_skip_with_bitmaps.re:245:9: warning: tag 'b1' has 5th degree of nondeterminism [-Wnondeterministic-tags]
+eager_skip_with_bitmaps.re:245:9: warning: tag `b0` has 9th degree of nondeterminism [-Wnondeterministic-tags]
+eager_skip_with_bitmaps.re:245:9: warning: tag `a1` has 5th degree of nondeterminism [-Wnondeterministic-tags]
+eager_skip_with_bitmaps.re:245:9: warning: tag `b1` has 5th degree of nondeterminism [-Wnondeterministic-tags]
