@@ -141,4 +141,4 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
-conditions/condition_05_cs.re:56:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+conditions/condition_05_cs.re:56:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

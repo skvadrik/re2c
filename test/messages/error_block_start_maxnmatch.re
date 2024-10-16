@@ -1,7 +1,22 @@
 // re2c $INPUT -o $OUTPUT
-/*!maxnmatch:re2c*/ // ok, end of block
-/*!maxnmatch:re2c */ // ok, space
-/*!maxnmatch:re2c	*/ // ok, space
+
+// ok, end of block
+/*!maxnmatch:re2c*/
+%{maxnmatch%}
+
+// ok, space
+/*!maxnmatch:re2c */
+%{maxnmatch %}
+
+// ok, space
+/*!maxnmatch:re2c	*/
+%{maxnmatch	%}
+
+// ok, newline
 /*!maxnmatch:re2c
-*/ // ok, newline
-/*!maxnmatch:re2cx */ // bad
+*/
+%{maxnmatch
+%}
+
+// bad
+/*!maxnmatch:re2cx */

@@ -1,7 +1,22 @@
 // re2c $INPUT -o $OUTPUT
-/*!mtags:re2c*/ // ok, end of block
-/*!mtags:re2c */ // ok, space
-/*!mtags:re2c	*/ // ok, space
+
+// ok, end of block
+/*!mtags:re2c*/
+%{mtags%}
+
+// ok, space
+/*!mtags:re2c */
+%{mtags %}
+
+// ok, space
+/*!mtags:re2c	*/
+%{mtags	%}
+
+// ok, newline
 /*!mtags:re2c
-*/ // ok, newline
-/*!mtags:re2cx */ // bad
+*/
+%{mtags
+%}
+
+// bad
+/*!mtags:re2cx */

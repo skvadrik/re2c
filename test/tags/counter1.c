@@ -116,4 +116,4 @@ yy14:
 	{}
 }
 
-tags/counter1.re:4:18: warning: tag 'z' has 11th degree of nondeterminism [-Wnondeterministic-tags]
+tags/counter1.re:4:18: warning: tag `z` has 11th degree of nondeterminism [-Wnondeterministic-tags]

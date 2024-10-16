@@ -182,7 +182,7 @@ class Ast {
     std::set<std::string> temp_condlist; // must be ordered, as condition order matters
     std::string temp_blockname;
 
-    // A list of `rules:re2c` blocks (other blocks don't need to be stored as they are not reused).
+    // A list of `rules` blocks (other blocks don't need to be stored as they are not reused).
     AstBlocks blocks;
 
     // Used to denote unbounded repetition (iteration, Kleene star).

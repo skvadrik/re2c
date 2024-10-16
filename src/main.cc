@@ -226,7 +226,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     CHECK_RET(input.gen_dep_file(output.total_opts->header_file));
 
-    if (globopts.verbose) fprintf(stderr, "re2c: success\n");
+    if (globopts.verbose) fprintf(stderr, RE2C_PROG ": success\n");
     return Ret::OK;
 }
 

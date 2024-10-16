@@ -77,9 +77,8 @@ void Warn::condition_order(const loc_t& loc) {
     if (mask[CONDITION_ORDER] & WARNING) {
         const bool e = mask[CONDITION_ORDER] & ERROR;
         error_accuml |= e;
-        msg.warning (names[CONDITION_ORDER], loc, e,
-                     "condition numbers may change, use '/*!conditions:re2c*/' directive to "
-                     "generate reliable condition identifiers");
+        msg.warning (names[CONDITION_ORDER], loc, e, "condition numbers may change"
+                ", use `conditions` block to generate reliable condition identifiers");
     }
 }
 
@@ -110,7 +109,7 @@ void Warn::nondeterministic_tags(
         if (tagname == nullptr) {
             fprintf(stderr, "trailing context");
         } else {
-            fprintf(stderr, "tag '%s'", tagname);
+            fprintf(stderr, "tag `%s`", tagname);
         }
         fprintf(stderr, " %shas %zu%s degree of nondeterminism",
                 incond(cond).c_str(), nver, nver == 2 ? "nd" : nver == 3 ? "rd" : "th");
@@ -196,7 +195,7 @@ void Warn::sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32
                     incond(cond).c_str(),
                     defined ? sentinel : 0,
                     defined ? "" : " (note: if a different sentinel symbol is used,"
-                    " specify it with 're2c:sentinel' configuration)");
+                    " specify it with `re2c:sentinel` configuration)");
     }
 }
 
@@ -205,7 +204,7 @@ void Warn::undefined_syntax_config(const loc_t& loc, const char* name) {
         const bool e = mask[UNDEFINED_SYNTAX_CONFIG] & ERROR;
         error_accuml |= e;
         msg.warning(names[UNDEFINED_SYNTAX_CONFIG], loc, e,
-            "syntax configuration '%s' is not defined "
+            "syntax configuration `%s` is not defined "
             "(set it to <undefined> explicitly to silence the warning)", name);
     }
 }

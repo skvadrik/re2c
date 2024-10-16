@@ -252,7 +252,7 @@ static void emit_skeleton_stags(Output& output, CodeList* code, const Adfa& dfa)
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"\n")
-            .cstr("\"wrong value for tag '%s': expected %u, actual %u\\n\"").flush();
+            .cstr("\"wrong value for tag `%s`: expected %u, actual %u\\n\"").flush();
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "token - input"));
     append(args, code_arg(alc, "kix"));
@@ -398,7 +398,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const Adfa& dfa)
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"\n")
-            .cstr("\"history for tag '%s' is too short\\n\"").flush();
+            .cstr("\"history for tag `%s` is too short\\n\"").flush();
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "token - input"));
     append(args, code_arg(alc, "kix + n"));
@@ -418,7 +418,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const Adfa& dfa)
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"\n")
-            .cstr("\"wrong value for tag '%s': expected %u, actual %u\\n\"").flush();
+            .cstr("\"wrong value for tag `%s`: expected %u, actual %u\\n\"").flush();
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "token - input"));
     append(args, code_arg(alc, "kix + n"));
@@ -436,7 +436,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const Adfa& dfa)
     args = code_args(alc);
     append(args, code_arg(alc, "stderr"));
     text = o.cstr("\"error: lex_").str(dfa.name).cstr(": at position %ld, key %u: \"\n")
-            .cstr("\"history for tag '%s' is too long\\n\"").flush();
+            .cstr("\"history for tag `%s` is too long\\n\"").flush();
     append(args, code_arg(alc, text));
     append(args, code_arg(alc, "token - input"));
     append(args, code_arg(alc, "kix + n"));

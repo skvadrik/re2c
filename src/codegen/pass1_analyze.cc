@@ -648,7 +648,7 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
         type = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
         param = parts.size() > 2 ? copystr(parts[2], alc) : name;
         if (parts.size() > 3) {
-            RET_FAIL(error("`define:YYFN` element '%s' has too many parts", s.c_str()));
+            RET_FAIL(error("`re2c:YYFN` configuration element `%s` has too many parts", s.c_str()));
         }
         return Ret::OK;
     };
@@ -668,7 +668,8 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     for (size_t i = 1; i < opts->api_fn.size(); ++i) {
         CHECK_RET(split(opts->api_fn[i]));
         if (type == nullptr) {
-            RET_FAIL(error("missing type in `define:YYFN` element '%s'", opts->api_fn[i].c_str()));
+            RET_FAIL(error(
+                "missing type in `re2c:YYFN` configuration element `%s`", opts->api_fn[i].c_str()));
         }
 
         append(f->params, code_param(alc, param, type));
@@ -827,7 +828,7 @@ Ret codegen_analyze(Output& output) {
         }
     }
 
-    // Generate implicit condiiton enum in the header, if there is no explicit directive.
+    // Generate implicit condiiton enum in the header, if there is no explicit `conditions` block.
     const opt_t* opts = output.total_opts;
     if (!opts->header_file.empty() && opts->start_conditions && output.cond_enum_autogen) {
         output.header_mode(true);

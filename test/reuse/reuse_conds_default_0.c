@@ -186,5 +186,5 @@ yy21:
 
 reuse/reuse_conds_default_0.re:13:0: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 reuse/reuse_conds_default_0.re:18:0: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/reuse_conds_default_0.re:13:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
-reuse/reuse_conds_default_0.re:18:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+reuse/reuse_conds_default_0.re:13:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]
+reuse/reuse_conds_default_0.re:18:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

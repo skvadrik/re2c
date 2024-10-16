@@ -139,7 +139,7 @@ struct Output {
     uint32_t label_counter;
     uint32_t fill_label_counter;
     bool state_goto;
-    bool cond_enum_autogen; // true unless an explicit `types:re2c` directive is used
+    bool cond_enum_autogen; // true unless an explicit `conditions` block is used
     bool warn_condition_order;
     bool need_header;
     bool done_mtag_defs;

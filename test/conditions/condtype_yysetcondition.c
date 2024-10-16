@@ -52,4 +52,4 @@ yy2:
 	}
 	return 0;
 }
-conditions/condtype_yysetcondition.re:21:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+conditions/condtype_yysetcondition.re:21:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

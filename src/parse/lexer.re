@@ -246,7 +246,7 @@ loop:
         goto next;
     }
     "/*!header:re2c" | "%{header" {
-        RET_FAIL(error_at_cur("ill-formed `header` directive: expected `:on` or `:off`"));
+        RET_FAIL(error_at_cur("ill-formed `header` block: expected `:on` or `:off`"));
     }
 
     ("/*!include:re2c" | "%{include") space+ @x dstring @y / ws_or_eoc {
@@ -257,7 +257,7 @@ loop:
         goto next;
     }
     "/*!include:re2c" | "%{include" {
-        RET_FAIL(error_at_cur("ill-formed `include` directive: expected filename in quotes"));
+        RET_FAIL(error_at_cur("ill-formed `include` block: expected filename in quotes"));
     }
 
     ("/*!ignore:re2c" | "%{ignore") / ws_or_eoc {
@@ -267,8 +267,8 @@ loop:
         goto next;
     }
     "/*!ignore:re2c" | "%{ignore" {
-        RET_FAIL(error_at_cur("ill-formed `ignore` block: "
-                "expected a space, a newline, or the end of block"));
+        RET_FAIL(error_at_cur(
+                "ill-formed `ignore` block: expected a space, a newline, or the end of block"));
     }
 
     eof {
@@ -318,8 +318,8 @@ loop:
 /*!local:re2c
     "" {
         RET_FAIL(error_at_cur(
-                "ill-formed start of a block: expected a space, a newline, a colon followed by a"
-                " list of colon-separated block names, or the end of block `*" "/`"));
+                "ill-formed start of a block: expected a space, a newline, a colon "
+                "followed by a list of colon-separated block names, or the end of block"));
     }
 
     "" / ws_or_eoc { *ptail = nullptr; return Ret::OK; }
@@ -334,7 +334,7 @@ loop:
         // Check that the added name is unique.
         for (const BlockNameList *p = *phead; p != l; p = p->next) {
             if (strcmp(p->name, l->name) == 0) {
-                RET_FAIL(error_at_cur("duplicate block '%s' on the list", p->name));
+                RET_FAIL(error_at_cur("duplicate block `%s` on the list", p->name));
             }
         }
 
@@ -349,7 +349,7 @@ loop: /*!local:re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
         RET_FAIL(error_at_cur(
-                "ill-formed end of block: expected optional whitespaces followed by `*" "/`"));
+            "ill-formed block: expected optional whitespaces followed by the end of block"));
     }
     eoc {
         if (multiline && globopts->line_dirs) {
@@ -372,8 +372,7 @@ Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
 loop: /*!local:re2c
     * {
         RET_FAIL(error_at_cur(
-                "ill-formed directive: expected optional configurations followed by the end of"
-                " block `*" "/`"));
+            "ill-formed block: expected optional configurations followed by the end of block"));
     }
 
     "format" {

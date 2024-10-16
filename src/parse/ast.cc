@@ -216,12 +216,12 @@ const AstBlock* AstBlocks::find(const std::string& name) const {
         if (!blocks.empty()) {
             return blocks.back();
         }
-        error("cannot find `/*!rules:re2c ... */` block");
+        error("cannot find `rules` block");
     } else {
         for (const AstBlock* b : blocks) {
             if (b->name == name) return b;
         }
-        error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
+        error("cannot find `rules` block named `%s`", name.c_str());
     }
     return nullptr;
 }
@@ -309,7 +309,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         for (const AstGram& g : grams) {
             if (g.setup.size() > 1) {
                 RET_FAIL(msg.error(g.setup[1]->loc,
-                                   "code to setup rule '%s' is already defined at line %u",
+                                   "code to setup rule `%s` is already defined at line %u",
                                    g.name.c_str(), g.setup[0]->loc.line));
             }
         }
@@ -317,7 +317,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         for (const AstGram& g : grams) {
             if (g.name != "*" && !g.setup.empty() && g.rules.empty()) {
                 RET_FAIL(msg.error(g.setup[0]->loc,
-                                   "setup for non existing condition '%s' found", g.name.c_str()));
+                                   "setup for non existing condition `%s` found", g.name.c_str()));
             }
         }
 
@@ -389,15 +389,15 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         grams.insert(grams.begin(), zero_copy);
     }
 
-    // Check that 're2c:eof' configuration and the $ rule are used together. This must be done after
+    // Check that `re2c:eof` configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
     for (const AstGram& g : grams) {
         if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
-                               "%s$ rule found, but 're2c:eof' configuration is not set",
+                               "%s$ rule found, but `re2c:eof` configuration is not set",
                                incond(g.name).c_str()));
         } else if (g.eofs.empty() && opts->fill_eof != NOEOF) {
-            RET_FAIL(error("%s're2c:eof' configuration is set, but no $ rule found",
+            RET_FAIL(error("%s`re2c:eof` configuration is set, but no $ rule found",
                            incond(g.name).c_str()));
         }
     }

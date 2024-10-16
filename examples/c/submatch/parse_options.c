@@ -1621,5 +1621,5 @@ int main() {
     return 0;
 }
 c/submatch/parse_options.re:68:12: warning: rule matches empty string [-Wmatch-empty-string]
-c/submatch/parse_options.re:80:35: warning: tag 'k' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/parse_options.re:80:35: warning: tag 'v' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:80:35: warning: tag `k` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/parse_options.re:80:35: warning: tag `v` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

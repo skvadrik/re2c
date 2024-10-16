@@ -190,5 +190,5 @@ reuse/reuse_conds_setup_0.re:10:0: warning: control flow in condition 'r1' is un
 reuse/reuse_conds_setup_0.re:10:0: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 reuse/reuse_conds_setup_0.re:15:0: warning: control flow in condition 'r1' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
 reuse/reuse_conds_setup_0.re:15:0: warning: control flow in condition 'r2' is undefined for strings that match '\xA', use default rule '*' [-Wundefined-control-flow]
-reuse/reuse_conds_setup_0.re:10:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
-reuse/reuse_conds_setup_0.re:15:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+reuse/reuse_conds_setup_0.re:10:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]
+reuse/reuse_conds_setup_0.re:15:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

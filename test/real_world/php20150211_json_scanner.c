@@ -1244,4 +1244,4 @@ yy105:
 
 real_world/php20150211_json_scanner.re:337:26: warning: unreachable rule in condition 'STR_P1' (shadowed by rules at lines 205, 229, 233, 255, 256) [-Wunreachable-rules]
 real_world/php20150211_json_scanner.re:337:26: warning: unreachable rule in condition 'STR_P2' (shadowed by rules at lines 298, 331, 335) [-Wunreachable-rules]
-real_world/php20150211_json_scanner.re:100:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+real_world/php20150211_json_scanner.re:100:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

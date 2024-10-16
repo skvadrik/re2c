@@ -1,7 +1,22 @@
 // re2c $INPUT -o $OUTPUT
-/*!ignore:re2c*/ // ok, end of block
-/*!ignore:re2c */ // ok, space
-/*!ignore:re2c	*/ // ok, space
+
+// ok, end of block
+/*!ignore:re2c*/
+%{ignore%}
+
+// ok, space
+/*!ignore:re2c */
+%{ignore %}
+
+// ok, space
+/*!ignore:re2c	*/
+%{ignore	%}
+
+// ok, newline
 /*!ignore:re2c
-*/ // ok, newline
-/*!ignore:re2cx */ // bad
+*/
+%{ignore
+%}
+
+// bad
+/*!ignore:re2cx */

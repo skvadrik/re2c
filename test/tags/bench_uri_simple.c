@@ -1443,10 +1443,10 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-tags/bench_uri_simple.re:99:8: warning: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'u2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'h1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'h2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'r2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/bench_uri_simple.re:99:8: warning: tag 'p1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `u1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `u2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `h1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `h2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `r1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `r2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/bench_uri_simple.re:99:8: warning: tag `p1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

@@ -1,1 +1,1 @@
-re2c: error: cannot find block 'x' listed in `max:re2c` directive
+re2c: error: cannot find block named `x` referenced by `max` block

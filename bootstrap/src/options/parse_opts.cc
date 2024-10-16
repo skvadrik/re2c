@@ -32,7 +32,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& global, const char* source)
     do { if (!next(YYCURSOR, argv)) RET_FAIL(error_arg(option)); goto label; } while(0)
 
 #define ERRARG(opt, exp, arg) \
-    RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
+    RET_FAIL(error("bad argument `%s` to option %s (expected <%s>)", arg, opt, exp))
 
 LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& global, char** argv, Msg& msg, Lang* lang)) {
     char* YYCURSOR, *YYMARKER;
