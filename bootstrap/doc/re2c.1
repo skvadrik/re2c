@@ -60,12 +60,10 @@ bool lex(const char *s) {
     const char *YYCURSOR = s;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
 
-        number = [1\-9][0\-9]*;
-
-        number { return true; }
-        *      { return false; }
+        [1\-9][0\-9]* { return true; }
+        *           { return false; }
     */
 }
 
@@ -1638,7 +1636,7 @@ static int lex(const char *YYCURSOR) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
         *      { return \-1; }
@@ -1694,7 +1692,7 @@ static int lex(const char *str, unsigned int len) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -1766,8 +1764,8 @@ static int lex(const char *str, unsigned int len) {
 loop:
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL  = \(dqgoto fail;\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = \(dqgoto fail;\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1834,9 +1832,9 @@ static int lex(const char *str, unsigned int len) {
         re2c:yyfill:enable = 0;
         re2c:api = generic;
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYPEEK = \(dqcur < lim ? *cur : 0\(dq;  // fake null
-        re2c:define:YYSKIP = \(dq++cur;\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYPEEK = \(dqcur < lim ? *cur : 0\(dq;  // fake null
+        re2c:YYSKIP = \(dq++cur;\(dq;
 
         *      { count = \-1; break; }
         [\ex00] { break;; }
@@ -1995,8 +1993,8 @@ loop:
     yyrecord\->token = yyrecord\->yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = \(dqfill(*yyrecord) == 0\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = \(dqfill(*yyrecord) == 0\(dq;
         re2c:eof = 0;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2142,8 +2140,8 @@ loop:
     yyrecord\->token = yyrecord\->yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = \(dqif (fill(*yyrecord, @@) != 0) return \-1;\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = \(dqif (fill(*yyrecord, @@) != 0) return \-1;\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2234,7 +2232,7 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
 
         end = \(dq\ex00\(dq;
 
@@ -2395,9 +2393,9 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE   = char;
-        re2c:define:YYGETCOND = \(dqc\(dq;
-        re2c:define:YYSETCOND = \(dqc = @@;\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYGETCOND = \(dqc\(dq;
+        re2c:YYSETCOND = \(dqc = @@;\(dq;
         re2c:yyfill:enable = 0;
 
         <*> * { return ERROR; }
@@ -2534,13 +2532,13 @@ static Status lex(State &st, unsigned int *recv) {
         st.tok = st.cur;
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE    = \(dqchar\(dq;
-        re2c:define:YYCURSOR   = \(dqst.cur\(dq;
-        re2c:define:YYMARKER   = \(dqst.mar\(dq;
-        re2c:define:YYLIMIT    = \(dqst.lim\(dq;
-        re2c:define:YYGETSTATE = \(dqst.state\(dq;
-        re2c:define:YYSETSTATE = \(dqst.state = @@;\(dq;
-        re2c:define:YYFILL     = \(dqreturn WAITING;\(dq;
+        re2c:YYCTYPE = \(dqchar\(dq;
+        re2c:YYCURSOR = \(dqst.cur\(dq;
+        re2c:YYMARKER = \(dqst.mar\(dq;
+        re2c:YYLIMIT = \(dqst.lim\(dq;
+        re2c:YYGETSTATE = \(dqst.state\(dq;
+        re2c:YYSETSTATE = \(dqst.state = @@;\(dq;
+        re2c:YYFILL = \(dqreturn WAITING;\(dq;
         re2c:eof = 0;
 
         packet = [a\-z]+[;];
@@ -2689,7 +2687,7 @@ static What lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
 
         !use:fish;
         !use:colors;
@@ -2730,7 +2728,7 @@ int main() {
 static int lex_utf8(const uint8_t *s) {
     const uint8_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
-        re2c:define:YYCTYPE = uint8_t;
+        re2c:YYCTYPE = uint8_t;
         re2c:encoding:utf8 = 1;
     */
 }
@@ -2738,7 +2736,7 @@ static int lex_utf8(const uint8_t *s) {
 static int lex_utf32(const uint32_t *s) {
     const uint32_t *YYCURSOR = s, *YYMARKER;
     /*!use:re2c
-        re2c:define:YYCTYPE = uint32_t;
+        re2c:YYCTYPE = uint32_t;
         re2c:encoding:utf32 = 1;
     */
 }
@@ -2883,7 +2881,7 @@ static bool lex(const char *str, SemVer &ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:tags = 1;
 
         num = [0\-9]+;
@@ -2989,11 +2987,11 @@ static bool lex(Input &in, std::vector<SemVer> &vers) {
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in.cur;
-        re2c:define:YYMARKER = in.mar;
-        re2c:define:YYLIMIT  = in.lim;
-        re2c:define:YYFILL   = \(dqfill(in) == 0\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYCURSOR = in.cur;
+        re2c:YYMARKER = in.mar;
+        re2c:YYLIMIT = in.lim;
+        re2c:YYFILL = \(dqfill(in) == 0\(dq;
         re2c:tags:expression = \(dqin.@@\(dq;
 
         num = [0\-9]+;
@@ -3076,7 +3074,7 @@ static bool lex(const char *str, SemVer &ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:captvars = 1;
 
         num = [0\-9]+;
@@ -3179,11 +3177,11 @@ static bool parse(const char *str, Ver &ver) {
 
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYSTAGP = \(dq@@ = YYCURSOR;\(dq;
-        re2c:define:YYSTAGN = \(dq@@ = NULL;\(dq;
-        re2c:define:YYMTAGP = \(dqadd_mtag(mt, @@, YYCURSOR);\(dq;
-        re2c:define:YYMTAGN = \(dqadd_mtag(mt, @@, NULL);\(dq;
+        re2c:YYCTYPE = char;
+        re2c:YYSTAGP = \(dq@@ = YYCURSOR;\(dq;
+        re2c:YYSTAGN = \(dq@@ = NULL;\(dq;
+        re2c:YYMTAGP = \(dqadd_mtag(mt, @@, YYCURSOR);\(dq;
+        re2c:YYMTAGN = \(dqadd_mtag(mt, @@, NULL);\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
@@ -3280,7 +3278,7 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 static int lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
-        re2c:define:YYCTYPE = \(aqunsigned char\(aq;
+        re2c:YYCTYPE = \(aqunsigned char\(aq;
         re2c:yyfill:enable = 0;
 
         // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
@@ -3364,7 +3362,7 @@ float { return OK; }
 Result lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
         *      { return FAIL; }
@@ -3423,7 +3421,7 @@ long lex(LexerState* yyrecord) {
         re2c:header = \(dqlexer/state.h\(dq;
         re2c:api = record;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:tags = 1;
 
         [a]* @t [b]* { return t \- yyrecord\->str; }

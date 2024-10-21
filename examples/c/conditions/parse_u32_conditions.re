@@ -18,9 +18,9 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE   = char;
-        re2c:define:YYGETCOND = "c";
-        re2c:define:YYSETCOND = "c = @@;";
+        re2c:YYCTYPE = char;
+        re2c:YYGETCOND = "c";
+        re2c:YYSETCOND = "c = @@;";
         re2c:yyfill:enable = 0;
 
         <*> * { return ERROR; }

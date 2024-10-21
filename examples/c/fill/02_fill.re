@@ -50,8 +50,8 @@ loop:
     yyrecord->token = yyrecord->yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "if (fill(*yyrecord, @@) != 0) return -1;";
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = "if (fill(*yyrecord, @@) != 0) return -1;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

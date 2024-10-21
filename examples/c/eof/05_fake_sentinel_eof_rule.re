@@ -17,12 +17,12 @@ static int lex(const char *str, unsigned int len) {
         re2c:eof = 0;
         re2c:api = generic;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYLESSTHAN = "cur >= lim";
-        re2c:define:YYPEEK = "cur < lim ? *cur : 0";  // fake null
-        re2c:define:YYSKIP = "++cur;";
-        re2c:define:YYBACKUP = "mar = cur;";
-        re2c:define:YYRESTORE = "cur = mar;";
+        re2c:YYCTYPE = char;
+        re2c:YYLESSTHAN = "cur >= lim";
+        re2c:YYPEEK = "cur < lim ? *cur : 0";  // fake null
+        re2c:YYSKIP = "++cur;";
+        re2c:YYBACKUP = "mar = cur;";
+        re2c:YYRESTORE = "cur = mar;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

@@ -25,7 +25,7 @@ static bool lex(const char *str, SemVer &ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:posix-captures = 1;
 
         num = [0-9]+;
