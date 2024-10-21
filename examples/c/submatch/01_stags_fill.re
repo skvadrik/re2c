@@ -64,11 +64,11 @@ static bool lex(Input &in, std::vector<SemVer> &vers) {
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE  = char;
-        re2c:define:YYCURSOR = in.cur;
-        re2c:define:YYMARKER = in.mar;
-        re2c:define:YYLIMIT  = in.lim;
-        re2c:define:YYFILL   = "fill(in) == 0";
+        re2c:YYCTYPE = char;
+        re2c:YYCURSOR = in.cur;
+        re2c:YYMARKER = in.mar;
+        re2c:YYLIMIT = in.lim;
+        re2c:YYFILL = "fill(in) == 0";
         re2c:tags:expression = "in.@@";
 
         num = [0-9]+;
