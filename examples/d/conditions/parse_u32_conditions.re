@@ -16,7 +16,7 @@ private ulong parse_u32(const(char)* s) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
 
         <*> * { return ERROR; }
         <init> '0b' / [01]        :=> bin

@@ -8,7 +8,7 @@ private int lex(immutable char[] s) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 

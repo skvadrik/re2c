@@ -17,7 +17,7 @@ private long lex(ref LexerState yyrecord) {
     const(char)* t;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = "char";
+        re2c:YYCTYPE = "char";
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
         re2c:header = "lexer/state.d";

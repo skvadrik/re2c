@@ -3,12 +3,11 @@ module main;
 
 private bool lex(const(char)* yycursor) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
 
-        number = [1-9][0-9]*;
-        number { return true; }
-        *      { return false; }
+        [1-9][0-9]* { return true; }
+        *           { return false; }
     */
 }
 
