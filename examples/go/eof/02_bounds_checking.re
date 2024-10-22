@@ -16,8 +16,8 @@ func lex(str string) int {
 
 	for { /*!re2c
 		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYFILL = "return -1";
+		re2c:YYCTYPE = byte;
+		re2c:YYFILL = "return -1";
 
 		str = ['] ([^'\\] | [\\][^])* ['];
 

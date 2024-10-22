@@ -5,13 +5,11 @@ func lex(yyinput string) {
 	var yycursor int
 	/*!re2c
 		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
+		re2c:YYCTYPE = byte;
 		re2c:yyfill:enable = 0;
 
-		number = [1-9][0-9]*;
-
-		number { return }
-		*      { panic("error!") }
+		[1-9][0-9]* { return }
+		*           { panic("error!") }
 	*/
 }
 

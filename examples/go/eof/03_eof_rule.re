@@ -9,7 +9,7 @@ func lex(yyinput string) int {
 
 	for { /*!re2c
 		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
+		re2c:YYCTYPE = byte;
 		re2c:yyfill:enable = 0;
 		re2c:eof = 0;
 
