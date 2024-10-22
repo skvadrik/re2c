@@ -17,9 +17,9 @@ func lex(yyrecord *lexer.State) int {
 	/*!re2c
 		re2c:header = "lexer/state.go";
 		re2c:api = record;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYINPUT = "yyrecord.Data";
-		re2c:define:YYCURSOR = "yyrecord.Cur";
+		re2c:YYCTYPE = byte;
+		re2c:YYINPUT = "yyrecord.Data";
+		re2c:YYCURSOR = "yyrecord.Cur";
 		re2c:yyfill:enable = 0;
 		re2c:tags = 1;
 		re2c:tags:prefix = "Tag";

@@ -16,7 +16,7 @@ func lexUTF8(yyinput []uint8) int {
 	var yycursor, yymarker int
 	/*!use:re2c
 		re2c:encoding:utf8 = 1;
-		re2c:define:YYCTYPE = uint8;
+		re2c:YYCTYPE = uint8;
 	*/
 }
 
@@ -24,7 +24,7 @@ func lexUTF32(yyinput []uint32) int {
 	var yycursor, yymarker int
 	/*!use:re2c
 		re2c:encoding:utf32 = 1;
-		re2c:define:YYCTYPE = uint32;
+		re2c:YYCTYPE = uint32;
 	*/
 }
 

@@ -74,9 +74,9 @@ func parse(yyinput string) []int {
 		re2c:tags = 1;
 		re2c:yyfill:enable = 0;
 		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYMTAGP = "@@ = add_mtag(&trie, @@, yycursor)";
-		re2c:define:YYMTAGN = "@@ = add_mtag(&trie, @@, tagNone)";
+		re2c:YYCTYPE = byte;
+		re2c:YYMTAGP = "@@ = add_mtag(&trie, @@, yycursor)";
+		re2c:YYMTAGN = "@@ = add_mtag(&trie, @@, tagNone)";
 
 		num = [0-9]+;
 

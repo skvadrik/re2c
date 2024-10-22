@@ -23,7 +23,7 @@ func parse_u32(yyinput string) (uint32, error) {
 	/*!re2c
 		re2c:yyfill:enable = 0;
 		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
+		re2c:YYCTYPE = byte;
 
 		end = "\x00";
 

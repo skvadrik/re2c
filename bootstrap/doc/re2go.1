@@ -58,13 +58,11 @@ func lex(yyinput string) {
     var yycursor int
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
 
-        number = [1\-9][0\-9]*;
-
-        number { return }
-        *      { panic(\(dqerror!\(dq) }
+        [1\-9][0\-9]* { return }
+        *           { panic(\(dqerror!\(dq) }
     */
 }
 
@@ -1639,7 +1637,7 @@ func lex(yyinput string) int {
     for { /*!re2c
         re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
 
         *      { return \-1 }
         [\ex00] { return count }
@@ -1695,7 +1693,7 @@ func lex(yyinput string) int {
 
     for { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -1765,8 +1763,8 @@ func lex(str string) int {
 
     for { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYFILL = \(dqreturn \-1\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYFILL = \(dqreturn \-1\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1827,9 +1825,9 @@ func lex(str string) int {
 
     for { /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYPEEK  = \(dqpeek(str, cur)\(dq;
-        re2c:define:YYSKIP  = \(dqcur += 1\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYPEEK = \(dqpeek(str, cur)\(dq;
+        re2c:YYSKIP = \(dqcur += 1\(dq;
 
         *      { return \-1 }
         [\ex00] { return count }
@@ -1989,8 +1987,8 @@ func lex(yyrecord *Input) int {
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYFILL = \(dqfill(yyrecord) == 0\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYFILL = \(dqfill(yyrecord) == 0\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2138,8 +2136,8 @@ func lex(yyrecord *Input) int {
         yyrecord.token = yyrecord.yycursor
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYFILL = \(dqif r := fill(yyrecord, @@); r != 0 { return r }\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYFILL = \(dqif r := fill(yyrecord, @@); r != 0 { return r }\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2239,7 +2237,7 @@ func parse_u32(yyinput string) (uint32, error) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
 
         end = \(dq\ex00\(dq;
 
@@ -2421,9 +2419,9 @@ func parse_u32(yyinput string) (uint32, error) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYGETCOND = \(dqcond\(dq;
-        re2c:define:YYSETCOND = \(dqcond = @@\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYGETCOND = \(dqcond\(dq;
+        re2c:YYSETCOND = \(dqcond = @@\(dq;
 
         <*> * { return 0, eSyntax }
 
@@ -2579,7 +2577,7 @@ loop:
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYFILL = \(dqreturn lexWaitingForInput\(dq;
+        re2c:YYFILL = \(dqreturn lexWaitingForInput\(dq;
 
         packet = [a\-z]+[;];
 
@@ -2720,7 +2718,7 @@ func lex(yyinput string) int {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
 
         !use:fish;
         !use:colors;
@@ -2762,7 +2760,7 @@ func lexUTF8(yyinput []uint8) int {
     var yycursor, yymarker int
     /*!use:re2c
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = uint8;
+        re2c:YYCTYPE = uint8;
     */
 }
 
@@ -2770,7 +2768,7 @@ func lexUTF32(yyinput []uint32) int {
     var yycursor, yymarker int
     /*!use:re2c
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = uint32;
+        re2c:YYCTYPE = uint32;
     */
 }
 
@@ -2909,7 +2907,7 @@ func parse(yyinput string) *SemVer {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
         re2c:tags = 1;
 
         num = [0\-9]+;
@@ -3022,9 +3020,9 @@ func parse(in *Input) []SemVer {
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:variable:yyrecord = in;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYFILL = \(dqfill(in) == 0\(dq;
+        re2c:yyrecord = in;
+        re2c:YYCTYPE = byte;
+        re2c:YYFILL = \(dqfill(in) == 0\(dq;
 
         num = [0\-9]+;
 
@@ -3111,7 +3109,7 @@ func parse(yyinput string) *SemVer {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
         re2c:captvars = 1;
 
         num = [0\-9]+;
@@ -3226,9 +3224,9 @@ func parse(yyinput string) []int {
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYMTAGP = \(dq@@ = add_mtag(&trie, @@, yycursor)\(dq;
-        re2c:define:YYMTAGN = \(dq@@ = add_mtag(&trie, @@, tagNone)\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(&trie, @@, yycursor)\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(&trie, @@, tagNone)\(dq;
 
         num = [0\-9]+;
 
@@ -3325,7 +3323,7 @@ func lex(yyinput string) int {
     /*!re2c
         re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
 
         // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
         // (see https://unicode.org/reports/tr31)
@@ -3414,7 +3412,7 @@ func lex(yyinput string) int {
     var yycursor, yymarker int
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = byte;
+        re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
 
         *      { return ResultFail }
@@ -3474,9 +3472,9 @@ func lex(yyrecord *lexer.State) int {
     /*!re2c
         re2c:header = \(dqlexer/state.go\(dq;
         re2c:api = record;
-        re2c:define:YYCTYPE = byte;
-        re2c:define:YYINPUT = \(dqyyrecord.Data\(dq;
-        re2c:define:YYCURSOR = \(dqyyrecord.Cur\(dq;
+        re2c:YYCTYPE = byte;
+        re2c:YYINPUT = \(dqyyrecord.Data\(dq;
+        re2c:YYCURSOR = \(dqyyrecord.Cur\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
         re2c:tags:prefix = \(dqTag\(dq;

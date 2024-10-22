@@ -17,9 +17,9 @@ func lex(str string) int {
 
 	for { /*!re2c
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYPEEK  = "peek(str, cur)";
-		re2c:define:YYSKIP  = "cur += 1";
+		re2c:YYCTYPE = byte;
+		re2c:YYPEEK = "peek(str, cur)";
+		re2c:YYSKIP = "cur += 1";
 
 		*      { return -1 }
 		[\x00] { return count }
