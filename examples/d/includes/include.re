@@ -5,7 +5,7 @@
 private Result lex(const(char)* s) {
     const(char)* yycursor = s, yymarker;
     /*!re2c
-        re2c:define:YYCTYPE = "char";
+        re2c:YYCTYPE = "char";
         re2c:yyfill:enable = 0;
 
         *      { return Result.FAIL; }
