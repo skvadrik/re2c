@@ -68,8 +68,8 @@ fn parse(yyinput string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:define:YYMTAGP = "@@ = add_mtag(mut &trie, @@, yycursor)";
-        re2c:define:YYMTAGN = "@@ = add_mtag(mut &trie, @@, tag_none)";
+        re2c:YYMTAGP = "@@ = add_mtag(mut &trie, @@, yycursor)";
+        re2c:YYMTAGN = "@@ = add_mtag(mut &trie, @@, tag_none)";
 
         num = [0-9]+;
 

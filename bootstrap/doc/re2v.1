@@ -58,10 +58,8 @@ fn lex(yyinput string) {
     /*!re2c
         re2c:yyfill:enable = 0;
 
-        number = [1\-9][0\-9]*;
-
-        number { return }
-        *      { panic(\(dqerror!\(dq) }
+        [1\-9][0\-9]* { return }
+        *           { panic(\(dqerror!\(dq) }
     */
 }
 
@@ -1671,7 +1669,7 @@ fn lex(str string) int {
     mut count := 0
 
 loop: /*!re2c
-    re2c:define:YYFILL = \(dqreturn \-1\(dq;
+    re2c:YYFILL = \(dqreturn \-1\(dq;
 
     str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1727,8 +1725,8 @@ fn lex(str string) int {
 loop: /*!re2c
     re2c:api = generic;
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = \(dqpeek(str, cur)\(dq;
-    re2c:define:YYSKIP = \(dqcur += 1\(dq;
+    re2c:YYPEEK = \(dqpeek(str, cur)\(dq;
+    re2c:YYSKIP = \(dqcur += 1\(dq;
 
     *      { return \-1 }
     [\ex00] { return count }
@@ -1887,7 +1885,7 @@ loop:
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYFILL = \(dqfill(mut yyrecord) == 0\(dq;
+        re2c:YYFILL = \(dqfill(mut yyrecord) == 0\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2035,7 +2033,7 @@ loop:
     yyrecord.token = yyrecord.yycursor
     /*!re2c
         re2c:api = record;
-        re2c:define:YYFILL = \(dqr := fill(mut yyrecord, @@); if r != 0 { return r }\(dq;
+        re2c:YYFILL = \(dqr := fill(mut yyrecord, @@); if r != 0 { return r }\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2126,7 +2124,7 @@ fn parse_u32(yyinput string) ?u32 {
     }
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:variable:yych:emit = 0;
+        re2c:yych:emit = 0;
 
         end = \(dq\ex00\(dq;
 
@@ -2447,7 +2445,7 @@ loop:
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYFILL = \(dqreturn .lex_waiting\(dq;
+        re2c:YYFILL = \(dqreturn .lex_waiting\(dq;
 
         packet = [a\-z]+[;];
 
@@ -2629,7 +2627,7 @@ fn lex_utf8(yyinput []u8) int {
     mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8; // the default
+        re2c:YYCTYPE = u8; // the default
     */
 }
 
@@ -2637,7 +2635,7 @@ fn lex_utf32(yyinput []u32) int {
     mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
+        re2c:YYCTYPE = u32;
     */
 }
 
@@ -2896,8 +2894,8 @@ loop:
     st.token = st.yycursor
     /*!re2c
         re2c:api = record;
-        re2c:variable:yyrecord = st;
-        re2c:define:YYFILL = \(dqfill(mut st) == 0\(dq;
+        re2c:yyrecord = st;
+        re2c:YYFILL = \(dqfill(mut st) == 0\(dq;
         re2c:tags = 1;
         re2c:eof = 0;
 
@@ -3097,8 +3095,8 @@ fn parse(yyinput string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:define:YYMTAGP = \(dq@@ = add_mtag(mut &trie, @@, yycursor)\(dq;
-        re2c:define:YYMTAGN = \(dq@@ = add_mtag(mut &trie, @@, tag_none)\(dq;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(mut &trie, @@, yycursor)\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(mut &trie, @@, tag_none)\(dq;
 
         num = [0\-9]+;
 

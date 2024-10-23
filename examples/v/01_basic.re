@@ -5,10 +5,8 @@ fn lex(yyinput string) {
     /*!re2c
         re2c:yyfill:enable = 0;
 
-        number = [1-9][0-9]*;
-
-        number { return }
-        *      { panic("error!") }
+        [1-9][0-9]* { return }
+        *           { panic("error!") }
     */
 }
 

@@ -13,7 +13,7 @@ fn parse_u32(yyinput string) ?u32 {
     }
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:variable:yych:emit = 0;
+        re2c:yych:emit = 0;
 
         end = "\x00";
 
