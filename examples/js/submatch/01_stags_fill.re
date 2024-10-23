@@ -42,9 +42,9 @@ function lex(st) {
 
         /*!re2c
             re2c:api = record;
-            re2c:variable:yyrecord = st;
-            re2c:define:YYPEEK = "readUInt8";
-            re2c:define:YYFILL = "fill(st) == OK";
+            re2c:yyrecord = st;
+            re2c:YYPEEK = "readUInt8";
+            re2c:YYFILL = "fill(st) == OK";
             re2c:eof = 0;
             re2c:tags = 1;
 

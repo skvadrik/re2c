@@ -38,8 +38,8 @@ function lex(yyrecord, count) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
-            re2c:define:YYPEEK = "readUInt8";
-            re2c:define:YYFILL = "if (fill(yyrecord, @@) != OK) return -1;";
+            re2c:YYPEEK = "readUInt8";
+            re2c:YYFILL = "if (fill(yyrecord, @@) != OK) return -1;";
 
             str = ['] ([^'\\] | [\\][^])* ['];
 

@@ -5,7 +5,7 @@
 // blocks add only encoding-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = "at";
+    re2c:YYPEEK = "at";
 
     "∀x ∃y" { return yycursor }
     *       { return null }

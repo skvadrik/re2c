@@ -5,10 +5,8 @@ function lex(yyinput) {
     /*!re2c
         re2c:yyfill:enable = 0;
 
-        number = [1-9][0-9]*;
-
-        number { return true; }
-        *      { return false; }
+        [1-9][0-9]* { return true; }
+        *           { return false; }
     */
 }
 
