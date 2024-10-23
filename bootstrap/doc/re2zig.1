@@ -60,10 +60,8 @@ fn lex(yyinput: [:0]const u8) bool {
     %{
         re2c:yyfill:enable = 0;
 
-        number = [1\-9][0\-9]*;
-
-        number { return true; }
-        *      { return false; }
+        [1\-9][0\-9]* { return true; }
+        *           { return false; }
     %}
 }
 
@@ -1706,7 +1704,7 @@ fn lex(str: []const u8) !i32 {
 
     loop: while (true) {
         %{
-            re2c:define:YYFILL = \(dqreturn \-1;\(dq;
+            re2c:YYFILL = \(dqreturn \-1;\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1761,8 +1759,8 @@ fn lex(str: []const u8) i32 {
             re2c:api = generic;
             re2c:yyfill:enable = 0;
             // YYPEEK returns \(dqfake\(dq terminating null if cursor has reached limit.
-            re2c:define:YYPEEK = \(dqif (cur >= str.len) 0 else str[cur]\(dq;
-            re2c:define:YYSKIP = \(dqcur += 1;\(dq;
+            re2c:YYPEEK = \(dqif (cur >= str.len) 0 else str[cur]\(dq;
+            re2c:YYSKIP = \(dqcur += 1;\(dq;
 
             *      { return \-1; }
             [\ex00] { return count; }
@@ -1916,7 +1914,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
         %{
             re2c:api = record;
             re2c:eof = 0;
-            re2c:define:YYFILL = \(dqfill(yyrecord, file) == 0\(dq;
+            re2c:YYFILL = \(dqfill(yyrecord, file) == 0\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2063,7 +2061,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
         yyrecord.token = yyrecord.yycursor;
         %{
             re2c:api = record;
-            re2c:define:YYFILL = \(dq{ if (fill(yyrecord, @@, file) != 0) return \-2; }\(dq;
+            re2c:YYFILL = \(dq{ if (fill(yyrecord, @@, file) != 0) return \-2; }\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2157,7 +2155,7 @@ const State = struct {
 // Common re2c definitions shared between all functions.
 %{
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
 %}
 
@@ -2475,7 +2473,7 @@ fn lex(yyrecord: *State) Status {
         %{
             re2c:api = record;
             re2c:eof = 0;
-            re2c:define:YYFILL = \(dqreturn Status.waiting;\(dq;
+            re2c:YYFILL = \(dqreturn Status.waiting;\(dq;
 
             packet = [a\-z]+[;];
 
@@ -2659,7 +2657,7 @@ fn lex_utf8(yyinput: []const u8) ?usize {
     var yymarker: usize = 0;
     %{use
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8; // the default
+        re2c:YYCTYPE = u8; // the default
     %}
 }
 
@@ -2668,7 +2666,7 @@ fn lex_utf32(yyinput: []const u32) ?usize {
     var yymarker: usize = 0;
     %{use
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
+        re2c:YYCTYPE = u32;
     %}
 }
 
@@ -2925,8 +2923,8 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
             re2c:api = record;
             re2c:eof = 0;
             re2c:tags = 1;
-            re2c:variable:yyrecord = st;
-            re2c:define:YYFILL = \(dqfill(st, file) == 0\(dq;
+            re2c:yyrecord = st;
+            re2c:YYFILL = \(dqfill(st, file) == 0\(dq;
 
             num = [0\-9]+;
 
@@ -3130,8 +3128,8 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
     %{mtags format = \(dqvar @@: usize = mtag_root;\(dq; %}
 
     %{
-        re2c:define:YYMTAGP = \(dq@@ = add_mtag(&mt, @@, yycursor) catch none;\(dq;
-        re2c:define:YYMTAGN = \(dq@@ = add_mtag(&mt, @@, none) catch none;\(dq;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(&mt, @@, yycursor) catch none;\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(&mt, @@, none) catch none;\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

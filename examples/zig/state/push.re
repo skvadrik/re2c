@@ -50,7 +50,7 @@ fn lex(yyrecord: *State) Status {
         %{
             re2c:api = record;
             re2c:eof = 0;
-            re2c:define:YYFILL = "return Status.waiting;";
+            re2c:YYFILL = "return Status.waiting;";
 
             packet = [a-z]+[;];
 
