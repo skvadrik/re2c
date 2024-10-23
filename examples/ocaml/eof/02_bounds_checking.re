@@ -12,8 +12,8 @@ type state = {
 
 %{max %}
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
-    re2c:define:YYFILL = "raise Fill;";
+    re2c:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:YYFILL = "raise Fill;";
 
     str = ['] ([^'\\] | [\\][^])* ['];
 

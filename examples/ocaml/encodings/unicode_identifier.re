@@ -12,7 +12,7 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = ["lex;bool", "yyrecord;state"];
+    re2c:YYFN = ["lex;bool", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
     // Simplified "Unicode Identifier and Pattern Syntax"

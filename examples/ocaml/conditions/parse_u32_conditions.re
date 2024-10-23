@@ -21,8 +21,8 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             in if n' > (of_int32 Int32.max_int) then None else Some (to_int n')
 
 %{
-    re2c:define:YYFN = ["parse;int option", "st;state", "num;int option"];
-    re2c:variable:yyrecord = "st";
+    re2c:YYFN = ["parse;int option", "st;state", "num;int option"];
+    re2c:yyrecord = "st";
     re2c:yyfill:enable = 0;
 
     <init> '0b' / [01]        :=> bin

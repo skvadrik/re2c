@@ -9,9 +9,9 @@ type state = {
 (* expect a string without terminating null *)
 %{
     re2c:api = generic;
-    re2c:define:YYFN = ["lex;int", "st;state", "count;int"];
-    re2c:define:YYPEEK = "if st.cur < st.lim then st.str.[st.cur] else '\\x00'";
-    re2c:define:YYSKIP = "st.cur <- st.cur + 1;";
+    re2c:YYFN = ["lex;int", "st;state", "count;int"];
+    re2c:YYPEEK = "if st.cur < st.lim then st.str.[st.cur] else '\\x00'";
+    re2c:YYSKIP = "st.cur <- st.cur + 1;";
     re2c:yyfill:enable = 0;
 
     *      { -1 }

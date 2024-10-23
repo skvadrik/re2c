@@ -11,7 +11,7 @@ type state = {
 
 (* expect a null-terminated string *)
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
 

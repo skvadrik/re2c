@@ -61,13 +61,11 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = [\(dqlex;bool\(dq, \(dqyyrecord;state\(dq];
+    re2c:YYFN = [\(dqlex;bool\(dq, \(dqyyrecord;state\(dq];
     re2c:yyfill:enable = 0;
 
-    number = [1\-9][0\-9]*;
-
-    number { true }
-    *      { false }
+    [1\-9][0\-9]* { true }
+    *           { false }
 %}
 
 let main () =
@@ -1565,7 +1563,7 @@ type state = {
 
 (* expect a null\-terminated string *)
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
     re2c:yyfill:enable = 0;
 
     *      { \-1 }
@@ -1626,7 +1624,7 @@ type state = {
 
 (* expect a null\-terminated string *)
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
 
@@ -1699,8 +1697,8 @@ type state = {
 
 %{max %}
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
-    re2c:define:YYFILL = \(dqraise Fill;\(dq;
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
+    re2c:YYFILL = \(dqraise Fill;\(dq;
 
     str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1757,9 +1755,9 @@ type state = {
 (* expect a string without terminating null *)
 %{
     re2c:api = generic;
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqst;state\(dq, \(dqcount;int\(dq];
-    re2c:define:YYPEEK = \(dqif st.cur < st.lim then st.str.[st.cur] else \(aq\e\ex00\(aq\(dq;
-    re2c:define:YYSKIP = \(dqst.cur <\- st.cur + 1;\(dq;
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqst;state\(dq, \(dqcount;int\(dq];
+    re2c:YYPEEK = \(dqif st.cur < st.lim then st.str.[st.cur] else \(aq\e\ex00\(aq\(dq;
+    re2c:YYSKIP = \(dqst.cur <\- st.cur + 1;\(dq;
     re2c:yyfill:enable = 0;
 
     *      { \-1 }
@@ -1912,8 +1910,8 @@ let fill(st: state) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
-    re2c:define:YYFILL = \(dqfill yyrecord = Ok\(dq;
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
+    re2c:YYFILL = \(dqfill yyrecord = Ok\(dq;
     re2c:eof = 0;
 
     str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2059,8 +2057,8 @@ let fill (st: state) (need: int) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
-    re2c:define:YYFILL = \(dqif not (fill yyrecord @@ = Ok) then raise Fill;\(dq;
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;state\(dq, \(dqcount;int\(dq];
+    re2c:YYFILL = \(dqif not (fill yyrecord @@ = Ok) then raise Fill;\(dq;
 
     str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2156,30 +2154,30 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             in if n\(aq > (of_int32 Int32.max_int) then None else Some (to_int n\(aq)
 
 %{
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:yyrecord = \(dqst\(dq;
     re2c:yyfill:enable = 0;
 %}
 
 %{local
-    re2c:define:YYFN = [\(dqparse_bin;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
+    re2c:YYFN = [\(dqparse_bin;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
     [01] { parse_bin st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 48) 2) }
     *    { num }
 %}
 
 %{local
-    re2c:define:YYFN = [\(dqparse_oct;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
+    re2c:YYFN = [\(dqparse_oct;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
     [0\-7] { parse_oct st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 48) 8) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = [\(dqparse_dec;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
+    re2c:YYFN = [\(dqparse_dec;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
     [0\-9] { parse_dec st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 48) 10) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = [\(dqparse_hex;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
+    re2c:YYFN = [\(dqparse_hex;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
     [0\-9] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 48) 16) }
     [a\-f] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 87) 16) }
     [A\-F] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor \- 1] \- 55) 16) }
@@ -2187,7 +2185,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 %}
 
 %{local
-    re2c:define:YYFN = [\(dqparse;int option\(dq, \(dqst;state\(dq];
+    re2c:YYFN = [\(dqparse;int option\(dq, \(dqst;state\(dq];
     \(aq0b\(aq / [01]        { parse_bin st (Some 0) }
     \(dq0\(dq                { parse_oct st (Some 0) }
     \(dq\(dq / [1\-9]         { parse_dec st (Some 0) }
@@ -2325,8 +2323,8 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             in if n\(aq > (of_int32 Int32.max_int) then None else Some (to_int n\(aq)
 
 %{
-    re2c:define:YYFN = [\(dqparse;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:YYFN = [\(dqparse;int option\(dq, \(dqst;state\(dq, \(dqnum;int option\(dq];
+    re2c:yyrecord = \(dqst\(dq;
     re2c:yyfill:enable = 0;
 
     <init> \(aq0b\(aq / [01]        :=> bin
@@ -2457,8 +2455,8 @@ let fill(st: state) : status =
     Ready)
 
 %{
-    re2c:define:YYFN = [\(dqlex;status\(dq, \(dqyyrecord;state\(dq];
-    re2c:define:YYFILL = \(dqWaiting\(dq;
+    re2c:YYFN = [\(dqlex;status\(dq, \(dqyyrecord;state\(dq];
+    re2c:YYFILL = \(dqWaiting\(dq;
     re2c:eof = 0;
 
     packet = [a\-z]+[;];
@@ -2598,7 +2596,7 @@ type state = {
 %}
 
 %{
-    re2c:define:YYFN = [\(dqlex;answer\(dq, \(dqyyrecord;state\(dq];
+    re2c:YYFN = [\(dqlex;answer\(dq, \(dqyyrecord;state\(dq];
     re2c:yyfill:enable = 0;
 
     !use:fish;
@@ -2647,12 +2645,12 @@ type \(aqa state = {
 %}
 
 %{use
-    re2c:define:YYFN = [\(dqlex8;int option\(dq, \(dqyyrecord;char state\(dq];
+    re2c:YYFN = [\(dqlex8;int option\(dq, \(dqyyrecord;char state\(dq];
     re2c:encoding:utf8 = 1;
 %}
 
 %{use
-    re2c:define:YYFN = [\(dqlex32;int option\(dq, \(dqyyrecord;int state\(dq];
+    re2c:YYFN = [\(dqlex32;int option\(dq, \(dqyyrecord;int state\(dq];
     re2c:encoding:utf32 = 1;
 %}
 
@@ -2799,8 +2797,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 %{local
-    re2c:define:YYFN = [\(dqparse;semver option\(dq, \(dqst;state\(dq];
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:YYFN = [\(dqparse;semver option\(dq, \(dqst;state\(dq];
+    re2c:yyrecord = \(dqst\(dq;
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
 
@@ -2907,9 +2905,9 @@ let fill(st: state) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = [\(dqlex;(semver list) option\(dq, \(dqst;state\(dq, \(dqvers;semver list\(dq];
-    re2c:define:YYFILL = \(dqfill st = Ok\(dq;
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:YYFN = [\(dqlex;(semver list) option\(dq, \(dqst;state\(dq, \(dqvers;semver list\(dq];
+    re2c:YYFILL = \(dqfill st = Ok\(dq;
+    re2c:yyrecord = \(dqst\(dq;
     re2c:tags = 1;
     re2c:eof = 0;
 
@@ -3002,8 +3000,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 %{local
-    re2c:define:YYFN = [\(dqparse;semver option\(dq, \(dqst;state\(dq];
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:YYFN = [\(dqparse;semver option\(dq, \(dqst;state\(dq];
+    re2c:yyrecord = \(dqst\(dq;
     re2c:captvars = 1;
     re2c:yyfill:enable = 0;
 
@@ -3070,10 +3068,10 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 %{local
-    re2c:define:YYFN = [\(dqparse;(int list) option\(dq, \(dqst;state\(dq];
-    re2c:define:YYMTAGP = \(dq@@ <\- st.yycursor :: @@;\(dq;
-    re2c:define:YYMTAGN = \(dq\(dq; // alternatively could add \(ga\-1\(ga to the list
-    re2c:variable:yyrecord = \(dqst\(dq;
+    re2c:YYFN = [\(dqparse;(int list) option\(dq, \(dqst;state\(dq];
+    re2c:YYMTAGP = \(dq@@ <\- st.yycursor :: @@;\(dq;
+    re2c:YYMTAGN = \(dq\(dq; // alternatively could add \(ga\-1\(ga to the list
+    re2c:yyrecord = \(dqst\(dq;
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
 
@@ -3184,7 +3182,7 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = [\(dqlex;bool\(dq, \(dqyyrecord;state\(dq];
+    re2c:YYFN = [\(dqlex;bool\(dq, \(dqyyrecord;state\(dq];
     re2c:yyfill:enable = 0;
 
     // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
@@ -3280,7 +3278,7 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = [\(dqlex;number\(dq, \(dqyyrecord;state\(dq];
+    re2c:YYFN = [\(dqlex;number\(dq, \(dqyyrecord;state\(dq];
     re2c:yyfill:enable = 0;
 
     *      { NaN }
@@ -3339,7 +3337,7 @@ type state = {
 %{header:off %}
 
 %{
-    re2c:define:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;State.state\(dq];
+    re2c:YYFN = [\(dqlex;int\(dq, \(dqyyrecord;State.state\(dq];
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
     re2c:header = \(dqlexer/state.ml\(dq;

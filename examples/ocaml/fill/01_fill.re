@@ -39,8 +39,8 @@ let fill(st: state) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
-    re2c:define:YYFILL = "fill yyrecord = Ok";
+    re2c:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:YYFILL = "fill yyrecord = Ok";
     re2c:eof = 0;
 
     str = ['] ([^'\\] | [\\][^])* ['];

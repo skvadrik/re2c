@@ -55,9 +55,9 @@ let fill(st: state) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = ["lex;(semver list) option", "st;state", "vers;semver list"];
-    re2c:define:YYFILL = "fill st = Ok";
-    re2c:variable:yyrecord = "st";
+    re2c:YYFN = ["lex;(semver list) option", "st;state", "vers;semver list"];
+    re2c:YYFILL = "fill st = Ok";
+    re2c:yyrecord = "st";
     re2c:tags = 1;
     re2c:eof = 0;
 
