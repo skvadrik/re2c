@@ -12,7 +12,7 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = ["lex;number", "yyrecord;state"];
+    re2c:YYFN = ["lex;number", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
     *      { NaN }

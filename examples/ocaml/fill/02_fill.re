@@ -48,8 +48,8 @@ let fill (st: state) (need: int) : status =
     Ok)
 
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
-    re2c:define:YYFILL = "if not (fill yyrecord @@ = Ok) then raise Fill;";
+    re2c:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:YYFILL = "if not (fill yyrecord @@ = Ok) then raise Fill;";
 
     str = ['] ([^'\\] | [\\][^])* ['];
 

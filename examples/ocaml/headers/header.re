@@ -13,7 +13,7 @@ type state = {
 %{header:off %}
 
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;State.state"];
+    re2c:YYFN = ["lex;int", "yyrecord;State.state"];
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
     re2c:header = "lexer/state.ml";

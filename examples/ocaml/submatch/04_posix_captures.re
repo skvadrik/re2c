@@ -27,8 +27,8 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 %{local
-    re2c:define:YYFN = ["parse;semver option", "st;state"];
-    re2c:variable:yyrecord = "st";
+    re2c:YYFN = ["parse;semver option", "st;state"];
+    re2c:yyrecord = "st";
     re2c:posix-captures = 1;
     re2c:yyfill:enable = 0;
 
