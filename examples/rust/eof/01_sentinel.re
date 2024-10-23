@@ -9,7 +9,7 @@ fn lex(yyinput: &[u8]) -> isize {
 
     'lex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         *      { return -1; }

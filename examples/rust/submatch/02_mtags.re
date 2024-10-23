@@ -64,9 +64,9 @@ fn parse(yyinput: &[u8]) -> Option<Ver> {
 
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYMTAGP = "@@ = add_mtag(&mut mt, @@, yycursor);";
-        re2c:define:YYMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
+        re2c:YYCTYPE = u8;
+        re2c:YYMTAGP = "@@ = add_mtag(&mut mt, @@, yycursor);";
+        re2c:YYMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

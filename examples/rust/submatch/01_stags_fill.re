@@ -77,9 +77,9 @@ fn parse(st: &mut State) -> Option<Vec::<SemVer>> {
         re2c:api = record;
         re2c:eof = 0;
         re2c:tags = 1;
-        re2c:variable:yyrecord = st;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = "fill(st) == Fill::Ok";
+        re2c:yyrecord = st;
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = "fill(st) == Fill::Ok";
 
         num = [0-9]+;
 

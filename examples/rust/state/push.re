@@ -57,8 +57,8 @@ fn lex(yyrecord: &mut State, recv: &mut usize) -> Status {
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYCTYPE = "u8";
-        re2c:define:YYFILL = "return Status::Waiting;";
+        re2c:YYCTYPE = "u8";
+        re2c:YYFILL = "return Status::Waiting;";
 
         packet = [a-z]+[;];
 

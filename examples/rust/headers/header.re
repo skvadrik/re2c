@@ -19,7 +19,7 @@ fn lex(yyrecord: &mut State) -> usize {
         re2c:header = "lexer/state.rs";
         re2c:yyfill:enable = 0;
         re2c:api = record;
-        re2c:define:YYCTYPE = "u8";
+        re2c:YYCTYPE = "u8";
         re2c:tags = 1;
 
         [a]* @t [b]* { return t; }

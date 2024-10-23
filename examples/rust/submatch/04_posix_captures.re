@@ -28,7 +28,7 @@ fn parse(yyinput: &[u8]) -> Option<SemVer> {
 
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:posix-captures = 1;
 
