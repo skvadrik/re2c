@@ -14,8 +14,8 @@ function parse(yyinput) {
     /*!mtags:re2c format = "let @@ = []\n"; */
 
     /*!re2c
-        re2c:define:YYMTAGP = "@@.push(yycursor)";
-        re2c:define:YYMTAGN = ""; // do nothing
+        re2c:YYMTAGP = "@@.push(yycursor)";
+        re2c:YYMTAGN = ""; // do nothing
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

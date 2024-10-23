@@ -41,8 +41,8 @@ function lex(yyrecord) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
-            re2c:define:YYPEEK = "readUInt8";
-            re2c:define:YYFILL = "return WAITING";
+            re2c:YYPEEK = "readUInt8";
+            re2c:YYFILL = "return WAITING";
             re2c:eof = 0;
 
             packet = [a-z]+[;];

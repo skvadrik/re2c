@@ -9,7 +9,7 @@ function lex(yyinput) {
 
     loop: while (true) {
     /*!re2c
-        re2c:define:YYFILL = "return -1";
+        re2c:YYFILL = "return -1";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

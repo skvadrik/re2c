@@ -58,10 +58,8 @@ function lex(yyinput) {
     /*!re2c
         re2c:yyfill:enable = 0;
 
-        number = [1\-9][0\-9]*;
-
-        number { return true; }
-        *      { return false; }
+        [1\-9][0\-9]* { return true; }
+        *           { return false; }
     */
 }
 
@@ -1703,7 +1701,7 @@ function lex(yyinput) {
 
     loop: while (true) {
     /*!re2c
-        re2c:define:YYFILL = \(dqreturn \-1\(dq;
+        re2c:YYFILL = \(dqreturn \-1\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1758,8 +1756,8 @@ function lex(str) {
     loop: while (true) {
     /*!re2c
         re2c:api = generic;
-        re2c:define:YYPEEK = \(dqcur < lim ? str.charCodeAt(cur) : 0\(dq;
-        re2c:define:YYSKIP = \(dqcur += 1\(dq;
+        re2c:YYPEEK = \(dqcur < lim ? str.charCodeAt(cur) : 0\(dq;
+        re2c:YYSKIP = \(dqcur += 1\(dq;
         re2c:yyfill:enable = 0;
 
         *      { return \-1 }
@@ -1904,8 +1902,8 @@ function lex(yyrecord, count) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
-            re2c:define:YYPEEK = \(dqreadUInt8\(dq;
-            re2c:define:YYFILL = \(dqfill(yyrecord) == OK\(dq;
+            re2c:YYPEEK = \(dqreadUInt8\(dq;
+            re2c:YYFILL = \(dqfill(yyrecord) == OK\(dq;
             re2c:eof = 0;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2038,8 +2036,8 @@ function lex(yyrecord, count) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
-            re2c:define:YYPEEK = \(dqreadUInt8\(dq;
-            re2c:define:YYFILL = \(dqif (fill(yyrecord, @@) != OK) return \-1;\(dq;
+            re2c:YYPEEK = \(dqreadUInt8\(dq;
+            re2c:YYFILL = \(dqif (fill(yyrecord, @@) != OK) return \-1;\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2115,7 +2113,7 @@ blocks.
 
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
 */
 
@@ -2421,8 +2419,8 @@ function lex(yyrecord) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
-            re2c:define:YYPEEK = \(dqreadUInt8\(dq;
-            re2c:define:YYFILL = \(dqreturn WAITING\(dq;
+            re2c:YYPEEK = \(dqreadUInt8\(dq;
+            re2c:YYFILL = \(dqreturn WAITING\(dq;
             re2c:eof = 0;
 
             packet = [a\-z]+[;];
@@ -2600,7 +2598,7 @@ test(\(dqwhat?\(dq, DUNNO)
 // blocks add only encoding\-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = \(dqat\(dq;
+    re2c:YYPEEK = \(dqat\(dq;
 
     \(dq∀x ∃y\(dq { return yycursor }
     *       { return null }
@@ -2826,9 +2824,9 @@ function lex(st) {
 
         /*!re2c
             re2c:api = record;
-            re2c:variable:yyrecord = st;
-            re2c:define:YYPEEK = \(dqreadUInt8\(dq;
-            re2c:define:YYFILL = \(dqfill(st) == OK\(dq;
+            re2c:yyrecord = st;
+            re2c:YYPEEK = \(dqreadUInt8\(dq;
+            re2c:YYFILL = \(dqfill(st) == OK\(dq;
             re2c:eof = 0;
             re2c:tags = 1;
 
@@ -2951,8 +2949,8 @@ function parse(yyinput) {
     /*!mtags:re2c format = \(dqlet @@ = []\en\(dq; */
 
     /*!re2c
-        re2c:define:YYMTAGP = \(dq@@.push(yycursor)\(dq;
-        re2c:define:YYMTAGN = \(dq\(dq; // do nothing
+        re2c:YYMTAGP = \(dq@@.push(yycursor)\(dq;
+        re2c:YYMTAGN = \(dq\(dq; // do nothing
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
