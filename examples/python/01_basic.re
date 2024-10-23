@@ -6,10 +6,8 @@ def lex(yyinput):
     re2c:yyfill:enable = 0;
     re2c:indent:top = 1;
 
-    number = [1-9][0-9]*;
-
-    number { return True }
-    *      { return False }
+    [1-9][0-9]* { return True }
+    *           { return False }
 %}
 
 assert lex(b"1234\0")
