@@ -58,14 +58,12 @@ class Main {
         int yycursor = 0;
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
             re2c:yyfill:enable = 0;
 
-            number = [1\-9][0\-9]*;
-
-            number { return true; }
-            *      { return false; }
+            [1\-9][0\-9]* { return true; }
+            *           { return false; }
         */
     }
 
@@ -1599,8 +1597,8 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = \(dqchar\(dq;
-                re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+                re2c:YYCTYPE = \(dqchar\(dq;
+                re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
                 re2c:yyfill:enable = 0;
 
                 *      { return \-1; }
@@ -1658,8 +1656,8 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = \(dqchar\(dq;
-                re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+                re2c:YYCTYPE = \(dqchar\(dq;
+                re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
                 re2c:yyfill:enable = 0;
                 re2c:eof = 0;
 
@@ -1728,9 +1726,9 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dqyyinput[yycursor]\(dq;
-                re2c:define:YYFILL = \(dqreturn \-1;\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYFILL = \(dqreturn \-1;\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1784,9 +1782,9 @@ class Main {
         loop: while (true) {
             /*!re2c
                 re2c:api = generic;
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dq(yycursor < yyinput.length) ? yyinput[yycursor] : 0\(dq;
-                re2c:define:YYSKIP = \(dqyycursor += 1;\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dq(yycursor < yyinput.length) ? yyinput[yycursor] : 0\(dq;
+                re2c:YYSKIP = \(dqyycursor += 1;\(dq;
                 re2c:yyfill:enable = 0;
 
                 *      { return \-1; }
@@ -1949,9 +1947,9 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dqyyinput[yycursor]\(dq;
-                re2c:define:YYFILL = \(dqfill() == 0\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2097,9 +2095,9 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dqyyinput[yycursor]\(dq;
-                re2c:define:YYFILL = \(dqif (fill(@@) != 0) { return \-2; }\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYFILL = \(dqif (fill(@@) != 0) { return \-2; }\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2188,8 +2186,8 @@ class Parser {
 
         try {
             /*!re2c
-                re2c:define:YYCTYPE = \(dqchar\(dq;
-                re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+                re2c:YYCTYPE = \(dqchar\(dq;
+                re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
                 re2c:yyfill:enable = 0;
 
                 end = \(dq\ex00\(dq;
@@ -2367,8 +2365,8 @@ class Parser {
         try {
             loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = \(dqchar\(dq;
-                re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+                re2c:YYCTYPE = \(dqchar\(dq;
+                re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
                 re2c:yyfill:enable = 0;
 
                 <*> * { throw new IllegalArgumentException(\(dqill\-formed number\(dq); }
@@ -2528,9 +2526,9 @@ class Lexer {
             yyrecord.token = yyrecord.yycursor;
             /*!re2c
                 re2c:api = record;
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dqyyrecord.yyinput[yyrecord.yycursor]\(dq;
-                re2c:define:YYFILL = \(dqreturn Status.WAITING;\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dqyyrecord.yyinput[yyrecord.yycursor]\(dq;
+                re2c:YYFILL = \(dqreturn Status.WAITING;\(dq;
                 re2c:eof = 0;
 
                 packet = [a\-z]+[;];
@@ -2668,8 +2666,8 @@ class Main {
 
         /*!re2c
             re2c:yyfill:enable = 0;
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
 
             !use:fish;
             !use:colors;
@@ -2701,7 +2699,7 @@ class Main {
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = \(dqyyinput[yycursor]\(dq;
+    re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
     re2c:indent:top = 1;
 
     \(dq∀x ∃y\(dq { return true; }
@@ -2713,7 +2711,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:define:YYCTYPE = \(dqint\(dq; // should be \(gabyte\(ga, but it\(aqs signed in Java
+            re2c:YYCTYPE = \(dqint\(dq; // should be \(gabyte\(ga, but it\(aqs signed in Java
             re2c:encoding:utf8 = 1;
         */
     }
@@ -2722,7 +2720,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:define:YYCTYPE = \(dqint\(dq;
+            re2c:YYCTYPE = \(dqint\(dq;
             re2c:encoding:utf32 = 1;
         */
     }
@@ -2873,8 +2871,8 @@ class Main {
         /*!stags:re2c format = \(dqint @@ = \-1;\(dq; */
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
             re2c:yyfill:enable = 0;
             re2c:tags = 1;
 
@@ -2997,9 +2995,9 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:define:YYCTYPE = \(dqbyte\(dq;
-                re2c:define:YYPEEK = \(dqyyinput[yycursor]\(dq;
-                re2c:define:YYFILL = \(dqfill() == 0\(dq;
+                re2c:YYCTYPE = \(dqbyte\(dq;
+                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
                 re2c:tags = 1;
 
@@ -3088,8 +3086,8 @@ class Main {
         /*!stags:re2c format = \(dqint @@ = \-1;\(dq; */
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
             re2c:yyfill:enable = 0;
             re2c:captvars = 1;
 
@@ -3143,10 +3141,10 @@ class Main {
         /*!mtags:re2c format = \(dqList<Integer> @@ = new ArrayList<>();\(dq; */
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
-            re2c:define:YYMTAGP = \(dq@@.add(yycursor);\(dq;
-            re2c:define:YYMTAGN = \(dq\(dq; // do nothing
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYMTAGP = \(dq@@.add(yycursor);\(dq;
+            re2c:YYMTAGN = \(dq\(dq; // do nothing
             re2c:yyfill:enable = 0;
             re2c:tags = 1;
 
@@ -3245,8 +3243,8 @@ class Main {
         int yymarker = 0;
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
             re2c:yyfill:enable = 0;
 
             // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
@@ -3334,8 +3332,8 @@ class Main {
         int yymarker = 0;
 
         /*!re2c
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyinput.charAt(yycursor)\(dq;
             re2c:yyfill:enable = 0;
 
             *      { return Num.NAN; }
@@ -3406,8 +3404,8 @@ class Main {
             re2c:api = record;
             re2c:tags = 1;
             re2c:yyfill:enable = 0;
-            re2c:define:YYCTYPE = \(dqchar\(dq;
-            re2c:define:YYPEEK = \(dqyyrecord.yyinput.charAt(yyrecord.yycursor)\(dq;
+            re2c:YYCTYPE = \(dqchar\(dq;
+            re2c:YYPEEK = \(dqyyrecord.yyinput.charAt(yyrecord.yycursor)\(dq;
             re2c:header = \(dqlexer/state.java\(dq;
 
             [a]* @t [b]* { return t; }
