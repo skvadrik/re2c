@@ -22,8 +22,8 @@ class Parser {
         try {
             loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = "char";
-                re2c:define:YYPEEK = "yyinput.charAt(yycursor)";
+                re2c:YYCTYPE = "char";
+                re2c:YYPEEK = "yyinput.charAt(yycursor)";
                 re2c:yyfill:enable = 0;
 
                 <*> * { throw new IllegalArgumentException("ill-formed number"); }

@@ -10,9 +10,9 @@ class Main {
         loop: while (true) {
             /*!re2c
                 re2c:api = generic;
-                re2c:define:YYCTYPE = "byte";
-                re2c:define:YYPEEK = "(yycursor < yyinput.length) ? yyinput[yycursor] : 0";
-                re2c:define:YYSKIP = "yycursor += 1;";
+                re2c:YYCTYPE = "byte";
+                re2c:YYPEEK = "(yycursor < yyinput.length) ? yyinput[yycursor] : 0";
+                re2c:YYSKIP = "yycursor += 1;";
                 re2c:yyfill:enable = 0;
 
                 *      { return -1; }

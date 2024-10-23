@@ -16,10 +16,10 @@ class Main {
         /*!mtags:re2c format = "List<Integer> @@ = new ArrayList<>();"; */
 
         /*!re2c
-            re2c:define:YYCTYPE = "char";
-            re2c:define:YYPEEK = "yyinput.charAt(yycursor)";
-            re2c:define:YYMTAGP = "@@.add(yycursor);";
-            re2c:define:YYMTAGN = ""; // do nothing
+            re2c:YYCTYPE = "char";
+            re2c:YYPEEK = "yyinput.charAt(yycursor)";
+            re2c:YYMTAGP = "@@.add(yycursor);";
+            re2c:YYMTAGN = ""; // do nothing
             re2c:yyfill:enable = 0;
             re2c:tags = 1;
 

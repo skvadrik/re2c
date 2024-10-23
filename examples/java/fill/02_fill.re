@@ -56,9 +56,9 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:define:YYCTYPE = "byte";
-                re2c:define:YYPEEK = "yyinput[yycursor]";
-                re2c:define:YYFILL = "if (fill(@@) != 0) { return -2; }";
+                re2c:YYCTYPE = "byte";
+                re2c:YYPEEK = "yyinput[yycursor]";
+                re2c:YYFILL = "if (fill(@@) != 0) { return -2; }";
 
                 str = ['] ([^'\\] | [\\][^])* ['];
 

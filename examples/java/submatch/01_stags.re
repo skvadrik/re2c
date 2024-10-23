@@ -30,8 +30,8 @@ class Main {
         /*!stags:re2c format = "int @@ = -1;"; */
 
         /*!re2c
-            re2c:define:YYCTYPE = "char";
-            re2c:define:YYPEEK = "yyinput.charAt(yycursor)";
+            re2c:YYCTYPE = "char";
+            re2c:YYPEEK = "yyinput.charAt(yycursor)";
             re2c:yyfill:enable = 0;
             re2c:tags = 1;
 

@@ -15,9 +15,9 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:define:YYCTYPE = "byte";
-                re2c:define:YYPEEK = "yyinput[yycursor]";
-                re2c:define:YYFILL = "return -1;";
+                re2c:YYCTYPE = "byte";
+                re2c:YYPEEK = "yyinput[yycursor]";
+                re2c:YYFILL = "return -1;";
 
                 str = ['] ([^'\\] | [\\][^])* ['];
 

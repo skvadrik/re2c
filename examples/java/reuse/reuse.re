@@ -6,7 +6,7 @@
 
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = "yyinput[yycursor]";
+    re2c:YYPEEK = "yyinput[yycursor]";
     re2c:indent:top = 1;
 
     "∀x ∃y" { return true; }
@@ -18,7 +18,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:define:YYCTYPE = "int"; // should be `byte`, but it's signed in Java
+            re2c:YYCTYPE = "int"; // should be `byte`, but it's signed in Java
             re2c:encoding:utf8 = 1;
         */
     }
@@ -27,7 +27,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:define:YYCTYPE = "int";
+            re2c:YYCTYPE = "int";
             re2c:encoding:utf32 = 1;
         */
     }

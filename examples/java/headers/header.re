@@ -28,8 +28,8 @@ class Main {
             re2c:api = record;
             re2c:tags = 1;
             re2c:yyfill:enable = 0;
-            re2c:define:YYCTYPE = "char";
-            re2c:define:YYPEEK = "yyrecord.yyinput.charAt(yyrecord.yycursor)";
+            re2c:YYCTYPE = "char";
+            re2c:YYPEEK = "yyrecord.yyinput.charAt(yyrecord.yycursor)";
             re2c:header = "lexer/state.java";
 
             [a]* @t [b]* { return t; }

@@ -5,14 +5,12 @@ class Main {
         int yycursor = 0;
 
         /*!re2c
-            re2c:define:YYCTYPE = "char";
-            re2c:define:YYPEEK = "yyinput.charAt(yycursor)";
+            re2c:YYCTYPE = "char";
+            re2c:YYPEEK = "yyinput.charAt(yycursor)";
             re2c:yyfill:enable = 0;
 
-            number = [1-9][0-9]*;
-
-            number { return true; }
-            *      { return false; }
+            [1-9][0-9]* { return true; }
+            *           { return false; }
         */
     }
 
