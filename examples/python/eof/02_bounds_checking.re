@@ -8,7 +8,7 @@ def lex(yyinput):
     count = 0
 
     while True: %{
-        re2c:define:YYFILL = "return -1";
+        re2c:YYFILL = "return -1";
         re2c:indent:top = 2;
 
         str = ['] ([^'\\] | [\\][^])* ['];

@@ -61,8 +61,8 @@ def lex(st, count):
         st.token = st.yycursor
     %{
         re2c:api = record;
-        re2c:variable:yyrecord = st;
-        re2c:define:YYFILL = "fill(st) == Status.OK";
+        re2c:yyrecord = st;
+        re2c:YYFILL = "fill(st) == Status.OK";
         re2c:eof = 0;
         re2c:indent:top = 2;
         re2c:tags = 1;

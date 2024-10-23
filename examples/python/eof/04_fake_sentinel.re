@@ -8,8 +8,8 @@ def lex(str):
 
     while True: %{
         re2c:api = generic;
-        re2c:define:YYPEEK = "str[cur] if cur < lim else 0";
-        re2c:define:YYSKIP = "cur += 1";
+        re2c:YYPEEK = "str[cur] if cur < lim else 0";
+        re2c:YYSKIP = "cur += 1";
         re2c:yyfill:enable = 0;
         re2c:indent:top = 2;
 
