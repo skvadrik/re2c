@@ -13,7 +13,7 @@ data State = State {
 
 -- expect a null-terminated string
 %{
-    re2c:define:YYFN = ["lexer;Int", "State{..};State"];
+    re2c:YYFN = ["lexer;Int", "State{..};State"];
     re2c:yyfill:enable = 0;
 
     *      { (-1) }

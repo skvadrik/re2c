@@ -15,7 +15,7 @@ data State = State {
 }
 
 %{
-    re2c:define:YYFN = ["lexer;Bool", "State{..};State"];
+    re2c:YYFN = ["lexer;Bool", "State{..};State"];
     re2c:yyfill:enable = 0;
 
     // Simplified "Unicode Identifier and Pattern Syntax"

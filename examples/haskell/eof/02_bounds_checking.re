@@ -20,9 +20,9 @@ yymaxfill :: Int
 %{max %}
 
 %{
-    re2c:define:YYFN  = ["lexer;IO Int", "State{..};State"];
-    re2c:define:YYPEEK = "BS.index";
-    re2c:define:YYFILL = "throw UnexpectedFill";
+    re2c:YYFN  = ["lexer;IO Int", "State{..};State"];
+    re2c:YYPEEK = "BS.index";
+    re2c:YYFILL = "throw UnexpectedFill";
     re2c:monadic = 1; // YYFILL requires monadic do-notation for `when` conditions
 
     str = ['] ([^'\\] | [\\][^])* ['];

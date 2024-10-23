@@ -30,10 +30,10 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (index s k) - 48))
 
 %{
-    re2c:define:YYFN = ["parse;Maybe SemVer", "State{..};State"];
-    re2c:define:YYCTYPE = "Word8";
+    re2c:YYFN = ["parse;Maybe SemVer", "State{..};State"];
+    re2c:YYCTYPE = "Word8";
     re2c:captvars = 1;
-    re2c:variable:yypmatch = _;
+    re2c:yypmatch = _;
     re2c:yyfill:enable = 0;
 
     num = [0-9]+;

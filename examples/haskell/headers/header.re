@@ -20,7 +20,7 @@ data State = State {
 %{header:off %}
 
 %{
-    re2c:define:YYFN = ["lexer;Int", "State{..};State"];
+    re2c:YYFN = ["lexer;Int", "State{..};State"];
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
     re2c:header = "lexer/state.hs";

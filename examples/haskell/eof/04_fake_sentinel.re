@@ -15,9 +15,9 @@ data State = State {
 -- Expect a string without terminating null.
 %{
     re2c:api = generic;
-    re2c:define:YYFN = ["lexer;Int", "State{..};State"];
-    re2c:define:YYPEEK = "if _cur < _lim then BS.index _str _cur else 0";
-    re2c:define:YYSKIP = "let cur = _cur + 1 in let _cur = cur in";
+    re2c:YYFN = ["lexer;Int", "State{..};State"];
+    re2c:YYPEEK = "if _cur < _lim then BS.index _str _cur else 0";
+    re2c:YYSKIP = "let cur = _cur + 1 in let _cur = cur in";
     re2c:yyfill:enable = 0;
 
     *      { (-1) }
