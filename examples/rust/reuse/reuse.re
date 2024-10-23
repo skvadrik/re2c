@@ -1,10 +1,9 @@
-// re2rust $INPUT -o $OUTPUT --input-encoding utf8
+// re2rust $INPUT -o $OUTPUT --input-encoding utf8 --api simple
 
 // This example supports multiple input encodings: UTF-8 and UTF-32.
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding-specific configurations.
 /*!rules:re2c
-    re2c:api = default;
     re2c:yyfill:enable = 0;
 
     "∀x ∃y" { return Some(yycursor); }

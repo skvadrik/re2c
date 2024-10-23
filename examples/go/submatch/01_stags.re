@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT
+//go:generate re2go $INPUT -o $OUTPUT --api simple
 package main
 
 import "reflect"
@@ -22,7 +22,6 @@ func parse(yyinput string) *SemVer {
 
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		re2c:api = default;
 		re2c:YYCTYPE = byte;
 		re2c:tags = 1;
 

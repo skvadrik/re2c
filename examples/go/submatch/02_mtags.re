@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT
+//go:generate re2go $INPUT -o $OUTPUT --api simple
 package main
 
 import "reflect"
@@ -73,7 +73,6 @@ func parse(yyinput string) []int {
 	/*!re2c
 		re2c:tags = 1;
 		re2c:yyfill:enable = 0;
-		re2c:api = default;
 		re2c:YYCTYPE = byte;
 		re2c:YYMTAGP = "@@ = add_mtag(&trie, @@, yycursor)";
 		re2c:YYMTAGN = "@@ = add_mtag(&trie, @@, tagNone)";

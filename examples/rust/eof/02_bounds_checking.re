@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 /*!max:re2c*/
 
@@ -13,7 +13,6 @@ fn lex(s: &[u8]) -> isize {
     yyinput.extend([0 as u8; YYMAXFILL]);
 
     'lex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:YYFILL = "return -1;";
 

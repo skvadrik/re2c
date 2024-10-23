@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT
+//go:generate re2go $INPUT -o $OUTPUT --api simple
 package main
 
 // This example shows how to combine reusable re2c blocks: two blocks
@@ -27,7 +27,6 @@ func lex(yyinput string) int {
 	var yycursor, yymarker int
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		re2c:api = default;
 		re2c:YYCTYPE = byte;
 
 		!use:fish;

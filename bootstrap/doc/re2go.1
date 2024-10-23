@@ -51,13 +51,12 @@ decimal number:
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT \-i
+//go:generate re2go $INPUT \-o $OUTPUT \-i \-\-api simple
 package main
 
 func lex(yyinput string) {
     var yycursor int
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
 
@@ -1617,7 +1616,7 @@ warning and \fBre2c:sentinel\fP configuration to verify this). Configuration
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 // Expect a null\-terminated string.
@@ -1626,7 +1625,6 @@ func lex(yyinput string) int {
     count := 0
 
     for { /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
         re2c:YYCTYPE = byte;
 
@@ -1673,7 +1671,7 @@ to a default state, causing
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 // Expects a null\-terminated string.
@@ -1683,7 +1681,6 @@ func lex(yyinput string) int {
     count := 0
 
     for { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
@@ -1736,7 +1733,7 @@ section for an example that refills the input buffer with \fBYYFILL\fP\&.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 import \(dqstrings\(dq
@@ -1753,7 +1750,6 @@ func lex(str string) int {
     count := 0
 
     for { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:YYFILL = \(dqreturn \-1\(dq;
 
@@ -2203,7 +2199,7 @@ blocks.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT \-i
+//go:generate re2go $INPUT \-o $OUTPUT \-i \-\-api simple
 package main
 
 import \(dqerrors\(dq
@@ -2227,7 +2223,6 @@ func parse_u32(yyinput string) (uint32, error) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
 
         end = \(dq\ex00\(dq;
@@ -2381,7 +2376,7 @@ number of the initial condition generated with \fBconditions\fP block.
 .sp
 .nf
 .ft C
-//go:generate re2go \-c $INPUT \-o $OUTPUT \-i
+//go:generate re2go \-c $INPUT \-o $OUTPUT \-i \-\-api simple
 package main
 
 import \(dqerrors\(dq
@@ -2409,7 +2404,6 @@ func parse_u32(yyinput string) (uint32, error) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:YYGETCOND = \(dqcond\(dq;
         re2c:YYSETCOND = \(dqcond = @@\(dq;
@@ -2679,7 +2673,7 @@ blocks.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 // This example shows how to combine reusable re2c blocks: two blocks
@@ -2708,7 +2702,6 @@ func lex(yyinput string) int {
     var yycursor, yymarker int
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
 
         !use:fish;
@@ -2733,7 +2726,7 @@ func main() {
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT \-\-input\-encoding utf8
+//go:generate re2go $INPUT \-o $OUTPUT \-\-input\-encoding utf8 \-\-api simple
 package main
 
 // This example supports multiple input encodings: UTF\-8 and UTF\-32.
@@ -2741,7 +2734,6 @@ package main
 // blocks add only encoding\-specific configurations.
 /*!rules:re2c
     re2c:yyfill:enable = 0;
-    re2c:api = default;
 
     \(dq∀x ∃y\(dq { return 0; }
     *       { return 1; }
@@ -2873,7 +2865,7 @@ See below for a more complex example that uses \fBYYFILL\fP\&.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 import \(dqreflect\(dq
@@ -2897,7 +2889,6 @@ func parse(yyinput string) *SemVer {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:tags = 1;
 
@@ -3075,7 +3066,7 @@ Here is an example of using capturing groups to parse semantic versions.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 import \(dqreflect\(dq
@@ -3099,7 +3090,6 @@ func parse(yyinput string) *SemVer {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:captvars = 1;
 
@@ -3139,7 +3129,7 @@ components. Tag variables are stored in a trie.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT
+//go:generate re2go $INPUT \-o $OUTPUT \-\-api simple
 package main
 
 import \(dqreflect\(dq
@@ -3214,7 +3204,6 @@ func parse(yyinput string) []int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:YYMTAGP = \(dq@@ = add_mtag(&trie, @@, yycursor)\(dq;
         re2c:YYMTAGN = \(dq@@ = add_mtag(&trie, @@, tagNone)\(dq;
@@ -3304,7 +3293,7 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT \-8 \-s \-i
+//go:generate re2go $INPUT \-o $OUTPUT \-8si \-\-api simple
 package main
 
 /*!include:re2c \(dqunicode_categories.re\(dq */
@@ -3312,7 +3301,6 @@ package main
 func lex(yyinput string) int {
     var yycursor, yymarker int
     /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
         re2c:YYCTYPE = byte;
 
@@ -3394,7 +3382,7 @@ float { return ResultOk }
 .sp
 .nf
 .ft C
-//go:generate re2go $INPUT \-o $OUTPUT \-i
+//go:generate re2go $INPUT \-o $OUTPUT \-i \-\-api simple
 package main
 
 /*!include:re2c \(dqdefinitions.go\(dq */
@@ -3402,7 +3390,6 @@ package main
 func lex(yyinput string) int {
     var yycursor, yymarker int
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = byte;
         re2c:yyfill:enable = 0;
 

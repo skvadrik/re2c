@@ -51,12 +51,11 @@ decimal number:
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-\-no\-unsafe
+// re2rust $INPUT \-o $OUTPUT \-\-no\-unsafe \-\-api simple
 
 fn lex(yyinput: &[u8]) \-> bool {
     let mut yycursor = 0;
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -1588,7 +1587,7 @@ warning and \fBre2c:sentinel\fP configuration to verify this). Configuration
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 fn lex(yyinput: &[u8]) \-> isize {
     // The input must be null\-terminated, otherwise the function has UB.
@@ -1598,7 +1597,6 @@ fn lex(yyinput: &[u8]) \-> isize {
     let mut count = 0;
 
     \(aqlex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -1643,7 +1641,7 @@ to a default state, causing
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 fn lex(yyinput: &[u8]) \-> isize {
     // The input must be null\-terminated, otherwise the function has UB.
@@ -1654,7 +1652,6 @@ fn lex(yyinput: &[u8]) \-> isize {
     let mut count = 0;
 
     \(aqlex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
@@ -1705,7 +1702,7 @@ section for an example that refills the input buffer with \fBYYFILL\fP\&.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 /*!max:re2c*/
 
@@ -1720,7 +1717,6 @@ fn lex(s: &[u8]) \-> isize {
     yyinput.extend([0 as u8; YYMAXFILL]);
 
     \(aqlex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:YYFILL = \(dqreturn \-1;\(dq;
 
@@ -2365,7 +2361,7 @@ number of the initial condition generated with \fBconditions\fP block.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-c
+// re2rust $INPUT \-o $OUTPUT \-c \-\-api simple
 
 /*!conditions:re2c*/
 
@@ -2385,7 +2381,6 @@ fn parse_u32(yyinput: &[u8]) \-> Option<u32> {
     let mut num = 0u64; // Store number in u64 to simplify overflow checks.
 
     \(aqlex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -2660,7 +2655,7 @@ blocks.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 // This example shows how to combine reusable re2c blocks: two blocks
 // (\(aqcolors\(aq and \(aqfish\(aq) are merged into one. The \(aqsalmon\(aq rule occurs
@@ -2686,7 +2681,6 @@ fn lex(yyinput: &[u8]) \-> Ans {
 
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
         re2c:YYCTYPE = u8;
 
@@ -2711,13 +2705,12 @@ fn main() {
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-\-input\-encoding utf8
+// re2rust $INPUT \-o $OUTPUT \-\-input\-encoding utf8 \-\-api simple
 
 // This example supports multiple input encodings: UTF\-8 and UTF\-32.
 // Both lexers are generated from the same rules block, and the use
 // blocks add only encoding\-specific configurations.
 /*!rules:re2c
-    re2c:api = default;
     re2c:yyfill:enable = 0;
 
     \(dq∀x ∃y\(dq { return Some(yycursor); }
@@ -2854,7 +2847,7 @@ See below for a more complex example that uses \fBYYFILL\fP\&.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 #[derive(Debug, PartialEq)]
 struct SemVer(u32, u32, u32); // version: (major, minor, patch)
@@ -2879,7 +2872,6 @@ fn parse(yyinput: &[u8]) \-> Option<SemVer> {
     /*!stags:re2c format = \(aqlet mut @@ = NONE;\(aq; */
 
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
@@ -3071,7 +3063,7 @@ Here is an example of using capturing groups to parse semantic versions.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 #[derive(Debug, PartialEq)]
 struct SemVer(u32, u32, u32); // version: (major, minor, patch)
@@ -3096,7 +3088,6 @@ fn parse(yyinput: &[u8]) \-> Option<SemVer> {
     /*!svars:re2c format = \(aq#[allow(unused_mut)]\enlet mut @@;\en\(aq; */
 
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:captvars = 1;
@@ -3132,7 +3123,7 @@ components. Tag variables are stored in a trie.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 const NONE: usize = std::usize::MAX;
 const MTAG_ROOT: usize = NONE \- 1;
@@ -3197,7 +3188,6 @@ fn parse(yyinput: &[u8]) \-> Option<Ver> {
     /*!mtags:re2c format = \(aqlet mut @@ = MTAG_ROOT;\(aq; */
 
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:YYMTAGP = \(dq@@ = add_mtag(&mut mt, @@, yycursor);\(dq;
         re2c:YYMTAGN = \(dq@@ = add_mtag(&mut mt, @@, NONE);\(dq;
@@ -3286,7 +3276,7 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT \-\-utf8
+// re2rust $INPUT \-o $OUTPUT \-\-utf8 \-\-api simple
 
 /*!include:re2c \(dqunicode_categories.re\(dq */
 
@@ -3295,7 +3285,6 @@ fn lex(yyinput: &[u8]) \-> bool {
 
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
@@ -3373,7 +3362,7 @@ float { return Num::Float; }
 .sp
 .nf
 .ft C
-// re2rust $INPUT \-o $OUTPUT
+// re2rust $INPUT \-o $OUTPUT \-\-api simple
 
 /*!include:re2c \(dqdefinitions.rs\(dq */
 
@@ -3383,7 +3372,6 @@ fn lex(yyinput: &[u8]) \-> Num {
     let mut yycursor = 0;
     let mut yymarker = 0;
     /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
         re2c:YYCTYPE = u8;
 
