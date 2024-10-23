@@ -14,7 +14,7 @@ program:
     Record API is useful in cases when lexer state must be stored in a class.
     It is enabled with ``--api record`` option or ``re2c:api = record``
     configuration. This API consists of a variable ``yyrecord`` (the
-    name can be overridden with ``re2c:variable:yyrecord``) that should be
+    name can be overridden with ``re2c:yyrecord``) that should be
     defined as a class with fields ``yyinput``, ``yycursor``, ``yymarker``,
     ``yyctxmarker``, ``yylimit`` (only the fields used by the generated code
     need to be defined, and their names can be configured).

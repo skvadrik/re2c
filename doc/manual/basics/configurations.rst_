@@ -10,7 +10,7 @@ Here is a full list of configurations supported by |re2c|:
     to ``$``, then placeholders will have the form ``${name}``. Single-argument
     APIs may use shorthand notation without the name in braces. This option can
     be overridden by options for individual API primitives, e.g.
-    ``re2c:define:YYFILL@len`` for ``YYFILL``.
+    ``re2c:YYFILL@len`` for ``YYFILL``.
 
 ``re2c:api:style``
     Specify API style. Possible values are ``functions`` (the default for C) and
@@ -25,7 +25,7 @@ Here is a full list of configurations supported by |re2c|:
     variables of the form ``@@{var}`` or ``@@`` (they correspond to arguments in
     function-like style).
     This configuration may be overridden for individual API primitives, see for
-    example ``re2c:define:YYFILL:naked`` configuration for ``YYFILL``.
+    example ``re2c:YYFILL:naked`` configuration for ``YYFILL``.
 
 ``re2c:bit-vectors``, ``re2c:flags:bit-vectors``, ``re2c:flags:b``
     Same as the ``--bit-vectors`` option, but can be configured on per-block
@@ -86,128 +86,121 @@ Here is a full list of configurations supported by |re2c|:
     Same as the ``--debug-output`` option, but can be configured on per-block
     basis.
 
-``re2c:define:YYBACKUP``
-    Defines generic API primitive ``YYBACKUP`` (see the API primitives section).
+``re2c:YYBACKUP``, ``re2c:define:YYBACKUP``
+    Defines generic API primitive ``YYBACKUP``.
 
-``re2c:define:YYBACKUPCTX``
-    Defines generic API primitive ``YYBACKUPCTX`` (see the API primitives
-    section).
+``re2c:YYBACKUPCTX``, ``re2c:define:YYBACKUPCTX``
+    Defines generic API primitive ``YYBACKUPCTX``.
 
-``re2c:define:YYCONDTYPE``
-    Defines ``YYCONDTYPE`` (see the API primitives section).
+``re2c:YYCONDTYPE``, ``re2c:define:YYCONDTYPE``
+    Defines ``YYCONDTYPE``.
 
-``re2c:define:YYCTYPE``
-    Defines ``YYCTYPE`` (see the API primitives section).
+``re2c:YYCTYPE``, ``re2c:define:YYCTYPE``
+    Defines ``YYCTYPE``.
 
-``re2c:define:YYCTXMARKER``
-    Defines API primitive ``YYCTXMARKER`` (see the API primitives section).
+``re2c:YYCTXMARKER``, ``re2c:define:YYCTXMARKER``
+    Defines API primitive ``YYCTXMARKER``.
 
-``re2c:define:YYCURSOR``
-    Defines API primitive ``YYCURSOR`` (see the API primitives section).
+``re2c:YYCURSOR``, ``re2c:define:YYCURSOR``
+    Defines API primitive ``YYCURSOR``.
 
-``re2c:define:YYDEBUG``
-    Defines API primitive ``YYDEBUG`` (see the API primitives section).
+``re2c:YYDEBUG``, ``re2c:define:YYDEBUG``
+    Defines API primitive ``YYDEBUG``.
 
-``re2c:define:YYFILL``
-    Defines API primitive ``YYFILL`` (see the API primitives section).
+``re2c:YYFILL``, ``re2c:define:YYFILL``
+    Defines API primitive ``YYFILL``.
 
-``re2c:define:YYFILL@len``
+``re2c:YYFILL@len``, ``re2c:define:YYFILL@len``
     Specifies the sigil used for argument substitution in ``YYFILL``
     definition. Defaults to ``@@``.
     Overrides the more generic ``re2c:api:sigil`` configuration.
 
-``re2c:define:YYFILL:naked``
+``re2c:YYFILL:naked``, ``re2c:define:YYFILL:naked``
     Overrides the more generic ``re2c:api:style`` configuration for ``YYFILL``.
     Zero value corresponds to free-form API style.
 
-``re2c:define:YYGETCONDITION``
-    Defines API primitive ``YYGETCONDITION`` (see the API primitives section).
+``re2c:YYGETCONDITION``, ``re2c:define:YYGETCONDITION``
+    Defines API primitive ``YYGETCONDITION``.
 
-``re2c:define:YYGETCONDITION:naked``
+``re2c:YYGETCONDITION:naked``, ``re2c:define:YYGETCONDITION:naked``
     Overrides the more generic ``re2c:api:style`` configuration for
     ``YYGETCONDITION``. Zero value corresponds to free-form API style.
 
-``re2c:define:YYGETSTATE``
-    Defines API primitive ``YYGETSTATE`` (see the API primitives section).
+``re2c:YYGETSTATE``, ``re2c:define:YYGETSTATE``
+    Defines API primitive ``YYGETSTATE``.
 
-``re2c:define:YYGETSTATE:naked``
+``re2c:YYGETSTATE:naked``, ``re2c:define:YYGETSTATE:naked``
     Overrides the more generic ``re2c:api:style`` configuration for
     ``YYGETSTATE``. Zero value corresponds to free-form API style.
 
-``re2c:define:YYLESSTHAN``
-    Defines generic API primitive ``YYLESSTHAN`` (see the API primitives
-    section).
+``re2c:YYLESSTHAN``, ``re2c:define:YYLESSTHAN``
+    Defines generic API primitive ``YYLESSTHAN``.
 
-``re2c:define:YYLIMIT``
-    Defines API primitive ``YYLIMIT`` (see the API primitives section).
+``re2c:YYLIMIT``, ``re2c:define:YYLIMIT``
+    Defines API primitive ``YYLIMIT``.
 
-``re2c:define:YYMARKER``
-    Defines API primitive ``YYMARKER`` (see the API primitives section).
+``re2c:YYMARKER``, ``re2c:define:YYMARKER``
+    Defines API primitive ``YYMARKER``.
 
-``re2c:define:YYMTAGN``
-    Defines generic API primitive ``YYMTAGN`` (see the API primitives section).
+``re2c:YYMTAGN``, ``re2c:define:YYMTAGN``
+    Defines generic API primitive ``YYMTAGN``.
 
-``re2c:define:YYMTAGP``
-    Defines generic API primitive ``YYMTAGP`` (see the API primitives section).
+``re2c:YYMTAGP``, ``re2c:define:YYMTAGP``
+    Defines generic API primitive ``YYMTAGP``.
 
-``re2c:define:YYPEEK``
-    Defines generic API primitive ``YYPEEK`` (see the API primitives section).
+``re2c:YYPEEK``, ``re2c:define:YYPEEK``
+    Defines generic API primitive ``YYPEEK``.
 
-``re2c:define:YYRESTORE``
-    Defines generic API primitive ``YYRESTORE`` (see the API primitives
-    section).
+``re2c:YYRESTORE``, ``re2c:define:YYRESTORE``
+    Defines generic API primitive ``YYRESTORE``.
 
-``re2c:define:YYRESTORECTX``
-    Defines generic API primitive ``YYRESTORECTX`` (see the API primitives
-    section).
+``re2c:YYRESTORECTX``, ``re2c:define:YYRESTORECTX``
+    Defines generic API primitive ``YYRESTORECTX``.
 
-``re2c:define:YYRESTORETAG``
-    Defines generic API primitive ``YYRESTORETAG`` (see the API primitives
-    section).
+``re2c:YYRESTORETAG``, ``re2c:define:YYRESTORETAG``
+    Defines generic API primitive ``YYRESTORETAG``.
 
-``re2c:define:YYSETCONDITION``
-    Defines API primitive ``YYSETCONDITION`` (see the API primitives section).
+``re2c:YYSETCONDITION``, ``re2c:define:YYSETCONDITION``
+    Defines API primitive ``YYSETCONDITION``.
 
-``re2c:define:YYSETCONDITION@cond``
+``re2c:YYSETCONDITION@cond``, ``re2c:define:YYSETCONDITION@cond``
     Specifies the sigil used for argument substitution in ``YYSETCONDITION``
     definition. The default value is ``@@``.
     Overrides the more generic ``re2c:api:sigil`` configuration.
 
-``re2c:define:YYSETCONDITION:naked``
+``re2c:YYSETCONDITION:naked``, ``re2c:define:YYSETCONDITION:naked``
     Overrides the more generic ``re2c:api:style`` configuration for
     ``YYSETCONDITION``. Zero value corresponds to free-form API style.
 
-``re2c:define:YYSETSTATE``
-    Defines API primitive ``YYSETSTATE`` (see the API primitives section).
+``re2c:YYSETSTATE``, ``re2c:define:YYSETSTATE``
+    Defines API primitive ``YYSETSTATE``.
 
-``re2c:define:YYSETSTATE@state``
+``re2c:YYSETSTATE@state``, ``re2c:define:YYSETSTATE@state``
     Specifies the sigil used for argument substitution in ``YYSETSTATE``
     definition. The default value is ``@@``.
     Overrides the more generic ``re2c:api:sigil`` configuration.
 
-``re2c:define:YYSETSTATE:naked``
+``re2c:YYSETSTATE:naked``, ``re2c:define:YYSETSTATE:naked``
     Overrides the more generic ``re2c:api:style`` configuration for
     ``YYSETSTATE``. Zero value corresponds to free-form API style.
 
-``re2c:define:YYSKIP``
-    Defines generic API primitive ``YYSKIP`` (see the API primitives section).
+``re2c:YYSKIP``, ``re2c:define:YYSKIP``
+    Defines generic API primitive ``YYSKIP``.
 
-``re2c:define:YYSHIFT``
-    Defines generic API primitive ``YYSHIFT`` (see the API primitives section).
+``re2c:YYSHIFT``, ``re2c:define:YYSHIFT``
+    Defines generic API primitive ``YYSHIFT``.
 
-``re2c:define:YYSHIFTMTAG``
-    Defines generic API primitive ``YYSHIFTMTAG`` (see the API primitives
-    section).
+``re2c:YYSHIFTMTAG``, ``re2c:define:YYSHIFTMTAG``
+    Defines generic API primitive ``YYSHIFTMTAG``.
 
-``re2c:define:YYSHIFTSTAG``
-    Defines generic API primitive ``YYSHIFTSTAG`` (see the API primitives
-    section).
+``re2c:YYSHIFTSTAG``, ``re2c:define:YYSHIFTSTAG``
+    Defines generic API primitive ``YYSHIFTSTAG``.
 
-``re2c:define:YYSTAGN``
-    Defines generic API primitive ``YYSTAGN`` (see the API primitives section).
+``re2c:YYSTAGN``, ``re2c:define:YYSTAGN``
+    Defines generic API primitive ``YYSTAGN``.
 
-``re2c:define:YYSTAGP``
-    Defines generic API primitive ``YYSTAGP`` (see the API primitives section).
+``re2c:YYSTAGP``, ``re2c:define:YYSTAGP``
+    Defines generic API primitive ``YYSTAGP``.
 
 ``re2c:empty-class``, ``re2c:flags:empty-class``
     Same as the ``--empty-class`` option, but can be configured on per-block
@@ -337,40 +330,38 @@ Here is a full list of configurations supported by |re2c|:
     ``YYPEEK``. The default is non-zero (wrappers are generated).
     This configuration is specific to Rust.
 
-``re2c:variable:yyaccept``
-    Specifies the name of the ``yyaccept`` variable (see the API primitives
-    section).
+``re2c:yyaccept``, ``re2c:variable:yyaccept``
+    Specifies the name of the ``yyaccept`` variable.
 
-``re2c:variable:yybm``
+``re2c:yybm``, ``re2c:variable:yybm``
     Specifies the name of the ``yybm`` variable (used for bitmaps).
 
-``re2c:variable:yybm:hex``, ``re2c:yybm:hex``
+``re2c:yybm:hex``, ``re2c:variable:yybm:hex``
     If set to nonzero, bitmaps for the ``--bit-vectors`` option are generated
     in hexadecimal format. The default is zero (bitmaps are in decimal format).
 
-``re2c:variable:yych``
-    Specifies the name of the ``yych`` variable (see the API primitives
-    section).
+``re2c:yych``, ``re2c:variable:yych``
+    Specifies the name of the ``yych`` variable.
 
-``re2c:variable:yych:emit``, ``re2c:yych:emit``
+``re2c:yych:emit``, ``re2c:variable:yych:emit``
     If set to zero, ``yych`` definition is not generated.
     The default is non-zero.
 
-``re2c:variable:yych:conversion``, ``re2c:yych:conversion``
+``re2c:yych:conversion``, ``re2c:variable:yych:conversion``
     If set to non-zero, |re2c| automatically generates a conversion to ``YYCTYPE``
     every time ``yych`` is read. The default is to zero (no conversion).
 
-``re2c:variable:yyctable``
+``re2c:yyctable``, ``re2c:variable:yyctable``
     Specifies the name of the ``yyctable`` variable (the jump table generated
     for ``YYGETCONDITION`` switch with ``--computed-gotos`` option).
 
-``re2c:variable:yytarget``
+``re2c:yytarget``, ``re2c:variable:yytarget``
     Specifies the name of the ``yytarget`` variable.
 
-``re2c:variable:yystable``
+``re2c:yystable``, ``re2c:variable:yystable``
     Deprecated.
 
-``re2c:variable:yystate``
+``re2c:yystate``, ``re2c:variable:yystate``
     Specifies the name of the ``yystate`` variable (used with the
     ``--loop-switch`` option to store the current DFA state).
 
@@ -393,5 +384,5 @@ Here is a full list of configurations supported by |re2c|:
     If set to zero, suppresses the generation of parameter passed to ``YYFILL``.
     The parameter is the minimum number of characters that must be supplied.
     Defaults to non-zero (the parameter is generated).
-    This configuration can be overridden with ``re2c:define:YYFILL:naked`` or
+    This configuration can be overridden with ``re2c:YYFILL:naked`` or
     ``re2c:api:style``.

@@ -44,7 +44,7 @@ order to interface with the outer program.
     should not return on failure. The maximum value of ``len`` is ``YYMAXFILL``.
     The definition of ``YYFILL`` can be either function-like or free-form
     depending on the API style (see ``re2c:api:style`` and
-    ``re2c:define:YYFILL:naked``).
+    ``re2c:YYFILL:naked``).
 
 ``YYMAXFILL``
     An integral constant equal to the maximum value of the argument to
@@ -170,28 +170,28 @@ order to interface with the outer program.
     It should be defined as an r-value of type ``YYCONDTYPE`` that is equal to
     the current condition identifier. The definition can be either function-like
     or free-form depending on the API style (see ``re2c:api:style`` and
-    ``re2c:define:YYGETCONDITION:naked``).
+    ``re2c:YYGETCONDITION:naked``).
 
 ``YYSETCONDITION``
     An API primitive with one argument ``cond``.
     The meaning of ``YYSETCONDITION`` is to set the current condition
     identifier to ``cond``.
     The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style`` and ``re2c:define:YYSETCONDITION@cond``).
+    API style (see ``re2c:api:style`` and ``re2c:YYSETCONDITION@cond``).
 
 ``YYGETSTATE``
     An API primitive with zero arguments.
     It should be defined as an r-value of integer type that is equal to the
     current lexer state. Should be initialized to ``-1``. The definition can be
     either function-like or free-form depending on the API style (see
-    ``re2c:api:style`` and ``re2c:define:YYGETSTATE:naked``).
+    ``re2c:api:style`` and ``re2c:YYGETSTATE:naked``).
 
 ``YYSETSTATE``
     An API primitive with one argument ``state``.
     The meaning of ``YYSETSTATE`` is to set the current lexer state to
     ``state``.
     The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style`` and ``re2c:define:YYSETSTATE@state``).
+    API style (see ``re2c:api:style`` and ``re2c:YYSETSTATE@state``).
 
 ``YYDEBUG``
     A debug API primitive with two arguments. It can be used to debug the

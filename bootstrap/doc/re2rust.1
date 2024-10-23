@@ -404,7 +404,7 @@ followed by the argument name in curly braces. For example, if sigil is set
 to \fB$\fP, then placeholders will have the form \fB${name}\fP\&. Single\-argument
 APIs may use shorthand notation without the name in braces. This option can
 be overridden by options for individual API primitives, e.g.
-\fBre2c:define:YYFILL@len\fP for \fBYYFILL\fP\&.
+\fBre2c:YYFILL@len\fP for \fBYYFILL\fP\&.
 .TP
 .B \fBre2c:api:style\fP
 Specify API style. Possible values are \fBfunctions\fP (the default for C) and
@@ -419,7 +419,7 @@ defined as strings containing free\-form pieces of code with interpolated
 variables of the form \fB@@{var}\fP or \fB@@\fP (they correspond to arguments in
 function\-like style).
 This configuration may be overridden for individual API primitives, see for
-example \fBre2c:define:YYFILL:naked\fP configuration for \fBYYFILL\fP\&.
+example \fBre2c:YYFILL:naked\fP configuration for \fBYYFILL\fP\&.
 .TP
 .B \fBre2c:bit\-vectors\fP, \fBre2c:flags:bit\-vectors\fP, \fBre2c:flags:b\fP
 Same as the \fB\-\-bit\-vectors\fP option, but can be configured on per\-block
@@ -480,128 +480,121 @@ The default is \fByyc\fP\&.
 Same as the \fB\-\-debug\-output\fP option, but can be configured on per\-block
 basis.
 .TP
-.B \fBre2c:define:YYBACKUP\fP
-Defines generic API primitive \fBYYBACKUP\fP (see the API primitives section).
+.B \fBre2c:YYBACKUP\fP, \fBre2c:define:YYBACKUP\fP
+Defines generic API primitive \fBYYBACKUP\fP\&.
 .TP
-.B \fBre2c:define:YYBACKUPCTX\fP
-Defines generic API primitive \fBYYBACKUPCTX\fP (see the API primitives
-section).
+.B \fBre2c:YYBACKUPCTX\fP, \fBre2c:define:YYBACKUPCTX\fP
+Defines generic API primitive \fBYYBACKUPCTX\fP\&.
 .TP
-.B \fBre2c:define:YYCONDTYPE\fP
-Defines \fBYYCONDTYPE\fP (see the API primitives section).
+.B \fBre2c:YYCONDTYPE\fP, \fBre2c:define:YYCONDTYPE\fP
+Defines \fBYYCONDTYPE\fP\&.
 .TP
-.B \fBre2c:define:YYCTYPE\fP
-Defines \fBYYCTYPE\fP (see the API primitives section).
+.B \fBre2c:YYCTYPE\fP, \fBre2c:define:YYCTYPE\fP
+Defines \fBYYCTYPE\fP\&.
 .TP
-.B \fBre2c:define:YYCTXMARKER\fP
-Defines API primitive \fBYYCTXMARKER\fP (see the API primitives section).
+.B \fBre2c:YYCTXMARKER\fP, \fBre2c:define:YYCTXMARKER\fP
+Defines API primitive \fBYYCTXMARKER\fP\&.
 .TP
-.B \fBre2c:define:YYCURSOR\fP
-Defines API primitive \fBYYCURSOR\fP (see the API primitives section).
+.B \fBre2c:YYCURSOR\fP, \fBre2c:define:YYCURSOR\fP
+Defines API primitive \fBYYCURSOR\fP\&.
 .TP
-.B \fBre2c:define:YYDEBUG\fP
-Defines API primitive \fBYYDEBUG\fP (see the API primitives section).
+.B \fBre2c:YYDEBUG\fP, \fBre2c:define:YYDEBUG\fP
+Defines API primitive \fBYYDEBUG\fP\&.
 .TP
-.B \fBre2c:define:YYFILL\fP
-Defines API primitive \fBYYFILL\fP (see the API primitives section).
+.B \fBre2c:YYFILL\fP, \fBre2c:define:YYFILL\fP
+Defines API primitive \fBYYFILL\fP\&.
 .TP
-.B \fBre2c:define:YYFILL@len\fP
+.B \fBre2c:YYFILL@len\fP, \fBre2c:define:YYFILL@len\fP
 Specifies the sigil used for argument substitution in \fBYYFILL\fP
 definition. Defaults to \fB@@\fP\&.
 Overrides the more generic \fBre2c:api:sigil\fP configuration.
 .TP
-.B \fBre2c:define:YYFILL:naked\fP
+.B \fBre2c:YYFILL:naked\fP, \fBre2c:define:YYFILL:naked\fP
 Overrides the more generic \fBre2c:api:style\fP configuration for \fBYYFILL\fP\&.
 Zero value corresponds to free\-form API style.
 .TP
-.B \fBre2c:define:YYGETCONDITION\fP
-Defines API primitive \fBYYGETCONDITION\fP (see the API primitives section).
+.B \fBre2c:YYGETCONDITION\fP, \fBre2c:define:YYGETCONDITION\fP
+Defines API primitive \fBYYGETCONDITION\fP\&.
 .TP
-.B \fBre2c:define:YYGETCONDITION:naked\fP
+.B \fBre2c:YYGETCONDITION:naked\fP, \fBre2c:define:YYGETCONDITION:naked\fP
 Overrides the more generic \fBre2c:api:style\fP configuration for
 \fBYYGETCONDITION\fP\&. Zero value corresponds to free\-form API style.
 .TP
-.B \fBre2c:define:YYGETSTATE\fP
-Defines API primitive \fBYYGETSTATE\fP (see the API primitives section).
+.B \fBre2c:YYGETSTATE\fP, \fBre2c:define:YYGETSTATE\fP
+Defines API primitive \fBYYGETSTATE\fP\&.
 .TP
-.B \fBre2c:define:YYGETSTATE:naked\fP
+.B \fBre2c:YYGETSTATE:naked\fP, \fBre2c:define:YYGETSTATE:naked\fP
 Overrides the more generic \fBre2c:api:style\fP configuration for
 \fBYYGETSTATE\fP\&. Zero value corresponds to free\-form API style.
 .TP
-.B \fBre2c:define:YYLESSTHAN\fP
-Defines generic API primitive \fBYYLESSTHAN\fP (see the API primitives
-section).
+.B \fBre2c:YYLESSTHAN\fP, \fBre2c:define:YYLESSTHAN\fP
+Defines generic API primitive \fBYYLESSTHAN\fP\&.
 .TP
-.B \fBre2c:define:YYLIMIT\fP
-Defines API primitive \fBYYLIMIT\fP (see the API primitives section).
+.B \fBre2c:YYLIMIT\fP, \fBre2c:define:YYLIMIT\fP
+Defines API primitive \fBYYLIMIT\fP\&.
 .TP
-.B \fBre2c:define:YYMARKER\fP
-Defines API primitive \fBYYMARKER\fP (see the API primitives section).
+.B \fBre2c:YYMARKER\fP, \fBre2c:define:YYMARKER\fP
+Defines API primitive \fBYYMARKER\fP\&.
 .TP
-.B \fBre2c:define:YYMTAGN\fP
-Defines generic API primitive \fBYYMTAGN\fP (see the API primitives section).
+.B \fBre2c:YYMTAGN\fP, \fBre2c:define:YYMTAGN\fP
+Defines generic API primitive \fBYYMTAGN\fP\&.
 .TP
-.B \fBre2c:define:YYMTAGP\fP
-Defines generic API primitive \fBYYMTAGP\fP (see the API primitives section).
+.B \fBre2c:YYMTAGP\fP, \fBre2c:define:YYMTAGP\fP
+Defines generic API primitive \fBYYMTAGP\fP\&.
 .TP
-.B \fBre2c:define:YYPEEK\fP
-Defines generic API primitive \fBYYPEEK\fP (see the API primitives section).
+.B \fBre2c:YYPEEK\fP, \fBre2c:define:YYPEEK\fP
+Defines generic API primitive \fBYYPEEK\fP\&.
 .TP
-.B \fBre2c:define:YYRESTORE\fP
-Defines generic API primitive \fBYYRESTORE\fP (see the API primitives
-section).
+.B \fBre2c:YYRESTORE\fP, \fBre2c:define:YYRESTORE\fP
+Defines generic API primitive \fBYYRESTORE\fP\&.
 .TP
-.B \fBre2c:define:YYRESTORECTX\fP
-Defines generic API primitive \fBYYRESTORECTX\fP (see the API primitives
-section).
+.B \fBre2c:YYRESTORECTX\fP, \fBre2c:define:YYRESTORECTX\fP
+Defines generic API primitive \fBYYRESTORECTX\fP\&.
 .TP
-.B \fBre2c:define:YYRESTORETAG\fP
-Defines generic API primitive \fBYYRESTORETAG\fP (see the API primitives
-section).
+.B \fBre2c:YYRESTORETAG\fP, \fBre2c:define:YYRESTORETAG\fP
+Defines generic API primitive \fBYYRESTORETAG\fP\&.
 .TP
-.B \fBre2c:define:YYSETCONDITION\fP
-Defines API primitive \fBYYSETCONDITION\fP (see the API primitives section).
+.B \fBre2c:YYSETCONDITION\fP, \fBre2c:define:YYSETCONDITION\fP
+Defines API primitive \fBYYSETCONDITION\fP\&.
 .TP
-.B \fBre2c:define:YYSETCONDITION@cond\fP
+.B \fBre2c:YYSETCONDITION@cond\fP, \fBre2c:define:YYSETCONDITION@cond\fP
 Specifies the sigil used for argument substitution in \fBYYSETCONDITION\fP
 definition. The default value is \fB@@\fP\&.
 Overrides the more generic \fBre2c:api:sigil\fP configuration.
 .TP
-.B \fBre2c:define:YYSETCONDITION:naked\fP
+.B \fBre2c:YYSETCONDITION:naked\fP, \fBre2c:define:YYSETCONDITION:naked\fP
 Overrides the more generic \fBre2c:api:style\fP configuration for
 \fBYYSETCONDITION\fP\&. Zero value corresponds to free\-form API style.
 .TP
-.B \fBre2c:define:YYSETSTATE\fP
-Defines API primitive \fBYYSETSTATE\fP (see the API primitives section).
+.B \fBre2c:YYSETSTATE\fP, \fBre2c:define:YYSETSTATE\fP
+Defines API primitive \fBYYSETSTATE\fP\&.
 .TP
-.B \fBre2c:define:YYSETSTATE@state\fP
+.B \fBre2c:YYSETSTATE@state\fP, \fBre2c:define:YYSETSTATE@state\fP
 Specifies the sigil used for argument substitution in \fBYYSETSTATE\fP
 definition. The default value is \fB@@\fP\&.
 Overrides the more generic \fBre2c:api:sigil\fP configuration.
 .TP
-.B \fBre2c:define:YYSETSTATE:naked\fP
+.B \fBre2c:YYSETSTATE:naked\fP, \fBre2c:define:YYSETSTATE:naked\fP
 Overrides the more generic \fBre2c:api:style\fP configuration for
 \fBYYSETSTATE\fP\&. Zero value corresponds to free\-form API style.
 .TP
-.B \fBre2c:define:YYSKIP\fP
-Defines generic API primitive \fBYYSKIP\fP (see the API primitives section).
+.B \fBre2c:YYSKIP\fP, \fBre2c:define:YYSKIP\fP
+Defines generic API primitive \fBYYSKIP\fP\&.
 .TP
-.B \fBre2c:define:YYSHIFT\fP
-Defines generic API primitive \fBYYSHIFT\fP (see the API primitives section).
+.B \fBre2c:YYSHIFT\fP, \fBre2c:define:YYSHIFT\fP
+Defines generic API primitive \fBYYSHIFT\fP\&.
 .TP
-.B \fBre2c:define:YYSHIFTMTAG\fP
-Defines generic API primitive \fBYYSHIFTMTAG\fP (see the API primitives
-section).
+.B \fBre2c:YYSHIFTMTAG\fP, \fBre2c:define:YYSHIFTMTAG\fP
+Defines generic API primitive \fBYYSHIFTMTAG\fP\&.
 .TP
-.B \fBre2c:define:YYSHIFTSTAG\fP
-Defines generic API primitive \fBYYSHIFTSTAG\fP (see the API primitives
-section).
+.B \fBre2c:YYSHIFTSTAG\fP, \fBre2c:define:YYSHIFTSTAG\fP
+Defines generic API primitive \fBYYSHIFTSTAG\fP\&.
 .TP
-.B \fBre2c:define:YYSTAGN\fP
-Defines generic API primitive \fBYYSTAGN\fP (see the API primitives section).
+.B \fBre2c:YYSTAGN\fP, \fBre2c:define:YYSTAGN\fP
+Defines generic API primitive \fBYYSTAGN\fP\&.
 .TP
-.B \fBre2c:define:YYSTAGP\fP
-Defines generic API primitive \fBYYSTAGP\fP (see the API primitives section).
+.B \fBre2c:YYSTAGP\fP, \fBre2c:define:YYSTAGP\fP
+Defines generic API primitive \fBYYSTAGP\fP\&.
 .TP
 .B \fBre2c:empty\-class\fP, \fBre2c:flags:empty\-class\fP
 Same as the \fB\-\-empty\-class\fP option, but can be configured on per\-block
@@ -731,40 +724,38 @@ If set to zero, it suppresses the generation of \fBunsafe\fP wrappers around
 \fBYYPEEK\fP\&. The default is non\-zero (wrappers are generated).
 This configuration is specific to Rust.
 .TP
-.B \fBre2c:variable:yyaccept\fP
-Specifies the name of the \fByyaccept\fP variable (see the API primitives
-section).
+.B \fBre2c:yyaccept\fP, \fBre2c:variable:yyaccept\fP
+Specifies the name of the \fByyaccept\fP variable.
 .TP
-.B \fBre2c:variable:yybm\fP
+.B \fBre2c:yybm\fP, \fBre2c:variable:yybm\fP
 Specifies the name of the \fByybm\fP variable (used for bitmaps).
 .TP
-.B \fBre2c:variable:yybm:hex\fP, \fBre2c:yybm:hex\fP
+.B \fBre2c:yybm:hex\fP, \fBre2c:variable:yybm:hex\fP
 If set to nonzero, bitmaps for the \fB\-\-bit\-vectors\fP option are generated
 in hexadecimal format. The default is zero (bitmaps are in decimal format).
 .TP
-.B \fBre2c:variable:yych\fP
-Specifies the name of the \fByych\fP variable (see the API primitives
-section).
+.B \fBre2c:yych\fP, \fBre2c:variable:yych\fP
+Specifies the name of the \fByych\fP variable.
 .TP
-.B \fBre2c:variable:yych:emit\fP, \fBre2c:yych:emit\fP
+.B \fBre2c:yych:emit\fP, \fBre2c:variable:yych:emit\fP
 If set to zero, \fByych\fP definition is not generated.
 The default is non\-zero.
 .TP
-.B \fBre2c:variable:yych:conversion\fP, \fBre2c:yych:conversion\fP
+.B \fBre2c:yych:conversion\fP, \fBre2c:variable:yych:conversion\fP
 If set to non\-zero, re2rust automatically generates a conversion to \fBYYCTYPE\fP
 every time \fByych\fP is read. The default is to zero (no conversion).
 .TP
-.B \fBre2c:variable:yyctable\fP
+.B \fBre2c:yyctable\fP, \fBre2c:variable:yyctable\fP
 Specifies the name of the \fByyctable\fP variable (the jump table generated
 for \fBYYGETCONDITION\fP switch with \fB\-\-computed\-gotos\fP option).
 .TP
-.B \fBre2c:variable:yytarget\fP
+.B \fBre2c:yytarget\fP, \fBre2c:variable:yytarget\fP
 Specifies the name of the \fByytarget\fP variable.
 .TP
-.B \fBre2c:variable:yystable\fP
+.B \fBre2c:yystable\fP, \fBre2c:variable:yystable\fP
 Deprecated.
 .TP
-.B \fBre2c:variable:yystate\fP
+.B \fBre2c:yystate\fP, \fBre2c:variable:yystate\fP
 Specifies the name of the \fByystate\fP variable (used with the
 \fB\-\-loop\-switch\fP option to store the current DFA state).
 .TP
@@ -787,7 +778,7 @@ The default is non\-zero (\fBYYFILL\fP is enabled).
 If set to zero, suppresses the generation of parameter passed to \fBYYFILL\fP\&.
 The parameter is the minimum number of characters that must be supplied.
 Defaults to non\-zero (the parameter is generated).
-This configuration can be overridden with \fBre2c:define:YYFILL:naked\fP or
+This configuration can be overridden with \fBre2c:YYFILL:naked\fP or
 \fBre2c:api:style\fP\&.
 .UNINDENT
 .SS Program interface
@@ -825,10 +816,10 @@ units, e.g. a string) and \fBYYCURSOR\fP, \fBYYMARKER\fP, \fBYYCTXMARKER\fP,
 Record API is useful in cases when lexer state must be stored in a struct.
 It is enabled with \fB\-\-api record\fP option or \fBre2c:api = record\fP
 configuration. This API consists of a variable \fByyrecord\fP (the
-name can be overridden with \fBre2c:variable:yyrecord\fP) that should be
-defined as a struct with fields \fByyinput\fP, \fByycursor\fP, \fByymarker\fP,
-\fByyctxmarker\fP, \fByylimit\fP (only the fields used by the generated code
-need to be defined, and their names can be configured).
+name can be overridden with \fBre2c:yyrecord\fP) that should be defined as a
+struct with fields \fByyinput\fP, \fByycursor\fP, \fByymarker\fP, \fByyctxmarker\fP,
+\fByylimit\fP (only the fields used by the generated code need to be defined,
+and their names can be configured).
 .nf
 
 .fi
@@ -862,18 +853,18 @@ position, then generic API can be defined as follows:
 .nf
 .ft C
 /*!re2c
-  re2c:define:YYPEEK       = \(dq*buffer.get_unchecked(cursor)\(dq;
-  re2c:define:YYSKIP       = \(dqcursor += 1;\(dq;
-  re2c:define:YYBACKUP     = \(dqmarker = cursor;\(dq;
-  re2c:define:YYRESTORE    = \(dqcursor = marker;\(dq;
-  re2c:define:YYBACKUPCTX  = \(dqctxmarker = cursor;\(dq;
-  re2c:define:YYRESTORECTX = \(dqcursor = ctxmarker;\(dq;
-  re2c:define:YYRESTORETAG = \(dqcursor = @@{tag};\(dq;
-  re2c:define:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
-  re2c:define:YYSTAGP      = \(dq@@{tag} = cursor;\(dq;
-  re2c:define:YYSTAGN      = \(dq@@{tag} = NONE;\(dq;
-  re2c:define:YYSHIFT      = \(dqcursor = (cursor as isize + @@{shift}) as usize;\(dq;
-  re2c:define:YYSHIFTSTAG  = \(dq@@{tag} = (@@{tag} as isize + @@{shift}) as usize;\(dq;
+  re2c:YYPEEK       = \(dq*buffer.get_unchecked(cursor)\(dq;
+  re2c:YYSKIP       = \(dqcursor += 1;\(dq;
+  re2c:YYBACKUP     = \(dqmarker = cursor;\(dq;
+  re2c:YYRESTORE    = \(dqcursor = marker;\(dq;
+  re2c:YYBACKUPCTX  = \(dqctxmarker = cursor;\(dq;
+  re2c:YYRESTORECTX = \(dqcursor = ctxmarker;\(dq;
+  re2c:YYRESTORETAG = \(dqcursor = @@{tag};\(dq;
+  re2c:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
+  re2c:YYSTAGP      = \(dq@@{tag} = cursor;\(dq;
+  re2c:YYSTAGN      = \(dq@@{tag} = NONE;\(dq;
+  re2c:YYSHIFT      = \(dqcursor = (cursor as isize + @@{shift}) as usize;\(dq;
+  re2c:YYSHIFTSTAG  = \(dq@@{tag} = (@@{tag} as isize + @@{shift}) as usize;\(dq;
 */
 .ft P
 .fi
@@ -928,7 +919,7 @@ If \fBre2c:eof\fP is not used, then \fBYYFILL\fP return value is ignored and it
 should not return on failure. The maximum value of \fBlen\fP is \fBYYMAXFILL\fP\&.
 The definition of \fBYYFILL\fP can be either function\-like or free\-form
 depending on the API style (see \fBre2c:api:style\fP and
-\fBre2c:define:YYFILL:naked\fP).
+\fBre2c:YYFILL:naked\fP).
 .TP
 .B \fBYYMAXFILL\fP
 An integral constant equal to the maximum value of the argument to
@@ -1054,28 +1045,28 @@ An API primitive with zero arguments.
 It should be defined as an r\-value of type \fBYYCONDTYPE\fP that is equal to
 the current condition identifier. The definition can be either function\-like
 or free\-form depending on the API style (see \fBre2c:api:style\fP and
-\fBre2c:define:YYGETCONDITION:naked\fP).
+\fBre2c:YYGETCONDITION:naked\fP).
 .TP
 .B \fBYYSETCONDITION\fP
 An API primitive with one argument \fBcond\fP\&.
 The meaning of \fBYYSETCONDITION\fP is to set the current condition
 identifier to \fBcond\fP\&.
 The definition should be either function\-like or free\-form depending on the
-API style (see \fBre2c:api:style\fP and \fBre2c:define:YYSETCONDITION@cond\fP).
+API style (see \fBre2c:api:style\fP and \fBre2c:YYSETCONDITION@cond\fP).
 .TP
 .B \fBYYGETSTATE\fP
 An API primitive with zero arguments.
 It should be defined as an r\-value of integer type that is equal to the
 current lexer state. Should be initialized to \fB\-1\fP\&. The definition can be
 either function\-like or free\-form depending on the API style (see
-\fBre2c:api:style\fP and \fBre2c:define:YYGETSTATE:naked\fP).
+\fBre2c:api:style\fP and \fBre2c:YYGETSTATE:naked\fP).
 .TP
 .B \fBYYSETSTATE\fP
 An API primitive with one argument \fBstate\fP\&.
 The meaning of \fBYYSETSTATE\fP is to set the current lexer state to
 \fBstate\fP\&.
 The definition should be either function\-like or free\-form depending on the
-API style (see \fBre2c:api:style\fP and \fBre2c:define:YYSETSTATE@state\fP).
+API style (see \fBre2c:api:style\fP and \fBre2c:YYSETSTATE@state\fP).
 .TP
 .B \fBYYDEBUG\fP
 A debug API primitive with two arguments. It can be used to debug the
@@ -2635,8 +2626,8 @@ fn main() {
 .UNINDENT
 .SS Reusable blocks
 .sp
-Reusable blocks of the form \fB/*!rules:re2c[:<name>] ... */\(ga\(gaor
-\(ga\(ga%{rules[:<name>] ... %}\fP can be reused any number of times and combined with
+Reusable blocks of the form \fB/*!rules:re2c[:<name>] ... */\fP or
+\fB%{rules[:<name>] ... %}\fP can be reused any number of times and combined with
 other re2rust blocks. The \fB<name>\fP is optional. A rules block can be used in a
 \fBuse\fP block or directive. The code for a rules block is generated at every
 point of use.
