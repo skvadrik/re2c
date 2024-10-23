@@ -36,9 +36,9 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (BS.index s k) - 48))
 
 %{
-    re2c:define:YYFN = ["lexer;IO [SemVer]", "State{..};State", "_vers;[SemVer]"];
-    re2c:define:YYPEEK = "BS.index";
-    re2c:define:YYFILL = "(State{..}, yyfill) <- fill State{..}";
+    re2c:YYFN = ["lexer;IO [SemVer]", "State{..};State", "_vers;[SemVer]"];
+    re2c:YYPEEK = "BS.index";
+    re2c:YYFILL = "(State{..}, yyfill) <- fill State{..}";
     re2c:eof = 0;
     re2c:monadic = 1;
     re2c:tags = 1;

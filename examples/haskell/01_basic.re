@@ -10,13 +10,11 @@ data State = State {
 }
 
 %{
-    re2c:define:YYFN = ["lexer;Bool", "State{..};State"];
+    re2c:YYFN = ["lexer;Bool", "State{..};State"];
     re2c:yyfill:enable = 0;
 
-    number = [1-9][0-9]*;
-
-    number { True }
-    *      { False }
+    [1-9][0-9]* { True }
+    *           { False }
 %}
 
 main :: IO ()

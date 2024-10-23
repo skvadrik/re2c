@@ -19,25 +19,25 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_bin;Int", "State{..};State", "num;Int"];
+    re2c:YYFN = ["parse_bin;Int", "State{..};State", "num;Int"];
     [01] { parse_bin State{..} $ num * 2 + (peek_digit _yyinput _yycursor 48) }
     *    { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_oct;Int", "State{..};State", "num;Int"];
+    re2c:YYFN = ["parse_oct;Int", "State{..};State", "num;Int"];
     [0-7] { parse_oct State{..} $ num * 8 + (peek_digit _yyinput _yycursor 48) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_dec;Int", "State{..};State", "num;Int"];
+    re2c:YYFN = ["parse_dec;Int", "State{..};State", "num;Int"];
     [0-9] { parse_dec State{..} $ num * 10 + (peek_digit _yyinput _yycursor 48) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_hex;Int", "State{..};State", "num;Int"];
+    re2c:YYFN = ["parse_hex;Int", "State{..};State", "num;Int"];
     [0-9] { parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 48) }
     [a-f] { parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 87) }
     [A-F] { parse_hex State{..} $ num * 16 + (peek_digit _yyinput _yycursor 55) }
@@ -45,7 +45,7 @@ peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 %}
 
 %{local
-    re2c:define:YYFN = ["parse;Maybe Int", "State{..};State"];
+    re2c:YYFN = ["parse;Maybe Int", "State{..};State"];
     '0b' / [01]        { Just $ parse_bin State{..} 0 }
     "0"                { Just $ parse_oct State{..} 0 }
     "" / [1-9]         { Just $ parse_dec State{..} 0 }

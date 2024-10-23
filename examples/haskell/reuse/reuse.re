@@ -18,22 +18,22 @@ data State a = State {
 
 %{rules
     re2c:yyfill:enable = 0;
-    re2c:define:YYPEEK = "(!)";
+    re2c:YYPEEK = "(!)";
 
     "∀x ∃y" { Just _yycursor }
     *       { Nothing }
 %}
 
 %{use
-    re2c:define:YYFN = ["lex8;Maybe Int", "State{..};State (Array Int Word8)"];
+    re2c:YYFN = ["lex8;Maybe Int", "State{..};State (Array Int Word8)"];
     re2c:encoding:utf8 = 1;
-    re2c:define:YYCTYPE = Word8;
+    re2c:YYCTYPE = Word8;
 %}
 
 %{use
-    re2c:define:YYFN = ["lex32;Maybe Int", "State{..};State (Array Int Int)"];
+    re2c:YYFN = ["lex32;Maybe Int", "State{..};State (Array Int Int)"];
     re2c:encoding:utf32 = 1;
-    re2c:define:YYCTYPE = Int;
+    re2c:YYCTYPE = Int;
 %}
 
 main :: IO ()

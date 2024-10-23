@@ -30,7 +30,7 @@ data State = State {
 %}
 
 %{
-    re2c:define:YYFN = ["lexer;Answer", "State{..};State"];
+    re2c:YYFN = ["lexer;Answer", "State{..};State"];
     re2c:yyfill:enable = 0;
 
     !use:fish;
