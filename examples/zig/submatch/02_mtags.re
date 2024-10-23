@@ -69,8 +69,8 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
     %{mtags format = "var @@: usize = mtag_root;"; %}
 
     %{
-        re2c:define:YYMTAGP = "@@ = add_mtag(&mt, @@, yycursor) catch none;";
-        re2c:define:YYMTAGN = "@@ = add_mtag(&mt, @@, none) catch none;";
+        re2c:YYMTAGP = "@@ = add_mtag(&mt, @@, yycursor) catch none;";
+        re2c:YYMTAGN = "@@ = add_mtag(&mt, @@, none) catch none;";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

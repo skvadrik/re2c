@@ -12,8 +12,8 @@ fn lex(str: []const u8) i32 {
             re2c:api = generic;
             re2c:yyfill:enable = 0;
             // YYPEEK returns "fake" terminating null if cursor has reached limit.
-            re2c:define:YYPEEK = "if (cur >= str.len) 0 else str[cur]";
-            re2c:define:YYSKIP = "cur += 1;";
+            re2c:YYPEEK = "if (cur >= str.len) 0 else str[cur]";
+            re2c:YYSKIP = "cur += 1;";
 
             *      { return -1; }
             [\x00] { return count; }

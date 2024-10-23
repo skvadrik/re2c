@@ -71,8 +71,8 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
             re2c:api = record;
             re2c:eof = 0;
             re2c:tags = 1;
-            re2c:variable:yyrecord = st;
-            re2c:define:YYFILL = "fill(st, file) == 0";
+            re2c:yyrecord = st;
+            re2c:YYFILL = "fill(st, file) == 0";
 
             num = [0-9]+;
 

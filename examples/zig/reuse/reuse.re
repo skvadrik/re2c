@@ -18,7 +18,7 @@ fn lex_utf8(yyinput: []const u8) ?usize {
     var yymarker: usize = 0;
     %{use
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8; // the default
+        re2c:YYCTYPE = u8; // the default
     %}
 }
 
@@ -27,7 +27,7 @@ fn lex_utf32(yyinput: []const u32) ?usize {
     var yymarker: usize = 0;
     %{use
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
+        re2c:YYCTYPE = u32;
     %}
 }
 
