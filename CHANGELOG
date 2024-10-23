@@ -65,6 +65,8 @@ Changelog
   + ``re2c:variable:yynmatch``
   + ``re2c:variable:yypmatch``
   + ``re2c[:variable]:yych:literals``
+  + All configurations that have `define:` or `variable:` part in their name
+    now have an alias without this part.
 
 - Added directives:
 

@@ -14,7 +14,7 @@ program:
     Record API is useful in cases when lexer state must be stored in a struct.
     It is enabled with ``--api record`` option or ``re2c:api = record``
     configuration. This API consists of a variable ``yyrecord`` (the
-    name can be overridden with ``re2c:variable:yyrecord``) that should be
+    name can be overridden with ``re2c:yyrecord``) that should be
     defined as a struct with fields ``yycursor``, ``yymarker``, ``yyctxmarker``,
     ``yylimit`` (only the fields used by the generated code need to be defined,
     and their names can be configured).
@@ -59,18 +59,18 @@ program:
         .. code-block:: c
 
             /*!re2c
-              re2c:define:YYPEEK       = "*cursor";
-              re2c:define:YYSKIP       = "++cursor;";
-              re2c:define:YYBACKUP     = "marker = cursor;";
-              re2c:define:YYRESTORE    = "cursor = marker;";
-              re2c:define:YYBACKUPCTX  = "ctxmarker = cursor;";
-              re2c:define:YYRESTORECTX = "cursor = ctxmarker;";
-              re2c:define:YYRESTORETAG = "cursor = ${tag};";
-              re2c:define:YYLESSTHAN   = "limit - cursor < @@{len}";
-              re2c:define:YYSTAGP      = "@@{tag} = cursor;";
-              re2c:define:YYSTAGN      = "@@{tag} = NULL;";
-              re2c:define:YYSHIFT      = "cursor += @@{shift};";
-              re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
+              re2c:YYPEEK       = "*cursor";
+              re2c:YYSKIP       = "++cursor;";
+              re2c:YYBACKUP     = "marker = cursor;";
+              re2c:YYRESTORE    = "cursor = marker;";
+              re2c:YYBACKUPCTX  = "ctxmarker = cursor;";
+              re2c:YYRESTORECTX = "cursor = ctxmarker;";
+              re2c:YYRESTORETAG = "cursor = ${tag};";
+              re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+              re2c:YYSTAGP      = "@@{tag} = cursor;";
+              re2c:YYSTAGN      = "@@{tag} = NULL;";
+              re2c:YYSHIFT      = "cursor += @@{shift};";
+              re2c:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
             */
 
         |
