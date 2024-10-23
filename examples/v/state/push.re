@@ -59,7 +59,7 @@ loop:
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYFILL = "return .lex_waiting";
+        re2c:YYFILL = "return .lex_waiting";
 
         packet = [a-z]+[;];
 

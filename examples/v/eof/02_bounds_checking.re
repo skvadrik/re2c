@@ -13,7 +13,7 @@ fn lex(str string) int {
     mut count := 0
 
 loop: /*!re2c
-    re2c:define:YYFILL = "return -1";
+    re2c:YYFILL = "return -1";
 
     str = ['] ([^'\\] | [\\][^])* ['];
 

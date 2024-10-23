@@ -50,7 +50,7 @@ loop:
     yyrecord.token = yyrecord.yycursor
     /*!re2c
         re2c:api = record;
-        re2c:define:YYFILL = "r := fill(mut yyrecord, @@); if r != 0 { return r }";
+        re2c:YYFILL = "r := fill(mut yyrecord, @@); if r != 0 { return r }";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 
