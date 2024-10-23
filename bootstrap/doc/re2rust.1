@@ -57,13 +57,11 @@ fn lex(yyinput: &[u8]) \-> bool {
     let mut yycursor = 0;
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
-        number = [1\-9][0\-9]*;
-
-        number { return true; }
-        *      { return false; }
+        [1\-9][0\-9]* { return true; }
+        *           { return false; }
     */
 }
 
@@ -1610,7 +1608,7 @@ fn lex(yyinput: &[u8]) \-> isize {
 
     \(aqlex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         *      { return \-1; }
@@ -1666,7 +1664,7 @@ fn lex(yyinput: &[u8]) \-> isize {
 
     \(aqlex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -1732,8 +1730,8 @@ fn lex(s: &[u8]) \-> isize {
 
     \(aqlex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = \(dqreturn \-1;\(dq;
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = \(dqreturn \-1;\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -1782,9 +1780,9 @@ fn lex(s: &[u8]) \-> isize {
     let lim = s.len();
 
     \(aqlex: loop {/*!re2c
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK  = \(dqif cur < lim {*s.get_unchecked(cur)} else {0}\(dq;
-        re2c:define:YYSKIP  = \(dqcur += 1;\(dq;
+        re2c:YYCTYPE = u8;
+        re2c:YYPEEK = \(dqif cur < lim {*s.get_unchecked(cur)} else {0}\(dq;
+        re2c:YYSKIP = \(dqcur += 1;\(dq;
         re2c:yyfill:enable  = 0;
 
         *      { return \-1; }
@@ -1945,8 +1943,8 @@ fn lex(yyrecord: &mut State) \-> isize {
         yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = \(dqfill(yyrecord) == Fill::Ok\(dq;
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = \(dqfill(yyrecord) == Fill::Ok\(dq;
         re2c:eof = 0;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2113,8 +2111,8 @@ fn lex(yyrecord: &mut State) \-> isize {
         yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = \(dqif fill(yyrecord, @@) != Fill::Ok { return \-1; }\(dq;
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = \(dqif fill(yyrecord, @@) != Fill::Ok { return \-1; }\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2214,9 +2212,9 @@ struct State<\(aqa> {
 
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = u8;
+    re2c:YYCTYPE = u8;
 */
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow
@@ -2397,7 +2395,7 @@ fn parse_u32(yyinput: &[u8]) \-> Option<u32> {
 
     \(aqlex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         <INIT> \(aq0b\(aq / [01]        :=> BIN
@@ -2542,8 +2540,8 @@ fn lex(yyrecord: &mut State, recv: &mut usize) \-> Status {
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYCTYPE = \(dqu8\(dq;
-        re2c:define:YYFILL = \(dqreturn Status::Waiting;\(dq;
+        re2c:YYCTYPE = \(dqu8\(dq;
+        re2c:YYFILL = \(dqreturn Status::Waiting;\(dq;
 
         packet = [a\-z]+[;];
 
@@ -2699,7 +2697,7 @@ fn lex(yyinput: &[u8]) \-> Ans {
     /*!re2c
         re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;
@@ -2740,7 +2738,7 @@ fn lex_utf8(yyinput: &[u8]) \-> Option<usize> {
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!use:re2c
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
     */
 }
 
@@ -2749,7 +2747,7 @@ fn lex_utf32(yyinput: &[u32]) \-> Option<usize> {
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!use:re2c
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
+        re2c:YYCTYPE = u32;
     */
 }
 
@@ -2891,7 +2889,7 @@ fn parse(yyinput: &[u8]) \-> Option<SemVer> {
 
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
@@ -3009,9 +3007,9 @@ fn parse(st: &mut State) \-> Option<Vec::<SemVer>> {
         re2c:api = record;
         re2c:eof = 0;
         re2c:tags = 1;
-        re2c:variable:yyrecord = st;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = \(dqfill(st) == Fill::Ok\(dq;
+        re2c:yyrecord = st;
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = \(dqfill(st) == Fill::Ok\(dq;
 
         num = [0\-9]+;
 
@@ -3108,7 +3106,7 @@ fn parse(yyinput: &[u8]) \-> Option<SemVer> {
 
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:captvars = 1;
 
@@ -3209,9 +3207,9 @@ fn parse(yyinput: &[u8]) \-> Option<Ver> {
 
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYMTAGP = \(dq@@ = add_mtag(&mut mt, @@, yycursor);\(dq;
-        re2c:define:YYMTAGN = \(dq@@ = add_mtag(&mut mt, @@, NONE);\(dq;
+        re2c:YYCTYPE = u8;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(&mut mt, @@, yycursor);\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(&mut mt, @@, NONE);\(dq;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 
@@ -3307,7 +3305,7 @@ fn lex(yyinput: &[u8]) \-> bool {
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
@@ -3396,7 +3394,7 @@ fn lex(yyinput: &[u8]) \-> Num {
     /*!re2c
         re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
 
         *      { return Num::NaN; }
         number { return Num::Int; }
@@ -3456,7 +3454,7 @@ fn lex(yyrecord: &mut State) \-> usize {
         re2c:header = \(dqlexer/state.rs\(dq;
         re2c:yyfill:enable = 0;
         re2c:api = record;
-        re2c:define:YYCTYPE = \(dqu8\(dq;
+        re2c:YYCTYPE = \(dqu8\(dq;
         re2c:tags = 1;
 
         [a]* @t [b]* { return t; }

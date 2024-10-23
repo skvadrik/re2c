@@ -7,9 +7,9 @@ fn lex(s: &[u8]) -> isize {
     let lim = s.len();
 
     'lex: loop {/*!re2c
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYPEEK  = "if cur < lim {*s.get_unchecked(cur)} else {0}";
-        re2c:define:YYSKIP  = "cur += 1;";
+        re2c:YYCTYPE = u8;
+        re2c:YYPEEK = "if cur < lim {*s.get_unchecked(cur)} else {0}";
+        re2c:YYSKIP = "cur += 1;";
         re2c:yyfill:enable  = 0;
 
         *      { return -1; }

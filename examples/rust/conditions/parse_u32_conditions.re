@@ -19,7 +19,7 @@ fn parse_u32(yyinput: &[u8]) -> Option<u32> {
 
     'lex: loop { /*!re2c
         re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 
         <INIT> '0b' / [01]        :=> BIN
