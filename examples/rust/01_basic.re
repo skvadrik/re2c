@@ -1,9 +1,8 @@
-// re2rust $INPUT -o $OUTPUT --no-unsafe
+// re2rust $INPUT -o $OUTPUT --no-unsafe --api simple
 
 fn lex(yyinput: &[u8]) -> bool {
     let mut yycursor = 0;
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 

@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT -c
+// re2rust $INPUT -o $OUTPUT -c --api simple
 
 /*!conditions:re2c*/
 
@@ -18,7 +18,6 @@ fn parse_u32(yyinput: &[u8]) -> Option<u32> {
     let mut num = 0u64; // Store number in u64 to simplify overflow checks.
 
     'lex: loop { /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
 

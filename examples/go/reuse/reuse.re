@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT --input-encoding utf8
+//go:generate re2go $INPUT -o $OUTPUT --input-encoding utf8 --api simple
 package main
 
 // This example supports multiple input encodings: UTF-8 and UTF-32.
@@ -6,7 +6,6 @@ package main
 // blocks add only encoding-specific configurations.
 /*!rules:re2c
 	re2c:yyfill:enable = 0;
-	re2c:api = default;
 
 	"∀x ∃y" { return 0; }
 	*       { return 1; }

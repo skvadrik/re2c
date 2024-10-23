@@ -1,10 +1,9 @@
-//go:generate re2go $INPUT -o $OUTPUT -i
+//go:generate re2go $INPUT -o $OUTPUT -i --api simple
 package main
 
 func lex(yyinput string) {
 	var yycursor int
 	/*!re2c
-		re2c:api = default;
 		re2c:YYCTYPE = byte;
 		re2c:yyfill:enable = 0;
 

@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 #[derive(Debug, PartialEq)]
 struct SemVer(u32, u32, u32); // version: (major, minor, patch)
@@ -23,7 +23,6 @@ fn parse(yyinput: &[u8]) -> Option<SemVer> {
     /*!stags:re2c format = 'let mut @@ = NONE;'; */
 
     /*!re2c
-        re2c:api = default;
         re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
