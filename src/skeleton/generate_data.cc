@@ -364,7 +364,9 @@ static void gencover(Skeleton& skel, cover_t& cover, size_t i) {
 
     if (node.end()) {
         suffix.init = true;
-    } if (suffix.init) {
+    }
+
+    if (suffix.init) {
         prefix.push_sfx(suffix);
         size = size + cover_one<cunit_t, key_t>(skel, cover);
         prefix.pop_sfx(suffix);
