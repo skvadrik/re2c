@@ -1365,7 +1365,7 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::IF_THEN_ELSE: {
         bool oneline = rctx.opts->specialize_oneline_if();
         for (const CodeBranch* b = code->ifte->head; oneline && b; b = b->next) {
-            oneline = oneline && oneline_stmt_list(b->code);
+            oneline = oneline_stmt_list(b->code);
         }
         RenderIfThenElse callback(rctx, code->ifte, oneline);
         if (oneline) {
