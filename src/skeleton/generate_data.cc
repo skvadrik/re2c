@@ -472,6 +472,7 @@ Ret emit_data(Skeleton& skel) {
     }
     FILE* keys = fopen (keys_name.c_str(), "wb");
     if (!keys) {
+        fclose(input);
         RET_FAIL(error("cannot open file: %s", keys_name.c_str()));
     }
 
