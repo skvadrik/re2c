@@ -46,7 +46,6 @@ inline uint32_t mtag_trie_next(mtag_trie_t& trie) {
         memcpy(head, trie.head, trie.size * sizeof(mtag_t));
         free(trie.head);
         trie.head = head;
-        trie.next = trie.size;
         trie.size *= 2;
     }
 
