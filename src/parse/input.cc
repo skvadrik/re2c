@@ -248,10 +248,6 @@ bool Input::fill(size_t need) {
     } else {
         BSIZE += std::max(BSIZE, need);
         uint8_t* buf = new uint8_t[BSIZE + maxfill()];
-        if (buf == nullptr) {
-            error("out of memory");
-            return false;
-        }
 
         memmove(buf, tok, copy);
         shift_ptrs_and_fpos(buf - tok);
