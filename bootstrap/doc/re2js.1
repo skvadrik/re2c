@@ -1087,14 +1087,27 @@ Internal options are useful for experimenting with the algorithms used in re2c.
 .B \fB\-? \-\-help \-h\fP
 Show help message.
 .TP
-.B \fB\-\-api \-\-input <default | custom>\fP
+.B \fB\-\-api <simple | record | generic>\fP
 Specify the API used by the generated code to interface with used\-defined
-code: \fBdefault\fP is the API based on pointer arithmetic (the default for
-C), and \fBcustom\fP is the generic API (the default for Go and Rust).
+code. Option \fBsimple\fP shold be used in simple cases when there\(aqs no need
+for buffer refilling and storing lexer state. Option \fBrecord\fP should be
+used when lexer state needs to be stored in a record (struct, class, etc.).
+Option \fBgeneric\fP should be used in complex cases when the other two APIs
+are not flexible enough.
 .TP
 .B \fB\-\-bit\-vectors \-b\fP
 Optimize conditional jumps using bit masks.
 This option implies \fB\-\-nested\-ifs\fP\&.
+.TP
+.B \fB\-\-captures\fP, \fB\-\-leftmost\-captures\fP
+Enable submatch extraction with leftmost greedy capturing groups. The result
+is collected into an array \fByybmatch\fP of capacity \fB2 * YYMAXNMATCH\fP, and
+\fByynmatch\fP is set to the number of groups for the matching rule.
+.TP
+.B \fB\-\-captvars\fP, \fB\-\-leftmost\-captvars\fP
+Enable submatch extraction with leftmost greedy capturing groups. The result
+is collected into variables \fByytl<k>\fP, \fByytr<k>\fP for \fBk\fP\-th capturing
+group.
 .TP
 .B \fB\-\-case\-insensitive\fP
 Treat single\-quoted and double\-quoted strings as case\-insensitive.
@@ -1155,6 +1168,11 @@ the equal sign and the terminating semicolon, and when used they must be
 surrounded with curly braces. Names without curly braces are treated as
 double\-quoted strings.
 .TP
+.B \fB\-\-goto\-label\fP
+Use \(dqgoto/label\(dq code model: encode DFA in form of labeled code blocks
+connected with \fBgoto\fP transitions across blocks. This is only supported
+for languages that have a \fBgoto\fP statement.
+.TP
 .B \fB\-\-header \-\-type\-header \-t HEADER\fP
 Generate a \fBHEADER\fP file. The contents of the file can be specified using
 special blocks \fBheader:on\fP and \fBheader:off\fP\&. If conditions are used, the
@@ -1166,6 +1184,11 @@ Add \fBPATH\fP to the list of locations which are used when searching for
 include files. This option is useful in combination with \fBinclude\fP block
 or directive. re2js looks for \fBFILE\fP in the directory of the parent file
 and in the include locations specified with \fB\-I\fP option.
+.TP
+.B \fB\-\-input <default | custom>\fP
+Deprecated alias for \fB\-\-api\fP\&. Option \fBdefault\fP corresponds to \fBsimple\fP
+(it is indeed the default for most backends, but not for all). Option
+\fBcustom\fP corresponds to \fBgeneric\fP\&.
 .TP
 .B \fB\-\-input\-encoding <ascii | utf8>\fP
 Specify the way re2js parses regular expressions.
@@ -1179,12 +1202,11 @@ Invert the meaning of capturing and non\-capturing groups. By default
 \fB(...)\fP is capturing and \fB(! ...)\fP is non\-capturing. With this option
 \fB(! ...)\fP is capturing and \fB(...)\fP is non\-capturing.
 .TP
-.B \fB\-\-lang <c | go | rust>\fP
-Specify the output language. Supported languages are C, Go and Rust.
-The default is C for re2js, Go for re2go and Rust for re2rust.
-.TP
-.B \fB\-\-leftmost\-captures\fP
-Enable submatch extraction with leftmost greedy capturing groups.
+.B \fB\-\-lang <none | c | d | go | haskell | java | js | ocaml | python | rust | v | zig>\fP
+Specify the target language. Supported languages are C, D, Go, Haskell,
+Java, JS, OCaml, Python, Rust, V, Zig (more languages can be added via
+user\-defined syntax files, see the \fB\-\-syntax\fP option). Option \fBnone\fP
+disables default suntax configs, so that the target language is undefined.
 .TP
 .B \fB\-\-location\-format <gnu | msvc>\fP
 Specify location format in messages.
@@ -1193,12 +1215,11 @@ With \fBmsvc\fP locations are printed as \(aqfilename(line,column) ...\(aq.
 The default is \fBgnu\fP\&.
 .TP
 .B \fB\-\-loop\-switch\fP
-Encode DFA in a form of a loop over a switch statement. Individual states
-are switch cases. The current state is stored in a variable \fByystate\fP\&.
-Transitions between states update \fByystate\fP to the case label of the
-destination state and \fBcontinue\fP to the head of the loop. This option is
-always enabled for Rust, as it has no \fBgoto\fP statement and cannot use the
-goto/label approach which is the default for C and Go backends.
+Use \(dqloop/switch\(dq code model: encode DFA in form of a loop over a switch
+statement, where individual states are switch cases. State is stored in a
+variable \fByystate\fP\&. Transitions between states update \fByystate\fP to the
+case label of the destination state and continue execution to the head of
+the loop.
 .TP
 .B \fB\-\-nested\-ifs \-s\fP
 Use nested \fBif\fP statements instead of \fBswitch\fP statements in conditional
@@ -1208,8 +1229,7 @@ compilers.
 .B \fB\-\-no\-debug\-info \-i\fP
 Do not output line directives. This may be useful when the generated code is
 stored in a version control system (to avoid huge autogenerated diffs on
-small changes). This option is on by default for Rust, as it does not have
-line directives.
+small changes).
 .TP
 .B \fB\-\-no\-generation\-date\fP
 Suppress date output in the generated file.
@@ -1228,8 +1248,19 @@ option helps to avoid warnings about redundant \fBunsafe\fP blocks.
 .B \fB\-\-output \-o OUTPUT\fP
 Specify the \fBOUTPUT\fP file.
 .TP
-.B \fB\-\-posix\-captures \-P\fP
-Enable submatch extraction with POSIX\-style capturing groups.
+.B \fB\-\-posix\-captures\fP, \fB\-P\fP
+Enable submatch extraction with POSIX\-style capturing groups. The result
+is collected into an array \fByybmatch\fP of capacity \fB2 * YYMAXNMATCH\fP, and
+\fByynmatch\fP is set to the number of groups for the matching rule.
+.TP
+.B \fB\-\-posix\-captvars\fP
+Enable submatch extraction with POSIX\-style capturing groups. The result
+is collected into variables \fByytl<k>\fP, \fByytr<k>\fP for \fBk\fP\-th capturing
+group.
+.TP
+.B \fB\-\-recursive\-functions\fP
+Use code model based on co\-recursive functions, where each DFA state is a
+separate function that may call other state\-functions or itself.
 .TP
 .B \fB\-\-reusable \-r\fP
 Deprecated since version 2.2 (reusable blocks are allowed by default now).
@@ -1248,6 +1279,13 @@ when there is not enough input, and then resumed when more input becomes
 available. In this mode users should additionally define \fBYYGETSTATE\fP
 and \fBYYSETSTATE\fP primitives, and variables \fByych\fP, \fByyaccept\fP and
 \fBstate\fP should be part of the stored lexer state.
+.TP
+.B \fB\-\-syntax FILE\fP
+Load configurations from the specified \fBFILE\fP and apply them on top of the
+default syntax file. Note that \fBFILE\fP can define only a few configurations
+(if it\(aqs used to amend the default syntax file), or it can define a whole
+new language backend (in the latter case it is recommended to use
+\fB\-\-lang none\fP option).
 .TP
 .B \fB\-\-tags \-T\fP
 Enable submatch extraction with tags.
