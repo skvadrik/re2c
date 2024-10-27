@@ -44,8 +44,8 @@ loop:
     yyrecord->token = yyrecord->yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "fill(*yyrecord) == 0";
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = "fill(*yyrecord) == 0";
         re2c:eof = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];

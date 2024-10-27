@@ -48,8 +48,8 @@ private Status lex(ref State yyrecord, uint* recv) {
         yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL = "return Status.WAITING;";
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = "return Status.WAITING;";
         re2c:eof = 0;
 
         packet = [a-z]+[;];

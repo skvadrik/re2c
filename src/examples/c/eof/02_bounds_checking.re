@@ -17,8 +17,8 @@ static int lex(const char *str, unsigned int len) {
 loop:
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL  = "goto fail;";
+        re2c:YYCTYPE = char;
+        re2c:YYFILL = "goto fail;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

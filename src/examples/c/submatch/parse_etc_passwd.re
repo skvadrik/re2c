@@ -12,7 +12,7 @@ static int lex(const char *YYCURSOR) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:YYCTYPE = char;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

@@ -25,9 +25,9 @@ data State = State {
 data Status = End | Ready | Waiting | BadPacket deriving (Eq)
 
 %{
-    re2c:define:YYFN = ["lexer;IO (State, Status)", "State{..};State;!State{..}"];
-    re2c:define:YYPEEK = "BS.index";
-    re2c:define:YYFILL = "return (State{..}, Waiting)";
+    re2c:YYFN = ["lexer;IO (State, Status)", "State{..};State;!State{..}"];
+    re2c:YYPEEK = "BS.index";
+    re2c:YYFILL = "return (State{..}, Waiting)";
     re2c:eof = 0;
     re2c:monadic = 1;
 

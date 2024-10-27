@@ -24,10 +24,10 @@ data State = State {
 }
 
 %{
-    re2c:define:YYFN = ["lexer;IO Int", "State{..};State;!State{..}"];
-    re2c:define:YYCTYPE = "Word8";
-    re2c:define:YYPEEK = "BS.index";
-    re2c:define:YYFILL = "(State{..}, yyfill) <- fill State{..}";
+    re2c:YYFN = ["lexer;IO Int", "State{..};State;!State{..}"];
+    re2c:YYCTYPE = "Word8";
+    re2c:YYPEEK = "BS.index";
+    re2c:YYFILL = "(State{..}, yyfill) <- fill State{..}";
     re2c:eof = 0;
     re2c:monadic = 1;
 

@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT -8 -s -i
+//go:generate re2go $INPUT -o $OUTPUT -8si --api simple
 package main
 
 /*!include:re2c "unicode_categories.re" */
@@ -6,9 +6,8 @@ package main
 func lex(yyinput string) int {
 	var yycursor, yymarker int
 	/*!re2c
-		re2c:api = default;
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE = byte;
+		re2c:YYCTYPE = byte;
 
 		// Simplified "Unicode Identifier and Pattern Syntax"
 		// (see https://unicode.org/reports/tr31)

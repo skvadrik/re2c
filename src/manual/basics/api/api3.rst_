@@ -8,154 +8,139 @@ order to interface with the outer program.
     should be 4-byte unsigned integer.
 
 ``YYCURSOR``
-    A pointer-like l-value that stores the current input position (usually a
-    pointer of type ``YYCTYPE*``). Initially ``YYCURSOR`` should point to the
-    first input character. It is advanced by the generated code.
-    When a rule matches, ``YYCURSOR`` points to the position after the
-    last matched character. It is used only in C pointer API.
+    An l-value that stores the current input position (a pointer or an integer
+    offset in ``YYINPUT``). Initially ``YYCURSOR`` should point to the first
+    input character, and later it is advanced by the generated code. When a rule
+    matches, ``YYCURSOR`` position is the one after the last matched character.
 
 ``YYLIMIT``
-    A pointer-like r-value that stores the end of input position (usually a
-    pointer of type ``YYCTYPE*``). Initially ``YYLIMIT`` should point to the
-    position after the last available input character. It is not changed by the
+    An r-value that stores the end of input position (a pointer or an integer
+    offset in ``YYINPUT``). Initially ``YYLIMIT`` should point to the position
+    after the last available input character. It is not changed by the
     generated code. The lexer compares ``YYCURSOR`` to ``YYLIMIT``
     in order to determine if there are enough input characters left.
-    ``YYLIMIT`` is used only in C pointer API.
 
 ``YYMARKER``
-    A pointer-like l-value (usually a pointer of type ``YYCTYPE*``)
-    that stores the position of the latest matched rule. It is used to
-    restore the ``YYCURSOR`` position if the longer match fails and
-    the lexer needs to rollback. Initialization is not
-    needed. ``YYMARKER`` is used only in C pointer API.
+    An l-value that stores the position of the latest matched rule (a pointer or
+    an integer offset in ``YYINPUT``). It is used to restore the ``YYCURSOR``
+    position if the longer match fails and the lexer needs to rollback.
+    Initialization is not needed.
 
 ``YYCTXMARKER``
-    A pointer-like l-value that stores the position of the trailing context
-    (usually a pointer of type ``YYCTYPE*``). No initialization is needed.
-    It is used only in C pointer API, and only with the lookahead operator
-    ``/``.
+    An l-value that stores the position of the trailing context (a pointer or an
+    integer offset in ``YYINPUT``). No initialization is needed. ``YYCTXMARKER``
+    is needed only if the lookahead operator ``/`` is used.
 
 ``YYFILL``
-    A generic API primitive with one argument ``len``.
+    A generic API primitive with one variable ``len``.
     ``YYFILL`` should provide at least ``len`` more input characters or fail.
     If ``re2c:eof`` is used, then ``len`` is always ``1`` and  ``YYFILL`` should
     always return to the calling function; zero return value indicates success.
     If ``re2c:eof`` is not used, then ``YYFILL`` return value is ignored and it
     should not return on failure. The maximum value of ``len`` is ``YYMAXFILL``.
-    The definition of ``YYFILL`` can be either function-like or free-form
-    depending on the API style (see ``re2c:api:style`` and
-    ``re2c:define:YYFILL:naked``).
+
+``YYFN``
+    A primitive that defines function prototype in ``--recursive-functions``
+    code model. Its value should be an array of one or more strings, where each
+    string contains two or three components separated by the string specified in
+    ``re2c:fn:sep`` configuration (typically a semicolon). The first array
+    element defines function name and return type (emply for a void function).
+    Subsequent elements define function arguments: first, the expression for the
+    argument used in function body (usually just a name); second, argument type;
+    third, an optional formal parameter (it defaults to the first component -
+    usually both the argument and the parameter are the same identifier).
+
+``YYINPUT``
+    An r-value that stores the current input character sequence (string, buffer,
+    etc.).
 
 ``YYMAXFILL``
     An integral constant equal to the maximum value of the argument to
     ``YYFILL``.  It can be generated with a ``max`` block.
 
 ``YYLESSTHAN``
-    A generic API primitive with one argument ``len``.
+    A generic API primitive with one variable ``len``.
     It should be defined as an r-value of boolean type that equals ``true`` if
     and only if there are less than ``len`` input characters left.
-    The definition can be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
 
 ``YYPEEK``
-    A generic API primitive with no arguments.
+    A generic API primitive with no variables.
     It should be defined as an r-value of type ``YYCTYPE`` that is equal to the
-    character at the current input position. The definition can be either
-    function-like or free-form depending on the API style (see
-    ``re2c:api:style``).
+    character at the current input position.
 
 ``YYSKIP``
-    A generic API primitive with no arguments.
-    ``YYSKIP`` should advance the current input position by one
-    character. The definition can be either function-like or free-form
-    depending on the API style (see ``re2c:api:style``).
+    A generic API primitive that should advance the current input position by
+    one code unit.
 
 ``YYBACKUP``
-    A generic API primitive with no arguments.
-    ``YYBACKUP`` should save the current input position, which is
-    later restored with ``YYRESTORE``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive that should save the current input position (to be
+    restored with ``YYRESTORE`` later).
 
 ``YYRESTORE``
-    A generic API primitive with no arguments.
-    ``YYRESTORE`` should restore the current input position to the
-    value saved by ``YYBACKUP``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive that should restore the current input position to
+    the value saved by ``YYBACKUP``.
 
 ``YYBACKUPCTX``
-    A generic API primitive with zero arguments.
-    ``YYBACKUPCTX`` should save the current input position as the
-    position of the trailing context, which is later restored by
-    ``YYRESTORECTX``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive that should save the current input position as the
+    position of the trailing context (to be restored with ``YYRESTORECTX``
+    later).
 
 ``YYRESTORECTX``
-    A generic API primitive with no arguments.
-    ``YYRESTORECTX`` should restore the trailing context position
+    A generic API primitive that should restore the trailing context position
     saved with ``YYBACKUPCTX``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
 
 ``YYRESTORETAG``
-    A generic API primitive with one argument ``tag``.
-    ``YYRESTORETAG`` should restore the trailing context position
-    to the value of ``tag``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive with one variable ``tag`` that should restore the
+    trailing context position to the value of ``tag``.
 
 ``YYSTAGP``
-    A generic API primitive with one argument ``tag``, where ``tag`` can be a
-    pointer or an offset (see submatch extraction section for details).
-    ``YYSTAGP`` should set ``tag`` to the current input position.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive with one variable ``tag``, where ``tag`` can be a
+    pointer or an offset in ``YYINPUT`` (see submatch extraction section for
+    details). ``YYSTAGP`` should set ``tag`` to the current input position.
 
 ``YYSTAGN``
-    A generic API primitive with one argument ``tag``, where ``tag`` can be a
-    pointer or an offset (see submatch extraction section for details).
-    ``YYSTAGN`` should to set ``tag`` to a value that represents non-existent
-    input position.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive with one variable ``tag``, where ``tag`` can be a
+    pointer or an offset in ``YYINPUT`` (see submatch extraction section for
+    details). ``YYSTAGN`` should to set ``tag`` to a value that represents
+    non-existent input position.
 
 ``YYMTAGP``
-    A generic API primitive with one argument ``tag``.
+    A generic API primitive with one variable ``tag``.
     ``YYMTAGP`` should append the current position to the submatch history of
     ``tag`` (see the submatch extraction section for details.)
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
 
 ``YYMTAGN``
-    A generic API primitive with one argument ``tag``.
+    A generic API primitive with one variable ``tag``.
     ``YYMTAGN`` should append a value that represents non-existent input
     position position to the submatch history of ``tag`` (see the submatch
     extraction section for details.)
-    The definition can be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
 
 ``YYSHIFT``
-    A generic API primitive with one argument ``shift``.
-    ``YYSHIFT`` should shift the current input position by
-    ``shift`` characters (the shift value may be negative). The definition
-    can be either function-like or free-form depending on the API style
-    (see ``re2c:api:style``).
+    A generic API primitive with one variable ``shift`` that should shift the
+    current input position by ``shift`` characters (the shift value may be
+    negative).
+
+``YYCOPYSTAG``
+    A generic API primitive with two variables, ``lhs`` and ``rhs`` that should
+    copy right-hand-side s-tag variable ``rhs`` to the left-hand-side s-tag
+    variable ``lhs``. For most languages this primitive has a default definition
+    that assigns ``lhs`` to ``rhs``.
+
+``YYCOPYMTAG``
+    A generic API primitive with two variables, ``lhs`` and ``rhs`` that should
+    copy right-hand-side m-tag variable ``rhs`` to the left-hand-side m-tag
+    variable ``lhs``. For most languages this primitive has a default definition
+    that assigns ``lhs`` to ``rhs``.
 
 ``YYSHIFTSTAG``
-    A generic  API primitive with two arguments, ``tag`` and ``shift``.
-    ``YYSHIFTSTAG`` should shift ``tag`` by ``shift`` characters
-    (the shift value may be negative).
-    The definition can be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic  API primitive with two variables, ``tag`` and ``shift`` that
+    should shift ``tag`` by ``shift`` code units (the shift value may be
+    negative).
 
 ``YYSHIFTMTAG``
-    A generic API primitive with two arguments, ``tag`` and ``shift``.
-    ``YYSHIFTMTAG`` should shift the latest value in the history
-    of ``tag`` by ``shift`` characters (the shift value may be negative).
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style``).
+    A generic API primitive with two variables, ``tag`` and ``shift`` that
+    should shift the latest value in the history of ``tag`` by ``shift`` code
+    units (the shift value may be negative).
 
 ``YYMAXNMATCH``
     An integral constant equal to the maximal number of POSIX capturing groups
@@ -165,48 +150,65 @@ order to interface with the outer program.
     The type of the condition enum.
     It can be generated either with ``conditions`` block or ``--header`` option.
 
-``YYGETCONDITION``
-    An API primitive with zero arguments.
-    It should be defined as an r-value of type ``YYCONDTYPE`` that is equal to
-    the current condition identifier. The definition can be either function-like
-    or free-form depending on the API style (see ``re2c:api:style`` and
-    ``re2c:define:YYGETCONDITION:naked``).
+``YYGETACCEPT``
+    A primitive with one variable ``var`` that stores numeric selector of the
+    accepted rule. For most languages this primitive has a default definition
+    that reads from ``var``.
 
-``YYSETCONDITION``
-    An API primitive with one argument ``cond``.
-    The meaning of ``YYSETCONDITION`` is to set the current condition
-    identifier to ``cond``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style`` and ``re2c:define:YYSETCONDITION@cond``).
+``YYSETACCEPT``
+    A primitive with two variables: ``var`` (an l-value that stores numeric
+    selector of the accepted rule), and ``val`` (the value of selector). For 
+    most languages this primitive has a default definition that assigns ``var``
+    to ``val``.
+
+``YYGETCOND``
+    An r-value of type ``YYCONDTYPE`` that is equal to the current condition
+    identifier.
+
+``YYSETCOND``
+    A primitive with one variable ``cond`` that should set the current
+    condition identifier to ``cond``.
 
 ``YYGETSTATE``
-    An API primitive with zero arguments.
-    It should be defined as an r-value of integer type that is equal to the
-    current lexer state. Should be initialized to ``-1``. The definition can be
-    either function-like or free-form depending on the API style (see
-    ``re2c:api:style`` and ``re2c:define:YYGETSTATE:naked``).
+    An r-value of integer type that is equal to the current lexer state. It
+    should be initialized to ``-1``.
 
 ``YYSETSTATE``
-    An API primitive with one argument ``state``.
-    The meaning of ``YYSETSTATE`` is to set the current lexer state to
-    ``state``.
-    The definition should be either function-like or free-form depending on the
-    API style (see ``re2c:api:style`` and ``re2c:define:YYSETSTATE@state``).
+    A primitive with one variable ``state`` that should set the current lexer
+    state to ``state``.
 
 ``YYDEBUG``
-    A debug API primitive with two arguments. It can be used to debug the
-    generated code (with ``-d`` ``--debug-output`` option). ``YYDEBUG`` should
-    return no value and accept two arguments: ``state`` (either a DFA state
-    index or ``-1``) and ``symbol`` (the current input symbol).
+    This primitive is generated only with ``-d``, ``--debug-output`` option.
+    Its purpose is to add logging to the generated code (typical ``YYDEBUG``
+    definition is a print statement). ``YYDEBUG`` statements are generated in
+    every state and have two variables: ``state`` (either a DFA state index or
+    ``-1``) and ``symbol`` (the current input symbol).
+
+``yyaccept``
+    An l-value of unsigned integral type that stores the number of the latest
+    matched rule. User definition is necessary only with ``--storable-state``
+    option.
+
+``yybm``
+    A table containing compressed bitmaps for up to 8 transitions (used with
+    the ``--bitmaps`` option). The table contains 256 elements and is indexed by
+    1-byte code units. Each 8-bit element combines boolean values for up to 8
+    transitions. k-Th bit of n-th element is true iff n-th code unit is in the
+    range of k-th transition. The idea of this bitmap is to replace many `if`
+    branches or `switch` cases with one check of a single bit in the table.
 
 ``yych``
     An l-value of type ``YYCTYPE`` that stores the current input character.
     User definition is necessary only with ``-f`` ``--storable-state`` option.
 
-``yyaccept``
-    An l-value of unsigned integral type that stores the number of the latest
-    matched rule.
-    User definition is necessary only with ``-f`` ``--storable-state`` option.
+``yyctable``
+    Jump table generated for the initial condition dispatch (enabled with the
+    combination of ``--conditions`` and ``--computed-gotos`` options).
+
+``yyfill``
+    An l-value that stores the result of ``YYFILL`` call (this may be necessary
+    for pure functional languages, where ``YYFILL`` is a monadic function with
+    complex return value).
 
 ``yynmatch``
     An l-value of unsigned integral type that stores the number of POSIX
@@ -219,3 +221,14 @@ order to interface with the outer program.
     at least ``yynmatch * 2`` (usually ``YYMAXNMATCH * 2`` is a good choice).
     Used only with ``-P`` ``--posix-captures`` option.
 
+``yystable``
+    Deprecated.
+
+``yystate``
+    An l-value used with the ``--loop-switch`` option to store the current DFA
+    state.
+
+``yytarget``
+    Jump table that contains jump targets (label addresses) for all transitions
+    from a state. This table is local to each state. Generation of ``yytarget``
+    tables is enabled with ``--computed-gotos`` option.

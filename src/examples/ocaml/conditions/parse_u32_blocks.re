@@ -18,30 +18,30 @@ let add (num: int option) (dgt: int) (base: int) : int option =
             in if n' > (of_int32 Int32.max_int) then None else Some (to_int n')
 
 %{
-    re2c:variable:yyrecord = "st";
+    re2c:yyrecord = "st";
     re2c:yyfill:enable = 0;
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_bin;int option", "st;state", "num;int option"];
+    re2c:YYFN = ["parse_bin;int option", "st;state", "num;int option"];
     [01] { parse_bin st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 2) }
     *    { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_oct;int option", "st;state", "num;int option"];
+    re2c:YYFN = ["parse_oct;int option", "st;state", "num;int option"];
     [0-7] { parse_oct st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 8) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_dec;int option", "st;state", "num;int option"];
+    re2c:YYFN = ["parse_dec;int option", "st;state", "num;int option"];
     [0-9] { parse_dec st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 10) }
     *     { num }
 %}
 
 %{local
-    re2c:define:YYFN = ["parse_hex;int option", "st;state", "num;int option"];
+    re2c:YYFN = ["parse_hex;int option", "st;state", "num;int option"];
     [0-9] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 48) 16) }
     [a-f] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 87) 16) }
     [A-F] { parse_hex st (add num (Char.code st.yyinput.[st.yycursor - 1] - 55) 16) }
@@ -49,7 +49,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 %}
 
 %{local
-    re2c:define:YYFN = ["parse;int option", "st;state"];
+    re2c:YYFN = ["parse;int option", "st;state"];
     '0b' / [01]        { parse_bin st (Some 0) }
     "0"                { parse_oct st (Some 0) }
     "" / [1-9]         { parse_dec st (Some 0) }

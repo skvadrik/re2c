@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 fn lex(yyinput: &[u8]) -> isize {
     // The input must be null-terminated, otherwise the function has UB.
@@ -9,8 +9,7 @@ fn lex(yyinput: &[u8]) -> isize {
     let mut count = 0;
 
     'lex: loop { /*!re2c
-        re2c:api = default;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 

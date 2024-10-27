@@ -1,4 +1,4 @@
-Reusable blocks of the form ``/*!rules:re2c[:<name>] ... */``or
+Reusable blocks of the form ``/*!rules:re2c[:<name>] ... */`` or
 ``%{rules[:<name>] ... %}`` can be reused any number of times and combined with
 other |re2c| blocks. The ``<name>`` is optional. A rules block can be used in a
 ``use`` block or directive. The code for a rules block is generated at every

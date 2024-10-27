@@ -69,9 +69,9 @@ func parse(in *Input) []SemVer {
 	/*!re2c
 		re2c:api = record;
 		re2c:eof = 0;
-		re2c:variable:yyrecord = in;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYFILL = "fill(in) == 0";
+		re2c:yyrecord = in;
+		re2c:YYCTYPE = byte;
+		re2c:YYFILL = "fill(in) == 0";
 
 		num = [0-9]+;
 

@@ -52,7 +52,7 @@ def lex(yyrecord, recv):
         yyrecord.token = yyrecord.yycursor
     %{
         re2c:api = record;
-        re2c:define:YYFILL = "return Status.WAITING, recv";
+        re2c:YYFILL = "return Status.WAITING, recv";
         re2c:eof = 0;
         re2c:indent:top = 2;
 

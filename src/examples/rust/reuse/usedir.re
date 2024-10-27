@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 // This example shows how to combine reusable re2c blocks: two blocks
 // ('colors' and 'fish') are merged into one. The 'salmon' rule occurs
@@ -24,9 +24,8 @@ fn lex(yyinput: &[u8]) -> Ans {
 
     let (mut yycursor, mut yymarker) = (0, 0);
     /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
 
         !use:fish;
         !use:colors;

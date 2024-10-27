@@ -1,4 +1,4 @@
-//go:generate re2go -c $INPUT -o $OUTPUT -i
+//go:generate re2go -c $INPUT -o $OUTPUT -i --api simple
 package main
 
 import "errors"
@@ -26,10 +26,9 @@ func parse_u32(yyinput string) (uint32, error) {
 
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		re2c:api = default;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYGETCOND = "cond";
-		re2c:define:YYSETCOND = "cond = @@";
+		re2c:YYCTYPE = byte;
+		re2c:YYGETCOND = "cond";
+		re2c:YYSETCOND = "cond = @@";
 
 		<*> * { return 0, eSyntax }
 

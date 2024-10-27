@@ -22,9 +22,9 @@ s2n s i j = f i 0 where
     f k n = if k >= j then n else f (k + 1) (n * 10 + (fromIntegral (index s k) - 48))
 
 %{
-    re2c:define:YYFN = ["parse;Maybe [Int]", "State{..};State"];
-    re2c:define:YYMTAGP = "let tag = _yycursor : @@{tag} in let @@{tag} = tag in";
-    re2c:define:YYMTAGN = ""; // alternatively could add -1 to the list
+    re2c:YYFN = ["parse;Maybe [Int]", "State{..};State"];
+    re2c:YYMTAGP = "let tag = _yycursor : @@{tag} in let @@{tag} = tag in";
+    re2c:YYMTAGN = ""; // alternatively could add -1 to the list
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
 

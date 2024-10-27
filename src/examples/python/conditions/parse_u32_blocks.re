@@ -9,7 +9,7 @@ class State:
 # Common re2c definitions shared between all functions.
 %{
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
     re2c:indent:top = 2;
 %}

@@ -64,9 +64,9 @@ private bool parse(const(char)* str, ref Ver ver) {
     /*!re2c
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
-        re2c:define:YYCTYPE = "char";
-        re2c:define:YYMTAGP = "add_mtag(mt, @@, yycursor);";
-        re2c:define:YYMTAGN = "add_mtag(mt, @@, null);";
+        re2c:YYCTYPE = "char";
+        re2c:YYMTAGP = "add_mtag(mt, @@, yycursor);";
+        re2c:YYMTAGN = "add_mtag(mt, @@, null);";
 
         num = [0-9]+;
         @t1 num @t2 ("." #t3 num #t4)* [\x00] {

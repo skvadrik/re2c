@@ -8929,13 +8929,13 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'u2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h5' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'h6' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag 'p3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `u1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `u2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h5` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `h6` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `r1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:134:8: warning: tag `p3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

@@ -26,7 +26,7 @@ type state = {
 %}
 
 %{
-    re2c:define:YYFN = ["lex;answer", "yyrecord;state"];
+    re2c:YYFN = ["lex;answer", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
     !use:fish;

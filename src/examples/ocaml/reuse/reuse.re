@@ -19,12 +19,12 @@ type 'a state = {
 %}
 
 %{use
-    re2c:define:YYFN = ["lex8;int option", "yyrecord;char state"];
+    re2c:YYFN = ["lex8;int option", "yyrecord;char state"];
     re2c:encoding:utf8 = 1;
 %}
 
 %{use
-    re2c:define:YYFN = ["lex32;int option", "yyrecord;int state"];
+    re2c:YYFN = ["lex32;int option", "yyrecord;int state"];
     re2c:encoding:utf32 = 1;
 %}
 

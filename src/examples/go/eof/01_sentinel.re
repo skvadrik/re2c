@@ -1,4 +1,4 @@
-//go:generate re2go $INPUT -o $OUTPUT
+//go:generate re2go $INPUT -o $OUTPUT --api simple
 package main
 
 // Expect a null-terminated string.
@@ -7,9 +7,8 @@ func lex(yyinput string) int {
 	count := 0
 
 	for { /*!re2c
-		re2c:api = default;
 		re2c:yyfill:enable = 0;
-		re2c:define:YYCTYPE = byte;
+		re2c:YYCTYPE = byte;
 
 		*      { return -1 }
 		[\x00] { return count }
