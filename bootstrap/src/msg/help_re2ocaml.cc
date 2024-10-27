@@ -503,4 +503,13 @@ const char* help =
 "        generated lexer. This warning is only applicable if the sentinel method\n"
 "        of checking for the end of input is used. It is set to an error if\n"
 "        re2c:sentinel configuration is used.\n"
+"\n"
+"    -Wundefined-syntax-config\n"
+"\n"
+"        Warn if the syntax file specified with --syntax option is missing\n"
+"        definitions of some configurations. This helps to maintain user-defined\n"
+"        syntax files: if a new release adds configurations, old syntax file\n"
+"        will raise a warning, and the user will be notified. If some\n"
+"        configurations are unused and do not need a definition, they should be\n"
+"        explicitly set to <undefined>.\n"
 ;
