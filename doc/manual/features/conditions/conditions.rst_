@@ -3,8 +3,8 @@ way to encode multiple interrelated automata within the same |re2c| block.
 
 Each condition corresponds to a single automaton and has a unique name specified
 by the user and a unique internal number defined by |re2c|. The numbers are used
-to switch between conditions: the generated code uses ``YYGETCONDITION`` and
-``YYSETCONDITION`` primitives to get the current condition or set it to the
+to switch between conditions: the generated code uses ``YYGETCOND`` and
+``YYSETCOND`` primitives to get the current condition or set it to the
 given number. Use ``conditions`` block, ``--header`` option or ``re2c:header``
 configuration to generate numeric condition identifiers. Configuration
 ``re2c:cond:enumprefix`` specifies the generated identifier prefix.
@@ -67,7 +67,7 @@ identifier equal to the number of its start state, and a switch between
 conditions is no different than a switch between DFA states of a single
 condition. There is no need for a separate initial condition switch.
 (Since the same approach is used to implement storable states,
-``YYGETCONDITION``/``YYSETCONDITION`` are redundant if both storable states and
+``YYGETCOND``/``YYSETCOND`` are redundant if both storable states and
 conditions are used).
 
 The program below uses start conditions to parse binary, octal, decimal and

@@ -52,7 +52,7 @@ Changelog
   + ``re2c:api = simple`` (alias for ``re2c:api = default``)
   + ``re2c:api = generic`` (alias for ``re2c:api = custom``)
   + ``re2c:api = record``
-  + ``re2c:computed_gotos`` (alias for ``re2c:cgoto``)
+  + ``re2c:computed-gotos`` (alias for ``re2c:cgoto``)
   + ``re2c:cond:abort``
   + ``re2c:tags:negative``
   + ``re2c:leftmost-captvars``
@@ -61,25 +61,29 @@ Changelog
   + ``re2c:captures`` (alias for ``re2c:leftmost-captures``)
   + ``re2c:monadic``
   + ``re2c:fn:sep``
-  + ``re2c:define:YYFN``
-  + ``re2c:define:YYINPUT``
-  + ``re2c:define:YYGETACCEPT``
-  + ``re2c:define:YYSETACCEPT``
-  + ``re2c:define:YYCOPYSTAG``
-  + ``re2c:define:YYCOPYMTAG``
-  + ``re2c:define:YYGETCOND`` (alias for ``re2c:define:YYGETCONDITION``)
-  + ``re2c:define:YYSETCOND`` (alias for ``re2c:define:YYSETCONDITION``)
-  + ``re2c:variable:yyfill``
-  + ``re2c:variable:yynmatch``
-  + ``re2c:variable:yypmatch``
-  + ``re2c[:variable]:yych:literals``
-  + All configurations that have `define:` or `variable:` part in their name
-    now have an alias without this part.
+  + ``re2c:[define:]YYFN``
+  + ``re2c:[define:]YYINPUT``
+  + ``re2c:[define:]YYGETACCEPT``
+  + ``re2c:[define:]YYSETACCEPT``
+  + ``re2c:[define:]YYCOPYSTAG``
+  + ``re2c:[define:]YYCOPYMTAG``
+  + ``re2c:[define:]YYGETCOND`` (alias for ``re2c:[define:]YYGETCONDITION``)
+  + ``re2c:[define:]YYSETCOND`` (alias for ``re2c:[define:]YYSETCONDITION``)
+  + ``re2c:[variable:]yyfill``
+  + ``re2c:[variable:]yynmatch``
+  + ``re2c:[variable:]yypmatch``
+  + ``re2c:[variable:]yych:literals``
 
-- Added directives:
+- All configurations that have `define:` or `variable:` part in their name
+  now have an alias without this part.
+
+- Added new block types:
 
   + ``/*!svars:re2c ... */``
   + ``/*!mvars:re2c ... */``
+
+- Flex-style opening/closing braces ``%{`` and ``%}`` for block start/end
+  markers now work for all block types.
 
 - Added syntax file feature lists:
 
@@ -194,9 +198,6 @@ Changelog
 
 - Dropped support for function-like API style for Rust.
   (it was hard to use, if at all possible)
-
-- Flex-style opening/closing braces ``%{`` and ``%}`` for block start/end
-  markers now work for all block types and directives.
 
 - Infra work on Github Actions CI.
 
