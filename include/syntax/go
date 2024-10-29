@@ -181,7 +181,6 @@ code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
-code:type_cond_enum = <undefined>;
 code:type_yybm = "byte";
 code:type_yytarget = <undefined>;
 

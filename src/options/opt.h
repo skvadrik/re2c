@@ -100,7 +100,7 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(enum, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), ({StxLOpt::INIT}) \
+        ({StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), ({StxLOpt::INIT}) \
     ) \
     CODE_TEMPLATE(enum_elem, \
         ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
@@ -112,9 +112,6 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_uint, \
-        ({}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(type_cond_enum, \
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_yybm, \

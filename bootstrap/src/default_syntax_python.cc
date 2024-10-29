@@ -177,7 +177,6 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "\n"
     "code:type_int = <undefined>;\n"
     "code:type_uint = <undefined>;\n"
-    "code:type_cond_enum = <undefined>;\n"
     "code:type_yybm = <undefined>;\n"
     "code:type_yytarget = <undefined>;\n"
     "\n"

@@ -112,7 +112,7 @@ re2c:label:start = 0;
 
 re2c:YYBACKUP = "yybackup";
 re2c:YYBACKUPCTX = "yybackupctx";
-re2c:YYCONDTYPE = "YYCond";
+re2c:YYCONDTYPE = "u32";
 re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCTXMARKER = (.api.record ? yyrecord ".") "yyctxmarker";
@@ -175,7 +175,6 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "i32";
 code:type_uint = "u32";
-code:type_cond_enum = "u32";
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
 

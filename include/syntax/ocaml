@@ -168,7 +168,7 @@ code:array_global = code:array_local;
 code:array_elem = array ".(" index ")";
 
 code:enum =
-    "type " name " = "
+    "type " type " = "
         [elem{0}:          elem]
         [elem{1:-1}: " | " elem]
     nl;
@@ -179,7 +179,6 @@ code:assign = topindent lhs " <- " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
-code:type_cond_enum = (.storable_state ? "int" : "uint");
 code:type_yybm = "int";
 code:type_yytarget = <undefined>;
 

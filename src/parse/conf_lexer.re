@@ -591,7 +591,6 @@ start:
     "code:array_elem"             { RET_CODE(code_array_elem); }
     "code:type_int"               { RET_CODE(code_type_int); }
     "code:type_uint"              { RET_CODE(code_type_uint); }
-    "code:type_cond_enum"         { RET_CODE(code_type_cond_enum); }
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
     "code:assign"                 { RET_CODE(code_assign); }

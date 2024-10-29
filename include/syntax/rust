@@ -112,7 +112,7 @@ re2c:label:start = 0;
 
 re2c:YYBACKUP = "YYBACKUP";
 re2c:YYBACKUPCTX = "YYBACKUPCTX";
-re2c:YYCONDTYPE = "YYCONDTYPE";
+re2c:YYCONDTYPE = (.storable_state ? "isize" : "usize");
 re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCTYPE = "YYCTYPE";
@@ -179,7 +179,6 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "isize";
 code:type_uint = "usize";
-code:type_cond_enum = (.storable_state ? "isize" : "usize");
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
 

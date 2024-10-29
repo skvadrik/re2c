@@ -1154,11 +1154,8 @@ class RenderEnum : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
-        case StxVarId::NAME:
-            rctx.os << code->name;
-            break;
         case StxVarId::TYPE:
-            rctx.opts->render_code_type_cond_enum(rctx.os);
+            rctx.os << code->type;
             break;
         case StxVarId::ELEM:
             rctx.os << code->elem_ids[curr_elem];

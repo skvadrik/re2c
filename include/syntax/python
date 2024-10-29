@@ -175,7 +175,6 @@ code:assign = topindent lhs " = " rhs nl;
 
 code:type_int = <undefined>;
 code:type_uint = <undefined>;
-code:type_cond_enum = <undefined>;
 code:type_yybm = <undefined>;
 code:type_yytarget = <undefined>;
 

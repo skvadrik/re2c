@@ -183,7 +183,6 @@ const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:type_int = \"int\";\n"
     "code:type_uint = \"uint\";\n"
-    "code:type_cond_enum = <undefined>;\n"
     "code:type_yybm = \"byte\";\n"
     "code:type_yytarget = <undefined>;\n"
     "\n"

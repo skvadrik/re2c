@@ -169,7 +169,7 @@ code:array_global = code:array_local;
 code:array_elem = array "[" index "]";
 
 code:enum =
-    "enum " name " {" nl indent
+    "enum " type " {" nl indent
         [elem{0:-2}: topindent elem (.init ? " = " init) "," nl]
         [elem{-1}:   topindent elem (.init ? " = " init) nl]
     dedent "};" nl;
@@ -180,7 +180,6 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
-code:type_cond_enum = <undefined>;
 code:type_yybm = "immutable char";
 code:type_yytarget = <undefined>;
 

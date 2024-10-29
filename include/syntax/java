@@ -111,7 +111,7 @@ re2c:label:start = 0;
 
 re2c:YYBACKUP = "yybackup";
 re2c:YYBACKUPCTX = "yybackupctx";
-re2c:YYCONDTYPE = "YYCond";
+re2c:YYCONDTYPE = "int";
 re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs};";
 re2c:YYCTYPE = "YYChar";
@@ -174,7 +174,6 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "int";
-code:type_cond_enum = "int";
 code:type_yybm = "int";
 code:type_yytarget = <undefined>;
 
