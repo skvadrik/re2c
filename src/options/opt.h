@@ -246,8 +246,7 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestoretag, \
-        ({StxVarId::RESTORETAG, StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::TAG, \
-            StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::RESTORETAG, StxVarId::CURSOR, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshift, \
         ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
