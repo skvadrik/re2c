@@ -1573,6 +1573,7 @@ static CodeList* gen_cond_goto(Output& output) {
     bool warn_cond_ord = output.warn_condition_order;
 
     DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
+    DCHECK(opts->target != Target::DOT);
 
     const size_t ncond = conds.size();
     CodeList* stmts = code_list(alc);
@@ -1580,41 +1581,34 @@ static CodeList* gen_cond_goto(Output& output) {
     GenGetCond callback(buf.stream(), opts);
     const char* getcond = opts->gen_code_yygetcond(buf, callback);
 
-    if (opts->target == Target::DOT) {
-        for (const StartCond& cond : conds) {
-            buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
-            append(stmts, code_text(alc, buf.flush()));
-        }
+    if (opts->computed_gotos) {
+        buf.cstr("*").str(opts->var_cond_table).cstr("[").cstr(getcond).cstr("]");
+        append(stmts, code_goto(alc, buf.flush()));
+    } else if (opts->nested_ifs) {
+        warn_cond_ord &= ncond > 1;
+        append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
     } else {
-        if (opts->computed_gotos) {
-            buf.cstr("*").str(opts->var_cond_table).cstr("[").cstr(getcond).cstr("]");
-            append(stmts, code_goto(alc, buf.flush()));
-        } else if (opts->nested_ifs) {
-            warn_cond_ord &= ncond > 1;
-            append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
-        } else {
-            warn_cond_ord = false;
+        warn_cond_ord = false;
 
-            CodeCases* ccases = code_cases(alc);
-            for (const StartCond& cond : conds) {
-                CodeList* body = code_list(alc);
-                buf.str(opts->cond_label_prefix).str(cond.name);
-                append(body, code_goto(alc, buf.flush()));
+        CodeCases* ccases = code_cases(alc);
+        for (const StartCond& cond : conds) {
+            CodeList* body = code_list(alc);
+            buf.str(opts->cond_label_prefix).str(cond.name);
+            append(body, code_goto(alc, buf.flush()));
 
-                append(ccases, code_case_string(alc, body,
-                        gen_cond_enum_elem(buf, opts, cond.name)));
-            }
-            if (opts->cond_abort) {
-                append(ccases, code_case_default(alc, gen_abort(alc)));
-            }
-            append(stmts, code_switch(alc, getcond, ccases));
+            append(ccases, code_case_string(alc, body,
+                    gen_cond_enum_elem(buf, opts, cond.name)));
         }
-
-        // see note [condition order]
-        warn_cond_ord &= opts->header_file.empty();
-        if (warn_cond_ord) {
-            output.msg.warn.condition_order(block.loc);
+        if (opts->cond_abort) {
+            append(ccases, code_case_default(alc, gen_abort(alc)));
         }
+        append(stmts, code_switch(alc, getcond, ccases));
+    }
+
+    // see note [condition order]
+    warn_cond_ord &= opts->header_file.empty();
+    if (warn_cond_ord) {
+        output.msg.warn.condition_order(block.loc);
     }
 
     return stmts;
@@ -2022,7 +2016,11 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
     Scratchbuf& buf = output.scratchbuf;
 
     append(code, code_text(alc, "digraph re2c {"));
-    append(code, gen_cond_goto(output));
+
+    for (const StartCond& cond : output.block().conds) {
+        buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
+        append(code, code_text(alc, buf.flush()));
+    }
 
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         if (!dfa->cond.empty()) {
