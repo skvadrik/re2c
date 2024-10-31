@@ -82,6 +82,10 @@ Warnings can be invividually enabled, disabled and turned into an error.
 .. include:: @top_srcdir@/doc/manual/basics/warnings/warnings_general.rst_
 .. include:: @top_srcdir@/doc/manual/basics/warnings/warnings_list.rst_
 
+Syntax files
+------------
+.. include:: @top_srcdir@/doc/manual/basics/syntax_files.rst_
+
 Handling the end of input
 =========================
 .. include:: @top_srcdir@/doc/manual/eof/eof.rst_

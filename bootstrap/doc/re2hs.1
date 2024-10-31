@@ -1577,6 +1577,633 @@ raise a warning, and the user will be notified. If some configurations are
 unused and do not need a definition, they should be explicitly set to
 \fB<undefined>\fP\&.
 .UNINDENT
+.SS Syntax files
+.sp
+Support for different languages in re2c is based on the idea of \fIsyntax files\fP\&.
+A syntax file is a configuration file that defines syntax of the target language
+\-\- not the whole language, but a small part of it that is used by the generated
+code. Syntax files make re2c very flexible, but they should not be used as a
+replacement for \fBre2c:\fP configurations: their purpose is to define syntax of
+the target language, not to customise one particular lexer. All supported
+languages have default syntax files that are part of the distribution (see
+\fBinclude/syntax\fP subdirectory); they are also embedded in the re2hs binary.
+Users may provide a custom syntax file that overrides a few configurations for
+one of supported languages, or they may choose to redefine all configurations
+(in that case \fB\-\-lang none\fP option should be used).
+Syntax files contain configurations of four different kinds: feature lists,
+language configurations, inplace configurations and code templates.
+.sp
+\fBFeature lists\fP
+.INDENT 0.0
+.INDENT 3.5
+A few list configurations define various features supported by a given
+backend, so that re2hs may give a clear error if the user tries to enable an
+unsupported feature:
+.INDENT 0.0
+.TP
+.B \fBsupported_apis\fP
+A list of supported APIs with possible elements \fBsimple\fP, \fBrecord\fP,
+\fBgeneric\fP\&.
+.TP
+.B \fBsupported_api_styles\fP
+A list of supported API styles with possible elements \fBfunctions\fP,
+\fBfree\-form\fP\&.
+.TP
+.B \fBsupported_code_models\fP
+A list of supported code models with possible elements \fBgoto\-label\fP,
+\fBloop\-switch\fP, \fBrecursive\-functions\fP\&.
+.TP
+.B \fBsupported_targets\fP
+A list of supported codegen targets with possible elements \fBcode\fP,
+\fBdot\fP, \fBskeleton\fP\&.
+.TP
+.B \fBsupported_features\fP
+A list of supported features with possible elements \fBnested\-ifs\fP,
+\fBbitmaps\fP, \fBcomputed\-gotos\fP, \fBcase\-ranges\fP, \fBmonadic\fP, \fBunsafe\fP,
+\fBtags\fP, \fBcaptures\fP, \fBcaptvars\fP\&.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fBLanguage configurations\fP
+.INDENT 0.0
+.INDENT 3.5
+A few boolean configurations describe features of the target language that
+affect re2hs parser and code generator:
+.INDENT 0.0
+.TP
+.B \fBsemicolons\fP
+Non\-zero if the language uses semicolons after statements.
+.TP
+.B \fBbacktick_quoted_strings\fP
+Non\-zero if the language has backtick\-quoted strings.
+.TP
+.B \fBsingle_quoted_strings\fP
+Non\-zero if the language has single\-quoted strings.
+.TP
+.B \fBindentation_sensitive\fP
+Non\-zero if the language is indentation sensitive.
+.TP
+.B \fBwrap_blocks_in_braces\fP
+Non\-zero if compound statements must be wrapped in curly braces.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+\fBInplace configurations\fP
+.INDENT 0.0
+.INDENT 3.5
+Syntax files define initial values of all \fBre2c:\fP configurations, as they
+may differ for different languages. See configurations section for a full list
+of all inplace configurations and their meaning.
+.UNINDENT
+.UNINDENT
+.sp
+\fBCode templates\fP
+.INDENT 0.0
+.INDENT 3.5
+Code templates define syntax of the target language. They are written in a
+simple domain\-specific language with the following formal grammar:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+code\-template ::
+      name \(aq=\(aq code\-exprs \(aq;\(aq
+    | CODE_TEMPLATE \(aq;\(aq
+    | \(aq<undefined>\(aq \(aq;\(aq
+
+code\-exprs ::
+      <EMPTY>
+    | code\-exprs code\-expr
+
+code\-expr ::
+      STRING
+    | VARIABLE
+    | optional
+    | list
+
+optional ::
+      \(aq(\(aq CONDITIONAL \(aq?\(aq code\-exprs \(aq)\(aq
+    | \(aq(\(aq CONDITIONAL \(aq?\(aq code\-exprs \(aq:\(aq code\-exprs \(aq)\(aq
+
+list ::
+      \(aq[\(aq VARIABLE \(aq:\(aq code\-exprs \(aq]\(aq
+    | \(aq[\(aq VARIABLE \(aq{\(aq NUMBER \(aq}\(aq \(aq:\(aq code\-exprs \(aq]\(aq
+    | \(aq[\(aq VARIABLE \(aq{\(aq NUMBER \(aq,\(aq NUMBER \(aq}\(aq \(aq:\(aq code\-exprs \(aq]\(aq
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+A code template is a sequence of string literals, variables, optional elements
+and lists, or a reference to another code template, or a special value
+\fB<undefined>\fP\&. Variables are placeholders that are substituted during code
+generation phase. List variables are special: when expanding list templates,
+re2hs repeats expressions the right hand side of the column a few times, each
+time replacing occurrences of the list variable with a value speific to this
+repetition. Lists have optional bounds (negative values are counted from the
+end, e.g. \fB\-1\fP means the last element). Conditional names start with a dot.
+Both conditionals and variables may be either local (specific to the given
+code template) or global (allowed in all code templates). When re2hs reads
+syntax file, it checks that each code template uses only the variables and
+conditionals that are allowed in it.
+.sp
+For example, the following code template defines if\-then\-else construct for a
+C\-like language:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+code:if_then_else =
+    [branch{0}: topindent \(dqif \(dq cond \(dq {\(dq nl
+        indent [stmt: stmt] dedent]
+    [branch{1:\-1}: topindent \(dq} else\(dq (.cond ? \(dq if \(dq cond) \(dq {\(dq nl
+        indent [stmt: stmt] dedent]
+    topindent \(dq}\(dq nl;
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Here \fBbranch\fP is a list variable: \fBbranch{0}\fP expands to the first branch
+(which is special, as there is no \fBelse\fP part), \fBbranch{1:\-1}\fP expands to
+all remaining branches (if any). \fBstmt\fP is also a list variable:
+\fB[stmt: stmt]\fP is a nested list that expands to a list of statements in the
+body of the current branch. \fBtopindent\fP, \fBindent\fP, \fBdedent\fP and \fBnl\fP
+are global variables, and \fB\&.cond\fP is a local conditional (their meaning is
+described below). This code template could produce the following code:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.nf
+.ft C
+if x {
+    // do something
+} else if y {
+    // do something else
+} else {
+    // don\(aqt do anything
+}
+.ft P
+.fi
+.UNINDENT
+.UNINDENT
+.sp
+Here\(aqs a list of all code templates supported by re2hs with their local
+variables and conditionals. Note that a particular definition may, but does
+not have to use local variables and conditionals.
+Any unused code templates should be set to \fB<undefined>\fP\&.
+.INDENT 0.0
+.TP
+.B \fBcode:var_local\fP
+Declaration or definition of a local variable. Supported variables:
+\fBtype\fP (the type of the variable), \fBname\fP (its name) and \fBinit\fP
+(initial value, if any). Conditionals: \fB\&.init\fP (true if there is an
+initializer).
+.TP
+.B \fBcode:var_global\fP
+Same as \fBcode:var_local\fP, except that it\(aqs used in top\-level.
+.TP
+.B \fBcode:const_local\fP
+Definition of a local constant. Supported variables: \fBtype\fP (the type
+of the constant), \fBname\fP (its name) and \fBinit\fP (initial value).
+.TP
+.B \fBcode:const_global\fP
+Same as \fBcode:const_local\fP, except that it\(aqs used in top\-level.
+.TP
+.B \fBcode:array_local\fP
+Definition of a local array (table). Supported variables: \fBtype\fP (the
+type of array elements), \fBname\fP (array name), \fBsize\fP (its size),
+\fBrow\fP (a list variable that does not itself produce any code, but
+expands list expression as many times as there are rows in the table)
+and \fBelem\fP (a list variable that expands to all table elements in the
+current row \-\- it\(aqs meant to be nested in the \fBrow\fP list).
+.TP
+.B \fBcode:array_global\fP
+Same as \fBcode:array_local\fP, except that it\(aqs used in top\-level.
+.TP
+.B \fBcode:array_elem\fP
+Reference to an element of an array (table). Supported variables:
+\fBarray\fP (the name of the array) and \fBindex\fP (index of the element).
+.TP
+.B \fBcode:enum\fP
+Definition of an enumeration (it may be defined using a special language
+construct for enumerations, or simply as a few standalone constants).
+Supported variables are \fBtype\fP (user\-defined enumeration type or type
+of the constants), \fBelem\fP (list variable that expands to the name of
+each member) and \fBinit\fP (initializer for each member). Conditionals:
+\fB\&.init\fP (true if there is an initializer).
+.TP
+.B \fBcode:enum_elem\fP
+Enumeration element (a member of a user\-defined enumeration type or a
+name of a constant, depending on how \fBcode:enum\fP is defined).
+Supported variables are \fBname\fP (the name of the element) and \fBtype\fP
+(its type).
+.TP
+.B \fBcode:assign\fP
+Assignment statement. Supported variables are \fBlhs\fP (left hand side)
+and \fBrhs\fP (right hand side).
+.TP
+.B \fBcode:type_int\fP
+Signed integer type.
+.TP
+.B \fBcode:type_uint\fP
+Unsigned integer type.
+.TP
+.B \fBcode:type_yybm\fP
+Type of elements in the \fByybm\fP table.
+.TP
+.B \fBcode:type_yytarget\fP
+Type of elements in the \fByytarget\fP table.
+.TP
+.B \fBcode:cmp_eq\fP
+Operator \(dqequals\(dq.
+.TP
+.B \fBcode:cmp_ne\fP
+Operator \(dqnot equals\(dq.
+.TP
+.B \fBcode:cmp_lt\fP
+Operator \(dqless than\(dq.
+.TP
+.B \fBcode:cmp_gt\fP
+Operator \(dqgreater than\(dq
+.TP
+.B \fBcode:cmp_le\fP
+Operator \(dqless or equal\(dq
+.TP
+.B \fBcode:cmp_ge\fP
+Operator \(dqgreater or equal\(dq
+.TP
+.B \fBcode:if_then_else\fP
+If\-then\-else statement with one or more branches. Supported variables:
+\fBbranch\fP (a list variable that does not itself produce any code, but
+expands list expression as many times as there are branches), \fBcond\fP
+(condition of the current branch) and \fBstmt\fP (a list variable that
+expands to all statements in the current branch). Conditionals:
+\fB\&.cond\fP (true if the current branch has a condition), \fB\&.many\fP (true
+if there\(aqs more than one branch).
+.TP
+.B \fBcode:if_then_else_oneline\fP
+A specialization of \fBcode:if_then_else\fP for the case when all branches
+have one\-line statements. If this is \fB<undefined>\fP,
+\fBcode:if_then_else\fP is used instead.
+.TP
+.B \fBcode:switch\fP
+A switch statement with one or more cases. Supported variables: \fBexpr\fP
+(the switched\-on expression) and \fBcase\fP (a list variable that expands
+to all cases\-groups with their code blocks).
+.TP
+.B \fBcode:switch_cases\fP
+A group of switch cases that maps to a single code block. Supported
+variables are \fBcase\fP (a list variable that expands to all cases in
+this group) and \fBstmt\fP (a list variable that expands to all statements
+in the code block.
+.TP
+.B \fBcode:switch_cases_oneline\fP
+A specialization of \fBcode:switch_cases\fP for the case when the code
+block consists of a single one\-line statement. If this is
+\fB<undefined>\fP, \fBcode:switch_cases\fP is used instead.
+.TP
+.B \fBcode:switch_case_range\fP
+A single switch case that covers a range of values (possibly consisting
+of a single value). Supported variable: \fBval\fP (a list variable that
+expands to all values in the range). Supported conditionals: \fB\&.many\fP
+(true if there\(aqs more than one value in the range) and
+\fB\&.char_literals\fP (true if this is a switch on character literals \-\-
+some languages provide special syntax for this case).
+.TP
+.B \fBcode:switch_case_default\fP
+Default switch case.
+.TP
+.B \fBcode:loop\fP
+A loop that runs forever (unless interrupted from the loop body).
+Supported variables: \fBlabel\fP (loop label), \fBstmt\fP (a list variable
+tht expands to all statements in the loop body).
+.TP
+.B \fBcode:continue\fP
+Continue statement. Supported variables: \fBlabel\fP (label from which to
+continue execution).
+.TP
+.B \fBcode:goto\fP
+Goto statement. Supported variables: \fBlabel\fP (label of the jump
+target).
+.TP
+.B \fBcode:fndecl\fP
+Function declaration. Supported variables: \fBname\fP (function name),
+\fBtype\fP (return type), \fBarg\fP (a list variable that does not itself
+produce code, but expands list expression as many times as there are
+function arguments), \fBargname\fP (name of the current argument),
+\fBargtype\fP (type of the current argument). Conditional: \fB\&.type\fP (true
+if this is a non\-void funtion).
+.TP
+.B \fBcode:fndef\fP
+Like \fBcode:fndecl\fP, but used for function definitions, so it has one
+additional list variable \fBstmt\fP that expands to all statements in the
+function body.
+.TP
+.B \fBcode:fncall\fP
+Function call statement. Supported variables: \fBname\fP (function name),
+\fBretval\fP (l\-value where the return value is stored, if any) and
+\fBarg\fP (a list variable that expands to all function arguments).
+Conditionals: \fB\&.args\fP (true if the function has arguments) and
+\fB\&.retval\fP (true if return value needs to be saved).
+.TP
+.B \fBcode:tailcall\fP
+Tail call statement. Supported variables: \fBname\fP (function name),
+and \fBarg\fP (a list variable that expands to all function arguments).
+Conditionals: \fB\&.args\fP (true if the function has arguments) and
+\fB\&.retval\fP (true if this is a non\-void function).
+.TP
+.B \fBcode:recursive_functions\fP
+Program body with \fB\-\-recursive\-functions\fP code model. Supported
+variables: \fBfn\fP (a list variable that does not itself produce any
+code, but expands list expression as many times as there are functions),
+\fBfndecl\fP (declaration of the current function) and \fBfndef\fP
+(definition of the current function).
+.TP
+.B \fBcode:fingerprint\fP
+The fingerprint at the top of the generated output file. Supported
+variables: \fBver\fP (re2hs version that was used to generate this) and
+\fBdate\fP (generation date).
+.TP
+.B \fBcode:line_info\fP
+The format of line directives (if this is set to \fB<undefined>\fP, no
+directives are generated). Supported variables: \fBline\fP (line number)
+and \fBfile\fP (filename).
+.TP
+.B \fBcode:abort\fP
+A statement that aborts program execution.
+.TP
+.B \fBcode:yydebug\fP
+\fBYYDEBUG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYDEBUG\fP, \fByyrecord\fP, \fByych\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBstate\fP (DFA state number).
+.TP
+.B \fBcode:yypeek\fP
+\fBYYPEEK\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYPEEK\fP, \fBYYCTYPE\fP, \fBYYINPUT\fP, \fBYYCURSOR\fP,
+\fByyrecord\fP, \fByych\fP (map to the corresponding \fBre2c:\fP
+configurations). Conditionals: \fB\&.cast\fP (true if
+\fBre2c:yych:conversion\fP is set to non\-zero).
+.TP
+.B \fBcode:yyskip\fP
+\fBYYSKIP\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSKIP\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations).
+.TP
+.B \fBcode:yybackup\fP
+\fBYYBACKUP\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYBACKUP\fP, \fBYYCURSOR\fP, \fBYYMARKER\fP,
+\fByyrecord\fP (map to the corresponding \fBre2c:\fP configurations).
+.TP
+.B \fBcode:yybackupctx\fP
+\fBYYBACKUPCTX\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYBACKUPCTX\fP, \fBYYCURSOR\fP, \fBYYCTXMARKER\fP,
+\fByyrecord\fP (map to the corresponding \fBre2c:\fP configurations).
+.TP
+.B \fBcode:yyskip_yypeek\fP
+Combined \fBcode:yyskip\fP and \fBcode:yypeek\fP statement (defaults to
+\fBcode:yyskip\fP followed by \fBcode:yypeek\fP).
+.TP
+.B \fBcode:yypeek_yyskip\fP
+Combined \fBcode:yypeek\fP and \fBcode:yyskip\fP statement (defaults to
+\fBcode:yypeek\fP followed by \fBcode:yyskip\fP).
+.TP
+.B \fBcode:yyskip_yybackup\fP
+Combined \fBcode:yyskip\fP and \fBcode:yybackup\fP statement (defaults to
+\fBcode:yyskip\fP followed by \fBcode:yybackup\fP).
+.TP
+.B \fBcode:yybackup_yyskip\fP
+Combined \fBcode:yybackup\fP and \fBcode:yyskip\fP statement (defaults to
+\fBcode:yybackup\fP followed by \fBcode:yyskip\fP).
+.TP
+.B \fBcode:yybackup_yypeek\fP
+Combined \fBcode:yybackup\fP and \fBcode:yypeek\fP statement (defaults to
+\fBcode:yybackup\fP followed by \fBcode:yypeek\fP).
+.TP
+.B \fBcode:yyskip_yybackup_yypeek\fP
+Combined \fBcode:yyskip\fP, \fBcode:yybackup\fP and \fBcode:yypeek\fP
+statement (defaults to\(ga\(gacode:yyskip\(ga\(ga followed by \fBcode:yybackup\fP
+followed by \fBcode:yypeek\fP).
+.TP
+.B \fBcode:yybackup_yypeek_yyskip\fP
+Combined \fBcode:yybackup\fP, \fBcode:yypeek\fP and \fBcode:yyskip\fP
+statement (defaults to\(ga\(gacode:yybackup\(ga\(ga followed by \fBcode:yypeek\fP
+followed by \fBcode:yyskip\fP).
+.TP
+.B \fBcode:yyrestore\fP
+\fBYYRESTORE\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYRESTORE\fP, \fBYYCURSOR\fP, \fBYYMARKER\fP,
+\fByyrecord\fP (map to the corresponding \fBre2c:\fP configurations).
+.TP
+.B \fBcode:yyrestorectx\fP
+\fBYYRESTORECTX\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYRESTORECTX\fP, \fBYYCURSOR\fP, \fBYYCTXMARKER\fP,
+\fByyrecord\fP (map to the corresponding \fBre2c:\fP configurations).
+.TP
+.B \fBcode:yyrestoretag\fP
+\fBYYRESTORETAG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYRESTORETAG\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map
+to the corresponding \fBre2c:\fP configurations), \fBtag\fP (the name of tag
+variable used to restore position).
+.TP
+.B \fBcode:yyshift\fP
+\fBYYSHIFT\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSHIFT\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBoffset\fP (the number of code
+units to shift the current position).
+.TP
+.B \fBcode:yyshiftstag\fP
+\fBYYSHIFTSTAG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSHIFTSTAG\fP, \fByyrecord\fP, \fBnegative\fP (map
+to the corresponding \fBre2c:\fP configurations), \fBtag\fP (tag variable
+which needs to be shifted), \fBoffset\fP (the number of code units to
+shift). Conditionals: \fB\&.nested\fP (true if this is a nested tag \-\- in
+this case its value may equal to \fBre2c:tags:negative\fP, which should
+not be shifted).
+.TP
+.B \fBcode:yyshiftmtag\fP
+\fBYYSHIFTMTAG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSHIFTMTAG\fP (maps to the corresponding
+\fBre2c:\fP configuration), \fBtag\fP (tag variable which needs to be
+shifted), \fBoffset\fP (the number of code units to shift).
+.TP
+.B \fBcode:yystagp\fP
+\fBYYSTAGP\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSTAGP\fP, \fBYYCURSOR\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBtag\fP (tag variable that
+should be updated).
+.TP
+.B \fBcode:yymtagp\fP
+\fBYYMTAGP\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYMTAGP\fP (maps to the corresponding \fBre2c:\fP
+configuration), \fBtag\fP (tag variable that should be updated).
+.TP
+.B \fBcode:yystagn\fP
+\fBYYSTAGN\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSTAGN\fP, \fBnegative\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBtag\fP (tag variable that
+should be updated).
+.TP
+.B \fBcode:yymtagn\fP
+\fBYYMTAGN\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYMTAGN\fP (maps to the corresponding \fBre2c:\fP
+configuration), \fBtag\fP (tag variable that should be updated).
+.TP
+.B \fBcode:yycopystag\fP
+\fBYYCOPYSTAG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYCOPYSTAG\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBlhs\fP, \fBrhs\fP (left and
+right hand side tag variables of the copy operation).
+.TP
+.B \fBcode:yycopymtag\fP
+\fBYYCOPYMTAG\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYCOPYMTAG\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBlhs\fP, \fBrhs\fP (left and
+right hand side tag variables of the copy operation).
+.TP
+.B \fBcode:yygetaccept\fP
+\fBYYGETACCEPT\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYGETACCEPT\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yyaccept\fP configuration).
+.TP
+.B \fBcode:yysetaccept\fP
+\fBYYSETACCEPT\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSETACCEPT\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yyaccept\fP configuration) and \fBval\fP (numeric value of the
+accepted rule).
+.TP
+.B \fBcode:yygetcond\fP
+\fBYYGETCOND\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYGETCOND\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yycond\fP configuration).
+.TP
+.B \fBcode:yysetcond\fP
+\fBYYSETCOND\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSETCOND\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yycond\fP configuration) and \fBval\fP (numeric condition
+identifier).
+.TP
+.B \fBcode:yygetstate\fP
+\fBYYGETSTATE\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYGETSTATE\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yystate\fP configuration).
+.TP
+.B \fBcode:yysetstate\fP
+\fBYYSETSTATE\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYSETSTATE\fP, \fByyrecord\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBvar\fP (maps to
+\fBre2c:yystate\fP configuration) and \fBval\fP (state number).
+.TP
+.B \fBcode:yylessthan\fP
+\fBYYLESSTHAN\fP statement, possibly specialized for different APIs.
+Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
+\fByyrecord\fP (map to the corresponding \fBre2c:\fP configurations),
+\fBneed\fP (the number of code units to check against). Conditional:
+\fB\&.many\fP (true if the \fBneed\fP is more than one).
+.TP
+.B \fBcode:yybm_filter\fP
+Condition that is used to filter out \fByych\fP values that are not
+covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
+Supported variable: \fByych\fP (maps to \fBre2c:yych\fP configuration).
+.TP
+.B \fBcode:yybm_match\fP
+The format of \fByybm\fP table check (generated with \fB\-\-bitmaps\fP
+option). Supported variables: \fByybm\fP, \fByych\fP (map to the
+corresponding \fBre2c:\fP configurations), \fBoffset\fP (offset in the
+\fByybm\fP table that needs to be added to \fByych\fP) and \fBmask\fP (bit
+mask that should be applied to the table entry to retrieve the boolean
+value that needs to be checked)
+.UNINDENT
+.sp
+Here\(aqs a list of all global variables that are allowed in syntax files:
+.INDENT 0.0
+.TP
+.B \fBnl\fP
+A newline.
+.TP
+.B \fBindent\fP
+A variable that does not produce any code, but has a side\-effect of
+increasing indentation level.
+.TP
+.B \fBdedent\fP
+A variable that does not produce any code, but has a side\-effect of
+decreasing indentation level.
+.TP
+.B \fBtopindent\fP
+Indentation string for the current statement. Indentation level is
+tracked and automatically updated by the code generator.
+.UNINDENT
+.sp
+Here\(aqs a list of all global conditionals that are allowed in syntax files:
+.INDENT 0.0
+.TP
+.B \fB\&.api.simple\fP
+True if simple API is used (\fB\-\-api simple\fP or \fBre2c:api = simple\fP).
+.TP
+.B \fB\&.api.generic\fP
+True if generic API is used (\fB\-\-api generic\fP or
+\fBre2c:api = generic\fP).
+.TP
+.B \fB\&.api.record\fP
+True if record API is used (\fB\-\-api record\fP or \fBre2c:api = record\fP).
+.TP
+.B \fB\&.api_style.functions\fP
+True if function\-like API style is used
+(\fBre2c:api\-style = functions\fP).
+.TP
+.B \fB\&.api_style.freeform\fP
+True if free\-form API style is used (\fBre2c:api\-style = free\-form\fP).
+.TP
+.B \fB\&.case_ranges\fP
+True if case ranges feature is enabled (\fB\-\-case\-ranges\fP or
+\fBre2c:case\-ranges = 1\fP).
+.TP
+.B \fB\&.code_model.goto_label\fP
+True if  code model based on goto/label is used (\fB\-\-goto\-label\fP).
+.TP
+.B \fB\&.code_model.loop_switch\fP
+True if code model based on loop/switch is used (\fB\-\-loop\-switch\fP).
+.TP
+.B \fB\&.code_model.recursive_functions\fP
+True if code model based on recursive functions is used
+(\fB\-\-recursive\-function\fP).
+.TP
+.B \fB\&.date\fP
+True if the generated fingerprint should contain generation date.
+.TP
+.B \fB\&.loop_label\fP
+True if re2hs generated loops must have a label (\fBre2c:label:yyloop\fP
+is set to a nonempty string).
+.TP
+.B \fB\&.monadic\fP
+True if the generated code should be monadic (\fBre2c:monadic = 1\fP).
+This is only relevant for pure functional languages.
+.TP
+.B \fB\&.start_conditions\fP
+True if start conditions are enabled (\fB\-\-start\-conditions\fP).
+.TP
+.B \fB\&.storable_state\fP
+True if storable state is enabled (\fB\-\-storable\-state\fP).
+.TP
+.B \fB\&.unsafe\fP
+True if re2hs should use \(dqunsafe\(dq blocks in order to generate faster
+code (\fB\-\-unsafe\fP, \fBre2c:unsafe = 1\fP). This is only relevant for
+languages that have \(dqunsafe\(dq feature.
+.TP
+.B \fB\&.version\fP
+True if the generated fingerprint should contain re2hs version.
+.UNINDENT
+.UNINDENT
+.UNINDENT
 .SH HANDLING THE END OF INPUT
 .sp
 One of the main problems for the lexer is to know when to stop.

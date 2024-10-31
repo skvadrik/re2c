@@ -234,6 +234,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/basics/configurations.rst_ \
 	doc/manual/basics/regular_expressions.rst_ \
 	doc/manual/basics/syntax.rst_ \
+	doc/manual/basics/syntax_files.rst_ \
 	doc/manual/basics/options/debug.rst_ \
 	doc/manual/basics/options/internal.rst_ \
 	doc/manual/basics/options/options.rst_ \
