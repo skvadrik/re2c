@@ -9,11 +9,11 @@ Changelog
 4.0 (2024-??-??)
 ~~~~~~~~~~~~~~~~
 
+- Added a generic technique for describing language backends based on the idea
+  of syntax files (`#450 <https://github.com/skvadrik/re2c/issues/450>`_).
+
 - Added support for new languages: D, Haskell, Java, JavaScript, OCaml, Python,
   V, Zig.
-
-- Completely redesigned and reimplemented codegen subsystem based on the new
-  concept of syntax files (`#450 <https://github.com/skvadrik/re2c/issues/450>`_).
 
 - Added new record API for all languages (enabled with ``--api record``,
   ``re2c:api = record``) and made it the default API for Haskell and OCaml.
@@ -74,7 +74,7 @@ Changelog
   + ``re2c:[variable:]yypmatch``
   + ``re2c:[variable:]yych:literals``
 
-- All configurations that have `define:` or `variable:` part in their name
+- All configurations that have ``define:`` or ``variable:`` part in their name
   now have an alias without this part.
 
 - Added new block types:
@@ -185,6 +185,32 @@ Changelog
   + ``code:yylessthan``
   + ``code:yybm_filter``
   + ``code:yybm_match``
+
+- Added global variables in syntax files:
+
+  + ``nl``
+  + ``indent``
+  + ``dedent``
+  + ``topindent``
+
+- Added global conditionals in syntax files:
+
+  + ``.api.simple``
+  + ``.api.generic``
+  + ``.api.record``
+  + ``.api_style.functions``
+  + ``.api_style.freeform``
+  + ``.case_ranges``
+  + ``.code_model.goto_label``
+  + ``.code_model.loop_switch``
+  + ``.code_model.recursive_functions``
+  + ``.date``
+  + ``.loop_label``
+  + ``.monadic``
+  + ``.start_conditions``
+  + ``.storable_state``
+  + ``.unsafe``
+  + ``.version``
 
 - Added warning ``-Wundefined-syntax-config``.
 
