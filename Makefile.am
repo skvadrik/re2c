@@ -149,10 +149,9 @@ re2c_GEN_SRC = \
 	src/parse/conf_lexer.cc \
 	src/parse/conf_parser.cc
 re2c_GEN_HDR = \
-	src/options/parser.h \
-	src/options/conf_parser.h \
-	src/options/syntax_parser.h \
-	src/parse/lex.h
+	src/parse/parser.h \
+	src/parse/conf_parser.h \
+	src/parse/lexer.h
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR)
