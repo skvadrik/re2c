@@ -3,6 +3,13 @@ If you modify the website layout (directory structure), be sure to fix all links
 
 To update website http://re2c.org, on gh-pages-gen:
 
+- Install extra prerequisites. For Ubuntu 22.04 the following packages need to be installed via apt-get
+  * pdf2svg
+  * texlive-full (beware of the bug during installation: https://askubuntu.com/questions/956006/pregenerating-context-markiv-format-this-may-take-some-time-takes-forever)
+  * python3-sphinx
+  * cmake
+  * ninja-build
+
 - Run ./sync_with_branch.sh to sync with master branch that contains the core
   documentation used to generate manpage and help message. Commit.
 
