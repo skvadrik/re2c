@@ -1,17 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-set -x
+source utils.sh
 
-rm -rf re2c.org obj
+rm --recursive --force re2c.org obj
+./make.sh nolaunch
+cp --recursive obj re2c.org
+(
+    cd re2c.org
+    git init
+    git remote add origin "$gitRepoRoot"
+    git checkout -b gh-pages
+    git add --all
+    git commit --message "Initial commit"
+    git push --force --set-upstream origin gh-pages
+)
 
-./make.sh nolaunch \
-&& cp -r obj re2c.org \
-&& cd re2c.org \
-&& git init \
-&& git remote add origin git@github.com:skvadrik/re2c.git \
-&& git checkout -b gh-pages \
-&& find . | xargs git add \
-&& git commit -m "Initial commit" \
-&& git push -f -u origin gh-pages \
-&& cd ..
-
+echo "The script has finished successfully"

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <!-- We don't have a favicon. The browser tries to request a favicon when the page is loaded. Therefore, we need this line to avoid an error being shown in the HTTP server log -->
+  <link rel="icon" href="data:," />
+
+  <title>re2c Online. Version:</title>
+
+  <!-- There is no specific reason why this font is chosen. The main rationale is that it is condensed and allows longer lines to be visible on the screen -->
+  <link href="https://iosevka-webfonts.github.io/iosevka/Iosevka.css" rel="stylesheet"/>
+
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    .main-row-layout {
+      display: grid;
+      grid-template-rows: auto 1fr auto 100px;
+      height: 100vh;
+    }
+
+    .language-and-example-select-layout {
+      display: grid;
+      grid-template-columns: max-content max-content max-content;
+      gap: 10px;
+    }
+
+    .controls-layout {
+      display: grid;
+    }
+
+    .compile-and-open-lexer-graph-layout {
+      display: grid;
+      grid-template-columns: 300px 300px;
+      gap: 5px;
+    }
+
+    .source-code-and-output-editors-layout {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 10px;
+    }
+
+    .re2c-flags-container {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      gap: 5px;
+    }
+
+    #re2c-flags {
+      flex-grow: 1;
+    }
+
+    input, select, textarea {
+      font-family: 'Iosevka Web';
+    }
+  </style>
+</head>
+<body>
+<div class="main-row-layout">
+  <div class="controls-layout">
+    <div class="language-and-example-select-layout">
+      <label>
+        Language:
+        <select id="language-select" onchange="languageSelected()">
+          <!-- The option values correspond to ace.js language highlighting mode.
+               The mode names can be found if you search the ace.js codebase for "mode-*.js" files like "mode-c_cpp.js":
+                 https://github.com/ajaxorg/ace-builds/tree/master/src-min
+          -->
+          <option value="c_cpp">c</option>
+          <option value="golang">go</option>
+          <option value="rust">rust</option>
+          <option value="d">d</option>
+          <option value="haskell">haskell</option>
+          <option value="java">java</option>
+          <option value="javascript">js</option>
+          <option value="ocaml">ocaml</option>
+          <option value="python">python</option>
+          <option value="v">v</option>
+          <option value="zig">zig</option>
+        </select>
+      </label>
+      <label>
+        Example:
+        <select id="example-select" onchange="exampleSelected()">
+        </select>
+      </label>
+      <label>
+        Font size:
+        <select id="font-size-select" onchange="setFontSize(this.value)">
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option selected>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="re2c-flags-container">
+      <label>Extra command line arguments for re2c.exe:</label>
+      <input type="text" id="re2c-flags">
+    </div>
+
+    <div class="compile-and-open-lexer-graph-layout">
+      <button id="compileButton" onclick="compileCode()">Compile</button>
+      <button id="openLexerGraphButton" onclick="openLexerGraph()">Open lexer graph in GraphvizOnline</button>
+    </div>
+  </div>
+
+  <div class="source-code-and-output-editors-layout">
+    <div id="editor"></div>
+    <div id="output"></div>
+  </div>
+
+  <label>
+    Log:
+    <button onclick="clearLog()">Clear</button>
+  </label>
+  <div id="log-output"></div>
+</div>
+</body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.3/ace.min.js"></script>
+<script>
+  // re2c stdout and stderr are printed using "console.log" and "console.error" commands.
+  // We want this output to be visible to the user.
+  console.error = function (...args) {
+    log(args.join(' '))
+  };
+  console.log = function (...args) {
+    log(args.join(' '))
+  };
+
+  const languageSelect = document.getElementById("language-select")
+  const exampleSelect = document.getElementById("example-select")
+  const fontSizeSelect = document.getElementById("font-size-select")
+  const re2cFlagsDropBox = document.getElementById("re2c-flags")
+
+  const editor = ace.edit("editor")
+  editor.setOptions({
+    fontFamily: "Iosevka Web",
+  })
+
+  const output = ace.edit("output")
+  output.setOptions({
+    fontFamily: "Iosevka Web",
+    readOnly: true
+  })
+  output.session.setValue("", 1)
+
+  const logOutput = ace.edit("log-output")
+  logOutput.setOptions({
+    fontFamily: "Iosevka Web",
+    readOnly: true
+  })
+
+  setFontSize(fontSizeSelect.options[fontSizeSelect.selectedIndex].text)
+
+  function log(text) {
+    const lastRow = logOutput.session.getLength()
+    const rowIsEmpty = logOutput.session.getLine(lastRow - 1).length === 0
+    if (rowIsEmpty) {
+      logOutput.session.insert({row: lastRow, column: 0}, text)
+    } else {
+      logOutput.session.insert({row: lastRow, column: 0}, `\n${text}`)
+    }
+    logOutput.scrollToRow(lastRow)
+  }
+
+  function clearLog() {
+    logOutput.setValue("", 1)
+  }
+
+  function setFontSize(fontSize) {
+    editor.setFontSize(`${fontSize}px`)
+    output.setFontSize(`${fontSize}px`)
+    logOutput.setFontSize(`${fontSize}px`)
+  }
+</script>
+<script type="module">
+  import Re2cModule from "./gen/re2c.js"
+  import re2cExamples from "./gen/re2cExamples.js"
+  import re2cVersion from "./gen/re2cVersion.js"
+
+  document.title += re2cVersion;
+  log(`re2c version: ${re2cVersion}`)
+
+  const re2cModule = await Re2cModule()
+
+  window.exampleSelected = function () {
+    const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
+    const selectedExampleName = exampleSelect.options[exampleSelect.selectedIndex].text
+    const exampleContent = re2cExamples[selectedLanguageText][selectedExampleName]
+    editor.setValue(exampleContent["content"], 1)
+    re2cFlagsDropBox.value = exampleContent["extraCommandLineArguments"]
+    output.setValue("", 1)
+  }
+
+  window.languageSelected = function () {
+    const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
+    const selectedLanguageValue = languageSelect.options[languageSelect.selectedIndex].value
+
+    editor.session.setMode(`ace/mode/${selectedLanguageValue}`)
+    output.session.setMode(`ace/mode/${selectedLanguageValue}`)
+
+    while (exampleSelect.options.length) {
+      exampleSelect.remove(0);
+    }
+
+    for (const exampleName in re2cExamples[selectedLanguageText]) {
+      const option = document.createElement("option")
+      option.text = exampleName
+      exampleSelect.add(option)
+    }
+
+    window.exampleSelected()
+  }
+
+  window.languageSelected()
+
+  window.compileCode = function () {
+    const code = editor.getValue()
+
+    re2cModule.FS.writeFile('/input.txt', code)
+
+    const re2cCommandLineArguments = `/input.txt --lang ${languageSelect.options[languageSelect.selectedIndex].text} -o /output.txt ${re2cFlagsDropBox.value}`.trim()
+    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
+    const res = re2cModule.callMain(re2cCommandLineArguments.split(" "))
+
+    if (res == 0) {
+      output.session.setValue(re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'}), 1)
+    } else {
+      output.session.setValue("", 1)
+      log(`Failed to run re2c.exe. Error code: ${res}`)
+    }
+  }
+
+  window.openLexerGraph = function () {
+    const code = editor.getValue()
+
+    re2cModule.FS.writeFile('/input.txt', code)
+
+    const re2cCommandLineArguments = `/input.txt --lang ${languageSelect.options[languageSelect.selectedIndex].text} -o /output.txt --emit-dot ${re2cFlagsDropBox.value}`.trim()
+    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
+    const res = re2cModule.callMain(re2cCommandLineArguments.split(" "))
+
+    if (res == 0) {
+      const outputContent = re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'})
+      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputContent)}`, '_blank')
+    } else {
+      output.session.setValue("", 1)
+      log(`Failed to run re2c.exe. Error code: ${res}`)
+    }
+  }
+</script>
+</html>

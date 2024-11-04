@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
-set -e
+source utils.sh
 
 for lang in {c,d,go,hs,java,js,ocaml,py,rust,v,zig}; do
     python3 build/split_man.py src/manual/manual.rst.in src/manual/manual_re2$lang.rst
@@ -8,7 +8,11 @@ for lang in {c,d,go,hs,java,js,ocaml,py,rust,v,zig}; do
     mv src/manual/manual_re2$lang.rst src/manual/manual_$lang.rst
 done
 
-sphinx-build -b html src obj || { echo "failed!"; exit 1; }
+sphinx-build --builder html src obj
 
-[ $# != 0 ] || #pass an argument to prevent the server from launching
-    python3 -m http.server -d obj
+cp --recursive playground obj
+
+if [[ $# -eq 0 ]]; then
+    #pass an argument to prevent the server from launching
+    python3 -m http.server --directory obj
+fi
