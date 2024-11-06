@@ -6,7 +6,7 @@ if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 fi
 
 # The following section is needed to make scripts more robust and easier to debug.
-set -o xtrace   # Print every command that is being executed
+# set -o xtrace   # Print every command that is being executed
 set -o errexit  # Exit immediately if a command exits with a non-zero status
 set -o nounset  # Treat unset variables like `unset variable_name` as an error and exit immediately
 set -o pipefail # Fail the entire pipeline if any command in it fails
