@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 readonly root=`dirname "$(realpath -s "${BASH_SOURCE[0]}")"`
 source "$root/../utils.sh"
