@@ -8,7 +8,7 @@ for lang in {c,d,go,hs,java,js,ocaml,py,rust,v,zig}; do
     mv src/manual/manual_re2$lang.rst src/manual/manual_$lang.rst
 done
 
-sphinx-build --builder html src obj
+sphinx-build -b html src obj
 
 cp --recursive playground obj
 
