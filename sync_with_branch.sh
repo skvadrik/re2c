@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source utils.sh
+source ./utils.sh
 
 if [[ $# -eq 0 ]]; then
   echo "Usage: $0 <git-branch-name>"

@@ -16,6 +16,3 @@ readonly currentScriptDir=`dirname "$(realpath -s "${BASH_SOURCE[1]}")"`
 
 # folder where utils.sh script is located. It is also the root of the repo
 readonly gitRepoRoot=`dirname "$(realpath -s "${BASH_SOURCE[0]}")"`
-
-# the remote url of the repository
-readonly gitRepoUrl=`git remote get-url origin`

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source utils.sh
+source ./utils.sh
 
 rm --recursive --force re2c.org obj
 ./make.sh nolaunch
