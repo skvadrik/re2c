@@ -15,6 +15,8 @@
     body {
       padding: 0;
       margin: 0;
+      font-family: sans-serif;
+      padding: 0.5em;
     }
 
     .main-row-layout {
@@ -26,7 +28,7 @@
     .language-and-example-select-layout {
       display: grid;
       grid-template-columns: max-content max-content max-content;
-      gap: 10px;
+      padding: 0 0 0.5em 0;
     }
 
     .controls-layout {
@@ -36,27 +38,36 @@
     .compile-and-open-lexer-graph-layout {
       display: grid;
       grid-template-columns: 300px 300px;
-      gap: 5px;
+      gap: 0.5em;
+      padding: 0 0 0.5em 0;
     }
 
     .source-code-and-output-editors-layout {
       display: grid;
       grid-template-columns: auto auto;
-      gap: 10px;
+      gap: 0.5em;
     }
 
     .re2c-flags-container {
       display: flex;
       align-items: center;
       flex-grow: 1;
-      gap: 5px;
+      padding: 0 0 0.5em 0;
+    }
+
+    .log {
+      padding: 0.5em 0 0.5em 0;
     }
 
     #re2c-flags {
       flex-grow: 1;
     }
 
-    input, select, textarea {
+    input, select {
+      font-family: 'Iosevka Web';
+      margin: 0 0.5em 0 0.5em;
+    }
+    textarea {
       font-family: 'Iosevka Web';
     }
   </style>
@@ -109,13 +120,13 @@
     </div>
 
     <div class="re2c-flags-container">
-      <label>Extra command line arguments for re2c.exe:</label>
+      <label>Options:</label>
       <input type="text" id="re2c-flags">
     </div>
 
     <div class="compile-and-open-lexer-graph-layout">
       <button id="compileButton" onclick="compileCode()">Compile</button>
-      <button id="openLexerGraphButton" onclick="openLexerGraph()">Open lexer graph in GraphvizOnline</button>
+      <button id="openLexerGraphButton" onclick="openLexerGraph()">Open graph in GraphvizOnline</button>
     </div>
   </div>
 
@@ -124,10 +135,11 @@
     <div id="output"></div>
   </div>
 
-  <label>
+  <label class="log">
     Log:
     <button onclick="clearLog()">Clear</button>
   </label>
+
   <div id="log-output"></div>
 </div>
 </body>
