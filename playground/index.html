@@ -171,11 +171,13 @@
   const editor = ace.edit("editor")
   editor.setOptions({
     fontFamily: "Iosevka Web",
+    showPrintMargin: false
   })
 
   const output = ace.edit("output")
   output.setOptions({
     fontFamily: "Iosevka Web",
+    showPrintMargin: false,
     readOnly: true
   })
   output.session.setValue("", 1)
@@ -183,6 +185,7 @@
   const logOutput = ace.edit("log-output")
   logOutput.setOptions({
     fontFamily: "Iosevka Web",
+    showPrintMargin: false,
     readOnly: true
   })
 
