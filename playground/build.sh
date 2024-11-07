@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
-readonly root=`dirname "$(realpath -s "${BASH_SOURCE[0]}")"`
-source "$root/../utils.sh"
+source "`dirname ${BASH_SOURCE[0]}`/../utils.sh"
 
 if [[ $# -eq 0 ]]; then
   echo "Usage: $0 <git-branch-or-tag-name>"
@@ -26,7 +25,7 @@ source "$buildDir/emsdk/emsdk_env.sh"
 
 # Download and build re2c to generate "docs/re2c.js".
 # Clone the repository fully because we need to get the nearest tag later to generate version.
-git clone --branch "$re2cBranchOrTagName" --single-branch "$gitRepoRoot" "$buildDir/re2c"
+git clone --branch "$re2cBranchOrTagName" --single-branch "$gitRepoUrl" "$buildDir/re2c"
 # Flags with `-s` are Emscripten compile settings described: https://emscripten.org/docs/tools_reference/settings_reference.html
 # Rationale why some flags are chosen:
 # * INVOKE_RUN - we don't need re2c to started utomatically when the page is loaded.

@@ -8,7 +8,7 @@ cp --recursive obj re2c.org
 (
     cd re2c.org
     git init
-    git remote add origin "$gitRepoRoot"
+    git remote add origin "$gitRepoUrl"
     git checkout -b gh-pages
     git add --all
     git commit --message "Initial commit"
