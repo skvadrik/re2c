@@ -3,12 +3,27 @@
 source ./utils.sh
 
 if [[ $# -eq 0 ]]; then
-  echo "Usage: $0 <git-branch-name>"
+  echo "Usage: $0 <git-branch-name> [--no-svg] [--no-playground]"
   exit 1
 fi
 
 branch="$1"
 remote=`git config branch.master.remote`
+
+gen_svg=1
+gen_playground=1
+while [[ $# -gt 1 ]]; do
+    if [[ "$2" == "--no-svg" ]]; then
+        gen_svg=0
+        shift
+    elif [[ "$2" == "--no-playground" ]]; then
+        gen_playground=0
+        shift
+    else
+        echo "Error: unknown argument: $2"
+        exit 1
+    fi
+done
 
 if ! git ls-remote --heads "$remote" "$branch" | grep --quiet "$branch"; then
     echo "branch $branch not found in remote $remote"
@@ -69,11 +84,15 @@ gen_bar_charts_for_benchmark() {
     )
 }
 
-gen_bar_charts_for_benchmark dfa_aot ""
-gen_bar_charts_for_benchmark dfa_jit "--relative-to ''"
-gen_bar_charts_for_benchmark nfa     "--relative-to LG"
+if [[ "$gen_svg" -ne 0 ]]; then
+    gen_bar_charts_for_benchmark dfa_aot ""
+    gen_bar_charts_for_benchmark dfa_jit "--relative-to ''"
+    gen_bar_charts_for_benchmark nfa     "--relative-to LG"
+fi
 
-echo "Build playground"
-playground/build.sh "$branch"
+if [[ "$gen_playground" -ne 0 ]]; then
+    echo "Build playground"
+    playground/build.sh "$branch"
+fi
 
 echo "The script has finished successfully"
