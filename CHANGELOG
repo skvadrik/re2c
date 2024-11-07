@@ -225,6 +225,9 @@ Changelog
 - Dropped support for function-like API style for Rust.
   (it was hard to use, if at all possible)
 
+- Added online playground that allows one to run re2c in a web browser:
+  https://re2c.org/playground.
+
 - Infra work on Github Actions CI.
 
 
