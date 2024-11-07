@@ -38,9 +38,15 @@
 
     .compile-and-open-lexer-graph-layout {
       display: grid;
-      grid-template-columns: 300px 300px;
+      grid-template-columns: 100px 100px 200px;
       gap: 0.5em;
-      padding: 0 0 0.5em 0;
+      padding: 0.5em 0 0.5em 0;
+    }
+
+    #compileButton {
+      background-color: limegreen;
+      border: 1px solid gray;
+      border-radius: 5px;
     }
 
     .source-code-and-output-editors-layout {
@@ -49,15 +55,20 @@
       gap: 0.5em;
     }
 
+    #editor, #output, #log-output {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+    }
+
+    #output {
+      background-color: aliceblue;
+    }
+
     .re2c-flags-container {
       display: flex;
       align-items: center;
       flex-grow: 1;
       padding: 0 0 0.5em 0;
-    }
-
-    .log {
-      padding: 0.5em 0 0.5em 0;
     }
 
     #re2c-flags {
@@ -124,11 +135,6 @@
       <label>Options:</label>
       <input type="text" id="re2c-flags">
     </div>
-
-    <div class="compile-and-open-lexer-graph-layout">
-      <button id="compileButton" onclick="compileCode()">Compile</button>
-      <button id="openLexerGraphButton" onclick="openLexerGraph()">Open graph in GraphvizOnline</button>
-    </div>
   </div>
 
   <div class="source-code-and-output-editors-layout">
@@ -136,10 +142,11 @@
     <div id="output"></div>
   </div>
 
-  <label class="log">
-    Log:
-    <button onclick="clearLog()">Clear</button>
-  </label>
+  <div class="compile-and-open-lexer-graph-layout">
+    <button id="compileButton" onclick="compileCode()">Compile</button>
+    <button onclick="clearLog()">Clear log</button>
+    <button id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
+  </div>
 
   <div id="log-output"></div>
 </div>
