@@ -63,7 +63,7 @@ gen_bar_charts_for_benchmark() {
             $j2pp_args \
             results.json \
             results.tex
-        pdflatex -halt-on-error -file-line-error results.tex
+        pdflatex -halt-on-error -file-line-error results.tex < /dev/null > results.log
         pdf2svg results.pdf results_1.svg 1
         rm results.{aux,log,pdf,tex}
     )
