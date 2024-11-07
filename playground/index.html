@@ -2,10 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <link rel="shortcut icon" href="../_static/favicon.ico"/>
-
-  <!-- We don't have a favicon. The browser tries to request a favicon when the page is loaded. Therefore, we need this line to avoid an error being shown in the HTTP server log -->
-  <link rel="icon" href="data:," />
+    
+  <link rel="icon" href="../_static/favicon.ico"/>
 
   <title>re2c Online. Version:</title>
 
@@ -38,15 +36,19 @@
 
     .compile-and-open-lexer-graph-layout {
       display: grid;
-      grid-template-columns: 100px 100px 200px;
+      grid-template-columns: 100px 100px 200px 100px;
       gap: 0.5em;
       padding: 0.5em 0 0.5em 0;
     }
 
     #compileButton {
-      background-color: limegreen;
+      background-color: lightsteelblue;
       border: 1px solid gray;
       border-radius: 5px;
+    }
+
+    #compileButton:hover {
+        background-color: steelblue;
     }
 
     .source-code-and-output-editors-layout {
@@ -64,8 +66,12 @@
       font-variant-ligatures: none;
     }
 
+    #editor {
+        background-color: aliceblue;
+    }
+
     #output {
-      background-color: aliceblue;
+      background-color: linen;
     }
 
     .re2c-flags-container {
@@ -97,8 +103,8 @@
         Language:
         <select id="language-select" onchange="languageSelected()">
           <!-- The option values correspond to ace.js language highlighting mode.
-               The mode names can be found if you search the ace.js codebase for "mode-*.js" files like "mode-c_cpp.js":
-                 https://github.com/ajaxorg/ace-builds/tree/master/src-min
+             The mode names can be found if you search the ace.js codebase for "mode-*.js" files like "mode-c_cpp.js":
+               https://github.com/ajaxorg/ace-builds/tree/master/src-min
           -->
           <option value="c_cpp" label="C/C++">c</option>
           <option value="golang" label="D">d</option>
@@ -109,7 +115,7 @@
           <option value="ocaml" label="OCaml">ocaml</option>
           <option value="python" label="Python">python</option>
           <option value="rust" label="Rust">rust</option>
-          <option value="v" label="V">v</option>
+          <option value="text" label="V">v</option> <!-- There is no syntax highlighting for V lang. Therefore, we use "text" -->
           <option value="zig" label="Zig">zig</option>
         </select>
       </label>
@@ -151,22 +157,23 @@
     <button id="compileButton" onclick="compileCode()">Compile</button>
     <button onclick="clearLog()">Clear log</button>
     <button id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
+    <button id="shareButton">Share</button>
   </div>
 
   <div id="log-output"></div>
 </div>
 </body>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.3/ace.min.js"></script>
+<!-- 3rd party libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.4/ace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
 <script>
   // re2c stdout and stderr are printed using "console.log" and "console.error" commands.
   // We want this output to be visible to the user.
-  console.error = function (...args) {
-    log(args.join(' '))
-  };
-  console.log = function (...args) {
-    log(args.join(' '))
-  };
+  console.error = (...args) => log(args.join(' '));
+  console.log = (...args) => log(args.join(' '));
 
   const languageSelect = document.getElementById("language-select")
   const exampleSelect = document.getElementById("example-select")
@@ -216,10 +223,34 @@
     output.setFontSize(`${fontSize}px`)
     logOutput.setFontSize(`${fontSize}px`)
   }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const shareButton = document.getElementById('shareButton');
+
+    const clipboard = new ClipboardJS(shareButton, {
+      text: function(trigger) {
+        const compressedDataBase64 = LZString.compressToEncodedURIComponent(JSON.stringify({
+          "sourceCode": editor.getValue(),
+          "options": re2cFlagsDropBox.value,
+          "language": languageSelect.options[languageSelect.selectedIndex].text,
+        }));
+        const shareableURL = `${window.location.origin}${window.location.pathname}?compressed=${compressedDataBase64}`;
+        return shareableURL;
+      }
+    });
+
+    clipboard.on('success', function(e) {
+      window.alert("The share link is copied to clipboard");
+    });
+
+    clipboard.on('error', function(e) {
+      log("Failed to copy the share link to clipboard");
+    });
+  });
 </script>
 <script type="module">
   import Re2cModule from "./gen/re2c.js"
-  import re2cExamples from "./gen/re2cExamples.js"
+  import Re2cExamples from "./gen/re2cExamples.js"
   import re2cVersion from "./gen/re2cVersion.js"
 
   document.title += re2cVersion;
@@ -230,7 +261,7 @@
   window.exampleSelected = function () {
     const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
     const selectedExampleName = exampleSelect.options[exampleSelect.selectedIndex].text
-    const exampleContent = re2cExamples[selectedLanguageText][selectedExampleName]
+    const exampleContent = Re2cExamples[selectedLanguageText][selectedExampleName]
     editor.setValue(exampleContent["content"], 1)
     re2cFlagsDropBox.value = exampleContent["extraCommandLineArguments"]
     output.setValue("", 1)
@@ -243,54 +274,73 @@
     editor.session.setMode(`ace/mode/${selectedLanguageValue}`)
     output.session.setMode(`ace/mode/${selectedLanguageValue}`)
 
-    while (exampleSelect.options.length) {
-      exampleSelect.remove(0);
-    }
+    // Clear the list of examples
+    exampleSelect.options.length = 0;
 
-    for (const exampleName in re2cExamples[selectedLanguageText]) {
+    // Add the examples for the selected language to the drop box
+    for (const exampleName in Re2cExamples[selectedLanguageText]) {
       const option = document.createElement("option")
       option.text = exampleName
       exampleSelect.add(option)
     }
 
+    // Make the first example active
     window.exampleSelected()
   }
 
-  window.languageSelected()
-
-  window.compileCode = function () {
-    const code = editor.getValue()
-
-    re2cModule.FS.writeFile('/input.txt', code)
-
-    const re2cCommandLineArguments = `/input.txt --lang ${languageSelect.options[languageSelect.selectedIndex].text} -o /output.txt ${re2cFlagsDropBox.value}`.trim()
-    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
-    const res = re2cModule.callMain(re2cCommandLineArguments.split(" "))
-
-    if (res == 0) {
-      output.session.setValue(re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'}), 1)
+  // Check if this is the share URL that contains the source code
+  const params = new URLSearchParams(window.location.search);
+  params.get('compressed');
+  if (params.has('compressed')) {
+    const compressedData = params.get('compressed');
+    const decompressedData = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData));
+    if(decompressedData === null) {
+      log("Failed to decompress the data from the URL");
+      window.languageSelected()
     } else {
-      output.session.setValue("", 1)
-      log(`Failed to run re2c.exe. Error code: ${res}`)
+      log(`Restore previous session using the data from the URL: { Language: "${decompressedData.language}"; Options: "${decompressedData.options}" }`);
+      const languageIndex = Array.from(languageSelect.options).findIndex(option => option.text === decompressedData.language);
+      languageSelect.selectedIndex = languageIndex;
+      window.languageSelected()
+      exampleSelect.selectedIndex = -1;
+      re2cFlagsDropBox.value = decompressedData.options;
+      editor.setValue(decompressedData.sourceCode, 1)
+    }
+  } else {
+    window.languageSelected()
+  }
+
+  function runRe2c(additionalFlags, onSuccess) {
+    const sourceCode = editor.getValue();
+    re2cModule.FS.writeFile('/input.txt', sourceCode);
+
+    const selectedLanguage = languageSelect.options[languageSelect.selectedIndex].text;
+    const userProvidedFlags = re2cFlagsDropBox.value;
+    const re2cCommandLineArguments = `/input.txt --lang ${selectedLanguage} -o /output.txt ${additionalFlags} ${userProvidedFlags}`;
+
+    log(`Run command: re2c.exe ${re2cCommandLineArguments}`);
+    // convert the command line arguments string into an array without empty elements
+    const res = re2cModule.callMain(re2cCommandLineArguments.split(" ").filter(i => i));
+
+    if (res === 0) {
+      const outputFileContent = re2cModule.FS.readFile('/output.txt', { encoding: 'utf8' });
+      onSuccess(outputFileContent);
+    } else {
+      output.session.setValue("", 1);
+      log(`Failed to run re2c.exe. Error code: ${res}`);
     }
   }
 
+  window.compileCode = function () {
+    runRe2c("", function (outputFileContent) {
+      output.session.setValue(outputFileContent, 1);
+    });
+  }
+
   window.openLexerGraph = function () {
-    const code = editor.getValue()
-
-    re2cModule.FS.writeFile('/input.txt', code)
-
-    const re2cCommandLineArguments = `/input.txt --lang ${languageSelect.options[languageSelect.selectedIndex].text} -o /output.txt --emit-dot ${re2cFlagsDropBox.value}`.trim()
-    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
-    const res = re2cModule.callMain(re2cCommandLineArguments.split(" "))
-
-    if (res == 0) {
-      const outputContent = re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'})
-      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputContent)}`, '_blank')
-    } else {
-      output.session.setValue("", 1)
-      log(`Failed to run re2c.exe. Error code: ${res}`)
-    }
+    runRe2c("--emit-dot", function (outputFileContent) {
+      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputFileContent)}`, '_blank');
+    });
   }
 </script>
 </html>
