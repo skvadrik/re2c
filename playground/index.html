@@ -41,14 +41,21 @@
       padding: 0.5em 0 0.5em 0;
     }
 
-    #compileButton {
-      background-color: lightsteelblue;
+    .button, .select {
+      background-color: #e9e9ed;
       border: 1px solid gray;
       border-radius: 5px;
+      height: 25px;
+    }
+    .button:hover, .select:hover {
+      background-color: #cbcbce;
     }
 
+    #compileButton {
+      background-color: #b0c4de;
+    }
     #compileButton:hover {
-        background-color: steelblue;
+      background-color: #99aac1;
     }
 
     .source-code-and-output-editors-layout {
@@ -83,6 +90,9 @@
 
     #re2c-flags {
       flex-grow: 1;
+      border: 1px solid gray;
+      border-radius: 5px;
+      height: 20px;
     }
 
     input, select {
@@ -93,6 +103,12 @@
     textarea {
       font-family: 'Iosevka Web';
     }
+
+    @media (max-width: 1000px) {
+      body {
+        font-size: 15px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -101,7 +117,7 @@
     <div class="language-and-example-select-layout">
       <label>
         Language:
-        <select id="language-select" onchange="languageSelected()">
+        <select class="select" id="language-select" onchange="languageSelected()">
           <!-- The option values correspond to ace.js language highlighting mode.
              The mode names can be found if you search the ace.js codebase for "mode-*.js" files like "mode-c_cpp.js":
                https://github.com/ajaxorg/ace-builds/tree/master/src-min
@@ -121,12 +137,12 @@
       </label>
       <label>
         Example:
-        <select id="example-select" onchange="exampleSelected()">
+        <select class="select" id="example-select" onchange="exampleSelected()">
         </select>
       </label>
       <label>
         Font size:
-        <select id="font-size-select" onchange="setFontSize(this.value)">
+        <select class="select" id="font-size-select" onchange="setFontSize(this.value)">
           <option>8</option>
           <option>9</option>
           <option>10</option>
@@ -154,10 +170,10 @@
   </div>
 
   <div class="compile-and-open-lexer-graph-layout">
-    <button id="compileButton" onclick="compileCode()">Compile</button>
-    <button onclick="clearLog()">Clear log</button>
-    <button id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
-    <button id="shareButton">Share</button>
+    <button class="button" id="compileButton" onclick="compileCode()">Compile</button>
+    <button class="button" onclick="clearLog()">Clear log</button>
+    <button class="button" id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
+    <button class="button" id="shareButton">Share</button>
   </div>
 
   <div id="log-output"></div>
