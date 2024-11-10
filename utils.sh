@@ -18,4 +18,5 @@ readonly currentScriptDir=`dirname "$(realpath -s "${BASH_SOURCE[1]}")"`
 readonly gitRepoRoot=`dirname "$(realpath -s "${BASH_SOURCE[0]}")"`
 
 # the remote url of the repository
-readonly gitRepoUrl=`git remote get-url origin`
+readonly gitRemote="$(git remote | head -n1)"
+readonly gitRepoUrl="$(git remote get-url $gitRemote)"
