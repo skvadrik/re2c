@@ -35,14 +35,22 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_YY_LIB_PARSE_H_INCLUDED
-# define YY_YY_LIB_PARSE_H_INCLUDED
+#ifndef YY_RE2C_LIB_LIB_PARSE_H_INCLUDED
+# define YY_RE2C_LIB_LIB_PARSE_H_INCLUDED
 /* Debug traces.  */
-#ifndef YYDEBUG
-# define YYDEBUG 0
-#endif
+#ifndef RE2C_LIB_DEBUG
+# if defined YYDEBUG
 #if YYDEBUG
-extern int yydebug;
+#   define RE2C_LIB_DEBUG 1
+#  else
+#   define RE2C_LIB_DEBUG 0
+#  endif
+# else /* ! defined YYDEBUG */
+#  define RE2C_LIB_DEBUG 0
+# endif /* ! defined YYDEBUG */
+#endif  /* ! defined RE2C_LIB_DEBUG */
+#if RE2C_LIB_DEBUG
+extern int re2c_lib_debug;
 #endif
 /* "%code requires" blocks.  */
 #line 1 "../lib/parse.ypp"
@@ -53,45 +61,45 @@ namespace re2c {
     struct AstNode;
 }
 
-#line 57 "lib/parse.h"
+#line 65 "lib/parse.h"
 
 /* Token kinds.  */
-#ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
+#ifndef RE2C_LIB_TOKENTYPE
+# define RE2C_LIB_TOKENTYPE
+  enum re2c_lib_tokentype
   {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
+    RE2C_LIB_EMPTY = -2,
+    RE2C_LIB_EOF = 0,              /* "end of file"  */
+    RE2C_LIB_error = 256,          /* error  */
+    RE2C_LIB_UNDEF = 257,          /* "invalid token"  */
     TOKEN_COUNT = 258,             /* TOKEN_COUNT  */
     TOKEN_ERROR = 259,             /* TOKEN_ERROR  */
     TOKEN_REGEXP = 260             /* TOKEN_REGEXP  */
   };
-  typedef enum yytokentype yytoken_kind_t;
+  typedef enum re2c_lib_tokentype re2c_lib_token_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
+#if ! defined RE2C_LIB_STYPE && ! defined RE2C_LIB_STYPE_IS_DECLARED
+union RE2C_LIB_STYPE
 {
-#line 33 "../lib/parse.ypp"
+#line 34 "../lib/parse.ypp"
 
     const re2c::AstNode* regexp;
     re2c::AstBounds bounds;
 
-#line 84 "lib/parse.h"
+#line 92 "lib/parse.h"
 
 };
-typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
+typedef union RE2C_LIB_STYPE RE2C_LIB_STYPE;
+# define RE2C_LIB_STYPE_IS_TRIVIAL 1
+# define RE2C_LIB_STYPE_IS_DECLARED 1
 #endif
 
 
 
 
-int yyparse (const uint8_t*& pattern, re2c::Ast& ast);
+int re2c_lib_parse (const uint8_t*& pattern, re2c::Ast& ast);
 
 
-#endif /* !YY_YY_LIB_PARSE_H_INCLUDED  */
+#endif /* !YY_RE2C_LIB_LIB_PARSE_H_INCLUDED  */

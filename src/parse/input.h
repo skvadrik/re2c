@@ -90,7 +90,7 @@ class Input: private LexerState {
     Ret gen_dep_file(const std::string& header) const NODISCARD;
 
     Ret lex_program(Output& out, std::string& block_name, InputBlock& kind) NODISCARD;
-    Ret lex_block(YYSTYPE* yylval, Ast& ast, int& token) NODISCARD;
+    Ret lex_block(RE2C_STYPE* yylval, Ast& ast, int& token) NODISCARD;
     Ret lex_conf(Opt& opts) NODISCARD;
     Ret lex_conf_token(CONF_STYPE* yylval, int& token, Opt& opts);
     Ret lex_syntax_file(Opt& opts);
@@ -126,14 +126,14 @@ class Input: private LexerState {
     inline void next_line();
     Ret set_sourceline() NODISCARD;
 
-    Ret process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) NODISCARD;
+    Ret process_semact(RE2C_STYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) NODISCARD;
 
     Ret lex_opt_name(std::string& name) NODISCARD;
     Ret lex_name_list(BlockNameList** ptail) NODISCARD;
     Ret lex_special_block(Output& out, CodeKind kind, uint32_t mask) NODISCARD;
     Ret lex_block_end(Output& out, bool allow_garbage = false) NODISCARD;
-    Ret lex_code_indented(YYSTYPE* yylval, Ast& ast) NODISCARD;
-    Ret lex_code_in_braces(YYSTYPE* yylval, Ast& ast) NODISCARD;
+    Ret lex_code_indented(RE2C_STYPE* yylval, Ast& ast) NODISCARD;
+    Ret lex_code_in_braces(RE2C_STYPE* yylval, Ast& ast) NODISCARD;
     Ret lex_dqstring_in_code() NODISCARD;
     Ret lex_sqstring_in_code() NODISCARD;
     Ret lex_bqstring_in_code() NODISCARD;

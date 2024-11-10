@@ -408,7 +408,7 @@ loop: /*!local:re2c
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
-Ret Input::lex_block(YYSTYPE* yylval, Ast& ast, int& token) {
+Ret Input::lex_block(RE2C_STYPE* yylval, Ast& ast, int& token) {
     const uint8_t* p, *x, *y;
 scan:
     tok = cur;
@@ -616,7 +616,7 @@ error:
     RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
-Ret Input::process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) {
+Ret Input::process_semact(RE2C_STYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) {
     const char* text = "";
     if (globopts->indentation_sensitive) {
         // Cut off any leading or trailing newlines to make the code uniform.
@@ -667,7 +667,7 @@ Ret Input::process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uin
     return Ret::OK;
 }
 
-Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_indented(RE2C_STYPE* yylval, Ast& ast) {
     tok = cur;
 code: /*!re2c
     eol   { next_line(); goto indent; }
@@ -690,7 +690,7 @@ indent: /*!re2c
 */
 }
 
-Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_in_braces(RE2C_STYPE* yylval, Ast& ast) {
     uint32_t depth = 1;
 code: /*!re2c
     "}" {

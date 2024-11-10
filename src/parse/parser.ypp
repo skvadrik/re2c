@@ -30,6 +30,7 @@ extern "C" {
 %start spec
 
 %define api.pure full
+%define api.prefix {re2c_}
 %lex-param {re2c::Input& input}
 %lex-param {re2c::Ast& ast}
 %lex-param {re2c::Opt& opts}

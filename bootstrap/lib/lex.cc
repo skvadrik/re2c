@@ -20,7 +20,7 @@ static int32_t lex_cls_chr(const uint8_t*&, uint32_t&);
 #line 27 "../lib/lex.re"
 
 
-int lex(YYSTYPE* yylval, const uint8_t*& cur, Ast& ast) {
+int lex(RE2C_LIB_STYPE* yylval, const uint8_t*& cur, Ast& ast) {
     
 #line 26 "lib/lex.cc"
 const uint8_t* yyt1;const uint8_t* yyt2;
