@@ -63,8 +63,14 @@
 /* Pull parsers.  */
 #define YYPULL 1
 
-
-
+/* Substitute the type names.  */
+#define YYSTYPE         RE2C_STYPE
+/* Substitute the variable and function names.  */
+#define yyparse         re2c_parse
+#define yylex           re2c_lex
+#define yyerror         re2c_error
+#define yydebug         re2c_debug
+#define yynerrs         re2c_nerrs
 
 /* First part of user prologue.  */
 #line 10 "../src/parse/parser.ypp"
@@ -87,7 +93,7 @@ extern "C" {
 }
 
 
-#line 91 "src/parse/parser.cc"
+#line 97 "src/parse/parser.cc"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -426,7 +432,7 @@ void free (void *); /* INFRINGES ON USER NAME SPACE */
 
 #if (! defined yyoverflow \
      && (! defined __cplusplus \
-         || (defined YYSTYPE_IS_TRIVIAL && YYSTYPE_IS_TRIVIAL)))
+         || (defined RE2C_STYPE_IS_TRIVIAL && RE2C_STYPE_IS_TRIVIAL)))
 
 /* A type that is properly aligned for any stack member.  */
 union yyalloc
@@ -543,22 +549,22 @@ static const yytype_int8 yytranslate[] =
       15,    16,    17
 };
 
-#if YYDEBUG
+#if RE2C_DEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    76,    76,    77,    81,    85,    86,    87,    91,    94,
-     100,   101,   104,   104,   107,   110,   113,   116,   122,   128,
-     134,   140,   147,   148,   153,   158,   159,   165,   166,   170,
-     171,   175,   177,   181,   182,   195,   201,   202,   206,   207,
-     208,   212,   213,   222,   223
+       0,    77,    77,    78,    82,    86,    87,    88,    92,    95,
+     101,   102,   105,   105,   108,   111,   114,   117,   123,   129,
+     135,   141,   148,   149,   154,   159,   160,   166,   167,   171,
+     172,   176,   178,   182,   183,   196,   202,   203,   207,   208,
+     209,   213,   214,   223,   224
 };
 #endif
 
 /** Accessing symbol of state STATE.  */
 #define YY_ACCESSING_SYMBOL(State) YY_CAST (yysymbol_kind_t, yystos[State])
 
-#if YYDEBUG || 0
+#if RE2C_DEBUG || 0
 /* The user-facing name of the symbol whose (internal) number is
    YYSYMBOL.  No bounds checking.  */
 static const char *yysymbol_name (yysymbol_kind_t yysymbol) YY_ATTRIBUTE_UNUSED;
@@ -697,7 +703,7 @@ static const yytype_int8 yyr2[] =
 enum { YYENOMEM = -2 };
 
 #define yyerrok         (yyerrstatus = 0)
-#define yyclearin       (yychar = YYEMPTY)
+#define yyclearin       (yychar = RE2C_EMPTY)
 
 #define YYACCEPT        goto yyacceptlab
 #define YYABORT         goto yyabortlab
@@ -709,7 +715,7 @@ enum { YYENOMEM = -2 };
 
 #define YYBACKUP(Token, Value)                                    \
   do                                                              \
-    if (yychar == YYEMPTY)                                        \
+    if (yychar == RE2C_EMPTY)                                        \
       {                                                           \
         yychar = (Token);                                         \
         yylval = (Value);                                         \
@@ -725,12 +731,12 @@ enum { YYENOMEM = -2 };
   while (0)
 
 /* Backward compatibility with an undocumented macro.
-   Use YYerror or YYUNDEF. */
-#define YYERRCODE YYUNDEF
+   Use RE2C_error or RE2C_UNDEF. */
+#define YYERRCODE RE2C_UNDEF
 
 
 /* Enable debugging if requested.  */
-#if YYDEBUG
+#if RE2C_DEBUG
 
 # ifndef YYFPRINTF
 #  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
@@ -852,12 +858,12 @@ do {                                    \
 /* Nonzero means print parse trace.  It is left uninitialized so that
    multiple parsers can coexist.  */
 int yydebug;
-#else /* !YYDEBUG */
+#else /* !RE2C_DEBUG */
 # define YYDPRINTF(Args) ((void) 0)
 # define YY_SYMBOL_PRINT(Title, Kind, Value, Location)
 # define YY_STACK_PRINT(Bottom, Top)
 # define YY_REDUCE_PRINT(Rule)
-#endif /* !YYDEBUG */
+#endif /* !RE2C_DEBUG */
 
 
 /* YYINITDEPTH -- initial size of the parser's stacks.  */
@@ -967,7 +973,7 @@ YYSTYPE yylval YY_INITIAL_VALUE (= yyval_default);
 
   YYDPRINTF ((stderr, "Starting parse\n"));
 
-  yychar = YYEMPTY; /* Cause a token to be read.  */
+  yychar = RE2C_EMPTY; /* Cause a token to be read.  */
 
   goto yysetstate;
 
@@ -1077,25 +1083,25 @@ yybackup:
   /* Not known => get a lookahead token if don't already have one.  */
 
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
-  if (yychar == YYEMPTY)
+  if (yychar == RE2C_EMPTY)
     {
       YYDPRINTF ((stderr, "Reading a token\n"));
       yychar = yylex (&yylval, input, ast, opts, grams);
     }
 
-  if (yychar <= YYEOF)
+  if (yychar <= RE2C_EOF)
     {
-      yychar = YYEOF;
+      yychar = RE2C_EOF;
       yytoken = YYSYMBOL_YYEOF;
       YYDPRINTF ((stderr, "Now at end of input.\n"));
     }
-  else if (yychar == YYerror)
+  else if (yychar == RE2C_error)
     {
       /* The scanner already issued an error message, process directly
          to error recovery.  But do not keep the error token as
          lookahead, it is too special and may lead us to an endless
          loop in error recovery. */
-      yychar = YYUNDEF;
+      yychar = RE2C_UNDEF;
       yytoken = YYSYMBOL_YYerror;
       goto yyerrlab1;
     }
@@ -1132,7 +1138,7 @@ yybackup:
   YY_IGNORE_MAYBE_UNINITIALIZED_END
 
   /* Discard the shifted token.  */
-  yychar = YYEMPTY;
+  yychar = RE2C_EMPTY;
   goto yynewstate;
 
 
@@ -1168,177 +1174,177 @@ yyreduce:
   switch (yyn)
     {
   case 3: /* spec: spec TOKEN_BLOCK  */
-#line 77 "../src/parse/parser.ypp"
+#line 78 "../src/parse/parser.ypp"
                    {
     if (use_block(input, ast, opts, grams, ast.temp_blockname) != Ret::OK) YYABORT;
     ast.temp_blockname.clear();
 }
-#line 1177 "src/parse/parser.cc"
+#line 1183 "src/parse/parser.cc"
     break;
 
   case 4: /* spec: spec TOKEN_CONF  */
-#line 81 "../src/parse/parser.ypp"
+#line 82 "../src/parse/parser.ypp"
                   {
     // Handled here, as the main lexer should not get access to opts under construction.
     if (input.lex_conf(opts) != Ret::OK) YYABORT;
 }
-#line 1186 "src/parse/parser.cc"
+#line 1192 "src/parse/parser.cc"
     break;
 
   case 8: /* def: name expr enddef  */
-#line 91 "../src/parse/parser.ypp"
+#line 92 "../src/parse/parser.ypp"
                    {
     if (add_named_def(opts.symtab, (yyvsp[-2].cstr), (yyvsp[-1].regexp), input) != Ret::OK) YYABORT;
 }
-#line 1194 "src/parse/parser.cc"
+#line 1200 "src/parse/parser.cc"
     break;
 
   case 9: /* def: name expr '/'  */
-#line 94 "../src/parse/parser.ypp"
+#line 95 "../src/parse/parser.ypp"
                 {
     input.error_at_tok("trailing contexts are not allowed in named definitions");
     YYABORT;
 }
-#line 1203 "src/parse/parser.cc"
-    break;
-
-  case 10: /* name: TOKEN_ID '='  */
-#line 100 "../src/parse/parser.ypp"
-               { (yyval.cstr) = (yyvsp[-1].cstr); }
 #line 1209 "src/parse/parser.cc"
     break;
 
+  case 10: /* name: TOKEN_ID '='  */
+#line 101 "../src/parse/parser.ypp"
+               { (yyval.cstr) = (yyvsp[-1].cstr); }
+#line 1215 "src/parse/parser.cc"
+    break;
+
   case 14: /* rule: trailexpr TOKEN_CODE  */
-#line 107 "../src/parse/parser.ypp"
+#line 108 "../src/parse/parser.ypp"
                        {
     find_or_add_gram(grams, "").rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
 }
-#line 1217 "src/parse/parser.cc"
+#line 1223 "src/parse/parser.cc"
     break;
 
   case 15: /* rule: '*' TOKEN_CODE  */
-#line 110 "../src/parse/parser.ypp"
+#line 111 "../src/parse/parser.ypp"
                  {
     find_or_add_gram(grams, "").defs.push_back((yyvsp[0].semact));
 }
-#line 1225 "src/parse/parser.cc"
+#line 1231 "src/parse/parser.cc"
     break;
 
   case 16: /* rule: '$' TOKEN_CODE  */
-#line 113 "../src/parse/parser.ypp"
+#line 114 "../src/parse/parser.ypp"
                  {
     find_or_add_gram(grams, "").eofs.push_back((yyvsp[0].semact));
 }
-#line 1233 "src/parse/parser.cc"
+#line 1239 "src/parse/parser.cc"
     break;
 
   case 17: /* rule: TOKEN_CLIST trailexpr ccode  */
-#line 116 "../src/parse/parser.ypp"
+#line 117 "../src/parse/parser.ypp"
                               {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).rules.push_back(AstRule((yyvsp[-1].regexp), (yyvsp[0].semact)));
     }
     ast.temp_condlist.clear();
 }
-#line 1244 "src/parse/parser.cc"
+#line 1250 "src/parse/parser.cc"
     break;
 
   case 18: /* rule: TOKEN_CLIST '*' ccode  */
-#line 122 "../src/parse/parser.ypp"
+#line 123 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).defs.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
-#line 1255 "src/parse/parser.cc"
+#line 1261 "src/parse/parser.cc"
     break;
 
   case 19: /* rule: TOKEN_CLIST '$' ccode  */
-#line 128 "../src/parse/parser.ypp"
+#line 129 "../src/parse/parser.ypp"
                         {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).eofs.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
-#line 1266 "src/parse/parser.cc"
+#line 1272 "src/parse/parser.cc"
     break;
 
   case 20: /* rule: TOKEN_CSETUP TOKEN_CODE  */
-#line 134 "../src/parse/parser.ypp"
+#line 135 "../src/parse/parser.ypp"
                           {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).setup.push_back((yyvsp[0].semact));
     }
     ast.temp_condlist.clear();
 }
-#line 1277 "src/parse/parser.cc"
+#line 1283 "src/parse/parser.cc"
     break;
 
   case 21: /* rule: TOKEN_CZERO ccode  */
-#line 140 "../src/parse/parser.ypp"
+#line 141 "../src/parse/parser.ypp"
                     {
     const AstNode* r = ast.nil(input.tok_loc());
     find_or_add_gram(grams, "0").rules.push_back(AstRule(r, (yyvsp[0].semact)));
     ast.temp_condlist.clear();
 }
-#line 1287 "src/parse/parser.cc"
+#line 1293 "src/parse/parser.cc"
     break;
 
   case 23: /* ccode: TOKEN_CNEXT TOKEN_CODE  */
-#line 148 "../src/parse/parser.ypp"
+#line 149 "../src/parse/parser.ypp"
                          {
     (yyval.semact) = (yyvsp[0].semact);
     // parser needs to to update condition, but for the rest of the code actions are immutable
     const_cast<SemAct*>((yyval.semact))->cond = (yyvsp[-1].cstr); 
 }
-#line 1297 "src/parse/parser.cc"
+#line 1303 "src/parse/parser.cc"
     break;
 
   case 24: /* ccode: TOKEN_CJUMP  */
-#line 153 "../src/parse/parser.ypp"
+#line 154 "../src/parse/parser.ypp"
               {
     (yyval.semact) = ast.sem_act(input.tok_loc(), nullptr, (yyvsp[0].cstr), true);
 }
-#line 1305 "src/parse/parser.cc"
-    break;
-
-  case 25: /* trailexpr: expr  */
-#line 158 "../src/parse/parser.ypp"
-       { (yyval.regexp) = ast.cap((yyvsp[0].regexp), CAPTURE_IF_NOT_INVERTED); }
 #line 1311 "src/parse/parser.cc"
     break;
 
-  case 26: /* trailexpr: expr '/' expr  */
+  case 25: /* trailexpr: expr  */
 #line 159 "../src/parse/parser.ypp"
+       { (yyval.regexp) = ast.cap((yyvsp[0].regexp), CAPTURE_IF_NOT_INVERTED); }
+#line 1317 "src/parse/parser.cc"
+    break;
+
+  case 26: /* trailexpr: expr '/' expr  */
+#line 160 "../src/parse/parser.ypp"
                 {
     (yyval.regexp) = ast.cat(ast.cap((yyvsp[-2].regexp), CAPTURE_IF_NOT_INVERTED),
                  ast.cat(ast.tag(input.tok_loc(), nullptr, false), (yyvsp[0].regexp)));
 }
-#line 1320 "src/parse/parser.cc"
-    break;
-
-  case 28: /* expr: expr '|' diff  */
-#line 166 "../src/parse/parser.ypp"
-                { (yyval.regexp) = ast.alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
 #line 1326 "src/parse/parser.cc"
     break;
 
-  case 30: /* diff: diff '\\' term  */
-#line 171 "../src/parse/parser.ypp"
-                 { (yyval.regexp) = ast.diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
+  case 28: /* expr: expr '|' diff  */
+#line 167 "../src/parse/parser.ypp"
+                { (yyval.regexp) = ast.alt((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
 #line 1332 "src/parse/parser.cc"
     break;
 
-  case 32: /* term: factor term  */
-#line 177 "../src/parse/parser.ypp"
-              { (yyval.regexp) = ast.cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
+  case 30: /* diff: diff '\\' term  */
+#line 172 "../src/parse/parser.ypp"
+                 { (yyval.regexp) = ast.diff((yyvsp[-2].regexp), (yyvsp[0].regexp)); }
 #line 1338 "src/parse/parser.cc"
     break;
 
+  case 32: /* term: factor term  */
+#line 178 "../src/parse/parser.ypp"
+              { (yyval.regexp) = ast.cat((yyvsp[-1].regexp), (yyvsp[0].regexp)); }
+#line 1344 "src/parse/parser.cc"
+    break;
+
   case 34: /* factor: primary closes  */
-#line 182 "../src/parse/parser.ypp"
+#line 183 "../src/parse/parser.ypp"
                  {
     switch((yyvsp[0].op)) {
     case '*':
@@ -1352,43 +1358,43 @@ yyreduce:
         break;
     }
 }
-#line 1356 "src/parse/parser.cc"
+#line 1362 "src/parse/parser.cc"
     break;
 
   case 35: /* factor: primary TOKEN_CLOSESIZE  */
-#line 195 "../src/parse/parser.ypp"
+#line 196 "../src/parse/parser.ypp"
                           {
     (yyval.regexp) = ast.iter((yyvsp[-1].regexp), (yyvsp[0].bounds).min, (yyvsp[0].bounds).max);
 }
-#line 1364 "src/parse/parser.cc"
-    break;
-
-  case 37: /* closes: closes close  */
-#line 202 "../src/parse/parser.ypp"
-               { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
 #line 1370 "src/parse/parser.cc"
     break;
 
-  case 38: /* close: '*'  */
-#line 206 "../src/parse/parser.ypp"
-      { (yyval.op) = '*'; }
+  case 37: /* closes: closes close  */
+#line 203 "../src/parse/parser.ypp"
+               { (yyval.op) = ((yyvsp[-1].op) == (yyvsp[0].op)) ? (yyvsp[-1].op) : '*'; }
 #line 1376 "src/parse/parser.cc"
     break;
 
-  case 39: /* close: '+'  */
+  case 38: /* close: '*'  */
 #line 207 "../src/parse/parser.ypp"
-      { (yyval.op) = '+'; }
+      { (yyval.op) = '*'; }
 #line 1382 "src/parse/parser.cc"
     break;
 
-  case 40: /* close: '?'  */
+  case 39: /* close: '+'  */
 #line 208 "../src/parse/parser.ypp"
-      { (yyval.op) = '?'; }
+      { (yyval.op) = '+'; }
 #line 1388 "src/parse/parser.cc"
     break;
 
+  case 40: /* close: '?'  */
+#line 209 "../src/parse/parser.ypp"
+      { (yyval.op) = '?'; }
+#line 1394 "src/parse/parser.cc"
+    break;
+
   case 42: /* primary: TOKEN_ID  */
-#line 213 "../src/parse/parser.ypp"
+#line 214 "../src/parse/parser.ypp"
            {
     (yyval.regexp) = find_def(opts.symtab, (yyvsp[0].cstr));
     if ((yyval.regexp) == nullptr) {
@@ -1398,23 +1404,23 @@ yyreduce:
         (yyval.regexp) = ast.cap((yyval.regexp), NO_CAPTURE);
     }
 }
-#line 1402 "src/parse/parser.cc"
-    break;
-
-  case 43: /* primary: '(' expr ')'  */
-#line 222 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_NOT_INVERTED); }
 #line 1408 "src/parse/parser.cc"
     break;
 
-  case 44: /* primary: '(' '!' expr ')'  */
+  case 43: /* primary: '(' expr ')'  */
 #line 223 "../src/parse/parser.ypp"
-                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_INVERTED); }
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_NOT_INVERTED); }
 #line 1414 "src/parse/parser.cc"
     break;
 
+  case 44: /* primary: '(' '!' expr ')'  */
+#line 224 "../src/parse/parser.ypp"
+                   { (yyval.regexp) = ast.cap((yyvsp[-1].regexp), CAPTURE_IF_INVERTED); }
+#line 1420 "src/parse/parser.cc"
+    break;
 
-#line 1418 "src/parse/parser.cc"
+
+#line 1424 "src/parse/parser.cc"
 
       default: break;
     }
@@ -1456,7 +1462,7 @@ yyreduce:
 yyerrlab:
   /* Make sure we have latest lookahead translation.  See comments at
      user semantic actions for why this is necessary.  */
-  yytoken = yychar == YYEMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
+  yytoken = yychar == RE2C_EMPTY ? YYSYMBOL_YYEMPTY : YYTRANSLATE (yychar);
   /* If not already recovering from an error, report this error.  */
   if (!yyerrstatus)
     {
@@ -1469,17 +1475,17 @@ yyerrlab:
       /* If just tried and failed to reuse lookahead token after an
          error, discard it.  */
 
-      if (yychar <= YYEOF)
+      if (yychar <= RE2C_EOF)
         {
           /* Return failure if at end of input.  */
-          if (yychar == YYEOF)
+          if (yychar == RE2C_EOF)
             YYABORT;
         }
       else
         {
           yydestruct ("Error: discarding",
                       yytoken, &yylval, input, ast, opts, grams);
-          yychar = YYEMPTY;
+          yychar = RE2C_EMPTY;
         }
     }
 
@@ -1581,7 +1587,7 @@ yyexhaustedlab:
 | yyreturnlab -- parsing is finished, clean up and return.  |
 `----------------------------------------------------------*/
 yyreturnlab:
-  if (yychar != YYEMPTY)
+  if (yychar != RE2C_EMPTY)
     {
       /* Make sure we have latest lookahead translation.  See comments at
          user semantic actions for why this is necessary.  */
@@ -1607,7 +1613,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 226 "../src/parse/parser.ypp"
+#line 227 "../src/parse/parser.ypp"
 
 
 #pragma GCC diagnostic pop
