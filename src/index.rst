@@ -30,13 +30,14 @@ It is used in other open-source projects such as
 `wake <https://github.com/sifive/wake>`_,
 etc.
 
-.. |feed| image:: feed/feed/feed.png
-    :target: feed/atom.xml
+.. |nbsp| unicode:: 0xA0
+
+.. |man| image:: _static/manual.png
+    :target: manual/manual.html
     :class:  feed
     :width:  2em
 
-|feed| `Subscribe <feed/atom.xml>`_ to receive the latest news and updates.
-See the user manuals (
+|man| |nbsp| Read the manual for
 `C/C++ <manual/manual_c.html>`_,
 `D <manual/manual_d.html>`_,
 `Go <manual/manual_go.html>`_,
@@ -47,9 +48,21 @@ See the user manuals (
 `Python <manual/manual_py.html>`_,
 `Rust <manual/manual_rust.html>`_
 `V <manual/manual_v.html>`_,
-`Zig <manual/manual_zig.html>`_,
-) for a
-complete overview with examples.
+`Zig <manual/manual_zig.html>`_.
+
+.. |play| image:: _static/play.png
+    :target: ../playground
+    :class:  feed
+    :width:  2em
+
+|play| |nbsp| Run examples in the `playground <../playground>`_.
+
+.. |feed| image:: feed/feed/feed.png
+    :target: feed/atom.xml
+    :class:  feed
+    :width:  2em
+
+|feed| |nbsp| `Subscribe <feed/atom.xml>`_ to receive release notes.
 
 Download
 --------
