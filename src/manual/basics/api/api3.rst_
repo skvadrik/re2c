@@ -44,7 +44,7 @@ order to interface with the outer program.
     code model. Its value should be an array of one or more strings, where each
     string contains two or three components separated by the string specified in
     ``re2c:fn:sep`` configuration (typically a semicolon). The first array
-    element defines function name and return type (emply for a void function).
+    element defines function name and return type (empty for a void function).
     Subsequent elements define function arguments: first, the expression for the
     argument used in function body (usually just a name); second, argument type;
     third, an optional formal parameter (it defaults to the first component -

@@ -7,7 +7,7 @@ using :ref:`syntax files <manual/manual_c:syntax files>` --- a technique
 for describing language backends. With so many new languages *re2c* now has a
 more generic meaning: *Regular Expressions to Code* rather than *Regular
 Expressions to C*. A new code generation model based on recursive functions has
-been added to enable support of functional laguages. Much effort went into
+been added to enable support of functional languages. Much effort went into
 simplifying user interface: the former default API is now called *simple API*
 and supported for backends other than C/C++, and there is a new *record API* for
 cases when lexer state needs to be stored. Capturing groups can now be used with
@@ -33,7 +33,7 @@ For a long time C/C++ was the only backend that supported default API, because
 pointer-like semantics of ``YYCURSOR`` and other primitives was hardcoded into
 re2c. With the addition of syntax files, it is now possible to define
 API flavours individually for each language. For languages that don't have
-pointer arithmetics ``YYCURSOR`` and others should be defined as indices rather
+pointer arithmetic ``YYCURSOR`` and others should be defined as indices rather
 than pointers, and a new primitive ``YYINPUT`` should be used to define the
 indexed character sequence. The former default API is now called *simple API* to
 avoid confusion, as some languages historically default to generic API. Simple
@@ -60,14 +60,14 @@ see the :ref:`changelog <releases/changelog/changelog:4.0 (2024-??-??)>` for
 details. Configurations that have ``define:`` or ``variable:`` parts now
 have shorter aliases without these parts (e.g ``re2c:YYCURSOR`` instead of
 ``re2c:define:YYCURSOR`` and ``re2c:yych`` instead of ``re2c:variable:yych``).
-The goal of this change is to make the naming scheme more consistenst, as
+The goal of this change is to make the naming scheme more consistent, as
 wide-scope ``define:`` and ``variable:`` prefixes were in conflict with
 narrow-scope prefixes like ``tags:``, ``cond:``, ``yych:`` etc.
 
 **Recursive functions.**
 
 This release adds a new code model based on recursive functions (enabled with
-``--recursive-functions`` option). Previosuly re2c supported two code models.
+``--recursive-functions`` option). Previously re2c supported two code models.
 One is based on ``goto`` and labels (enabled with ``--goto-label`` option); it
 generates efficient code, and it's the best option for languages that support
 ``goto`` statement. The other model is based on state-switch inside of a loop

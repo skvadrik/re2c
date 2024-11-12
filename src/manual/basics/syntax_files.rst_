@@ -3,7 +3,7 @@ A syntax file is a configuration file that defines syntax of the target language
 -- not the whole language, but a small part of it that is used by the generated
 code. Syntax files make re2c very flexible, but they should not be used as a
 replacement for ``re2c:`` configurations: their purpose is to define syntax of
-the target language, not to customise one particular lexer. All supported
+the target language, not to customize one particular lexer. All supported
 languages have default syntax files that are part of the distribution (see
 ``include/syntax`` subdirectory); they are also embedded in the |re2c| binary.
 Users may provide a custom syntax file that overrides a few configurations for
@@ -101,7 +101,7 @@ language configurations, inplace configurations and code templates.
   ``<undefined>``. Variables are placeholders that are substituted during code
   generation phase. List variables are special: when expanding list templates,
   |re2c| repeats expressions the right hand side of the column a few times, each
-  time replacing occurrences of the list variable with a value speific to this
+  time replacing occurrences of the list variable with a value specific to this
   repetition. Lists have optional bounds (negative values are counted from the
   end, e.g. ``-1`` means the last element). Conditional names start with a dot.
   Both conditionals and variables may be either local (specific to the given
@@ -267,7 +267,7 @@ language configurations, inplace configurations and code templates.
   ``code:loop``
       A loop that runs forever (unless interrupted from the loop body).
       Supported variables: ``label`` (loop label), ``stmt`` (a list variable
-      tht expands to all statements in the loop body).
+      that expands to all statements in the loop body).
 
   ``code:continue``
       Continue statement. Supported variables: ``label`` (label from which to
@@ -283,7 +283,7 @@ language configurations, inplace configurations and code templates.
       produce code, but expands list expression as many times as there are
       function arguments), ``argname`` (name of the current argument),
       ``argtype`` (type of the current argument). Conditional: ``.type`` (true
-      if this is a non-void funtion).
+      if this is a non-void function).
 
   ``code:fndef``
       Like ``code:fndecl``, but used for function definitions, so it has one
