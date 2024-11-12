@@ -1,6 +1,8 @@
-========
-re2c
-========
+.. |nbsp| unicode:: 0xA0
+
+==================================================
+re2c |nbsp| --- |nbsp| Regular Expressions to Code
+==================================================
 
 .. toctree::
     :hidden:
@@ -11,17 +13,22 @@ re2c
     Release notes  </releases/release_notes>
     Changelog      </releases/changelog/changelog>
 
-re2c is a free and open-source lexer generator for C/C++, Go and Rust with a
-focus on generating fast code. It compiles regular expression specifications to
-deterministic finite automata and encodes them in the form of conditional jumps
-in the target language. This approach is generally faster than table-based
-lexers, and the generated code is easier to debug and understand. A flexible
-user interface allows one to adapt the generated lexer to a particular
-environment and input model, avoiding the overhead on unnecessary checks and
-buffers. re2c is based on the
-`lookahead TDFA <2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf>`_
-algorithm that allows it to perform fast and lightweight submatch extraction.
-It is used in other open-source projects such as
+re2c is a free and open-source lexer generator that supports C/C++, D, Go,
+Haskell, Java, JavaScript, OCaml, Python, Rust, V, Zig, and can be extended to
+other languages by implementing a single :ref:`syntax file <manual/manual_c:syntax files>`.
+The primary focus of re2c is on generating *fast* code. It compiles regular
+expressions to deterministic finite automata and translates them to code in the
+target language using goto statements, loops or recursive functions.
+Direct-coded lexers are generally faster than their table-driven analogues, and
+the code is easier to debug and understand.
+Secondary focus is on *flexibility*: re2c does not assume a fixed program
+template; instead, it allows the user to embed lexers anywhere in the source
+code and configure them to avoid unnecessary buffering and bounds checks.
+Internal algorithm used by re2c is based on a special kind of deterministic
+finite automata: `lookahead TDFA <2022_borsotti_trofimovich_a_closer_look_at_tdfa.pdf>`_.
+These automata are as fast as ordinary DFA, but they are also capable of
+performing submatch extraction with minimal overhead.
+re2c is used in other open-source projects, such as
 `php <http://php.net/>`_,
 `ninja <https://ninja-build.org/>`_,
 `yasm <http://yasm.tortall.net/>`_,
@@ -29,8 +36,6 @@ It is used in other open-source projects such as
 `BRL-CAD <http://brlcad.org/>`_,
 `wake <https://github.com/sifive/wake>`_,
 etc.
-
-.. |nbsp| unicode:: 0xA0
 
 .. |man| image:: _static/manual.png
     :target: manual/manual.html
