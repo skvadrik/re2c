@@ -96,12 +96,12 @@
     }
 
     input, select {
-      font-family: 'Iosevka Web';
+      font-family: mono, 'Iosevka Web';
       margin: 0 0.5em 0 0.5em;
     }
 
     textarea {
-      font-family: 'Iosevka Web';
+      font-family: mono, 'Iosevka Web';
     }
 
     @media (max-width: 1000px) {
@@ -197,22 +197,25 @@
   const re2cFlagsDropBox = document.getElementById("re2c-flags")
 
   const editor = ace.edit("editor")
+  editor.setTheme("ace/theme/github_light_default");
   editor.setOptions({
-    fontFamily: "Iosevka Web",
+    // fontFamily: "Iosevka Web",
     showPrintMargin: false
   })
 
   const output = ace.edit("output")
+  output.setTheme("ace/theme/github_light_default");
   output.setOptions({
-    fontFamily: "Iosevka Web",
+    // fontFamily: "Iosevka Web",
     showPrintMargin: false,
     readOnly: true
   })
   output.session.setValue("", 1)
 
   const logOutput = ace.edit("log-output")
+  logOutput.setTheme("ace/theme/github_light_default");
   logOutput.setOptions({
-    fontFamily: "Iosevka Web",
+    // fontFamily: "Iosevka Web",
     showPrintMargin: false,
     readOnly: true
   })
