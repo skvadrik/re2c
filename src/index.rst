@@ -13,15 +13,15 @@ re2c |nbsp| --- |nbsp| Regular Expressions to Code
     Release notes  </releases/release_notes>
     Changelog      </releases/changelog/changelog>
 
-re2c is a free and open-source lexer generator that supports C/C++, D, Go,
+*re2c* stands for *Regular Expressions to Code*.
+It is a free and open-source lexer generator that supports C/C++, D, Go,
 Haskell, Java, JavaScript, OCaml, Python, Rust, V, Zig, and can be extended to
 other languages by implementing a single :ref:`syntax file <manual/manual_c:syntax files>`.
-The primary focus of re2c is on generating *fast* code. It compiles regular
-expressions to deterministic finite automata and translates them to code in the
-target language using goto statements, loops or recursive functions.
-Direct-coded lexers are generally faster than their table-driven analogues, and
-the code is easier to debug and understand.
-Secondary focus is on *flexibility*: re2c does not assume a fixed program
+The primary focus of re2c is on generating *fast* code: it compiles regular
+expressions to deterministic finite automata and translates them into
+direct-coded lexers in the target language (such lexers are generally faster
+and easier to debug than their table-driven analogues).
+Secondary re2c focus is on *flexibility*: it does not assume a fixed program
 template; instead, it allows the user to embed lexers anywhere in the source
 code and configure them to avoid unnecessary buffering and bounds checks.
 Internal algorithm used by re2c is based on a special kind of deterministic
