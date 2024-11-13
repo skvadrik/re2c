@@ -304,8 +304,8 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         expand_fintags(output, tag, fintags);
 
         if (!fixed(tag)) { // variable tag
-            for (const char* t : fintags) {
-                append(varops, code_copy_tag(alc, t, base, is_mtag));
+            for (const char* f : fintags) {
+                append(varops, code_copy_tag(alc, f, base, is_mtag));
             }
         } else {
             DCHECK(!is_mtag);
