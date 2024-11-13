@@ -936,7 +936,7 @@ A primitive that defines function prototype in \fB\-\-recursive\-functions\fP
 code model. Its value should be an array of one or more strings, where each
 string contains two or three components separated by the string specified in
 \fBre2c:fn:sep\fP configuration (typically a semicolon). The first array
-element defines function name and return type (emply for a void function).
+element defines function name and return type (empty for a void function).
 Subsequent elements define function arguments: first, the expression for the
 argument used in function body (usually just a name); second, argument type;
 third, an optional formal parameter (it defaults to the first component \-
@@ -1564,7 +1564,7 @@ A syntax file is a configuration file that defines syntax of the target language
 \-\- not the whole language, but a small part of it that is used by the generated
 code. Syntax files make re2c very flexible, but they should not be used as a
 replacement for \fBre2c:\fP configurations: their purpose is to define syntax of
-the target language, not to customise one particular lexer. All supported
+the target language, not to customize one particular lexer. All supported
 languages have default syntax files that are part of the distribution (see
 \fBinclude/syntax\fP subdirectory); they are also embedded in the re2d binary.
 Users may provide a custom syntax file that overrides a few configurations for
@@ -1682,7 +1682,7 @@ and lists, or a reference to another code template, or a special value
 \fB<undefined>\fP\&. Variables are placeholders that are substituted during code
 generation phase. List variables are special: when expanding list templates,
 re2d repeats expressions the right hand side of the column a few times, each
-time replacing occurrences of the list variable with a value speific to this
+time replacing occurrences of the list variable with a value specific to this
 repetition. Lists have optional bounds (negative values are counted from the
 end, e.g. \fB\-1\fP means the last element). Conditional names start with a dot.
 Both conditionals and variables may be either local (specific to the given
@@ -1861,7 +1861,7 @@ Default switch case.
 .B \fBcode:loop\fP
 A loop that runs forever (unless interrupted from the loop body).
 Supported variables: \fBlabel\fP (loop label), \fBstmt\fP (a list variable
-tht expands to all statements in the loop body).
+that expands to all statements in the loop body).
 .TP
 .B \fBcode:continue\fP
 Continue statement. Supported variables: \fBlabel\fP (label from which to
@@ -1877,7 +1877,7 @@ Function declaration. Supported variables: \fBname\fP (function name),
 produce code, but expands list expression as many times as there are
 function arguments), \fBargname\fP (name of the current argument),
 \fBargtype\fP (type of the current argument). Conditional: \fB\&.type\fP (true
-if this is a non\-void funtion).
+if this is a non\-void function).
 .TP
 .B \fBcode:fndef\fP
 Like \fBcode:fndecl\fP, but used for function definitions, so it has one
@@ -3439,7 +3439,7 @@ Another way to use capturing groups is the \fB\-\-captvars\fP option or
 is in the way the generated code stores submatch results: instead of
 \fByynmatch\fP and \fByypmatch\fP re2d generates variables \fByytl<k>\fP and
 \fByytr<k>\fP for \fIk\fP\-th capturing group (the user should declare these using
-an \fBsvars\fP block). Captures with variables support two dismbiguation
+an \fBsvars\fP block). Captures with variables support two disambiguation
 policies: \fB\-\-leftmost\-captvars\fP or \fBre2c:leftmost\-captvars = 1\fP for
 leftmost greedy policy (the default one) and \fB\-\-posix\-captvars\fP or
 \fBre2c:posix\-captvars\fP for POSIX longest\-match policy.

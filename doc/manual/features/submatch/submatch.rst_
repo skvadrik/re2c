@@ -37,7 +37,7 @@
    is in the way the generated code stores submatch results: instead of
    ``yynmatch`` and ``yypmatch`` |re2c| generates variables ``yytl<k>`` and
    ``yytr<k>`` for *k*-th capturing group (the user should declare these using
-   an ``svars`` block). Captures with variables support two dismbiguation
+   an ``svars`` block). Captures with variables support two disambiguation
    policies: ``--leftmost-captvars`` or ``re2c:leftmost-captvars = 1`` for
    leftmost greedy policy (the default one) and ``--posix-captvars`` or
    ``re2c:posix-captvars`` for POSIX longest-match policy.
