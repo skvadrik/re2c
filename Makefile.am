@@ -528,35 +528,46 @@ re2c_SRC_DOC_EXT = \
 	examples/zig/submatch/04_posix_captures.re
 
 DOCS = doc/re2c.1
+HELP = src/msg/help_re2c.cc
 if WITH_DLANG
 DOCS += doc/re2d.1
+HELP += src/msg/help_re2d.cc
 endif
 if WITH_GOLANG
 DOCS += doc/re2go.1
+HELP += src/msg/help_re2go.cc
 endif
 if WITH_HASKELL
 DOCS += doc/re2hs.1
+HELP += src/msg/help_re2hs.cc
 endif
 if WITH_JAVA
 DOCS += doc/re2java.1
+HELP += src/msg/help_re2java.cc
 endif
 if WITH_JS
 DOCS += doc/re2js.1
+HELP += src/msg/help_re2js.cc
 endif
 if WITH_OCAML
 DOCS += doc/re2ocaml.1
+HELP += src/msg/help_re2ocaml.cc
 endif
 if WITH_PYTHON
 DOCS += doc/re2py.1
+HELP += src/msg/help_re2py.cc
 endif
 if WITH_RUST
 DOCS += doc/re2rust.1
+HELP += src/msg/help_re2rust.cc
 endif
 if WITH_VLANG
 DOCS += doc/re2v.1
+HELP += src/msg/help_re2v.cc
 endif
 if WITH_ZIG
 DOCS += doc/re2zig.1
+HELP += src/msg/help_re2zig.cc
 endif
 
 man_MANS = $(DOCS)
@@ -607,7 +618,9 @@ EXTRA_DIST = \
 
 CLEANFILES = \
 	$(re2c_GEN) \
-	$(DOCS)
+	$(re2c_GEN_HELP) \
+	$(DOCS) \
+	$(HELP)
 
 if REBUILD_SYNTAX
 STX2CPP = $(top_srcdir)/build/stx2cpp.py
@@ -664,7 +677,7 @@ bootstrap: all
 
 .PHONY: docs
 if REBUILD_DOCS
-docs: $(DOCS) $(re2c_GEN_HELP)
+docs: $(DOCS) $(HELP)
 RST2TXT = $(top_srcdir)/build/rst2txt.py
 RST2MAN = $(top_srcdir)/build/rst2man.py
 SPLITMAN = $(top_srcdir)/build/split_man.py
@@ -682,7 +695,7 @@ src/msg/help_re2%.cc: $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(RST2TXT)
 		&& $(PYTHON) $(RST2TXT) --variable-name=help $(<D)/$(@F).rst $@ \
 		&& cp $@ $(top_srcdir)/bootstrap/$@
 else
-docs: $(DOCS) $(re2c_GEN_HELP)
+docs: $(DOCS) $(HELP)
 	$(AM_V_at)echo "Reconfigure with --enable-docs to rebuild docs"
 # copy bootstrap manpage
 doc/re2%.1: bootstrap/doc/re2%.1
