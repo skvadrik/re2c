@@ -12,6 +12,8 @@
 
 namespace re2c {
 
+namespace {
+
 class GenBitmapChecks : public RenderCallback {
     std::ostream& os;
     const opt_t* opts;
@@ -49,6 +51,8 @@ class GenBitmapChecks : public RenderCallback {
 
     FORBID_COPY(GenBitmapChecks);
 };
+
+} // anonymous namespace
 
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
 static bool matches(

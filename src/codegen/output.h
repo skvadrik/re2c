@@ -68,24 +68,11 @@ struct RenderContext {
 
 class RenderCallback {
   public:
-    virtual void render_var(StxVarId /*var*/) {
-        UNREACHABLE();
-    }
-    virtual size_t get_list_size(StxVarId /*var*/) const {
-        UNREACHABLE();
-        return 0;
-    }
-    virtual void start_list(StxVarId /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
-        UNREACHABLE();
-    }
-    virtual bool next_in_list(StxVarId /*var*/) {
-        UNREACHABLE();
-        return false;
-    }
-    virtual bool eval_cond(StxLOpt /*opt*/) {
-        UNREACHABLE();
-        return false;
-    }
+    virtual void render_var(StxVarId var);
+    virtual size_t get_list_size(StxVarId var) const;
+    virtual void start_list(StxVarId var, size_t lbound, size_t rbound);
+    virtual bool next_in_list(StxVarId var);
+    virtual bool eval_cond(StxLOpt opt);
     virtual ~RenderCallback() = default;
 };
 

@@ -877,6 +877,8 @@ void opt_t::render_code_##name(std::ostream& os) const { \
 RE2C_CODE_TEMPLATES
 #undef CODE_TEMPLATE
 
+namespace  {
+
 class GenOpt : public RenderCallback {
     std::ostringstream &os;
     const opt_t* opts;
@@ -909,6 +911,8 @@ class GenOpt : public RenderCallback {
 
     FORBID_COPY(GenOpt);
 };
+
+} // anonymous namespace
 
 #define MUTCODE(name) \
 std::string opt_t::gen_##name(const StxCodes* code) const { \
@@ -981,6 +985,29 @@ bool is_undefined(const StxCodes* code) {
     return code->head != nullptr
         && code->head->next == nullptr
         && code->head->type == StxCodeType::UD;
+}
+
+void RenderCallback::render_var(StxVarId /*var*/) {
+    UNREACHABLE();
+}
+
+size_t RenderCallback::get_list_size(StxVarId /*var*/) const {
+    UNREACHABLE();
+    return 0;
+}
+
+void RenderCallback::start_list(StxVarId /*var*/, size_t /*lbound*/, size_t /*rbound*/) {
+    UNREACHABLE();
+}
+
+bool RenderCallback::next_in_list(StxVarId /*var*/) {
+    UNREACHABLE();
+    return false;
+}
+
+bool RenderCallback::eval_cond(StxLOpt /*opt*/) {
+    UNREACHABLE();
+    return false;
 }
 
 } // namespace re2c

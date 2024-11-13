@@ -24,6 +24,8 @@ namespace re2c {
 static CodeList* gen_goswif(
         Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from);
 
+namespace {
+
 class GenArrayElem : public RenderCallback {
     std::ostream& os;
     const char* array;
@@ -154,6 +156,28 @@ class GenLessThan : public RenderCallback {
 
     FORBID_COPY(GenLessThan);
 };
+
+class GenEnumElem : public RenderCallback {
+    std::ostream& os;
+    const std::string& type;
+    const std::string& name;
+
+  public:
+    GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
+        : os(os), type(type), name(name) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::TYPE: os << type; break;
+            case StxVarId::NAME: os << name; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenEnumElem);
+};
+
+} // anonymous namespace
 
 bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
@@ -933,26 +957,6 @@ static void emit_accept(
     }
     append(stmts, code_switch(alc, var, cases));
 }
-
-class GenEnumElem : public RenderCallback {
-    std::ostream& os;
-    const std::string& type;
-    const std::string& name;
-
-  public:
-    GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
-        : os(os), type(type), name(name) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::TYPE: os << type; break;
-            case StxVarId::NAME: os << name; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    FORBID_COPY(GenEnumElem);
-};
 
 static const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
     const std::string& cond = opts->cond_enum_prefix + name;

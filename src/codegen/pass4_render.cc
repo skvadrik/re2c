@@ -10,6 +10,8 @@
 
 namespace re2c {
 
+namespace {
+
 static void render(RenderContext& rctx, const Code* code);
 
 static bool oneline_stmt_list(const CodeList* list) {
@@ -1704,6 +1706,8 @@ LOCAL_NODISCARD(Ret codegen_render_blocks(
     }
     return Ret::OK;
 }
+
+} // anonymous namespace
 
 Ret codegen_render(Output& output) {
     const opt_t* opts = output.total_opts; // global options
