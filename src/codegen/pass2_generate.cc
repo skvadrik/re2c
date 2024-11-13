@@ -674,9 +674,6 @@ static CodeList* gen_goifl(
     OutAllocator& alc = output.allocator;
     const opt_t* opts = output.block().opts;
 
-    CodeList* stmts = code_list(alc);
-    const CodeGoBranch* b = go->branches, *e = b + go->nbranches;
-
     auto transition = [&](const CodeGoBranch* b) {
         if (b->kind == CodeGoBranch::Kind::JUMP) {
             CodeList* code = code_list(alc);
@@ -686,6 +683,9 @@ static CodeList* gen_goifl(
             return gen_goswif(output, dfa, b->swif, from);
         }
     };
+
+    CodeList* stmts = code_list(alc);
+    const CodeGoBranch* b = go->branches, *e = b + go->nbranches;
 
     if (opts->code_model != CodeModel::REC_FUNC) {
         // In goto/label and loop/switch modes generate a sequence of IF statements.
