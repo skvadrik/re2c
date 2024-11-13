@@ -11,7 +11,7 @@ static const char* code_model_name(CodeModel model) {
         case CodeModel::GOTO_LABEL: return "goto-label";
         case CodeModel::LOOP_SWITCH: return "loop-switch";
         case CodeModel::REC_FUNC: return "recursive-functions";
-    };
+    }
     UNREACHABLE();
     return nullptr;
 }
