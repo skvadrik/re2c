@@ -188,6 +188,7 @@ TRY_CXXFLAG([-Weverything], m4_join([ ],
     [-Wno-c++98-compat-pedantic],
     [-Wno-unsafe-pointer-arithmetic],
     [-Wno-unsafe-buffer-usage],
+    [-Wno-exit-time-destructors], dnl re2c is single-threaded => no danger of race conditions
     [-Wno-switch-enum]))
 
 

@@ -53,6 +53,8 @@ if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
         # re2c uses C++11, not C++98
         "-Wno-c++98-compat"
         "-Wno-c++98-compat-pedantic"
+        # re2c is single-threaded => no danger of race conditions
+        "-Wno-exit-time-destructors"
     )
     try_cxxflag("-fdiagnostics-color=always")
 
