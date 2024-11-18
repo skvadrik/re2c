@@ -208,9 +208,7 @@ re2c_BOOT = \
 	bootstrap/src/parse/conf_parser.cc
 
 # custom sources
-re2c_CUSTOM_HELP = doc/help.rst
 re2c_CUSTOM = \
-	$(re2c_CUSTOM_HELP) \
 	src/msg/ver_to_vernum.re \
 	src/options/parse_opts.re \
 	src/parse/lexer.re \
@@ -219,7 +217,6 @@ re2c_CUSTOM = \
 	src/parse/conf_parser.ypp
 
 # docs
-re2c_SRC_DOC = doc/manpage.rst
 # To build the list of examples for all backends, run:
 # find examples -regex '.*\.re\|.*\(state\|01_basic\|definitions\)\..*' -printf '\t%p \\\n' | sort
 re2c_SRC_DOC_EXT = \
@@ -569,6 +566,7 @@ if WITH_ZIG
 DOCS += doc/re2zig.1
 HELP += src/msg/help_re2zig.cc
 endif
+BUILT_SOURCES += $(HELP)
 
 man_MANS = $(DOCS)
 
@@ -625,13 +623,13 @@ CLEANFILES = \
 if REBUILD_SYNTAX
 STX2CPP = $(top_srcdir)/build/stx2cpp.py
 # generate C++ sources from syntax configs and update bootstrap files
-src/default_syntax_%.cc : $(top_srcdir)/include/syntax/% $(STX2CPP)
+.stx.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)$(PYTHON) $(STX2CPP) $< $@
 	$(AM_V_GEN)cp -f $@ $(top_srcdir)/bootstrap/$@
 else
 # copy bootstrap files
-src/default_syntax_%.cc : bootstrap/src/default_syntax_%.cc
+.stx.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$@ $(@D)
 	$(AM_V_at)echo "Reconfigure with --enable-syntax to regenerate $@"
@@ -677,32 +675,31 @@ bootstrap: all
 
 .PHONY: docs
 if REBUILD_DOCS
-docs: $(DOCS) $(HELP)
 RST2TXT = $(top_srcdir)/build/rst2txt.py
 RST2MAN = $(top_srcdir)/build/rst2man.py
 SPLITMAN = $(top_srcdir)/build/split_man.py
+docs: $(DOCS) $(HELP) $(SPLITMAN) $(RST2MAN) $(RST2TXT)
 # generate manpage
-doc/re2%.1: $(re2c_SRC_DOC) $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN)
+.rst.1:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_SRC_DOC) $(top_builddir)/$@.rst \
-		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$@.rst > $@ \
-		&& cp $@ $(top_srcdir)/bootstrap/$@ \
-		&& rm $(top_builddir)/$@.rst
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$< $(top_builddir)/$< \
+		&& $(PYTHON) $(RST2MAN) --tab-width=4 $(top_builddir)/$< > $@ \
+		&& cp $@ $(top_srcdir)/bootstrap/$@
 # generate help
-src/msg/help_re2%.cc: $(re2c_CUSTOM_HELP) $(re2c_SRC_DOC_EXT) $(RST2TXT)
+.rst.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
-	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$(re2c_CUSTOM_HELP) $(<D)/$(@F).rst \
-		&& $(PYTHON) $(RST2TXT) --variable-name=help $(<D)/$(@F).rst $@ \
+	$(AM_V_GEN)$(PYTHON) $(SPLITMAN) $(top_builddir)/$< $(top_builddir)/$< \
+		&& $(PYTHON) $(RST2TXT) --variable-name=help $(top_builddir)/$< $@ \
 		&& cp $@ $(top_srcdir)/bootstrap/$@
 else
 docs: $(DOCS) $(HELP)
 	$(AM_V_at)echo "Reconfigure with --enable-docs to rebuild docs"
 # copy bootstrap manpage
-doc/re2%.1: bootstrap/doc/re2%.1
+.rst.1:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$@ $@
 # copy bootstrap help
-src/msg/help_re2%.cc: $(top_srcdir)/bootstrap/src/msg/help_re2%.cc
+.rst.cc:
 	$(AM_V_at)$(MKDIR_P) $(@D)
 	$(AM_V_GEN)cp $(top_srcdir)/bootstrap/$@ $@
 endif

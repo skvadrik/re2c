@@ -15,8 +15,9 @@ input = sys.argv[1]
 output = sys.argv[2]
 
 with open(output, 'w') as output_file:
+    name = os.path.splitext(os.path.basename(input))[0].upper()
     output_file.write("#include \"src/parse/conf_parser.h\"\n")
-    output_file.write("const char* DEFAULT_SYNTAX_" + os.path.basename(input).upper() + " =\n")
+    output_file.write("const char* " + name + " =\n")
 
     # write input file line by line as a string, escaping characters as needed
     with open(input, 'r') as input_file:

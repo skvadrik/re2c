@@ -206,8 +206,6 @@ AC_CONFIG_FILES([
     benchmarks/submatch_dfa_aot/Makefile
     benchmarks/submatch_dfa_jit/Makefile
     benchmarks/submatch_java/Makefile
-    doc/manpage.rst
-    doc/help.rst
 ])
 AC_CONFIG_FILES([run_tests.py],
     [chmod +x run_tests.py])
@@ -215,9 +213,52 @@ AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.py],
     [chmod +x benchmarks/submatch_dfa_aot/run.py])
 AC_CONFIG_FILES([benchmarks/submatch_java/run.py],
     [chmod +x benchmarks/submatch_java/run.py])
+# Custom names are needed to accommodate POSIX Make suffix rules (bmake in
+# particular) instead of the more generic and flexible GNU Make pattern rules.
+# Copies are needed to patch them in-place with build/split_man.py.
+AC_CONFIG_FILES([
+    src/msg/help_re2c.rst:doc/help.rst.in
+    src/msg/help_re2d.rst:doc/help.rst.in
+    src/msg/help_re2go.rst:doc/help.rst.in
+    src/msg/help_re2hs.rst:doc/help.rst.in
+    src/msg/help_re2java.rst:doc/help.rst.in
+    src/msg/help_re2js.rst:doc/help.rst.in
+    src/msg/help_re2ocaml.rst:doc/help.rst.in
+    src/msg/help_re2py.rst:doc/help.rst.in
+    src/msg/help_re2rust.rst:doc/help.rst.in
+    src/msg/help_re2v.rst:doc/help.rst.in
+    src/msg/help_re2zig.rst:doc/help.rst.in
 
-
-AC_CONFIG_LINKS([benchmarks/submatch_java/chart.js:benchmarks/submatch_java/chart.js])
+    doc/re2c.rst:doc/manpage.rst.in
+    doc/re2d.rst:doc/manpage.rst.in
+    doc/re2go.rst:doc/manpage.rst.in
+    doc/re2hs.rst:doc/manpage.rst.in
+    doc/re2java.rst:doc/manpage.rst.in
+    doc/re2js.rst:doc/manpage.rst.in
+    doc/re2ocaml.rst:doc/manpage.rst.in
+    doc/re2py.rst:doc/manpage.rst.in
+    doc/re2rust.rst:doc/manpage.rst.in
+    doc/re2v.rst:doc/manpage.rst.in
+    doc/re2zig.rst:doc/manpage.rst.in
+])
+# Custom names are needed to accommodate POSIX Make suffix rules (bmake in
+# particular) instead of the more generic and flexible GNU Make pattern rules.
+AC_CONFIG_LINKS([
+    src/default_syntax_c.stx:include/syntax/c
+    src/default_syntax_d.stx:include/syntax/d
+    src/default_syntax_go.stx:include/syntax/go
+    src/default_syntax_haskell.stx:include/syntax/haskell
+    src/default_syntax_java.stx:include/syntax/java
+    src/default_syntax_js.stx:include/syntax/js
+    src/default_syntax_ocaml.stx:include/syntax/ocaml
+    src/default_syntax_python.stx:include/syntax/python
+    src/default_syntax_rust.stx:include/syntax/rust
+    src/default_syntax_v.stx:include/syntax/v
+    src/default_syntax_zig.stx:include/syntax/zig
+])
+AC_CONFIG_LINKS([
+    benchmarks/submatch_java/chart.js:benchmarks/submatch_java/chart.js
+])
 
 
 LT_INIT([dlopen win32-dll])
