@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-    
+
   <link rel="icon" href="../_static/favicon.ico"/>
 
   <title>re2c Online. Version:</title>
@@ -36,7 +36,7 @@
 
     .compile-and-open-lexer-graph-layout {
       display: grid;
-      grid-template-columns: 100px 100px 200px 100px;
+      grid-template-columns: 100px 100px 100px 200px;
       gap: 0.5em;
       padding: 0.5em 0 0.5em 0;
     }
@@ -104,7 +104,11 @@
       font-family: mono, 'Iosevka Web';
     }
 
+    /* change layout on mobile phones */
     @media (max-width: 1000px) {
+      .source-code-and-output-editors-layout {
+        grid-template-columns: auto;
+      }
       body {
         font-size: 15px;
       }
@@ -172,8 +176,8 @@
   <div class="compile-and-open-lexer-graph-layout">
     <button class="button" id="compileButton" onclick="compileCode()">Compile</button>
     <button class="button" onclick="clearLog()">Clear log</button>
-    <button class="button" id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
     <button class="button" id="shareButton">Share</button>
+    <button class="button" id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
   </div>
 
   <div id="log-output"></div>
