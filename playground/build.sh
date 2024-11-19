@@ -15,8 +15,6 @@ rm -rf "$buildDir"
 mkdir -p "$buildDir"
 mkdir -p "$currentScriptDir/gen"
 
-trap 'rm -rf "$buildDir"' EXIT
-
 # Download and configure Emscripten
 git clone --depth=1 https://github.com/emscripten-core/emsdk.git "$buildDir/emsdk"
 "$buildDir/emsdk/emsdk" install latest

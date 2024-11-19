@@ -2,14 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="icon" href="../_static/favicon.ico"/>
 
   <title>re2c Online. Version:</title>
-
-  <!-- There is no specific reason why this font is chosen. The main rationale is that it is condensed and allows longer lines to be visible on the screen -->
-  <link href="https://iosevka-webfonts.github.io/iosevka/Iosevka.css" rel="stylesheet"/>
 
   <style>
     body {
@@ -48,6 +46,7 @@
       border-radius: 5px;
       height: 25px;
     }
+
     .button:hover, .select:hover {
       background-color: #cbcbce;
     }
@@ -55,6 +54,7 @@
     #compileButton {
       background-color: #b0c4de;
     }
+
     #compileButton:hover {
       background-color: #99aac1;
     }
@@ -196,14 +196,12 @@
   const editor = ace.edit("editor")
   editor.setTheme("ace/theme/github_light_default");
   editor.setOptions({
-    // fontFamily: "Iosevka Web",
     showPrintMargin: false
   })
 
   const output = ace.edit("output")
   output.setTheme("ace/theme/github_light_default");
   output.setOptions({
-    // fontFamily: "Iosevka Web",
     showPrintMargin: false,
     readOnly: true
   })
@@ -212,7 +210,6 @@
   const logOutput = ace.edit("log-output")
   logOutput.setTheme("ace/theme/github_light_default");
   logOutput.setOptions({
-    // fontFamily: "Iosevka Web",
     showPrintMargin: false,
     readOnly: true
   })
