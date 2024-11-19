@@ -6,7 +6,7 @@ Changelog
 4.0x
 ----
 
-4.0 (2024-??-??)
+4.0 (2024-11-19)
 ~~~~~~~~~~~~~~~~
 
 - Added a generic technique for describing language backends based on the idea
