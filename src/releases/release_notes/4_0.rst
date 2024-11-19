@@ -56,7 +56,7 @@ configuration. See `examples <https://github.com/search?q=repo%3Askvadrik%2Fre2c
 that use record API.
 
 Some options and configurations have been renamed (old aliases still work),
-see the :ref:`changelog <releases/changelog/changelog:4.0 (2024-??-??)>` for
+see the :ref:`changelog <releases/changelog/changelog:4.0 (2024-11-19)>` for
 details. Configurations that have ``define:`` or ``variable:`` parts now
 have shorter aliases without these parts (e.g ``re2c:YYCURSOR`` instead of
 ``re2c:define:YYCURSOR`` and ``re2c:yych`` instead of ``re2c:variable:yych``).
@@ -120,5 +120,5 @@ playground that allows one to load examples for all languages, edit, compile and
 share the code online.
 
 For a full list of changes and bug fixes see the changelog
-:ref:`releases/changelog/changelog:4.0 (2024-??-??)`.
+:ref:`releases/changelog/changelog:4.0 (2024-11-19)`.
 As always, thanks to all contributors!
