@@ -14,11 +14,11 @@ static int lex(const char *str, unsigned int len) {
     for (;;) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:api = generic;
+        re2c:api = custom;
         re2c:api:style = free-form;
-        re2c:YYCTYPE = char;
-        re2c:YYPEEK = "cur < lim ? *cur : 0";  // fake null
-        re2c:YYSKIP = "++cur;";
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYPEEK = "cur < lim ? *cur : 0";  // fake null
+        re2c:define:YYSKIP = "++cur;";
 
         *      { count = -1; break; }
         [\x00] { break;; }

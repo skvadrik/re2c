@@ -5,7 +5,7 @@ bool lex(const char *s) {
     const char *YYCURSOR = s;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:YYCTYPE = char;
+        re2c:define:YYCTYPE = char;
 
         [1-9][0-9]* { return true; }
         *           { return false; }

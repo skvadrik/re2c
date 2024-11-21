@@ -42,9 +42,9 @@ static int lex(const char *s) {
 
     for (;;) {
     /*!re2c
-        re2c:YYCTYPE = char;
-        re2c:YYCURSOR = s;
-        re2c:YYMARKER = m;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYCURSOR = s;
+        re2c:define:YYMARKER = m;
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

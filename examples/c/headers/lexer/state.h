@@ -2,7 +2,7 @@
 
 
 typedef struct {
-    const char *str, *yycursor;
+    const char *str, *cur;
     const char *yyt1;
 } LexerState;
 

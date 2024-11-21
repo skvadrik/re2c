@@ -9,130 +9,125 @@
 
 struct Input {
     FILE *file;
-    char buffer[BUFSIZE + 1]; // +1 for sentinel
-    char *yylimit;
-    char *yycursor;
-    char *yymarker;
-    char *token;
+    char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok; // +1 for sentinel
     bool eof;
 };
 
 static int fill(Input &in) {
     if (in.eof) return 1;
 
-    const size_t shift = in.token - in.buffer;
-    const size_t used = in.yylimit - in.token;
+    const size_t shift = in.tok - in.buf;
+    const size_t used = in.lim - in.tok;
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
     if (shift < 1) return 2;
 
     // Shift buffer contents (discard everything up to the current token).
-    memmove(in.buffer, in.token, used);
-    in.yylimit -= shift;
-    in.yycursor -= shift;
-    in.yymarker -= shift;
-    in.token -= shift;
+    memmove(in.buf, in.tok, used);
+    in.lim -= shift;
+    in.cur -= shift;
+    in.mar -= shift;
+    in.tok -= shift;
 
     // Fill free space at the end of buffer with new data from file.
-    in.yylimit += fread(in.yylimit, 1, BUFSIZE - used, in.file);
-    in.yylimit[0] = 0;
-    in.eof = in.yylimit < in.buffer + BUFSIZE;
+    in.lim += fread(in.lim, 1, BUFSIZE - used, in.file);
+    in.lim[0] = 0;
+    in.eof = in.lim < in.buf + BUFSIZE;
     return 0;
 }
 
-static int lex(Input *yyrecord) {
+static int lex(Input &in) {
     int count = 0;
 loop:
-    yyrecord->token = yyrecord->yycursor;
+        in.tok = in.cur;
     
-#line 49 "c/fill/01_fill.c"
+#line 45 "c/fill/01_fill.c"
 {
 	char yych;
 yyFillLabel0:
-	yych = *yyrecord->yycursor;
+	yych = *in.cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		case '\'': goto yy5;
 		default:
-			if (yyrecord->yylimit <= yyrecord->yycursor) {
-				if (fill(*yyrecord) == 0) goto yyFillLabel0;
+			if (in.lim <= in.cur) {
+				if (fill(in) == 0) goto yyFillLabel0;
 				goto yy10;
 			}
 			goto yy1;
 	}
 yy1:
-	++yyrecord->yycursor;
+	++in.cur;
 yy2:
-#line 53 "c/fill/01_fill.re"
+#line 52 "c/fill/01_fill.re"
 	{ return -1; }
-#line 69 "c/fill/01_fill.c"
+#line 65 "c/fill/01_fill.c"
 yy3:
-	++yyrecord->yycursor;
+	++in.cur;
 yyFillLabel1:
-	yych = *yyrecord->yycursor;
+	yych = *in.cur;
 	switch (yych) {
 		case ' ': goto yy3;
 		default:
-			if (yyrecord->yylimit <= yyrecord->yycursor) {
-				if (fill(*yyrecord) == 0) goto yyFillLabel1;
+			if (in.lim <= in.cur) {
+				if (fill(in) == 0) goto yyFillLabel1;
 			}
 			goto yy4;
 	}
 yy4:
-#line 56 "c/fill/01_fill.re"
+#line 55 "c/fill/01_fill.re"
 	{ goto loop; }
-#line 85 "c/fill/01_fill.c"
+#line 81 "c/fill/01_fill.c"
 yy5:
-	++yyrecord->yycursor;
-	yyrecord->yymarker = yyrecord->yycursor;
+	in.mar = ++in.cur;
 yyFillLabel2:
-	yych = *yyrecord->yycursor;
+	yych = *in.cur;
 	if (yych >= 0x01) goto yy7;
-	if (yyrecord->yylimit <= yyrecord->yycursor) {
-		if (fill(*yyrecord) == 0) goto yyFillLabel2;
+	if (in.lim <= in.cur) {
+		if (fill(in) == 0) goto yyFillLabel2;
 		goto yy2;
 	}
 yy6:
-	++yyrecord->yycursor;
+	++in.cur;
 yyFillLabel3:
-	yych = *yyrecord->yycursor;
+	yych = *in.cur;
 yy7:
 	switch (yych) {
 		case '\'': goto yy8;
 		case '\\': goto yy9;
 		default:
-			if (yyrecord->yylimit <= yyrecord->yycursor) {
-				if (fill(*yyrecord) == 0) goto yyFillLabel3;
+			if (in.lim <= in.cur) {
+				if (fill(in) == 0) goto yyFillLabel3;
 				goto yy11;
 			}
 			goto yy6;
 	}
 yy8:
-	++yyrecord->yycursor;
-#line 55 "c/fill/01_fill.re"
+	++in.cur;
+#line 54 "c/fill/01_fill.re"
 	{ ++count; goto loop; }
-#line 115 "c/fill/01_fill.c"
+#line 110 "c/fill/01_fill.c"
 yy9:
-	++yyrecord->yycursor;
+	++in.cur;
 yyFillLabel4:
-	yych = *yyrecord->yycursor;
+	yych = *in.cur;
 	if (yych <= 0x00) {
-		if (yyrecord->yylimit <= yyrecord->yycursor) {
-			if (fill(*yyrecord) == 0) goto yyFillLabel4;
+		if (in.lim <= in.cur) {
+			if (fill(in) == 0) goto yyFillLabel4;
 			goto yy11;
 		}
 		goto yy6;
 	}
 	goto yy6;
 yy10:
-#line 54 "c/fill/01_fill.re"
+#line 53 "c/fill/01_fill.re"
 	{ return count; }
-#line 131 "c/fill/01_fill.c"
+#line 126 "c/fill/01_fill.c"
 yy11:
-	yyrecord->yycursor = yyrecord->yymarker;
+	in.cur = in.mar;
 	goto yy2;
 }
-#line 57 "c/fill/01_fill.re"
+#line 56 "c/fill/01_fill.re"
 
 }
 
@@ -152,13 +147,13 @@ int main() {
     // Initialize lexer state: all pointers are at the end of buffer.
     Input in;
     in.file = fopen(fname, "r");
-    in.yycursor = in.yymarker = in.token = in.yylimit = in.buffer + BUFSIZE;
+    in.cur = in.mar = in.tok = in.lim = in.buf + BUFSIZE;
     in.eof = 0;
     // Sentinel (at YYLIMIT pointer) is set to zero, which triggers YYFILL.
-    in.yylimit[0] = 0;
+    in.lim[0] = 0;
 
     // Run the lexer.
-    assert(lex(&in) == count);
+    assert(lex(in) == count);
 
     // Cleanup: remove input file.
     fclose(in.file);

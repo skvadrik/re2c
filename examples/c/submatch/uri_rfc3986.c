@@ -124,28 +124,12 @@ if (in->yyt9) in->yyt9 -= free;
 
 static int lex(input_t *in, long *count)
 {
-    const char *f1;
-const char *f2;
-const char *h1;
-const char *h2;
-const char *h3;
-const char *h4;
-const char *h5;
-const char *h6;
-const char *p1;
-const char *p2;
-const char *p3;
-const char *p4;
-const char *q1;
-const char *q2;
-const char *r1;
-const char *r2;
-const char *s1;
-const char *s2;
-const char *u1;
-const char *u2;
+    const char
+        *s1, *u1, *h1, *h3, *h5, *r1, *p1, *p3, *q1, *f1,
+        *s2, *u2, *h2, *h4, *h6, *r2, *p2, *p4, *q2, *f2;
+    long c;
 
-    long c = 0;
+    c = 0;
 loop:
     in->tok = in->cur;
 
@@ -8929,13 +8913,13 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-c/submatch/uri_rfc3986.re:134:8: warning: tag `u1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `u2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h5` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `h6` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `r1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/uri_rfc3986.re:134:8: warning: tag `p3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `u1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `u2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h5` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `h6` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `r1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/uri_rfc3986.re:138:8: warning: tag `p3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

@@ -5,27 +5,28 @@
 
 /*!header:re2c:on*/
 struct LexerState {
-    const char *str, *yycursor;
+    const char *str, *cur;
     /*!stags:re2c format = "const char *@@;"; */
 };
 /*!header:re2c:off*/
 
-long lex(LexerState* yyrecord) {
+long lex(LexerState& st) {
     const char *t;
     /*!re2c
         re2c:header = "lexer/state.h";
-        re2c:api = record;
         re2c:yyfill:enable = 0;
-        re2c:YYCTYPE = char;
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYCURSOR = "st.cur";
         re2c:tags = 1;
+        re2c:tags:expression = "st.@@";
 
-        [a]* @t [b]* { return t - yyrecord->str; }
+        [a]* @t [b]* { return t - st.str; }
     */
 }
 
 int main() {
     const char *s = "ab";
     LexerState st = { s, s /*!stags:re2c format = ", NULL"; */ };
-    assert(lex(&st) == 1);
+    assert(lex(st) == 1);
     return 0;
 }
