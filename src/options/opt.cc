@@ -31,7 +31,7 @@ LOCAL_NODISCARD(Ret fix_conopt(conopt_t& glob)) {
 
     // Check that the chosen code model is supported for the given backend.
     if (!glob.supported_code_models_contains(code_model_name(glob.code_model))) {
-        RET_FAIL(error("code model is not suppoted for this backend"));
+        RET_FAIL(error("code model is not supported for this backend"));
     }
 
     if (glob.code_model != CodeModel::GOTO_LABEL) {

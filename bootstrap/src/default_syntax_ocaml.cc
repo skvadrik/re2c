@@ -217,7 +217,7 @@ const char* DEFAULT_SYNTAX_OCAML =
     "    [case{-1}:   topindent \"| \" case \" -> \" [stmt: stmt] nl];\n"
     "\n"
     "// In OCaml only literals of type `char` support case ranges.\n"
-    "// For `int`, we have to exlicitly list all range values. We cannot use\n"
+    "// For `int`, we have to explicitly list all range values. We cannot use\n"
     "//     `\"c when \" [val{0}: val] \" <= c && c <= \" [val{-1}: val]`\n"
     "// as it causes error when there are multiple cases:\n"
     "//     `Error: Variable c must occur on both sides of this | pattern`.\n"

@@ -4,7 +4,7 @@ const char* DEFAULT_SYNTAX_PYTHON =
     "\n"
     "supported_apis = [\"simple\", \"generic\", \"record\"];\n"
     "supported_api_styles = [\"free-form\"];\n"
-    "// \"recursive_functions\" works syntactically, but causes stack overflows due to non-tail recusion\n"
+    "// \"recursive_functions\" works syntactically, but causes stack overflows due to non-tail recursion\n"
     "supported_code_models = [\"loop-switch\"];\n"
     "supported_targets = [\"code\", \"dot\"];\n"
     "supported_features = [\"nested-ifs\", \"bitmaps\", \"tags\", \"captures\", \"captvars\"];\n"

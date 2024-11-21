@@ -31,7 +31,7 @@ considerations and other factors. Here is a list of methods:
   |
 
 - **Sentinel with bounds checks.**
-  This method is generic: it allows to handle any input without restrictions on
+  This method is generic: it allows one to handle any input without restrictions on
   the regular expressions. The idea is to reduce the number of end of input
   checks by performing them only on certain characters. Similar to the
   "sentinel" method, one of the characters is chosen as a "sentinel" and
@@ -66,7 +66,7 @@ considerations and other factors. Here is a list of methods:
   |
 
 - **Custom checks.**
-  Generic API allows to override basic operations like reading a character,
+  Generic API allows one to override basic operations like reading a character,
   which makes it possible to include the end-of-input checks as part of them.
   This approach is error-prone and should be used with caution. To use a custom
   method, enable generic API with ``--api custom`` or ``re2c:api = custom;`` and
