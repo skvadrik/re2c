@@ -74,6 +74,10 @@
       font-variant-ligatures: none;
     }
 
+    .ace-tomorrow .ace_comment {
+      color: #007700;
+    }
+
     .re2c-flags-container {
       display: flex;
       align-items: center;
@@ -194,13 +198,13 @@
   const re2cFlagsDropBox = document.getElementById("re2c-flags")
 
   const editor = ace.edit("editor")
-  editor.setTheme("ace/theme/github_light_default");
+  editor.setTheme("ace/theme/tomorrow");
   editor.setOptions({
     showPrintMargin: false
   })
 
   const output = ace.edit("output")
-  output.setTheme("ace/theme/github_light_default");
+  output.setTheme("ace/theme/tomorrow");
   output.setOptions({
     showPrintMargin: false,
     readOnly: true
@@ -208,7 +212,7 @@
   output.session.setValue("", 1)
 
   const logOutput = ace.edit("log-output")
-  logOutput.setTheme("ace/theme/github_light_default");
+  logOutput.setTheme("ace/theme/tomorrow");
   logOutput.setOptions({
     showPrintMargin: false,
     readOnly: true
