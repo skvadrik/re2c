@@ -36,11 +36,17 @@ do
     cd ..
 done
 
-# test that the release tarball builds with CMake
 cd "$builddir"
 tarball=$(find . -name 're2c-*.tar.xz')
 test -f "$tarball" && tar -xf "$tarball" \
     || { echo "*** failed to extract tarball ***" && exit 1; }
+
+# test `make docs` in release tarball
+cd "${tarball%.tar.xz}" && ./configure --enable-docs && make -j"$(nproc)" && make clean && cd .. \
+    || { echo "*** failed to build docs ***" && exit 1; }
+
+# test that the release tarball builds with CMake
 cd "${tarball%.tar.xz}" && cmake . && make -j"$(nproc)" && cd .. \
     || { echo "*** failed to build with cmake ***" && exit 1; }
+
 cd ..

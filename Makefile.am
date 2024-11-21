@@ -222,8 +222,16 @@ re2c_CUSTOM = \
 re2c_SRC_DOC_EXT = \
 	doc/manual/basics/api/api1.rst_ \
 	doc/manual/basics/api/api2_c.rst_ \
+	doc/manual/basics/api/api2_d.rst_ \
 	doc/manual/basics/api/api2_go.rst_ \
+	doc/manual/basics/api/api2_haskell.rst_ \
+	doc/manual/basics/api/api2_java.rst_ \
+	doc/manual/basics/api/api2_js.rst_ \
+	doc/manual/basics/api/api2_ocaml.rst_ \
+	doc/manual/basics/api/api2_python.rst_ \
 	doc/manual/basics/api/api2_rust.rst_ \
+	doc/manual/basics/api/api2_v.rst_ \
+	doc/manual/basics/api/api2_zig.rst_ \
 	doc/manual/basics/api/api3.rst_ \
 	doc/manual/basics/blocks.rst_ \
 	doc/manual/basics/directives.rst_ \
