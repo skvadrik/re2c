@@ -1,1 +1,1 @@
-re2c: error: code model is not suppoted for this backend
+re2c: error: code model is not supported for this backend

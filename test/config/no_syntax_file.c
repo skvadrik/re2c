@@ -69,4 +69,4 @@
 <default syntax file>:1:0: warning: syntax configuration `code:yylessthan` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_filter` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_match` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
-re2c: error: code model is not suppoted for this backend
+re2c: error: code model is not supported for this backend

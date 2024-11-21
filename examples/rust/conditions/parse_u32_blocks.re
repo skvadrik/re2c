@@ -1,6 +1,6 @@
 // re2rust $INPUT -o $OUTPUT
 
-// Store u32 number in u64 during parsing to simplify overflow hadling.
+// Store u32 number in u64 during parsing to simplify overflow handling.
 struct State<'a> {
     yyinput: &'a [u8],
     yycursor: usize,

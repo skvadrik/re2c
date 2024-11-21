@@ -215,7 +215,7 @@ code:switch_cases_oneline =
     [case{-1}:   topindent "| " case " -> " [stmt: stmt] nl];
 
 // In OCaml only literals of type `char` support case ranges.
-// For `int`, we have to exlicitly list all range values. We cannot use
+// For `int`, we have to explicitly list all range values. We cannot use
 //     `"c when " [val{0}: val] " <= c && c <= " [val{-1}: val]`
 // as it causes error when there are multiple cases:
 //     `Error: Variable c must occur on both sides of this | pattern`.
