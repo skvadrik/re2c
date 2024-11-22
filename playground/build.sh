@@ -21,13 +21,13 @@ git clone --depth=1 https://github.com/emscripten-core/emsdk.git "$buildDir/emsd
 "$buildDir/emsdk/emsdk" activate latest
 source "$buildDir/emsdk/emsdk_env.sh"
 
-# Download and build re2c to generate "docs/re2c.js".
+# Download and build re2c to generate "gen/re2c.js".
 # Clone the repository fully because we need to get the nearest tag later to generate version.
 git clone --branch "$re2cBranchOrTagName" --single-branch "$gitRepoUrl" "$buildDir/re2c"
 # Flags with `-s` are Emscripten compile settings described: https://emscripten.org/docs/tools_reference/settings_reference.html
 # Rationale why some flags are chosen:
-# * INVOKE_RUN - we don't need re2c to started utomatically when the page is loaded.
-# * SINGLE_FILE - just a convinience. Otherwise, it will generate 2 files: js and wasm.
+# * INVOKE_RUN - we don't need re2c to start automatically when the page is loaded.
+# * SINGLE_FILE - just a convenience. Otherwise, it will generate 2 files: js and wasm.
 # * EXPORT_ES6 - produce a js module file. It is more convenient and doesn't pollute the global namespace when imported.
 # * FORCE_FILESYSTEM - generate FileSystem functions because we need them to interact with re2c.
 # * ALLOW_MEMORY_GROWTH - without this flag, re2c fails with an "out of memory" error for some examples.
@@ -60,7 +60,7 @@ emcmake cmake \
 emmake cmake --build "$buildDir/re2c-build"
 cp --force "$buildDir/re2c-build/re2c.js" "$currentScriptDir/gen/"
 
-# Generate "docs/re2cExamples.js"
+# Generate "gen/re2cExamples.js"
 # The following code goes through all *.re files inside the re2c/examples folder and creates a javascript module like:
 # export default {
 #   "languageName": {
@@ -79,15 +79,15 @@ examples_folder_full_name = "${buildDir}/re2c/examples"
 re2c_examples_js_file_full_name = "${currentScriptDir}/gen/re2cExamples.js"
 
 re2c_examples_data = {}
-for exampleFile in list(Path(examples_folder_full_name).rglob("*.re")):
-  # Relative_path will have a value like "c/fill/01_fill.re"
-  relative_path = exampleFile.relative_to(Path(examples_folder_full_name))
+for example_file in list(Path(examples_folder_full_name).rglob("*.re")):
+  # relative_path will have a value like "c/fill/01_fill.re"
+  relative_path = example_file.relative_to(Path(examples_folder_full_name))
 
   # Split relative_path into two parts. The first part is always the name of the language.
   language_name = relative_path.parts[0]
   example_name = "/".join(relative_path.parts[1:])
 
-  content = Path(exampleFile).read_text()
+  content = Path(example_file).read_text()
 
   # The first line of every example might contain extra command line arguments.
   # These lines look like "// re2v INPUT -o OUTPUT -i".
