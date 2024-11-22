@@ -2308,7 +2308,7 @@ with \fBre2c:yyfill:enable = 0;\fP and \fBre2c:eof\fP has the default value
 .sp
 .IP \(bu 2
 \fBSentinel with bounds checks.\fP
-This method is generic: it allows to handle any input without restrictions on
+This method is generic: it allows one to handle any input without restrictions on
 the regular expressions. The idea is to reduce the number of end of input
 checks by performing them only on certain characters. Similar to the
 \(dqsentinel\(dq method, one of the characters is chosen as a \(dqsentinel\(dq and
@@ -2347,7 +2347,7 @@ This method is used if \fBYYFILL\fP is enabled and \fBre2c:eof\fP is \fB\-1\fP
 .sp
 .IP \(bu 2
 \fBCustom checks.\fP
-Generic API allows to override basic operations like reading a character,
+Generic API allows one to override basic operations like reading a character,
 which makes it possible to include the end\-of\-input checks as part of them.
 This approach is error\-prone and should be used with caution. To use a custom
 method, enable generic API with \fB\-\-api custom\fP or \fBre2c:api = custom;\fP and
