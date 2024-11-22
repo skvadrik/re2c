@@ -6,9 +6,9 @@
 
 static const uint64_t ERROR = UINT64_MAX;
 
-template<int BASE> static void add(uint64_t &u, char d) {
-    u = u * BASE + d;
-    if (u > UINT32_MAX) u = ERROR;
+static void add(uint32_t base, uint64_t &number, char digit) {
+    number = number * base + digit;
+    if (number > UINT32_MAX) number = ERROR;
 }
 
 static uint64_t parse_u32(const char *s) {
@@ -116,7 +116,7 @@ yy12:
 	{ return ERROR; }
 yy13:
 	++YYCURSOR;
-	{ add<2>(u, YYCURSOR[-1] - '0'); goto bin; }
+	{ add(2, u, YYCURSOR[-1] - '0'); goto bin; }
 }
 
 oct:
@@ -144,7 +144,7 @@ yy16:
 	{ return ERROR; }
 yy17:
 	++YYCURSOR;
-	{ add<8>(u, YYCURSOR[-1] - '0'); goto oct; }
+	{ add(8, u, YYCURSOR[-1] - '0'); goto oct; }
 }
 
 dec:
@@ -174,7 +174,7 @@ yy20:
 	{ return ERROR; }
 yy21:
 	++YYCURSOR;
-	{ add<10>(u, YYCURSOR[-1] - '0'); goto dec; }
+	{ add(10, u, YYCURSOR[-1] - '0'); goto dec; }
 }
 
 hex:
@@ -216,13 +216,13 @@ yy24:
 	{ return ERROR; }
 yy25:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - '0');      goto hex; }
+	{ add(16, u, YYCURSOR[-1] - '0');      goto hex; }
 yy26:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'A' + 10); goto hex; }
+	{ add(16, u, YYCURSOR[-1] - 'A' + 10); goto hex; }
 yy27:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'a' + 10); goto hex; }
+	{ add(16, u, YYCURSOR[-1] - 'a' + 10); goto hex; }
 }
 
 }

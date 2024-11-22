@@ -14,9 +14,9 @@ enum YYCONDTYPE {
 };
 
 
-template<int BASE> static void add(uint64_t &u, char d) {
-    u = u * BASE + d;
-    if (u > UINT32_MAX) u = ERROR;
+static void add(uint32_t base, uint64_t &number, char digit) {
+    number = number * base + digit;
+    if (number > UINT32_MAX) number = ERROR;
 }
 
 static uint64_t parse_u32(const char *s) {
@@ -134,7 +134,7 @@ yy12:
 	{ return ERROR; }
 yy13:
 	++YYCURSOR;
-	{ add<2>(u,  YYCURSOR[-1] - '0');      goto yyc_bin; }
+	{ add(2,  u, YYCURSOR[-1] - '0');      goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
 	yych = *YYCURSOR;
@@ -160,7 +160,7 @@ yy16:
 	{ return ERROR; }
 yy17:
 	++YYCURSOR;
-	{ add<10>(u, YYCURSOR[-1] - '0');      goto yyc_dec; }
+	{ add(10, u, YYCURSOR[-1] - '0');      goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
 	yych = *YYCURSOR;
@@ -198,13 +198,13 @@ yy20:
 	{ return ERROR; }
 yy21:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - '0');      goto yyc_hex; }
+	{ add(16, u, YYCURSOR[-1] - '0');      goto yyc_hex; }
 yy22:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
+	{ add(16, u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
 yy23:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
+	{ add(16, u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
 	yych = *YYCURSOR;
@@ -228,7 +228,7 @@ yy26:
 	{ return ERROR; }
 yy27:
 	++YYCURSOR;
-	{ add<8>(u,  YYCURSOR[-1] - '0');      goto yyc_oct; }
+	{ add(8,  u, YYCURSOR[-1] - '0');      goto yyc_oct; }
 }
 
 }

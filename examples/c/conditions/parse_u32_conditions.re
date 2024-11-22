@@ -6,9 +6,9 @@
 static const uint64_t ERROR = UINT64_MAX;
 /*!conditions:re2c*/
 
-template<int BASE> static void add(uint64_t &u, char d) {
-    u = u * BASE + d;
-    if (u > UINT32_MAX) u = ERROR;
+static void add(uint32_t base, uint64_t &number, char digit) {
+    number = number * base + digit;
+    if (number > UINT32_MAX) number = ERROR;
 }
 
 static uint64_t parse_u32(const char *s) {
@@ -32,12 +32,12 @@ static uint64_t parse_u32(const char *s) {
 
         <bin, oct, dec, hex> "\x00" { return u; }
 
-        <bin> [01]  { add<2>(u,  YYCURSOR[-1] - '0');      goto yyc_bin; }
-        <oct> [0-7] { add<8>(u,  YYCURSOR[-1] - '0');      goto yyc_oct; }
-        <dec> [0-9] { add<10>(u, YYCURSOR[-1] - '0');      goto yyc_dec; }
-        <hex> [0-9] { add<16>(u, YYCURSOR[-1] - '0');      goto yyc_hex; }
-        <hex> [a-f] { add<16>(u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
-        <hex> [A-F] { add<16>(u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
+        <bin> [01]  { add(2,  u, YYCURSOR[-1] - '0');      goto yyc_bin; }
+        <oct> [0-7] { add(8,  u, YYCURSOR[-1] - '0');      goto yyc_oct; }
+        <dec> [0-9] { add(10, u, YYCURSOR[-1] - '0');      goto yyc_dec; }
+        <hex> [0-9] { add(16, u, YYCURSOR[-1] - '0');      goto yyc_hex; }
+        <hex> [a-f] { add(16, u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
+        <hex> [A-F] { add(16, u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
     */
 }
 
