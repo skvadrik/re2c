@@ -26,7 +26,7 @@ if lang == b'c':
     src_ext = b'c'
     hdr_ext = b'h'
     lang_name = b'C/C++'
-    disclaimer = b'Note: examples are in C++ (but can be easily adapted to C).'
+    disclaimer = b'Note: some examples are in C++ (but can be adapted to C).'
 elif lang == b'd':
     src_ext = b'd'
     lang_name = b'D'
