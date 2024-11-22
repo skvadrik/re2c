@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
   <link rel="icon" href="../_static/favicon.ico"/>
 
@@ -93,12 +93,12 @@
     }
 
     input, select {
-      font-family: mono, 'Iosevka Web';
+      font-family: mono;
       margin: 0 0.5em 0 0.5em;
     }
 
     textarea {
-      font-family: mono, 'Iosevka Web';
+      font-family: mono;
     }
 
     /* change layout on mobile phones */
@@ -106,6 +106,7 @@
       .source-code-and-output-editors-layout {
         grid-template-columns: auto;
       }
+
       body {
         font-size: 15px;
       }
@@ -189,8 +190,8 @@
 <script>
   // re2c stdout and stderr are printed using "console.log" and "console.error" commands.
   // We want this output to be visible to the user.
-  console.error = (...args) => log(args.join(' '));
-  console.log = (...args) => log(args.join(' '));
+  console.error = (...args) => log(args.join(' '))
+  console.log = (...args) => log(args.join(' '))
 
   const languageSelect = document.getElementById("language-select")
   const exampleSelect = document.getElementById("example-select")
@@ -198,13 +199,13 @@
   const re2cFlagsDropBox = document.getElementById("re2c-flags")
 
   const editor = ace.edit("editor")
-  editor.setTheme("ace/theme/tomorrow");
+  editor.setTheme("ace/theme/tomorrow")
   editor.setOptions({
     showPrintMargin: false
   })
 
   const output = ace.edit("output")
-  output.setTheme("ace/theme/tomorrow");
+  output.setTheme("ace/theme/tomorrow")
   output.setOptions({
     showPrintMargin: false,
     readOnly: true
@@ -212,7 +213,7 @@
   output.session.setValue("", 1)
 
   const logOutput = ace.edit("log-output")
-  logOutput.setTheme("ace/theme/tomorrow");
+  logOutput.setTheme("ace/theme/tomorrow")
   logOutput.setOptions({
     showPrintMargin: false,
     readOnly: true
@@ -241,36 +242,36 @@
     logOutput.setFontSize(`${fontSize}px`)
   }
 
-  document.addEventListener('DOMContentLoaded', function() {
-    const shareButton = document.getElementById('shareButton');
+  document.addEventListener('DOMContentLoaded', function () {
+    const shareButton = document.getElementById('shareButton')
 
     const clipboard = new ClipboardJS(shareButton, {
-      text: function(trigger) {
+      text: function (trigger) {
         const compressedDataBase64 = LZString.compressToEncodedURIComponent(JSON.stringify({
           "sourceCode": editor.getValue(),
           "options": re2cFlagsDropBox.value,
           "language": languageSelect.options[languageSelect.selectedIndex].text,
-        }));
-        const shareableURL = `${window.location.origin}${window.location.pathname}?compressed=${compressedDataBase64}`;
-        return shareableURL;
+        }))
+        const shareableURL = `${window.location.origin}${window.location.pathname}?compressed=${compressedDataBase64}`
+        return shareableURL
       }
-    });
+    })
 
-    clipboard.on('success', function(e) {
-      window.alert("The share link is copied to clipboard");
-    });
+    clipboard.on('success', function (e) {
+      window.alert("The share link is copied to clipboard")
+    })
 
-    clipboard.on('error', function(e) {
-      log("Failed to copy the share link to clipboard");
-    });
-  });
+    clipboard.on('error', function (e) {
+      log("Failed to copy the share link to clipboard")
+    })
+  })
 </script>
 <script type="module">
   import Re2cModule from "./gen/re2c.js"
   import Re2cExamples from "./gen/re2cExamples.js"
   import re2cVersion from "./gen/re2cVersion.js"
 
-  document.title += re2cVersion;
+  document.title += re2cVersion
   log(`re2c version: ${re2cVersion}`)
 
   const re2cModule = await Re2cModule()
@@ -292,7 +293,7 @@
     output.session.setMode(`ace/mode/${selectedLanguageValue}`)
 
     // Clear the list of examples
-    exampleSelect.options.length = 0;
+    exampleSelect.options.length = 0
 
     // Add the examples for the selected language to the drop box
     for (const exampleName in Re2cExamples[selectedLanguageText]) {
@@ -305,59 +306,107 @@
     window.exampleSelected()
   }
 
-  // Check if this is the share URL that contains the source code
-  const params = new URLSearchParams(window.location.search);
-  params.get('compressed');
-  if (params.has('compressed')) {
-    const compressedData = params.get('compressed');
-    const decompressedData = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData));
-    if(decompressedData === null) {
-      log("Failed to decompress the data from the URL");
-      window.languageSelected()
-    } else {
-      log(`Restore previous session using the data from the URL: { Language: "${decompressedData.language}"; Options: "${decompressedData.options}" }`);
-      const languageIndex = Array.from(languageSelect.options).findIndex(option => option.text === decompressedData.language);
-      languageSelect.selectedIndex = languageIndex;
-      window.languageSelected()
-      exampleSelect.selectedIndex = -1;
-      re2cFlagsDropBox.value = decompressedData.options;
-      editor.setValue(decompressedData.sourceCode, 1)
+  // * select is the object pointing to the "select" html element
+  // * text is the text of the option that should be selected
+  function selectByText(select, text) {
+    const index = Array.from(select.options).findIndex(option => option.text === text)
+    select.selectedIndex = index
+  }
+
+  // * select is the object pointing to the "select" html element
+  // * text is the text of the option
+  function selectHasOptionWithText(select, text) {
+    const index = Array.from(select.options).findIndex(option => option.text === text)
+    return index !== -1
+  }
+
+  function tryUsingCompressedUrlParameter() {
+    const compressedData = new URLSearchParams(window.location.search).get('compressed')
+    if(compressedData === null) {
+      return false
     }
-  } else {
+
+    const decompressedData = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData))
+    if (decompressedData === null) {
+      log("Failed to decompress the data from the URL")
+      return false
+    }
+
+    log(`Restore previous session using the data from the URL: { Language: "${decompressedData.language}"; Options: "${decompressedData.options}" }`)
+    selectByText(languageSelect, decompressedData.language)
     window.languageSelected()
+    exampleSelect.selectedIndex = -1
+    re2cFlagsDropBox.value = decompressedData.options
+    editor.setValue(decompressedData.sourceCode, 1)
+    return true
+  }
+
+  function tryUsingExampleUrlParameter() {
+    // the example has the form "c/eof/01_sentinel.c" - the first part is the language, the second part is the example name
+    const example = new URLSearchParams(window.location.search).get('example')
+    if(example === null) {
+      return false
+    }
+
+    log(`Select example "${example}"`)
+    const [languageName, ...exampleNameParts] = example.split("/")
+    const exampleName = exampleNameParts.join("/")
+
+    // Select the language
+    if (!selectHasOptionWithText(languageSelect, languageName)) {
+      log(`Failed to select the example: the language "${languageName}" is not found`)
+      return false
+    }
+    selectByText(languageSelect, languageName)
+    window.languageSelected()
+
+    // Select the example
+    if (!selectHasOptionWithText(exampleSelect, exampleName)) {
+      log(`Failed to select the example: the example "${exampleName}" is not found`)
+      return false
+    }
+    selectByText(exampleSelect, exampleName)
+    window.exampleSelected()
+    return true
+  }
+
+  // Try to use the URL parameters
+  if (!tryUsingCompressedUrlParameter() && !tryUsingExampleUrlParameter()) {
+    // If no parameters are specified, or we failed to use them, then we select the first language and the first example
+    window.languageSelected();
   }
 
   function runRe2c(additionalFlags, onSuccess) {
-    const sourceCode = editor.getValue();
-    re2cModule.FS.writeFile('/input.txt', sourceCode);
+    const sourceCode = editor.getValue()
+    re2cModule.FS.writeFile('/input.txt', sourceCode)
 
-    const selectedLanguage = languageSelect.options[languageSelect.selectedIndex].text;
-    const userProvidedFlags = re2cFlagsDropBox.value;
-    const re2cCommandLineArguments = `/input.txt --lang ${selectedLanguage} -o /output.txt ${additionalFlags} ${userProvidedFlags}`;
+    const selectedLanguage = languageSelect.options[languageSelect.selectedIndex].text
+    const userProvidedFlags = re2cFlagsDropBox.value
+    const re2cCommandLineArguments = `/input.txt --lang ${selectedLanguage} -o /output.txt ${additionalFlags} ${userProvidedFlags}`
 
-    log(`Run command: re2c.exe ${re2cCommandLineArguments}`);
+    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
     // convert the command line arguments string into an array without empty elements
-    const res = re2cModule.callMain(re2cCommandLineArguments.split(" ").filter(i => i));
+    const res = re2cModule.callMain(re2cCommandLineArguments.split(" ").filter(i => i))
 
     if (res === 0) {
-      const outputFileContent = re2cModule.FS.readFile('/output.txt', { encoding: 'utf8' });
-      onSuccess(outputFileContent);
+      const outputFileContent = re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'})
+      onSuccess(outputFileContent)
     } else {
-      output.session.setValue("", 1);
-      log(`Failed to run re2c.exe. Error code: ${res}`);
+      output.session.setValue("", 1)
+      log(`Failed to run re2c.exe. Error code: ${res}`)
     }
   }
 
   window.compileCode = function () {
     runRe2c("", function (outputFileContent) {
-      output.session.setValue(outputFileContent, 1);
-    });
+      output.session.setValue(outputFileContent, 1)
+    })
   }
 
   window.openLexerGraph = function () {
     runRe2c("--emit-dot", function (outputFileContent) {
-      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputFileContent)}`, '_blank');
-    });
+      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputFileContent)}`, '_blank')
+    })
   }
 </script>
 </html>
