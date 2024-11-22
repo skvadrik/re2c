@@ -49,13 +49,13 @@ static Status lex(State &st, unsigned int *recv) {
         st.tok = st.cur;
     /*!re2c
         re2c:api:style = free-form;
-        re2c:YYCTYPE = "char";
-        re2c:YYCURSOR = "st.cur";
-        re2c:YYMARKER = "st.mar";
-        re2c:YYLIMIT = "st.lim";
-        re2c:YYGETSTATE = "st.state";
-        re2c:YYSETSTATE = "st.state = @@;";
-        re2c:YYFILL = "return WAITING;";
+        re2c:define:YYCTYPE = "char";
+        re2c:define:YYCURSOR = "st.cur";
+        re2c:define:YYMARKER = "st.mar";
+        re2c:define:YYLIMIT = "st.lim";
+        re2c:define:YYGETSTATE = "st.state";
+        re2c:define:YYSETSTATE = "st.state = @@;";
+        re2c:define:YYFILL = "return WAITING;";
         re2c:eof = 0;
 
         packet = [a-z]+[;];
@@ -68,7 +68,7 @@ static Status lex(State &st, unsigned int *recv) {
 }
 
 void test(const char **packets, Status expect) {
-    // Create a pipe (open the same file for reading and writing).
+    // Create a "socket" (open the same file for reading and writing).
     const char *fname = "pipe";
     FILE *fw = fopen(fname, "w");
     FILE *fr = fopen(fname, "r");

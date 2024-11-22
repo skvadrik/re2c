@@ -23,7 +23,7 @@ static What lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:YYCTYPE = char;
+        re2c:define:YYCTYPE = char;
 
         !use:fish;
         !use:colors;

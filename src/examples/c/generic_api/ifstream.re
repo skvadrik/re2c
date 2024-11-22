@@ -8,13 +8,13 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     std::streampos mar;
     for (;;) {
     /*!re2c
-        re2c:api = generic;
+        re2c:api= custom;
         re2c:api:style = free-form;
-        re2c:YYCTYPE = char;
-        re2c:YYPEEK = "in.peek()";
-        re2c:YYSKIP = "{ in.ignore(); if (in.eof()) return; }";
-        re2c:YYBACKUP = "mar = in.tellg();";
-        re2c:YYRESTORE = "in.seekg(mar);";
+        re2c:define:YYCTYPE = char;
+        re2c:define:YYPEEK = "in.peek()";
+        re2c:define:YYSKIP = "{ in.ignore(); if (in.eof()) return; }";
+        re2c:define:YYBACKUP = "mar = in.tellg();";
+        re2c:define:YYRESTORE = "in.seekg(mar);";
         re2c:yyfill:enable = 0;
 
         *      { out.put(yych); continue; }

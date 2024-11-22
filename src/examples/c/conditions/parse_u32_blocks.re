@@ -16,7 +16,7 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:YYCTYPE = char;
+        re2c:define:YYCTYPE = char;
 
         end = "\x00";
 

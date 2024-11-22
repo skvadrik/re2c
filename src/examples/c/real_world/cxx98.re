@@ -51,7 +51,7 @@ struct input_t {
     }
 };
 
-/*!re2c re2c:YYCTYPE = "unsigned char"; */
+/*!re2c re2c:define:YYCTYPE = "unsigned char"; */
 
 template<int base>
 static bool adddgt(unsigned long &u, unsigned long d)
@@ -88,7 +88,7 @@ static bool lex_hex(const unsigned char *s, const unsigned char *e, unsigned lon
     for (u = 0, s += 2; s < e;) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:YYCURSOR = s;
+        re2c:define:YYCURSOR = s;
         *     { if (!adddgt<16>(u, s[-1] - 0x30u))      return false; continue; }
         [a-f] { if (!adddgt<16>(u, s[-1] - 0x61u + 10)) return false; continue; }
         [A-F] { if (!adddgt<16>(u, s[-1] - 0x41u + 10)) return false; continue; }
@@ -104,11 +104,11 @@ static bool lex_str(input_t &in, unsigned char q)
         in.tok = in.cur;
         /*!re2c
             re2c:yyfill:enable = 1;
-            re2c:YYCURSOR = in.cur;
-            re2c:YYMARKER = in.mar;
-            re2c:YYLIMIT = in.lim;
-            re2c:YYFILL = "if (!in.fill(@@)) return false;";
-            re2c:YYFILL:naked = 1;
+            re2c:define:YYCURSOR = in.cur;
+            re2c:define:YYMARKER = in.mar;
+            re2c:define:YYLIMIT = in.lim;
+            re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
+            re2c:define:YYFILL:naked = 1;
             *                    { return false; }
             [^\n\\]              { u = in.tok[0]; if (u == q) break; continue; }
             "\\a"                { u = '\a'; continue; }
@@ -139,7 +139,7 @@ static bool lex_flt(const unsigned char *s)
     int e = 0;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:YYCURSOR = s;
+        re2c:define:YYCURSOR = s;
     */
 mant_int:
     /*!re2c
@@ -180,11 +180,11 @@ static bool lex(input_t &in)
         in.tok = in.cur;
         /*!re2c
             re2c:yyfill:enable = 1;
-            re2c:YYCURSOR = in.cur;
-            re2c:YYMARKER = in.mar;
-            re2c:YYLIMIT = in.lim;
-            re2c:YYFILL = "if (!in.fill(@@)) return false;";
-            re2c:YYFILL:naked = 1;
+            re2c:define:YYCURSOR = in.cur;
+            re2c:define:YYMARKER = in.mar;
+            re2c:define:YYLIMIT = in.lim;
+            re2c:define:YYFILL = "if (!in.fill(@@)) return false;";
+            re2c:define:YYFILL:naked = 1;
 
             end = "\x00";
 
