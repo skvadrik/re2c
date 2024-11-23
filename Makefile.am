@@ -686,7 +686,8 @@ if REBUILD_DOCS
 RST2TXT = $(top_srcdir)/build/rst2txt.py
 RST2MAN = $(top_srcdir)/build/rst2man.py
 SPLITMAN = $(top_srcdir)/build/split_man.py
-docs: $(DOCS) $(HELP) $(SPLITMAN) $(RST2MAN) $(RST2TXT)
+docs: $(DOCS) $(HELP)
+$(DOCS) $(HELP) : $(re2c_SRC_DOC_EXT) $(SPLITMAN) $(RST2MAN) $(RST2TXT)
 # generate manpage
 .rst.1:
 	$(AM_V_at)$(MKDIR_P) $(@D)
