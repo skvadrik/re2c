@@ -30,6 +30,7 @@ do
     ../configure \
             --enable-docs \
             --enable-libs \
+            --enable-syntax \
             --enable-lexers RE2C_FOR_BUILD="$(pwd)/stage1/bin/re2c" \
         && $make_prog bootstrap -j"$(nproc)" \
         && $make_prog distcheck -j"$(nproc)"
