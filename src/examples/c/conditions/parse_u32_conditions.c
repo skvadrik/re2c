@@ -14,11 +14,6 @@ enum YYCONDTYPE {
 };
 
 
-template<int BASE> static void add(uint64_t &u, char d) {
-    u = u * BASE + d;
-    if (u > UINT32_MAX) u = ERROR;
-}
-
 static uint64_t parse_u32(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     int c = yycinit;
@@ -52,6 +47,7 @@ yyc_init:
 	}
 yy1:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return ERROR; }
 yy2:
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -128,13 +124,16 @@ yyc_bin:
 	}
 yy11:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return u; }
 yy12:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return ERROR; }
 yy13:
 	++YYCURSOR;
-	{ add<2>(u,  YYCURSOR[-1] - '0');      goto yyc_bin; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 2  + (YYCURSOR[-1] - '0');      goto yyc_bin; }
 /* *********************************** */
 yyc_dec:
 	yych = *YYCURSOR;
@@ -154,13 +153,16 @@ yyc_dec:
 	}
 yy15:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return u; }
 yy16:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return ERROR; }
 yy17:
 	++YYCURSOR;
-	{ add<10>(u, YYCURSOR[-1] - '0');      goto yyc_dec; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 10 + (YYCURSOR[-1] - '0');      goto yyc_dec; }
 /* *********************************** */
 yyc_hex:
 	yych = *YYCURSOR;
@@ -192,19 +194,24 @@ yyc_hex:
 	}
 yy19:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return u; }
 yy20:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return ERROR; }
 yy21:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - '0');      goto yyc_hex; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 16 + (YYCURSOR[-1] - '0');      goto yyc_hex; }
 yy22:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 16 + (YYCURSOR[-1] - 'A' + 10); goto yyc_hex; }
 yy23:
 	++YYCURSOR;
-	{ add<16>(u, YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 16 + (YYCURSOR[-1] - 'a' + 10); goto yyc_hex; }
 /* *********************************** */
 yyc_oct:
 	yych = *YYCURSOR;
@@ -222,13 +229,16 @@ yyc_oct:
 	}
 yy25:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return u; }
 yy26:
 	++YYCURSOR;
+	{ if (u > UINT32_MAX) return ERROR; }
 	{ return ERROR; }
 yy27:
 	++YYCURSOR;
-	{ add<8>(u,  YYCURSOR[-1] - '0');      goto yyc_oct; }
+	{ if (u > UINT32_MAX) return ERROR; }
+	{ u = u * 8  + (YYCURSOR[-1] - '0');      goto yyc_oct; }
 }
 
 }

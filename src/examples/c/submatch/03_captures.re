@@ -2,7 +2,7 @@
 #include <assert.h>
 #include <stddef.h>
 
-struct SemVer { int major, minor, patch; };
+typedef struct { int major, minor, patch; } SemVer;
 
 static int s2n(const char *s, const char *e) { // pre-parsed string to number
     int n = 0;
@@ -10,7 +10,7 @@ static int s2n(const char *s, const char *e) { // pre-parsed string to number
     return n;
 }
 
-static bool lex(const char *str, SemVer &ver) {
+static int lex(const char *str, SemVer *ver) {
     const char *YYCURSOR = str, *YYMARKER;
 
     // Final tag variables available in semantic action.
@@ -28,19 +28,19 @@ static bool lex(const char *str, SemVer &ver) {
 
         (num) "." (num) ("." num)? [\x00] {
             (void) yytl0; (void) yytr0; // some variables are unused
-            ver.major = s2n(yytl1, yytr1);
-            ver.minor = s2n(yytl2, yytr2);
-            ver.patch = yytl3 ? s2n(yytl3 + 1, yytr3) : 0;
-            return true;
+            ver->major = s2n(yytl1, yytr1);
+            ver->minor = s2n(yytl2, yytr2);
+            ver->patch = yytl3 ? s2n(yytl3 + 1, yytr3) : 0;
+            return 0;
         }
-        * { return false; }
+        * { return 1; }
     */
 }
 
 int main() {
     SemVer v;
-    assert(lex("23.34", v) && v.major == 23 && v.minor == 34 && v.patch == 0);
-    assert(lex("1.2.999", v) && v.major == 1 && v.minor == 2 && v.patch == 999);
-    assert(!lex("1.a", v));
+    assert(lex("23.34", &v) == 0 && v.major == 23 && v.minor == 34 && v.patch == 0);
+    assert(lex("1.2.999", &v) == 0 && v.major == 1 && v.minor == 2 && v.patch == 999);
+    assert(lex("1.a", &v) == 1);
     return 0;
 }

@@ -12,50 +12,50 @@
 // In real world use a larger buffer.
 #define BUFSIZE 10
 
-struct State {
+typedef struct {
     FILE *file;
     char buf[BUFSIZE + 1], *lim, *cur, *mar, *tok;
     int state;
-};
+} State;
 
 typedef enum {END, READY, WAITING, BAD_PACKET, BIG_PACKET} Status;
 
-static Status fill(State &st) {
-    const size_t shift = st.tok - st.buf;
-    const size_t used = st.lim - st.tok;
+static Status fill(State *st) {
+    const size_t shift = st->tok - st->buf;
+    const size_t used = st->lim - st->tok;
     const size_t free = BUFSIZE - used;
 
     // Error: no space. In real life can reallocate a larger buffer.
     if (free < 1) return BIG_PACKET;
 
     // Shift buffer contents (discard already processed data).
-    memmove(st.buf, st.tok, used);
-    st.lim -= shift;
-    st.cur -= shift;
-    st.mar -= shift;
-    st.tok -= shift;
+    memmove(st->buf, st->tok, used);
+    st->lim -= shift;
+    st->cur -= shift;
+    st->mar -= shift;
+    st->tok -= shift;
 
     // Fill free space at the end of buffer with new data.
-    const size_t read = fread(st.lim, 1, free, st.file);
-    st.lim += read;
-    st.lim[0] = 0; // append sentinel symbol
+    const size_t read = fread(st->lim, 1, free, st->file);
+    st->lim += read;
+    st->lim[0] = 0; // append sentinel symbol
 
     return READY;
 }
 
-static Status lex(State &st, unsigned int *recv) {
+static Status lex(State *st, unsigned int *recv) {
     char yych;
     
 #line 50 "c/state/push.c"
-switch (st.state) {
+switch (st->state) {
 	case 0:
-		if (st.lim <= st.cur) goto yy8;
+		if (st->lim <= st->cur) goto yy8;
 		goto yyFillLabel0;
 	case 1:
-		if (st.lim <= st.cur) goto yy3;
+		if (st->lim <= st->cur) goto yy3;
 		goto yyFillLabel1;
 	case 2:
-		if (st.lim <= st.cur) goto yy7;
+		if (st->lim <= st->cur) goto yy7;
 		goto yyFillLabel2;
 	default: goto yy0;
 }
@@ -63,12 +63,12 @@ switch (st.state) {
 
 
     for (;;) {
-        st.tok = st.cur;
+        st->tok = st->cur;
     
 #line 69 "c/state/push.c"
 yy0:
 yyFillLabel0:
-	yych = *st.cur;
+	yych = *st->cur;
 	switch (yych) {
 		case 'a':
 		case 'b':
@@ -97,23 +97,23 @@ yyFillLabel0:
 		case 'y':
 		case 'z': goto yy4;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 0;
+			if (st->lim <= st->cur) {
+				st->state = 0;
 				return WAITING;
 			}
 			goto yy2;
 	}
 yy2:
-	++st.cur;
+	++st->cur;
 yy3:
-	st.state = -1;
+	st->state = -1;
 #line 63 "c/state/push.re"
 	{ return BAD_PACKET; }
 #line 113 "c/state/push.c"
 yy4:
-	st.mar = ++st.cur;
+	st->mar = ++st->cur;
 yyFillLabel1:
-	yych = *st.cur;
+	yych = *st->cur;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a':
@@ -143,22 +143,22 @@ yyFillLabel1:
 		case 'y':
 		case 'z': goto yy6;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 1;
+			if (st->lim <= st->cur) {
+				st->state = 1;
 				return WAITING;
 			}
 			goto yy3;
 	}
 yy5:
-	++st.cur;
-	st.state = -1;
+	++st->cur;
+	st->state = -1;
 #line 65 "c/state/push.re"
 	{ *recv = *recv + 1; continue; }
 #line 158 "c/state/push.c"
 yy6:
-	++st.cur;
+	++st->cur;
 yyFillLabel2:
-	yych = *st.cur;
+	yych = *st->cur;
 	switch (yych) {
 		case ';': goto yy5;
 		case 'a':
@@ -188,17 +188,17 @@ yyFillLabel2:
 		case 'y':
 		case 'z': goto yy6;
 		default:
-			if (st.lim <= st.cur) {
-				st.state = 2;
+			if (st->lim <= st->cur) {
+				st->state = 2;
 				return WAITING;
 			}
 			goto yy7;
 	}
 yy7:
-	st.cur = st.mar;
+	st->cur = st->mar;
 	goto yy3;
 yy8:
-	st.state = -1;
+	st->state = -1;
 #line 64 "c/state/push.re"
 	{ return END; }
 #line 205 "c/state/push.c"
@@ -230,7 +230,7 @@ void test(const char **packets, Status expect) {
     Status status;
     unsigned int send = 0, recv = 0;
     for (;;) {
-        status = lex(st, &recv);
+        status = lex(&st, &recv);
         if (status == END) {
             LOG("done: got %u packets\n", recv);
             break;
@@ -241,7 +241,7 @@ void test(const char **packets, Status expect) {
                 fprintf(fw, "%s", *packets++);
                 ++send;
             }
-            status = fill(st);
+            status = fill(&st);
             LOG("queue: '%s'\n", st.buf);
             if (status == BIG_PACKET) {
                 LOG("error: packet too big\n");

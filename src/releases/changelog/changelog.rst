@@ -6,6 +6,21 @@ Changelog
 4.0x
 ----
 
+4.0.1 (2024-11-25)
+~~~~~~~~~~~~~~~~~~
+
+- Added missing doc sources to the distribution tarball
+  (`#503 <https://github.com/skvadrik/re2c/issues/503>`_)
+
+- Reworked C/C++ examples to avoid using new configuration aliases until the
+  world has updated to re2c 4.0, made them compatible with C.
+
+- A few build system changes: increased CMake minimum required version to 3.15,
+  added missing dependencies on doc sources in Makefile.am.
+
+- Fixed typos in docs.
+
+
 4.0 (2024-11-19)
 ~~~~~~~~~~~~~~~~
 
