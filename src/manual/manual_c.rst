@@ -12,7 +12,7 @@ User manual (C/C++)
 
 .. raw:: html
 
-    <p style="color:gray";><i>Note: examples are in C++ (but can be easily adapted to C).</i></p>
+    <p style="color:gray";><i>Note: some examples are in C++ (but can be adapted to C).</i></p>
 
 .. |re2c| replace:: re2c
 .. |lang_name| replace:: C/C++

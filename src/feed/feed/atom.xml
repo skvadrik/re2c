@@ -408,4 +408,21 @@
         </author>
     </entry>
 
+
+    <entry>
+        <title>Release 4.0.1</title>
+        <link href="https://re2c.org/releases/release_notes.html#release-4-0-1"/>
+        <id>https://re2c.org/releases/release_notes.html#release-4-0-1</id>
+        <updated>2023-11-25T00:00:00Z</updated>
+        <summary type="xhtml">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Minor release re2c-4.0.1 (<a href="https://re2c.org/releases/release_notes.html#release-4-0-1">release notes</a>).
+            </div>
+        </summary>
+        <author>
+            <name>Ulya Trofimovich</name>
+            <email>skvadrik@gmail.com</email>
+        </author>
+    </entry>
+
 </feed>
