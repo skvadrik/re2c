@@ -276,7 +276,7 @@
 
   const re2cModule = await Re2cModule()
 
-  window.exampleSelected = function () {
+  window.exampleSelected = function (shouldAddSelectedExampleParameterToUrl = true) {
     const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
     const selectedExampleName = exampleSelect.options[exampleSelect.selectedIndex].text
     const exampleContent = Re2cExamples[selectedLanguageText][selectedExampleName]
@@ -285,11 +285,13 @@
     output.setValue("", 1)
 
     // Add the selected example as a parameter to the URL
-    let url = `${window.location.origin}${window.location.pathname}?example=${selectedLanguageText}/${selectedExampleName}`
-    window.history.replaceState({}, '', url);
+    if (shouldAddSelectedExampleParameterToUrl) {
+      const url = `${window.location.origin}${window.location.pathname}?example=${selectedLanguageText}/${selectedExampleName}`
+      window.history.replaceState({}, '', url);
+    }
   }
 
-  window.languageSelected = function () {
+  window.languageSelected = function (shouldAddSelectedExampleParameterToUrl = true) {
     const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
     const selectedLanguageValue = languageSelect.options[languageSelect.selectedIndex].value
 
@@ -307,7 +309,7 @@
     }
 
     // Make the first example active
-    window.exampleSelected()
+    window.exampleSelected(shouldAddSelectedExampleParameterToUrl)
   }
 
   // * select is the object pointing to the "select" html element
@@ -338,7 +340,7 @@
 
     log(`Restore previous session using the data from the URL: { Language: "${decompressedData.language}"; Options: "${decompressedData.options}" }`)
     selectByText(languageSelect, decompressedData.language)
-    window.languageSelected()
+    window.languageSelected(false) // We don't need to change the URL
     exampleSelect.selectedIndex = -1
     re2cFlagsDropBox.value = decompressedData.options
     editor.setValue(decompressedData.sourceCode, 1)
