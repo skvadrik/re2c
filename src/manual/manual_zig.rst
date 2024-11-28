@@ -16,6 +16,7 @@ User manual (Zig)
 
 .. |re2c| replace:: re2zig
 .. |lang_name| replace:: Zig
+.. |nbsp| unicode:: 0xA0
 
 Introduction
 ============
@@ -23,6 +24,13 @@ Introduction
 
 Here is an example of a small program that checks if a given string contains a
 decimal number:
+
+.. |run_01_basic| image:: ../_static/play.png
+    :target: ../../playground?example=zig/01_basic.re
+    :class:  feed
+    :width:  2em
+
+|run_01_basic| |nbsp| `Run in playground <../../playground?example=zig/01_basic.re>`__
 
 .. literalinclude:: ../examples/zig/01_basic.re
     :language: zig
@@ -88,15 +96,50 @@ Handling the end of input
 =========================
 .. include:: /manual/eof/eof.rst_
 .. include:: /manual/eof/01_sentinel.rst_
+
+.. |run_eof_01| image:: ../_static/play.png
+    :target: ../../playground?example=zig/eof/01_sentinel.re
+    :class:  feed
+    :width:  2em
+
+|run_eof_01| |nbsp| `Run in playground <../../playground?example=zig/eof/01_sentinel.re>`__
+
 .. literalinclude:: ../examples/zig/eof/01_sentinel.re
     :language: zig
+
 .. include:: /manual/eof/03_eof_rule.rst_
+
+.. |run_eof_03| image:: ../_static/play.png
+    :target: ../../playground?example=zig/eof/03_eof_rule.re
+    :class:  feed
+    :width:  2em
+
+|run_eof_03| |nbsp| `Run in playground <../../playground?example=zig/eof/03_eof_rule.re>`__
+
 .. literalinclude:: ../examples/zig/eof/03_eof_rule.re
     :language: zig
+
 .. include:: /manual/eof/02_bounds_checking.rst_
+
+.. |run_eof_02| image:: ../_static/play.png
+    :target: ../../playground?example=zig/eof/02_bounds_checking.re
+    :class:  feed
+    :width:  2em
+
+|run_eof_02| |nbsp| `Run in playground <../../playground?example=zig/eof/02_bounds_checking.re>`__
+
 .. literalinclude:: ../examples/zig/eof/02_bounds_checking.re
     :language: zig
+
 .. include:: /manual/eof/04_fake_sentinel.rst_
+
+.. |run_eof_04| image:: ../_static/play.png
+    :target: ../../playground?example=zig/eof/04_fake_sentinel.re
+    :class:  feed
+    :width:  2em
+
+|run_eof_04| |nbsp| `Run in playground <../../playground?example=zig/eof/04_fake_sentinel.re>`__
+
 .. literalinclude:: ../examples/zig/eof/04_fake_sentinel.re
     :language: zig
 
@@ -104,9 +147,26 @@ Buffer refilling
 ================
 .. include:: /manual/fill/fill.rst_
 .. include:: /manual/fill/01_fill.rst_
+
+.. |run_fill_01| image:: ../_static/play.png
+    :target: ../../playground?example=zig/fill/01_fill.re
+    :class:  feed
+    :width:  2em
+
+|run_fill_01| |nbsp| `Run in playground <../../playground?example=zig/fill/01_fill.re>`__
+
 .. literalinclude:: ../examples/zig/fill/01_fill.re
     :language: zig
+
 .. include:: /manual/fill/02_fill.rst_
+
+.. |run_fill_02| image:: ../_static/play.png
+    :target: ../../playground?example=zig/fill/02_fill.re
+    :class:  feed
+    :width:  2em
+
+|run_fill_02| |nbsp| `Run in playground <../../playground?example=zig/fill/02_fill.re>`__
+
 .. literalinclude:: ../examples/zig/fill/02_fill.re
     :language: zig
 
@@ -116,18 +176,42 @@ Features
 Multiple blocks
 ---------------
 .. include:: /manual/features/conditions/blocks.rst_
+
+.. |run_cond_blocks| image:: ../_static/play.png
+    :target: ../../playground?example=zig/conditions/parse_u32_blocks.re
+    :class:  feed
+    :width:  2em
+
+|run_cond_blocks| |nbsp| `Run in playground <../../playground?example=zig/conditions/parse_u32_blocks.re>`__
+
 .. literalinclude:: ../examples/zig/conditions/parse_u32_blocks.re
     :language: zig
 
 Start conditions
 ----------------
 .. include:: /manual/features/conditions/conditions.rst_
+
+.. |run_cond_conds| image:: ../_static/play.png
+    :target: ../../playground?example=zig/conditions/parse_u32_conditions.re
+    :class:  feed
+    :width:  2em
+
+|run_cond_conds| |nbsp| `Run in playground <../../playground?example=zig/conditions/parse_u32_conditions.re>`__
+
 .. literalinclude:: ../examples/zig/conditions/parse_u32_conditions.re
     :language: zig
 
 Storable state
 --------------
 .. include:: /manual/features/state/state.rst_
+
+.. |run_state_push| image:: ../_static/play.png
+    :target: ../../playground?example=zig/state/push.re
+    :class:  feed
+    :width:  2em
+
+|run_state_push| |nbsp| `Run in playground <../../playground?example=zig/state/push.re>`__
+
 .. literalinclude:: ../examples/zig/state/push.re
     :language: zig
 
@@ -137,10 +221,24 @@ Reusable blocks
 
 Example of a ``!use`` directive:
 
+.. |run_reuse_usedir| image:: ../_static/play.png
+    :target: ../../playground?example=zig/reuse/usedir.re
+    :class:  feed
+    :width:  2em
+
+|run_reuse_usedir| |nbsp| `Run in playground <../../playground?example=zig/reuse/usedir.re>`__
+
 .. literalinclude:: ../examples/zig/reuse/usedir.re
     :language: zig
 
 Example of a ``/*!use:re2c ... */`` block:
+
+.. |run_reuse_reuse| image:: ../_static/play.png
+    :target: ../../playground?example=zig/reuse/reuse.re
+    :class:  feed
+    :width:  2em
+
+|run_reuse_reuse| |nbsp| `Run in playground <../../playground?example=zig/reuse/reuse.re>`__
 
 .. literalinclude:: ../examples/zig/reuse/reuse.re
     :language: zig
@@ -149,21 +247,64 @@ Submatch extraction
 -------------------
 .. include:: /manual/features/submatch/submatch.rst_
 .. include:: /manual/features/submatch/submatch_example_stags.rst_
+
+.. |run_submatch_01| image:: ../_static/play.png
+    :target: ../../playground?example=zig/submatch/01_stags.re
+    :class:  feed
+    :width:  2em
+
+|run_submatch_01| |nbsp| `Run in playground <../../playground?example=zig/submatch/01_stags.re>`__
+
 .. literalinclude:: ../examples/zig/submatch/01_stags.re
     :language: zig
+
 .. include:: /manual/features/submatch/submatch_example_stags_fill.rst_
+
+.. |run_submatch_01_fill| image:: ../_static/play.png
+    :target: ../../playground?example=zig/submatch/01_stags_fill.re
+    :class:  feed
+    :width:  2em
+
+|run_submatch_01_fill| |nbsp| `Run in playground <../../playground?example=zig/submatch/01_stags_fill.re>`__
+
 .. literalinclude:: ../examples/zig/submatch/01_stags_fill.re
     :language: zig
+
 .. include:: /manual/features/submatch/submatch_example_captures.rst_
+
+.. |run_submatch_03| image:: ../_static/play.png
+    :target: ../../playground?example=zig/submatch/03_captures.re
+    :class:  feed
+    :width:  2em
+
+|run_submatch_03| |nbsp| `Run in playground <../../playground?example=zig/submatch/03_captures.re>`__
+
 .. literalinclude:: ../examples/zig/submatch/03_captures.re
     :language: zig
+
 .. include:: /manual/features/submatch/submatch_example_mtags.rst_
+
+.. |run_submatch_02| image:: ../_static/play.png
+    :target: ../../playground?example=zig/submatch/02_mtags.re
+    :class:  feed
+    :width:  2em
+
+|run_submatch_02| |nbsp| `Run in playground <../../playground?example=zig/submatch/02_mtags.re>`__
+
 .. literalinclude:: ../examples/zig/submatch/02_mtags.re
     :language: zig
 
 Encoding support
 ----------------
 .. include:: /manual/features/encodings/encodings.rst_
+
+.. |run_encodings| image:: ../_static/play.png
+    :target: ../../playground?example=zig/encodings/unicode_identifier.re
+    :class:  feed
+    :width:  2em
+
+|run_encodings| |nbsp| `Run in playground <../../playground?example=zig/encodings/unicode_identifier.re>`__
+
 .. literalinclude:: ../examples/zig/encodings/unicode_identifier.re
     :language: zig
 
@@ -182,12 +323,26 @@ Include file 2 (extra_rules.re.inc):
 
 Input file:
 
+.. |run_includes| image:: ../_static/play.png
+    :target: ../../playground?example=zig/includes/include.re
+    :class:  feed
+    :width:  2em
+
+|run_includes| |nbsp| `Run in playground <../../playground?example=zig/includes/include.re>`__
+
 .. literalinclude:: ../examples/zig/includes/include.re
     :language: zig
 
 Header files
 ------------
 .. include:: /manual/features/headers/headers.rst_
+
+.. |run_headers| image:: ../_static/play.png
+    :target: ../../playground?example=zig/headers/header.re
+    :class:  feed
+    :width:  2em
+
+|run_headers| |nbsp| `Run in playground <../../playground?example=zig/headers/header.re>`__
 
 .. literalinclude:: ../examples/zig/headers/header.re
     :language: zig
