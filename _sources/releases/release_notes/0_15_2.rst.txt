@@ -1,0 +1,7 @@
+Release 0.15.2
+==============
+
+This release fixes a bug in the build system:
+it adds a missing dependency of the lexer on the bison-generated header
+(`reported <https://bugs.gentoo.org/show_bug.cgi?id=566620>`_ on Gentoo bugtracker).
+See the changelog :ref:`releases/changelog/changelog:0.15.2 (2015-11-23)` for details.

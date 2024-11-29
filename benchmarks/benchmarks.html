@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="../">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Benchmarks &#8212; re2c 3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03c5f347" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-re2c.css?v=a68cfb71" />
+    <script src="../_static/documentation_options.js?v=110ea713"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build/build.html">How to build</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+    <h3>Benchmarks</h3>
+    <div class="re2c-toc-local">
+        <ul>
+<li><a class="reference internal" href="#">Benchmarks</a><ul>
+<li><a class="reference internal" href="#submatch-lexer-generators">Submatch (lexer generators)</a></li>
+<li><a class="reference internal" href="#submatch-libraries-dfa">Submatch (libraries, DFA)</a></li>
+<li><a class="reference internal" href="#submatch-libraries-nfa">Submatch (libraries, NFA)</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="benchmarks">
+<h1>Benchmarks<a class="headerlink" href="#benchmarks" title="Link to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>Benchmarks are not built by default, as some of them contain large automata that
+take considerable time to compile with GCC or Clang. To enable them, configure
+with <code class="docutils literal notranslate"><span class="pre">--enable-benchmarks</span></code> (Autotools) or <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_BENCHMARKS=yes</span></code>
+(CMake). There are a few different groups of benchmarks.</p>
+<p>Submatch extraction in lexer generators:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>/benchmarks/submatch_dfa_aot
+$<span class="w"> </span>./run.py<span class="w"> </span>--repetitions<span class="w"> </span><span class="si">${</span><span class="nv">REP_COUNT</span><span class="si">}</span><span class="w"> </span>--output<span class="o">=</span>results.json
+</pre></div>
+</div>
+<p>Submatch extraction in library algorithms based on deterministic automata:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>/benchmarks/submatch_dfa_jit
+$<span class="w"> </span>./bench_submatch_dfa_jit<span class="w"> </span>--benchmark_out_format<span class="o">=</span>json<span class="w"> </span>--benchmark_out<span class="o">=</span>results.json
+</pre></div>
+</div>
+<p>Submatch extraction in library algorithms based on non-deterministic automata:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="si">${</span><span class="nv">BUILD_DIR</span><span class="si">}</span>/benchmarks/submatch_nfa
+$<span class="w"> </span>./bench_submatch_nfa<span class="w"> </span>--benchmark_out_format<span class="o">=</span>json<span class="w"> </span>--benchmark_out<span class="o">=</span>results.json
+</pre></div>
+</div>
+<p>To generate a TeX bar chart (PGF plot) from the JSON output, use json2pgfplot.py
+script. It has a few options, such as <code class="docutils literal notranslate"><span class="pre">--relative-to</span> <span class="pre">&lt;algo&gt;</span></code> (which scales the
+timings relative to the specified algorithm) and <code class="docutils literal notranslate"><span class="pre">--font</span> <span class="pre">&lt;name&gt;</span></code> (which
+specifies the font to be used).
+The generated TeX file can be compiled to PDF, which can be further
+converted to SVG, etc.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span><span class="si">${</span><span class="nv">SOURCE_DIR</span><span class="si">}</span>/benchmarks/json2pgfplot.py<span class="w"> </span>--variant<span class="w"> </span>&lt;dfa_aot<span class="w"> </span><span class="p">|</span><span class="w"> </span>dfa_jit<span class="w"> </span><span class="p">|</span><span class="w"> </span>nfa&gt;<span class="w"> </span>results.json<span class="w"> </span>results.tex
+$<span class="w"> </span>pdflatex<span class="w"> </span>results.tex<span class="w"> </span>&lt;/dev/null<span class="w"> </span>&gt;results.log
+$<span class="w"> </span>pdf2svg<span class="w"> </span>results.pdf<span class="w"> </span>results.svg
+</pre></div>
+</div>
+<section id="submatch-lexer-generators">
+<h2>Submatch (lexer generators)<a class="headerlink" href="#submatch-lexer-generators" title="Link to this heading">¶</a></h2>
+<p>These benchmarks contain regular expressions with submatch markers that are
+compiled to C code by a lexer generator, and further compiled to native code by
+a C compiler (GCC and Clang). Compilation happens ahead of time, so it is not
+included in the run time. The currently supported generators are
+<a class="reference external" href="https://www.colm.net/open-source/ragel">ragel</a>,
+<a class="reference external" href="https://kleenexlang.org">kleenex</a>
+and re2c TDFA(0), TDFA(1) and sta-DFA algorithms (no flex, as it does not
+support submatch extraction).
+Regular expressions used in the benchmarks can be divided in two categories:</p>
+<ul class="simple">
+<li><p>real-world regular expressions (parsers for HTTP message headers, URI, email
+addresses, etc.) ranging from large to small, mostly unambiguous</p></li>
+<li><p>artificial regular expressions (a few different groups with emphasis on
+alternative, concatenation or repetition) in series of increasing complexity
+and ambiguity</p></li>
+</ul>
+<p>The generated programs do string rewriting. They read text from stdin and write
+it to stdout with some characters inserted at the points of submatch extraction
+(this is to make sure that the generated program is correct). String rewriting
+is a form dictated by kleenex, as it is suited to this task and cannot generate
+free-form programs as ragel and re2c do. Both ragel and re2c programs are
+written with performance in mind and use buffered input. As for kleenex, there
+is no control over what it generates (user input consists of regular expressions
+only), but presumably it also optimizes the generated code.</p>
+<p>Ragel programs are fast, but not always correct. This is because ragel cannot
+handle non-determinism in the general case. It is a fundamental limitation which
+cannot be solved with disambiguation operators, except for simple cases. Ragel
+has no notion of <em>tags</em> and <em>tag variables</em>, and its submatch extraction is
+based on <em>actions</em> — arbitrary blocks of code embedded in the regular
+expression. When ragel generates a DFA, it puts actions either on transitions or
+in states (depending on the action type). Non-determinism means that there are
+multiple parallel NFA paths with different actions that reach a given DFA state.
+Actions on different paths conflict with each other (in particular, an action
+can conflict with itself) and change the program state in unforeseen ways (e.g.
+overwrite variables set by another action). Disambiguation operators can remove
+some of the conflicting actions, but they cannot fork the program state.</p>
+<p>Kleenex generates very large automata in some benchmarks, which cannot be
+compiled in reasonable time. On the whole, kleenex programs have some constant
+overhead compared to other programs. It can be explained by a different
+underlying automaton type (DSST), which is better suited to full parsing than
+submatch extraction.</p>
+<p>Of the algorithms in re2c, TDFA(1) is the fastest and the most robust one.
+In unambiguous cases its performance is similar to ragel, sometimes slightly
+better or worse (it varies more with the C compiler than with the benchmark).
+The generated binary size is also close. In highly ambiguous cases TDFA(1) is
+slower than ragel, which happens because TDFA(1) handles non-determinism by
+keeping track of multiple possible tag values, while ragel doesn’t handle it in
+any special way.
+TDFA(0) is generally less efficient than TDFA(1), see the paper <a class="reference external" href="/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">Tagged
+Deterministic Finite Automata with Lookahead</a>
+for a detailed comparison.
+Sta-DFA performs well on small benchmarks, but it degrades quickly on large or
+ambiguous regular expressions, both in speed and in the automaton size.</p>
+<p>The measurements have been taken on an Intel(R) Core(TM) i7-8750H CPU with
+32 KiB L1 Data cache (x6 cores),
+32 KiB L1 Instruction cache (x6 cores),
+256 KiB L2 Unified cache (x6 cores),
+9216 KiB L3 Unified cache,
+32 GiB RAM.
+Software versions:
+<a class="reference external" href="https://www.colm.net/files/ragel/ragel-7.0.4.tar.gz">ragel-7.0.4</a>,
+kleenex built from Git at commit <a class="reference external" href="https://github.com/diku-kmc/kleenexlang/commit/d474c6015339c261b2e7bf37061175fd69185baf">d474c60</a>,
+re2c built from Git at commit <a class="reference external" href="https://github.com/skvadrik/re2c/commit/814d38f7eb19130a926f8d06172a00088967779f">814d38f</a>,
+GCC-11.2.0,
+Clang-13.0.0.
+<strong>The results may be out of date!</strong></p>
+<p>Time is measured in ms (on 100MB of text), binary size is measured in KB (binaries are stripped).</p>
+<figure class="align-default">
+<img alt="../_images/results_1.svg" class="benchmark" src="../_images/results_1.svg" /></figure>
+</section>
+<section id="submatch-libraries-dfa">
+<h2>Submatch (libraries, DFA)<a class="headerlink" href="#submatch-libraries-dfa" title="Link to this heading">¶</a></h2>
+<p>This group contains library algorithms for submatch extraction that are based on
+deterministic automata. These are regular expressions that undergo just-in-time
+determinization before matching, which is included in the run time. Currently
+the group contains only two algorithms, TDFA(1) and regless-TDFA(1) — a
+modification of TDFA(1) that replaces register operations with a record of tag
+history, and a second pass on the history that unfolds it and reconstructs
+submatch results. The benchmark also includes variations for POSIX and leftmost
+greedy disambiguation policies, since disambiguation is also included in the run
+time.</p>
+<p>Regless-TDFA(1) bypasses a few expensive computation steps in <em>regcomp()</em>, which
+results in much faster determinization times (a few orders of magnitude faster
+on large regular expressions). For <em>regexec()</em> the results are divided: on
+real-world regular expressions TDFA(1) usually outperforms regless-TDFA(1), but
+in some artificially constructed cases it can arbitrarily slower. These are
+pathological inputs for TDFA(1); the tags have arbitrarily high degree of
+non-determinism (increased with the repetition counter), so TDFA(1) has to track
+arbitrary many tag variables. Regless-TDFA(1) does not have tag variables.</p>
+<p>The measurements have been taken on an Intel(R) Core(TM) i7-8750H CPU with
+32 KiB L1 Data cache (x6 cores),
+32 KiB L1 Instruction cache (x6 cores),
+256 KiB L2 Unified cache (x6 cores),
+9216 KiB L3 Unified cache,
+32 GiB RAM.
+Software versions:
+re2c built from Git at commit <a class="reference external" href="https://github.com/skvadrik/re2c/commit/814d38f7eb19130a926f8d06172a00088967779f">814d38f</a>.
+<strong>The results may be out of date!</strong></p>
+<p>Compile time and run time is shown relative to the first row.</p>
+<figure class="align-default">
+<img alt="../_images/results_11.svg" class="benchmark" src="../_images/results_11.svg" /></figure>
+</section>
+<section id="submatch-libraries-nfa">
+<h2>Submatch (libraries, NFA)<a class="headerlink" href="#submatch-libraries-nfa" title="Link to this heading">¶</a></h2>
+<p>This group contains library algorithms for submatch extraction based on
+non-deterministic automata. They are described in depth in the paper <a class="reference external" href="/2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf">Efficient
+POSIX submatch extraction on NFA</a>.
+The goal is to compare algorithms that support POSIX longest-match semantics. A
+few leftmost greedy algorithms are provided as a baseline, including the Google
+RE2 library (which does not support POSIX semantics). There are four different
+variations of Okui-Suzuki algorithm, an algorithm proposed by Kuklewicz and a
+backward-matching algorithm proposed by Cox (which is generally incorrect).</p>
+<p>As the benchmarks show, the basic Okui-Suzuki algorithm the most robust one
+among POSIX algorithms. It works in bounded memory that depends only on the
+regular expression and does not grow with the input size, and it has reasonable
+performance compared to the leftmost-greedy algorithm (although it too has some
+pathological cases on regular expressions with high ambiguity level). The lazy
+variation of Okui-Suzuki algorithm is often faster, but its memory requirement
+is not bounded (it grows with the size of input). Both Kuklewicz and backward
+algorithms are much slower on large real-world regular expressions.</p>
+<p>The measurements have been taken on an Intel(R) Core(TM) i7-8750H CPU with
+32 KiB L1 Data cache (x6 cores),
+32 KiB L1 Instruction cache (x6 cores),
+256 KiB L2 Unified cache (x6 cores),
+9216 KiB L3 Unified cache,
+32 GiB RAM.
+Software versions:
+re2c built from Git at commit <a class="reference external" href="https://github.com/skvadrik/re2c/commit/b55ab37a220f5f2950b9ebc323bc0d010a715220">b55ab37</a>,
+<a class="reference external" href="https://github.com/google/re2/releases/tag/2020-11-01">re2-2020-11-01</a>.
+<strong>The results may be out of date!</strong></p>
+<p>Simulation time is shown relative to the first row.</p>
+<figure class="align-default">
+<img alt="../_images/results_12.svg" class="benchmark" src="../_images/results_12.svg" /></figure>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Nov 29, 2024.
+    </div>
+  </body>
+</html>
