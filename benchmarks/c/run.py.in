@@ -1,0 +1,232 @@
+#!/usr/bin/env python3
+
+import argparse
+import functools
+import json
+import os
+import os.path
+import re
+import shutil
+import subprocess
+import sys
+
+
+srcdir = "@srcdir@"
+builddir = "@builddir@"
+bindir = os.path.join(builddir, "bin")
+datadir = os.path.join(builddir, "data")
+
+
+# Parse command-line arguments.
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output",
+        help="JSON file to write benchmark results to")
+    parser.add_argument("--repetitions", type=int, default=1,
+        help="number of times to run one benchmark")
+    parser.add_argument("--filter",
+        help="regexp to select a subset of benchmarks by name")
+    parser.add_argument("--filter-out",
+        help="regexp to mask a subset of benchmarks by name")
+    parser.add_argument("--verify", action='store_true',
+        help="verify parse results on full data files")
+    parser.add_argument("--quickverify", action='store_true',
+        help="verify parse results on small data samples")
+
+    args = parser.parse_args()
+    if args.output == None and not (args.verify or args.quickverify):
+        sys.exit("no output file!")
+
+    return args
+
+
+DATA_STEM = re.compile('^submatch_[0-9]+__([a-z0-9]+).*$')
+PROG_STEM = re.compile('^submatch_[0-9]+__([a-z0-9_]+).*$')
+
+
+# Format: <path>/<engine>/<benchmark>[-<sfx1>[-<sfx2>...]]-<compiler>
+def decompose(path):
+    [_, engine, binary] = path.rsplit(os.sep, 2)
+    components = binary.split('-')
+    name = components[0]
+    compiler = components[-1]
+    suffixes = components[1:-1]
+    return (binary, name, engine, suffixes, compiler)
+
+
+# Order on regexp engines.
+def ord_engine(engine):
+    if engine == "ragel":
+        return 1
+    elif engine == "kleenex":
+        return 2
+    elif engine == "re2c":
+        return 3
+    return 4
+
+
+# Order on compilers.
+def ord_compiler(compiler):
+    if compiler == "gcc":
+        return 1
+    elif compiler == "clang":
+        return 2
+    return 3
+
+
+# Compare two benchmarks by their name, compiler, engine, etc.
+def compare_benchmarks(x, y):
+    (_, xname, xengine, xsuffixes, xcompiler) = decompose(x)
+    (_, yname, yengine, ysuffixes, ycompiler) = decompose(y)
+    if xname < yname:
+        return -1
+    elif yname < xname:
+        return 1
+    elif ord_compiler(xcompiler) < ord_compiler(ycompiler):
+        return -1
+    elif ord_compiler(ycompiler) < ord_compiler(xcompiler):
+        return 1
+    elif ord_engine(xengine) < ord_engine(yengine):
+        return -1
+    elif ord_engine(yengine) < ord_engine(xengine):
+        return 1
+    elif xsuffixes < ysuffixes:
+        return -1
+    elif ysuffixes < xsuffixes:
+        return 1
+    else:
+        return 0
+
+
+# Find benchmarks to run, taking filter into account.
+def find_benchmarks(filter, filter_out):
+    known_failures = []
+    with open(os.path.join(srcdir, "known_failures")) as f:
+        known_failures = f.read().splitlines()
+
+    re_accept = re.compile('.*' if filter == None else filter)
+    re_reject = re.compile('^$' if filter_out == None else filter_out)
+
+    benchmarks = []
+    for path, subdirs, files in os.walk(bindir):
+        for basename in files:
+            prog = os.path.join(path, basename)
+            (_, name, engine, _, _) = decompose(prog)
+            if basename.endswith('.o'):
+                # This is an object file => skip (we need only executables).
+                continue
+            elif re_accept.search(basename) == None:
+                # This benchmark is does not match the current filter => skip.
+                continue
+            elif re_reject.search(basename) != None:
+                # This benchmark is masked by the current filter-out => skip.
+                continue
+            elif '%s/%s' % (engine, name) in known_failures:
+                # This benchmark is known to fail => skip.
+                continue
+            benchmarks.append(prog)
+
+    # Sort benchmarks in the order they should appear on the chart.
+    return sorted(benchmarks, key=functools.cmp_to_key(compare_benchmarks))
+
+
+# Run the benchmark and return its average time in milliseconds.
+def run(engine, binary, repcount):
+    stem = DATA_STEM.search(binary).group(1)
+    data = os.path.join(datadir, stem, 'big')
+    prog = os.path.join(bindir, engine, binary)
+
+    time = 0
+    for _ in range(repcount):
+        with open(data) as f:
+            p = subprocess.run([prog, '-t'], universal_newlines=True,
+                stdin=f, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+
+            # output format: time (ms): <number>
+            time += float(p.stderr.rsplit(' ', 1)[1])
+
+    # Measure stripped binary size.
+    tmp = prog + ".tmp"
+    shutil.copy(prog, tmp)
+    subprocess.run(['strip', tmp])
+    size = os.stat(tmp).st_size
+    os.remove(tmp)
+
+    time = int(time / repcount)
+    size = int(size / 1024)
+    print('%-10s %-40s %10d %10d' % (engine, binary, time, size))
+    return time, size
+
+
+# Run all benchmarks, write results in a JSON file.
+def run_all(benchmarks, repcount, output):
+    print('%-10s %-40s %10s %10s\n%s' % (
+        'engine', 'algorithm', 'time (ms)', 'size (KB)', '-' * 80))
+
+    results = []
+    for bench in benchmarks:
+        (binary, name, engine, suffixes, compiler) = decompose(bench)
+        algo = '-'.join([engine] + suffixes)
+        stem = PROG_STEM.search(name).group(1)
+        title = '%s-%s_%s' % (stem.replace('_', '-'), compiler, algo)
+
+        time, size = run(engine, binary, repcount)
+        results.append({
+            'name':     title,
+            'cpu_time': time,
+            'bin_size': size,
+        })
+
+    results = {'benchmarks': results}
+    if output != None:
+        with open(output, 'w') as f:
+            f.write(json.dumps(results, indent=2))
+
+
+# Run all benchmarks and compare the output within each group. Exit with error
+# on mismatch.
+def verify(benchmarks, quick):
+    groups = {}
+    for bench in benchmarks:
+        (binary, name, engine, suffixes, compiler) = decompose(bench)
+        prog = os.path.join(bindir, engine, binary)
+        groups.setdefault(name, []).append(prog)
+
+    for name in groups:
+        print('verifying %s...' % name)
+
+        stem = DATA_STEM.search(name).group(1)
+        data = os.path.join(datadir, stem, 'small' if quick else 'big')
+
+        group = groups[name]
+        for i in range(len(group)):
+            prog = group[i]
+            with open(data) as f:
+                p = subprocess.run([prog], stdin=f,
+                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            if i == 0:
+                stdout0 = p.stdout
+            elif p.stdout != stdout0:
+                errmsg = 'mismatch on benchmark %s, data file %s: %s vs. %s'
+                sys.exit(errmsg % (name, data, group[0], prog))
+
+    print('OK')
+
+
+def main():
+    args = parse_args()
+
+    benchmarks = find_benchmarks(args.filter, args.filter_out)
+
+    if args.verify:
+        verify(benchmarks, False)
+    elif args.quickverify:
+        verify(benchmarks, True)
+    else:
+        run_all(benchmarks, args.repetitions, args.output)
+
+
+if __name__ == "__main__":
+    main()
+

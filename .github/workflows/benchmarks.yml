@@ -88,20 +88,20 @@ jobs:
         run: cmake --build .build
 
       - name: Run submatch DFA AOT benchmark
-        working-directory: .build/benchmarks/submatch_dfa_aot
+        working-directory: .build/benchmarks/c
         run: |
           ./run.py --quickverify \
             && ./run.py --repetitions 5 --output results.json \
             && cat results.json
 
       - name: Run submatch DFA JIT benchmark
-        working-directory: .build/benchmarks/submatch_dfa_jit
-        run: ./bench_submatch_dfa_jit
+        working-directory: .build/benchmarks/c/libre2c/jit
+        run: ./bench_submatch_jit
 
       - name: Run submatch Java benchmark (ReTdfa)
-        working-directory: .build/benchmarks/submatch_java
+        working-directory: .build/benchmarks/c/libre2c/java
         run: ./run.py
 
       - name: Run submatch NFA benchmark
-        working-directory: .build/benchmarks/submatch_nfa
+        working-directory: .build/benchmarks/c/libre2c/nfa
         run: ./bench_submatch_nfa
