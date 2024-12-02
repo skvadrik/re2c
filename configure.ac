@@ -202,17 +202,17 @@ AC_CHECK_HEADERS([io.h],        [], [], [[]]) # windows POSIX-like API
 
 AC_CONFIG_FILES([
     Makefile
-    benchmarks/submatch_nfa/Makefile
-    benchmarks/submatch_dfa_aot/Makefile
-    benchmarks/submatch_dfa_jit/Makefile
-    benchmarks/submatch_java/Makefile
+    benchmarks/c/submatch/Makefile
+    benchmarks/c/submatch_libre2c/nfa/Makefile
+    benchmarks/c/submatch_libre2c/jit/Makefile
+    benchmarks/c/submatch_libre2c/java/Makefile
 ])
 AC_CONFIG_FILES([run_tests.py],
     [chmod +x run_tests.py])
-AC_CONFIG_FILES([benchmarks/submatch_dfa_aot/run.py],
-    [chmod +x benchmarks/submatch_dfa_aot/run.py])
-AC_CONFIG_FILES([benchmarks/submatch_java/run.py],
-    [chmod +x benchmarks/submatch_java/run.py])
+AC_CONFIG_FILES([benchmarks/c/submatch/run.py],
+    [chmod +x benchmarks/c/submatch/run.py])
+AC_CONFIG_FILES([benchmarks/c/submatch_libre2c/java/run.py],
+    [chmod +x benchmarks/c/submatch_libre2c/java/run.py])
 # Custom names are needed to accommodate POSIX Make suffix rules (bmake in
 # particular) instead of the more generic and flexible GNU Make pattern rules.
 # Copies are needed to patch them in-place with build/split_man.py.
@@ -257,7 +257,7 @@ AC_CONFIG_LINKS([
     src/default_syntax_zig.stx:include/syntax/zig
 ])
 AC_CONFIG_LINKS([
-    benchmarks/submatch_java/chart.js:benchmarks/submatch_java/chart.js
+    benchmarks/c/submatch_libre2c/java/chart.js:benchmarks/c/submatch_libre2c/java/chart.js
 ])
 
 

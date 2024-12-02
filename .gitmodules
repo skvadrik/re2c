@@ -1,3 +1,3 @@
-[submodule "benchmarks/submatch_java/REgen"]
-	path = benchmarks/submatch_java/REgen
+[submodule "benchmarks/c/submatch_libre2c/java/REgen"]
+	path = benchmarks/c/submatch_libre2c/java/REgen
 	url = https://github.com/skvadrik/REgen.git

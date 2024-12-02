@@ -761,8 +761,8 @@ TESTS = \
 
 # benchmarks
 if WITH_BENCHMARKS
-SUBDIRS += benchmarks/submatch_dfa_aot
-EXTRA_DIST += benchmarks/submatch_dfa_aot
+SUBDIRS += benchmarks/c/submatch
+EXTRA_DIST += benchmarks/c
 endif
 
 # libre2c

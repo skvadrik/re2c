@@ -633,9 +633,9 @@ if (RE2C_BUILD_LIBS)
     endif()
 
     if(RE2C_BUILD_BENCHMARKS)
-        add_subdirectory(benchmarks/submatch_nfa)
-        add_subdirectory(benchmarks/submatch_dfa_jit)
-        add_subdirectory(benchmarks/submatch_java)
+        add_subdirectory(benchmarks/c/submatch_libre2c/nfa)
+        add_subdirectory(benchmarks/c/submatch_libre2c/jit)
+        add_subdirectory(benchmarks/c/submatch_libre2c/java)
     endif()
 else()
     # empty check target
@@ -645,7 +645,7 @@ else()
 endif()
 
 if(RE2C_BUILD_BENCHMARKS)
-    add_subdirectory(benchmarks/submatch_dfa_aot)
+    add_subdirectory(benchmarks/c/submatch)
 endif()
 
 if(RE2C_BUILD_TESTS)
