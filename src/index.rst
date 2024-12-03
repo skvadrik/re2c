@@ -51,7 +51,7 @@ etc.
 `JS <manual/manual_js.html>`_,
 `OCaml <manual/manual_ocaml.html>`_,
 `Python <manual/manual_py.html>`_,
-`Rust <manual/manual_rust.html>`_
+`Rust <manual/manual_rust.html>`_,
 `V <manual/manual_v.html>`_,
 `Zig <manual/manual_zig.html>`_.
 
