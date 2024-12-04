@@ -43,8 +43,9 @@ mv src/build/BUILD.md src/build/build.md
 git archive --remote=. "remotes/$remote/$branch" LICENSE | tar --directory=src -xpf -
 git archive --remote=. "remotes/$remote/$branch" doc/manual | tar --directory=src --strip-components=1 -xpf -
 git archive --remote=. "remotes/$remote/$branch" examples/**/*.{re,c,h,d,go,hs,java,js,ml,py,rs,v,zig,inc} | tar --directory=src -xpf -
-git archive --remote=. "remotes/$remote/$branch" benchmarks/submatch_{dfa_aot,dfa_jit,nfa}/results | tar --directory=src -xpf -
-git archive --remote=. "remotes/$remote/$branch" benchmarks/json2pgfplot.py | tar --directory=build --strip-components=1 -xpf -
+git archive --remote=. "remotes/$remote/$branch" benchmarks/c/results | tar --directory=src -xpf -
+git archive --remote=. "remotes/$remote/$branch" benchmarks/c/libre2c/{jit,nfa}/results | tar --directory=src -xpf -
+git archive --remote=. "remotes/$remote/$branch" benchmarks/_scripts/json2pgfplot.py | tar --directory=build --strip-components=2 -xpf -
 git archive --remote=. "remotes/$remote/$branch" build/split_man.py | tar -xpf -
 git archive --remote=. "remotes/$remote/$branch" CHANGELOG | tar --directory=src/releases/changelog -xpf -
 mv src/releases/changelog/CHANGELOG src/releases/changelog/changelog.rst
@@ -67,12 +68,14 @@ pick_latest_result() {
 # (lexer generator benchmarks have file size charts in addition to time charts).
 gen_bar_charts_for_benchmark() {
     benchmark="$1"
-    j2pp_args="$2"
+    path="$2"
+    j2pp_args="$3"
+    j2pp="$(pwd)/build/json2pgfplot.py"
     (
-        cd "src/benchmarks/submatch_$benchmark"
+        cd "src/benchmarks/$path"
         echo "Generating SVG for $benchmark benchmark..."
         pick_latest_result
-        python3 ../../../build/json2pgfplot.py \
+        python3 "$j2pp" \
             --variant $benchmark \
             --font comicneue \
             $j2pp_args \
@@ -85,9 +88,9 @@ gen_bar_charts_for_benchmark() {
 }
 
 if [[ "$gen_svg" -ne 0 ]]; then
-    gen_bar_charts_for_benchmark dfa_aot ""
-    gen_bar_charts_for_benchmark dfa_jit "--relative-to ''"
-    gen_bar_charts_for_benchmark nfa     "--relative-to LG"
+    gen_bar_charts_for_benchmark "aot" "c" ""
+    gen_bar_charts_for_benchmark "jit" "c/libre2c/jit" "--relative-to ''"
+    gen_bar_charts_for_benchmark "nfa" "c/libre2c/nfa" "--relative-to LG"
 fi
 
 if [[ "$gen_playground" -ne 0 ]]; then

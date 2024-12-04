@@ -15,21 +15,21 @@ Submatch extraction in lexer generators:
 
 .. code-block:: bash
 
-    $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_aot
+    $ cd ${BUILD_DIR}/benchmarks/c
     $ ./run.py --repetitions ${REP_COUNT} --output=results.json
 
 Submatch extraction in library algorithms based on deterministic automata:
 
 .. code-block:: bash
 
-    $ cd ${BUILD_DIR}/benchmarks/submatch_dfa_jit
-    $ ./bench_submatch_dfa_jit --benchmark_out_format=json --benchmark_out=results.json
+    $ cd ${BUILD_DIR}/benchmarks/c/libre2c/jit
+    $ ./bench_submatch_jit --benchmark_out_format=json --benchmark_out=results.json
 
 Submatch extraction in library algorithms based on non-deterministic automata:
 
 .. code-block:: bash
 
-    $ cd ${BUILD_DIR}/benchmarks/submatch_nfa
+    $ cd ${BUILD_DIR}/benchmarks/c/libre2c/nfa
     $ ./bench_submatch_nfa --benchmark_out_format=json --benchmark_out=results.json
 
 To generate a TeX bar chart (PGF plot) from the JSON output, use json2pgfplot.py
@@ -41,7 +41,7 @@ converted to SVG, etc.
 
 .. code-block:: bash
 
-    $ ${SOURCE_DIR}/benchmarks/json2pgfplot.py --variant <dfa_aot | dfa_jit | nfa> results.json results.tex
+    $ ${SOURCE_DIR}/benchmarks/json2pgfplot.py --variant <aot | jit | nfa> results.json results.tex
     $ pdflatex results.tex </dev/null >results.log
     $ pdf2svg results.pdf results.svg
 
@@ -108,11 +108,11 @@ for a detailed comparison.
 Sta-DFA performs well on small benchmarks, but it degrades quickly on large or
 ambiguous regular expressions, both in speed and in the automaton size.
 
-.. include:: submatch_dfa_aot/env.rst
+.. include:: c/env.rst
 
 Time is measured in ms (on 100MB of text), binary size is measured in KB (binaries are stripped).
 
-.. figure:: submatch_dfa_aot/results_1.svg
+.. figure:: c/results_1.svg
     :class: benchmark
 
 
@@ -138,11 +138,11 @@ pathological inputs for TDFA(1); the tags have arbitrarily high degree of
 non-determinism (increased with the repetition counter), so TDFA(1) has to track
 arbitrary many tag variables. Regless-TDFA(1) does not have tag variables.
 
-.. include:: submatch_dfa_jit/env.rst
+.. include:: c/libre2c/jit/env.rst
 
 Compile time and run time is shown relative to the first row.
 
-.. figure:: submatch_dfa_jit/results_1.svg
+.. figure:: c/libre2c/jit/results_1.svg
     :class: benchmark
 
 
@@ -168,10 +168,10 @@ variation of Okui-Suzuki algorithm is often faster, but its memory requirement
 is not bounded (it grows with the size of input). Both Kuklewicz and backward
 algorithms are much slower on large real-world regular expressions.
 
-.. include:: submatch_nfa/env.rst
+.. include:: c/libre2c/nfa/env.rst
 
 Simulation time is shown relative to the first row.
 
-.. figure:: submatch_nfa/results_1.svg
+.. figure:: c/libre2c/nfa/results_1.svg
     :class: benchmark
 
