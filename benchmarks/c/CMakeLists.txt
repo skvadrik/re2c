@@ -129,60 +129,31 @@ endforeach()
 file(MAKE_DIRECTORY "${ENG_DIR}/re2c/")
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
-set(RE2C3 "${ENG_DIR}/re2c/re2c3")
-add_custom_command(
-    OUTPUT "${RE2C3}"
-    COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../_engines/re2c/getre2c3.sh"
-    WORKING_DIRECTORY "${ENG_DIR}/re2c/"
-)
 set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date" "--no-version")
 set(COMMON_RE2C
     "${SRC_DIR}/re2c/common.re"
-    "${SRC_DIR}/re2c/include/fill.re"
-    "${SRC_DIR}/re2c/include/fill_email.re"
-    "${SRC_DIR}/re2c/include-eof/fill.re"
-    "${SRC_DIR}/re2c/include-eof/fill_email.re"
+    "${SRC_DIR}/re2c/include-padding/fill.re"
+    "${SRC_DIR}/re2c/include-padding/fill_email.re"
+    "${SRC_DIR}/re2c/include-eofrule/fill.re"
+    "${SRC_DIR}/re2c/include-eofrule/fill_email.re"
 )
-# deprecated algorithms were removed after re2c-3.0
-set(DEPRECATED_ALGS "tdfa0" "stadfa")
+# always regenerate re2c benchmarks
 foreach(bench ${BENCHMARKS})
-foreach(eof "" "-eof")
-foreach(alg "tdfa1" "tdfa0" "stadfa")
+foreach(eof "-padding" "-eofrule")
     set(src_file "${SRC_DIR}/re2c/${bench}.re")
-    set(gen_file "${GEN_DIR}/re2c/${bench}${eof}-${alg}.c")
-    set(pregen_file "${PREGEN_DIR}/re2c/${bench}${eof}-${alg}.c")
-    # always regenerate re2c benchmarks, except for deprecated algorithms
-    if(RE2C_REGEN_BENCHMARKS OR NOT (alg IN_LIST DEPRECATED_ALGS))
-        # for deprecated algorithms use re2c-3.0
-        if(alg IN_LIST DEPRECATED_ALGS)
-            set(re2c_for_gen "${RE2C3}")
-        else()
-            set(re2c_for_gen "${RE2C}")
-        endif()
-        file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
-        file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
-        file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include${eof}")
-        set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
-        if("${alg}" STREQUAL "tdfa0")
-            set(re2c_flags ${re2c_flags} "--no-lookahead")
-        elseif("${alg}" STREQUAL "stadfa")
-            set(re2c_flags ${re2c_flags} "--stadfa")
-        endif()
-        add_custom_command(
-            OUTPUT "${gen_file}"
-            COMMAND "${re2c_for_gen}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
-            COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
-            DEPENDS "${src_file}" ${COMMON_RE2C} "${re2c_for_gen}"
-        )
-    else()
-        add_custom_command(
-            OUTPUT "${gen_file}"
-            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
-            DEPENDS "${pregen_file}"
-        )
-    endif()
+    set(gen_file "${GEN_DIR}/re2c/${bench}${eof}.c")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}${eof}.c")
+    file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
+    file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
+    file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include${eof}")
+    set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
+    add_custom_command(
+        OUTPUT "${gen_file}"
+        COMMAND "${RE2C}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
+        COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
+        DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
+    )
     list(APPEND GEN "${gen_file}")
-endforeach()
 endforeach()
 endforeach()
 
