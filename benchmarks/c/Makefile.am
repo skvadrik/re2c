@@ -84,8 +84,10 @@ KLEENEX_MASKED = \
     submatch_37__rep_13_rep_11_rep_7 \
     submatch_38__rep_23_rep_19_rep_17
 
+# For Kleenex we are interested only in submatch benchmarks (to compare DSST vs. TDFA).
 GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, \
-	$(filter-out $(KLEENEX_MASKED), $(BENCHMARKS)))
+	$(filter-out $(KLEENEX_MASKED), \
+		$(filter submatch_%, $(BENCHMARKS))))
 
 BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
 

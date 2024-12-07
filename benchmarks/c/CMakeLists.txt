@@ -67,6 +67,8 @@ set(KLEENEX_MASKED
 list(JOIN KLEENEX_MASKED "|" KLEENEX_MASKED_REGEXP)
 set(KLEENEX_BENCHMARKS ${BENCHMARKS})
 list(FILTER KLEENEX_BENCHMARKS EXCLUDE REGEX "${KLEENEX_MASKED_REGEXP}")
+# For Kleenex we are interested only in submatch benchmarks (to compare DSST vs. TDFA).
+list(FILTER KLEENEX_BENCHMARKS INCLUDE REGEX "^submatch_.*")
 foreach(bench ${KLEENEX_BENCHMARKS})
     set(src_file "${SRC_DIR}/kleenex/${bench}.kex")
     set(gen_file "${GEN_DIR}/kleenex/${bench}.c")
