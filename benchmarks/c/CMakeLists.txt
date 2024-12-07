@@ -47,53 +47,6 @@ set(PREGEN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/pregen")
 
 set(GEN "")
 
-# kleenex
-file(MAKE_DIRECTORY "${ENG_DIR}/kleenex/")
-file(MAKE_DIRECTORY "${GEN_DIR}/kleenex/")
-set(KLEENEX "${ENG_DIR}/kleenex/kexc")
-add_custom_command(
-    OUTPUT "${KLEENEX}"
-    COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/../_engines/kleenex/getkleenex.sh"
-    WORKING_DIRECTORY "${ENG_DIR}/kleenex/"
-)
-# Masked benchmarks for which Kleenex either generates very large output
-# (tens of megabytes of C code), or even causes out of memory condition.
-set(KLEENEX_MASKED
-    "submatch_34__rep_alt_13_11_7"
-    "submatch_35__rep_alt_23_19_17"
-    "submatch_37__rep_13_rep_11_rep_7"
-    "submatch_38__rep_23_rep_19_rep_17"
-)
-list(JOIN KLEENEX_MASKED "|" KLEENEX_MASKED_REGEXP)
-set(KLEENEX_BENCHMARKS ${BENCHMARKS})
-list(FILTER KLEENEX_BENCHMARKS EXCLUDE REGEX "${KLEENEX_MASKED_REGEXP}")
-# For Kleenex we are interested only in submatch benchmarks (to compare DSST vs. TDFA).
-list(FILTER KLEENEX_BENCHMARKS INCLUDE REGEX "^submatch_.*")
-foreach(bench ${KLEENEX_BENCHMARKS})
-    set(src_file "${SRC_DIR}/kleenex/${bench}.kex")
-    set(gen_file "${GEN_DIR}/kleenex/${bench}.c")
-    set(pregen_file "${PREGEN_DIR}/kleenex/${bench}.c")
-    # don't regenerate kleenex benchmarks, as kleenex is not actively developed
-    # and it cannot be built with the recent cabal / haskell ecosystem
-    # if(RE2C_REGEN_BENCHMARKS)
-    #     file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
-    #     file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
-    #     add_custom_command(
-    #         OUTPUT "${gen_file}"
-    #         COMMAND "${KLEENEX}" compile "${rel_src_file}" --srcout "${rel_gen_file}" --act=false --la=true
-    #         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
-    #         DEPENDS "${src_file}" "${KLEENEX}"
-    #     )
-    # else()
-        add_custom_command(
-            OUTPUT "${gen_file}"
-            COMMAND "${CMAKE_COMMAND}" -E copy "${pregen_file}" "${gen_file}"
-            DEPENDS "${pregen_file}"
-        )
-    # endif()
-    list(APPEND GEN "${gen_file}")
-endforeach()
-
 # ragel
 file(MAKE_DIRECTORY "${ENG_DIR}/ragel/")
 file(MAKE_DIRECTORY "${GEN_DIR}/ragel/")
@@ -128,7 +81,6 @@ foreach(bench ${BENCHMARKS})
 endforeach()
 
 # re2c
-file(MAKE_DIRECTORY "${ENG_DIR}/re2c/")
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
 set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date" "--no-version")
@@ -164,7 +116,6 @@ set(OBJ "")
 set(BIN "")
 set(CFLAGS "-O3" "-I" "${SRC_DIR}")
 set(COMMON_SRC "${SRC_DIR}/common.h")
-file(MAKE_DIRECTORY "${BIN_DIR}/kleenex/")
 file(MAKE_DIRECTORY "${BIN_DIR}/ragel/")
 file(MAKE_DIRECTORY "${BIN_DIR}/re2c/")
 foreach(gen_file ${GEN})
@@ -222,7 +173,7 @@ set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 set(builddir ".")
 configure_file(run.py.in run.py @ONLY)
 
-# override default clean command to keep engines (ragel, kleenex)
+# override default clean command to keep engines
 set_directory_properties(PROPERTY
     CLEAN_NO_CUSTOM On
     ADDITIONAL_CLEAN_FILES "${GEN};${OBJ};${BIN};${DAT}"

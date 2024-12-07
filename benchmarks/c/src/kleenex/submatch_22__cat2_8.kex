@@ -1,7 +1,0 @@
-start: lines
-
-lines := abcd*
-
-abcd :=
-    /[a]*/ "." /[a]{8}[b]*/ "."
-    /[a]*/ "." /[a]{8}[b]*/ /\n/

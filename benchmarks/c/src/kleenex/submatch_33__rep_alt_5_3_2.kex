@@ -1,5 +1,0 @@
-start: lines
-
-lines := aaa*
-
-aaa := (/[a]{5}|[a]{3}|[a]{2}/ ".")* /\n/

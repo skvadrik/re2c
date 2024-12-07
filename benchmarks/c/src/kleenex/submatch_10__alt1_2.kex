@@ -1,9 +1,0 @@
-start: lines
-
-lines := ab*
-
-ab :=
-    ( ("A" /[a]*/)
-    | ("B" /[b]*/)
-    )
-    /\n/

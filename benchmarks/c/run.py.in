@@ -58,11 +58,9 @@ def decompose(path):
 def ord_engine(engine):
     if engine == "ragel":
         return 1
-    elif engine == "kleenex":
-        return 2
     elif engine == "re2c":
-        return 3
-    return 4
+        return 2
+    return 3
 
 
 # Order on compilers.

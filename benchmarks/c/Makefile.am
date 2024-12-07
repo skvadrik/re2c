@@ -6,7 +6,6 @@ BIN_DIR = bin
 DAT_DIR = data
 CFLAGS = -O3 -I $(SRC_DIR)
 RAGEL = $(ENG_DIR)/ragel/ragel7
-KLEENEX = $(ENG_DIR)/kleenex/kexc
 RE2C = $(top_builddir)/re2c
 RE2C_FLAGS_COMMON = --reusable --tags --no-generation-date --no-version
 RE2C_FLAGS_PADDING = $(RE2C_FLAGS_COMMON) -I $(SRC_DIR)/re2c/include-padding
@@ -76,24 +75,9 @@ COMMON_RE2C = \
     $(SRC_DIR)/re2c/include-eofrule/fill.re \
     $(SRC_DIR)/re2c/include-eofrule/fill_email.re
 
-# Masked benchmarks for which Kleenex either generates very large output
-# (tens of megabytes of C code), or even causes out of memory condition.
-KLEENEX_MASKED = \
-    submatch_34__rep_alt_13_11_7 \
-    submatch_35__rep_alt_23_19_17 \
-    submatch_37__rep_13_rep_11_rep_7 \
-    submatch_38__rep_23_rep_19_rep_17
+GEN = $(GEN_RAGEL) $(GEN_RE2C)
 
-# For Kleenex we are interested only in submatch benchmarks (to compare DSST vs. TDFA).
-GEN_KLEENEX = $(patsubst %, $(GEN_DIR)/kleenex/%.c, \
-	$(filter-out $(KLEENEX_MASKED), \
-		$(filter submatch_%, $(BENCHMARKS))))
-
-BIN_KLEENEX = $(patsubst $(GEN_DIR)%.c, $(BIN_DIR)%, $(GEN_KLEENEX))
-
-GEN = $(GEN_RAGEL) $(GEN_RE2C) $(GEN_KLEENEX)
-
-BIN_ = $(BIN_RAGEL) $(BIN_RE2C) $(BIN_KLEENEX)
+BIN_ = $(BIN_RAGEL) $(BIN_RE2C)
 BIN_GCC   = $(patsubst %, %-gcc, $(BIN_))
 BIN_CLANG = $(patsubst %, %-clang, $(BIN_))
 BIN = $(BIN_GCC) $(BIN_CLANG)
@@ -120,7 +104,7 @@ $(GEN_RE2C_EOFRULE): $(GEN_DIR)/%-eofrule.c: $(SRC_DIR)/%.re $(COMMON_RE2C) $(RE
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/re2c/$(@F) ; then cp -f $@ $(PREGEN_DIR)/re2c/$(@F) ; fi
 
 
-# optionally regenerate ragel benchmarks
+# optionally regenerate other benchmarks
 
 if REGEN_BENCHMARKS
 
@@ -129,19 +113,9 @@ $(GEN_RAGEL): $(GEN_DIR)/%.c: $(SRC_DIR)/%.rl $(COMMON_RAGEL) $(RAGEL)
 	$(AM_V_GEN)$(RAGEL) -G2 $< -o $@
 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/ragel/$(@F) ; then cp -f $@ $(PREGEN_DIR)/ragel/$(@F) ; fi
 
-# don't regenerate kleenex benchmarks, as kleenex is not actively developed
-# and it cannot be built with the recent cabal / haskell ecosystem
-# $(GEN_KLEENEX): $(GEN_DIR)/%.c: $(SRC_DIR)/%.kex $(KLEENEX)
-# 	$(AM_V_at)mkdir -p $(@D)
-# 	$(AM_V_GEN)$(KLEENEX) compile $< --srcout $@ --act=false --la=true
-# 	$(AM_V_at)if ! cmp -s $@ $(PREGEN_DIR)/kleenex/$(@F) ; then cp -f $@ $(PREGEN_DIR)/kleenex/$(@F) ; fi
-$(GEN_KLEENEX): $(GEN_DIR)/%: $(PREGEN_DIR)/%
-	$(AM_V_at)mkdir -p $(@D)
-	$(AM_V_GEN)cp -f $< $@
-
 else
 
-$(GEN_RAGEL) $(GEN_KLEENEX): $(GEN_DIR)/%: $(PREGEN_DIR)/%
+$(GEN_RAGEL) $(GEN_DIR)/%: $(PREGEN_DIR)/%
 	$(AM_V_at)mkdir -p $(@D)
 	$(AM_V_GEN)cp -f $< $@
 
@@ -160,10 +134,6 @@ $(BIN_CLANG): $(BIN_DIR)/%-clang: $(GEN_DIR)/%.c
 $(DAT): $(DAT_DIR)/%/big: $(srcdir)/../_data/%/small
 	$(AM_V_at)mkdir -p $(@D) && cp $< $(@D)
 	$(AM_V_GEN)( cd $(@D) && ../../$(srcdir)/../_data/gen.py )
-
-$(KLEENEX):
-	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/../_engines/kleenex/getkleenex.sh $(@D)
-	$(AM_V_GEN)( cd $(@D) && ./getkleenex.sh )
 
 $(RAGEL):
 	$(AM_V_at)mkdir -p $(@D) && cp $(srcdir)/../_engines/ragel/getragel7.sh $(@D)
