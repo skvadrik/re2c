@@ -1,21 +1,19 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *a0, *a1,
-        *b0, *b1;
-loop:
-    in->tok = in->cur;
-/*!use:re2c
-    * { return 1; }
+namespace re2c_submatch_20__cat2_0 {
+
+/*!rules:re2c:main
+    * { return -1; }
 
     @a0 [a]* @b0 [b]*
     @a1 [a]* @b1 [b]*
     [\n] {
-        outs(out, a0, b0); outc(out, '.'); outs(out, b0, a1); outc(out, '.');
-        outs(out, a1, b1); outc(out, '.'); outs(out, b1, in->cur);
+        OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
+        OUTS(a1, b1); OUTC('.'); OUTS(b1, in->cur);
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_20__cat2_0

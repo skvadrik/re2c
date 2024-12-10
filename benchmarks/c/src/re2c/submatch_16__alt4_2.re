@@ -1,20 +1,9 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *a1, *b1,
-        *a2, *b2,
-        *a3, *b3,
-        *a4, *b4,
-        *a5, *b5,
-        *a6, *b6,
-        *a7, *b7,
-        *a8, *b8;
-loop:
-    in->tok = in->cur;
-/*!use:re2c
-    * { return 1; }
+namespace re2c_submatch_16__alt4_2 {
+
+/*!rules:re2c:main
+    * { return -1; }
 
     ( (@a1 [a]* @a2)
     | (@b1 [b]* @b2)
@@ -29,16 +18,19 @@ loop:
     | (@b7 [b]* @b8)
     )
     [\n] {
-        if (a1)      { outc(out, 'A'); outs(out, a1, a2); }
-        else if (b1) { outc(out, 'B'); outs(out, b1, b2); }
-        if (a3)      { outc(out, 'A'); outs(out, a3, a4); }
-        else if (b3) { outc(out, 'B'); outs(out, b3, b4); }
-        if (a6)      { outc(out, 'A'); outs(out, a5, a6); }
-        else if (b6) { outc(out, 'B'); outs(out, b5, b6); }
-        if (a8)      { outc(out, 'A'); outs(out, a7, a8); }
-        else if (b8) { outc(out, 'B'); outs(out, b7, b8); }
-        outc(out, '\n');
+        if (a1)      { OUTC('A'); OUTS(a1, a2); }
+        else if (b1) { OUTC('B'); OUTS(b1, b2); }
+        if (a3)      { OUTC('A'); OUTS(a3, a4); }
+        else if (b3) { OUTC('B'); OUTS(b3, b4); }
+        if (a6)      { OUTC('A'); OUTS(a5, a6); }
+        else if (b6) { OUTC('B'); OUTS(b5, b6); }
+        if (a8)      { OUTC('A'); OUTS(a7, a8); }
+        else if (b8) { OUTC('B'); OUTS(b7, b8); }
+        OUTC('\n');
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_16__alt4_2

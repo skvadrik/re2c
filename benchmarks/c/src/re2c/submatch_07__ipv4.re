@@ -1,27 +1,27 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char *p1, *p2, *p3, *p4;
+namespace re2c_submatch_07__ipv4 {
 
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     oct  = [0-9]{1,3};
     dot  = [.];
     ipv4 = @p1 oct dot @p2 oct dot @p3 oct dot @p4 oct [\n];
 
-    *    { return 1; }
+    *    { return -1; }
     ipv4 {
-        outs(out, p1, p2 - 1);
-        outc(out, ',');
-        outs(out, p2, p3 - 1);
-        outc(out, ',');
-        outs(out, p3, p4 - 1);
-        outc(out, ',');
-        outs(out, p4, in->cur - 1);
-        outc(out, '\n');
+        OUTS(p1, p2 - 1);
+        OUTC(',');
+        OUTS(p2, p3 - 1);
+        OUTC(',');
+        OUTS(p3, p4 - 1);
+        OUTC(',');
+        OUTS(p4, in->cur - 1);
+        OUTC('\n');
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_07__ipv4
+

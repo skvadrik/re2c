@@ -1,31 +1,29 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static const char *print(Output *out, const char *tok, const taglist_t *t)
-{
-    if (!t) return tok;
+namespace re2c_submatch_34__rep_alt_13_11_7 {
 
-    const char *s = print(out, tok, t->pred);
-    const char *e = tok + t->dist;
-    outs(out, s, e);
-    outc(out, '.');
-    return e;
-}
-
-static int lex(input_t *in, Output *out)
-{
-    taglist_t *t = NULL;
-
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     aaa = (([a]{13} | [a]{11} | [a]{7}) #t)*;
 
-    *        { return 1; }
+    *        { return -1; }
     aaa [\n] {
-        print(out, in->tok, t);
-        outc(out, '\n');
+        print(count, in->tok, t);
+        OUTC('\n');
         taglistpool_clear(&in->tlp, in);
         goto loop;
     }
 */
+
+static const char *print(long& count, const char *tok, const taglist_t *t) {
+    if (!t) return tok;
+
+    const char *s = print(count, tok, t->pred);
+    const char *e = tok + t->dist;
+    OUTS(s, e);
+    OUTC('.');
+    return e;
 }
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_34__rep_alt_13_11_7

@@ -1,5 +1,6 @@
-#include <assert.h>
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_16__alt4_2 {
 
 const char *delim = "\n";
 
@@ -33,15 +34,15 @@ const char *delim = "\n";
         | ([a]* >{ a7 = p; } %{ a8 = p; b7 = b8 = NULL; })
         )
         [\n] >{
-            if (a1)      { outc(out, 'A'); outs(out, a1, a2); }
-            else if (b1) { outc(out, 'B'); outs(out, b1, b2); }
-            if (a3)      { outc(out, 'A'); outs(out, a3, a4); }
-            else if (b3) { outc(out, 'B'); outs(out, b3, b4); }
-            if (a5)      { outc(out, 'A'); outs(out, a5, a6); }
-            else if (b5) { outc(out, 'B'); outs(out, b5, b6); }
-            if (a7)      { outc(out, 'A'); outs(out, a7, a8); }
-            else if (b7) { outc(out, 'B'); outs(out, b7, b8); }
-            outc(out, '\n');
+            if (a1)      { OUTC('A'); OUTS(a1, a2); }
+            else if (b1) { OUTC('B'); OUTS(b1, b2); }
+            if (a3)      { OUTC('A'); OUTS(a3, a4); }
+            else if (b3) { OUTC('B'); OUTS(b3, b4); }
+            if (a5)      { OUTC('A'); OUTS(a5, a6); }
+            else if (b5) { OUTC('B'); OUTS(b5, b6); }
+            if (a7)      { OUTC('A'); OUTS(a7, a8); }
+            else if (b7) { OUTC('B'); OUTS(b7, b8); }
+            OUTC('\n');
         };
 
     main := ab*;
@@ -49,8 +50,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -69,4 +69,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_16__alt4_2

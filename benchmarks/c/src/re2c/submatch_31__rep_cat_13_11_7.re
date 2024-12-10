@@ -1,40 +1,38 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static const char *print(Output *out, const char *tok,
-    const taglist_t *t1, const taglist_t *t2, const taglist_t *t3)
-{
-    if (!t1) return tok;
+namespace re2c_submatch_31__rep_cat_13_11_7 {
 
-    const char *p0 = print(out, tok, t1->pred, t2->pred, t3->pred);
-    const char *p1 = tok + t1->dist;
-    const char *p2 = tok + t2->dist;
-    const char *p3 = tok + t3->dist;
-
-    outs(out, p0, p1);
-    outc(out, '.');
-    outs(out, p1, p2);
-    outc(out, '.');
-    outs(out, p2, p3);
-    outc(out, ';');
-
-    return p3;
-}
-
-static int lex(input_t *in, Output *out)
-{
-    taglist_t *t1 = NULL, *t2 = NULL, *t3 = NULL;
-
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     aaa = ([a]{13} #t1 [a]{11} #t2 [a]{7} #t3)*;
 
-    *        { return 1; }
+    *        { return -1; }
     aaa [\n] {
-        print(out, in->tok, t1, t2, t3);
-        outc(out, '\n');
+        print(count, in->tok, t1, t2, t3);
+        OUTC('\n');
         taglistpool_clear(&in->tlp, in);
         goto loop;
     }
 */
+
+static const char *print(long& count,
+        const char *tok, const taglist_t *t1, const taglist_t *t2, const taglist_t *t3) {
+    if (!t1) return tok;
+
+    const char *p0 = print(count, tok, t1->pred, t2->pred, t3->pred);
+    const char *p1 = tok + t1->dist;
+    const char *p2 = tok + t2->dist;
+    const char *p3 = tok + t3->dist;
+
+    OUTS(p0, p1);
+    OUTC('.');
+    OUTS(p1, p2);
+    OUTC('.');
+    OUTS(p2, p3);
+    OUTC(';');
+
+    return p3;
 }
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_31__rep_cat_13_11_7

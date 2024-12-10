@@ -1,26 +1,8 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static void print_headers(Output *out, const char *tok,
-    const taglist_t *h1, const taglist_t *h2, const taglist_t *h3, const taglist_t *h4)
-{
-    if (!h4) return;
-    print_headers(out, tok, h1->pred, h2->pred, h3->pred, h4->pred);
-    OUT("header: ", tok + h1->dist, tok + h2->dist);
-    OUT("value: ", tok + h3->dist, tok + h4->dist);
-}
+namespace re2c_submatch_00__http_rfc7230 {
 
-static int lex(input_t *in, Output *out)
-{
-    const char *of, *au, *at,
-        *hs1, *hs3, *m1, *p1, *p3, *p5, *q1, *q3,
-        *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
-        *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
-        *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4;
-    taglist_t *h1, *h2, *h3, *h4;
-
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     eol            = "\n";
     crlf           = eol;
     sp             = " ";
@@ -94,7 +76,7 @@ loop:
     start_line     = (request_line | status_line);
     message_head   = start_line (header_field crlf)* crlf;
 
-    *            { return 1; }
+    *            { return -1; }
     message_head {
         if (st1) {
             OUT("version-1: ", v1, v2);
@@ -121,15 +103,27 @@ loop:
                 OUT("host-2: ", hs3, hs4);
                 if (r3) OUT("port-2: ", r3, r4);
             } else {
-                outc(out, '*');
+                OUTC('*');
             }
             OUT("version-2: ", v3, v4);
         }
-        print_headers(out, in->tok, h1, h2, h3, h4);
-        outc(out, '\n');
+        count += print_headers(in->tok, h1, h2, h3, h4);
+        OUTC('\n');
 
         taglistpool_clear(&in->tlp, in);
         goto loop;
     }
 */
+
+static long print_headers(const char *tok, const taglist_t *h1, const taglist_t *h2,
+        const taglist_t *h3, const taglist_t *h4) {
+    if (!h4) return 0;
+    long count = print_headers(tok, h1->pred, h2->pred, h3->pred, h4->pred);
+    OUT("header: ", tok + h1->dist, tok + h2->dist);
+    OUT("value: ", tok + h3->dist, tok + h4->dist);
+    return count;
 }
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_00__http_rfc7230

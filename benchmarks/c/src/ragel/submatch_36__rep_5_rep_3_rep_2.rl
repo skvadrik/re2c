@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_36__rep_5_rep_3_rep_2 {
 
 const char *delim = "\n";
 
@@ -12,31 +14,30 @@ const char *delim = "\n";
 
     aaa =
         ([a]{5} %{
-            outs(out, s, p);
-            outc(out, '.');
+            OUTS(s, p);
+            OUTC('.');
             s = p;
         })* >{ s = p; }
         <:
         ([a]{3} %{
-            outs(out, s, p);
-            outc(out, '.');
+            OUTS(s, p);
+            OUTC('.');
             s = p;
         })*
         <:
         ([a]{2} %{
-            outs(out, s, p);
-            outc(out, '.');
+            OUTS(s, p);
+            OUTC('.');
             s = p;
         })*
-        [\n] >{ outc(out, '\n'); };
+        [\n] >{ OUTC('\n'); };
 
     main := aaa*;
 }%%
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char *s;
@@ -47,4 +48,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_36__rep_5_rep_3_rep_2

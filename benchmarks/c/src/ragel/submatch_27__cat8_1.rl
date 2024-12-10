@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_27__cat8_1 {
 
 const char *delim = "\n";
 
@@ -15,14 +17,14 @@ const char *delim = "\n";
         [a]* >{ a6 = p; } ([a][b]*) >{ b6 = p; }
         [a]* >{ a7 = p; } ([a][b]*) >{ b7 = p; }
         [\n] >{
-            outs(out, a0, b0); outc(out, '.'); outs(out, b0, a1); outc(out, '.');
-            outs(out, a1, b1); outc(out, '.'); outs(out, b1, a2); outc(out, '.');
-            outs(out, a2, b2); outc(out, '.'); outs(out, b2, a3); outc(out, '.');
-            outs(out, a3, b3); outc(out, '.'); outs(out, b3, a4); outc(out, '.');
-            outs(out, a4, b4); outc(out, '.'); outs(out, b4, a5); outc(out, '.');
-            outs(out, a5, b5); outc(out, '.'); outs(out, b5, a6); outc(out, '.');
-            outs(out, a6, b6); outc(out, '.'); outs(out, b6, a7); outc(out, '.');
-            outs(out, a7, b7); outc(out, '.'); outs(out, b7, p + 1);
+            OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
+            OUTS(a1, b1); OUTC('.'); OUTS(b1, a2); OUTC('.');
+            OUTS(a2, b2); OUTC('.'); OUTS(b2, a3); OUTC('.');
+            OUTS(a3, b3); OUTC('.'); OUTS(b3, a4); OUTC('.');
+            OUTS(a4, b4); OUTC('.'); OUTS(b4, a5); OUTC('.');
+            OUTS(a5, b5); OUTC('.'); OUTS(b5, a6); OUTC('.');
+            OUTS(a6, b6); OUTC('.'); OUTS(b6, a7); OUTC('.');
+            OUTS(a7, b7); OUTC('.'); OUTS(b7, p + 1);
         };
 
     main := abcd*;
@@ -30,8 +32,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -44,4 +45,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_27__cat8_1

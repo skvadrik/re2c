@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_06__email {
 
 const char *delim = "\n";
 
@@ -10,16 +12,16 @@ const char *delim = "\n";
     az09      = [a-z0-9];
     az09dash  = [a-z0-9\-]* [a-z0-9];
     after_at  = (az09 az09dash? [.])+ az09 az09dash?;
-    skip      = [^\n]*[\n];
+    skip      = [^\n\0]*[\n];
     email     =
         before_at >{ p1 = p; } [@]
         after_at  >{ p2 = p; } [\n]
     >{
-        outc(out, ' ');
-        outs(out, p1, p2 - 1);
-        outc(out, ' ');
-        outs(out, p2, p);
-        outc(out, '\n');
+        OUTC(' ');
+        OUTS(p1, p2 - 1);
+        OUTC(' ');
+        OUTS(p2, p);
+        OUTC('\n');
     };
 
     main := (email | (skip - email))*;
@@ -27,8 +29,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     char *p1, *p2;
@@ -39,4 +40,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_06__email

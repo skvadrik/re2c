@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_04__apache_log {
 
 const char *delim = "\n";
 
@@ -35,7 +37,7 @@ const char *delim = "\n";
         OUT("size: ",     z1, z2);
         OUT("url: ",      u1, u2);
         OUT("agent: ",    g1, g2);
-        outc(out, '\n');
+        OUTC('\n');
     };
 
     main := line*;
@@ -43,8 +45,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -57,4 +58,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_04__apache_log

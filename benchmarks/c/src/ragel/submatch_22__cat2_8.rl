@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_22__cat2_8 {
 
 const char *delim = "\n";
 
@@ -9,8 +11,8 @@ const char *delim = "\n";
         [a]* >{ a0 = p; } ([a]{8}[b]*) >{ b0 = p; }
         [a]* >{ a1 = p; } ([a]{8}[b]*) >{ b1 = p; }
         [\n] >{
-            outs(out, a0, b0); outc(out, '.'); outs(out, b0, a1); outc(out, '.');
-            outs(out, a1, b1); outc(out, '.'); outs(out, b1, p + 1);
+            OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
+            OUTS(a1, b1); OUTC('.'); OUTS(b1, p + 1);
         };
 
     main := abcd*;
@@ -18,8 +20,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -32,4 +33,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_22__cat2_8

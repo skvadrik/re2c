@@ -207,12 +207,9 @@ AC_CONFIG_FILES([
     benchmarks/c/libre2c/jit/Makefile
     benchmarks/c/libre2c/java/Makefile
 ])
-AC_CONFIG_FILES([run_tests.py],
-    [chmod +x run_tests.py])
-AC_CONFIG_FILES([benchmarks/c/run.py],
-    [chmod +x benchmarks/c/run.py])
-AC_CONFIG_FILES([benchmarks/c/libre2c/java/run.py],
-    [chmod +x benchmarks/c/libre2c/java/run.py])
+AC_CONFIG_FILES([run_tests.py], [chmod +x run_tests.py])
+AC_CONFIG_FILES([benchmarks/c/run.py], [chmod +x benchmarks/c/run.py])
+AC_CONFIG_FILES([benchmarks/c/libre2c/java/run.py], [chmod +x benchmarks/c/libre2c/java/run.py])
 # Custom names are needed to accommodate POSIX Make suffix rules (bmake in
 # particular) instead of the more generic and flexible GNU Make pattern rules.
 # Copies are needed to patch them in-place with build/split_man.py.

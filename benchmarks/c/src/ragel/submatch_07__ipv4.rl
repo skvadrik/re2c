@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_07__ipv4 {
 
 const char *delim = "\n";
 
@@ -13,14 +15,14 @@ const char *delim = "\n";
         oct >{ p3 = p; } dot
         oct >{ p4 = p; } [\n]
     >{
-        outs(out, p1, p2 - 1);
-        outc(out, ',');
-        outs(out, p2, p3 - 1);
-        outc(out, ',');
-        outs(out, p3, p4 - 1);
-        outc(out, ',');
-        outs(out, p4, p);
-        outc(out, '\n');
+        OUTS(p1, p2 - 1);
+        OUTC(',');
+        OUTS(p2, p3 - 1);
+        OUTC(',');
+        OUTS(p3, p4 - 1);
+        OUTC(',');
+        OUTS(p4, p);
+        OUTC('\n');
     };
 
     main := ipv4*;
@@ -28,8 +30,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char *p1, *p2, *p3, *p4;
@@ -40,4 +41,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_07__ipv4

@@ -1,14 +1,8 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *h1, *i1, *a1, *d1, *r1, *s1, *z1, *u1, *g1,
-        *h2, *i2, *a2, *d2, *r2, *s2, *z2, *u2, *g2;
+namespace re2c_submatch_04__apache_log {
 
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     sp        = [ \t]+;
     host      = @h1 [0-9.]+ @h2;
     userid    = @i1 [-] @i2;
@@ -30,7 +24,7 @@ loop:
         url       sp
         useragent [\n];
 
-    *    { return 1; }
+    *    { return -1; }
     line {
         OUT("host: ",     h1, h2);
         OUT("userid: ",   i1, i2);
@@ -41,8 +35,11 @@ loop:
         OUT("size: ",     z1, z2);
         OUT("url: ",      u1, u2);
         OUT("agent: ",    g1, g2);
-        outc(out, '\n');
+        OUTC('\n');
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_04__apache_log

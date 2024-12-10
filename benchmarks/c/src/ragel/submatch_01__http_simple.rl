@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_01__http_simple {
 
 const char *delim = "\n\n";
 
@@ -68,15 +70,14 @@ const char *delim = "\n\n";
         h1 = h2 = NULL;
     };
 
-    message_head = start_line field* eol >{ outc(out, '\n'); };
+    message_head = start_line field* eol >{ OUTC('\n'); };
 
     main := message_head*;
 }%%
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char *h1, *h2,
@@ -89,4 +90,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_01__http_simple

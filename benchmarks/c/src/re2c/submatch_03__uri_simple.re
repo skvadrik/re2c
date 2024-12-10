@@ -1,14 +1,8 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *s1, *u1, *h1, *r1, *p1, *q1, *f1,
-        *s2, *u2, *h2, *r2, *p2, *q2, *f2;
+namespace re2c_submatch_03__uri_simple {
 
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     nl        = "\n";
     char      = [-._~%!$&'()*+,;=a-zA-Z0-9];
     scheme    = @s1 [-+.a-zA-Z0-9]+ @s2;
@@ -22,7 +16,7 @@ loop:
                 ("//" (userinfo "@")? host (":" port)?)?
                 path ("?" query)? ("#" fragment)? nl;
 
-    *   { return 1; }
+    *   { return -1; }
     uri {
         OUT("scheme: ", s1, s2);
         if (u1) OUT("user: ", u1, u2);
@@ -31,8 +25,11 @@ loop:
         OUT("path: ", p1, p2);
         if (q1) OUT("query: ", q1, q2);
         if (f1) OUT("fragment: ", f1, f2);
-        outc(out, '\n');
+        OUTC('\n');
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_03__uri_simple

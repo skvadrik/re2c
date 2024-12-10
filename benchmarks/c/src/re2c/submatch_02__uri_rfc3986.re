@@ -1,14 +1,8 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *s1, *u1, *h1, *h3, *h5, *r1, *p1, *p3, *q1, *f1,
-        *s2, *u2, *h2, *h4, *h6, *r2, *p2, *p4, *q2, *f2;
+namespace re2c_submatch_02__uri_rfc3986 {
 
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     nl            = "\n";
     alpha         = [a-zA-Z];
     digit         = [0-9];
@@ -58,7 +52,7 @@ loop:
     fragment      = @f1 (pchar | [/?])* @f2;
     uri           = scheme ":" hier_part ("?" query)? ("#" fragment)? nl;
 
-    *   { return 1; }
+    *   { return -1; }
     uri {
         OUT("scheme: ", s1, s2);
         if (u1) OUT("user: ", u1, u2);
@@ -70,8 +64,11 @@ loop:
         else if (p3) OUT("path-2: ", p3, p4);
         if (q1) OUT("query: ", q1, q2);
         if (f1) OUT("fragment: ", f1, f2);
-        outc(out, '\n');
+        OUTC('\n');
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_02__uri_rfc3986

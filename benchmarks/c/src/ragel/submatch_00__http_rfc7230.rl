@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_00__http_rfc7230 {
 
 const char *delim = "\n\n";
 
@@ -142,7 +144,7 @@ const char *delim = "\n\n";
                 OUT("host-2: ", hs3, hs4);
                 if (r4) OUT("port-2: ", r3, r4);
             } else {
-                outc(out, '*');
+                OUTC('*');
             }
             OUT("version-2: ", v3, v4);
         }
@@ -156,15 +158,14 @@ const char *delim = "\n\n";
         h1 = h2 = h3 = h4 = NULL;
     };
 
-    message_head = start_line field* crlf >{ outc(out, '\n'); };
+    message_head = start_line field* crlf >{ OUTC('\n'); };
 
     main := message_head*;
 }%%
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char *of, *au, *at,
@@ -180,4 +181,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_00__http_rfc7230

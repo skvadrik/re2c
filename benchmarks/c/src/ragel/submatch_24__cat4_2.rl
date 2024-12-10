@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_24__cat4_2 {
 
 const char *delim = "\n";
 
@@ -11,10 +13,10 @@ const char *delim = "\n";
         [a]* >{ a2 = p; } ([a]{2}[b]*) >{ b2 = p; }
         [a]* >{ a3 = p; } ([a]{2}[b]*) >{ b3 = p; }
         [\n] >{
-            outs(out, a0, b0); outc(out, '.'); outs(out, b0, a1); outc(out, '.');
-            outs(out, a1, b1); outc(out, '.'); outs(out, b1, a2); outc(out, '.');
-            outs(out, a2, b2); outc(out, '.'); outs(out, b2, a3); outc(out, '.');
-            outs(out, a3, b3); outc(out, '.'); outs(out, b3, p + 1);
+            OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
+            OUTS(a1, b1); OUTC('.'); OUTS(b1, a2); OUTC('.');
+            OUTS(a2, b2); OUTC('.'); OUTS(b2, a3); OUTC('.');
+            OUTS(a3, b3); OUTC('.'); OUTS(b3, p + 1);
         };
 
     main := abcd*;
@@ -22,8 +24,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -36,4 +37,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_24__cat4_2

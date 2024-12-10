@@ -183,7 +183,7 @@ def index_of_algo(group, stem):
 def time_format(time):
     order = math.floor(math.log(time, 10))
     if order > 0:
-        return '%.0lf'
+        return '%.1lf'
     else:
         return '%%.%dlf' % (-order + 1)
 
@@ -322,7 +322,7 @@ def group_benchmarks(benchmarks, params):
 
     avgtime /= nbench
     avgsize /= nbench
-    factor = 10 if params.relative_to != None else 3
+    factor = 10 if params.relative_to != None else 5
     maxtime = min(maxtime, factor * avgtime)
     maxsize = min(maxsize, factor * avgsize)
 

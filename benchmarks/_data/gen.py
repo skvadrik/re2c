@@ -2,8 +2,8 @@
 
 import os
 
-# 100 megabytes
-LIMIT = 1024 * 1024 * 100
+# 16 megabytes
+LIMIT = 1024 * 1024 * 16
 
 # read the small sample
 with open('small', 'rb') as f:

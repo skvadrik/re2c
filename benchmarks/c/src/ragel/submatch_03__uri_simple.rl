@@ -1,4 +1,6 @@
-#include "ragel/common.c"
+#include "ragel/base.h"
+
+namespace ragel_submatch_03__uri_simple {
 
 const char *delim = "\n";
 
@@ -30,7 +32,7 @@ const char *delim = "\n";
         OUT("path: ", p1, p2);
         if (q1) OUT("query: ", q1, q2);
         if (f1) OUT("fragment: ", f1, f2);
-        outc(out, '\n');
+        OUTC('\n');
     };
 
     main := uri*;
@@ -38,8 +40,7 @@ const char *delim = "\n";
 
 %% write data;
 
-static void lex(Input *in, Output *out)
-{
+static int lex(Input *in, int count) {
     char *p = in->p;
     char *pe = in->pe;
     const char
@@ -52,4 +53,11 @@ static void lex(Input *in, Output *out)
 
     in->p = p;
     in->pe = pe;
+
+    return count;
 }
+
+RAGEL_BENCH()
+RAGEL_TEST()
+
+} // namespace ragel_submatch_03__uri_simple

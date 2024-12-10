@@ -1,23 +1,8 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static void print_headers(Output *out, const char *tok,
-    const taglist_t *h1, const taglist_t *h2)
-{
-    if (!h2) return;
-    print_headers(out, tok, h1->pred, h2->pred);
-    OUT("header: ", tok + h1->dist, tok + h2->dist);
-}
+namespace re2c_submatch_01__http_simple {
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *s1, *v1, *v3, *m1, *rp1, *rt1,
-        *s2, *v2, *v4, *m2, *rp2, *rt2;
-    taglist_t *h1, *h2;
-
-loop:
-    in->tok = in->cur;
-/*!use:re2c
+/*!rules:re2c:main
     eol            = "\n";
     sp             = " ";
     htab           = "\t";
@@ -47,7 +32,7 @@ loop:
     start_line     = (request_line | status_line);
     message_head   = start_line (header_field eol)* eol;
 
-    *            { return 1; }
+    *            { return -1; }
     message_head {
         if (s1) {
             OUT("version: ", v1, v2);
@@ -59,11 +44,21 @@ loop:
             OUT("request: ", rt1, rt2);
             OUT("version: ", v3, v4);
         }
-        print_headers(out, in->tok, h1, h2);
-        outc(out, '\n');
+        count += print_headers(in->tok, h1, h2);
+        OUTC('\n');
 
         taglistpool_clear(&in->tlp, in);
         goto loop;
     }
 */
+
+static long print_headers(const char *tok, const taglist_t *h1, const taglist_t *h2) {
+    if (!h2) return 0;
+    long count = print_headers(tok, h1->pred, h2->pred);
+    OUT("header: ", tok + h1->dist, tok + h2->dist);
+    return count;
 }
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_01__http_simple

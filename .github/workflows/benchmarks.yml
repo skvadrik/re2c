@@ -90,8 +90,8 @@ jobs:
       - name: Run submatch DFA AOT benchmark
         working-directory: .build/benchmarks/c
         run: |
-          ./run.py --quickverify \
-            && ./run.py --repetitions 5 --output results.json \
+          ./run.py --verify \
+            && ./run.py --output results.json \
             && cat results.json
 
       - name: Run submatch DFA JIT benchmark

@@ -1,25 +1,23 @@
-/*!include:re2c "common.re" */
+#include "re2c/base.h"
 
-static int lex(input_t *in, Output *out)
-{
-    const char
-        *a0, *a1, *a2, *a3,
-        *b0, *b1, *b2, *b3;
-loop:
-    in->tok = in->cur;
-/*!use:re2c
-    * { return 1; }
+namespace re2c_submatch_24__cat4_2 {
+
+/*!rules:re2c:main
+    * { return -1; }
 
     @a0 [a]* @b0 [a]{2}[b]*
     @a1 [a]* @b1 [a]{2}[b]*
     @a2 [a]* @b2 [a]{2}[b]*
     @a3 [a]* @b3 [a]{2}[b]*
     [\n] {
-        outs(out, a0, b0); outc(out, '.'); outs(out, b0, a1); outc(out, '.');
-        outs(out, a1, b1); outc(out, '.'); outs(out, b1, a2); outc(out, '.');
-        outs(out, a2, b2); outc(out, '.'); outs(out, b2, a3); outc(out, '.');
-        outs(out, a3, b3); outc(out, '.'); outs(out, b3, in->cur);
+        OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
+        OUTS(a1, b1); OUTC('.'); OUTS(b1, a2); OUTC('.');
+        OUTS(a2, b2); OUTC('.'); OUTS(b2, a3); OUTC('.');
+        OUTS(a3, b3); OUTC('.'); OUTS(b3, in->cur);
         goto loop;
     }
 */
-}
+
+/*!include:re2c "base.re" */
+
+} // namespace re2c_submatch_24__cat4_2
