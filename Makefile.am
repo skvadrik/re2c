@@ -138,6 +138,10 @@ re2c_GEN_SRC = \
 	src/parse/conf_lexer.cc \
 	src/parse/conf_parser.cc
 re2c_GEN_HDR = \
+	src/parse/parser.h \
+	src/parse/conf_parser.h \
+	src/parse/lexer.h
+re2c_GEN_STX = \
 	src/default_syntax_c.h \
 	src/default_syntax_d.h \
 	src/default_syntax_go.h \
@@ -148,10 +152,7 @@ re2c_GEN_HDR = \
 	src/default_syntax_python.h \
 	src/default_syntax_rust.h \
 	src/default_syntax_v.h \
-	src/default_syntax_zig.h \
-	src/parse/parser.h \
-	src/parse/conf_parser.h \
-	src/parse/lexer.h
+	src/default_syntax_zig.h
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR)
@@ -160,7 +161,7 @@ nodist_re2c_SOURCES = \
 	src/msg/help_re2c.cc
 
 # custom rules create headers and must go before normal rules
-BUILT_SOURCES = $(re2c_GEN)
+BUILT_SOURCES = $(re2c_GEN_SRC) $(re2c_GEN_STX)
 
 # bootstrap sources
 re2c_BOOT = \
