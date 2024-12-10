@@ -155,7 +155,8 @@ re2c_GEN_STX = \
 	src/default_syntax_zig.h
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
-	$(re2c_GEN_HDR)
+	$(re2c_GEN_HDR) \
+	$(re2c_GEN_STX)
 nodist_re2c_SOURCES = \
 	$(re2c_GEN) \
 	src/msg/help_re2c.cc
