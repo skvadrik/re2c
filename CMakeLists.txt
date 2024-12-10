@@ -165,17 +165,17 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_lexer.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_parser.cc"
     "${CMAKE_CURRENT_BINARY_DIR}/src/parse/conf_parser.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_haskell.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_java.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_js.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.cc"
-    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_zig.cc"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_c.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_d.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_go.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_haskell.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_java.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_js.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_zig.h"
     "${re2c_docs}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
@@ -253,17 +253,17 @@ re2c_bootstrap_parser("src/parse/parser.ypp" "src/parse/parser.cc" "src/parse/pa
 re2c_bootstrap_lexer("src/parse/conf_lexer.re" "src/parse/conf_lexer.cc")
 re2c_bootstrap_parser("src/parse/conf_parser.ypp" "src/parse/conf_parser.cc" "src/parse/conf_parser.h")
 
-re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.cc")
-re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.cc")
-re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.cc")
-re2c_bootstrap_syntax("include/syntax/haskell" "src/default_syntax_haskell.cc")
-re2c_bootstrap_syntax("include/syntax/java" "src/default_syntax_java.cc")
-re2c_bootstrap_syntax("include/syntax/js" "src/default_syntax_js.cc")
-re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.cc")
-re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.cc")
-re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.cc")
-re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.cc")
-re2c_bootstrap_syntax("include/syntax/zig" "src/default_syntax_zig.cc")
+re2c_bootstrap_syntax("include/syntax/c" "src/default_syntax_c.h")
+re2c_bootstrap_syntax("include/syntax/d" "src/default_syntax_d.h")
+re2c_bootstrap_syntax("include/syntax/go" "src/default_syntax_go.h")
+re2c_bootstrap_syntax("include/syntax/haskell" "src/default_syntax_haskell.h")
+re2c_bootstrap_syntax("include/syntax/java" "src/default_syntax_java.h")
+re2c_bootstrap_syntax("include/syntax/js" "src/default_syntax_js.h")
+re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.h")
+re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.h")
+re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.h")
+re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.h")
+re2c_bootstrap_syntax("include/syntax/zig" "src/default_syntax_zig.h")
 
 # docs
 file(GLOB_RECURSE re2c_docs_sources CONFIGURE_DEPENDS

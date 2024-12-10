@@ -1,5 +1,4 @@
-#include "src/parse/conf_parser.h"
-const char* DEFAULT_SYNTAX_C =
+static constexpr const char* DEFAULT_SYNTAX_C =
     "// supported feature lists -----------------------------------------------------\n"
     "\n"
     "supported_apis = [\"simple\", \"generic\", \"record\"];\n"

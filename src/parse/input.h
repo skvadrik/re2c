@@ -85,7 +85,7 @@ class Input: private LexerState {
     ~Input();
 
     Ret open(const std::string& filename, const std::string* parent) NODISCARD;
-    Ret load_syntax_config(Opt& opts, Lang& lang);
+    Ret load_syntax_config(Opt& opts, Lang lang);
     Ret include(const std::string& filename, uint8_t* at) NODISCARD;
     Ret gen_dep_file(const std::string& header) const NODISCARD;
 

@@ -348,8 +348,7 @@ end:
     return Ret::OK;
 }
 
-Ret Opt::parse(char** argv, Input& input) {
-    Lang lang = RE2C_LANG;
+Ret Opt::parse(char** argv, Input& input, Lang lang) {
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
 
     // Load syntax file (it must have file index 0).

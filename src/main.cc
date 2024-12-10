@@ -142,7 +142,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     Opt opts(out_alc, msg);
     const conopt_t& globopts = opts.global();
     Input input(out_alc, &globopts, msg);
-    CHECK_RET(opts.parse(argv, input));
+    CHECK_RET(opts.parse(argv, input, RE2C_LANG));
 
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
