@@ -763,7 +763,7 @@ TESTS = \
 
 # benchmarks
 if WITH_BENCHMARKS
-SUBDIRS += benchmarks/c/submatch
+SUBDIRS += benchmarks/c
 EXTRA_DIST += benchmarks/c
 endif
 

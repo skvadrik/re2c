@@ -169,12 +169,12 @@ check_PROGRAMS += test_libre2c
 
 # benchmarks
 if WITH_BENCHMARKS
-SUBDIRS += benchmarks/c/submatch_libre2c/nfa
-SUBDIRS += benchmarks/c/submatch_libre2c/jit
-EXTRA_DIST += benchmarks/c/submatch_libre2c/nfa
-EXTRA_DIST += benchmarks/c/submatch_libre2c/jit
+SUBDIRS += benchmarks/c/libre2c/nfa
+SUBDIRS += benchmarks/c/libre2c/jit
+EXTRA_DIST += benchmarks/c/libre2c/nfa
+EXTRA_DIST += benchmarks/c/libre2c/jit
 if WITH_JAVA
-SUBDIRS += benchmarks/c/submatch_libre2c/java
-EXTRA_DIST += benchmarks/c/submatch_libre2c/java
+SUBDIRS += benchmarks/c/libre2c/java
+EXTRA_DIST += benchmarks/c/libre2c/java
 endif # WITH_JAVA
 endif # WITH_BENCHMARKS
