@@ -1,0 +1,124 @@
+Release 4.0
+===========
+
+This release adds support for eight new languages (D, Haskell, Java, JavaScript,
+OCaml, Python, V, Zig). Code generation subsystem has been completely rewritten
+using :ref:`syntax files <manual/manual_c:syntax files>` --- a technique
+for describing language backends. With so many new languages *re2c* now has a
+more generic meaning: *Regular Expressions to Code* rather than *Regular
+Expressions to C*. A new code generation model based on recursive functions has
+been added to enable support of functional languages. Much effort went into
+simplifying user interface: the former default API is now called *simple API*
+and supported for backends other than C/C++, and there is a new *record API* for
+cases when lexer state needs to be stored. Capturing groups can now be used with
+variables instead of arrays. Last but not least, re2c now has an
+`online playground <https://re2c.org/playground>`_.
+
+**Syntax files.**
+
+Previously language-specific logic was hardcoded into re2c. This made it
+difficult to add new languages or tweak code generator for existing ones, as it
+required patching re2c and upstreaming the changes, or else maintaining a fork.
+Now all language-specific logic has been moved to :ref:`syntax files <manual/manual_c:syntax files>`
+--- declarative configuration files that can be supplied by the user and don't
+require rebuilding re2c. Adding support for a new language is as simple as
+writing a syntax file for it. One can partially override an existing syntax file
+or completely redefine everything from scratch, if needed. For examples of
+syntax files see `include/syntax <https://github.com/skvadrik/re2c/tree/master/include/syntax>`_
+subdirectory.
+
+**API changes.**
+
+For a long time C/C++ was the only backend that supported default API, because
+pointer-like semantics of ``YYCURSOR`` and other primitives was hardcoded into
+re2c. With the addition of syntax files, it is now possible to define
+API flavours individually for each language. For languages that don't have
+pointer arithmetic ``YYCURSOR`` and others should be defined as indices rather
+than pointers, and a new primitive ``YYINPUT`` should be used to define the
+indexed character sequence. The former default API is now called *simple API* to
+avoid confusion, as some languages historically default to generic API. Simple
+API is implemented for all languages except Haskell and OCaml, and it's enabled
+by default for C, D, Java, JavaScript, Python, V and Zig. It can be explicitly
+enabled with ``--api simple`` option or ``re2c:api = simple`` configuration.
+
+There's also a new :ref:`record API <manual/manual_c:program interface>` enabled
+with ``--api record`` option and ``re2c:api = record`` configuration that should
+be used in cases when lexer state needs to be stored in some form of a record (a
+struct, a class, an object --- whatever it's called in the target language).
+This is usually the case when ``YYFILL`` is enabled, as it needs to update lexer
+state in a subroutine. Record API defines all operations via a single primitive
+``yyrecord`` --- a record with fields for ``YYCURSOR`` and other primitives (as
+needed). The names of the fields are language specific, but for most languages
+they default to lowercase equivalents of the primitives (e.g. ``yycursor`` for
+``YYCURSOR``), and they can be changed with the corresponding configurations.
+The name of the record itself can be changed with ``re2c:yyrecord``
+configuration. See `examples <https://github.com/search?q=repo%3Askvadrik%2Fre2c+path%3A%2F%5Eexamples%5C%2F%2F+%22re2c%3Aapi+%3D+record%22&type=code>`_
+that use record API.
+
+Some options and configurations have been renamed (old aliases still work),
+see the :ref:`changelog <releases/changelog/changelog:4.0 (2024-11-19)>` for
+details. Configurations that have ``define:`` or ``variable:`` parts now
+have shorter aliases without these parts (e.g ``re2c:YYCURSOR`` instead of
+``re2c:define:YYCURSOR`` and ``re2c:yych`` instead of ``re2c:variable:yych``).
+The goal of this change is to make the naming scheme more consistent, as
+wide-scope ``define:`` and ``variable:`` prefixes were in conflict with
+narrow-scope prefixes like ``tags:``, ``cond:``, ``yych:`` etc.
+
+**Recursive functions.**
+
+This release adds a new code model based on recursive functions (enabled with
+``--recursive-functions`` option). Previously re2c supported two code models.
+One is based on ``goto`` and labels (enabled with ``--goto-label`` option); it
+generates efficient code, and it's the best option for languages that support
+``goto`` statement. The other model is based on state-switch inside of a loop
+(enabled with ``--loop-switch`` option); it is for languages that don't have
+``goto``, but do have variables and loops. However, functional languages like
+Haskell don't have that --- they have immutable bindings instead of variables
+and recursion instead of loops. Therefore a third code model was needed. Some
+languages support all three models, and some support just one (supported models,
+as well as the default one, are defined by the syntax files).
+
+**Captures with variables.**
+Previously re2c always used POSIX-style ``yypmatch`` array to store submatch
+results with capturing groups (``--posix-captures`` and ``--leftmost-captures``
+options). However, it may be more convenient to use a scalar variable for each
+parenthesis instead of an array (some languages don't even have mutable arrays
+in the standard library). This release adds ``--posix-captvars`` and
+``--leftmost-captvars`` options that store submatch results in variables with
+autogenerated names ``<prefix>l<k>`` and ``<prefix>r<k>`` for ``k``-th capturing
+group, where ``<prefix>`` is the value of ``re2c:tags:prefix`` configuration.
+There're also new block types ``svars`` and ``mvars`` that are exactly like
+``stags`` and ``mtags``, except that they are expanded for the variables used
+in semantic action, not for the intermediate tag variables.
+
+**Block start/end markers.**
+For a long time re2c supported Flex-style block start/end markers ``%{`` and
+``%}``. Now this syntax is extended to all kinds of blocks, e.g. ``%{local`` for
+a local block ``/*!local:re2c``, ``%{rules:foo`` for a named rules block
+``/*!rules:re2c:foo``, ``%{getstate:x:y:z`` for a special block
+``/*!getstate:re2c:x:y:z``, etc. The new syntax is primarily intended for
+languages that don't have C-style multiline comments ``/* ... */``.
+
+**Warnings on by default.**
+Warnings that indicate serious issues with the code are now enabled by default.
+This includes
+`-Wundefined-control-flow <../../manual/basics/warnings/warnings.html#wundefined-control-flow>`_,
+`-Wsentinel-in-midrule  <../../manual/basics/warnings/warnings.html#wsentinel-in-midrule>`_,
+`-Wunreachable-rules <../../manual/basics/warnings/warnings.html#wunreachable-rules>`_,
+`-Wuseless-escape <../../manual/basics/warnings/warnings.html#wuseless-escape>`_,
+`-Wswapped-range <../../manual/basics/warnings/warnings.html#wswapped-range>`_ and
+`-Wcondition-order <../../manual/basics/warnings/warnings.html#wcondition-order>`_.
+If needed, each of them can be disabled with an explicit ``-Wno-*`` option.
+To enable less important warnings, use ``-W``.
+A new warning ``-Wundefined-syntax-config`` has been added. It warns when a
+syntax config does not define some configurations --- fix it by defining them or
+explicitly setting them to ``<undefined>``.
+
+**Online playground**
+Thanks to `PolarGoose <https://github.com/PolarGoose>`_, re2c now has an online
+playground that allows one to load examples for all languages, edit, compile and
+share the code online.
+
+For a full list of changes and bug fixes see the changelog
+:ref:`releases/changelog/changelog:4.0 (2024-11-19)`.
+As always, thanks to all contributors!

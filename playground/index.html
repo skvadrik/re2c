@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="icon" href="../_static/favicon.ico"/>
+
+  <title>re2c Online. Version:</title>
+
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: sans-serif;
+      padding: 0.5em;
+    }
+
+    .main-row-layout {
+      display: grid;
+      grid-template-rows: auto 1fr auto 100px;
+      height: 100vh;
+    }
+
+    .language-and-example-select-layout {
+      display: grid;
+      grid-template-columns: max-content max-content max-content;
+      padding: 0 0 0.5em 0;
+    }
+
+    .controls-layout {
+      display: grid;
+    }
+
+    .compile-and-open-lexer-graph-layout {
+      display: grid;
+      grid-template-columns: 100px 100px 100px 200px;
+      gap: 0.5em;
+      padding: 0.5em 0 0.5em 0;
+    }
+
+    .button, .select {
+      background-color: #e9e9ed;
+      border: 1px solid gray;
+      border-radius: 5px;
+      height: 25px;
+    }
+
+    .button:hover, .select:hover {
+      background-color: #cbcbce;
+    }
+
+    #compileButton {
+      background-color: #b0c4de;
+    }
+
+    #compileButton:hover {
+      background-color: #99aac1;
+    }
+
+    .source-code-and-output-editors-layout {
+      display: grid;
+      grid-template-columns: auto auto;
+      gap: 0.5em;
+    }
+
+    #editor, #output, #log-output {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+    }
+
+    .ace_content {
+      font-variant-ligatures: none;
+    }
+
+    .ace-tomorrow .ace_comment {
+      color: #007700;
+    }
+
+    .re2c-flags-container {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      padding: 0 0 0.5em 0;
+    }
+
+    #re2c-flags {
+      flex-grow: 1;
+      border: 1px solid gray;
+      border-radius: 5px;
+      height: 20px;
+    }
+
+    input, select {
+      font-family: mono;
+      margin: 0 0.5em 0 0.5em;
+    }
+
+    textarea {
+      font-family: mono;
+    }
+
+    /* change layout on mobile phones */
+    @media (max-width: 1000px) {
+      .source-code-and-output-editors-layout {
+        grid-template-columns: auto;
+      }
+
+      body {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="main-row-layout">
+  <div class="controls-layout">
+    <div class="language-and-example-select-layout">
+      <label>
+        Language:
+        <select class="select" id="language-select" onchange="languageSelected()">
+          <!-- The option values correspond to ace.js language highlighting mode.
+             The mode names can be found if you search the ace.js codebase for "mode-*.js" files like "mode-c_cpp.js":
+               https://github.com/ajaxorg/ace-builds/tree/master/src-min
+          -->
+          <option value="c_cpp" label="C/C++">c</option>
+          <option value="golang" label="D">d</option>
+          <option value="golang" label="Go">go</option>
+          <option value="haskell" label="Haskell">haskell</option>
+          <option value="java" label="Java">java</option>
+          <option value="js" label="JS">js</option>
+          <option value="ocaml" label="OCaml">ocaml</option>
+          <option value="python" label="Python">python</option>
+          <option value="rust" label="Rust">rust</option>
+          <option value="text" label="V">v</option> <!-- There is no syntax highlighting for V lang. Therefore, we use "text" -->
+          <option value="zig" label="Zig">zig</option>
+        </select>
+      </label>
+      <label>
+        Example:
+        <select class="select" id="example-select" onchange="exampleSelected()">
+        </select>
+      </label>
+      <label>
+        Font size:
+        <select class="select" id="font-size-select" onchange="setFontSize(this.value)">
+          <option>8</option>
+          <option>9</option>
+          <option>10</option>
+          <option>11</option>
+          <option>12</option>
+          <option selected>13</option>
+          <option>14</option>
+          <option>15</option>
+          <option>16</option>
+          <option>17</option>
+          <option>18</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="re2c-flags-container">
+      <label>Options:</label>
+      <input type="text" id="re2c-flags">
+    </div>
+  </div>
+
+  <div class="source-code-and-output-editors-layout">
+    <div id="editor"></div>
+    <div id="output"></div>
+  </div>
+
+  <div class="compile-and-open-lexer-graph-layout">
+    <button class="button" id="compileButton" onclick="compileCode()">Compile</button>
+    <button class="button" onclick="clearLog()">Clear log</button>
+    <button class="button" id="shareButton">Share</button>
+    <button class="button" id="openLexerGraphButton" onclick="openLexerGraph()">Open in GraphvizOnline</button>
+  </div>
+
+  <div id="log-output"></div>
+</div>
+</body>
+
+<!-- 3rd party libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.36.4/ace.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.5.0/lz-string.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js"></script>
+
+<script>
+  // re2c stdout and stderr are printed using "console.log" and "console.error" commands.
+  // We want this output to be visible to the user.
+  console.error = (...args) => log(args.join(' '))
+  console.log = (...args) => log(args.join(' '))
+
+  const languageSelect = document.getElementById("language-select")
+  const exampleSelect = document.getElementById("example-select")
+  const fontSizeSelect = document.getElementById("font-size-select")
+  const re2cFlagsDropBox = document.getElementById("re2c-flags")
+
+  const editor = ace.edit("editor")
+  editor.setTheme("ace/theme/tomorrow")
+  editor.setOptions({
+    showPrintMargin: false
+  })
+
+  const output = ace.edit("output")
+  output.setTheme("ace/theme/tomorrow")
+  output.setOptions({
+    showPrintMargin: false,
+    readOnly: true
+  })
+  output.session.setValue("", 1)
+
+  const logOutput = ace.edit("log-output")
+  logOutput.setTheme("ace/theme/tomorrow")
+  logOutput.setOptions({
+    showPrintMargin: false,
+    readOnly: true
+  })
+
+  setFontSize(fontSizeSelect.options[fontSizeSelect.selectedIndex].text)
+
+  function log(text) {
+    const lastRow = logOutput.session.getLength()
+    const rowIsEmpty = logOutput.session.getLine(lastRow - 1).length === 0
+    if (rowIsEmpty) {
+      logOutput.session.insert({row: lastRow, column: 0}, text)
+    } else {
+      logOutput.session.insert({row: lastRow, column: 0}, `\n${text}`)
+    }
+    logOutput.scrollToRow(lastRow)
+  }
+
+  function clearLog() {
+    logOutput.setValue("", 1)
+  }
+
+  function setFontSize(fontSize) {
+    editor.setFontSize(`${fontSize}px`)
+    output.setFontSize(`${fontSize}px`)
+    logOutput.setFontSize(`${fontSize}px`)
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const shareButton = document.getElementById('shareButton')
+
+    const clipboard = new ClipboardJS(shareButton, {
+      text: function (trigger) {
+        const compressedDataBase64 = LZString.compressToEncodedURIComponent(JSON.stringify({
+          "sourceCode": editor.getValue(),
+          "options": re2cFlagsDropBox.value,
+          "language": languageSelect.options[languageSelect.selectedIndex].text,
+        }))
+        const shareableURL = `${window.location.origin}${window.location.pathname}?compressed=${compressedDataBase64}`
+        return shareableURL
+      }
+    })
+
+    clipboard.on('success', function (e) {
+      window.alert("The share link is copied to clipboard")
+    })
+
+    clipboard.on('error', function (e) {
+      log("Failed to copy the share link to clipboard")
+    })
+  })
+</script>
+<script type="module">
+  import Re2cModule from "./gen/re2c.js"
+  import Re2cExamples from "./gen/re2cExamples.js"
+  import re2cVersion from "./gen/re2cVersion.js"
+
+  document.title += re2cVersion
+  log(`re2c version: ${re2cVersion}`)
+
+  const re2cModule = await Re2cModule()
+
+  window.exampleSelected = function (shouldAddSelectedExampleParameterToUrl = true) {
+    const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
+    const selectedExampleName = exampleSelect.options[exampleSelect.selectedIndex].text
+    const exampleContent = Re2cExamples[selectedLanguageText][selectedExampleName]
+    editor.setValue(exampleContent["content"], 1)
+    re2cFlagsDropBox.value = exampleContent["extraCommandLineArguments"]
+    output.setValue("", 1)
+
+    // Add the selected example as a parameter to the URL
+    if (shouldAddSelectedExampleParameterToUrl) {
+      const url = `${window.location.origin}${window.location.pathname}?example=${selectedLanguageText}/${selectedExampleName}`
+      window.history.replaceState({}, '', url);
+    }
+  }
+
+  window.languageSelected = function (shouldAddSelectedExampleParameterToUrl = true) {
+    const selectedLanguageText = languageSelect.options[languageSelect.selectedIndex].text
+    const selectedLanguageValue = languageSelect.options[languageSelect.selectedIndex].value
+
+    editor.session.setMode(`ace/mode/${selectedLanguageValue}`)
+    output.session.setMode(`ace/mode/${selectedLanguageValue}`)
+
+    // Clear the list of examples
+    exampleSelect.options.length = 0
+
+    // Add the examples for the selected language to the drop box
+    for (const exampleName in Re2cExamples[selectedLanguageText]) {
+      const option = document.createElement("option")
+      option.text = exampleName
+      exampleSelect.add(option)
+    }
+
+    // Make the first example active
+    window.exampleSelected(shouldAddSelectedExampleParameterToUrl)
+  }
+
+  // * select is the object pointing to the "select" html element
+  // * text is the text of the option that should be selected
+  function selectByText(select, text) {
+    const index = Array.from(select.options).findIndex(option => option.text === text)
+    select.selectedIndex = index
+  }
+
+  // * select is the object pointing to the "select" html element
+  // * text is the text of the option
+  function selectHasOptionWithText(select, text) {
+    const index = Array.from(select.options).findIndex(option => option.text === text)
+    return index !== -1
+  }
+
+  function tryUsingCompressedUrlParameter() {
+    const compressedData = new URLSearchParams(window.location.search).get('compressed')
+    if(compressedData === null) {
+      return false
+    }
+
+    const decompressedData = JSON.parse(LZString.decompressFromEncodedURIComponent(compressedData))
+    if (decompressedData === null) {
+      log("Failed to decompress the data from the URL")
+      return false
+    }
+
+    log(`Restore previous session using the data from the URL: { Language: "${decompressedData.language}"; Options: "${decompressedData.options}" }`)
+    selectByText(languageSelect, decompressedData.language)
+    window.languageSelected(false) // We don't need to change the URL
+    exampleSelect.selectedIndex = -1
+    re2cFlagsDropBox.value = decompressedData.options
+    editor.setValue(decompressedData.sourceCode, 1)
+    return true
+  }
+
+  function tryUsingExampleUrlParameter() {
+    // the example has the form "c/eof/01_sentinel.c" - the first part is the language, the second part is the example name
+    const example = new URLSearchParams(window.location.search).get('example')
+    if(example === null) {
+      return false
+    }
+
+    log(`Select example "${example}"`)
+    const [languageName, ...exampleNameParts] = example.split("/")
+    const exampleName = exampleNameParts.join("/")
+
+    // Select the language
+    if (!selectHasOptionWithText(languageSelect, languageName)) {
+      log(`Failed to select the example: the language "${languageName}" is not found`)
+      return false
+    }
+    selectByText(languageSelect, languageName)
+    window.languageSelected()
+
+    // Select the example
+    if (!selectHasOptionWithText(exampleSelect, exampleName)) {
+      log(`Failed to select the example: the example "${exampleName}" is not found`)
+      return false
+    }
+    selectByText(exampleSelect, exampleName)
+    window.exampleSelected()
+    return true
+  }
+
+  // Try to use the URL parameters
+  if (!tryUsingCompressedUrlParameter() && !tryUsingExampleUrlParameter()) {
+    // If no parameters are specified, or we failed to use them, then we select the first language and the first example
+    window.languageSelected();
+  }
+
+  function runRe2c(additionalFlags, onSuccess) {
+    const sourceCode = editor.getValue()
+    re2cModule.FS.writeFile('/input.txt', sourceCode)
+
+    const selectedLanguage = languageSelect.options[languageSelect.selectedIndex].text
+    const userProvidedFlags = re2cFlagsDropBox.value
+    const re2cCommandLineArguments = `/input.txt --lang ${selectedLanguage} -o /output.txt ${additionalFlags} ${userProvidedFlags}`
+
+    log(`Run command: re2c.exe ${re2cCommandLineArguments}`)
+    // convert the command line arguments string into an array without empty elements
+    const res = re2cModule.callMain(re2cCommandLineArguments.split(" ").filter(i => i))
+
+    if (res === 0) {
+      const outputFileContent = re2cModule.FS.readFile('/output.txt', {encoding: 'utf8'})
+      onSuccess(outputFileContent)
+    } else {
+      output.session.setValue("", 1)
+      log(`Failed to run re2c.exe. Error code: ${res}`)
+    }
+  }
+
+  window.compileCode = function () {
+    runRe2c("", function (outputFileContent) {
+      output.session.setValue(outputFileContent, 1)
+    })
+  }
+
+  window.openLexerGraph = function () {
+    runRe2c("--emit-dot", function (outputFileContent) {
+      window.open(`https://dreampuf.github.io/GraphvizOnline/#${encodeURIComponent(outputFileContent)}`, '_blank')
+    })
+  }
+</script>
+</html>
