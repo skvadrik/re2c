@@ -6,12 +6,15 @@ Changelog
 4.0x
 ----
 
-4.0.2 (2024-12-10)
+4.0.2 (2024-12-11)
 ~~~~~~~~~~~~~~~~~~
 
 - CMake build system: fixed bug
   `#515 <https://github.com/skvadrik/re2c/issues/515>`_ where language-specific
   binaries erroneously defaulted to generating code for C.
+
+- Playground: address bar now reflects navigation between examples, editors use
+  a more high-contrast CSS theme.
 
 
 4.0.1 (2024-11-25)
