@@ -21,7 +21,7 @@ do
     # stage 1
     mkdir stage1
     ../configure --prefix "$(pwd)/stage1" \
-        && $make_prog \
+        && $make_prog -j"$(nproc)" \
         && $make_prog install
 
     # stage 2
