@@ -886,3 +886,11 @@ re2zig_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::ZIG -DRE2C_PROG=\"re2zig\"
 re2zig_SOURCES = $(re2c_SOURCES)
 nodist_re2zig_SOURCES = $(re2c_GEN) src/msg/help_re2zig.cc
 endif
+
+# re2php
+if WITH_PHP
+bin_PROGRAMS += re2php
+re2php_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PHP -DRE2C_PROG=\"re2php\"
+re2php_SOURCES = $(re2c_SOURCES)
+nodist_re2php_SOURCES = $(re2c_GEN) src/msg/help_re2php.cc
+endif

@@ -24,6 +24,7 @@ enum class Lang: uint32_t {
     RUST,
     V,
     ZIG,
+    PHP,
     NONE // no language (no default syntax config will be loaded)
 };
 

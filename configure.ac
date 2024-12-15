@@ -231,6 +231,7 @@ AC_CONFIG_FILES([
     src/msg/help_re2rust.rst:doc/help.rst.in
     src/msg/help_re2v.rst:doc/help.rst.in
     src/msg/help_re2zig.rst:doc/help.rst.in
+    src/msg/help_re2php.rst:doc/help.rst.in
 
     doc/re2c.rst:doc/manpage.rst.in
     doc/re2d.rst:doc/manpage.rst.in
@@ -243,6 +244,7 @@ AC_CONFIG_FILES([
     doc/re2rust.rst:doc/manpage.rst.in
     doc/re2v.rst:doc/manpage.rst.in
     doc/re2zig.rst:doc/manpage.rst.in
+    doc/re2php.rst:doc/manpage.rst.in
 ])
 # Custom names are needed to accommodate POSIX Make suffix rules (bmake in
 # particular) instead of the more generic and flexible GNU Make pattern rules.
@@ -258,6 +260,7 @@ AC_CONFIG_LINKS([
     src/default_syntax_rust.stx:include/syntax/rust
     src/default_syntax_v.stx:include/syntax/v
     src/default_syntax_zig.stx:include/syntax/zig
+    src/default_syntax_php.stx:include/syntax/php
 ])
 AC_CONFIG_LINKS([
     benchmarks/c/libre2c/java/chart.js:benchmarks/c/libre2c/java/chart.js

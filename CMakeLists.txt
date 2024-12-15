@@ -97,6 +97,7 @@ set(re2c_manpage_python  "${CMAKE_CURRENT_BINARY_DIR}/doc/re2py.1")
 set(re2c_manpage_rust    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
 set(re2c_manpage_v       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2v.1")
 set(re2c_manpage_zig     "${CMAKE_CURRENT_BINARY_DIR}/doc/re2zig.1")
+set(re2c_manpage_zig     "${CMAKE_CURRENT_BINARY_DIR}/doc/re2php.1")
 set(re2c_help_c          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2c.cc")
 set(re2c_help_d          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2d.cc")
 set(re2c_help_go         "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2go.cc")
@@ -108,6 +109,7 @@ set(re2c_help_python     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2py.cc")
 set(re2c_help_rust       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2rust.cc")
 set(re2c_help_v          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2v.cc")
 set(re2c_help_zig        "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2zig.cc")
+set(re2c_help_php        "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2php.cc")
 set(re2c_rst2man         "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
 set(re2c_rst2txt         "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2txt.py")
 set(re2c_splitman        "${CMAKE_CURRENT_SOURCE_DIR}/build/split_man.py")
@@ -177,6 +179,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_zig.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_php.h"
     "${re2c_docs}"
 )
 add_library(re2c_objects_autogen_ver_to_vernum OBJECT
@@ -265,6 +268,7 @@ re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.h")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.h")
 re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.h")
 re2c_bootstrap_syntax("include/syntax/zig" "src/default_syntax_zig.h")
+re2c_bootstrap_syntax("include/syntax/php" "src/default_syntax_php.h")
 
 # docs
 file(GLOB_RECURSE re2c_docs_sources CONFIGURE_DEPENDS
@@ -386,6 +390,17 @@ if (RE2C_BUILD_RE2ZIG)
     target_compile_definitions(re2zig PUBLIC
         "RE2C_LANG=Lang::ZIG"
         "RE2C_PROG=\"re2zig\""
+    )
+endif()
+
+# re2php
+if (RE2C_BUILD_RE2PHP)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_php}")
+    re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_php}")
+    add_executable(re2php ${re2c_sources} "${re2c_help_php}")
+    target_compile_definitions(re2php PUBLIC
+        "RE2C_LANG=Lang::PHP"
+        "RE2C_PROG=\"re2php\""
     )
 endif()
 
