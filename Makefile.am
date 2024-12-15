@@ -560,7 +560,7 @@ re2c_SRC_DOC_EXT = \
     examples/php/submatch/01_stags.re \
     examples/php/submatch/02_mtags.re \
     examples/php/submatch/03_captures.re \
-    examples/php/submatch/04_posix_captures.re \
+    examples/php/submatch/04_posix_captures.re
 
 DOCS = doc/re2c.1
 HELP = src/msg/help_re2c.cc
