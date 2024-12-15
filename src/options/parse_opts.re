@@ -251,6 +251,7 @@ opt_lang: /*!local:re2c
     "rust"    end { *lang = Lang::RUST;    goto opt; }
     "v"       end { *lang = Lang::V;       goto opt; }
     "zig"     end { *lang = Lang::ZIG;     goto opt; }
+    "php"     end { *lang = Lang::PHP;     goto opt; }
     "none"    end { *lang = Lang::NONE;    goto opt; }
 */
 

@@ -59,6 +59,9 @@ elif lang == b'v':
 elif lang == b'zig':
     src_ext = b'zig'
     lang_name = b'Zig'
+elif lang == b'php':
+    src_ext = b'php'
+    lang_name = b'PHP'
 else:
     print('***', sys.argv[0], ': unknown lang:', lang)
     exit(1)

@@ -70,6 +70,7 @@ extern int conf_debug;
 #include "src/default_syntax_rust.h"
 #include "src/default_syntax_v.h"
 #include "src/default_syntax_zig.h"
+#include "src/default_syntax_php.h"
 
 
 #line 76 "src/parse/conf_parser.h"

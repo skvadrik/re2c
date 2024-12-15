@@ -104,6 +104,9 @@ AM_CONDITIONAL([WITH_VLANG], [test "x$enable_vlang" != "xno"])
 # --enable-zig
 AC_ARG_ENABLE([zig], [AS_HELP_STRING([--enable-zig], [build re2zig executable])])
 AM_CONDITIONAL([WITH_ZIG], [test "x$enable_zig" != "xno"])
+# --enable-php
+AC_ARG_ENABLE([php], [AS_HELP_STRING([--enable-php], [build re2php executable])])
+AM_CONDITIONAL([WITH_PHP], [test "x$enable_php" != "xno"])
 
 
 # --enable-benchmarks

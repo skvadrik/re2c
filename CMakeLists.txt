@@ -44,6 +44,7 @@ option(RE2C_BUILD_RE2PY "Build re2py executable (an alias for `re2c --lang pytho
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
 option(RE2C_BUILD_RE2V "Build re2v executable (an alias for `re2c --lang v`)" ON)
 option(RE2C_BUILD_RE2ZIG "Build re2zig executable (an alias for `re2c --lang zig`)" ON)
+option(RE2C_BUILD_RE2PHP "Build re2php executable (an alias for `re2c --lang php`)" ON)
 
 option(RE2C_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(RE2C_REGEN_BENCHMARKS "Regenerate C code for benchmarks" OFF)

@@ -152,7 +152,8 @@ re2c_GEN_STX = \
 	src/default_syntax_python.h \
 	src/default_syntax_rust.h \
 	src/default_syntax_v.h \
-	src/default_syntax_zig.h
+	src/default_syntax_zig.h \
+	src/default_syntax_php.h
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR) \
@@ -177,6 +178,7 @@ re2c_BOOT = \
 	bootstrap/doc/re2rust.1 \
 	bootstrap/doc/re2v.1 \
 	bootstrap/doc/re2zig.1 \
+	bootstrap/doc/re2php.1 \
 	bootstrap/src/default_syntax_c.h \
 	bootstrap/src/default_syntax_d.h \
 	bootstrap/src/default_syntax_go.h \
@@ -188,6 +190,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_rust.h \
 	bootstrap/src/default_syntax_v.h \
 	bootstrap/src/default_syntax_zig.h \
+	bootstrap/src/default_syntax_php.h \
 	bootstrap/src/msg/help_re2c.cc \
 	bootstrap/src/msg/help_re2d.cc \
 	bootstrap/src/msg/help_re2go.cc \
@@ -199,6 +202,7 @@ re2c_BOOT = \
 	bootstrap/src/msg/help_re2rust.cc \
 	bootstrap/src/msg/help_re2v.cc \
 	bootstrap/src/msg/help_re2zig.cc \
+	bootstrap/src/msg/help_re2php.cc \
 	bootstrap/src/msg/ver_to_vernum.cc \
 	bootstrap/src/options/parse_opts.cc \
 	bootstrap/src/parse/lexer.cc \
@@ -234,6 +238,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/basics/api/api2_rust.rst_ \
 	doc/manual/basics/api/api2_v.rst_ \
 	doc/manual/basics/api/api2_zig.rst_ \
+	doc/manual/basics/api/api2_php.rst_ \
 	doc/manual/basics/api/api3.rst_ \
 	doc/manual/basics/blocks.rst_ \
 	doc/manual/basics/directives.rst_ \
@@ -533,6 +538,29 @@ re2c_SRC_DOC_EXT = \
 	examples/zig/submatch/02_mtags.re \
 	examples/zig/submatch/03_captures.re \
 	examples/zig/submatch/04_posix_captures.re
+	examples/php/01_basic.php \
+    examples/php/01_basic.re \
+    examples/php/conditions/parse_u32_blocks.re \
+    examples/php/conditions/parse_u32_conditions.re \
+    examples/php/encodings/unicode_identifier.re \
+    examples/php/eof/01_sentinel.re \
+    examples/php/eof/02_bounds_checking.re \
+    examples/php/eof/03_eof_rule.re \
+    examples/php/eof/04_fake_sentinel.re \
+    examples/php/fill/01_fill.re \
+    examples/php/fill/02_fill.re \
+    examples/php/headers/header.re \
+    examples/php/headers/lexer/state.php \
+    examples/php/includes/definitions.php \
+    examples/php/includes/include.re \
+    examples/php/reuse/reuse.re \
+    examples/php/reuse/usedir.re \
+    examples/php/state/push.re \
+    examples/php/submatch/01_stags_fill.re \
+    examples/php/submatch/01_stags.re \
+    examples/php/submatch/02_mtags.re \
+    examples/php/submatch/03_captures.re \
+    examples/php/submatch/04_posix_captures.re \
 
 DOCS = doc/re2c.1
 HELP = src/msg/help_re2c.cc
@@ -576,6 +604,10 @@ if WITH_ZIG
 DOCS += doc/re2zig.1
 HELP += src/msg/help_re2zig.cc
 endif
+if WITH_PHP
+DOCS += doc/re2php.1
+HELP += src/msg/help_re2php.cc
+endif
 BUILT_SOURCES += $(HELP)
 
 man_MANS = $(DOCS)
@@ -593,6 +625,7 @@ dist_stdlib_DATA = \
 	include/syntax/rust \
 	include/syntax/v \
 	include/syntax/zig \
+	include/syntax/php \
 	include/unicode_categories.re
 
 BAZELFILES := \
