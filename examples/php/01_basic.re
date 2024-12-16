@@ -2,7 +2,7 @@
 // re2php $INPUT -o $OUTPUT
 
 function lex($yyinput) {
-    let yycursor = 0;
+    $yycursor = 0;
     /*!re2c
         re2c:yyfill:enable = 0;
 
@@ -12,5 +12,5 @@ function lex($yyinput) {
 }
 
 if (!lex("1234\0")) {
-    throw "error!"
+    throw new \Exception("error!");
 }
