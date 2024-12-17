@@ -22,10 +22,10 @@ function lex($yyinput) {
                         case 0x37:
                         case 0x38:
                         case 0x39:
-                            yystate = 2;
+                            $yystate = 2;
                             break;
                         default:
-                            yystate = 1;
+                            $yystate = 1;
                             break;
                     }
                 case 1:
@@ -44,10 +44,10 @@ function lex($yyinput) {
                         case 0x38:
                         case 0x39:
                             $yycursor += 1;
-                            yystate = 2;
+                            $yystate = 2;
                             break;
                         default:
-                            yystate = 3;
+                            $yystate = 3;
                             break;
                     }
                 case 3:
