@@ -44,7 +44,7 @@ static void print_char(std::ostream& o, uint32_t c, const opt_t* opts) {
         o << "\\\\"; // both .dot and C/C++ code expect "\\"
         break;
     default:
-        if (is_print(c) || is_space(c)) {
+        if (is_print(c)) {
             o << static_cast<char> (c);
         } else {
             CHECK(opts->encoding.cunit_size() == 1);
