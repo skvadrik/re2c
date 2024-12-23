@@ -16,6 +16,7 @@ static constexpr const char* DEFAULT_SYNTAX_ZIG =
     "single_quoted_strings = 0;\n"
     "indentation_sensitive = 0;\n"
     "wrap_blocks_in_braces = 0;\n"
+    "special_escapes = \"\\n\\r\\t\\\\'\\\"\";\n"
     "\n"
     "\n"
     "// immutable configurations (command-line only options) ------------------------\n"

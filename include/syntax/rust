@@ -15,6 +15,7 @@ backtick_quoted_strings = 0;
 single_quoted_strings = 0;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
+special_escapes = "\n\r\t\\'\"";
 
 
 // immutable configurations (command-line only options) ------------------------

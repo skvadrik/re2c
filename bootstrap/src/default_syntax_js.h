@@ -15,6 +15,7 @@ static constexpr const char* DEFAULT_SYNTAX_JS =
     "single_quoted_strings = 1;\n"
     "indentation_sensitive = 0;\n"
     "wrap_blocks_in_braces = 1;\n"
+    "special_escapes = \"\\b\\f\\n\\r\\t\\v\\\\'\\\"\";\n"
     "\n"
     "\n"
     "// immutable configurations (command-line only options) ------------------------\n"

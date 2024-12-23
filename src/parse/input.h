@@ -79,6 +79,7 @@ class Input: private LexerState {
     const StxCodes* tmp_code;
 
     bool in_syntax_file;
+    bool allow_raw_nl;
 
   public:
     Input(OutAllocator& alc, const conopt_t* o, Msg& m);
@@ -179,7 +180,8 @@ inline Input::Input(OutAllocator& alc, const conopt_t* o, Msg& m)
       tmp_bool(),
       tmp_list(),
       tmp_code(),
-      in_syntax_file(false) {}
+      in_syntax_file(false),
+      allow_raw_nl(true) {}
 
 inline loc_t Input::cur_loc() const {
     const uint8_t* p = cur;

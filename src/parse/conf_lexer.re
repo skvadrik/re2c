@@ -496,7 +496,7 @@ Ret Input::lex_conf_string_quoted(uint8_t quote) {
         if (stop) return Ret::OK;
         if (c.chr > 0xFF) {
             RET_FAIL(error_at(c.loc, "multibyte character in configuration string: 0x%X", c.chr));
-        } else if (c.chr == '\n' && in_syntax_file) {
+        } else if (c.chr == '\n' && in_syntax_file && !allow_raw_nl) {
             RET_FAIL(error_at(c.loc, "newline in a string literal (use `nl` variable instead)"));
         }
         tmp_str += static_cast<char>(c.chr);
@@ -506,7 +506,9 @@ Ret Input::lex_conf_string_quoted(uint8_t quote) {
 Ret Input::lex_conf_code(Opt& opts) {
     if (in_syntax_file) {
         conf_kind = ConfKind::CODE;
+        allow_raw_nl = false;
         CHECK_RET(parse_conf(opts));
+        allow_raw_nl = true;
     } else {
         CHECK_RET(lex_conf_string(opts));
         tmp_code = opts.make_api(tmp_str);
@@ -815,6 +817,12 @@ start:
     goto start; \
 } while(0)
 
+#define SAVE_CONF_STR(conf) do { \
+    CHECK_RET(lex_conf_string(opts)); \
+    opts.set_##conf(tmp_str); \
+    goto start; \
+} while(0)
+
 #define SAVE_CONF_LIST(conf) do { \
     CHECK_RET(lex_conf_list(opts)); \
     opts.set_##conf(tmp_list); \
@@ -836,7 +844,12 @@ start:
 
     "re2c:" { CHECK_RET(lex_conf(opts)); goto start; }
 
-    "" / "code:" { if (conf_parse(*this, opts) != 0) return Ret::FAIL; goto start; }
+    "" / "code:" {
+        allow_raw_nl = false;
+        if (conf_parse(*this, opts) != 0) return Ret::FAIL;
+        allow_raw_nl = true;
+        goto start;
+    }
 
     "supported_apis"        { SAVE_CONF_LIST(supported_apis); }
     "supported_api_styles"  { SAVE_CONF_LIST(supported_api_styles); }
@@ -849,7 +862,7 @@ start:
     "single_quoted_strings"   { SAVE_CONF_BOOL(single_quoted_strings); }
     "indentation_sensitive"   { SAVE_CONF_BOOL(indentation_sensitive); }
     "wrap_blocks_in_braces"   { SAVE_CONF_BOOL(wrap_blocks_in_braces); }
-
+    "special_escapes"         { SAVE_CONF_STR(special_escapes); }
 
     * { RET_FAIL(error_at_tok("unexpected character: '%c'", cur[-1])); }
 */
@@ -859,6 +872,7 @@ start:
 }
 
 #undef SAVE_CONF_BOOL
+#undef SAVE_CONF_STR
 #undef SAVE_CONF_LIST
 
 #undef YYFILL
