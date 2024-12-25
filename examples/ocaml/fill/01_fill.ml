@@ -43,7 +43,7 @@ let fill(st: state) : status =
 
 #45 "ocaml/fill/01_fill.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -69,7 +69,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 #70 "ocaml/fill/01_fill.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -89,7 +89,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
     yyrecord.yymarker <- yyrecord.yycursor;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     if (yych <= '\x00') then (
         if (yyrecord.yylimit <= yyrecord.yycursor) then (
             if (fill yyrecord = Ok) then (yy5 [@tailcall]) yyrecord count
@@ -103,7 +103,7 @@ and yy5 (yyrecord : state) (count : int) : int =
     )
 
 and yy6 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     (yy7 [@tailcall]) yyrecord count yych
 
 and yy7 (yyrecord : state) (count : int) (yych : char) : int =
@@ -129,7 +129,7 @@ and yy8 (yyrecord : state) (count : int) : int =
 #130 "ocaml/fill/01_fill.ml"
 
 and yy9 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     if (yych <= '\x00') then (
         if (yyrecord.yylimit <= yyrecord.yycursor) then (
             if (fill yyrecord = Ok) then (yy9 [@tailcall]) yyrecord count

@@ -15,7 +15,7 @@ type state = {
 
 #17 "ocaml/eof/03_eof_rule.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -40,7 +40,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 #41 "ocaml/eof/03_eof_rule.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -54,7 +54,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
     yyrecord.yymarker <- yyrecord.yycursor;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     if (yych <= '\x00') then (
         if (yyrecord.yylimit <= yyrecord.yycursor) then (
             (yy2 [@tailcall]) yyrecord count
@@ -67,7 +67,7 @@ and yy5 (yyrecord : state) (count : int) : int =
     )
 
 and yy6 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     (yy7 [@tailcall]) yyrecord count yych
 
 and yy7 (yyrecord : state) (count : int) (yych : char) : int =
@@ -92,7 +92,7 @@ and yy8 (yyrecord : state) (count : int) : int =
 #93 "ocaml/eof/03_eof_rule.ml"
 
 and yy9 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     if (yych <= '\x00') then (
         if (yyrecord.yylimit <= yyrecord.yycursor) then (
             (yy11 [@tailcall]) yyrecord count
@@ -130,8 +130,8 @@ let test(str, count) =
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =
-    test("\x00", 0);
-    test("'qu\x00tes' 'are' 'fine: \\'' \x00", 3);
-    test("'unterminated\\'\x00", -1)
+    test("", 0);
+    test("'qu\x00tes' 'are' 'fine: \\'' ", 3);
+    test("'unterminated\\'", -1)
 
 let _ = main ()

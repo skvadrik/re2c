@@ -8,7 +8,7 @@ open String
 
 
 let rec yy0 (yyrecord : State.state) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | 'a' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -26,7 +26,7 @@ and yy1 (yyrecord : State.state) : int =
     yyrecord.tag
 
 and yy2 (yyrecord : State.state) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | 'b' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -40,7 +40,7 @@ and lex (yyrecord : State.state) : int =
 
 let main () =
     let st = {
-        yyinput = "ab\x00";
+        yyinput = "ab";
         yycursor = 0;
         tag = 0;
         

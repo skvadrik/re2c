@@ -25,7 +25,7 @@ let test(str, num) =
     in if not (lex st = num) then raise (Failure "error")
 
 let main () =
-    test("123\x00", Int);
-    test("123.4567\x00", Float)
+    test("123", Int);
+    test("123.4567", Float)
 
 let _ = main ()

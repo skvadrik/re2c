@@ -11,7 +11,7 @@ type state = {
 
 
 let rec yy0 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\x07' -> (yy3 [@tailcall]) yyrecord
@@ -25,7 +25,7 @@ and yy2 (yyrecord : state) : bool =
 
 and yy3 (yyrecord : state) : bool =
     yyrecord.yymarker <- yyrecord.yycursor;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\b' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -33,7 +33,7 @@ and yy3 (yyrecord : state) : bool =
         | _ -> (yy2 [@tailcall]) yyrecord
 
 and yy4 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x0C' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -45,7 +45,7 @@ and yy5 (yyrecord : state) : bool =
     (yy2 [@tailcall]) yyrecord
 
 and yy6 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\n' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -53,7 +53,7 @@ and yy6 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy7 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\r' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -61,7 +61,7 @@ and yy7 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy8 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\t' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -69,7 +69,7 @@ and yy8 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy9 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\x0B' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -77,7 +77,7 @@ and yy9 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy10 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\\' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -85,7 +85,7 @@ and yy10 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy11 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '\'' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -93,7 +93,7 @@ and yy11 (yyrecord : state) : bool =
         | _ -> (yy5 [@tailcall]) yyrecord
 
 and yy12 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '"' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;

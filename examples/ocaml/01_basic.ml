@@ -10,7 +10,7 @@ type state = {
 
 
 let rec yy0 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '1'..'9' -> (yy2 [@tailcall]) yyrecord
@@ -20,7 +20,7 @@ and yy1 (yyrecord : state) : bool =
     false
 
 and yy2 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | '0'..'9' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -36,7 +36,7 @@ and lex (yyrecord : state) : bool =
 
 
 let main () =
-    let st = {yyinput = "1234\x00"; yycursor = 0}
+    let st = {yyinput = "1234"; yycursor = 0}
     in if not (lex st) then raise (Failure "error")
 
 let _ = main ()

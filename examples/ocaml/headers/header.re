@@ -23,7 +23,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = "ab\x00";
+        yyinput = "ab";
         yycursor = 0;
         tag = 0;
         %{stags format = "\n\t@@ = 0;"; %}
