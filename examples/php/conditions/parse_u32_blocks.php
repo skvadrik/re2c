@@ -1,6 +1,8 @@
 <?php
 // re2js $INPUT -o $OUTPUT
 
+
+
 function parse_u32($str) {
     $st = new \stdClass();
     $st->yyinput = $str;
@@ -13,46 +15,46 @@ function parse_u32($str) {
     while (true) {
         switch ($yystate) {
             case 0:
-                $yych = ord($st->yyinput[$st->yycursor]);
+                $yych = $st->yyinput[$st->yycursor];
                 $st->yycursor += 1;
                 switch ($yych) {
-                    case 0x30:
+                    case '0':
                         $yystate = 2;
-                        break;
-                    case 0x31:
-                    case 0x32:
-                    case 0x33:
-                    case 0x34:
-                    case 0x35:
-                    case 0x36:
-                    case 0x37:
-                    case 0x38:
-                    case 0x39:
+                        break 2;
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
                         $yystate = 4;
-                        break;
+                        break 2;
                     default:
                         $yystate = 1;
-                        break;
+                        break 2;
                 }
             case 1:
                 return null;
             case 2:
                 $st->yymarker = $st->yycursor;
-                $yych = ord($st->yyinput[$st->yycursor]);
+                $yych = $st->yyinput[$st->yycursor];
                 switch ($yych) {
-                    case 0x42:
-                    case 0x62:
+                    case 'B':
+                    case 'b':
                         $st->yycursor += 1;
                         $yystate = 5;
-                        break;
-                    case 0x58:
-                    case 0x78:
+                        break 2;
+                    case 'X':
+                    case 'x':
                         $st->yycursor += 1;
                         $yystate = 7;
-                        break;
+                        break 2;
                     default:
                         $yystate = 3;
-                        break;
+                        break 2;
                 }
             case 3:
                 return parse_oct($st);
@@ -60,52 +62,52 @@ function parse_u32($str) {
                 $st->yycursor -= 1;
                 return parse_dec($st);
             case 5:
-                $yych = ord($st->yyinput[$st->yycursor]);
+                $yych = $st->yyinput[$st->yycursor];
                 switch ($yych) {
-                    case 0x30:
-                    case 0x31:
+                    case '0':
+                    case '1':
                         $st->yycursor += 1;
                         $yystate = 8;
-                        break;
+                        break 2;
                     default:
                         $yystate = 6;
-                        break;
+                        break 2;
                 }
             case 6:
                 $st->yycursor = $st->yymarker;
                 $yystate = 3;
-                break;
+                break 2;
             case 7:
-                $yych = ord($st->yyinput[$st->yycursor]);
+                $yych = $st->yyinput[$st->yycursor];
                 switch ($yych) {
-                    case 0x30:
-                    case 0x31:
-                    case 0x32:
-                    case 0x33:
-                    case 0x34:
-                    case 0x35:
-                    case 0x36:
-                    case 0x37:
-                    case 0x38:
-                    case 0x39:
-                    case 0x41:
-                    case 0x42:
-                    case 0x43:
-                    case 0x44:
-                    case 0x45:
-                    case 0x46:
-                    case 0x61:
-                    case 0x62:
-                    case 0x63:
-                    case 0x64:
-                    case 0x65:
-                    case 0x66:
+                    case '0':
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
+                    case 'A':
+                    case 'B':
+                    case 'C':
+                    case 'D':
+                    case 'E':
+                    case 'F':
+                    case 'a':
+                    case 'b':
+                    case 'c':
+                    case 'd':
+                    case 'e':
+                    case 'f':
                         $st->yycursor += 1;
                         $yystate = 9;
-                        break;
+                        break 2;
                     default:
                         $yystate = 6;
-                        break;
+                        break 2;
                 }
             case 8:
                 $st->yycursor -= 1;
@@ -120,7 +122,7 @@ function parse_u32($str) {
 
 }
 
-function parse_bin($st) {
+function parse_bin($st): int {
     $n = 0;
     while (true) {
 
@@ -129,21 +131,21 @@ function parse_bin($st) {
         while (true) {
             switch ($yystate) {
                 case 0:
-                    $yych = ord($st->yyinput[$st->yycursor]);
+                    $yych = $st->yyinput[$st->yycursor];
                     $st->yycursor += 1;
                     switch ($yych) {
-                        case 0x30:
-                        case 0x31:
+                        case '0':
+                        case '1':
                             $yystate = 2;
-                            break;
+                            break 2;
                         default:
                             $yystate = 1;
-                            break;
+                            break 2;
                     }
                 case 1:
                     return $n;
                 case 2:
-                    $n = $n * 2 + ($st->yyinput[$st->yycursor - 1] - 48); break;
+                    $n = $n * 2 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2;
                 default:
                     throw new \Exception("internal lexer error");
             }
@@ -152,7 +154,7 @@ function parse_bin($st) {
     }
 }
 
-function parse_oct($st) {
+function parse_oct($st): int {
     $n = 0;
     while (true) {
 
@@ -161,27 +163,27 @@ function parse_oct($st) {
         while (true) {
             switch ($yystate) {
                 case 0:
-                    $yych = ord($st->yyinput[$st->yycursor]);
+                    $yych = $st->yyinput[$st->yycursor];
                     $st->yycursor += 1;
                     switch ($yych) {
-                        case 0x30:
-                        case 0x31:
-                        case 0x32:
-                        case 0x33:
-                        case 0x34:
-                        case 0x35:
-                        case 0x36:
-                        case 0x37:
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
                             $yystate = 2;
-                            break;
+                            break 2;
                         default:
                             $yystate = 1;
-                            break;
+                            break 2;
                     }
                 case 1:
                     return $n;
                 case 2:
-                    $n = $n * 8 + ($st->yyinput[$st->yycursor - 1] - 48); break;
+                    $n = $n * 8 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2;
                 default:
                     throw new \Exception("internal lexer error");
             }
@@ -190,7 +192,7 @@ function parse_oct($st) {
     }
 }
 
-function parse_dec($st) {
+function parse_dec($st): int {
     $n = 0;
     while (true) {
 
@@ -199,29 +201,32 @@ function parse_dec($st) {
         while (true) {
             switch ($yystate) {
                 case 0:
-                    $yych = ord($st->yyinput[$st->yycursor]);
+                    $yych = $st->yyinput[$st->yycursor];
                     $st->yycursor += 1;
                     switch ($yych) {
-                        case 0x30:
-                        case 0x31:
-                        case 0x32:
-                        case 0x33:
-                        case 0x34:
-                        case 0x35:
-                        case 0x36:
-                        case 0x37:
-                        case 0x38:
-                        case 0x39:
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
                             $yystate = 2;
-                            break;
+                            break 2;
                         default:
                             $yystate = 1;
-                            break;
+                            break 2;
                     }
                 case 1:
                     return $n;
                 case 2:
-                    $n = $n * 10 + ($st->yyinput[$st->yycursor - 1] - 48); break;
+
+                    $n = $n * 10 + (ord($st->yyinput[$st->yycursor - 1]) - 48);
+                    break 2;
+
                 default:
                     throw new \Exception("internal lexer error");
             }
@@ -230,7 +235,7 @@ function parse_dec($st) {
     }
 }
 
-function parse_hex($st) {
+function parse_hex($st): int {
     $n = 0;
     while (true) {
 
@@ -239,49 +244,49 @@ function parse_hex($st) {
         while (true) {
             switch ($yystate) {
                 case 0:
-                    $yych = ord($st->yyinput[$st->yycursor]);
+                    $yych = $st->yyinput[$st->yycursor];
                     $st->yycursor += 1;
                     switch ($yych) {
-                        case 0x30:
-                        case 0x31:
-                        case 0x32:
-                        case 0x33:
-                        case 0x34:
-                        case 0x35:
-                        case 0x36:
-                        case 0x37:
-                        case 0x38:
-                        case 0x39:
+                        case '0':
+                        case '1':
+                        case '2':
+                        case '3':
+                        case '4':
+                        case '5':
+                        case '6':
+                        case '7':
+                        case '8':
+                        case '9':
                             $yystate = 2;
-                            break;
-                        case 0x41:
-                        case 0x42:
-                        case 0x43:
-                        case 0x44:
-                        case 0x45:
-                        case 0x46:
+                            break 2;
+                        case 'A':
+                        case 'B':
+                        case 'C':
+                        case 'D':
+                        case 'E':
+                        case 'F':
                             $yystate = 3;
-                            break;
-                        case 0x61:
-                        case 0x62:
-                        case 0x63:
-                        case 0x64:
-                        case 0x65:
-                        case 0x66:
+                            break 2;
+                        case 'a':
+                        case 'b':
+                        case 'c':
+                        case 'd':
+                        case 'e':
+                        case 'f':
                             $yystate = 4;
-                            break;
+                            break 2;
                         default:
                             $yystate = 1;
-                            break;
+                            break 2;
                     }
                 case 1:
                     return $n;
                 case 2:
-                    $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 48); break;
+                    $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2;
                 case 3:
-                    $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 55); break;
+                    $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 55); break 2;
                 case 4:
-                    $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 87); break;
+                    $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 87); break 2;
                 default:
                     throw new \Exception("internal lexer error");
             }
@@ -290,7 +295,7 @@ function parse_hex($st) {
     }
 }
 
-function test($s, $n) {
+function test($s, $n): void {
     if (parse_u32($s) != $n) {
         throw new \Exception("error!");
     }

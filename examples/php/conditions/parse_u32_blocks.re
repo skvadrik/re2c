@@ -22,49 +22,52 @@ function parse_u32($str) {
     */
 }
 
-function parse_bin($st) {
+function parse_bin($st): int {
     $n = 0;
     while (true) {
     /*!re2c
-        [01] { $n = $n * 2 + ($st->yyinput[$st->yycursor - 1] - 48); break; }
+        [01] { $n = $n * 2 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2; }
         *    { return $n; }
     */
     }
 }
 
-function parse_oct($st) {
+function parse_oct($st): int {
     $n = 0;
     while (true) {
     /*!re2c
-        [0-7] { $n = $n * 8 + ($st->yyinput[$st->yycursor - 1] - 48); break; }
+        [0-7] { $n = $n * 8 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2; }
         *     { return $n; }
     */
     }
 }
 
-function parse_dec($st) {
+function parse_dec($st): int {
     $n = 0;
     while (true) {
     /*!re2c
-        [0-9] { $n = $n * 10 + ($st->yyinput[$st->yycursor - 1] - 48); break; }
+        [0-9] {
+            $n = $n * 10 + (ord($st->yyinput[$st->yycursor - 1]) - 48);
+            break 2;
+        }
+        * { return $n; }
+    */
+    }
+}
+
+function parse_hex($st): int {
+    $n = 0;
+    while (true) {
+    /*!re2c
+        [0-9] { $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 48); break 2; }
+        [a-f] { $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 87); break 2; }
+        [A-F] { $n = $n * 16 + (ord($st->yyinput[$st->yycursor - 1]) - 55); break 2; }
         *     { return $n; }
     */
     }
 }
 
-function parse_hex($st) {
-    $n = 0;
-    while (true) {
-    /*!re2c
-        [0-9] { $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 48); break; }
-        [a-f] { $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 87); break; }
-        [A-F] { $n = $n * 16 + ($st->yyinput[$st->yycursor - 1] - 55); break; }
-        *     { return $n; }
-    */
-    }
-}
-
-function test($s, $n) {
+function test($s, $n): void {
     if (parse_u32($s) != $n) {
         throw new \Exception("error!");
     }
