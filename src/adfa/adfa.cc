@@ -460,7 +460,7 @@ Ret Adfa::calc_stats(OutputBlock& out) {
                 mtagvars.insert(tag.name);
             } else if (tag.name) {
                 stagvars.insert(tag.name);
-            } else if (capture(tag) && !opts->captures_array) {
+            } else if (capture(tag) && !fictive(tag) && !opts->captures_array) {
                 for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
                     stagvars.insert(captvar_name(i, opts));
                 }
