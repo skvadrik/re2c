@@ -423,12 +423,14 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::TAG:
-            if (ast->tag.name && !opts->tags) {
-                RET_FAIL(spec.msg.error(
-                        ast->loc, "tags are only allowed with '-T, --tags' option"));
-            } else if (opts->captures) {
-                RET_FAIL(spec.msg.error(
-                        ast->loc, "cannot mix capturing groups and standalone tags"));
+            if (ast->tag.name) { // skip lookahead operator / (unnamed tag), it's a special case
+                if (!opts->tags) {
+                    RET_FAIL(spec.msg.error(
+                            ast->loc, "tags are only allowed with '-T, --tags' option"));
+                } else if (opts->captures) {
+                    RET_FAIL(spec.msg.error(
+                            ast->loc, "cannot mix capturing groups and standalone tags"));
+                }
             }
             re = re_tag(spec, tags.size(), false);
             tags.emplace_back(ast->tag.name, ast->tag.history, x.height);
