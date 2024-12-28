@@ -55,7 +55,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     const loc_t& loc = block.loc;
     Msg& msg = output.msg;
     const std::vector<AstRule>& ast = gram.rules;
-    const std::string&cond = gram.name;
+    const std::string& cond = gram.name;
     const std::string name = make_name(output, cond, loc);
     const std::string& setup = gram.setup.empty() ? "" : gram.setup[0]->text;
 
@@ -87,7 +87,9 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
         output.skeletons.insert(name);
     }
 
-    cutoff_dead_rules(dfa, opts, cond, msg);
+    if (cond != "0") {
+        cutoff_dead_rules(dfa, opts, cond, msg);
+    }
 
     insert_fallback_tags(dfa);
 

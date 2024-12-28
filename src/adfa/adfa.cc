@@ -320,7 +320,7 @@ void Adfa::prepare(const opt_t* opts) {
         }
 
         // last state, add end-of-input rule $ if needed (see note [end-of-input rule])
-        if (!s->next && opts->fill_eof != NOEOF) {
+        if (!s->next && opts->fill_eof != NOEOF && cond != "0") {
             eof_state = new State;
             eof_state->action.set_rule(eof_rule);
             finstates[eof_rule] = eof_state;

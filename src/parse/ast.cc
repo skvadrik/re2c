@@ -391,12 +391,13 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
     // Check that `re2c:eof` configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
+    // Skip "0" condition, as it's a special one that has no rules and always matches empty string.
     for (const AstGram& g : grams) {
         if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
                                "%s$ rule found, but `re2c:eof` configuration is not set",
                                incond(g.name).c_str()));
-        } else if (g.eofs.empty() && opts->fill_eof != NOEOF) {
+        } else if (g.eofs.empty() && opts->fill_eof != NOEOF && g.name != "0") {
             RET_FAIL(error("%s`re2c:eof` configuration is set, but no $ rule found",
                            incond(g.name).c_str()));
         }
