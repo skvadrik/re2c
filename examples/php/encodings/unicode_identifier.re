@@ -1,9 +1,10 @@
-// re2js $INPUT -o $OUTPUT --utf8 -s
+<?php
+// re2php $INPUT -o $OUTPUT --utf8 -s
 
 /*!include:re2c "unicode_categories.re" */
 
-function lex(yyinput) {
-    let yycursor = 0
+function lex($yyinput) {
+    $yycursor = 0;
     /*!re2c
         re2c:yyfill:enable = 0;
 
@@ -13,9 +14,11 @@ function lex(yyinput) {
         id_continue = id_start | Mn | Mc | Nd | Pc | [\u200D\u05F3];
         identifier  = id_start id_continue*;
 
-        identifier { return true }
-        *          { return false }
+        identifier { return true; }
+        *          { return false; }
     */
 }
 
-if (!lex("_Ыдентификатор\0")) throw "error!"
+if (!lex("_Ыдентификатор\0")) {
+    throw new \Exception("error!");
+}
