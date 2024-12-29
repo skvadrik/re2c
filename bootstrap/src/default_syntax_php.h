@@ -117,7 +117,7 @@ static constexpr const char* DEFAULT_SYNTAX_PHP =
     "re2c:YYCOPYSTAG = sigil \"{lhs} = \" sigil \"{rhs}\";\n"
     "re2c:YYCTYPE = \"$YYChar\";\n"
     "re2c:YYCTXMARKER = (.api.record ? yyrecord \"->yyctxmarker\" : \"$yyctxmarker\");\n"
-    "re2c:YYCURSOR = (.api.record ? yyrecord \"->yycursor\" : \"yycursor\");\n"
+    "re2c:YYCURSOR = (.api.record ? yyrecord \"->yycursor\" : \"$yycursor\");\n"
     "re2c:YYDEBUG = \"yydebug\";\n"
     "re2c:YYFILL = \"yyfill\";\n"
     "re2c:YYGETACCEPT = sigil \"{var}\";\n"

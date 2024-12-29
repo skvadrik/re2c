@@ -1,5 +1,5 @@
 <?php
-// re2js $INPUT -o $OUTPUT
+// re2php $INPUT -o $OUTPUT
 
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:api = record;
