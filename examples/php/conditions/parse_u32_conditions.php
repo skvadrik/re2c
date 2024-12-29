@@ -14,7 +14,7 @@ function parse_u32($yyinput) {
     $n = 0;
 
     while (true) {
-
+    
         $yych = 0;
         $yystate = $yycond;
         while (true) {
