@@ -305,7 +305,9 @@ static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
 } // anonymous namespace
 
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
-    if (opts->fill_eof != NOEOF) {
+    if (cond == ZERO_COND) {
+        // Skip zero condition `<>`, it's a special case that doesn't need end-of-input checks.
+    } else if (opts->fill_eof != NOEOF) {
         // See note [end-of-input rule].
         find_fallback_states_with_eof_rule(dfa);
         remove_dead_final_states_with_eof_rule(dfa);

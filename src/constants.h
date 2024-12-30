@@ -216,6 +216,8 @@ enum class StxLOpt {
     NESTED
 };
 
+extern const char* ZERO_COND;
+
 enum class Ret: uint32_t {
     OK,   // all good
     EXIT, // all good, but exit immediately (used for options like help or version)

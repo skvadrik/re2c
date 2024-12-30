@@ -334,7 +334,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         }
 
         for (const AstGram& g : grams) {
-            if (g.name == "0" && g.rules.size() > 1) {
+            if (g.name == ZERO_COND && g.rules.size() > 1) {
                 RET_FAIL(msg.error(g.rules[1].semact->loc,
                                    "startup code is already defined at line %u",
                                    g.rules[0].semact->loc.line));
@@ -349,13 +349,13 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         append(g.setup, g.inherited_setup);
     }
 
-    // Merge <*> rules and <!*> setup to all conditions except "0". Star rules must have lower
-    // priority than normal rules.
+    // Merge <*> rules and <!*> setup to all conditions except zero condition <>.
+    // Star rules must have lower priority than normal rules.
     auto star = std::find_if(
             grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
     if (star != grams.end()) {
         for (AstGram& g : grams) {
-            if (g.name != "*" && g.name != "0") {
+            if (g.name != "*" && g.name != ZERO_COND) {
                 append(g.rules, star->rules);
                 append(g.defs, star->defs);
                 append(g.eofs, star->eofs);
@@ -380,9 +380,9 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         }
     }
 
-    // "0" condition must be the first one.
+    // zero condition must be the first one.
     auto zero = std::find_if(
-            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "0"; });
+            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == ZERO_COND; });
     if (zero != grams.end() && zero != grams.begin()) {
         AstGram zero_copy(*zero);
         grams.erase(zero);
@@ -391,13 +391,13 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
     // Check that `re2c:eof` configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
-    // Skip "0" condition, as it's a special one that has no rules and always matches empty string.
+    // Skip zero condition, as it's a special one that has no rules and always matches empty string.
     for (const AstGram& g : grams) {
         if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
                                "%s$ rule found, but `re2c:eof` configuration is not set",
                                incond(g.name).c_str()));
-        } else if (g.eofs.empty() && opts->fill_eof != NOEOF && g.name != "0") {
+        } else if (g.eofs.empty() && opts->fill_eof != NOEOF && g.name != ZERO_COND) {
             RET_FAIL(error("%s`re2c:eof` configuration is set, but no $ rule found",
                            incond(g.name).c_str()));
         }
@@ -408,5 +408,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
 constexpr uint32_t Ast::MANY;
+
+const char* ZERO_COND = "0";
 
 } // namespace re2c

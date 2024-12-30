@@ -87,9 +87,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
         output.skeletons.insert(name);
     }
 
-    if (cond != "0") {
-        cutoff_dead_rules(dfa, opts, cond, msg);
-    }
+    cutoff_dead_rules(dfa, opts, cond, msg);
 
     insert_fallback_tags(dfa);
 
