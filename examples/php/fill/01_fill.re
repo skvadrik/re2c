@@ -1,17 +1,18 @@
-// re2js $INPUT -o $OUTPUT
+<?php
+// re2php $INPUT -o $OUTPUT
 
 const fs = require('fs')
 
-const BUFSIZE = 4096
-const OK = 0
-const EOF = 1
-const LONG_LEXEME = 2
+const BUFSIZE = 4096;
+const OK = 0;
+const EOF = 1;
+const LONG_LEXEME = 2;
 
-function fill(st) {
+function fill($st) {
     if (st.eof) return EOF
 
     // Error: lexeme too long. In real life could reallocate a larger buffer.
-    if (st.token < 1) return LONG_LEXEME
+    if (st.token < 1) return LONG_LEXEME;
 
     // Shift buffer contents (discard everything up to the current token).
     st.yyinput.copy(st.yyinput, 0, st.token, st.yylimit)
@@ -27,11 +28,11 @@ function fill(st) {
     st.yylimit += nread
     st.yyinput.writeUInt8(0, st.yylimit) // sentinel
 
-    return OK
+    return OK;
 }
 
-function lex(yyrecord, count) {
-    loop: while (true) {
+function lex($yyrecord, $count) {
+    while (true) {
         yyrecord.token = yyrecord.yycursor
         /*!re2c
             re2c:api = record;
@@ -50,29 +51,33 @@ function lex(yyrecord, count) {
 }
 
 function main() {
-    let fname = "input"
+    $fname = "input";
 
     // Create input file.
-    let content = "'qu\0tes' 'are' 'fine: \\'' ".repeat(BUFSIZE)
-    fs.writeFileSync(fname, content, function(err) { if (err) throw err; })
+    $content = str_repeat("'qu\0tes' 'are' 'fine: \\'' ", BUFSIZE);
+    $handle = fopen($name, 'w+');
+    fwrite($handle, $content);
+    fclose($handle);
 
     // Init lexer state.
-    let limit = BUFSIZE - 1 // exclude terminating null
-    let st = {
-        file: fs.openSync(fname, 'r'),
-        yyinput: Buffer.alloc(BUFSIZE),
-        yylimit: limit,
-        yycursor: limit,
-        yymarker: limit,
-        token: limit,
-        eof: false
-    }
+    $limit = BUFSIZE - 1; // exclude terminating null
+    $st = new \stdClass();
+    $st->file = fopen($fname, 'r');
+    $st->yyinput = str_repeat("\0", BUFSIZE);
+    $st->yylimit = $limit;
+    $st->yycursor = $limit;
+    $st->yymarker = $limit;
+    $st->token = $limit;
+    $st->eof = false;
 
     // Run lexer on the prepared file.
-    if (lex(st, 0) != 3 * BUFSIZE) { throw "error :[" }
+    if (lex($st, 0) != 3 * BUFSIZE) {
+        throw new \Exception("error :[");
+    }
 
     // Cleanup.
-    fs.unlink(fname, function(err){ if (err) throw err; })
+    fclose($st->file);
+    unlink($fname);
 }
 
-main()
+main();
