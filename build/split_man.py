@@ -46,6 +46,9 @@ elif lang == b'js':
 elif lang == b'ocaml':
     src_ext = b'ml'
     lang_name = b'OCaml'
+elif lang == b'php':
+    src_ext = b'php'
+    lang_name = b'PHP'
 elif lang == b'py':
     lang = b'python'
     src_ext = b'py'
@@ -59,9 +62,6 @@ elif lang == b'v':
 elif lang == b'zig':
     src_ext = b'zig'
     lang_name = b'Zig'
-elif lang == b'php':
-    src_ext = b'php'
-    lang_name = b'PHP'
 else:
     print('***', sys.argv[0], ': unknown lang:', lang)
     exit(1)

@@ -149,11 +149,11 @@ re2c_GEN_STX = \
 	src/default_syntax_java.h \
 	src/default_syntax_js.h \
 	src/default_syntax_ocaml.h \
+	src/default_syntax_php.h \
 	src/default_syntax_python.h \
 	src/default_syntax_rust.h \
 	src/default_syntax_v.h \
-	src/default_syntax_zig.h \
-	src/default_syntax_php.h
+	src/default_syntax_zig.h
 re2c_GEN = \
 	$(re2c_GEN_SRC) \
 	$(re2c_GEN_HDR) \
@@ -174,11 +174,11 @@ re2c_BOOT = \
 	bootstrap/doc/re2java.1 \
 	bootstrap/doc/re2js.1 \
 	bootstrap/doc/re2ocaml.1 \
+	bootstrap/doc/re2php.1 \
 	bootstrap/doc/re2py.1 \
 	bootstrap/doc/re2rust.1 \
 	bootstrap/doc/re2v.1 \
 	bootstrap/doc/re2zig.1 \
-	bootstrap/doc/re2php.1 \
 	bootstrap/src/default_syntax_c.h \
 	bootstrap/src/default_syntax_d.h \
 	bootstrap/src/default_syntax_go.h \
@@ -186,11 +186,11 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_java.h \
 	bootstrap/src/default_syntax_js.h \
 	bootstrap/src/default_syntax_ocaml.h \
+	bootstrap/src/default_syntax_php.h \
 	bootstrap/src/default_syntax_python.h \
 	bootstrap/src/default_syntax_rust.h \
 	bootstrap/src/default_syntax_v.h \
 	bootstrap/src/default_syntax_zig.h \
-	bootstrap/src/default_syntax_php.h \
 	bootstrap/src/msg/help_re2c.cc \
 	bootstrap/src/msg/help_re2d.cc \
 	bootstrap/src/msg/help_re2go.cc \
@@ -199,10 +199,10 @@ re2c_BOOT = \
 	bootstrap/src/msg/help_re2js.cc \
 	bootstrap/src/msg/help_re2ocaml.cc \
 	bootstrap/src/msg/help_re2py.cc \
+	bootstrap/src/msg/help_re2php.cc \
 	bootstrap/src/msg/help_re2rust.cc \
 	bootstrap/src/msg/help_re2v.cc \
 	bootstrap/src/msg/help_re2zig.cc \
-	bootstrap/src/msg/help_re2php.cc \
 	bootstrap/src/msg/ver_to_vernum.cc \
 	bootstrap/src/options/parse_opts.cc \
 	bootstrap/src/parse/lexer.cc \
@@ -445,6 +445,29 @@ re2c_SRC_DOC_EXT = \
 	examples/ocaml/submatch/02_mtags.re \
 	examples/ocaml/submatch/03_captures.re \
 	examples/ocaml/submatch/04_posix_captures.re \
+	examples/php/01_basic.php \
+	examples/php/01_basic.re \
+	examples/php/conditions/parse_u32_blocks.re \
+	examples/php/conditions/parse_u32_conditions.re \
+	examples/php/encodings/unicode_identifier.re \
+	examples/php/eof/01_sentinel.re \
+	examples/php/eof/02_bounds_checking.re \
+	examples/php/eof/03_eof_rule.re \
+	examples/php/eof/04_fake_sentinel.re \
+	examples/php/fill/01_fill.re \
+	examples/php/fill/02_fill.re \
+	examples/php/headers/header.re \
+	examples/php/headers/lexer/state.php \
+	examples/php/includes/definitions.php \
+	examples/php/includes/include.re \
+	examples/php/reuse/reuse.re \
+	examples/php/reuse/usedir.re \
+	examples/php/state/push.re \
+	examples/php/submatch/01_stags_fill.re \
+	examples/php/submatch/01_stags.re \
+	examples/php/submatch/02_mtags.re \
+	examples/php/submatch/03_captures.re \
+	examples/php/submatch/04_posix_captures.re \
 	examples/python/01_basic.py \
 	examples/python/01_basic.re \
 	examples/python/conditions/parse_u32_blocks.re \
@@ -538,29 +561,6 @@ re2c_SRC_DOC_EXT = \
 	examples/zig/submatch/02_mtags.re \
 	examples/zig/submatch/03_captures.re \
 	examples/zig/submatch/04_posix_captures.re
-	examples/php/01_basic.php \
-    examples/php/01_basic.re \
-    examples/php/conditions/parse_u32_blocks.re \
-    examples/php/conditions/parse_u32_conditions.re \
-    examples/php/encodings/unicode_identifier.re \
-    examples/php/eof/01_sentinel.re \
-    examples/php/eof/02_bounds_checking.re \
-    examples/php/eof/03_eof_rule.re \
-    examples/php/eof/04_fake_sentinel.re \
-    examples/php/fill/01_fill.re \
-    examples/php/fill/02_fill.re \
-    examples/php/headers/header.re \
-    examples/php/headers/lexer/state.php \
-    examples/php/includes/definitions.php \
-    examples/php/includes/include.re \
-    examples/php/reuse/reuse.re \
-    examples/php/reuse/usedir.re \
-    examples/php/state/push.re \
-    examples/php/submatch/01_stags_fill.re \
-    examples/php/submatch/01_stags.re \
-    examples/php/submatch/02_mtags.re \
-    examples/php/submatch/03_captures.re \
-    examples/php/submatch/04_posix_captures.re
 
 DOCS = doc/re2c.1
 HELP = src/msg/help_re2c.cc
@@ -588,6 +588,10 @@ if WITH_OCAML
 DOCS += doc/re2ocaml.1
 HELP += src/msg/help_re2ocaml.cc
 endif
+if WITH_PHP
+DOCS += doc/re2php.1
+HELP += src/msg/help_re2php.cc
+endif
 if WITH_PYTHON
 DOCS += doc/re2py.1
 HELP += src/msg/help_re2py.cc
@@ -604,10 +608,6 @@ if WITH_ZIG
 DOCS += doc/re2zig.1
 HELP += src/msg/help_re2zig.cc
 endif
-if WITH_PHP
-DOCS += doc/re2php.1
-HELP += src/msg/help_re2php.cc
-endif
 BUILT_SOURCES += $(HELP)
 
 man_MANS = $(DOCS)
@@ -621,11 +621,11 @@ dist_stdlib_DATA = \
 	include/syntax/java \
 	include/syntax/js \
 	include/syntax/ocaml \
+	include/syntax/php \
 	include/syntax/python \
 	include/syntax/rust \
 	include/syntax/v \
 	include/syntax/zig \
-	include/syntax/php \
 	include/unicode_categories.re
 
 BAZELFILES := \
@@ -855,6 +855,14 @@ re2ocaml_SOURCES = $(re2c_SOURCES)
 nodist_re2ocaml_SOURCES = $(re2c_GEN) src/msg/help_re2ocaml.cc
 endif
 
+# re2php
+if WITH_PHP
+bin_PROGRAMS += re2php
+re2php_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PHP -DRE2C_PROG=\"re2php\"
+re2php_SOURCES = $(re2c_SOURCES)
+nodist_re2php_SOURCES = $(re2c_GEN) src/msg/help_re2php.cc
+endif
+
 # re2py
 if WITH_PYTHON
 bin_PROGRAMS += re2py
@@ -885,12 +893,4 @@ bin_PROGRAMS += re2zig
 re2zig_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::ZIG -DRE2C_PROG=\"re2zig\"
 re2zig_SOURCES = $(re2c_SOURCES)
 nodist_re2zig_SOURCES = $(re2c_GEN) src/msg/help_re2zig.cc
-endif
-
-# re2php
-if WITH_PHP
-bin_PROGRAMS += re2php
-re2php_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PHP -DRE2C_PROG=\"re2php\"
-re2php_SOURCES = $(re2c_SOURCES)
-nodist_re2php_SOURCES = $(re2c_GEN) src/msg/help_re2php.cc
 endif

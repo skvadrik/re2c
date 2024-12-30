@@ -20,11 +20,11 @@ enum class Lang: uint32_t {
     JAVA,
     JS,
     OCAML,
+    PHP,
     PYTHON,
     RUST,
     V,
     ZIG,
-    PHP,
     NONE // no language (no default syntax config will be loaded)
 };
 
