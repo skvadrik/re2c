@@ -247,6 +247,7 @@ opt_lang: /*!local:re2c
     "java"    end { *lang = Lang::JAVA;    goto opt; }
     "js"      end { *lang = Lang::JS;      goto opt; }
     "ocaml"   end { *lang = Lang::OCAML;   goto opt; }
+    "php"     end { *lang = Lang::PHP;     goto opt; }
     "python"  end { *lang = Lang::PYTHON;  goto opt; }
     "rust"    end { *lang = Lang::RUST;    goto opt; }
     "v"       end { *lang = Lang::V;       goto opt; }
