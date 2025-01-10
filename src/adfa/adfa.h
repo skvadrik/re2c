@@ -126,9 +126,9 @@ struct Adfa {
          const std::vector<size_t>& fill,
          size_t key,
          const loc_t& loc,
-         const std::string& nm,
-         const std::string& cn,
-         const std::string& su,
+         const std::string& name,
+         const std::string& cond,
+         const std::string& setup,
          const opt_t* opts,
          Msg& msg);
 
@@ -138,8 +138,8 @@ struct Adfa {
     Ret calc_stats(OutputBlock& out) NODISCARD;
 
   private:
-    void add_state(State*, State*);
-    void split(State*);
+    void add_state_after(State* s, State* x);
+    void split(State* s);
     void find_base_state(const opt_t* opts);
     void hoist_tags(const opt_t* opts);
     void hoist_tags_and_skip(const opt_t* opts);
@@ -155,8 +155,6 @@ inline void Action::set_initial() {
     } else if (kind == Kind::SAVE) {
         // fallback state: do not loose 'yyaccept'
         kind = Kind::INITIAL;
-    } else if (kind == Kind::INITIAL) {
-        // already marked as initial, probably reuse mode
     } else {
         UNREACHABLE();
     }

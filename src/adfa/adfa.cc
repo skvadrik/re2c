@@ -27,9 +27,9 @@ Adfa::Adfa(Tdfa&& dfa,
            const std::vector<size_t>& fill,
            size_t key,
            const loc_t& loc,
-           const std::string& nm,
-           const std::string& cn,
-           const std::string& su,
+           const std::string& name,
+           const std::string& cond,
+           const std::string& setup,
            const opt_t* opts,
            Msg& msg)
     : // Move ownership from TDFA to ADFA.
@@ -42,8 +42,8 @@ Adfa::Adfa(Tdfa&& dfa,
       maxtagver(dfa.maxtagver),
 
       loc(loc),
-      name(nm),
-      cond(cn),
+      name(name),
+      cond(cond),
       msg(msg),
 
       accepts(),
@@ -72,7 +72,7 @@ Adfa::Adfa(Tdfa&& dfa,
       oldstyle_ctxmarker(false),
 
       bitmap(nullptr),
-      setup(su),
+      setup(setup),
 
       initial_label(nullptr) {
 
@@ -179,19 +179,22 @@ void Adfa::reorder() {
     }
 }
 
-void Adfa::add_state(State* s, State* next) {
+// ... x -> y ...
+// ... x -> s -> y ...
+void Adfa::add_state_after(State* s, State* x) {
     ++state_count;
-    s->next = next->next;
-    s->prev = next;
-    next->next = s;
-    next->prev = s->prev;
+    State* y = x->next;
+    if (y) y->prev = s;
+    s->next = y;
+    s->prev = x;
+    x->next = s;
 }
 
 void Adfa::split(State* s) {
     // If a split state has a rule, both parts should keep it. Codegen checks it when generating
     // fallback transition on YYFILL failure, either in state dispatch or on a regular transition.
     State* move = new State;
-    add_state(move, s);
+    add_state_after(move, s);
     move->action.set_move();
     move->rule = s->rule;
     move->fill_state = s->fill_state;
@@ -309,7 +312,7 @@ void Adfa::prepare(const opt_t* opts) {
                 }
                 n->action.set_rule(s->rule);
                 finstates[s->rule] = n;
-                add_state(n, s);
+                add_state_after(n, s);
             }
             for (uint32_t i = 0; i < s->go.span_count; ++i) {
                 if (!s->go.span[i].to) {
@@ -325,7 +328,7 @@ void Adfa::prepare(const opt_t* opts) {
             eof_state = new State;
             eof_state->action.set_rule(eof_rule);
             finstates[eof_rule] = eof_state;
-            add_state(eof_state, s);
+            add_state_after(eof_state, s);
             break;
         }
     }
@@ -337,7 +340,7 @@ void Adfa::prepare(const opt_t* opts) {
             if (!s->go.span[i].to) {
                 if (!default_state) {
                     default_state = defstate = new State;
-                    add_state(default_state, s);
+                    add_state_after(default_state, s);
                 }
                 s->go.span[i].to = defstate;
             }
@@ -355,7 +358,7 @@ void Adfa::prepare(const opt_t* opts) {
 
             if (!s->next && have_fallback_states) {
                 default_state = defstate = new State;
-                add_state(default_state, s);
+                add_state_after(default_state, s);
                 break;
             }
         }
