@@ -57,7 +57,8 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     const std::vector<AstRule>& ast = gram.rules;
     const std::string& cond = gram.name;
     const std::string name = make_name(output, cond, loc);
-    const std::string& setup = gram.setup.empty() ? "" : gram.setup[0]->text;
+    const SemAct* entry = gram.entry.empty() ? nullptr : gram.entry[0];
+    const SemAct* exit = gram.exit.empty() ? nullptr : gram.exit[0];
 
     // Build a mutable tree representation of a regexp from an immutable AST.
     RESpec re(opts, msg);
@@ -106,7 +107,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
     // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
     Adfa* adfa = new Adfa(
-            std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
+            std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, entry, exit, opts, msg);
     dfas.push_back(std::unique_ptr<Adfa>(adfa));
 
     // see note [reordering DFA states]

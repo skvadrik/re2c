@@ -118,15 +118,17 @@ struct AstGram {
     // Normal rules specified in this block or inherited from other blocks.
     std::vector<AstRule> rules;
 
-    // Special rules *, $ and <!> specified in this block.
+    // Special rules *, $, ^ and <!> specified in this block.
     std::vector<const SemAct*> defs;
     std::vector<const SemAct*> eofs;
-    std::vector<const SemAct*> setup;
+    std::vector<const SemAct*> entry;
+    std::vector<const SemAct*> exit;
 
-    // Special rules *, $ and <!>  inherited from other blocks.
+    // Special rules *, $, ^ and <!>  inherited from other blocks.
     std::vector<const SemAct*> inherited_defs;
     std::vector<const SemAct*> inherited_eofs;
-    std::vector<const SemAct*> inherited_setup;
+    std::vector<const SemAct*> inherited_entry;
+    std::vector<const SemAct*> inherited_exit;
 
     size_t def_rule;
     size_t eof_rule;

@@ -39,7 +39,7 @@ struct AcceptTrans {
 
 class Action {
   public:
-    enum class Kind: uint32_t { MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
+    enum class Kind: uint32_t { ENTRY, MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
     union {
         const uniq_vector_t<AcceptTrans>* accepts;
         size_t save;
@@ -48,6 +48,7 @@ class Action {
 
   public:
     Action(): kind(Kind::MATCH), info() {}
+    void set_entry();
     void set_initial();
     void set_save(size_t save);
     void set_move();
@@ -118,7 +119,9 @@ struct Adfa {
     bool oldstyle_ctxmarker;
 
     CodeBitmap* bitmap;
-    std::string setup;
+
+    const SemAct* entry_action;
+    const SemAct* exit_action;
 
     Label* initial_label;
 
@@ -128,7 +131,8 @@ struct Adfa {
          const loc_t& loc,
          const std::string& name,
          const std::string& cond,
-         const std::string& setup,
+         const SemAct* entry_action,
+         const SemAct* exit_action,
          const opt_t* opts,
          Msg& msg);
 
@@ -139,6 +143,8 @@ struct Adfa {
 
   private:
     void add_state_after(State* s, State* x);
+    void add_state_before(State* s, State* x);
+    void add_single_trans(State* s, State* x);
     void split(State* s);
     void find_base_state(const opt_t* opts);
     void hoist_tags(const opt_t* opts);
@@ -146,6 +152,10 @@ struct Adfa {
 
     FORBID_COPY(Adfa);
 };
+
+inline void Action::set_entry() {
+    kind = Kind::ENTRY;
+}
 
 inline void Action::set_initial() {
     if (kind == Kind::MATCH) {
@@ -161,24 +171,20 @@ inline void Action::set_initial() {
 }
 
 inline void Action::set_save(size_t save) {
-    DCHECK(kind == Kind::MATCH);
     kind = Kind::SAVE;
     info.save = save;
 }
 
 inline void Action::set_move() {
-    DCHECK(kind == Kind::MATCH);
     kind = Kind::MOVE;
 }
 
 inline void Action::set_accept(const uniq_vector_t<AcceptTrans>* accepts) {
-    DCHECK(kind == Kind::MATCH);
     kind = Kind::ACCEPT;
     info.accepts = accepts;
 }
 
 inline void Action::set_rule(size_t rule) {
-    DCHECK(kind == Kind::MATCH);
     kind = Kind::RULE;
     info.rule = rule;
 }

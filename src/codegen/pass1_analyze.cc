@@ -579,7 +579,8 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     const uint32_t eof = from->go.span_count == 1 && !consume(from->go.span[0].to)
             ? NOEOF : opts->fill_eof;
     const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
-    const bool skip = opts->eager_skip && !go->skip;
+    // Transition fromm the entry state to the initial state is non-consuming.
+    const bool skip = opts->eager_skip && !go->skip && from->action.kind != Action::Kind::ENTRY;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
@@ -612,6 +613,7 @@ void init_go(CodeGo* go) {
 
 bool consume(const State* s) {
     switch (s->action.kind) {
+    case Action::Kind::ENTRY:
     case Action::Kind::RULE:
     case Action::Kind::MOVE:
     case Action::Kind::ACCEPT:

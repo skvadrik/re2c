@@ -29,7 +29,8 @@ Adfa::Adfa(Tdfa&& dfa,
            const loc_t& loc,
            const std::string& name,
            const std::string& cond,
-           const std::string& setup,
+           const SemAct* entry_action,
+           const SemAct* exit_action,
            const opt_t* opts,
            Msg& msg)
     : // Move ownership from TDFA to ADFA.
@@ -72,7 +73,9 @@ Adfa::Adfa(Tdfa&& dfa,
       oldstyle_ctxmarker(false),
 
       bitmap(nullptr),
-      setup(setup),
+
+      entry_action(entry_action),
+      exit_action(exit_action),
 
       initial_label(nullptr) {
 
@@ -190,6 +193,26 @@ void Adfa::add_state_after(State* s, State* x) {
     x->next = s;
 }
 
+// ... y -> x ...
+// ... y -> s -> x ...
+void Adfa::add_state_before(State* s, State* x) {
+    ++state_count;
+    State* y = x->prev;
+    if (y) y->next = s;
+    s->prev = y;
+    s->next = x;
+    x->prev = s;
+}
+
+void Adfa::add_single_trans(State* s, State* x) {
+    Span* p = allocate<Span>(1);
+    p->ub = upper_char;
+    p->to = x;
+    p->tags = TCID0;
+    s->go.span = p;
+    s->go.span_count = 1;
+}
+
 void Adfa::split(State* s) {
     // If a split state has a rule, both parts should keep it. Codegen checks it when generating
     // fallback transition on YYFILL failure, either in state dispatch or on a regular transition.
@@ -203,11 +226,7 @@ void Adfa::split(State* s) {
     move->go.tags = TCID0; // drop hoisted tags
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
-    s->go.span_count = 1;
-    s->go.span = allocate<Span>(1);
-    s->go.span[0].ub = upper_char;
-    s->go.span[0].to = move;
-    s->go.span[0].tags = TCID0;
+    add_single_trans(s, move);
 }
 
 static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
@@ -380,6 +399,18 @@ void Adfa::prepare(const opt_t* opts) {
         head->action.set_initial();
     }
 
+    // Entry action cannot be part of the initial state, as there might be a nullable loop through
+    // it that would execute the action multiple times. Using a DFA pseudo-state simplifies codegen
+    // a lot: it automatically adds a separate case in loop/switch mode, or a separate function in
+    // rec/func mode, which would otherwise require a lot of special handling.
+    if (entry_action != nullptr) {
+        State* s = new State;
+        add_state_before(s, head);
+        add_single_trans(s, head);
+        s->action.set_entry();
+        head = s;
+    }
+
     // Tag hoisting should be done after binding default arcs, which may introduce new tags.
     // See note [tag hoisting, skip hoisting and tunneling].
     if (!opts->eager_skip) {
@@ -523,6 +554,9 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
     // If the end-of-input rule $ is used, skip cannot be hoisted because the lexer may need to
     // rescan the current input character after YYFILL, and skip operation will be applied twice.
     if (opts->fill_eof != NOEOF) return false;
+
+    // Transition fromm the entry state to the initial state is non-consuming.
+    if (s->action.kind == Action::Kind::ENTRY) return false;
 
     // All spans must agree on skip, and they all must be consuming.
     for (uint32_t i = 0; i < nspan; ++i) {

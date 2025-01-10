@@ -440,7 +440,7 @@ scan:
         RET_TOK(TOKEN_REGEXP);
     }
 
-    [*+?!()|;/\\=$] { RET_TOK(*tok); }
+    [*+?!()|;/\\=$^] { RET_TOK(*tok); }
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
@@ -592,8 +592,8 @@ Ret Input::lex_clist(Ast& ast, int& token) {
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
     CHECK(cl.empty());
 /*!re2c
-    space* "!" space* { token = TOKEN_CSETUP; goto cond; }
-    space* ">"        { token = TOKEN_CZERO;  goto end; }
+    space* "!" space* { token = TOKEN_CEXIT; goto cond; }
+    space* ">"        { token = TOKEN_CZERO; goto end; }
     space*            { goto cond; }
 */
 cond:

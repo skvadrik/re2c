@@ -185,10 +185,12 @@ AstGram::AstGram(const std::string& name)
       rules(),
       defs(),
       eofs(),
-      setup(),
+      entry(),
+      exit(),
       inherited_defs(),
       inherited_eofs(),
-      inherited_setup(),
+      inherited_entry(),
+      inherited_exit(),
       def_rule(Rule::NONE),
       eof_rule(Rule::NONE) {}
 
@@ -250,14 +252,15 @@ Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const st
     for (const AstGram& g : b->grams) {
         AstGram& gram = find_or_add_gram(grams, g.name);
 
-        // Merge rules. Inherited special rules *, $ and <!> are kept separate from those defined in
-        // the current block, because they are handled differently: they have lower priority and it
-        // is allowed to override them with local rules (while within one block redefinition of a
+        // Merge rules. Inherited special rules *, $, ^ and <!> are kept separate from those defined
+        // in the current block, because they are handled differently: they have lower priority and
+        // it is allowed to override them with local rules (while within one block redefinition of a
         // special rule is an error).
         append(gram.rules, g.rules);
         append(gram.inherited_defs, g.defs);
         append(gram.inherited_eofs, g.eofs);
-        append(gram.inherited_setup, g.setup);
+        append(gram.inherited_entry, g.entry);
+        append(gram.inherited_exit, g.exit);
     }
 
     // Merge configurations and symtab.
@@ -276,6 +279,10 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
             RET_FAIL(msg.error(g.eofs[1]->loc,
                                "EOF rule %sis already defined at line %u",
                                incond(g.name).c_str(), g.eofs[0]->loc.line));
+        } else if (g.entry.size() > 1) {
+            RET_FAIL(msg.error(g.entry[1]->loc,
+                               "entry rule %sis already defined at line %u",
+                               incond(g.name).c_str(), g.entry[0]->loc.line));
         } else if (g.rules.empty() && g.defs.empty() && !g.eofs.empty()) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
                                "EOF rule %swithout other rules doesn't make sense",
@@ -307,28 +314,28 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         }
 
         for (const AstGram& g : grams) {
-            if (g.setup.size() > 1) {
-                RET_FAIL(msg.error(g.setup[1]->loc,
-                                   "code to setup rule `%s` is already defined at line %u",
-                                   g.name.c_str(), g.setup[0]->loc.line));
+            if (g.exit.size() > 1) {
+                RET_FAIL(msg.error(g.exit[1]->loc,
+                                   "exit action for condition `%s` is already defined at line %u",
+                                   g.name.c_str(), g.exit[0]->loc.line));
             }
         }
 
         for (const AstGram& g : grams) {
-            if (g.name != "*" && !g.setup.empty() && g.rules.empty()) {
-                RET_FAIL(msg.error(g.setup[0]->loc,
-                                   "setup for non existing condition `%s` found", g.name.c_str()));
+            if (g.name != "*" && !g.exit.empty() && g.rules.empty()) {
+                RET_FAIL(msg.error(g.exit[0]->loc,
+                                   "exit action for non existing condition `%s` found", g.name.c_str()));
             }
         }
 
-        auto no_setup = std::find_if(
-                grams.begin(), grams.end(), [](const AstGram& g) { return g.setup.empty(); });
-        if (no_setup == grams.end()) { // all grams have setup
+        auto no_exit = std::find_if(
+                grams.begin(), grams.end(), [](const AstGram& g) { return g.exit.empty(); });
+        if (no_exit == grams.end()) { // all grams have exit
             for (const AstGram& g : grams) {
                 if (g.name == "*") {
-                    RET_FAIL(msg.error(g.setup[0]->loc,
-                                       "setup for all conditions '<!*>' is illegal if setup for "
-                                       "each condition is defined explicitly"));
+                    RET_FAIL(msg.error(g.exit[0]->loc,
+                                       "exit action for all conditions '<!*>' is illegal if "
+                                       "exit action for each condition is defined explicitly"));
                 }
             }
         }
@@ -336,7 +343,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         for (const AstGram& g : grams) {
             if (g.name == ZERO_COND && g.rules.size() > 1) {
                 RET_FAIL(msg.error(g.rules[1].semact->loc,
-                                   "startup code is already defined at line %u",
+                                   "entry action is already defined at line %u",
                                    g.rules[0].semact->loc.line));
             }
         }
@@ -346,10 +353,11 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     for (AstGram& g : grams) {
         append(g.defs, g.inherited_defs);
         append(g.eofs, g.inherited_eofs);
-        append(g.setup, g.inherited_setup);
+        append(g.entry, g.inherited_entry);
+        append(g.exit, g.inherited_exit);
     }
 
-    // Merge <*> rules and <!*> setup to all conditions except zero condition <>.
+    // Merge <*> rules and exit actions <!*> to all conditions except zero condition <>.
     // Star rules must have lower priority than normal rules.
     auto star = std::find_if(
             grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
@@ -359,7 +367,8 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
                 append(g.rules, star->rules);
                 append(g.defs, star->defs);
                 append(g.eofs, star->eofs);
-                append(g.setup, star->setup);
+                append(g.entry, star->entry);
+                append(g.exit, star->exit);
             }
         }
         grams.erase(star);

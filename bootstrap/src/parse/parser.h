@@ -76,7 +76,7 @@ namespace re2c {
     TOKEN_CJUMP = 258,             /* TOKEN_CJUMP  */
     TOKEN_CNEXT = 259,             /* TOKEN_CNEXT  */
     TOKEN_CLIST = 260,             /* TOKEN_CLIST  */
-    TOKEN_CSETUP = 261,            /* TOKEN_CSETUP  */
+    TOKEN_CEXIT = 261,             /* TOKEN_CEXIT  */
     TOKEN_CZERO = 262,             /* TOKEN_CZERO  */
     TOKEN_CLOSESIZE = 263,         /* TOKEN_CLOSESIZE  */
     TOKEN_CODE = 264,              /* TOKEN_CODE  */

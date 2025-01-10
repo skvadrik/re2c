@@ -52,7 +52,7 @@ extern "C" {
 %token TOKEN_CJUMP
 %token TOKEN_CNEXT
 %token TOKEN_CLIST
-%token TOKEN_CSETUP
+%token TOKEN_CEXIT
 %token TOKEN_CZERO
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
@@ -114,6 +114,9 @@ rule
 | '$' TOKEN_CODE {
     find_or_add_gram(grams, "").eofs.push_back($2);
 }
+| '^' TOKEN_CODE {
+    find_or_add_gram(grams, "").entry.push_back($2);
+}
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).rules.push_back(AstRule($2, $3));
@@ -132,9 +135,15 @@ rule
     }
     ast.temp_condlist.clear();
 }
-| TOKEN_CSETUP TOKEN_CODE {
+| TOKEN_CLIST '^' ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_gram(grams, cond).setup.push_back($2);
+        find_or_add_gram(grams, cond).entry.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CEXIT TOKEN_CODE {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).exit.push_back($2);
     }
     ast.temp_condlist.clear();
 }
