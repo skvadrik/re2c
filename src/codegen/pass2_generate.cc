@@ -1637,7 +1637,7 @@ static CodeList* gen_cond_table(Output& output) {
     return code;
 }
 
-static Code* gen_yystate_def(Output& output) {
+static Code* gen_yystate_def(Output& output, bool is_cond_block) {
     Scratchbuf& buf = output.scratchbuf;
     const opt_t* opts = output.block().opts;
 
@@ -1653,7 +1653,7 @@ static Code* gen_yystate_def(Output& output) {
         type = VarType::INT;
         GenGetState callback(buf.stream(), opts);
         init = opts->gen_code_yygetstate(buf, callback);
-    } else if (opts->start_conditions) {
+    } else if (is_cond_block) {
         // Else with start conditions yystate should be initialized to YYGETCONDITION.
         type = VarType::UINT;
         GenGetCond callback(buf.stream(), opts);
@@ -1977,7 +1977,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
         // Merge DFAs for different conditions together in one switch.
         local_decls = true;
-        append(code, gen_yystate_def(output));
+        append(code, gen_yystate_def(output, is_cond_block));
 
         local_decls |= gen_bitmaps(output, code);
 
