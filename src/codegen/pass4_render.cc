@@ -645,7 +645,9 @@ class RenderFnDef : public RenderCallback {
             rctx.os << code->name;
             break;
         case StxVarId::TYPE:
-            rctx.os << code->type;
+            // The user may omit type, although it makes sense only for languages that don't have
+            // explicit void type (like Go). But don't write nullptr, as it truncates the output.
+            if (code->type != nullptr) rctx.os << code->type;
             break;
         case StxVarId::ARGNAME:
             rctx.os << curr_param->name;
