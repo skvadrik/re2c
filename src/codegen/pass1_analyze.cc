@@ -788,11 +788,12 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
 
         // Assign label indices (only to the labels that are used).
         for (State* s = dfa->head; s; s = s->next) {
-            if (s->label->used) s->label->index = output.label_counter++;
-        }
-
-        if (dfa->head->label->used && !opts->eager_skip) {
-            dfa->initial_label->used = true;
+            if (s->label->used) {
+                s->label->index = output.label_counter++;
+                if (s->action.kind == Action::Kind::INITIAL && !opts->eager_skip) {
+                    dfa->initial_label->used = true;
+                }
+            }
         }
 
         if (!dfa->cond.empty()) {

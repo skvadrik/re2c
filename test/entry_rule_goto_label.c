@@ -5,8 +5,10 @@
 {
 	YYCTYPE yych;
 	{ /* init ... */ }
+	goto yy0;
 yy1:
 	++YYCURSOR;
+yy0:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -33,8 +35,10 @@ enum YYCONDTYPE {
 /* *********************************** */
 yyc_a:
 	{ /* init a ... */ }
+	goto yy3;
 yy4:
 	++YYCURSOR;
+yy3:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {
@@ -46,8 +50,10 @@ yy5:
 /* *********************************** */
 yyc_b:
 	{ /* init * ... */ }
+	goto yy6;
 yy7:
 	++YYCURSOR;
+yy6:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	yych = *YYCURSOR;
 	switch (yych) {

@@ -1768,17 +1768,18 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    // If DFA has transitions into the initial state and --eager-skip option is not used, then the
-    // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
-    // In loop/switch or func/rec mode that would be impossible, because there can be no transitions
-    // to the middle of a state.
     DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
-    if (dfa.initial_label->used) {
-        buf.str(opts->label_prefix).label(*dfa.initial_label);
-        append(stmts, code_goto(alc, buf.flush()));
-    }
 
     for (State* s = dfa.head; s; s = s->next) {
+        // If DFA has transitions into the initial state and --eager-skip option is not used,
+        // then the initial state must have a YYSKIP statement that must be bypassed when first
+        // entering the DFA. In loop/switch or func/rec mode that would be impossible, because
+        // there can be no transitions to the middle of a state.
+        if (s->action.kind == Action::Kind::INITIAL && dfa.initial_label->used) {
+            buf.str(opts->label_prefix).label(*dfa.initial_label);
+            append(stmts, code_goto(alc, buf.flush()));
+        }
+
         emit_state(output, s, stmts);
         emit_action(output, dfa, s, stmts);
         gen_go(output, dfa, &s->go, s, stmts);

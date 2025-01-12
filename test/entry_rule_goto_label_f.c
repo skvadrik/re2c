@@ -4,8 +4,10 @@
 
 yy0:
 	{ /* init ... */ }
+	goto yy1;
 yy2:
 	++YYCURSOR;
+yy1:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(0);
 		YYFILL(1);
@@ -41,8 +43,10 @@ yy4:
 /* *********************************** */
 yyc_a:
 	{ /* init a ... */ }
+	goto yy5;
 yy6:
 	++YYCURSOR;
+yy5:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(1);
 		YYFILL(1);
@@ -59,8 +63,10 @@ yy7:
 /* *********************************** */
 yyc_b:
 	{ /* init * ... */ }
+	goto yy8;
 yy9:
 	++YYCURSOR;
+yy8:
 	if (YYLIMIT <= YYCURSOR) {
 		YYSETSTATE(2);
 		YYFILL(1);
