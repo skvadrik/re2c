@@ -267,6 +267,21 @@ Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const st
     return opts.merge(b->opts, input);
 }
 
+static const loc_t& find_rule_location(const AstGram& g) {
+    // Try to find location of some rule.
+    if (!g.rules.empty()) return g.rules[0].semact->loc;
+    if (!g.defs.empty()) return g.defs[0]->loc;
+    if (!g.eofs.empty()) return g.eofs[0]->loc;
+    if (!g.entry.empty()) return g.entry[0]->loc;
+    if (!g.exit.empty()) return g.exit[0]->loc;
+    if (!g.inherited_defs.empty()) return g.inherited_defs[0]->loc;
+    if (!g.inherited_eofs.empty()) return g.inherited_eofs[0]->loc;
+    if (!g.inherited_entry.empty()) return g.inherited_entry[0]->loc;
+    if (!g.inherited_exit.empty()) return g.inherited_exit[0]->loc;
+    UNREACHABLE();
+    return NOWHERE;
+}
+
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) {
     if (grams.empty()) return Ret::OK;
 
@@ -294,10 +309,8 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         // normal mode: there must be no named grams corresponding to conditions
         for (const AstGram& g : grams) {
             if (!g.name.empty()) { // found named gram
-                const loc_t& loc = !g.rules.empty() ? g.rules[0].semact->loc
-                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
-                RET_FAIL(msg.error(loc,
-                                   "conditions are only allowed with '-c', '--conditions' option"));
+                RET_FAIL(msg.error(find_rule_location(g),
+                        "conditions are only allowed with '-c', '--conditions' option"));
             }
         }
     } else if (grams.size() == 1 && grams[0].name.empty()) {
@@ -307,9 +320,8 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
         for (const AstGram& g : grams) {
             if (g.name.empty()) { // found unnamed gram
-                const loc_t& l = !g.rules.empty() ? g.rules[0].semact->loc
-                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
-                RET_FAIL(msg.error(l, "cannot mix conditions with normal rules"));
+                RET_FAIL(msg.error(find_rule_location(g),
+                        "cannot mix conditions with normal rules"));
             }
         }
 
@@ -324,7 +336,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         for (const AstGram& g : grams) {
             if (g.name != "*" && !g.exit.empty() && g.rules.empty()) {
                 RET_FAIL(msg.error(g.exit[0]->loc,
-                                   "exit action for non existing condition `%s` found", g.name.c_str()));
+                        "exit action for non existing condition `%s` found", g.name.c_str()));
             }
         }
 
