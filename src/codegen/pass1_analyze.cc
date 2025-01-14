@@ -67,6 +67,7 @@ static bool matches(
 
     if (go1->tags != go2->tags) return false;
 
+    tcid_t tags = TCID_NONE;
     for (;;) {
         for (; b1 < e1 && b1->to != s1; ++b1) {
             lb1 = b1->ub;
@@ -80,12 +81,14 @@ static bool matches(
         if (b2 == e2) {
             return false;
         }
+        if (tags == TCID_NONE) tags = b1->tags;
         // If transitions have different chracter ranges, quit.
         if (!(lb1 == lb2 && b1->ub == b2->ub)
                 // If there is YYSKIP on one transition but not the other, quit.
                 || (opts->eager_skip && consume(b1->to) != consume(b2->to))
-                // If tags are not identical, quit.
-                || b1->tags != b2->tags) {
+                // If tags differ, quit (they may differ either between b1 and b2,
+                // or from tags on other transitions going to the bitmap state).
+                || !(b1->tags == tags && b2->tags == tags)) {
             return false;
         }
         ++b1;
