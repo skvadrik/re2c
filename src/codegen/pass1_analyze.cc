@@ -533,7 +533,7 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     if (go->span_count == 0) return;
 
     // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
-    if (opts->fill_eof != NOEOF && !(go->span_count == 1 && from->next == span[0].to)) {
+    if (opts->fill_eof != NOEOF && !endstate(from)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
 
