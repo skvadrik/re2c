@@ -532,10 +532,16 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
-    // With end-of-input rule $, mark states that are targets of fallback transitions as used.
+    // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
     if (opts->fill_eof != NOEOF && !(go->span_count == 1 && from->next == span[0].to)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
+
+        // In goto/label rematch transitions target special YYFILL labels, not state labels.
+        // For move states rematch transition targets the other part of the split state pair.
+        if (opts->code_model != CodeModel::GOTO_LABEL && from->action.kind != Action::Kind::MOVE) {
+            from->label->used = true;
+        }
     }
 
     // In .dot format every node in the graph (a.k.a. DFA state) should be generated.
