@@ -4,8 +4,9 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 3) YYFILL(3);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	if (yych >= 0x01) {
 		yyt1 = YYCURSOR;
 		yyt2 = NULL;

@@ -3,8 +3,9 @@
 
 {
 	YYCTYPE yych;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
 			yyt1 = NULL;

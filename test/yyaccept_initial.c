@@ -14,8 +14,9 @@ yy1:
 	yyaccept = 0;
 	++YYCURSOR;
 yy0:
+	YYMARKER = YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy3;
 		default: goto yy2;

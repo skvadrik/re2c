@@ -99,8 +99,9 @@ yy5:
 	}
 /* *********************************** */
 yyc_ST_VALUE:
+			YYMARKER = YYCURSOR;
 			if (YYLIMIT <= YYCURSOR) YYFILL(1);
-			yych = *(YYMARKER = YYCURSOR);
+			yych = *YYCURSOR;
 			if (yybm_ST_VALUE[0+yych] & 128) goto yy8;
 			if (yych == '$') goto yy9;
 yy7:

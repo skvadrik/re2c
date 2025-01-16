@@ -1083,10 +1083,10 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
             append(stmts, code_skip(alc));
         }
         append(stmts, code_nlabel(alc, dfa.initial_label));
-        gen_fill_and_label(output, stmts, dfa, s);
         if (backup) {
             append(stmts, code_backup(alc));
         }
+        gen_fill_and_label(output, stmts, dfa, s);
         gen_peek(alc, s, stmts);
         if (opts->debug) {
             append(stmts, code_debug(alc, dfa.initial_label->index));
