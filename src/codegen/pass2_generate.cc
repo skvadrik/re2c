@@ -184,8 +184,8 @@ bool endstate(const State* s) {
     // are final states (not all final states are 'end' states), but sometimes it be initial
     // non-accepting state, e.g. in case of rule '[]'.
     DCHECK(s->go.span_count > 0);
-    Action::Kind a = s->go.span[0].to->action.kind;
-    return s->go.span_count == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
+    StateKind k = s->go.span[0].to->kind;
+    return s->go.span_count == 1 && (k == StateKind::RULE || k == StateKind::ACCEPT);
 }
 
 static const char* gen_fill_label(Output& output, uint32_t index) {
@@ -202,8 +202,8 @@ static bool omit_peek(const State* s) {
     // state (a single transition does not require matching on `yych`). Such states are added by
     // the tunneling optimisation which attempts to compress DFA by factoring out common parts of
     // similar states.
-    return s->action.kind == Action::Kind::MOVE
-            || (s->go.span_count == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE);
+    return s->kind == StateKind::MOVE
+            || (s->go.span_count == 1 && s->go.span[0].to->kind != StateKind::MOVE);
 }
 
 static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
@@ -1060,74 +1060,42 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 
-    switch (s->action.kind) {
-    case Action::Kind::ENTRY:
+    switch (s->kind) {
+    case StateKind::ENTRY:
         gen_action(output, dfa.entry_action, stmts);
         break;
-    case Action::Kind::MATCH:
-        if (!opts->eager_skip) {
-            append(stmts, code_skip(alc));
-        }
-        gen_fill_and_label(output, stmts, dfa, s);
-        gen_peek(alc, s, stmts);
-        break;
-    case Action::Kind::INITIAL: {
-        const size_t save = s->action.info.save;
-        const bool backup = save != NOSAVE;
-        const bool ul1 = s->label->used;
+    case StateKind::MATCH: {
+        bool is_initial = s == dfa.initial_state;
+        bool omit_initial = is_initial && !s->label->used;
+        bool backup = s->save != NOSAVE;
 
-        if (ul1 && dfa.accepts.size() > 1 && backup) {
-            append(stmts, code_set_accept(alc, save));
+        if (backup && dfa.accepts.size() > 1 && !omit_initial) {
+            append(stmts, code_set_accept(alc, s->save));
         }
-        if (ul1 && !opts->eager_skip) {
+        if (!opts->eager_skip && !omit_initial) {
             append(stmts, code_skip(alc));
         }
-        append(stmts, code_nlabel(alc, dfa.initial_label));
+        if (is_initial && dfa.initial_label) {
+            append(stmts, code_nlabel(alc, dfa.initial_label));
+        }
         if (backup) {
             append(stmts, code_backup(alc));
         }
         gen_fill_and_label(output, stmts, dfa, s);
         gen_peek(alc, s, stmts);
-        if (opts->debug) {
+        if (is_initial && dfa.initial_label && opts->debug) {
             append(stmts, code_debug(alc, dfa.initial_label->index));
         }
         break;
     }
-    case Action::Kind::SAVE:
-        if (dfa.accepts.size() > 1) {
-            append(stmts, code_set_accept(alc, s->action.info.save));
-        }
-        if (!opts->eager_skip) {
-            append(stmts, code_skip(alc));
-        }
-        append(stmts, code_backup(alc));
-        gen_fill_and_label(output, stmts, dfa, s);
-        gen_peek(alc, s, stmts);
+    case StateKind::MOVE:
         break;
-    case Action::Kind::MOVE:
+    case StateKind::ACCEPT:
+        emit_accept(output, stmts, dfa, *s->accepts);
         break;
-    case Action::Kind::ACCEPT:
-        emit_accept(output, stmts, dfa, *s->action.info.accepts);
+    case StateKind::RULE:
+        emit_rule(output, stmts, dfa, s->rule);
         break;
-    case Action::Kind::RULE:
-        emit_rule(output, stmts, dfa, s->action.info.rule);
-        break;
-    }
-}
-
-static void emit_state(Output& output, const State* state, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-
-    // If state label is unused, we should not generate it.
-    // Nor can we emit an YYDEBUG statement, as there is no state number to pass to it.
-    if (!state->label->used) return;
-
-    if (opts->code_model == CodeModel::GOTO_LABEL) {
-        append(stmts, code_nlabel(output.allocator, state->label));
-    }
-    if (opts->debug && state->action.kind != Action::Kind::INITIAL) {
-        append(stmts, code_debug(alc, state->label->index));
     }
 }
 
@@ -1775,37 +1743,42 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
         // then the initial state must have a YYSKIP statement that must be bypassed when first
         // entering the DFA. In loop/switch or func/rec mode that would be impossible, because
         // there can be no transitions to the middle of a state.
-        if (s->action.kind == Action::Kind::INITIAL && dfa.initial_label->used) {
+        if (s == dfa.initial_state && dfa.initial_label->used) {
             buf.str(opts->label_prefix).label(*dfa.initial_label);
             append(stmts, code_goto(alc, buf.flush()));
         }
-
-        emit_state(output, s, stmts);
+        if (s->label->used) {
+            append(stmts, code_nlabel(alc, s->label));
+            if (opts->debug && s != dfa.initial_state) { // initial state uses `initial_label`
+                append(stmts, code_debug(alc, s->label->index));
+            }
+        }
         emit_action(output, dfa, s, stmts);
         gen_go(output, dfa, &s->go, s, stmts);
     }
 }
 
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
+    const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     DCHECK(output.block().opts->code_model == CodeModel::LOOP_SWITCH);
 
     for (State* s = dfa.head; s; s = s->next) {
         CodeList* body = code_list(alc);
 
-        // Emit current state.
-        emit_state(output, s, body);
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
         uint32_t label = s->label->index;
         DCHECK(label != Label::NONE);
+
+        // Emit current state.
+        if (opts->debug) append(body, code_debug(alc, label));
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state. This avoids looping through the
         // `yystate` switch only to return to the next case.
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_state(output, s, body);
             emit_action(output, dfa, s, body);
             gen_go(output, dfa, &s->go, s, body);
         }
@@ -1834,21 +1807,26 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
     Scratchbuf& buf = output.scratchbuf;
     CodeFnCommon* fn = output.block().fn_common;
 
-    for (State* s = dfa.head; s;) {
+    for (State* s = dfa.head; s; s = s->next) {
         DCHECK(s->label->index != Label::NONE);
         const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
 
         CodeParams* params = need_yych_arg(s) ? fn->params_yych : fn->params;
-
-        // Emit this state and the following state(s) that don't have transitions into them
-        // (such states may be added by the tunneling pass).
         CodeList* body = code_list(alc);
-        do {
-            emit_state(output, s, body);
+
+        // Emit current state.
+        if (opts->debug) append(body, code_debug(alc, s->label->index));
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
+
+        // As long as the following state has no incoming transitions (its label is unused),
+        // generate it as a continuation of the current state (such states may be added by the
+        // tunneling pass).
+        while (s->next && !s->next->label->used) {
+            s = s->next;
             emit_action(output, dfa, s, body);
             gen_go(output, dfa, &s->go, s, body);
-            s = s->next;
-        } while (s && !s->label->used);
+        }
 
         append(code, code_fndef(alc, f, fn->type, params, body));
     }
@@ -2046,16 +2024,16 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
         }
 
         for (State* s = dfa->head; s; s = s->next) {
-            if (s->action.kind == Action::Kind::ACCEPT) {
+            if (s->kind == StateKind::ACCEPT) {
                 uint32_t i = 0;
-                for (const AcceptTrans& a: *s->action.info.accepts) {
+                for (const AcceptTrans& a: *s->accepts) {
                     buf.label(*s->label).cstr(" -> ").label(*a.state->label)
                             .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
                     append(code, code_text(alc, buf.flush()));
                     ++i;
                 }
-            } else if (s->action.kind == Action::Kind::RULE) {
-                const SemAct* semact = dfa->rules[s->action.info.rule].semact;
+            } else if (s->kind == StateKind::RULE) {
+                const SemAct* semact = dfa->rules[s->rule].semact;
                 if (!semact->autogen) {
                     buf.label(*s->label).cstr(" [label=\"")
                             .str(output.msg.filenames[semact->loc.file])

@@ -41,21 +41,20 @@ void dump_adfa(const Adfa& dfa) {
 
     for (const State* s = dfa.head; s; s = s->next) {
         const char* attr;
-        Action::Kind action = s->action.kind;
 
-        if (action == Action::Kind::ACCEPT) {
+        if (s->kind == StateKind::ACCEPT) {
             attr = "style=filled fillcolor=gray";
-        } else if (action == Action::Kind::RULE) {
+        } else if (s->kind == StateKind::RULE) {
             attr = "style=filled fillcolor=lightgray";
         } else {
             attr = "";
         }
         fprintf(stderr, "  n%u [height=0.2 width=0.2 label=\"", st2idx[s]);
-        if (s->fill && action != Action::Kind::MOVE) {
+        if (s->fill && s->kind != StateKind::MOVE) {
             fprintf(stderr, "F(%zu) ", s->fill);
         }
-        if (action == Action::Kind::RULE) {
-            const Rule& r = dfa.rules[s->action.info.rule];
+        if (s->kind == StateKind::RULE) {
+            const Rule& r = dfa.rules[s->rule];
             for (size_t t = r.ltag; t < r.htag; ++t) {
                 if (t > r.ltag) fprintf(stderr, " ");
                 const char* name = dfa.tags[t].name;
@@ -65,8 +64,8 @@ void dump_adfa(const Adfa& dfa) {
         dump_tcmd(dfa.tcpool[s->go.tags]);
         fprintf(stderr, "\" %s]\n", attr);
 
-        if (action == Action::Kind::ACCEPT) {
-            for (const AcceptTrans& a: *s->action.info.accepts) {
+        if (s->kind == StateKind::ACCEPT) {
+            for (const AcceptTrans& a: *s->accepts) {
                 fprintf(stderr, "  n%u -> n%u [label=\"", st2idx[s], st2idx[a.state]);
                 dump_tcmd(dfa.tcpool[a.tags]);
                 fprintf(stderr, "\" style=dotted]\n");
@@ -78,8 +77,7 @@ void dump_adfa(const Adfa& dfa) {
             if (!x->to) continue;
 
             bool eat = true;
-            const Action::Kind act = x->to->action.kind;
-            if (act == Action::Kind::MOVE || act == Action::Kind::RULE) {
+            if (x->to->kind == StateKind::MOVE || x->to->kind == StateKind::RULE) {
                 attr = "style=dotted";
                 eat = false;
             } else {

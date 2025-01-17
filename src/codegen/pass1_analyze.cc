@@ -499,7 +499,7 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state->action.kind == Action::Kind::INITIAL) {
+    if (state == dfa.initial_state) {
         // End-of-input rule $ in the initial state takes priority over any other rule.
         fallback = dfa.eof_state;
         falltags = TCID0;
@@ -521,8 +521,8 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     const opt_t* opts = output.block().opts;
 
     // Mark all states that are targets of `yyaccept` switch to as used.
-    if (from->action.kind == Action::Kind::ACCEPT) {
-        for (const AcceptTrans& a : *from->action.info.accepts) {
+    if (from->kind == StateKind::ACCEPT) {
+        for (const AcceptTrans& a : *from->accepts) {
             a.state->label->used = true;
         }
     }
@@ -539,7 +539,7 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
         // In goto/label rematch transitions target special YYFILL labels, not state labels.
         // For move states rematch transition targets the other part of the split state pair.
-        if (opts->code_model != CodeModel::GOTO_LABEL && from->action.kind != Action::Kind::MOVE) {
+        if (opts->code_model != CodeModel::GOTO_LABEL && from->kind != StateKind::MOVE) {
             from->label->used = true;
         }
     }
@@ -589,7 +589,7 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
             ? NOEOF : opts->fill_eof;
     const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
     // Transition fromm the entry state to the initial state is non-consuming.
-    const bool skip = opts->eager_skip && !go->skip && from->action.kind != Action::Kind::ENTRY;
+    const bool skip = opts->eager_skip && !go->skip && from->kind != StateKind::ENTRY;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
@@ -621,15 +621,13 @@ void init_go(CodeGo* go) {
 }
 
 bool consume(const State* s) {
-    switch (s->action.kind) {
-    case Action::Kind::ENTRY:
-    case Action::Kind::RULE:
-    case Action::Kind::MOVE:
-    case Action::Kind::ACCEPT:
+    switch (s->kind) {
+    case StateKind::ENTRY:
+    case StateKind::RULE:
+    case StateKind::MOVE:
+    case StateKind::ACCEPT:
         return false;
-    case Action::Kind::MATCH:
-    case Action::Kind::INITIAL:
-    case Action::Kind::SAVE:
+    case StateKind::MATCH:
         return true;
     }
     UNREACHABLE();
@@ -797,13 +795,12 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
 
         // Assign label indices (only to the labels that are used).
         for (State* s = dfa->head; s; s = s->next) {
-            if (s->label->used) {
-                s->label->index = output.label_counter++;
-                if (s->action.kind == Action::Kind::INITIAL && !opts->eager_skip) {
-                    dfa->initial_label->used = true;
-                }
-            }
+            if (s->label->used) s->label->index = output.label_counter++;
         }
+        if (dfa->initial_state->label->used && dfa->initial_label && !opts->eager_skip) {
+            dfa->initial_label->used = true;
+        }
+
 
         if (!dfa->cond.empty()) {
             // In loop/switch or rec/func mode, condition numbers are the numeric indices of their

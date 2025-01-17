@@ -55,6 +55,7 @@ Adfa::Adfa(Tdfa&& dfa,
       head(nullptr),
       defstate(nullptr),
       eof_state(nullptr),
+      initial_state(nullptr),
       finstates(rules.size(), nullptr),
 
       stagnames(),
@@ -218,7 +219,7 @@ void Adfa::split(State* s) {
     // fallback transition on YYFILL failure, either in state dispatch or on a regular transition.
     State* move = new State;
     add_state_after(move, s);
-    move->action.set_move();
+    move->kind = StateKind::MOVE;
     move->rule = s->rule;
     move->fill_state = s->fill_state;
     move->fill = s->fill; // used by tunneling, ignored by codegen
@@ -329,7 +330,8 @@ void Adfa::prepare(const opt_t* opts) {
                 if (s->rule == def_rule) {
                     defstate = n;
                 }
-                n->action.set_rule(s->rule);
+                n->kind = StateKind::RULE;
+                n->rule = s->rule;
                 finstates[s->rule] = n;
                 add_state_after(n, s);
             }
@@ -345,7 +347,8 @@ void Adfa::prepare(const opt_t* opts) {
         // skip zero condition `<>` as it does not have end-of-input rule
         if (!s->next && opts->fill_eof != NOEOF && cond != ZERO_COND) {
             eof_state = new State;
-            eof_state->action.set_rule(eof_rule);
+            eof_state->kind = StateKind::RULE;
+            eof_state->rule = eof_rule;
             finstates[eof_rule] = eof_state;
             add_state_after(eof_state, s);
             break;
@@ -388,16 +391,14 @@ void Adfa::prepare(const opt_t* opts) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
                 DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
-                s->action.set_save(accepts.find_or_add({finstates[s->rule], s->fall_tags}));
+                s->save = accepts.find_or_add({finstates[s->rule], s->fall_tags});
             }
         }
-        defstate->action.set_accept(&accepts);
+        defstate->kind = StateKind::ACCEPT;
+        defstate->accepts = &accepts;
     }
 
-    // Initial state is special only in goto/label mode.
-    if (opts->code_model == CodeModel::GOTO_LABEL) {
-        head->action.set_initial();
-    }
+    initial_state = head;
 
     // Entry action cannot be part of the initial state, as there might be a nullable loop through
     // it that would execute the action multiple times. Using a DFA pseudo-state simplifies codegen
@@ -407,7 +408,7 @@ void Adfa::prepare(const opt_t* opts) {
         State* s = new State;
         add_state_before(s, head);
         add_single_trans(s, head);
-        s->action.set_entry();
+        s->kind = StateKind::ENTRY;
         head = s;
     }
 
@@ -556,7 +557,7 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
     if (opts->fill_eof != NOEOF) return false;
 
     // Transition fromm the entry state to the initial state is non-consuming.
-    if (s->action.kind == Action::Kind::ENTRY) return false;
+    if (s->kind == StateKind::ENTRY) return false;
 
     // All spans must agree on skip, and they all must be consuming.
     for (uint32_t i = 0; i < nspan; ++i) {

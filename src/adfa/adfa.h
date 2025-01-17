@@ -37,26 +37,11 @@ struct AcceptTrans {
     }
 };
 
-class Action {
-  public:
-    enum class Kind: uint32_t { ENTRY, MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
-    union {
-        const uniq_vector_t<AcceptTrans>* accepts;
-        size_t save;
-        size_t rule;
-    } info;
-
-  public:
-    Action(): kind(Kind::MATCH), info() {}
-    void set_entry();
-    void set_initial();
-    void set_save(size_t save);
-    void set_move();
-    void set_accept(const uniq_vector_t<AcceptTrans>* accepts);
-    void set_rule(size_t rule);
-};
+enum class StateKind { ENTRY, MATCH, MOVE, RULE, ACCEPT };
 
 struct State {
+    StateKind kind;
+
     State* next;
     State* prev;
     Label* label; // labels are allocated in codegen as they live longer
@@ -68,14 +53,19 @@ struct State {
     size_t rule;
     tcid_t rule_tags;
     tcid_t fall_tags;
+
+    size_t save; // `yyaccept` number for this state, if any
+
+    const uniq_vector_t<AcceptTrans>* accepts; // `yyaccept` transition table
+
     bool fallback;
     bool is_base;
 
     CodeGo go;
-    Action action;
 
     State();
     ~State();
+
     FORBID_COPY(State);
 };
 
@@ -101,6 +91,7 @@ struct Adfa {
     State* head;
     State* defstate;
     State* eof_state;
+    State* initial_state;
     std::vector<State*> finstates;
 
     std::set<std::string> stagnames;
@@ -153,56 +144,22 @@ struct Adfa {
     FORBID_COPY(Adfa);
 };
 
-inline void Action::set_entry() {
-    kind = Kind::ENTRY;
-}
-
-inline void Action::set_initial() {
-    if (kind == Kind::MATCH) {
-        // ordinary state with no special action
-        kind = Kind::INITIAL;
-        info.save = NOSAVE;
-    } else if (kind == Kind::SAVE) {
-        // fallback state: do not loose 'yyaccept'
-        kind = Kind::INITIAL;
-    } else {
-        UNREACHABLE();
-    }
-}
-
-inline void Action::set_save(size_t save) {
-    kind = Kind::SAVE;
-    info.save = save;
-}
-
-inline void Action::set_move() {
-    kind = Kind::MOVE;
-}
-
-inline void Action::set_accept(const uniq_vector_t<AcceptTrans>* accepts) {
-    kind = Kind::ACCEPT;
-    info.accepts = accepts;
-}
-
-inline void Action::set_rule(size_t rule) {
-    kind = Kind::RULE;
-    info.rule = rule;
-}
-
 inline State::State()
-    : next(nullptr),
-      prev(nullptr),
-      label(nullptr),
-      fill_state(nullptr),
-      fill_label(nullptr),
-      fill(0),
-      rule(Rule::NONE),
-      rule_tags(TCID0),
-      fall_tags(TCID0),
-      fallback(false),
-      is_base(false),
-      go(),
-      action() {
+        : kind(StateKind::MATCH)
+        , next(nullptr)
+        , prev(nullptr)
+        , label(nullptr)
+        , fill_state(nullptr)
+        , fill_label(nullptr)
+        , fill(0)
+        , rule(Rule::NONE)
+        , rule_tags(TCID0)
+        , fall_tags(TCID0)
+        , save(NOSAVE)
+        , accepts(nullptr)
+        , fallback(false)
+        , is_base(false)
+        , go() {
     init_go(&go);
 }
 
