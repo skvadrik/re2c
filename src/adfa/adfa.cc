@@ -41,44 +41,35 @@ Adfa::Adfa(Tdfa&& dfa,
       tcpool(std::move(dfa.tcpool)),
       finvers(dfa.finvers),
       maxtagver(dfa.maxtagver),
-
       loc(loc),
       name(name),
       cond(cond),
       msg(msg),
-
       accepts(),
-
       lower_char(0),
       upper_char(charset.back()),
       state_count(0),
       head(nullptr),
       default_state(nullptr),
       eof_state(nullptr),
-      initial_state(nullptr),
+      start_state(nullptr),
       finstates(rules.size(), nullptr),
-
+      custom_start_label(nullptr),
       stagnames(),
       stagvars(),
       mtagnames(),
       mtagvars(),
-
       def_rule(dfa.def_rule),
       eof_rule(dfa.eof_rule),
       key_size(key),
       max_fill(0),
       max_nmatch(0),
-
       need_backup(false),
       need_accept(false),
       oldstyle_ctxmarker(false),
-
       bitmap(nullptr),
-
       entry_action(entry_action),
-      exit_action(exit_action),
-
-      initial_label(nullptr) {
+      exit_action(exit_action) {
 
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
@@ -394,9 +385,9 @@ void Adfa::prepare(const opt_t* opts) {
         default_state->accepts = &accepts;
     }
 
-    initial_state = head;
+    start_state = head;
 
-    // Entry action cannot be part of the initial state, as there might be a nullable loop through
+    // Entry action cannot be part of the start state, as there might be a nullable loop through
     // it that would execute the action multiple times. Using a DFA pseudo-state simplifies codegen
     // a lot: it automatically adds a separate case in loop/switch mode, or a separate function in
     // rec/func mode, which would otherwise require a lot of special handling.
@@ -552,7 +543,7 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
     // rescan the current input character after YYFILL, and skip operation will be applied twice.
     if (opts->fill_eof != NOEOF) return false;
 
-    // Transition fromm the entry state to the initial state is non-consuming.
+    // Transition fromm the entry state to the start state is non-consuming.
     if (s->kind == StateKind::ENTRY) return false;
 
     // All spans must agree on skip, and they all must be consuming.

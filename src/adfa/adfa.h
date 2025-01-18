@@ -88,11 +88,17 @@ struct Adfa {
     uint32_t lower_char;
     uint32_t upper_char;
     uint32_t state_count;
+
     State* head;
     State* default_state;
     State* eof_state;
-    State* initial_state;
+    State* start_state;
     std::vector<State*> finstates;
+
+    // In goto/label mode, if there's a loop through the start state and --eager-skip isn't used,
+    // then the start state has YYSKIP statement that must be bypassed when entering the DFA.
+    // So there's a need for a special start label, different from the start state's label.
+    Label* custom_start_label;
 
     std::set<std::string> stagnames;
     std::set<std::string> stagvars;
@@ -113,8 +119,6 @@ struct Adfa {
 
     const SemAct* entry_action;
     const SemAct* exit_action;
-
-    Label* initial_label;
 
     Adfa(Tdfa&& dfa,
          const std::vector<size_t>& fill,

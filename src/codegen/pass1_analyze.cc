@@ -499,8 +499,8 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state == dfa.initial_state) {
-        // End-of-input rule $ in the initial state takes priority over any other rule.
+    if (state == dfa.start_state) {
+        // End-of-input rule $ in the start state takes priority over any other rule.
         fallback = dfa.eof_state;
         falltags = TCID0;
     } else if (state->rule != Rule::NONE) {
@@ -588,7 +588,7 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     const uint32_t eof = from->go.span_count == 1 && !consume(from->go.span[0].to)
             ? NOEOF : opts->fill_eof;
     const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
-    // Transition fromm the entry state to the initial state is non-consuming.
+    // Transition from the entry state to the start state is non-consuming.
     const bool skip = opts->eager_skip && !go->skip && from->kind != StateKind::ENTRY;
 
     if (opts->target == Target::DOT) {
@@ -761,8 +761,9 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
                     block.start_label = new_label(alc, output.label_counter++);
                 }
             }
-            // Initial label points to the start of the DFA (after condition dispatch in `-c`).
-            dfa->initial_label = new_label(alc, output.label_counter++);
+            // In goto/label mode, if there's a loop through the start state and --eager-skip isn't
+            // used, there's a need for a special start label after YYFILL in the start state.
+            dfa->custom_start_label = new_label(alc, output.label_counter++);
             break;
         case CodeModel::LOOP_SWITCH:
             // First state label is always used, as there are no jumps in the middle of a case.
@@ -797,14 +798,13 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         for (State* s = dfa->head; s; s = s->next) {
             if (s->label->used) s->label->index = output.label_counter++;
         }
-        if (dfa->initial_state->label->used && dfa->initial_label && !opts->eager_skip) {
-            dfa->initial_label->used = true;
+        if (dfa->start_state->label->used && dfa->custom_start_label && !opts->eager_skip) {
+            dfa->custom_start_label->used = true;
         }
-
 
         if (!dfa->cond.empty()) {
             // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
-            // initial DFA state. Otherwise we do not assign explicit numbers, and conditions are
+            // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
             // implicitly assigned consecutive numbers starting from zero.
             block.conds.push_back({dfa->cond,
                     opts->code_model == CodeModel::GOTO_LABEL ? 0 : dfa->head->label->index});
