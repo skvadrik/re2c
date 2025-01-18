@@ -509,7 +509,7 @@ State* fallback_state_with_eof_rule(
         falltags = state->rule_tags;
     } else {
         // EOF in a non-accepting state: fallback to default state.
-        fallback = dfa.defstate;
+        fallback = dfa.default_state;
         falltags = state->fall_tags;
     }
 

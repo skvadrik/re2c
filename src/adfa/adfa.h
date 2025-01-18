@@ -89,7 +89,7 @@ struct Adfa {
     uint32_t upper_char;
     uint32_t state_count;
     State* head;
-    State* defstate;
+    State* default_state;
     State* eof_state;
     State* initial_state;
     std::vector<State*> finstates;

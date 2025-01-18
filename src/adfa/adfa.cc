@@ -53,7 +53,7 @@ Adfa::Adfa(Tdfa&& dfa,
       upper_char(charset.back()),
       state_count(0),
       head(nullptr),
-      defstate(nullptr),
+      default_state(nullptr),
       eof_state(nullptr),
       initial_state(nullptr),
       finstates(rules.size(), nullptr),
@@ -356,11 +356,11 @@ void Adfa::prepare(const opt_t* opts) {
     for (State* s = head; s; s = s->next) {
         for (uint32_t i = 0; i < s->go.span_count; ++i) {
             if (!s->go.span[i].to) {
-                if (!defstate) {
-                    defstate = new State;
-                    add_state_after(defstate, s);
+                if (!default_state) {
+                    default_state = new State;
+                    add_state_after(default_state, s);
                 }
-                s->go.span[i].to = defstate;
+                s->go.span[i].to = default_state;
             }
         }
     }
@@ -368,30 +368,30 @@ void Adfa::prepare(const opt_t* opts) {
     // With end-of-input rule $ there is a default quasi-transition on YYFILL failure, so the
     // default state is needed if there is at least one final state with at least one outgoing
     // transition to a non-final state.
-    if (!defstate && opts->fill_eof != NOEOF) {
+    if (!default_state && opts->fill_eof != NOEOF) {
         bool have_fallback_states = false;
 
         for (State* s = head; s; s = s->next) {
             have_fallback_states |= s->fallback;
 
             if (!s->next && have_fallback_states) {
-                defstate = new State;
-                add_state_after(defstate, s);
+                default_state = new State;
+                add_state_after(default_state, s);
                 break;
             }
         }
     }
 
     // bind save actions to fallback states and create accept state (if needed)
-    if (defstate) {
+    if (default_state) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
                 DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
                 s->save = accepts.find_or_add({finstates[s->rule], s->fall_tags});
             }
         }
-        defstate->kind = StateKind::ACCEPT;
-        defstate->accepts = &accepts;
+        default_state->kind = StateKind::ACCEPT;
+        default_state->accepts = &accepts;
     }
 
     initial_state = head;
