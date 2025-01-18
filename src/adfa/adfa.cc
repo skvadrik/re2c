@@ -327,9 +327,6 @@ void Adfa::prepare(const opt_t* opts) {
         if (s->rule != Rule::NONE && s->rule != eof_rule) {
             if (!finstates[s->rule]) {
                 State* n = new State;
-                if (s->rule == def_rule) {
-                    defstate = n;
-                }
                 n->kind = StateKind::RULE;
                 n->rule = s->rule;
                 finstates[s->rule] = n;
@@ -356,13 +353,12 @@ void Adfa::prepare(const opt_t* opts) {
     }
 
     // create default state (if needed)
-    State* default_state = nullptr;
     for (State* s = head; s; s = s->next) {
         for (uint32_t i = 0; i < s->go.span_count; ++i) {
             if (!s->go.span[i].to) {
-                if (!default_state) {
-                    default_state = defstate = new State;
-                    add_state_after(default_state, s);
+                if (!defstate) {
+                    defstate = new State;
+                    add_state_after(defstate, s);
                 }
                 s->go.span[i].to = defstate;
             }
@@ -372,22 +368,22 @@ void Adfa::prepare(const opt_t* opts) {
     // With end-of-input rule $ there is a default quasi-transition on YYFILL failure, so the
     // default state is needed if there is at least one final state with at least one outgoing
     // transition to a non-final state.
-    if (!default_state && opts->fill_eof != NOEOF) {
+    if (!defstate && opts->fill_eof != NOEOF) {
         bool have_fallback_states = false;
 
         for (State* s = head; s; s = s->next) {
             have_fallback_states |= s->fallback;
 
             if (!s->next && have_fallback_states) {
-                default_state = defstate = new State;
-                add_state_after(default_state, s);
+                defstate = new State;
+                add_state_after(defstate, s);
                 break;
             }
         }
     }
 
     // bind save actions to fallback states and create accept state (if needed)
-    if (default_state) {
+    if (defstate) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
                 DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
