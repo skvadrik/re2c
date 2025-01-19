@@ -1597,6 +1597,7 @@ Ret Input::load_syntax_config(Opt& opts, Lang lang) {
         case Lang::JAVA: src = DEFAULT_SYNTAX_JAVA; break;
         case Lang::JS: src = DEFAULT_SYNTAX_JS; break;
         case Lang::OCAML: src = DEFAULT_SYNTAX_OCAML; break;
+        case Lang::PHP: src = DEFAULT_SYNTAX_PHP; break;
         case Lang::PYTHON: src = DEFAULT_SYNTAX_PYTHON; break;
         case Lang::RUST: src = DEFAULT_SYNTAX_RUST; break;
         case Lang::V: src = DEFAULT_SYNTAX_V; break;

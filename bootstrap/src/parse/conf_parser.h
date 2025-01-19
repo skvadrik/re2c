@@ -66,6 +66,7 @@ extern int conf_debug;
 #include "src/default_syntax_java.h"
 #include "src/default_syntax_js.h"
 #include "src/default_syntax_ocaml.h"
+#include "src/default_syntax_php.h"
 #include "src/default_syntax_python.h"
 #include "src/default_syntax_rust.h"
 #include "src/default_syntax_v.h"
