@@ -252,10 +252,10 @@ Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const st
     for (const AstGram& g : b->grams) {
         AstGram& gram = find_or_add_gram(grams, g.name);
 
-        // Merge rules. Inherited special rules *, $, ^ and <!> are kept separate from those defined
-        // in the current block, because they are handled differently: they have lower priority and
-        // it is allowed to override them with local rules (while within one block redefinition of a
-        // special rule is an error).
+        // Merge rules. Inherited special rules *, $, !entry, <!> are kept separate from those
+        // defined in the current block, because they are handled differently: they have lower
+        // priority and it is allowed to override them with local rules (while it is an error
+        // to redefine special rule within one block).
         append(gram.rules, g.rules);
         append(gram.inherited_defs, g.defs);
         append(gram.inherited_eofs, g.eofs);

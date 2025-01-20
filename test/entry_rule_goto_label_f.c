@@ -88,6 +88,6 @@ switch (YYGETSTATE()) {
 	default: goto yy4;
 }
 
-entry_rule_goto_label_f.re:4:9: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label_f.re:12:13: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label_f.re:13:13: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+entry_rule_goto_label_f.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
+entry_rule_goto_label_f.re:12:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+entry_rule_goto_label_f.re:13:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]

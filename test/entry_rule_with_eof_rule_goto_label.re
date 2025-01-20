@@ -3,7 +3,7 @@
 %{
   re2c:eof = 0;
 
-  ^   { /* init ... */ }
-  [^] { return ^; }
-  $   { return $; }
+  !entry { /* init ... */ }
+  [^]    { return ^; }
+  $      { return $; }
 %}

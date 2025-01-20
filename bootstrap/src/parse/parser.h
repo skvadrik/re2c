@@ -87,7 +87,8 @@ namespace re2c {
     TOKEN_LINE_INFO = 269,         /* TOKEN_LINE_INFO  */
     TOKEN_REGEXP = 270,            /* TOKEN_REGEXP  */
     TOKEN_BLOCK = 271,             /* TOKEN_BLOCK  */
-    TOKEN_ERROR = 272              /* TOKEN_ERROR  */
+    TOKEN_ENTRY = 272,             /* TOKEN_ENTRY  */
+    TOKEN_ERROR = 273              /* TOKEN_ERROR  */
   };
   typedef enum re2c_tokentype re2c_token_kind_t;
 #endif
@@ -105,7 +106,7 @@ union RE2C_STYPE
     const char* cstr;
     std::string* str;
 
-#line 109 "src/parse/parser.h"
+#line 110 "src/parse/parser.h"
 
 };
 typedef union RE2C_STYPE RE2C_STYPE;

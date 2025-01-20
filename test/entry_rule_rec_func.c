@@ -113,6 +113,6 @@ int lex() {
 }
 
 
-entry_rule_rec_func.re:8:9: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_rec_func.re:14:13: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_rec_func.re:15:13: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func.re:8:11: warning: rule matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func.re:14:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func.re:15:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]

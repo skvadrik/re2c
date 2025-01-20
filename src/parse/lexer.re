@@ -440,7 +440,7 @@ scan:
         RET_TOK(TOKEN_REGEXP);
     }
 
-    [*+?!()|;/\\=$^] { RET_TOK(*tok); }
+    [*+?!()|;/\\=$] { RET_TOK(*tok); }
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
@@ -537,6 +537,8 @@ scan:
                 " optional spaces, a semicolon, and finally a space, a newline, or the end of"
                 " block"));
     }
+
+    "!entry" / ws_or_eoc { RET_TOK(TOKEN_ENTRY); }
 
     "." { yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
 

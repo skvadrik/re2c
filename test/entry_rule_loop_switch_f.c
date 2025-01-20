@@ -102,6 +102,6 @@ enum YYCONDTYPE {
 	}
 }
 
-entry_rule_loop_switch_f.re:4:9: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_loop_switch_f.re:10:13: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_loop_switch_f.re:11:13: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+entry_rule_loop_switch_f.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
+entry_rule_loop_switch_f.re:10:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+entry_rule_loop_switch_f.re:11:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]

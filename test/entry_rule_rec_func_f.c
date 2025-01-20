@@ -134,6 +134,6 @@ int lex() {
 	}
 }
 
-entry_rule_rec_func_f.re:8:9: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_rec_func_f.re:16:13: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_rec_func_f.re:17:13: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func_f.re:8:11: warning: rule matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func_f.re:16:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+entry_rule_rec_func_f.re:17:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
