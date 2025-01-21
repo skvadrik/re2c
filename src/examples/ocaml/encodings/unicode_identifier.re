@@ -27,7 +27,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = "_Ыдентификатор\x00";
+        yyinput = "_Ыдентификатор";
         yycursor = 0;
         yymarker = 0;
         yyaccept = 0;

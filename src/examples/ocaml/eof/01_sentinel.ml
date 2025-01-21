@@ -13,7 +13,7 @@ type state = {
 
 #15 "ocaml/eof/01_sentinel.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\x00' -> (yy1 [@tailcall]) yyrecord count
@@ -32,7 +32,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 #33 "ocaml/eof/01_sentinel.ml"
 
 and yy3 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -45,7 +45,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 #46 "ocaml/eof/01_sentinel.ml"
 
 and yy5 (yyrecord : state) (count : int) : int =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | 'a'..'z' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -68,8 +68,8 @@ let test(yyinput, count) =
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =
-    test("\x00", 0);
-    test("one two three\x00", 3);
-    test("f0ur\x00", -1)
+    test("", 0);
+    test("one two three", 3);
+    test("f0ur", -1)
 
 let _ = main ()

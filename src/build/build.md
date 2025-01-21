@@ -1,5 +1,10 @@
-How to build
-============
+Build & install
+===============
+
+
+If you want to install re2c from a prebuilt package, skip to the bottom of the
+page for a list of all packages available on different systems. Below is a guide
+how to build re2c from source code.
 
 
 Dependencies
@@ -284,3 +289,11 @@ fuzz-testing Haskell scripts in the *fuzz* subdirectory; they are based on the
 QuickCheck library and can be easily modified to fuzz-test various aspects of
 re2c by comparing current re2c version against older versions or against other
 regular expression libraries.
+
+Packages
+--------
+
+[Repology](https://repology.org/project/re2c/versions)
+has a list of re2c packages for different systems:
+
+![re2c](https://repology.org/badge/vertical-allrepos/re2c.svg)

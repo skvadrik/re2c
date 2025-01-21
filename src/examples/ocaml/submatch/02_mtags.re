@@ -50,8 +50,8 @@ let test (str: string) (result: (int list) option) =
     in if not (parse st = result) then raise (Failure "error")
 
 let main () =
-    test "1\x00" (Some [1]);
-    test "1.2.3.4.5.6.7\x00" (Some [1; 2; 3; 4; 5; 6; 7;]);
-    test "1.2.\x00" None
+    test "1" (Some [1]);
+    test "1.2.3.4.5.6.7" (Some [1; 2; 3; 4; 5; 6; 7;]);
+    test "1.2." None
 
 let _ = main ()

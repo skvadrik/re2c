@@ -7,11 +7,11 @@ re2c |nbsp| --- |nbsp| Regular Expressions to Code
 .. toctree::
     :hidden:
 
-    User manual    </manual/manual>
-    How to build   </build/build>
-    Benchmarks     </benchmarks/benchmarks>
-    Release notes  </releases/release_notes>
-    Changelog      </releases/changelog/changelog>
+    User manual     </manual/manual>
+    Build & install </build/build>
+    Benchmarks      </benchmarks/benchmarks>
+    Release notes   </releases/release_notes>
+    Changelog       </releases/changelog/changelog>
 
 *re2c* stands for *Regular Expressions to Code*.
 It is a free and open-source lexer generator that supports C/C++, D, Go,

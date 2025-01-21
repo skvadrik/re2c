@@ -24,7 +24,7 @@ let add (num: int option) (dgt: int) (base: int) : int option =
 
 
 let rec yy1 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     st.yycursor <- st.yycursor + 1;
     match yych with
         | '0' -> (yy3 [@tailcall]) st num
@@ -36,7 +36,7 @@ and yy2 (st : state) (num : int option) : int option =
 
 and yy3 (st : state) (num : int option) : int option =
     st.yymarker <- st.yycursor;
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | 'B'
         | 'b' ->
@@ -58,7 +58,7 @@ and yy5 (st : state) (num : int option) : int option =
     (yyfndec [@tailcall]) st num
 
 and yy6 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'1' ->
             st.yycursor <- st.yycursor + 1;
@@ -70,7 +70,7 @@ and yy7 (st : state) (num : int option) : int option =
     (yy4 [@tailcall]) st num
 
 and yy8 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9'
         | 'A'..'F'
@@ -93,7 +93,7 @@ and yyfninit (st : state) (num : int option) : int option =
     (yy1 [@tailcall]) st num
 
 and yy11 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     st.yycursor <- st.yycursor + 1;
     match yych with
         | '0'..'1' -> (yy13 [@tailcall]) st num
@@ -109,7 +109,7 @@ and yyfnbin (st : state) (num : int option) : int option =
     (yy11 [@tailcall]) st num
 
 and yy14 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     st.yycursor <- st.yycursor + 1;
     match yych with
         | '0'..'7' -> (yy16 [@tailcall]) st num
@@ -125,7 +125,7 @@ and yyfnoct (st : state) (num : int option) : int option =
     (yy14 [@tailcall]) st num
 
 and yy17 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     st.yycursor <- st.yycursor + 1;
     match yych with
         | '0'..'9' -> (yy19 [@tailcall]) st num
@@ -141,7 +141,7 @@ and yyfndec (st : state) (num : int option) : int option =
     (yy17 [@tailcall]) st num
 
 and yy20 (st : state) (num : int option) : int option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     st.yycursor <- st.yycursor + 1;
     match yych with
         | '0'..'9' -> (yy22 [@tailcall]) st num

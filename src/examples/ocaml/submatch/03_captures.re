@@ -52,8 +52,8 @@ let test (str: string) (result: semver option) =
     in if not (parse st = result) then raise (Failure "error")
 
 let main () =
-    test "23.34\x00" (Some {major = 23; minor = 34; patch = 0});
-    test "1.2.99999\x00" (Some {major = 1; minor = 2; patch = 99999});
-    test "1.a\x00" None
+    test "23.34" (Some {major = 23; minor = 34; patch = 0});
+    test "1.2.99999" (Some {major = 1; minor = 2; patch = 99999});
+    test "1.a" None
 
 let _ = main ()

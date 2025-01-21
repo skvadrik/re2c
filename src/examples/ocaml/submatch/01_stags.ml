@@ -45,7 +45,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #47 "ocaml/submatch/01_stags.ml"
 let rec yy0 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt1 <- st.yycursor;
@@ -65,7 +65,7 @@ and yy2 (st : state) : semver option =
 
 and yy3 (st : state) : semver option =
     st.yymarker <- st.yycursor;
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '.' ->
             st.yycursor <- st.yycursor + 1;
@@ -76,7 +76,7 @@ and yy3 (st : state) : semver option =
         | _ -> (yy2 [@tailcall]) st
 
 and yy4 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt2 <- st.yycursor;
@@ -89,7 +89,7 @@ and yy5 (st : state) : semver option =
     (yy2 [@tailcall]) st
 
 and yy6 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '.' ->
             st.yycursor <- st.yycursor + 1;
@@ -100,7 +100,7 @@ and yy6 (st : state) : semver option =
         | _ -> (yy5 [@tailcall]) st
 
 and yy7 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\x00' ->
             st.yyt3 <- st.yycursor;
@@ -134,7 +134,7 @@ and yy8 (st : state) : semver option =
 #135 "ocaml/submatch/01_stags.ml"
 
 and yy9 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt4 <- st.yycursor;
@@ -143,7 +143,7 @@ and yy9 (st : state) : semver option =
         | _ -> (yy5 [@tailcall]) st
 
 and yy10 (st : state) : semver option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\x00' ->
             st.yycursor <- st.yycursor + 1;
@@ -187,8 +187,8 @@ let test (str: string) (result: semver option) =
     in if not (parse st = result) then raise (Failure "error")
 
 let main () =
-    test "23.34\x00" (Some {major = 23; minor = 34; patch = 0});
-    test "1.2.99999\x00" (Some {major = 1; minor = 2; patch = 99999});
-    test "1.a\x00" None
+    test "23.34" (Some {major = 23; minor = 34; patch = 0});
+    test "1.2.99999" (Some {major = 1; minor = 2; patch = 99999});
+    test "1.a" None
 
 let _ = main ()

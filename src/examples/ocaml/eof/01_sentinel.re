@@ -23,8 +23,8 @@ let test(yyinput, count) =
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =
-    test("\x00", 0);
-    test("one two three\x00", 3);
-    test("f0ur\x00", -1)
+    test("", 0);
+    test("one two three", 3);
+    test("f0ur", -1)
 
 let _ = main ()

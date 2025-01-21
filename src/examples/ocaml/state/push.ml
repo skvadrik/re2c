@@ -43,7 +43,7 @@ let fill(st: state) : status =
 
 
 let rec yy0 (yyrecord : state) : status =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | 'a'..'z' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -66,7 +66,7 @@ and yy2 (yyrecord : state) : status =
 
 and yy3 (yyrecord : state) : status =
     yyrecord.yymarker <- yyrecord.yycursor;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ';' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -87,7 +87,7 @@ and yy4 (yyrecord : state) : status =
     yyrecord.recv <- yyrecord.recv + 1; lex_loop yyrecord
 
 and yy5 (yyrecord : state) : status =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ';' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;

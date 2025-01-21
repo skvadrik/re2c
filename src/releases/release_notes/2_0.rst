@@ -43,7 +43,7 @@ working implementation.
 The existing Autotools-based build system continues to be used and maintained
 for the foreseeable future. In fact, both build systems are continuously tested
 on Travis CI.
-See the :ref:`build instructions <build/build:how to build>` page for
+See the :ref:`build instructions <build/build:build & install>` page for
 more details.
 
 **Free-form generic API.**

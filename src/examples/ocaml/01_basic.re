@@ -16,7 +16,7 @@ type state = {
 %}
 
 let main () =
-    let st = {yyinput = "1234\x00"; yycursor = 0}
+    let st = {yyinput = "1234"; yycursor = 0}
     in if not (lex st) then raise (Failure "error")
 
 let _ = main ()
