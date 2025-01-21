@@ -72,21 +72,27 @@ etc.
 Download
 --------
 
-You can get the
-`latest release <https://github.com/skvadrik/re2c/releases/latest>`_ on GitHub,
-as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_.
-Many Linux distributions and other systems provide their own packages. The
-source code is hosted on both GitHub (`<https://github.com/skvadrik/re2c>`_) and
-SourceForge (`<https://sourceforge.net/p/re2c>`_). GitHub serves as the main
-repository, bugtracker and tarball hosting. SourceForge is used as a backup
-repository and email hosting.
+- **Packages**.
+  Many systems provide their own packages that can be installed via package
+  managers. See the full list `on Repology <https://repology.org/project/re2c/versions>`_.
+
+- **Release tarballs**.
+  You can get the `latest release <https://github.com/skvadrik/re2c/releases/latest>`_
+  on GitHub, as well as the `older releases <https://github.com/skvadrik/re2c/releases>`_.
+
+- **Source code**.
+  The main repository is on GitHub: `<https://github.com/skvadrik/re2c>`_.
+  There is a mirror on SourceForge: `<https://sourceforge.net/p/re2c>`_, but it
+  may be out of date.
 
 Bugs & patches
 --------------
 
-Please send bugs reports, patches and other feedback to `GitHub issue tracker
-<https://github.com/skvadrik/re2c>`_ or email them to
-`re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ and
+Please send bugs reports, patches and other feedback to
+`GitHub issue tracker <https://github.com/skvadrik/re2c>`_ or
+`GitHub discussions <https://github.com/skvadrik/re2c/discussions>`_,
+or else send an email to `skvadrik@gmail.com <skvadrik@gmail.com>`_,
+`re2c-devel@lists.sourceforge.net <re2c-devel@lists.sourceforge.net>`_ or
 `re2c-general@lists.sourceforge.net <re2c-general@lists.sourceforge.net>`_
 mailing lists. There is an IRC channel ``#re2c`` on
 `irc.libera.chat <https://libera.chat>`_ and
