@@ -52,7 +52,7 @@ extern "C" {
 %token TOKEN_CJUMP
 %token TOKEN_CNEXT
 %token TOKEN_CLIST
-%token TOKEN_CEXIT
+%token TOKEN_CPRE_RULE
 %token TOKEN_CZERO
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
@@ -64,6 +64,9 @@ extern "C" {
 %token TOKEN_REGEXP
 %token TOKEN_BLOCK
 %token TOKEN_ENTRY
+%token TOKEN_PRE_RULE
+%token TOKEN_POST_RULE
+%token TOKEN_LPAREN_NEG
 %token TOKEN_ERROR
 
 %type <op>      close closes
@@ -118,6 +121,12 @@ rule
 | TOKEN_ENTRY TOKEN_CODE {
     find_or_add_gram(grams, "").entry.push_back($2);
 }
+| TOKEN_PRE_RULE TOKEN_CODE {
+    find_or_add_gram(grams, "").pre_rule.push_back($2);
+}
+| TOKEN_POST_RULE TOKEN_CODE {
+    find_or_add_gram(grams, "").post_rule.push_back($2);
+}
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).rules.push_back(AstRule($2, $3));
@@ -142,9 +151,21 @@ rule
     }
     ast.temp_condlist.clear();
 }
-| TOKEN_CEXIT TOKEN_CODE {
+| TOKEN_CLIST TOKEN_PRE_RULE ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_gram(grams, cond).exit.push_back($2);
+        find_or_add_gram(grams, cond).pre_rule.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CLIST TOKEN_POST_RULE ccode {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).post_rule.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CPRE_RULE TOKEN_CODE {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).pre_rule.push_back($2);
     }
     ast.temp_condlist.clear();
 }
@@ -230,8 +251,8 @@ primary
         $$ = ast.cap($$, NO_CAPTURE);
     }
 }
-| '('     expr ')' { $$ = ast.cap($2, CAPTURE_IF_NOT_INVERTED); }
-| '(' '!' expr ')' { $$ = ast.cap($3, CAPTURE_IF_INVERTED); }
+| '('              expr ')' { $$ = ast.cap($2, CAPTURE_IF_NOT_INVERTED); }
+| TOKEN_LPAREN_NEG expr ')' { $$ = ast.cap($2, CAPTURE_IF_INVERTED); }
 ;
 
 %%

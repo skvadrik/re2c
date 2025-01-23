@@ -118,7 +118,8 @@ struct Adfa {
     CodeBitmap* bitmap;
 
     const SemAct* entry_action;
-    const SemAct* exit_action;
+    const SemAct* pre_rule_action;
+    const SemAct* post_rule_action;
 
     Adfa(Tdfa&& dfa,
          const std::vector<size_t>& fill,
@@ -126,10 +127,11 @@ struct Adfa {
          const loc_t& loc,
          const std::string& name,
          const std::string& cond,
-         const SemAct* entry_action,
-         const SemAct* exit_action,
          const opt_t* opts,
-         Msg& msg);
+         Msg& msg,
+         const SemAct* entry_action,
+         const SemAct* pre_rule_action,
+         const SemAct* post_rule_action);
 
     ~Adfa();
     void reorder();

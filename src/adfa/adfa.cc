@@ -24,52 +24,54 @@ static bool is_eof(const opt_t* opts, uint32_t ub) {
 }
 
 Adfa::Adfa(Tdfa&& dfa,
-           const std::vector<size_t>& fill,
-           size_t key,
-           const loc_t& loc,
-           const std::string& name,
-           const std::string& cond,
-           const SemAct* entry_action,
-           const SemAct* exit_action,
-           const opt_t* opts,
-           Msg& msg)
-    : // Move ownership from TDFA to ADFA.
-      charset(std::move(dfa.charset)),
-      rules(std::move(dfa.rules)),
-      tags(std::move(dfa.tags)),
-      mtagvers(std::move(dfa.mtagvers)),
-      tcpool(std::move(dfa.tcpool)),
-      finvers(dfa.finvers),
-      maxtagver(dfa.maxtagver),
-      loc(loc),
-      name(name),
-      cond(cond),
-      msg(msg),
-      accepts(),
-      lower_char(0),
-      upper_char(charset.back()),
-      state_count(0),
-      head(nullptr),
-      default_state(nullptr),
-      eof_state(nullptr),
-      start_state(nullptr),
-      finstates(rules.size(), nullptr),
-      custom_start_label(nullptr),
-      stagnames(),
-      stagvars(),
-      mtagnames(),
-      mtagvars(),
-      def_rule(dfa.def_rule),
-      eof_rule(dfa.eof_rule),
-      key_size(key),
-      max_fill(0),
-      max_nmatch(0),
-      need_backup(false),
-      need_accept(false),
-      oldstyle_ctxmarker(false),
-      bitmap(nullptr),
-      entry_action(entry_action),
-      exit_action(exit_action) {
+    const std::vector<size_t>& fill,
+    size_t key,
+    const loc_t& loc,
+    const std::string& name,
+    const std::string& cond,
+    const opt_t* opts,
+    Msg& msg,
+    const SemAct* entry_action,
+    const SemAct* pre_rule_action,
+    const SemAct* post_rule_action)
+        // Move ownership from TDFA to ADFA.
+        : charset(std::move(dfa.charset))
+        , rules(std::move(dfa.rules))
+        , tags(std::move(dfa.tags))
+        , mtagvers(std::move(dfa.mtagvers))
+        , tcpool(std::move(dfa.tcpool))
+        , finvers(dfa.finvers)
+        , maxtagver(dfa.maxtagver)
+        , loc(loc)
+        , name(name)
+        , cond(cond)
+        , msg(msg)
+        , accepts()
+        , lower_char(0)
+        , upper_char(charset.back())
+        , state_count(0)
+        , head(nullptr)
+        , default_state(nullptr)
+        , eof_state(nullptr)
+        , start_state(nullptr)
+        , finstates(rules.size(), nullptr)
+        , custom_start_label(nullptr)
+        , stagnames()
+        , stagvars()
+        , mtagnames()
+        , mtagvars()
+        , def_rule(dfa.def_rule)
+        , eof_rule(dfa.eof_rule)
+        , key_size(key)
+        , max_fill(0)
+        , max_nmatch(0)
+        , need_backup(false)
+        , need_accept(false)
+        , oldstyle_ctxmarker(false)
+        , bitmap(nullptr)
+        , entry_action(entry_action)
+        , pre_rule_action(pre_rule_action)
+        , post_rule_action(post_rule_action) {
 
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;

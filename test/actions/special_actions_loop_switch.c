@@ -8,7 +8,7 @@
 	for (;;) {
 		switch (yystate) {
 			case 0:
-				{ /* init ... */ }
+				{ /* entry ... */ }
 				yystate = 1;
 				continue;
 			case 1:
@@ -23,7 +23,10 @@
 						yystate = 2;
 						continue;
 				}
-			case 2: { return a; }
+			case 2:
+				{ /* pre_rule ... */ }
+				{ return a; }
+				{ /* post_rule ... */ }
 		}
 	}
 }
@@ -41,7 +44,7 @@ enum YYCONDTYPE {
 	for (;;) {
 		switch (yystate) {
 			case 0:
-				{ /* init a ... */ }
+				{ /* entry a ... */ }
 				yystate = 1;
 				continue;
 			case 1:
@@ -56,9 +59,12 @@ enum YYCONDTYPE {
 						yystate = 2;
 						continue;
 				}
-			case 2: { return a; }
+			case 2:
+				{ /* pre_rule * ... */ }
+				{ return a; }
+				{ /* post_rule * ... */ }
 			case 3:
-				{ /* init * ... */ }
+				{ /* entry * ... */ }
 				yystate = 4;
 				continue;
 			case 4:
@@ -73,11 +79,14 @@ enum YYCONDTYPE {
 						yystate = 5;
 						continue;
 				}
-			case 5: { return b; }
+			case 5:
+				{ /* pre_rule b ... */ }
+				{ return b; }
+				{ /* post_rule b ... */ }
 		}
 	}
 }
 
-entry_rule_loop_switch.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_loop_switch.re:10:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_loop_switch.re:11:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+actions/special_actions_loop_switch.re:4:15: warning: rule matches empty string [-Wmatch-empty-string]
+actions/special_actions_loop_switch.re:12:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+actions/special_actions_loop_switch.re:13:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]

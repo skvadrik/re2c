@@ -442,6 +442,8 @@ scan:
 
     [*+?!()|;/\\=$] { RET_TOK(*tok); }
 
+    "(!" { RET_TOK(TOKEN_LPAREN_NEG); } // avoid parsing `!x` as action in `(!x)`
+
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
             RET_FAIL(error_at_tok("repetition count overflow"));
@@ -539,6 +541,10 @@ scan:
     }
 
     "!entry" / ws_or_eoc { RET_TOK(TOKEN_ENTRY); }
+    "!pre_rule" / ws_or_eoc { RET_TOK(TOKEN_PRE_RULE); }
+    "!post_rule" / ws_or_eoc { RET_TOK(TOKEN_POST_RULE); }
+
+    "!" name { RET_FAIL(error_at_tok("unknown action or directive '%.*s'", int(cur - tok), tok)); }
 
     "." { yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
 
@@ -594,7 +600,7 @@ Ret Input::lex_clist(Ast& ast, int& token) {
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
     CHECK(cl.empty());
 /*!re2c
-    space* "!" space* { token = TOKEN_CEXIT; goto cond; }
+    space* "!" space* { token = TOKEN_CPRE_RULE; goto cond; }
     space* ">"        { token = TOKEN_CZERO; goto end; }
     space*            { goto cond; }
 */

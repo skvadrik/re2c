@@ -76,7 +76,7 @@ namespace re2c {
     TOKEN_CJUMP = 258,             /* TOKEN_CJUMP  */
     TOKEN_CNEXT = 259,             /* TOKEN_CNEXT  */
     TOKEN_CLIST = 260,             /* TOKEN_CLIST  */
-    TOKEN_CEXIT = 261,             /* TOKEN_CEXIT  */
+    TOKEN_CPRE_RULE = 261,         /* TOKEN_CPRE_RULE  */
     TOKEN_CZERO = 262,             /* TOKEN_CZERO  */
     TOKEN_CLOSESIZE = 263,         /* TOKEN_CLOSESIZE  */
     TOKEN_CODE = 264,              /* TOKEN_CODE  */
@@ -88,7 +88,10 @@ namespace re2c {
     TOKEN_REGEXP = 270,            /* TOKEN_REGEXP  */
     TOKEN_BLOCK = 271,             /* TOKEN_BLOCK  */
     TOKEN_ENTRY = 272,             /* TOKEN_ENTRY  */
-    TOKEN_ERROR = 273              /* TOKEN_ERROR  */
+    TOKEN_PRE_RULE = 273,          /* TOKEN_PRE_RULE  */
+    TOKEN_POST_RULE = 274,         /* TOKEN_POST_RULE  */
+    TOKEN_LPAREN_NEG = 275,        /* TOKEN_LPAREN_NEG  */
+    TOKEN_ERROR = 276              /* TOKEN_ERROR  */
   };
   typedef enum re2c_tokentype re2c_token_kind_t;
 #endif
@@ -106,7 +109,7 @@ union RE2C_STYPE
     const char* cstr;
     std::string* str;
 
-#line 110 "src/parse/parser.h"
+#line 113 "src/parse/parser.h"
 
 };
 typedef union RE2C_STYPE RE2C_STYPE;

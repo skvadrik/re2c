@@ -4,7 +4,7 @@
 
 {
 	YYCTYPE yych;
-	{ /* init ... */ }
+	{ /* entry ... */ }
 yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych >= 0x01) goto yy1;
@@ -14,8 +14,12 @@ yyFillLabel0:
 	}
 yy1:
 	++YYCURSOR;
+	{ /* pre_rule ... */ }
 	{ return ^; }
+	{ /* post_rule ... */ }
 yy2:
+	{ /* pre_rule ... */ }
 	{ return $; }
+	{ /* post_rule ... */ }
 }
 

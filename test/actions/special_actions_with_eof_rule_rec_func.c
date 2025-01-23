@@ -9,7 +9,7 @@ int yy3();
 int lex();
 
 int yy0() {
-	/* init ... */
+	/* entry ... */
 	return yy1();
 }
 
@@ -30,11 +30,15 @@ int yy1() {
 }
 
 int yy2() {
+	/* pre_rule ... */
 	return ^;
+	/* post_rule ... */
 }
 
 int yy3() {
+	/* pre_rule ... */
 	return $;
+	/* post_rule ... */
 }
 
 int lex() {

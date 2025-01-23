@@ -8,7 +8,7 @@
 	for (;;) {
 		switch (yystate) {
 			case 0:
-				{ /* init ... */ }
+				{ /* entry ... */ }
 				yystate = 1;
 				continue;
 			case 1:
@@ -29,8 +29,14 @@
 				++YYCURSOR;
 				yystate = 2;
 				continue;
-			case 2: { return ^; }
-			case 3: { return $; }
+			case 2:
+				{ /* pre_rule ... */ }
+				{ return ^; }
+				{ /* post_rule ... */ }
+			case 3:
+				{ /* pre_rule ... */ }
+				{ return $; }
+				{ /* post_rule ... */ }
 		}
 	}
 }

@@ -4,7 +4,7 @@
 
 {
 	YYCTYPE yych;
-	{ /* init ... */ }
+	{ /* entry ... */ }
 	goto yy0;
 yy1:
 	++YYCURSOR;
@@ -16,7 +16,9 @@ yy0:
 		default: goto yy2;
 	}
 yy2:
+	{ /* pre_rule ... */ }
 	{ return a; }
+	{ /* post_rule ... */ }
 }
 
 
@@ -34,7 +36,7 @@ enum YYCONDTYPE {
 	}
 /* *********************************** */
 yyc_a:
-	{ /* init a ... */ }
+	{ /* entry a ... */ }
 	goto yy3;
 yy4:
 	++YYCURSOR;
@@ -46,10 +48,12 @@ yy3:
 		default: goto yy5;
 	}
 yy5:
+	{ /* pre_rule * ... */ }
 	{ return a; }
+	{ /* post_rule * ... */ }
 /* *********************************** */
 yyc_b:
-	{ /* init * ... */ }
+	{ /* entry * ... */ }
 	goto yy6;
 yy7:
 	++YYCURSOR;
@@ -61,9 +65,11 @@ yy6:
 		default: goto yy8;
 	}
 yy8:
+	{ /* pre_rule b ... */ }
 	{ return b; }
+	{ /* post_rule b ... */ }
 }
 
-entry_rule_goto_label.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label.re:10:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label.re:11:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label.re:4:15: warning: rule matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label.re:12:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label.re:13:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]

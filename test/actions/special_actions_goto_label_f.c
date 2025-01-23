@@ -3,7 +3,7 @@
 
 
 yy0:
-	{ /* init ... */ }
+	{ /* entry ... */ }
 	goto yy1;
 yy2:
 	++YYCURSOR;
@@ -20,7 +20,9 @@ yyFillLabel0:
 	}
 yy3:
 	YYSETSTATE(-1);
+	{ /* pre_rule ... */ }
 	{ return a; }
+	{ /* post_rule ... */ }
 
 
 switch (YYGETSTATE()) {
@@ -42,7 +44,7 @@ yy4:
 	}
 /* *********************************** */
 yyc_a:
-	{ /* init a ... */ }
+	{ /* entry a ... */ }
 	goto yy5;
 yy6:
 	++YYCURSOR;
@@ -59,10 +61,12 @@ yyFillLabel1:
 	}
 yy7:
 	YYSETSTATE(-1);
+	{ /* pre_rule * ... */ }
 	{ return a; }
+	{ /* post_rule * ... */ }
 /* *********************************** */
 yyc_b:
-	{ /* init * ... */ }
+	{ /* entry * ... */ }
 	goto yy8;
 yy9:
 	++YYCURSOR;
@@ -79,7 +83,9 @@ yyFillLabel2:
 	}
 yy10:
 	YYSETSTATE(-1);
+	{ /* pre_rule b ... */ }
 	{ return b; }
+	{ /* post_rule b ... */ }
 
 
 switch (YYGETSTATE()) {
@@ -88,6 +94,6 @@ switch (YYGETSTATE()) {
 	default: goto yy4;
 }
 
-entry_rule_goto_label_f.re:4:11: warning: rule matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label_f.re:12:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
-entry_rule_goto_label_f.re:13:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label_f.re:4:15: warning: rule matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label_f.re:14:15: warning: rule in condition 'a' matches empty string [-Wmatch-empty-string]
+actions/special_actions_goto_label_f.re:15:15: warning: rule in condition 'b' matches empty string [-Wmatch-empty-string]
