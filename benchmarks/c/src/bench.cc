@@ -4,12 +4,16 @@
 #include "ragel/base.h"
 
 #define GROUP(qual, name, data, count1, count2) \
-    benchmark::RegisterBenchmark(name "-" CXX "_re2c-eofrule", \
-        re2c_##qual::bench_yyfill_eofrule(), "data/" #data "/big", count2); \
-    benchmark::RegisterBenchmark(name "-" CXX "_re2c-padding", \
-        re2c_##qual::bench_yyfill_padding(), "data/" #data "/big", count2); \
-    benchmark::RegisterBenchmark(name "-" CXX "_ragel", \
-        ragel_##qual::bench(), "data/" #data "/big", count2);
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-simple", \
+        re2c_##qual::bench_simple(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-buffered-eof", \
+        re2c_##qual::bench_buffered_eof(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_re2c-buffered-scc", \
+        re2c_##qual::bench_buffered_scc(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_ragel-simple", \
+        ragel_##qual::bench_simple(), "data/" #data "/big", count2); \
+    benchmark::RegisterBenchmark(name "-" CXX "_ragel-buffered", \
+        ragel_##qual::bench_buffered(), "data/" #data "/big", count2);
 
 int main(int argc, char** argv) {
     benchmark::Initialize(&argc, argv);

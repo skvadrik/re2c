@@ -9552,8 +9552,7 @@ static const int uri_start = 235;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_02__uri_rfc3986
 

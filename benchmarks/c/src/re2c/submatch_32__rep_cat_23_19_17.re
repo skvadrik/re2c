@@ -7,9 +7,9 @@ namespace re2c_submatch_32__rep_cat_23_19_17 {
 
     *        { return -1; }
     aaa [\n] {
-        print(count, in->tok, t1, t2, t3);
+        print(count, YYTOKEN, t1, t2, t3);
         OUTC('\n');
-        taglistpool_clear(&in->tlp, in);
+        TLP_CLEAR();
         goto loop;
     }
 */

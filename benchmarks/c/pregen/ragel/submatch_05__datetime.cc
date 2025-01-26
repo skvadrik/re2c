@@ -692,7 +692,6 @@ static const int datetime_start = 35;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_05__datetime

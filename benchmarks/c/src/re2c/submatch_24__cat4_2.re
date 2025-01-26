@@ -13,7 +13,7 @@ namespace re2c_submatch_24__cat4_2 {
         OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
         OUTS(a1, b1); OUTC('.'); OUTS(b1, a2); OUTC('.');
         OUTS(a2, b2); OUTC('.'); OUTS(b2, a3); OUTC('.');
-        OUTS(a3, b3); OUTC('.'); OUTS(b3, in->cur);
+        OUTS(a3, b3); OUTC('.'); OUTS(b3, YYCURSOR);
         goto loop;
     }
 */

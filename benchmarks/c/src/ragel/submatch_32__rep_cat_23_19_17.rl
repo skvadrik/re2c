@@ -46,7 +46,6 @@ static int lex(Input *in, int count) {
     return count;
 }
 
-RAGEL_BENCH()
-RAGEL_TEST()
+RAGEL_BENCH_AND_TEST()
 
 } // namespace ragel_submatch_32__rep_cat_23_19_17

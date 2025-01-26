@@ -202,7 +202,6 @@ static const int m_start = 3;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_10__alt1_2

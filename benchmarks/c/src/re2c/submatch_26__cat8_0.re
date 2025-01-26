@@ -21,7 +21,7 @@ namespace re2c_submatch_26__cat8_0 {
         OUTS(a4, b4); OUTC('.'); OUTS(b4, a5); OUTC('.');
         OUTS(a5, b5); OUTC('.'); OUTS(b5, a6); OUTC('.');
         OUTS(a6, b6); OUTC('.'); OUTS(b6, a7); OUTC('.');
-        OUTS(a7, b7); OUTC('.'); OUTS(b7, in->cur);
+        OUTS(a7, b7); OUTC('.'); OUTS(b7, YYCURSOR);
         goto loop;
     }
 */

@@ -295,6 +295,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out7;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -309,6 +312,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out8;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -336,7 +342,7 @@ static const int apache_log_start = 25;
 #line 24 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				d2 = p; }
 			
-#line 321 "gen/ragel/submatch_04__apache_log.cc"
+#line 327 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st10;
 			_st10:
@@ -361,7 +367,7 @@ static const int apache_log_start = 25;
 #line 25 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				r1 = p; }
 			
-#line 345 "gen/ragel/submatch_04__apache_log.cc"
+#line 351 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st11;
 			_st11:
@@ -370,6 +376,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out11;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -384,6 +393,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out12;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -411,7 +423,7 @@ static const int apache_log_start = 25;
 #line 25 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				r2 = p; }
 			
-#line 394 "gen/ragel/submatch_04__apache_log.cc"
+#line 406 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st14;
 			_st14:
@@ -436,7 +448,7 @@ static const int apache_log_start = 25;
 #line 26 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				s1 = p; }
 			
-#line 418 "gen/ragel/submatch_04__apache_log.cc"
+#line 430 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st15;
 			_st15:
@@ -461,7 +473,7 @@ static const int apache_log_start = 25;
 #line 26 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				s2 = p; }
 			
-#line 442 "gen/ragel/submatch_04__apache_log.cc"
+#line 454 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st16;
 			_st16:
@@ -489,7 +501,7 @@ static const int apache_log_start = 25;
 #line 27 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				z1 = p; }
 			
-#line 469 "gen/ragel/submatch_04__apache_log.cc"
+#line 481 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st17;
 			_st17:
@@ -511,7 +523,7 @@ static const int apache_log_start = 25;
 #line 27 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				z2 = p; }
 			
-#line 490 "gen/ragel/submatch_04__apache_log.cc"
+#line 502 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st18;
 			_st18:
@@ -536,7 +548,7 @@ static const int apache_log_start = 25;
 #line 28 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				u1 = p; }
 			
-#line 514 "gen/ragel/submatch_04__apache_log.cc"
+#line 526 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st19;
 			_st19:
@@ -545,6 +557,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out19;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -572,7 +587,7 @@ static const int apache_log_start = 25;
 #line 28 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				u2 = p; }
 			
-#line 549 "gen/ragel/submatch_04__apache_log.cc"
+#line 564 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st21;
 			_st21:
@@ -597,7 +612,7 @@ static const int apache_log_start = 25;
 #line 29 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				g1 = p; }
 			
-#line 573 "gen/ragel/submatch_04__apache_log.cc"
+#line 588 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st22;
 			_st22:
@@ -606,6 +621,9 @@ static const int apache_log_start = 25;
 			if ( p == pe )
 				goto _out22;
 			switch( ( (*( p))) ) {
+				case 0: {
+					goto _st0;
+				}
 				case 10: {
 					goto _st0;
 				}
@@ -628,7 +646,7 @@ static const int apache_log_start = 25;
 #line 27 "../../../benchmarks/c/src/ragel/submatch_04__apache_log.rl"
 				z1 = p; }
 			
-#line 603 "gen/ragel/submatch_04__apache_log.cc"
+#line 621 "gen/ragel/submatch_04__apache_log.cc"
 
 			goto _st24;
 			_st24:
@@ -686,7 +704,6 @@ static const int apache_log_start = 25;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_04__apache_log

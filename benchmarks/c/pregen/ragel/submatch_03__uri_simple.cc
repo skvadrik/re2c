@@ -1769,7 +1769,6 @@ static const int uri_start = 19;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_03__uri_simple

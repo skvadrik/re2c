@@ -12,20 +12,24 @@ bool verbose = false;
 #define TEST(name, data, count1, count2, except) do { \
     fprintf(stderr, "checking %s...\n", #name); \
     if ((except & E_RE2C) == 0) { \
-        ok &= re2c_##name::test_yyfill_eofrule("data/" #data "/small", count1); \
-        if (!quick) ok &= re2c_##name::test_yyfill_eofrule("data/" #data "/big", count2); \
-        ok &= re2c_##name::test_yyfill_padding("data/" #data "/small", count1); \
-        if (!quick) ok &= re2c_##name::test_yyfill_padding("data/" #data "/big", count2); \
+        ok &= re2c_##name::test_simple("data/" #data "/small", count1); \
+        if (!quick) ok &= re2c_##name::test_simple("data/" #data "/big", count2); \
+        ok &= re2c_##name::test_buffered_eof("data/" #data "/small", count1); \
+        if (!quick) ok &= re2c_##name::test_buffered_eof("data/" #data "/big", count2); \
+        ok &= re2c_##name::test_buffered_scc("data/" #data "/small", count1); \
+        if (!quick) ok &= re2c_##name::test_buffered_scc("data/" #data "/big", count2); \
     } \
     if ((except & E_RAGEL) == 0) { \
-        ok &= ragel_##name::test("data/" #data "/small", count1); \
-        if (!quick) ok &= ragel_##name::test("data/" #data "/big", count2); \
+        ok &= ragel_##name::test_simple("data/" #data "/small", count1); \
+        if (!quick) ok &= ragel_##name::test_simple("data/" #data "/big", count2); \
+        ok &= ragel_##name::test_buffered("data/" #data "/small", count1); \
+        if (!quick) ok &= ragel_##name::test_buffered("data/" #data "/big", count2); \
     } \
 } while (0)
 
-#define TEST_RAGEL_ERROR(name, data, count1, count2) do { \
-    ok &= ragel_##name::test("data/" #data "/small", count1); \
-    if (!quick) ok &= ragel_##name::test("data/" #data "/big", count2); \
+#define TEST_RAGEL_ERROR(suffix, name, data, count1, count2) do { \
+    ok &= ragel_##name::test_##suffix("data/" #data "/small", count1); \
+    if (!quick) ok &= ragel_##name::test_##suffix("data/" #data "/big", count2); \
 } while (0)
 
 int main(int argc, char** argv) {
@@ -75,20 +79,21 @@ int main(int argc, char** argv) {
     TEST(submatch_31__rep_cat_13_11_7, rep, 18290, 16790220, E_RAGEL);
     TEST(submatch_32__rep_cat_23_19_17, rep, 18290, 16790220, E_RAGEL);
     TEST(submatch_33__rep_alt_5_3_2, rep, 18290, 16790220, 0);
-    TEST(submatch_34__rep_alt_13_11_7, rep, 18290, 16790220, E_RAGEL);
-    TEST(submatch_35__rep_alt_23_19_17, rep, 18290, 16790220, E_RAGEL);
+    TEST(submatch_34__rep_alt_13_11_7, rep, 18290, 16790220, 0);
+    TEST(submatch_35__rep_alt_23_19_17, rep, 18290, 16790220, 0);
     TEST(submatch_36__rep_5_rep_3_rep_2, rep, 18290, 16790220, 0);
-    TEST(submatch_37__rep_13_rep_11_rep_7, rep, 18290, 16790220, E_RAGEL);
+    TEST(submatch_37__rep_13_rep_11_rep_7, rep, 18290, 16790220, 0);
     TEST(submatch_38__rep_23_rep_19_rep_17, rep, 18290, 16790220, E_RAGEL);
 
     // Test that Ragel lexers still fail in the same way.
-    TEST_RAGEL_ERROR(submatch_30__rep_cat_5_3_2, rep, 18290, 16790832);
-    TEST_RAGEL_ERROR(submatch_31__rep_cat_13_11_7, rep, 18290, 16790832);
-    TEST_RAGEL_ERROR(submatch_32__rep_cat_23_19_17, rep, 18290, 16790832);
-    TEST_RAGEL_ERROR(submatch_34__rep_alt_13_11_7, rep, 18278, 5593068);
-    TEST_RAGEL_ERROR(submatch_35__rep_alt_23_19_17, rep, 18285, 5595210);
-    TEST_RAGEL_ERROR(submatch_37__rep_13_rep_11_rep_7, rep, 18278, 5593068);
-    TEST_RAGEL_ERROR(submatch_38__rep_23_rep_19_rep_17, rep, 18285, 5595210);
+    TEST_RAGEL_ERROR(simple, submatch_30__rep_cat_5_3_2, rep, 18290, 16791137);
+    TEST_RAGEL_ERROR(simple, submatch_31__rep_cat_13_11_7, rep, 18290, 16791137);
+    TEST_RAGEL_ERROR(simple, submatch_32__rep_cat_23_19_17, rep, 18290, 16791137);
+    TEST_RAGEL_ERROR(simple, submatch_38__rep_23_rep_19_rep_17, rep, 18285, 18285);
+    TEST_RAGEL_ERROR(buffered, submatch_30__rep_cat_5_3_2, rep, 18290, 16790832);
+    TEST_RAGEL_ERROR(buffered, submatch_31__rep_cat_13_11_7, rep, 18290, 16790832);
+    TEST_RAGEL_ERROR(buffered, submatch_32__rep_cat_23_19_17, rep, 18290, 16790832);
+    TEST_RAGEL_ERROR(buffered, submatch_38__rep_23_rep_19_rep_17, rep, 18285, 5595210);
 
     fprintf(stderr, "%s\n", ok ? "all good :)" : "*** error ***"); \
     return ok ? 0 : 1;

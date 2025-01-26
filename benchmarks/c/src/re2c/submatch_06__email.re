@@ -14,9 +14,9 @@ namespace re2c_submatch_06__email {
     * { return -1; }
     email {
         OUTC(' ');
-        OUTS(in->tok, p - 1);
+        OUTS(YYTOKEN, p - 1);
         OUTC(' ');
-        OUTS(p, in->cur - 1);
+        OUTS(p, YYCURSOR - 1);
         OUTC('\n');
         goto loop;
     }

@@ -70,17 +70,25 @@ def bench_size():
             fname = re.search("([^/]+)-gcc.o$", f).group(1) + "-" + compiler + ".o"
             name = re.search("^.*__(.*)-gcc.o$", f).group(1).replace("_", "-") + "-" + compiler
 
-            benchmarks[name + "_re2c-eofrule"] = { "bin_size": get_sym_size(
+            benchmarks[name + "_re2c-simple"] = { "bin_size": get_sym_size(
                 os.path.join(builddir, "gen", "re2c", fname),
-                b"([0-9a-f]{16}) [tT] .*::(lex_yyfill|bench_yyfill|fill)_eofrule") }
+                b"([0-9a-f]{16}) [tT] .*::(lex|bench|fill)_simple") }
 
-            benchmarks[name + "_re2c-padding"] = { "bin_size": get_sym_size(
+            benchmarks[name + "_re2c-buffered-eof"] = { "bin_size": get_sym_size(
                 os.path.join(builddir, "gen", "re2c", fname),
-                b"([0-9a-f]{16}) [tT] .*::(lex_yyfill|bench_yyfill|fill)_padding") }
+                b"([0-9a-f]{16}) [tT] .*::(lex|bench|fill)_buffered_eof") }
 
-            benchmarks[name + "_ragel"] = { "bin_size": get_sym_size(
+            benchmarks[name + "_re2c-buffered-scc"] = { "bin_size": get_sym_size(
+                os.path.join(builddir, "gen", "re2c", fname),
+                b"([0-9a-f]{16}) [tT] .*::(lex|bench|fill)_buffered_scc") }
+
+            benchmarks[name + "_ragel-simple"] = { "bin_size": get_sym_size(
                 os.path.join(builddir, "gen", "ragel", fname),
-                b"([0-9a-f]{16}) [tT] .*::(lex|bench)") }
+                b"([0-9a-f]{16}) [tT] .*::(lex|bench_simple)") }
+
+            benchmarks[name + "_ragel-buffered"] = { "bin_size": get_sym_size(
+                os.path.join(builddir, "gen", "ragel", fname),
+                b"([0-9a-f]{16}) [tT] .*::(lex|bench_buffered)") }
 
     return benchmarks
 

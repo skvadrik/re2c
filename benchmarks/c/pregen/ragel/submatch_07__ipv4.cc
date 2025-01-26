@@ -323,7 +323,6 @@ static const int ipv4_start = 16;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_07__ipv4

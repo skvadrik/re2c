@@ -202,7 +202,6 @@ static const int aaa_start = 6;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_33__rep_alt_5_3_2

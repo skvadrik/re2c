@@ -107,10 +107,10 @@ namespace re2c_submatch_00__http_rfc7230 {
             }
             OUT("version-2: ", v3, v4);
         }
-        count += print_headers(in->tok, h1, h2, h3, h4);
+        count += print_headers(YYTOKEN, h1, h2, h3, h4);
         OUTC('\n');
 
-        taglistpool_clear(&in->tlp, in);
+        TLP_CLEAR();
         goto loop;
     }
 */

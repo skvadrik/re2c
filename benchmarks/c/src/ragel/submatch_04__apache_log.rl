@@ -11,12 +11,12 @@ const char *delim = "\n";
     host      = [0-9.]+;
     userid    = [\-];
     authuser  = [\-];
-    date      = "[" [^\n\]]+ "]";
-    request   = ["] [^\n"]+ ["];
+    date      = "[" [^\0\n\]]+ "]";
+    request   = ["] [^\0\n"]+ ["];
     status    = digit+;
     size      = (digit+ | '-');
-    url       = ["] [^\n"]* ["];
-    useragent = ["] [^\n"]* ["];
+    url       = ["] [^\0\n"]* ["];
+    useragent = ["] [^\0\n"]* ["];
     line    =
         host      >{ h1 = p; } %{ h2 = p; } sp
         userid    >{ i1 = p; } %{ i2 = p; } sp
@@ -62,7 +62,6 @@ static int lex(Input *in, int count) {
     return count;
 }
 
-RAGEL_BENCH()
-RAGEL_TEST()
+RAGEL_BENCH_AND_TEST()
 
 } // namespace ragel_submatch_04__apache_log

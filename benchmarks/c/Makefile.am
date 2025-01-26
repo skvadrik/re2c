@@ -5,9 +5,9 @@ PREGEN_DIR = $(srcdir)/pregen
 DAT_DIR = data
 RAGEL = $(ENG_DIR)/ragel/ragel7
 RE2C = $(top_builddir)/re2c
-RE2C_FLAGS = --reusable --tags --no-generation-date --no-version
+RE2C_FLAGS = --reusable --tags --no-generation-date --no-version -i
 
-CXXFLAGS = $(AM_CXXFLAGS) -O3 -I $(SRC_DIR)
+CXXFLAGS = $(AM_CXXFLAGS) -O3 -g -I $(SRC_DIR) -Wall -Wno-unused-const-variable
 LDFLAGS = -lbenchmark -lpthread
 
 BENCHMARKS = \

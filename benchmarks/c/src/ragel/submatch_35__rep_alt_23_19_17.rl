@@ -7,16 +7,11 @@ const char *delim = "\n";
 %%{
     machine aaa;
 
-    # using disambiguation operator ** causes incorrect parse,
-    # because some actions are removed while they are still needed
-    #
-    # without ** results are also incorrect due to action collision
-
     aaa = (([a]{23}|[a]{19}|[a]{17}) %{
             OUTS(s, p);
             OUTC('.');
             s = p;
-        })** >{ s = p; }
+        })* >{ s = p; }
         [\n] >{ OUTC('\n'); };
 
     main := aaa*;
@@ -39,7 +34,6 @@ static int lex(Input *in, int count) {
     return count;
 }
 
-RAGEL_BENCH()
-RAGEL_TEST()
+RAGEL_BENCH_AND_TEST()
 
 } // namespace ragel_submatch_35__rep_alt_23_19_17

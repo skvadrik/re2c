@@ -15,7 +15,7 @@ namespace re2c_submatch_07__ipv4 {
         OUTC(',');
         OUTS(p3, p4 - 1);
         OUTC(',');
-        OUTS(p4, in->cur - 1);
+        OUTS(p4, YYCURSOR - 1);
         OUTC('\n');
         goto loop;
     }

@@ -9,7 +9,7 @@ namespace re2c_submatch_22__cat2_8 {
     @a1 [a]* @b1 [a]{8}[b]*
     [\n] {
         OUTS(a0, b0); OUTC('.'); OUTS(b0, a1); OUTC('.');
-        OUTS(a1, b1); OUTC('.'); OUTS(b1, in->cur);
+        OUTS(a1, b1); OUTC('.'); OUTS(b1, YYCURSOR);
         goto loop;
     }
 */

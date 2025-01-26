@@ -44,10 +44,9 @@ namespace re2c_submatch_01__http_simple {
             OUT("request: ", rt1, rt2);
             OUT("version: ", v3, v4);
         }
-        count += print_headers(in->tok, h1, h2);
+        count += print_headers(YYTOKEN, h1, h2);
         OUTC('\n');
-
-        taglistpool_clear(&in->tlp, in);
+        TLP_CLEAR();
         goto loop;
     }
 */

@@ -12699,7 +12699,6 @@ static const int uri_start = 411;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_00__http_rfc7230

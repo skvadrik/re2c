@@ -7,12 +7,12 @@ namespace re2c_submatch_37__rep_13_rep_11_rep_7 {
 
     *        { return -1; }
     aaa [\n] {
-        const char *p = in->tok;
-        p = print(count, in->tok, p, t1);
-        p = print(count, in->tok, p, t2);
-        p = print(count, in->tok, p, t3);
+        const char *p = YYTOKEN;
+        p = print(count, YYTOKEN, p, t1);
+        p = print(count, YYTOKEN, p, t2);
+        p = print(count, YYTOKEN, p, t3);
         OUTC('\n');
-        taglistpool_clear(&in->tlp, in);
+        TLP_CLEAR();
         goto loop;
     }
 */

@@ -19,16 +19,52 @@ struct taglistpool_t {
     taglist_t *last;
 };
 
+static inline void taglistpool_init(taglistpool_t *tlp) {
+    static const unsigned size = 1024 * 1024;
+    tlp->head = (taglist_t*)malloc(size * sizeof(taglist_t));
+    tlp->next = tlp->head;
+    tlp->last = tlp->head + size;
+}
+
+static inline void taglistpool_free(taglistpool_t *tlp) {
+    free(tlp->head);
+    tlp->head = tlp->next = tlp->last = NULL;
+}
+
+static inline void taglist(taglist_t **ptl, const char *b, const char *t, taglistpool_t *tlp) {
+#ifdef GROW_MTAG_LIST
+    if (tlp->next >= tlp->last) {
+        const unsigned size = tlp->last - tlp->head;
+        taglist_t *head = (taglist_t*)malloc(2 * size * sizeof(taglist_t));
+        memcpy(head, tlp->head, size * sizeof(taglist_t));
+        free(tlp->head);
+        tlp->head = head;
+        tlp->next = head + size;
+        tlp->last = head + size * 2;
+    }
+#else
+    assert(tlp->next < tlp->last);
+#endif
+    taglist_t *tl = tlp->next++;
+    tl->pred = *ptl;
+    tl->dist = t - b;
+    *ptl = tl;
+}
+
 #define BENCH(name) \
 namespace re2c_##name { \
-    struct bench_yyfill_eofrule { \
+    struct bench_simple { \
         void operator()(benchmark::State &state, const char* input, long expected) const; \
     }; \
-    struct bench_yyfill_padding { \
+    struct bench_buffered_eof { \
         void operator()(benchmark::State &state, const char* input, long expected) const; \
     }; \
-    bool test_yyfill_eofrule(const char* input, long expected); \
-    bool test_yyfill_padding(const char* input, long expected); \
+    struct bench_buffered_scc { \
+        void operator()(benchmark::State &state, const char* input, long expected) const; \
+    }; \
+    bool test_simple(const char* input, long expected); \
+    bool test_buffered_eof(const char* input, long expected); \
+    bool test_buffered_scc(const char* input, long expected); \
 }
 
 BENCH(submatch_00__http_rfc7230)

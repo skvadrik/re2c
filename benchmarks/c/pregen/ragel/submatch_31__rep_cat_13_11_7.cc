@@ -514,7 +514,6 @@ static const int aaa_start = 32;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_31__rep_cat_13_11_7

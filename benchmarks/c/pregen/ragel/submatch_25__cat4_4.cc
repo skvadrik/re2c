@@ -2062,7 +2062,6 @@ static const int abcd_start = 60;
 		return count;
 	}
 	
-	RAGEL_BENCH()
-	RAGEL_TEST()
+	RAGEL_BENCH_AND_TEST()
 	
 } // namespace ragel_submatch_25__cat4_4

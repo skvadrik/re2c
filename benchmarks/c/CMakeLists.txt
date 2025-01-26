@@ -83,7 +83,7 @@ endforeach()
 # re2c
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
-set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date" "--no-version")
+set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date" "--no-version" "-i")
 set(COMMON_RE2C
     "${SRC_DIR}/re2c/common.re"
     "${SRC_DIR}/re2c/include-padding/fill.re"
@@ -114,7 +114,7 @@ endforeach()
 # binaries
 set(OBJ "")
 set(BIN "")
-set(CFLAGS "-O3" "-I" "${SRC_DIR}")
+set(CFLAGS "-O3" "-g" "-I" "${SRC_DIR}" "-Wall")
 set(COMMON_SRC "${SRC_DIR}/common.h")
 file(MAKE_DIRECTORY "${BIN_DIR}/ragel/")
 file(MAKE_DIRECTORY "${BIN_DIR}/re2c/")
