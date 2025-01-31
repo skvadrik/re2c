@@ -145,7 +145,6 @@ loop:
     tok = cur;
     /*!local:re2c
         re2c:yyfill:enable = 0;
-        re2c:bit-vectors = 1;
 
         "\x00" { return count; }
 
@@ -178,7 +177,6 @@ loop:
         re2c:define:YYFILL = "fill_buffered_eof(in) == 0";
         re2c:eof = 0;
         re2c:tags:expression = "in->@@";
-        // re2c:bit-vectors = 1; // doesn't work with end of input rule $
 
         $ { return count; }
 
@@ -196,7 +194,6 @@ loop:
     /*!local:re2c:y
         re2c:define:YYFILL = "if (fill_buffered_scc(in, @@) != 0) return -2;"; // propagate error
         re2c:tags:expression = "in->@@";
-        re2c:bit-vectors = 1;
 
         "\x00" { return count; }
 

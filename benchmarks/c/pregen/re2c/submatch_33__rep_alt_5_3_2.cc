@@ -174,14 +174,13 @@ loop:
 {
 	char yych;
 	yych = *YYCURSOR;
-	if (yych <= '\n') {
-		if (yych <= 0x00) goto yy1;
-		if (yych <= '\t') goto yy2;
-		taglist(&yytm1, YYTOKEN, YYTOKEN - 1, &in->tlp);
-		goto yy4;
-	} else {
-		if (yych == 'a') goto yy5;
-		goto yy2;
+	switch (yych) {
+		case 0x00: goto yy1;
+		case '\n':
+			taglist(&yytm1, YYTOKEN, YYTOKEN - 1, &in->tlp);
+			goto yy4;
+		case 'a': goto yy5;
+		default: goto yy2;
 	}
 yy1:
 	++YYCURSOR;
@@ -201,52 +200,68 @@ yy4:
     }
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych != 'a') goto yy3;
+	switch (yych) {
+		case 'a': goto yy6;
+		default: goto yy3;
+	}
 yy6:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy4;
-	}
-	if (yych == 'a') {
-		yytm2 = yytm1;
-		taglist(&yytm2, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy8;
+	switch (yych) {
+		case '\n':
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy4;
+		case 'a':
+			yytm2 = yytm1;
+			taglist(&yytm2, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy8;
+		default: goto yy7;
 	}
 yy7:
 	YYCURSOR = YYMARKER;
 	goto yy3;
 yy8:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy4;
+		case 'a':
+			yytm3 = yytm1;
+			taglist(&yytm3, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy9;
+		default: goto yy7;
 	}
-	if (yych != 'a') goto yy7;
-	yytm3 = yytm1;
-	taglist(&yytm3, YYTOKEN, YYCURSOR, &in->tlp);
+yy9:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		yytm1 = yytm2;
-		taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yytm1 = yytm2;
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy4;
+		case 'a': goto yy10;
+		default: goto yy7;
 	}
-	if (yych != 'a') goto yy7;
+yy10:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy4;
+		case 'a':
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy11;
+		default: goto yy7;
 	}
-	if (yych != 'a') goto yy7;
-	taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+yy11:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		yytm1 = yytm3;
-		taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yytm1 = yytm3;
+			taglist(&yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy4;
+		case 'a': goto yy6;
+		default: goto yy7;
 	}
-	if (yych == 'a') goto yy6;
-	goto yy7;
 }
 
 }
@@ -279,20 +294,20 @@ yyFillLabel0:
 	switch (yych) {
 		case '\n':
 			taglist(&in->yytm1, YYTOKEN, YYTOKEN - 1, &in->tlp);
-			goto yy12;
-		case 'a': goto yy13;
+			goto yy15;
+		case 'a': goto yy16;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel0;
-				goto yy20;
+				goto yy23;
 			}
-			goto yy10;
+			goto yy13;
 	}
-yy10:
+yy13:
 	++YYCURSOR;
-yy11:
+yy14:
 	{ return -1; }
-yy12:
+yy15:
 	++YYCURSOR;
 	t = in->yytm1;
 	{
@@ -301,58 +316,58 @@ yy12:
         TLP_CLEAR();
         goto loop;
     }
-yy13:
+yy16:
 	YYMARKER = ++YYCURSOR;
 yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
-		case 'a': goto yy14;
+		case 'a': goto yy17;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel1;
 			}
-			goto yy11;
+			goto yy14;
 	}
-yy14:
+yy17:
 	++YYCURSOR;
 yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '\n':
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy12;
+			goto yy15;
 		case 'a':
 			in->yytm2 = in->yytm1;
 			taglist(&in->yytm2, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy16;
+			goto yy19;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel2;
 			}
-			goto yy15;
+			goto yy18;
 	}
-yy15:
+yy18:
 	YYCURSOR = YYMARKER;
-	goto yy11;
-yy16:
+	goto yy14;
+yy19:
 	++YYCURSOR;
 yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '\n':
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy12;
+			goto yy15;
 		case 'a':
 			in->yytm3 = in->yytm1;
 			taglist(&in->yytm3, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy17;
+			goto yy20;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel3;
 			}
-			goto yy15;
+			goto yy18;
 	}
-yy17:
+yy20:
 	++YYCURSOR;
 yyFillLabel4:
 	yych = *YYCURSOR;
@@ -360,32 +375,32 @@ yyFillLabel4:
 		case '\n':
 			in->yytm1 = in->yytm2;
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy12;
-		case 'a': goto yy18;
+			goto yy15;
+		case 'a': goto yy21;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel4;
 			}
-			goto yy15;
+			goto yy18;
 	}
-yy18:
+yy21:
 	++YYCURSOR;
 yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '\n':
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy12;
+			goto yy15;
 		case 'a':
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy19;
+			goto yy22;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel5;
 			}
-			goto yy15;
+			goto yy18;
 	}
-yy19:
+yy22:
 	++YYCURSOR;
 yyFillLabel6:
 	yych = *YYCURSOR;
@@ -393,15 +408,15 @@ yyFillLabel6:
 		case '\n':
 			in->yytm1 = in->yytm3;
 			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-			goto yy12;
-		case 'a': goto yy14;
+			goto yy15;
+		case 'a': goto yy17;
 		default:
 			if (YYLIMIT <= YYCURSOR) {
 				if (fill_buffered_eof(in) == 0) goto yyFillLabel6;
 			}
-			goto yy15;
+			goto yy18;
 	}
-yy20:
+yy23:
 	{ return count; }
 }
 
@@ -418,23 +433,22 @@ loop:
 	char yych;
 	if ((YYLIMIT - YYCURSOR) < 2) if (fill_buffered_scc(in, 2) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych <= '\n') {
-		if (yych <= 0x00) goto yy22;
-		if (yych <= '\t') goto yy23;
-		taglist(&in->yytm1, YYTOKEN, YYTOKEN - 1, &in->tlp);
-		goto yy25;
-	} else {
-		if (yych == 'a') goto yy26;
-		goto yy23;
+	switch (yych) {
+		case 0x00: goto yy25;
+		case '\n':
+			taglist(&in->yytm1, YYTOKEN, YYTOKEN - 1, &in->tlp);
+			goto yy28;
+		case 'a': goto yy29;
+		default: goto yy26;
 	}
-yy22:
+yy25:
 	++YYCURSOR;
 	{ return count; }
-yy23:
+yy26:
 	++YYCURSOR;
-yy24:
+yy27:
 	{ return -1; }
-yy25:
+yy28:
 	++YYCURSOR;
 	t = in->yytm1;
 	{
@@ -443,64 +457,80 @@ yy25:
         TLP_CLEAR();
         goto loop;
     }
-yy26:
-	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych != 'a') goto yy24;
-yy27:
-	++YYCURSOR;
-	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
-	yych = *YYCURSOR;
-	if (yych == '\n') {
-		taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy25;
-	}
-	if (yych == 'a') {
-		in->yytm2 = in->yytm1;
-		taglist(&in->yytm2, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy29;
-	}
-yy28:
-	YYCURSOR = YYMARKER;
-	goto yy24;
 yy29:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 'a': goto yy30;
+		default: goto yy27;
+	}
+yy30:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') {
-		taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy25;
+	switch (yych) {
+		case '\n':
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy28;
+		case 'a':
+			in->yytm2 = in->yytm1;
+			taglist(&in->yytm2, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy32;
+		default: goto yy31;
 	}
-	if (yych != 'a') goto yy28;
-	in->yytm3 = in->yytm1;
-	taglist(&in->yytm3, YYTOKEN, YYCURSOR, &in->tlp);
+yy31:
+	YYCURSOR = YYMARKER;
+	goto yy27;
+yy32:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') {
-		in->yytm1 = in->yytm2;
-		taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy25;
+	switch (yych) {
+		case '\n':
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy28;
+		case 'a':
+			in->yytm3 = in->yytm1;
+			taglist(&in->yytm3, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy33;
+		default: goto yy31;
 	}
-	if (yych != 'a') goto yy28;
+yy33:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') {
-		taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy25;
+	switch (yych) {
+		case '\n':
+			in->yytm1 = in->yytm2;
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy28;
+		case 'a': goto yy34;
+		default: goto yy31;
 	}
-	if (yych != 'a') goto yy28;
-	taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+yy34:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') {
-		in->yytm1 = in->yytm3;
-		taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
-		goto yy25;
+	switch (yych) {
+		case '\n':
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy28;
+		case 'a':
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy35;
+		default: goto yy31;
 	}
-	if (yych == 'a') goto yy27;
-	goto yy28;
+yy35:
+	++YYCURSOR;
+	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
+	yych = *YYCURSOR;
+	switch (yych) {
+		case '\n':
+			in->yytm1 = in->yytm3;
+			taglist(&in->yytm1, YYTOKEN, YYCURSOR, &in->tlp);
+			goto yy28;
+		case 'a': goto yy30;
+		default: goto yy31;
+	}
 }
 
 }

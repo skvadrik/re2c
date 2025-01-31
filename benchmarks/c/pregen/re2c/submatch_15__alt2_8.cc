@@ -372,45 +372,10 @@ loop:
     
 {
 	char yych;
-	static const unsigned char yybm[256] = {
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   1,   2,   4,   8,  16,  32,  64,
-		128,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0
-	};
 	yych = *YYCURSOR;
-	if (yych <= 'b') {
-		if (yych <= '\n') {
-			if (yych <= 0x00) goto yy1;
-			if (yych <= '\t') goto yy2;
+	switch (yych) {
+		case 0x00: goto yy1;
+		case '\n':
 			yyt1 = NULL;
 			yyt2 = NULL;
 			yyt3 = NULL;
@@ -444,12 +409,10 @@ loop:
 			yyt31 = NULL;
 			yyt32 = NULL;
 			goto yy4;
-		} else {
-			if (yych <= '`') goto yy2;
-			if (yych <= 'a') {
-				yyt16 = YYCURSOR;
-				goto yy5;
-			}
+		case 'a':
+			yyt16 = YYCURSOR;
+			goto yy5;
+		case 'b':
 			yyt1 = NULL;
 			yyt2 = NULL;
 			yyt3 = NULL;
@@ -469,51 +432,47 @@ loop:
 			yyt24 = NULL;
 			yyt26 = YYCURSOR;
 			goto yy6;
-		}
-	} else {
-		if (yych <= 'e') {
-			if (yych <= 'c') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt9 = YYCURSOR;
-				yyt16 = YYCURSOR;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt27 = YYCURSOR;
-				goto yy7;
-			}
-			if (yych <= 'd') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt10 = YYCURSOR;
-				yyt16 = YYCURSOR;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy8;
-			}
+		case 'c':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt9 = YYCURSOR;
+			yyt16 = YYCURSOR;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt27 = YYCURSOR;
+			goto yy7;
+		case 'd':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt10 = YYCURSOR;
+			yyt16 = YYCURSOR;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy8;
+		case 'e':
 			yyt1 = NULL;
 			yyt2 = NULL;
 			yyt3 = NULL;
@@ -533,72 +492,67 @@ loop:
 			yyt24 = NULL;
 			yyt29 = YYCURSOR;
 			goto yy9;
-		} else {
-			if (yych <= 'f') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt12 = YYCURSOR;
-				yyt16 = YYCURSOR;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt30 = YYCURSOR;
-				goto yy10;
-			}
-			if (yych <= 'g') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt13 = YYCURSOR;
-				yyt16 = YYCURSOR;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy11;
-			}
-			if (yych <= 'h') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt14 = YYCURSOR;
-				yyt16 = YYCURSOR;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy12;
-			}
-			goto yy2;
-		}
+		case 'f':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt12 = YYCURSOR;
+			yyt16 = YYCURSOR;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt30 = YYCURSOR;
+			goto yy10;
+		case 'g':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt13 = YYCURSOR;
+			yyt16 = YYCURSOR;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy11;
+		case 'h':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt14 = YYCURSOR;
+			yyt16 = YYCURSOR;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy12;
+		default: goto yy2;
 	}
 yy1:
 	++YYCURSOR;
@@ -663,113 +617,173 @@ yy4:
     }
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy14;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy14;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy14;
+		default: goto yy3;
+	}
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy25;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy25;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy25;
+		default: goto yy3;
+	}
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy27;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy27;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy27;
+		default: goto yy3;
+	}
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy29;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy29;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy29;
+		default: goto yy3;
+	}
 yy9:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy31;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy31;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy31;
+		default: goto yy3;
+	}
 yy10:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy33;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy33;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy33;
+		default: goto yy3;
+	}
 yy11:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy35;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy35;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy35;
+		default: goto yy3;
+	}
 yy12:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy37;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'h') goto yy37;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy37;
+		default: goto yy3;
+	}
 yy13:
 	yych = *++YYCURSOR;
 yy14:
-	if (yybm[0+yych] & 1) goto yy13;
-	if (yych <= 'c') {
-		if (yych <= '\n') {
-			if (yych >= '\n') {
-				yyt1 = NULL;
-				yyt2 = NULL;
-				yyt3 = NULL;
-				yyt4 = NULL;
-				yyt5 = NULL;
-				yyt6 = NULL;
-				yyt7 = NULL;
-				yyt8 = YYCURSOR;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-		} else {
-			if (yych <= '`') goto yy15;
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt1 = NULL;
+			yyt2 = NULL;
+			yyt3 = NULL;
+			yyt4 = NULL;
+			yyt5 = NULL;
+			yyt6 = NULL;
+			yyt7 = NULL;
+			yyt8 = YYCURSOR;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a': goto yy13;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -787,47 +801,43 @@ yy14:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+		case 'd':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -845,327 +855,328 @@ yy14:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt17 = YYCURSOR;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-		}
+		case 'g':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt17 = YYCURSOR;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy15:
 	YYCURSOR = YYMARKER;
 	goto yy3;
 yy16:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 2) goto yy16;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = YYCURSOR;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = YYCURSOR;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'b': goto yy16;
+		default: goto yy15;
 	}
-	goto yy15;
 yy17:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 4) goto yy17;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = YYCURSOR;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = YYCURSOR;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'c': goto yy17;
+		default: goto yy15;
 	}
-	goto yy15;
 yy18:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 8) goto yy18;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = YYCURSOR;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = YYCURSOR;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'd': goto yy18;
+		default: goto yy15;
 	}
-	goto yy15;
 yy19:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 16) goto yy19;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = YYCURSOR;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = YYCURSOR;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'e': goto yy19;
+		default: goto yy15;
 	}
-	goto yy15;
 yy20:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 32) goto yy20;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = YYCURSOR;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = YYCURSOR;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'f': goto yy20;
+		default: goto yy15;
 	}
-	goto yy15;
 yy21:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 64) goto yy21;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = YYCURSOR;
-		yyt15 = NULL;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = YYCURSOR;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'g': goto yy21;
+		default: goto yy15;
 	}
-	goto yy15;
 yy22:
 	yych = *++YYCURSOR;
-	if (yybm[0+yych] & 128) goto yy22;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = NULL;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = YYCURSOR;
-		yyt25 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = YYCURSOR;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			goto yy4;
+		case 'h': goto yy22;
+		default: goto yy15;
 	}
-	goto yy15;
 yy23:
 	yych = *++YYCURSOR;
-	if (yych == '\n') {
-		yyt1 = yyt8;
-		yyt2 = yyt9;
-		yyt3 = yyt10;
-		yyt4 = yyt11;
-		yyt5 = yyt12;
-		yyt6 = yyt13;
-		yyt7 = yyt14;
-		yyt8 = YYCURSOR;
-		yyt9 = NULL;
-		yyt10 = NULL;
-		yyt11 = NULL;
-		yyt12 = NULL;
-		yyt13 = NULL;
-		yyt14 = NULL;
-		yyt15 = NULL;
-		yyt26 = NULL;
-		yyt27 = NULL;
-		yyt28 = NULL;
-		yyt29 = NULL;
-		yyt30 = NULL;
-		yyt31 = NULL;
-		yyt32 = NULL;
-		goto yy4;
+	switch (yych) {
+		case '\n':
+			yyt1 = yyt8;
+			yyt2 = yyt9;
+			yyt3 = yyt10;
+			yyt4 = yyt11;
+			yyt5 = yyt12;
+			yyt6 = yyt13;
+			yyt7 = yyt14;
+			yyt8 = YYCURSOR;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a': goto yy23;
+		default: goto yy15;
 	}
-	if (yych == 'a') goto yy23;
-	goto yy15;
 yy24:
 	yych = *++YYCURSOR;
 yy25:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = YYCURSOR;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = YYCURSOR;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') goto yy24;
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = YYCURSOR;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = YYCURSOR;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b': goto yy24;
+		case 'c':
 			yyt9 = NULL;
 			yyt10 = NULL;
 			yyt11 = NULL;
@@ -1183,47 +1194,43 @@ yy25:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = YYCURSOR;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = YYCURSOR;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+		case 'd':
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = YYCURSOR;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = YYCURSOR;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt9 = NULL;
 			yyt10 = NULL;
 			yyt11 = NULL;
@@ -1241,153 +1248,139 @@ yy25:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = YYCURSOR;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = YYCURSOR;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'g':
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = YYCURSOR;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = YYCURSOR;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy26:
 	yych = *++YYCURSOR;
 yy27:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = YYCURSOR;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
-			goto yy26;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = YYCURSOR;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c': goto yy26;
+		case 'd':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt8 = NULL;
 			yyt10 = NULL;
 			yyt11 = NULL;
@@ -1405,111 +1398,102 @@ yy27:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = YYCURSOR;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'g':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt8 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = YYCURSOR;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy28:
 	yych = *++YYCURSOR;
 yy29:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = YYCURSOR;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = YYCURSOR;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = YYCURSOR;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = YYCURSOR;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = YYCURSOR;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = YYCURSOR;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt11 = NULL;
@@ -1527,29 +1511,26 @@ yy29:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') goto yy28;
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = YYCURSOR;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+		case 'd': goto yy28;
+		case 'e':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = YYCURSOR;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt11 = NULL;
@@ -1567,111 +1548,102 @@ yy29:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = YYCURSOR;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = YYCURSOR;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'g':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = YYCURSOR;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = YYCURSOR;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy30:
 	yych = *++YYCURSOR;
 yy31:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = YYCURSOR;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = YYCURSOR;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = YYCURSOR;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = YYCURSOR;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = YYCURSOR;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = YYCURSOR;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -1689,29 +1661,26 @@ yy31:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = YYCURSOR;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') goto yy30;
+		case 'd':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = YYCURSOR;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e': goto yy30;
+		case 'f':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -1729,111 +1698,102 @@ yy31:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = YYCURSOR;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = YYCURSOR;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'g':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = YYCURSOR;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = YYCURSOR;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy32:
 	yych = *++YYCURSOR;
 yy33:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = YYCURSOR;
-				yyt14 = NULL;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt31 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = YYCURSOR;
+			yyt14 = NULL;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt31 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -1851,153 +1811,139 @@ yy33:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
-			goto yy32;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = YYCURSOR;
-				yyt23 = NULL;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'd':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f': goto yy32;
+		case 'g':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = YYCURSOR;
+			yyt23 = NULL;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy34:
 	yych = *++YYCURSOR;
 yy35:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = YYCURSOR;
-				yyt15 = NULL;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt32 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = YYCURSOR;
-				yyt24 = NULL;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = YYCURSOR;
-				yyt24 = NULL;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = YYCURSOR;
+			yyt15 = NULL;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt32 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = YYCURSOR;
+			yyt24 = NULL;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = YYCURSOR;
+			yyt24 = NULL;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -2015,47 +1961,43 @@ yy35:
 			yyt24 = NULL;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = YYCURSOR;
-				yyt24 = NULL;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = YYCURSOR;
-				yyt24 = NULL;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+		case 'd':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = YYCURSOR;
+			yyt24 = NULL;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = YYCURSOR;
+			yyt24 = NULL;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -2073,93 +2015,85 @@ yy35:
 			yyt24 = NULL;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') goto yy34;
-			if (yych <= 'h') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt14 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = YYCURSOR;
-				yyt24 = NULL;
-				yyt32 = YYCURSOR;
-				goto yy22;
-			}
-			goto yy15;
-		}
+		case 'g': goto yy34;
+		case 'h':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt14 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = YYCURSOR;
+			yyt24 = NULL;
+			yyt32 = YYCURSOR;
+			goto yy22;
+		default: goto yy15;
 	}
 yy36:
 	yych = *++YYCURSOR;
 yy37:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt14 = NULL;
-				yyt15 = YYCURSOR;
-				yyt25 = NULL;
-				yyt26 = NULL;
-				yyt27 = NULL;
-				yyt28 = NULL;
-				yyt29 = NULL;
-				yyt30 = NULL;
-				yyt31 = NULL;
-				goto yy4;
-			}
-			goto yy15;
-		} else {
-			if (yych <= 'a') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = YYCURSOR;
-				yyt25 = YYCURSOR;
-				goto yy23;
-			}
-			if (yych <= 'b') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = YYCURSOR;
-				yyt26 = YYCURSOR;
-				goto yy16;
-			}
+	switch (yych) {
+		case '\n':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt14 = NULL;
+			yyt15 = YYCURSOR;
+			yyt25 = NULL;
+			yyt26 = NULL;
+			yyt27 = NULL;
+			yyt28 = NULL;
+			yyt29 = NULL;
+			yyt30 = NULL;
+			yyt31 = NULL;
+			goto yy4;
+		case 'a':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = YYCURSOR;
+			yyt25 = YYCURSOR;
+			goto yy23;
+		case 'b':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = YYCURSOR;
+			yyt26 = YYCURSOR;
+			goto yy16;
+		case 'c':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -2177,47 +2111,43 @@ yy37:
 			yyt24 = YYCURSOR;
 			yyt27 = YYCURSOR;
 			goto yy17;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = YYCURSOR;
-				yyt28 = YYCURSOR;
-				goto yy18;
-			}
-			if (yych <= 'e') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = YYCURSOR;
-				yyt29 = YYCURSOR;
-				goto yy19;
-			}
+		case 'd':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = YYCURSOR;
+			yyt28 = YYCURSOR;
+			goto yy18;
+		case 'e':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = YYCURSOR;
+			yyt29 = YYCURSOR;
+			goto yy19;
+		case 'f':
 			yyt8 = NULL;
 			yyt9 = NULL;
 			yyt10 = NULL;
@@ -2235,29 +2165,26 @@ yy37:
 			yyt24 = YYCURSOR;
 			yyt30 = YYCURSOR;
 			goto yy20;
-		} else {
-			if (yych <= 'g') {
-				yyt8 = NULL;
-				yyt9 = NULL;
-				yyt10 = NULL;
-				yyt11 = NULL;
-				yyt12 = NULL;
-				yyt13 = NULL;
-				yyt16 = NULL;
-				yyt17 = NULL;
-				yyt18 = NULL;
-				yyt19 = NULL;
-				yyt20 = NULL;
-				yyt21 = NULL;
-				yyt22 = NULL;
-				yyt23 = NULL;
-				yyt24 = YYCURSOR;
-				yyt31 = YYCURSOR;
-				goto yy21;
-			}
-			if (yych <= 'h') goto yy36;
-			goto yy15;
-		}
+		case 'g':
+			yyt8 = NULL;
+			yyt9 = NULL;
+			yyt10 = NULL;
+			yyt11 = NULL;
+			yyt12 = NULL;
+			yyt13 = NULL;
+			yyt16 = NULL;
+			yyt17 = NULL;
+			yyt18 = NULL;
+			yyt19 = NULL;
+			yyt20 = NULL;
+			yyt21 = NULL;
+			yyt22 = NULL;
+			yyt23 = NULL;
+			yyt24 = YYCURSOR;
+			yyt31 = YYCURSOR;
+			goto yy21;
+		case 'h': goto yy36;
+		default: goto yy15;
 	}
 }
 
@@ -4261,46 +4188,11 @@ loop:
     
 {
 	char yych;
-	static const unsigned char yybm[256] = {
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   1,   2,   4,   8,  16,  32,  64,
-		128,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0
-	};
 	if ((YYLIMIT - YYCURSOR) < 2) if (fill_buffered_scc(in, 2) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych <= 'b') {
-		if (yych <= '\n') {
-			if (yych <= 0x00) goto yy77;
-			if (yych <= '\t') goto yy78;
+	switch (yych) {
+		case 0x00: goto yy77;
+		case '\n':
 			in->yyt1 = NULL;
 			in->yyt2 = NULL;
 			in->yyt3 = NULL;
@@ -4334,12 +4226,10 @@ loop:
 			in->yyt31 = NULL;
 			in->yyt32 = NULL;
 			goto yy80;
-		} else {
-			if (yych <= '`') goto yy78;
-			if (yych <= 'a') {
-				in->yyt16 = YYCURSOR;
-				goto yy81;
-			}
+		case 'a':
+			in->yyt16 = YYCURSOR;
+			goto yy81;
+		case 'b':
 			in->yyt1 = NULL;
 			in->yyt2 = NULL;
 			in->yyt3 = NULL;
@@ -4359,51 +4249,47 @@ loop:
 			in->yyt24 = NULL;
 			in->yyt26 = YYCURSOR;
 			goto yy82;
-		}
-	} else {
-		if (yych <= 'e') {
-			if (yych <= 'c') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt9 = YYCURSOR;
-				in->yyt16 = YYCURSOR;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt27 = YYCURSOR;
-				goto yy83;
-			}
-			if (yych <= 'd') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt10 = YYCURSOR;
-				in->yyt16 = YYCURSOR;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy84;
-			}
+		case 'c':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt9 = YYCURSOR;
+			in->yyt16 = YYCURSOR;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt27 = YYCURSOR;
+			goto yy83;
+		case 'd':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt10 = YYCURSOR;
+			in->yyt16 = YYCURSOR;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy84;
+		case 'e':
 			in->yyt1 = NULL;
 			in->yyt2 = NULL;
 			in->yyt3 = NULL;
@@ -4423,72 +4309,67 @@ loop:
 			in->yyt24 = NULL;
 			in->yyt29 = YYCURSOR;
 			goto yy85;
-		} else {
-			if (yych <= 'f') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt12 = YYCURSOR;
-				in->yyt16 = YYCURSOR;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt30 = YYCURSOR;
-				goto yy86;
-			}
-			if (yych <= 'g') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt13 = YYCURSOR;
-				in->yyt16 = YYCURSOR;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy87;
-			}
-			if (yych <= 'h') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt14 = YYCURSOR;
-				in->yyt16 = YYCURSOR;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy88;
-			}
-			goto yy78;
-		}
+		case 'f':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt12 = YYCURSOR;
+			in->yyt16 = YYCURSOR;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt30 = YYCURSOR;
+			goto yy86;
+		case 'g':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt13 = YYCURSOR;
+			in->yyt16 = YYCURSOR;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy87;
+		case 'h':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt14 = YYCURSOR;
+			in->yyt16 = YYCURSOR;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy88;
+		default: goto yy78;
 	}
 yy77:
 	++YYCURSOR;
@@ -4553,115 +4434,175 @@ yy80:
     }
 yy81:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy90;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy90;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy90;
+		default: goto yy79;
+	}
 yy82:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy101;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy101;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy101;
+		default: goto yy79;
+	}
 yy83:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy103;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy103;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy103;
+		default: goto yy79;
+	}
 yy84:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy105;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy105;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy105;
+		default: goto yy79;
+	}
 yy85:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy107;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy107;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy107;
+		default: goto yy79;
+	}
 yy86:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy109;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy109;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy109;
+		default: goto yy79;
+	}
 yy87:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy111;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy111;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy111;
+		default: goto yy79;
+	}
 yy88:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy113;
-	if (yych <= '`') goto yy79;
-	if (yych <= 'h') goto yy113;
-	goto yy79;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b':
+		case 'c':
+		case 'd':
+		case 'e':
+		case 'f':
+		case 'g':
+		case 'h': goto yy113;
+		default: goto yy79;
+	}
 yy89:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy90:
-	if (yybm[0+yych] & 1) goto yy89;
-	if (yych <= 'c') {
-		if (yych <= '\n') {
-			if (yych >= '\n') {
-				in->yyt1 = NULL;
-				in->yyt2 = NULL;
-				in->yyt3 = NULL;
-				in->yyt4 = NULL;
-				in->yyt5 = NULL;
-				in->yyt6 = NULL;
-				in->yyt7 = NULL;
-				in->yyt8 = YYCURSOR;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-		} else {
-			if (yych <= '`') goto yy91;
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt1 = NULL;
+			in->yyt2 = NULL;
+			in->yyt3 = NULL;
+			in->yyt4 = NULL;
+			in->yyt5 = NULL;
+			in->yyt6 = NULL;
+			in->yyt7 = NULL;
+			in->yyt8 = YYCURSOR;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a': goto yy89;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -4679,47 +4620,43 @@ yy90:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -4737,46 +4674,43 @@ yy90:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt17 = YYCURSOR;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-		}
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt17 = YYCURSOR;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy91:
 	YYCURSOR = YYMARKER;
@@ -4785,297 +4719,301 @@ yy92:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 2) goto yy92;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = YYCURSOR;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = YYCURSOR;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'b': goto yy92;
+		default: goto yy91;
 	}
-	goto yy91;
 yy93:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 4) goto yy93;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = YYCURSOR;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = YYCURSOR;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'c': goto yy93;
+		default: goto yy91;
 	}
-	goto yy91;
 yy94:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 8) goto yy94;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = YYCURSOR;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = YYCURSOR;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'd': goto yy94;
+		default: goto yy91;
 	}
-	goto yy91;
 yy95:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 16) goto yy95;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = YYCURSOR;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = YYCURSOR;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'e': goto yy95;
+		default: goto yy91;
 	}
-	goto yy91;
 yy96:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 32) goto yy96;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = YYCURSOR;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = YYCURSOR;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'f': goto yy96;
+		default: goto yy91;
 	}
-	goto yy91;
 yy97:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 64) goto yy97;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = YYCURSOR;
-		in->yyt15 = NULL;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = YYCURSOR;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'g': goto yy97;
+		default: goto yy91;
 	}
-	goto yy91;
 yy98:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yybm[0+yych] & 128) goto yy98;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = NULL;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = YYCURSOR;
-		in->yyt25 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = YYCURSOR;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			goto yy80;
+		case 'h': goto yy98;
+		default: goto yy91;
 	}
-	goto yy91;
 yy99:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') {
-		in->yyt1 = in->yyt8;
-		in->yyt2 = in->yyt9;
-		in->yyt3 = in->yyt10;
-		in->yyt4 = in->yyt11;
-		in->yyt5 = in->yyt12;
-		in->yyt6 = in->yyt13;
-		in->yyt7 = in->yyt14;
-		in->yyt8 = YYCURSOR;
-		in->yyt9 = NULL;
-		in->yyt10 = NULL;
-		in->yyt11 = NULL;
-		in->yyt12 = NULL;
-		in->yyt13 = NULL;
-		in->yyt14 = NULL;
-		in->yyt15 = NULL;
-		in->yyt26 = NULL;
-		in->yyt27 = NULL;
-		in->yyt28 = NULL;
-		in->yyt29 = NULL;
-		in->yyt30 = NULL;
-		in->yyt31 = NULL;
-		in->yyt32 = NULL;
-		goto yy80;
+	switch (yych) {
+		case '\n':
+			in->yyt1 = in->yyt8;
+			in->yyt2 = in->yyt9;
+			in->yyt3 = in->yyt10;
+			in->yyt4 = in->yyt11;
+			in->yyt5 = in->yyt12;
+			in->yyt6 = in->yyt13;
+			in->yyt7 = in->yyt14;
+			in->yyt8 = YYCURSOR;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a': goto yy99;
+		default: goto yy91;
 	}
-	if (yych == 'a') goto yy99;
-	goto yy91;
 yy100:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy101:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = YYCURSOR;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = YYCURSOR;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') goto yy100;
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = YYCURSOR;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = YYCURSOR;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b': goto yy100;
+		case 'c':
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
 			in->yyt11 = NULL;
@@ -5093,47 +5031,43 @@ yy101:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = YYCURSOR;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = YYCURSOR;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+		case 'd':
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = YYCURSOR;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = YYCURSOR;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
 			in->yyt11 = NULL;
@@ -5151,155 +5085,141 @@ yy101:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = YYCURSOR;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = YYCURSOR;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'g':
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = YYCURSOR;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = YYCURSOR;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy102:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy103:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = YYCURSOR;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
-			goto yy102;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = YYCURSOR;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c': goto yy102;
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt10 = NULL;
 			in->yyt11 = NULL;
@@ -5317,113 +5237,104 @@ yy103:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = YYCURSOR;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = YYCURSOR;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy104:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy105:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = YYCURSOR;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = YYCURSOR;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = YYCURSOR;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = YYCURSOR;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = YYCURSOR;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = YYCURSOR;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt11 = NULL;
@@ -5441,29 +5352,26 @@ yy105:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') goto yy104;
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = YYCURSOR;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+		case 'd': goto yy104;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = YYCURSOR;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt11 = NULL;
@@ -5481,113 +5389,104 @@ yy105:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = YYCURSOR;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = YYCURSOR;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = YYCURSOR;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = YYCURSOR;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy106:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy107:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = YYCURSOR;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = YYCURSOR;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = YYCURSOR;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = YYCURSOR;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = YYCURSOR;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = YYCURSOR;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -5605,29 +5504,26 @@ yy107:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = YYCURSOR;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') goto yy106;
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = YYCURSOR;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e': goto yy106;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -5645,113 +5541,104 @@ yy107:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = YYCURSOR;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = YYCURSOR;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = YYCURSOR;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = YYCURSOR;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy108:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy109:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = YYCURSOR;
-				in->yyt14 = NULL;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt31 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = YYCURSOR;
+			in->yyt14 = NULL;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt31 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -5769,155 +5656,141 @@ yy109:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
-			goto yy108;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = YYCURSOR;
-				in->yyt23 = NULL;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f': goto yy108;
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = YYCURSOR;
+			in->yyt23 = NULL;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy110:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy111:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = YYCURSOR;
-				in->yyt15 = NULL;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt32 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = YYCURSOR;
-				in->yyt24 = NULL;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = YYCURSOR;
-				in->yyt24 = NULL;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = YYCURSOR;
+			in->yyt15 = NULL;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt32 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = YYCURSOR;
+			in->yyt24 = NULL;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = YYCURSOR;
+			in->yyt24 = NULL;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -5935,47 +5808,43 @@ yy111:
 			in->yyt24 = NULL;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = YYCURSOR;
-				in->yyt24 = NULL;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = YYCURSOR;
-				in->yyt24 = NULL;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = YYCURSOR;
+			in->yyt24 = NULL;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = YYCURSOR;
+			in->yyt24 = NULL;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -5993,95 +5862,87 @@ yy111:
 			in->yyt24 = NULL;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') goto yy110;
-			if (yych <= 'h') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt14 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = YYCURSOR;
-				in->yyt24 = NULL;
-				in->yyt32 = YYCURSOR;
-				goto yy98;
-			}
-			goto yy91;
-		}
+		case 'g': goto yy110;
+		case 'h':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt14 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = YYCURSOR;
+			in->yyt24 = NULL;
+			in->yyt32 = YYCURSOR;
+			goto yy98;
+		default: goto yy91;
 	}
 yy112:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy113:
-	if (yych <= 'c') {
-		if (yych <= '`') {
-			if (yych == '\n') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt14 = NULL;
-				in->yyt15 = YYCURSOR;
-				in->yyt25 = NULL;
-				in->yyt26 = NULL;
-				in->yyt27 = NULL;
-				in->yyt28 = NULL;
-				in->yyt29 = NULL;
-				in->yyt30 = NULL;
-				in->yyt31 = NULL;
-				goto yy80;
-			}
-			goto yy91;
-		} else {
-			if (yych <= 'a') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = YYCURSOR;
-				in->yyt25 = YYCURSOR;
-				goto yy99;
-			}
-			if (yych <= 'b') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = YYCURSOR;
-				in->yyt26 = YYCURSOR;
-				goto yy92;
-			}
+	switch (yych) {
+		case '\n':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt14 = NULL;
+			in->yyt15 = YYCURSOR;
+			in->yyt25 = NULL;
+			in->yyt26 = NULL;
+			in->yyt27 = NULL;
+			in->yyt28 = NULL;
+			in->yyt29 = NULL;
+			in->yyt30 = NULL;
+			in->yyt31 = NULL;
+			goto yy80;
+		case 'a':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = YYCURSOR;
+			in->yyt25 = YYCURSOR;
+			goto yy99;
+		case 'b':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = YYCURSOR;
+			in->yyt26 = YYCURSOR;
+			goto yy92;
+		case 'c':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -6099,47 +5960,43 @@ yy113:
 			in->yyt24 = YYCURSOR;
 			in->yyt27 = YYCURSOR;
 			goto yy93;
-		}
-	} else {
-		if (yych <= 'f') {
-			if (yych <= 'd') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = YYCURSOR;
-				in->yyt28 = YYCURSOR;
-				goto yy94;
-			}
-			if (yych <= 'e') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = YYCURSOR;
-				in->yyt29 = YYCURSOR;
-				goto yy95;
-			}
+		case 'd':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = YYCURSOR;
+			in->yyt28 = YYCURSOR;
+			goto yy94;
+		case 'e':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = YYCURSOR;
+			in->yyt29 = YYCURSOR;
+			goto yy95;
+		case 'f':
 			in->yyt8 = NULL;
 			in->yyt9 = NULL;
 			in->yyt10 = NULL;
@@ -6157,29 +6014,26 @@ yy113:
 			in->yyt24 = YYCURSOR;
 			in->yyt30 = YYCURSOR;
 			goto yy96;
-		} else {
-			if (yych <= 'g') {
-				in->yyt8 = NULL;
-				in->yyt9 = NULL;
-				in->yyt10 = NULL;
-				in->yyt11 = NULL;
-				in->yyt12 = NULL;
-				in->yyt13 = NULL;
-				in->yyt16 = NULL;
-				in->yyt17 = NULL;
-				in->yyt18 = NULL;
-				in->yyt19 = NULL;
-				in->yyt20 = NULL;
-				in->yyt21 = NULL;
-				in->yyt22 = NULL;
-				in->yyt23 = NULL;
-				in->yyt24 = YYCURSOR;
-				in->yyt31 = YYCURSOR;
-				goto yy97;
-			}
-			if (yych <= 'h') goto yy112;
-			goto yy91;
-		}
+		case 'g':
+			in->yyt8 = NULL;
+			in->yyt9 = NULL;
+			in->yyt10 = NULL;
+			in->yyt11 = NULL;
+			in->yyt12 = NULL;
+			in->yyt13 = NULL;
+			in->yyt16 = NULL;
+			in->yyt17 = NULL;
+			in->yyt18 = NULL;
+			in->yyt19 = NULL;
+			in->yyt20 = NULL;
+			in->yyt21 = NULL;
+			in->yyt22 = NULL;
+			in->yyt23 = NULL;
+			in->yyt24 = YYCURSOR;
+			in->yyt31 = YYCURSOR;
+			goto yy97;
+		case 'h': goto yy112;
+		default: goto yy91;
 	}
 }
 

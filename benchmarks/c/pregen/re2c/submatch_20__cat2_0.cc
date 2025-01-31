@@ -176,61 +176,23 @@ loop:
     
 {
 	char yych;
-	static const unsigned char yybm[256] = {
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,  64, 128,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0
-	};
 	yych = *YYCURSOR;
-	if (yych <= '\n') {
-		if (yych <= 0x00) goto yy1;
-		if (yych <= '\t') goto yy2;
-		yyt1 = YYCURSOR;
-		yyt2 = YYCURSOR;
-		yyt3 = YYCURSOR;
-		yyt4 = YYCURSOR;
-		goto yy4;
-	} else {
-		if (yych <= '`') goto yy2;
-		if (yych <= 'a') {
+	switch (yych) {
+		case 0x00: goto yy1;
+		case '\n':
+			yyt1 = YYCURSOR;
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			goto yy4;
+		case 'a':
 			yyt1 = YYCURSOR;
 			goto yy5;
-		}
-		if (yych <= 'b') {
+		case 'b':
 			yyt1 = YYCURSOR;
 			yyt4 = YYCURSOR;
 			goto yy6;
-		}
-		goto yy2;
+		default: goto yy2;
 	}
 yy1:
 	++YYCURSOR;
@@ -252,30 +214,34 @@ yy4:
     }
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy8;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'b') goto yy8;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b': goto yy8;
+		default: goto yy3;
+	}
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy11;
-	if (yych <= '`') goto yy3;
-	if (yych <= 'b') goto yy11;
-	goto yy3;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b': goto yy11;
+		default: goto yy3;
+	}
 yy7:
 	yych = *++YYCURSOR;
 yy8:
-	if (yybm[0+yych] & 64) goto yy7;
-	if (yych == '\n') {
-		yyt2 = YYCURSOR;
-		yyt3 = YYCURSOR;
-		yyt4 = YYCURSOR;
-		goto yy4;
-	}
-	if (yych <= '`') goto yy9;
-	if (yych <= 'b') {
-		yyt4 = YYCURSOR;
-		goto yy10;
+	switch (yych) {
+		case '\n':
+			yyt2 = YYCURSOR;
+			yyt3 = YYCURSOR;
+			yyt4 = YYCURSOR;
+			goto yy4;
+		case 'a': goto yy7;
+		case 'b':
+			yyt4 = YYCURSOR;
+			goto yy10;
+		default: goto yy9;
 	}
 yy9:
 	YYCURSOR = YYMARKER;
@@ -283,32 +249,36 @@ yy9:
 yy10:
 	yych = *++YYCURSOR;
 yy11:
-	if (yybm[0+yych] & 128) goto yy10;
-	if (yych == '\n') {
-		yyt2 = YYCURSOR;
-		yyt3 = YYCURSOR;
-		goto yy4;
-	}
-	if (yych != 'a') goto yy9;
-	yyt2 = YYCURSOR;
-yy12:
-	yych = *++YYCURSOR;
-	if (yych <= '`') {
-		if (yych == '\n') {
+	switch (yych) {
+		case '\n':
+			yyt2 = YYCURSOR;
 			yyt3 = YYCURSOR;
 			goto yy4;
-		}
-		goto yy9;
-	} else {
-		if (yych <= 'a') goto yy12;
-		if (yych >= 'c') goto yy9;
-		yyt3 = YYCURSOR;
+		case 'a':
+			yyt2 = YYCURSOR;
+			goto yy12;
+		case 'b': goto yy10;
+		default: goto yy9;
+	}
+yy12:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case '\n':
+			yyt3 = YYCURSOR;
+			goto yy4;
+		case 'a': goto yy12;
+		case 'b':
+			yyt3 = YYCURSOR;
+			goto yy13;
+		default: goto yy9;
 	}
 yy13:
 	yych = *++YYCURSOR;
-	if (yych == '\n') goto yy4;
-	if (yych == 'b') goto yy13;
-	goto yy9;
+	switch (yych) {
+		case '\n': goto yy4;
+		case 'b': goto yy13;
+		default: goto yy9;
+	}
 }
 
 }
@@ -492,62 +462,24 @@ loop:
     
 {
 	char yych;
-	static const unsigned char yybm[256] = {
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,  64, 128,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0,
-		  0,   0,   0,   0,   0,   0,   0,   0
-	};
 	if ((YYLIMIT - YYCURSOR) < 2) if (fill_buffered_scc(in, 2) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych <= '\n') {
-		if (yych <= 0x00) goto yy29;
-		if (yych <= '\t') goto yy30;
-		in->yyt1 = YYCURSOR;
-		in->yyt2 = YYCURSOR;
-		in->yyt3 = YYCURSOR;
-		in->yyt4 = YYCURSOR;
-		goto yy32;
-	} else {
-		if (yych <= '`') goto yy30;
-		if (yych <= 'a') {
+	switch (yych) {
+		case 0x00: goto yy29;
+		case '\n':
+			in->yyt1 = YYCURSOR;
+			in->yyt2 = YYCURSOR;
+			in->yyt3 = YYCURSOR;
+			in->yyt4 = YYCURSOR;
+			goto yy32;
+		case 'a':
 			in->yyt1 = YYCURSOR;
 			goto yy33;
-		}
-		if (yych <= 'b') {
+		case 'b':
 			in->yyt1 = YYCURSOR;
 			in->yyt4 = YYCURSOR;
 			goto yy34;
-		}
-		goto yy30;
+		default: goto yy30;
 	}
 yy29:
 	++YYCURSOR;
@@ -569,32 +501,36 @@ yy32:
     }
 yy33:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy36;
-	if (yych <= '`') goto yy31;
-	if (yych <= 'b') goto yy36;
-	goto yy31;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b': goto yy36;
+		default: goto yy31;
+	}
 yy34:
 	yych = *(YYMARKER = ++YYCURSOR);
-	if (yych == '\n') goto yy39;
-	if (yych <= '`') goto yy31;
-	if (yych <= 'b') goto yy39;
-	goto yy31;
+	switch (yych) {
+		case '\n':
+		case 'a':
+		case 'b': goto yy39;
+		default: goto yy31;
+	}
 yy35:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy36:
-	if (yybm[0+yych] & 64) goto yy35;
-	if (yych == '\n') {
-		in->yyt2 = YYCURSOR;
-		in->yyt3 = YYCURSOR;
-		in->yyt4 = YYCURSOR;
-		goto yy32;
-	}
-	if (yych <= '`') goto yy37;
-	if (yych <= 'b') {
-		in->yyt4 = YYCURSOR;
-		goto yy38;
+	switch (yych) {
+		case '\n':
+			in->yyt2 = YYCURSOR;
+			in->yyt3 = YYCURSOR;
+			in->yyt4 = YYCURSOR;
+			goto yy32;
+		case 'a': goto yy35;
+		case 'b':
+			in->yyt4 = YYCURSOR;
+			goto yy38;
+		default: goto yy37;
 	}
 yy37:
 	YYCURSOR = YYMARKER;
@@ -604,36 +540,40 @@ yy38:
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
 yy39:
-	if (yybm[0+yych] & 128) goto yy38;
-	if (yych == '\n') {
-		in->yyt2 = YYCURSOR;
-		in->yyt3 = YYCURSOR;
-		goto yy32;
+	switch (yych) {
+		case '\n':
+			in->yyt2 = YYCURSOR;
+			in->yyt3 = YYCURSOR;
+			goto yy32;
+		case 'a':
+			in->yyt2 = YYCURSOR;
+			goto yy40;
+		case 'b': goto yy38;
+		default: goto yy37;
 	}
-	if (yych != 'a') goto yy37;
-	in->yyt2 = YYCURSOR;
 yy40:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych <= '`') {
-		if (yych == '\n') {
+	switch (yych) {
+		case '\n':
 			in->yyt3 = YYCURSOR;
 			goto yy32;
-		}
-		goto yy37;
-	} else {
-		if (yych <= 'a') goto yy40;
-		if (yych >= 'c') goto yy37;
-		in->yyt3 = YYCURSOR;
+		case 'a': goto yy40;
+		case 'b':
+			in->yyt3 = YYCURSOR;
+			goto yy41;
+		default: goto yy37;
 	}
 yy41:
 	++YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) if (fill_buffered_scc(in, 1) != 0) return -2;
 	yych = *YYCURSOR;
-	if (yych == '\n') goto yy32;
-	if (yych == 'b') goto yy41;
-	goto yy37;
+	switch (yych) {
+		case '\n': goto yy32;
+		case 'b': goto yy41;
+		default: goto yy37;
+	}
 }
 
 }
