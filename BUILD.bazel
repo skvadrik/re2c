@@ -31,7 +31,7 @@ cc_library(
     srcs = glob([
         "bootstrap/src/**/*.cc",
         "src/**/*.cc",
-    ]),
+    ], exclude = ["src/test/**/*.cc"]),
     deps = [
         "re2c_config_cc",  # Needed for 're2c_config_cc' data files
     ],
