@@ -42,7 +42,6 @@ set(BENCHMARKS
 set(SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(ENG_DIR "${CMAKE_CURRENT_BINARY_DIR}/engines")
 set(GEN_DIR "${CMAKE_CURRENT_BINARY_DIR}/gen")
-set(BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(PREGEN_DIR "${CMAKE_CURRENT_SOURCE_DIR}/pregen")
 
 set(GEN "")
@@ -58,8 +57,8 @@ add_custom_command(
 )
 foreach(bench ${BENCHMARKS})
     set(src_file "${SRC_DIR}/ragel/${bench}.rl")
-    set(gen_file "${GEN_DIR}/ragel/${bench}.c")
-    set(pregen_file "${PREGEN_DIR}/ragel/${bench}.c")
+    set(gen_file "${GEN_DIR}/ragel/${bench}.cc")
+    set(pregen_file "${PREGEN_DIR}/ragel/${bench}.cc")
     # optionally regenerate ragel benchmarks if RE2C_REGEN_BENCHMARKS is set
     if(RE2C_REGEN_BENCHMARKS)
         file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
@@ -84,53 +83,55 @@ endforeach()
 file(MAKE_DIRECTORY "${GEN_DIR}/re2c/")
 set(RE2C "${CMAKE_BINARY_DIR}/re2c")
 set(RE2C_FLAGS "--reusable" "--tags" "--no-generation-date" "--no-version" "-i")
-set(COMMON_RE2C
-    "${SRC_DIR}/re2c/common.re"
-    "${SRC_DIR}/re2c/include-padding/fill.re"
-    "${SRC_DIR}/re2c/include-padding/fill_email.re"
-    "${SRC_DIR}/re2c/include-eofrule/fill.re"
-    "${SRC_DIR}/re2c/include-eofrule/fill_email.re"
-)
 # always regenerate re2c benchmarks
 foreach(bench ${BENCHMARKS})
-foreach(eof "-padding" "-eofrule")
     set(src_file "${SRC_DIR}/re2c/${bench}.re")
-    set(gen_file "${GEN_DIR}/re2c/${bench}${eof}.c")
-    set(pregen_file "${PREGEN_DIR}/re2c/${bench}${eof}.c")
+    set(gen_file "${GEN_DIR}/re2c/${bench}.cc")
+    set(pregen_file "${PREGEN_DIR}/re2c/${bench}.cc")
     file(RELATIVE_PATH rel_src_file "${CMAKE_CURRENT_BINARY_DIR}" "${src_file}")
     file(RELATIVE_PATH rel_gen_file "${CMAKE_CURRENT_BINARY_DIR}" "${gen_file}")
-    file(RELATIVE_PATH rel_inc_path "${CMAKE_CURRENT_BINARY_DIR}" "${SRC_DIR}/re2c/include${eof}")
-    set(re2c_flags ${RE2C_FLAGS} "-I" "${rel_inc_path}")
     add_custom_command(
         OUTPUT "${gen_file}"
-        COMMAND "${RE2C}" ${re2c_flags} "${rel_src_file}" -o "${rel_gen_file}"
+        COMMAND "${RE2C}" ${RE2C_FLAGS} "${rel_src_file}" -o "${rel_gen_file}"
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different "${gen_file}" "${pregen_file}"
-        DEPENDS "${src_file}" ${COMMON_RE2C} "${RE2C}"
+        DEPENDS "${src_file}" "${SRC_DIR}/re2c/base.re" "${RE2C}"
     )
     list(APPEND GEN "${gen_file}")
 endforeach()
-endforeach()
 
 # binaries
-set(OBJ "")
-set(BIN "")
-set(CFLAGS "-O3" "-g" "-I" "${SRC_DIR}" "-Wall")
-set(COMMON_SRC "${SRC_DIR}/common.h")
-file(MAKE_DIRECTORY "${BIN_DIR}/ragel/")
-file(MAKE_DIRECTORY "${BIN_DIR}/re2c/")
-foreach(gen_file ${GEN})
-foreach(compiler "gcc" "clang")
-    string(REGEX REPLACE "^${GEN_DIR}(.+)\.c$" "${BIN_DIR}\\1-${compiler}" bin_file "${gen_file}")
-    set(obj_file "${bin_file}.o")
+set(RE2C_CXX_FLAGS "-O3" "-g" "-I" "${SRC_DIR}" "-Wall" "-Wno-unused-const-variable")
+list(APPEND COMPILERS "g++" "clang++")
+list(APPEND COMPNAMES "gcc" "clang")
+foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
+    set(objects "")
+    set(flags ${RE2C_CXX_FLAGS} "-DCXX=\\\"${compiler_1}\\\"")
+    foreach(gen_file ${GEN})
+        string(REGEX REPLACE
+            "^${GEN_DIR}(.+)\.cc$" "${GEN_DIR}\\1-${compiler_1}.o" obj_file "${gen_file}")
+        add_custom_command(
+            OUTPUT "${obj_file}"
+            COMMAND "${compiler_0}" ${flags} -c "${gen_file}" -o "${obj_file}"
+            DEPENDS "${gen_file}" "${SRC_DIR}/common.h"
+        )
+        list(APPEND objects "${obj_file}")
+    endforeach()
+    # don't use add_executable, as we need to mnually select the toolchain.
+    set(inputs ${objects} "${SRC_DIR}/bench.cc")
+    set(output "bench-${compiler_1}")
     add_custom_command(
-        OUTPUT "${bin_file}"
-        COMMAND "${compiler}" ${CFLAGS} -c "${gen_file}" -o "${obj_file}"
-        COMMAND "${compiler}" ${CFLAGS} "${obj_file}" -o "${bin_file}"
-        DEPENDS "${gen_file}" ${COMMON_SRC}
+        OUTPUT "${output}"
+        COMMAND "${compiler_0}" ${flags} ${inputs} "-o" "${output}" "-lbenchmark"
+        DEPENDS ${inputs}
     )
-    list(APPEND OBJ "${obj_file}")
-    list(APPEND BIN "${bin_file}")
-endforeach()
+    if(compiler_1 STREQUAL "gcc") # build test only with GCC
+        set(test_inputs ${objects} "${SRC_DIR}/test.cc")
+        add_custom_command(
+            OUTPUT "test"
+            COMMAND "${compiler_0}" ${flags} ${test_inputs} "-o" "test" "-lbenchmark"
+            DEPENDS ${test_inputs}
+        )
+    endif()
 endforeach()
 
 # helper function to transform list
@@ -166,7 +167,7 @@ foreach(input ${INPUTS})
     list(APPEND DAT "${dst_dir}/small" "${dst_dir}/big")
 endforeach()
 
-add_custom_target(bench_submatch_aot ALL DEPENDS ${BIN} ${DAT})
+add_custom_target(bench_submatch_aot ALL DEPENDS bench-gcc bench-clang test ${DAT})
 
 # benchmark scripts
 set(srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
