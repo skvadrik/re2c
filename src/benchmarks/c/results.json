@@ -1,1604 +1,1674 @@
 {
   "benchmarks": [
     {
-      "name": "http-rfc7230-gcc_ragel",
-      "cpu_time": 196,
-      "bin_size": 82
+      "bin_size": 23.6,
+      "name": "http-rfc7230-gcc_re2c-simple",
+      "cpu_time": 21.165230062499997
     },
     {
-      "name": "http-rfc7230-gcc_kleenex",
-      "cpu_time": 598,
-      "bin_size": 786
+      "bin_size": 75.5,
+      "name": "http-rfc7230-gcc_re2c-buffered-eof",
+      "cpu_time": 29.84305586956522
     },
     {
-      "name": "http-rfc7230-gcc_re2c-stadfa",
-      "cpu_time": 1393,
-      "bin_size": 582
+      "bin_size": 42.5,
+      "name": "http-rfc7230-gcc_re2c-buffered-scc",
+      "cpu_time": 23.908031517241376
     },
     {
-      "name": "http-rfc7230-gcc_re2c-tdfa0",
-      "cpu_time": 299,
-      "bin_size": 134
+      "bin_size": 43.9,
+      "name": "http-rfc7230-gcc_ragel-simple",
+      "cpu_time": 25.487832666666666
     },
     {
-      "name": "http-rfc7230-gcc_re2c-tdfa1",
-      "cpu_time": 197,
-      "bin_size": 134
+      "bin_size": 44.4,
+      "name": "http-rfc7230-gcc_ragel-buffered",
+      "cpu_time": 24.214628689655164
     },
     {
-      "name": "http-rfc7230-clang_ragel",
-      "cpu_time": 217,
-      "bin_size": 74
+      "bin_size": 27.2,
+      "name": "http-rfc7230-clang_re2c-simple",
+      "cpu_time": 25.951424481481485
     },
     {
-      "name": "http-rfc7230-clang_kleenex",
-      "cpu_time": 664,
-      "bin_size": 518
+      "bin_size": 32.2,
+      "name": "http-rfc7230-clang_re2c-buffered-eof",
+      "cpu_time": 36.75644721052631
     },
     {
-      "name": "http-rfc7230-clang_re2c-stadfa",
-      "cpu_time": 1700,
-      "bin_size": 814
+      "bin_size": 23.8,
+      "name": "http-rfc7230-clang_re2c-buffered-scc",
+      "cpu_time": 30.87558739130434
     },
     {
-      "name": "http-rfc7230-clang_re2c-tdfa0",
-      "cpu_time": 381,
-      "bin_size": 134
+      "bin_size": 41.1,
+      "name": "http-rfc7230-clang_ragel-simple",
+      "cpu_time": 29.05119358333334
     },
     {
-      "name": "http-rfc7230-clang_re2c-tdfa1",
-      "cpu_time": 210,
-      "bin_size": 142
+      "bin_size": 41.6,
+      "name": "http-rfc7230-clang_ragel-buffered",
+      "cpu_time": 28.154417400000007
     },
     {
-      "name": "http-simple-gcc_ragel",
-      "cpu_time": 157,
-      "bin_size": 22
+      "bin_size": 4.1,
+      "name": "http-simple-gcc_re2c-simple",
+      "cpu_time": 18.625777675675682
     },
     {
-      "name": "http-simple-gcc_kleenex",
-      "cpu_time": 511,
-      "bin_size": 70
+      "bin_size": 13.9,
+      "name": "http-simple-gcc_re2c-buffered-eof",
+      "cpu_time": 22.971090166666652
     },
     {
-      "name": "http-simple-gcc_re2c-stadfa",
-      "cpu_time": 506,
-      "bin_size": 30
+      "bin_size": 8.4,
+      "name": "http-simple-gcc_re2c-buffered-scc",
+      "cpu_time": 16.535021190476186
     },
     {
-      "name": "http-simple-gcc_re2c-tdfa0",
-      "cpu_time": 227,
-      "bin_size": 22
+      "bin_size": 6.1,
+      "name": "http-simple-gcc_ragel-simple",
+      "cpu_time": 22.00399731249997
     },
     {
-      "name": "http-simple-gcc_re2c-tdfa1",
-      "cpu_time": 174,
-      "bin_size": 22
+      "bin_size": 6.6,
+      "name": "http-simple-gcc_ragel-buffered",
+      "cpu_time": 21.21523866666669
     },
     {
-      "name": "http-simple-clang_ragel",
-      "cpu_time": 192,
-      "bin_size": 26
+      "bin_size": 3.4,
+      "name": "http-simple-clang_re2c-simple",
+      "cpu_time": 26.37243377777777
     },
     {
-      "name": "http-simple-clang_kleenex",
-      "cpu_time": 578,
-      "bin_size": 86
+      "bin_size": 10.0,
+      "name": "http-simple-clang_re2c-buffered-eof",
+      "cpu_time": 33.8944119047619
     },
     {
-      "name": "http-simple-clang_re2c-stadfa",
-      "cpu_time": 525,
-      "bin_size": 66
+      "bin_size": 5.4,
+      "name": "http-simple-clang_re2c-buffered-scc",
+      "cpu_time": 29.635602958333305
     },
     {
-      "name": "http-simple-clang_re2c-tdfa0",
-      "cpu_time": 286,
-      "bin_size": 38
+      "bin_size": 6.0,
+      "name": "http-simple-clang_ragel-simple",
+      "cpu_time": 32.97071652380953
     },
     {
-      "name": "http-simple-clang_re2c-tdfa1",
-      "cpu_time": 199,
-      "bin_size": 42
+      "bin_size": 6.5,
+      "name": "http-simple-clang_ragel-buffered",
+      "cpu_time": 32.15557131818175
     },
     {
-      "name": "uri-rfc3986-gcc_ragel",
-      "cpu_time": 169,
-      "bin_size": 102
+      "bin_size": 15.6,
+      "name": "uri-rfc3986-gcc_re2c-simple",
+      "cpu_time": 24.517446310344827
     },
     {
-      "name": "uri-rfc3986-gcc_kleenex",
-      "cpu_time": 744,
-      "bin_size": 342
+      "bin_size": 35.5,
+      "name": "uri-rfc3986-gcc_re2c-buffered-eof",
+      "cpu_time": 18.27376007894738
     },
     {
-      "name": "uri-rfc3986-gcc_re2c-stadfa",
-      "cpu_time": 228,
-      "bin_size": 262
+      "bin_size": 25.1,
+      "name": "uri-rfc3986-gcc_re2c-buffered-scc",
+      "cpu_time": 21.86060228125003
     },
     {
-      "name": "uri-rfc3986-gcc_re2c-tdfa0",
-      "cpu_time": 276,
-      "bin_size": 82
+      "bin_size": 31.8,
+      "name": "uri-rfc3986-gcc_ragel-simple",
+      "cpu_time": 24.48260707142858
     },
     {
-      "name": "uri-rfc3986-gcc_re2c-tdfa1",
-      "cpu_time": 196,
-      "bin_size": 82
+      "bin_size": 32.3,
+      "name": "uri-rfc3986-gcc_ragel-buffered",
+      "cpu_time": 23.60757437931037
     },
     {
-      "name": "uri-rfc3986-clang_ragel",
-      "cpu_time": 175,
-      "bin_size": 106
+      "bin_size": 17.5,
+      "name": "uri-rfc3986-clang_re2c-simple",
+      "cpu_time": 21.238920515151502
     },
     {
-      "name": "uri-rfc3986-clang_kleenex",
-      "cpu_time": 903,
-      "bin_size": 186
+      "bin_size": 19.2,
+      "name": "uri-rfc3986-clang_re2c-buffered-eof",
+      "cpu_time": 24.43457278571426
     },
     {
-      "name": "uri-rfc3986-clang_re2c-stadfa",
-      "cpu_time": 180,
-      "bin_size": 302
+      "bin_size": 16.3,
+      "name": "uri-rfc3986-clang_re2c-buffered-scc",
+      "cpu_time": 19.736361942857172
     },
     {
-      "name": "uri-rfc3986-clang_re2c-tdfa0",
-      "cpu_time": 235,
-      "bin_size": 78
+      "bin_size": 27.4,
+      "name": "uri-rfc3986-clang_ragel-simple",
+      "cpu_time": 27.87249824
     },
     {
-      "name": "uri-rfc3986-clang_re2c-tdfa1",
-      "cpu_time": 154,
-      "bin_size": 78
+      "bin_size": 27.9,
+      "name": "uri-rfc3986-clang_ragel-buffered",
+      "cpu_time": 26.87851207692304
     },
     {
-      "name": "uri-simple-gcc_ragel",
-      "cpu_time": 239,
-      "bin_size": 30
+      "bin_size": 3.8,
+      "name": "uri-simple-gcc_re2c-simple",
+      "cpu_time": 23.510658566666663
     },
     {
-      "name": "uri-simple-gcc_kleenex",
-      "cpu_time": 505,
-      "bin_size": 38
+      "bin_size": 9.6,
+      "name": "uri-simple-gcc_re2c-buffered-eof",
+      "cpu_time": 20.88908660606067
     },
     {
-      "name": "uri-simple-gcc_re2c-stadfa",
-      "cpu_time": 197,
-      "bin_size": 30
+      "bin_size": 7.3,
+      "name": "uri-simple-gcc_re2c-buffered-scc",
+      "cpu_time": 19.250078694444483
     },
     {
-      "name": "uri-simple-gcc_re2c-tdfa0",
-      "cpu_time": 230,
-      "bin_size": 22
+      "bin_size": 4.9,
+      "name": "uri-simple-gcc_ragel-simple",
+      "cpu_time": 26.84673415384609
     },
     {
-      "name": "uri-simple-gcc_re2c-tdfa1",
-      "cpu_time": 194,
-      "bin_size": 22
+      "bin_size": 5.4,
+      "name": "uri-simple-gcc_ragel-buffered",
+      "cpu_time": 25.991681888888884
     },
     {
-      "name": "uri-simple-clang_ragel",
-      "cpu_time": 205,
-      "bin_size": 34
+      "bin_size": 3.4,
+      "name": "uri-simple-clang_re2c-simple",
+      "cpu_time": 22.933381451612867
     },
     {
-      "name": "uri-simple-clang_kleenex",
-      "cpu_time": 631,
-      "bin_size": 34
+      "bin_size": 4.1,
+      "name": "uri-simple-clang_re2c-buffered-eof",
+      "cpu_time": 22.251255290322618
     },
     {
-      "name": "uri-simple-clang_re2c-stadfa",
-      "cpu_time": 160,
-      "bin_size": 58
+      "bin_size": 4.0,
+      "name": "uri-simple-clang_re2c-buffered-scc",
+      "cpu_time": 20.01555500000001
     },
     {
-      "name": "uri-simple-clang_re2c-tdfa0",
-      "cpu_time": 186,
-      "bin_size": 34
+      "bin_size": 6.0,
+      "name": "uri-simple-clang_ragel-simple",
+      "cpu_time": 29.263881833333283
     },
     {
-      "name": "uri-simple-clang_re2c-tdfa1",
-      "cpu_time": 195,
-      "bin_size": 38
+      "bin_size": 6.5,
+      "name": "uri-simple-clang_ragel-buffered",
+      "cpu_time": 28.60045083333344
     },
     {
-      "name": "apache-log-gcc_ragel",
-      "cpu_time": 88,
-      "bin_size": 18
+      "bin_size": 2.1,
+      "name": "apache-log-gcc_re2c-simple",
+      "cpu_time": 14.858037021276592
     },
     {
-      "name": "apache-log-gcc_kleenex",
-      "cpu_time": 467,
-      "bin_size": 30
+      "bin_size": 9.7,
+      "name": "apache-log-gcc_re2c-buffered-eof",
+      "cpu_time": 17.55654082051277
     },
     {
-      "name": "apache-log-gcc_re2c-stadfa",
-      "cpu_time": 151,
-      "bin_size": 18
+      "bin_size": 6.1,
+      "name": "apache-log-gcc_re2c-buffered-scc",
+      "cpu_time": 18.802338945945962
     },
     {
-      "name": "apache-log-gcc_re2c-tdfa0",
-      "cpu_time": 186,
-      "bin_size": 18
+      "bin_size": 2.4,
+      "name": "apache-log-gcc_ragel-simple",
+      "cpu_time": 15.170477499999967
     },
     {
-      "name": "apache-log-gcc_re2c-tdfa1",
-      "cpu_time": 187,
-      "bin_size": 18
+      "bin_size": 2.9,
+      "name": "apache-log-gcc_ragel-buffered",
+      "cpu_time": 14.032515080000039
     },
     {
-      "name": "apache-log-clang_ragel",
-      "cpu_time": 264,
-      "bin_size": 18
+      "bin_size": 1.6,
+      "name": "apache-log-clang_re2c-simple",
+      "cpu_time": 15.051653804347794
     },
     {
-      "name": "apache-log-clang_kleenex",
-      "cpu_time": 481,
-      "bin_size": 26
+      "bin_size": 3.9,
+      "name": "apache-log-clang_re2c-buffered-eof",
+      "cpu_time": 18.342136526315738
     },
     {
-      "name": "apache-log-clang_re2c-stadfa",
-      "cpu_time": 107,
-      "bin_size": 22
+      "bin_size": 3.4,
+      "name": "apache-log-clang_re2c-buffered-scc",
+      "cpu_time": 14.723082510638287
     },
     {
-      "name": "apache-log-clang_re2c-tdfa0",
-      "cpu_time": 103,
-      "bin_size": 22
+      "bin_size": 2.4,
+      "name": "apache-log-clang_ragel-simple",
+      "cpu_time": 16.366171023255784
     },
     {
-      "name": "apache-log-clang_re2c-tdfa1",
-      "cpu_time": 110,
-      "bin_size": 22
+      "bin_size": 2.8,
+      "name": "apache-log-clang_ragel-buffered",
+      "cpu_time": 15.537182288888907
     },
     {
-      "name": "datetime-gcc_ragel",
-      "cpu_time": 250,
-      "bin_size": 14
+      "bin_size": 1.2,
+      "name": "datetime-gcc_re2c-simple",
+      "cpu_time": 7.102811867346947
     },
     {
-      "name": "datetime-gcc_kleenex",
-      "cpu_time": 865,
-      "bin_size": 38
+      "bin_size": 6.8,
+      "name": "datetime-gcc_re2c-buffered-eof",
+      "cpu_time": 19.370254416666633
     },
     {
-      "name": "datetime-gcc_re2c-stadfa",
-      "cpu_time": 221,
-      "bin_size": 14
+      "bin_size": 1.9,
+      "name": "datetime-gcc_re2c-buffered-scc",
+      "cpu_time": 7.771034655555554
     },
     {
-      "name": "datetime-gcc_re2c-tdfa0",
-      "cpu_time": 238,
-      "bin_size": 14
+      "bin_size": 1.8,
+      "name": "datetime-gcc_ragel-simple",
+      "cpu_time": 9.653174366197183
     },
     {
-      "name": "datetime-gcc_re2c-tdfa1",
-      "cpu_time": 228,
-      "bin_size": 14
+      "bin_size": 2.3,
+      "name": "datetime-gcc_ragel-buffered",
+      "cpu_time": 8.297128192771076
     },
     {
-      "name": "datetime-clang_ragel",
-      "cpu_time": 153,
-      "bin_size": 14
+      "bin_size": 1.2,
+      "name": "datetime-clang_re2c-simple",
+      "cpu_time": 6.450448185185196
     },
     {
-      "name": "datetime-clang_kleenex",
-      "cpu_time": 967,
-      "bin_size": 34
+      "bin_size": 5.5,
+      "name": "datetime-clang_re2c-buffered-eof",
+      "cpu_time": 19.45057116666662
     },
     {
-      "name": "datetime-clang_re2c-stadfa",
-      "cpu_time": 151,
-      "bin_size": 14
+      "bin_size": 1.8,
+      "name": "datetime-clang_re2c-buffered-scc",
+      "cpu_time": 10.58932115384617
     },
     {
-      "name": "datetime-clang_re2c-tdfa0",
-      "cpu_time": 140,
-      "bin_size": 14
+      "bin_size": 1.8,
+      "name": "datetime-clang_ragel-simple",
+      "cpu_time": 8.464407621951223
     },
     {
-      "name": "datetime-clang_re2c-tdfa1",
-      "cpu_time": 138,
-      "bin_size": 14
+      "bin_size": 2.3,
+      "name": "datetime-clang_ragel-buffered",
+      "cpu_time": 7.094329884210544
     },
     {
-      "name": "email-gcc_ragel",
-      "cpu_time": 141,
-      "bin_size": 14
+      "bin_size": 1.3,
+      "name": "email-gcc_re2c-simple",
+      "cpu_time": 14.97522578723402
     },
     {
-      "name": "email-gcc_kleenex",
-      "cpu_time": 425,
-      "bin_size": 26
+      "bin_size": 3.9,
+      "name": "email-gcc_re2c-buffered-eof",
+      "cpu_time": 13.80022418000003
     },
     {
-      "name": "email-gcc_re2c-stadfa",
-      "cpu_time": 108,
-      "bin_size": 14
+      "bin_size": 3.1,
+      "name": "email-gcc_re2c-buffered-scc",
+      "cpu_time": 15.106806782608658
     },
     {
-      "name": "email-gcc_re2c-tdfa0",
-      "cpu_time": 100,
-      "bin_size": 14
+      "bin_size": 2.1,
+      "name": "email-gcc_ragel-simple",
+      "cpu_time": 19.840585828571427
     },
     {
-      "name": "email-gcc_re2c-tdfa1",
-      "cpu_time": 112,
-      "bin_size": 14
+      "bin_size": 2.5,
+      "name": "email-gcc_ragel-buffered",
+      "cpu_time": 18.456934947368467
     },
     {
-      "name": "email-clang_ragel",
-      "cpu_time": 130,
-      "bin_size": 14
+      "bin_size": 1.1,
+      "name": "email-clang_re2c-simple",
+      "cpu_time": 13.011172870370421
     },
     {
-      "name": "email-clang_kleenex",
-      "cpu_time": 542,
-      "bin_size": 26
+      "bin_size": 3.1,
+      "name": "email-clang_re2c-buffered-eof",
+      "cpu_time": 18.888531216216172
     },
     {
-      "name": "email-clang_re2c-stadfa",
-      "cpu_time": 134,
-      "bin_size": 18
+      "bin_size": 2.6,
+      "name": "email-clang_re2c-buffered-scc",
+      "cpu_time": 25.762829851851848
     },
     {
-      "name": "email-clang_re2c-tdfa0",
-      "cpu_time": 139,
-      "bin_size": 18
+      "bin_size": 1.8,
+      "name": "email-clang_ragel-simple",
+      "cpu_time": 18.685381324324336
     },
     {
-      "name": "email-clang_re2c-tdfa1",
-      "cpu_time": 129,
-      "bin_size": 18
+      "bin_size": 2.3,
+      "name": "email-clang_ragel-buffered",
+      "cpu_time": 17.418117799999955
     },
     {
-      "name": "ipv4-gcc_ragel",
-      "cpu_time": 126,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "ipv4-gcc_re2c-simple",
+      "cpu_time": 7.544010560439529
     },
     {
-      "name": "ipv4-gcc_kleenex",
-      "cpu_time": 337,
-      "bin_size": 22
+      "bin_size": 5.2,
+      "name": "ipv4-gcc_re2c-buffered-eof",
+      "cpu_time": 8.893070835443087
     },
     {
-      "name": "ipv4-gcc_re2c-stadfa",
-      "cpu_time": 141,
-      "bin_size": 14
+      "bin_size": 2.0,
+      "name": "ipv4-gcc_re2c-buffered-scc",
+      "cpu_time": 6.272891045044996
     },
     {
-      "name": "ipv4-gcc_re2c-tdfa0",
-      "cpu_time": 142,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "ipv4-gcc_ragel-simple",
+      "cpu_time": 9.045700012986979
     },
     {
-      "name": "ipv4-gcc_re2c-tdfa1",
-      "cpu_time": 140,
-      "bin_size": 14
+      "bin_size": 1.9,
+      "name": "ipv4-gcc_ragel-buffered",
+      "cpu_time": 7.857415045454533
     },
     {
-      "name": "ipv4-clang_ragel",
-      "cpu_time": 143,
-      "bin_size": 14
+      "bin_size": 0.9,
+      "name": "ipv4-clang_re2c-simple",
+      "cpu_time": 7.7211463626373025
     },
     {
-      "name": "ipv4-clang_kleenex",
-      "cpu_time": 355,
-      "bin_size": 22
+      "bin_size": 4.6,
+      "name": "ipv4-clang_re2c-buffered-eof",
+      "cpu_time": 9.525623972222242
     },
     {
-      "name": "ipv4-clang_re2c-stadfa",
-      "cpu_time": 154,
-      "bin_size": 14
+      "bin_size": 1.2,
+      "name": "ipv4-clang_re2c-buffered-scc",
+      "cpu_time": 9.171895249999963
     },
     {
-      "name": "ipv4-clang_re2c-tdfa0",
-      "cpu_time": 142,
-      "bin_size": 14
+      "bin_size": 1.3,
+      "name": "ipv4-clang_ragel-simple",
+      "cpu_time": 8.82711525316461
     },
     {
-      "name": "ipv4-clang_re2c-tdfa1",
-      "cpu_time": 154,
-      "bin_size": 14
+      "bin_size": 1.8,
+      "name": "ipv4-clang_ragel-buffered",
+      "cpu_time": 7.606565522222217
     },
     {
-      "name": "alt1-2-gcc_ragel",
-      "cpu_time": 78,
-      "bin_size": 14
+      "bin_size": 0.7,
+      "name": "alt1-2-gcc_re2c-simple",
+      "cpu_time": 8.953298923077003
     },
     {
-      "name": "alt1-2-gcc_kleenex",
-      "cpu_time": 359,
-      "bin_size": 18
+      "bin_size": 2.9,
+      "name": "alt1-2-gcc_re2c-buffered-eof",
+      "cpu_time": 10.616510843750039
     },
     {
-      "name": "alt1-2-gcc_re2c-stadfa",
-      "cpu_time": 146,
-      "bin_size": 14
+      "bin_size": 2.5,
+      "name": "alt1-2-gcc_re2c-buffered-scc",
+      "cpu_time": 10.747310830769244
     },
     {
-      "name": "alt1-2-gcc_re2c-tdfa0",
-      "cpu_time": 190,
-      "bin_size": 14
+      "bin_size": 0.8,
+      "name": "alt1-2-gcc_ragel-simple",
+      "cpu_time": 12.000731051724133
     },
     {
-      "name": "alt1-2-gcc_re2c-tdfa1",
-      "cpu_time": 146,
-      "bin_size": 14
+      "bin_size": 1.3,
+      "name": "alt1-2-gcc_ragel-buffered",
+      "cpu_time": 10.628103156250068
     },
     {
-      "name": "alt1-2-clang_ragel",
-      "cpu_time": 74,
-      "bin_size": 14
+      "bin_size": 0.8,
+      "name": "alt1-2-clang_re2c-simple",
+      "cpu_time": 8.491894609756084
     },
     {
-      "name": "alt1-2-clang_kleenex",
-      "cpu_time": 374,
-      "bin_size": 18
+      "bin_size": 2.0,
+      "name": "alt1-2-clang_re2c-buffered-eof",
+      "cpu_time": 13.75468134000002
     },
     {
-      "name": "alt1-2-clang_re2c-stadfa",
-      "cpu_time": 65,
-      "bin_size": 14
+      "bin_size": 1.6,
+      "name": "alt1-2-clang_re2c-buffered-scc",
+      "cpu_time": 24.107642965517307
     },
     {
-      "name": "alt1-2-clang_re2c-tdfa0",
-      "cpu_time": 74,
-      "bin_size": 14
+      "bin_size": 0.9,
+      "name": "alt1-2-clang_ragel-simple",
+      "cpu_time": 10.630333909090975
     },
     {
-      "name": "alt1-2-clang_re2c-tdfa1",
-      "cpu_time": 66,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "alt1-2-clang_ragel-buffered",
+      "cpu_time": 8.03875579761906
     },
     {
-      "name": "alt1-4-gcc_ragel",
-      "cpu_time": 79,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "alt1-4-gcc_re2c-simple",
+      "cpu_time": 11.975491728813525
     },
     {
-      "name": "alt1-4-gcc_kleenex",
-      "cpu_time": 359,
-      "bin_size": 18
+      "bin_size": 5.7,
+      "name": "alt1-4-gcc_re2c-buffered-eof",
+      "cpu_time": 9.554832361111112
     },
     {
-      "name": "alt1-4-gcc_re2c-stadfa",
-      "cpu_time": 145,
-      "bin_size": 14
+      "bin_size": 4.5,
+      "name": "alt1-4-gcc_re2c-buffered-scc",
+      "cpu_time": 10.844692843750003
     },
     {
-      "name": "alt1-4-gcc_re2c-tdfa0",
-      "cpu_time": 185,
-      "bin_size": 14
+      "bin_size": 0.9,
+      "name": "alt1-4-gcc_ragel-simple",
+      "cpu_time": 12.11049025862073
     },
     {
-      "name": "alt1-4-gcc_re2c-tdfa1",
-      "cpu_time": 146,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "alt1-4-gcc_ragel-buffered",
+      "cpu_time": 10.703298000000029
     },
     {
-      "name": "alt1-4-clang_ragel",
-      "cpu_time": 72,
-      "bin_size": 14
+      "bin_size": 0.8,
+      "name": "alt1-4-clang_re2c-simple",
+      "cpu_time": 8.608287987654357
     },
     {
-      "name": "alt1-4-clang_kleenex",
-      "cpu_time": 371,
-      "bin_size": 18
+      "bin_size": 2.3,
+      "name": "alt1-4-clang_re2c-buffered-eof",
+      "cpu_time": 25.27673985714277
     },
     {
-      "name": "alt1-4-clang_re2c-stadfa",
-      "cpu_time": 76,
-      "bin_size": 14
+      "bin_size": 1.7,
+      "name": "alt1-4-clang_re2c-buffered-scc",
+      "cpu_time": 10.313182661764632
     },
     {
-      "name": "alt1-4-clang_re2c-tdfa0",
-      "cpu_time": 75,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "alt1-4-clang_ragel-simple",
+      "cpu_time": 10.613802318181902
     },
     {
-      "name": "alt1-4-clang_re2c-tdfa1",
-      "cpu_time": 68,
-      "bin_size": 14
+      "bin_size": 1.7,
+      "name": "alt1-4-clang_ragel-buffered",
+      "cpu_time": 10.950637507936527
     },
     {
-      "name": "alt1-8-gcc_ragel",
-      "cpu_time": 77,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "alt1-8-gcc_re2c-simple",
+      "cpu_time": 12.005730413793101
     },
     {
-      "name": "alt1-8-gcc_kleenex",
-      "cpu_time": 354,
-      "bin_size": 22
+      "bin_size": 10.3,
+      "name": "alt1-8-gcc_re2c-buffered-eof",
+      "cpu_time": 9.430848202702743
     },
     {
-      "name": "alt1-8-gcc_re2c-stadfa",
-      "cpu_time": 153,
-      "bin_size": 18
+      "bin_size": 7.3,
+      "name": "alt1-8-gcc_re2c-buffered-scc",
+      "cpu_time": 13.525646326923034
     },
     {
-      "name": "alt1-8-gcc_re2c-tdfa0",
-      "cpu_time": 318,
-      "bin_size": 18
+      "bin_size": 1.2,
+      "name": "alt1-8-gcc_ragel-simple",
+      "cpu_time": 15.238513304347748
     },
     {
-      "name": "alt1-8-gcc_re2c-tdfa1",
-      "cpu_time": 154,
-      "bin_size": 18
+      "bin_size": 1.7,
+      "name": "alt1-8-gcc_ragel-buffered",
+      "cpu_time": 13.917035519999956
     },
     {
-      "name": "alt1-8-clang_ragel",
-      "cpu_time": 75,
-      "bin_size": 14
+      "bin_size": 1.1,
+      "name": "alt1-8-clang_re2c-simple",
+      "cpu_time": 8.887770531645627
     },
     {
-      "name": "alt1-8-clang_kleenex",
-      "cpu_time": 358,
-      "bin_size": 22
+      "bin_size": 3.3,
+      "name": "alt1-8-clang_re2c-buffered-eof",
+      "cpu_time": 25.26242592857158
     },
     {
-      "name": "alt1-8-clang_re2c-stadfa",
-      "cpu_time": 78,
-      "bin_size": 14
+      "bin_size": 3.3,
+      "name": "alt1-8-clang_re2c-buffered-scc",
+      "cpu_time": 10.18162470588238
     },
     {
-      "name": "alt1-8-clang_re2c-tdfa0",
-      "cpu_time": 77,
-      "bin_size": 14
+      "bin_size": 1.2,
+      "name": "alt1-8-clang_ragel-simple",
+      "cpu_time": 12.180782052631649
     },
     {
-      "name": "alt1-8-clang_re2c-tdfa1",
-      "cpu_time": 68,
-      "bin_size": 18
+      "bin_size": 1.6,
+      "name": "alt1-8-clang_ragel-buffered",
+      "cpu_time": 11.05094361290323
     },
     {
-      "name": "alt2-2-gcc_ragel",
-      "cpu_time": 73,
-      "bin_size": 14
+      "bin_size": 0.9,
+      "name": "alt2-2-gcc_re2c-simple",
+      "cpu_time": 11.54497971666674
     },
     {
-      "name": "alt2-2-gcc_kleenex",
-      "cpu_time": 426,
-      "bin_size": 22
+      "bin_size": 3.5,
+      "name": "alt2-2-gcc_re2c-buffered-eof",
+      "cpu_time": 13.300857557692298
     },
     {
-      "name": "alt2-2-gcc_re2c-stadfa",
-      "cpu_time": 142,
-      "bin_size": 14
+      "bin_size": 4.6,
+      "name": "alt2-2-gcc_re2c-buffered-scc",
+      "cpu_time": 13.243242903846145
     },
     {
-      "name": "alt2-2-gcc_re2c-tdfa0",
-      "cpu_time": 220,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "alt2-2-gcc_ragel-simple",
+      "cpu_time": 12.274031964912325
     },
     {
-      "name": "alt2-2-gcc_re2c-tdfa1",
-      "cpu_time": 174,
-      "bin_size": 14
+      "bin_size": 1.5,
+      "name": "alt2-2-gcc_ragel-buffered",
+      "cpu_time": 10.930975857142867
     },
     {
-      "name": "alt2-2-clang_ragel",
-      "cpu_time": 73,
-      "bin_size": 14
+      "bin_size": 0.9,
+      "name": "alt2-2-clang_re2c-simple",
+      "cpu_time": 8.11681689534885
     },
     {
-      "name": "alt2-2-clang_kleenex",
-      "cpu_time": 568,
-      "bin_size": 18
+      "bin_size": 2.0,
+      "name": "alt2-2-clang_re2c-buffered-eof",
+      "cpu_time": 15.928908302325539
     },
     {
-      "name": "alt2-2-clang_re2c-stadfa",
-      "cpu_time": 85,
-      "bin_size": 14
+      "bin_size": 1.6,
+      "name": "alt2-2-clang_re2c-buffered-scc",
+      "cpu_time": 9.105931881578885
     },
     {
-      "name": "alt2-2-clang_re2c-tdfa0",
-      "cpu_time": 91,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "alt2-2-clang_ragel-simple",
+      "cpu_time": 10.643032196969736
     },
     {
-      "name": "alt2-2-clang_re2c-tdfa1",
-      "cpu_time": 89,
-      "bin_size": 14
+      "bin_size": 1.9,
+      "name": "alt2-2-clang_ragel-buffered",
+      "cpu_time": 8.739867679487189
     },
     {
-      "name": "alt2-4-gcc_ragel",
-      "cpu_time": 83,
-      "bin_size": 18
+      "bin_size": 2.0,
+      "name": "alt2-4-gcc_re2c-simple",
+      "cpu_time": 13.361677115384623
     },
     {
-      "name": "alt2-4-gcc_kleenex",
-      "cpu_time": 429,
-      "bin_size": 26
+      "bin_size": 9.4,
+      "name": "alt2-4-gcc_re2c-buffered-eof",
+      "cpu_time": 12.038102206896626
     },
     {
-      "name": "alt2-4-gcc_re2c-stadfa",
-      "cpu_time": 151,
-      "bin_size": 18
+      "bin_size": 7.7,
+      "name": "alt2-4-gcc_re2c-buffered-scc",
+      "cpu_time": 14.913678212765939
     },
     {
-      "name": "alt2-4-gcc_re2c-tdfa0",
-      "cpu_time": 334,
-      "bin_size": 18
+      "bin_size": 1.6,
+      "name": "alt2-4-gcc_ragel-simple",
+      "cpu_time": 12.918360944444522
     },
     {
-      "name": "alt2-4-gcc_re2c-tdfa1",
-      "cpu_time": 182,
-      "bin_size": 18
+      "bin_size": 2.1,
+      "name": "alt2-4-gcc_ragel-buffered",
+      "cpu_time": 11.575682627118658
     },
     {
-      "name": "alt2-4-clang_ragel",
-      "cpu_time": 80,
-      "bin_size": 18
+      "bin_size": 2.0,
+      "name": "alt2-4-clang_re2c-simple",
+      "cpu_time": 8.499096927710823
     },
     {
-      "name": "alt2-4-clang_kleenex",
-      "cpu_time": 504,
-      "bin_size": 22
+      "bin_size": 3.6,
+      "name": "alt2-4-clang_re2c-buffered-eof",
+      "cpu_time": 23.668227655172334
     },
     {
-      "name": "alt2-4-clang_re2c-stadfa",
-      "cpu_time": 92,
-      "bin_size": 18
+      "bin_size": 3.5,
+      "name": "alt2-4-clang_re2c-buffered-scc",
+      "cpu_time": 9.000390246753257
     },
     {
-      "name": "alt2-4-clang_re2c-tdfa0",
-      "cpu_time": 276,
-      "bin_size": 18
+      "bin_size": 1.6,
+      "name": "alt2-4-clang_ragel-simple",
+      "cpu_time": 10.914232375
     },
     {
-      "name": "alt2-4-clang_re2c-tdfa1",
-      "cpu_time": 100,
-      "bin_size": 18
+      "bin_size": 2.1,
+      "name": "alt2-4-clang_ragel-buffered",
+      "cpu_time": 9.599830394366217
     },
     {
-      "name": "alt2-8-gcc_ragel",
-      "cpu_time": 90,
-      "bin_size": 30
+      "bin_size": 8.8,
+      "name": "alt2-8-gcc_re2c-simple",
+      "cpu_time": 17.70826532499985
     },
     {
-      "name": "alt2-8-gcc_kleenex",
-      "cpu_time": 431,
-      "bin_size": 30
+      "bin_size": 22.7,
+      "name": "alt2-8-gcc_re2c-buffered-eof",
+      "cpu_time": 18.11810997435897
     },
     {
-      "name": "alt2-8-gcc_re2c-stadfa",
-      "cpu_time": 242,
-      "bin_size": 38
+      "bin_size": 23.3,
+      "name": "alt2-8-gcc_re2c-buffered-scc",
+      "cpu_time": 22.11319603124995
     },
     {
-      "name": "alt2-8-gcc_re2c-tdfa0",
-      "cpu_time": 560,
-      "bin_size": 30
+      "bin_size": 6.7,
+      "name": "alt2-8-gcc_ragel-simple",
+      "cpu_time": 13.063643518518461
     },
     {
-      "name": "alt2-8-gcc_re2c-tdfa1",
-      "cpu_time": 205,
-      "bin_size": 30
+      "bin_size": 7.2,
+      "name": "alt2-8-gcc_ragel-buffered",
+      "cpu_time": 11.877281793103442
     },
     {
-      "name": "alt2-8-clang_ragel",
-      "cpu_time": 73,
-      "bin_size": 26
+      "bin_size": 8.4,
+      "name": "alt2-8-clang_re2c-simple",
+      "cpu_time": 8.732446387499948
     },
     {
-      "name": "alt2-8-clang_kleenex",
-      "cpu_time": 505,
-      "bin_size": 30
+      "bin_size": 11.1,
+      "name": "alt2-8-clang_re2c-buffered-eof",
+      "cpu_time": 24.732304214285705
     },
     {
-      "name": "alt2-8-clang_re2c-stadfa",
-      "cpu_time": 206,
-      "bin_size": 34
+      "bin_size": 10.9,
+      "name": "alt2-8-clang_re2c-buffered-scc",
+      "cpu_time": 11.64013734426235
     },
     {
-      "name": "alt2-8-clang_re2c-tdfa0",
-      "cpu_time": 486,
-      "bin_size": 26
+      "bin_size": 5.5,
+      "name": "alt2-8-clang_ragel-simple",
+      "cpu_time": 10.136082173912971
     },
     {
-      "name": "alt2-8-clang_re2c-tdfa1",
-      "cpu_time": 101,
-      "bin_size": 26
+      "bin_size": 6.0,
+      "name": "alt2-8-clang_ragel-buffered",
+      "cpu_time": 8.91861686842105
     },
     {
-      "name": "alt4-2-gcc_ragel",
-      "cpu_time": 87,
-      "bin_size": 18
+      "bin_size": 1.3,
+      "name": "alt4-2-gcc_re2c-simple",
+      "cpu_time": 12.695334236363594
     },
     {
-      "name": "alt4-2-gcc_kleenex",
-      "cpu_time": 783,
-      "bin_size": 30
+      "bin_size": 8.1,
+      "name": "alt4-2-gcc_re2c-buffered-eof",
+      "cpu_time": 11.41999388524585
     },
     {
-      "name": "alt4-2-gcc_re2c-stadfa",
-      "cpu_time": 319,
-      "bin_size": 18
+      "bin_size": 7.1,
+      "name": "alt4-2-gcc_re2c-buffered-scc",
+      "cpu_time": 12.198233421052612
     },
     {
-      "name": "alt4-2-gcc_re2c-tdfa0",
-      "cpu_time": 235,
-      "bin_size": 18
+      "bin_size": 1.3,
+      "name": "alt4-2-gcc_ragel-simple",
+      "cpu_time": 11.959209983050737
     },
     {
-      "name": "alt4-2-gcc_re2c-tdfa1",
-      "cpu_time": 167,
-      "bin_size": 18
+      "bin_size": 1.8,
+      "name": "alt4-2-gcc_ragel-buffered",
+      "cpu_time": 10.626726384615363
     },
     {
-      "name": "alt4-2-clang_ragel",
-      "cpu_time": 103,
-      "bin_size": 18
+      "bin_size": 1.5,
+      "name": "alt4-2-clang_re2c-simple",
+      "cpu_time": 8.984873641025615
     },
     {
-      "name": "alt4-2-clang_kleenex",
-      "cpu_time": 754,
-      "bin_size": 26
+      "bin_size": 2.8,
+      "name": "alt4-2-clang_re2c-buffered-eof",
+      "cpu_time": 20.506087764706017
     },
     {
-      "name": "alt4-2-clang_re2c-stadfa",
-      "cpu_time": 356,
-      "bin_size": 18
+      "bin_size": 2.8,
+      "name": "alt4-2-clang_re2c-buffered-scc",
+      "cpu_time": 11.120244936507893
     },
     {
-      "name": "alt4-2-clang_re2c-tdfa0",
-      "cpu_time": 222,
-      "bin_size": 18
+      "bin_size": 1.3,
+      "name": "alt4-2-clang_ragel-simple",
+      "cpu_time": 11.208094112903161
     },
     {
-      "name": "alt4-2-clang_re2c-tdfa1",
-      "cpu_time": 115,
-      "bin_size": 18
+      "bin_size": 1.8,
+      "name": "alt4-2-clang_ragel-buffered",
+      "cpu_time": 10.102572367647072
     },
     {
-      "name": "alt4-4-gcc_ragel",
-      "cpu_time": 95,
-      "bin_size": 30
+      "bin_size": 8.9,
+      "name": "alt4-4-gcc_re2c-simple",
+      "cpu_time": 13.57158063461538
     },
     {
-      "name": "alt4-4-gcc_kleenex",
-      "cpu_time": 863,
-      "bin_size": 34
+      "bin_size": 19.0,
+      "name": "alt4-4-gcc_re2c-buffered-eof",
+      "cpu_time": 16.04845544186063
     },
     {
-      "name": "alt4-4-gcc_re2c-stadfa",
-      "cpu_time": 1970,
-      "bin_size": 66
+      "bin_size": 19.9,
+      "name": "alt4-4-gcc_re2c-buffered-scc",
+      "cpu_time": 19.18729174999988
     },
     {
-      "name": "alt4-4-gcc_re2c-tdfa0",
-      "cpu_time": 554,
-      "bin_size": 38
+      "bin_size": 4.6,
+      "name": "alt4-4-gcc_ragel-simple",
+      "cpu_time": 12.370522285714257
     },
     {
-      "name": "alt4-4-gcc_re2c-tdfa1",
-      "cpu_time": 187,
-      "bin_size": 30
+      "bin_size": 5.1,
+      "name": "alt4-4-gcc_ragel-buffered",
+      "cpu_time": 11.077451870967765
     },
     {
-      "name": "alt4-4-clang_ragel",
-      "cpu_time": 97,
-      "bin_size": 30
+      "bin_size": 9.4,
+      "name": "alt4-4-clang_re2c-simple",
+      "cpu_time": 9.144455815789412
     },
     {
-      "name": "alt4-4-clang_kleenex",
-      "cpu_time": 786,
-      "bin_size": 58
+      "bin_size": 13.2,
+      "name": "alt4-4-clang_re2c-buffered-eof",
+      "cpu_time": 31.413234090909338
     },
     {
-      "name": "alt4-4-clang_re2c-stadfa",
-      "cpu_time": 1682,
-      "bin_size": 70
+      "bin_size": 13.5,
+      "name": "alt4-4-clang_re2c-buffered-scc",
+      "cpu_time": 14.514439125000203
     },
     {
-      "name": "alt4-4-clang_re2c-tdfa0",
-      "cpu_time": 525,
-      "bin_size": 30
+      "bin_size": 5.4,
+      "name": "alt4-4-clang_ragel-simple",
+      "cpu_time": 9.847821225352064
     },
     {
-      "name": "alt4-4-clang_re2c-tdfa1",
-      "cpu_time": 125,
-      "bin_size": 30
+      "bin_size": 5.9,
+      "name": "alt4-4-clang_ragel-buffered",
+      "cpu_time": 8.632672481012616
     },
     {
-      "name": "alt4-8-gcc_ragel",
-      "cpu_time": 116,
-      "bin_size": 106
+      "bin_size": 64.8,
+      "name": "alt4-8-gcc_re2c-simple",
+      "cpu_time": 16.67208333333326
     },
     {
-      "name": "alt4-8-gcc_kleenex",
-      "cpu_time": 727,
-      "bin_size": 50
+      "bin_size": 101.2,
+      "name": "alt4-8-gcc_re2c-buffered-eof",
+      "cpu_time": 28.47959345833336
     },
     {
-      "name": "alt4-8-gcc_re2c-stadfa",
-      "cpu_time": 5673,
-      "bin_size": 550
+      "bin_size": 97.3,
+      "name": "alt4-8-gcc_re2c-buffered-scc",
+      "cpu_time": 30.88191995652222
     },
     {
-      "name": "alt4-8-gcc_re2c-tdfa0",
-      "cpu_time": 1000,
-      "bin_size": 98
+      "bin_size": 31.1,
+      "name": "alt4-8-gcc_ragel-simple",
+      "cpu_time": 14.79744527659569
     },
     {
-      "name": "alt4-8-gcc_re2c-tdfa1",
-      "cpu_time": 264,
-      "bin_size": 106
+      "bin_size": 31.6,
+      "name": "alt4-8-gcc_ragel-buffered",
+      "cpu_time": 13.869741780000027
     },
     {
-      "name": "alt4-8-clang_ragel",
-      "cpu_time": 126,
-      "bin_size": 86
+      "bin_size": 75.5,
+      "name": "alt4-8-clang_re2c-simple",
+      "cpu_time": 12.975975129629775
     },
     {
-      "name": "alt4-8-clang_kleenex",
-      "cpu_time": 729,
-      "bin_size": 150
+      "bin_size": 71.4,
+      "name": "alt4-8-clang_re2c-buffered-eof",
+      "cpu_time": 39.188292555555414
     },
     {
-      "name": "alt4-8-clang_re2c-stadfa",
-      "cpu_time": 6107,
-      "bin_size": 566
+      "bin_size": 76.1,
+      "name": "alt4-8-clang_re2c-buffered-scc",
+      "cpu_time": 22.907737633333152
     },
     {
-      "name": "alt4-8-clang_re2c-tdfa0",
-      "cpu_time": 888,
-      "bin_size": 74
+      "bin_size": 27.4,
+      "name": "alt4-8-clang_ragel-simple",
+      "cpu_time": 11.874523661017077
     },
     {
-      "name": "alt4-8-clang_re2c-tdfa1",
-      "cpu_time": 188,
-      "bin_size": 110
+      "bin_size": 27.9,
+      "name": "alt4-8-clang_ragel-buffered",
+      "cpu_time": 10.827643206349125
     },
     {
-      "name": "cat2-0-gcc_ragel",
-      "cpu_time": 85,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "cat2-0-gcc_re2c-simple",
+      "cpu_time": 11.035255983870917
     },
     {
-      "name": "cat2-0-gcc_kleenex",
-      "cpu_time": 353,
-      "bin_size": 18
+      "bin_size": 2.7,
+      "name": "cat2-0-gcc_re2c-buffered-eof",
+      "cpu_time": 9.749828352112754
     },
     {
-      "name": "cat2-0-gcc_re2c-stadfa",
-      "cpu_time": 137,
-      "bin_size": 14
+      "bin_size": 4.3,
+      "name": "cat2-0-gcc_re2c-buffered-scc",
+      "cpu_time": 11.296657725806645
     },
     {
-      "name": "cat2-0-gcc_re2c-tdfa0",
-      "cpu_time": 164,
-      "bin_size": 14
+      "bin_size": 1.3,
+      "name": "cat2-0-gcc_ragel-simple",
+      "cpu_time": 14.621417875000079
     },
     {
-      "name": "cat2-0-gcc_re2c-tdfa1",
-      "cpu_time": 153,
-      "bin_size": 14
+      "bin_size": 1.8,
+      "name": "cat2-0-gcc_ragel-buffered",
+      "cpu_time": 13.236378903845965
     },
     {
-      "name": "cat2-0-clang_ragel",
-      "cpu_time": 88,
-      "bin_size": 14
+      "bin_size": 0.8,
+      "name": "cat2-0-clang_re2c-simple",
+      "cpu_time": 10.216256746268789
     },
     {
-      "name": "cat2-0-clang_kleenex",
-      "cpu_time": 364,
-      "bin_size": 18
+      "bin_size": 2.5,
+      "name": "cat2-0-clang_re2c-buffered-eof",
+      "cpu_time": 12.71828946296299
     },
     {
-      "name": "cat2-0-clang_re2c-stadfa",
-      "cpu_time": 78,
-      "bin_size": 14
+      "bin_size": 2.0,
+      "name": "cat2-0-clang_re2c-buffered-scc",
+      "cpu_time": 22.05154243750007
     },
     {
-      "name": "cat2-0-clang_re2c-tdfa0",
-      "cpu_time": 94,
-      "bin_size": 14
+      "bin_size": 1.1,
+      "name": "cat2-0-clang_ragel-simple",
+      "cpu_time": 11.033115015872829
     },
     {
-      "name": "cat2-0-clang_re2c-tdfa1",
-      "cpu_time": 90,
-      "bin_size": 14
+      "bin_size": 2.2,
+      "name": "cat2-0-clang_ragel-buffered",
+      "cpu_time": 10.08520532352949
     },
     {
-      "name": "cat2-4-gcc_kleenex",
-      "cpu_time": 467,
-      "bin_size": 50
+      "bin_size": 1.2,
+      "name": "cat2-4-gcc_re2c-simple",
+      "cpu_time": 9.925684528571262
     },
     {
-      "name": "cat2-4-gcc_re2c-stadfa",
-      "cpu_time": 290,
-      "bin_size": 18
+      "bin_size": 6.7,
+      "name": "cat2-4-gcc_re2c-buffered-eof",
+      "cpu_time": 23.820459827586525
     },
     {
-      "name": "cat2-4-gcc_re2c-tdfa0",
-      "cpu_time": 194,
-      "bin_size": 14
+      "bin_size": 7.1,
+      "name": "cat2-4-gcc_re2c-buffered-scc",
+      "cpu_time": 10.547373523809572
     },
     {
-      "name": "cat2-4-gcc_re2c-tdfa1",
-      "cpu_time": 184,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "cat2-4-gcc_ragel-simple",
+      "cpu_time": 11.502575786885078
     },
     {
-      "name": "cat2-4-clang_kleenex",
-      "cpu_time": 466,
-      "bin_size": 78
+      "bin_size": 1.9,
+      "name": "cat2-4-gcc_ragel-buffered",
+      "cpu_time": 10.12958053731344
     },
     {
-      "name": "cat2-4-clang_re2c-stadfa",
-      "cpu_time": 338,
-      "bin_size": 18
+      "bin_size": 0.9,
+      "name": "cat2-4-clang_re2c-simple",
+      "cpu_time": 6.728948436893165
     },
     {
-      "name": "cat2-4-clang_re2c-tdfa0",
-      "cpu_time": 96,
-      "bin_size": 14
+      "bin_size": 3.1,
+      "name": "cat2-4-clang_re2c-buffered-eof",
+      "cpu_time": 24.797184035714434
     },
     {
-      "name": "cat2-4-clang_re2c-tdfa1",
-      "cpu_time": 110,
-      "bin_size": 14
+      "bin_size": 1.9,
+      "name": "cat2-4-clang_re2c-buffered-scc",
+      "cpu_time": 23.66252433333358
     },
     {
-      "name": "cat2-8-gcc_kleenex",
-      "cpu_time": 367,
-      "bin_size": 90
+      "bin_size": 1.4,
+      "name": "cat2-4-clang_ragel-simple",
+      "cpu_time": 8.355318916666679
     },
     {
-      "name": "cat2-8-gcc_re2c-stadfa",
-      "cpu_time": 240,
-      "bin_size": 18
+      "bin_size": 1.9,
+      "name": "cat2-4-clang_ragel-buffered",
+      "cpu_time": 7.029061833333294
     },
     {
-      "name": "cat2-8-gcc_re2c-tdfa0",
-      "cpu_time": 128,
-      "bin_size": 18
+      "bin_size": 1.8,
+      "name": "cat2-8-gcc_re2c-simple",
+      "cpu_time": 7.624137489130426
     },
     {
-      "name": "cat2-8-gcc_re2c-tdfa1",
-      "cpu_time": 132,
-      "bin_size": 18
+      "bin_size": 9.7,
+      "name": "cat2-8-gcc_re2c-buffered-eof",
+      "cpu_time": 21.028265666666442
     },
     {
-      "name": "cat2-8-clang_kleenex",
-      "cpu_time": 359,
-      "bin_size": 74
+      "bin_size": 6.2,
+      "name": "cat2-8-gcc_re2c-buffered-scc",
+      "cpu_time": 14.546372812499856
     },
     {
-      "name": "cat2-8-clang_re2c-stadfa",
-      "cpu_time": 467,
-      "bin_size": 22
+      "bin_size": 1.5,
+      "name": "cat2-8-gcc_ragel-simple",
+      "cpu_time": 9.274513186666695
     },
     {
-      "name": "cat2-8-clang_re2c-tdfa0",
-      "cpu_time": 126,
-      "bin_size": 18
+      "bin_size": 2.0,
+      "name": "cat2-8-gcc_ragel-buffered",
+      "cpu_time": 7.880832139534938
     },
     {
-      "name": "cat2-8-clang_re2c-tdfa1",
-      "cpu_time": 111,
-      "bin_size": 18
+      "bin_size": 1.1,
+      "name": "cat2-8-clang_re2c-simple",
+      "cpu_time": 7.365772768421146
     },
     {
-      "name": "cat4-0-gcc_ragel",
-      "cpu_time": 110,
-      "bin_size": 22
+      "bin_size": 3.5,
+      "name": "cat2-8-clang_re2c-buffered-eof",
+      "cpu_time": 20.043673264705784
     },
     {
-      "name": "cat4-0-gcc_kleenex",
-      "cpu_time": 382,
-      "bin_size": 22
+      "bin_size": 2.9,
+      "name": "cat2-8-clang_re2c-buffered-scc",
+      "cpu_time": 13.091847792452695
     },
     {
-      "name": "cat4-0-gcc_re2c-stadfa",
-      "cpu_time": 150,
-      "bin_size": 18
+      "bin_size": 1.7,
+      "name": "cat2-8-clang_ragel-simple",
+      "cpu_time": 8.495650158536531
     },
     {
-      "name": "cat4-0-gcc_re2c-tdfa0",
-      "cpu_time": 164,
-      "bin_size": 14
+      "bin_size": 2.2,
+      "name": "cat2-8-clang_ragel-buffered",
+      "cpu_time": 7.217534478723384
     },
     {
-      "name": "cat4-0-gcc_re2c-tdfa1",
-      "cpu_time": 161,
-      "bin_size": 14
+      "bin_size": 1.4,
+      "name": "cat4-0-gcc_re2c-simple",
+      "cpu_time": 12.49584024999985
     },
     {
-      "name": "cat4-0-clang_ragel",
-      "cpu_time": 134,
-      "bin_size": 22
+      "bin_size": 4.8,
+      "name": "cat4-0-gcc_re2c-buffered-eof",
+      "cpu_time": 11.165528688524482
     },
     {
-      "name": "cat4-0-clang_kleenex",
-      "cpu_time": 381,
-      "bin_size": 22
+      "bin_size": 4.1,
+      "name": "cat4-0-gcc_re2c-buffered-scc",
+      "cpu_time": 11.601522966666522
     },
     {
-      "name": "cat4-0-clang_re2c-stadfa",
-      "cpu_time": 142,
-      "bin_size": 18
+      "bin_size": 1.6,
+      "name": "cat4-0-gcc_ragel-simple",
+      "cpu_time": 12.272144175438514
     },
     {
-      "name": "cat4-0-clang_re2c-tdfa0",
-      "cpu_time": 170,
-      "bin_size": 18
+      "bin_size": 2.1,
+      "name": "cat4-0-gcc_ragel-buffered",
+      "cpu_time": 10.856064984126974
     },
     {
-      "name": "cat4-0-clang_re2c-tdfa1",
-      "cpu_time": 122,
-      "bin_size": 18
+      "bin_size": 0.9,
+      "name": "cat4-0-clang_re2c-simple",
+      "cpu_time": 10.415159626865712
     },
     {
-      "name": "cat4-2-gcc_kleenex",
-      "cpu_time": 764,
-      "bin_size": 54
+      "bin_size": 2.1,
+      "name": "cat4-0-clang_re2c-buffered-eof",
+      "cpu_time": 19.5715664000001
     },
     {
-      "name": "cat4-2-gcc_re2c-stadfa",
-      "cpu_time": 494,
-      "bin_size": 26
+      "bin_size": 1.7,
+      "name": "cat4-0-clang_re2c-buffered-scc",
+      "cpu_time": 12.763503981481435
     },
     {
-      "name": "cat4-2-gcc_re2c-tdfa0",
-      "cpu_time": 194,
-      "bin_size": 22
+      "bin_size": 1.7,
+      "name": "cat4-0-clang_ragel-simple",
+      "cpu_time": 11.944243169491568
     },
     {
-      "name": "cat4-2-gcc_re2c-tdfa1",
-      "cpu_time": 163,
-      "bin_size": 22
+      "bin_size": 2.2,
+      "name": "cat4-0-clang_ragel-buffered",
+      "cpu_time": 10.510968738461639
     },
     {
-      "name": "cat4-2-clang_kleenex",
-      "cpu_time": 712,
-      "bin_size": 106
+      "bin_size": 2.8,
+      "name": "cat4-2-gcc_re2c-simple",
+      "cpu_time": 11.263745887096698
     },
     {
-      "name": "cat4-2-clang_re2c-stadfa",
-      "cpu_time": 684,
-      "bin_size": 30
+      "bin_size": 13.3,
+      "name": "cat4-2-gcc_re2c-buffered-eof",
+      "cpu_time": 19.822950742857056
     },
     {
-      "name": "cat4-2-clang_re2c-tdfa0",
-      "cpu_time": 181,
-      "bin_size": 22
+      "bin_size": 10.4,
+      "name": "cat4-2-gcc_re2c-buffered-scc",
+      "cpu_time": 18.176402736841997
     },
     {
-      "name": "cat4-2-clang_re2c-tdfa1",
-      "cpu_time": 144,
-      "bin_size": 18
+      "bin_size": 2.2,
+      "name": "cat4-2-gcc_ragel-simple",
+      "cpu_time": 12.978645759259186
     },
     {
-      "name": "cat4-4-gcc_kleenex",
-      "cpu_time": 462,
-      "bin_size": 286
+      "bin_size": 2.7,
+      "name": "cat4-2-gcc_ragel-buffered",
+      "cpu_time": 11.648137305084752
     },
     {
-      "name": "cat4-4-gcc_re2c-stadfa",
-      "cpu_time": 333,
-      "bin_size": 38
+      "bin_size": 1.9,
+      "name": "cat4-2-clang_re2c-simple",
+      "cpu_time": 7.8953525730337
     },
     {
-      "name": "cat4-4-gcc_re2c-tdfa0",
-      "cpu_time": 146,
-      "bin_size": 26
+      "bin_size": 6.3,
+      "name": "cat4-2-clang_re2c-buffered-eof",
+      "cpu_time": 22.205058193548204
     },
     {
-      "name": "cat4-4-gcc_re2c-tdfa1",
-      "cpu_time": 150,
-      "bin_size": 26
+      "bin_size": 5.7,
+      "name": "cat4-2-clang_re2c-buffered-scc",
+      "cpu_time": 15.084654934782765
     },
     {
-      "name": "cat4-4-clang_kleenex",
-      "cpu_time": 481,
-      "bin_size": 290
+      "bin_size": 2.6,
+      "name": "cat4-2-clang_ragel-simple",
+      "cpu_time": 9.883396126760447
     },
     {
-      "name": "cat4-4-clang_re2c-stadfa",
-      "cpu_time": 551,
-      "bin_size": 42
+      "bin_size": 3.0,
+      "name": "cat4-2-clang_ragel-buffered",
+      "cpu_time": 8.637925936709026
     },
     {
-      "name": "cat4-4-clang_re2c-tdfa0",
-      "cpu_time": 137,
-      "bin_size": 26
+      "bin_size": 4.5,
+      "name": "cat4-4-gcc_re2c-simple",
+      "cpu_time": 10.016702057142927
     },
     {
-      "name": "cat4-4-clang_re2c-tdfa1",
-      "cpu_time": 115,
-      "bin_size": 22
+      "bin_size": 14.1,
+      "name": "cat4-4-gcc_re2c-buffered-eof",
+      "cpu_time": 20.570557735293914
     },
     {
-      "name": "cat8-0-gcc_ragel",
-      "cpu_time": 138,
-      "bin_size": 42
+      "bin_size": 11.3,
+      "name": "cat4-4-gcc_re2c-buffered-scc",
+      "cpu_time": 14.200405918367549
     },
     {
-      "name": "cat8-0-gcc_kleenex",
-      "cpu_time": 465,
-      "bin_size": 26
+      "bin_size": 3.6,
+      "name": "cat4-4-gcc_ragel-simple",
+      "cpu_time": 10.151427768116069
     },
     {
-      "name": "cat8-0-gcc_re2c-stadfa",
-      "cpu_time": 162,
-      "bin_size": 18
+      "bin_size": 4.0,
+      "name": "cat4-4-gcc_ragel-buffered",
+      "cpu_time": 8.727410602564152
     },
     {
-      "name": "cat8-0-gcc_re2c-tdfa0",
-      "cpu_time": 215,
-      "bin_size": 18
+      "bin_size": 2.5,
+      "name": "cat4-4-clang_re2c-simple",
+      "cpu_time": 8.121429616279114
     },
     {
-      "name": "cat8-0-gcc_re2c-tdfa1",
-      "cpu_time": 180,
-      "bin_size": 18
+      "bin_size": 11.1,
+      "name": "cat4-4-clang_re2c-buffered-eof",
+      "cpu_time": 16.359014119047508
     },
     {
-      "name": "cat8-0-clang_ragel",
-      "cpu_time": 335,
-      "bin_size": 46
+      "bin_size": 8.7,
+      "name": "cat4-4-clang_re2c-buffered-scc",
+      "cpu_time": 10.406770104477818
     },
     {
-      "name": "cat8-0-clang_kleenex",
-      "cpu_time": 427,
-      "bin_size": 30
+      "bin_size": 3.5,
+      "name": "cat4-4-clang_ragel-simple",
+      "cpu_time": 9.524003702702851
     },
     {
-      "name": "cat8-0-clang_re2c-stadfa",
-      "cpu_time": 148,
-      "bin_size": 22
+      "bin_size": 4.0,
+      "name": "cat4-4-clang_ragel-buffered",
+      "cpu_time": 8.318440691358076
     },
     {
-      "name": "cat8-0-clang_re2c-tdfa0",
-      "cpu_time": 286,
-      "bin_size": 22
+      "bin_size": 2.8,
+      "name": "cat8-0-gcc_re2c-simple",
+      "cpu_time": 12.103739155172377
     },
     {
-      "name": "cat8-0-clang_re2c-tdfa1",
-      "cpu_time": 162,
-      "bin_size": 22
+      "bin_size": 9.2,
+      "name": "cat8-0-gcc_re2c-buffered-eof",
+      "cpu_time": 13.636974940000073
     },
     {
-      "name": "cat8-1-gcc_ragel",
-      "cpu_time": 121,
-      "bin_size": 22
+      "bin_size": 7.6,
+      "name": "cat8-0-gcc_re2c-buffered-scc",
+      "cpu_time": 16.320977953488487
     },
     {
-      "name": "cat8-1-gcc_kleenex",
-      "cpu_time": 2794,
-      "bin_size": 66
+      "bin_size": 3.1,
+      "name": "cat8-0-gcc_ragel-simple",
+      "cpu_time": 12.934238370370373
     },
     {
-      "name": "cat8-1-gcc_re2c-stadfa",
-      "cpu_time": 1328,
-      "bin_size": 82
+      "bin_size": 3.6,
+      "name": "cat8-0-gcc_ragel-buffered",
+      "cpu_time": 11.600507711864386
     },
     {
-      "name": "cat8-1-gcc_re2c-tdfa0",
-      "cpu_time": 385,
-      "bin_size": 154
+      "bin_size": 1.2,
+      "name": "cat8-0-clang_re2c-simple",
+      "cpu_time": 9.472844959459485
     },
     {
-      "name": "cat8-1-gcc_re2c-tdfa1",
-      "cpu_time": 282,
-      "bin_size": 122
+      "bin_size": 2.8,
+      "name": "cat8-0-clang_re2c-buffered-eof",
+      "cpu_time": 21.83955778125002
     },
     {
-      "name": "cat8-1-clang_ragel",
-      "cpu_time": 137,
-      "bin_size": 22
+      "bin_size": 2.6,
+      "name": "cat8-0-clang_re2c-buffered-scc",
+      "cpu_time": 13.583248627451011
     },
     {
-      "name": "cat8-1-clang_kleenex",
-      "cpu_time": 2158,
-      "bin_size": 170
+      "bin_size": 3.3,
+      "name": "cat8-0-clang_ragel-simple",
+      "cpu_time": 15.600265533333236
     },
     {
-      "name": "cat8-1-clang_re2c-stadfa",
-      "cpu_time": 2073,
-      "bin_size": 98
+      "bin_size": 3.8,
+      "name": "cat8-0-clang_ragel-buffered",
+      "cpu_time": 14.424848125000148
     },
     {
-      "name": "cat8-1-clang_re2c-tdfa0",
-      "cpu_time": 432,
-      "bin_size": 170
+      "bin_size": 29.4,
+      "name": "cat8-1-gcc_re2c-simple",
+      "cpu_time": 11.879562084745778
     },
     {
-      "name": "cat8-1-clang_re2c-tdfa1",
-      "cpu_time": 304,
-      "bin_size": 118
+      "bin_size": 99.9,
+      "name": "cat8-1-gcc_re2c-buffered-eof",
+      "cpu_time": 36.17771315789454
     },
     {
-      "name": "cat8-2-gcc_kleenex",
-      "cpu_time": 1285,
-      "bin_size": 170
+      "bin_size": 90.1,
+      "name": "cat8-1-gcc_re2c-buffered-scc",
+      "cpu_time": 33.732832190476564
     },
     {
-      "name": "cat8-2-gcc_re2c-stadfa",
-      "cpu_time": 1681,
-      "bin_size": 154
+      "bin_size": 4.9,
+      "name": "cat8-1-gcc_ragel-simple",
+      "cpu_time": 12.297620122807192
     },
     {
-      "name": "cat8-2-gcc_re2c-tdfa0",
-      "cpu_time": 265,
-      "bin_size": 230
+      "bin_size": 5.4,
+      "name": "cat8-1-gcc_ragel-buffered",
+      "cpu_time": 10.932528412698478
     },
     {
-      "name": "cat8-2-gcc_re2c-tdfa1",
-      "cpu_time": 227,
-      "bin_size": 194
+      "bin_size": 12.2,
+      "name": "cat8-1-clang_re2c-simple",
+      "cpu_time": 9.068614090908936
     },
     {
-      "name": "cat8-2-clang_kleenex",
-      "cpu_time": 1155,
-      "bin_size": 442
+      "bin_size": 80.9,
+      "name": "cat8-1-clang_re2c-buffered-eof",
+      "cpu_time": 36.13162473684228
     },
     {
-      "name": "cat8-2-clang_re2c-stadfa",
-      "cpu_time": 2091,
-      "bin_size": 158
+      "bin_size": 75.0,
+      "name": "cat8-1-clang_re2c-buffered-scc",
+      "cpu_time": 31.89868318181833
     },
     {
-      "name": "cat8-2-clang_re2c-tdfa0",
-      "cpu_time": 311,
-      "bin_size": 254
+      "bin_size": 6.0,
+      "name": "cat8-1-clang_ragel-simple",
+      "cpu_time": 10.95204260937499
     },
     {
-      "name": "cat8-2-clang_re2c-tdfa1",
-      "cpu_time": 247,
-      "bin_size": 202
+      "bin_size": 6.5,
+      "name": "cat8-1-clang_ragel-buffered",
+      "cpu_time": 9.930285942857202
     },
     {
-      "name": "rep-cat-5-3-2-gcc_ragel",
-      "cpu_time": 148,
-      "bin_size": 14
+      "bin_size": 52.2,
+      "name": "cat8-2-gcc_re2c-simple",
+      "cpu_time": 13.353418519230878
     },
     {
-      "name": "rep-cat-5-3-2-gcc_kleenex",
-      "cpu_time": 291,
-      "bin_size": 18
+      "bin_size": 186.4,
+      "name": "cat8-2-gcc_re2c-buffered-eof",
+      "cpu_time": 28.347643320000202
     },
     {
-      "name": "rep-cat-5-3-2-gcc_re2c-stadfa",
-      "cpu_time": 273,
-      "bin_size": 14
+      "bin_size": 158.2,
+      "name": "cat8-2-gcc_re2c-buffered-scc",
+      "cpu_time": 26.817497961538642
     },
     {
-      "name": "rep-cat-5-3-2-gcc_re2c-tdfa0",
-      "cpu_time": 273,
-      "bin_size": 14
+      "bin_size": 7.5,
+      "name": "cat8-2-gcc_ragel-simple",
+      "cpu_time": 12.335455736842063
     },
     {
-      "name": "rep-cat-5-3-2-gcc_re2c-tdfa1",
-      "cpu_time": 277,
-      "bin_size": 14
+      "bin_size": 8.0,
+      "name": "cat8-2-gcc_ragel-buffered",
+      "cpu_time": 11.040571951612963
     },
     {
-      "name": "rep-cat-5-3-2-clang_ragel",
-      "cpu_time": 141,
-      "bin_size": 14
+      "bin_size": 21.1,
+      "name": "cat8-2-clang_re2c-simple",
+      "cpu_time": 8.423730567901229
     },
     {
-      "name": "rep-cat-5-3-2-clang_kleenex",
-      "cpu_time": 336,
-      "bin_size": 18
+      "bin_size": 193.4,
+      "name": "cat8-2-clang_re2c-buffered-eof",
+      "cpu_time": 32.252951863636206
     },
     {
-      "name": "rep-cat-5-3-2-clang_re2c-stadfa",
-      "cpu_time": 212,
-      "bin_size": 14
+      "bin_size": 143.3,
+      "name": "cat8-2-clang_re2c-buffered-scc",
+      "cpu_time": 23.027916366667018
     },
     {
-      "name": "rep-cat-5-3-2-clang_re2c-tdfa0",
-      "cpu_time": 209,
-      "bin_size": 14
+      "bin_size": 7.4,
+      "name": "cat8-2-clang_ragel-simple",
+      "cpu_time": 11.017317281249994
     },
     {
-      "name": "rep-cat-5-3-2-clang_re2c-tdfa1",
-      "cpu_time": 203,
-      "bin_size": 14
+      "bin_size": 7.9,
+      "name": "cat8-2-clang_ragel-buffered",
+      "cpu_time": 10.072106235294054
     },
     {
-      "name": "rep-cat-13-11-7-gcc_ragel",
-      "cpu_time": 105,
-      "bin_size": 14
+      "bin_size": 1.3,
+      "name": "rep-cat-5-3-2-gcc_re2c-simple",
+      "cpu_time": 13.301571942307898
     },
     {
-      "name": "rep-cat-13-11-7-gcc_kleenex",
-      "cpu_time": 284,
-      "bin_size": 18
+      "bin_size": 3.3,
+      "name": "rep-cat-5-3-2-gcc_re2c-buffered-eof",
+      "cpu_time": 18.38287671052616
     },
     {
-      "name": "rep-cat-13-11-7-gcc_re2c-stadfa",
-      "cpu_time": 174,
-      "bin_size": 18
+      "bin_size": 3.3,
+      "name": "rep-cat-5-3-2-gcc_re2c-buffered-scc",
+      "cpu_time": 18.192254210526254
     },
     {
-      "name": "rep-cat-13-11-7-gcc_re2c-tdfa0",
-      "cpu_time": 176,
-      "bin_size": 18
+      "bin_size": 1.0,
+      "name": "rep-cat-5-3-2-clang_re2c-simple",
+      "cpu_time": 14.575662604166576
     },
     {
-      "name": "rep-cat-13-11-7-gcc_re2c-tdfa1",
-      "cpu_time": 178,
-      "bin_size": 18
+      "bin_size": 2.8,
+      "name": "rep-cat-5-3-2-clang_re2c-buffered-eof",
+      "cpu_time": 20.9655125757577
     },
     {
-      "name": "rep-cat-13-11-7-clang_ragel",
-      "cpu_time": 109,
-      "bin_size": 14
+      "bin_size": 2.6,
+      "name": "rep-cat-5-3-2-clang_re2c-buffered-scc",
+      "cpu_time": 29.54966841666658
     },
     {
-      "name": "rep-cat-13-11-7-clang_kleenex",
-      "cpu_time": 282,
-      "bin_size": 18
+      "bin_size": 1.4,
+      "name": "rep-cat-13-11-7-gcc_re2c-simple",
+      "cpu_time": 7.4976209148936634
     },
     {
-      "name": "rep-cat-13-11-7-clang_re2c-stadfa",
-      "cpu_time": 92,
-      "bin_size": 18
+      "bin_size": 4.1,
+      "name": "rep-cat-13-11-7-gcc_re2c-buffered-eof",
+      "cpu_time": 20.45027923529412
     },
     {
-      "name": "rep-cat-13-11-7-clang_re2c-tdfa0",
-      "cpu_time": 94,
-      "bin_size": 18
+      "bin_size": 7.3,
+      "name": "rep-cat-13-11-7-gcc_re2c-buffered-scc",
+      "cpu_time": 10.448757661764779
     },
     {
-      "name": "rep-cat-13-11-7-clang_re2c-tdfa1",
-      "cpu_time": 94,
-      "bin_size": 18
+      "bin_size": 1.3,
+      "name": "rep-cat-13-11-7-clang_re2c-simple",
+      "cpu_time": 7.660601274725291
     },
     {
-      "name": "rep-cat-23-19-17-gcc_ragel",
-      "cpu_time": 95,
-      "bin_size": 18
+      "bin_size": 3.6,
+      "name": "rep-cat-13-11-7-clang_re2c-buffered-eof",
+      "cpu_time": 20.137174705882565
     },
     {
-      "name": "rep-cat-23-19-17-gcc_kleenex",
-      "cpu_time": 284,
-      "bin_size": 18
+      "bin_size": 5.7,
+      "name": "rep-cat-13-11-7-clang_re2c-buffered-scc",
+      "cpu_time": 24.97352682142814
     },
     {
-      "name": "rep-cat-23-19-17-gcc_re2c-stadfa",
-      "cpu_time": 157,
-      "bin_size": 18
+      "bin_size": 1.5,
+      "name": "rep-cat-23-19-17-gcc_re2c-simple",
+      "cpu_time": 6.258189294642946
     },
     {
-      "name": "rep-cat-23-19-17-gcc_re2c-tdfa0",
-      "cpu_time": 157,
-      "bin_size": 18
+      "bin_size": 5.2,
+      "name": "rep-cat-23-19-17-gcc_re2c-buffered-eof",
+      "cpu_time": 22.209489741935467
     },
     {
-      "name": "rep-cat-23-19-17-gcc_re2c-tdfa1",
-      "cpu_time": 159,
-      "bin_size": 18
+      "bin_size": 10.9,
+      "name": "rep-cat-23-19-17-gcc_re2c-buffered-scc",
+      "cpu_time": 8.476916108433892
     },
     {
-      "name": "rep-cat-23-19-17-clang_ragel",
-      "cpu_time": 101,
-      "bin_size": 14
+      "bin_size": 1.6,
+      "name": "rep-cat-23-19-17-clang_re2c-simple",
+      "cpu_time": 6.27599344642858
     },
     {
-      "name": "rep-cat-23-19-17-clang_kleenex",
-      "cpu_time": 269,
-      "bin_size": 18
+      "bin_size": 4.7,
+      "name": "rep-cat-23-19-17-clang_re2c-buffered-eof",
+      "cpu_time": 21.751357156249984
     },
     {
-      "name": "rep-cat-23-19-17-clang_re2c-stadfa",
-      "cpu_time": 168,
-      "bin_size": 22
+      "bin_size": 10.3,
+      "name": "rep-cat-23-19-17-clang_re2c-buffered-scc",
+      "cpu_time": 23.876572137931202
     },
     {
-      "name": "rep-cat-23-19-17-clang_re2c-tdfa0",
-      "cpu_time": 75,
-      "bin_size": 22
+      "bin_size": 1.2,
+      "name": "rep-alt-5-3-2-gcc_re2c-simple",
+      "cpu_time": 21.40452681818169
     },
     {
-      "name": "rep-cat-23-19-17-clang_re2c-tdfa1",
-      "cpu_time": 75,
-      "bin_size": 22
+      "bin_size": 2.4,
+      "name": "rep-alt-5-3-2-gcc_re2c-buffered-eof",
+      "cpu_time": 30.787361782608475
     },
     {
-      "name": "rep-alt-5-3-2-gcc_kleenex",
-      "cpu_time": 334,
-      "bin_size": 30
+      "bin_size": 2.2,
+      "name": "rep-alt-5-3-2-gcc_re2c-buffered-scc",
+      "cpu_time": 30.606942956521635
     },
     {
-      "name": "rep-alt-5-3-2-gcc_re2c-stadfa",
-      "cpu_time": 463,
-      "bin_size": 14
+      "bin_size": 1.0,
+      "name": "rep-alt-5-3-2-gcc_ragel-simple",
+      "cpu_time": 8.063008965517179
     },
     {
-      "name": "rep-alt-5-3-2-gcc_re2c-tdfa0",
-      "cpu_time": 392,
-      "bin_size": 14
+      "bin_size": 1.5,
+      "name": "rep-alt-5-3-2-gcc_ragel-buffered",
+      "cpu_time": 13.374217903846057
     },
     {
-      "name": "rep-alt-5-3-2-gcc_re2c-tdfa1",
-      "cpu_time": 292,
-      "bin_size": 14
+      "bin_size": 1.1,
+      "name": "rep-alt-5-3-2-clang_re2c-simple",
+      "cpu_time": 26.515872423076942
     },
     {
-      "name": "rep-alt-5-3-2-clang_kleenex",
-      "cpu_time": 375,
-      "bin_size": 50
+      "bin_size": 2.1,
+      "name": "rep-alt-5-3-2-clang_re2c-buffered-eof",
+      "cpu_time": 36.62019631578959
     },
     {
-      "name": "rep-alt-5-3-2-clang_re2c-stadfa",
-      "cpu_time": 309,
-      "bin_size": 14
+      "bin_size": 1.9,
+      "name": "rep-alt-5-3-2-clang_re2c-buffered-scc",
+      "cpu_time": 36.685388631579336
     },
     {
-      "name": "rep-alt-5-3-2-clang_re2c-tdfa0",
-      "cpu_time": 364,
-      "bin_size": 14
+      "bin_size": 1.1,
+      "name": "rep-alt-5-3-2-clang_ragel-simple",
+      "cpu_time": 8.333408166666718
     },
     {
-      "name": "rep-alt-5-3-2-clang_re2c-tdfa1",
-      "cpu_time": 261,
-      "bin_size": 14
+      "bin_size": 2.0,
+      "name": "rep-alt-5-3-2-clang_ragel-buffered",
+      "cpu_time": 14.374358124999986
     },
     {
-      "name": "rep-alt-13-11-7-gcc_re2c-stadfa",
-      "cpu_time": 661,
-      "bin_size": 22
+      "bin_size": 4.9,
+      "name": "rep-alt-13-11-7-gcc_re2c-simple",
+      "cpu_time": 21.83775450000036
     },
     {
-      "name": "rep-alt-13-11-7-gcc_re2c-tdfa0",
-      "cpu_time": 354,
-      "bin_size": 18
+      "bin_size": 7.1,
+      "name": "rep-alt-13-11-7-gcc_re2c-buffered-eof",
+      "cpu_time": 32.452308952381074
     },
     {
-      "name": "rep-alt-13-11-7-gcc_re2c-tdfa1",
-      "cpu_time": 294,
-      "bin_size": 22
+      "bin_size": 5.9,
+      "name": "rep-alt-13-11-7-gcc_re2c-buffered-scc",
+      "cpu_time": 32.9186893809526
     },
     {
-      "name": "rep-alt-13-11-7-clang_re2c-stadfa",
-      "cpu_time": 550,
-      "bin_size": 18
+      "bin_size": 1.8,
+      "name": "rep-alt-13-11-7-gcc_ragel-simple",
+      "cpu_time": 15.011008108696073
     },
     {
-      "name": "rep-alt-13-11-7-clang_re2c-tdfa0",
-      "cpu_time": 363,
-      "bin_size": 18
+      "bin_size": 2.3,
+      "name": "rep-alt-13-11-7-gcc_ragel-buffered",
+      "cpu_time": 20.583415970588202
     },
     {
-      "name": "rep-alt-13-11-7-clang_re2c-tdfa1",
-      "cpu_time": 300,
-      "bin_size": 18
+      "bin_size": 4.9,
+      "name": "rep-alt-13-11-7-clang_re2c-simple",
+      "cpu_time": 24.078148275862077
     },
     {
-      "name": "rep-alt-23-19-17-gcc_re2c-stadfa",
-      "cpu_time": 745,
-      "bin_size": 42
+      "bin_size": 5.7,
+      "name": "rep-alt-13-11-7-clang_re2c-buffered-eof",
+      "cpu_time": 40.71934288235301
     },
     {
-      "name": "rep-alt-23-19-17-gcc_re2c-tdfa0",
-      "cpu_time": 313,
-      "bin_size": 30
+      "bin_size": 3.8,
+      "name": "rep-alt-13-11-7-clang_re2c-buffered-scc",
+      "cpu_time": 39.863270166665956
     },
     {
-      "name": "rep-alt-23-19-17-gcc_re2c-tdfa1",
-      "cpu_time": 268,
-      "bin_size": 30
+      "bin_size": 1.8,
+      "name": "rep-alt-13-11-7-clang_ragel-simple",
+      "cpu_time": 15.844549340909255
     },
     {
-      "name": "rep-alt-23-19-17-clang_re2c-stadfa",
-      "cpu_time": 852,
-      "bin_size": 42
+      "bin_size": 2.3,
+      "name": "rep-alt-13-11-7-clang_ragel-buffered",
+      "cpu_time": 21.229329000000302
     },
     {
-      "name": "rep-alt-23-19-17-clang_re2c-tdfa0",
-      "cpu_time": 308,
-      "bin_size": 26
+      "bin_size": 13.8,
+      "name": "rep-alt-23-19-17-gcc_re2c-simple",
+      "cpu_time": 25.863439814814782
     },
     {
-      "name": "rep-alt-23-19-17-clang_re2c-tdfa1",
-      "cpu_time": 333,
-      "bin_size": 22
+      "bin_size": 17.0,
+      "name": "rep-alt-23-19-17-gcc_re2c-buffered-eof",
+      "cpu_time": 34.87385889999928
     },
     {
-      "name": "rep-5-rep-3-rep-2-gcc_kleenex",
-      "cpu_time": 270,
-      "bin_size": 42
+      "bin_size": 15.7,
+      "name": "rep-alt-23-19-17-gcc_re2c-buffered-scc",
+      "cpu_time": 35.32944960000037
     },
     {
-      "name": "rep-5-rep-3-rep-2-gcc_re2c-stadfa",
-      "cpu_time": 810,
-      "bin_size": 18
+      "bin_size": 6.4,
+      "name": "rep-alt-23-19-17-gcc_ragel-simple",
+      "cpu_time": 14.969910297871989
     },
     {
-      "name": "rep-5-rep-3-rep-2-gcc_re2c-tdfa0",
-      "cpu_time": 615,
-      "bin_size": 18
+      "bin_size": 6.9,
+      "name": "rep-alt-23-19-17-gcc_ragel-buffered",
+      "cpu_time": 21.137300242424377
     },
     {
-      "name": "rep-5-rep-3-rep-2-gcc_re2c-tdfa1",
-      "cpu_time": 354,
-      "bin_size": 18
+      "bin_size": 12.6,
+      "name": "rep-alt-23-19-17-clang_re2c-simple",
+      "cpu_time": 27.587551399999484
     },
     {
-      "name": "rep-5-rep-3-rep-2-clang_kleenex",
-      "cpu_time": 316,
-      "bin_size": 54
+      "bin_size": 12.8,
+      "name": "rep-alt-23-19-17-clang_re2c-buffered-eof",
+      "cpu_time": 43.51817500000088
     },
     {
-      "name": "rep-5-rep-3-rep-2-clang_re2c-stadfa",
-      "cpu_time": 342,
-      "bin_size": 14
+      "bin_size": 7.8,
+      "name": "rep-alt-23-19-17-clang_re2c-buffered-scc",
+      "cpu_time": 39.81449500000009
     },
     {
-      "name": "rep-5-rep-3-rep-2-clang_re2c-tdfa0",
-      "cpu_time": 548,
-      "bin_size": 14
+      "bin_size": 4.3,
+      "name": "rep-alt-23-19-17-clang_ragel-simple",
+      "cpu_time": 14.829100702127228
     },
     {
-      "name": "rep-5-rep-3-rep-2-clang_re2c-tdfa1",
-      "cpu_time": 327,
-      "bin_size": 14
+      "bin_size": 4.8,
+      "name": "rep-alt-23-19-17-clang_ragel-buffered",
+      "cpu_time": 20.96809993939401
     },
     {
-      "name": "rep-13-rep-11-rep-7-gcc_re2c-stadfa",
-      "cpu_time": 1171,
-      "bin_size": 58
+      "bin_size": 2.4,
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-simple",
+      "cpu_time": 27.597702520000666
     },
     {
-      "name": "rep-13-rep-11-rep-7-gcc_re2c-tdfa0",
-      "cpu_time": 416,
-      "bin_size": 34
+      "bin_size": 5.0,
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-buffered-eof",
+      "cpu_time": 39.91712394117746
     },
     {
-      "name": "rep-13-rep-11-rep-7-gcc_re2c-tdfa1",
-      "cpu_time": 313,
-      "bin_size": 38
+      "bin_size": 3.6,
+      "name": "rep-5-rep-3-rep-2-gcc_re2c-buffered-scc",
+      "cpu_time": 39.96553858823571
     },
     {
-      "name": "rep-13-rep-11-rep-7-clang_re2c-stadfa",
-      "cpu_time": 1161,
-      "bin_size": 70
+      "bin_size": 0.9,
+      "name": "rep-5-rep-3-rep-2-gcc_ragel-simple",
+      "cpu_time": 7.652843406593287
     },
     {
-      "name": "rep-13-rep-11-rep-7-clang_re2c-tdfa0",
-      "cpu_time": 533,
-      "bin_size": 26
+      "bin_size": 1.4,
+      "name": "rep-5-rep-3-rep-2-gcc_ragel-buffered",
+      "cpu_time": 12.695349800000342
     },
     {
-      "name": "rep-13-rep-11-rep-7-clang_re2c-tdfa1",
-      "cpu_time": 386,
-      "bin_size": 26
+      "bin_size": 2.6,
+      "name": "rep-5-rep-3-rep-2-clang_re2c-simple",
+      "cpu_time": 34.387255750000634
     },
     {
-      "name": "rep-23-rep-19-rep-17-gcc_re2c-stadfa",
-      "cpu_time": 1546,
-      "bin_size": 286
+      "bin_size": 4.0,
+      "name": "rep-5-rep-3-rep-2-clang_re2c-buffered-eof",
+      "cpu_time": 51.81552476923037
     },
     {
-      "name": "rep-23-rep-19-rep-17-gcc_re2c-tdfa0",
-      "cpu_time": 388,
-      "bin_size": 78
+      "bin_size": 2.9,
+      "name": "rep-5-rep-3-rep-2-clang_re2c-buffered-scc",
+      "cpu_time": 50.99214742857124
     },
     {
-      "name": "rep-23-rep-19-rep-17-gcc_re2c-tdfa1",
-      "cpu_time": 317,
-      "bin_size": 90
+      "bin_size": 1.0,
+      "name": "rep-5-rep-3-rep-2-clang_ragel-simple",
+      "cpu_time": 8.416039710843359
     },
     {
-      "name": "rep-23-rep-19-rep-17-clang_re2c-stadfa",
-      "cpu_time": 1984,
-      "bin_size": 334
+      "bin_size": 1.9,
+      "name": "rep-5-rep-3-rep-2-clang_ragel-buffered",
+      "cpu_time": 14.457068458333092
     },
     {
-      "name": "rep-23-rep-19-rep-17-clang_re2c-tdfa0",
-      "cpu_time": 458,
-      "bin_size": 42
+      "bin_size": 16.5,
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-simple",
+      "cpu_time": 27.819485679999616
     },
     {
-      "name": "rep-23-rep-19-rep-17-clang_re2c-tdfa1",
-      "cpu_time": 378,
-      "bin_size": 42
+      "bin_size": 21.0,
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-buffered-eof",
+      "cpu_time": 39.05385416666718
+    },
+    {
+      "bin_size": 24.5,
+      "name": "rep-13-rep-11-rep-7-gcc_re2c-buffered-scc",
+      "cpu_time": 38.96197822222152
+    },
+    {
+      "bin_size": 9.0,
+      "name": "rep-13-rep-11-rep-7-gcc_ragel-simple",
+      "cpu_time": 9.711704041666597
+    },
+    {
+      "bin_size": 9.5,
+      "name": "rep-13-rep-11-rep-7-gcc_ragel-buffered",
+      "cpu_time": 15.162548326086801
+    },
+    {
+      "bin_size": 17.9,
+      "name": "rep-13-rep-11-rep-7-clang_re2c-simple",
+      "cpu_time": 30.724330608696054
+    },
+    {
+      "bin_size": 15.3,
+      "name": "rep-13-rep-11-rep-7-clang_re2c-buffered-eof",
+      "cpu_time": 49.89552535714178
+    },
+    {
+      "bin_size": 12.1,
+      "name": "rep-13-rep-11-rep-7-clang_re2c-buffered-scc",
+      "cpu_time": 46.10653519999914
+    },
+    {
+      "bin_size": 7.4,
+      "name": "rep-13-rep-11-rep-7-clang_ragel-simple",
+      "cpu_time": 7.822314277777625
+    },
+    {
+      "bin_size": 7.9,
+      "name": "rep-13-rep-11-rep-7-clang_ragel-buffered",
+      "cpu_time": 13.911878840000327
+    },
+    {
+      "bin_size": 55.4,
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-simple",
+      "cpu_time": 31.4208996818182
+    },
+    {
+      "bin_size": 78.5,
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-buffered-eof",
+      "cpu_time": 41.392342058824234
+    },
+    {
+      "bin_size": 75.8,
+      "name": "rep-23-rep-19-rep-17-gcc_re2c-buffered-scc",
+      "cpu_time": 41.14601629411856
+    },
+    {
+      "bin_size": 56.7,
+      "name": "rep-23-rep-19-rep-17-clang_re2c-simple",
+      "cpu_time": 32.69823728571385
+    },
+    {
+      "bin_size": 38.1,
+      "name": "rep-23-rep-19-rep-17-clang_re2c-buffered-eof",
+      "cpu_time": 50.361870499999995
+    },
+    {
+      "bin_size": 29.8,
+      "name": "rep-23-rep-19-rep-17-clang_re2c-buffered-scc",
+      "cpu_time": 46.588693400000615
     }
   ]
 }

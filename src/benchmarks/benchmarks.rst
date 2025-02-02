@@ -16,7 +16,7 @@ Submatch extraction in lexer generators:
 .. code-block:: bash
 
     $ cd ${BUILD_DIR}/benchmarks/c
-    $ ./run.py --repetitions ${REP_COUNT} --output=results.json
+    $ ./run.py --output=results.json
 
 Submatch extraction in library algorithms based on deterministic automata:
 
@@ -53,10 +53,8 @@ These benchmarks contain regular expressions with submatch markers that are
 compiled to C code by a lexer generator, and further compiled to native code by
 a C compiler (GCC and Clang). Compilation happens ahead of time, so it is not
 included in the run time. The currently supported generators are
-`ragel <https://www.colm.net/open-source/ragel>`_,
-`kleenex <https://kleenexlang.org>`_
-and re2c TDFA(0), TDFA(1) and sta-DFA algorithms (no flex, as it does not
-support submatch extraction).
+`ragel <https://www.colm.net/open-source/ragel>`_
+and re2c (no flex, as it does not support submatch extraction).
 Regular expressions used in the benchmarks can be divided in two categories:
 
 - real-world regular expressions (parsers for HTTP message headers, URI, email
@@ -66,16 +64,21 @@ Regular expressions used in the benchmarks can be divided in two categories:
   alternative, concatenation or repetition) in series of increasing complexity
   and ambiguity
 
-The generated programs do string rewriting. They read text from stdin and write
-it to stdout with some characters inserted at the points of submatch extraction
-(this is to make sure that the generated program is correct). String rewriting
-is a form dictated by kleenex, as it is suited to this task and cannot generate
-free-form programs as ragel and re2c do. Both ragel and re2c programs are
-written with performance in mind and use buffered input. As for kleenex, there
-is no control over what it generates (user input consists of regular expressions
-only), but presumably it also optimizes the generated code.
+The generated programs find submatch boundaries and count the total length of
+all submatch fragments (using submatch results is necessary to prevent
+the compiler from optimizing out submatch extraction logic). For each engine
+there are simple and buffered variants. In the simple case the whole input is
+represented as one continuous block of memory, while in the buffered case the
+input is copied into a buffer of smaller size chunk by chunk, so the lexers need
+additional logic for buffer refills. For re2c there are two buffered variants
+that differ in the way they
+`handle the end of input <https://re2c.org/manual/manual_c.html#handling-the-end-of-input>`_:
+``buffered-eof`` uses
+`sentinel with bounds checks <https://re2c.org/manual/manual_c.html#sentinel-with-bounds-checks>`_
+method, while ``buffered-scc`` uses
+`bounds checks with padding <https://re2c.org/manual/manual_c.html#bounds-checks-with-padding>`_.
 
-Ragel programs are fast, but not always correct. This is because ragel cannot
+Ragel programs are not always correct. This is because ragel cannot
 handle non-determinism in the general case. It is a fundamental limitation which
 cannot be solved with disambiguation operators, except for simple cases. Ragel
 has no notion of *tags* and *tag variables*, and its submatch extraction is
@@ -88,29 +91,23 @@ can conflict with itself) and change the program state in unforeseen ways (e.g.
 overwrite variables set by another action). Disambiguation operators can remove
 some of the conflicting actions, but they cannot fork the program state.
 
-Kleenex generates very large automata in some benchmarks, which cannot be
-compiled in reasonable time. On the whole, kleenex programs have some constant
-overhead compared to other programs. It can be explained by a different
-underlying automaton type (DSST), which is better suited to full parsing than
-submatch extraction.
-
-Of the algorithms in re2c, TDFA(1) is the fastest and the most robust one.
-In unambiguous cases its performance is similar to ragel, sometimes slightly
-better or worse (it varies more with the C compiler than with the benchmark).
-The generated binary size is also close. In highly ambiguous cases TDFA(1) is
-slower than ragel, which happens because TDFA(1) handles non-determinism by
-keeping track of multiple possible tag values, while ragel doesn't handle it in
-any special way.
-TDFA(0) is generally less efficient than TDFA(1), see the paper `Tagged
-Deterministic Finite Automata with Lookahead
+re2c uses TDFA(1) algorithm (see the paper
+`Tagged Deterministic Finite Automata with Lookahead
 </2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
-for a detailed comparison.
-Sta-DFA performs well on small benchmarks, but it degrades quickly on large or
-ambiguous regular expressions, both in speed and in the automaton size.
+for details and benchmarks against other submatch extraction algorithms).
+In real-world cases the overhead on submatch extraction is very small, and re2c
+is usually a bit faster than ragel (performance and binary size depends a lot on
+the C++ compiler being used).
+In highly ambiguous artificial cases there is considerable overhead on tracking
+multiple versions of non-deterministic tags (which is necessary for correctness),
+and re2c is slower than ragel.
 
 .. include:: c/env.rst
 
-Time is measured in ms (on 100MB of text), binary size is measured in KB (binaries are stripped).
+Time is measured in ms.
+Input size is 16MB.
+Binary size is measured in KB (it is calculated as a sum of binary sizes of all
+functions relevant for a particular benchmark, as shown by ``nm`` utility).
 
 .. figure:: c/results_1.svg
     :class: benchmark
