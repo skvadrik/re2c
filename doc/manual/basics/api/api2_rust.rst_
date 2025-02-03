@@ -1,0 +1,65 @@
+
+re2rust has three API flavors that define the core set of primitives used by a
+program:
+
+**Simple API**
+    (*added in version 4.0*)
+    This is a basic API that can be enabled with ``--api simple`` option or
+    ``re2c:api = simple`` configuration. It consists of the following
+    primitives: ``YYINPUT`` (which should be defined as a sequence of code
+    units, e.g. a string) and ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``,
+    ``YYLIMIT`` (which should be defined as indices in ``YYINPUT``).
+
+    |
+
+**Record API**
+    (*added in version 4.0*)
+    Record API is useful in cases when lexer state must be stored in a struct.
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
+    name can be overridden with ``re2c:yyrecord``) that should be defined as a
+    struct with fields ``yyinput``, ``yycursor``, ``yymarker``, ``yyctxmarker``,
+    ``yylimit`` (only the fields used by the generated code need to be defined,
+    and their names can be configured).
+
+    |
+
+**Generic API**
+    This is the most flexible API and the default API for the Rust backend.
+    This API contains primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.
+    For example, if the input is a byte slice ``buffer: &[u8]``, variables
+    ``cursor``, ``limit``, ``marker`` and ``ctxmarker`` of type ``usize``
+    represent input positions, and a constant ``NONE`` represents invalid
+    position, then generic API can be defined as follows:
+
+    .. code-block:: rust
+
+        /*!re2c
+          re2c:YYPEEK       = "*buffer.get_unchecked(cursor)";
+          re2c:YYSKIP       = "cursor += 1;";
+          re2c:YYBACKUP     = "marker = cursor;";
+          re2c:YYRESTORE    = "cursor = marker;";
+          re2c:YYBACKUPCTX  = "ctxmarker = cursor;";
+          re2c:YYRESTORECTX = "cursor = ctxmarker;";
+          re2c:YYRESTORETAG = "cursor = @@{tag};";
+          re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+          re2c:YYSTAGP      = "@@{tag} = cursor;";
+          re2c:YYSTAGN      = "@@{tag} = NONE;";
+          re2c:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
+          re2c:YYSHIFTSTAG  = "@@{tag} = (@@{tag} as isize + @@{shift}) as usize;";
+        */

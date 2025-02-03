@@ -23,6 +23,7 @@ using namespace re2c;
 %}
 
 %define api.pure full
+%define api.prefix {re2c_lib_}
 %lex-param {const uint8_t*& pattern}
 %lex-param {re2c::Ast& ast}
 %parse-param {const uint8_t*& pattern}

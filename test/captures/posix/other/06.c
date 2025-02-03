@@ -3,8 +3,9 @@
 
 {
 	YYCTYPE yych;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 2) YYFILL(2);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'b': goto yy2;
 		default: goto yy1;

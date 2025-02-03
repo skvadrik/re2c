@@ -11,7 +11,7 @@ type state = {
 
 (* expect a null-terminated string *)
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;state", "count;int"];
+    re2c:YYFN = ["lex;int", "yyrecord;state", "count;int"];
     re2c:yyfill:enable = 0;
     re2c:eof = 0;
 
@@ -33,8 +33,8 @@ let test(str, count) =
     in if not (lex st 0 = count) then raise (Failure "error")
 
 let main () =
-    test("\x00", 0);
-    test("'qu\x00tes' 'are' 'fine: \\'' \x00", 3);
-    test("'unterminated\\'\x00", -1)
+    test("", 0);
+    test("'qu\x00tes' 'are' 'fine: \\'' ", 3);
+    test("'unterminated\\'", -1)
 
 let _ = main ()

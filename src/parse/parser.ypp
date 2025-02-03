@@ -30,6 +30,7 @@ extern "C" {
 %start spec
 
 %define api.pure full
+%define api.prefix {re2c_}
 %lex-param {re2c::Input& input}
 %lex-param {re2c::Ast& ast}
 %lex-param {re2c::Opt& opts}
@@ -51,7 +52,7 @@ extern "C" {
 %token TOKEN_CJUMP
 %token TOKEN_CNEXT
 %token TOKEN_CLIST
-%token TOKEN_CSETUP
+%token TOKEN_CPRE_RULE
 %token TOKEN_CZERO
 %token TOKEN_CLOSESIZE
 %token TOKEN_CODE
@@ -62,6 +63,10 @@ extern "C" {
 %token TOKEN_LINE_INFO
 %token TOKEN_REGEXP
 %token TOKEN_BLOCK
+%token TOKEN_ENTRY
+%token TOKEN_PRE_RULE
+%token TOKEN_POST_RULE
+%token TOKEN_LPAREN_NEG
 %token TOKEN_ERROR
 
 %type <op>      close closes
@@ -113,6 +118,15 @@ rule
 | '$' TOKEN_CODE {
     find_or_add_gram(grams, "").eofs.push_back($2);
 }
+| TOKEN_ENTRY TOKEN_CODE {
+    find_or_add_gram(grams, "").entry.push_back($2);
+}
+| TOKEN_PRE_RULE TOKEN_CODE {
+    find_or_add_gram(grams, "").pre_rule.push_back($2);
+}
+| TOKEN_POST_RULE TOKEN_CODE {
+    find_or_add_gram(grams, "").post_rule.push_back($2);
+}
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : ast.temp_condlist) {
         find_or_add_gram(grams, cond).rules.push_back(AstRule($2, $3));
@@ -131,15 +145,33 @@ rule
     }
     ast.temp_condlist.clear();
 }
-| TOKEN_CSETUP TOKEN_CODE {
+| TOKEN_CLIST TOKEN_ENTRY ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_gram(grams, cond).setup.push_back($2);
+        find_or_add_gram(grams, cond).entry.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CLIST TOKEN_PRE_RULE ccode {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).pre_rule.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CLIST TOKEN_POST_RULE ccode {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).post_rule.push_back($3);
+    }
+    ast.temp_condlist.clear();
+}
+| TOKEN_CPRE_RULE TOKEN_CODE {
+    for (const std::string& cond : ast.temp_condlist) {
+        find_or_add_gram(grams, cond).pre_rule.push_back($2);
     }
     ast.temp_condlist.clear();
 }
 | TOKEN_CZERO ccode {
     const AstNode* r = ast.nil(input.tok_loc());
-    find_or_add_gram(grams, "0").rules.push_back(AstRule(r, $2));
+    find_or_add_gram(grams, ZERO_COND).rules.push_back(AstRule(r, $2));
     ast.temp_condlist.clear();
 };
 
@@ -219,8 +251,8 @@ primary
         $$ = ast.cap($$, NO_CAPTURE);
     }
 }
-| '('     expr ')' { $$ = ast.cap($2, CAPTURE_IF_NOT_INVERTED); }
-| '(' '!' expr ')' { $$ = ast.cap($3, CAPTURE_IF_INVERTED); }
+| '('              expr ')' { $$ = ast.cap($2, CAPTURE_IF_NOT_INVERTED); }
+| TOKEN_LPAREN_NEG expr ')' { $$ = ast.cap($2, CAPTURE_IF_INVERTED); }
 ;
 
 %%

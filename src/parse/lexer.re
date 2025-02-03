@@ -246,7 +246,7 @@ loop:
         goto next;
     }
     "/*!header:re2c" | "%{header" {
-        RET_FAIL(error_at_cur("ill-formed `header` directive: expected `:on` or `:off`"));
+        RET_FAIL(error_at_cur("ill-formed `header` block: expected `:on` or `:off`"));
     }
 
     ("/*!include:re2c" | "%{include") space+ @x dstring @y / ws_or_eoc {
@@ -257,7 +257,7 @@ loop:
         goto next;
     }
     "/*!include:re2c" | "%{include" {
-        RET_FAIL(error_at_cur("ill-formed `include` directive: expected filename in quotes"));
+        RET_FAIL(error_at_cur("ill-formed `include` block: expected filename in quotes"));
     }
 
     ("/*!ignore:re2c" | "%{ignore") / ws_or_eoc {
@@ -267,8 +267,8 @@ loop:
         goto next;
     }
     "/*!ignore:re2c" | "%{ignore" {
-        RET_FAIL(error_at_cur("ill-formed `ignore` block: "
-                "expected a space, a newline, or the end of block"));
+        RET_FAIL(error_at_cur(
+                "ill-formed `ignore` block: expected a space, a newline, or the end of block"));
     }
 
     eof {
@@ -318,8 +318,8 @@ loop:
 /*!local:re2c
     "" {
         RET_FAIL(error_at_cur(
-                "ill-formed start of a block: expected a space, a newline, a colon followed by a"
-                " list of colon-separated block names, or the end of block `*" "/`"));
+                "ill-formed start of a block: expected a space, a newline, a colon "
+                "followed by a list of colon-separated block names, or the end of block"));
     }
 
     "" / ws_or_eoc { *ptail = nullptr; return Ret::OK; }
@@ -334,7 +334,7 @@ loop:
         // Check that the added name is unique.
         for (const BlockNameList *p = *phead; p != l; p = p->next) {
             if (strcmp(p->name, l->name) == 0) {
-                RET_FAIL(error_at_cur("duplicate block '%s' on the list", p->name));
+                RET_FAIL(error_at_cur("duplicate block `%s` on the list", p->name));
             }
         }
 
@@ -349,7 +349,7 @@ loop: /*!local:re2c
     * {
         if (allow_garbage && !is_eof()) goto loop;
         RET_FAIL(error_at_cur(
-                "ill-formed end of block: expected optional whitespaces followed by `*" "/`"));
+            "ill-formed block: expected optional whitespaces followed by the end of block"));
     }
     eoc {
         if (multiline && globopts->line_dirs) {
@@ -372,8 +372,7 @@ Ret Input::lex_special_block(Output& out, CodeKind kind, uint32_t mask) {
 loop: /*!local:re2c
     * {
         RET_FAIL(error_at_cur(
-                "ill-formed directive: expected optional configurations followed by the end of"
-                " block `*" "/`"));
+            "ill-formed block: expected optional configurations followed by the end of block"));
     }
 
     "format" {
@@ -409,7 +408,7 @@ loop: /*!local:re2c
 
 #define RET_TOK(t) do { token = t; return Ret::OK; } while(0)
 
-Ret Input::lex_block(YYSTYPE* yylval, Ast& ast, int& token) {
+Ret Input::lex_block(RE2C_STYPE* yylval, Ast& ast, int& token) {
     const uint8_t* p, *x, *y;
 scan:
     tok = cur;
@@ -442,6 +441,8 @@ scan:
     }
 
     [*+?!()|;/\\=$] { RET_TOK(*tok); }
+
+    "(!" { RET_TOK(TOKEN_LPAREN_NEG); } // avoid parsing `!x` as action in `(!x)`
 
     "{" [0-9]+ "}" {
         if (!s_to_u32_unsafe (tok + 1, cur - 1, yylval->bounds.min)) {
@@ -539,6 +540,12 @@ scan:
                 " block"));
     }
 
+    "!entry" / ws_or_eoc { RET_TOK(TOKEN_ENTRY); }
+    "!pre_rule" / ws_or_eoc { RET_TOK(TOKEN_PRE_RULE); }
+    "!post_rule" / ws_or_eoc { RET_TOK(TOKEN_POST_RULE); }
+
+    "!" name { RET_FAIL(error_at_tok("unknown action or directive '%.*s'", int(cur - tok), tok)); }
+
     "." { yylval->regexp = ast.dot(tok_loc()); RET_TOK(TOKEN_REGEXP); }
 
     space+ { goto scan; }
@@ -593,8 +600,8 @@ Ret Input::lex_clist(Ast& ast, int& token) {
     // Due to the re2c grammar parser must reduce each condition list before shifing a new one.
     CHECK(cl.empty());
 /*!re2c
-    space* "!" space* { token = TOKEN_CSETUP; goto cond; }
-    space* ">"        { token = TOKEN_CZERO;  goto end; }
+    space* "!" space* { token = TOKEN_CPRE_RULE; goto cond; }
+    space* ">"        { token = TOKEN_CZERO; goto end; }
     space*            { goto cond; }
 */
 cond:
@@ -617,7 +624,7 @@ error:
     RET_FAIL(error_at_cur("syntax error in condition list"));
 }
 
-Ret Input::process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) {
+Ret Input::process_semact(RE2C_STYPE* yylval, Ast& ast, const uint8_t* p, const uint8_t* q) {
     const char* text = "";
     if (globopts->indentation_sensitive) {
         // Cut off any leading or trailing newlines to make the code uniform.
@@ -668,7 +675,7 @@ Ret Input::process_semact(YYSTYPE* yylval, Ast& ast, const uint8_t* p, const uin
     return Ret::OK;
 }
 
-Ret Input::lex_code_indented(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_indented(RE2C_STYPE* yylval, Ast& ast) {
     tok = cur;
 code: /*!re2c
     eol   { next_line(); goto indent; }
@@ -691,7 +698,7 @@ indent: /*!re2c
 */
 }
 
-Ret Input::lex_code_in_braces(YYSTYPE* yylval, Ast& ast) {
+Ret Input::lex_code_in_braces(RE2C_STYPE* yylval, Ast& ast) {
     uint32_t depth = 1;
 code: /*!re2c
     "}" {

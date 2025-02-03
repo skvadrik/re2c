@@ -14,7 +14,7 @@ fn lex_utf8(yyinput []u8) int {
     mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf8 = 1;
-        re2c:define:YYCTYPE = u8; // the default
+        re2c:YYCTYPE = u8; // the default
     */
 }
 
@@ -22,7 +22,7 @@ fn lex_utf32(yyinput []u32) int {
     mut yycursor, mut yymarker := 0, 0
     /*!use:re2c
         re2c:encoding:utf32 = 1;
-        re2c:define:YYCTYPE = u32;
+        re2c:YYCTYPE = u32;
     */
 }
 

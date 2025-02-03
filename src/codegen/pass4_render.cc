@@ -10,6 +10,8 @@
 
 namespace re2c {
 
+namespace {
+
 static void render(RenderContext& rctx, const Code* code);
 
 static bool oneline_stmt_list(const CodeList* list) {
@@ -171,7 +173,7 @@ class RenderVar : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_INIT) {
+        if (opt == StxLOpt::INIT) {
             return !code->is_default;
         }
         UNREACHABLE();
@@ -264,7 +266,7 @@ class RenderIfThenElse : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
-            case StxLOpt::HAVE_COND: return curr_branch->cond != nullptr;
+            case StxLOpt::COND: return curr_branch->cond != nullptr;
             case StxLOpt::MANY: return nbranches > 1;
             default: break;
         }
@@ -595,22 +597,22 @@ class RenderLoop : public RenderCallback {
     FORBID_COPY(RenderLoop);
 };
 
-class RenderGoto : public RenderCallback {
+class RenderJmp : public RenderCallback {
     RenderContext& rctx;
-    const char* target;
+    const char* label;
 
   public:
-    RenderGoto(RenderContext& rctx, const char* target)
-            : rctx(rctx), target(target) {}
+    RenderJmp(RenderContext& rctx, const char* label)
+            : rctx(rctx), label(label) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::LABEL: rctx.os << target; break;
+            case StxVarId::LABEL: rctx.os << label; break;
             default: render_global_var(rctx, var); break;
         }
     }
 
-    FORBID_COPY(RenderGoto);
+    FORBID_COPY(RenderJmp);
 };
 
 class RenderFnDef : public RenderCallback {
@@ -643,7 +645,9 @@ class RenderFnDef : public RenderCallback {
             rctx.os << code->name;
             break;
         case StxVarId::TYPE:
-            rctx.os << code->type;
+            // The user may omit type, although it makes sense only for languages that don't have
+            // explicit void type (like Go). But don't write nullptr, as it truncates the output.
+            if (code->type != nullptr) rctx.os << code->type;
             break;
         case StxVarId::ARGNAME:
             rctx.os << curr_param->name;
@@ -699,7 +703,7 @@ class RenderFnDef : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_TYPE) {
+        if (opt == StxLOpt::TYPE) {
             return code->type != nullptr;
         }
         UNREACHABLE();
@@ -763,9 +767,9 @@ class RenderFnCall : public RenderCallback {
 
     bool eval_cond(StxLOpt opt) override {
         switch (opt) {
-        case StxLOpt::HAVE_ARGS:
+        case StxLOpt::ARGS:
             return nargs > 0;
-        case StxLOpt::HAVE_RETVAL:
+        case StxLOpt::RETVAL:
             return code->retval != nullptr;
         default:
             UNREACHABLE();
@@ -1154,11 +1158,8 @@ class RenderEnum : public RenderCallback {
 
     void render_var(StxVarId var) override {
         switch (var) {
-        case StxVarId::NAME:
-            rctx.os << code->name;
-            break;
         case StxVarId::TYPE:
-            rctx.opts->render_code_type_cond_enum(rctx.os);
+            rctx.os << code->type;
             break;
         case StxVarId::ELEM:
             rctx.os << code->elem_ids[curr_elem];
@@ -1199,7 +1200,7 @@ class RenderEnum : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::HAVE_INIT) {
+        if (opt == StxLOpt::INIT) {
             return code->elem_nums != nullptr;
         }
         UNREACHABLE();
@@ -1365,7 +1366,7 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::IF_THEN_ELSE: {
         bool oneline = rctx.opts->specialize_oneline_if();
         for (const CodeBranch* b = code->ifte->head; oneline && b; b = b->next) {
-            oneline = oneline && oneline_stmt_list(b->code);
+            oneline = oneline_stmt_list(b->code);
         }
         RenderIfThenElse callback(rctx, code->ifte, oneline);
         if (oneline) {
@@ -1408,8 +1409,13 @@ static void render(RenderContext& rctx, const Code* code) {
         break;
     }
     case CodeKind::GOTO: {
-        RenderGoto callback(rctx, code->target);
+        RenderJmp callback(rctx, code->target);
         rctx.opts->render_code_goto(rctx.os, callback);
+        break;
+    }
+    case CodeKind::CONTINUE: {
+        RenderJmp callback(rctx, code->target);
+        rctx.opts->render_code_continue(rctx.os, callback);
         break;
     }
     case CodeKind::TEXT_RAW:
@@ -1587,11 +1593,23 @@ static void render(RenderContext& rctx, const Code* code) {
         rctx.opts->render_code_line_info(rctx.os, callback);
         break;
     }
-    case CodeKind::FINGERPRINT: {
-        RenderFingerprint callback(rctx);
-        rctx.opts->render_code_fingerprint(rctx.os, callback);
+    case CodeKind::FINGERPRINT:
+        if (rctx.opts->target == Target::DOT) {
+            // Don't use `code:fingerprint`, as it has language-specific comment syntax.
+            rctx.os << "/* Generated by re2c";
+            if (rctx.opts->version) rctx.os << " " PACKAGE_VERSION;
+            if (rctx.opts->date) {
+                rctx.os << " on ";
+                time_t now = time(nullptr);
+                rctx.os.write(ctime(&now), 24);
+            }
+            rctx.os << " */";
+            render_nl(rctx);
+        } else {
+            RenderFingerprint callback(rctx);
+            rctx.opts->render_code_fingerprint(rctx.os, callback);
+        }
         break;
-    }
     case CodeKind::VAR: {
         RenderVar callback(rctx, &code->var);
         rctx.opts->render_code_var_local(rctx.os, callback);
@@ -1638,7 +1656,7 @@ static uint32_t write_converting_newlines(const std::string& str, FILE* f) {
 
     // In order to maintain consistency we convert all newlines to LF when writing output to file.
     // Some newlines originate in user-defined code (including semantic actions and code fragments
-    // in configurations and directives), and some are generated by re2c itself.
+    // in configurations and blocks), and some are generated by re2c itself.
     for (const char* p = s;; ++p) {
         size_t l = static_cast<size_t>(p - s);
         if (p == e) {
@@ -1690,6 +1708,8 @@ LOCAL_NODISCARD(Ret codegen_render_blocks(
     }
     return Ret::OK;
 }
+
+} // anonymous namespace
 
 Ret codegen_render(Output& output) {
     const opt_t* opts = output.total_opts; // global options

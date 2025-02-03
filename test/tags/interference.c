@@ -6,8 +6,9 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
+	YYMARKER = YYCURSOR;
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy2;
 		case 'b':

@@ -1,5 +1,10 @@
-How to build
-============
+Build & install
+===============
+
+
+If you want to install re2c from a prebuilt package, skip to the bottom of the
+page for a list of all packages available on different systems. Below is a guide
+how to build re2c from source code.
 
 
 Dependencies
@@ -45,11 +50,35 @@ The configure script has many options (to see them all, run
   * `--enable-debug`
     Enable debug checks in the re2c source code. Also enables debug options.
 
+  * `--enable-dlang`
+    Build re2d (identical to `re2c --lang d`). This is on by default.
+
   * `--enable-golang`
     Build re2go (identical to `re2c --lang go`). This is on by default.
 
+  * `--enable-haskell`
+    Build re2hs (identical to `re2c --lang haskell`). This is on by default.
+
+  * `--enable-java`
+    Build re2java (identical to `re2c --lang java`). This is on by default.
+
+  * `--enable-js`
+    Build re2js (identical to `re2c --lang js`). This is on by default.
+
+  * `--enable-ocaml`
+    Build re2ocaml (identical to `re2c --lang ocaml`). This is on by default.
+
+  * `--enable-python`
+    Build re2py (identical to `re2c --lang python`). This is on by default.
+
   * `--enable-rust`
     Build re2rust (identical to `re2c --lang rust`). This is on by default.
+
+  * `--enable-vlang`
+    Build re2v (identical to `re2c --lang v`). This is on by default.
+
+  * `--enable-zig`
+    Build re2zig (identical to `re2c --lang zig`). This is on by default.
 
   * `--enable-lexers`
     Enable regeneration of lexers from *.re* files (as opposed to using
@@ -59,6 +88,10 @@ The configure script has many options (to see them all, run
   * `--enable-parsers`
     Enable regeneration of parsers from *.ypp* files with bison (as opposed to
     using pre-generated bootstrap files).
+
+  * `--enable-syntax`
+    Enable regeneration of default syntax files from the ones provided in
+    include/ directory (as opposed to using pre-generated bootstrap files).
 
   * `--enable-docs`
     Enable regeneration of documentation (requires Python 3 Docutils).
@@ -148,12 +181,40 @@ A simple build (objects are generated in a separate build directory):
 CMake supports a lot of configuration options. Here is the list of options
 specific to re2c:
 
+  * `-DRE2C_BUILD_RE2D=yes`
+    Build re2d executable (an alias to `re2c --lang d`). Enabled by default.
+
   * `-DRE2C_BUILD_RE2GO=yes`
     Build re2go executable (an alias to `re2c --lang go`). Enabled by default.
+
+  * `-DRE2C_BUILD_RE2HS=yes`
+    Build re2hs executable (an alias to `re2c --lang haskell`). Enabled by
+    default.
+
+  * `-DRE2C_BUILD_RE2JAVA=yes`
+    Build re2java executable (an alias to `re2c --lang java`). Enabled by
+    default.
+
+  * `-DRE2C_BUILD_RE2JS=yes`
+    Build re2js executable (an alias to `re2c --lang js`). Enabled by default.
+
+  * `-DRE2C_BUILD_RE2OCAML=yes`
+    Build re2ocaml executable (an alias to `re2c --lang ocaml`). Enabled by
+    default.
+
+  * `-DRE2C_BUILD_RE2PY=yes`
+    Build re2py executable (an alias to `re2c --lang python`). Enabled by
+    default.
 
   * `-DRE2C_BUILD_RE2RUST=yes`
     Build re2rust executable (an alias to `re2c --lang rust`). Enabled by
     default.
+
+  * `-DRE2C_BUILD_RE2V=yes`
+    Build re2v executable (an alias to `re2c --lang v`). Enabled by default.
+
+  * `-DRE2C_BUILD_RE2ZIG=yes`
+    Build re2zig executable (an alias to `re2c --lang zig`). Enabled by default.
 
   * `-DRE2C_REBUILD_LEXERS=yes`
     Enable regeneration of lexers from *.re* files (as opposed to using
@@ -163,6 +224,10 @@ specific to re2c:
   * `-DRE2C_REBUILD_PARSERS=yes`
     Enable regeneration of parsers from *.ypp* files with bison (as opposed to
     using pre-generated bootstrap files).
+
+  * `-DRE2C_REBUILD_SYNTAX=yes`
+    Enable regeneration of default syntax files from the ones provided in
+    include/ directory (as opposed to using pre-generated bootstrap files).
 
   * `-DRE2C_REBUILD_DOCS=yes`
     Enable regeneration of documentation (requires Python 3 Docutils).
@@ -224,3 +289,11 @@ fuzz-testing Haskell scripts in the *fuzz* subdirectory; they are based on the
 QuickCheck library and can be easily modified to fuzz-test various aspects of
 re2c by comparing current re2c version against older versions or against other
 regular expression libraries.
+
+Packages
+--------
+
+[Repology](https://repology.org/project/re2c/versions)
+has a list of re2c packages for different systems:
+
+![re2c](https://repology.org/badge/vertical-allrepos/re2c.svg)

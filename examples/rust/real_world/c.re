@@ -291,16 +291,16 @@ fn next_token(input: &mut Input) -> Result<Option<Token>, LexError> {
     input.token = input.cursor;
     /*!re2c
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE      = "u8";
-    re2c:define:YYPEEK       = "input.data[input.cursor]";
-    re2c:define:YYSKIP       = "input.cursor += 1;";
-    re2c:define:YYBACKUP     = "input.marker = input.cursor;";
-    re2c:define:YYRESTORE    = "input.cursor = input.marker;";
-    re2c:define:YYRESTORETAG = "input.cursor = ${tag};";
-    re2c:define:YYSTAGP      = "@@{tag} = input.cursor;";
-    re2c:define:YYSTAGN      = "@@{tag} = -1;";
-    re2c:define:YYSHIFT      = "input.cursor += @@{shift};";
-    re2c:define:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
+    re2c:YYCTYPE      = "u8";
+    re2c:YYPEEK       = "input.data[input.cursor]";
+    re2c:YYSKIP       = "input.cursor += 1;";
+    re2c:YYBACKUP     = "input.marker = input.cursor;";
+    re2c:YYRESTORE    = "input.cursor = input.marker;";
+    re2c:YYRESTORETAG = "input.cursor = ${tag};";
+    re2c:YYSTAGP      = "@@{tag} = input.cursor;";
+    re2c:YYSTAGN      = "@@{tag} = -1;";
+    re2c:YYSHIFT      = "input.cursor += @@{shift};";
+    re2c:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
 
     O  = [0-7];
     D  = [0-9];

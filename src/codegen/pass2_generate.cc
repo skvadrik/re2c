@@ -24,6 +24,8 @@ namespace re2c {
 static CodeList* gen_goswif(
         Output& output, const Adfa& dfa, const CodeGoSwIf* go, const State* from);
 
+namespace {
+
 class GenArrayElem : public RenderCallback {
     std::ostream& os;
     const char* array;
@@ -155,13 +157,35 @@ class GenLessThan : public RenderCallback {
     FORBID_COPY(GenLessThan);
 };
 
+class GenEnumElem : public RenderCallback {
+    std::ostream& os;
+    const std::string& type;
+    const std::string& name;
+
+  public:
+    GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
+        : os(os), type(type), name(name) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::TYPE: os << type; break;
+            case StxVarId::NAME: os << name; break;
+            default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenEnumElem);
+};
+
+} // anonymous namespace
+
 bool endstate(const State* s) {
     // An 'end' state is a state which has no outgoing transitions on symbols. Usually 'end' states
-    // are final states (not all final states are 'end' states), but sometimes it be initial
-    // non-accepting state, e.g. in case of rule '[]'.
+    // are final states (not all final states are 'end' states), but sometimes it may be
+    // non-accepting start state, e.g. in case of rule '[]'.
     DCHECK(s->go.span_count > 0);
-    Action::Kind a = s->go.span[0].to->action.kind;
-    return s->go.span_count == 1 && (a == Action::Kind::RULE || a == Action::Kind::ACCEPT);
+    StateKind k = s->go.span[0].to->kind;
+    return s->go.span_count == 1 && (k == StateKind::RULE || k == StateKind::ACCEPT);
 }
 
 static const char* gen_fill_label(Output& output, uint32_t index) {
@@ -178,8 +202,8 @@ static bool omit_peek(const State* s) {
     // state (a single transition does not require matching on `yych`). Such states are added by
     // the tunneling optimisation which attempts to compress DFA by factoring out common parts of
     // similar states.
-    return s->action.kind == Action::Kind::MOVE
-            || (s->go.span_count == 1 && s->go.span[0].to->action.kind != Action::Kind::MOVE);
+    return s->kind == StateKind::MOVE
+            || (s->go.span_count == 1 && s->go.span[0].to->kind != StateKind::MOVE);
 }
 
 static void gen_peek(OutAllocator& alc, const State* s, CodeList* stmts) {
@@ -304,8 +328,8 @@ static void gen_fintags(Output& output, CodeList* stmts, const Adfa& dfa, const 
         expand_fintags(output, tag, fintags);
 
         if (!fixed(tag)) { // variable tag
-            for (const char* t : fintags) {
-                append(varops, code_copy_tag(alc, t, base, is_mtag));
+            for (const char* f : fintags) {
+                append(varops, code_copy_tag(alc, f, base, is_mtag));
             }
         } else {
             DCHECK(!is_mtag);
@@ -383,13 +407,11 @@ void expand_fintags(Output& output, const Tag& tag, std::vector<const char*>& fi
 static void gen_continue_yyloop(Output& output, CodeList* stmts, const char* next) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
 
     append(stmts, code_assign(alc, opts->var_state.c_str(), next));
 
-    buf.cstr("continue");
-    if (!opts->label_loop.empty()) buf.cstr(" ").str(opts->label_loop);
-    append(stmts, code_stmt(alc, buf.flush()));
+    const char* label = opts->label_loop.empty() ? nullptr : opts->label_loop.c_str();
+    append(stmts, code_continue(alc, label));
 }
 
 static CodeList* gen_fill_falllback(
@@ -676,9 +698,6 @@ static CodeList* gen_goifl(
     OutAllocator& alc = output.allocator;
     const opt_t* opts = output.block().opts;
 
-    CodeList* stmts = code_list(alc);
-    const CodeGoBranch* b = go->branches, *e = b + go->nbranches;
-
     auto transition = [&](const CodeGoBranch* b) {
         if (b->kind == CodeGoBranch::Kind::JUMP) {
             CodeList* code = code_list(alc);
@@ -688,6 +707,9 @@ static CodeList* gen_goifl(
             return gen_goswif(output, dfa, b->swif, from);
         }
     };
+
+    CodeList* stmts = code_list(alc);
+    const CodeGoBranch* b = go->branches, *e = b + go->nbranches;
 
     if (opts->code_model != CodeModel::REC_FUNC) {
         // In goto/label and loop/switch modes generate a sequence of IF statements.
@@ -815,7 +837,8 @@ static void gen_godot(
     }
 }
 
-static void gen_go(Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
+static void gen_go(
+        Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 
@@ -936,30 +959,26 @@ static void emit_accept(
     append(stmts, code_switch(alc, var, cases));
 }
 
-class GenEnumElem : public RenderCallback {
-    std::ostream& os;
-    const std::string& type;
-    const std::string& name;
-
-  public:
-    GenEnumElem(std::ostream& os, const std::string& type, const std::string& name)
-        : os(os), type(type), name(name) {}
-
-    void render_var(StxVarId var) override {
-        switch (var) {
-            case StxVarId::TYPE: os << type; break;
-            case StxVarId::NAME: os << name; break;
-            default: UNREACHABLE(); break;
-        }
-    }
-
-    FORBID_COPY(GenEnumElem);
-};
-
 static const char* gen_cond_enum_elem(Scratchbuf& buf, const opt_t* opts, const std::string& name) {
     const std::string& cond = opts->cond_enum_prefix + name;
     GenEnumElem callback(buf.stream(), opts->api_cond_type, cond);
     return opts->gen_code_enum_elem(buf, callback);
+}
+
+static void gen_action(Output& output, const SemAct* action, CodeList* stmts) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+
+    if (opts->line_dirs) append(stmts, code_line_info_input(alc, action->loc));
+    if (opts->indentation_sensitive) {
+        for (const char* p = action->text, *q; *p; ++p) {
+            for (q = p; *p && *p != '\n'; ++p);
+            append(stmts, code_text(alc, newcstr(q, p, alc)));
+        }
+    } else {
+        append(stmts, code_text(alc, output.scratchbuf.cstr(action->text).flush()));
+    }
+    if (opts->line_dirs) append(stmts, code_line_info_output(alc));
 }
 
 static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t rule_idx) {
@@ -988,9 +1007,9 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
         const char* next_state = (dfa.cond.empty() || opts->code_model != CodeModel::LOOP_SWITCH)
                 ? "-1" : next_cond;
         // Generate YYSETSTATE in the final state. This is needed because the user may enclose the
-        // lexer in an outer loop that goes via YYGETSTATE switch (it may happen if `getstate:re2c`
-        // is not used, which is the case in the loop/switch mode). The user would expect the next
-        // iteration of the loop to start in the initial DFA state, so YYGETSTATE should return the
+        // lexer in an outer loop that goes via YYGETSTATE switch (it may happen if `getstate` is
+        // not used, which is the case in the loop/switch mode). The user would expect the next
+        // iteration of the loop to start in the start DFA state, so YYGETSTATE should return the
         // corresponding value.
         append(stmts, code_set_state(alc, next_state));
     }
@@ -1007,17 +1026,13 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
 
     if (!semact->autogen) {
         // User-defined semantic action.
-        if (!dfa.setup.empty()) append(stmts, code_text(alc, o.str(dfa.setup).flush()));
-        if (opts->line_dirs) append(stmts, code_line_info_input(alc, semact->loc));
-        if (opts->indentation_sensitive) {
-            for (const char* p = semact->text, *q; *p; ++p) {
-                for (q = p; *p && *p != '\n'; ++p);
-                append(stmts, code_text(alc, newcstr(q, p, alc)));
-            }
-        } else {
-            append(stmts, code_text(alc, o.cstr(semact->text).flush()));
+        if (dfa.pre_rule_action != nullptr) {
+            append(stmts, code_text(alc, o.str(dfa.pre_rule_action->text).flush()));
         }
-        if (opts->line_dirs) append(stmts, code_line_info_output(alc));
+        gen_action(output, semact, stmts);
+        if (dfa.post_rule_action != nullptr) {
+            append(stmts, code_text(alc, o.str(dfa.post_rule_action->text).flush()));
+        }
     } else {
         // Autogenerated action for the :=> rule.
         switch (opts->code_model) {
@@ -1030,7 +1045,7 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
             append(stmts, code_text(alc, o.flush()));
             break;
         case CodeModel::LOOP_SWITCH:
-            // loop/switch mode: set `yystate` to the initial state of the next condition and
+            // loop/switch mode: set `yystate` to the start DFA state of the next condition and
             // continue to the head of the loop.
             gen_continue_yyloop(output, stmts, next_cond);
             break;
@@ -1048,71 +1063,42 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
 
-    switch (s->action.kind) {
-    case Action::Kind::MATCH:
-        if (!opts->eager_skip) {
-            append(stmts, code_skip(alc));
-        }
-        gen_fill_and_label(output, stmts, dfa, s);
-        gen_peek(alc, s, stmts);
+    switch (s->kind) {
+    case StateKind::ENTRY:
+        gen_action(output, dfa.entry_action, stmts);
         break;
-    case Action::Kind::INITIAL: {
-        const size_t save = s->action.info.save;
-        const bool backup = save != NOSAVE;
-        const bool ul1 = s->label->used;
+    case StateKind::MATCH: {
+        bool is_start = s == dfa.start_state;
+        bool omit_start = is_start && !s->label->used;
+        bool backup = s->save != NOSAVE;
 
-        if (ul1 && dfa.accepts.size() > 1 && backup) {
-            append(stmts, code_set_accept(alc, save));
+        if (backup && dfa.accepts.size() > 1 && !omit_start) {
+            append(stmts, code_set_accept(alc, s->save));
         }
-        if (ul1 && !opts->eager_skip) {
+        if (!opts->eager_skip && !omit_start) {
             append(stmts, code_skip(alc));
         }
-        append(stmts, code_nlabel(alc, dfa.initial_label));
-        gen_fill_and_label(output, stmts, dfa, s);
+        if (is_start && dfa.custom_start_label) {
+            append(stmts, code_nlabel(alc, dfa.custom_start_label));
+        }
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        gen_peek(alc, s, stmts);
-        if (opts->debug) {
-            append(stmts, code_debug(alc, dfa.initial_label->index));
-        }
-        break;
-    }
-    case Action::Kind::SAVE:
-        if (dfa.accepts.size() > 1) {
-            append(stmts, code_set_accept(alc, s->action.info.save));
-        }
-        if (!opts->eager_skip) {
-            append(stmts, code_skip(alc));
-        }
-        append(stmts, code_backup(alc));
         gen_fill_and_label(output, stmts, dfa, s);
         gen_peek(alc, s, stmts);
-        break;
-    case Action::Kind::MOVE:
-        break;
-    case Action::Kind::ACCEPT:
-        emit_accept(output, stmts, dfa, *s->action.info.accepts);
-        break;
-    case Action::Kind::RULE:
-        emit_rule(output, stmts, dfa, s->action.info.rule);
+        if (is_start && dfa.custom_start_label && opts->debug) {
+            append(stmts, code_debug(alc, dfa.custom_start_label->index));
+        }
         break;
     }
-}
-
-static void emit_state(Output& output, const State* state, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-
-    // If state label is unused, we should not generate it.
-    // Nor can we emit an YYDEBUG statement, as there is no state number to pass to it.
-    if (!state->label->used) return;
-
-    if (opts->code_model == CodeModel::GOTO_LABEL) {
-        append(stmts, code_nlabel(output.allocator, state->label));
-    }
-    if (opts->debug && state->action.kind != Action::Kind::INITIAL) {
-        append(stmts, code_debug(alc, state->label->index));
+    case StateKind::MOVE:
+        break;
+    case StateKind::ACCEPT:
+        emit_accept(output, stmts, dfa, *s->accepts);
+        break;
+    case StateKind::RULE:
+        emit_rule(output, stmts, dfa, s->rule);
+        break;
     }
 }
 
@@ -1121,10 +1107,11 @@ static void gen_storable_state_cases(Output& output, CodeCases* cases) {
     const opt_t* opts = block.opts;
     OutAllocator& alc = output.allocator;
 
-    if (!opts->storable_state || opts->code_model == CodeModel::GOTO_LABEL) return;
+    CHECK(opts->code_model == CodeModel::LOOP_SWITCH);
+    if (!opts->storable_state) return;
 
-    // TODO: If `re2c:eof` is not used, some of these cases are redundant (they contain a single
-    // transition to the DFA state that has the corresponding YYFILL invocation).
+    // TODO: If `re2c:eof` is not used, some of these cases are redundant (they contain
+    // a single transition to the DFA state that has the corresponding YYFILL invocation).
     for (const auto& i : block.fill_goto) {
         append(cases, code_case_number(alc, i.second, static_cast<int32_t>(i.first)));
     }
@@ -1152,14 +1139,15 @@ static OutputBlock* find_block_with_name(Output& output, const char* name) {
 }
 
 static Ret find_blocks(
-        Output& output, const BlockNameList* names, blocks_t& blocks, const char* directive) {
+        Output& output, const BlockNameList* names, blocks_t& blocks, const char* block) {
     blocks.clear();
     for (const BlockNameList* p = names; p; p = p->next) {
         OutputBlock* b = find_block_with_name(output, p->name);
         if (b) {
             blocks.push_back(b);
         } else {
-            RET_FAIL(error("cannot find block '%s' listed in `%s` directive", p->name, directive));
+            RET_FAIL(error(
+                "cannot find block named `%s` referenced by `%s` block", p->name, block));
         }
     }
     return Ret::OK;
@@ -1174,7 +1162,7 @@ static void gen_state_goto_cases(Output& output, CodeCases* cases, const OutputB
 
 LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     // Target and code model are constant options, so it doesn't matter which block they come from.
-    // Block-level options should wait until we find the first block of `getstate:re2c` directive.
+    // Block-level options should wait until we find the first block of `getstate` block.
     Target target = output.total_opts->target;
     CodeModel code_model = output.total_opts->code_model;
 
@@ -1189,15 +1177,15 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     // There are two possibilities:
     //
     // 1. A state switch with an explicit list of block names. This is the case of a user-defined
-    //    `getstate:re2c:<name1>[:<name2>...]` directive or a `use:re2c` block (use blocks have a
-    //    block-local state switch that is automatically generated at the beginning of the block,
-    //    and they have a special autogenerated name, as they cannot have a user-defined one).
+    //    `getstate:<name1>[:<name2>...]` block or a `use` block (use blocks have a block-local
+    //    state switch that is automatically generated at the beginning of the block, and they have
+    //    a special autogenerated name, as they cannot have a user-defined one).
     //
     // 2. A global state switch without a list of block names. This is the case of a user-defined
-    //    `getstate:re2c` without a name list, or a global state switch that is generated
-    //    automatically if the user did not specify any explicit `getstate:re2c` directives. The
-    //    global switch includes all blocks except `use:re2c` (if a block generates no code it does
-    //    not contribute any cases to the state switch).
+    //    `getstate` without a name list, or a global state switch that is generated automatically
+    //    if the user did not specify any explicit `getstate` blocks. The global switch includes
+    //    all blocks except `use` (if a block generates no code it does not contribute any cases to
+    //    the state switch).
     //
     bool global = (code->fmt.block_names == nullptr);
 
@@ -1206,7 +1194,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
 
     if (global) {
         // No block names are specified: generate a global switch. It includes all blocks except for
-        // the `re2c:use` ones which have a local switch.
+        // the `use` ones which have a local switch.
         for (const OutputBlock* b : *output.pblocks) {
             if (b->kind != InputBlock::USE) {
                 gen_state_goto_cases(output, cases, b);
@@ -1216,18 +1204,17 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
             }
         }
         if (!bstart || !bstart->start_label) {
-            // This must be a user-defined directive: the automatic state switch is generated only
-            // when processing the first block that has code.
-            RET_FAIL(error("none of the blocks in `getstate:re2c` generate any code"));
+            // This must be a user-defined `getstate` block: the automatic state switch is generated
+            // only when processing the first block that has code.
+            RET_FAIL(error("none of the blocks in `getstate` generate any code"));
         }
     } else {
         // Generate a switch for all specified named blocks.
-        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "getstate:re2c"));
+        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "getstate"));
         for (const OutputBlock* b : output.tmpblocks) {
             if (!b->start_label) {
-                RET_FAIL(error("block '%s' does not generate code, so it should not be listed in "
-                               "`getstate:re2c` directive",
-                               b->name.c_str()));
+                RET_FAIL(error("block `%s` does not generate code, so it should not be listed"
+                        " in `getstate` block", b->name.c_str()));
             }
             // Use start label of the first block on the list.
             if (!bstart) bstart = b;
@@ -1235,16 +1222,16 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
         }
     }
 
-    // For a global `getstate:re2c` use options accumulated from the whole program.
-    // For `getstate:re2c` with an explicit list of blocks use options of the first block
-    // (this covers `use:re2c` blocks that have an autogenerated block list with a single block).
+    // For a global `getstate` block use options accumulated from the whole program.
+    // For `getstate` with an explicit list of blocks use options of the first block
+    // (this covers `use` blocks that have an autogenerated block list with a single block).
     const opt_t* opts = global ? output.total_opts : bstart->opts;
 
     // This is the use that makes 2nd codegen pass for labels necessary.
     Label* lstart = bstart->start_label;
     lstart->used = true;
 
-    // We need a special case for the initial transition: start state number can be any number,
+    // We need a special case for the start transition: start state number can be any number,
     // depending on where the start block is located in the source file, and the user should not
     // depend on this autogenerated number in order to initialize the state variable.
     CodeList* goto_start = code_list(alc);
@@ -1307,8 +1294,8 @@ LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, CodeList* code)) {
     if (block.kind == InputBlock::USE) {
         // For a use block, always generate a local state switch. Link the block to the state
         // switch by the autogenerated block name. Note that it is impossible for the user to do so
-        // with a `getstate:re2c` directive, as use blocks do not have a user-defined name and
-        // cannot be referenced.
+        // with a `getstate` block, as use blocks do not have a user-defined name and cannot be
+        //referenced.
         block_list = alc.alloct<BlockNameList>(1);
         block_list->name = copystr(block.name, alc);
         block_list->next = nullptr;
@@ -1318,7 +1305,7 @@ LOCAL_NODISCARD(Ret gen_state_goto_implicit(Output& output, CodeList* code)) {
         // blocks in the file.
         output.state_goto = true;
     } else {
-        // don't generate anything, there is an explicit `getstate:re2c`
+        // don't generate anything, there is an explicit `getstate` block
         return Ret::OK;
     }
 
@@ -1395,10 +1382,10 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
         // Gather tags from the blocks on the list.
         const char* directive = nullptr;
         switch (code->kind) {
-            case CodeKind::STAGS: directive = "stags:re2c"; break;
-            case CodeKind::MTAGS: directive = "mtags:re2c"; break;
-            case CodeKind::SVARS: directive = "svars:re2c"; break;
-            case CodeKind::MVARS: directive = "mvars:re2c"; break;
+            case CodeKind::STAGS: directive = "stags"; break;
+            case CodeKind::MTAGS: directive = "mtags"; break;
+            case CodeKind::SVARS: directive = "svars"; break;
+            case CodeKind::MVARS: directive = "mvars"; break;
             default: UNREACHABLE(); break;
         }
         CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, directive));
@@ -1469,7 +1456,7 @@ LOCAL_NODISCARD(Ret add_condition_from_block(
                 return Ret::OK;
             } else {
                 // An error: conditions with idetical names but different numbers.
-                RET_FAIL(error("cannot generate condition enumeration: conditon '%s' has "
+                RET_FAIL(error("cannot generate condition enumeration: condition `%s` has "
                                "different numbers in different blocks (use `re2c:condenumprefix` "
                                "configuration to set per-block prefix)",
                                cond.name.c_str()));
@@ -1494,7 +1481,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     Scratchbuf& buf = output.scratchbuf;
     OutAllocator& alc = output.allocator;
 
-    // Use global options accumulated across the whole file, as `types:re2c` may include conditions
+    // Use global options accumulated across the whole file, as `conditions` may include conditions
     // from a few different blocks, and it is not clear which block's options it should inherit.
     const opt_t* globopts = output.total_opts;
 
@@ -1510,7 +1497,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
         CHECK_RET(add_conditions_from_blocks(output.hblocks, conds));
     } else {
         // Gather conditions from the blocks on the list.
-        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "types:re2c"));
+        CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "conditions"));
         CHECK_RET(add_conditions_from_blocks(output.tmpblocks, conds));
     }
 
@@ -1540,7 +1527,7 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
 // re2c has to preserve the existing numbering scheme.
 //
 // re2c warns about implicit assumptions about condition order, unless:
-//     - condition type is defined with 'types:re2c' or '-t, --type-header'
+//     - condition type is defined with `conditions` or `--header`
 //     - dispatch is independent of condition order: either it uses explicit condition names or
 //       there's only one condition and dispatch shrinks to unconditional jump
 
@@ -1575,6 +1562,7 @@ static CodeList* gen_cond_goto(Output& output) {
     bool warn_cond_ord = output.warn_condition_order;
 
     DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
+    DCHECK(opts->target != Target::DOT);
 
     const size_t ncond = conds.size();
     CodeList* stmts = code_list(alc);
@@ -1582,41 +1570,34 @@ static CodeList* gen_cond_goto(Output& output) {
     GenGetCond callback(buf.stream(), opts);
     const char* getcond = opts->gen_code_yygetcond(buf, callback);
 
-    if (opts->target == Target::DOT) {
-        for (const StartCond& cond : conds) {
-            buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
-            append(stmts, code_text(alc, buf.flush()));
-        }
+    if (opts->computed_gotos) {
+        buf.cstr("*").str(opts->var_cond_table).cstr("[").cstr(getcond).cstr("]");
+        append(stmts, code_goto(alc, buf.flush()));
+    } else if (opts->nested_ifs) {
+        warn_cond_ord &= ncond > 1;
+        append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
     } else {
-        if (opts->computed_gotos) {
-            buf.cstr("*").str(opts->var_cond_table).cstr("[").cstr(getcond).cstr("]");
-            append(stmts, code_goto(alc, buf.flush()));
-        } else if (opts->nested_ifs) {
-            warn_cond_ord &= ncond > 1;
-            append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
-        } else {
-            warn_cond_ord = false;
+        warn_cond_ord = false;
 
-            CodeCases* ccases = code_cases(alc);
-            for (const StartCond& cond : conds) {
-                CodeList* body = code_list(alc);
-                buf.str(opts->cond_label_prefix).str(cond.name);
-                append(body, code_goto(alc, buf.flush()));
+        CodeCases* ccases = code_cases(alc);
+        for (const StartCond& cond : conds) {
+            CodeList* body = code_list(alc);
+            buf.str(opts->cond_label_prefix).str(cond.name);
+            append(body, code_goto(alc, buf.flush()));
 
-                append(ccases, code_case_string(alc, body,
-                        gen_cond_enum_elem(buf, opts, cond.name)));
-            }
-            if (opts->cond_abort) {
-                append(ccases, code_case_default(alc, gen_abort(alc)));
-            }
-            append(stmts, code_switch(alc, getcond, ccases));
+            append(ccases, code_case_string(alc, body,
+                    gen_cond_enum_elem(buf, opts, cond.name)));
         }
-
-        // see note [condition order]
-        warn_cond_ord &= opts->header_file.empty();
-        if (warn_cond_ord) {
-            output.msg.warn.condition_order(block.loc);
+        if (opts->cond_abort) {
+            append(ccases, code_case_default(alc, gen_abort(alc)));
         }
+        append(stmts, code_switch(alc, getcond, ccases));
+    }
+
+    // see note [condition order]
+    warn_cond_ord &= opts->header_file.empty();
+    if (warn_cond_ord) {
+        output.msg.warn.condition_order(block.loc);
     }
 
     return stmts;
@@ -1641,7 +1622,7 @@ static CodeList* gen_cond_table(Output& output) {
     return code;
 }
 
-static Code* gen_yystate_def(Output& output) {
+static Code* gen_yystate_def(Output& output, bool is_cond_block) {
     Scratchbuf& buf = output.scratchbuf;
     const opt_t* opts = output.block().opts;
 
@@ -1657,7 +1638,7 @@ static Code* gen_yystate_def(Output& output) {
         type = VarType::INT;
         GenGetState callback(buf.stream(), opts);
         init = opts->gen_code_yygetstate(buf, callback);
-    } else if (opts->start_conditions) {
+    } else if (is_cond_block) {
         // Else with start conditions yystate should be initialized to YYGETCONDITION.
         type = VarType::UINT;
         GenGetCond callback(buf.stream(), opts);
@@ -1687,7 +1668,7 @@ LOCAL_NODISCARD(Ret gen_yymax(Output& output, Code* code)) {
     }
 
     CodeKind kind = code->kind;
-    const char* dirname = kind == CodeKind::MAXFILL ? "max:re2c" : "maxnmatch:re2c";
+    const char* dirname = kind == CodeKind::MAXFILL ? "max" : "maxnmatch";
     const char* varname = kind == CodeKind::MAXFILL
             ? opts->api_maxfill.c_str() : opts->api_maxnmatch.c_str();
 
@@ -1758,44 +1739,50 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    // If DFA has transitions into the initial state and --eager-skip option is not used, then the
-    // initial state must have a YYSKIP statement that must be bypassed when first entering the DFA.
-    // In loop/switch or func/rec mode that would be impossible, because there can be no transitions
-    // to the middle of a state.
     DCHECK(opts->code_model == CodeModel::GOTO_LABEL);
-    if (dfa.initial_label->used) {
-        buf.str(opts->label_prefix).label(*dfa.initial_label);
-        append(stmts, code_goto(alc, buf.flush()));
-    }
 
     for (State* s = dfa.head; s; s = s->next) {
-        emit_state(output, s, stmts);
+        // If DFA has transitions into the start state and --eager-skip option is not used,
+        // then the start state must have a YYSKIP statement that must be bypassed when first
+        // entering the DFA. In loop/switch or func/rec mode that would be impossible, because
+        // there can be no transitions to the middle of a state.
+        if (s == dfa.start_state && dfa.custom_start_label->used) {
+            buf.str(opts->label_prefix).label(*dfa.custom_start_label);
+            append(stmts, code_goto(alc, buf.flush()));
+        }
+        if (s->label->used) {
+            append(stmts, code_nlabel(alc, s->label));
+            // YYDEBUG for the start state uses a special start label, not start state's label.
+            if (opts->debug && s != dfa.start_state) {
+                append(stmts, code_debug(alc, s->label->index));
+            }
+        }
         emit_action(output, dfa, s, stmts);
         gen_go(output, dfa, &s->go, s, stmts);
     }
 }
 
 void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
+    const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-
-    DCHECK(output.block().opts->code_model != CodeModel::GOTO_LABEL);
+    DCHECK(output.block().opts->code_model == CodeModel::LOOP_SWITCH);
 
     for (State* s = dfa.head; s; s = s->next) {
         CodeList* body = code_list(alc);
 
-        // Emit current state.
-        emit_state(output, s, body);
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
         uint32_t label = s->label->index;
         DCHECK(label != Label::NONE);
+
+        // Emit current state.
+        if (opts->debug) append(body, code_debug(alc, label));
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state. This avoids looping through the
         // `yystate` switch only to return to the next case.
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_state(output, s, body);
             emit_action(output, dfa, s, body);
             gen_go(output, dfa, &s->go, s, body);
         }
@@ -1807,8 +1794,7 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
 void wrap_dfas_in_loop_switch(Output& output, CodeList* stmts, CodeCases* cases) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
-
-    DCHECK(opts->code_model != CodeModel::GOTO_LABEL);
+    DCHECK(opts->code_model == CodeModel::LOOP_SWITCH);
 
     CodeList* loop = code_list(alc);
     gen_storable_state_cases(output, cases);
@@ -1825,21 +1811,26 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
     Scratchbuf& buf = output.scratchbuf;
     CodeFnCommon* fn = output.block().fn_common;
 
-    for (State* s = dfa.head; s;) {
+    for (State* s = dfa.head; s; s = s->next) {
         DCHECK(s->label->index != Label::NONE);
         const char* f = buf.str(opts->label_prefix).u32(s->label->index).flush();
 
         CodeParams* params = need_yych_arg(s) ? fn->params_yych : fn->params;
-
-        // Emit this state and the following state(s) that don't have transitions into them
-        // (such states may be added by the tunneling pass).
         CodeList* body = code_list(alc);
-        do {
-            emit_state(output, s, body);
+
+        // Emit current state.
+        if (opts->debug) append(body, code_debug(alc, s->label->index));
+        emit_action(output, dfa, s, body);
+        gen_go(output, dfa, &s->go, s, body);
+
+        // As long as the following state has no incoming transitions (its label is unused),
+        // generate it as a continuation of the current state (such states may be added by the
+        // tunneling pass).
+        while (s->next && !s->next->label->used) {
+            s = s->next;
             emit_action(output, dfa, s, body);
             gen_go(output, dfa, &s->go, s, body);
-            s = s->next;
-        } while (s && !s->label->used);
+        }
 
         append(code, code_fndef(alc, f, fn->type, params, body));
     }
@@ -1981,7 +1972,7 @@ LOCAL_NODISCARD(Ret gen_block_code(Output& output, const Adfas& dfas, CodeList* 
         // In the loop/switch mode append all DFA states as cases of the `yystate` switch.
         // Merge DFAs for different conditions together in one switch.
         local_decls = true;
-        append(code, gen_yystate_def(output));
+        append(code, gen_yystate_def(output, is_cond_block));
 
         local_decls |= gen_bitmaps(output, code);
 
@@ -2024,7 +2015,11 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
     Scratchbuf& buf = output.scratchbuf;
 
     append(code, code_text(alc, "digraph re2c {"));
-    append(code, gen_cond_goto(output));
+
+    for (const StartCond& cond : output.block().conds) {
+        buf.cstr("0 -> ").str(cond.name).cstr(" [label=\"state=").str(cond.name).cstr("\"]");
+        append(code, code_text(alc, buf.flush()));
+    }
 
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         if (!dfa->cond.empty()) {
@@ -2033,16 +2028,16 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
         }
 
         for (State* s = dfa->head; s; s = s->next) {
-            if (s->action.kind == Action::Kind::ACCEPT) {
+            if (s->kind == StateKind::ACCEPT) {
                 uint32_t i = 0;
-                for (const AcceptTrans& a: *s->action.info.accepts) {
+                for (const AcceptTrans& a: *s->accepts) {
                     buf.label(*s->label).cstr(" -> ").label(*a.state->label)
                             .cstr(" [label=\"yyaccept=").u32(i).cstr("\"]");
                     append(code, code_text(alc, buf.flush()));
                     ++i;
                 }
-            } else if (s->action.kind == Action::Kind::RULE) {
-                const SemAct* semact = dfa->rules[s->action.info.rule].semact;
+            } else if (s->kind == StateKind::RULE) {
+                const SemAct* semact = dfa->rules[s->rule].semact;
                 if (!semact->autogen) {
                     buf.label(*s->label).cstr(" [label=\"")
                             .str(output.msg.filenames[semact->loc.file])

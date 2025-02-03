@@ -57,7 +57,7 @@ def lex(yyrecord):
         yyrecord.token = yyrecord.yycursor
     %{
         re2c:api = record;
-        re2c:define:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
+        re2c:YYFILL = "if fill(yyrecord, @@) != Status.OK: return -1";
         re2c:indent:top = 2;
 
         str = ['] ([^'\\] | [\\][^])* ['];

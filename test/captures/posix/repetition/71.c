@@ -4,8 +4,9 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 7) YYFILL(7);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
 			yyt1 = YYCURSOR;

@@ -12,45 +12,38 @@ static inline char hex(uint32_t c) {
 
 static void print_char(std::ostream& o, uint32_t c, const opt_t* opts) {
     bool dot = opts->target == Target::DOT;
-    switch (c) {
-    case '\'':
-        o << (dot ? "'" : "\\'");
-        break;
-    case '"':
-        o << (dot ? "\\\""  : "\"");
-        break;
-    case '\n':
-        o << (dot ? "\\\\n" : "\\n");
-        break;
-    case '\t':
-        o << (dot ? "\\\\t" : "\\t");
-        break;
-    case '\v':
-        o << (dot ? "\\\\v" : "\\v");
-        break;
-    case '\b':
-        o << (dot ? "\\\\b" : "\\b");
-        break;
-    case '\r':
-        o << (dot ? "\\\\r" : "\\r");
-        break;
-    case '\f':
-        o << (dot ? "\\\\f" : "\\f");
-        break;
-    case '\a':
-        o << (dot ? "\\\\a" : "\\a");
-        break;
-    case '\\':
-        o << "\\\\"; // both .dot and C/C++ code expect "\\"
-        break;
-    default:
-        if (is_print(c) || is_space(c)) {
-            o << static_cast<char> (c);
-        } else {
-            CHECK(opts->encoding.cunit_size() == 1);
-            o << (dot ? "\\\\x" : "\\x") << hex(c >> 4u) << hex(c);
+    if (dot) {
+        switch (c) {
+            case '"': o << "\\\""; return;
+            case '\n': o << "\\\\n"; return;
+            case '\t': o << "\\\\t"; return;
+            case '\v': o << "\\\\v"; return;
+            case '\b': o << "\\\\b"; return;
+            case '\r': o << "\\\\r"; return;
+            case '\f': o << "\\\\f"; return;
+            case '\a': o << "\\\\a"; return;
+            case '\\': o << "\\\\"; return;
+            default: break;
         }
-        break;
+    } else if (opts->special_escapes.find(static_cast<char>(c)) != std::string::npos) {
+        switch (c) {
+            case '\'': o << "\\'"; return;
+            case '\n': o << "\\n"; return;
+            case '\t': o << "\\t"; return;
+            case '\v': o << "\\v"; return;
+            case '\b': o << "\\b"; return;
+            case '\r': o << "\\r"; return;
+            case '\f': o << "\\f"; return;
+            case '\a': o << "\\a"; return;
+            case '\\': o << "\\\\"; return;
+            default: break;
+        }
+    }
+    if (is_print(c)) {
+        o << static_cast<char>(c);
+    } else {
+        CHECK(opts->encoding.cunit_size() == 1);
+        o << (dot ? "\\\\x" : "\\x") << hex(c >> 4u) << hex(c);
     }
 }
 

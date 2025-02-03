@@ -18,7 +18,7 @@ loop:
     /*!re2c
         re2c:api:style = free-form;
         re2c:define:YYCTYPE = char;
-        re2c:define:YYFILL  = "goto fail;";
+        re2c:define:YYFILL = "goto fail;";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

@@ -20,10 +20,10 @@ let s2n (str: string) (i1: int) (i2: int) : int =
     in f str i1 i2 0
 
 %{local
-    re2c:define:YYFN = ["parse;(int list) option", "st;state"];
-    re2c:define:YYMTAGP = "@@ <- st.yycursor :: @@;";
-    re2c:define:YYMTAGN = ""; // alternatively could add `-1` to the list
-    re2c:variable:yyrecord = "st";
+    re2c:YYFN = ["parse;(int list) option", "st;state"];
+    re2c:YYMTAGP = "@@ <- st.yycursor :: @@;";
+    re2c:YYMTAGN = ""; // alternatively could add `-1` to the list
+    re2c:yyrecord = "st";
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
 
@@ -50,8 +50,8 @@ let test (str: string) (result: (int list) option) =
     in if not (parse st = result) then raise (Failure "error")
 
 let main () =
-    test "1\x00" (Some [1]);
-    test "1.2.3.4.5.6.7\x00" (Some [1; 2; 3; 4; 5; 6; 7;]);
-    test "1.2.\x00" None
+    test "1" (Some [1]);
+    test "1.2.3.4.5.6.7" (Some [1; 2; 3; 4; 5; 6; 7;]);
+    test "1.2." None
 
 let _ = main ()

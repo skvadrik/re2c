@@ -259,51 +259,20 @@ static void print_headers(const char *tok,
 
 static int lex(input_t *in, long *count)
 {
-    const char *at = NULL;
-const char *au = NULL;
-const char *hs1 = NULL;
-const char *hs2 = NULL;
-const char *hs3 = NULL;
-const char *hs4 = NULL;
-const char *m1 = NULL;
-const char *m2 = NULL;
-const char *of = NULL;
-const char *p1 = NULL;
-const char *p2 = NULL;
-const char *p3 = NULL;
-const char *p4 = NULL;
-const char *p5 = NULL;
-const char *p6 = NULL;
-const char *q1 = NULL;
-const char *q2 = NULL;
-const char *q3 = NULL;
-const char *q4 = NULL;
-const char *r1 = NULL;
-const char *r2 = NULL;
-const char *r3 = NULL;
-const char *r4 = NULL;
-const char *rp1 = NULL;
-const char *rp2 = NULL;
-const char *s1 = NULL;
-const char *s2 = NULL;
-const char *st1 = NULL;
-const char *st2 = NULL;
-const char *u1 = NULL;
-const char *u2 = NULL;
-const char *u3 = NULL;
-const char *u4 = NULL;
-const char *v1 = NULL;
-const char *v2 = NULL;
-const char *v3 = NULL;
-const char *v4 = NULL;
+    const char *of, *au, *at,
+        *hs1, *hs3, *m1, *p1, *p3, *p5, *q1, *q3,
+        *hs2, *hs4, *m2, *p2, *p4, *p6, *q2, *q4,
+        *r1, *r3, *rp1, *s1, *st1, *u1, *u3, *v1, *v3,
+        *r2, *r4, *rp2, *s2, *st2, *u2, *u4, *v2, *v4;
+    mtag_t *h1, *h2, *h3, *h4, *h5;
+    long c;
 
-    mtag_t *h1;
-mtag_t *h2;
-mtag_t *h3;
-mtag_t *h4;
-mtag_t *h5;
-
-    long c = 0;
+    c = 0;;
+    of = au = at
+        = hs1 = hs3 = m1 = p1 = p3 = p5 = q1 = q3
+        = hs2 = hs4 = m2 = p2 = p4 = p6 = q2 = q4
+        = r1 = r3 = rp1 = s1 = st1 = u1 = u3 = v1 = v3
+        = r2 = r4 = rp2 = s2 = st2 = u2 = u4 = v2 = v4 = NULL;
 loop:
     in->tok = in->cur;
 
@@ -14076,21 +14045,21 @@ int main(int argc, char **argv)
     free_input(&in);
     return 0;
 }
-c/submatch/http_rfc7230.re:236:17: warning: tag 'm1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'at' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'u3' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'u4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'hs3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'hs4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'r3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 's1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 's2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'u1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'u2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'hs1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'hs2' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'r1' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'p3' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'h3' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'h4' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-c/submatch/http_rfc7230.re:236:17: warning: tag 'h5' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `m1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `at` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `u3` has 3rd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `u4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `hs3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `hs4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `r3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `s1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `s2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `u1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `u2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `hs1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `hs2` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `r1` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `p3` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `h3` has 3rd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `h4` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+c/submatch/http_rfc7230.re:247:17: warning: tag `h5` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

@@ -3,7 +3,7 @@
 
 const std = @import("std");
 
-// Store u32 number in u64 during parsing to simplify overflow hadling.
+// Store u32 number in u64 during parsing to simplify overflow handling.
 const State = struct {
     yyinput: [:0]const u8,
     yycursor: usize,
@@ -32,7 +32,7 @@ fn parse_u32(s: [:0]const u8) ?u32 {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -40,15 +40,15 @@ fn parse_u32(s: [:0]const u8) ?u32 {
                 switch (yych) {
                     0x30 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     0x31...0x39 => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -61,17 +61,17 @@ fn parse_u32(s: [:0]const u8) ?u32 {
                     0x62 => {
                         st.yycursor += 1;
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                     0x58,
                     0x78 => {
                         st.yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -86,18 +86,18 @@ fn parse_u32(s: [:0]const u8) ?u32 {
                     0x30...0x31 => {
                         st.yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             6 => {
                 st.yycursor = st.yymarker;
                 yystate = 3;
-                continue;
+                continue :yyl;
             },
             7 => {
                 yych = st.yyinput[st.yycursor];
@@ -107,11 +107,11 @@ fn parse_u32(s: [:0]const u8) ?u32 {
                     0x61...0x66 => {
                         st.yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -133,7 +133,7 @@ fn parse_bin(st: *State) ?u32 {
     bin: while (true) {
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -141,11 +141,11 @@ fn parse_bin(st: *State) ?u32 {
                 switch (yych) {
                     0x30...0x31 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -161,7 +161,7 @@ fn parse_oct(st: *State) ?u32 {
     oct: while (true) {
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -169,11 +169,11 @@ fn parse_oct(st: *State) ?u32 {
                 switch (yych) {
                     0x30...0x37 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -189,7 +189,7 @@ fn parse_dec(st: *State) ?u32 {
     dec: while (true) {
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -197,11 +197,11 @@ fn parse_dec(st: *State) ?u32 {
                 switch (yych) {
                     0x30...0x39 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -217,7 +217,7 @@ fn parse_hex(st: *State) ?u32 {
     hex: while (true) {
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = st.yyinput[st.yycursor];
@@ -225,19 +225,19 @@ fn parse_hex(st: *State) ?u32 {
                 switch (yych) {
                     0x30...0x39 => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                     0x41...0x46 => {
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     0x61...0x66 => {
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

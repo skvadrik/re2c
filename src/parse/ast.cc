@@ -185,10 +185,14 @@ AstGram::AstGram(const std::string& name)
       rules(),
       defs(),
       eofs(),
-      setup(),
+      entry(),
+      pre_rule(),
+      post_rule(),
       inherited_defs(),
       inherited_eofs(),
-      inherited_setup(),
+      inherited_entry(),
+      inherited_pre_rule(),
+      inherited_post_rule(),
       def_rule(Rule::NONE),
       eof_rule(Rule::NONE) {}
 
@@ -216,12 +220,12 @@ const AstBlock* AstBlocks::find(const std::string& name) const {
         if (!blocks.empty()) {
             return blocks.back();
         }
-        error("cannot find `/*!rules:re2c ... */` block");
+        error("cannot find `rules` block");
     } else {
         for (const AstBlock* b : blocks) {
             if (b->name == name) return b;
         }
-        error("cannot find `/*!rules:re2c:%s ... */` block", name.c_str());
+        error("cannot find `rules` block named `%s`", name.c_str());
     }
     return nullptr;
 }
@@ -250,36 +254,63 @@ Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const st
     for (const AstGram& g : b->grams) {
         AstGram& gram = find_or_add_gram(grams, g.name);
 
-        // Merge rules. Inherited special rules *, $ and <!> are kept separate from those defined in
-        // the current block, because they are handled differently: they have lower priority and it
-        // is allowed to override them with local rules (while within one block redefinition of a
-        // special rule is an error).
+        // Merge rules. Inherited special rules and actions are kept separate from those
+        // defined in the current block, because they are handled differently: they have lower
+        // priority and it is allowed to override them with local rules (while it is an error
+        // to redefine special rule within one block).
         append(gram.rules, g.rules);
         append(gram.inherited_defs, g.defs);
         append(gram.inherited_eofs, g.eofs);
-        append(gram.inherited_setup, g.setup);
+        append(gram.inherited_entry, g.entry);
+        append(gram.inherited_pre_rule, g.pre_rule);
+        append(gram.inherited_post_rule, g.post_rule);
     }
 
     // Merge configurations and symtab.
     return opts.merge(b->opts, input);
 }
 
+static const loc_t& find_rule_location(const AstGram& g) {
+    // Try to find location of some rule.
+
+    if (!g.rules.empty()) return g.rules[0].semact->loc;
+    if (!g.defs.empty()) return g.defs[0]->loc;
+    if (!g.eofs.empty()) return g.eofs[0]->loc;
+    if (!g.entry.empty()) return g.entry[0]->loc;
+    if (!g.pre_rule.empty()) return g.pre_rule[0]->loc;
+    if (!g.post_rule.empty()) return g.post_rule[0]->loc;
+
+    if (!g.inherited_defs.empty()) return g.inherited_defs[0]->loc;
+    if (!g.inherited_eofs.empty()) return g.inherited_eofs[0]->loc;
+    if (!g.inherited_entry.empty()) return g.inherited_entry[0]->loc;
+    if (!g.inherited_pre_rule.empty()) return g.inherited_pre_rule[0]->loc;
+    if (!g.inherited_post_rule.empty()) return g.inherited_post_rule[0]->loc;
+
+    UNREACHABLE();
+    return NOWHERE;
+}
+
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) {
     if (grams.empty()) return Ret::OK;
 
     for (const AstGram& g : grams) {
-        if (g.defs.size() > 1) {
-            RET_FAIL(msg.error(g.defs[1]->loc,
-                               "code to default rule %sis already defined at line %u",
-                               incond(g.name).c_str(), g.defs[0]->loc.line));
-        } else if (g.eofs.size() > 1) {
-            RET_FAIL(msg.error(g.eofs[1]->loc,
-                               "EOF rule %sis already defined at line %u",
-                               incond(g.name).c_str(), g.eofs[0]->loc.line));
-        } else if (g.rules.empty() && g.defs.empty() && !g.eofs.empty()) {
+        // Check for redundant special rules and actions.
+#define CHECK_SPECIAL(what, str) \
+        if (g.what.size() > 1) { \
+            RET_FAIL(msg.error(g.what[1]->loc, "%s %sis already defined at line %u", \
+                str, incond(g.name).c_str(), g.what[0]->loc.line)); \
+        }
+        CHECK_SPECIAL(defs, "default rule");
+        CHECK_SPECIAL(eofs, "end of input rule");
+        CHECK_SPECIAL(entry, "entry action");
+        CHECK_SPECIAL(pre_rule, "pre-rule action");
+        CHECK_SPECIAL(post_rule, "post-rule action");
+#undef CHECK_SPECIAL
+
+        if (g.rules.empty() && g.defs.empty() && !g.eofs.empty()) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
-                               "EOF rule %swithout other rules doesn't make sense",
-                               incond(g.name).c_str()));
+                "end of input rule %swithout other rules doesn't make sense",
+                incond(g.name).c_str()));
         }
     }
 
@@ -287,57 +318,53 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         // normal mode: there must be no named grams corresponding to conditions
         for (const AstGram& g : grams) {
             if (!g.name.empty()) { // found named gram
-                const loc_t& loc = !g.rules.empty() ? g.rules[0].semact->loc
-                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
-                RET_FAIL(msg.error(loc,
-                                   "conditions are only allowed with '-c', '--conditions' option"));
+                RET_FAIL(msg.error(find_rule_location(g),
+                    "conditions are only allowed with '-c', '--conditions' option"));
             }
         }
     } else if (grams.size() == 1 && grams[0].name.empty()) {
         // condition mode, a single unnamed gram => ok, normal blocks are allowed
     } else {
         // condition mode, at least one named gram => this is a block with conditions
-
         for (const AstGram& g : grams) {
             if (g.name.empty()) { // found unnamed gram
-                const loc_t& l = !g.rules.empty() ? g.rules[0].semact->loc
-                        : !g.defs.empty() ? g.defs[0]->loc : NOWHERE;
-                RET_FAIL(msg.error(l, "cannot mix conditions with normal rules"));
+                RET_FAIL(msg.error(find_rule_location(g),
+                    "cannot mix conditions with normal rules"));
             }
         }
 
+        // Check for redundant actions in `<*>` condiiton or nonexistent conditions.
+#define CHECK_ACTION(action, str) do { \
+        bool all_conds_have_it = true; \
+        const SemAct* star_action = nullptr; \
+        for (const AstGram& g : grams) { \
+            if (g.action.empty()) { \
+                all_conds_have_it = false; \
+            } else if (g.name == "*") { \
+                star_action = g.action[0]; \
+            } else if (g.rules.empty()) { \
+                RET_FAIL(msg.error(g.action[0]->loc, \
+                    "%s action for non-existing condition `%s` found", \
+                    str, g.name.c_str())); \
+            } \
+        } \
+        if (star_action && all_conds_have_it) { \
+            RET_FAIL(msg.error(star_action->loc, \
+                "%s action for all conditions `*` is unused, as it's already defined " \
+                "for each condition individually", str)); \
+        } \
+} while(0)
+        CHECK_ACTION(entry, "entry");
+        CHECK_ACTION(pre_rule, "pre-rule");
+        CHECK_ACTION(post_rule, "post-rule");
+#undef CHECK_ACTION
+
+        // Check zero condition. It has similar purpose to the !entry action, but the latter
+        // is per-condition, while <> is one for all conditions.
         for (const AstGram& g : grams) {
-            if (g.setup.size() > 1) {
-                RET_FAIL(msg.error(g.setup[1]->loc,
-                                   "code to setup rule '%s' is already defined at line %u",
-                                   g.name.c_str(), g.setup[0]->loc.line));
-            }
-        }
-
-        for (const AstGram& g : grams) {
-            if (g.name != "*" && !g.setup.empty() && g.rules.empty()) {
-                RET_FAIL(msg.error(g.setup[0]->loc,
-                                   "setup for non existing condition '%s' found", g.name.c_str()));
-            }
-        }
-
-        auto no_setup = std::find_if(
-                grams.begin(), grams.end(), [](const AstGram& g) { return g.setup.empty(); });
-        if (no_setup == grams.end()) { // all grams have setup
-            for (const AstGram& g : grams) {
-                if (g.name == "*") {
-                    RET_FAIL(msg.error(g.setup[0]->loc,
-                                       "setup for all conditions '<!*>' is illegal if setup for "
-                                       "each condition is defined explicitly"));
-                }
-            }
-        }
-
-        for (const AstGram& g : grams) {
-            if (g.name == "0" && g.rules.size() > 1) {
+            if (g.name == ZERO_COND && g.rules.size() > 1) {
                 RET_FAIL(msg.error(g.rules[1].semact->loc,
-                                   "startup code is already defined at line %u",
-                                   g.rules[0].semact->loc.line));
+                    "entry action is already defined at line %u", g.rules[0].semact->loc.line));
             }
         }
     }
@@ -346,20 +373,24 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     for (AstGram& g : grams) {
         append(g.defs, g.inherited_defs);
         append(g.eofs, g.inherited_eofs);
-        append(g.setup, g.inherited_setup);
+        append(g.entry, g.inherited_entry);
+        append(g.pre_rule, g.inherited_pre_rule);
+        append(g.post_rule, g.inherited_post_rule);
     }
 
-    // Merge <*> rules and <!*> setup to all conditions except "0". Star rules must have lower
-    // priority than normal rules.
+    // Merge <*> rules and actions to all conditions except zero condition <>.
+    // Star rules must have lower priority than normal rules.
     auto star = std::find_if(
             grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
     if (star != grams.end()) {
         for (AstGram& g : grams) {
-            if (g.name != "*" && g.name != "0") {
+            if (g.name != "*" && g.name != ZERO_COND) {
                 append(g.rules, star->rules);
                 append(g.defs, star->defs);
                 append(g.eofs, star->eofs);
-                append(g.setup, star->setup);
+                append(g.entry, star->entry);
+                append(g.pre_rule, star->pre_rule);
+                append(g.post_rule, star->post_rule);
             }
         }
         grams.erase(star);
@@ -380,24 +411,25 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         }
     }
 
-    // "0" condition must be the first one.
+    // zero condition must be the first one.
     auto zero = std::find_if(
-            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "0"; });
+            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == ZERO_COND; });
     if (zero != grams.end() && zero != grams.begin()) {
         AstGram zero_copy(*zero);
         grams.erase(zero);
         grams.insert(grams.begin(), zero_copy);
     }
 
-    // Check that 're2c:eof' configuration and the $ rule are used together. This must be done after
+    // Check that `re2c:eof` configuration and the $ rule are used together. This must be done after
     // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
+    // Skip zero condition, as it's a special one that has no rules and always matches empty string.
     for (const AstGram& g : grams) {
         if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
             RET_FAIL(msg.error(g.eofs[0]->loc,
-                               "%s$ rule found, but 're2c:eof' configuration is not set",
+                               "%s$ rule found, but `re2c:eof` configuration is not set",
                                incond(g.name).c_str()));
-        } else if (g.eofs.empty() && opts->fill_eof != NOEOF) {
-            RET_FAIL(error("%s're2c:eof' configuration is set, but no $ rule found",
+        } else if (g.eofs.empty() && opts->fill_eof != NOEOF && g.name != ZERO_COND) {
+            RET_FAIL(error("%s`re2c:eof` configuration is set, but no $ rule found",
                            incond(g.name).c_str()));
         }
     }
@@ -407,5 +439,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
 constexpr uint32_t Ast::MANY;
+
+const char* ZERO_COND = "0";
 
 } // namespace re2c

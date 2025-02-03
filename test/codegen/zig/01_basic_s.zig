@@ -8,36 +8,36 @@ fn lex(yyinput: [:0]const u8) bool {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
                 yycursor += 1;
                 if (yych <= 0x30) {
                     yystate = 1;
-                    continue;
+                    continue :yyl;
                 }
                 if (yych <= 0x39) {
                     yystate = 2;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 1;
-                continue;
+                continue :yyl;
             },
             1 => { return false; },
             2 => {
                 yych = yyinput[yycursor];
                 if (yych <= 0x2F) {
                     yystate = 3;
-                    continue;
+                    continue :yyl;
                 }
                 if (yych <= 0x39) {
                     yycursor += 1;
                     yystate = 2;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 3;
-                continue;
+                continue :yyl;
             },
             3 => { return true; },
             else => { @panic("internal lexer error"); },

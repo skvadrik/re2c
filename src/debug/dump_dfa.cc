@@ -92,7 +92,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     }
     fprintf(stderr, "</TABLE>>]\n");
 
-    // transitions (initial state)
+    // transitions (start state)
     if (origin == Tdfa::NIL) {
         fprintf(stderr, "  void [shape=point]\n");
 

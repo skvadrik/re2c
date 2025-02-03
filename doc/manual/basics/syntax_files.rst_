@@ -1,0 +1,586 @@
+Support for different languages in re2c is based on the idea of *syntax files*.
+A syntax file is a configuration file that defines syntax of the target language
+-- not the whole language, but a small part of it that is used by the generated
+code. Syntax files make re2c very flexible, but they should not be used as a
+replacement for ``re2c:`` configurations: their purpose is to define syntax of
+the target language, not to customize one particular lexer. All supported
+languages have default syntax files that are part of the distribution (see
+``include/syntax`` subdirectory); they are also embedded in the |re2c| binary.
+Users may provide a custom syntax file that overrides a few configurations for
+one of supported languages, or they may choose to redefine all configurations
+(in that case ``--lang none`` option should be used).
+Syntax files contain configurations of four different kinds: feature lists,
+language configurations, inplace configurations and code templates.
+
+**Feature lists**
+
+  A few list configurations define various features supported by a given
+  backend, so that |re2c| may give a clear error if the user tries to enable an
+  unsupported feature:
+
+  ``supported_apis``
+      A list of supported APIs with possible elements ``simple``, ``record``,
+      ``generic``.
+
+  ``supported_api_styles``
+      A list of supported API styles with possible elements ``functions``,
+      ``free-form``.
+
+  ``supported_code_models``
+      A list of supported code models with possible elements ``goto-label``,
+      ``loop-switch``, ``recursive-functions``.
+
+  ``supported_targets``
+      A list of supported codegen targets with possible elements ``code``,
+      ``dot``, ``skeleton``.
+
+  ``supported_features``
+      A list of supported features with possible elements ``nested-ifs``,
+      ``bitmaps``, ``computed-gotos``, ``case-ranges``, ``monadic``, ``unsafe``,
+      ``tags``, ``captures``, ``captvars``.
+
+**Language configurations**
+
+  A few boolean configurations describe features of the target language that
+  affect |re2c| parser and code generator:
+
+  ``semicolons``
+      Non-zero if the language uses semicolons after statements.
+
+  ``backtick_quoted_strings``
+      Non-zero if the language has backtick-quoted strings.
+
+  ``single_quoted_strings``
+      Non-zero if the language has single-quoted strings.
+
+  ``indentation_sensitive``
+      Non-zero if the language is indentation sensitive.
+
+  ``wrap_blocks_in_braces``
+      Non-zero if compound statements must be wrapped in curly braces.
+
+**Inplace configurations**
+
+  Syntax files define initial values of all ``re2c:`` configurations, as they
+  may differ for different languages. See configurations section for a full list
+  of all inplace configurations and their meaning.
+
+**Code templates**
+
+  Code templates define syntax of the target language. They are written in a
+  simple domain-specific language with the following formal grammar:
+
+  .. code-block:: bnf
+
+    code-template ::
+          name '=' code-exprs ';'
+        | CODE_TEMPLATE ';'
+        | '<undefined>' ';'
+
+    code-exprs ::
+          <EMPTY>
+        | code-exprs code-expr
+
+    code-expr ::
+          STRING
+        | VARIABLE
+        | optional
+        | list
+
+    optional ::
+          '(' CONDITIONAL '?' code-exprs ')'
+        | '(' CONDITIONAL '?' code-exprs ':' code-exprs ')'
+
+    list ::
+          '[' VARIABLE ':' code-exprs ']'
+        | '[' VARIABLE '{' NUMBER '}' ':' code-exprs ']'
+        | '[' VARIABLE '{' NUMBER ',' NUMBER '}' ':' code-exprs ']'
+
+  A code template is a sequence of string literals, variables, optional elements
+  and lists, or a reference to another code template, or a special value
+  ``<undefined>``. Variables are placeholders that are substituted during code
+  generation phase. List variables are special: when expanding list templates,
+  |re2c| repeats expressions the right hand side of the column a few times, each
+  time replacing occurrences of the list variable with a value specific to this
+  repetition. Lists have optional bounds (negative values are counted from the
+  end, e.g. ``-1`` means the last element). Conditional names start with a dot.
+  Both conditionals and variables may be either local (specific to the given
+  code template) or global (allowed in all code templates). When |re2c| reads
+  syntax file, it checks that each code template uses only the variables and
+  conditionals that are allowed in it.
+
+  For example, the following code template defines if-then-else construct for a
+  C-like language:
+
+  .. code-block:: cpp
+
+    code:if_then_else =
+        [branch{0}: topindent "if " cond " {" nl
+            indent [stmt: stmt] dedent]
+        [branch{1:-1}: topindent "} else" (.cond ? " if " cond) " {" nl
+            indent [stmt: stmt] dedent]
+        topindent "}" nl;
+
+  Here ``branch`` is a list variable: ``branch{0}`` expands to the first branch
+  (which is special, as there is no ``else`` part), ``branch{1:-1}`` expands to
+  all remaining branches (if any). ``stmt`` is also a list variable:
+  ``[stmt: stmt]`` is a nested list that expands to a list of statements in the
+  body of the current branch. ``topindent``, ``indent``, ``dedent`` and ``nl``
+  are global variables, and ``.cond`` is a local conditional (their meaning is
+  described below). This code template could produce the following code:
+
+  .. code-block:: cpp
+
+    if x {
+        // do something
+    } else if y {
+        // do something else
+    } else {
+        // don't do anything
+    }
+
+  Here's a list of all code templates supported by |re2c| with their local
+  variables and conditionals. Note that a particular definition may, but does
+  not have to use local variables and conditionals.
+  Any unused code templates should be set to ``<undefined>``.
+
+  ``code:var_local``
+      Declaration or definition of a local variable. Supported variables:
+      ``type`` (the type of the variable), ``name`` (its name) and ``init``
+      (initial value, if any). Conditionals: ``.init`` (true if there is an
+      initializer).
+
+  ``code:var_global``
+      Same as ``code:var_local``, except that it's used in top-level.
+
+  ``code:const_local``
+      Definition of a local constant. Supported variables: ``type`` (the type
+      of the constant), ``name`` (its name) and ``init`` (initial value).
+
+  ``code:const_global``
+      Same as ``code:const_local``, except that it's used in top-level.
+
+  ``code:array_local``
+      Definition of a local array (table). Supported variables: ``type`` (the
+      type of array elements), ``name`` (array name), ``size`` (its size),
+      ``row`` (a list variable that does not itself produce any code, but
+      expands list expression as many times as there are rows in the table)
+      and ``elem`` (a list variable that expands to all table elements in the
+      current row -- it's meant to be nested in the ``row`` list).
+
+  ``code:array_global``
+      Same as ``code:array_local``, except that it's used in top-level.
+
+  ``code:array_elem``
+      Reference to an element of an array (table). Supported variables:
+      ``array`` (the name of the array) and ``index`` (index of the element).
+
+  ``code:enum``
+      Definition of an enumeration (it may be defined using a special language
+      construct for enumerations, or simply as a few standalone constants).
+      Supported variables are ``type`` (user-defined enumeration type or type
+      of the constants), ``elem`` (list variable that expands to the name of
+      each member) and ``init`` (initializer for each member). Conditionals:
+      ``.init`` (true if there is an initializer).
+
+  ``code:enum_elem``
+      Enumeration element (a member of a user-defined enumeration type or a
+      name of a constant, depending on how ``code:enum`` is defined).
+      Supported variables are ``name`` (the name of the element) and ``type``
+      (its type).
+
+  ``code:assign``
+      Assignment statement. Supported variables are ``lhs`` (left hand side)
+      and ``rhs`` (right hand side).
+
+  ``code:type_int``
+      Signed integer type.
+
+  ``code:type_uint``
+      Unsigned integer type.
+
+  ``code:type_yybm``
+      Type of elements in the ``yybm`` table.
+
+  ``code:type_yytarget``
+      Type of elements in the ``yytarget`` table.
+
+  ``code:cmp_eq``
+      Operator "equals".
+
+  ``code:cmp_ne``
+      Operator "not equals".
+
+  ``code:cmp_lt``
+      Operator "less than".
+
+  ``code:cmp_gt``
+      Operator "greater than"
+
+  ``code:cmp_le``
+      Operator "less or equal"
+
+  ``code:cmp_ge``
+      Operator "greater or equal"
+
+  ``code:if_then_else``
+      If-then-else statement with one or more branches. Supported variables:
+      ``branch`` (a list variable that does not itself produce any code, but
+      expands list expression as many times as there are branches), ``cond``
+      (condition of the current branch) and ``stmt`` (a list variable that
+      expands to all statements in the current branch). Conditionals:
+      ``.cond`` (true if the current branch has a condition), ``.many`` (true
+      if there's more than one branch).
+
+  ``code:if_then_else_oneline``
+      A specialization of ``code:if_then_else`` for the case when all branches
+      have one-line statements. If this is ``<undefined>``,
+      ``code:if_then_else`` is used instead.
+
+  ``code:switch``
+      A switch statement with one or more cases. Supported variables: ``expr``
+      (the switched-on expression) and ``case`` (a list variable that expands
+      to all cases-groups with their code blocks).
+
+  ``code:switch_cases``
+      A group of switch cases that maps to a single code block. Supported
+      variables are ``case`` (a list variable that expands to all cases in
+      this group) and ``stmt`` (a list variable that expands to all statements
+      in the code block.
+
+  ``code:switch_cases_oneline``
+      A specialization of ``code:switch_cases`` for the case when the code
+      block consists of a single one-line statement. If this is
+      ``<undefined>``, ``code:switch_cases`` is used instead.
+
+  ``code:switch_case_range``
+      A single switch case that covers a range of values (possibly consisting
+      of a single value). Supported variable: ``val`` (a list variable that
+      expands to all values in the range). Supported conditionals: ``.many``
+      (true if there's more than one value in the range) and
+      ``.char_literals`` (true if this is a switch on character literals --
+      some languages provide special syntax for this case).
+
+  ``code:switch_case_default``
+      Default switch case.
+
+  ``code:loop``
+      A loop that runs forever (unless interrupted from the loop body).
+      Supported variables: ``label`` (loop label), ``stmt`` (a list variable
+      that expands to all statements in the loop body).
+
+  ``code:continue``
+      Continue statement. Supported variables: ``label`` (label from which to
+      continue execution).
+
+  ``code:goto``
+      Goto statement. Supported variables: ``label`` (label of the jump
+      target).
+
+  ``code:fndecl``
+      Function declaration. Supported variables: ``name`` (function name),
+      ``type`` (return type), ``arg`` (a list variable that does not itself
+      produce code, but expands list expression as many times as there are
+      function arguments), ``argname`` (name of the current argument),
+      ``argtype`` (type of the current argument). Conditional: ``.type`` (true
+      if this is a non-void function).
+
+  ``code:fndef``
+      Like ``code:fndecl``, but used for function definitions, so it has one
+      additional list variable ``stmt`` that expands to all statements in the
+      function body.
+
+  ``code:fncall``
+      Function call statement. Supported variables: ``name`` (function name),
+      ``retval`` (l-value where the return value is stored, if any) and
+      ``arg`` (a list variable that expands to all function arguments).
+      Conditionals: ``.args`` (true if the function has arguments) and
+      ``.retval`` (true if return value needs to be saved).
+
+  ``code:tailcall``
+      Tail call statement. Supported variables: ``name`` (function name),
+      and ``arg`` (a list variable that expands to all function arguments).
+      Conditionals: ``.args`` (true if the function has arguments) and
+      ``.retval`` (true if this is a non-void function).
+
+  ``code:recursive_functions``
+      Program body with ``--recursive-functions`` code model. Supported
+      variables: ``fn`` (a list variable that does not itself produce any
+      code, but expands list expression as many times as there are functions),
+      ``fndecl`` (declaration of the current function) and ``fndef``
+      (definition of the current function).
+
+  ``code:fingerprint``
+      The fingerprint at the top of the generated output file. Supported
+      variables: ``ver`` (|re2c| version that was used to generate this) and
+      ``date`` (generation date).
+
+  ``code:line_info``
+      The format of line directives (if this is set to ``<undefined>``, no
+      directives are generated). Supported variables: ``line`` (line number)
+      and ``file`` (filename).
+
+  ``code:abort``
+      A statement that aborts program execution.
+
+  ``code:yydebug``
+      ``YYDEBUG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYDEBUG``, ``yyrecord``, ``yych`` (map to the
+      corresponding ``re2c:`` configurations), ``state`` (DFA state number).
+
+  ``code:yypeek``
+      ``YYPEEK`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYPEEK``, ``YYCTYPE``, ``YYINPUT``, ``YYCURSOR``,
+      ``yyrecord``, ``yych`` (map to the corresponding ``re2c:``
+      configurations). Conditionals: ``.cast`` (true if
+      ``re2c:yych:conversion`` is set to non-zero).
+
+  ``code:yyskip``
+      ``YYSKIP`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSKIP``, ``YYCURSOR``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations).
+
+  ``code:yybackup``
+      ``YYBACKUP`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYBACKUP``, ``YYCURSOR``, ``YYMARKER``,
+      ``yyrecord`` (map to the corresponding ``re2c:`` configurations).
+
+  ``code:yybackupctx``
+      ``YYBACKUPCTX`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYBACKUPCTX``, ``YYCURSOR``, ``YYCTXMARKER``,
+      ``yyrecord`` (map to the corresponding ``re2c:`` configurations).
+
+  ``code:yyskip_yypeek``
+      Combined ``code:yyskip`` and ``code:yypeek`` statement (defaults to
+      ``code:yyskip`` followed by ``code:yypeek``).
+
+  ``code:yypeek_yyskip``
+      Combined ``code:yypeek`` and ``code:yyskip`` statement (defaults to
+      ``code:yypeek`` followed by ``code:yyskip``).
+
+  ``code:yyskip_yybackup``
+      Combined ``code:yyskip`` and ``code:yybackup`` statement (defaults to
+      ``code:yyskip`` followed by ``code:yybackup``).
+
+  ``code:yybackup_yyskip``
+      Combined ``code:yybackup`` and ``code:yyskip`` statement (defaults to
+      ``code:yybackup`` followed by ``code:yyskip``).
+
+  ``code:yybackup_yypeek``
+      Combined ``code:yybackup`` and ``code:yypeek`` statement (defaults to
+      ``code:yybackup`` followed by ``code:yypeek``).
+
+  ``code:yyskip_yybackup_yypeek``
+      Combined ``code:yyskip``, ``code:yybackup`` and ``code:yypeek``
+      statement (defaults to``code:yyskip`` followed by ``code:yybackup``
+      followed by ``code:yypeek``).
+
+  ``code:yybackup_yypeek_yyskip``
+      Combined ``code:yybackup``, ``code:yypeek`` and ``code:yyskip``
+      statement (defaults to``code:yybackup`` followed by ``code:yypeek``
+      followed by ``code:yyskip``).
+
+  ``code:yyrestore``
+      ``YYRESTORE`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYRESTORE``, ``YYCURSOR``, ``YYMARKER``,
+      ``yyrecord`` (map to the corresponding ``re2c:`` configurations).
+
+  ``code:yyrestorectx``
+      ``YYRESTORECTX`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYRESTORECTX``, ``YYCURSOR``, ``YYCTXMARKER``,
+      ``yyrecord`` (map to the corresponding ``re2c:`` configurations).
+
+  ``code:yyrestoretag``
+      ``YYRESTORETAG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYRESTORETAG``, ``YYCURSOR``, ``yyrecord`` (map
+      to the corresponding ``re2c:`` configurations), ``tag`` (the name of tag
+      variable used to restore position).
+
+  ``code:yyshift``
+      ``YYSHIFT`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSHIFT``, ``YYCURSOR``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``offset`` (the number of code
+      units to shift the current position).
+
+  ``code:yyshiftstag``
+      ``YYSHIFTSTAG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSHIFTSTAG``, ``yyrecord``, ``negative`` (map
+      to the corresponding ``re2c:`` configurations), ``tag`` (tag variable
+      which needs to be shifted), ``offset`` (the number of code units to
+      shift). Conditionals: ``.nested`` (true if this is a nested tag -- in
+      this case its value may equal to ``re2c:tags:negative``, which should
+      not be shifted).
+
+  ``code:yyshiftmtag``
+      ``YYSHIFTMTAG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSHIFTMTAG`` (maps to the corresponding
+      ``re2c:`` configuration), ``tag`` (tag variable which needs to be
+      shifted), ``offset`` (the number of code units to shift).
+
+  ``code:yystagp``
+      ``YYSTAGP`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSTAGP``, ``YYCURSOR``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``tag`` (tag variable that
+      should be updated).
+
+  ``code:yymtagp``
+      ``YYMTAGP`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYMTAGP`` (maps to the corresponding ``re2c:``
+      configuration), ``tag`` (tag variable that should be updated).
+
+  ``code:yystagn``
+      ``YYSTAGN`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSTAGN``, ``negative``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``tag`` (tag variable that
+      should be updated).
+
+  ``code:yymtagn``
+      ``YYMTAGN`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYMTAGN`` (maps to the corresponding ``re2c:``
+      configuration), ``tag`` (tag variable that should be updated).
+
+  ``code:yycopystag``
+      ``YYCOPYSTAG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYCOPYSTAG``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``lhs``, ``rhs`` (left and
+      right hand side tag variables of the copy operation).
+
+  ``code:yycopymtag``
+      ``YYCOPYMTAG`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYCOPYMTAG``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``lhs``, ``rhs`` (left and
+      right hand side tag variables of the copy operation).
+
+  ``code:yygetaccept``
+      ``YYGETACCEPT`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYGETACCEPT``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yyaccept`` configuration).
+
+  ``code:yysetaccept``
+      ``YYSETACCEPT`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSETACCEPT``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yyaccept`` configuration) and ``val`` (numeric value of the
+      accepted rule).
+
+  ``code:yygetcond``
+      ``YYGETCOND`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYGETCOND``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yycond`` configuration).
+
+  ``code:yysetcond``
+      ``YYSETCOND`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSETCOND``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yycond`` configuration) and ``val`` (numeric condition
+      identifier).
+
+  ``code:yygetstate``
+      ``YYGETSTATE`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYGETSTATE``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yystate`` configuration).
+
+  ``code:yysetstate``
+      ``YYSETSTATE`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYSETSTATE``, ``yyrecord`` (map to the
+      corresponding ``re2c:`` configurations), ``var`` (maps to
+      ``re2c:yystate`` configuration) and ``val`` (state number).
+
+  ``code:yylessthan``
+      ``YYLESSTHAN`` statement, possibly specialized for different APIs.
+      Supported variables: ``YYLESSTHAN``, ``YYCURSOR``, ``YYLIMIT``,
+      ``yyrecord`` (map to the corresponding ``re2c:`` configurations),
+      ``need`` (the number of code units to check against). Conditional:
+      ``.many`` (true if the ``need`` is more than one).
+
+  ``code:yybm_filter``
+      Condition that is used to filter out ``yych`` values that are not
+      covered by the ``yybm`` table (used with ``--bitmaps`` option).
+      Supported variable: ``yych`` (maps to ``re2c:yych`` configuration).
+
+  ``code:yybm_match``
+      The format of ``yybm`` table check (generated with ``--bitmaps``
+      option). Supported variables: ``yybm``, ``yych`` (map to the
+      corresponding ``re2c:`` configurations), ``offset`` (offset in the
+      ``yybm`` table that needs to be added to ``yych``) and ``mask`` (bit
+      mask that should be applied to the table entry to retrieve the boolean
+      value that needs to be checked)
+
+  Here's a list of all global variables that are allowed in syntax files:
+
+  ``nl``
+      A newline.
+
+  ``indent``
+      A variable that does not produce any code, but has a side-effect of
+      increasing indentation level.
+
+  ``dedent``
+      A variable that does not produce any code, but has a side-effect of
+      decreasing indentation level.
+
+  ``topindent``
+      Indentation string for the current statement. Indentation level is
+      tracked and automatically updated by the code generator.
+
+  Here's a list of all global conditionals that are allowed in syntax files:
+
+  ``.api.simple``
+      True if simple API is used (``--api simple`` or ``re2c:api = simple``).
+
+  ``.api.generic``
+      True if generic API is used (``--api generic`` or
+      ``re2c:api = generic``).
+
+  ``.api.record``
+      True if record API is used (``--api record`` or ``re2c:api = record``).
+
+  ``.api_style.functions``
+      True if function-like API style is used
+      (``re2c:api-style = functions``).
+
+  ``.api_style.freeform``
+      True if free-form API style is used (``re2c:api-style = free-form``).
+
+  ``.case_ranges``
+      True if case ranges feature is enabled (``--case-ranges`` or
+      ``re2c:case-ranges = 1``).
+
+  ``.code_model.goto_label``
+      True if  code model based on goto/label is used (``--goto-label``).
+
+  ``.code_model.loop_switch``
+      True if code model based on loop/switch is used (``--loop-switch``).
+
+  ``.code_model.recursive_functions``
+      True if code model based on recursive functions is used
+      (``--recursive-function``).
+
+  ``.date``
+      True if the generated fingerprint should contain generation date.
+
+  ``.loop_label``
+      True if |re2c| generated loops must have a label (``re2c:label:yyloop``
+      is set to a nonempty string).
+
+  ``.monadic``
+      True if the generated code should be monadic (``re2c:monadic = 1``).
+      This is only relevant for pure functional languages.
+
+  ``.start_conditions``
+      True if start conditions are enabled (``--start-conditions``).
+
+  ``.storable_state``
+      True if storable state is enabled (``--storable-state``).
+
+  ``.unsafe``
+      True if |re2c| should use "unsafe" blocks in order to generate faster
+      code (``--unsafe``, ``re2c:unsafe = 1``). This is only relevant for
+      languages that have "unsafe" feature.
+
+  ``.version``
+      True if the generated fingerprint should contain |re2c| version.
+

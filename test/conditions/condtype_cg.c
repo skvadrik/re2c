@@ -40,4 +40,4 @@ yy3:
 }
 conditions/condtype_cg.re:7:0: warning: control flow in condition 'a' is undefined for strings that match '[\x0-\x60\x62-\xFF]', use default rule '*' [-Wundefined-control-flow]
 conditions/condtype_cg.re:7:0: warning: control flow in condition 'b' is undefined for strings that match '[\x0-\x61\x63-\xFF]', use default rule '*' [-Wundefined-control-flow]
-conditions/condtype_cg.re:7:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+conditions/condtype_cg.re:7:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

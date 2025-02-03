@@ -1,4 +1,4 @@
--- re2hs $INPUT -o $OUTPUT --header lexer/State.hs -i
+-- re2hs $INPUT -o $OUTPUT --header lexer/state.hs -i
 {-# OPTIONS_GHC -Wno-unused-record-wildcards #-}
 {-# LANGUAGE OverloadedStrings #-}
 
@@ -20,10 +20,10 @@ data State = State {
 %{header:off %}
 
 %{
-    re2c:define:YYFN = ["lexer;Int", "State{..};State"];
+    re2c:YYFN = ["lexer;Int", "State{..};State"];
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
-    re2c:header = "lexer/State.hs";
+    re2c:header = "lexer/state.hs";
 
     [a]* @_tag [b]* { _tag }
 %}

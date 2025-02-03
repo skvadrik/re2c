@@ -15,7 +15,7 @@ data State = State {
 }
 
 %{
-    re2c:define:YYFN = ["lexer;Number", "State{..};State"];
+    re2c:YYFN = ["lexer;Number", "State{..};State"];
     re2c:yyfill:enable = 0;
 
     *      { NNaN }

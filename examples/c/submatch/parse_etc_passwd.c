@@ -8,8 +8,7 @@
 
 
 static int lex(const char *YYCURSOR) {
-    const char *YYMARKER;
-    const char *c;const char *f;const char *g;const char *h;const char *n;const char *p;const char *u;
+    const char *YYMARKER, *n, *p, *u, *g, *f, *h, *c;
     const char *yyt1;const char *yyt2;const char *yyt3;const char *yyt4;const char *yyt5;const char *yyt6;const char *yyt7;
 
     for (;;) {

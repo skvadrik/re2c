@@ -136,6 +136,7 @@ enum class CodeKind: uint32_t {
     ENUM,
     STMT,
     GOTO,
+    CONTINUE,
     LOOP,
     TEXT,
     TEXT_RAW,
@@ -155,7 +156,7 @@ enum class VarType: uint32_t {
     YYCTYPE
 };
 
-// Bit flags for configurations used in directives.
+// Bit flags for configurations used in re2c blocks.
 enum DirConf: uint32_t {
     DCONF_FORMAT    = 1u,
     DCONF_SEPARATOR = 2u
@@ -195,8 +196,8 @@ enum class StxGOpt {
     CODE_MODEL_REC_FUNC,
     START_CONDITIONS,
     STORABLE_STATE,
-    HAVE_DATE,
-    HAVE_VER,
+    DATE,
+    VER,
     CASE_RANGES,
     UNSAFE,
     MONADIC,
@@ -206,14 +207,16 @@ enum class StxGOpt {
 enum class StxLOpt {
     CAST,
     CHAR_LITERALS,
-    HAVE_ARGS,
-    HAVE_COND,
-    HAVE_INIT,
-    HAVE_TYPE,
-    HAVE_RETVAL,
+    ARGS,
+    COND,
+    INIT,
+    TYPE,
+    RETVAL,
     MANY,
     NESTED
 };
+
+extern const char* ZERO_COND;
 
 enum class Ret: uint32_t {
     OK,   // all good

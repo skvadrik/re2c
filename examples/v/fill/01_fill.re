@@ -49,7 +49,7 @@ loop:
     /*!re2c
         re2c:api = record;
         re2c:eof = 0;
-        re2c:define:YYFILL = "fill(mut yyrecord) == 0";
+        re2c:YYFILL = "fill(mut yyrecord) == 0";
 
         str = ['] ([^'\\] | [\\][^])* ['];
 

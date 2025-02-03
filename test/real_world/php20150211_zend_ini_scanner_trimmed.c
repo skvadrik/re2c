@@ -2680,4 +2680,4 @@ real_world/php20150211_zend_ini_scanner_trimmed.re:51:50: warning: unreachable r
 real_world/php20150211_zend_ini_scanner_trimmed.re:56:7: warning: unreachable rule in condition 'ST_VALUE' (shadowed by rules at lines 40, 41, 42, 44, 45, 46, 48, 51, 55) [-Wunreachable-rules]
 real_world/php20150211_zend_ini_scanner_trimmed.re:56:7: warning: unreachable rule in condition 'ST_DOUBLE_QUOTES' (shadowed by rules at lines 49, 50) [-Wunreachable-rules]
 real_world/php20150211_zend_ini_scanner_trimmed.re:56:7: warning: unreachable rule in condition 'ST_RAW' (shadowed by rules at lines 38, 40, 55) [-Wunreachable-rules]
-real_world/php20150211_zend_ini_scanner_trimmed.re:2:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+real_world/php20150211_zend_ini_scanner_trimmed.re:2:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

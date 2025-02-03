@@ -1,0 +1,96 @@
+
+re2go has three API flavors that define the core set of primitives used by a
+program:
+
+**Simple API**
+    (*added in version 4.0*)
+    This is a basic API that can be enabled with ``--api simple`` option or
+    ``re2c:api = simple`` configuration. It consists of the following
+    primitives: ``YYINPUT`` (which should be defined as a sequence of code
+    units, e.g. a string) and ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``,
+    ``YYLIMIT`` (which should be defined as indices in ``YYINPUT``).
+
+    |
+
+**Record API**
+    (*added in version 4.0*)
+    Record API is useful in cases when lexer state must be stored in a struct.
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
+    name can be overridden with ``re2c:yyrecord``) that should be
+    defined as a struct with fields ``yyinput``, ``yycursor``, ``yymarker``,
+    ``yyctxmarker``, ``yylimit`` (only the fields used by the generated code
+    need to be defined, and their names can be configured).
+
+    |
+
+**Generic API**
+    This is the most flexible API and the default API for the Go backend.
+    It contains primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.
+    Generic API supports two styles that determine the form in which the
+    primitives should be defined:
+
+    |
+
+    **Free-form**
+        Free-form style is the default one. It can also be enabled with
+        configuration ``re2c:api:style = free-form``.
+        In this style interface primitives should be defined as free-form
+        pieces of code with interpolated variables of the form ``@@{var}`` or
+        optionally just ``@@`` if there is a single variable. The set of
+        variables is specific to each primitive. Here's how free-form generic
+        API can be defined in terms of integer variables ``cursor``, ``limit``,
+        ``marker``, ``ctxmarker`` and a string (or a byte slice) ``data``:
+
+        .. code-block:: go
+
+            /*!re2c
+              re2c:YYPEEK       = "data[cursor]";
+              re2c:YYSKIP       = "cursor++";
+              re2c:YYBACKUP     = "marker = cursor";
+              re2c:YYRESTORE    = "cursor = marker";
+              re2c:YYBACKUPCTX  = "ctxmarker = cursor";
+              re2c:YYRESTORECTX = "cursor = ctxmarker";
+              re2c:YYRESTORETAG = "cursor = ${tag}";
+              re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+              re2c:YYSTAGP      = "@@{tag} = cursor";
+              re2c:YYSTAGN      = "@@{tag} = -1";
+              re2c:YYSHIFT      = "cursor += @@{shift}";
+              re2c:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+            */
+
+        |
+
+    **Function-like**
+        Function-like style is enabled with configuration
+        ``re2c:api:style = functions``. In this style primitives should be
+        defined as closures accepting the necessary arguments. Here's how
+        function-like generic API can be defined in terms of integer variables
+        ``cursor``, ``limit``, ``marker``, ``ctxmarker`` and a string (or a byte
+        slice) ``data``:
+
+        .. code-block:: go
+
+            YYPEEK := func() byte { return data[cursor] }
+            YYSKIP := func() { cursor++ }
+            YYBACKUP := func() { marker = cursor }
+            YYRESTORE := func() { cursor = marker }
+            YYBACKUPCTX := func() { ctxmarker = cursor }
+            YYRESTORECTX := func() { cursor = ctxmarker }
+            YYLESSTHAN := func(n int) bool { return limit-cursor < n }
+            YYSHIFT := func(n int) { cursor += n }

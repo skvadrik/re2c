@@ -10,7 +10,7 @@
 #line 6 "c/submatch/04_posix_captures.re"
 
 
-struct SemVer { int major, minor, patch; };
+typedef struct { int major, minor, patch; } SemVer;
 
 static int s2n(const char *s, const char *e) { // pre-parsed string to number
     int n = 0;
@@ -18,7 +18,7 @@ static int s2n(const char *s, const char *e) { // pre-parsed string to number
     return n;
 }
 
-static bool lex(const char *str, SemVer &ver) {
+static int lex(const char *str, SemVer *ver) {
     const char *YYCURSOR = str, *YYMARKER;
 
     // Allocate memory for capturing parentheses (twice the number of groups).
@@ -60,7 +60,7 @@ yy1:
 	++YYCURSOR;
 yy2:
 #line 43 "c/submatch/04_posix_captures.re"
-	{ return false; }
+	{ return 1; }
 #line 65 "c/submatch/04_posix_captures.c"
 yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
@@ -156,10 +156,10 @@ yy8:
             assert(yynmatch == 4);
             // Even `yypmatch` values are for opening parentheses, odd values
             // are for closing parentheses, the first group is the whole match.
-            ver.major = s2n(yypmatch[2], yypmatch[3]);
-            ver.minor = s2n(yypmatch[4], yypmatch[5]);
-            ver.patch = yypmatch[6] ? s2n(yypmatch[6] + 1, yypmatch[7]) : 0;
-            return true;
+            ver->major = s2n(yypmatch[2], yypmatch[3]);
+            ver->minor = s2n(yypmatch[4], yypmatch[5]);
+            ver->patch = yypmatch[6] ? s2n(yypmatch[6] + 1, yypmatch[7]) : 0;
+            return 0;
         }
 #line 165 "c/submatch/04_posix_captures.c"
 yy9:
@@ -192,8 +192,8 @@ yy11:
 
 int main() {
     SemVer v;
-    assert(lex("23.34", v) && v.major == 23 && v.minor == 34 && v.patch == 0);
-    assert(lex("1.2.999", v) && v.major == 1 && v.minor == 2 && v.patch == 999);
-    assert(!lex("1.a", v));
+    assert(lex("23.34", &v) == 0 && v.major == 23 && v.minor == 34 && v.patch == 0);
+    assert(lex("1.2.999", &v) == 0 && v.major == 1 && v.minor == 2 && v.patch == 999);
+    assert(lex("1.a", &v) == 1);
     return 0;
 }

@@ -30,7 +30,7 @@ LOCAL_NODISCARD(inline Ret set_source_file(conopt_t& global, const char* source)
     do { if (!next(YYCURSOR, argv)) RET_FAIL(error_arg(option)); goto label; } while(0)
 
 #define ERRARG(opt, exp, arg) \
-    RET_FAIL(error("bad argument '%s' to option %s (expected <%s>)", arg, opt, exp))
+    RET_FAIL(error("bad argument `%s` to option %s (expected <%s>)", arg, opt, exp))
 
 LOCAL_NODISCARD(Ret parse_opts(Opt& opts, conopt_t& global, char** argv, Msg& msg, Lang* lang)) {
     char* YYCURSOR, *YYMARKER;
@@ -348,8 +348,7 @@ end:
     return Ret::OK;
 }
 
-Ret Opt::parse(char** argv, Input& input) {
-    Lang lang = RE2C_LANG;
+Ret Opt::parse(char** argv, Input& input, Lang lang) {
     CHECK_RET(parse_opts(*this, const_cast<conopt_t&>(glob), argv, msg, &lang));
 
     // Load syntax file (it must have file index 0).

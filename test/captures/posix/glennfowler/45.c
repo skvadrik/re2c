@@ -3,8 +3,9 @@
 
 {
 	YYCTYPE yych;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 4) YYFILL(4);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	if (yych >= 0x01) {
 		yyt1 = YYCURSOR;
 		yyt3 = NULL;

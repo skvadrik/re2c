@@ -1,0 +1,58 @@
+
+``--dfa-minimization <moore | table>``
+    Internal option: DFA minimization algorithm used by |re2c|. The ``moore``
+    option is the Moore algorithm (it is the default). The ``table`` option is
+    the "table filling" algorithm. Both algorithms should produce the same DFA
+    up to states relabeling; table filling is simpler and much slower and serves
+    as a reference implementation.
+
+``--eager-skip``
+    Internal option: make the generated lexer advance the input position
+    eagerly -- immediately after reading the input symbol. This changes the
+    default behavior when the input position is advanced lazily -- after
+    transition to the next state.
+
+``--no-lookahead``
+    Internal option, deprecated.
+    It used to enable TDFA(0) algorithm. Unlike TDFA(1), TDFA(0) algorithm does
+    not use one-symbol lookahead. It applies register operations to the incoming
+    transitions rather than the outgoing ones. Benchmarks showed that TDFA(0)
+    algorithm is less efficient than TDFA(1).
+
+``--no-optimize-tags``
+    Internal option: suppress optimization of tag variables (useful for
+    debugging).
+
+``--posix-closure <gor1 | gtop>``
+    Internal option: specify shortest-path algorithm used for the construction of
+    epsilon-closure with POSIX disambiguation semantics: ``gor1`` (the default)
+    stands for Goldberg-Radzik algorithm, and ``gtop`` stands for "global
+    topological order" algorithm.
+
+``--posix-prectable <complex | naive>``
+    Internal option: specify the algorithm used to compute POSIX precedence
+    table. The ``complex`` algorithm computes precedence table in one traversal
+    of tag history tree and has quadratic complexity in the number of TNFA
+    states; it is the default. The ``naive`` algorithm has worst-case cubic
+    complexity in the number of TNFA states, but it is much simpler than
+    ``complex`` and may be slightly faster in non-pathological cases.
+
+``--stadfa``
+    Internal option, deprecated.
+    It used to enable staDFA algorithm, which differs from TDFA in that register
+    operations are placed in states rather than on transitions. Benchmarks
+    showed that staDFA algorithm is less efficient than TDFA.
+
+``--fixed-tags <none | toplevel | all>``
+    Internal option:
+    specify whether the fixed-tag optimization should be applied to all tags
+    (``all``), none of them (``none``), or only those in toplevel concatenation
+    (``toplevel``). The default is ``all``.
+    "Fixed" tags are those that are located within a fixed distance to some
+    other tag (called "base"). In such cases only the base tag needs to be
+    tracked, and the value of the fixed tag can be computed as the value of the
+    base tag plus a static offset. For tags that are under alternative or
+    repetition it is also necessary to check if the base tag has a no-match
+    value (in that case fixed tag should also be set to no-match, disregarding
+    the offset). For tags in top-level concatenation the check is not needed,
+    because they always match.

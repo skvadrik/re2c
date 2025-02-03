@@ -44,8 +44,8 @@ struct out_t {
     re2c:yyfill:enable = 0;
     re2c:api:style = free-form;
     re2c:encoding:utf8 = 1;
-    re2c:define:YYGETCOND = "c";
-    re2c:define:YYSETCOND = "c = @@;";
+    re2c:define:YYGETCONDITION = "c";
+    re2c:define:YYSETCONDITION = "c = @@;";
 
     // letters
     l = "\u2830";

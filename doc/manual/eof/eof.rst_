@@ -11,9 +11,9 @@ state with no outgoing transitions, and the matching automatically stops. The
 third condition, end of input, is different: it may happen in any state, and the
 lexer should be able to handle it. Checking for the end of input interrupts the
 normal lexer workflow and adds conditional branches to the generated program,
-therefore it is necessary to minimize the number of such checks. re2c supports a
-few different methods for handling the end of input. Which one to use depends on
-the complexity of regular expressions, the need for buffering, performance
+therefore it is necessary to minimize the number of such checks. |re2c| supports
+a few different methods for handling the end of input. Which one to use depends
+on the complexity of regular expressions, the need for buffering, performance
 considerations and other factors. Here is a list of methods:
 
 - **Sentinel.**
@@ -31,7 +31,7 @@ considerations and other factors. Here is a list of methods:
   |
 
 - **Sentinel with bounds checks.**
-  This method is generic: it allows to handle any input without restrictions on
+  This method is generic: it allows one to handle any input without restrictions on
   the regular expressions. The idea is to reduce the number of end of input
   checks by performing them only on certain characters. Similar to the
   "sentinel" method, one of the characters is chosen as a "sentinel" and
@@ -58,7 +58,7 @@ considerations and other factors. Here is a list of methods:
   the longest lexeme. This can be fixed by padding the input with a few fake
   characters that do not form a valid lexeme suffix (so that the lexer cannot
   match them). The length of padding should be ``YYMAXFILL``, generated with
-  ``/*!max:re2c*/``. If there is not enough input, the lexer invokes ``YYFILL``
+  a ``max`` block. If there is not enough input, the lexer invokes ``YYFILL``
   which should supply at least the required number of characters or not return.
   This method is used if ``YYFILL`` is enabled and ``re2c:eof`` is ``-1``
   (this is the default configuration).
@@ -66,7 +66,7 @@ considerations and other factors. Here is a list of methods:
   |
 
 - **Custom checks.**
-  Generic API allows to override basic operations like reading a character,
+  Generic API allows one to override basic operations like reading a character,
   which makes it possible to include the end-of-input checks as part of them.
   This approach is error-prone and should be used with caution. To use a custom
   method, enable generic API with ``--api custom`` or ``re2c:api = custom;`` and

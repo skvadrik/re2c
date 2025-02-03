@@ -1,0 +1,51 @@
+It is necessary to understand the difference between **code points** and
+**code units**. A code point is a numeric identifier of a symbol. A code unit is
+the smallest unit of storage in the encoded text. A single code point may be
+represented with one or more code units. In a fixed-length encoding all code
+points are represented with the same number of code units. In a variable-length
+encoding code points may be represented with a different number of code units.
+Note that the "any" rule ``[^]`` matches any code point, but not necessarily
+any code unit (the only way to match any code unit regardless of the encoding
+is the default rule ``*``).
+The generated lexer works with a stream of code units: ``yych`` stores a code
+unit, and ``YYCTYPE`` is the code unit type. Regular expressions, on the other
+hand, are specified in terms of code points. When |re2c| compiles regular
+expressions to automata it translates code points to code units. This is
+generally not a simple mapping: in variable-length encodings a single code point
+range may get translated to a complex code unit graph.
+The following encodings are supported:
+
+- **ASCII** (enabled by default). It is a fixed-length encoding with code space
+  ``[0-255]`` and 1-byte code points and code units.
+
+- **EBCDIC** (enabled with ``--ebcdic`` or ``re2c:encoding:ebcdic``). It is a
+  fixed-length encoding with code space ``[0-255]`` and 1-byte code points and
+  code units.
+
+- **UCS2** (enabled with ``--ucs2`` or ``re2c:encoding:ucs2``). It is a
+  fixed-length encoding with code space ``[0-0xFFFF]`` and 2-byte code points
+  and code units.
+
+- **UTF8** (enabled with ``--utf8`` or ``re2c:encoding:utf8``). It is a
+  variable-length Unicode encoding. Code unit size is 1 byte. Code points are
+  represented with 1 -- 4 code units.
+
+- **UTF16** (enabled with ``--utf16`` or ``re2c:encoding:utf16``). It is a
+  variable-length Unicode encoding. Code unit size is 2 bytes. Code points are
+  represented with 1 -- 2 code units.
+
+- **UTF32** (enabled with ``--utf32`` or ``re2c:encoding:utf32``). It is a
+  fixed-length Unicode encoding with code space ``[0-0x10FFFF]`` and 4-byte code
+  points and code units.
+
+Include file ``include/unicode_categories.re`` provides |re2c| definitions for the
+standard Unicode categories.
+
+Option ``--input-encoding`` specifies source file encoding, which can be used to
+enable Unicode literals in regular expressions. For example
+``--input-encoding utf8`` tells |re2c| that the source file is in UTF8 (it differs
+from ``--utf8`` which sets input text encoding). Option ``--encoding-policy``
+specifies the way |re2c| handles Unicode surrogates (code points in range
+``[0xD800-0xDFFF]``).
+
+Below is an example of a lexer for UTF8 encoded Unicode identifiers.

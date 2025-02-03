@@ -2,7 +2,7 @@
 
 const std = @import("std");
 
-// Store u32 number in u64 during parsing to simplify overflow hadling.
+// Store u32 number in u64 during parsing to simplify overflow handling.
 const State = struct {
     yyinput: [:0]const u8,
     yycursor: usize,
@@ -13,7 +13,7 @@ const State = struct {
 // Common re2c definitions shared between all functions.
 %{
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
 %}
 

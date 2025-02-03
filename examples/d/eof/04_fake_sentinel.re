@@ -16,9 +16,9 @@ private int lex(immutable char[] s) {
     /*!re2c
         re2c:api = generic;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
-        re2c:define:YYPEEK  = "cur < lim ? *cur : 0";  // fake null
-        re2c:define:YYSKIP  = "++cur;";
+        re2c:YYCTYPE = char;
+        re2c:YYPEEK = "cur < lim ? *cur : 0";  // fake null
+        re2c:YYSKIP = "++cur;";
 
         *      { count = -1; break; }
         [\x00] { break;{} }

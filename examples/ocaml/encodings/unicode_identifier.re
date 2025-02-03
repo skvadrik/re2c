@@ -12,7 +12,7 @@ type state = {
 }
 
 %{
-    re2c:define:YYFN = ["lex;bool", "yyrecord;state"];
+    re2c:YYFN = ["lex;bool", "yyrecord;state"];
     re2c:yyfill:enable = 0;
 
     // Simplified "Unicode Identifier and Pattern Syntax"
@@ -27,7 +27,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = "_Ыдентификатор\x00";
+        yyinput = "_Ыдентификатор";
         yycursor = 0;
         yymarker = 0;
         yyaccept = 0;

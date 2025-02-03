@@ -67,9 +67,9 @@ class Lexer {
             yyrecord.token = yyrecord.yycursor;
             /*!re2c
                 re2c:api = record;
-                re2c:define:YYCTYPE = "byte";
-                re2c:define:YYPEEK = "yyrecord.yyinput[yyrecord.yycursor]";
-                re2c:define:YYFILL = "return Status.WAITING;";
+                re2c:YYCTYPE = "byte";
+                re2c:YYPEEK = "yyrecord.yyinput[yyrecord.yycursor]";
+                re2c:YYFILL = "return Status.WAITING;";
                 re2c:eof = 0;
 
                 packet = [a-z]+[;];

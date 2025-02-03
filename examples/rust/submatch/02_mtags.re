@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 const NONE: usize = std::usize::MAX;
 const MTAG_ROOT: usize = NONE - 1;
@@ -63,10 +63,9 @@ fn parse(yyinput: &[u8]) -> Option<Ver> {
     /*!mtags:re2c format = 'let mut @@ = MTAG_ROOT;'; */
 
     /*!re2c
-        re2c:api = default;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYMTAGP = "@@ = add_mtag(&mut mt, @@, yycursor);";
-        re2c:define:YYMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
+        re2c:YYCTYPE = u8;
+        re2c:YYMTAGP = "@@ = add_mtag(&mut mt, @@, yycursor);";
+        re2c:YYMTAGN = "@@ = add_mtag(&mut mt, @@, NONE);";
         re2c:yyfill:enable = 0;
         re2c:tags = 1;
 

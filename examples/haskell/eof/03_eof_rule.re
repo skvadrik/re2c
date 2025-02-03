@@ -16,9 +16,9 @@ data State = State {
 
 -- expect a null-terminated string
 %{
-    re2c:define:YYFN = ["lexer;Int", "State{..};State"];
-    re2c:define:YYCTYPE = "Word8";
-    re2c:define:YYPEEK = "BS.index";
+    re2c:YYFN = ["lexer;Int", "State{..};State"];
+    re2c:YYCTYPE = "Word8";
+    re2c:YYPEEK = "BS.index";
     re2c:eof = 0;
     re2c:yyfill:enable = 0;
 

@@ -13,7 +13,7 @@ type state = {
 %{header:off %}
 
 %{
-    re2c:define:YYFN = ["lex;int", "yyrecord;State.state"];
+    re2c:YYFN = ["lex;int", "yyrecord;State.state"];
     re2c:tags = 1;
     re2c:yyfill:enable = 0;
     re2c:header = "lexer/state.ml";
@@ -23,7 +23,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = "ab\x00";
+        yyinput = "ab";
         yycursor = 0;
         tag = 0;
         %{stags format = "\n\t@@ = 0;"; %}

@@ -1,0 +1,35 @@
+
+re2hs has two API flavors that define the core set of primitives used by a
+program:
+
+**Record API**
+    Record API is the default API for the Haskell backend.
+    This API consists of a binding ``yyrecord`` (the name can be overridden with
+    ``re2c:yyrecord``) that should be defined as a record with fields
+    ``_yyinput``, ``_yycursor``, ``_yymarker``, ``_yyctxmarker``, ``_yylimit``.
+    Only the fields used by the generated code need to be defined, and their
+    names can be configured.
+
+    |
+
+**Generic API**
+    This is the most flexible API. It is enabled with ``--api generic`` option
+    or ``re2c:api = generic`` configuration.
+    It contains primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYCOPYSTAG``,
+    ``YYCOPYMTAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.

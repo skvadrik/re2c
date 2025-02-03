@@ -14,139 +14,140 @@ backtick_quoted_strings = 1;
 single_quoted_strings = 1;
 indentation_sensitive = 0;
 wrap_blocks_in_braces = 1;
+special_escapes = "\b\f\n\r\t\v\\'\"";
 
 
 // immutable configurations (command-line only options) ------------------------
 
-conf:target = code;
-conf:code-model = loop-switch;
-conf:input-encoding = ascii;
-conf:date = 1;
-conf:version = 1;
-conf:conditions = 0;
-conf:storable-state = 0;
-conf:flex-syntax = 0;
-conf:verbose = 0;
-conf:line-dirs = 0;
+re2c:target = code;
+re2c:code-model = loop-switch;
+re2c:input-encoding = ascii;
+re2c:date = 1;
+re2c:version = 1;
+re2c:conditions = 0;
+re2c:storable-state = 0;
+re2c:flex-syntax = 0;
+re2c:verbose = 0;
+re2c:line-dirs = 0;
 
 
 // mutable configurations ------------------------------------------------------
 
-conf:api = default;
-conf:api:style = free-form;
-conf:api:sigil = "@@";
-conf:define:YYGETCOND:naked = 0;
-conf:define:YYSETCOND:naked = 0;
-conf:define:YYSETCOND@cond = "@@";
-conf:define:YYGETSTATE:naked = 0;
-conf:define:YYSETSTATE:naked = 0;
-conf:define:YYSETSTATE@state = "@@";
-conf:define:YYFILL@len = "@@";
-conf:define:YYFILL:naked = 0;
-conf:define:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
-conf:yyfn:sep = ";";
-conf:variable:yycond = "yycond";
-conf:variable:yyctable = "yyctable";
-conf:variable:yyaccept = "yyaccept";
-conf:variable:yytarget = "yytarget";
-conf:variable:yystate = "yystate";
-conf:variable:yynmatch = "yynmatch";
-conf:variable:yypmatch = "yypmatch";
-conf:variable:yyrecord = "yyrecord";
-conf:variable:yych = "yych";
-conf:variable:yych:conversion = 0;
-conf:variable:yych:literals = hex;
-conf:variable:yych:emit = 1;
-conf:variable:yybm = "yybm";
-conf:variable:yybm:hex = 0;
-conf:variable:yyfill = "";
-conf:variable:yystable = ""; // deprecated
-conf:header = "";
-conf:eof = -1;
-conf:sentinel = -1;
-conf:yyfill:enable = 1;
-conf:yyfill:parameter = 1;
-conf:yyfill:check = 1;
-conf:tags = 0;
-conf:tags:prefix = "yyt";
-conf:captures = 0;
-conf:captvars = 0;
-conf:posix-captures = 0;
-conf:posix-captvars = 0;
-conf:invert-captures = 0;
-conf:cond:abort = 0;
-conf:cond:prefix = "yyc_";
-conf:cond:enumprefix = "YYC_";
-conf:cond:divider@cond = "@@";
-conf:cond:goto@cond = "@@";
-conf:state:abort = 1;
-conf:state:nextlabel = 0;
-conf:bit-vectors = 0;
-conf:debug-output = 0;
-conf:computed-gotos = 0;
-conf:computed-gotos:threshold = 9;
-conf:nested-ifs = 0;
-conf:case-insensitive = 0;
-conf:case-inverted = 0;
-conf:case-ranges = 0;
-conf:unsafe = 0;
-conf:monadic = 0;
-conf:encoding:ebcdic = 0;
-conf:encoding:utf32 = 0;
-conf:encoding:ucs2 = 0;
-conf:encoding:utf16 = 0;
-conf:encoding:utf8 = 0;
-conf:encoding-policy = ignore;
-conf:empty-class = match-empty;
-conf:indent:string = "    ";
-conf:indent:top = 0;
-conf:label:prefix = "yy";
-conf:label:yyfill = "";
-conf:label:yyloop = "yyl"; // In Java `continue` statements have labels, use it to avoid ambiguity.
-conf:label:yyNext = "";
-conf:label:start = 0;
+re2c:api = simple;
+re2c:api:style = free-form;
+re2c:api:sigil = "@@";
+re2c:YYGETCOND:naked = 0;
+re2c:YYSETCOND:naked = 0;
+re2c:YYSETCOND@cond = "@@";
+re2c:YYGETSTATE:naked = 0;
+re2c:YYSETSTATE:naked = 0;
+re2c:YYSETSTATE@state = "@@";
+re2c:YYFILL@len = "@@";
+re2c:YYFILL:naked = 0;
+re2c:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+re2c:yyfn:sep = ";";
+re2c:yycond = "yycond";
+re2c:yyctable = "yyctable";
+re2c:yyaccept = "yyaccept";
+re2c:yytarget = "yytarget";
+re2c:yystate = "yystate";
+re2c:yynmatch = "yynmatch";
+re2c:yypmatch = "yypmatch";
+re2c:yyrecord = "yyrecord";
+re2c:yych = "yych";
+re2c:yych:conversion = 0;
+re2c:yych:literals = hex;
+re2c:yych:emit = 1;
+re2c:yybm = "yybm";
+re2c:yybm:hex = 0;
+re2c:yyfill = "";
+re2c:yystable = ""; // deprecated
+re2c:header = "";
+re2c:eof = -1;
+re2c:sentinel = -1;
+re2c:yyfill:enable = 1;
+re2c:yyfill:parameter = 1;
+re2c:yyfill:check = 1;
+re2c:tags = 0;
+re2c:tags:prefix = "yyt";
+re2c:captures = 0;
+re2c:captvars = 0;
+re2c:posix-captures = 0;
+re2c:posix-captvars = 0;
+re2c:invert-captures = 0;
+re2c:cond:abort = 0;
+re2c:cond:prefix = "yyc_";
+re2c:cond:enumprefix = "YYC_";
+re2c:cond:divider@cond = "@@";
+re2c:cond:goto@cond = "@@";
+re2c:state:abort = 1;
+re2c:state:nextlabel = 0;
+re2c:bit-vectors = 0;
+re2c:debug-output = 0;
+re2c:computed-gotos = 0;
+re2c:computed-gotos:threshold = 9;
+re2c:nested-ifs = 0;
+re2c:case-insensitive = 0;
+re2c:case-inverted = 0;
+re2c:case-ranges = 0;
+re2c:unsafe = 0;
+re2c:monadic = 0;
+re2c:encoding:ebcdic = 0;
+re2c:encoding:utf32 = 0;
+re2c:encoding:ucs2 = 0;
+re2c:encoding:utf16 = 0;
+re2c:encoding:utf8 = 0;
+re2c:encoding-policy = ignore;
+re2c:empty-class = match-empty;
+re2c:indent:string = "    ";
+re2c:indent:top = 0;
+re2c:label:prefix = "";
+re2c:label:yyfill = "";
+re2c:label:yyloop = "yyl";
+re2c:label:yyNext = "";
+re2c:label:start = 0;
 
 
 // mutable code configuration --------------------------------------------------
 
-conf:define:YYBACKUP = "yybackup";
-conf:define:YYBACKUPCTX = "yybackupctx";
-conf:define:YYCONDTYPE = "YYCond";
-conf:define:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
-conf:define:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
-conf:define:YYCTYPE = "YYChar";
-conf:define:YYCTXMARKER = (api.record ? yyrecord ".") "yyctxmarker";
-conf:define:YYCURSOR = (api.record ? yyrecord ".") "yycursor";
-conf:define:YYDEBUG = "yydebug";
-conf:define:YYFILL = "yyfill";
-conf:define:YYGETACCEPT = sigil "{var}";
-conf:define:YYGETCOND = "yygetcond";
-conf:define:YYGETSTATE = "yygetstate";
-conf:define:YYINPUT = (api.record ? yyrecord ".") "yyinput";
-conf:define:YYLESSTHAN = "yylessthan";
-conf:define:YYLIMIT = (api.record ? yyrecord ".") "yylimit";
-conf:define:YYMARKER = (api.record ? yyrecord ".") "yymarker";
-conf:define:YYMAXFILL = "YYMAXFILL";
-conf:define:YYMAXNMATCH = "YYMAXNMATCH";
-conf:define:YYMTAGN = "yymtagn";
-conf:define:YYMTAGP = "yymtagp";
-conf:define:YYPEEK = (api.generic ? "yypeek" : "charCodeAt");
-conf:define:YYRESTORE = "yyrestore";
-conf:define:YYRESTORECTX = "yyrestorectx";
-conf:define:YYRESTORETAG = "yyrestoretag";
-conf:define:YYSETACCEPT = sigil "{var} = " sigil "{val}";
-conf:define:YYSETCOND = "yysetcond";
-conf:define:YYSETSTATE = "yysetstate";
-conf:define:YYSHIFT = "yyshift";
-conf:define:YYSHIFTSTAG = "yyshiftstag";
-conf:define:YYSHIFTMTAG = "yyshiftmtag";
-conf:define:YYSKIP = "yyskip";
-conf:define:YYSTAGN = "yystagn";
-conf:define:YYSTAGP = "yystagp";
-conf:tags:expression = (api.record ? yyrecord ".") sigil;
-conf:tags:negative = (api.generic ? "@@" : "-1");
-conf:cond:divider = "";
-conf:cond:goto = "";
+re2c:YYBACKUP = "yybackup";
+re2c:YYBACKUPCTX = "yybackupctx";
+re2c:YYCONDTYPE = "YYCond";
+re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
+re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
+re2c:YYCTYPE = "YYChar";
+re2c:YYCTXMARKER = (.api.record ? yyrecord ".") "yyctxmarker";
+re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
+re2c:YYDEBUG = "yydebug";
+re2c:YYFILL = "yyfill";
+re2c:YYGETACCEPT = sigil "{var}";
+re2c:YYGETCOND = "yygetcond";
+re2c:YYGETSTATE = "yygetstate";
+re2c:YYINPUT = (.api.record ? yyrecord ".") "yyinput";
+re2c:YYLESSTHAN = "yylessthan";
+re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
+re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
+re2c:YYMAXFILL = "YYMAXFILL";
+re2c:YYMAXNMATCH = "YYMAXNMATCH";
+re2c:YYMTAGN = "yymtagn";
+re2c:YYMTAGP = "yymtagp";
+re2c:YYPEEK = (.api.generic ? "yypeek" : "charCodeAt");
+re2c:YYRESTORE = "yyrestore";
+re2c:YYRESTORECTX = "yyrestorectx";
+re2c:YYRESTORETAG = "yyrestoretag";
+re2c:YYSETACCEPT = sigil "{var} = " sigil "{val}";
+re2c:YYSETCOND = "yysetcond";
+re2c:YYSETSTATE = "yysetstate";
+re2c:YYSHIFT = "yyshift";
+re2c:YYSHIFTSTAG = "yyshiftstag";
+re2c:YYSHIFTMTAG = "yyshiftmtag";
+re2c:YYSKIP = "yyskip";
+re2c:YYSTAGN = "yystagn";
+re2c:YYSTAGP = "yystagp";
+re2c:tags:expression = (.api.record ? yyrecord ".") sigil;
+re2c:tags:negative = (.api.generic ? "@@" : "-1");
+re2c:cond:divider = "";
+re2c:cond:goto = "";
 
 
 // code templates --------------------------------------------------------------
@@ -166,13 +167,16 @@ code:array_global = <undefined>;
 
 code:array_elem = array "[" index "]";
 
-code:type_int = <undefined>;
-code:type_uint = <undefined>;
-code:type_cond_enum = <undefined>;
-code:type_yybm = <undefined>;
-code:type_yytarget = <undefined>;
+code:enum = [elem: topindent "const " elem " = " init nl];
+
+code:enum_elem = name;
 
 code:assign = topindent lhs " = " rhs nl;
+
+code:type_int = <undefined>;
+code:type_uint = <undefined>;
+code:type_yybm = <undefined>;
+code:type_yytarget = <undefined>;
 
 code:cmp_eq = "===";
 code:cmp_ne = "!==";
@@ -184,7 +188,7 @@ code:cmp_ge = ">=";
 code:if_then_else =
     [branch{0}: topindent "if (" cond ") {" nl
         indent [stmt: stmt] dedent]
-    [branch{1:-1}: topindent "} else " (have_cond? "if (" cond ") ") "{" nl
+    [branch{1:-1}: topindent "} else " (.cond ? "if (" cond ") ") "{" nl
         indent [stmt: stmt] dedent]
     topindent "}" nl;
 
@@ -209,13 +213,11 @@ code:switch_case_default =
     topindent "default:";
 
 code:loop =
-    topindent (loop_label? label ": ") "while (true) {" nl
+    topindent (.loop_label ? label ": ") "while (true) {" nl
         indent [stmt: stmt] dedent
     topindent "}" nl;
 
-code:enum = [elem: topindent "const " elem " = " init nl];
-
-code:enum_elem = name;
+code:continue = topindent "continue" (.loop_label ? " " label) nl;
 
 code:goto = <undefined>;
 
@@ -228,38 +230,38 @@ code:recursive_functions = <undefined>;
 code:line_info = <undefined>;
 
 code:fingerprint =
-    "// Generated by re2js" (have_version? " " version) (have_date? " on " date) nl;
+    "// Generated by re2js" (.version ? " " version) (.date ? " on " date) nl;
 
 code:abort = topindent "throw \"internal lexer error\"" nl;
 
 code:yydebug =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYDEBUG
-    : (api.record
+    : (.api.record
         ? YYDEBUG "(" yyrecord ");"
         : YYDEBUG "(" state ", " yych ");"
     )) nl;
 
 code:yypeek =
-    topindent (code_model.recursive_functions ? YYCTYPE " ") yych " = " (api.generic
+    topindent (.code_model.recursive_functions ? YYCTYPE " ") yych " = " (.api.generic
         ? YYPEEK
         : YYINPUT "." YYPEEK "(" YYCURSOR ")"
     ) nl;
 
 code:yyskip =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSKIP
         : YYCURSOR " += 1;"
     ) nl;
 
 code:yybackup =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYBACKUP
         : YYMARKER " = " YYCURSOR ";"
     ) nl;
 
 code:yybackupctx =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYBACKUPCTX
         : YYCTXMARKER " = " YYCURSOR ";"
     ) nl;
@@ -273,31 +275,31 @@ code:yyskip_yybackup_yypeek = <undefined>;
 code:yybackup_yypeek_yyskip = <undefined>;
 
 code:yyrestore =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYRESTORE
         : YYCURSOR " = " YYMARKER ";"
     ) nl;
 
 code:yyrestorectx =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYRESTORECTX
         : YYCURSOR " = " YYCTXMARKER ";"
     ) nl;
 
 code:yyrestoretag =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYRESTORETAG
         : YYCURSOR " = " tag ";"
     ) nl;
 
 code:yyshift =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSHIFT
         : YYCURSOR " -= " offset ";"
     ) nl;
 
 code:yyshiftstag =
-    topindent (nested ? "if (" tag " != " neg ") ") (api.generic
+    topindent (.nested ? "if (" tag " != " neg ") ") (.api.generic
         ? YYSHIFTSTAG
         : tag " -= " offset ";"
     ) nl;
@@ -306,7 +308,7 @@ code:yyshiftmtag =
     topindent YYSHIFTMTAG nl;
 
 code:yystagp =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSTAGP
         : tag " = " YYCURSOR ";"
     ) nl;
@@ -315,7 +317,7 @@ code:yymtagp =
     topindent YYMTAGP nl;
 
 code:yystagn =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSTAGN
         : tag " = " neg ";"
     ) nl;
@@ -324,54 +326,54 @@ code:yymtagn =
     topindent YYMTAGN nl;
 
 code:yycopystag =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYCOPYSTAG
         : lhs " = " rhs ";"
     ) nl;
 
 code:yycopymtag =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYCOPYMTAG
         : lhs " = " rhs ";"
     ) nl;
 
 code:yygetaccept =
-    (api.generic
+    (.api.generic
         ? YYGETACCEPT
-        : (api.record & storable_state ? yyrecord ".") var);
+        : (.api.record & .storable_state ? yyrecord ".") var);
 
 code:yysetaccept =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSETACCEPT
-        : (api.record & storable_state ? yyrecord ".") var " = " val ";"
+        : (.api.record & .storable_state ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yygetcond =
-    (api.generic
+    (.api.generic
         ? YYGETCOND
-        : (api.record ? yyrecord ".") var);
+        : (.api.record ? yyrecord ".") var);
 
 code:yysetcond =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSETCOND
-        : (api.record ? yyrecord ".") var " = " val ";"
+        : (.api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yygetstate =
-     (api.generic
+     (.api.generic
          ? YYGETSTATE
-         : (api.record ? yyrecord ".") var);
+         : (.api.record ? yyrecord ".") var);
 
 code:yysetstate =
-    topindent (api.generic
+    topindent (.api.generic
         ? YYSETSTATE
-        : (api.record ? yyrecord ".") var " = " val ";"
+        : (.api.record ? yyrecord ".") var " = " val ";"
     ) nl;
 
 code:yylessthan =
-    (api.generic
+    (.api.generic
         ? YYLESSTHAN
-        : (many
+        : (.many
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
 

@@ -12,6 +12,8 @@
 
 namespace re2c {
 
+namespace {
+
 class GenBitmapChecks : public RenderCallback {
     std::ostream& os;
     const opt_t* opts;
@@ -50,6 +52,8 @@ class GenBitmapChecks : public RenderCallback {
     FORBID_COPY(GenBitmapChecks);
 };
 
+} // anonymous namespace
+
 // All spans in b1 that lead to s1 are pairwise equal to that in b2 leading to s2
 static bool matches(
         const opt_t* opts, const CodeGo* go1, const State* s1, const CodeGo* go2, const State* s2) {
@@ -63,6 +67,7 @@ static bool matches(
 
     if (go1->tags != go2->tags) return false;
 
+    tcid_t tags = TCID_NONE;
     for (;;) {
         for (; b1 < e1 && b1->to != s1; ++b1) {
             lb1 = b1->ub;
@@ -76,12 +81,14 @@ static bool matches(
         if (b2 == e2) {
             return false;
         }
+        if (tags == TCID_NONE) tags = b1->tags;
         // If transitions have different chracter ranges, quit.
         if (!(lb1 == lb2 && b1->ub == b2->ub)
                 // If there is YYSKIP on one transition but not the other, quit.
                 || (opts->eager_skip && consume(b1->to) != consume(b2->to))
-                // If tags are not identical, quit.
-                || b1->tags != b2->tags) {
+                // If tags differ, quit (they may differ either between b1 and b2,
+                // or from tags on other transitions going to the bitmap state).
+                || !(b1->tags == tags && b2->tags == tags)) {
             return false;
         }
         ++b1;
@@ -492,8 +499,8 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state->action.kind == Action::Kind::INITIAL) {
-        // End-of-input rule $ in the initial state takes priority over any other rule.
+    if (state == dfa.start_state) {
+        // End-of-input rule $ in the start state takes priority over any other rule.
         fallback = dfa.eof_state;
         falltags = TCID0;
     } else if (state->rule != Rule::NONE) {
@@ -502,7 +509,7 @@ State* fallback_state_with_eof_rule(
         falltags = state->rule_tags;
     } else {
         // EOF in a non-accepting state: fallback to default state.
-        fallback = dfa.defstate;
+        fallback = dfa.default_state;
         falltags = state->fall_tags;
     }
 
@@ -514,8 +521,8 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     const opt_t* opts = output.block().opts;
 
     // Mark all states that are targets of `yyaccept` switch to as used.
-    if (from->action.kind == Action::Kind::ACCEPT) {
-        for (const AcceptTrans& a : *from->action.info.accepts) {
+    if (from->kind == StateKind::ACCEPT) {
+        for (const AcceptTrans& a : *from->accepts) {
             a.state->label->used = true;
         }
     }
@@ -525,10 +532,16 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
-    // With end-of-input rule $, mark states that are targets of fallback transitions as used.
-    if (opts->fill_eof != NOEOF && !(go->span_count == 1 && from->next == span[0].to)) {
+    // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
+    if (opts->fill_eof != NOEOF && !endstate(from)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
         if (f) f->label->used = true;
+
+        // In goto/label rematch transitions target special YYFILL labels, not state labels.
+        // For move states rematch transition targets the other part of the split state pair.
+        if (opts->code_model != CodeModel::GOTO_LABEL && from->kind != StateKind::MOVE) {
+            from->label->used = true;
+        }
     }
 
     // In .dot format every node in the graph (a.k.a. DFA state) should be generated.
@@ -575,7 +588,8 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
     const uint32_t eof = from->go.span_count == 1 && !consume(from->go.span[0].to)
             ? NOEOF : opts->fill_eof;
     const uint32_t dspan_count = go->span_count - hspan_count - bitmap_count;
-    const bool skip = opts->eager_skip && !go->skip;
+    // Transition from the entry state to the start state is non-consuming.
+    const bool skip = opts->eager_skip && !go->skip && from->kind != StateKind::ENTRY;
 
     if (opts->target == Target::DOT) {
         go->kind = CodeGo::Kind::DOT;
@@ -607,14 +621,13 @@ void init_go(CodeGo* go) {
 }
 
 bool consume(const State* s) {
-    switch (s->action.kind) {
-    case Action::Kind::RULE:
-    case Action::Kind::MOVE:
-    case Action::Kind::ACCEPT:
+    switch (s->kind) {
+    case StateKind::ENTRY:
+    case StateKind::RULE:
+    case StateKind::MOVE:
+    case StateKind::ACCEPT:
         return false;
-    case Action::Kind::MATCH:
-    case Action::Kind::INITIAL:
-    case Action::Kind::SAVE:
+    case StateKind::MATCH:
         return true;
     }
     UNREACHABLE();
@@ -648,7 +661,7 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
         type = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
         param = parts.size() > 2 ? copystr(parts[2], alc) : name;
         if (parts.size() > 3) {
-            RET_FAIL(error("`define:YYFN` element '%s' has too many parts", s.c_str()));
+            RET_FAIL(error("`re2c:YYFN` configuration element `%s` has too many parts", s.c_str()));
         }
         return Ret::OK;
     };
@@ -668,7 +681,8 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
     for (size_t i = 1; i < opts->api_fn.size(); ++i) {
         CHECK_RET(split(opts->api_fn[i]));
         if (type == nullptr) {
-            RET_FAIL(error("missing type in `define:YYFN` element '%s'", opts->api_fn[i].c_str()));
+            RET_FAIL(error(
+                "missing type in `re2c:YYFN` configuration element `%s`", opts->api_fn[i].c_str()));
         }
 
         append(f->params, code_param(alc, param, type));
@@ -747,8 +761,9 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
                     block.start_label = new_label(alc, output.label_counter++);
                 }
             }
-            // Initial label points to the start of the DFA (after condition dispatch in `-c`).
-            dfa->initial_label = new_label(alc, output.label_counter++);
+            // In goto/label mode, if there's a loop through the start state and --eager-skip isn't
+            // used, there's a need for a special start label after YYFILL in the start state.
+            dfa->custom_start_label = new_label(alc, output.label_counter++);
             break;
         case CodeModel::LOOP_SWITCH:
             // First state label is always used, as there are no jumps in the middle of a case.
@@ -783,14 +798,13 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         for (State* s = dfa->head; s; s = s->next) {
             if (s->label->used) s->label->index = output.label_counter++;
         }
-
-        if (dfa->head->label->used && !opts->eager_skip) {
-            dfa->initial_label->used = true;
+        if (dfa->start_state->label->used && dfa->custom_start_label && !opts->eager_skip) {
+            dfa->custom_start_label->used = true;
         }
 
         if (!dfa->cond.empty()) {
             // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
-            // initial DFA state. Otherwise we do not assign explicit numbers, and conditions are
+            // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
             // implicitly assigned consecutive numbers starting from zero.
             block.conds.push_back({dfa->cond,
                     opts->code_model == CodeModel::GOTO_LABEL ? 0 : dfa->head->label->index});
@@ -827,7 +841,7 @@ Ret codegen_analyze(Output& output) {
         }
     }
 
-    // Generate implicit condiiton enum in the header, if there is no explicit directive.
+    // Generate implicit condiiton enum in the header, if there is no explicit `conditions` block.
     const opt_t* opts = output.total_opts;
     if (!opts->header_file.empty() && opts->start_conditions && output.cond_enum_autogen) {
         output.header_mode(true);

@@ -289,7 +289,7 @@ struct CodeArray {
 };
 
 struct CodeEnum {
-    const char* name;
+    const char* type;
     size_t size;
     const char** elem_ids;
     const uint32_t* elem_nums;
@@ -362,6 +362,12 @@ inline Code* code_stmt(OutAllocator& alc, const char* text) {
 
 inline Code* code_goto(OutAllocator& alc, const char* target) {
     Code* x = new_code(alc, CodeKind::GOTO);
+    x->target = target;
+    return x;
+}
+
+inline Code* code_continue(OutAllocator& alc, const char* target) {
+    Code* x = new_code(alc, CodeKind::CONTINUE);
     x->target = target;
     return x;
 }
@@ -768,9 +774,9 @@ inline Code* code_array(
 }
 
 inline void init_code_enum(
-        Code* x, const char* name, size_t size, const char** elem_ids, uint32_t* elem_nums) {
+        Code* x, const char* type, size_t size, const char** elem_ids, uint32_t* elem_nums) {
     x->kind = CodeKind::ENUM;
-    x->enumr.name = name;
+    x->enumr.type = type;
     x->enumr.size = size;
     x->enumr.elem_ids = elem_ids;
     x->enumr.elem_nums = elem_nums;

@@ -1,17 +1,19 @@
 Usage
 =====
 
+.. |re2c| replace:: RE2C_PROG
+
 .. include:: @top_srcdir@/doc/manual/synopsis.rst_
 
 OPTIONS
 =======
 
-.. include:: @top_srcdir@/doc/manual/options/options.rst_
-.. include:: @top_srcdir@/doc/manual/options/debug.rst_
-.. include:: @top_srcdir@/doc/manual/options/internal.rst_
+.. include:: @top_srcdir@/doc/manual/basics/options/options.rst_
+.. include:: @top_srcdir@/doc/manual/basics/options/debug.rst_
+.. include:: @top_srcdir@/doc/manual/basics/options/internal.rst_
 
 WARNINGS
 ========
 
-.. include:: @top_srcdir@/doc/manual/warnings/warnings_general.rst_
-.. include:: @top_srcdir@/doc/manual/warnings/warnings_list.rst_
+.. include:: @top_srcdir@/doc/manual/basics/warnings/warnings_general.rst_
+.. include:: @top_srcdir@/doc/manual/basics/warnings/warnings_list.rst_

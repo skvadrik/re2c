@@ -1,4 +1,4 @@
-// re2rust $INPUT -o $OUTPUT
+// re2rust $INPUT -o $OUTPUT --api simple
 
 /*!include:re2c "definitions.rs" */
 
@@ -8,9 +8,8 @@ fn lex(yyinput: &[u8]) -> Num {
     let mut yycursor = 0;
     let mut yymarker = 0;
     /*!re2c
-        re2c:api = default;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = u8;
+        re2c:YYCTYPE = u8;
 
         *      { return Num::NaN; }
         number { return Num::Int; }

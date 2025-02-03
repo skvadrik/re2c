@@ -7,8 +7,9 @@
 {
 	YYCTYPE yych;
 	unsigned int yyaccept = 0;
+	YYMARKER = YYCURSOR;
 	if ((YYLIMIT - YYCURSOR) < 6) YYFILL(6);
-	yych = *(YYMARKER = YYCURSOR);
+	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a':
 			yyt3 = YYCURSOR;
@@ -213,8 +214,8 @@ yy16:
 }
 
 tags/twopass_nofix.re:8:29: warning: rule matches empty string [-Wmatch-empty-string]
-tags/twopass_nofix.re:7:42: warning: tag 'p' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass_nofix.re:7:42: warning: tag 'q' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass_nofix.re:7:42: warning: tag 'y' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass_nofix.re:8:29: warning: tag 'r' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-tags/twopass_nofix.re:8:29: warning: tag 's' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass_nofix.re:7:42: warning: tag `p` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass_nofix.re:7:42: warning: tag `q` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass_nofix.re:7:42: warning: tag `y` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass_nofix.re:8:29: warning: tag `r` has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+tags/twopass_nofix.re:8:29: warning: tag `s` has 2nd degree of nondeterminism [-Wnondeterministic-tags]

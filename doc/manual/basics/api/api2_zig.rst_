@@ -1,0 +1,42 @@
+
+re2zig has three API flavors that define the core set of primitives used by a
+program:
+
+**Simple API**
+    This is the default API for the Zig backend. It consists of the following
+    primitives: ``YYINPUT`` (which should be defined as a sequence of code
+    units, e.g. a string) and ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``,
+    ``YYLIMIT`` (which should be defined as indices in ``YYINPUT``).
+
+    |
+
+**Record API**
+    Record API is useful in cases when lexer state must be stored in a struct.
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
+    name can be overridden with ``re2c:yyrecord``) that should be
+    defined as a struct with fields ``yyinput``, ``yycursor``, ``yymarker``,
+    ``yyctxmarker``, ``yylimit`` (only the fields used by the generated code
+    need to be defined, and their names can be configured).
+
+    |
+
+**Generic API**
+    This is the most flexible API. It is enabled with ``--api generic`` option
+    or ``re2c:api = generic`` configuration.
+    It contains primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.

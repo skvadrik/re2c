@@ -9,7 +9,7 @@
 // earlier. Default rule * occurs in all three blocks; the local (not
 // inherited) definition takes priority.
 
-enum What { COLOR, FISH, DUNNO };
+typedef enum { COLOR, FISH, DUNNO } What;
 
 #line 15 "c/reuse/usedir.re"
 

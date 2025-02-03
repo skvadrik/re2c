@@ -1,0 +1,14 @@
+|re2c| was originally written by Peter Bumbulis (peter@csg.uwaterloo.ca) in 1993.
+Marcus Boerger and Dan Nuffer spent several years to turn the original idea into
+a production ready code generator. Since then it has been maintained and
+developed by multiple volunteers, most notably,
+Brian Young (bayoung@acm.org),
+`Marcus Boerger <https://github.com/helly25>`_,
+Dan Nuffer (nuffer@users.sourceforge.net),
+`Ulya Trofimovich <https://github.com/skvadrik>`_ (skvadrik@gmail.com),
+`Serghei Iakovlev <https://github.com/sergeyklay>`_,
+`Sergei Trofimovich <https://github.com/trofi>`_,
+`Petr Skocik <https://github.com/pskocik>`_,
+`ligfx <https://github.com/ligfx>`_
+`raekye <https://github.com/raekye>`_
+and `PolarGoose <https://github.com/PolarGoose>`_.

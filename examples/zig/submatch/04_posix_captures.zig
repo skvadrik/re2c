@@ -34,7 +34,7 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
     
     var yych: u8 = 0;
     var yystate: u32 = 0;
-    while (true) {
+    yyl: while (true) {
         switch (yystate) {
             0 => {
                 yych = yyinput[yycursor];
@@ -43,18 +43,18 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                         yyt1 = yycursor;
                         yycursor += 1;
                         yystate = 3;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yycursor += 1;
                         yystate = 1;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             1 => {
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             2 => { return null; },
             3 => {
@@ -64,16 +64,16 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                     0x2E => {
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 2;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -84,18 +84,18 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                         yyt2 = yycursor;
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
             5 => {
                 yycursor = yymarker;
                 yystate = 2;
-                continue;
+                continue :yyl;
             },
             6 => {
                 yych = yyinput[yycursor];
@@ -103,16 +103,16 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                     0x2E => {
                         yycursor += 1;
                         yystate = 4;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 6;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -125,23 +125,23 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                         yyt5 = std.math.maxInt(usize);
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     0x2E => {
                         yyt3 = yycursor;
                         yyt5 = yycursor;
                         yycursor += 1;
                         yystate = 9;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 7;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },
@@ -173,15 +173,15 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                 yych = yyinput[yycursor];
                 if (yych <= 0x00) {
                     yystate = 5;
-                    continue;
+                    continue :yyl;
                 }
                 yystate = 11;
-                continue;
+                continue :yyl;
             },
             10 => {
                 yych = yyinput[yycursor];
                 yystate = 11;
-                continue;
+                continue :yyl;
             },
             11 => {
                 switch (yych) {
@@ -189,16 +189,16 @@ fn parse(yyinput: [:0]const u8) ?SemVer {
                         yyt4 = yycursor;
                         yycursor += 1;
                         yystate = 8;
-                        continue;
+                        continue :yyl;
                     },
                     0x30...0x39 => {
                         yycursor += 1;
                         yystate = 10;
-                        continue;
+                        continue :yyl;
                     },
                     else => {
                         yystate = 5;
-                        continue;
+                        continue :yyl;
                     },
                 }
             },

@@ -26,7 +26,7 @@ static int32_t lex_cls_chr(const uint8_t*&, uint32_t&);
     num = [0-9]+;
 */
 
-int lex(YYSTYPE* yylval, const uint8_t*& cur, Ast& ast) {
+int lex(RE2C_LIB_STYPE* yylval, const uint8_t*& cur, Ast& ast) {
     /*!stags:re2c format = "const uint8_t* @@;"; */
     const uint8_t* mar, *x, *y;
     bool neg = false;

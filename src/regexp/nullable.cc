@@ -93,8 +93,8 @@ static bool trivially_nullable(const RESpec& spec, const Regexp* re) {
 // Warn about rules that match empty string (including rules with nonempty trailing context). False
 // positives on partially self-shadowed rules like `[^]?`.
 void warn_nullable(const RESpec& spec, const std::string& cond) {
-    // rule for <> is special -- it doesn't have a regexp
-    if (cond == "0") return;
+    // The rule for zero condition `<>` is special -- it doesn't have a regexp.
+    if (cond == ZERO_COND) return;
 
     std::vector<StackItem> stack;
     const size_t nre = spec.res.size();

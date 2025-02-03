@@ -1,0 +1,79 @@
+|re2c| has two options for submatch extraction.
+
+**Tags**
+    The first option is to use standalone *tags* of the form ``@stag`` or
+    ``#mtag``, where ``stag`` and ``mtag`` are arbitrary used-defined names.
+    Tags are enabled with ``-T --tags`` option or ``re2c:tags = 1``
+    configuration. Semantically tags are position markers: they can be
+    inserted anywhere in a regular expression, and they bind to the
+    corresponding position (or multiple positions) in the input string.
+    *S-tags* bind to the last matching position, and *m-tags* bind to a list of
+    positions (they may be used in repetition subexpressions, where a single
+    position in a regular expression corresponds to multiple positions in the
+    input string). All tags should be defined by the user, either manually or
+    with the help of ``svars`` and ``mvars`` blocks. If there is more than one
+    way tags can be matched against the input, ambiguity is resolved using
+    leftmost greedy disambiguation strategy.
+
+**Captures**
+   The second option is to use *capturing groups*. They are enabled with
+   ``--captures`` option or ``re2c:captures = 1`` configuration. There are two
+   flavours for different disambiguation policies, ``--leftmost-captures``
+   (the default) is for leftmost greedy policy, and, ``--posix-captures`` is
+   for POSIX longest-match policy. In this mode all parenthesized
+   subexpressions are considered capturing groups, and a bang can be used to
+   mark non-capturing groups: ``(! ... )``. With ``--invert-captures`` option or
+   ``re2c:invert-captures = 1`` configuration the meaning of bang is inverted.
+   The number of groups for the matching rule is stored in a variable
+   ``yynmatch`` (the whole regular expression is group number zero), and
+   submatch results are stored in ``yypmatch`` array. Both ``yynmatch`` and
+   ``yypmatch`` should be defined by the user, and ``yypmatch`` size must be at
+   least ``[yynmatch * 2]``. Use ``maxnmatch`` block to  define ``YYMAXNMATCH``,
+   a constant that equals to the maximum value of ``yynmatch`` among all rules.
+
+**Captvars**
+   Another way to use capturing groups is the ``--captvars`` option or
+   ``re2c:captvars = 1`` configuration. The only difference with ``--captures``
+   is in the way the generated code stores submatch results: instead of
+   ``yynmatch`` and ``yypmatch`` |re2c| generates variables ``yytl<k>`` and
+   ``yytr<k>`` for *k*-th capturing group (the user should declare these using
+   an ``svars`` block). Captures with variables support two disambiguation
+   policies: ``--leftmost-captvars`` or ``re2c:leftmost-captvars = 1`` for
+   leftmost greedy policy (the default one) and ``--posix-captvars`` or
+   ``re2c:posix-captvars`` for POSIX longest-match policy.
+
+Under the hood all these options translate into tags and
+`Tagged Deterministic Finite Automata with Lookahead <https://arxiv.org/abs/1907.08837>`_.
+The core idea of TDFA is to minimize the overhead on submatch extraction.
+In the extreme, if there're no tags or captures in a regular expression, TDFA is
+just an ordinary DFA. If the number of tags is moderate, the overhead is barely
+noticeable. The generated TDFA uses a number of *tag variables* which do not map
+directly to tags: a single variable may be used for different tags, and a tag
+may require multiple variables to hold all its possible values. Eventually
+ambiguity is resolved, and only one final variable per tag survives. Tag
+variables should be defined using ``stags`` or ``mtags`` blocks. If lexer state
+is stored, tag variables should be part of it. They also need to be updated  by
+``YYFILL``.
+
+S-tags support the following operations:
+
+* save input position to an s-tag: ``t = YYCURSOR`` with C pointer API or a
+  user-defined operation ``YYSTAGP(t)`` with generic API
+* save default value to an s-tag: ``t = NULL`` with C pointer API or a
+  user-defined operation ``YYSTAGN(t)`` with generic API
+* copy one s-tag to another: ``t1 = t2``
+
+M-tags support the following operations:
+
+* append input position to an m-tag: a user-defined operation ``YYMTAGP(t)``
+  with both default and generic API
+* append default value to an m-tag: a user-defined operation ``YYMTAGN(t)``
+  with both default and generic API
+* copy one m-tag to another: ``t1 = t2``
+
+S-tags can be implemented as scalar values (pointers or offsets). M-tags need a
+more complex representation, as they need to store a sequence of tag values. The
+most naive and inefficient representation of an m-tag is a list (array, vector)
+of tag values; a more efficient representation is to store all m-tags in a
+prefix-tree represented as array of nodes ``(v, p)``, where ``v`` is tag value
+and ``p`` is a pointer to parent node.

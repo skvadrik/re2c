@@ -1,12 +1,32 @@
 // re2c $INPUT -o $OUTPUT
-/*!rules:re2c*/ // ok, end of block
-/*!rules:re2c:_Yx1*/ // ok, end of block
-/*!rules:re2c */ // ok, space
-/*!rules:re2c:Yx1 */ // ok, space
-/*!rules:re2c	*/ // ok, space
-/*!rules:re2c:yX1_	*/ // ok, space
+
+// ok, end of block
+/*!rules:re2c*/
+/*!rules:re2c:_Yx1*/
+%{rules%}
+%{rules:_Zx1%}
+
+// ok, space
+/*!rules:re2c */
+/*!rules:re2c:Yx1 */
+%{rules %}
+%{rules:Zx1 %}
+
+// ok, space
+/*!rules:re2c	*/
+/*!rules:re2c:yX1_	*/
+%{rules	%}
+%{rules:zX1_	%}
+
+// ok, newline
 /*!rules:re2c
-*/ // ok, newline
+*/
 /*!rules:re2c:_
-*/ // ok, newline
-/*!rules:re2c:1Yx */ // bad, name starts with digit
+*/
+%{rules
+%}
+%{rules:__
+%}
+
+// bad, name starts with digit
+/*!rules:re2c:1Yx */

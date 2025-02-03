@@ -1,6 +1,6 @@
 // re2rust $INPUT -o $OUTPUT
 
-// Store u32 number in u64 during parsing to simplify overflow hadling.
+// Store u32 number in u64 during parsing to simplify overflow handling.
 struct State<'a> {
     yyinput: &'a [u8],
     yycursor: usize,
@@ -10,9 +10,9 @@ struct State<'a> {
 
 /*!re2c // Common re2c definitions shared between all functions.
     re2c:api = record;
-    re2c:variable:yyrecord = st;
+    re2c:yyrecord = st;
     re2c:yyfill:enable = 0;
-    re2c:define:YYCTYPE = u8;
+    re2c:YYCTYPE = u8;
 */
 
 const ERROR: u64 = std::u32::MAX as u64 + 1; // overflow

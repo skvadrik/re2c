@@ -11,6 +11,8 @@
 #pragma GCC diagnostic ignored "-Wmissing-variable-declarations"
 #pragma GCC diagnostic ignored "-Wunreachable-code"
 #pragma GCC diagnostic ignored "-Wunreachable-code-break"
+#pragma GCC diagnostic ignored "-Wdisabled-macro-expansion"
+#pragma GCC diagnostic ignored "-Wused-but-marked-unused"
 
 // Silence -Wunused-macro warnings on bison-generated macros.
 // `#pragma GCC diagnostic ignored` doesn't help for macros that are emitted too early.

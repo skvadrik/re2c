@@ -41,8 +41,8 @@ let fill(st: state) : status =
     Ready)
 
 %{
-    re2c:define:YYFN = ["lex;status", "yyrecord;state"];
-    re2c:define:YYFILL = "Waiting";
+    re2c:YYFN = ["lex;status", "yyrecord;state"];
+    re2c:YYFILL = "Waiting";
     re2c:eof = 0;
 
     packet = [a-z]+[;];

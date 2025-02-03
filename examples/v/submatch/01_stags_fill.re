@@ -72,8 +72,8 @@ loop:
     st.token = st.yycursor
     /*!re2c
         re2c:api = record;
-        re2c:variable:yyrecord = st;
-        re2c:define:YYFILL = "fill(mut st) == 0";
+        re2c:yyrecord = st;
+        re2c:YYFILL = "fill(mut st) == 0";
         re2c:tags = 1;
         re2c:eof = 0;
 

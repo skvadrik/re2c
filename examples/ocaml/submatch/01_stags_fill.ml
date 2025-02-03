@@ -84,7 +84,7 @@ let fill(st: state) : status =
 
 #86 "ocaml/submatch/01_stags_fill.ml"
 let rec yy0 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt1 <- st.yycursor;
@@ -109,7 +109,7 @@ and yy2 (st : state) (vers : semver list) : (semver list) option =
 
 and yy3 (st : state) (vers : semver list) : (semver list) option =
     st.yymarker <- st.yycursor;
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '.' ->
             st.yycursor <- st.yycursor + 1;
@@ -126,7 +126,7 @@ and yy3 (st : state) (vers : semver list) : (semver list) option =
             )
 
 and yy4 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt2 <- st.yycursor;
@@ -145,7 +145,7 @@ and yy5 (st : state) (vers : semver list) : (semver list) option =
     (yy2 [@tailcall]) st vers
 
 and yy6 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '.' ->
             st.yycursor <- st.yycursor + 1;
@@ -162,7 +162,7 @@ and yy6 (st : state) (vers : semver list) : (semver list) option =
             )
 
 and yy7 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\n' ->
             st.yyt3 <- st.yycursor;
@@ -202,7 +202,7 @@ and yy8 (st : state) (vers : semver list) : (semver list) option =
 #203 "ocaml/submatch/01_stags_fill.ml"
 
 and yy9 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt4 <- st.yycursor;
@@ -217,7 +217,7 @@ and yy9 (st : state) (vers : semver list) : (semver list) option =
             )
 
 and yy10 (st : state) (vers : semver list) : (semver list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\n' ->
             st.yycursor <- st.yycursor + 1;

@@ -24,57 +24,54 @@ static bool is_eof(const opt_t* opts, uint32_t ub) {
 }
 
 Adfa::Adfa(Tdfa&& dfa,
-           const std::vector<size_t>& fill,
-           size_t key,
-           const loc_t& loc,
-           const std::string& nm,
-           const std::string& cn,
-           const std::string& su,
-           const opt_t* opts,
-           Msg& msg)
-    : // Move ownership from TDFA to ADFA.
-      charset(std::move(dfa.charset)),
-      rules(std::move(dfa.rules)),
-      tags(std::move(dfa.tags)),
-      mtagvers(std::move(dfa.mtagvers)),
-      tcpool(std::move(dfa.tcpool)),
-      finvers(dfa.finvers),
-      maxtagver(dfa.maxtagver),
-
-      loc(loc),
-      name(nm),
-      cond(cn),
-      msg(msg),
-
-      accepts(),
-
-      lower_char(0),
-      upper_char(charset.back()),
-      state_count(0),
-      head(nullptr),
-      defstate(nullptr),
-      eof_state(nullptr),
-      finstates(rules.size(), nullptr),
-
-      stagnames(),
-      stagvars(),
-      mtagnames(),
-      mtagvars(),
-
-      def_rule(dfa.def_rule),
-      eof_rule(dfa.eof_rule),
-      key_size(key),
-      max_fill(0),
-      max_nmatch(0),
-
-      need_backup(false),
-      need_accept(false),
-      oldstyle_ctxmarker(false),
-
-      bitmap(nullptr),
-      setup(su),
-
-      initial_label(nullptr) {
+    const std::vector<size_t>& fill,
+    size_t key,
+    const loc_t& loc,
+    const std::string& name,
+    const std::string& cond,
+    const opt_t* opts,
+    Msg& msg,
+    const SemAct* entry_action,
+    const SemAct* pre_rule_action,
+    const SemAct* post_rule_action)
+        // Move ownership from TDFA to ADFA.
+        : charset(std::move(dfa.charset))
+        , rules(std::move(dfa.rules))
+        , tags(std::move(dfa.tags))
+        , mtagvers(std::move(dfa.mtagvers))
+        , tcpool(std::move(dfa.tcpool))
+        , finvers(dfa.finvers)
+        , maxtagver(dfa.maxtagver)
+        , loc(loc)
+        , name(name)
+        , cond(cond)
+        , msg(msg)
+        , accepts()
+        , lower_char(0)
+        , upper_char(charset.back())
+        , state_count(0)
+        , head(nullptr)
+        , default_state(nullptr)
+        , eof_state(nullptr)
+        , start_state(nullptr)
+        , finstates(rules.size(), nullptr)
+        , custom_start_label(nullptr)
+        , stagnames()
+        , stagvars()
+        , mtagnames()
+        , mtagvars()
+        , def_rule(dfa.def_rule)
+        , eof_rule(dfa.eof_rule)
+        , key_size(key)
+        , max_fill(0)
+        , max_nmatch(0)
+        , need_backup(false)
+        , need_accept(false)
+        , oldstyle_ctxmarker(false)
+        , bitmap(nullptr)
+        , entry_action(entry_action)
+        , pre_rule_action(pre_rule_action)
+        , post_rule_action(post_rule_action) {
 
     const size_t nstates = dfa.states.size();
     const size_t nchars = dfa.nchars;
@@ -179,20 +176,43 @@ void Adfa::reorder() {
     }
 }
 
-void Adfa::add_state(State* s, State* next) {
+// ... x -> y ...
+// ... x -> s -> y ...
+void Adfa::add_state_after(State* s, State* x) {
     ++state_count;
-    s->next = next->next;
-    s->prev = next;
-    next->next = s;
-    next->prev = s->prev;
+    State* y = x->next;
+    if (y) y->prev = s;
+    s->next = y;
+    s->prev = x;
+    x->next = s;
+}
+
+// ... y -> x ...
+// ... y -> s -> x ...
+void Adfa::add_state_before(State* s, State* x) {
+    ++state_count;
+    State* y = x->prev;
+    if (y) y->next = s;
+    s->prev = y;
+    s->next = x;
+    x->prev = s;
+}
+
+void Adfa::add_single_trans(State* s, State* x) {
+    Span* p = allocate<Span>(1);
+    p->ub = upper_char;
+    p->to = x;
+    p->tags = TCID0;
+    s->go.span = p;
+    s->go.span_count = 1;
 }
 
 void Adfa::split(State* s) {
     // If a split state has a rule, both parts should keep it. Codegen checks it when generating
     // fallback transition on YYFILL failure, either in state dispatch or on a regular transition.
     State* move = new State;
-    add_state(move, s);
-    move->action.set_move();
+    add_state_after(move, s);
+    move->kind = StateKind::MOVE;
     move->rule = s->rule;
     move->fill_state = s->fill_state;
     move->fill = s->fill; // used by tunneling, ignored by codegen
@@ -200,11 +220,7 @@ void Adfa::split(State* s) {
     move->go.tags = TCID0; // drop hoisted tags
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
-    s->go.span_count = 1;
-    s->go.span = allocate<Span>(1);
-    s->go.span[0].ub = upper_char;
-    s->go.span[0].to = move;
-    s->go.span[0].tags = TCID0;
+    add_single_trans(s, move);
 }
 
 static uint32_t merge(Span* x, State* fg, State* bg, const opt_t* opts) {
@@ -304,12 +320,10 @@ void Adfa::prepare(const opt_t* opts) {
         if (s->rule != Rule::NONE && s->rule != eof_rule) {
             if (!finstates[s->rule]) {
                 State* n = new State;
-                if (s->rule == def_rule) {
-                    defstate = n;
-                }
-                n->action.set_rule(s->rule);
+                n->kind = StateKind::RULE;
+                n->rule = s->rule;
                 finstates[s->rule] = n;
-                add_state(n, s);
+                add_state_after(n, s);
             }
             for (uint32_t i = 0; i < s->go.span_count; ++i) {
                 if (!s->go.span[i].to) {
@@ -320,25 +334,26 @@ void Adfa::prepare(const opt_t* opts) {
         }
 
         // last state, add end-of-input rule $ if needed (see note [end-of-input rule])
-        if (!s->next && opts->fill_eof != NOEOF) {
+        // skip zero condition `<>` as it does not have end-of-input rule
+        if (!s->next && opts->fill_eof != NOEOF && cond != ZERO_COND) {
             eof_state = new State;
-            eof_state->action.set_rule(eof_rule);
+            eof_state->kind = StateKind::RULE;
+            eof_state->rule = eof_rule;
             finstates[eof_rule] = eof_state;
-            add_state(eof_state, s);
+            add_state_after(eof_state, s);
             break;
         }
     }
 
     // create default state (if needed)
-    State* default_state = nullptr;
     for (State* s = head; s; s = s->next) {
         for (uint32_t i = 0; i < s->go.span_count; ++i) {
             if (!s->go.span[i].to) {
                 if (!default_state) {
-                    default_state = defstate = new State;
-                    add_state(default_state, s);
+                    default_state = new State;
+                    add_state_after(default_state, s);
                 }
-                s->go.span[i].to = defstate;
+                s->go.span[i].to = default_state;
             }
         }
     }
@@ -353,8 +368,8 @@ void Adfa::prepare(const opt_t* opts) {
             have_fallback_states |= s->fallback;
 
             if (!s->next && have_fallback_states) {
-                default_state = defstate = new State;
-                add_state(default_state, s);
+                default_state = new State;
+                add_state_after(default_state, s);
                 break;
             }
         }
@@ -365,15 +380,25 @@ void Adfa::prepare(const opt_t* opts) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
                 DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
-                s->action.set_save(accepts.find_or_add({finstates[s->rule], s->fall_tags}));
+                s->save = accepts.find_or_add({finstates[s->rule], s->fall_tags});
             }
         }
-        defstate->action.set_accept(&accepts);
+        default_state->kind = StateKind::ACCEPT;
+        default_state->accepts = &accepts;
     }
 
-    // Initial state is special only in goto/label mode.
-    if (opts->code_model == CodeModel::GOTO_LABEL) {
-        head->action.set_initial();
+    start_state = head;
+
+    // Entry action cannot be part of the start state, as there might be a nullable loop through
+    // it that would execute the action multiple times. Using a DFA pseudo-state simplifies codegen
+    // a lot: it automatically adds a separate case in loop/switch mode, or a separate function in
+    // rec/func mode, which would otherwise require a lot of special handling.
+    if (entry_action != nullptr) {
+        State* s = new State;
+        add_state_before(s, head);
+        add_single_trans(s, head);
+        s->kind = StateKind::ENTRY;
+        head = s;
     }
 
     // Tag hoisting should be done after binding default arcs, which may introduce new tags.
@@ -450,9 +475,8 @@ Ret Adfa::calc_stats(OutputBlock& out) {
 
     // error if tags are not enabled, but we need them
     if (!opts->tags && maxtagver > 1) {
-        RET_FAIL(msg.error(loc,
-                           "overlapping trailing contexts need multiple context markers, use "
-                           "'-t, --tags' option and '/*!stags:re2c ... */' directive"));
+        RET_FAIL(msg.error(loc, "overlapping trailing contexts need multiple context markers"
+                ", use --tags option and `stags` block"));
     }
 
     if (!oldstyle_ctxmarker) {
@@ -461,7 +485,7 @@ Ret Adfa::calc_stats(OutputBlock& out) {
                 mtagvars.insert(tag.name);
             } else if (tag.name) {
                 stagvars.insert(tag.name);
-            } else if (capture(tag) && !opts->captures_array) {
+            } else if (capture(tag) && !fictive(tag) && !opts->captures_array) {
                 for (size_t i = tag.lsub; i <= tag.hsub; i += 2) {
                     stagvars.insert(captvar_name(i, opts));
                 }
@@ -520,6 +544,9 @@ static bool can_hoist_skip(const State* s, const opt_t* opts) {
     // If the end-of-input rule $ is used, skip cannot be hoisted because the lexer may need to
     // rescan the current input character after YYFILL, and skip operation will be applied twice.
     if (opts->fill_eof != NOEOF) return false;
+
+    // Transition fromm the entry state to the start state is non-consuming.
+    if (s->kind == StateKind::ENTRY) return false;
 
     // All spans must agree on skip, and they all must be consuming.
     for (uint32_t i = 0; i < nspan; ++i) {

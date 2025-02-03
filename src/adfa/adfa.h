@@ -37,25 +37,11 @@ struct AcceptTrans {
     }
 };
 
-class Action {
-  public:
-    enum class Kind: uint32_t { MATCH, INITIAL, SAVE, MOVE, ACCEPT, RULE } kind;
-    union {
-        const uniq_vector_t<AcceptTrans>* accepts;
-        size_t save;
-        size_t rule;
-    } info;
-
-  public:
-    Action(): kind(Kind::MATCH), info() {}
-    void set_initial();
-    void set_save(size_t save);
-    void set_move();
-    void set_accept(const uniq_vector_t<AcceptTrans>* accepts);
-    void set_rule(size_t rule);
-};
+enum class StateKind { ENTRY, MATCH, MOVE, RULE, ACCEPT };
 
 struct State {
+    StateKind kind;
+
     State* next;
     State* prev;
     Label* label; // labels are allocated in codegen as they live longer
@@ -67,14 +53,19 @@ struct State {
     size_t rule;
     tcid_t rule_tags;
     tcid_t fall_tags;
+
+    size_t save; // `yyaccept` number for this state, if any
+
+    const uniq_vector_t<AcceptTrans>* accepts; // `yyaccept` transition table
+
     bool fallback;
     bool is_base;
 
     CodeGo go;
-    Action action;
 
     State();
     ~State();
+
     FORBID_COPY(State);
 };
 
@@ -97,10 +88,17 @@ struct Adfa {
     uint32_t lower_char;
     uint32_t upper_char;
     uint32_t state_count;
+
     State* head;
-    State* defstate;
+    State* default_state;
     State* eof_state;
+    State* start_state;
     std::vector<State*> finstates;
+
+    // In goto/label mode, if there's a loop through the start state and --eager-skip isn't used,
+    // then the start state has YYSKIP statement that must be bypassed when entering the DFA.
+    // So there's a need for a special start label, different from the start state's label.
+    Label* custom_start_label;
 
     std::set<std::string> stagnames;
     std::set<std::string> stagvars;
@@ -118,19 +116,22 @@ struct Adfa {
     bool oldstyle_ctxmarker;
 
     CodeBitmap* bitmap;
-    std::string setup;
 
-    Label* initial_label;
+    const SemAct* entry_action;
+    const SemAct* pre_rule_action;
+    const SemAct* post_rule_action;
 
     Adfa(Tdfa&& dfa,
          const std::vector<size_t>& fill,
          size_t key,
          const loc_t& loc,
-         const std::string& nm,
-         const std::string& cn,
-         const std::string& su,
+         const std::string& name,
+         const std::string& cond,
          const opt_t* opts,
-         Msg& msg);
+         Msg& msg,
+         const SemAct* entry_action,
+         const SemAct* pre_rule_action,
+         const SemAct* post_rule_action);
 
     ~Adfa();
     void reorder();
@@ -138,8 +139,10 @@ struct Adfa {
     Ret calc_stats(OutputBlock& out) NODISCARD;
 
   private:
-    void add_state(State*, State*);
-    void split(State*);
+    void add_state_after(State* s, State* x);
+    void add_state_before(State* s, State* x);
+    void add_single_trans(State* s, State* x);
+    void split(State* s);
     void find_base_state(const opt_t* opts);
     void hoist_tags(const opt_t* opts);
     void hoist_tags_and_skip(const opt_t* opts);
@@ -147,58 +150,22 @@ struct Adfa {
     FORBID_COPY(Adfa);
 };
 
-inline void Action::set_initial() {
-    if (kind == Kind::MATCH) {
-        // ordinary state with no special action
-        kind = Kind::INITIAL;
-        info.save = NOSAVE;
-    } else if (kind == Kind::SAVE) {
-        // fallback state: do not loose 'yyaccept'
-        kind = Kind::INITIAL;
-    } else if (kind == Kind::INITIAL) {
-        // already marked as initial, probably reuse mode
-    } else {
-        UNREACHABLE();
-    }
-}
-
-inline void Action::set_save(size_t save) {
-    DCHECK(kind == Kind::MATCH);
-    kind = Kind::SAVE;
-    info.save = save;
-}
-
-inline void Action::set_move() {
-    DCHECK(kind == Kind::MATCH);
-    kind = Kind::MOVE;
-}
-
-inline void Action::set_accept(const uniq_vector_t<AcceptTrans>* accepts) {
-    DCHECK(kind == Kind::MATCH);
-    kind = Kind::ACCEPT;
-    info.accepts = accepts;
-}
-
-inline void Action::set_rule(size_t rule) {
-    DCHECK(kind == Kind::MATCH);
-    kind = Kind::RULE;
-    info.rule = rule;
-}
-
 inline State::State()
-    : next(nullptr),
-      prev(nullptr),
-      label(nullptr),
-      fill_state(nullptr),
-      fill_label(nullptr),
-      fill(0),
-      rule(Rule::NONE),
-      rule_tags(TCID0),
-      fall_tags(TCID0),
-      fallback(false),
-      is_base(false),
-      go(),
-      action() {
+        : kind(StateKind::MATCH)
+        , next(nullptr)
+        , prev(nullptr)
+        , label(nullptr)
+        , fill_state(nullptr)
+        , fill_label(nullptr)
+        , fill(0)
+        , rule(Rule::NONE)
+        , rule_tags(TCID0)
+        , fall_tags(TCID0)
+        , save(NOSAVE)
+        , accepts(nullptr)
+        , fallback(false)
+        , is_base(false)
+        , go() {
     init_go(&go);
 }
 

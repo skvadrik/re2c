@@ -1,0 +1,28 @@
+Reusable blocks of the form ``/*!rules:re2c[:<name>] ... */`` or
+``%{rules[:<name>] ... %}`` can be reused any number of times and combined with
+other |re2c| blocks. The ``<name>`` is optional. A rules block can be used in a
+``use`` block or directive. The code for a rules block is generated at every
+point of use.
+
+Use blocks are defined with ``/*!use:re2c[:<name>] ... */`` or
+``%{use[:<name>] ... %}``. The ``<name>`` is optional: if it's not specified,
+the associated rules block is the most recent one (whether named or unnamed).
+A use block can add named definitions, configurations and rules of its own.
+An important use case for use blocks is a lexer that supports multiple input
+encodings: the same rules block is reused multiple times with encoding-specific
+configurations (see the example below).
+
+In-block use directive ``!use:<name>;`` can be used from inside of a |re2c|
+block. It merges the referenced block ``<name>`` into the current one. If some
+of the merged rules and configurations overlap with the previously defined ones,
+conflicts are resolved in the usual way: the earliest rule takes priority, and
+latest configuration overrides preceding ones. One exception are the special
+rules ``*``, ``$`` and (in condition mode) ``<!>``, for which a block-local
+definition overrides any inherited ones. Use directive allows one to combine
+different |re2c| blocks together in one block (see the example below).
+
+Named blocks and in-block use directive were added in |re2c| version 2.2.
+Since that version reusable blocks are allowed by default (no special option
+is needed). Before version 2.2 reuse mode was enabled with ``-r --reusable``
+option. Before version 1.2 reusable blocks could not be mixed with normal
+blocks.

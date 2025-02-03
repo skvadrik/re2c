@@ -7797,4 +7797,4 @@ nowdoc_scan_done:
 real_world/php20150211_zend_language_scanner.re:1096:12: warning: escape has no effect: '\[' [-Wuseless-escape]
 real_world/php20150211_zend_language_scanner.re:1477:19: warning: escape has no effect: '\*' [-Wuseless-escape]
 real_world/php20150211_zend_language_scanner.re:1481:19: warning: escape has no effect: '\*' [-Wuseless-escape]
-real_world/php20150211_zend_language_scanner.re:1086:0: warning: condition numbers may change, use '/*!conditions:re2c*/' directive to generate reliable condition identifiers [-Wcondition-order]
+real_world/php20150211_zend_language_scanner.re:1086:0: warning: condition numbers may change, use `conditions` block to generate reliable condition identifiers [-Wcondition-order]

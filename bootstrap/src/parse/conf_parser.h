@@ -59,17 +59,17 @@ extern int conf_debug;
 #include "src/constants.h"
 #include "src/options/opt.h"
 
-extern const char* DEFAULT_SYNTAX_C;
-extern const char* DEFAULT_SYNTAX_D;
-extern const char* DEFAULT_SYNTAX_GO;
-extern const char* DEFAULT_SYNTAX_HASKELL;
-extern const char* DEFAULT_SYNTAX_JAVA;
-extern const char* DEFAULT_SYNTAX_JS;
-extern const char* DEFAULT_SYNTAX_OCAML;
-extern const char* DEFAULT_SYNTAX_PYTHON;
-extern const char* DEFAULT_SYNTAX_RUST;
-extern const char* DEFAULT_SYNTAX_V;
-extern const char* DEFAULT_SYNTAX_ZIG;
+#include "src/default_syntax_c.h"
+#include "src/default_syntax_d.h"
+#include "src/default_syntax_go.h"
+#include "src/default_syntax_haskell.h"
+#include "src/default_syntax_java.h"
+#include "src/default_syntax_js.h"
+#include "src/default_syntax_ocaml.h"
+#include "src/default_syntax_python.h"
+#include "src/default_syntax_rust.h"
+#include "src/default_syntax_v.h"
+#include "src/default_syntax_zig.h"
 
 
 #line 76 "src/parse/conf_parser.h"

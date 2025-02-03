@@ -1,1 +1,1 @@
-re2c: error: missing type in `define:YYFN` element 'arg1'
+re2c: error: missing type in `re2c:YYFN` configuration element `arg1`

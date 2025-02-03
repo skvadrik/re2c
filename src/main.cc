@@ -55,9 +55,11 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     const loc_t& loc = block.loc;
     Msg& msg = output.msg;
     const std::vector<AstRule>& ast = gram.rules;
-    const std::string&cond = gram.name;
+    const std::string& cond = gram.name;
     const std::string name = make_name(output, cond, loc);
-    const std::string& setup = gram.setup.empty() ? "" : gram.setup[0]->text;
+    const SemAct* entry_action = gram.entry.empty() ? nullptr : gram.entry[0];
+    const SemAct* pre_rule_action = gram.pre_rule.empty() ? nullptr : gram.pre_rule[0];
+    const SemAct* post_rule_action = gram.post_rule.empty() ? nullptr : gram.post_rule[0];
 
     // Build a mutable tree representation of a regexp from an immutable AST.
     RESpec re(opts, msg);
@@ -105,8 +107,8 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     fillpoints(dfa, fill);
 
     // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
-    Adfa* adfa = new Adfa(
-            std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, setup, opts, msg);
+    Adfa* adfa = new Adfa(std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, opts, msg,
+            entry_action, pre_rule_action, post_rule_action);
     dfas.push_back(std::unique_ptr<Adfa>(adfa));
 
     // see note [reordering DFA states]
@@ -142,7 +144,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
     Opt opts(out_alc, msg);
     const conopt_t& globopts = opts.global();
     Input input(out_alc, &globopts, msg);
-    CHECK_RET(opts.parse(argv, input));
+    CHECK_RET(opts.parse(argv, input, RE2C_LANG));
 
     CHECK_RET(input.open(globopts.source_file, nullptr));
 
@@ -226,7 +228,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
 
     CHECK_RET(input.gen_dep_file(output.total_opts->header_file));
 
-    if (globopts.verbose) fprintf(stderr, "re2c: success\n");
+    if (globopts.verbose) fprintf(stderr, RE2C_PROG ": success\n");
     return Ret::OK;
 }
 

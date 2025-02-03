@@ -20,7 +20,7 @@ let yymaxfill = 1
 #21 "ocaml/eof/02_bounds_checking.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\x00' -> (yy1 [@tailcall]) yyrecord count
@@ -43,7 +43,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 
 and yy3 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -57,7 +57,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\'' -> (yy6 [@tailcall]) yyrecord count

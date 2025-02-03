@@ -1,0 +1,99 @@
+
+re2c has three API flavors that define the core set of primitives used by a
+program:
+
+**Simple API**
+    This is the default API for C/C++ backend. It consists of primitives
+    ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER`` and ``YYLIMIT``, which
+    should be defined as pointers of type ``YYCTYPE*``.
+
+    |
+
+**Record API**
+    (*added in version 4.0*)
+    Record API is useful in cases when lexer state must be stored in a struct.
+    It is enabled with ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the
+    name can be overridden with ``re2c:yyrecord``) that should be
+    defined as a struct with fields ``yycursor``, ``yymarker``, ``yyctxmarker``,
+    ``yylimit`` (only the fields used by the generated code need to be defined,
+    and their names can be configured).
+
+    |
+
+**Generic API**
+    (*added in version 0.14*)
+    This is the most flexible API. It is enabled with ``--api generic`` option
+    or ``re2c:api = generic`` configuration.
+    This API contains primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.
+    Generic API supports two styles that determine the form in which the
+    primitives should be defined:
+
+    |
+
+    **Free-form**
+        Free-form style is enabled with configuration
+        ``re2c:api:style = free-form``.
+        In this style interface primitives should be defined as free-form
+        pieces of code with interpolated variables of the form ``@@{var}`` or
+        optionally just ``@@`` if there is a single variable. The set of
+        variables is specific to each primitive. Here's how free-form generic
+        API can be defined in terms of pointers ``cursor``, ``limit``,
+        ``marker`` and ``ctxmarker``:
+
+        .. code-block:: c
+
+            /*!re2c
+              re2c:YYPEEK       = "*cursor";
+              re2c:YYSKIP       = "++cursor;";
+              re2c:YYBACKUP     = "marker = cursor;";
+              re2c:YYRESTORE    = "cursor = marker;";
+              re2c:YYBACKUPCTX  = "ctxmarker = cursor;";
+              re2c:YYRESTORECTX = "cursor = ctxmarker;";
+              re2c:YYRESTORETAG = "cursor = ${tag};";
+              re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+              re2c:YYSTAGP      = "@@{tag} = cursor;";
+              re2c:YYSTAGN      = "@@{tag} = NULL;";
+              re2c:YYSHIFT      = "cursor += @@{shift};";
+              re2c:YYSHIFTSTAG  = "@@{tag} += @@{shift};";
+            */
+
+        |
+
+    **Function-like**
+        Historically function-like style is the default one. It also can be
+        enabled with configuration ``re2c:api:style = functions``. In this
+        style primitives should be defined as functions or macros with
+        parentheses, accepting the necessary arguments. Here's how function-like
+        generic API can be defined in terms of pointers ``cursor``, ``limit``,
+        ``marker`` and ``ctxmarker`` using preprocessor macros:
+
+        .. code-block:: c
+
+            #define  YYPEEK()                 *cursor
+            #define  YYSKIP()                 ++cursor
+            #define  YYBACKUP()               marker = cursor
+            #define  YYRESTORE()              cursor = marker
+            #define  YYBACKUPCTX()            ctxmarker = cursor
+            #define  YYRESTORECTX()           cursor = ctxmarker
+            #define  YYRESTORETAG(tag)        cursor = tag
+            #define  YYLESSTHAN(len)          limit - cursor < len
+            #define  YYSTAGP(tag)             tag = cursor
+            #define  YYSTAGN(tag)             tag = NULL
+            #define  YYSHIFT(shift)           cursor += shift
+            #define  YYSHIFTSTAG(tag, shift)  tag += shift

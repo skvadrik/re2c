@@ -51,8 +51,8 @@ func lex(yyrecord *Input) int {
 		yyrecord.token = yyrecord.yycursor
 	/*!re2c
 		re2c:api = record;
-		re2c:define:YYCTYPE = byte;
-		re2c:define:YYFILL = "if r := fill(yyrecord, @@); r != 0 { return r }";
+		re2c:YYCTYPE = byte;
+		re2c:YYFILL = "if r := fill(yyrecord, @@); r != 0 { return r }";
 
 		str = ['] ([^'\\] | [\\][^])* ['];
 

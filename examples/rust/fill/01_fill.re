@@ -51,8 +51,8 @@ fn lex(yyrecord: &mut State) -> isize {
         yyrecord.token = yyrecord.yycursor;
     /*!re2c
         re2c:api = record;
-        re2c:define:YYCTYPE = u8;
-        re2c:define:YYFILL = "fill(yyrecord) == Fill::Ok";
+        re2c:YYCTYPE = u8;
+        re2c:YYFILL = "fill(yyrecord) == Fill::Ok";
         re2c:eof = 0;
 
         str = ['] ([^'\\] | [\\][^])* ['];

@@ -73,14 +73,15 @@ using StxCodes = list_t<StxCode>;
     STX_OPT(bool, backtick_quoted_strings, false) \
     STX_OPT(bool, single_quoted_strings, false) \
     STX_OPT(bool, indentation_sensitive, false) \
-    STX_OPT(bool, wrap_blocks_in_braces, false)
+    STX_OPT(bool, wrap_blocks_in_braces, false) \
+    STX_OPT(std::string, special_escapes, "")
 
 #define RE2C_CODE_TEMPLATES \
     CODE_TEMPLATE(var_local, \
-        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT}) \
     ) \
     CODE_TEMPLATE(var_global, \
-        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::HAVE_INIT}) \
+        ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({StxLOpt::INIT}) \
     ) \
     CODE_TEMPLATE(const_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::INIT}), ({}), ({}) \
@@ -99,13 +100,19 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(array_elem, \
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(enum, \
+        ({StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), ({StxLOpt::INIT}) \
+    ) \
+    CODE_TEMPLATE(enum_elem, \
+        ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(assign, \
+        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(type_int, \
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_uint, \
-        ({}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(type_cond_enum, \
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(type_yybm, \
@@ -113,9 +120,6 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(type_yytarget, \
         ({}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(assign, \
-        ({StxVarId::LHS, StxVarId::RHS}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(cmp_eq, \
         ({}), ({}), ({}) \
@@ -136,12 +140,10 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(if_then_else, \
-        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
-        ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::COND, StxLOpt::MANY}) \
     ) \
     CODE_TEMPLATE(if_then_else_oneline, \
-        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), \
-        ({StxLOpt::HAVE_COND, StxLOpt::MANY}) \
+        ({StxVarId::COND}), ({StxVarId::BRANCH, StxVarId::STMT}), ({StxLOpt::COND, StxLOpt::MANY}) \
     ) \
     CODE_TEMPLATE(switch, \
         ({StxVarId::EXPR}), ({StxVarId::CASE}), ({}) \
@@ -161,30 +163,26 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(loop, \
         ({StxVarId::LABEL}), ({StxVarId::STMT}), ({}) \
     ) \
+    CODE_TEMPLATE(continue, \
+        ({StxVarId::LABEL}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(enum, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), \
-        ({StxLOpt::HAVE_INIT}) \
-    ) \
-    CODE_TEMPLATE(enum_elem, \
-        ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \
-    ) \
     CODE_TEMPLATE(fndecl, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
-        ({StxVarId::ARG}), ({StxLOpt::HAVE_TYPE}) \
+        ({StxVarId::ARG}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fndef, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
-        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::HAVE_TYPE}) \
+        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fncall, \
         ({StxVarId::NAME, StxVarId::RETVAL}), ({StxVarId::ARG}), \
-        ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
+        ({StxLOpt::ARGS, StxLOpt::RETVAL}) \
     ) \
     CODE_TEMPLATE(tailcall, \
-        ({StxVarId::NAME}), ({StxVarId::ARG}), ({StxLOpt::HAVE_ARGS, StxLOpt::HAVE_RETVAL}) \
+        ({StxVarId::NAME}), ({StxVarId::ARG}), ({StxLOpt::ARGS, StxLOpt::RETVAL}) \
     ) \
     CODE_TEMPLATE(recursive_functions, \
         ({StxVarId::FNDECL, StxVarId::FNDEF}), ({StxVarId::FN}), ({}) \
@@ -249,8 +247,7 @@ using StxCodes = list_t<StxCode>;
         ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyrestoretag, \
-        ({StxVarId::RESTORETAG, StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::TAG, \
-            StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
+        ({StxVarId::RESTORETAG, StxVarId::CURSOR, StxVarId::TAG, StxVarId::RECORD}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(yyshift, \
         ({StxVarId::SHIFT, StxVarId::CURSOR, StxVarId::OFFSET, StxVarId::RECORD}), ({}), ({}) \
@@ -876,7 +873,7 @@ struct Opt {
   public:
     Opt(OutAllocator& alc, Msg& msg);
     const conopt_t& global() const { return glob; }
-    Ret parse(char** argv, Input& input);
+    Ret parse(char** argv, Input& input, Lang lang);
     Ret snapshot(const opt_t** opts) NODISCARD;
     Ret fix_global_and_defaults() NODISCARD;
     Ret restore(const opt_t* opts) NODISCARD;

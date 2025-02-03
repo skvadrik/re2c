@@ -48,7 +48,7 @@ let s2n (str: string) (i1: int) (i2: int) : int =
 
 #50 "ocaml/submatch/02_mtags.ml"
 let rec yy0 (st : state) : (int list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yyt1 <- st.yycursor;
@@ -68,7 +68,7 @@ and yy2 (st : state) : (int list) option =
 
 and yy3 (st : state) : (int list) option =
     st.yymarker <- st.yycursor;
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\x00' ->
             
@@ -99,7 +99,7 @@ and yy4 (st : state) : (int list) option =
 #100 "ocaml/submatch/02_mtags.ml"
 
 and yy5 (st : state) : (int list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '0'..'9' ->
             st.yytm3 <- st.yycursor :: st.yytm3;
@@ -112,7 +112,7 @@ and yy6 (st : state) : (int list) option =
     (yy2 [@tailcall]) st
 
 and yy7 (st : state) : (int list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\x00' ->
             
@@ -130,7 +130,7 @@ and yy7 (st : state) : (int list) option =
         | _ -> (yy6 [@tailcall]) st
 
 and yy8 (st : state) : (int list) option =
-    let yych = get st.yyinput st.yycursor in
+    let yych = unsafe_get st.yyinput st.yycursor in
     match yych with
         | '\x00' ->
             st.yytm4 <- st.yycursor :: st.yytm4;
@@ -188,8 +188,8 @@ let test (str: string) (result: (int list) option) =
     in if not (parse st = result) then raise (Failure "error")
 
 let main () =
-    test "1\x00" (Some [1]);
-    test "1.2.3.4.5.6.7\x00" (Some [1; 2; 3; 4; 5; 6; 7;]);
-    test "1.2.\x00" None
+    test "1" (Some [1]);
+    test "1.2.3.4.5.6.7" (Some [1; 2; 3; 4; 5; 6; 7;]);
+    test "1.2." None
 
 let _ = main ()

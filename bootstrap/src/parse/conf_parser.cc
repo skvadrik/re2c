@@ -1580,7 +1580,7 @@ extern "C" {
 
 namespace re2c {
 
-Ret Input::load_syntax_config(Opt& opts, Lang& lang) {
+Ret Input::load_syntax_config(Opt& opts, Lang lang) {
     in_syntax_file = true;
 
     // First, apply the default syntax config that is provided as a string.

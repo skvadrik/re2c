@@ -1,0 +1,14 @@
+
+The generated code interfaces with the outer program with the help of
+*primitives*, collectively referred to as the *API*.
+Which primitives should be defined for a particular program depends on multiple
+factors, including the complexity of regular expressions, input representation,
+buffering and the use of various features. All the necessary primitives should
+be defined by the user in the form of macros, functions, variables or any other
+suitable form that makes the generated code syntactically and semantically
+correct. |re2c| does not (and cannot) check the definitions, so if anything is
+missing or defined incorrectly, the generated program may have compile-time or
+run-time errors.
+This manual provides examples of API definitions in the most common cases.
+
+.. _generic_api:

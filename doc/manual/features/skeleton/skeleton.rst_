@@ -1,0 +1,35 @@
+With the ``-S, --skeleton`` option, |re2c| ignores all non-|re2c| code and
+generates a self-contained C program that can be further compiled and executed.
+The program consists of lexer code and input data. For each constructed DFA
+(block or condition) |re2c| generates a standalone lexer and two files: an
+``.input`` file with strings derived from the DFA and a ``.keys`` file with
+expected match results. The program runs each lexer on the corresponding
+``.input`` file and compares results with the expectations.
+Skeleton programs are very useful for a number of reasons:
+
+- They can check correctness of various |re2c| optimizations (the data is
+  generated early in the process, before any DFA transformations have taken
+  place).
+
+- Generating a set of input data with good coverage may be useful for both
+  testing and benchmarking.
+
+- Generating self-contained executable programs allows one to get minimized test
+  cases (the original code may be large or have a lot of dependencies).
+
+The difficulty with generating input data is that for all but the most trivial
+cases the number of possible input strings is too large (even if the string
+length is limited). |re2c| solves this difficulty by generating sufficiently
+many strings to cover almost all DFA transitions. It uses the following
+algorithm. First, it constructs a skeleton of the DFA. For encodings with 1-byte
+code unit size (such as ASCII, UTF-8 and EBCDIC) skeleton is just an exact copy
+of the original DFA. For encodings with multibyte code units skeleton is a copy
+of DFA with certain transitions omitted: namely, |re2c| takes at most 256 code
+units for each disjoint continuous range that corresponds to a DFA transition.
+The chosen values are evenly distributed and include range bounds. Instead of
+trying to cover all possible paths in the skeleton (which is infeasible) |re2c|
+generates sufficiently many paths to cover all skeleton transitions, and thus
+trigger the corresponding conditional jumps in the lexer.
+The algorithm implementation is limited by ~1Gb of transitions and consumes
+constant amount of memory (|re2c| writes data to file as soon as it is
+generated).

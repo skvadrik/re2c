@@ -1,0 +1,237 @@
+
+``-? --help -h``
+    Show help message.
+
+``--api <simple | record | generic>``
+    Specify the API used by the generated code to interface with used-defined
+    code. Option ``simple`` shold be used in simple cases when there's no need
+    for buffer refilling and storing lexer state. Option ``record`` should be
+    used when lexer state needs to be stored in a record (struct, class, etc.).
+    Option ``generic`` should be used in complex cases when the other two APIs
+    are not flexible enough.
+
+``--bit-vectors -b``
+    Optimize conditional jumps using bit masks.
+    This option implies ``--nested-ifs``.
+
+``--captures``, ``--leftmost-captures``
+    Enable submatch extraction with leftmost greedy capturing groups. The result
+    is collected into an array ``yybmatch`` of capacity ``2 * YYMAXNMATCH``, and
+    ``yynmatch`` is set to the number of groups for the matching rule.
+
+``--captvars``, ``--leftmost-captvars``
+    Enable submatch extraction with leftmost greedy capturing groups. The result
+    is collected into variables ``yytl<k>``, ``yytr<k>`` for ``k``-th capturing
+    group.
+
+``--case-insensitive``
+    Treat single-quoted and double-quoted strings as case-insensitive.
+
+``--case-inverted``
+    Invert the meaning of single-quoted and double-quoted strings:
+    treat single-quoted strings as case-sensitive and double-quoted strings
+    as case-insensitive.
+
+``--case-ranges``
+    Collapse consecutive cases in a switch statements into a range of the form
+    ``low ... high``. This syntax is a C/C++ language extension that is
+    supported by compilers like GCC, Clang and Tcc. The main advantage over
+    using single cases is smaller generated code and faster generation time,
+    although for some compilers like Tcc it also results in smaller binary size.
+    This option is supported only for C.
+
+``--computed-gotos -g``
+    Optimize conditional jumps using non-standard "computed goto" extension
+    (which must be supported by the compiler). |re2c| generates jump tables
+    only in complex cases with a lot of conditional branches. Complexity
+    threshold can be configured with ``cgoto:threshold`` configuration. This
+    option implies ``--bit-vectors``. It is supported only for C.
+
+``--conditions --start-conditions -c``
+    Enable support of Flex-like "conditions": multiple interrelated lexers
+    within one block. This is an alternative to manually specifying different
+    |re2c| blocks connected with ``goto`` or function calls.
+
+``--depfile FILE``
+    Write dependency information to ``FILE`` in the form of a Makefile rule
+    ``<output-file> : <input-file> [include-file ...]``. This allows one to
+    track build dependencies in the presence of ``include`` blocks/directives,
+    so that updating include files triggers regeneration of the output file.
+    This option depends on the ``--output`` option.
+
+``--ebcdic --ecb -e``
+    Generate a lexer that reads input in EBCDIC encoding. |re2c| assumes that
+    the character range is 0 -- 0xFF and character size is 1 byte.
+
+``--empty-class <match-empty | match-none | error>``
+    Define the way |re2c| treats empty character classes. With ``match-empty``
+    (the default) empty class matches empty input (which is illogical, but
+    backwards-compatible). With ``match-none`` empty class always fails to match.
+    With ``error`` empty class raises a compilation error.
+
+``--encoding-policy <fail | substitute | ignore>``
+    Define the way |re2c| treats Unicode surrogates.
+    With ``fail`` |re2c| aborts with an error when a surrogate is encountered.
+    With ``substitute`` |re2c| silently replaces surrogates with the error code
+    point 0xFFFD. With ``ignore`` (the default) |re2c| treats surrogates as
+    normal code points. The Unicode standard says that standalone surrogates
+    are invalid, but real-world libraries and programs behave in different ways.
+
+``--flex-syntax -F``
+    Partial support for Flex syntax: in this mode named definitions don't need
+    the equal sign and the terminating semicolon, and when used they must be
+    surrounded with curly braces. Names without curly braces are treated as
+    double-quoted strings.
+
+``--goto-label``
+    Use "goto/label" code model: encode DFA in form of labeled code blocks
+    connected with ``goto`` transitions across blocks. This is only supported
+    for languages that have a ``goto`` statement.
+
+``--header --type-header -t HEADER``
+    Generate a ``HEADER`` file. The contents of the file can be specified using
+    special blocks ``header:on`` and ``header:off``. If conditions are used, the
+    generated header will have a condition enum automatically appended to it
+    (unless there is an explicit ``conditions`` block).
+
+``-I PATH``
+    Add ``PATH`` to the list of locations which are used when searching for
+    include files. This option is useful in combination with ``include`` block
+    or directive. |re2c| looks for ``FILE`` in the directory of the parent file
+    and in the include locations specified with ``-I`` option.
+
+``--input <default | custom>``
+    Deprecated alias for ``--api``. Option ``default`` corresponds to ``simple``
+    (it is indeed the default for most backends, but not for all). Option
+    ``custom`` corresponds to ``generic``.
+
+``--input-encoding <ascii | utf8>``
+    Specify the way |re2c| parses regular expressions.
+    With ``ascii`` (the default) |re2c| handles input as ASCII-encoded: any
+    sequence of code units is a sequence of standalone 1-byte characters.
+    With ``utf8`` |re2c| handles input as UTF8-encoded and recognizes multibyte
+    characters.
+
+``--invert-captures``
+    Invert the meaning of capturing and non-capturing groups. By default
+    ``(...)`` is capturing and ``(! ...)`` is non-capturing. With this option
+    ``(! ...)`` is capturing and ``(...)`` is non-capturing.
+
+``--lang <none | c | d | go | haskell | java | js | ocaml | python | rust | v | zig>``
+    Specify the target language. Supported languages are C, D, Go, Haskell,
+    Java, JS, OCaml, Python, Rust, V, Zig (more languages can be added via
+    user-defined syntax files, see the ``--syntax`` option). Option ``none``
+    disables default suntax configs, so that the target language is undefined.
+
+``--location-format <gnu | msvc>``
+    Specify location format in messages.
+    With ``gnu`` locations are printed as 'filename:line:column: ...'.
+    With ``msvc`` locations are printed as 'filename(line,column) ...'.
+    The default is ``gnu``.
+
+``--loop-switch``
+    Use "loop/switch" code model: encode DFA in form of a loop over a switch
+    statement, where individual states are switch cases. State is stored in a
+    variable ``yystate``. Transitions between states update ``yystate`` to the
+    case label of the destination state and continue execution to the head of
+    the loop.
+
+``--nested-ifs -s``
+    Use nested ``if`` statements instead of ``switch`` statements in conditional
+    jumps. This usually results in more efficient code with non-optimizing
+    compilers.
+
+``--no-debug-info -i``
+    Do not output line directives. This may be useful when the generated code is
+    stored in a version control system (to avoid huge autogenerated diffs on
+    small changes).
+
+``--no-generation-date``
+    Suppress date output in the generated file.
+
+``--no-version``
+    Suppress version output in the generated file.
+
+``--no-unsafe``
+    Do not generate ``unsafe`` wrapper over ``YYPEEK`` (this option is specific
+    to Rust). For performance reasons ``YYPEEK`` should avoid bounds-checking,
+    as the lexer already performs end-of-input checks in a more efficient way.
+    The user may choose to provide a safe ``YYPEEK`` definition, or a definition
+    that is unsafe only in release builds, in which case the ``--no-unsafe``
+    option helps to avoid warnings about redundant ``unsafe`` blocks.
+
+``--output -o OUTPUT``
+    Specify the ``OUTPUT`` file.
+
+``--posix-captures``, ``-P``
+    Enable submatch extraction with POSIX-style capturing groups. The result
+    is collected into an array ``yybmatch`` of capacity ``2 * YYMAXNMATCH``, and
+    ``yynmatch`` is set to the number of groups for the matching rule.
+
+``--posix-captvars``
+    Enable submatch extraction with POSIX-style capturing groups. The result
+    is collected into variables ``yytl<k>``, ``yytr<k>`` for ``k``-th capturing
+    group.
+
+``--recursive-functions``
+    Use code model based on co-recursive functions, where each DFA state is a
+    separate function that may call other state-functions or itself.
+
+``--reusable -r``
+    Deprecated since version 2.2 (reusable blocks are allowed by default now).
+
+``--skeleton -S``
+    Ignore user-defined interface code and generate a self-contained "skeleton"
+    program. Additionally, generate input files with strings derived from the
+    regular grammar and compressed match results that are used to verify
+    "skeleton" behavior on all inputs. This option is useful for finding bugs
+    in optimizations and code generation. This option is supported only for C.
+
+``--storable-state -f``
+    Generate a lexer which can store its inner state.
+    This is useful in push-model lexers which are stopped by an outer program
+    when there is not enough input, and then resumed when more input becomes
+    available. In this mode users should additionally define ``YYGETSTATE``
+    and ``YYSETSTATE`` primitives, and variables ``yych``, ``yyaccept`` and
+    ``state`` should be part of the stored lexer state.
+
+``--syntax FILE``
+    Load configurations from the specified ``FILE`` and apply them on top of the
+    default syntax file. Note that ``FILE`` can define only a few configurations
+    (if it's used to amend the default syntax file), or it can define a whole
+    new language backend (in the latter case it is recommended to use
+    ``--lang none`` option).
+
+``--tags -T``
+    Enable submatch extraction with tags.
+
+``--ucs2 --wide-chars -w``
+    Generate a lexer that reads UCS2-encoded input. |re2c| assumes that the
+    character range is 0 -- 0xFFFF and character size is 2 bytes.
+    This option implies ``--nested-ifs``.
+
+``--utf8 --utf-8 -8``
+    Generate a lexer that reads input in UTF-8 encoding. |re2c| assumes that the
+    character range is 0 -- 0x10FFFF and character size is 1 byte.
+
+``--utf16 --utf-16 -x``
+    Generate a lexer that reads UTF16-encoded input. |re2c| assumes that the
+    character range is 0 -- 0x10FFFF and character size is 2 bytes.
+    This option implies ``--nested-ifs``.
+
+``--utf32 --unicode -u``
+    Generate a lexer that reads UTF32-encoded input. |re2c| assumes that the
+    character range is 0 -- 0x10FFFF and character size is 4 bytes.
+    This option implies ``--nested-ifs``.
+
+``--verbose``
+    Output a short message in case of success.
+
+``--vernum -V``
+    Show version information in ``MMmmpp`` format (major, minor, patch).
+
+``--version -v``
+    Show version information.
+
+``--single-pass -1``
+    Deprecated. Does nothing (single pass is the default now).

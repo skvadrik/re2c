@@ -18,7 +18,7 @@ peek_digit :: ByteString -> Int -> Int -> Int
 peek_digit str idx offs = fromIntegral (index str (idx - 1)) - offs
 
 %{
-    re2c:define:YYFN = ["parse;Maybe Int", "State{..};State", "_num;Int"];
+    re2c:YYFN = ["parse;Maybe Int", "State{..};State", "_num;Int"];
     re2c:yyfill:enable = 0;
 
     <init> '0b' / [01]        :=> bin

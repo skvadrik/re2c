@@ -1,0 +1,6 @@
+With the ``-D, --emit-dot`` option, |re2c| does not generate code. Instead,
+it dumps the generated DFA in DOT format.
+One can convert this dump to an image of the DFA using Graphviz or another library.
+Note that this option shows the final DFA after it has gone through a number of
+optimizations and transformations. Earlier stages can be dumped with various debug
+options, such as ``--dump-nfa``, ``--dump-dfa-raw`` etc. (see the full list of options).

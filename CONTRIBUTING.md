@@ -47,6 +47,10 @@ with options `--enable-parsers` (Autotools) or `-DRE2C_REBUILD_PARSERS=ON`
 (CMake). In this case `bison` must be installed on the system. Otherwise
 Autoconf or CMake will fail at configuration stage.
 
+For changes that affect syntax files, regeneration mode is configured
+with options `--enable-syntax` (Autotools) or `-DRE2C_REBUILD_SYNTAX=ON`
+(CMake).
+
 For changes that update documentation, it is necessary to rebuild the bootstrap
 manpages by reconfiguring and rebuilding re2c with options `--enable-docs`
 (Autotools) or `-DRE2C_REBUILD_DOCS=ON` (CMake).

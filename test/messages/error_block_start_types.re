@@ -1,7 +1,32 @@
 // re2c $INPUT -o $OUTPUT
-/*!types:re2c*/ // ok, end of block
-/*!types:re2c */ // ok, space
-/*!types:re2c	*/ // ok, space
+
+// ok, end of block
+/*!types:re2c*/
+/*!conditions:re2c*/
+%{types%}
+%{conditions%}
+
+// ok, space
+/*!types:re2c */
+/*!conditions:re2c */
+%{types %}
+%{conditions %}
+
+// ok, space
+/*!types:re2c	*/
+/*!conditions:re2c	*/
+%{types	%}
+%{conditions	%}
+
+// ok, newline
 /*!types:re2c
-*/ // ok, newline
-/*!types:re2cx */ // bad
+*/
+/*!conditions:re2c
+*/
+%{types
+%}
+%{conditions
+%}
+
+// bad
+/*!types:re2cx */

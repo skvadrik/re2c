@@ -56,7 +56,7 @@ let fill (st: state) (need: int) : status =
 #57 "ocaml/fill/02_fill.ml"
 let rec yy0 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\x00' -> (yy1 [@tailcall]) yyrecord count
@@ -79,7 +79,7 @@ and yy2 (yyrecord : state) (count : int) : int =
 
 and yy3 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | ' ' ->
             yyrecord.yycursor <- yyrecord.yycursor + 1;
@@ -93,7 +93,7 @@ and yy4 (yyrecord : state) (count : int) : int =
 
 and yy5 (yyrecord : state) (count : int) : int =
     if (yyrecord.yylimit <= yyrecord.yycursor) then if not (fill yyrecord 1 = Ok) then raise Fill;
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <- yyrecord.yycursor + 1;
     match yych with
         | '\'' -> (yy6 [@tailcall]) yyrecord count
