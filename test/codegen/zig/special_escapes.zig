@@ -29,7 +29,10 @@ fn lex(yyinput: [:0]const u8) bool {
                 yystate = 2;
                 continue :yyl;
             },
-            2 => { return false; },
+            2 => { 
+            _ = [_]u8{'\n', '\r', '\t', '\\', '\'', '\"'};
+            return false;
+ },
             3 => {
                 yymarker = yycursor;
                 yych = yyinput[yycursor];

@@ -8,7 +8,10 @@ fn lex(yyinput: &[u8]) -> bool {
         re2c:yyfill:enable = 0;
 
         "\a\b\f\n\r\t\v\\'\"" { return true; }
-        * { return false; }
+        * {
+            let _ = ['\n', '\r', '\t', '\\', '\'', '\"'];
+            return false;
+        }
     */
 }
 

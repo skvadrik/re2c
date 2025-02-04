@@ -7,7 +7,10 @@ fn lex(yyinput string) {
         re2c:yyfill:enable = 0;
 
         "\a\b\f\n\r\t\v\\'\"" { return }
-        * { panic("error!") }
+        * {
+            _ := ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"']
+            panic("error!")
+        }
     */
 }
 

@@ -768,7 +768,7 @@ loop: /*!re2c
         esc [U] hex_digit{8}       | // 8-byte hex escape \UXXXXXXXX
         esc [o][{] oct_digit+ [}]  | // octal escape \o{X...X}
         esc oct_digit{3}           | // octal escape \XXX
-        esc ['\\?abfnrtv0]         | // special escape sequences
+        esc ['"\\?abfnrtv0]        | // special escape sequences
         [^]                        ; // any UTF-8 encoded Unicode symbol, unescaped
 */
 

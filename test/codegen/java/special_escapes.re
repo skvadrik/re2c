@@ -11,7 +11,10 @@ class Main {
             re2c:yyfill:enable = 0;
 
             "\a\b\f\n\r\t\v\\'\"" { return true; }
-            * { return false; }
+            * {
+                char[] x = {'\b', '\f', '\n', '\r', '\t', '\\', '\'', '\"'};
+                return false;
+            }
         */
     }
 

@@ -21,7 +21,10 @@ and yy1 (yyrecord : state) : bool =
     (yy2 [@tailcall]) yyrecord
 
 and yy2 (yyrecord : state) : bool =
-    false
+    
+        let _ = ['\b', '\n', '\r', '\t', '\\', '\'', '\"'] in
+        false
+
 
 and yy3 (yyrecord : state) : bool =
     yyrecord.yymarker <- yyrecord.yycursor;

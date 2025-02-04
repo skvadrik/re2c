@@ -17,6 +17,7 @@ def lex(yyinput):
                 yystate = 1
                 continue
             case 1:
+                x = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] # unused
                 return False
             case 2:
                 yymarker = yycursor

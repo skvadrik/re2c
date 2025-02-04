@@ -15,7 +15,11 @@ int lex(const char *s) {
 yy1:
 	++YYCURSOR;
 yy2:
-	{ return 1; }
+	{
+            char x[] = {'\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'}; // unused
+            (void) x;
+            return 1;
+        }
 yy3:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {

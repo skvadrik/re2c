@@ -14,7 +14,10 @@ fn lex(yyinput string) {
 yy1:
     yycursor += 1
 yy2:
-    panic("error!")
+    
+            _ := ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"']
+            panic("error!")
+
 yy3:
     yycursor += 1
     yymarker = yycursor

@@ -13,7 +13,10 @@ type state = {
     re2c:yyfill:enable = 0;
 
     "\a\b\f\n\r\t\v\\'\"" { true }
-    * { false }
+    * {
+        let _ = ['\b', '\n', '\r', '\t', '\\', '\'', '\"'] in
+        false
+    }
 %}
 
 let main () =

@@ -8,7 +8,10 @@ private bool lex(const(char)* yycursor) {
         re2c:yyfill:enable = 0;
 
         "\a\b\f\n\r\t\v\\'\"" { return true; }
-        * { return false; }
+        * {
+            auto _ = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"']; // unused
+            return false;
+        }
     */
 }
 

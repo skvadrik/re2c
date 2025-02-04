@@ -25,7 +25,10 @@ function lex(yyinput) {
                 yystate = 2
                 continue yyl
             case 2:
-                { return false; }
+                {
+            x = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] // unused
+            return false;
+        }
             case 3:
                 yymarker = yycursor;
                 yych = yyinput.charCodeAt(yycursor)

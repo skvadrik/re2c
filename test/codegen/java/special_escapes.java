@@ -27,7 +27,10 @@ class Main {
                 yystate = 2;
                 continue yyl;
             case 2:
-                { return false; }
+                {
+                char[] x = {'\b', '\f', '\n', '\r', '\t', '\\', '\'', '\"'};
+                return false;
+            }
             case 3:
                 yymarker = yycursor;
                 yych = yyinput.charAt(yycursor);

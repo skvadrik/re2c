@@ -8,7 +8,11 @@ func lex(yyinput string) {
 		re2c:yyfill:enable = 0;
 
 		"\a\b\f\n\r\t\v\\'\"" { return }
-		* { panic("error!") }
+		* {
+			_ = []rune{'\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\''}
+			_ = "\""
+			panic("error!")
+		}
 	*/
 }
 

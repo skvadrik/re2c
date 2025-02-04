@@ -15,7 +15,10 @@ data State = State {
     re2c:yyfill:enable = 0;
 
     "\a\b\f\n\r\t\v\\'\"" { True }
-    * { False }
+    * {
+        let _ = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] in
+        False
+    }
 %}
 
 main :: IO ()

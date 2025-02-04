@@ -8,7 +8,11 @@ int lex(const char *s) {
         re2c:define:YYCTYPE = char;
 
         "\a\b\f\n\r\t\v\\'\"" { return 0; }
-        * { return 1; }
+        * {
+            char x[] = {'\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'}; // unused
+            (void) x;
+            return 1;
+        }
     */
 }
 

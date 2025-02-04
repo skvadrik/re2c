@@ -17,7 +17,11 @@ func lex(yyinput string) {
 yy1:
 	yycursor += 1
 yy2:
-	{ panic("error!") }
+	{
+			_ = []rune{'\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\''}
+			_ = "\""
+			panic("error!")
+		}
 yy3:
 	yycursor += 1
 	yymarker = yycursor

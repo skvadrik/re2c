@@ -29,6 +29,7 @@ yy1 State{..} =
 
 yy2 :: State -> Bool
 yy2 State{..} =
+    let _ = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] in
     False
 
 yy3 :: State -> Bool

@@ -8,7 +8,10 @@ def lex(yyinput):
     re2c:indent:top = 1;
 
     "\a\b\f\n\r\t\v\\'\"" { return True }
-    * { return False }
+    * {
+        x = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] # unused
+        return False
+    }
 %}
 
 assert lex(b"\x07\x08\x0c\x0a\x0d\x09\x0b\\'\"\0")

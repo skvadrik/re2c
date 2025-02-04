@@ -15,7 +15,10 @@ private bool lex(const(char)* yycursor) {
 yy1:
     ++yycursor;
 yy2:
-    { return false; }
+    {
+            auto _ = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"']; // unused
+            return false;
+        }
 yy3:
     yych = *(yymarker = ++yycursor);
     switch (yych) {

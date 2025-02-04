@@ -7,7 +7,10 @@ function lex(yyinput) {
         re2c:yyfill:enable = 0;
 
         "\a\b\f\n\r\t\v\\'\"" { return true; }
-        * { return false; }
+        * {
+            x = ['\a', '\b', '\f', '\n', '\r', '\t', '\v', '\\', '\'', '\"'] // unused
+            return false;
+        }
     */
 }
 
