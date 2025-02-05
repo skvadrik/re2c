@@ -10,7 +10,7 @@ const State = struct {
 
 
 fn yy0(st: *State) bool {
-    var yych: u8 = st.str[st.cur];
+    const yych = st.str[st.cur];
     st.cur += 1;
     switch (yych) {
         0x31...0x39 => { return yy2(st); },
@@ -23,7 +23,7 @@ fn yy1(st: *State) bool {
 }
 
 fn yy2(st: *State) bool {
-    var yych: u8 = st.str[st.cur];
+    const yych = st.str[st.cur];
     switch (yych) {
         0x30...0x39 => {
             st.cur += 1;

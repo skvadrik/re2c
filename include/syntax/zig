@@ -259,7 +259,7 @@ code:yydebug =
     )) nl;
 
 code:yypeek =
-    topindent (.code_model.recursive_functions ? "var " yych ": " YYCTYPE : yych) " = " (.api.generic
+    topindent (.code_model.recursive_functions ? "const ") yych " = " (.api.generic
         ? YYPEEK
         : (.cast ? "@intCast(") YYINPUT "[" YYCURSOR "]" (.cast ? ")")
     ) ";" nl;

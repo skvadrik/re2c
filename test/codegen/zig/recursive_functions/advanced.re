@@ -60,8 +60,7 @@ fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
 fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     // Reached the root of the m-tag tree, stop recursion.
     if (x == mtag_root and y == mtag_root) {
-        var ss = std.ArrayList([]const u8).init(st.allocator);
-        return ss;
+        return std.ArrayList([]const u8).init(st.allocator);
     }
 
     // Unwind history further.
@@ -69,12 +68,12 @@ fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
 
     // Get tag values. Tag histories must have equal length.
     std.debug.assert(x != mtag_root and y != mtag_root);
-    var ex = st.trie.items[x].elem;
-    var ey = st.trie.items[y].elem;
+    const ex = st.trie.items[x].elem;
+    const ey = st.trie.items[y].elem;
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
-        var s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
+        const s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
         try ss.append(s);
     } else {
         // Both tags are none (this corresponds to zero repetitions).
@@ -91,8 +90,8 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
 }
 
 fn fill(st: *State, file: anytype) Status {
-    var used = st.yylimit - st.token;
-    var free = bufsize - used;
+    const used = st.yylimit - st.token;
+    const free = bufsize - used;
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
     if (free < 1) return Status.big_packet;
@@ -154,13 +153,13 @@ fn fill(st: *State, file: anytype) Status {
     media_type          = @l1 token '/' token @l2 ( ows ';' ows parameter )*;
 
     <media_type> media_type ows crlf {
-        var mt = st.yyinput[st.l1..st.l2];
+        const mt = st.yyinput[st.l1..st.l2];
         std.log.debug("media type: {s}", .{mt});
 
-        var pnames = unwind(st, st.p1, st.p2) catch null;
+        const pnames = unwind(st, st.p1, st.p2) catch null;
         std.log.debug("pnames: {any}", .{pnames});
 
-        var pvals = unwind(st, st.p3, st.p4) catch null;
+        const pvals = unwind(st, st.p3, st.p4) catch null;
         std.log.debug("pvals: {any}", .{pvals});
 
         st.token = st.yycursor;
@@ -168,7 +167,7 @@ fn fill(st: *State, file: anytype) Status {
     }
 
     <header> header_field_folded crlf {
-        var folds = unwind(st, st.f1, st.f2) catch null;
+        const folds = unwind(st, st.f1, st.f2) catch null;
         std.log.debug("folds: {any}", .{folds});
 
         st.token = st.yycursor;

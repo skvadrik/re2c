@@ -260,7 +260,7 @@ static constexpr const char* DEFAULT_SYNTAX_ZIG =
     "    )) nl;\n"
     "\n"
     "code:yypeek =\n"
-    "    topindent (.code_model.recursive_functions ? \"var \" yych \": \" YYCTYPE : yych) \" = \" (.api.generic\n"
+    "    topindent (.code_model.recursive_functions ? \"const \") yych \" = \" (.api.generic\n"
     "        ? YYPEEK\n"
     "        : (.cast ? \"@intCast(\") YYINPUT \"[\" YYCURSOR \"]\" (.cast ? \")\")\n"
     "    ) \";\" nl;\n"

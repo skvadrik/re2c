@@ -75,8 +75,7 @@ fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
 fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     // Reached the root of the m-tag tree, stop recursion.
     if (x == mtag_root and y == mtag_root) {
-        var ss = std.ArrayList([]const u8).init(st.allocator);
-        return ss;
+        return std.ArrayList([]const u8).init(st.allocator);
     }
 
     // Unwind history further.
@@ -84,12 +83,12 @@ fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
 
     // Get tag values. Tag histories must have equal length.
     std.debug.assert(x != mtag_root and y != mtag_root);
-    var ex = st.trie.items[x].elem;
-    var ey = st.trie.items[y].elem;
+    const ex = st.trie.items[x].elem;
+    const ey = st.trie.items[y].elem;
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
-        var s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
+        const s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
         try ss.append(s);
     } else {
         // Both tags are none (this corresponds to zero repetitions).
@@ -106,8 +105,8 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
 }
 
 fn fill(st: *State, file: anytype) Status {
-    var used = st.yylimit - st.token;
-    var free = bufsize - used;
+    const used = st.yylimit - st.token;
+    const free = bufsize - used;
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
     if (free < 1) return Status.big_packet;
@@ -134,7 +133,7 @@ if (st.yyt2 != none) st.yyt2 = @subWithOverflow(st.yyt2, st.token)[0];
 
 
 fn yy1(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x21,
         0x23...0x27,
@@ -172,7 +171,7 @@ fn yy3(st: *State) Status {
 
 fn yy4(st: *State) Status {
     st.yymarker = st.yycursor;
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x21,
         0x23...0x27,
@@ -194,7 +193,7 @@ fn yy4(st: *State) Status {
 }
 
 fn yy5(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     return yy6(st, yych);
 }
 
@@ -233,7 +232,7 @@ fn yy7(st: *State) Status {
 }
 
 fn yy8(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x09,
@@ -252,7 +251,7 @@ fn yy8(st: *State) Status {
 }
 
 fn yy9(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     return yy10(st, yych);
 }
 
@@ -314,7 +313,7 @@ fn yy10(st: *State, yych: u8) Status {
 }
 
 fn yy11(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -341,7 +340,7 @@ fn yy11(st: *State) Status {
 }
 
 fn yy12(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x0A => {
             st.yycursor += 1;
@@ -359,7 +358,7 @@ fn yy12(st: *State) Status {
 }
 
 fn yy13(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -399,13 +398,13 @@ fn yy14(st: *State) Status {
     st.p4 = st.yytm6;
     st.yystate = -1;
     
-        var mt = st.yyinput[st.l1..st.l2];
+        const mt = st.yyinput[st.l1..st.l2];
         std.log.debug("media type: {s}", .{mt});
 
-        var pnames = unwind(st, st.p1, st.p2) catch null;
+        const pnames = unwind(st, st.p1, st.p2) catch null;
         std.log.debug("pnames: {any}", .{pnames});
 
-        var pvals = unwind(st, st.p3, st.p4) catch null;
+        const pvals = unwind(st, st.p3, st.p4) catch null;
         std.log.debug("pvals: {any}", .{pvals});
 
         st.token = st.yycursor;
@@ -414,7 +413,7 @@ fn yy14(st: *State) Status {
 }
 
 fn yy15(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x21,
         0x23...0x27,
@@ -445,7 +444,7 @@ fn yy15(st: *State) Status {
 }
 
 fn yy16(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x21,
         0x23...0x27,
@@ -477,7 +476,7 @@ fn yy16(st: *State) Status {
 }
 
 fn yy17(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -523,7 +522,7 @@ fn yy17(st: *State) Status {
 }
 
 fn yy18(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -552,7 +551,7 @@ fn yy18(st: *State) Status {
 }
 
 fn yy19(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -583,7 +582,7 @@ fn yy19(st: *State) Status {
 }
 
 fn yy20(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -617,7 +616,7 @@ fn yy20(st: *State) Status {
 }
 
 fn yy21(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -647,7 +646,7 @@ fn yyfnmedia_type(st: *State) Status {
 }
 
 fn yy23(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x0C,
@@ -685,7 +684,7 @@ fn yy25(st: *State) Status {
 fn yy26(st: *State) Status {
     st.yyaccept = 0;
     st.yymarker = st.yycursor;
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x0A => {
             st.yycursor += 1;
@@ -705,7 +704,7 @@ fn yy26(st: *State) Status {
 fn yy27(st: *State) Status {
     st.yyaccept = 0;
     st.yymarker = st.yycursor;
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -736,7 +735,7 @@ fn yy27(st: *State) Status {
 }
 
 fn yy28(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -761,7 +760,7 @@ fn yy29(st: *State) Status {
 }
 
 fn yy30(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -790,7 +789,7 @@ fn yy30(st: *State) Status {
 }
 
 fn yy31(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x0A => {
             st.yycursor += 1;
@@ -808,7 +807,7 @@ fn yy31(st: *State) Status {
 }
 
 fn yy32(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -839,7 +838,7 @@ fn yy32(st: *State) Status {
 }
 
 fn yy33(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -874,7 +873,7 @@ fn yy33(st: *State) Status {
 }
 
 fn yy34(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x0C,
@@ -900,7 +899,7 @@ fn yy34(st: *State) Status {
 }
 
 fn yy35(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x0A => {
             st.yycursor += 1;
@@ -918,7 +917,7 @@ fn yy35(st: *State) Status {
 }
 
 fn yy36(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -952,7 +951,7 @@ fn yy36(st: *State) Status {
 fn yy37(st: *State) Status {
     st.yyaccept = 1;
     st.yymarker = st.yycursor;
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
@@ -976,7 +975,7 @@ fn yy38(st: *State) Status {
     st.f2 = st.yytm3;
     st.yystate = -1;
     
-        var folds = unwind(st, st.f1, st.f2) catch null;
+        const folds = unwind(st, st.f1, st.f2) catch null;
         std.log.debug("folds: {any}", .{folds});
 
         st.token = st.yycursor;
@@ -985,7 +984,7 @@ fn yy38(st: *State) Status {
 }
 
 fn yy39(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -1019,7 +1018,7 @@ fn yy39(st: *State) Status {
 }
 
 fn yy40(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x0A => {
             st.yycursor += 1;
@@ -1037,7 +1036,7 @@ fn yy40(st: *State) Status {
 }
 
 fn yy41(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x00,
         0x01...0x08,
@@ -1073,7 +1072,7 @@ fn yy42(st: *State) Status {
 }
 
 fn yy43(st: *State) Status {
-    var yych: u8 = st.yyinput[st.yycursor];
+    const yych = st.yyinput[st.yycursor];
     switch (yych) {
         0x09,
         0x20 => {
