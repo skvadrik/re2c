@@ -1,19 +1,5 @@
-# Don't use `find_package(benchmark REQUIRED)`: it can only be used with `target_link_libraries`,
-# which won't work because we need both GCC and Clang toolchains, so we need a library path).
-
-# find google-benchmark include path
-find_path(benchmark_INCLUDE_DIR "benchmark/benchmark.h"
-  PATHS "/nix/store/"
-  PATH_SUFFIXES include
-  NO_DEFAULT_PATH)
-find_path(benchmark_INCLUDE_DIR "benchmark/benchmark.h")
-
-# find google-benchmark library
-find_library(benchmark_LIBRARY NAMES "benchmark"
-  PATHS "/nix/store/"
-  PATH_SUFFIXES lib lib64
-  NO_DEFAULT_PATH)
-find_library(benchmark_LIBRARY NAMES "benchmark")
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GBENCHMARK REQUIRED benchmark)
 
 set(BENCHMARKS
     "submatch_00__http_rfc7230"
@@ -117,8 +103,13 @@ foreach(bench ${BENCHMARKS})
 endforeach()
 
 # binaries
+if("${GBENCHMARK_INCLUDE_DIR}" STREQUAL "")
+    set(GBENCHMARK_INCLUDES "${GBENCHMARK_CFLAGS}")
+else()
+    set(GBENCHMARK_INCLUDES "-I${GBENCHMARK_INCLUDE_DIR}")
+endif()
 set(RE2C_CXX_FLAGS "-O3" "-g" "-I" "${SRC_DIR}" "-Wall" "-Wno-unused-const-variable"
-    "-I${benchmark_INCLUDE_DIR}" "-std=c++11")
+    "${GBENCHMARK_INCLUDES}" "-std=c++11") # C++11 is needed for some google-benchmark features
 list(APPEND COMPILERS "g++" "clang++")
 list(APPEND COMPNAMES "gcc" "clang")
 foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
@@ -139,14 +130,14 @@ foreach(compiler IN ZIP_LISTS COMPILERS COMPNAMES)
     set(output "bench-${compiler_1}")
     add_custom_command(
         OUTPUT "${output}"
-        COMMAND "${compiler_0}" ${flags} ${inputs} "-o" "${output}" "${benchmark_LIBRARY}"
+        COMMAND "${compiler_0}" ${flags} ${inputs} "-o" "${output}" ${GBENCHMARK_LINK_LIBRARIES}
         DEPENDS ${inputs}
     )
     if(compiler_1 STREQUAL "gcc") # build test only with GCC
         set(test_inputs ${objects} "${SRC_DIR}/test.cc")
         add_custom_command(
             OUTPUT "test"
-            COMMAND "${compiler_0}" ${flags} ${test_inputs} "-o" "test" "${benchmark_LIBRARY}"
+            COMMAND "${compiler_0}" ${flags} ${test_inputs} "-o" "test" ${GBENCHMARK_LINK_LIBRARIES}
             DEPENDS ${test_inputs}
         )
     endif()
