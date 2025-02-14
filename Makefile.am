@@ -235,6 +235,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/basics/api/api2_v.rst_ \
 	doc/manual/basics/api/api2_zig.rst_ \
 	doc/manual/basics/api/api3.rst_ \
+	doc/manual/basics/actions.rst_ \
 	doc/manual/basics/blocks.rst_ \
 	doc/manual/basics/directives.rst_ \
 	doc/manual/basics/configurations.rst_ \

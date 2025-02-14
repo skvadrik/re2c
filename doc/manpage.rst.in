@@ -44,17 +44,21 @@ Blocks
 ------
 .. include:: @top_srcdir@/doc/manual/basics/blocks.rst_
 
-Directives
-----------
-.. include:: @top_srcdir@/doc/manual/basics/directives.rst_
+Configurations
+--------------
+.. include:: @top_srcdir@/doc/manual/basics/configurations.rst_
 
 Regular expressions
 -------------------
 .. include:: @top_srcdir@/doc/manual/basics/regular_expressions.rst_
 
-Configurations
---------------
-.. include:: @top_srcdir@/doc/manual/basics/configurations.rst_
+Actions
+-------
+.. include:: @top_srcdir@/doc/manual/basics/actions.rst_
+
+Directives
+----------
+.. include:: @top_srcdir@/doc/manual/basics/directives.rst_
 
 Program interface
 -----------------

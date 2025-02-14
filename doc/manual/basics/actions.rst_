@@ -1,0 +1,19 @@
+Here is a list of predefined actions supported by |re2c|:
+
+``!entry code``
+    Entry action binds a user-defined block of ``code`` to the start state of
+    the current finite state machine. If `start conditions`_ are used, the entry
+    action can be set individually for each condition. This action may be used
+    to perform initialization, e.g. to save start location of a lexeme.
+
+``!pre_rule code``
+    Pre-rule action prepends a user-defined block of ``code`` to semantic actions
+    of all rules in the current block (or condition, if `start conditions`_ are
+    used). This action may be used to factor out the common part of all semantic
+    actions (e.g. saving the end location of a lexeme).
+
+``!post_rule code``
+    Post-rule action appends a user-defined block of ``code`` to semantic actions
+    of all rules in the current block (or condition, if `start conditions`_ are
+    used). This action may be used to emit trap statements that guard against
+    unintended control flow.

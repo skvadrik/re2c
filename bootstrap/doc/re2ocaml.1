@@ -27,7 +27,7 @@ level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
 .in \\n[rst2man-indent\\n[rst2man-indent-level]]u
 ..
-.TH "RE2OCAML" 1 "" ""
+.TH "RE2OCAML" 1 "" "" ""
 .SH NAME
 re2ocaml \- generate fast lexical analyzers for OCaml
 .SH SYNOPSIS
@@ -69,7 +69,7 @@ type state = {
 %}
 
 let main () =
-    let st = {yyinput = \(dq1234\ex00\(dq; yycursor = 0}
+    let st = {yyinput = \(dq1234\(dq; yycursor = 0}
     in if not (lex st) then raise (Failure \(dqerror\(dq)
 
 let _ = main ()
@@ -97,7 +97,7 @@ type state = {
 
 
 let rec yy0 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     yyrecord.yycursor <\- yyrecord.yycursor + 1;
     match yych with
         | \(aq1\(aq..\(aq9\(aq \-> (yy2 [@tailcall]) yyrecord
@@ -107,7 +107,7 @@ and yy1 (yyrecord : state) : bool =
     false
 
 and yy2 (yyrecord : state) : bool =
-    let yych = get yyrecord.yyinput yyrecord.yycursor in
+    let yych = unsafe_get yyrecord.yyinput yyrecord.yycursor in
     match yych with
         | \(aq0\(aq..\(aq9\(aq \->
             yyrecord.yycursor <\- yyrecord.yycursor + 1;
@@ -123,7 +123,7 @@ and lex (yyrecord : state) : bool =
 
 
 let main () =
-    let st = {yyinput = \(dq1234\ex00\(dq; yycursor = 0}
+    let st = {yyinput = \(dq1234\(dq; yycursor = 0}
     in if not (lex st) then raise (Failure \(dqerror\(dq)
 
 let _ = main ()
@@ -135,48 +135,53 @@ let _ = main ()
 .SH BASICS
 .sp
 A re2ocaml program consists of a sequence of \fIblocks\fP intermixed with code in the
-target language. A block may contain \fIdefinitions\fP, \fIconfigurations\fP, \fIrules\fP
-and \fIdirectives\fP in any order:
+target language. A block may contain \fIdefinitions\fP, \fIconfigurations\fP, \fIrules\fP,
+\fIactions\fP and \fIdirectives\fP in any order:
 .INDENT 0.0
 .TP
-.B \fB<name> = <regular expression>;\fP
-A \fIdefinition\fP binds a name to a regular expression. Names may contain
+.B \fBname = regular\-expression ;\fP
+A \fIdefinition\fP binds \fBname\fP to \fBregular\-expression\fP\&. Names may contain
 alphanumeric characters and underscore. The \fI\%regular expressions\fP section
 gives an overview of re2ocaml syntax for regular expressions. Once defined,
-the name can be used in other regular expressions and in rules. Recursion in
-named definitions is not allowed, and each name should be defined before it
-is used. A block inherits named definitions from the global scope.
-Redefining a name that exists in the current scope is an error.
+the \fBname\fP can be used in other regular expressions and in rules.
+Recursion in named definitions is not allowed, and each name should be
+defined before it is used. A block inherits named definitions from the
+global scope. Redefining a name that exists in the current scope is an error.
 .TP
-.B \fB<configuration> = <value>;\fP
+.B \fBconfiguration = value ;\fP
 A \fIconfiguration\fP allows one to change re2ocaml behavior and customize the
 generated code. For a full list of configurations supported by re2ocaml see
 the \fI\%configurations\fP section. Depending on a particular configuration, the
-value can be a keyword, a nonnegative integer number or a one\-line string
+\fBvalue\fP can be a keyword, a nonnegative integer number or a one\-line string
 which should be enclosed in double or single quotes unless it consists of
 alphanumeric characters. A block inherits configurations from the global
 scope and may redefine them or add new ones. Configurations defined inside
 of a block affect the whole block, even if they appear at the end of it.
 .TP
-.B \fB<regular expression> { <code> }\fP
-A \fIrule\fP binds a regular expression to a semantic action (a block of code in
-the target language). If the regular expression matches, the associated
-semantic action is executed. If multiple rules match, the longest match
-takes precedence. If multiple rules match the same string, the earliest one
-takes precedence. There are two special rules: the default rule \fB*\fP and
-the end of input rule \fB$\fP\&. The default rule should always be defined, it
-has the lowest priority regardless of its place in the block, and it matches
-any code unit (not necessarily a valid character, see the
-\fI\%encoding support\fP section). The end of input rule should be defined if the
-corresponding method for \fI\%handling the end of input\fP is used. If
-\fI\%start conditions\fP are used, rules have more complex syntax.
+.B \fBregular\-expression code\fP
+A \fIrule\fP binds \fBregular\-expression\fP to its semantic action (a block of
+code in curly braces, or a block of code that starts with \fB:=\fP and ends on
+a newline followed by any non\-whitespace character).
+If the \fBregular\-expression\fP matches, the associated \fBcode\fP is executed.
+If multiple rules match, the longest match takes precedence. If multiple
+rules match the same string, the earliest one takes precedence. There are
+two special rules: the default rule \fB*\fP and the end of input rule \fB$\fP\&.
+Default rule should always be defined, it has the lowest priority regardless
+of its place in the block, and it matches any code unit (not necessarily a
+valid character, see the \fI\%encoding support\fP section). The end of input rule
+should be defined if the corresponding method for
+\fI\%handling the end of input\fP is used.
+With \fI\%start conditions\fP rules have more complex syntax.
 .TP
-.B \fB!<directive>;\fP
+.B \fB!action code\fP
+An \fIaction\fP binds a user\-defined block of \fBcode\fP to a particular place in
+the generated finite state machine (in the same way as semantic actions bind
+code to the final states). See the \fI\%actions\fP section for a full list of
+predefined actions.
+.TP
+.B \fB!directive ;\fP
 A \fIdirective\fP is one of the special predefined statements. Each directive
-has a unique purpose. For example, the \fB!use\fP directive merges a rules
-block into the current one (see the \fI\%reusable blocks\fP section), and the
-\fB!include\fP directive allows one to include an outer file (see the
-\fI\%include files\fP section).
+has a unique purpose. See the \fI\%directives\fP section for details.
 .UNINDENT
 .SS Blocks
 .sp
@@ -301,102 +306,6 @@ This block marks the end of header file started with \fBheader:on*/\fP block.
 .B \fB/*!ignore:re2c ... */\fP or \fB%{ignore ... %}\fP
 A block which contents are ignored and removed from the output file.
 .UNINDENT
-.SS Directives
-.sp
-Here is a full list of directives supported by re2ocaml:
-.INDENT 0.0
-.TP
-.B \fB!use:<name>;\fP
-An in\-block use directive that merges a previously defined rules block with
-the specified name into the current block. Named definitions, configurations
-and rules of the referenced block are added to the current ones. Conflicts
-between overlapping rules and configurations are resolved in the usual way:
-the first rule takes priority, and the latest configuration overrides the
-preceding ones. One exception is the special rules \fB*\fP, \fB$\fP and \fB<!>\fP
-for which a block\-local definition always takes priority. A use directive
-can be placed anywhere inside of a block, and multiple use directives are
-allowed.
-.TP
-.B \fB!include <file>;\fP
-This directive is the same as \fBinclude\fP block: it inserts \fB<file>\fP
-contents verbatim in place of the durective.
-.UNINDENT
-.SS Regular expressions
-.sp
-re2ocaml uses the following syntax for regular expressions:
-.INDENT 0.0
-.TP
-.B \fB\(dqfoo\(dq\fP
-Case\-sensitive string literal.
-.TP
-.B \fB\(aqfoo\(aq\fP
-Case\-insensitive string literal.
-.TP
-.B \fB[a\-xyz]\fP, \fB[^a\-xyz]\fP
-Character class (possibly negated).
-.TP
-.B \fB\&.\fP
-Any character except newline.
-.TP
-.B \fBR \e S\fP
-Difference of character classes \fBR\fP and \fBS\fP\&.
-.TP
-.B \fBR*\fP
-Zero or more occurrences of \fBR\fP\&.
-.TP
-.B \fBR+\fP
-One or more occurrences of \fBR\fP\&.
-.TP
-.B \fBR?\fP
-Optional \fBR\fP\&.
-.TP
-.B \fBR{n}\fP
-Repetition of \fBR\fP exactly \fBn\fP times.
-.TP
-.B \fBR{n,}\fP
-Repetition of \fBR\fP at least \fBn\fP times.
-.TP
-.B \fBR{n,m}\fP
-Repetition of \fBR\fP from \fBn\fP to \fBm\fP times.
-.TP
-.B \fB(R)\fP
-Just \fBR\fP; parentheses are used to override precedence. If submatch
-extraction is enabled, \fB(R)\fP is a capturing or a non\-capturing group
-depending on \fB\-\-invert\-captures\fP option.
-.TP
-.B \fB(!R)\fP
-If submatch extraction is enabled, \fB(!R)\fP is a non\-capturing or a
-capturing group depending on \fB\-\-invert\-captures\fP option.
-.TP
-.B \fBR S\fP
-Concatenation: \fBR\fP followed by \fBS\fP\&.
-.TP
-.B \fBR | S\fP
-Alternative: \fBR or S\fP\&.
-.TP
-.B \fBR / S\fP
-Lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed.
-.TP
-.B \fBname\fP
-Regular expression defined as \fBname\fP (or literal string \fB\(dqname\(dq\fP in
-Flex compatibility mode).
-.TP
-.B \fB{name}\fP
-Regular expression defined as \fBname\fP in Flex compatibility mode.
-.TP
-.B \fB@stag\fP
-An \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a
-variable named \fBstag\fP\&.
-.TP
-.B \fB#mtag\fP
-An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
-variable named \fBmtag\fP\&.
-.UNINDENT
-.sp
-Character classes and string literals may contain the following escape
-sequences: \fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP,
-octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and
-\fB\eUhhhhhhhh\fP\&.
 .SS Configurations
 .sp
 Here is a full list of configurations supported by re2ocaml:
@@ -844,6 +753,125 @@ The parameter is the minimum number of characters that must be supplied.
 Defaults to non\-zero (the parameter is generated).
 This configuration can be overridden with \fBre2c:YYFILL:naked\fP or
 \fBre2c:api:style\fP\&.
+.UNINDENT
+.SS Regular expressions
+.sp
+re2ocaml uses the following syntax for regular expressions:
+.INDENT 0.0
+.TP
+.B \fB\(dqfoo\(dq\fP
+Case\-sensitive string literal.
+.TP
+.B \fB\(aqfoo\(aq\fP
+Case\-insensitive string literal.
+.TP
+.B \fB[a\-xyz]\fP, \fB[^a\-xyz]\fP
+Character class (possibly negated).
+.TP
+.B \fB\&.\fP
+Any character except newline.
+.TP
+.B \fBR \e S\fP
+Difference of character classes \fBR\fP and \fBS\fP\&.
+.TP
+.B \fBR*\fP
+Zero or more occurrences of \fBR\fP\&.
+.TP
+.B \fBR+\fP
+One or more occurrences of \fBR\fP\&.
+.TP
+.B \fBR?\fP
+Optional \fBR\fP\&.
+.TP
+.B \fBR{n}\fP
+Repetition of \fBR\fP exactly \fBn\fP times.
+.TP
+.B \fBR{n,}\fP
+Repetition of \fBR\fP at least \fBn\fP times.
+.TP
+.B \fBR{n,m}\fP
+Repetition of \fBR\fP from \fBn\fP to \fBm\fP times.
+.TP
+.B \fB(R)\fP
+Just \fBR\fP; parentheses are used to override precedence. If submatch
+extraction is enabled, \fB(R)\fP is a capturing or a non\-capturing group
+depending on \fB\-\-invert\-captures\fP option.
+.TP
+.B \fB(!R)\fP
+If submatch extraction is enabled, \fB(!R)\fP is a non\-capturing or a
+capturing group depending on \fB\-\-invert\-captures\fP option.
+.TP
+.B \fBR S\fP
+Concatenation: \fBR\fP followed by \fBS\fP\&.
+.TP
+.B \fBR | S\fP
+Alternative: \fBR or S\fP\&.
+.TP
+.B \fBR / S\fP
+Lookahead: \fBR\fP followed by \fBS\fP, but \fBS\fP is not consumed.
+.TP
+.B \fBname\fP
+Regular expression defined as \fBname\fP (or literal string \fB\(dqname\(dq\fP in
+Flex compatibility mode).
+.TP
+.B \fB{name}\fP
+Regular expression defined as \fBname\fP in Flex compatibility mode.
+.TP
+.B \fB@stag\fP
+An \fIs\-tag\fP: saves the last input position at which \fB@stag\fP matches in a
+variable named \fBstag\fP\&.
+.TP
+.B \fB#mtag\fP
+An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
+variable named \fBmtag\fP\&.
+.UNINDENT
+.sp
+Character classes and string literals may contain the following escape
+sequences: \fB\ea\fP, \fB\eb\fP, \fB\ef\fP, \fB\en\fP, \fB\er\fP, \fB\et\fP, \fB\ev\fP, \fB\e\e\fP,
+octal escapes \fB\eooo\fP and hexadecimal escapes \fB\exhh\fP, \fB\euhhhh\fP and
+\fB\eUhhhhhhhh\fP\&.
+.SS Actions
+.sp
+Here is a list of predefined actions supported by re2ocaml:
+.INDENT 0.0
+.TP
+.B \fB!entry code\fP
+Entry action binds a user\-defined block of \fBcode\fP to the start state of
+the current finite state machine. If \fI\%start conditions\fP are used, the entry
+action can be set individually for each condition. This action may be used
+to perform initialization, e.g. to save start location of a lexeme.
+.TP
+.B \fB!pre_rule code\fP
+Pre\-rule action prepends a user\-defined block of \fBcode\fP to semantic actions
+of all rules in the current block (or condition, if \fI\%start conditions\fP are
+used). This action may be used to factor out the common part of all semantic
+actions (e.g. saving the end location of a lexeme).
+.TP
+.B \fB!post_rule code\fP
+Post\-rule action appends a user\-defined block of \fBcode\fP to semantic actions
+of all rules in the current block (or condition, if \fI\%start conditions\fP are
+used). This action may be used to emit trap statements that guard against
+unintended control flow.
+.UNINDENT
+.SS Directives
+.sp
+Here is a full list of directives supported by re2ocaml:
+.INDENT 0.0
+.TP
+.B \fB!use:<name>;\fP
+An in\-block use directive that merges a previously defined rules block with
+the specified \fB<name>\fP into the current block. Named definitions, configurations
+and rules of the referenced block are added to the current ones. Conflicts
+between overlapping rules and configurations are resolved in the usual way:
+the first rule takes priority, and the latest configuration overrides the
+preceding ones. One exception is the special rules \fB*\fP, \fB$\fP and \fB<!>\fP
+for which a block\-local definition always takes priority. A use directive
+can be placed anywhere inside of a block, and multiple use directives are
+allowed.
+.TP
+.B \fB!include file ;\fP
+This directive is the same as \fBinclude\fP block: it inserts \fBfile\fP
+contents verbatim in place of the directive.
 .UNINDENT
 .SS Program interface
 .sp
@@ -2324,9 +2352,9 @@ let test(yyinput, count) =
     in if not (lex st 0 = count) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test(\(dq\ex00\(dq, 0);
-    test(\(dqone two three\ex00\(dq, 3);
-    test(\(dqf0ur\ex00\(dq, \-1)
+    test(\(dq\(dq, 0);
+    test(\(dqone two three\(dq, 3);
+    test(\(dqf0ur\(dq, \-1)
 
 let _ = main ()
 
@@ -2393,9 +2421,9 @@ let test(str, count) =
     in if not (lex st 0 = count) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test(\(dq\ex00\(dq, 0);
-    test(\(dq\(aqqu\ex00tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \ex00\(dq, 3);
-    test(\(dq\(aqunterminated\e\e\(aq\ex00\(dq, \-1)
+    test(\(dq\(dq, 0);
+    test(\(dq\(aqqu\ex00tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq, 3);
+    test(\(dq\(aqunterminated\e\e\(aq\(dq, \-1)
 
 let _ = main ()
 
@@ -2978,44 +3006,50 @@ conditions. The rule syntax is extended as follows:
 .INDENT 3.5
 .INDENT 0.0
 .TP
-.B \fB< cond\-list > regexp action\fP
-A rule that is merged to every condition on the \fBcond\-list\fP\&.
-It matches \fBregexp\fP and executes the associated \fBaction\fP\&.
+.B \fB< condition\-list > regular\-expression code\fP
+A rule that is merged to every condition on the \fBcondition\-list\fP\&.
+It matches \fBregular\-expression\fP and executes the associated \fBcode\fP\&.
 .TP
-.B \fB< cond\-list > regexp => cond action\fP
-A rule that is merged to every condition on the \fBcond\-list\fP\&.
-It matches \fBregexp\fP, sets the current condition to \fBcond\fP and
-executes the associated \fBaction\fP\&.
+.B \fB< condition\-list > regular\-expression => condition code\fP
+A rule that is merged to every condition on the \fBcondition\-list\fP\&.
+It matches \fBregular\-expression\fP, sets the current condition to
+\fBcondition\fP and executes the associated \fBcode\fP\&.
 .TP
-.B \fB< cond\-list > regexp :=> cond\fP
-A rule that is merged to every condition on the \fBcond\-list\fP\&.
-It matches \fBregexp\fP and immediately transitions to \fBcond\fP (there is
-no semantic action).
+.B \fB< condition\-list > regular\-expression :=> condition\fP
+A rule that is merged to every condition on the \fBcondition\-list\fP\&.
+It matches \fBregular\-expression\fP and immediately transitions to
+\fBcondition\fP (there is no semantic action).
 .TP
-.B \fB<! cond\-list > action\fP
-The \fBaction\fP is prepended to semantic actions of all rules for every
-condition on the \fBcond\-list\fP\&. This may be used to deduplicate common
-code.
+.B \fB< condition\-list > !action code\fP
+A rule that binds \fBcode\fP to the place defined by \fBaction\fP in every
+condition on the \fBcondition\-list\fP (see the \fI\%actions\fP section for
+various types of actions).
 .TP
-.B \fB< > action\fP
-A rule that is merged to a special entry condition with number zero
-and name \fB\(dq0\(dq\fP\&. It matches empty string and executes the \fBaction\fP\&.
+.B \fB<! condition\-list > code\fP
+A rule that prepends \fBcode\fP to semantic actions of all rules for every
+condition on the \fBcondition\-list\fP\&. This syntax is deprecated and the
+\fB!pre_rule\fP action should be used instead (it does exactly the same).
 .TP
-.B \fB< > => cond action\fP
-A rule that is merged to a special entry condition with number zero
-and name \fB\(dq0\(dq\fP\&. It matches empty string, sets the current condition to
-\fBcond\fP and executes the \fBaction\fP\&.
+.B \fB< > code\fP
+A rule that creates a special entry condition with number zero and name
+\fB\(dq0\(dq\fP that executes \fBcode\fP before jumping to other conditions.
+This syntax is deprecated, and the \fB!entry\fP action should be used
+instead (it provides a more fine\-grained control, as the code can be
+specified on a per\-condition basis, and one can jump directly to
+condition start without going through condition dispatch).
 .TP
-.B \fB< > :=> cond\fP
-A rule that is merged to a special entry condition with number zero
-and name \fB\(dq0\(dq\fP\&. It matches empty string and immediately transitions to
-\fBcond\fP\&.
+.B \fB< > => condition code\fP
+Same as the previous rule, except that it sets the next \fBcondition\fP\&.
+.TP
+.B \fB< > :=> condition\fP
+Same as the previous rule, except that it has no associated code and
+immediately jumps to \fBcondition\fP\&.
 .UNINDENT
 .UNINDENT
 .UNINDENT
 .sp
-The code re2ocaml generates for conditions depends on whether re2ocaml uses goto/label
-approach or loop/switch approach to encode the automata.
+The code re2ocaml generates for conditions depends on whether re2ocaml uses
+goto/label approach or loop/switch approach to encode the automata.
 .sp
 In languages that have \fBgoto\fP statement (such as C/C++ and Go) conditions are
 naturally implemented as blocks of code prefixed with labels of the form
@@ -3572,9 +3606,9 @@ let test (str: string) (result: semver option) =
     in if not (parse st = result) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test \(dq23.34\ex00\(dq (Some {major = 23; minor = 34; patch = 0});
-    test \(dq1.2.99999\ex00\(dq (Some {major = 1; minor = 2; patch = 99999});
-    test \(dq1.a\ex00\(dq None
+    test \(dq23.34\(dq (Some {major = 23; minor = 34; patch = 0});
+    test \(dq1.2.99999\(dq (Some {major = 1; minor = 2; patch = 99999});
+    test \(dq1.a\(dq None
 
 let _ = main ()
 
@@ -3775,9 +3809,9 @@ let test (str: string) (result: semver option) =
     in if not (parse st = result) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test \(dq23.34\ex00\(dq (Some {major = 23; minor = 34; patch = 0});
-    test \(dq1.2.99999\ex00\(dq (Some {major = 1; minor = 2; patch = 99999});
-    test \(dq1.a\ex00\(dq None
+    test \(dq23.34\(dq (Some {major = 23; minor = 34; patch = 0});
+    test \(dq1.2.99999\(dq (Some {major = 1; minor = 2; patch = 99999});
+    test \(dq1.a\(dq None
 
 let _ = main ()
 
@@ -3845,9 +3879,9 @@ let test (str: string) (result: (int list) option) =
     in if not (parse st = result) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test \(dq1\ex00\(dq (Some [1]);
-    test \(dq1.2.3.4.5.6.7\ex00\(dq (Some [1; 2; 3; 4; 5; 6; 7;]);
-    test \(dq1.2.\ex00\(dq None
+    test \(dq1\(dq (Some [1]);
+    test \(dq1.2.3.4.5.6.7\(dq (Some [1; 2; 3; 4; 5; 6; 7;]);
+    test \(dq1.2.\(dq None
 
 let _ = main ()
 
@@ -3944,7 +3978,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = \(dq_Ыдентификатор\ex00\(dq;
+        yyinput = \(dq_Ыдентификатор\(dq;
         yycursor = 0;
         yymarker = 0;
         yyaccept = 0;
@@ -4038,8 +4072,8 @@ let test(str, num) =
     in if not (lex st = num) then raise (Failure \(dqerror\(dq)
 
 let main () =
-    test(\(dq123\ex00\(dq, Int);
-    test(\(dq123.4567\ex00\(dq, Float)
+    test(\(dq123\(dq, Int);
+    test(\(dq123.4567\(dq, Float)
 
 let _ = main ()
 
@@ -4094,7 +4128,7 @@ type state = {
 
 let main () =
     let st = {
-        yyinput = \(dqab\ex00\(dq;
+        yyinput = \(dqab\(dq;
         yycursor = 0;
         tag = 0;
         %{stags format = \(dq\en\et@@ = 0;\(dq; %}
