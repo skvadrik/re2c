@@ -6,6 +6,60 @@ Changelog
 4.0x
 ----
 
+4.1 (2025-02-16)
+~~~~~~~~~~~~~~~~
+
+- Added new syntax for actions
+  (`#521 <https://github.com/skvadrik/re2c/issues/521>`_).
+
+- Added entry, pre-rule and post-rule actions
+  (`#521 <https://github.com/skvadrik/re2c/issues/521>`_):
+
+  + ``!entry`` action binds code at the start of the current finite state machine
+  + ``!pre_rule`` action prepernds code to semantic actions of all rules in the
+    current block or condiiton.
+  + ``!post_rule`` action appernds code to semantic actions of all rules in the
+    current block or condiiton.
+
+- Added syntax file option ``special_escapes`` that describes allowed escape
+  sequences (`#516 <https://github.com/skvadrik/re2c/issues/516>`_).
+
+- Fixed bugs:
+
+  + `#518 <https://github.com/skvadrik/re2c/issues/518>`_
+    (allow using lookahead operator with captures).
+
+  + `#519 <https://github.com/skvadrik/re2c/issues/519>`_
+    (integer overflow caused a very long loop when generating tag names).
+
+  + `#522 <https://github.com/skvadrik/re2c/issues/522>`_
+    (segfault on ``!use`` directive in a block with conditions).
+
+  + `#523 <https://github.com/skvadrik/re2c/issues/523>`_
+    (regression with bit-vector optimization).
+
+  + `#529 <https://github.com/skvadrik/re2c/issues/529>`_
+    (failure to recognize escaped double quotes in character literals).
+
+- OCaml backend now uses ``unsafe_get`` instead of ``get`` as the default ``YYPEEK``
+  implementation.
+
+- Zig backend now uses ``const`` for ``yych`` declaration in
+  ``--recursive-functions`` mode.
+
+- Benchmarks (C/C++):
+
+  + Reimplemented benchmarks using google-benchmark library.
+  + Added simple variants without buffer refill.
+  + Removed Kleenex benchmarks.
+  + Removed deprecated TDFA(0) and StaDFA algorithms.
+  + Updated benchmark results.
+
+- Build system:
+
+  + Migrated to Bazel 8 using bzlmod.
+
+
 4.0.2 (2024-12-11)
 ~~~~~~~~~~~~~~~~~~
 
