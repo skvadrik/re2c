@@ -56,6 +56,10 @@ Regular expressions
 -------------------
 .. include:: /manual/basics/regular_expressions.rst_
 
+Actions
+-------
+.. include:: /manual/basics/actions.rst_
+
 Directives
 ----------
 .. include:: /manual/basics/directives.rst_

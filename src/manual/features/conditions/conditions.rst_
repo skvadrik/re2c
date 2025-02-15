@@ -13,42 +13,48 @@ In condition mode every rule must be prefixed with a list of comma-separated
 condition names in angle brackets, or a wildcard ``<*>`` to denote all
 conditions. The rule syntax is extended as follows:
 
-    ``< cond-list > regexp action``
-        A rule that is merged to every condition on the ``cond-list``.
-        It matches ``regexp`` and executes the associated ``action``.
+    ``< condition-list > regular-expression code``
+        A rule that is merged to every condition on the ``condition-list``.
+        It matches ``regular-expression`` and executes the associated ``code``.
 
-    ``< cond-list > regexp => cond action``
-        A rule that is merged to every condition on the ``cond-list``.
-        It matches ``regexp``, sets the current condition to ``cond`` and
-        executes the associated ``action``.
+    ``< condition-list > regular-expression => condition code``
+        A rule that is merged to every condition on the ``condition-list``.
+        It matches ``regular-expression``, sets the current condition to
+        ``condition`` and executes the associated ``code``.
 
-    ``< cond-list > regexp :=> cond``
-        A rule that is merged to every condition on the ``cond-list``.
-        It matches ``regexp`` and immediately transitions to ``cond`` (there is
-        no semantic action).
+    ``< condition-list > regular-expression :=> condition``
+        A rule that is merged to every condition on the ``condition-list``.
+        It matches ``regular-expression`` and immediately transitions to
+        ``condition`` (there is no semantic action).
 
-    ``<! cond-list > action``
-        The ``action`` is prepended to semantic actions of all rules for every
-        condition on the ``cond-list``. This may be used to deduplicate common
-        code.
+    ``< condition-list > !action code``
+        A rule that binds ``code`` to the place defined by ``action`` in every
+        condition on the ``condition-list`` (see the `actions`_ section for
+        various types of actions).
 
-    ``< > action``
-        A rule that is merged to a special entry condition with number zero
-        and name ``"0"``. It matches empty string and executes the ``action``.
+    ``<! condition-list > code``
+        A rule that prepends ``code`` to semantic actions of all rules for every
+        condition on the ``condition-list``. This syntax is deprecated and the
+        ``!pre_rule`` action should be used instead (it does exactly the same).
 
-    ``< > => cond action``
-        A rule that is merged to a special entry condition with number zero
-        and name ``"0"``. It matches empty string, sets the current condition to
-        ``cond`` and executes the ``action``.
+    ``< > code``
+        A rule that creates a special entry condition with number zero and name
+        ``"0"`` that executes ``code`` before jumping to other conditions.
+        This syntax is deprecated, and the ``!entry`` action should be used
+        instead (it provides a more fine-grained control, as the code can be
+        specified on a per-condition basis, and one can jump directly to
+        condition start without going through condition dispatch).
 
-    ``< > :=> cond``
-        A rule that is merged to a special entry condition with number zero
-        and name ``"0"``. It matches empty string and immediately transitions to
-        ``cond``.
+    ``< > => condition code``
+        Same as the previous rule, except that it sets the next ``condition``.
+
+    ``< > :=> condition``
+        Same as the previous rule, except that it has no associated code and
+        immediately jumps to ``condition``.
 
 
-The code |re2c| generates for conditions depends on whether |re2c| uses goto/label
-approach or loop/switch approach to encode the automata.
+The code |re2c| generates for conditions depends on whether |re2c| uses
+goto/label approach or loop/switch approach to encode the automata.
 
 In languages that have ``goto`` statement (such as C/C++ and Go) conditions are
 naturally implemented as blocks of code prefixed with labels of the form
