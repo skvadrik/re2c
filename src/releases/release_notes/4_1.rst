@@ -12,7 +12,7 @@ new actions. First, the ``!entry`` action is executed at the lexer entry, which
 can be used to emit set up code (it is similar to the zero condition ``< >``,
 but the action is more flexible: it can be set individually per condition, and
 it allows one to bypass the initial condition dispatch and jump directly to the
-start of each condition). Second, the ``!pre-rule`` action is executed
+start of each condition). Second, the ``!pre_rule`` action is executed
 immediately *before* semantic action for each rule in the current block or
 condition. Third, the ``!post_rule`` action is like the previous one, except
 that it is executed immediately *after* each semantic action.
