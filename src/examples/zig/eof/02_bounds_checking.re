@@ -8,11 +8,11 @@ fn lex(str: []const u8) !i32 {
     // Create a copy of the input string padded with yymaxfill zeroes at the end.
     var yyinput = try std.testing.allocator.alloc(u8, str.len + yymaxfill);
     defer std.testing.allocator.free(yyinput);
-    std.mem.copy(u8, yyinput[0..], str);
-    std.mem.copy(u8, yyinput[str.len..], &[_]u8{0} ** yymaxfill); // zero padding
+    std.mem.copyForwards(u8, yyinput[0..], str);
+    std.mem.copyForwards(u8, yyinput[str.len..], &[_]u8{0} ** yymaxfill); // zero padding
 
     var yycursor: usize = 0;
-    var yylimit: usize = yyinput.len;
+    const yylimit: usize = yyinput.len;
     var count: i32 = 0;
 
     loop: while (true) {

@@ -37,8 +37,8 @@ fn unwind(trie: *std.ArrayList(MtagElem),
 
     // Get tag values. Tag histories must have equal length.
     std.debug.assert(x != mtag_root and y != mtag_root);
-    var ex = trie.items[x].elem;
-    var ey = trie.items[y].elem;
+    const ex = trie.items[x].elem;
+    const ey = trie.items[y].elem;
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
@@ -235,6 +235,6 @@ test {
 }
 
 test {
-    var result = parse("1.2.") catch null;
+    const result = parse("1.2.") catch null;
     try std.testing.expectEqualDeep(result, null);
 }
