@@ -2470,11 +2470,11 @@ fn lex(str: []const u8) !i32 {
     // Create a copy of the input string padded with yymaxfill zeroes at the end.
     var yyinput = try std.testing.allocator.alloc(u8, str.len + yymaxfill);
     defer std.testing.allocator.free(yyinput);
-    std.mem.copy(u8, yyinput[0..], str);
-    std.mem.copy(u8, yyinput[str.len..], &[_]u8{0} ** yymaxfill); // zero padding
+    std.mem.copyForwards(u8, yyinput[0..], str);
+    std.mem.copyForwards(u8, yyinput[str.len..], &[_]u8{0} ** yymaxfill); // zero padding
 
     var yycursor: usize = 0;
-    var yylimit: usize = yyinput.len;
+    const yylimit: usize = yyinput.len;
     var count: i32 = 0;
 
     loop: while (true) {
@@ -3876,8 +3876,8 @@ fn unwind(trie: *std.ArrayList(MtagElem),
 
     // Get tag values. Tag histories must have equal length.
     std.debug.assert(x != mtag_root and y != mtag_root);
-    var ex = trie.items[x].elem;
-    var ey = trie.items[y].elem;
+    const ex = trie.items[x].elem;
+    const ey = trie.items[y].elem;
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
@@ -3945,7 +3945,7 @@ test {
 }
 
 test {
-    var result = parse(\(dq1.2.\(dq) catch null;
+    const result = parse(\(dq1.2.\(dq) catch null;
     try std.testing.expectEqualDeep(result, null);
 }
 
