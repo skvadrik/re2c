@@ -1,6 +1,9 @@
 #ifndef _RE2C_BENCHMARKS_C_RAGEL_BASE_
 #define _RE2C_BENCHMARKS_C_RAGEL_BASE_
 
+// turn off some warnings for ragel-generated code that we don't control
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
+
 #include <assert.h>
 #include <benchmark/benchmark.h>
 #include <stdlib.h>
@@ -10,12 +13,16 @@
 
 struct Input {
     FILE *file;
-    char *buf, *p, *pe, *end;
+    char *buf, *p, *pe, *end, *ts, *te;
+    int act;
 };
 
 static inline bool init_input_simple(Input *in, const char *fname) {
     FILE* f = fopen(fname, "rb");
-    if (f == nullptr) return false;
+    if (f == nullptr) {
+        in->p = in->pe = in->end = in->buf = nullptr;
+        return false;
+    }
 
     fseek(f, 0, SEEK_END);
     size_t flen = (size_t) ftell(f);
@@ -23,8 +30,9 @@ static inline bool init_input_simple(Input *in, const char *fname) {
 
     in->file = nullptr; // unused
     in->buf = (char*) malloc(flen + 1);
-    in->p = in->buf;
+    in->p = in->ts = in->te = in->buf;
     in->pe = in->end = in->buf + flen;
+    in->act = 0;
 
     fread(in->buf, 1, flen, f);
     in->buf[flen] = 0;
@@ -35,10 +43,13 @@ static inline bool init_input_simple(Input *in, const char *fname) {
 
 static inline bool init_input_buffered(Input *in, const char *fname) {
     in->file = fopen(fname, "rb");
-    if (in->file == nullptr) return false;
+    if (in->file == nullptr) {
+        in->p = in->ts = in->te = in->pe = in->end = in->buf = nullptr;
+        return false;
+    }
     in->buf = (char*) malloc(SIZE);
-    in->p = in->pe = in->end = in->buf;
-    return true;;
+    in->p = in->ts = in->te = in->pe = in->end = in->buf;
+    return true;
 }
 
 static inline void free_input(Input *in) {
@@ -84,7 +95,7 @@ static inline void free_input(Input *in) {
         /* Shift the remaining tail to the beginning of buffer. */ \
         size_t left = in.end - in.pe; \
         memmove(in.buf, in.pe, left); \
-        in.p = in.buf; \
+        in.p = in.ts = in.te = in.buf; \
         in.pe = in.end = in.buf + left; \
     } \
 end:
@@ -127,6 +138,9 @@ bool test_##suffix(const char* input, long expected) { \
     return true; \
 }
 
+// turn off some warnings for ragel-generated code that we don't control
+#pragma GCC diagnostic ignored "-Wmisleading-indentation"
+
 #define RAGEL_BENCH_AND_TEST() \
     RAGEL_BENCH(simple) \
     RAGEL_BENCH(buffered) \
@@ -144,6 +158,11 @@ namespace ragel_##name { \
     bool test_simple(const char* input, long expected); \
     bool test_buffered(const char* input, long expected); \
 }
+BENCH(lex_00__numbers1)
+BENCH(lex_01__numbers2)
+BENCH(lex_02__words1)
+BENCH(lex_03__words2)
+BENCH(lex_04__words3)
 BENCH(submatch_00__http_rfc7230)
 BENCH(submatch_01__http_simple)
 BENCH(submatch_02__uri_rfc3986)
