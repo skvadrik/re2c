@@ -44,8 +44,16 @@
     Optimize conditional jumps using non-standard "computed goto" extension
     (which must be supported by the compiler). |re2c| generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
-    threshold can be configured with ``cgoto:threshold`` configuration. This
+    threshold can be configured with ``cgoto:threshold`` configuration.
+    Relative offsets can be enabled with ``cgoto:relative`` configuration. This
     option implies ``--bit-vectors``. It is supported only for C.
+
+``--computed-gotos-relative``
+    Similar to --computed-gotos but generate relative offsets for jump tables
+    instead (which must be supported by the compiler). This
+    option implies ``--computed-gotos``.  This flag is the same as specifying
+    ``cgoto:relative`` as above and using `--computed-gotos``.
+    It is supported only for C.
 
 ``--conditions --start-conditions -c``
     Enable support of Flex-like "conditions": multiple interrelated lexers
