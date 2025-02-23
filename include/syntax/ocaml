@@ -87,6 +87,7 @@ re2c:bit-vectors = 0;
 re2c:debug-output = 0;
 re2c:computed-gotos = 0;
 re2c:computed-gotos:threshold = 9;
+re2c:computed-gotos:relative = 0;
 re2c:nested-ifs = 0;
 re2c:case-insensitive = 0;
 re2c:case-inverted = 0;

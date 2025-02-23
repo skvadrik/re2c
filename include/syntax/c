@@ -87,6 +87,7 @@ re2c:bit-vectors = 0;
 re2c:debug-output = 0;
 re2c:computed-gotos = 0;
 re2c:computed-gotos:threshold = 9;
+re2c:computed-gotos:relative = 0;
 re2c:nested-ifs = 0;
 re2c:case-insensitive = 0;
 re2c:case-inverted = 0;
@@ -182,7 +183,7 @@ code:assign = topindent lhs " = " rhs ";" nl;
 code:type_int = "int";
 code:type_uint = "unsigned int";
 code:type_yybm = "static const unsigned char";
-code:type_yytarget = "static const void*";
+code:type_yytarget = "static const " (.cgoto.relative ? "int" : "void*");
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
