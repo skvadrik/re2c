@@ -155,16 +155,17 @@ opt_long: /*!local:re2c
     "loop-switch"           end { global.set_code_model(CodeModel::LOOP_SWITCH); goto opt; }
     "recursive-functions"   end { global.set_code_model(CodeModel::REC_FUNC);    goto opt; }
 
-    "bit-vectors"           end { opts.set_bitmaps(true);            goto opt; }
-    "debug-output"          end { opts.set_debug(true);              goto opt; }
-    "case-ranges"           end { opts.set_case_ranges(true);        goto opt; }
-    "computed-gotos"        end { opts.set_computed_gotos(true);     goto opt; }
-    "nested-ifs"            end { opts.set_nested_ifs(true);         goto opt; }
-    "case-insensitive"      end { opts.set_case_insensitive(true);   goto opt; }
-    "case-inverted"         end { opts.set_case_inverted(true);      goto opt; }
-    "tags"                  end { opts.set_tags(true);               goto opt; }
-    "no-unsafe"             end { opts.set_unsafe(false);            goto opt; }
-    "invert-captures"       end { opts.set_captures_invert(true);    goto opt; }
+    "bit-vectors"             end { opts.set_bitmaps(true);                 goto opt; }
+    "debug-output"            end { opts.set_debug(true);                   goto opt; }
+    "case-ranges"             end { opts.set_case_ranges(true);             goto opt; }
+    "computed-gotos"          end { opts.set_computed_gotos(true);          goto opt; }
+    "computed-gotos-relative" end { opts.set_computed_gotos_relative(true); goto opt; }
+    "nested-ifs"              end { opts.set_nested_ifs(true);              goto opt; }
+    "case-insensitive"        end { opts.set_case_insensitive(true);        goto opt; }
+    "case-inverted"           end { opts.set_case_inverted(true);           goto opt; }
+    "tags"                    end { opts.set_tags(true);                    goto opt; }
+    "no-unsafe"               end { opts.set_unsafe(false);                 goto opt; }
+    "invert-captures"         end { opts.set_captures_invert(true);         goto opt; }
 
     "ebcdic" | "ecb"        end { opts.set_encoding(Enc::Type::EBCDIC, true); goto opt; }
     "utf32"  | "unicode"    end { opts.set_encoding(Enc::Type::UTF32, true);  goto opt; }

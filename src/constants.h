@@ -201,7 +201,8 @@ enum class StxGOpt {
     CASE_RANGES,
     UNSAFE,
     MONADIC,
-    LOOP_LABEL
+    LOOP_LABEL,
+    CGOTO_RELATIVE
 };
 
 enum class StxLOpt {

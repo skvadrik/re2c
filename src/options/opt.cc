@@ -222,6 +222,9 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.bitmaps || real.encoding.multibyte_cunit()) {
         real.nested_ifs = true;
     }
+    if (real.computed_gotos_relative) {
+        real.computed_gotos = true;
+    }
     if (real.computed_gotos) {
         real.bitmaps = true;
         real.nested_ifs = true;
@@ -270,7 +273,8 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.api_style == ApiStyle::FREEFORM && !glob.supported_api_styles_contains("free-form")) {
         RET_FAIL(error("free-form API style is not supported for this backend"));
     }
-    if (!is_default.computed_gotos && !glob.supported_features_contains("computed-gotos")) {
+    if (!(is_default.computed_gotos && is_default.computed_gotos_relative) &&
+        !glob.supported_features_contains("computed-gotos")) {
         RET_FAIL(error("`computed-gotos` feature is not supported for this backend"));
     }
     if (!is_default.bitmaps && !glob.supported_features_contains("bitmaps")) {
@@ -302,7 +306,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     if (real.fill_eof != NOEOF) {
         if (real.bitmaps || real.computed_gotos) {
             RET_FAIL(error("`re2c:eof` configuration cannot be used with options --bit-vectors "
-                           "and --computed gotos"));
+                           "and --computed-gotos"));
         }
         if (real.fill_eof >= real.encoding.cunit_count()) {
             RET_FAIL(error("EOF exceeds maximum code unit value for given encoding"));
@@ -847,6 +851,8 @@ static bool eval_cond(
             return opts->monadic;
         case StxGOpt::LOOP_LABEL:
             return !opts->label_loop.empty();
+        case StxGOpt::CGOTO_RELATIVE:
+            return opts->computed_gotos_relative;
         }
     }
     UNREACHABLE();

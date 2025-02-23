@@ -162,6 +162,8 @@
     re2c:flags:g = 0;
     re2c:computed-gotos:threshold = 0;
     re2c:cgoto:threshold = 0;
+    re2c:computed-gotos:relative = 0;
+    re2c:cgoto:relative = 0;
     re2c:nested-ifs = 0;
     re2c:flags:nested-ifs = 0;
     re2c:flags:s = 0;
