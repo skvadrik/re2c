@@ -53,7 +53,7 @@
 extern int conf_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "../src/parse/conf_parser.ypp"
+#line 1 "src/parse/conf_parser.ypp"
 
 
 #include "src/constants.h"
@@ -99,7 +99,7 @@ extern int conf_debug;
 #if ! defined CONF_STYPE && ! defined CONF_STYPE_IS_DECLARED
 union CONF_STYPE
 {
-#line 48 "../src/parse/conf_parser.ypp"
+#line 48 "src/parse/conf_parser.ypp"
 
     const char* str;
     int32_t num;

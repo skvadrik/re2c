@@ -88,6 +88,7 @@ static constexpr const char* DEFAULT_SYNTAX_OCAML =
     "re2c:debug-output = 0;\n"
     "re2c:computed-gotos = 0;\n"
     "re2c:computed-gotos:threshold = 9;\n"
+    "re2c:computed-gotos:relative = 0;\n"
     "re2c:nested-ifs = 0;\n"
     "re2c:case-insensitive = 0;\n"
     "re2c:case-inverted = 0;\n"
