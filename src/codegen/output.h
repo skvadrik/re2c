@@ -41,6 +41,8 @@ class Scratchbuf {
     Scratchbuf& u64(uint64_t u) { os << u; return *this; }
     Scratchbuf& str(const std::string& s) { os << s; return *this; }
     Scratchbuf& cstr(const char* s) { os << s; return *this; }
+    Scratchbuf& label(const std::string& s) { os << s; return *this; }
+    Scratchbuf& label(uint32_t u) { os << u; return *this; }
     Scratchbuf& exact_uint(size_t width);
     const char* flush();
 
