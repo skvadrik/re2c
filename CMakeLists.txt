@@ -40,6 +40,7 @@ option(RE2C_BUILD_RE2HS "Build re2hs executable (an alias for `re2c --lang haske
 option(RE2C_BUILD_RE2JAVA "Build re2java executable (an alias for `re2c --lang java`)" ON)
 option(RE2C_BUILD_RE2JS "Build re2js executable (an alias for `re2c --lang js`)" ON)
 option(RE2C_BUILD_RE2OCAML "Build re2ocaml executable (an alias for `re2c --lang ocaml`)" ON)
+option(RE2C_BUILD_RE2PHP "Build re2php executable (an alias for `re2c --lang php`)" ON)
 option(RE2C_BUILD_RE2PY "Build re2py executable (an alias for `re2c --lang python`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
 option(RE2C_BUILD_RE2V "Build re2v executable (an alias for `re2c --lang v`)" ON)
@@ -92,6 +93,7 @@ set(re2c_manpage_haskell "${CMAKE_CURRENT_BINARY_DIR}/doc/re2hs.1")
 set(re2c_manpage_java    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2java.1")
 set(re2c_manpage_js      "${CMAKE_CURRENT_BINARY_DIR}/doc/re2js.1")
 set(re2c_manpage_ocaml   "${CMAKE_CURRENT_BINARY_DIR}/doc/re2ocaml.1")
+set(re2c_manpage_php     "${CMAKE_CURRENT_BINARY_DIR}/doc/re2php.1")
 set(re2c_manpage_python  "${CMAKE_CURRENT_BINARY_DIR}/doc/re2py.1")
 set(re2c_manpage_rust    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
 set(re2c_manpage_v       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2v.1")
@@ -103,6 +105,7 @@ set(re2c_help_haskell    "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2hs.cc")
 set(re2c_help_java       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2java.cc")
 set(re2c_help_js         "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2js.cc")
 set(re2c_help_ocaml      "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2ocaml.cc")
+set(re2c_help_php        "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2php.cc")
 set(re2c_help_python     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2py.cc")
 set(re2c_help_rust       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2rust.cc")
 set(re2c_help_v          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2v.cc")
@@ -172,6 +175,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_java.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_js.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_php.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.h"
@@ -260,6 +264,7 @@ re2c_bootstrap_syntax("include/syntax/haskell" "src/default_syntax_haskell.h")
 re2c_bootstrap_syntax("include/syntax/java" "src/default_syntax_java.h")
 re2c_bootstrap_syntax("include/syntax/js" "src/default_syntax_js.h")
 re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.h")
+re2c_bootstrap_syntax("include/syntax/php" "src/default_syntax_php.h")
 re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.h")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.h")
 re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.h")
@@ -341,6 +346,17 @@ if (RE2C_BUILD_RE2OCAML)
     target_compile_definitions(re2ocaml PUBLIC
         "RE2C_LANG=Lang::OCAML"
         "RE2C_PROG=\"re2ocaml\""
+    )
+endif()
+
+# re2php
+if (RE2C_BUILD_RE2PHP)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_php}")
+    re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_php}")
+    add_executable(re2php ${re2c_sources} "${re2c_help_php}")
+    target_compile_definitions(re2php PUBLIC
+        "RE2C_LANG=Lang::PHP"
+        "RE2C_PROG=\"re2php\""
     )
 endif()
 
