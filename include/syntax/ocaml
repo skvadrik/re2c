@@ -183,6 +183,7 @@ code:type_int = "int";
 code:type_uint = "uint";
 code:type_yybm = "int";
 code:type_yytarget = <undefined>;
+code:type_yyctable = <undefined>;
 
 code:cmp_eq = "=="; // physical equality, as this is used to compare primitive values
 code:cmp_ne = "!="; // physical inequality, as this is used to compare primitive values
@@ -394,3 +395,8 @@ code:yylessthan =
 code:yybm_filter = yych " land ~0xFF";
 
 code:yybm_match = "(" yybm ".(" offset " + Char.code " yych ") land " mask ") != 0";
+
+code:yytarget_elem = <undefined>;
+code:yytarget_goto = <undefined>;
+code:yyctable_elem = <undefined>;
+code:yyctable_goto = <undefined>;

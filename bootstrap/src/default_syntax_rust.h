@@ -184,6 +184,7 @@ static constexpr const char* DEFAULT_SYNTAX_RUST =
     "code:type_uint = \"usize\";\n"
     "code:type_yybm = \"u8\";\n"
     "code:type_yytarget = <undefined>;\n"
+    "code:type_yyctable = <undefined>;\n"
     "\n"
     "code:cmp_eq = \"==\";\n"
     "code:cmp_ne = \"!=\";\n"
@@ -406,4 +407,9 @@ static constexpr const char* DEFAULT_SYNTAX_RUST =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \" as usize] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
+    "code:yytarget_goto = <undefined>;\n"
+    "code:yyctable_elem = <undefined>;\n"
+    "code:yyctable_goto = <undefined>;\n"
     ;

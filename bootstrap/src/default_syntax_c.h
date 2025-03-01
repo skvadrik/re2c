@@ -185,6 +185,7 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "code:type_uint = \"unsigned int\";\n"
     "code:type_yybm = \"static const unsigned char\";\n"
     "code:type_yytarget = \"static const \" (.cgoto.relative ? \"int\" : \"void*\");\n"
+    "code:type_yyctable = \"static const \" (.cgoto.relative ? \"int\" : \"void*\");\n"
     "\n"
     "code:cmp_eq = \"==\";\n"
     "code:cmp_ne = \"!=\";\n"
@@ -442,4 +443,9 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = yybm \"[\" offset \"+\" yych \"] & \" mask;\n"
+    "\n"
+    "code:yytarget_elem = (.cgoto.relative ? \"(int)((char*)&&\" label \" - (char*)&&\" base \")\" : \"&&\" label);\n"
+    "code:yytarget_goto = (.cgoto.relative ? \"*((char*)&&\" base \" + \" yytarget \"[\" index \"])\" : \"*\" yytarget \"[\" index \"]\");\n"
+    "code:yyctable_elem = (.cgoto.relative ? \"(int)((char*)&&\" label \" - (char*)&&\" base \")\" : \"&&\" label);\n"
+    "code:yyctable_goto = (.cgoto.relative ? \"*((char*)&&\" base \" + \" yyctable \"[\" index \"])\" : \"*\" yyctable \"[\" index \"]\");\n"
     ;

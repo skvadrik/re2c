@@ -180,6 +180,7 @@ static constexpr const char* DEFAULT_SYNTAX_PYTHON =
     "code:type_uint = <undefined>;\n"
     "code:type_yybm = <undefined>;\n"
     "code:type_yytarget = <undefined>;\n"
+    "code:type_yyctable = <undefined>;\n"
     "\n"
     "code:cmp_eq = \"==\";\n"
     "code:cmp_ne = \"!=\";\n"
@@ -388,4 +389,9 @@ static constexpr const char* DEFAULT_SYNTAX_PYTHON =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \"] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
+    "code:yytarget_goto = <undefined>;\n"
+    "code:yyctable_elem = <undefined>;\n"
+    "code:yyctable_goto = <undefined>;\n"
     ;
