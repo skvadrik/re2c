@@ -42,7 +42,7 @@
 			(int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1),
 			(int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1), (int)((char*)&&yy1 - (char*)&&yy1)
 		};
-		goto *((char *)&&yy1 + yytarget[yych]);
+		goto *((char*)&&yy1 + yytarget[yych]);
 	}
 yy1:
 	++YYCURSOR;
