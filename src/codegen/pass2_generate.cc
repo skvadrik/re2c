@@ -177,6 +177,27 @@ class GenEnumElem : public RenderCallback {
     FORBID_COPY(GenEnumElem);
 };
 
+class GenYytargetElem : public RenderCallback {
+    std::ostream& os;
+    const std::string& base;
+    const std::string& label;
+
+  public:
+    GenYytargetElem(
+            std::ostream& os, const std::string& base, const std::string& label)
+        : os(os), base(base), label(label) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::BASE: os << base; break;
+        case StxVarId::LABEL: os << label; break;
+        default: UNREACHABLE(); break;
+        }
+    }
+
+    FORBID_COPY(GenYytargetElem);
+};
+
 } // anonymous namespace
 
 bool endstate(const State* s) {
@@ -755,17 +776,14 @@ static CodeList* gen_goswif(
 }
 
 template<typename label_t>
-static const char* gen_gocp_entry(Scratchbuf& buf, bool relative, const std::string& prefix,
+static const char* gen_gocp_entry(Output& output, const std::string& prefix,
         const label_t base_label, const label_t label) {
-    if (relative) {
-        // TODO: port to syntax file and replace hardcoded `int` with `code:type_yytarget`
-        buf.cstr("(int)(").cstr("(char*)").cstr("&&").str(prefix)
-            .label(label).cstr(" - (char*)").cstr("&&")
-            .str(prefix).label(base_label).cstr(")");
-    } else {
-        buf.cstr("&&").str(prefix).label(label);
-    }
-    return buf.flush();
+    const opt_t* opts = output.block().opts;
+    Scratchbuf& buf = output.scratchbuf;
+    const std::string base = buf.str(prefix).label(base_label).flush();
+    const std::string lbl = buf.str(prefix).label(label).flush();
+    GenYytargetElem callback(buf.stream(), base, lbl);
+    return opts->gen_code_yytarget_elem(buf, callback);
 }
 
 template<typename label_t>
@@ -790,8 +808,8 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go, uint32_
     const char** elems = alc.alloct<const char*>(CodeGoCpTable::TABLE_SIZE);
 
     for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE; ++i) {
-        elems[i] = gen_gocp_entry(buf, opts->computed_gotos_relative, opts->label_prefix,
-                min_index, go->table[i]->label->index);
+        elems[i] = gen_gocp_entry(output, opts->label_prefix, min_index,
+                go->table[i]->label->index);
     }
 
     const char* name = opts->var_computed_gotos_table.c_str();
@@ -968,8 +986,8 @@ static void emit_accept(
         const char** elems = alc.alloct<const char*>(nacc);
 
         for (uint32_t i = 0; i < nacc; ++i) {
-            elems[i] = gen_gocp_entry(buf, opts->computed_gotos_relative,
-                    opts->label_prefix, min_index, acc[i].state->label->index);
+            elems[i] = gen_gocp_entry(output, opts->label_prefix, min_index,
+                    acc[i].state->label->index);
         }
 
         const char* name = opts->var_computed_gotos_table.c_str();
@@ -1662,8 +1680,8 @@ static CodeList* gen_cond_table(Output& output) {
     const char** elems = alc.alloct<const char*>(conds.size());
 
     for (uint32_t i = 0; i < conds.size(); ++i) {
-        elems[i] = gen_gocp_entry(buf, opts->computed_gotos_relative, opts->cond_label_prefix,
-                conds.front().name, conds[i].name);
+        elems[i] = gen_gocp_entry(output, opts->cond_label_prefix, conds.front().name,
+                conds[i].name);
     }
 
     const char* name = opts->var_cond_table.c_str();

@@ -441,3 +441,5 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
+
+code:yytarget_elem = (.cgoto.relative ? "(int)((char*)&&" : "&&") label (.cgoto.relative ? " - (char*)&&" base ")");

@@ -121,6 +121,9 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(type_yytarget, \
         ({}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(yytarget_elem, \
+        ({StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(cmp_eq, \
         ({}), ({}), ({}) \
     ) \
@@ -318,6 +321,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGNAME, "argname") \
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
+    STX_LOCAL_VAR(BASE, "base") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(COND, "cond") \

@@ -418,4 +418,6 @@ static constexpr const char* DEFAULT_SYNTAX_ZIG =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \"] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
     ;
