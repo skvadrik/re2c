@@ -183,6 +183,7 @@ code:type_int = "isize";
 code:type_uint = "usize";
 code:type_yybm = "u8";
 code:type_yytarget = <undefined>;
+code:type_yyctable = <undefined>;
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -405,3 +406,8 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = "(" yybm "[" offset "+" yych " as usize] & " mask ") != 0";
+
+code:yytarget_elem = <undefined>;
+code:yytarget_goto = <undefined>;
+code:yyctable_elem = <undefined>;
+code:yyctable_goto = <undefined>;

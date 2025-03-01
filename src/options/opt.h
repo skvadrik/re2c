@@ -121,6 +121,21 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(type_yytarget, \
         ({}), ({}), ({}) \
     ) \
+    CODE_TEMPLATE(type_yyctable, \
+        ({}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yytarget_elem, \
+        ({StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yytarget_goto, \
+        ({StxVarId::TARGET, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yyctable_elem, \
+        ({StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yyctable_goto, \
+        ({StxVarId::CTABLE, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(cmp_eq, \
         ({}), ({}), ({}) \
     ) \
@@ -318,6 +333,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGNAME, "argname") \
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
+    STX_LOCAL_VAR(BASE, "base") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \
     STX_LOCAL_VAR(COND, "cond") \
@@ -357,6 +373,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(CHAR, "yych") \
     STX_LOCAL_VAR(COPYMTAG, "YYCOPYMTAG") \
     STX_LOCAL_VAR(COPYSTAG, "YYCOPYSTAG") \
+    STX_LOCAL_VAR(CTABLE, "yyctable") \
     STX_LOCAL_VAR(CTYPE, "YYCTYPE") \
     STX_LOCAL_VAR(CTXMARKER, "YYCTXMARKER") \
     STX_LOCAL_VAR(CURSOR, "YYCURSOR") \
@@ -383,7 +400,8 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(SHIFTSTAG, "YYSHIFTSTAG") \
     STX_LOCAL_VAR(SKIP, "YYSKIP") \
     STX_LOCAL_VAR(STAGN, "YYSTAGN") \
-    STX_LOCAL_VAR(STAGP, "YYSTAGP")
+    STX_LOCAL_VAR(STAGP, "YYSTAGP") \
+    STX_LOCAL_VAR(TARGET, "yytarget")
 
 // global variables in syntax files
 #define RE2C_STX_GLOBAL_VARS \

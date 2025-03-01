@@ -184,6 +184,7 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:type_uint = <undefined>;\n"
     "code:type_yybm = \"Word8\";\n"
     "code:type_yytarget = <undefined>;\n"
+    "code:type_yyctable = <undefined>;\n"
     "\n"
     "code:cmp_eq = \"==\";\n"
     "code:cmp_ne = \"/=\";\n"
@@ -416,4 +417,9 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:yybm_filter = \"(\" yych \" .&. complement 0xFF) /= 0\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \" ! (\" offset \" + fromIntegral \" yych \") .&. \" mask \") /= 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
+    "code:yytarget_goto = <undefined>;\n"
+    "code:yyctable_elem = <undefined>;\n"
+    "code:yyctable_goto = <undefined>;\n"
     ;
