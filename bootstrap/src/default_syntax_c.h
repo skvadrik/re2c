@@ -442,4 +442,6 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = yybm \"[\" offset \"+\" yych \"] & \" mask;\n"
+    "\n"
+    "code:yytarget_elem = (.cgoto.relative ? \"(int)((char*)&&\" : \"&&\") label (.cgoto.relative ? \" - (char*)&&\" base \")\");\n"
     ;

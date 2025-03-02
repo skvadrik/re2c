@@ -416,4 +416,6 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:yybm_filter = \"(\" yych \" .&. complement 0xFF) /= 0\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \" ! (\" offset \" + fromIntegral \" yych \") .&. \" mask \") /= 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
     ;

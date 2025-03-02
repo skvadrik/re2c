@@ -596,6 +596,7 @@ start:
     "code:type_uint"              { RET_CODE(code_type_uint); }
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
+    "code:yytarget_elem"          { RET_CODE(code_yytarget_elem); }
     "code:assign"                 { RET_CODE(code_assign); }
     "code:cmp_eq"                 { RET_CODE(code_cmp_eq); }
     "code:cmp_ne"                 { RET_CODE(code_cmp_ne); }
@@ -667,6 +668,7 @@ start:
     "argtype"      { RET_VAR(StxVarId::ARGTYPE); }
     "array"        { RET_VAR(StxVarId::ARRAY); }
     "branch"       { RET_VAR(StxVarId::BRANCH); }
+    "base"         { RET_VAR(StxVarId::BASE); }
     "case"         { RET_VAR(StxVarId::CASE); }
     "cond"         { RET_VAR(StxVarId::COND); }
     "date"         { RET_VAR(StxVarId::DATE); }

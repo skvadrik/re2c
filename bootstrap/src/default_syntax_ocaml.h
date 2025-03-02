@@ -395,4 +395,6 @@ static constexpr const char* DEFAULT_SYNTAX_OCAML =
     "code:yybm_filter = yych \" land ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \".(\" offset \" + Char.code \" yych \") land \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
     ;

@@ -394,3 +394,5 @@ code:yylessthan =
 code:yybm_filter = yych " land ~0xFF";
 
 code:yybm_match = "(" yybm ".(" offset " + Char.code " yych ") land " mask ") != 0";
+
+code:yytarget_elem = <undefined>;
