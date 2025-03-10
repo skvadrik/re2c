@@ -92,6 +92,9 @@ AM_CONDITIONAL([WITH_JS], [test "x$enable_js" != "xno"])
 # --enable-ocaml
 AC_ARG_ENABLE([ocaml], [AS_HELP_STRING([--enable-ocaml], [build re2ocaml executable])])
 AM_CONDITIONAL([WITH_OCAML], [test "x$enable_ocaml" != "xno"])
+# --enable-php
+AC_ARG_ENABLE([php], [AS_HELP_STRING([--enable-php], [build re2php executable])])
+AM_CONDITIONAL([WITH_PHP], [test "x$enable_php" != "xno"])
 # --enable-python
 AC_ARG_ENABLE([python], [AS_HELP_STRING([--enable-python], [build re2py executable])])
 AM_CONDITIONAL([WITH_PYTHON], [test "x$enable_python" != "xno"])
@@ -221,6 +224,7 @@ AC_CONFIG_FILES([
     src/msg/help_re2java.rst:doc/help.rst.in
     src/msg/help_re2js.rst:doc/help.rst.in
     src/msg/help_re2ocaml.rst:doc/help.rst.in
+    src/msg/help_re2php.rst:doc/help.rst.in
     src/msg/help_re2py.rst:doc/help.rst.in
     src/msg/help_re2rust.rst:doc/help.rst.in
     src/msg/help_re2v.rst:doc/help.rst.in
@@ -233,6 +237,7 @@ AC_CONFIG_FILES([
     doc/re2java.rst:doc/manpage.rst.in
     doc/re2js.rst:doc/manpage.rst.in
     doc/re2ocaml.rst:doc/manpage.rst.in
+    doc/re2php.rst:doc/manpage.rst.in
     doc/re2py.rst:doc/manpage.rst.in
     doc/re2rust.rst:doc/manpage.rst.in
     doc/re2v.rst:doc/manpage.rst.in
@@ -248,6 +253,7 @@ AC_CONFIG_LINKS([
     src/default_syntax_java.stx:include/syntax/java
     src/default_syntax_js.stx:include/syntax/js
     src/default_syntax_ocaml.stx:include/syntax/ocaml
+    src/default_syntax_php.stx:include/syntax/php
     src/default_syntax_python.stx:include/syntax/python
     src/default_syntax_rust.stx:include/syntax/rust
     src/default_syntax_v.stx:include/syntax/v
