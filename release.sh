@@ -22,7 +22,7 @@ then
 fi
 
 # check that examples work
-for lang in c d go haskell java js ocaml python rust v zig; do
+for lang in c d go haskell java js ocaml python rust swift v zig; do
     ( cd examples/$lang && ./__run_all.sh \
         || { echo "$lang examples failed"; exit 1; } )
 done

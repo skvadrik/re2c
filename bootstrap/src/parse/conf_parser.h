@@ -68,11 +68,12 @@ extern int conf_debug;
 #include "src/default_syntax_ocaml.h"
 #include "src/default_syntax_python.h"
 #include "src/default_syntax_rust.h"
+#include "src/default_syntax_swift.h"
 #include "src/default_syntax_v.h"
 #include "src/default_syntax_zig.h"
 
 
-#line 76 "src/parse/conf_parser.h"
+#line 77 "src/parse/conf_parser.h"
 
 /* Token kinds.  */
 #ifndef CONF_TOKENTYPE
@@ -99,7 +100,7 @@ extern int conf_debug;
 #if ! defined CONF_STYPE && ! defined CONF_STYPE_IS_DECLARED
 union CONF_STYPE
 {
-#line 48 "../src/parse/conf_parser.ypp"
+#line 49 "../src/parse/conf_parser.ypp"
 
     const char* str;
     int32_t num;
@@ -113,7 +114,7 @@ union CONF_STYPE
     re2c::StxGOpt gopt;
     re2c::StxLOpt lopt;
 
-#line 117 "src/parse/conf_parser.h"
+#line 118 "src/parse/conf_parser.h"
 
 };
 typedef union CONF_STYPE CONF_STYPE;

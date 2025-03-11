@@ -22,6 +22,7 @@ enum class Lang: uint32_t {
     OCAML,
     PYTHON,
     RUST,
+    SWIFT,
     V,
     ZIG,
     NONE // no language (no default syntax config will be loaded)

@@ -1,0 +1,63 @@
+
+re2swift has three API flavors that define the core set of primitives used by a
+program:
+
+**Simple API**
+    This is the default for the Swift backend. It consists of the
+    following primitives: ``YYINPUT`` (which should be defined as a sequence of
+    code units, e.g. a string) and ``YYCURSOR``, ``YYMARKER``, ``YYCTXMARKER``,
+    ``YYLIMIT`` (which should be defined as indices into ``YYINPUT``).
+
+    |
+
+**Record API**
+    Record API is useful in cases when lexer state must be stored in an object.
+    It is enabled with the ``--api record`` option or ``re2c:api = record``
+    configuration. This API consists of a variable ``yyrecord`` (the name can
+    be overridden with ``re2c:YYRECORD``) that should be defined as a struct or
+    class with fields ``yyinput``, ``yycursor``, ``yymarker``, ``yyctxmarker``,
+    ``yylimit`` (only the fields used by the generated code need to be defined,
+    and their names can be configured).
+
+    |
+
+**Generic API**
+    This is the most flexible API. It is enabled with the ``--api generic``
+    option or ``re2c:api = generic`` configuration.
+    This API contains the following primitives for generic operations:
+    ``YYPEEK``,
+    ``YYSKIP``,
+    ``YYBACKUP``,
+    ``YYBACKUPCTX``,
+    ``YYSTAGP``,
+    ``YYSTAGN``,
+    ``YYMTAGP``,
+    ``YYMTAGN``,
+    ``YYRESTORE``,
+    ``YYRESTORECTX``,
+    ``YYRESTORETAG``,
+    ``YYSHIFT``,
+    ``YYSHIFTSTAG``,
+    ``YYSHIFTMTAG``,
+    ``YYLESSTHAN``.
+    For example, if the input is a zero-terminated array of bytes
+    ``buffer: [UInt8]``, variables ``cursor``, ``limit``, ``marker`` and
+    ``ctxmarker`` of type ``Int`` represent input positions, and ``-1``
+    represents invalid positions, then a generic API can be defined as follows:
+
+    .. code-block:: swift
+
+        /*!re2c
+          re2c:YYPEEK       = "buffer[cursor]";
+          re2c:YYSKIP       = "cursor++";
+          re2c:YYBACKUP     = "marker = cursor";
+          re2c:YYRESTORE    = "cursor = marker";
+          re2c:YYBACKUPCTX  = "ctxmarker = cursor";
+          re2c:YYRESTORECTX = "cursor = ctxmarker";
+          re2c:YYRESTORETAG = "cursor = ${tag}";
+          re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+          re2c:YYSTAGP      = "@@{tag} = cursor";
+          re2c:YYSTAGN      = "@@{tag} = -1";
+          re2c:YYSHIFT      = "cursor += @@{shift}";
+          re2c:YYSHIFTSTAG  = "@@{tag} += @@{shift}";
+        */
