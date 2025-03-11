@@ -200,7 +200,7 @@ code:yydebug =
 code:yypeek =
     topindent (.code_model.recursive_functions ? "let ") yych " = " (.api.generic
         ? YYPEEK (.api_style.functions ? "()")
-        : (.cast ? YYCTYPE "(bitPattern: ") YYINPUT "[" YYCURSOR "]" (.cast ? ")") // Unsure how to handle unchecked casting
+        : (.cast ? YYCTYPE "(") YYINPUT "[" YYCURSOR "]" (.cast ? ")")
     ) nl;
 
 code:yyskip =
