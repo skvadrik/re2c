@@ -14,13 +14,14 @@ extension FileHandle: @retroactive TextOutputStream {
   }
 }
 
-func lex(state yyrecord: inout State, recv: inout Int) -> Status {
+func lex(state: inout State, recv: inout Int) -> Status {
   var yych: UInt8 = 0
   lex: while true {
-    yyrecord.token = yyrecord.yycursor
+    state.token = state.yycursor
     /*!re2c
       re2c:api = record;
       re2c:eof = 0;
+      re2c:variable:yyrecord = "state";
       re2c:YYCTYPE = UInt8;
       re2c:YYFILL = "return .waiting";
 
