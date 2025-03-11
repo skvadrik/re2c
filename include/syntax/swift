@@ -83,9 +83,12 @@ re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
 re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
 re2c:YYMAXFILL = "yymaxfill";
 re2c:YYPEEK = "yypeek";
+re2c:YYRESTORE = "yyrestore";
+re2c:YYRESTORECTX = "yyrestorectx";
+re2c:YYRESTORETAG = "yyrestoretag";
 re2c:YYSETSTATE = "yysetstate";
 re2c:YYSKIP = "yyskip";
-//re2c:YYSTAGN = "yystagn";
+re2c:YYSTAGN = "yystagn";
 re2c:YYSTAGP = "yystagp";
 re2c:tags:negative = (.api.generic ? "@@" : "nil");
 re2c:cond:divider = "/* *********************************** */";
@@ -221,6 +224,12 @@ code:yybackup =
         : YYMARKER " = " YYCURSOR
     ) nl;
 
+code:yybackupctx =
+    topindent (.api.generic
+        ? YYBACKUPCTX (.api_style.functions ? "()")
+        : YYCTXMARKER " = " YYCURSOR
+    ) nl;
+
 code:yyskip_yypeek = <undefined>;
 code:yypeek_yyskip = <undefined>;
 code:yyskip_yybackup = <undefined>;
@@ -233,6 +242,18 @@ code:yyrestore =
     topindent (.api.generic
         ? YYRESTORE (.api_style.functions ? "()")
         : YYCURSOR " = " YYMARKER
+    ) nl;
+
+code:yyrestorectx =
+    topindent (.api.generic
+        ? YYRESTORECTX (.api_style.functions ? "()")
+        : YYCURSOR " = " YYCTXMARKER
+    ) nl;
+
+code:yyrestoretag =
+    topindent (.api.generic
+        ? YYRESTORETAG (.api_style.functions ? "()")
+        : YYCURSOR " = " tag
     ) nl;
 
 code:yystagp =
