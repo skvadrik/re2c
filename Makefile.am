@@ -151,6 +151,7 @@ re2c_GEN_STX = \
 	src/default_syntax_ocaml.h \
 	src/default_syntax_python.h \
 	src/default_syntax_rust.h \
+	src/default_syntax_swift.h \
 	src/default_syntax_v.h \
 	src/default_syntax_zig.h
 re2c_GEN = \
@@ -175,6 +176,7 @@ re2c_BOOT = \
 	bootstrap/doc/re2ocaml.1 \
 	bootstrap/doc/re2py.1 \
 	bootstrap/doc/re2rust.1 \
+	bootstrap/doc/re2swift.1 \
 	bootstrap/doc/re2v.1 \
 	bootstrap/doc/re2zig.1 \
 	bootstrap/src/default_syntax_c.h \
@@ -186,6 +188,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_ocaml.h \
 	bootstrap/src/default_syntax_python.h \
 	bootstrap/src/default_syntax_rust.h \
+	bootstrap/src/default_syntax_swift.h \
 	bootstrap/src/default_syntax_v.h \
 	bootstrap/src/default_syntax_zig.h \
 	bootstrap/src/msg/help_re2c.cc \
@@ -197,6 +200,7 @@ re2c_BOOT = \
 	bootstrap/src/msg/help_re2ocaml.cc \
 	bootstrap/src/msg/help_re2py.cc \
 	bootstrap/src/msg/help_re2rust.cc \
+	bootstrap/src/msg/help_re2swift.cc \
 	bootstrap/src/msg/help_re2v.cc \
 	bootstrap/src/msg/help_re2zig.cc \
 	bootstrap/src/msg/ver_to_vernum.cc \
@@ -232,6 +236,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/basics/api/api2_ocaml.rst_ \
 	doc/manual/basics/api/api2_python.rst_ \
 	doc/manual/basics/api/api2_rust.rst_ \
+	doc/manual/basics/api/api2_swift.rst_ \
 	doc/manual/basics/api/api2_v.rst_ \
 	doc/manual/basics/api/api2_zig.rst_ \
 	doc/manual/basics/api/api3.rst_ \
@@ -488,6 +493,30 @@ re2c_SRC_DOC_EXT = \
 	examples/rust/submatch/02_mtags.re \
 	examples/rust/submatch/03_captures.re \
 	examples/rust/submatch/04_posix_captures.re \
+	examples/swift/01_basic.re \
+	examples/swift/01_basic.swift \
+	examples/swift/conditions/parse_u32_blocks.re \
+	examples/swift/conditions/parse_u32_conditions.re \
+	examples/swift/encodings/unicode_identifier.re \
+	examples/swift/eof/01_sentinel.re \
+	examples/swift/eof/02_bounds_checking.re \
+	examples/swift/eof/03_eof_rule.re \
+	examples/swift/eof/04_fake_sentinel.re \
+	examples/swift/eof/05_fake_sentinel_eof_rule.re \
+	examples/swift/fill/01_fill.re \
+	examples/swift/fill/02_fill.re \
+	examples/swift/headers/header.re \
+	examples/swift/headers/lexer/state.swift \
+	examples/swift/includes/definitions.swift \
+	examples/swift/includes/include.re \
+	examples/swift/reuse/reuse.re \
+	examples/swift/reuse/usedir.re \
+	examples/swift/state/push.re \
+	examples/swift/submatch/01_stags.re \
+	examples/swift/submatch/01_stags_fill.re \
+	examples/swift/submatch/02_mtags.re \
+	examples/swift/submatch/03_captures.re \
+	examples/swift/submatch/04_posix_captures.re \
 	examples/v/01_basic.re \
 	examples/v/01_basic.v \
 	examples/v/conditions/parse_u32_blocks.re \
@@ -569,6 +598,10 @@ if WITH_RUST
 DOCS += doc/re2rust.1
 HELP += src/msg/help_re2rust.cc
 endif
+if WITH_SWIFT
+DOCS += doc/re2swift.1
+HELP += src/msg/help_re2swift.cc
+endif
 if WITH_VLANG
 DOCS += doc/re2v.1
 HELP += src/msg/help_re2v.cc
@@ -592,6 +625,7 @@ dist_stdlib_DATA = \
 	include/syntax/ocaml \
 	include/syntax/python \
 	include/syntax/rust \
+	include/syntax/swift \
 	include/syntax/v \
 	include/syntax/zig \
 	include/unicode_categories.re
@@ -837,6 +871,14 @@ bin_PROGRAMS += re2rust
 re2rust_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::RUST -DRE2C_PROG=\"re2rust\"
 re2rust_SOURCES = $(re2c_SOURCES)
 nodist_re2rust_SOURCES = $(re2c_GEN) src/msg/help_re2rust.cc
+endif
+
+# re2swift
+if WITH_SWIFT
+bin_PROGRAMS += re2swift
+re2swift_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::SWIFT -DRE2C_PROG=\"re2swift\"
+re2swift_SOURCES = $(re2c_SOURCES)
+nodist_re2swift_SOURCES = $(re2c_GEN) src/msg/help_re2swift.cc
 endif
 
 # re2v

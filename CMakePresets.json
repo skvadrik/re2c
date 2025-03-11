@@ -19,6 +19,7 @@
         "RE2C_BUILD_RE2OCAML": true,
         "RE2C_BUILD_RE2PY": true,
         "RE2C_BUILD_RE2RUST": true,
+        "RE2C_BUILD_RE2SWIFT": true,
         "RE2C_BUILD_RE2V": true,
         "RE2C_BUILD_RE2ZIG": true,
         "RE2C_BUILD_LIBS": true,
@@ -64,6 +65,7 @@
         "RE2C_BUILD_RE2OCAML": false,
         "RE2C_BUILD_RE2PY": false,
         "RE2C_BUILD_RE2RUST": false,
+        "RE2C_BUILD_RE2SWIFT": false,
         "RE2C_BUILD_RE2V": false,
         "RE2C_BUILD_RE2ZIG": false
       }
@@ -91,6 +93,7 @@
         "RE2C_BUILD_RE2OCAML": false,
         "RE2C_BUILD_RE2PY": false,
         "RE2C_BUILD_RE2RUST": false,
+        "RE2C_BUILD_RE2SWIFT": false,
         "RE2C_BUILD_RE2V": false,
         "RE2C_BUILD_RE2ZIG": false
       }
@@ -118,6 +121,7 @@
         "RE2C_BUILD_RE2OCAML": false,
         "RE2C_BUILD_RE2PY": false,
         "RE2C_BUILD_RE2RUST": false,
+        "RE2C_BUILD_RE2SWIFT": false,
         "RE2C_BUILD_RE2V": false,
         "RE2C_BUILD_RE2ZIG": false
       }
@@ -151,6 +155,7 @@
         "RE2C_BUILD_RE2OCAML": false,
         "RE2C_BUILD_RE2PY": false,
         "RE2C_BUILD_RE2RUST": false,
+        "RE2C_BUILD_RE2SWIFT": false,
         "RE2C_BUILD_RE2V": false,
         "RE2C_BUILD_RE2ZIG": false
       }
@@ -176,6 +181,7 @@
         "RE2C_BUILD_RE2OCAML": false,
         "RE2C_BUILD_RE2PY": false,
         "RE2C_BUILD_RE2RUST": false,
+        "RE2C_BUILD_RE2SWIFT": false,
         "RE2C_BUILD_RE2V": false,
         "RE2C_BUILD_RE2ZIG": false
       }

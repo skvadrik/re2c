@@ -299,7 +299,7 @@ def copy_tests(tests, dst):  # type: (list, str) -> None
 def clean_test_tree(path):  # type: (str) -> None
     """Clean the test tree from the not needed files."""
     files = set([str(f) for f in Path(path).rglob('*.*')])
-    for ext in ['re', 'c', 'h', 'd', 'go', 'hs', 'java', 'js', 'ml', 'py', 'rs', 'v', 'zig', 'inc']:
+    for ext in ['re', 'c', 'h', 'd', 'go', 'hs', 'java', 'js', 'ml', 'py', 'rs', 'swift', 'v', 'zig', 'inc']:
         files -= set([str(f) for f in Path(path).rglob(f'*.{ext}')])
 
     remove(*[f for f in files if os.path.isfile(f)])
@@ -363,6 +363,8 @@ def run_test(test):
             ext = "py"
         elif head.startswith("// re2rust"):
             ext = "rs"
+        elif head.startswith("// re2swift"):
+            ext = "swift"
         elif head.startswith("// re2v"):
             ext = "v"
         elif head.startswith("// re2zig"):
@@ -383,6 +385,7 @@ def run_test(test):
     switches = switches.replace('re2ocaml', 're2c --lang ocaml')
     switches = switches.replace('re2py', 're2c --lang python')
     switches = switches.replace('re2rust', 're2c --lang rust')
+    switches = switches.replace('re2swift', 're2c --lang swift')
     switches = switches.replace('re2v', 're2c --lang v')
     switches = switches.replace('re2zig', 're2c --lang zig')
     switches = RE2C_PATTERN.sub(r'\1', switches)
@@ -496,7 +499,7 @@ def run_test(test):
     # skeleton tests (exclude non-C tests and tests that output help message)
     elif ext == 'c' and '--help' not in switches:
         # cleanup temporary files
-        remove(outy) 
+        remove(outy)
 
         switches = f'{switches} --skeleton -Werror-undefined-control-flow'
 

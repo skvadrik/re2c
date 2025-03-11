@@ -238,7 +238,7 @@ opt_long: /*!local:re2c
 opt_lang: /*!local:re2c
     * {
         ERRARG("--lang",
-            "c | d | go | haskell | java | js | ocaml | python | rust | v | zig | none",
+            "c | d | go | haskell | java | js | ocaml | python | rust | swift | v | zig | none",
             *argv);
     }
     "c"       end { *lang = Lang::C;       goto opt; }
@@ -250,6 +250,7 @@ opt_lang: /*!local:re2c
     "ocaml"   end { *lang = Lang::OCAML;   goto opt; }
     "python"  end { *lang = Lang::PYTHON;  goto opt; }
     "rust"    end { *lang = Lang::RUST;    goto opt; }
+    "swift"   end { *lang = Lang::SWIFT;   goto opt; }
     "v"       end { *lang = Lang::V;       goto opt; }
     "zig"     end { *lang = Lang::ZIG;     goto opt; }
     "none"    end { *lang = Lang::NONE;    goto opt; }

@@ -42,6 +42,7 @@ option(RE2C_BUILD_RE2JS "Build re2js executable (an alias for `re2c --lang js`)"
 option(RE2C_BUILD_RE2OCAML "Build re2ocaml executable (an alias for `re2c --lang ocaml`)" ON)
 option(RE2C_BUILD_RE2PY "Build re2py executable (an alias for `re2c --lang python`)" ON)
 option(RE2C_BUILD_RE2RUST "Build re2rust executable (an alias for `re2c --lang rust`)" ON)
+option(RE2C_BUILD_RE2SWIFT "Build re2swift executable (an alias for `re2c --lang swift`)" ON)
 option(RE2C_BUILD_RE2V "Build re2v executable (an alias for `re2c --lang v`)" ON)
 option(RE2C_BUILD_RE2ZIG "Build re2zig executable (an alias for `re2c --lang zig`)" ON)
 
@@ -94,6 +95,7 @@ set(re2c_manpage_js      "${CMAKE_CURRENT_BINARY_DIR}/doc/re2js.1")
 set(re2c_manpage_ocaml   "${CMAKE_CURRENT_BINARY_DIR}/doc/re2ocaml.1")
 set(re2c_manpage_python  "${CMAKE_CURRENT_BINARY_DIR}/doc/re2py.1")
 set(re2c_manpage_rust    "${CMAKE_CURRENT_BINARY_DIR}/doc/re2rust.1")
+set(re2c_manpage_swift   "${CMAKE_CURRENT_BINARY_DIR}/doc/re2swift.1")
 set(re2c_manpage_v       "${CMAKE_CURRENT_BINARY_DIR}/doc/re2v.1")
 set(re2c_manpage_zig     "${CMAKE_CURRENT_BINARY_DIR}/doc/re2zig.1")
 set(re2c_help_c          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2c.cc")
@@ -105,6 +107,7 @@ set(re2c_help_js         "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2js.cc")
 set(re2c_help_ocaml      "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2ocaml.cc")
 set(re2c_help_python     "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2py.cc")
 set(re2c_help_rust       "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2rust.cc")
+set(re2c_help_swift      "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2swift.cc")
 set(re2c_help_v          "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2v.cc")
 set(re2c_help_zig        "${CMAKE_CURRENT_BINARY_DIR}/src/msg/help_re2zig.cc")
 set(re2c_rst2man         "${CMAKE_CURRENT_SOURCE_DIR}/build/rst2man.py")
@@ -120,6 +123,7 @@ set(re2c_docs
     "$<$<BOOL:${RE2C_BUILD_RE2OCAML}>:${re2c_manpage_ocaml}>"
     "$<$<BOOL:${RE2C_BUILD_RE2PY}>:${re2c_manpage_python}>"
     "$<$<BOOL:${RE2C_BUILD_RE2RUST}>:${re2c_manpage_rust}>"
+    "$<$<BOOL:${RE2C_BUILD_RE2SWIFT}>:${re2c_manpage_swift}>"
     "$<$<BOOL:${RE2C_BUILD_RE2V}>:${re2c_manpage_v}>"
     "$<$<BOOL:${RE2C_BUILD_RE2ZIG}>:${re2c_manpage_zig}>"
 )
@@ -174,6 +178,7 @@ add_library(re2c_objects_autogen OBJECT
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_ocaml.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_python.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_rust.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_swift.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_v.h"
     "${CMAKE_CURRENT_BINARY_DIR}/src/default_syntax_zig.h"
     "${re2c_docs}"
@@ -262,6 +267,7 @@ re2c_bootstrap_syntax("include/syntax/js" "src/default_syntax_js.h")
 re2c_bootstrap_syntax("include/syntax/ocaml" "src/default_syntax_ocaml.h")
 re2c_bootstrap_syntax("include/syntax/python" "src/default_syntax_python.h")
 re2c_bootstrap_syntax("include/syntax/rust" "src/default_syntax_rust.h")
+re2c_bootstrap_syntax("include/syntax/swift" "src/default_syntax_swift.h")
 re2c_bootstrap_syntax("include/syntax/v" "src/default_syntax_v.h")
 re2c_bootstrap_syntax("include/syntax/zig" "src/default_syntax_zig.h")
 
@@ -366,6 +372,16 @@ if (RE2C_BUILD_RE2RUST)
     )
 endif()
 
+if (RE2C_BUILD_RE2SWIFT)
+    re2c_gen_help("${re2c_help_source}" "${re2c_help_swift}")
+    re2c_gen_manpage("${re2c_manpage_source}" "${re2c_manpage_swift}")
+    add_executable(re2swift ${re2c_sources} "${re2c_help_swift}")
+    target_compile_definitions(re2swift PUBLIC
+        "RE2C_LANG=Lang::SWIFT"
+        "RE2C_PROG=\"re2swift\""
+    )
+endif()
+
 # re2v
 if (RE2C_BUILD_RE2V)
     re2c_gen_help("${re2c_help_source}" "${re2c_help_v}")
@@ -425,6 +441,10 @@ if(RE2C_IS_ROOT_PROJECT)
         install(TARGETS re2rust RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_rust}" DESTINATION "share/man/man1")
     endif()
+    if(RE2C_BUILD_RE2SWIFT)
+        install(TARGETS re2swift RUNTIME DESTINATION bin)
+        install(FILES "${re2c_manpage_swift}" DESTINATION "share/man/man1")
+    endif()
     if(RE2C_BUILD_RE2V)
         install(TARGETS re2v RUNTIME DESTINATION bin)
         install(FILES "${re2c_manpage_v}" DESTINATION "share/man/man1")
@@ -443,6 +463,7 @@ if(RE2C_IS_ROOT_PROJECT)
         include/syntax/ocaml
         include/syntax/python
         include/syntax/rust
+        include/syntax/swift
         include/syntax/v
         include/syntax/zig
         include/unicode_categories.re

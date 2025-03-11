@@ -53,6 +53,9 @@ elif lang == b'py':
 elif lang == b'rust':
     src_ext = b'rs'
     lang_name = b'Rust'
+elif lang == b'swift':
+    src_ext = b'swift'
+    lang_name = b'Swift'
 elif lang == b'v':
     src_ext = b'v'
     lang_name = b'V'

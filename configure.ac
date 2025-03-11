@@ -98,6 +98,9 @@ AM_CONDITIONAL([WITH_PYTHON], [test "x$enable_python" != "xno"])
 # --enable-rust
 AC_ARG_ENABLE([rust], [AS_HELP_STRING([--enable-rust], [build re2rust executable])])
 AM_CONDITIONAL([WITH_RUST], [test "x$enable_rust" != "xno"])
+# --enable-swift
+AC_ARG_ENABLE([swift], [AS_HELP_STRING([--enable-swift], [build re2swift executable])])
+AM_CONDITIONAL([WITH_SWIFT], [test "x$enable_swift" != "xno"])
 # --enable-vlang
 AC_ARG_ENABLE([vlang], [AS_HELP_STRING([--enable-vlang], [build re2v executable])])
 AM_CONDITIONAL([WITH_VLANG], [test "x$enable_vlang" != "xno"])
@@ -223,6 +226,7 @@ AC_CONFIG_FILES([
     src/msg/help_re2ocaml.rst:doc/help.rst.in
     src/msg/help_re2py.rst:doc/help.rst.in
     src/msg/help_re2rust.rst:doc/help.rst.in
+    src/msg/help_re2swift.rst:doc/help.rst.in
     src/msg/help_re2v.rst:doc/help.rst.in
     src/msg/help_re2zig.rst:doc/help.rst.in
 
@@ -235,6 +239,7 @@ AC_CONFIG_FILES([
     doc/re2ocaml.rst:doc/manpage.rst.in
     doc/re2py.rst:doc/manpage.rst.in
     doc/re2rust.rst:doc/manpage.rst.in
+    doc/re2swift.rst:doc/manpage.rst.in
     doc/re2v.rst:doc/manpage.rst.in
     doc/re2zig.rst:doc/manpage.rst.in
 ])
@@ -250,6 +255,7 @@ AC_CONFIG_LINKS([
     src/default_syntax_ocaml.stx:include/syntax/ocaml
     src/default_syntax_python.stx:include/syntax/python
     src/default_syntax_rust.stx:include/syntax/rust
+    src/default_syntax_swift.stx:include/syntax/swift
     src/default_syntax_v.stx:include/syntax/v
     src/default_syntax_zig.stx:include/syntax/zig
 ])
