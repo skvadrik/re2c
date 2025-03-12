@@ -7,6 +7,7 @@ supported_targets = ["code", "dot"];
 supported_features = ["nested-ifs", "bitmaps", "case-ranges", "tags", "captures",
     "captvars"];
 
+
 // language-specific options ---------------------------------------------------
 
 semicolons = 0;
@@ -82,15 +83,20 @@ re2c:YYLESSTHAN = "yylessthan";
 re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
 re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
 re2c:YYMAXFILL = "yymaxfill";
+re2c:YYMAXNMATCH = "yymaxnmatch";
 re2c:YYPEEK = "yypeek";
 re2c:YYRESTORE = "yyrestore";
 re2c:YYRESTORECTX = "yyrestorectx";
 re2c:YYRESTORETAG = "yyrestoretag";
 re2c:YYSETSTATE = "yysetstate";
+re2c:YYSHIFT = "yyshift";
+re2c:YYSHIFTSTAG = "yyshiftstag";
+re2c:YYSHIFTMTAG = "yyshiftmtag";
 re2c:YYSKIP = "yyskip";
 re2c:YYSTAGN = "yystagn";
 re2c:YYSTAGP = "yystagp";
-re2c:tags:negative = (.api.generic ? "@@" : "nil");
+re2c:tags:expression = (.api.record ? yyrecord ".") sigil;
+re2c:tags:negative = (.api.generic ? "@@" : "-1");
 re2c:cond:divider = "/* *********************************** */";
 re2c:cond:goto = "";
 re2c:state:abort = 1;
@@ -256,10 +262,24 @@ code:yyrestoretag =
         : YYCURSOR " = " tag
     ) nl;
 
+code:yyshiftstag =
+    topindent (.nested ? "if " tag " != " neg " {" nl indent)
+        topindent (.api.generic
+            ? YYSHIFTSTAG (.api_style.functions ? "(" tag ", -" offset ")")
+            : tag " -= " offset
+        ) nl
+    (.nested ? dedent topindent "}" nl);
+
 code:yystagp =
     topindent (.api.generic
-        ? YYSTAGP  (.api_style.functions ? "(" tag ")")
+        ? YYSTAGP (.api_style.functions ? "(" tag ")")
         : tag " = " YYCURSOR
+    ) nl;
+
+code:yystagn =
+    topindent (.api.generic
+        ? YYSTAGN (.api_style.functions ? "(" tag ")")
+        : tag " = " neg
     ) nl;
 
 code:yycopystag =
