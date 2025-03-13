@@ -70,13 +70,15 @@ re2c:indent:string = "  ";
 
 re2c:YYBACKUP = "yybackup";
 re2c:YYBACKUPCTX = "yybackupctx";
-re2c:YYCONDTYPE = "yycondtype";
+re2c:YYCONDTYPE = "YYCondType";
 re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
 re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
 re2c:YYCTYPE = "yyctype";
 re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
 re2c:YYDEBUG = "yydebug";
 re2c:YYFILL = "yyfill";
+re2c:YYGETACCEPT = sigil "{var}";
+re2c:YYGETCOND = "yygetcond";
 re2c:YYGETSTATE = "yygetstate";
 re2c:YYINPUT = (.api.record ? yyrecord ".") "yyinput";
 re2c:YYLESSTHAN = "yylessthan";
@@ -84,10 +86,14 @@ re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
 re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
 re2c:YYMAXFILL = "yymaxfill";
 re2c:YYMAXNMATCH = "yymaxnmatch";
+re2c:YYMTAGN = "yymtagn";
+re2c:YYMTAGP = "yymtagp";
 re2c:YYPEEK = "yypeek";
 re2c:YYRESTORE = "yyrestore";
 re2c:YYRESTORECTX = "yyrestorectx";
 re2c:YYRESTORETAG = "yyrestoretag";
+re2c:YYSETACCEPT = sigil "{var} = " sigil "{val}";
+re2c:YYSETCOND = "yysetcond";
 re2c:YYSETSTATE = "yysetstate";
 re2c:YYSHIFT = "yyshift";
 re2c:YYSHIFTSTAG = "yyshiftstag";
@@ -119,9 +125,12 @@ code:array_global = <undefined>;
 
 code:array_elem = array "[" index "]";
 
-code:enum = [elem: topindent "let " elem ": " type " = " init nl];
+code:enum =
+    "enum " type ": Int {" nl indent
+        [elem: topindent "case " elem (.init ? " = " init) nl]
+    dedent "}" nl;
 
-code:enum_elem = name;
+code:enum_elem = type "." name ".rawValue";
 
 code:assign = topindent lhs " = " rhs nl;
 
@@ -276,11 +285,17 @@ code:yystagp =
         : tag " = " YYCURSOR
     ) nl;
 
+code:yymtagp =
+    topindent YYMTAGP (.api_style.functions ? "(" tag ")") nl;
+
 code:yystagn =
     topindent (.api.generic
         ? YYSTAGN (.api_style.functions ? "(" tag ")")
         : tag " = " neg
     ) nl;
+
+code:yymtagn =
+    topindent YYMTAGN (.api_style.functions ? "(" tag ")") nl;
 
 code:yycopystag =
     topindent (.api.generic
@@ -310,6 +325,12 @@ code:yygetcond =
     (.api.generic
         ? YYGETCOND (.api_style.functions ? "()")
         : (.api.record ? yyrecord ".") var);
+
+code:yysetcond =
+    topindent (.api.generic
+        ? YYSETCOND (.api_style.functions ? "()")
+        : (.api.record ? yyrecord ".") var " = " val
+    ) nl;
 
 code:yygetstate =
     (.api.generic
