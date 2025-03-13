@@ -271,6 +271,12 @@ code:yyrestoretag =
         : YYCURSOR " = " tag
     ) nl;
 
+code:yyshift =
+    topindent (.api.generic
+        ? YYSHIFT (.api_style.functions ? "(-" offset ")")
+        : YYCURSOR " -= " offset
+    ) nl;
+
 code:yyshiftstag =
     topindent (.nested ? "if " tag " != " neg " {" nl indent)
         topindent (.api.generic
