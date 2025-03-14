@@ -596,6 +596,11 @@ start:
     "code:type_uint"              { RET_CODE(code_type_uint); }
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
+    "code:type_yyctable"          { RET_CODE(code_type_yyctable); }
+    "code:yytarget_elem"          { RET_CODE(code_yytarget_elem); }
+    "code:yytarget_goto"          { RET_CODE(code_yytarget_goto); }
+    "code:yyctable_elem"          { RET_CODE(code_yyctable_elem); }
+    "code:yyctable_goto"          { RET_CODE(code_yyctable_goto); }
     "code:assign"                 { RET_CODE(code_assign); }
     "code:cmp_eq"                 { RET_CODE(code_cmp_eq); }
     "code:cmp_ne"                 { RET_CODE(code_cmp_ne); }
@@ -667,6 +672,7 @@ start:
     "argtype"      { RET_VAR(StxVarId::ARGTYPE); }
     "array"        { RET_VAR(StxVarId::ARRAY); }
     "branch"       { RET_VAR(StxVarId::BRANCH); }
+    "base"         { RET_VAR(StxVarId::BASE); }
     "case"         { RET_VAR(StxVarId::CASE); }
     "cond"         { RET_VAR(StxVarId::COND); }
     "date"         { RET_VAR(StxVarId::DATE); }
@@ -705,6 +711,7 @@ start:
     "yych"         { RET_VAR(StxVarId::CHAR); }
     "YYCOPYMTAG"   { RET_VAR(StxVarId::COPYMTAG); }
     "YYCOPYSTAG"   { RET_VAR(StxVarId::COPYSTAG); }
+    "yyctable"     { RET_VAR(StxVarId::CTABLE); }
     "YYCTYPE"      { RET_VAR(StxVarId::CTYPE); }
     "YYCTXMARKER"  { RET_VAR(StxVarId::CTXMARKER); }
     "YYCURSOR"     { RET_VAR(StxVarId::CURSOR); }
@@ -732,6 +739,7 @@ start:
     "YYSKIP"       { RET_VAR(StxVarId::SKIP); }
     "YYSTAGN"      { RET_VAR(StxVarId::STAGN); }
     "YYSTAGP"      { RET_VAR(StxVarId::STAGP); }
+    "yytarget"     { RET_VAR(StxVarId::TARGET); }
 
     // global variables
     "nl"        { RET_VAR(StxVarId::NEWLINE); }

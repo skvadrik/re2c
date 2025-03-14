@@ -184,6 +184,7 @@ static constexpr const char* DEFAULT_SYNTAX_OCAML =
     "code:type_uint = \"uint\";\n"
     "code:type_yybm = \"int\";\n"
     "code:type_yytarget = <undefined>;\n"
+    "code:type_yyctable = <undefined>;\n"
     "\n"
     "code:cmp_eq = \"==\"; // physical equality, as this is used to compare primitive values\n"
     "code:cmp_ne = \"!=\"; // physical inequality, as this is used to compare primitive values\n"
@@ -395,4 +396,9 @@ static constexpr const char* DEFAULT_SYNTAX_OCAML =
     "code:yybm_filter = yych \" land ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \".(\" offset \" + Char.code \" yych \") land \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_elem = <undefined>;\n"
+    "code:yytarget_goto = <undefined>;\n"
+    "code:yyctable_elem = <undefined>;\n"
+    "code:yyctable_goto = <undefined>;\n"
     ;
