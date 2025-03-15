@@ -16,28 +16,45 @@ extension FileHandle: @retroactive TextOutputStream {
   }
 }
 
-func lex(state: inout State, recv: inout Int) -> Status {
-  var yych: UInt8 = 0
-  lex: while true {
-    state.token = state.yycursor
-    
-#sourceLocation(file: "push.swift", line: 25)
-  var yystate: Int = state.yystate
+struct State {
+  // Use a small buffer to cover the case when a lexeme doesn't fit,
+  // in a real world use case use a larger buffer.
+  static let bufferSize = 10
+
+  let file: FileHandle
+
+  // Extra '\0' byte on buffer acts as terminator.
+  var yyinput  = ContiguousArray<UInt8>(repeating: 0, count: Self.bufferSize + 1)
+  var yylimit  = Self.bufferSize
+  var yycursor = Self.bufferSize
+  var yymarker = Self.bufferSize
+  var token    = Self.bufferSize
+  var yystate  = -1
+}
+
+extension State {
+  mutating func lex(recv: inout Int) -> Status {
+    var yych: UInt8 = 0
+    lex: while true {
+      self.token = self.yycursor
+      
+#sourceLocation(file: "push.swift", line: 42)
+  var yystate: Int = self.yystate
   while true {
     switch yystate {
       case -1...0:
-        yych = state.yyinput[state.yycursor]
+        yych = self.yyinput[self.yycursor]
         switch yych {
           case 0x61...0x7A:
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 3
             continue
           default:
-            if state.yylimit <= state.yycursor {
-              state.yystate = 8
+            if self.yylimit <= self.yycursor {
+              self.yystate = 8
               return .waiting
             }
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 1
             continue
         }
@@ -45,82 +62,82 @@ func lex(state: inout State, recv: inout Int) -> Status {
         yystate = 2
         continue
       case 2:
-        state.yystate = -1
-#sourceLocation(file: "push.re", line: 30)
+        self.yystate = -1
+#sourceLocation(file: "push.re", line: 46)
         return .badPacket
-#sourceLocation(file: "push.swift", line: 52)
+#sourceLocation(file: "push.swift", line: 69)
       case 3:
-        state.yymarker = state.yycursor
-        yych = state.yyinput[state.yycursor]
+        self.yymarker = self.yycursor
+        yych = self.yyinput[self.yycursor]
         switch yych {
           case 0x3B:
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 4
             continue
           case 0x61...0x7A:
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 5
             continue
           default:
-            if state.yylimit <= state.yycursor {
-              state.yystate = 9
+            if self.yylimit <= self.yycursor {
+              self.yystate = 9
               return .waiting
             }
             yystate = 2
             continue
         }
       case 4:
-        state.yystate = -1
-#sourceLocation(file: "push.re", line: 32)
+        self.yystate = -1
+#sourceLocation(file: "push.re", line: 48)
         
-        recv += 1
-        continue lex
+          recv += 1
+          continue lex
 
-#sourceLocation(file: "push.swift", line: 80)
+#sourceLocation(file: "push.swift", line: 97)
       case 5:
-        yych = state.yyinput[state.yycursor]
+        yych = self.yyinput[self.yycursor]
         switch yych {
           case 0x3B:
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 4
             continue
           case 0x61...0x7A:
-            state.yycursor += 1
+            self.yycursor += 1
             yystate = 5
             continue
           default:
-            if state.yylimit <= state.yycursor {
-              state.yystate = 10
+            if self.yylimit <= self.yycursor {
+              self.yystate = 10
               return .waiting
             }
             yystate = 6
             continue
         }
       case 6:
-        state.yycursor = state.yymarker
+        self.yycursor = self.yymarker
         yystate = 2
         continue
       case 7:
-        state.yystate = -1
-#sourceLocation(file: "push.re", line: 31)
+        self.yystate = -1
+#sourceLocation(file: "push.re", line: 47)
         return .end
-#sourceLocation(file: "push.swift", line: 108)
+#sourceLocation(file: "push.swift", line: 125)
       case 8:
-        if state.yylimit <= state.yycursor {
+        if self.yylimit <= self.yycursor {
           yystate = 7
           continue
         }
         yystate = 0
         continue
       case 9:
-        if state.yylimit <= state.yycursor {
+        if self.yylimit <= self.yycursor {
           yystate = 2
           continue
         }
         yystate = 3
         continue
       case 10:
-        if state.yylimit <= state.yycursor {
+        if self.yylimit <= self.yycursor {
           yystate = 6
           continue
         }
@@ -129,39 +146,48 @@ func lex(state: inout State, recv: inout Int) -> Status {
       default: fatalError("internal lexer error")
     }
   }
-#sourceLocation(file: "push.re", line: 36)
+#sourceLocation(file: "push.re", line: 52)
 
-  }
-}
-
-func fill(state: inout State) -> Status {
-  // Error: lexeme too long. In the real world we can reallocate a larger buffer.
-  if state.token < 1 {
-    return .bigPacket
-  }
-
-  // Shift buffer contents (discard everything up to the current lexeme).
-  state.yyinput.replaceSubrange(..<(state.yylimit - state.token), with: state.yyinput[state.token..<state.yylimit])
-  state.yylimit -= state.token
-  state.yycursor -= state.token
-  state.yymarker -= state.token
-  state.token = 0
-
-  // Fill free space at the end of buffer with new data.
-  do {
-    if let data = try state.file.read(upToCount: State.bufferSize - 1 - state.yylimit) { // -1 for sentinel
-      state.yyinput.replaceSubrange(state.yylimit..<(state.yylimit + data.count), with: data)
-      state.yylimit += data.count
     }
-  } catch {
-    fatalError("cannot read from file: \(error.localizedDescription)")
   }
-  state.yyinput[state.yylimit] = 0  // append sentinel
 
-  return .ready
+  mutating func fill() -> Status {
+    let used = self.yylimit - self.token
+    let free = Self.bufferSize - used
+
+    // Error: No space. In the real world we can reallocate a larger buffer.
+    if free < 1 {
+      return .bigPacket
+    }
+
+    // Shift buffer contents, discarding everything up to the current lexeme.
+    let shift = self.token
+    self.yyinput.replaceSubrange(..<used, with: self.yyinput[shift..<self.yylimit])
+    self.yylimit  -= shift
+    self.yycursor -= shift
+    self.yymarker -= shift
+    self.token = 0
+
+    // Fill free space at the end of buffer with new data.
+    do {
+      if let data = try self.file.read(upToCount: free) {
+        self.yyinput.replaceSubrange(self.yylimit..<(self.yylimit + data.count), with: data)
+        self.yylimit += data.count
+      }
+    } catch {
+      fatalError("cannot read from file: \(error.localizedDescription)")
+    }
+    self.yyinput[self.yylimit] = 0  // append sentinel
+
+    return .ready
+  }
+
+  enum Status {
+    case end, ready, waiting, badPacket, bigPacket
+  }
 }
 
-func test(_ packets: [StaticString]) -> Status {
+func test(_ packets: [StaticString]) -> State.Status {
   // Create a "socket" (open the same file for reading and writing).
   let fname: String = "pipe"
   guard FileManager.default.createFile(atPath: fname, contents: nil),
@@ -190,7 +216,7 @@ func test(_ packets: [StaticString]) -> Status {
   // returns to the caller which should provide more input and resume lexing.
   var send = 0, recv = 0
   while true {
-    switch lex(state: &state, recv: &recv) {
+    switch state.lex(recv: &recv) {
       case .end:
         log("done: got \(recv)")
         assert(recv == send)
@@ -208,7 +234,7 @@ func test(_ packets: [StaticString]) -> Status {
           }
           send += 1
         }
-        let status = fill(state: &state)
+        let status = state.fill()
         state.yyinput.withUnsafeBytes {
           let buf = $0.bindMemory(to: CChar.self)
           log("queue: '\(String(utf8String: buf.baseAddress!) ?? "")'")
@@ -222,28 +248,9 @@ func test(_ packets: [StaticString]) -> Status {
         log("error: ill-formed packet")
         return .badPacket
       default:
-        fatalError("shouldn't happen")
+        fatalError("unreachable")
     }
   }
-}
-
-struct State {
-  // Use a small buffer to cover the case when a lexeme doesn't fit,
-  // in a real world use case use a larger buffer.
-  static let bufferSize = 10
-
-  let file: FileHandle
-
-  var yyinput = ContiguousArray<UInt8>(repeating: 0, count: Self.bufferSize)
-  var yylimit: Int = Self.bufferSize - 1
-  var yycursor: Int = Self.bufferSize - 1
-  var yymarker: Int = Self.bufferSize - 1
-  var token: Int = Self.bufferSize - 1
-  var yystate: Int = -1
-}
-
-enum Status {
-  case end, ready, waiting, badPacket, bigPacket
 }
 
 @main struct Program {
