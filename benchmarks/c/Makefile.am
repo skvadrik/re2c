@@ -11,6 +11,12 @@ CXXFLAGS = $(AM_CXXFLAGS) -O3 -g -I $(SRC_DIR) -Wall -Wno-unused-const-variable
 LDFLAGS = -lbenchmark -lpthread
 
 BENCHMARKS = \
+    lex_00__numbers1 \
+    lex_01__numbers2 \
+    lex_02__words1 \
+    lex_03__words2 \
+    lex_04__words3 \
+    \
     submatch_00__http_rfc7230 \
     submatch_01__http_simple \
     submatch_02__uri_rfc3986 \

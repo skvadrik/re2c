@@ -46,6 +46,12 @@ int main(int argc, char** argv) {
 
     bool ok = true;
 
+    TEST(lex_00__numbers1, numbers1, 230, 16777350, 0);
+    TEST(lex_01__numbers2, numbers2, 5237, 76669680, 0);
+    TEST(lex_02__words1, words1, 57, 16777266, 0);
+    TEST(lex_03__words2, words2, 1933, 16778440, 0);
+    TEST(lex_04__words3, words3, 15248, 16788048, 0);
+
     TEST(submatch_00__http_rfc7230, http, 3474, 15445404, 0);
     TEST(submatch_01__http_simple, http, 3661, 16276806, 0);
     TEST(submatch_02__uri_rfc3986, uri, 1929, 16037706, 0);

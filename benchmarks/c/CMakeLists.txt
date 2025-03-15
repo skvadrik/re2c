@@ -2,6 +2,12 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(GBENCHMARK REQUIRED benchmark)
 
 set(BENCHMARKS
+    "lex_00__numbers1"
+    "lex_01__numbers2"
+    "lex_02__words1"
+    "lex_03__words2"
+    "lex_04__words3"
+
     "submatch_00__http_rfc7230"
     "submatch_01__http_simple"
     "submatch_02__uri_rfc3986"
@@ -156,7 +162,7 @@ endfunction()
 # input data
 set(DAT)
 # Some benchmarks share the same data, like submatch_03__uri_simple and submatch_02__uri_rfc3986.
-regex_replace_list("^submatch_[0-9]+__([^_]+).*" "\\1" INPUTS ${BENCHMARKS})
+regex_replace_list("^[a-z]+_[0-9]+__([^_]+).*" "\\1" INPUTS ${BENCHMARKS})
 list(REMOVE_DUPLICATES INPUTS)
 foreach(input ${INPUTS})
     set(src_dir "${CMAKE_CURRENT_SOURCE_DIR}/../_data/${input}")

@@ -15,6 +15,13 @@ extern bool verbose;
     if (verbose) printf("%.*s", (int)((p2) - (p1)), p1); \
 } while (0)
 
+// Same as OUTS, but multiply the number of characters by a factor `x`
+// (used to create lexers with multiple rules - to make semantic actions differ).
+#define OUTX(p1, p2, x) do { \
+    count += ((p2) - (p1)) * x; \
+    if (verbose) printf("%.*s", (int)((p2) - (p1)), p1); \
+} while (0)
+
 #define OUTC(c) do { \
     if (verbose) printf("%c", c); \
 } while (0)
@@ -27,6 +34,7 @@ extern bool verbose;
 #else
 
 #define OUTS(p1, p2) do { count += (p2) - (p1); } while(0)
+#define OUTX(p1, p2, x) do { count += ((p2) - (p1)) * x; } while (0)
 #define OUTC(c)
 #define OUT(_, p1, p2) do { count += (p2) - (p1); } while(0)
 

@@ -315,7 +315,8 @@ in->yytm9 = 0;
 
 int lex_simple(input_t *in) {
     char *cur = in->buf, *mar, *tok;
-    (void) tok; // may be unused
+    (void) mar; // maybe unused
+    (void) tok; // maybe unused
     
     taglist_t *yytm1 = nullptr;
 taglist_t *yytm10 = nullptr;
@@ -19915,7 +19916,7 @@ void bench_##suffix::operator()( \
         count = lex_##suffix(&in); \
         free_input(&in); \
     } \
-    if (count != expected) state.SkipWithError("error"); \
+    if (count != expected) state.SkipWithError("re2c: error"); \
 }
 FN_BENCH(simple)
 FN_BENCH(buffered_eof)
@@ -19930,14 +19931,14 @@ bool test_##suffix(const char* input, long expected) { \
     switch (count) { \
     default: \
         if (count != expected) { \
-            fprintf(stderr, "wrong count, expected %ld, got %ld\n", expected, count); \
+            fprintf(stderr, "re2c: wrong count, expected %ld, got %ld\n", expected, count); \
         } \
         break; \
     case -1: \
-        fprintf(stderr, "syntax error\n"); \
+        fprintf(stderr, "re2c: syntax error\n"); \
         break; \
     case -2: \
-        fprintf(stderr, "yyfill error\n"); \
+        fprintf(stderr, "re2c: yyfill error\n"); \
         break; \
     } \
     free_input(&in); \
