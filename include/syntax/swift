@@ -1,0 +1,364 @@
+// supported feature lists -----------------------------------------------------
+
+supported_apis = ["simple", "generic", "record"];
+supported_api_styles = ["functions", "free-form"];
+supported_code_models = ["loop-switch", "recursive-functions"];
+supported_targets = ["code", "dot"];
+supported_features = ["nested-ifs", "bitmaps", "case-ranges", "tags", "captures",
+    "captvars"];
+
+
+// language-specific options ---------------------------------------------------
+
+semicolons = 0;
+backtick_quoted_strings = 0;
+single_quoted_strings = 0;
+indentation_sensitive = 0;
+wrap_blocks_in_braces = 0;
+
+
+// immutable configurations (command-line only options) ------------------------
+
+re2c:target = code;
+re2c:code-model = loop-switch;
+re2c:input-encoding = ascii;
+re2c:date = 1;
+re2c:version = 1;
+re2c:conditions = 0;
+re2c:storable-state = 0;
+re2c:flex-syntax = 0;
+re2c:verbose = 0;
+re2c:line-dirs = 1;
+
+
+// mutable configurations ------------------------------------------------------
+
+re2c:api = generic;
+re2c:api:style = free-form;
+re2c:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
+re2c:yyfn:sep = ";";
+re2c:yycond = "yycond";
+re2c:yyctable = "yyctable";
+re2c:yyaccept = "yyaccept";
+re2c:yytarget = "yytarget";
+re2c:yystate = "yystate";
+re2c:yynmatch = "yynmatch";
+re2c:yypmatch = "yypmatch";
+re2c:yyrecord = "yyrecord";
+re2c:yych = "yych";
+re2c:yych:conversion = 0;
+re2c:yych:literals = hex; // Seems impossible to double-quote char literals and wrap them in UInt8(asci: ), UnicodeScalars are also out of the question
+re2c:yych:emit = (.code_model.recursive_functions ? 0 : 1);
+re2c:yybm = "yybm";
+re2c:yybm:hex = 0;
+re2c:yyfill = "";
+re2c:yystable = ""; // deprecated
+re2c:header = "";
+re2c:eof = -1;
+re2c:sentinel = -1;
+re2c:yyfill:enable = 1;
+re2c:yyfill:parameter = 1;
+re2c:yyfill:check = 1;
+re2c:tags = 0;
+re2c:cond:abort = 1;
+re2c:nested-ifs = 0;
+re2c:case-ranges = 1;
+re2c:indent:string = "  ";
+
+
+// mutable code configuration --------------------------------------------------
+
+re2c:YYBACKUP = "yybackup";
+re2c:YYBACKUPCTX = "yybackupctx";
+re2c:YYCONDTYPE = "YYCondType";
+re2c:YYCOPYMTAG = sigil "{lhs} = " sigil "{rhs}";
+re2c:YYCOPYSTAG = sigil "{lhs} = " sigil "{rhs}";
+re2c:YYCTYPE = "UInt8";
+re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
+re2c:YYDEBUG = "yydebug";
+re2c:YYFILL = "yyfill";
+re2c:YYGETACCEPT = sigil "{var}";
+re2c:YYGETCOND = "yygetcond";
+re2c:YYGETSTATE = "yygetstate";
+re2c:YYINPUT = (.api.record ? yyrecord ".") "yyinput";
+re2c:YYLESSTHAN = "yylessthan";
+re2c:YYLIMIT = (.api.record ? yyrecord ".") "yylimit";
+re2c:YYMARKER = (.api.record ? yyrecord ".") "yymarker";
+re2c:YYMAXFILL = "yymaxfill";
+re2c:YYMAXNMATCH = "yymaxnmatch";
+re2c:YYMTAGN = "yymtagn";
+re2c:YYMTAGP = "yymtagp";
+re2c:YYPEEK = "yypeek";
+re2c:YYRESTORE = "yyrestore";
+re2c:YYRESTORECTX = "yyrestorectx";
+re2c:YYRESTORETAG = "yyrestoretag";
+re2c:YYSETACCEPT = sigil "{var} = " sigil "{val}";
+re2c:YYSETCOND = "yysetcond";
+re2c:YYSETSTATE = "yysetstate";
+re2c:YYSHIFT = "yyshift";
+re2c:YYSHIFTSTAG = "yyshiftstag";
+re2c:YYSHIFTMTAG = "yyshiftmtag";
+re2c:YYSKIP = "yyskip";
+re2c:YYSTAGN = "yystagn";
+re2c:YYSTAGP = "yystagp";
+re2c:tags:expression = (.api.record ? yyrecord ".") sigil;
+re2c:tags:negative = (.api.generic ? "@@" : "-1");
+re2c:cond:divider = "/* *********************************** */";
+re2c:cond:goto = "";
+re2c:state:abort = 1;
+
+
+// code templates --------------------------------------------------------------
+
+code:var_local = topindent "var " name ": " type " = " init nl;
+code:var_global = topindent "static var " name ": " type " = " init nl;
+
+code:const_local = topindent "let " name " = " init nl;
+code:const_global = code:const_local;
+
+code:array_local =
+    topindent "let " name ": [" type "] = [" nl indent
+        [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
+    dedent topindent "]" nl;
+
+code:array_global = <undefined>;
+
+code:array_elem = array "[" index "]";
+
+code:enum =
+    "enum " type ": Int {" nl indent
+        [elem: topindent "case " elem (.init ? " = " init) nl]
+    dedent "}" nl;
+
+code:enum_elem = type "." name ".rawValue";
+
+code:assign = topindent lhs " = " rhs nl;
+
+code:type_int = "Int";
+code:type_uint = "UInt";
+code:type_yybm = "UInt8";
+code:type_yytarget = <undefined>;
+
+code:cmp_eq = "==";
+code:cmp_ne = "!=";
+code:cmp_lt = "<";
+code:cmp_gt = ">";
+code:cmp_le = "<=";
+code:cmp_ge = ">=";
+
+code:if_then_else =
+    [branch{0}: topindent "if " cond " {" nl
+        indent [stmt: stmt] dedent]
+    [branch{1:-1}: topindent "} else " (.cond ? "if " cond " ") "{" nl
+        indent [stmt: stmt] dedent]
+    topindent "}" nl;
+
+code:if_then_else_oneline = <undefined>;
+
+code:switch =
+    topindent "switch " expr " {" nl
+        indent [case: case] dedent
+    topindent "}" nl;
+
+code:switch_cases =
+    [case{0:-2}: topindent case indent nl
+        topindent "fallthrough" dedent nl]
+    [case{-1}:   topindent case nl]
+        indent [stmt: stmt] dedent;
+
+code:switch_cases_oneline =
+    [case{0:-2}: topindent case indent nl
+        topindent "fallthrough" dedent nl]
+    [case{-1}:   topindent case " " [stmt: stmt] nl];
+
+code:switch_case_range = "case " [val{0}: val] (.many ? "..." [val{-1}: val]) ":";
+
+code:switch_case_default = "default:";
+
+code:loop =
+    topindent (.loop_label ? label ": " nl) "while true {" nl
+        indent [stmt: stmt] dedent
+    topindent "}" nl;
+
+code:continue = topindent "continue" (.loop_label ? " " label) nl;
+
+code:goto = <undefined>;
+
+code:fndecl = <undefined>;
+
+code:fndef =
+    topindent "func " name "("
+    [arg{0:-2}: "_ " argname ": " argtype ", "]
+    [arg{-1}:   "_ " argname ": " argtype]
+    ")" (.type ? " -> " type) " {" nl
+        indent [stmt: stmt] dedent
+    "}" nl; // Can't specify throw
+
+code:fncall = topindent (.retval ? retval " = ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:tailcall = topindent (.retval ? "return ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+
+code:recursive_functions = [fn: fndef nl];
+
+code:fingerprint =
+    "/* Generated by re2swift" (.version ? " " version) (.date ? " on " date) " */" nl;
+
+code:line_info = "#sourceLocation(file: \"" file "\", line: " line ")" nl;
+
+code:abort = topindent "fatalError(\"internal lexer error\")" nl;
+
+code:yydebug =
+    topindent (.api.generic
+        ? YYDEBUG (.api_style.functions ? "()")
+        : (.api.record
+            ? YYDEBUG "(" yyrecord ")"
+            : YYDEBUG "(" state ", " yych ")"
+    )) nl;
+
+code:yypeek =
+    topindent (.code_model.recursive_functions ? "let ") yych " = " (.api.generic
+        ? YYPEEK (.api_style.functions ? "()")
+        : (.cast ? YYCTYPE "(") YYINPUT "[" YYCURSOR "]" (.cast ? ")")
+    ) nl;
+
+code:yyskip =
+    topindent (.api.generic
+        ? YYSKIP (.api_style.functions ? "()")
+        : YYCURSOR " += 1"
+    ) nl;
+
+code:yybackupctx =
+    topindent (.api.generic
+        ? YYBACKUPCTX (.api_style.functions ? "()")
+        : YYCTXMARKER " = " YYCURSOR
+    ) nl;
+
+code:yybackup =
+    topindent (.api.generic
+        ? YYBACKUP (.api_style.functions ? "()")
+        : YYMARKER " = " YYCURSOR
+    ) nl;
+
+code:yybackupctx =
+    topindent (.api.generic
+        ? YYBACKUPCTX (.api_style.functions ? "()")
+        : YYCTXMARKER " = " YYCURSOR
+    ) nl;
+
+code:yyskip_yypeek = <undefined>;
+code:yypeek_yyskip = <undefined>;
+code:yyskip_yybackup = <undefined>;
+code:yybackup_yyskip = <undefined>;
+code:yybackup_yypeek = <undefined>;
+code:yyskip_yybackup_yypeek = <undefined>;
+code:yybackup_yypeek_yyskip = <undefined>;
+
+code:yyrestore =
+    topindent (.api.generic
+        ? YYRESTORE (.api_style.functions ? "()")
+        : YYCURSOR " = " YYMARKER
+    ) nl;
+
+code:yyrestorectx =
+    topindent (.api.generic
+        ? YYRESTORECTX (.api_style.functions ? "()")
+        : YYCURSOR " = " YYCTXMARKER
+    ) nl;
+
+code:yyrestoretag =
+    topindent (.api.generic
+        ? YYRESTORETAG (.api_style.functions ? "()")
+        : YYCURSOR " = " tag
+    ) nl;
+
+code:yyshift =
+    topindent (.api.generic
+        ? YYSHIFT (.api_style.functions ? "(-" offset ")")
+        : YYCURSOR " -= " offset
+    ) nl;
+
+code:yyshiftstag =
+    topindent (.nested ? "if " tag " != " neg " {" nl indent)
+        topindent (.api.generic
+            ? YYSHIFTSTAG (.api_style.functions ? "(" tag ", -" offset ")")
+            : tag " -= " offset
+        ) nl
+    (.nested ? dedent topindent "}" nl);
+
+code:yyshiftmtag =
+  topindent YYSHIFTMTAG (.api_style.functions ? "(" tag ", -" offset ")") nl;
+
+code:yystagp =
+    topindent (.api.generic
+        ? YYSTAGP (.api_style.functions ? "(" tag ")")
+        : tag " = " YYCURSOR
+    ) nl;
+
+code:yymtagp =
+    topindent YYMTAGP (.api_style.functions ? "(" tag ")") nl;
+
+code:yystagn =
+    topindent (.api.generic
+        ? YYSTAGN (.api_style.functions ? "(" tag ")")
+        : tag " = " neg
+    ) nl;
+
+code:yymtagn =
+    topindent YYMTAGN (.api_style.functions ? "(" tag ")") nl;
+
+code:yycopystag =
+    topindent (.api.generic
+        ? YYCOPYSTAG // function style is not supported, as there's no sensible default
+        : lhs " = " rhs
+    ) nl;
+
+code:yycopymtag =
+    topindent (.api.generic
+        ? YYCOPYMTAG // function style is not supported, as there's no sensible default
+        : lhs " = " rhs
+    ) nl;
+
+code:yygetaccept =
+    (.api.generic
+        ? YYGETACCEPT // function style is not supported, as there's no sensible default
+        : (.api.record & (.storable_state | .code_model.recursive_functions) ? yyrecord ".") var);
+
+code:yysetaccept =
+    topindent (.api.generic
+        ? YYSETACCEPT // function style is not supported, as there's no sensible default
+        : (.api.record & (.storable_state | .code_model.recursive_functions) ? yyrecord ".")
+            var " = " val
+    ) nl;
+
+code:yygetcond =
+    (.api.generic
+        ? YYGETCOND (.api_style.functions ? "()")
+        : (.api.record ? yyrecord ".") var);
+
+code:yysetcond =
+    topindent (.api.generic
+        ? YYSETCOND (.api_style.functions ? "()")
+        : (.api.record ? yyrecord ".") var " = " val
+    ) nl;
+
+code:yygetstate =
+    (.api.generic
+        ? YYGETSTATE (.api_style.functions ? "()")
+        : (.api.record ? yyrecord ".") var);
+
+code:yysetstate =
+    topindent (.api.generic
+        ? YYSETSTATE (.api_style.functions ? "()")
+        : (.api.record ? yyrecord ".") var " = " val
+    ) nl;
+
+code:yylessthan =
+    (.api.generic
+        ? YYLESSTHAN (.api_style.functions ? "(" need ")")
+        : (.many
+            ? "(" YYLIMIT " - " YYCURSOR ") < " need
+            : YYLIMIT " <= " YYCURSOR));
+
+code:yybm_filter = yych " & ~0xFF";
+
+code:yybm_match = "(" yybm "[" offset " + Int(" yych ")] & " mask ") != 0";
