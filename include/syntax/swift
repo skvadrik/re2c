@@ -285,6 +285,9 @@ code:yyshiftstag =
         ) nl
     (.nested ? dedent topindent "}" nl);
 
+code:yyshiftmtag =
+  topindent YYSHIFTMTAG (.api_style.functions ? "(" tag ", -" offset ")") nl;
+
 code:yystagp =
     topindent (.api.generic
         ? YYSTAGP (.api_style.functions ? "(" tag ")")
