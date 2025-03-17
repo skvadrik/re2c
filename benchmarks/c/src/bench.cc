@@ -19,11 +19,11 @@ int main(int argc, char** argv) {
     benchmark::Initialize(&argc, argv);
     benchmark::SetDefaultTimeUnit(benchmark::kMillisecond);
 
-    GROUP(lex_00__numbers1, "numbers-1", numbers1, 230, 16777350);
-    GROUP(lex_01__numbers2, "numbers-2", numbers2, 5237, 76669680);
-    GROUP(lex_02__words1, "words-1", words1, 57, 16777266);
-    GROUP(lex_03__words2, "words-2", words2, 1933, 16778440);
-    GROUP(lex_04__words3, "words-3", words3, 15248, 16788048);
+    GROUP(lex_00__numbers1, "numbers1", numbers1, 230, 16777350);
+    GROUP(lex_01__numbers2, "numbers2", numbers2, 5237, 76669680);
+    GROUP(lex_02__words1, "words1", words1, 57, 16777266);
+    GROUP(lex_03__words2, "words2", words2, 1933, 16778440);
+    GROUP(lex_04__words3, "words3", words3, 15248, 16788048);
 
     GROUP(submatch_00__http_rfc7230, "http-rfc7230", http, 3474, 15445404);
     GROUP(submatch_01__http_simple, "http-simple", http, 3661, 16276806);
