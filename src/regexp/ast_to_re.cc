@@ -24,13 +24,18 @@
 
 // note [default regexp]
 //
-// Create a byte range that includes all possible input characters. This may include characters that
-// do not map to any valid symbol in current encoding. For encodings that directly map symbols to
-// input characters (ASCII, EBCDIC, UTF-32), it equals `[^]`. For other encodings (UTF-16, UTF-8)
-// `[^]` and this range are different.
+// Default rule behaviour is controlled by `re2c:on-default` configuration.
 //
-// Also note that default range doesn't respect encoding policy (the way invalid code points are
-// treated).
+// With `re2c:on-default = match-code-point` default rule matches any single code point. This may
+// include characters that do not map to any valid symbol in current encoding. For encodings that
+// directly map symbols to input characters (ASCII, EBCDIC, UTF-32), it equals `[^]`. For other
+// encodings (UTF-16, UTF-8) `[^]` and this range are different. Also note that default range
+// doesn't respect encoding policy (the way invalid code points are treated).
+//
+// With `re2c:on-default = match-error` default rule matches the error location (it consumes
+// all the code points up to the fallback transition to default state), but we do YYBACKUP in
+// the start state, so the position on the previous match is available (with simple API it is
+// stored in YYMARKER).
 
 // note [POSIX subexpression hierarchy]
 //
@@ -411,8 +416,18 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::DEF: // see note [default regexp]
-            range = spec.rangemgr.ran(0, opts->encoding.cunit_count());
-            re = re_sym(spec, range);
+            switch (opts->on_default) {
+            case OnDefault::MATCH_CODE_POINT:
+                // Create a regexp that matches any code point.
+                range = spec.rangemgr.ran(0, opts->encoding.cunit_count());
+                re = re_sym(spec, range);
+                break;
+            case OnDefault::MATCH_ERROR:
+                // Nil regexp matches empty string, which puts YYBACKUP in the start state
+                // (we store position of the previous match but don't roll back to it on error).
+                re = re_nil(spec);
+                break;
+            }
             stack.pop_back();
             break;
 

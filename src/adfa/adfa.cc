@@ -385,6 +385,8 @@ void Adfa::prepare(const opt_t* opts) {
         }
         default_state->kind = StateKind::ACCEPT;
         default_state->accepts = &accepts;
+    } else if (opts->on_default == OnDefault::MATCH_ERROR) {
+        head->save = 0; // set to something other than `NOSAVE` to enforce YYBACKUP generation
     }
 
     start_state = head;

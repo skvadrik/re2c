@@ -280,6 +280,8 @@ Ret Input::lex_conf(Opt& opts) {
     "flags:"? "unsafe"                        { RET_CONF_BOOL(unsafe); }
     "flags:"? "monadic"                       { RET_CONF_BOOL(monadic); }
 
+    "on-default" { goto on_default; }
+
     "encoding:ebcdic" | "flags:ecb"        | "flags:e" { RET_CONF_ENC(Enc::Type::EBCDIC); }
     "encoding:utf32"  | "flags:unicode"    | "flags:u" { RET_CONF_ENC(Enc::Type::UTF32); }
     "encoding:ucs2"   | "flags:wide-chars" | "flags:w" { RET_CONF_ENC(Enc::Type::UCS2); }
@@ -326,6 +328,17 @@ code_model:
     "goto-label"          { SETCONOPT(code_model, CodeModel::GOTO_LABEL);  goto end; }
     "loop-switch"         { SETCONOPT(code_model, CodeModel::LOOP_SWITCH); goto end; }
     "recursive-functions" { SETCONOPT(code_model, CodeModel::REC_FUNC);    goto end; }
+*/
+
+on_default:
+    CHECK_RET(lex_conf_assign());
+/*!local:re2c
+    * {
+        RET_FAIL(error_at_cur(
+                "bad configuration value (expected: 'match-code-point', 'match-error')"));
+    }
+    "match-code-point" { SETOPT(on_default, OnDefault::MATCH_CODE_POINT); goto end; }
+    "match-error"      { SETOPT(on_default, OnDefault::MATCH_ERROR);      goto end; }
 */
 
 input_enc:
