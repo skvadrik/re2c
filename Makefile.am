@@ -149,6 +149,7 @@ re2c_GEN_STX = \
 	src/default_syntax_java.h \
 	src/default_syntax_js.h \
 	src/default_syntax_ocaml.h \
+	src/default_syntax_php.h \
 	src/default_syntax_python.h \
 	src/default_syntax_rust.h \
 	src/default_syntax_v.h \
@@ -173,6 +174,7 @@ re2c_BOOT = \
 	bootstrap/doc/re2java.1 \
 	bootstrap/doc/re2js.1 \
 	bootstrap/doc/re2ocaml.1 \
+	bootstrap/doc/re2php.1 \
 	bootstrap/doc/re2py.1 \
 	bootstrap/doc/re2rust.1 \
 	bootstrap/doc/re2v.1 \
@@ -184,6 +186,7 @@ re2c_BOOT = \
 	bootstrap/src/default_syntax_java.h \
 	bootstrap/src/default_syntax_js.h \
 	bootstrap/src/default_syntax_ocaml.h \
+	bootstrap/src/default_syntax_php.h \
 	bootstrap/src/default_syntax_python.h \
 	bootstrap/src/default_syntax_rust.h \
 	bootstrap/src/default_syntax_v.h \
@@ -196,6 +199,7 @@ re2c_BOOT = \
 	bootstrap/src/msg/help_re2js.cc \
 	bootstrap/src/msg/help_re2ocaml.cc \
 	bootstrap/src/msg/help_re2py.cc \
+	bootstrap/src/msg/help_re2php.cc \
 	bootstrap/src/msg/help_re2rust.cc \
 	bootstrap/src/msg/help_re2v.cc \
 	bootstrap/src/msg/help_re2zig.cc \
@@ -234,6 +238,7 @@ re2c_SRC_DOC_EXT = \
 	doc/manual/basics/api/api2_rust.rst_ \
 	doc/manual/basics/api/api2_v.rst_ \
 	doc/manual/basics/api/api2_zig.rst_ \
+	doc/manual/basics/api/api2_php.rst_ \
 	doc/manual/basics/api/api3.rst_ \
 	doc/manual/basics/actions.rst_ \
 	doc/manual/basics/blocks.rst_ \
@@ -441,6 +446,29 @@ re2c_SRC_DOC_EXT = \
 	examples/ocaml/submatch/02_mtags.re \
 	examples/ocaml/submatch/03_captures.re \
 	examples/ocaml/submatch/04_posix_captures.re \
+	examples/php/01_basic.php \
+	examples/php/01_basic.re \
+	examples/php/conditions/parse_u32_blocks.re \
+	examples/php/conditions/parse_u32_conditions.re \
+	examples/php/encodings/unicode_identifier.re \
+	examples/php/eof/01_sentinel.re \
+	examples/php/eof/02_bounds_checking.re \
+	examples/php/eof/03_eof_rule.re \
+	examples/php/eof/04_fake_sentinel.re \
+	examples/php/fill/01_fill.re \
+	examples/php/fill/02_fill.re \
+	examples/php/headers/header.re \
+	examples/php/headers/lexer/state.php \
+	examples/php/includes/definitions.php \
+	examples/php/includes/include.re \
+	examples/php/reuse/reuse.re \
+	examples/php/reuse/usedir.re \
+	examples/php/state/push.re \
+	examples/php/submatch/01_stags_fill.re \
+	examples/php/submatch/01_stags.re \
+	examples/php/submatch/02_mtags.re \
+	examples/php/submatch/03_captures.re \
+	examples/php/submatch/04_posix_captures.re \
 	examples/python/01_basic.py \
 	examples/python/01_basic.re \
 	examples/python/conditions/parse_u32_blocks.re \
@@ -561,6 +589,10 @@ if WITH_OCAML
 DOCS += doc/re2ocaml.1
 HELP += src/msg/help_re2ocaml.cc
 endif
+if WITH_PHP
+DOCS += doc/re2php.1
+HELP += src/msg/help_re2php.cc
+endif
 if WITH_PYTHON
 DOCS += doc/re2py.1
 HELP += src/msg/help_re2py.cc
@@ -590,6 +622,7 @@ dist_stdlib_DATA = \
 	include/syntax/java \
 	include/syntax/js \
 	include/syntax/ocaml \
+	include/syntax/php \
 	include/syntax/python \
 	include/syntax/rust \
 	include/syntax/v \
@@ -821,6 +854,14 @@ bin_PROGRAMS += re2ocaml
 re2ocaml_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::OCAML -DRE2C_PROG=\"re2ocaml\"
 re2ocaml_SOURCES = $(re2c_SOURCES)
 nodist_re2ocaml_SOURCES = $(re2c_GEN) src/msg/help_re2ocaml.cc
+endif
+
+# re2php
+if WITH_PHP
+bin_PROGRAMS += re2php
+re2php_CXXFLAGS = $(AM_CXXFLAGS) -DRE2C_LANG=Lang::PHP -DRE2C_PROG=\"re2php\"
+re2php_SOURCES = $(re2c_SOURCES)
+nodist_re2php_SOURCES = $(re2c_GEN) src/msg/help_re2php.cc
 endif
 
 # re2py

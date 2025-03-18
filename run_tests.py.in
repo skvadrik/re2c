@@ -299,7 +299,7 @@ def copy_tests(tests, dst):  # type: (list, str) -> None
 def clean_test_tree(path):  # type: (str) -> None
     """Clean the test tree from the not needed files."""
     files = set([str(f) for f in Path(path).rglob('*.*')])
-    for ext in ['re', 'c', 'h', 'd', 'go', 'hs', 'java', 'js', 'ml', 'py', 'rs', 'v', 'zig', 'inc']:
+    for ext in ['re', 'c', 'h', 'd', 'go', 'hs', 'java', 'js', 'ml', 'php', 'py', 'rs', 'v', 'zig', 'inc']:
         files -= set([str(f) for f in Path(path).rglob(f'*.{ext}')])
 
     remove(*[f for f in files if os.path.isfile(f)])

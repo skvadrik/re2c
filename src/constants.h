@@ -20,6 +20,7 @@ enum class Lang: uint32_t {
     JAVA,
     JS,
     OCAML,
+    PHP,
     PYTHON,
     RUST,
     V,
