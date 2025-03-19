@@ -1205,8 +1205,16 @@ This option is supported only for C.
 Optimize conditional jumps using non\-standard \(dqcomputed goto\(dq extension
 (which must be supported by the compiler). re2v generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
-threshold can be configured with \fBcgoto:threshold\fP configuration. This
+threshold can be configured with \fBcgoto:threshold\fP configuration.
+Relative offsets can be enabled with \fBcgoto:relative\fP configuration. This
 option implies \fB\-\-bit\-vectors\fP\&. It is supported only for C.
+.TP
+.B \fB\-\-computed\-gotos\-relative\fP
+Similar to \-\-computed\-gotos but generate relative offsets for jump tables
+instead (which must be supported by the compiler). This
+option implies \fB\-\-computed\-gotos\fP\&.  This flag is the same as specifying
+\fBcgoto:relative\fP as above and using \fI\-\-computed\-gotos\(ga\fP\&.
+It is supported only for C.
 .TP
 .B \fB\-\-conditions \-\-start\-conditions \-c\fP
 Enable support of Flex\-like \(dqconditions\(dq: multiple interrelated lexers

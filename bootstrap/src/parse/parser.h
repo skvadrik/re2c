@@ -53,7 +53,7 @@
 extern int re2c_debug;
 #endif
 /* "%code requires" blocks.  */
-#line 1 "src/parse/parser.ypp"
+#line 1 "../src/parse/parser.ypp"
 
 /* pull in types to populate YYSTYPE: */
 #include "src/parse/ast.h"
@@ -100,7 +100,7 @@ namespace re2c {
 #if ! defined RE2C_STYPE && ! defined RE2C_STYPE_IS_DECLARED
 union RE2C_STYPE
 {
-#line 43 "src/parse/parser.ypp"
+#line 43 "../src/parse/parser.ypp"
 
     const re2c::AstNode* regexp;
     const re2c::SemAct* semact;

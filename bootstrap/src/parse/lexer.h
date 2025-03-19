@@ -18,7 +18,7 @@ struct LexerState {
     
 #line 20 "src/parse/lexer.h"
 uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
-#line 78 "src/parse/lexer.re"
+#line 78 "../src/parse/lexer.re"
 
 
     inline LexerState()
@@ -36,7 +36,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
           
 #line 38 "src/parse/lexer.h"
 , yyt1(lim), yyt2(lim), yyt3(lim)
-#line 92 "src/parse/lexer.re"
+#line 92 "../src/parse/lexer.re"
  {
         memset(lim, 0, maxfill());
     }
@@ -63,7 +63,7 @@ uint8_t* yyt1;uint8_t* yyt2;uint8_t* yyt3;
         
 #line 65 "src/parse/lexer.h"
 if (yyt1) { yyt1 += offs; }if (yyt2) { yyt2 += offs; }if (yyt3) { yyt3 += offs; }
-#line 115 "src/parse/lexer.re"
+#line 115 "../src/parse/lexer.re"
 
     }
 
