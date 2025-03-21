@@ -649,6 +649,10 @@ class RenderFnDef : public RenderCallback {
             // explicit void type (like Go). But don't write nullptr, as it truncates the output.
             if (code->type != nullptr) rctx.os << code->type;
             break;
+        case StxVarId::ATTRS:
+            // The user may omit attributes. Don't write nullptr, as it truncates the output.
+            if (code->attrs != nullptr) rctx.os << code->attrs;
+            break;
         case StxVarId::ARGNAME:
             rctx.os << curr_param->name;
             break;
@@ -703,11 +707,11 @@ class RenderFnDef : public RenderCallback {
     }
 
     bool eval_cond(StxLOpt opt) override {
-        if (opt == StxLOpt::TYPE) {
-            return code->type != nullptr;
+        switch (opt) {
+            case StxLOpt::TYPE: return code->type != nullptr;
+            case StxLOpt::ATTRS: return code->attrs != nullptr;
+            default: UNREACHABLE(); return false;
         }
-        UNREACHABLE();
-        return false;
     }
 
     FORBID_COPY(RenderFnDef);

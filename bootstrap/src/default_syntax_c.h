@@ -239,7 +239,7 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "    topindent type \" \" name \"(\"\n"
     "        [arg{0:-2}: argtype \" \" argname \", \"]\n"
     "        [arg{-1}:   argtype \" \" argname]\n"
-    "    \");\" nl;\n"
+    "    \")\" (.attrs ? \" \" attrs) \";\" nl;\n"
     "\n"
     "code:fndef =\n"
     "    topindent type \" \" name \"(\"\n"

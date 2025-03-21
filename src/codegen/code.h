@@ -256,6 +256,7 @@ using CodeArgs = list_t<CodeArg>;
 struct CodeFnDef {
     const char* name;
     const char* type;
+    const char* attrs;
     const CodeParams* params; // shared between different function definitions
     CodeList* body;
 };
@@ -341,6 +342,7 @@ struct Code {
 struct CodeFnCommon {
     const char* name;
     const char* type;
+    const char* attrs;
     CodeParams* params = nullptr;
     CodeParams* params_yych = nullptr; // same as `params`, but with `yych` at the end
     CodeArgs* args = nullptr;
@@ -679,20 +681,22 @@ inline CodeArgs* code_args(OutAllocator& alc) {
     return new_list<CodeArg>(alc);
 }
 
-inline void init_code_fndef(
-        Code* x, const char* name, const char* type, CodeParams* params, CodeList* body) {
+inline void init_code_fndef(Code* x, const char* name, const char* type, const char* attrs,
+        CodeParams* params, CodeList* body) {
     x->kind = CodeKind::FNDEF;
     x->fndef.name = name;
     x->fndef.type = type;
+    x->fndef.attrs = attrs;
     x->fndef.params = params;
     x->fndef.body = body;
 }
 
-inline Code* code_fndef(
-        OutAllocator& alc, const char* name, const char* type, CodeParams* params, CodeList* body) {
+inline Code* code_fndef(OutAllocator& alc, const char* name, const char* type, const char* attrs,
+        CodeParams* params, CodeList* body) {
     Code* x = new_code(alc, CodeKind::FNDEF);
     x->fndef.name = name;
     x->fndef.type = type;
+    x->fndef.attrs = attrs;
     x->fndef.params = params;
     x->fndef.body = body;
     return x;

@@ -238,7 +238,7 @@ code:fndecl =
     topindent type " " name "("
         [arg{0:-2}: argtype " " argname ", "]
         [arg{-1}:   argtype " " argname]
-    ");" nl;
+    ")" (.attrs ? " " attrs) ";" nl;
 
 code:fndef =
     topindent type " " name "("

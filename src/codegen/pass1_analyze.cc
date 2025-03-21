@@ -643,7 +643,7 @@ bool consume(const State* s) {
 LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, const opt_t* opts)) {
     if (opts->code_model != CodeModel::REC_FUNC) return Ret::OK;
 
-    const char* name, *param, *type;
+    const char* part1, *part2, *part3;
 
     auto split = [&](const std::string& s) -> Ret {
         std::vector<std::string> parts;
@@ -657,9 +657,9 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
                 p1 = p2 + opts->fn_sep.length();
             }
         }
-        name = copystr(parts[0], alc);
-        type = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
-        param = parts.size() > 2 ? copystr(parts[2], alc) : name;
+        part1 = copystr(parts[0], alc);
+        part2 = parts.size() > 1 ? copystr(parts[1], alc) : nullptr;
+        part3 = parts.size() > 2 ? copystr(parts[2], alc) : nullptr;
         if (parts.size() > 3) {
             RET_FAIL(error("`re2c:YYFN` configuration element `%s` has too many parts", s.c_str()));
         }
@@ -670,8 +670,9 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
 
     DCHECK(!opts->api_fn.empty());
     CHECK_RET(split(opts->api_fn[0]));
-    f->name = name;
-    f->type = type;
+    f->name = part1;
+    f->type = part2;
+    f->attrs = part3;
 
     f->params = code_params(alc);
     f->params_yych = code_params(alc);
@@ -680,16 +681,17 @@ LOCAL_NODISCARD(Ret gen_fn_common(OutAllocator& alc, CodeFnCommon** fn_common, c
 
     for (size_t i = 1; i < opts->api_fn.size(); ++i) {
         CHECK_RET(split(opts->api_fn[i]));
-        if (type == nullptr) {
+        if (part2 == nullptr) {
             RET_FAIL(error(
                 "missing type in `re2c:YYFN` configuration element `%s`", opts->api_fn[i].c_str()));
         }
+        if (part3 == nullptr) part3 = part1;
 
-        append(f->params, code_param(alc, param, type));
-        append(f->params_yych, code_param(alc, param, type));
+        append(f->params, code_param(alc, part3, part2));
+        append(f->params_yych, code_param(alc, part3, part2));
 
-        append(f->args, code_arg(alc, name));
-        append(f->args_yych, code_arg(alc, name));
+        append(f->args, code_arg(alc, part1));
+        append(f->args_yych, code_arg(alc, part1));
     }
 
     append(f->params_yych, code_param(alc, opts->var_char.c_str(), opts->api_char_type.c_str()));

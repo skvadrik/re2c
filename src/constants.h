@@ -210,6 +210,7 @@ enum class StxLOpt {
     CAST,
     CHAR_LITERALS,
     ARGS,
+    ATTRS,
     COND,
     INIT,
     TYPE,

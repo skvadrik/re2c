@@ -671,6 +671,7 @@ start:
     "argname"      { RET_VAR(StxVarId::ARGNAME); }
     "argtype"      { RET_VAR(StxVarId::ARGTYPE); }
     "array"        { RET_VAR(StxVarId::ARRAY); }
+    "attrs"        { RET_VAR(StxVarId::ATTRS); }
     "branch"       { RET_VAR(StxVarId::BRANCH); }
     "base"         { RET_VAR(StxVarId::BASE); }
     "case"         { RET_VAR(StxVarId::CASE); }
@@ -792,6 +793,7 @@ start:
     ".cast"                { RET_LOPT(StxLOpt::CAST); }
     ".char_literals"       { RET_LOPT(StxLOpt::CHAR_LITERALS); }
     ".args"                { RET_LOPT(StxLOpt::ARGS); }
+    ".attrs"               { RET_LOPT(StxLOpt::ATTRS); }
     ".cond"                { RET_LOPT(StxLOpt::COND); }
     ".init"                { RET_LOPT(StxLOpt::INIT); }
     ".retval"              { RET_LOPT(StxLOpt::RETVAL); }

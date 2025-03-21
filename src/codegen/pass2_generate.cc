@@ -1347,7 +1347,7 @@ LOCAL_NODISCARD(Ret gen_state_goto(Output& output, Code* code)) {
     if (code_model == CodeModel::REC_FUNC) {
         // In rec/func mode this should be a function that tail-calls state functions.
         CodeFnCommon* fn = global ? output.fn_common : bstart->fn_common;
-        init_code_fndef(code, fn->name, fn->type, fn->params, stmts);
+        init_code_fndef(code, fn->name, fn->type, fn->attrs, fn->params, stmts);
     } else {
         // In goto/label and loop/switch mode state dispatch is block of code.
         code->kind = CodeKind::BLOCK;
@@ -1908,7 +1908,7 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
             gen_go(output, dfa, &s->go, s, body);
         }
 
-        append(code, code_fndef(alc, f, fn->type, params, body));
+        append(code, code_fndef(alc, f, fn->type, fn->attrs, params, body));
     }
 
     if (!dfa.cond.empty()) {
@@ -1918,7 +1918,7 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
         const char* f0 = buf.str(opts->label_prefix).u32(dfa.head->label->index).flush();
         append(body, code_tailcall(alc, f0, fn->args, fn->type != nullptr));
 
-        append(code, code_fndef(alc, name, fn->type, fn->params, body));
+        append(code, code_fndef(alc, name, fn->type, fn->attrs, fn->params, body));
     }
 }
 
@@ -1950,7 +1950,7 @@ LOCAL_NODISCARD(Code* gen_cond_func(Output& output)) {
 
     const char* name = buf.str(opts->label_prefix).u32(output.block().start_label->index).flush();
 
-    return code_fndef(alc, name, fn->type, fn->params, body);
+    return code_fndef(alc, name, fn->type, fn->attrs, fn->params, body);
 }
 
 LOCAL_NODISCARD(Ret gen_start_function(Output& output, const Adfa& dfa, CodeList* code)) {
@@ -1972,7 +1972,7 @@ LOCAL_NODISCARD(Ret gen_start_function(Output& output, const Adfa& dfa, CodeList
         const char* name = buf.str(opts->label_prefix).u32(l->index).flush();
         append(body, code_tailcall(alc, name, fn->args, fn->type != nullptr));
 
-        append(code, code_fndef(alc, fn->name, fn->type, fn->params, body));
+        append(code, code_fndef(alc, fn->name, fn->type, fn->attrs, fn->params, body));
         return Ret::OK;
     }
 }
