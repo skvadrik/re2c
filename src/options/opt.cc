@@ -853,6 +853,8 @@ static bool eval_cond(
             return !opts->label_loop.empty();
         case StxGOpt::CGOTO_RELATIVE:
             return opts->computed_gotos_relative;
+        case StxGOpt::FN_THROW:
+            return !opts->fn_throw.empty();
         }
     }
     UNREACHABLE();

@@ -47,6 +47,7 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "re2c:YYFILL:naked = 0;\n"
     "re2c:YYFN = [\"<undefined-function-name>;<undefined-function-type>\"];\n"
     "re2c:yyfn:sep = \";\";\n"
+    "re2c:yyfn:throw = \"\";\n"
     "re2c:yycond = \"_yycond\";\n"
     "re2c:yyctable = \"\"; // unused\n"
     "re2c:yyaccept = \"_yyaccept\";\n"

@@ -46,6 +46,7 @@ re2c:YYFILL@len = "@@";
 re2c:YYFILL:naked = 0;
 re2c:YYFN = ["<undefined-function-name>;<undefined-function-type>"];
 re2c:yyfn:sep = ";";
+re2c:yyfn:throw = "";
 re2c:yycond = "_yycond";
 re2c:yyctable = ""; // unused
 re2c:yyaccept = "_yyaccept";

@@ -185,11 +185,11 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(fndecl, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, StxVarId::THROW}), \
         ({StxVarId::ARG}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fndef, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, StxVarId::THROW}), \
         ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fncall, \
@@ -362,6 +362,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(STATE, "state") \
     STX_LOCAL_VAR(STMT, "stmt") \
     STX_LOCAL_VAR(TAG, "tag") \
+    STX_LOCAL_VAR(THROW, "throw") \
     STX_LOCAL_VAR(TYPE, "type") \
     STX_LOCAL_VAR(VAL, "val") \
     STX_LOCAL_VAR(VAR, "var") \
@@ -533,6 +534,7 @@ enum class StxVarId : uint32_t {
     MUTOPT(std::vector<std::string>, api_fn, \
             {"<undefined-fn-name>" RE2C_YYFN_SEP "<undefined-fn-type>"}) \
     MUTOPT(std::string, fn_sep, ";") \
+    MUTOPT(std::string, fn_throw, "") \
     /* labels */ \
     MUTOPT(std::string, label_fill, "yyFillLabel") \
     MUTOPT(std::string, label_loop, "") \

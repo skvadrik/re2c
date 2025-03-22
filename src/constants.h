@@ -203,7 +203,8 @@ enum class StxGOpt {
     UNSAFE,
     MONADIC,
     LOOP_LABEL,
-    CGOTO_RELATIVE
+    CGOTO_RELATIVE,
+    FN_THROW
 };
 
 enum class StxLOpt {

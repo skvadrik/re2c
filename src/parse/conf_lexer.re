@@ -151,7 +151,8 @@ Ret Input::lex_conf(Opt& opts) {
     "yyfill:parameter" { RET_CONF_BOOL(fill_param_enable); }
     "yyfill:check"     { RET_CONF_BOOL(fill_check); }
 
-    "yyfn:sep" { RET_CONF_STR(fn_sep); }
+    "yyfn:sep"   { RET_CONF_STR(fn_sep); }
+    "yyfn:throw" { RET_CONF_STR(fn_throw); }
 
     "flags:"? "tags" | "flags:T" {
         RET_CONF_BOOL(tags);
@@ -700,6 +701,7 @@ start:
     "state"        { RET_VAR(StxVarId::STATE); }
     "stmt"         { RET_VAR(StxVarId::STMT); }
     "tag"          { RET_VAR(StxVarId::TAG); }
+    "throw"        { RET_VAR(StxVarId::THROW); }
     "type"         { RET_VAR(StxVarId::TYPE); }
     "val"          { RET_VAR(StxVarId::VAL); }
     "var"          { RET_VAR(StxVarId::VAR); }
@@ -784,6 +786,7 @@ start:
     ".monadic"             { RET_GOPT(StxGOpt::MONADIC); }
     ".loop_label"          { RET_GOPT(StxGOpt::LOOP_LABEL); }
     ".cgoto.relative"      { RET_GOPT(StxGOpt::CGOTO_RELATIVE); }
+    ".yyfn.throw"          { RET_GOPT(StxGOpt::FN_THROW); }
 
     // Local conditionals (specific to each code template in syntax file).
     //

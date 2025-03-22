@@ -649,6 +649,9 @@ class RenderFnDef : public RenderCallback {
             // explicit void type (like Go). But don't write nullptr, as it truncates the output.
             if (code->type != nullptr) rctx.os << code->type;
             break;
+        case StxVarId::THROW:
+            rctx.os << rctx.opts->fn_throw;
+            break;
         case StxVarId::ARGNAME:
             rctx.os << curr_param->name;
             break;
