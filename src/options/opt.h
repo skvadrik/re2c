@@ -185,12 +185,12 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(fndecl, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ATTRS, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
-        ({StxVarId::ARG}), ({StxLOpt::TYPE, StxLOpt::ATTRS}) \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::ARG}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fndef, \
-        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ATTRS, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
-        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::TYPE, StxLOpt::ATTRS}) \
+        ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE}), \
+        ({StxVarId::ARG, StxVarId::STMT}), ({StxLOpt::TYPE}) \
     ) \
     CODE_TEMPLATE(fncall, \
         ({StxVarId::NAME, StxVarId::RETVAL}), ({StxVarId::ARG}), \
@@ -333,7 +333,6 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(ARGNAME, "argname") \
     STX_LOCAL_VAR(ARGTYPE, "argtype") \
     STX_LOCAL_VAR(ARRAY, "array") \
-    STX_LOCAL_VAR(ATTRS, "attrs") \
     STX_LOCAL_VAR(BASE, "base") \
     STX_LOCAL_VAR(BRANCH, "branch") \
     STX_LOCAL_VAR(CASE, "case") \

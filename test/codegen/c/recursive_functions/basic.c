@@ -4,11 +4,11 @@
 #include <assert.h>
 
 
-int yy0(const char* YYCURSOR) __attribute__((noinline));
-int yy1(const char* YYCURSOR) __attribute__((noinline));
-int yy2(const char* YYCURSOR) __attribute__((noinline));
-int yy3(const char* YYCURSOR) __attribute__((noinline));
-int lex(const char* YYCURSOR) __attribute__((noinline));
+int yy0(const char* YYCURSOR);
+int yy1(const char* YYCURSOR);
+int yy2(const char* YYCURSOR);
+int yy3(const char* YYCURSOR);
+int lex(const char* YYCURSOR);
 
 int yy0(const char* YYCURSOR) {
 	char yych = *YYCURSOR++;

@@ -106,7 +106,7 @@ Code* emit_skeleton_prolog(Output& output) {
     append(block, code_if_then_else(alc, "f != NULL", if_code, nullptr));
     append(block, code_stmt(alc, "return NULL"));
 
-    append(code, code_fndef(alc, "read_file", "static void*", "", params, block));
+    append(code, code_fndef(alc, "read_file", "static void*", params, block));
 
     return code_block(alc, code, CodeBlock::Kind::RAW);
 }
@@ -208,7 +208,7 @@ static void emit_skeleton_function_action(Output& output, CodeList* code, const 
     append(body, code_if_then_else(alc, if_cond, if_code, else_code));
 
     text = o.cstr("action_").str(dfa.name).flush();
-    append(code, code_fndef(alc, text, "static int", "", params, body));
+    append(code, code_fndef(alc, text, "static int", params, body));
 }
 
 static void emit_skeleton_stags(Output& output, CodeList* code, const Adfa& dfa) {
@@ -263,7 +263,7 @@ static void emit_skeleton_stags(Output& output, CodeList* code, const Adfa& dfa)
     append(body, code_stmt(alc, "return 1"));
 
     text = o.cstr("check_stag_").str(dfa.name).flush();
-    append(code, code_fndef(alc, text, "static int", "", params, body));
+    append(code, code_fndef(alc, text, "static int", params, body));
 }
 
 static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
@@ -300,7 +300,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(params, code_param(alc, "tp", "yymtagpool_t*"));
     block = code_list(alc);
     append(block, code_stmt(alc, "tp->next = tp->head"));
-    append(code, code_fndef(alc, "yymtagpool_clear", "static void", "", params, block));
+    append(code, code_fndef(alc, "yymtagpool_clear", "static void", params, block));
 
     append(code, code_newline(alc));
 
@@ -311,7 +311,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(block, code_stmt(alc, "tp->head = (yymtag_t*)malloc(size * sizeof(yymtag_t))"));
     append(block, code_stmt(alc, "tp->next = tp->head"));
     append(block, code_stmt(alc, "tp->last = tp->head + size"));
-    append(code, code_fndef(alc, "yymtagpool_init", "static void", "", params, block));
+    append(code, code_fndef(alc, "yymtagpool_init", "static void", params, block));
 
     append(code, code_newline(alc));
 
@@ -320,7 +320,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     block = code_list(alc);
     append(block, code_stmt(alc, "free(tp->head)"));
     append(block, code_stmt(alc, "tp->head = tp->next = tp->last = NULL"));
-    append(code, code_fndef(alc, "yymtagpool_free", "static void", "", params, block));
+    append(code, code_fndef(alc, "yymtagpool_free", "static void", params, block));
 
     append(code, code_newline(alc));
 
@@ -339,7 +339,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(if_code, code_stmt(alc, "tp->last = head + size * 2"));
     append(block, code_if_then_else(alc, if_cond, if_code, nullptr));
     append(block, code_stmt(alc, "return tp->next++"));
-    append(code, code_fndef(alc, "yymtagpool_next", "static yymtag_t*", "", params, block));
+    append(code, code_fndef(alc, "yymtagpool_next", "static yymtag_t*", params, block));
 
     append(code, code_newline(alc));
 
@@ -352,7 +352,7 @@ static void emit_skeleton_mtag_defs(Output& output, CodeList* code) {
     append(block, code_stmt(alc, "n->pred = *pt"));
     append(block, code_stmt(alc, "n->elem = t"));
     append(block, code_stmt(alc, "*pt = n - tp->head"));
-    append(code, code_fndef(alc, "yymtag", "static void", "", params, block));
+    append(code, code_fndef(alc, "yymtag", "static void", params, block));
 
     append(code, code_newline(alc));
 }
@@ -447,7 +447,7 @@ static void emit_skeleton_mtags(Output& output, CodeList* code, const Adfa& dfa)
     append(body, code_text(alc, "return 0;"));
 
     text = o.cstr("check_mtag_").str(dfa.name).flush();
-    append(code, code_fndef(alc, text, "static int", "", params, body));
+    append(code, code_fndef(alc, text, "static int", params, body));
 }
 
 static void emit_skeleton_function_check_key_count(Output& output, CodeList* code, Adfa& dfa) {
@@ -477,7 +477,7 @@ static void emit_skeleton_function_check_key_count(Output& output, CodeList* cod
     append(block, code_stmt(alc, "return 1"));
 
     text = o.cstr("check_key_count_").str(dfa.name).flush();
-    append(code, code_fndef(alc, text, "static int", "", params, block));
+    append(code, code_fndef(alc, text, "static int", params, block));
 }
 
 static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa) {
@@ -696,7 +696,7 @@ static void emit_skeleton_function_lex(Output& output, CodeList* code, Adfa& dfa
     append(block, code_stmt(alc, "return status"));
 
     text = o.cstr("lex_").str(dfa.name).flush();
-    append(code, code_fndef(alc, text, "int", "", code_params(alc), block));
+    append(code, code_fndef(alc, text, "int", code_params(alc), block));
 }
 
 static void emit_skeleton_undefs(Output& output, CodeList* code, Adfa& dfa) {
@@ -750,7 +750,7 @@ Code* emit_skeleton_epilog(Output& output) {
 
     CodeList* main = code_list(alc);
     append(main, code_text(alc, ""));
-    append(main, code_fndef(alc, "main", "int", "", code_params(alc), stmts));
+    append(main, code_fndef(alc, "main", "int", code_params(alc), stmts));
 
     return code_block(alc, main, CodeBlock::Kind::RAW);
 }
