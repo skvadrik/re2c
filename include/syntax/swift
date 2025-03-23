@@ -234,13 +234,13 @@ code:fndef =
     topindent "func " name "("
     [arg{0:-2}: "_ " argname ": " argtype ", "]
     [arg{-1}:   "_ " argname ": " argtype]
-    ")" (.type ? " -> " type) " {" nl
+    ")" (.yyfn.throw ? " " throw) (.type ? " -> " type) " {" nl
         indent [stmt: stmt] dedent
-    "}" nl; // Can't specify throw
+    "}" nl;
 
-code:fncall = topindent (.retval ? retval " = ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+code:fncall = topindent (.retval ? retval " = ") (.yyfn.throw ? "try ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
-code:tailcall = topindent (.retval ? "return ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+code:tailcall = topindent (.retval ? "return ") (.yyfn.throw ? "try ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
 code:recursive_functions = [fn: fndef nl];
 
