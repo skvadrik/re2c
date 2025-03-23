@@ -69,7 +69,7 @@ class State {
 
 
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 72)
-func yy1(_ s: State) -> State.Status {
+func yy1(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x21:
@@ -91,30 +91,30 @@ func yy1(_ s: State) -> State.Status {
     case 0x7E:
       s.yyt1 = s.cursor
       s.cursor += 1
-      return yy4(s)
+      return try yy4(s)
     default:
       if s.limit <= s.cursor {
         s.state = 0
         return .waiting
       } else {
         s.cursor += 1
-        return yy2(s)
+        return try yy2(s)
       }
   }
 }
 
-func yy2(_ s: State) -> State.Status {
-  return yy3(s)
+func yy2(_ s: State) throws(ParseError) -> State.Status {
+  return try yy3(s)
 }
 
-func yy3(_ s: State) -> State.Status {
+func yy3(_ s: State) throws(ParseError) -> State.Status {
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 125)
-  return .error
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 126)
+  throw .unexpectedCharacter
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 115)
 }
 
-func yy4(_ s: State) -> State.Status {
+func yy4(_ s: State) throws(ParseError) -> State.Status {
   s.marker = s.cursor
   let yych = s.buffer[s.cursor]
   switch yych {
@@ -132,23 +132,23 @@ func yy4(_ s: State) -> State.Status {
       fallthrough
     case 0x7C:
       fallthrough
-    case 0x7E: return yy6(s, yych)
+    case 0x7E: return try yy6(s, yych)
     default:
       if s.limit <= s.cursor {
         s.state = 1
         return .waiting
       } else {
-        return yy3(s)
+        return try yy3(s)
       }
   }
 }
 
-func yy5(_ s: State) -> State.Status {
+func yy5(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
-  return yy6(s, yych)
+  return try yy6(s, yych)
 }
 
-func yy6(_ s: State, _ yych: UInt8) -> State.Status {
+func yy6(_ s: State, _ yych: UInt8) throws(ParseError) -> State.Status {
   switch yych {
     case 0x21:
       fallthrough
@@ -168,26 +168,26 @@ func yy6(_ s: State, _ yych: UInt8) -> State.Status {
       fallthrough
     case 0x7E:
       s.cursor += 1
-      return yy5(s)
+      return try yy5(s)
     case 0x2F:
       s.cursor += 1
-      return yy8(s)
+      return try yy8(s)
     default:
       if s.limit <= s.cursor {
         s.state = 2
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy7(_ s: State) -> State.Status {
+func yy7(_ s: State) throws(ParseError) -> State.Status {
   s.cursor = s.marker
-  return yy3(s)
+  return try yy3(s)
 }
 
-func yy8(_ s: State) -> State.Status {
+func yy8(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -203,18 +203,18 @@ func yy8(_ s: State) -> State.Status {
         s.state = 3
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
-    default: return yy10(s, yych)
+    default: return try yy10(s, yych)
   }
 }
 
-func yy9(_ s: State) -> State.Status {
+func yy9(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
-  return yy10(s, yych)
+  return try yy10(s, yych)
 }
 
-func yy10(_ s: State, _ yych: UInt8) -> State.Status {
+func yy10(_ s: State, _ yych: UInt8) throws(ParseError) -> State.Status {
   switch yych {
     case 0x09:
       fallthrough
@@ -229,7 +229,7 @@ func yy10(_ s: State, _ yych: UInt8) -> State.Status {
       s.yytm3 = s.add(tag: s.yytm3, value: tagNone)
       s.yyt2 = s.cursor
       s.cursor += 1
-      return yy11(s)
+      return try yy11(s)
     case 0x0D:
       s.yytm6 = s.yytm10
       s.yytm6 = s.add(tag: s.yytm6, value: tagNone)
@@ -241,7 +241,7 @@ func yy10(_ s: State, _ yych: UInt8) -> State.Status {
       s.yytm3 = s.add(tag: s.yytm3, value: tagNone)
       s.yyt2 = s.cursor
       s.cursor += 1
-      return yy12(s)
+      return try yy12(s)
     case 0x21:
       fallthrough
     case 0x23...0x27:
@@ -260,69 +260,69 @@ func yy10(_ s: State, _ yych: UInt8) -> State.Status {
       fallthrough
     case 0x7E:
       s.cursor += 1
-      return yy9(s)
+      return try yy9(s)
     case 0x3B:
       s.yyt2 = s.cursor
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     default:
       if s.limit <= s.cursor {
         s.state = 4
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy11(_ s: State) -> State.Status {
+func yy11(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy11(s)
+      return try yy11(s)
     case 0x0D:
       s.cursor += 1
-      return yy12(s)
+      return try yy12(s)
     case 0x3B:
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     default:
       if s.limit <= s.cursor {
         s.state = 5
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy12(_ s: State) -> State.Status {
+func yy12(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x0A:
       s.cursor += 1
-      return yy14(s)
+      return try yy14(s)
     default:
       if s.limit <= s.cursor {
         s.state = 6
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy13(_ s: State) -> State.Status {
+func yy13(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     case 0x21:
       fallthrough
     case 0x23...0x27:
@@ -342,18 +342,18 @@ func yy13(_ s: State) -> State.Status {
     case 0x7E:
       s.yytm7 = s.add(tag: s.yytm7, value: s.cursor)
       s.cursor += 1
-      return yy15(s)
+      return try yy15(s)
     default:
       if s.limit <= s.cursor {
         s.state = 7
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy14(_ s: State) -> State.Status {
+func yy14(_ s: State) throws(ParseError) -> State.Status {
   s.l1 = s.yyt1
   s.l2 = s.yyt2
   s.p1 = s.yytm3
@@ -361,7 +361,7 @@ func yy14(_ s: State) -> State.Status {
   s.p3 = s.yytm5
   s.p4 = s.yytm6
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 96)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 97)
   
     print("media type: \(s.getString(s.l1..<s.l2))")
 
@@ -381,7 +381,7 @@ func yy14(_ s: State) -> State.Status {
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 382)
 }
 
-func yy15(_ s: State) -> State.Status {
+func yy15(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x21:
@@ -402,22 +402,22 @@ func yy15(_ s: State) -> State.Status {
       fallthrough
     case 0x7E:
       s.cursor += 1
-      return yy15(s)
+      return try yy15(s)
     case 0x3D:
       s.yytm8 = s.add(tag: s.yytm8, value: s.cursor)
       s.cursor += 1
-      return yy16(s)
+      return try yy16(s)
     default:
       if s.limit <= s.cursor {
         s.state = 8
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy16(_ s: State) -> State.Status {
+func yy16(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x21:
@@ -439,22 +439,22 @@ func yy16(_ s: State) -> State.Status {
     case 0x7E:
       s.yytm9 = s.add(tag: s.yytm9, value: s.cursor)
       s.cursor += 1
-      return yy17(s)
+      return try yy17(s)
     case 0x22:
       s.yytm9 = s.add(tag: s.yytm9, value: s.cursor)
       s.cursor += 1
-      return yy18(s)
+      return try yy18(s)
     default:
       if s.limit <= s.cursor {
         s.state = 9
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy17(_ s: State) -> State.Status {
+func yy17(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
@@ -462,7 +462,7 @@ func yy17(_ s: State) -> State.Status {
     case 0x20:
       s.yytm10 = s.add(tag: s.yytm10, value: s.cursor)
       s.cursor += 1
-      return yy19(s)
+      return try yy19(s)
     case 0x0D:
       s.yytm3 = s.yytm7
       s.yytm4 = s.yytm8
@@ -470,7 +470,7 @@ func yy17(_ s: State) -> State.Status {
       s.yytm6 = s.yytm10
       s.yytm6 = s.add(tag: s.yytm6, value: s.cursor)
       s.cursor += 1
-      return yy12(s)
+      return try yy12(s)
     case 0x21:
       fallthrough
     case 0x23...0x27:
@@ -489,22 +489,22 @@ func yy17(_ s: State) -> State.Status {
       fallthrough
     case 0x7E:
       s.cursor += 1
-      return yy17(s)
+      return try yy17(s)
     case 0x3B:
       s.yytm10 = s.add(tag: s.yytm10, value: s.cursor)
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     default:
       if s.limit <= s.cursor {
         s.state = 10
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy18(_ s: State) -> State.Status {
+func yy18(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -518,49 +518,49 @@ func yy18(_ s: State) -> State.Status {
         s.state = 11
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
     case 0x22:
       s.cursor += 1
-      return yy20(s)
+      return try yy20(s)
     case 0x5C:
       s.cursor += 1
-      return yy21(s)
+      return try yy21(s)
     default:
       s.cursor += 1
-      return yy18(s)
+      return try yy18(s)
   }
 }
 
-func yy19(_ s: State) -> State.Status {
+func yy19(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy19(s)
+      return try yy19(s)
     case 0x0D:
       s.yytm3 = s.yytm7
       s.yytm4 = s.yytm8
       s.yytm5 = s.yytm9
       s.yytm6 = s.yytm10
       s.cursor += 1
-      return yy12(s)
+      return try yy12(s)
     case 0x3B:
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     default:
       if s.limit <= s.cursor {
         s.state = 12
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy20(_ s: State) -> State.Status {
+func yy20(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
@@ -568,7 +568,7 @@ func yy20(_ s: State) -> State.Status {
     case 0x20:
       s.yytm10 = s.add(tag: s.yytm10, value: s.cursor)
       s.cursor += 1
-      return yy19(s)
+      return try yy19(s)
     case 0x0D:
       s.yytm3 = s.yytm7
       s.yytm4 = s.yytm8
@@ -576,22 +576,22 @@ func yy20(_ s: State) -> State.Status {
       s.yytm6 = s.yytm10
       s.yytm6 = s.add(tag: s.yytm6, value: s.cursor)
       s.cursor += 1
-      return yy12(s)
+      return try yy12(s)
     case 0x3B:
       s.yytm10 = s.add(tag: s.yytm10, value: s.cursor)
       s.cursor += 1
-      return yy13(s)
+      return try yy13(s)
     default:
       if s.limit <= s.cursor {
         s.state = 13
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
   }
 }
 
-func yy21(_ s: State) -> State.Status {
+func yy21(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -605,26 +605,26 @@ func yy21(_ s: State) -> State.Status {
         s.state = 14
         return .waiting
       } else {
-        return yy7(s)
+        return try yy7(s)
       }
     default:
       s.cursor += 1
-      return yy18(s)
+      return try yy18(s)
   }
 }
 
-func yy22(_ s: State) -> State.Status {
+func yy22(_ s: State) throws(ParseError) -> State.Status {
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 124)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 125)
   return .end
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 621)
 }
 
-func yyfnmedia_type(_ s: State) -> State.Status {
-  return yy1(s)
+func yyfnmedia_type(_ s: State) throws(ParseError) -> State.Status {
+  return try yy1(s)
 }
 
-func yy23(_ s: State) -> State.Status {
+func yy23(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -639,48 +639,48 @@ func yy23(_ s: State) -> State.Status {
         return .waiting
       } else {
         s.cursor += 1
-        return yy24(s)
+        return try yy24(s)
       }
     case 0x0D:
       s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
       s.cursor += 1
-      return yy26(s)
+      return try yy26(s)
     default:
       s.cursor += 1
-      return yy27(s)
+      return try yy27(s)
   }
 }
 
-func yy24(_ s: State) -> State.Status {
-  return yy25(s)
+func yy24(_ s: State) throws(ParseError) -> State.Status {
+  return try yy25(s)
 }
 
-func yy25(_ s: State) -> State.Status {
+func yy25(_ s: State) throws(ParseError) -> State.Status {
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 125)
-  return .error
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 126)
+  throw .unexpectedCharacter
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 663)
 }
 
-func yy26(_ s: State) -> State.Status {
+func yy26(_ s: State) throws(ParseError) -> State.Status {
   s.accept = 0
   s.marker = s.cursor
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x0A:
       s.cursor += 1
-      return yy28(s)
+      return try yy28(s)
     default:
       if s.limit <= s.cursor {
         s.state = 16
         return .waiting
       } else {
-        return yy25(s)
+        return try yy25(s)
       }
   }
 }
 
-func yy27(_ s: State) -> State.Status {
+func yy27(_ s: State) throws(ParseError) -> State.Status {
   s.accept = 0
   s.marker = s.cursor
   let yych = s.buffer[s.cursor]
@@ -698,49 +698,49 @@ func yy27(_ s: State) -> State.Status {
         s.state = 17
         return .waiting
       } else {
-        return yy25(s)
+        return try yy25(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy30(s)
+      return try yy30(s)
     case 0x0D:
       s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
       s.cursor += 1
-      return yy31(s)
+      return try yy31(s)
     default:
       s.cursor += 1
-      return yy32(s)
+      return try yy32(s)
   }
 }
 
-func yy28(_ s: State) -> State.Status {
+func yy28(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy33(s)
+      return try yy33(s)
     default:
       if s.limit <= s.cursor {
         s.state = 18
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
   }
 }
 
-func yy29(_ s: State) -> State.Status {
+func yy29(_ s: State) throws(ParseError) -> State.Status {
   s.cursor = s.marker
   if s.accept == 0 {
-    return yy25(s)
+    return try yy25(s)
   } else {
-    return yy38(s)
+    return try yy38(s)
   }
 }
 
-func yy30(_ s: State) -> State.Status {
+func yy30(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -754,37 +754,37 @@ func yy30(_ s: State) -> State.Status {
         s.state = 19
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy30(s)
+      return try yy30(s)
     case 0x20:
       s.cursor += 1
-      return yy32(s)
+      return try yy32(s)
     default:
       s.cursor += 1
-      return yy34(s)
+      return try yy34(s)
   }
 }
 
-func yy31(_ s: State) -> State.Status {
+func yy31(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x0A:
       s.cursor += 1
-      return yy28(s)
+      return try yy28(s)
     default:
       if s.limit <= s.cursor {
         s.state = 20
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
   }
 }
 
-func yy32(_ s: State) -> State.Status {
+func yy32(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -800,22 +800,22 @@ func yy32(_ s: State) -> State.Status {
         s.state = 21
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy30(s)
+      return try yy30(s)
     case 0x0D:
       s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
       s.cursor += 1
-      return yy31(s)
+      return try yy31(s)
     default:
       s.cursor += 1
-      return yy32(s)
+      return try yy32(s)
   }
 }
 
-func yy33(_ s: State) -> State.Status {
+func yy33(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -831,27 +831,27 @@ func yy33(_ s: State) -> State.Status {
         s.state = 22
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy33(s)
+      return try yy33(s)
     case 0x0D:
       s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.yytm2 = s.yytm1
       s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
       s.cursor += 1
-      return yy35(s)
+      return try yy35(s)
     default:
       s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.cursor += 1
-      return yy36(s)
+      return try yy36(s)
   }
 }
 
-func yy34(_ s: State) -> State.Status {
+func yy34(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -865,35 +865,35 @@ func yy34(_ s: State) -> State.Status {
         s.state = 23
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x0D:
       s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
       s.cursor += 1
-      return yy31(s)
+      return try yy31(s)
     default:
       s.cursor += 1
-      return yy32(s)
+      return try yy32(s)
   }
 }
 
-func yy35(_ s: State) -> State.Status {
+func yy35(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x0A:
       s.cursor += 1
-      return yy37(s)
+      return try yy37(s)
     default:
       if s.limit <= s.cursor {
         s.state = 24
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
   }
 }
 
-func yy36(_ s: State) -> State.Status {
+func yy36(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -909,23 +909,23 @@ func yy36(_ s: State) -> State.Status {
         s.state = 25
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy39(s)
+      return try yy39(s)
     case 0x0D:
       s.yytm2 = s.yytm1
       s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
       s.cursor += 1
-      return yy35(s)
+      return try yy35(s)
     default:
       s.cursor += 1
-      return yy36(s)
+      return try yy36(s)
   }
 }
 
-func yy37(_ s: State) -> State.Status {
+func yy37(_ s: State) throws(ParseError) -> State.Status {
   s.accept = 1
   s.marker = s.cursor
   let yych = s.buffer[s.cursor]
@@ -935,22 +935,22 @@ func yy37(_ s: State) -> State.Status {
     case 0x20:
       s.yytm1 = s.yytm2
       s.cursor += 1
-      return yy33(s)
+      return try yy33(s)
     default:
       if s.limit <= s.cursor {
         s.state = 26
         return .waiting
       } else {
-        return yy38(s)
+        return try yy38(s)
       }
   }
 }
 
-func yy38(_ s: State) -> State.Status {
+func yy38(_ s: State) throws(ParseError) -> State.Status {
   s.f1 = s.yytm1
   s.f2 = s.yytm3
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 113)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 114)
   
     var foldStart = s.f1, foldEnd = s.f2
     while foldStart != nil {
@@ -964,7 +964,7 @@ func yy38(_ s: State) -> State.Status {
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 965)
 }
 
-func yy39(_ s: State) -> State.Status {
+func yy39(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -980,40 +980,40 @@ func yy39(_ s: State) -> State.Status {
         s.state = 27
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy39(s)
+      return try yy39(s)
     case 0x0D:
       s.cursor += 1
-      return yy40(s)
+      return try yy40(s)
     case 0x20:
       s.cursor += 1
-      return yy36(s)
+      return try yy36(s)
     default:
       s.cursor += 1
-      return yy41(s)
+      return try yy41(s)
   }
 }
 
-func yy40(_ s: State) -> State.Status {
+func yy40(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x0A:
       s.cursor += 1
-      return yy42(s)
+      return try yy42(s)
     default:
       if s.limit <= s.cursor {
         s.state = 28
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
   }
 }
 
-func yy41(_ s: State) -> State.Status {
+func yy41(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x00:
@@ -1029,275 +1029,274 @@ func yy41(_ s: State) -> State.Status {
         s.state = 29
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
     case 0x09:
       s.cursor += 1
-      return yy43(s)
+      return try yy43(s)
     case 0x0D:
       s.yytm2 = s.yytm1
       s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
       s.cursor += 1
-      return yy35(s)
+      return try yy35(s)
     default:
       s.cursor += 1
-      return yy36(s)
+      return try yy36(s)
   }
 }
 
-func yy42(_ s: State) -> State.Status {
-  return yy38(s)
+func yy42(_ s: State) throws(ParseError) -> State.Status {
+  return try yy38(s)
 }
 
-func yy43(_ s: State) -> State.Status {
+func yy43(_ s: State) throws(ParseError) -> State.Status {
   let yych = s.buffer[s.cursor]
   switch yych {
     case 0x09:
       fallthrough
     case 0x20:
       s.cursor += 1
-      return yy43(s)
+      return try yy43(s)
     case 0x0D:
       s.cursor += 1
-      return yy40(s)
+      return try yy40(s)
     default:
       if s.limit <= s.cursor {
         s.state = 30
         return .waiting
       } else {
-        return yy29(s)
+        return try yy29(s)
       }
   }
 }
 
-func yy44(_ s: State) -> State.Status {
+func yy44(_ s: State) throws(ParseError) -> State.Status {
   s.state = -1
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 124)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 125)
   return .end
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1078)
 }
 
-func yyfnheader(_ s: State) -> State.Status {
-  return yy23(s)
+func yyfnheader(_ s: State) throws(ParseError) -> State.Status {
+  return try yy23(s)
 }
 
-func yy0(_ s: State) -> State.Status {
+func yy0(_ s: State) throws(ParseError) -> State.Status {
   switch s.cond {
-    case yycmedia_type: return yyfnmedia_type(s)
-    case yycheader: return yyfnheader(s)
+    case yycmedia_type: return try yyfnmedia_type(s)
+    case yycheader: return try yyfnheader(s)
     default: fatalError("internal lexer error")
   }
 }
 
-func parse(_ s: State) -> State.Status {
+func parse(_ s: State) throws(ParseError) -> State.Status {
   switch s.state {
-    case -1: return yy0(s)
+    case -1: return try yy0(s)
     case 0:
       if s.limit <= s.cursor {
-        return yy22(s)
+        return try yy22(s)
       } else {
-        return yy1(s)
+        return try yy1(s)
       }
     case 1:
       if s.limit <= s.cursor {
-        return yy3(s)
+        return try yy3(s)
       } else {
-        return yy4(s)
+        return try yy4(s)
       }
     case 2:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy5(s)
+        return try yy5(s)
       }
     case 3:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy8(s)
+        return try yy8(s)
       }
     case 4:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy9(s)
+        return try yy9(s)
       }
     case 5:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy11(s)
+        return try yy11(s)
       }
     case 6:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy12(s)
+        return try yy12(s)
       }
     case 7:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy13(s)
+        return try yy13(s)
       }
     case 8:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy15(s)
+        return try yy15(s)
       }
     case 9:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy16(s)
+        return try yy16(s)
       }
     case 10:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy17(s)
+        return try yy17(s)
       }
     case 11:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy18(s)
+        return try yy18(s)
       }
     case 12:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy19(s)
+        return try yy19(s)
       }
     case 13:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy20(s)
+        return try yy20(s)
       }
     case 14:
       if s.limit <= s.cursor {
-        return yy7(s)
+        return try yy7(s)
       } else {
-        return yy21(s)
+        return try yy21(s)
       }
     case 15:
       if s.limit <= s.cursor {
-        return yy44(s)
+        return try yy44(s)
       } else {
-        return yy23(s)
+        return try yy23(s)
       }
     case 16:
       if s.limit <= s.cursor {
-        return yy25(s)
+        return try yy25(s)
       } else {
-        return yy26(s)
+        return try yy26(s)
       }
     case 17:
       if s.limit <= s.cursor {
-        return yy25(s)
+        return try yy25(s)
       } else {
-        return yy27(s)
+        return try yy27(s)
       }
     case 18:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy28(s)
+        return try yy28(s)
       }
     case 19:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy30(s)
+        return try yy30(s)
       }
     case 20:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy31(s)
+        return try yy31(s)
       }
     case 21:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy32(s)
+        return try yy32(s)
       }
     case 22:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy33(s)
+        return try yy33(s)
       }
     case 23:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy34(s)
+        return try yy34(s)
       }
     case 24:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy35(s)
+        return try yy35(s)
       }
     case 25:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy36(s)
+        return try yy36(s)
       }
     case 26:
       if s.limit <= s.cursor {
-        return yy38(s)
+        return try yy38(s)
       } else {
-        return yy37(s)
+        return try yy37(s)
       }
     case 27:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy39(s)
+        return try yy39(s)
       }
     case 28:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy40(s)
+        return try yy40(s)
       }
     case 29:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy41(s)
+        return try yy41(s)
       }
     case 30:
       if s.limit <= s.cursor {
-        return yy29(s)
+        return try yy29(s)
       } else {
-        return yy43(s)
+        return try yy43(s)
       }
     default: fatalError("internal lexer error")
   }
 }
 
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 126)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 127)
 
 
 extension State {
   // Feed the next data packet into the buffer
-  func feed(string: StaticString) -> Bool {
+  func feed(string: StaticString) throws(ParseError) {
     let shift = self.token
     let free = bufferSize - (self.limit - shift)
 
-    return string.withUTF8Buffer { chunk in
-      // Error: no free space, in the real world we can reallocate a larger buffer.
-      if (free < chunk.count) {
-        log("Token too long for receive buffer:", self.buffer.count)
-        return false
-      }
+    // Error: no free space, in the real world we can reallocate a larger buffer.
+    if (free < string.utf8CodeUnitCount) {
+      throw .bigPacket(string.utf8CodeUnitCount, free)
+    }
 
+    string.withUTF8Buffer { chunk in
       if (shift > 0) {
         // Shift buffer contents, discarding already processed data.
         self.buffer.replaceSubrange(..<(bufferSize - shift), with: self.buffer[shift..<bufferSize])
@@ -1306,7 +1305,7 @@ extension State {
         self.marker -= shift
         self.token = 0
         
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1310)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1309)
         if self.yyt1 != tagNone { self.yyt1 -= shift }
         if self.yyt2 != tagNone { self.yyt2 -= shift }
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 148)
@@ -1316,8 +1315,6 @@ extension State {
       // Fill remaining space with new data.
       self.buffer.replaceSubrange(self.limit..<(self.limit + chunk.count), with: chunk)
       self.limit += chunk.count
-
-      return true
     }
   }
 
@@ -1334,10 +1331,21 @@ extension State {
   }
 
   enum Status {
-    case waiting
-    case done
-    case end
-    case error
+    case waiting, done, end
+  }
+}
+
+enum ParseError: Error {
+  case unexpectedCharacter
+  case bigPacket(Int, Int)
+}
+
+extension ParseError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+      case .unexpectedCharacter: "Malformed stream"
+      case .bigPacket(let size, let free): "Token (\(size) bytes) too long for receive buffer (\(free) free)"
+    }
   }
 }
 
@@ -1362,25 +1370,25 @@ func test(packets: [StaticString]) -> Int32 {
   // packet. When the lexer needs more input it saves its internal state and
   // returns to the caller which should provide more input and resume lexing.
   var chunkIdx = 0
-  finally: while true {
-    switch (parse(c)) {
-      case .waiting:
-        print("waiting")
-        guard c.feed(string: packets[chunkIdx]) else {
-          return 1
-        }
-        chunkIdx += 1
-      case .done:
-        print("done")
-      case .end:
-        print("end")
-        break finally
-      case .error:
-        print("error")
-        return 1
+  do {
+    finally: while true {
+      switch try parse(c) {
+        case .waiting:
+          print("waiting")
+          try c.feed(string: packets[chunkIdx])
+          chunkIdx += 1
+        case .done:
+          print("done")
+        case .end:
+          print("end")
+          break finally
+      }
     }
+    return 0
+  } catch {
+    log("Parse error:", error.localizedDescription)
+    return 1
   }
-  return 0
 }
 
 @main struct Program {
@@ -1402,9 +1410,9 @@ func test(packets: [StaticString]) -> Int32 {
     exit(code)
   }
 }
-codegen/swift/recursive_functions/advanced.re:96:35: warning: tag `p1` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/swift/recursive_functions/advanced.re:96:35: warning: tag `p2` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/swift/recursive_functions/advanced.re:96:35: warning: tag `p3` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/swift/recursive_functions/advanced.re:96:35: warning: tag `p4` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/swift/recursive_functions/advanced.re:113:36: warning: tag `f1` in condition 'header' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
-codegen/swift/recursive_functions/advanced.re:113:36: warning: tag `f2` in condition 'header' has 3rd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:97:35: warning: tag `p1` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:97:35: warning: tag `p2` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:97:35: warning: tag `p3` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:97:35: warning: tag `p4` in condition 'media_type' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:114:36: warning: tag `f1` in condition 'header' has 2nd degree of nondeterminism [-Wnondeterministic-tags]
+codegen/swift/recursive_functions/advanced.re:114:36: warning: tag `f2` in condition 'header' has 3rd degree of nondeterminism [-Wnondeterministic-tags]

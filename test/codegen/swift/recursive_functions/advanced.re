@@ -48,7 +48,8 @@ class State {
   re2c:tags = 1;
   re2c:tags:negative   = "nil";
   re2c:tags:expression = "s.@@";
-  re2c:variable:yyaccept = "s.accept";
+  re2c:yyaccept   = "s.accept";
+  re2c:yyfn:throw = "throws(ParseError)";
   re2c:YYFN       = ["parse;State.Status", "s;State"];
   re2c:YYPEEK     = "s.buffer[s.cursor]";
   re2c:YYSKIP     = "s.cursor += 1";
@@ -122,22 +123,21 @@ class State {
   }
 
   <*> $ { return .end }
-  <*> * { return .error }
+  <*> * { throw .unexpectedCharacter }
 */
 
 extension State {
   // Feed the next data packet into the buffer
-  func feed(string: StaticString) -> Bool {
+  func feed(string: StaticString) throws(ParseError) {
     let shift = self.token
     let free = bufferSize - (self.limit - shift)
 
-    return string.withUTF8Buffer { chunk in
-      // Error: no free space, in the real world we can reallocate a larger buffer.
-      if (free < chunk.count) {
-        log("Token too long for receive buffer:", self.buffer.count)
-        return false
-      }
+    // Error: no free space, in the real world we can reallocate a larger buffer.
+    if (free < string.utf8CodeUnitCount) {
+      throw .bigPacket(string.utf8CodeUnitCount, free)
+    }
 
+    string.withUTF8Buffer { chunk in
       if (shift > 0) {
         // Shift buffer contents, discarding already processed data.
         self.buffer.replaceSubrange(..<(bufferSize - shift), with: self.buffer[shift..<bufferSize])
@@ -151,8 +151,6 @@ extension State {
       // Fill remaining space with new data.
       self.buffer.replaceSubrange(self.limit..<(self.limit + chunk.count), with: chunk)
       self.limit += chunk.count
-
-      return true
     }
   }
 
@@ -169,10 +167,21 @@ extension State {
   }
 
   enum Status {
-    case waiting
-    case done
-    case end
-    case error
+    case waiting, done, end
+  }
+}
+
+enum ParseError: Error {
+  case unexpectedCharacter
+  case bigPacket(Int, Int)
+}
+
+extension ParseError: LocalizedError {
+  public var errorDescription: String? {
+    switch self {
+      case .unexpectedCharacter: "Malformed stream"
+      case .bigPacket(let size, let free): "Token (\(size) bytes) too long for receive buffer (\(free) free)"
+    }
   }
 }
 
@@ -197,25 +206,25 @@ func test(packets: [StaticString]) -> Int32 {
   // packet. When the lexer needs more input it saves its internal state and
   // returns to the caller which should provide more input and resume lexing.
   var chunkIdx = 0
-  finally: while true {
-    switch (parse(c)) {
-      case .waiting:
-        print("waiting")
-        guard c.feed(string: packets[chunkIdx]) else {
-          return 1
-        }
-        chunkIdx += 1
-      case .done:
-        print("done")
-      case .end:
-        print("end")
-        break finally
-      case .error:
-        print("error")
-        return 1
+  do {
+    finally: while true {
+      switch try parse(c) {
+        case .waiting:
+          print("waiting")
+          try c.feed(string: packets[chunkIdx])
+          chunkIdx += 1
+        case .done:
+          print("done")
+        case .end:
+          print("end")
+          break finally
+      }
     }
+    return 0
+  } catch {
+    log("Parse error:", error.localizedDescription)
+    return 1
   }
-  return 0
 }
 
 @main struct Program {
