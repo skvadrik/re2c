@@ -4,8 +4,7 @@ supported_apis = ["simple", "generic", "record"];
 supported_api_styles = ["free-form"];
 supported_code_models = ["loop-switch", "recursive-functions"];
 supported_targets = ["code", "dot"];
-supported_features = ["nested-ifs", "bitmaps", "case-ranges", "tags", "captures",
-    "captvars"];
+supported_features = ["nested-ifs", "bitmaps", "case-ranges", "tags", "captures", "captvars"];
 
 
 // language-specific options ---------------------------------------------------
@@ -238,9 +237,13 @@ code:fndef =
         indent [stmt: stmt] dedent
     "}" nl;
 
-code:fncall = topindent (.retval ? retval " = ") (.yyfn.throw ? "try ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+code:fncall =
+    topindent (.retval ? retval " = ") (.yyfn.throw ? "try ")
+        name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
-code:tailcall = topindent (.retval ? "return ") (.yyfn.throw ? "try ") name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
+code:tailcall =
+    topindent (.retval ? "return ") (.yyfn.throw ? "try ")
+        name "(" [arg{0:-2}: arg ", "] [arg{-1}: arg] ")" nl;
 
 code:recursive_functions = [fn: fndef nl];
 
