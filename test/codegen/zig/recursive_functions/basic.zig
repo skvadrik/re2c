@@ -8,42 +8,46 @@ const State = struct {
     cur: u32,
 };
 
+const SyntaxError = error {
+    UnexpectedCharacter
+};
 
-fn yy0(st: *State) bool {
+
+fn yy0(st: *State) SyntaxError!void {
     const yych = st.str[st.cur];
     st.cur += 1;
     switch (yych) {
-        0x31...0x39 => { return yy2(st); },
-        else => { return yy1(st); },
+        0x31...0x39 => { return try yy2(st); },
+        else => { return try yy1(st); },
     }
 }
 
-fn yy1(st: *State) bool {
-    _ = st; return false;
+fn yy1(st: *State) SyntaxError!void {
+    _ = st; return SyntaxError.UnexpectedCharacter;
 }
 
-fn yy2(st: *State) bool {
+fn yy2(st: *State) SyntaxError!void {
     const yych = st.str[st.cur];
     switch (yych) {
         0x30...0x39 => {
             st.cur += 1;
-            return yy2(st);
+            return try yy2(st);
         },
-        else => { return yy3(st); },
+        else => { return try yy3(st); },
     }
 }
 
-fn yy3(st: *State) bool {
-    _ = st; return true;
+fn yy3(st: *State) SyntaxError!void {
+    _ = st; return;
 }
 
-fn lex(st: *State) bool {
-    return yy0(st);
+fn lex(st: *State) SyntaxError!void {
+    return try yy0(st);
 }
 
 
 
 test {
     var st = State{.str = "1234", .cur = 0};
-    try std.testing.expect(lex(&st));
+    try lex(&st);
 }
