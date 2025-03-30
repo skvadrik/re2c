@@ -930,30 +930,6 @@ static void gen_go(
     }
 }
 
-static CodeList* emit_accept_binary(Output& output,
-                                    const Adfa& dfa,
-                                    const char* var,
-                                    const uniq_vector_t<AcceptTrans>& acc,
-                                    size_t l,
-                                    size_t r) {
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& o = output.scratchbuf;
-
-    CodeList* stmts = code_list(alc);
-    if (l < r) {
-        const size_t m = (l + r) >> 1;
-        const char* cmp = output.block().binops[r == l + 1 ? OP_CMP_EQ : OP_CMP_LE];
-        const char* if_cond = o.cstr(var).cstr(" ").cstr(cmp).cstr(" ").u64(m).flush();
-        CodeList* if_then = emit_accept_binary(output, dfa, var, acc, l, m);
-        CodeList* if_else = emit_accept_binary(output, dfa, var, acc, m + 1, r);
-        append(stmts, code_if_then_else(alc, if_cond, if_then, if_else));
-    } else {
-        const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
-        gen_goto(output, dfa, stmts, nullptr, jump);
-    }
-    return stmts;
-}
-
 static void emit_accept(
         Output& output, CodeList* stmts, const Adfa& dfa, const uniq_vector_t<AcceptTrans>& acc) {
     const opt_t* opts = output.block().opts;
@@ -1012,7 +988,52 @@ static void emit_accept(
 
     // nested ifs
     if (opts->nested_ifs || nacc == 2) {
-        append(stmts, emit_accept_binary(output, dfa, var, acc, 0, nacc - 1));
+        // Stack: store left/right bounds and the intermediate result for left subarray.
+        struct Bounds { uint32_t left, right; CodeList* code; };
+        std::vector<Bounds> stack;
+        stack.push_back({0, static_cast<uint32_t>(nacc) - 1, nullptr});
+
+        // Return value.
+        CodeList* code = nullptr;
+
+        // Create another invalid pointer to distinguish 1st and 2nd visit.
+        CodeList* const nullptr2 = reinterpret_cast<CodeList*>(~0lu);
+
+        while (!stack.empty()) {
+            Bounds& x = stack.back();
+            uint32_t l = x.left;
+            uint32_t r = x.right;
+
+            if (l == r) {
+                // recursion terminates, generate code for transition
+                code = code_list(alc);
+                const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
+                gen_goto(output, dfa, code, nullptr, jump);
+                stack.pop_back();
+            } else {
+                DCHECK(l < r);
+                const uint32_t m = (l + r) / 2;
+
+                if (x.code == nullptr) {
+                    // 1st visit: recurse into the left part
+                    x.code = nullptr2;
+                    stack.push_back({l, m, nullptr});
+                } else if (x.code == nullptr2) {
+                    // 2nd visit: save code for the left part, recurse into the right part
+                    x.code = code;
+                    stack.push_back({m + 1, r, nullptr});
+                } else {
+                    // 3rd and final visit: combine code for left and right parts
+                    const char* cmp = output.block().binops[r == l + 1 ? OP_CMP_EQ : OP_CMP_LE];
+                    const char* cond = buf.cstr(var).cstr(" ").cstr(cmp).cstr(" ").u64(m).flush();
+                    CodeList* result = code_list(alc);
+                    append(result, code_if_then_else(alc, cond, x.code, code));
+                    code = result;
+                    stack.pop_back();
+                }
+            }
+        }
+        append(stmts, code);
         return;
     }
 
