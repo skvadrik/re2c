@@ -65,11 +65,6 @@ enum class EmptyClass: uint32_t {
     ERROR        // compilation error
 };
 
-enum class OnDefault: uint32_t {
-    MATCH_CODE_POINT,
-    MATCH_ERROR
-};
-
 enum class Minimization: uint32_t {
     TABLE,
     MOORE

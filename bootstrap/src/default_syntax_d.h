@@ -96,7 +96,6 @@ static constexpr const char* DEFAULT_SYNTAX_D =
     "re2c:case-ranges = 0;\n"
     "re2c:unsafe = 0;\n"
     "re2c:monadic = 0;\n"
-    "re2c:on-default = match-code-point;\n"
     "re2c:encoding:ebcdic = 0;\n"
     "re2c:encoding:utf32 = 0;\n"
     "re2c:encoding:ucs2 = 0;\n"

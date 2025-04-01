@@ -150,7 +150,6 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.label_start = defaults.label_start;
         real.label_start_force = defaults.label_start_force;
         real.debug = defaults.debug;
-        real.on_default = defaults.on_default;
     }
 
     // respect hierarchy

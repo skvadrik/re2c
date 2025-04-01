@@ -936,36 +936,26 @@ static void emit_accept(
     const size_t nacc = acc.size();
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
-    bool restore_hoisted = opts->on_default != OnDefault::MATCH_ERROR;
-    auto need_restore = [&](const AcceptTrans& a) {
-        return !restore_hoisted && a.state->rule != dfa.def_rule;
-    };
 
     if (nacc == 0) return;
 
-    if (restore_hoisted) {
-        append(stmts, code_restore(alc));
-    }
+    append(stmts, code_restore(alc));
 
-    // Only one possible 'yyaccept' value: unconditional jump.
+    GenGetAccept callback(buf.stream(), opts);
+    const char* var = opts->gen_code_yygetaccept(buf, callback);
+
+    // only one possible 'yyaccept' value: unconditional jump
     if (nacc == 1) {
-        if (need_restore(acc[0])) append(stmts, code_restore(alc));
         const CodeJump jump = {acc[0].state, acc[0].tags, false, false, false};
         gen_goto(output, dfa, stmts, nullptr, jump);
         return;
     }
 
-    GenGetAccept callback(buf.stream(), opts);
-    const char* var = opts->gen_code_yygetaccept(buf, callback);
-
     bool have_tags = acc.end() != std::find_if(
             acc.begin(), acc.end(), [](const AcceptTrans& a) { return a.tags != TCID0; });
 
-    // Jump table: do it only if there are no tags on transitions and YYRESTORE is hoisted out.
-    if (opts->computed_gotos
-            && nacc >= opts->computed_gotos_threshold
-            && !have_tags
-            && restore_hoisted) {
+    // jump table
+    if (opts->computed_gotos && nacc >= opts->computed_gotos_threshold && !have_tags) {
         CodeList* block = code_list(alc);
         uint32_t min_index = acc[0].state->label->index;
 
@@ -976,6 +966,7 @@ static void emit_accept(
         }
 
         const char** elems = alc.alloct<const char*>(nacc);
+
         for (uint32_t i = 0; i < nacc; ++i) {
             GenCGotoTableElem callback(buf.stream(), opts->label_prefix, min_index,
                     acc[i].state->label->index);
@@ -995,7 +986,7 @@ static void emit_accept(
         return;
     }
 
-    // Nested IF branches: use binary bisect with a manual stack.
+    // nested ifs
     if (opts->nested_ifs || nacc == 2) {
         // Stack: store left/right bounds and the intermediate result for left subarray.
         struct Bounds { uint32_t left, right; CodeList* code; };
@@ -1016,7 +1007,6 @@ static void emit_accept(
             if (l == r) {
                 // recursion terminates, generate code for transition
                 code = code_list(alc);
-                if (need_restore(acc[l])) append(code, code_restore(alc));
                 const CodeJump jump = {acc[l].state, acc[l].tags, false, false, false};
                 gen_goto(output, dfa, code, nullptr, jump);
                 stack.pop_back();
@@ -1047,16 +1037,12 @@ static void emit_accept(
         return;
     }
 
-    // Switch.
+    // switch
     CodeCases* cases = code_cases(alc);
     for (uint32_t i = 0; i < nacc; ++i) {
         CodeList* case_body = code_list(alc);
-
-        if (need_restore(acc[i])) append(case_body, code_restore(alc));
-
         const CodeJump jump = {acc[i].state, acc[i].tags, false, false, false};
         gen_goto(output, dfa, case_body, nullptr, jump);
-
         if (i == nacc - 1) {
             append(cases, code_case_default(alc, case_body));
         } else {

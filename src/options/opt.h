@@ -494,7 +494,6 @@ enum class StxVarId : uint32_t {
     MUTOPT(bool, nested_ifs, false) \
     MUTOPT(bool, unsafe, true) \
     MUTOPT(bool, monadic, false) \
-    MUTOPT(OnDefault, on_default, OnDefault::MATCH_CODE_POINT) \
     /* YYFILL */ \
     MUTOPT(uint32_t, fill_eof, NOEOF) \
     MUTOPT(uint32_t, fill_sentinel, NOEOF) \
