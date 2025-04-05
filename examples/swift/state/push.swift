@@ -10,7 +10,7 @@ func log(_ items: Any..., separator: String = " ", terminator: String = "\n") {
 #endif
 }
 
-extension FileHandle: @retroactive TextOutputStream {
+extension FileHandle: TextOutputStream {
   public func write(_ string: String) {
     self.write(Data(string.utf8))
   }
