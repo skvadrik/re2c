@@ -126,9 +126,6 @@ Here is a full list of configurations supported by |re2c|:
     default value is ``-1`` (``$`` rule is not used). Other possible values
     include all valid code units. Only decimal numbers are recognized.
 
-``re2c:fn:sep``
-    Specifies separator used in ``YYFN`` elements (defaults to semicolon).
-
 ``re2c:header``, ``re2c:flags:type-header``, ``re2c:flags:t``
     Specifies the name of the generated header file relative to the directory of
     the output file. Same as the ``--header`` option except that the file path
@@ -442,3 +439,10 @@ Here is a full list of configurations supported by |re2c|:
     Defaults to non-zero (the parameter is generated).
     This configuration can be overridden with ``re2c:YYFILL:naked`` or
     ``re2c:api:style``.
+
+``re2c:yyfn:sep``
+    Specifies separator used in ``YYFN`` elements (defaults to semicolon).
+
+``re2c:yyfn:throw``
+    Specifies exceptions thrown by ``YYFN`` function (defaults to empty, which
+    means no exceptions).

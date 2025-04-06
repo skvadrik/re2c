@@ -461,9 +461,6 @@ Specifies the sentinel symbol used with the end\-of\-input rule \fB$\fP\&. The
 default value is \fB\-1\fP (\fB$\fP rule is not used). Other possible values
 include all valid code units. Only decimal numbers are recognized.
 .TP
-.B \fBre2c:fn:sep\fP
-Specifies separator used in \fBYYFN\fP elements (defaults to semicolon).
-.TP
 .B \fBre2c:header\fP, \fBre2c:flags:type\-header\fP, \fBre2c:flags:t\fP
 Specifies the name of the generated header file relative to the directory of
 the output file. Same as the \fB\-\-header\fP option except that the file path
@@ -777,6 +774,13 @@ The parameter is the minimum number of characters that must be supplied.
 Defaults to non\-zero (the parameter is generated).
 This configuration can be overridden with \fBre2c:YYFILL:naked\fP or
 \fBre2c:api:style\fP\&.
+.TP
+.B \fBre2c:yyfn:sep\fP
+Specifies separator used in \fBYYFN\fP elements (defaults to semicolon).
+.TP
+.B \fBre2c:yyfn:throw\fP
+Specifies exceptions thrown by \fBYYFN\fP function (defaults to empty, which
+means no exceptions).
 .UNINDENT
 .SS Regular expressions
 .sp
@@ -1248,8 +1252,16 @@ This option is supported only for C.
 Optimize conditional jumps using non\-standard \(dqcomputed goto\(dq extension
 (which must be supported by the compiler). re2java generates jump tables
 only in complex cases with a lot of conditional branches. Complexity
-threshold can be configured with \fBcgoto:threshold\fP configuration. This
+threshold can be configured with \fBcgoto:threshold\fP configuration.
+Relative offsets can be enabled with \fBcgoto:relative\fP configuration. This
 option implies \fB\-\-bit\-vectors\fP\&. It is supported only for C.
+.TP
+.B \fB\-\-computed\-gotos\-relative\fP
+Similar to \-\-computed\-gotos but generate relative offsets for jump tables
+instead (which must be supported by the compiler). This
+option implies \fB\-\-computed\-gotos\fP\&.  This flag is the same as specifying
+\fBcgoto:relative\fP as above and using \fI\-\-computed\-gotos\(ga\fP\&.
+It is supported only for C.
 .TP
 .B \fB\-\-conditions \-\-start\-conditions \-c\fP
 Enable support of Flex\-like \(dqconditions\(dq: multiple interrelated lexers
@@ -1321,9 +1333,9 @@ Invert the meaning of capturing and non\-capturing groups. By default
 \fB(...)\fP is capturing and \fB(! ...)\fP is non\-capturing. With this option
 \fB(! ...)\fP is capturing and \fB(...)\fP is non\-capturing.
 .TP
-.B \fB\-\-lang <none | c | d | go | haskell | java | js | ocaml | python | rust | v | zig>\fP
+.B \fB\-\-lang <none | c | d | go | haskell | java | js | ocaml | python | rust | swift | v | zig>\fP
 Specify the target language. Supported languages are C, D, Go, Haskell,
-Java, JS, OCaml, Python, Rust, V, Zig (more languages can be added via
+Java, JS, OCaml, Python, Rust, Swift, V, Zig (more languages can be added via
 user\-defined syntax files, see the \fB\-\-syntax\fP option). Option \fBnone\fP
 disables default suntax configs, so that the target language is undefined.
 .TP

@@ -81,7 +81,7 @@ In the output re2swift replaced the block in the middle with the generated code:
 
 func lex(_ yyinput: UnsafePointer<UInt8>) \-> Bool {
   var yycursor = 0
-
+  
   var yych: UInt8 = 0
   var yystate: UInt = 0
   yyl: while true {
@@ -427,9 +427,6 @@ Specifies the sentinel symbol used with the end\-of\-input rule \fB$\fP\&. The
 default value is \fB\-1\fP (\fB$\fP rule is not used). Other possible values
 include all valid code units. Only decimal numbers are recognized.
 .TP
-.B \fBre2c:fn:sep\fP
-Specifies separator used in \fBYYFN\fP elements (defaults to semicolon).
-.TP
 .B \fBre2c:header\fP, \fBre2c:flags:type\-header\fP, \fBre2c:flags:t\fP
 Specifies the name of the generated header file relative to the directory of
 the output file. Same as the \fB\-\-header\fP option except that the file path
@@ -743,6 +740,13 @@ The parameter is the minimum number of characters that must be supplied.
 Defaults to non\-zero (the parameter is generated).
 This configuration can be overridden with \fBre2c:YYFILL:naked\fP or
 \fBre2c:api:style\fP\&.
+.TP
+.B \fBre2c:yyfn:sep\fP
+Specifies separator used in \fBYYFN\fP elements (defaults to semicolon).
+.TP
+.B \fBre2c:yyfn:throw\fP
+Specifies exceptions thrown by \fBYYFN\fP function (defaults to empty, which
+means no exceptions).
 .UNINDENT
 .SS Regular expressions
 .sp
@@ -3263,7 +3267,7 @@ func log(_ items: Any..., separator: String = \(dq \(dq, terminator: String = \(
 #endif
 }
 
-extension FileHandle: @retroactive TextOutputStream {
+extension FileHandle: TextOutputStream {
   public func write(_ string: String) {
     self.write(Data(string.utf8))
   }

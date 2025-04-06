@@ -34,6 +34,7 @@
     re2c:tags:negative = "";
 
     re2c:yyfn:sep = ";";
+    re2c:yyfn:throw = "";
 
     re2c:YYBACKUP = "";
     re2c:define:YYBACKUP = "";
