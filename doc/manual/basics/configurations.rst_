@@ -55,6 +55,10 @@ Here is a full list of configurations supported by |re2c|:
     Same as the ``--computed-gotos`` option, but can be configured on per-block
     basis.
 
+``re2c:computed-gotos:relative``, ``re2c:cgoto:relative``
+    Same as the ``--computed-gotos-relative`` option, but can be configured on
+    per-block basis.
+
 ``re2c:computed-gotos:threshold``, ``re2c:cgoto:threshold``
     If computed ``goto`` is used, this configuration specifies the complexity
     threshold that triggers the generation of jump tables instead of nested
