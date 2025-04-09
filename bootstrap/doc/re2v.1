@@ -1804,6 +1804,7 @@ type of array elements), \fBname\fP (array name), \fBsize\fP (its size),
 expands list expression as many times as there are rows in the table)
 and \fBelem\fP (a list variable that expands to all table elements in the
 current row \-\- it\(aqs meant to be nested in the \fBrow\fP list).
+Supported conditional: \fB\&.const\fP (true if the array is immutable).
 .TP
 .B \fBcode:array_global\fP
 Same as \fBcode:array_local\fP, except that it\(aqs used in top\-level.

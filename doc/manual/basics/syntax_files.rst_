@@ -167,6 +167,7 @@ language configurations, inplace configurations and code templates.
       expands list expression as many times as there are rows in the table)
       and ``elem`` (a list variable that expands to all table elements in the
       current row -- it's meant to be nested in the ``row`` list).
+      Supported conditional: ``.const`` (true if the array is immutable).
 
   ``code:array_global``
       Same as ``code:array_local``, except that it's used in top-level.
