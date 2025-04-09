@@ -162,7 +162,7 @@ code:const_local = topindent "enum " name " = " init ";" nl;
 code:const_global = code:const_local;
 
 code:array_local =
-    topindent type "[" size "] " name " = [" nl indent
+    topindent (.const ? "immutable ") type "[" size "] " name " = [" nl indent
         [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
         [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem]     nl]
     dedent topindent "];" nl;
@@ -183,7 +183,7 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "uint";
-code:type_yybm = "immutable char";
+code:type_yybm = "char";
 code:type_yytarget = <undefined>;
 code:type_yyctable = <undefined>;
 

@@ -60,7 +60,7 @@ re2c:yych = "yych";
 re2c:yych:conversion = 0;
 re2c:yych:literals = hex;
 re2c:yych:emit = (.code_model.recursive_functions ? 0 : 1);
-re2c:yybm = "yybm";
+re2c:yybm = "YYBM";
 re2c:yybm:hex = 0;
 re2c:yyfill = "";
 re2c:yystable = ""; // deprecated
@@ -166,7 +166,7 @@ code:const_local = topindent "const " name ": " type " = " init ";" nl;
 code:const_global = code:const_local;
 
 code:array_local =
-    topindent "let " name ": [" type "; " size "] = [" nl indent
+    topindent (.const ? "const " : "let ") name ": [" type "; " size "] = [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "];" nl;
 

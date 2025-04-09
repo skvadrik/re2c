@@ -162,7 +162,7 @@ code:const_local = topindent type " " name " = " init ";" nl;
 code:const_global = topindent "#define " name " " init nl;
 
 code:array_local =
-    topindent type " " name "[" size "] = {" nl indent
+    topindent (.const ? "static const ") type " " name "[" size "] = {" nl indent
         [row{0:-2}: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
         [row{-1}:   topindent [elem{0:-2}: elem ", "] [elem{-1}: elem]     nl]
     dedent topindent "};" nl;
@@ -183,9 +183,9 @@ code:assign = topindent lhs " = " rhs ";" nl;
 
 code:type_int = "int";
 code:type_uint = "unsigned int";
-code:type_yybm = "static const unsigned char";
-code:type_yytarget = "static const " (.cgoto.relative ? "int" : "void*");
-code:type_yyctable = "static const " (.cgoto.relative ? "int" : "void*");
+code:type_yybm = "unsigned char";
+code:type_yytarget = (.cgoto.relative ? "int" : "void*");
+code:type_yyctable = (.cgoto.relative ? "int" : "void*");
 
 code:cmp_eq = "==";
 code:cmp_ne = "!=";
@@ -444,7 +444,18 @@ code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
 
-code:yytarget_elem = (.cgoto.relative ? "(int)((char*)&&" label " - (char*)&&" base ")" : "&&" label);
-code:yytarget_goto = (.cgoto.relative ? "*((char*)&&" base " + " yytarget "[" index "])" : "*" yytarget "[" index "]");
-code:yyctable_elem = (.cgoto.relative ? "(int)((char*)&&" label " - (char*)&&" base ")" : "&&" label);
-code:yyctable_goto = (.cgoto.relative ? "*((char*)&&" base " + " yyctable "[" index "])" : "*" yyctable "[" index "]");
+code:yytarget_elem = (.cgoto.relative
+    ? "(int)((char*)&&" label " - (char*)&&" base ")"
+    : "&&" label);
+
+code:yytarget_goto = (.cgoto.relative
+    ? "*((char*)&&" base " + " yytarget "[" index "])"
+    : "*" yytarget "[" index "]");
+
+code:yyctable_elem = (.cgoto.relative
+    ? "(int)((char*)&&" label " - (char*)&&" base ")"
+    : "&&" label);
+
+code:yyctable_goto = (.cgoto.relative
+    ? "*((char*)&&" base " + " yyctable "[" index "])"
+    : "*" yyctable "[" index "]");

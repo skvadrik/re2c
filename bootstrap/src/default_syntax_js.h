@@ -161,6 +161,7 @@ static constexpr const char* DEFAULT_SYNTAX_JS =
     "code:const_local = topindent \"const \" name \" = \" init nl;\n"
     "code:const_global = code:const_local;\n"
     "\n"
+    "// Not sure if there's a way to declare array with immutable elements in JS.\n"
     "code:array_local =\n"
     "    topindent \"const \" name \" = [\" nl indent\n"
     "        [row: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"

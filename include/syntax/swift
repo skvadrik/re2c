@@ -162,7 +162,7 @@ code:const_local = topindent "let " name " = " init nl;
 code:const_global = code:const_local;
 
 code:array_local =
-    topindent "let " name ": [" type "] = [" nl indent
+    topindent (.const ? "let " : "var ") name ": [" type "] = [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]
     dedent topindent "]" nl;
 

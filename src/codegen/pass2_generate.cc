@@ -825,8 +825,8 @@ static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go, uint32_
     bool local = opts->code_model != CodeModel::REC_FUNC;
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(
-            alc, name, type, elems, CodeGoCpTable::TABLE_SIZE, local, /*tabulate*/ true));
+    append(stmts, code_array(alc, name, type, elems, CodeGoCpTable::TABLE_SIZE,
+        local, /*constant*/ true, /*tabulate*/ true));
     return stmts;
 }
 
@@ -1001,7 +1001,7 @@ static void emit_accept(
         const char* type = opts->gen_code_type_yytarget(buf);
 
         // In rec/func mode the table can be local, as it's used in the same function.
-        append(block, code_array(alc, name, type, elems, nacc, /*local*/ true));
+        append(block, code_array(alc, name, type, elems, nacc, /*local*/ true, /*constant*/ true));
 
         GenCGoto callback(buf.stream(), opts, opts->label_prefix, min_index, var);
         append(block, code_goto(alc, opts->gen_code_yytarget_goto(buf, callback)));
@@ -1694,7 +1694,8 @@ static CodeList* gen_cond_table(Output& output) {
     const char* type = opts->gen_code_type_yyctable(buf);
 
     // In rec/func mode the table can be local, as it's used in the same function.
-    append(code, code_array(alc, name, type, elems, conds.size(), /*local*/ true));
+    append(code, code_array(
+        alc, name, type, elems, conds.size(), /*local*/ true, /*constant*/ true));
     return code;
 }
 
@@ -1789,8 +1790,8 @@ CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string
     bool local = opts->code_model != CodeModel::REC_FUNC;
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(
-            alc, name, type, bitmap->elems, bitmap->nelems, local, /*tabulate*/ true));
+    append(stmts, code_array(alc, name, type, bitmap->elems, bitmap->nelems,
+        local, /*constant*/ true, /*tabulate*/ true));
     return stmts;
 }
 

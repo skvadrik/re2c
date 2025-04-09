@@ -91,11 +91,11 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(array_local, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
-        ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
+        ({StxVarId::ROW, StxVarId::ELEM}), ({StxLOpt::CONST}) \
     ) \
     CODE_TEMPLATE(array_global, \
         ({StxVarId::TYPE, StxVarId::NAME, StxVarId::SIZE}), \
-        ({StxVarId::ROW, StxVarId::ELEM}), ({}) \
+        ({StxVarId::ROW, StxVarId::ELEM}), ({StxLOpt::CONST}) \
     ) \
     CODE_TEMPLATE(array_elem, \
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \

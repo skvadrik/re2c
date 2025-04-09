@@ -162,6 +162,7 @@ static constexpr const char* DEFAULT_SYNTAX_V =
     "code:const_local = topindent \"const \" name \" = \" init nl;\n"
     "code:const_global = code:const_local;\n"
     "\n"
+    "// V has only top-level constants, so all local arrays are mutable.\n"
     "code:array_local =\n"
     "    topindent name \" := [\" nl indent\n"
     "        [row: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"

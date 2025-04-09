@@ -1146,6 +1146,14 @@ class RenderArray : public RenderCallback {
         }
     }
 
+    bool eval_cond(StxLOpt opt) override {
+        if (opt == StxLOpt::CONST) {
+            return code->constant;
+        }
+        UNREACHABLE();
+        return false;
+    }
+
     FORBID_COPY(RenderArray);
 };
 

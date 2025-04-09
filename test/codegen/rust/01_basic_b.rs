@@ -8,7 +8,7 @@ fn lex(s: &[u8]) -> bool {
     #[allow(unused_assignments)]
     let mut yych : u8 = 0;
     let mut yystate : usize = 0;
-    let yybm: [u8; 256] = [
+    const YYBM: [u8; 256] = [
           0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,
@@ -61,7 +61,7 @@ fn lex(s: &[u8]) -> bool {
             1 => { return false; },
             2 => {
                 yych = unsafe {*s.get_unchecked(cursor)};
-                if (yybm[0+yych as usize] & 128) != 0 {
+                if (YYBM[0+yych as usize] & 128) != 0 {
                     cursor += 1;
                     yystate = 2;
                     continue 'yyl;

@@ -285,6 +285,7 @@ struct CodeArray {
     const char** elems;
     size_t size;
     bool local;
+    bool constant;
     bool tabulate;
 };
 
@@ -762,6 +763,7 @@ inline Code* code_array(
         const char** elems,
         size_t size,
         bool local,
+        bool constant,
         bool tabulate = false) {
     Code* x = new_code(alc, CodeKind::ARRAY);
     x->array.name = name;
@@ -769,6 +771,7 @@ inline Code* code_array(
     x->array.elems = elems;
     x->array.size = size;
     x->array.local = local;
+    x->array.constant = constant;
     x->array.tabulate = tabulate;
     return x;
 }

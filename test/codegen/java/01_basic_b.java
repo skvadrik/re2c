@@ -9,7 +9,7 @@ class Main {
 {
     char yych = 0;
     int yystate = 0;
-    int[] yybm = new int[]{
+    final int[] yybm = new int[]{
           0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,

@@ -161,6 +161,7 @@ code:var_global = <undefined>;
 code:const_local = topindent "const " name " = " init nl;
 code:const_global = code:const_local;
 
+// V has only top-level constants, so all local arrays are mutable.
 code:array_local =
     topindent name " := [" nl indent
         [row: topindent [elem{0:-2}: elem ", "] [elem{-1}: elem ","] nl]

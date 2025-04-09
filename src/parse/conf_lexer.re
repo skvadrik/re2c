@@ -794,6 +794,7 @@ start:
 
     ".cast"                { RET_LOPT(StxLOpt::CAST); }
     ".char_literals"       { RET_LOPT(StxLOpt::CHAR_LITERALS); }
+    ".const"               { RET_LOPT(StxLOpt::CONST); }
     ".args"                { RET_LOPT(StxLOpt::ARGS); }
     ".cond"                { RET_LOPT(StxLOpt::COND); }
     ".init"                { RET_LOPT(StxLOpt::INIT); }

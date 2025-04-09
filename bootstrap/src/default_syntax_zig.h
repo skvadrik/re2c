@@ -163,7 +163,7 @@ static constexpr const char* DEFAULT_SYNTAX_ZIG =
     "code:const_global = code:const_local;\n"
     "\n"
     "code:array_local =\n"
-    "    topindent \"const \" name \" = [\" size \"]\" type \"{\" nl indent\n"
+    "    topindent (.const ? \"const \") name \" = [\" size \"]\" type \"{\" nl indent\n"
     "        [row: topindent [elem{0:-2}: elem \", \"] [elem{-1}: elem \",\"] nl]\n"
     "    dedent topindent \"};\" nl;\n"
     "\n"
