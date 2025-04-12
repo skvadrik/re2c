@@ -124,18 +124,6 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(type_yyctable, \
         ({}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(yytarget_elem, \
-        ({StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(yytarget_goto, \
-        ({StxVarId::TARGET, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(yyctable_elem, \
-        ({StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
-    ) \
-    CODE_TEMPLATE(yyctable_goto, \
-        ({StxVarId::CTABLE, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
-    ) \
     CODE_TEMPLATE(cmp_eq, \
         ({}), ({}), ({}) \
     ) \
@@ -183,6 +171,12 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cgoto_target, \
+        ({StxVarId::ARRAY, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(cgoto_init, \
+        ({StxVarId::TYPE, StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(fndecl, \
         ({StxVarId::NAME, StxVarId::TYPE, StxVarId::ARGNAME, StxVarId::ARGTYPE, StxVarId::THROW}), \
@@ -374,7 +368,6 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(CHAR, "yych") \
     STX_LOCAL_VAR(COPYMTAG, "YYCOPYMTAG") \
     STX_LOCAL_VAR(COPYSTAG, "YYCOPYSTAG") \
-    STX_LOCAL_VAR(CTABLE, "yyctable") \
     STX_LOCAL_VAR(CTYPE, "YYCTYPE") \
     STX_LOCAL_VAR(CTXMARKER, "YYCTXMARKER") \
     STX_LOCAL_VAR(CURSOR, "YYCURSOR") \
@@ -401,8 +394,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(SHIFTSTAG, "YYSHIFTSTAG") \
     STX_LOCAL_VAR(SKIP, "YYSKIP") \
     STX_LOCAL_VAR(STAGN, "YYSTAGN") \
-    STX_LOCAL_VAR(STAGP, "YYSTAGP") \
-    STX_LOCAL_VAR(TARGET, "yytarget")
+    STX_LOCAL_VAR(STAGP, "YYSTAGP")
 
 // global variables in syntax files
 #define RE2C_STX_GLOBAL_VARS \
@@ -475,7 +467,7 @@ enum class StxVarId : uint32_t {
     /* variables */ \
     MUTOPT(std::string, var_accept, "yyaccept") \
     MUTOPT(std::string, var_bitmaps, "yybm") \
-    MUTOPT(std::string, var_computed_gotos_table, "yytarget") \
+    MUTOPT(std::string, var_cgoto_table, "yytarget") \
     MUTOPT(std::string, var_char, "yych") \
     MUTOPT(std::string, var_cond, "yycond") \
     MUTOPT(std::string, var_cond_table, "yyctable") \

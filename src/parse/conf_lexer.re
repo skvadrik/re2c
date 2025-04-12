@@ -243,7 +243,7 @@ Ret Input::lex_conf(Opt& opts) {
     "variable:"? "yycond"          { RET_CONF_STR(var_cond); }
     "variable:"? "yyctable"        { RET_CONF_STR(var_cond_table); }
     "variable:"? "yyaccept"        { RET_CONF_STR(var_accept); }
-    "variable:"? "yytarget"        { RET_CONF_STR(var_computed_gotos_table); }
+    "variable:"? "yytarget"        { RET_CONF_STR(var_cgoto_table); }
     "variable:"? "yystate"         { RET_CONF_STR(var_state); }
     "variable:"? "yynmatch"        { RET_CONF_STR(var_nmatch); }
     "variable:"? "yypmatch"        { RET_CONF_STR(var_pmatch); }
@@ -598,10 +598,6 @@ start:
     "code:type_yybm"              { RET_CODE(code_type_yybm); }
     "code:type_yytarget"          { RET_CODE(code_type_yytarget); }
     "code:type_yyctable"          { RET_CODE(code_type_yyctable); }
-    "code:yytarget_elem"          { RET_CODE(code_yytarget_elem); }
-    "code:yytarget_goto"          { RET_CODE(code_yytarget_goto); }
-    "code:yyctable_elem"          { RET_CODE(code_yyctable_elem); }
-    "code:yyctable_goto"          { RET_CODE(code_yyctable_goto); }
     "code:assign"                 { RET_CODE(code_assign); }
     "code:cmp_eq"                 { RET_CODE(code_cmp_eq); }
     "code:cmp_ne"                 { RET_CODE(code_cmp_ne); }
@@ -619,6 +615,8 @@ start:
     "code:loop"                   { RET_CODE(code_loop); }
     "code:continue"               { RET_CODE(code_continue); }
     "code:goto"                   { RET_CODE(code_goto); }
+    "code:cgoto_target"           { RET_CODE(code_cgoto_target); }
+    "code:cgoto_init"             { RET_CODE(code_cgoto_init); }
     "code:enum"                   { RET_CODE(code_enum); }
     "code:enum_elem"              { RET_CODE(code_enum_elem); }
     "code:fndecl"                 { RET_CODE(code_fndecl); }
@@ -713,7 +711,6 @@ start:
     "yych"         { RET_VAR(StxVarId::CHAR); }
     "YYCOPYMTAG"   { RET_VAR(StxVarId::COPYMTAG); }
     "YYCOPYSTAG"   { RET_VAR(StxVarId::COPYSTAG); }
-    "yyctable"     { RET_VAR(StxVarId::CTABLE); }
     "YYCTYPE"      { RET_VAR(StxVarId::CTYPE); }
     "YYCTXMARKER"  { RET_VAR(StxVarId::CTXMARKER); }
     "YYCURSOR"     { RET_VAR(StxVarId::CURSOR); }
@@ -741,7 +738,6 @@ start:
     "YYSKIP"       { RET_VAR(StxVarId::SKIP); }
     "YYSTAGN"      { RET_VAR(StxVarId::STAGN); }
     "YYSTAGP"      { RET_VAR(StxVarId::STAGP); }
-    "yytarget"     { RET_VAR(StxVarId::TARGET); }
 
     // global variables
     "nl"        { RET_VAR(StxVarId::NEWLINE); }

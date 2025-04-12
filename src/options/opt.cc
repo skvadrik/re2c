@@ -113,7 +113,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.var_char = defaults.var_char;
         real.var_cond = defaults.var_cond;
         real.var_cond_table = defaults.var_cond_table;
-        real.var_computed_gotos_table = defaults.var_computed_gotos_table;
+        real.var_cgoto_table = defaults.var_cgoto_table;
         real.var_fill = defaults.var_fill;
         real.var_state = defaults.var_state;
         real.var_nmatch = defaults.var_nmatch;
@@ -196,7 +196,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
     }
     if (!real.computed_gotos) {
         real.computed_gotos_threshold = defaults.computed_gotos_threshold;
-        real.var_computed_gotos_table = defaults.var_computed_gotos_table;
+        real.var_cgoto_table = defaults.var_cgoto_table;
     }
     if (!real.debug) {
         real.api_debug = defaults.api_debug;

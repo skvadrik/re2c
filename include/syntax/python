@@ -221,6 +221,8 @@ code:loop =
 code:continue = topindent "continue" nl;
 
 code:goto = <undefined>;
+code:cgoto_target = <undefined>;
+code:cgoto_init = <undefined>;
 
 code:fndecl = <undefined>;
 
@@ -389,8 +391,3 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
-
-code:yytarget_elem = <undefined>;
-code:yytarget_goto = <undefined>;
-code:yyctable_elem = <undefined>;
-code:yyctable_goto = <undefined>;

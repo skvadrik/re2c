@@ -467,13 +467,13 @@ static CodeGoIfL* code_gobm(
     return x;
 }
 
-static CodeGoCpTable* code_gocp_table(Output& output, const Span* span, uint32_t span_count) {
-    CodeGoCpTable* x = output.allocator.alloct<CodeGoCpTable>(1);
-    x->table = output.allocator.alloct<State*>(CodeGoCpTable::TABLE_SIZE);
+static CodeGoCgotoTable* code_cgoto_table(Output& output, const Span* span, uint32_t span_count) {
+    CodeGoCgotoTable* x = output.allocator.alloct<CodeGoCgotoTable>(1);
+    x->table = output.allocator.alloct<State*>(CodeGoCgotoTable::TABLE_SIZE);
 
     uint32_t c = 0;
     for (uint32_t i = 0; i < span_count; ++i) {
-        for(; c < span[i].ub && c < CodeGoCpTable::TABLE_SIZE; ++c) {
+        for(; c < span[i].ub && c < CodeGoCgotoTable::TABLE_SIZE; ++c) {
             State* to = span[i].to;
             x->table[c] = to;
             to->label->used = true;
@@ -483,12 +483,12 @@ static CodeGoCpTable* code_gocp_table(Output& output, const Span* span, uint32_t
     return x;
 }
 
-static CodeGoCp* code_gocp(Output& output, const Span* span, uint32_t span_count,
+static CodeGoCgoto* code_cgoto(Output& output, const Span* span, uint32_t span_count,
         const Span* hspan, uint32_t hspan_count, State* next, uint32_t eof) {
-    CodeGoCp* x = output.allocator.alloct<CodeGoCp>(1);
+    CodeGoCgoto* x = output.allocator.alloct<CodeGoCgoto>(1);
     x->hgo = hspan_count == 0 ? nullptr
             : code_goswif(output, hspan, hspan_count, next, false, eof);
-    x->table = code_gocp_table(output, span, span_count);
+    x->table = code_cgoto_table(output, span, span_count);
     return x;
 }
 
@@ -598,9 +598,9 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
                && !skip
                && dspan_count >= opts->computed_gotos_threshold
                && !low_spans_have_tags) {
-        go->kind = CodeGo::Kind::CPGOTO;
-        go->gocp = code_gocp(
-                output, go->span, go->span_count, hspan, hspan_count, from->next, eof);
+        go->kind = CodeGo::Kind::CGOTO;
+        go->cgoto = code_cgoto(
+            output, go->span, go->span_count, hspan, hspan_count, from->next, eof);
     } else if (opts->bitmaps && bitmap_count > 0) {
         go->kind = CodeGo::Kind::LINEAR_IF;
         go->goifl = code_gobm(
@@ -856,6 +856,6 @@ Ret codegen_analyze(Output& output) {
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
 constexpr uint32_t Label::NONE;
-constexpr uint32_t CodeGoCpTable::TABLE_SIZE;
+constexpr uint32_t CodeGoCgotoTable::TABLE_SIZE;
 
 } // end namespace re2c

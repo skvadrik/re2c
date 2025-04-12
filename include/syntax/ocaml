@@ -230,10 +230,10 @@ code:switch_case_range = (.char_literals
 code:switch_case_default = "_";
 
 code:loop = <undefined>;
-
 code:continue = <undefined>;
-
 code:goto = <undefined>;
+code:cgoto_target = <undefined>;
+code:cgoto_init = <undefined>;
 
 code:fndecl = <undefined>;
 
@@ -396,8 +396,3 @@ code:yylessthan =
 code:yybm_filter = yych " land ~0xFF";
 
 code:yybm_match = "(" yybm ".(" offset " + Char.code " yych ") land " mask ") != 0";
-
-code:yytarget_elem = <undefined>;
-code:yytarget_goto = <undefined>;
-code:yyctable_elem = <undefined>;
-code:yyctable_goto = <undefined>;

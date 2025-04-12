@@ -133,15 +133,15 @@ struct CodeGoIf {
     } kind;
 };
 
-struct CodeGoCpTable {
+struct CodeGoCgotoTable {
     static constexpr uint32_t TABLE_SIZE = 0x100;
 
     State** table;
 };
 
-struct CodeGoCp {
+struct CodeGoCgoto {
     CodeGoSwIf* hgo;
-    CodeGoCpTable* table;
+    CodeGoCgotoTable* table;
 };
 
 struct CodeGo {
@@ -149,7 +149,7 @@ struct CodeGo {
         EMPTY,
         SWITCH_IF,
         LINEAR_IF,
-        CPGOTO,
+        CGOTO,
         DOT
     };
 
@@ -160,7 +160,7 @@ struct CodeGo {
     bool skip;
     union {
         CodeGoSwIf* goswif;
-        CodeGoCp* gocp;
+        CodeGoCgoto* cgoto;
         CodeGoSw* godot;
         CodeGoIfL* goifl;
     };

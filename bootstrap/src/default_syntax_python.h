@@ -222,6 +222,8 @@ static constexpr const char* DEFAULT_SYNTAX_PYTHON =
     "code:continue = topindent \"continue\" nl;\n"
     "\n"
     "code:goto = <undefined>;\n"
+    "code:cgoto_target = <undefined>;\n"
+    "code:cgoto_init = <undefined>;\n"
     "\n"
     "code:fndecl = <undefined>;\n"
     "\n"
@@ -390,9 +392,4 @@ static constexpr const char* DEFAULT_SYNTAX_PYTHON =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \"] & \" mask \") != 0\";\n"
-    "\n"
-    "code:yytarget_elem = <undefined>;\n"
-    "code:yytarget_goto = <undefined>;\n"
-    "code:yyctable_elem = <undefined>;\n"
-    "code:yyctable_goto = <undefined>;\n"
     ;

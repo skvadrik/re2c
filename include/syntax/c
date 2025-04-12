@@ -235,6 +235,14 @@ code:continue = topindent "continue;" nl;
 
 code:goto = topindent "goto " label ";" nl;
 
+code:cgoto_target = (.cgoto.relative
+    ? "*((char*)&&" base " + " array "[" index "])"
+    : "*" array "[" index "]");
+
+code:cgoto_init = (.cgoto.relative
+    ? "(" type ")((char*)&&" label " - (char*)&&" base ")"
+    : "&&" label);
+
 code:fndecl =
     topindent type " " name "("
         [arg{0:-2}: argtype " " argname ", "]
@@ -443,19 +451,3 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
-
-code:yytarget_elem = (.cgoto.relative
-    ? "(int)((char*)&&" label " - (char*)&&" base ")"
-    : "&&" label);
-
-code:yytarget_goto = (.cgoto.relative
-    ? "*((char*)&&" base " + " yytarget "[" index "])"
-    : "*" yytarget "[" index "]");
-
-code:yyctable_elem = (.cgoto.relative
-    ? "(int)((char*)&&" label " - (char*)&&" base ")"
-    : "&&" label);
-
-code:yyctable_goto = (.cgoto.relative
-    ? "*((char*)&&" base " + " yyctable "[" index "])"
-    : "*" yyctable "[" index "]");

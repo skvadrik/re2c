@@ -177,57 +177,58 @@ class GenEnumElem : public RenderCallback {
     FORBID_COPY(GenEnumElem);
 };
 
-class GenCGotoTableElem : public RenderCallback {
+class GenCgotoInit : public RenderCallback {
     std::ostream& os;
     const std::string& prefix;
+    const std::string& type;
     std::string base;
     std::string label;
 
   public:
-    GenCGotoTableElem(std::ostream& os, const std::string& prefix, const std::string& base,
-            const std::string& label)
-        : os(os), prefix(prefix), base(base), label(label) {}
-    GenCGotoTableElem(std::ostream& os, const std::string& prefix, const uint32_t base,
-            const uint32_t label)
-        : GenCGotoTableElem(os, prefix, std::to_string(base), std::to_string(label)) {}
+    GenCgotoInit(std::ostream& os, const std::string& prefix, const std::string& type,
+            const std::string& base, const std::string& label)
+        : os(os), prefix(prefix), type(type), base(base), label(label) {}
+    GenCgotoInit(std::ostream& os, const std::string& prefix, const std::string& type,
+            uint32_t base, uint32_t label)
+        : GenCgotoInit(os, prefix, type, std::to_string(base), std::to_string(label)) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
+            case StxVarId::TYPE: os << type; break;
             case StxVarId::BASE: os << prefix << base; break;
             case StxVarId::LABEL: os << prefix << label; break;
             default: UNREACHABLE(); break;
         }
     }
 
-    FORBID_COPY(GenCGotoTableElem);
+    FORBID_COPY(GenCgotoInit);
 };
 
-class GenCGoto : public RenderCallback {
+class GenCgotoTarget : public RenderCallback {
     std::ostream& os;
-    const opt_t* opts;
+    const std::string& array;
     const std::string& prefix;
     std::string base;
     std::string index;
 
   public:
-    GenCGoto(std::ostream& os, const opt_t* opts, const std::string& prefix, const std::string& base,
-            const std::string& elem)
-        : os(os), opts(opts), prefix(prefix), base(base), index(elem) {}
-    GenCGoto(std::ostream& os, const opt_t* opts, const std::string& prefix, const uint32_t base,
-            const std::string& elem)
-        : GenCGoto(os, opts, prefix, std::to_string(base), elem) {}
+    GenCgotoTarget(std::ostream& os, const std::string& array,
+            const std::string& prefix, const std::string& base, const std::string& index)
+        : os(os), array(array), prefix(prefix), base(base), index(index) {}
+    GenCgotoTarget(std::ostream& os, const std::string& array,
+            const std::string& prefix, uint32_t base, const std::string& index)
+        : GenCgotoTarget(os, array, prefix, std::to_string(base), index) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
-            case StxVarId::TARGET: os << opts->var_computed_gotos_table; break;
-            case StxVarId::CTABLE: os << opts->var_cond_table; break;
+            case StxVarId::ARRAY: os << array; break;
             case StxVarId::BASE: os << prefix << base; break;
             case StxVarId::INDEX: os << index; break;
             default: UNREACHABLE(); break;
         }
     }
 
-    FORBID_COPY(GenCGoto);
+    FORBID_COPY(GenCgotoTarget);
 };
 
 } // anonymous namespace
@@ -807,54 +808,55 @@ static CodeList* gen_goswif(
            : gen_goif(output, dfa, go->goif, from);
 }
 
-static CodeList* gen_gocp_table(Output& output, const CodeGoCpTable* go, uint32_t min_index) {
+static CodeList* gen_cgoto_table(Output& output, const CodeGoCgotoTable* go, uint32_t min_index) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    const char** elems = alc.alloct<const char*>(CodeGoCpTable::TABLE_SIZE);
+    const char* name = opts->var_cgoto_table.c_str();
+    const char* type = opts->gen_code_type_yytarget(buf);
 
-    for (uint32_t i = 0; i < CodeGoCpTable::TABLE_SIZE; ++i) {
-        GenCGotoTableElem callback(buf.stream(), opts->label_prefix, min_index, go->table[i]->label->index);
-        elems[i] = opts->gen_code_yytarget_elem(buf, callback);
+    const char** elems = alc.alloct<const char*>(CodeGoCgotoTable::TABLE_SIZE);
+    for (uint32_t i = 0; i < CodeGoCgotoTable::TABLE_SIZE; ++i) {
+        GenCgotoInit callback(
+            buf.stream(), opts->label_prefix, type, min_index, go->table[i]->label->index);
+        elems[i] = opts->gen_code_cgoto_init(buf, callback);
     }
 
-    const char* name = opts->var_computed_gotos_table.c_str();
-    const char* type = opts->gen_code_type_yytarget(buf);
     // In rec/func mode tables are reused across different functions, so they must be global.
     bool local = opts->code_model != CodeModel::REC_FUNC;
 
     CodeList* stmts = code_list(alc);
-    append(stmts, code_array(alc, name, type, elems, CodeGoCpTable::TABLE_SIZE,
+    append(stmts, code_array(alc, name, type, elems, CodeGoCgotoTable::TABLE_SIZE,
         local, /*constant*/ true, /*tabulate*/ true));
     return stmts;
 }
 
-static CodeList* gen_gocp(Output& output, const Adfa& dfa, const CodeGoCp* go, const State* from) {
+static CodeList* gen_cgoto(
+        Output& output, const Adfa& dfa, const CodeGoCgoto* go, const State* from) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
-    uint32_t min_index = go->table->table[0]->label->index;
 
+    uint32_t min_index = go->table->table[0]->label->index;
     if (opts->computed_gotos_relative) {
-        for (uint32_t i = 1; i < CodeGoCpTable::TABLE_SIZE; ++i) {
+        for (uint32_t i = 1; i < CodeGoCgotoTable::TABLE_SIZE; ++i) {
             min_index = std::min(go->table->table[i]->label->index, min_index);
         }
     }
 
+    CodeList* cgoto = gen_cgoto_table(output, go->table, min_index);
+    GenCgotoTarget callback(
+        buf.stream(), opts->var_cgoto_table, opts->label_prefix, min_index, opts->var_char);
+    append(cgoto, code_goto(alc, opts->gen_code_cgoto_target(buf, callback)));
+
     CodeList* stmts = code_list(alc);
-    CodeList* if_else = gen_gocp_table(output, go->table, min_index);
-    GenCGoto callback(buf.stream(), opts, opts->label_prefix, min_index, opts->var_char);
-
-    append(if_else, code_goto(alc, opts->gen_code_yytarget_goto(buf, callback)));
-
     if (go->hgo != nullptr) {
-        const char* cond =
-                buf.str(opts->var_char).cstr(" & ~0xFF").flush();
-        CodeList* if_then = gen_goswif(output, dfa, go->hgo, from);
-        append(stmts, code_if_then_else(alc, cond, if_then, if_else));
+        const char* cond = buf.str(opts->var_char).cstr(" & ~0xFF").flush();
+        CodeList* other = gen_goswif(output, dfa, go->hgo, from);
+        append(stmts, code_if_then_else(alc, cond, other, cgoto));
     } else {
-        append(stmts, code_block(alc, if_else, CodeBlock::Kind::WRAPPED));
+        append(stmts, code_block(alc, cgoto, CodeBlock::Kind::WRAPPED));
     }
 
     return stmts;
@@ -925,8 +927,8 @@ static void gen_go(
         append(stmts, gen_goswif(output, dfa, go->goswif, from));
     } else if (go->kind == CodeGo::Kind::LINEAR_IF) {
         append(stmts, gen_goifl(output, dfa, go->goifl, from));
-    } else if (go->kind == CodeGo::Kind::CPGOTO) {
-        append(stmts, gen_gocp(output, dfa, go->gocp, from));
+    } else if (go->kind == CodeGo::Kind::CGOTO) {
+        append(stmts, gen_cgoto(output, dfa, go->cgoto, from));
     }
 }
 
@@ -989,22 +991,22 @@ static void emit_accept(
             }
         }
 
-        const char** elems = alc.alloct<const char*>(nacc);
-
-        for (uint32_t i = 0; i < nacc; ++i) {
-            GenCGotoTableElem callback(buf.stream(), opts->label_prefix, min_index,
-                    acc[i].state->label->index);
-            elems[i] = opts->gen_code_yytarget_elem(buf, callback);
-        }
-
-        const char* name = opts->var_computed_gotos_table.c_str();
+        const char* name = opts->var_cgoto_table.c_str();
         const char* type = opts->gen_code_type_yytarget(buf);
+
+        const char** elems = alc.alloct<const char*>(nacc);
+        for (uint32_t i = 0; i < nacc; ++i) {
+            GenCgotoInit callback(
+                buf.stream(), opts->label_prefix, type, min_index, acc[i].state->label->index);
+            elems[i] = opts->gen_code_cgoto_init(buf, callback);
+        }
 
         // In rec/func mode the table can be local, as it's used in the same function.
         append(block, code_array(alc, name, type, elems, nacc, /*local*/ true, /*constant*/ true));
 
-        GenCGoto callback(buf.stream(), opts, opts->label_prefix, min_index, var);
-        append(block, code_goto(alc, opts->gen_code_yytarget_goto(buf, callback)));
+        GenCgotoTarget callback(
+            buf.stream(), opts->var_cgoto_table, opts->label_prefix, min_index, var);
+        append(block, code_goto(alc, opts->gen_code_cgoto_target(buf, callback)));
 
         append(stmts, code_block(alc, block, CodeBlock::Kind::WRAPPED));
         return;
@@ -1643,8 +1645,9 @@ static CodeList* gen_cond_goto(Output& output) {
     const char* getcond = opts->gen_code_yygetcond(buf, callback);
 
     if (opts->computed_gotos) {
-        GenCGoto callback(buf.stream(), opts, opts->cond_label_prefix, conds.front().name, getcond);
-        append(stmts, code_goto(alc, opts->gen_code_yyctable_goto(buf, callback)));
+        GenCgotoTarget callback(
+            buf.stream(), opts->var_cond_table, opts->cond_label_prefix, conds[0].name, getcond);
+        append(stmts, code_goto(alc, opts->gen_code_cgoto_target(buf, callback)));
     } else if (opts->nested_ifs) {
         warn_cond_ord &= ncond > 1;
         append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
@@ -1657,8 +1660,7 @@ static CodeList* gen_cond_goto(Output& output) {
             buf.str(opts->cond_label_prefix).str(cond.name);
             append(body, code_goto(alc, buf.flush()));
 
-            append(ccases, code_case_string(alc, body,
-                    gen_cond_enum_elem(buf, opts, cond.name)));
+            append(ccases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
         }
         if (opts->cond_abort) {
             append(ccases, code_case_default(alc, gen_abort(alc)));
@@ -1682,16 +1684,15 @@ static CodeList* gen_cond_table(Output& output) {
 
     CodeList* code = code_list(alc);
 
-    const char** elems = alc.alloct<const char*>(conds.size());
-
-    for (uint32_t i = 0; i < conds.size(); ++i) {
-        GenCGotoTableElem callback(buf.stream(), opts->cond_label_prefix, conds.front().name,
-                conds[i].name);
-        elems[i] = opts->gen_code_yyctable_elem(buf, callback);
-    }
-
     const char* name = opts->var_cond_table.c_str();
     const char* type = opts->gen_code_type_yyctable(buf);
+
+    const char** elems = alc.alloct<const char*>(conds.size());
+    for (uint32_t i = 0; i < conds.size(); ++i) {
+        GenCgotoInit callback(
+                buf.stream(), opts->cond_label_prefix, type, conds[0].name, conds[i].name);
+        elems[i] = opts->gen_code_cgoto_init(buf, callback);
+    }
 
     // In rec/func mode the table can be local, as it's used in the same function.
     append(code, code_array(
