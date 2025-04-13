@@ -179,18 +179,18 @@ class GenEnumElem : public RenderCallback {
 
 class GenCgotoInit : public RenderCallback {
     std::ostream& os;
+    const char* type;
     const std::string& prefix;
-    const std::string& type;
     std::string base;
     std::string label;
 
   public:
-    GenCgotoInit(std::ostream& os, const std::string& prefix, const std::string& type,
+    GenCgotoInit(std::ostream& os, const char* type, const std::string& prefix,
             const std::string& base, const std::string& label)
         : os(os), prefix(prefix), type(type), base(base), label(label) {}
-    GenCgotoInit(std::ostream& os, const std::string& prefix, const std::string& type,
+    GenCgotoInit(std::ostream& os, const char* type, const std::string& prefix,
             uint32_t base, uint32_t label)
-        : GenCgotoInit(os, prefix, type, std::to_string(base), std::to_string(label)) {}
+        : GenCgotoInit(os, type, prefix, std::to_string(base), std::to_string(label)) {}
 
     void render_var(StxVarId var) override {
         switch (var) {
@@ -819,7 +819,7 @@ static CodeList* gen_cgoto_table(Output& output, const CodeGoCgotoTable* go, uin
     const char** elems = alc.alloct<const char*>(CodeGoCgotoTable::TABLE_SIZE);
     for (uint32_t i = 0; i < CodeGoCgotoTable::TABLE_SIZE; ++i) {
         GenCgotoInit callback(
-            buf.stream(), opts->label_prefix, type, min_index, go->table[i]->label->index);
+            buf.stream(), type, opts->label_prefix, min_index, go->table[i]->label->index);
         elems[i] = opts->gen_code_cgoto_init(buf, callback);
     }
 
@@ -997,7 +997,7 @@ static void emit_accept(
         const char** elems = alc.alloct<const char*>(nacc);
         for (uint32_t i = 0; i < nacc; ++i) {
             GenCgotoInit callback(
-                buf.stream(), opts->label_prefix, type, min_index, acc[i].state->label->index);
+                buf.stream(), type, opts->label_prefix, min_index, acc[i].state->label->index);
             elems[i] = opts->gen_code_cgoto_init(buf, callback);
         }
 
@@ -1690,7 +1690,7 @@ static CodeList* gen_cond_table(Output& output) {
     const char** elems = alc.alloct<const char*>(conds.size());
     for (uint32_t i = 0; i < conds.size(); ++i) {
         GenCgotoInit callback(
-                buf.stream(), opts->cond_label_prefix, type, conds[0].name, conds[i].name);
+                buf.stream(), type, opts->cond_label_prefix, conds[0].name, conds[i].name);
         elems[i] = opts->gen_code_cgoto_init(buf, callback);
     }
 
