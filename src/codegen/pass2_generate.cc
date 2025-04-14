@@ -187,7 +187,7 @@ class GenCgotoInit : public RenderCallback {
   public:
     GenCgotoInit(std::ostream& os, const char* type, const std::string& prefix,
             const std::string& base, const std::string& label)
-        : os(os), prefix(prefix), type(type), base(base), label(label) {}
+        : os(os), type(type), prefix(prefix), base(base), label(label) {}
     GenCgotoInit(std::ostream& os, const char* type, const std::string& prefix,
             uint32_t base, uint32_t label)
         : GenCgotoInit(os, type, prefix, std::to_string(base), std::to_string(label)) {}
