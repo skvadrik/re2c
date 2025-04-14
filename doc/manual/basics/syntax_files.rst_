@@ -278,6 +278,18 @@ language configurations, inplace configurations and code templates.
       Goto statement. Supported variables: ``label`` (label of the jump
       target).
 
+  ``code:cgoto:target``
+      An expression that describes the target of computed ``goto``.
+      Supported variables: ``array`` (the table containing computed ``goto``
+      information), ``index`` (index of the element in the table) and ``base``
+      (base label, only used if ``.cgoto.relative`` is true).
+
+  ``code:cgoto:init``
+      Initializer expression for a single element in computed ``goto`` table.
+      Supported variables: ``label`` (the label that is used to initialize the
+      current element), ``type`` (underlying type of the elements in the table)
+      and ``base``(base label - only used if ``.cgoto.relative`` is true).
+
   ``code:fndecl``
       Function declaration. Supported variables: ``name`` (function name),
       ``type`` (return type), ``arg`` (a list variable that does not itself
@@ -549,6 +561,10 @@ language configurations, inplace configurations and code templates.
   ``.case_ranges``
       True if case ranges feature is enabled (``--case-ranges`` or
       ``re2c:case-ranges = 1``).
+
+  ``.cgoto.relative``
+      True if the relative form of computed ``goto`` is used
+      (``--computed-gotos-relative`` or ``re2c:cgoto:relative = 1``).
 
   ``.code_model.goto_label``
       True if  code model based on goto/label is used (``--goto-label``).

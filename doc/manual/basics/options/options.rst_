@@ -38,7 +38,6 @@
     supported by compilers like GCC, Clang and Tcc. The main advantage over
     using single cases is smaller generated code and faster generation time,
     although for some compilers like Tcc it also results in smaller binary size.
-    This option is supported only for C.
 
 ``--computed-gotos -g``
     Optimize conditional jumps using non-standard "computed goto" extension
@@ -46,14 +45,12 @@
     only in complex cases with a lot of conditional branches. Complexity
     threshold can be configured with ``cgoto:threshold`` configuration.
     Relative offsets can be enabled with ``cgoto:relative`` configuration. This
-    option implies ``--bit-vectors``. It is supported only for C.
+    option implies ``--bit-vectors``.
 
 ``--computed-gotos-relative``
     Similar to --computed-gotos but generate relative offsets for jump tables
-    instead (which must be supported by the compiler). This
-    option implies ``--computed-gotos``.  This flag is the same as specifying
-    ``cgoto:relative`` as above and using `--computed-gotos``.
-    It is supported only for C.
+    instead (which must be supported by the compiler). This option implies
+    ``--computed-gotos``.
 
 ``--conditions --start-conditions -c``
     Enable support of Flex-like "conditions": multiple interrelated lexers
