@@ -615,8 +615,8 @@ start:
     "code:loop"                   { RET_CODE(code_loop); }
     "code:continue"               { RET_CODE(code_continue); }
     "code:goto"                   { RET_CODE(code_goto); }
-    "code:cgoto_target"           { RET_CODE(code_cgoto_target); }
-    "code:cgoto_init"             { RET_CODE(code_cgoto_init); }
+    "code:cgoto"                  { RET_CODE(code_cgoto); }
+    "code:cgoto_data"             { RET_CODE(code_cgoto_data); }
     "code:enum"                   { RET_CODE(code_enum); }
     "code:enum_elem"              { RET_CODE(code_enum_elem); }
     "code:fndecl"                 { RET_CODE(code_fndecl); }
@@ -660,6 +660,7 @@ start:
     "code:yylessthan"             { RET_CODE(code_yylessthan); }
     "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
     "code:yybm_match"             { RET_CODE(code_yybm_match); }
+    "code:yytarget_filter"        { RET_CODE(code_yytarget_filter); }
 
     "code:" [a-z0-9_]+ {
         RET_FAIL(error_at_tok("unknown code template: '%.*s'", int(cur - tok), tok));

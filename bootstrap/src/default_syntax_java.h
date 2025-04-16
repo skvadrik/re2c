@@ -224,8 +224,8 @@ static constexpr const char* DEFAULT_SYNTAX_JAVA =
     "code:continue = topindent \"continue\" (.loop_label ? \" \" label) \";\" nl;\n"
     "\n"
     "code:goto = <undefined>;\n"
-    "code:cgoto_target = <undefined>;\n"
-    "code:cgoto_init = <undefined>;\n"
+    "code:cgoto = <undefined>;\n"
+    "code:cgoto_data = <undefined>;\n"
     "\n"
     "code:fndecl = <undefined>;\n"
     "code:fndef = <undefined>;\n"
@@ -384,4 +384,6 @@ static constexpr const char* DEFAULT_SYNTAX_JAVA =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \"] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_filter = <undefined>;\n"
     ;

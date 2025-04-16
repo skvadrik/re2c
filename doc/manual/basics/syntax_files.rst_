@@ -278,13 +278,13 @@ language configurations, inplace configurations and code templates.
       Goto statement. Supported variables: ``label`` (label of the jump
       target).
 
-  ``code:cgoto:target``
-      An expression that describes the target of computed ``goto``.
+  ``code:cgoto``
+      Computed ``goto`` statement.
       Supported variables: ``array`` (the table containing computed ``goto``
       information), ``index`` (index of the element in the table) and ``base``
       (base label, only used if ``.cgoto.relative`` is true).
 
-  ``code:cgoto:init``
+  ``code:cgoto:data``
       Initializer expression for a single element in computed ``goto`` table.
       Supported variables: ``label`` (the label that is used to initialize the
       current element), ``type`` (underlying type of the elements in the table)
@@ -521,6 +521,11 @@ language configurations, inplace configurations and code templates.
       ``yybm`` table that needs to be added to ``yych``) and ``mask`` (bit
       mask that should be applied to the table entry to retrieve the boolean
       value that needs to be checked)
+
+  ``code:yytarget_filter``
+      Condition that is used to filter out ``yych`` values that are not
+      covered by the ``yytarget`` table (used with ``--computed-gotos`` option).
+      Supported variable: ``yych`` (maps to ``re2c:yych`` configuration).
 
   Here's a list of all global variables that are allowed in syntax files:
 

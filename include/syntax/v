@@ -233,8 +233,8 @@ code:continue = topindent "continue" (.loop_label ? " " label) nl;
 
 code:goto = topindent "unsafe { goto " label " }" nl;
 
-code:cgoto_target = <undefined>;
-code:cgoto_init = <undefined>;
+code:cgoto = <undefined>;
+code:cgoto_data = <undefined>;
 
 code:fndecl = <undefined>;
 
@@ -410,3 +410,5 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = "(" yybm "[" offset "+" yych "] & " mask ") != 0";
+
+code:yytarget_filter = <undefined>;

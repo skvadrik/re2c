@@ -225,8 +225,8 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:loop = <undefined>;\n"
     "code:continue = <undefined>;\n"
     "code:goto = <undefined>;\n"
-    "code:cgoto_target = <undefined>;\n"
-    "code:cgoto_init = <undefined>;\n"
+    "code:cgoto = <undefined>;\n"
+    "code:cgoto_data = <undefined>;\n"
     "\n"
     "code:fndecl = <undefined>;\n"
     "\n"
@@ -418,4 +418,6 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:yybm_filter = \"(\" yych \" .&. complement 0xFF) /= 0\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \" ! (\" offset \" + fromIntegral \" yych \") .&. \" mask \") /= 0\";\n"
+    "\n"
+    "code:yytarget_filter = <undefined>;\n"
     ;

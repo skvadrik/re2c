@@ -1933,13 +1933,13 @@ continue execution).
 Goto statement. Supported variables: \fBlabel\fP (label of the jump
 target).
 .TP
-.B \fBcode:cgoto:target\fP
-An expression that describes the target of computed \fBgoto\fP\&.
+.B \fBcode:cgoto\fP
+Computed \fBgoto\fP statement.
 Supported variables: \fBarray\fP (the table containing computed \fBgoto\fP
 information), \fBindex\fP (index of the element in the table) and \fBbase\fP
 (base label, only used if \fB\&.cgoto.relative\fP is true).
 .TP
-.B \fBcode:cgoto:init\fP
+.B \fBcode:cgoto:data\fP
 Initializer expression for a single element in computed \fBgoto\fP table.
 Supported variables: \fBlabel\fP (the label that is used to initialize the
 current element), \fBtype\fP (underlying type of the elements in the table)
@@ -2176,6 +2176,11 @@ corresponding \fBre2c:\fP configurations), \fBoffset\fP (offset in the
 \fByybm\fP table that needs to be added to \fByych\fP) and \fBmask\fP (bit
 mask that should be applied to the table entry to retrieve the boolean
 value that needs to be checked)
+.TP
+.B \fBcode:yytarget_filter\fP
+Condition that is used to filter out \fByych\fP values that are not
+covered by the \fByytarget\fP table (used with \fB\-\-computed\-gotos\fP option).
+Supported variable: \fByych\fP (maps to \fBre2c:yych\fP configuration).
 .UNINDENT
 .sp
 Here\(aqs a list of all global variables that are allowed in syntax files:

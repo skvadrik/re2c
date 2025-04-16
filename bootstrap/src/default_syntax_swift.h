@@ -227,8 +227,8 @@ static constexpr const char* DEFAULT_SYNTAX_SWIFT =
     "code:continue = topindent \"continue\" (.loop_label ? \" \" label) nl;\n"
     "\n"
     "code:goto = <undefined>;\n"
-    "code:cgoto_target = <undefined>;\n"
-    "code:cgoto_init = <undefined>;\n"
+    "code:cgoto = <undefined>;\n"
+    "code:cgoto_data = <undefined>;\n"
     "\n"
     "code:fndecl = <undefined>;\n"
     "\n"
@@ -412,4 +412,6 @@ static constexpr const char* DEFAULT_SYNTAX_SWIFT =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \" + Int(\" yych \")] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_filter = <undefined>;\n"
     ;

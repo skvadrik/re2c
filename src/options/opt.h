@@ -172,10 +172,10 @@ using StxCodes = list_t<StxCode>;
     CODE_TEMPLATE(goto, \
         ({StxVarId::LABEL}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(cgoto_target, \
+    CODE_TEMPLATE(cgoto, \
         ({StxVarId::ARRAY, StxVarId::BASE, StxVarId::INDEX}), ({}), ({}) \
     ) \
-    CODE_TEMPLATE(cgoto_init, \
+    CODE_TEMPLATE(cgoto_data, \
         ({StxVarId::TYPE, StxVarId::LABEL, StxVarId::BASE}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(fndecl, \
@@ -313,6 +313,9 @@ using StxCodes = list_t<StxCode>;
     ) \
     CODE_TEMPLATE(yybm_match, \
         ({StxVarId::BITMAP, StxVarId::CHAR, StxVarId::OFFSET, StxVarId::MASK}), ({}), ({}) \
+    ) \
+    CODE_TEMPLATE(yytarget_filter, \
+        ({StxVarId::CHAR}), ({}), ({}) \
     )
 
 #define RE2C_ONELINE_CODES \

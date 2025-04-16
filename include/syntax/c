@@ -235,11 +235,13 @@ code:continue = topindent "continue;" nl;
 
 code:goto = topindent "goto " label ";" nl;
 
-code:cgoto_target = (.cgoto.relative
-    ? "*((char*)&&" base " + " array "[" index "])"
-    : "*" array "[" index "]");
+code:cgoto =
+    topindent "goto " (.cgoto.relative
+        ? "*((char*)&&" base " + " array "[" index "])"
+        : "*" array "[" index "]"
+    ) ";" nl;
 
-code:cgoto_init = (.cgoto.relative
+code:cgoto_data = (.cgoto.relative
     ? "(" type ")((char*)&&" label " - (char*)&&" base ")"
     : "&&" label);
 
@@ -451,3 +453,5 @@ code:yylessthan =
 code:yybm_filter = yych " & ~0xFF";
 
 code:yybm_match = yybm "[" offset "+" yych "] & " mask;
+
+code:yytarget_filter = yych " & ~0xFF";

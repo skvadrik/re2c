@@ -29,8 +29,8 @@
 <default syntax file>:1:0: warning: syntax configuration `code:loop` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:continue` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:goto` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
-<default syntax file>:1:0: warning: syntax configuration `code:cgoto_target` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
-<default syntax file>:1:0: warning: syntax configuration `code:cgoto_init` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:cgoto` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:cgoto_data` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:fndecl` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:fndef` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:fncall` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
@@ -72,4 +72,5 @@
 <default syntax file>:1:0: warning: syntax configuration `code:yylessthan` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_filter` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 <default syntax file>:1:0: warning: syntax configuration `code:yybm_match` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
+<default syntax file>:1:0: warning: syntax configuration `code:yytarget_filter` is not defined (set it to <undefined> explicitly to silence the warning) [-Wundefined-syntax-config]
 re2c: error: code model is not supported for this backend

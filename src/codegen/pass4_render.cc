@@ -615,6 +615,26 @@ class RenderJmp : public RenderCallback {
     FORBID_COPY(RenderJmp);
 };
 
+class RenderCgoto : public RenderCallback {
+    RenderContext& rctx;
+    const CodeCgoto* code;
+
+  public:
+    RenderCgoto(RenderContext& rctx, const CodeCgoto* code)
+        : rctx(rctx), code(code) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+            case StxVarId::ARRAY: rctx.os << code->array; break;
+            case StxVarId::BASE: rctx.os << code->base; break;
+            case StxVarId::INDEX: rctx.os << code->index; break;
+            default: render_global_var(rctx, var); break;
+        }
+    }
+
+    FORBID_COPY(RenderCgoto);
+};
+
 class RenderFnDef : public RenderCallback {
     RenderContext& rctx;
     const CodeFnDef* code;
@@ -1422,6 +1442,11 @@ static void render(RenderContext& rctx, const Code* code) {
     case CodeKind::GOTO: {
         RenderJmp callback(rctx, code->target);
         rctx.opts->render_code_goto(rctx.os, callback);
+        break;
+    }
+    case CodeKind::CGOTO: {
+        RenderCgoto callback(rctx, &code->cgoto);
+        rctx.opts->render_code_cgoto(rctx.os, callback);
         break;
     }
     case CodeKind::CONTINUE: {

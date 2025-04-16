@@ -232,8 +232,8 @@ static constexpr const char* DEFAULT_SYNTAX_GO =
     "\n"
     "code:goto = topindent \"goto \" label nl;\n"
     "\n"
-    "code:cgoto_target = <undefined>;\n"
-    "code:cgoto_init = <undefined>;\n"
+    "code:cgoto = <undefined>;\n"
+    "code:cgoto_data = <undefined>;\n"
     "\n"
     "code:fndecl = <undefined>;\n"
     "\n"
@@ -409,4 +409,6 @@ static constexpr const char* DEFAULT_SYNTAX_GO =
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
     "code:yybm_match = \"(\" yybm \"[\" offset \"+\" yych \"] & \" mask \") != 0\";\n"
+    "\n"
+    "code:yytarget_filter = <undefined>;\n"
     ;

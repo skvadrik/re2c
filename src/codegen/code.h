@@ -238,6 +238,12 @@ struct CodeRaw {
     size_t size;
 };
 
+struct CodeCgoto {
+    const char* array;
+    const char* base;
+    const char* index;
+};
+
 struct CodeParam {
     const char* name;
     const char* type;
@@ -316,6 +322,7 @@ struct Code {
         CodeBranches* ifte;
         CodeSwitch swch;
         CodeBlock block;
+        CodeCgoto cgoto;
         CodeFnDef fndef;
         CodeFnCall fncall;
         CodeRaw raw;
@@ -364,6 +371,14 @@ inline Code* code_stmt(OutAllocator& alc, const char* text) {
 inline Code* code_goto(OutAllocator& alc, const char* target) {
     Code* x = new_code(alc, CodeKind::GOTO);
     x->target = target;
+    return x;
+}
+
+inline Code* code_cgoto(OutAllocator& alc, const char* array, const char* base, const char* index) {
+    Code* x = new_code(alc, CodeKind::CGOTO);
+    x->cgoto.array = array;
+    x->cgoto.base = base;
+    x->cgoto.index = index;
     return x;
 }
 
