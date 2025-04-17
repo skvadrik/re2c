@@ -288,13 +288,14 @@ language configurations, inplace configurations and code templates.
       Initializer expression for a single element in computed ``goto`` table.
       Supported variables: ``label`` (the label that is used to initialize the
       current element), ``type`` (underlying type of the elements in the table)
-      and ``base``(base label - only used if ``.cgoto.relative`` is true).
+      and ``base`` (base label - only used if ``.cgoto.relative`` is true).
 
   ``code:fndecl``
       Function declaration. Supported variables: ``name`` (function name),
-      ``type`` (return type), ``arg`` (a list variable that does not itself
-      produce code, but expands list expression as many times as there are
-      function arguments), ``argname`` (name of the current argument),
+      ``type`` (return type), ``throw`` (exceptions thrown by this function,
+      maps to ``re2c:yyfn:throw`` configuration), ``arg`` (a list variable that
+      does not itself produce code, but expands list expression as many times as
+      there are function arguments), ``argname`` (name of the current argument),
       ``argtype`` (type of the current argument). Conditional: ``.type`` (true
       if this is a non-void function).
 
@@ -605,4 +606,7 @@ language configurations, inplace configurations and code templates.
 
   ``.version``
       True if the generated fingerprint should contain |re2c| version.
+
+  ``.yyfn.throw``
+      True if ``re2c:yyfn:throw`` configuration is defined to a nonempty string.
 

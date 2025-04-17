@@ -1958,13 +1958,14 @@ information), \fBindex\fP (index of the element in the table) and \fBbase\fP
 Initializer expression for a single element in computed \fBgoto\fP table.
 Supported variables: \fBlabel\fP (the label that is used to initialize the
 current element), \fBtype\fP (underlying type of the elements in the table)
-and \fBbase\(ga\(ga(base label \- only used if \(ga\(ga.cgoto.relative\fP is true).
+and \fBbase\fP (base label \- only used if \fB\&.cgoto.relative\fP is true).
 .TP
 .B \fBcode:fndecl\fP
 Function declaration. Supported variables: \fBname\fP (function name),
-\fBtype\fP (return type), \fBarg\fP (a list variable that does not itself
-produce code, but expands list expression as many times as there are
-function arguments), \fBargname\fP (name of the current argument),
+\fBtype\fP (return type), \fBthrow\fP (exceptions thrown by this function,
+maps to \fBre2c:yyfn:throw\fP configuration), \fBarg\fP (a list variable that
+does not itself produce code, but expands list expression as many times as
+there are function arguments), \fBargname\fP (name of the current argument),
 \fBargtype\fP (type of the current argument). Conditional: \fB\&.type\fP (true
 if this is a non\-void function).
 .TP
@@ -2279,6 +2280,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2swift version.
+.TP
+.B \fB\&.yyfn.throw\fP
+True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.
 .UNINDENT
 .UNINDENT
 .UNINDENT
