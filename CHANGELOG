@@ -2,9 +2,36 @@ Changelog
 =========
 
 
-----
-4.0x
-----
+4.2 (2025-04-23)
+~~~~~~~~~~~~~~~~
+
+- Added Swift backend
+  (`#506 <https://github.com/skvadrik/re2c/issues/506>`_).
+
+- Added options:
+
+  + ``--lang swift``
+  + ``--computed-gotos-relative``
+
+- Added configurations:
+
+  + ``re2c:cgoto:relative``, ``re2c:computed-gotos:relative``
+  + ``re2c:yyfn:throw``
+
+- Added syntax file code templates:
+
+  + ``code:cgoto``
+  + ``code:cgoto_data``
+  + ``code:yytarget_filter``
+  + ``code:type_yyctable``
+
+- Added syntax file conditionals:
+
+  + ``.cgoto.relative``
+  + ``.yyfn.throw``
+
+- Added some C++ benchmarks without submatch extraction.
+
 
 4.1 (2025-02-16)
 ~~~~~~~~~~~~~~~~
@@ -311,10 +338,6 @@ Changelog
 - Infra work on Github Actions CI.
 
 
-----
-3.0x
-----
-
 3.1 (2023-07-19)
 ~~~~~~~~~~~~~~~~
 
@@ -520,10 +543,6 @@ Changelog
     `039c1894 <https://github.com/skvadrik/re2c/commit/039c1894>`_.
 
 
-----
-2.2x
-----
-
 2.2 (2021-08-01)
 ~~~~~~~~~~~~~~~~
 
@@ -559,9 +578,6 @@ Changelog
 
 - Updated documentation.
 
-----
-2.1x
-----
 
 2.1.1 (2021-03-27)
 ~~~~~~~~~~~~~~~~~~
@@ -617,9 +633,6 @@ Changelog
 
 - Updated documentation for end of input handling and submatch extraction.
 
-----
-2.0x
-----
 
 2.0.3 (2020-08-22)
 ~~~~~~~~~~~~~~~~~~
@@ -727,9 +740,6 @@ Changelog
 
 - Major revision of the paper "Efficient POSIX submatch extraction on NFA".
 
-----
-1.3x
-----
 
 1.3 (2019-12-14)
 ~~~~~~~~~~~~~~~~
@@ -753,9 +763,6 @@ Changelog
   (`#258 <https://github.com/skvadrik/re2c/pull/258>`_:
   Make the build reproducible).
 
-----
-1.2x
-----
 
 1.2.1 (2019-08-11)
 ~~~~~~~~~~~~~~~~~~
@@ -937,9 +944,6 @@ Changelog
 - Updated documentation and website.
 
 
-----
-1.1x
-----
 
 1.1.1 (2018-08-30)
 ~~~~~~~~~~~~~~~~~~
@@ -957,9 +961,6 @@ Changelog
   Bugs with option: ``re2c:flags:no-debug-info``.
 - Reworked first part of TDFA paper.
 
-----
-1.0x
-----
 
 1.0.3 (2017-11-08)
 ~~~~~~~~~~~~~~~~~~
@@ -1125,10 +1126,6 @@ Changelog
     Makefile.am: create target directory before writing into it
 
 
------
-0.16x
------
-
 0.16 (2016-01-21)
 ~~~~~~~~~~~~~~~~~
 
@@ -1140,10 +1137,6 @@ Changelog
 - Fixed bug `#132 <https://github.com/skvadrik/re2c/issues/132>`_:
   test failure on big endian archs with 0.15.3
 
-
------
-0.15x
------
 
 0.15.3 (2015-12-02)
 ~~~~~~~~~~~~~~~~~~~
@@ -1268,10 +1261,6 @@ Changelog
   keep a mirror on sourceforge.
 
 
------
-0.14x
------
-
 0.14.3 (2015-05-20)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -1304,10 +1293,6 @@ Changelog
 - fixed `#47 <https://github.com/skvadrik/re2c/issues/47>`_:
   Dot output label escaped characters
 
-
------
-0.13x
------
 
 0.13.7.5 (2014-08-22)
 ~~~~~~~~~~~~~~~~~~~~~
@@ -1419,10 +1404,6 @@ Changelog
 - Fixed #1708378 segfault ``in actions.cc``.
 
 
------
-0.12x
------
-
 0.12.3 (2007-08-24)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -1474,10 +1455,6 @@ Changelog
   + aCC: HP C/aC++ B3910B A.06.15 [Mar 28 2007] (HP-UX IA64)
 
 
------
-0.11x
------
-
 0.11.3 (2007-04-01)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -1503,10 +1480,6 @@ Changelog
 
 - Added ``-u`` switch to support unicode.
 
-
------
-0.10x
------
 
 0.10.8 (2007-04-01)
 ~~~~~~~~~~~~~~~~~~~
@@ -1638,10 +1611,6 @@ Changelog
 - Applied #1307467 Unicode patch for 0.9.7.
 
 
-----
-0.9x
-----
-
 0.9.12 (2005-12-28)
 ~~~~~~~~~~~~~~~~~~~
 
@@ -1735,9 +1704,8 @@ Changelog
 
 - Removed rcs comments in source files.
 
--------------------------
 re2c adopted (2003-12-09)
--------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Version 0.9.1 README::
 
