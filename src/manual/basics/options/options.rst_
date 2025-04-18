@@ -38,14 +38,19 @@
     supported by compilers like GCC, Clang and Tcc. The main advantage over
     using single cases is smaller generated code and faster generation time,
     although for some compilers like Tcc it also results in smaller binary size.
-    This option is supported only for C.
 
 ``--computed-gotos -g``
     Optimize conditional jumps using non-standard "computed goto" extension
     (which must be supported by the compiler). |re2c| generates jump tables
     only in complex cases with a lot of conditional branches. Complexity
-    threshold can be configured with ``cgoto:threshold`` configuration. This
-    option implies ``--bit-vectors``. It is supported only for C.
+    threshold can be configured with ``cgoto:threshold`` configuration.
+    Relative offsets can be enabled with ``cgoto:relative`` configuration. This
+    option implies ``--bit-vectors``.
+
+``--computed-gotos-relative``
+    Similar to --computed-gotos but generate relative offsets for jump tables
+    instead (which must be supported by the compiler). This option implies
+    ``--computed-gotos``.
 
 ``--conditions --start-conditions -c``
     Enable support of Flex-like "conditions": multiple interrelated lexers
@@ -117,9 +122,9 @@
     ``(...)`` is capturing and ``(! ...)`` is non-capturing. With this option
     ``(! ...)`` is capturing and ``(...)`` is non-capturing.
 
-``--lang <none | c | d | go | haskell | java | js | ocaml | python | rust | v | zig>``
+``--lang <none | c | d | go | haskell | java | js | ocaml | python | rust | swift | v | zig>``
     Specify the target language. Supported languages are C, D, Go, Haskell,
-    Java, JS, OCaml, Python, Rust, V, Zig (more languages can be added via
+    Java, JS, OCaml, Python, Rust, Swift, V, Zig (more languages can be added via
     user-defined syntax files, see the ``--syntax`` option). Option ``none``
     disables default suntax configs, so that the target language is undefined.
 

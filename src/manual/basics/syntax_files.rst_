@@ -167,6 +167,7 @@ language configurations, inplace configurations and code templates.
       expands list expression as many times as there are rows in the table)
       and ``elem`` (a list variable that expands to all table elements in the
       current row -- it's meant to be nested in the ``row`` list).
+      Supported conditional: ``.const`` (true if the array is immutable).
 
   ``code:array_global``
       Same as ``code:array_local``, except that it's used in top-level.
@@ -277,11 +278,24 @@ language configurations, inplace configurations and code templates.
       Goto statement. Supported variables: ``label`` (label of the jump
       target).
 
+  ``code:cgoto``
+      Computed ``goto`` statement.
+      Supported variables: ``array`` (the table containing computed ``goto``
+      information), ``index`` (index of the element in the table) and ``base``
+      (base label, only used if ``.cgoto.relative`` is true).
+
+  ``code:cgoto:data``
+      Initializer expression for a single element in computed ``goto`` table.
+      Supported variables: ``label`` (the label that is used to initialize the
+      current element), ``type`` (underlying type of the elements in the table)
+      and ``base`` (base label - only used if ``.cgoto.relative`` is true).
+
   ``code:fndecl``
       Function declaration. Supported variables: ``name`` (function name),
-      ``type`` (return type), ``arg`` (a list variable that does not itself
-      produce code, but expands list expression as many times as there are
-      function arguments), ``argname`` (name of the current argument),
+      ``type`` (return type), ``throw`` (exceptions thrown by this function,
+      maps to ``re2c:yyfn:throw`` configuration), ``arg`` (a list variable that
+      does not itself produce code, but expands list expression as many times as
+      there are function arguments), ``argname`` (name of the current argument),
       ``argtype`` (type of the current argument). Conditional: ``.type`` (true
       if this is a non-void function).
 
@@ -509,6 +523,11 @@ language configurations, inplace configurations and code templates.
       mask that should be applied to the table entry to retrieve the boolean
       value that needs to be checked)
 
+  ``code:yytarget_filter``
+      Condition that is used to filter out ``yych`` values that are not
+      covered by the ``yytarget`` table (used with ``--computed-gotos`` option).
+      Supported variable: ``yych`` (maps to ``re2c:yych`` configuration).
+
   Here's a list of all global variables that are allowed in syntax files:
 
   ``nl``
@@ -549,6 +568,10 @@ language configurations, inplace configurations and code templates.
       True if case ranges feature is enabled (``--case-ranges`` or
       ``re2c:case-ranges = 1``).
 
+  ``.cgoto.relative``
+      True if the relative form of computed ``goto`` is used
+      (``--computed-gotos-relative`` or ``re2c:cgoto:relative = 1``).
+
   ``.code_model.goto_label``
       True if  code model based on goto/label is used (``--goto-label``).
 
@@ -583,4 +606,7 @@ language configurations, inplace configurations and code templates.
 
   ``.version``
       True if the generated fingerprint should contain |re2c| version.
+
+  ``.yyfn.throw``
+      True if ``re2c:yyfn:throw`` configuration is defined to a nonempty string.
 
