@@ -39,7 +39,8 @@ An in-tree build (objects are generated side by side with sources):
   ```
   $ ./configure && make && make install
   ```
-An out-of-tree build (objects are generated in a separate directory):
+An out-of-tree build (objects are generated in a separate directory
+named `.build`):
   ```
   $ mkdir .build && cd .build && ../configure && make && make install
   ```
@@ -176,7 +177,8 @@ The following modes are supported:
     the code with Undefined Behavior Sanitizer to check for undefined behavior
     errors.
 
-A simple build (objects are generated in a separate build directory):
+A simple build (objects are generated in a separate build directory named
+`.build`):
   ```
   $ mkdir .build && cd .build && cmake .. && cmake --build .
   ```
