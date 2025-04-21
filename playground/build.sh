@@ -3,7 +3,7 @@
 source "`dirname ${BASH_SOURCE[0]}`/../utils.sh"
 
 if [[ $# -eq 0 ]]; then
-  echo "Usage: $0 <git-branch-or-tag-name>"
+  echo "Usage: $0 <re2c-git-branch-or-tag-name>"
   exit 1
 fi
 
