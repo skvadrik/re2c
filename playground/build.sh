@@ -18,7 +18,7 @@ mkdir -p "$buildDir"
 mkdir -p "$currentScriptDir/gen"
 
 # Download and configure Emscripten
-git clone --depth=1 https://github.com/emscripten-core/emsdk.git "$buildDir/emsdk"
+git clone --depth=100 https://github.com/emscripten-core/emsdk.git "$buildDir/emsdk"
 "$buildDir/emsdk/emsdk" install latest
 "$buildDir/emsdk/emsdk" activate latest
 source "$buildDir/emsdk/emsdk_env.sh"
@@ -46,7 +46,7 @@ emcmake cmake \
     -s EXPORT_ES6=1 \
     -s FORCE_FILESYSTEM=1 \
     -s ALLOW_MEMORY_GROWTH=1 \
-    -s EXTRA_EXPORTED_RUNTIME_METHODS=[FS,callMain] \
+    -s EXPORTED_RUNTIME_METHODS=[FS,callMain] \
     -w" \
   -D RE2C_BUILD_RE2D=0 \
   -D RE2C_BUILD_RE2GO=0 \
