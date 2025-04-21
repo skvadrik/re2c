@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 source "`dirname ${BASH_SOURCE[0]}`/../utils.sh"
 
 if [[ $# -eq 0 ]]; then
