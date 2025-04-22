@@ -42,7 +42,7 @@ git archive --remote=. "remotes/$remote/$branch" BUILD.md | tar --directory=src/
 mv src/build/BUILD.md src/build/build.md
 git archive --remote=. "remotes/$remote/$branch" LICENSE | tar --directory=src -xpf -
 git archive --remote=. "remotes/$remote/$branch" doc/manual | tar --directory=src --strip-components=1 -xpf -
-git archive --remote=. "remotes/$remote/$branch" examples/**/*.{re,c,h,d,go,hs,java,js,ml,py,rs,v,zig,inc} | tar --directory=src -xpf -
+git archive --remote=. "remotes/$remote/$branch" examples/**/*.{re,c,h,d,go,hs,java,js,ml,py,rs,swift,v,zig,inc} | tar --directory=src -xpf -
 git archive --remote=. "remotes/$remote/$branch" benchmarks/c/results | tar --directory=src -xpf -
 git archive --remote=. "remotes/$remote/$branch" benchmarks/c/libre2c/{jit,nfa}/results | tar --directory=src -xpf -
 git archive --remote=. "remotes/$remote/$branch" benchmarks/_scripts/json2pgfplot.py | tar --directory=build --strip-components=2 -xpf -

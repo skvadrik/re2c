@@ -16,5 +16,6 @@ Choose your target language:
     re2ocaml (OCaml)   </manual/manual_ocaml>
     re2py (Python)     </manual/manual_py>
     re2rust (Rust)     </manual/manual_rust>
+    re2swift (Swift)   </manual/manual_swift>
     re2v (V)           </manual/manual_v>
     re2zig (Zig)       </manual/manual_zig>

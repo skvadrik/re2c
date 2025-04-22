@@ -15,7 +15,7 @@ re2c |nbsp| --- |nbsp| Regular Expressions to Code
 
 *re2c* stands for *Regular Expressions to Code*.
 It is a free and open-source lexer generator that supports C/C++, D, Go,
-Haskell, Java, JavaScript, OCaml, Python, Rust, V, Zig, and can be extended to
+Haskell, Java, JavaScript, OCaml, Python, Rust, Swift, V, Zig, and can be extended to
 other languages by implementing a single :ref:`syntax file <manual/manual_c:syntax files>`.
 The primary focus of re2c is on generating *fast* code: it compiles regular
 expressions to deterministic finite automata and translates them into
@@ -52,6 +52,7 @@ etc.
 `OCaml <manual/manual_ocaml.html>`_,
 `Python <manual/manual_py.html>`_,
 `Rust <manual/manual_rust.html>`_,
+`Swift <manual/manual_swift.html>`_,
 `V <manual/manual_v.html>`_,
 `Zig <manual/manual_zig.html>`_.
 

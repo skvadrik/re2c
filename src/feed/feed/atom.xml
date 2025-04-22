@@ -459,4 +459,21 @@
         </author>
     </entry>
 
+
+    <entry>
+        <title>Release 4.2</title>
+        <link href="https://re2c.org/releases/release_notes.html#release-4-2"/>
+        <id>https://re2c.org/releases/release_notes.html#release-4-2</id>
+        <updated>2025-04-23T00:00:00Z</updated>
+        <summary type="xhtml">
+            <div xmlns="http://www.w3.org/1999/xhtml">
+                Release re2c-4.2 (<a href="https://re2c.org/releases/release_notes.html#release-4-2">release notes</a>).
+            </div>
+        </summary>
+        <author>
+            <name>Ulya Trofimovich</name>
+            <email>skvadrik@gmail.com</email>
+        </author>
+    </entry>
+
 </feed>
