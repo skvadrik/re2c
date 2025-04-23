@@ -85,8 +85,17 @@ jobs:
       - name: Fast Configure
         run: |
           ./configure \
+              --disable-dlang \
               --disable-golang \
+              --disable-haskell \
+              --disable-java \
+              --disable-js \
+              --disable-ocaml \
+              --disable-python \
               --disable-rust \
+              --disable-swift \
+              --disable-vlang \
+              --disable-zig \
               --prefix=$PWD/install
 
       - name: Fast Build

@@ -79,6 +79,7 @@ jobs:
             -DRE2C_BUILD_RE2OCAML=OFF \
             -DRE2C_BUILD_RE2PY=OFF \
             -DRE2C_BUILD_RE2RUST=OFF \
+            -DRE2C_BUILD_RE2SWIFT=OFF \
             -DRE2C_BUILD_RE2V=OFF \
             -DRE2C_BUILD_RE2ZIG=OFF \
             -DRE2C_BUILD_BENCHMARKS=ON \
