@@ -206,6 +206,9 @@ language configurations, inplace configurations and code templates.
   ``code:type_yytarget``
       Type of elements in the ``yytarget`` table.
 
+  ``code:type_yyctable``
+      Type of elements in the ``yyctable`` table.
+
   ``code:cmp_eq``
       Operator "equals".
 
