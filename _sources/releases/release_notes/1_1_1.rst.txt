@@ -1,0 +1,10 @@
+Release 1.1.1
+=============
+
+This is a minor bug-fix release.
+It fixes a crash with ``-V`` ``--vernum`` option.
+The crash was reported and fixed by Mike Gilbert,
+and later rediscovered by Daniel J. Luke and Perry E. Metzger.
+Sergei Trofimovich made a unit test, as the ``-V`` ``--vernum`` option has already caused some troubles in the past.
+See the changelog :ref:`releases/changelog/changelog:1.1.1 (2018-08-30)` for details.
+Thanks everyone!

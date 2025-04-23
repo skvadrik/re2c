@@ -1,0 +1,93 @@
+Release 1.0
+===========
+
+This release is an important milestone in the history of re2c: it adds *submatch extraction*.
+It is a long-awaited feature; even as Peter Bumbulis released the first version of re2c back in 1993,
+he mentioned submatch extraction in his paper together with Donald D. Cowan
+`"RE2C: a more versatile scanner generator" <../../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps>`_
+as a useful feature that soon should be added to re2c.
+It seemed back then that submatch extraction is relatively easy to implement;
+like many other useful extensions, it was deemed to be no more than syntactic sugar on top of canonical regular expressions.
+
+As it turned out, this is not so:
+the problem of *parsing* with regular expressions is inherently more complex than *recognition*,
+and submatch extraction cannot be implemented using traditional DFA-based approach.
+Many authors studied this subject and developed algorithms suitable for their particular settings and problem domains.
+Some of them used NFA-based approach,
+others suggested algorithms based on multiple DFA or multiple passes over a single DFA.
+For re2c most of these algorithms are too heavyweight:
+they require complication of the underlying computational model and incur overhead even in simple cases.
+
+However, one algorithm is outstanding in this respect:
+it is the algorithm invented by Ville Laurikari in 2000 and described in his paper 
+`"NFAs with Tagged Transitions, their Conversion to Deterministic Automata and Application to Regular Expressions"
+<http://laurikari.net/ville/spire2000-tnfa.pdf>`_.
+Laurikari algorithm is based on a single DFA extended with a fixed number of *registers*; it makes one pass over the input string,
+works in linear time and the required space does not depend on the input length.
+But what is most important, the added complexity depends on submatch detalization:
+on submatch-free regular expressions Laurikari automaton reduces to a simple DFA.
+
+When the work on submatch extraction feature started in early 2016,
+at first it seemed that Laurikari algorithm was still overly complicated.
+Re2c needed an algorithm that would support only *partial* submatch extraction,
+but the supported cases would be handled very efficiently.
+A lot of effort was spent on studying papers,
+and finally this lead to the development of a new algorithm.
+It soon became clear that the self-invented algorithm was in fact a special case of Laurikari algorithm,
+with one significant performance improvement: the use of lookahead symbol.
+Surprisingly, the original Laurikari algorithm has a strange deficiency:
+when recording submatches, the automata totally ignore the lookahead symbol
+and perform a lot of redundant operations that could be easily avoided.
+It was only logical to fix Laurikari algorithm.
+The new improved algorithm is described in the paper
+`"Tagged Deterministic Finite Automata with Lookahead" <../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_
+
+Submatch extraction in re2c comes in two flavors:
+POSIX-compliant capturing groups (with true POSIX semantics)
+and standalone *tags* that use leftmost greedy disambiguation.
+Both features require a number of new API primitives and configurations;
+and they are barely documented yet (though I managed to add a section in the manual).
+The paper cited above has some interesting benchmark results;
+articles and examples will follow in the nearest future.
+As usually, you may expect a number of small bug-fix releases in the 1.0.x series.
+
+The following people contributed to this release:
+
+* Petr Skocik tidied up re2c documentation: fixed ubiquitous spelling errors
+  and established synchronization system between the online documentation,
+  manpage and help message displayed by re2c with ``--help`` option.
+
+* Sergei Trofimovich wrote a *fuzzer* that generates random regular expressions
+  and checks them on input data generated with re2c ``--skeleton`` option.
+  This fuzzer is most helpful; it has already found tens of bugs in the early implementation of submatch extraction.
+  Sergei also helped me with testing re2c on numerous platforms and computer architectures.
+
+* Abs62,
+  asmwarrior,
+  Ben Smith,
+  CRCinAU,
+  Derick Rethans,
+  Dimitri John Ledkov,
+  Eldar Zakirov,
+  jcfp,
+  Jean-Claude Wippler,
+  Jeff Trull,
+  Jérôme Dumesnil,
+  Jesse Buesking,
+  Julian Andres Klode,
+  Paulo Custodio,
+  Perry E. Metzger,
+  philippschaefer,
+  Ross Burton,
+  Rui Maciel,
+  Ryan Mast,
+  Samuel006,
+  sirzooro,
+  Tim Kelly
+  --- all these people contributed bug reports, patches and feedback. Thank you!
+
+* Many thanks to the early user of the new features João Paredes for his patience and encouraging comments on the subject.
+
+See the changelog :ref:`releases/changelog/changelog:1.0 (2017-08-11)` for details.
+
+
