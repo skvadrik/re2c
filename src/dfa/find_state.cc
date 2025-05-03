@@ -73,15 +73,14 @@ struct kernel_map_t {
     bool operator()(const kernel_t* x, const kernel_t* y);
 };
 
-template<typename ctx_t> static tcmd_t* final_actions(ctx_t&, const clos_t&);
-template<typename ctx_t> static void reserve_buffers(ctx_t&);
+template<typename ctx_t> static tcmd_t* final_actions(
+    ctx_t& ctx, const TnfaState* state, uint32_t tvers, hidx_t look);
 template<typename ctx_t> static bool equal_lookahead_tags(ctx_t&, const kernel_t*, const kernel_t*);
 template<typename ctx_t> static void unwind(const typename ctx_t::history_t&, tag_path_t&, hidx_t);
-static kernel_t* make_new_kernel(size_t, IrAllocator&);
+static void make_kernel_view(kernel_t* k, const kernel_buffers_t& kbufs);
 static kernel_t* make_kernel_copy(const kernel_t*, IrAllocator&);
-static void copy_to_buffer(const closure_t&, const prectable_t*, kernel_t*);
+template<typename ctx_t> void reserve_kmapbus(ctx_t& ctx);
 static void group_by_tag(tag_path_t&, tag_path_t&, std::vector<uint32_t>&);
-static uint32_t hash_kernel(const kernel_t*);
 
 // explicit instantiation for context types
 template void find_state<pdetctx_t>(pdetctx_t& ctx);
@@ -103,10 +102,14 @@ void find_state(ctx_t& ctx) {
         dfa.states.push_back(t);
 
         // check if the new state is final (see note [at most one final item per closure])
-        cclositer_t f = std::find_if(ctx.state.begin(), ctx.state.end(), clos_t::fin);
-        if (f != ctx.state.end()) {
-            t->rule = f->state->rule;
-            t->tcmd[dfa.nchars] = final_actions(ctx, *f);
+        const kernel_buffers_t& k = ctx.kbufs;
+        for (size_t i = 0; i < k.size; ++i) {
+            const TnfaState* x = k.state[i];
+            if (x->kind == TnfaState::Kind::FIN) {
+                t->rule = x->rule;
+                t->tcmd[dfa.nchars] = final_actions(ctx, x, k.tvers[i], k.thist[i]);
+                break;
+            }
         }
     }
 
@@ -120,50 +123,64 @@ void find_state(ctx_t& ctx) {
     DDUMP_DFA_TREE(is_new);
 }
 
+template<typename ctx_t>
+uint32_t hash_kernel(const kernel_t& kernel) {
+    const size_t n = kernel.size;
+
+    // seed
+    uint32_t h = static_cast<uint32_t>(n);
+
+    // TNFA states
+    h = hash32(h, kernel.state, n * sizeof(void*));
+
+    // precedence table
+    if (std::is_same<ctx_t, pdetctx_t>::value) {
+        h = hash32(h, kernel.prectbl, n * n * sizeof(prectable_t));
+    }
+
+    return h;
+}
+
 template<typename ctx_t, bool regless>
 bool do_find_state(ctx_t& ctx) {
     kernels_t& kernels = ctx.kernels;
-    const closure_t& closure = ctx.state;
+    kernel_t k;
+    make_kernel_view(&k, ctx.kbufs);
 
     // empty closure corresponds to default state
-    if (closure.size() == 0) {
+    if (k.size == 0) {
         ctx.target = Tdfa::NIL;
         ctx.actions = nullptr;
         return false;
     }
 
-    // resize buffer if closure is too large
-    reserve_buffers(ctx);
-    kernel_t* k = ctx.buffers.kernel;
-
-    // copy closure to buffer kernel
-    copy_to_buffer(closure, ctx.newprectbl, k);
+    // resize auxiliary buffers if closure is too large
+    reserve_kmapbufs(ctx);
 
     // hash "static" part of the kernel
-    const uint32_t hash = hash_kernel(k);
+    const uint32_t hash = hash_kernel<ctx_t>(k);
 
     // try to find identical kernel
     kernel_eq_t<ctx_t> cmp_eq = {ctx};
-    ctx.target = kernels.find_with(hash, k, cmp_eq);
+    ctx.target = kernels.find_with(hash, &k, cmp_eq);
     if (ctx.target != kernels_t::NIL) return false;
 
     // else try to find mappable kernel (see note [bijective mappings])
     kernel_map_t<ctx_t, regless> cmp_map = {ctx};
-    ctx.target = kernels.find_with(hash, k, cmp_map);
+    ctx.target = kernels.find_with(hash, &k, cmp_map);
     if (ctx.target != kernels_t::NIL) return false;
 
     // otherwise add new kernel
-    kernel_t* kcopy = make_kernel_copy(k, ctx.ir_alc);
+    kernel_t* kcopy = make_kernel_copy(&k, ctx.ir_alc);
     ctx.target = kernels.push(hash, kcopy);
-    ctx.kernels_total += k->size;
+    ctx.kernels_total += k.size;
     return true;
 }
 
 template<typename ctx_t>
-tcmd_t* final_actions(ctx_t& ctx, const clos_t& fin) {
-    const Rule& rule = ctx.rules[fin.state->rule];
-    const tagver_t* vers = ctx.tagvertbl[fin.tvers];
-    const hidx_t look = fin.thist;
+tcmd_t* final_actions(ctx_t& ctx, const TnfaState* state, uint32_t tvers, hidx_t look) {
+    const Rule& rule = ctx.rules[state->rule];
+    const tagver_t* vers = ctx.tagvertbl[tvers];
     const typename ctx_t::history_t& thist = ctx.history;
     tcpool_t& tcpool = ctx.dfa.tcpool;
     tcmd_t* copy = nullptr, *save = nullptr, **p;
@@ -190,32 +207,23 @@ tcmd_t* final_actions(ctx_t& ctx, const clos_t& fin) {
     return copy;
 }
 
-kernel_buffers_t::kernel_buffers_t()
-    : maxsize(0),
-      kernel(nullptr),
-      cap(0),
-      max(0),
-      memory(nullptr),
-      x2y(nullptr),
-      y2x(nullptr),
-      x2t(nullptr),
-      indegree(nullptr),
-      backup_actions(nullptr) {}
-
-kernel_t* make_new_kernel(size_t size, IrAllocator& alc) {
-    kernel_t* k = alc.alloct<kernel_t>(1);
-    k->size = size;
-    k->state = alc.alloct<TnfaState*>(size);
-    k->thist = alc.alloct<hidx_t>(size);
-    k->prectbl = nullptr;
-    k->tvers = alc.alloct<uint32_t>(size);
-    return k;
+void make_kernel_view(kernel_t* k, const kernel_buffers_t& kbufs) {
+    k->size = kbufs.size;
+    k->state = kbufs.state;
+    k->tvers = kbufs.tvers;
+    k->thist = kbufs.thist;
+    k->prectbl = kbufs.prectbl;
 }
 
 kernel_t* make_kernel_copy(const kernel_t* kernel, IrAllocator& alc) {
     const size_t n = kernel->size;
 
-    kernel_t* k = make_new_kernel(n, alc);
+    kernel_t* k = alc.alloct<kernel_t>(1);
+    k->size = n;
+    k->state = alc.alloct<TnfaState*>(n);
+    k->tvers = alc.alloct<uint32_t>(n);
+    k->thist = alc.alloct<hidx_t>(n);
+    k->prectbl = nullptr;
 
     memcpy(k->state, kernel->state, n * sizeof(void*));
     memcpy(k->thist, kernel->thist, n * sizeof(hidx_t));
@@ -232,46 +240,11 @@ kernel_t* make_kernel_copy(const kernel_t* kernel, IrAllocator& alc) {
     return k;
 }
 
-uint32_t hash_kernel(const kernel_t* kernel) {
-    const size_t n = kernel->size;
-
-    // seed
-    uint32_t h = static_cast<uint32_t>(n);
-
-    // TNFA states
-    h = hash32(h, kernel->state, n * sizeof(void*));
-
-    // precedence table
-    if (kernel->prectbl) {
-        h = hash32(h, kernel->prectbl, n * n * sizeof(prectable_t));
-    }
-
-    return h;
-}
-
-void copy_to_buffer(const closure_t& closure, const prectable_t* prectbl, kernel_t* buffer) {
-    const size_t n = closure.size();
-    buffer->size = n;
-    buffer->prectbl = prectbl;
-    for (size_t i = 0; i < n; ++i) {
-        const clos_t& c = closure[i];
-        buffer->state[i] = c.state;
-        buffer->tvers[i] = c.tvers;
-        buffer->thist[i] = c.thist;
-    }
-}
-
 template<typename ctx_t>
-void reserve_buffers(ctx_t& ctx) {
-    kernel_buffers_t& kbufs = ctx.buffers;
+void reserve_kmapbufs(ctx_t& ctx) {
+    kernel_map_buffers_t& kbufs = ctx.kmapbufs;
     IrAllocator& alc = ctx.ir_alc;
     const tagver_t maxver = ctx.dfa.maxtagver;
-    const size_t nkern = ctx.state.size();
-
-    if (kbufs.maxsize < nkern) {
-        kbufs.maxsize = nkern * 2; // in advance
-        kbufs.kernel = make_new_kernel(kbufs.maxsize, alc);
-    }
 
     // +1 to ensure max tag version is not forgotten in loops
     kbufs.max = maxver + 1;
@@ -381,7 +354,7 @@ bool kernel_map_t<ctx_t, regless>::operator()(const kernel_t* x, const kernel_t*
 
     const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
-    kernel_buffers_t& bufs = ctx.buffers;
+    kernel_map_buffers_t& bufs = ctx.kmapbufs;
     tagver_t* x2y = bufs.x2y, *y2x = bufs.y2x, max = bufs.max;
     size_t* x2t = bufs.x2t;
 

@@ -22,19 +22,20 @@ template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
 Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
-    : dfa_alc(dfa_alc),
-      ir_alc(),
-      charset(),
-      rules(),
-      tags(),
-      states(),
-      nchars(charset_bounds - 1), // (n + 1) bounds for n ranges
-      mtagvers(),
-      finvers(nullptr),
-      tcpool(dfa_alc),
-      maxtagver(0),
-      def_rule(def_rule),
-      eof_rule(eof_rule) {}
+    : dfa_alc(dfa_alc)
+    , ir_alc()
+    , charset()
+    , rules()
+    , tags()
+    , states()
+    , nchars(charset_bounds - 1) // (n + 1) bounds for n ranges
+    , mtagvers()
+    , finvers(nullptr)
+    , tcpool(dfa_alc)
+    , maxtagver(0)
+    , def_rule(def_rule)
+    , eof_rule(eof_rule)
+{}
 
 Ret determinization(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
     if (opts->captures_posix) {
@@ -54,11 +55,10 @@ Tdfa::~Tdfa() {
 
 template<typename ctx_t>
 Ret determinization(ctx_t& ctx) {
-    const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
+    ctx.init_tags = init_tag_versions(ctx);
 
     // initial state
-    const clos_t c0(ctx.nfa_root, 0, INITIAL_TAGS, HROOT, HROOT);
-    ctx.reach.push_back(c0);
+    ctx.reach.push_back(clos_t(ctx.nfa_root, 0, HROOT));
     tagged_epsilon_closure(ctx);
     find_state(ctx);
 
@@ -115,13 +115,12 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     closure_t& reach = ctx.reach;
     reach.clear();
 
-    // Add configurations in reverse order: leftmost greedy closure uses the resulting array as a
-    // stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations).
+    // Add configurations in reverse order: leftmost greedy closure uses the resulting array
+    // as a stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         TnfaState* s = transition(kernel->state[i], symbol);
         if (s) {
-            const clos_t c(s, i, kernel->tvers[i], kernel->thist[i], HROOT);
-            reach.push_back(c);
+            reach.push_back(clos_t(s, i, HROOT));
         }
     }
 }
@@ -223,53 +222,49 @@ void warn_nondeterministic_tags(const ctx_t& ctx) {
 }
 
 template<typename history_t>
-determ_context_t<history_t>::determ_context_t(Tnfa&& nfa,
-                                              Tdfa& dfa,
-                                              const opt_t* opts,
-                                              Msg& msg,
-                                              const std::string& cond)
-    : opts(opts),
-      msg(msg),
-      cond(cond),
-
-      // Move ownership of common data from TNFA to determinization context.
-      nfa_root(nfa.root),
-      ir_alc(std::move(nfa.ir_alc)),
-      charset(std::move(nfa.charset)),
-      rules(std::move(nfa.rules)),
-      tags(std::move(nfa.tags)),
-
-      dfa(dfa),
-
-      origin(Tdfa::NIL),
-      target(Tdfa::NIL),
-      symbol(0),
-      actions(nullptr),
-      tagvertbl(tags.size()),
-      history(),
-      kernels(),
-      kernels_total(0),
-      buffers(),
-      hc_caches(),
-      newvers(newver_cmp_t<history_t>(history, hc_caches)),
-      path1(),
-      path2(),
-      path3(),
-      tagcount(),
-      reach(),
-      state(),
-      gor1_topsort(),
-      gor1_linear(),
-      newprectbl(nullptr),
-      oldprectbl(nullptr),
-      oldprecdim(0),
-      histlevel(nullptr),
-      sortcores(),
-      fincount(),
-      worklist(),
-      dump_dfa_tree(*this),
-      dump(opts),
-      clstats() {
+determ_context_t<history_t>::determ_context_t(
+    Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond)
+        : opts(opts)
+        , msg(msg)
+        , cond(cond)
+        // Move ownership of common data from TNFA to determinization context.
+        , nfa_root(nfa.root)
+        , ir_alc(std::move(nfa.ir_alc))
+        , charset(std::move(nfa.charset))
+        , rules(std::move(nfa.rules))
+        , tags(std::move(nfa.tags))
+        , dfa(dfa)
+        , origin(Tdfa::NIL)
+        , target(Tdfa::NIL)
+        , symbol(0)
+        , init_tags(0)
+        , actions(nullptr)
+        , tagvertbl(tags.size())
+        , history()
+        , kernels()
+        , kernels_total(0)
+        , kbufs()
+        , kmapbufs()
+        , hc_caches()
+        , newvers(newver_cmp_t<history_t>(history, hc_caches))
+        , path1()
+        , path2()
+        , path3()
+        , tagcount()
+        , reach()
+        , state()
+        , gor1_topsort()
+        , gor1_linear()
+        , newprectbl(nullptr)
+        , oldprectbl(nullptr)
+        , oldprecdim(0)
+        , histlevel(nullptr)
+        , sortcores()
+        , fincount()
+        , worklist()
+        , dump_dfa_tree(*this)
+        , dump(opts)
+        , clstats() {
     const size_t nstates = nfa.nstates;
     const size_t ncores = nfa.ncores;
     const size_t ntags = tags.size();

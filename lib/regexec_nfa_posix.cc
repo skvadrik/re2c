@@ -3,6 +3,8 @@
 #include <utility>
 #include <vector>
 
+#define RE2C_LIB // needed before include src/dfa/posix_precedence.h
+
 #include "lib/regex.h"
 #include "lib/regex_impl.h"
 #include "src/dfa/closure_posix.h"

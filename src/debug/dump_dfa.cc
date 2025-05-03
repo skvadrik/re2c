@@ -59,8 +59,15 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     const uint32_t symbol = ctx.symbol;
     const Tdfa& dfa = ctx.dfa;
     const tagver_table_t& tvtbl = ctx.tagvertbl;
-    const typename ctx_t::history_t& thist = ctx.history;
+    const typename ctx_t::history_t& thistory = ctx.history;
     uint32_t i;
+
+    // current kernel
+    size_t ksize = ctx.kbufs.size;
+    TnfaState** kstates = ctx.kbufs.state;
+    const uint32_t* korigins = ctx.kbufs.origin;
+    const uint32_t* ktvers = ctx.kbufs.tvers;
+    const hidx_t* kthist = ctx.kbufs.thist;
 
     if (target == Tdfa::NIL) return;
 
@@ -71,19 +78,21 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
     // closure
     fprintf(stderr, "  %s%u [label=<<TABLE BORDER=\"0\" CELLBORDER=\"1\">", prefix, state);
     i = 0;
-    for (const clos_t& c : ctx.state) {
-        fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u", i, style, c.state->topord);
+    for (size_t k = 0; k < ksize; ++k) {
+        fprintf(stderr, "<TR><TD ALIGN=\"left\" PORT=\"%u\"%s>%u", i, style, kstates[k]->topord);
 
-        if (c.tvers != ZERO_TAGS) {
-            const tagver_t* vers = tvtbl[c.tvers];
+        uint32_t tvers = ktvers[k];
+        if (tvers != ZERO_TAGS) {
+            const tagver_t* vers = tvtbl[tvers];
             const size_t ntag = ctx.tags.size();
 
             for (size_t t = 0; t < ntag; ++t) {
                 fprintf(stderr, " %s%d", tagname(ctx.tags[t]), abs(vers[t]));
             }
 
-            if (c.thist != HROOT) {
-                dump_history<ctx_t>(ctx.tags, thist, c.thist);
+            hidx_t thist = kthist[k];
+            if (thist != HROOT) {
+                dump_history<ctx_t>(ctx.tags, thistory, thist);
             }
         }
 
@@ -97,9 +106,9 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         fprintf(stderr, "  void [shape=point]\n");
 
         uint32_t j = 0;
-        for (const clos_t& c : ctx.state) {
+        for (size_t k = 0; k < ksize; ++k) {
             fprintf(stderr, "  void -> 0:%u:w [style=dotted label=\"", j);
-            dump_tags<ctx_t>(tvtbl, thist, c.ttran, c.tvers);
+            dump_tags<ctx_t>(tvtbl, thistory, HROOT, ktvers[k]);
             fprintf(stderr, "\"]\n");
             ++j;
         }
@@ -118,11 +127,11 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         }
 
         uint32_t j = 0;
-        for (const clos_t& c : ctx.state) {
-            fprintf(stderr,
-                    "  %u:%u:e -> %s%u:%u:w [label=\"%u",
-                    origin, c.origin, prefix, state, j, symbol);
-            dump_tags<ctx_t>(tvtbl, thist, c.ttran, c.tvers);
+        for (size_t k = 0; k < ksize; ++k) {
+            fprintf(stderr, "  %u:%u:e -> %s%u:%u:w [label=\"%u",
+                origin, korigins[k], prefix, state, j, symbol);
+            dump_tags<ctx_t>(
+                tvtbl, thistory, ctx.kernels[ctx.origin]->thist[korigins[k]], ktvers[k]);
             fprintf(stderr, "\"]\n");
             ++j;
         }
@@ -135,8 +144,11 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         const tcmd_t* cmd = t->tcmd[dfa.nchars];
 
         // see note [at most one final item per closure]
-        cclositer_t b = ctx.state.begin(), e = ctx.state.end(), c = std::find_if(b, e, clos_t::fin);
-        DCHECK(c != e);
+        size_t k = 0;
+        for (; k < ksize; ++k) {
+            if (kstates[k]->kind == TnfaState::Kind::FIN) break;
+        }
+        DCHECK(k < ksize);
 
         fprintf(stderr, "  r%u [shape=none label=\"(", state);
         for (size_t j = r.ltag; j < r.htag; ++j) {
@@ -145,7 +157,7 @@ void dump_dfa_t::state(const ctx_t& ctx, bool isnew) {
         }
         fprintf(stderr, ")\"]\n");
 
-        fprintf(stderr, "  %u:%td:e -> r%u [style=dotted label=\"", state, c - b, state);
+        fprintf(stderr, "  %u:%td:e -> r%u [style=dotted label=\"", state, k, state);
         dump_tcmd(cmd);
         fprintf(stderr, "\"]\n");
     }

@@ -122,6 +122,7 @@ void compute_prectable(ctx_t& ctx) {
         compute_prectable_naive(ctx);
         break;
     }
+    ctx.kbufs.prectbl = ctx.newprectbl;
 }
 
 // Naive O(m^2*t) algorithm for computation of POSIX precedence table, where m is the number of
@@ -130,9 +131,16 @@ void compute_prectable(ctx_t& ctx) {
 // compared histories have O(N) length.
 template<typename ctx_t>
 void compute_prectable_naive(ctx_t& ctx) {
+#ifndef RE2C_LIB
+    TnfaState** state = ctx.kbufs.state;
+    const uint32_t* origin = ctx.kbufs.origin;
+    const hidx_t* thist = ctx.kbufs.thist;
+    const size_t newdim = ctx.kbufs.size;
+#else
     const typename ctx_t::confset_t& state = ctx.state;
-    int32_t* newtbl = ctx.newprectbl;
     const size_t newdim = state.size();
+#endif
+    int32_t* newtbl = ctx.newprectbl;
 
     const int32_t p0 = pack(MAX_RHO, 0);
 
@@ -140,7 +148,13 @@ void compute_prectable_naive(ctx_t& ctx) {
         newtbl[i * newdim + i] = p0;
         for (uint32_t j = i + 1; j < newdim; ++j) {
             int32_t prec1, prec2;
+#ifndef RE2C_LIB
+            typename ctx_t::conf_t c1{state[i], origin[i], thist[i]};
+            typename ctx_t::conf_t c2{state[j], origin[j], thist[j]};
+            int32_t prec = ctx_t::history_t::precedence(ctx, c1, c2, prec1, prec2);
+#else
             int32_t prec = ctx_t::history_t::precedence(ctx, state[i], state[j], prec1, prec2);
+#endif
             newtbl[i * newdim + j] = pack(prec1, prec);
             newtbl[j * newdim + i] = pack(prec2, -prec);
         }
@@ -151,14 +165,19 @@ void compute_prectable_naive(ctx_t& ctx) {
 // states in TNFA.
 template<typename ctx_t>
 void compute_prectable_complex(ctx_t& ctx) {
+#ifndef RE2C_LIB
+    const uint32_t* origin = ctx.kbufs.origin;
+    const hidx_t* thist = ctx.kbufs.thist;
+    const size_t newdim = ctx.kbufs.size;
+#else
     const typename ctx_t::confset_t& state = ctx.state;
-    const std::vector<Tag>& tags = ctx.tags;
-    typename ctx_t::history_t& history = ctx.history;
-
+    const size_t newdim = state.size();
+#endif
+    const size_t olddim = ctx.oldprecdim;
     const prectable_t* oldtbl = ctx.oldprectbl;
     prectable_t* newtbl = ctx.newprectbl;
-    const size_t olddim = ctx.oldprecdim, newdim = state.size();
-
+    const std::vector<Tag>& tags = ctx.tags;
+    typename ctx_t::history_t& history = ctx.history;
     std::vector<uint32_t>& sortcores = ctx.sortcores;
     std::vector<uint32_t>& fcount = ctx.fincount;
     std::vector<int32_t>& stack = ctx.worklist;
@@ -170,8 +189,12 @@ void compute_prectable_complex(ctx_t& ctx) {
     // array of boundaries in the sorted configuration array.
     uint32_t maxfin = 0;
     sortcores.resize(newdim);
-    for (const typename ctx_t::conf_t& conf : state) {
-        typename ctx_t::history_t::node_t& n = history.node(conf.thist);
+    for (size_t k = 0; k < newdim; ++k) {
+#ifndef RE2C_LIB
+        typename ctx_t::history_t::node_t& n = history.node(thist[k]);
+#else
+        typename ctx_t::history_t::node_t& n = history.node(state[k].thist);
+#endif
         if (n.finidx >= USED) {
             n.finidx = maxfin++;
             fcount[n.finidx] = 0;
@@ -190,9 +213,13 @@ void compute_prectable_complex(ctx_t& ctx) {
     for (size_t i = 1; i <= maxfin; ++i) {
         fcount[i] += fcount[i - 1];
     }
-    sortcores.resize(state.size());
+    sortcores.resize(newdim);
     for (uint32_t i = static_cast<uint32_t>(newdim); i --> 0; ) {
+#ifndef RE2C_LIB
+        sortcores[--fcount[history.node(thist[i]).finidx]] = i;
+#else
         sortcores[--fcount[history.node(state[i].thist).finidx]] = i;
+#endif
     }
 
     // Depth-first traversal of the history tree. During traversal we grow an array of items (one
@@ -228,7 +255,11 @@ void compute_prectable_complex(ctx_t& ctx) {
             // this node has leaf configurations, add them to level
             for (uint32_t k = fcount[fidx], e = fcount[fidx + 1]; k < e; ++k) {
                 const uint32_t j = sortcores[k];
+#ifndef RE2C_LIB
+                *level++ = {j, origin[j], HROOT, h};
+#else
                 *level++ = {j, state[j].origin, HROOT, h};
+#endif
             }
 
             // compute precedence for newly added configurations

@@ -132,13 +132,15 @@ static MpTdfaBacklink* construct_backlinks(const ctx_t& ctx,
     const std::vector<uint32_t>& uo = uniq_orig[ctx.target];
     uint32_t nbacklinks = *std::max_element(uo.begin(), uo.end()) + 1;
     MpTdfaBacklink* links = mptdfa.alc.alloct<MpTdfaBacklink>(nbacklinks);
+    const kernel_buffers_t& kbufs = ctx.kbufs;
 
     for (size_t j = 0, k; j < nbacklinks; ++j) {
-        for (k = 0; k < ctx.state.size() && uo[k] != j; ++k);
-        const typename ctx_t::conf_t& x = ctx.state[k];
+        for (k = 0; k < kbufs.size && uo[k] != j; ++k);
         MpTdfaBacklink& l = links[j];
-        l.conf = uniq_orig[ctx.origin][x.origin];
-        get_tstring_fragment(ctx.history, mptdfa.alc, x.ttran, tfrag, l, tstring);
+        l.conf = uniq_orig[ctx.origin][kbufs.origin[k]];
+        hidx_t ttran = ctx.origin == Tdfa::NIL
+            ? HROOT : ctx.kernels[ctx.origin]->thist[kbufs.origin[k]];
+        get_tstring_fragment(ctx.history, mptdfa.alc, ttran, tfrag, l, tstring);
     }
 
     return links;
@@ -159,10 +161,12 @@ static void determinization_multipass(Tnfa&& nfa, MpTdfa& mptdfa) {
     // configuration).
     std::vector<std::vector<uint32_t> > uniq_orig;
 
+    // For registerless TDFA we don't care about register versions, but we need at least one entry
+    // in tag version table, as the code that constructs TDFA state mapping performs table lookups.
+    CHECK(ZERO_TAGS == ctx.tagvertbl.insert_const(TAGVER_ZERO));
+
     // Construct initial TDFA state.
-    const uint32_t INITIAL_TAGS = init_tag_versions(ctx);
-    const clos_t c0(ctx.nfa_root, 0, INITIAL_TAGS, HROOT, HROOT);
-    ctx.reach.push_back(c0);
+    ctx.reach.push_back(clos_t(ctx.nfa_root, 0, HROOT));
     closure(ctx);
     find_state_multipass(ctx, mptdfa, tfrag, uniq_orig);
 
@@ -190,22 +194,27 @@ static void find_state_multipass(ctx_t& ctx,
                                  MpTdfa& mptdfa,
                                  std::vector<tchar_t>& tfrag,
                                  std::vector<std::vector<uint32_t>>& uniq_orig) {
+    // Normally `tvers` are filled as part of tag version update, but registerless TDFA skip that
+    // step, so we fill `tvers` here (knowing that there's a single entry in tag version table).
+    // This is needed because the mapping code performs table lookups. It can be made more
+    // efficient if one fills only the extra elements compared to previous kernel size.
+    std::fill(ctx.kbufs.tvers, ctx.kbufs.tvers + ctx.kbufs.size, ZERO_TAGS);
+
     const bool tstring = mptdfa.flags & REG_TSTRING;
 
     // Find or add the new state in the existing set of states.
     const bool is_new = do_find_state<ctx_t, true>(ctx);
 
     if (is_new) {
-        const typename ctx_t::confset_t& state = ctx.state;
+        const kernel_buffers_t& kbufs = ctx.kbufs;
 
         // Map configuration index to a unique origin index.
-        uniq_orig.push_back(std::vector<uint32_t>(state.size(), UINT32_MAX));
+        uniq_orig.push_back(std::vector<uint32_t>(kbufs.size, UINT32_MAX));
         std::vector<uint32_t>& uo = uniq_orig.back();
-        for (uint32_t i = 0, j = 0; j < state.size(); ++j) {
+        for (uint32_t i = 0, j = 0; j < kbufs.size; ++j) {
             if (uo[j] != UINT32_MAX) continue;
-            for (size_t k = j + 1; k < state.size(); ++k) {
-                if (state[j].origin == state[k].origin) {
-                    DCHECK(state[j].ttran == state[k].ttran); // TDFA(1) property
+            for (size_t k = j + 1; k < kbufs.size; ++k) {
+                if (kbufs.origin[j] == kbufs.origin[k]) {
                     uo[k] = i;
                 }
             }
@@ -214,11 +223,11 @@ static void find_state_multipass(ctx_t& ctx,
 
         // Check if the new TDFA state is final. See note [at most one final item per closure].
         MpTdfaBacklink finlink = {NOCONF, nullptr, 0};
-        for (uint32_t i = 0; i < state.size(); ++i) {
-            if (state[i].state->kind == TnfaState::Kind::FIN) {
+        for (uint32_t i = 0; i < kbufs.size; ++i) {
+            if (kbufs.state[i]->kind == TnfaState::Kind::FIN) {
                 finlink.conf = uo[i];
                 get_tstring_fragment(
-                        ctx.history, mptdfa.alc, state[i].thist, tfrag, finlink, tstring);
+                        ctx.history, mptdfa.alc, kbufs.thist[i], tfrag, finlink, tstring);
                 break;
             }
         }

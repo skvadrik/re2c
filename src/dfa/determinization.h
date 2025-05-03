@@ -28,28 +28,14 @@ class Msg;
 using prectable_t = int32_t;
 
 struct clos_t {
-    TnfaState* state;
-    uint32_t origin;
-    uint32_t tvers; // vector of tag versions (including lookahead tags)
-    hidx_t ttran; // history of transition tags
-    hidx_t thist; // history of lookahead tags
+    TnfaState* state; // target TNFA state
+    uint32_t origin;  // index of the origin TNFA state
+    hidx_t thist;     // lookahead tag history
 
-    inline clos_t(): state(nullptr), origin(0), tvers(0), ttran(0), thist(HROOT) {}
-    inline clos_t(TnfaState* s, uint32_t o, uint32_t v, hidx_t t, hidx_t h)
-        : state(s), origin(o), tvers(v), ttran(t), thist(h) {}
-    inline clos_t(const clos_t& c, TnfaState* s)
-        : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(c.thist) {}
-    inline clos_t(const clos_t& c, TnfaState* s, hidx_t h)
-        : state(s), origin(c.origin), tvers(c.tvers), ttran(c.ttran), thist(h) {}
-    static inline bool fin(const clos_t& c) { return c.state->kind == TnfaState::Kind::FIN; }
-    static inline bool ran(const clos_t& c) { return c.state->kind == TnfaState::Kind::RAN; }
+    inline clos_t(TnfaState* s, uint32_t o, hidx_t h): state(s), origin(o), thist(h) {}
 };
 
 using closure_t = std::vector<clos_t>;
-using clositer_t = closure_t::iterator;
-using cclositer_t = closure_t::const_iterator;
-using rclositer_t = closure_t::reverse_iterator;
-using rcclositer_t = closure_t::const_reverse_iterator;
 
 struct newver_t {
     size_t tag;
@@ -73,17 +59,45 @@ struct newver_cmp_t {
 struct kernel_t {
     size_t size;                // kernel size (the number of TNFA states in it)
     TnfaState** state;          // TNFA states
+    uint32_t* tvers;            // tag versions for each TNFA state
     hidx_t* thist;              // lookahead tag histories for each TNFA state
     const prectable_t* prectbl; // POSIX precedence table, if applicable
-    uint32_t* tvers;            // tag versions for each TNFA state
 
-    FORBID_COPY(kernel_t);
+    kernel_t()
+        : size(0)
+        , state(nullptr)
+        , tvers(nullptr)
+        , thist(nullptr)
+        , prectbl(nullptr)
+    {}
 };
 
-// Temporary buffers used for manipulations on the kernels.
+// Temporary buffers used during kernel construction. They contain the same information as
+// a kernel, plus origin TNFA states and transition tags. This extra information could be
+// propagated through closure items, but we want to keep them as lean as possible for
+// performance reasons (to avoid extra copying during closure construction).
 struct kernel_buffers_t {
-    size_t maxsize;
-    kernel_t* kernel;
+    size_t size;                // current kernel size (the number of TNFA states in it)
+    size_t maxsize;             // maximum kernel size
+    TnfaState** state;          // TNFA states
+    uint32_t* origin;           // closure item indices of the origin TNFA states
+    hidx_t* thist;              // lookahead tag histories for each TNFA state
+    uint32_t* tvers;            // tag versions for each TNFA state
+    const prectable_t* prectbl; // POSIX precedence table, if applicable
+
+    kernel_buffers_t()
+        : size(0)
+        , maxsize(0)
+        , state(nullptr)
+        , origin(nullptr)
+        , thist(nullptr)
+        , tvers(nullptr)
+        , prectbl(nullptr)
+    {}
+};
+
+// Temporary buffers used during kernel mapping.
+struct kernel_map_buffers_t {
     tagver_t cap; // capacity (greater or equal to max)
     tagver_t max; // maximal tag version
     char* memory;
@@ -93,7 +107,16 @@ struct kernel_buffers_t {
     uint32_t* indegree;
     tcmd_t* backup_actions;
 
-    kernel_buffers_t();
+    kernel_map_buffers_t()
+        : cap(0)
+        , max(0)
+        , memory(nullptr)
+        , x2y(nullptr)
+        , y2x(nullptr)
+        , x2t(nullptr)
+        , indegree(nullptr)
+        , backup_actions(nullptr)
+    {}
 };
 
 struct histleaf_t {
@@ -113,6 +136,7 @@ struct determ_context_t {
     using cconfiter_t = confset_t::const_iterator;
     using rconfiter_t = confset_t::reverse_iterator;
     using rcconfiter_t = confset_t::const_reverse_iterator;
+
     using history_t = history_type_t;
     using newvers_t = std::map<newver_t, tagver_t, newver_cmp_t<history_t>>;
 
@@ -136,12 +160,14 @@ struct determ_context_t {
     uint32_t origin;                // from-state of the current transition
     uint32_t target;                // to-state of the current transition
     uint32_t symbol;                // alphabet symbol of the current transition
+    uint32_t init_tags;             // table index of initial tag versions
     tcmd_t* actions;                // tag actions of the current transition
     tagver_table_t tagvertbl;
     history_t history;              // prefix trie of tag histories
     kernels_t kernels;              // TDFA states under construction
     size_t kernels_total;           // sum total of all kernel sizes
-    kernel_buffers_t buffers;
+    kernel_buffers_t kbufs;
+    kernel_map_buffers_t kmapbufs;
     hc_caches_t hc_caches;          // per-tag cache of history comparisons
     newvers_t newvers;              // map of triples (tag, version, history) to new version
     tag_path_t path1;               // buffer 1 for tag history

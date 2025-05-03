@@ -50,7 +50,7 @@ namespace re2c {
 // priority (see note [closure items are sorted by rule]).
 
 template<typename ctx_t> static void generate_versions(ctx_t&);
-template<typename ctx_t> void prune(ctx_t& ctx);
+template<typename ctx_t> void prune_and_copy_to_kbufs(ctx_t& ctx);
 static bool cmpby_rule_state(const clos_t&, const clos_t&);
 
 // explicit instantiation for context types
@@ -66,14 +66,14 @@ void tagged_epsilon_closure(ctx_t& ctx) {
 
 template<> void closure<pdetctx_t>(pdetctx_t& ctx) {
     closure_posix(ctx);
-    prune(ctx);
     std::sort(ctx.state.begin(), ctx.state.end(), cmpby_rule_state);
+    prune_and_copy_to_kbufs(ctx);
     compute_prectable(ctx);
 }
 
 template<> void closure<ldetctx_t>(ldetctx_t& ctx) {
     closure_leftmost(ctx);
-    prune(ctx);
+    prune_and_copy_to_kbufs(ctx);
 }
 
 bool cmpby_rule_state(const clos_t& x, const clos_t& y) {
@@ -88,14 +88,32 @@ bool cmpby_rule_state(const clos_t& x, const clos_t& y) {
 }
 
 template<typename ctx_t>
-void prune(ctx_t& ctx) {
-    // Filter out configurations which states have transitions on symbols. If we have any
-    // configurations with final state, pick the one with the lowest rule. See note [at most one
-    // final item per closure].
+void reserve_kbufs(ctx_t& ctx) {
+    kernel_buffers_t& k = ctx.kbufs;
+    size_t n = ctx.state.size();
+    if (k.maxsize < n) {
+        n *= 2; // in advance
+        IrAllocator& alc = ctx.ir_alc;
+        k.maxsize = n;
+        k.state = alc.alloct<TnfaState*>(n);
+        k.origin = alc.alloct<uint32_t>(n);
+        k.thist = alc.alloct<hidx_t>(n);
+        k.tvers = alc.alloct<uint32_t>(n);
+    }
+}
 
-    closure_t& closure = ctx.state, &buffer = ctx.reach;
+// Filter out configurations with states that have transitions on symbols.
+// If there are any configurations with final state, pick the one with the lowest rule.
+// See note [at most one final item per closure].
+template<typename ctx_t>
+void prune_and_copy_to_kbufs(ctx_t& ctx) {
+
+    closure_t& closure = ctx.state;
     const clos_t* f = nullptr;
-    buffer.clear();
+
+    reserve_kbufs(ctx);
+    kernel_buffers_t& k = ctx.kbufs;
+    size_t i = 0;
 
     for (const clos_t& c : closure) {
         TnfaState* s = c.state;
@@ -103,29 +121,32 @@ void prune(ctx_t& ctx) {
         closure_cleanup<ctx_t>(s);
 
         if (s->kind == TnfaState::Kind::RAN) {
-            buffer.push_back(c);
-        } else if (s->kind == TnfaState::Kind::FIN
-                && (f == nullptr || s->rule < f->state->rule)) {
+            k.state[i] = s;
+            k.origin[i] = c.origin;
+            k.thist[i] = c.thist;
+            ++i;
+        } else if (s->kind == TnfaState::Kind::FIN && f == nullptr) {
+            k.state[i] = s;
+            k.origin[i] = c.origin;
+            k.thist[i] = c.thist;
+            ++i;
+
             f = &c;
+
         }
     }
+    k.size = i;
 
-    if (f != nullptr) {
-        buffer.push_back(*f);
-
-        // mark dropped rules as shadowed
-        if (ctx.msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
-            std::vector<Rule>& rules = ctx.rules;
-            const uint32_t l = rules[f->state->rule].semact->loc.line;
-            for (const clos_t& c : closure) {
-                if (&c != f && c.state->kind == TnfaState::Kind::FIN) {
-                    rules[c.state->rule].shadow.insert(l);
-                }
+    // mark dropped rules as shadowed
+    if (f != nullptr && ctx.msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
+        std::vector<Rule>& rules = ctx.rules;
+        const uint32_t l = rules[f->state->rule].semact->loc.line;
+        for (const clos_t& c : closure) {
+            if (&c != f && c.state->kind == TnfaState::Kind::FIN) {
+                rules[c.state->rule].shadow.insert(l);
             }
         }
     }
-
-    closure.swap(buffer);
 }
 
 template<typename ctx_t>
@@ -134,51 +155,62 @@ void generate_versions(ctx_t& ctx) {
     const std::vector<Tag>& tags = ctx.tags;
     const size_t ntag = tags.size();
     tagver_t& maxver = dfa.maxtagver;
-    tagver_table_t& tvtbl = ctx.tagvertbl;
-    tagver_t* vers = tvtbl.buffer;
-    closure_t& clos = ctx.state;
-    typename ctx_t::history_t& thist = ctx.history;
+    tagver_table_t& tagvertbl = ctx.tagvertbl;
+    typename ctx_t::history_t& thistory = ctx.history;
     typename ctx_t::newvers_t& newvers = ctx.newvers;
+    kernel_buffers_t& kbufs = ctx.kbufs;
+
+    if (ctx.origin == Tdfa::NIL) {
+        ctx.actions = nullptr;
+        std::fill(kbufs.tvers, kbufs.tvers + kbufs.size, ctx.init_tags);
+        return;
+    }
+
+    // Origin kernel (TDFA state) from which the current closure has been reached.
+    const kernel_t* kernel = ctx.kernels[ctx.origin];
 
     typename ctx_t::newvers_t newacts(
-        newver_cmp_t<typename ctx_t::history_t>(thist, ctx.hc_caches));
+        newver_cmp_t<typename ctx_t::history_t>(thistory, ctx.hc_caches));
     tcmd_t* cmd = nullptr;
 
     // For each tag, if there is at least one tagged transition, allocate a new version: negative
     // in the case of transition with a negative tag, and positive otherwise. The absolute version
     // value should be unique among all versions of all tags.
-    for (clos_t& c : clos) {
-        const hidx_t l = c.thist, h = c.ttran;
-        if (h == HROOT) continue;
+    for (size_t k = 0; k < kbufs.size; ++k) {
+        uint32_t orig = kbufs.origin[k];
+        hidx_t orig_thist = kernel->thist[orig];
 
-        const tagver_t* vs = tvtbl[c.tvers];
+        if (orig_thist == HROOT) continue;
+
+        hidx_t look_thist = kbufs.thist[k];
+        const tagver_t* old_vers = tagvertbl[kernel->tvers[orig]];
+
         for (size_t t = 0; t < ntag; ++t) {
+            if (last(thistory, orig_thist, t) == TAGVER_ZERO) continue;
+
             const Tag& tag = tags[t];
+            tagver_t old_ver = history(tag) ? old_vers[t] : TAGVER_ZERO;
+            newver_t key{t, old_ver, orig_thist};
+            tagver_t next_free_ver = maxver + 1;
+            tagver_t ver = newvers.insert(std::make_pair(key, next_free_ver)).first->second;
+            if (ver == next_free_ver) ++maxver;
 
-            const tagver_t h0 = last(thist, h, t);
-            if (h0 == TAGVER_ZERO) continue;
-
-            const tagver_t v = history(tag) ? vs[t] : TAGVER_ZERO;
-            newver_t x = {t, v, h};
-            const tagver_t n = maxver + 1;
-            const tagver_t m = newvers.insert(std::make_pair(x, n)).first->second;
-            if (n == m) ++maxver;
-
-            if (!fixed(tag) && (history(tag) || last(thist, l, t) == TAGVER_ZERO)) {
-                newacts.insert(std::make_pair(x, m));
+            if (!fixed(tag) && (history(tag) || last(thistory, look_thist, t) == TAGVER_ZERO)) {
+                newacts.insert(std::make_pair(key, ver));
             }
         }
     }
 
     // actions
     for (const auto& i : newacts) {
-        const tagver_t m = i.second, v = i.first.base;
-        const hidx_t h = i.first.history;
-        const size_t t = i.first.tag;
+        tagver_t ver = i.second;
+        tagver_t old_ver = i.first.base;
+        hidx_t thist = i.first.history;
+        size_t t = i.first.tag;
         if (history(tags[t])) {
-            cmd = dfa.tcpool.make_add(cmd, abs(m), abs(v), thist, h, t);
+            cmd = dfa.tcpool.make_add(cmd, abs(ver), abs(old_ver), thistory, thist, t);
         } else {
-            cmd = dfa.tcpool.make_set(cmd, abs(m), last(thist, h, t));
+            cmd = dfa.tcpool.make_set(cmd, abs(ver), last(thistory, thist, t));
         }
     }
 
@@ -190,23 +222,29 @@ void generate_versions(ctx_t& ctx) {
     }
 
     // update tag versions in closure
-    for (clos_t& c : clos) {
-        const hidx_t h = c.ttran;
-        if (h == HROOT) continue;
+    for (size_t k = 0; k < kbufs.size; ++k) {
+        uint32_t orig = kbufs.origin[k];
+        uint32_t orig_tvers = kernel->tvers[orig];
+        hidx_t orig_thist = kernel->thist[orig];
 
-        const tagver_t* vs = tvtbl[c.tvers];
-        for (size_t t = 0; t < ntag; ++t) {
-            const tagver_t v0 = vs[t];
-            const tagver_t h0 = last(thist, h, t);
-            const tagver_t v = history(tags[t]) ? v0 : TAGVER_ZERO;
-            if (h0 == TAGVER_ZERO) {
-                vers[t] = v0;
-            } else {
-                newver_t x = {t, v, h};
-                vers[t] = newvers[x];
+        if (orig_thist == HROOT) {
+            // empty history for all tags => use origin versions
+            kbufs.tvers[k] = orig_tvers;
+        } else {
+            const tagver_t* old_vers = tagvertbl[orig_tvers];
+            tagver_t* vers = tagvertbl.buffer;
+            for (size_t t = 0; t < ntag; ++t) {
+                if (last(thistory, orig_thist, t) == TAGVER_ZERO) {
+                    // empty history for tag `t` => use origin version
+                    vers[t] = old_vers[t];
+                } else {
+                    // use new version for tag `t`
+                    tagver_t old_ver = history(tags[t]) ? old_vers[t] : TAGVER_ZERO;
+                    vers[t] = newvers[{t, old_ver, orig_thist}];
+                }
             }
+            kbufs.tvers[k] = tagvertbl.insert(vers);
         }
-        c.tvers = tvtbl.insert(vers);
     }
 
     ctx.actions = cmd;

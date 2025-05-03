@@ -125,17 +125,17 @@ bool scan(ctx_t& ctx, TnfaState* q, bool all) {
     switch (q->kind) {
     case TnfaState::Kind::ALT:
         if (q->arcidx == 0) {
-            any |= relax_gor1(ctx, conf_t(x, q->out1));
+            any |= relax_gor1(ctx, conf_t(q->out1, x.origin, x.thist));
             ++q->arcidx;
         }
         if (q->arcidx == 1 && (!any || all)) {
-            any |= relax_gor1(ctx, conf_t(x, q->out2));
+            any |= relax_gor1(ctx, conf_t(q->out2, x.origin, x.thist));
             ++q->arcidx;
         }
         break;
     case TnfaState::Kind::TAG:
         if (q->arcidx == 0) {
-            any |= relax_gor1(ctx, conf_t(x, q->out1, ctx.history.link(ctx, x)));
+            any |= relax_gor1(ctx, conf_t(q->out1, x.origin, ctx.history.link(ctx, x)));
             ++q->arcidx;
         }
         break;

@@ -222,6 +222,12 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
 
     if (target == Tdfa::NIL) return;
 
+    // current kernel
+    size_t ksize = ctx.kbufs.size;
+    TnfaState** kstates = ctx.kbufs.state;
+    const uint32_t* korigins = ctx.kbufs.origin;
+    const hidx_t* kthist = ctx.kbufs.thist;
+
     // initial "void" node
     if (origin == Tdfa::NIL) {
         fprintf(stderr,
@@ -239,23 +245,25 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
     fprintf(stderr,
             "   subgraph {\n"
             "    rank=same\n");
-    for (const clos_t& c : ctx.state) {
+    for (size_t i = 0; i < ksize; ++i) {
+        const TnfaState* s = kstates[i];
         fprintf(stderr,
                 "    n%u_%u [label=\"s%u\" style=\"rounded,filled\" bgcolor=lightgray]\n",
-                targetx, c.state->topord, c.state->topord);
+                targetx, s->topord, s->topord);
     }
     fprintf(stderr, "   }\n");
     fprintf(stderr, "   style=\"rounded%s\"\n", isnew ? "" : ",dotted");
 
     // transitions constituiting the tag history tree
-    for (const clos_t& c : ctx.state) {
+    for (size_t i = 0; i < ksize; ++i) {
         if (origin == Tdfa::NIL) {
             fprintf(stderr, "   void");
         } else {
-            fprintf(stderr, "   n%u_%u", origin, ctx.kernels[origin]->state[c.origin]->topord);
+            fprintf(stderr, "   n%u_%u", origin, ctx.kernels[origin]->state[korigins[i]]->topord);
         }
-        dump_history1(ctx.history, used_nodes, c.thist);
-        fprintf(stderr, "->n%u_%u%s\n", targetx, c.state->topord, isnew ? "" : " [style=dotted]");
+        dump_history1(ctx.history, used_nodes, kthist[i]);
+        fprintf(stderr, "->n%u_%u%s\n", targetx, kstates[i]->topord,
+            isnew ? "" : " [style=dotted]");
     }
 
     // end cluster for the current tag history tree
@@ -263,8 +271,8 @@ void dump_dfa_tree_t<ctx_t>::state(bool isnew) {
 
     // save TNFA origins for this TDFA state
     origins_t& origins = origmap[std::make_pair(origin, ctx.symbol)];
-    for (const clos_t& c : ctx.state) {
-        origins.push_back(origin == Tdfa::NIL ? nullptr : ctx.kernels[origin]->state[c.origin]);
+    for (size_t i = 0; i < ksize; ++i) {
+        origins.push_back(origin == Tdfa::NIL ? nullptr : ctx.kernels[origin]->state[korigins[i]]);
     }
 }
 
