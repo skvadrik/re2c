@@ -32,6 +32,7 @@ struct clos_t {
     uint32_t origin;  // index of the origin TNFA state
     hidx_t thist;     // lookahead tag history
 
+    inline clos_t(): state(nullptr), origin(0), thist(HROOT) {}
     inline clos_t(TnfaState* s, uint32_t o, hidx_t h): state(s), origin(o), thist(h) {}
 };
 

@@ -18,19 +18,7 @@ namespace libre2c {
 
 using tag_path_t = std::vector<tag_info_t>;
 
-struct conf_t {
-    TnfaState* state;
-    uint32_t origin;
-    int32_t thist;
-
-    inline conf_t(): state(nullptr), origin(0), thist(HROOT) {}
-    inline conf_t(TnfaState* s, uint32_t o, int32_t h)
-        : state(s), origin(o), thist(h) {}
-    inline conf_t(const conf_t& c, TnfaState* s)
-        : state(s), origin(c.origin), thist(c.thist) {}
-    inline conf_t(const conf_t& c, TnfaState* s, int32_t h)
-        : state(s), origin(c.origin), thist(h) {}
-};
+using conf_t = clos_t;
 
 struct ran_or_fin_t {
     inline bool operator()(const conf_t& c);
@@ -43,7 +31,7 @@ using rcconfiter_t = confset_t::const_reverse_iterator;
 
 template<typename history_type_t>
 struct simctx_t {
-    using conf_t = libre2c::conf_t;
+    using conf_t = clos_t;
     using confset_t = std::vector<conf_t>;
     using confiter_t = confset_t::iterator;
     using cconfiter_t = confset_t::const_iterator;
