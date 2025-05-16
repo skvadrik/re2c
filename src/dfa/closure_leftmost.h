@@ -21,25 +21,29 @@ void closure_leftmost_dfs(ctx_t& ctx) {
     // DFS; linear complexity
     for (; !stack.empty(); ) {
         using conf_t = typename ctx_t::conf_t;
-        const conf_t x = stack.back();
-        stack.pop_back();
+        conf_t& x = stack.back();
         TnfaState* n = x.state;
 
-        if (n->clos != NOCLOS) continue;
+        if (n->clos != NOCLOS) {
+            stack.pop_back();
+            continue;
+        }
 
         n->clos = static_cast<uint32_t>(state.size());
         state.push_back(x);
 
         switch (n->kind) {
         case TnfaState::Kind::ALT:
-            stack.push_back(conf_t(n->out2, x.origin, x.thist));
+            x.state = n->out2; // use inplace stack slot for the right alternative
             stack.push_back(conf_t(n->out1, x.origin, x.thist));
             break;
         case TnfaState::Kind::TAG:
-            stack.push_back(conf_t(n->out1, x.origin, ctx.history.link(ctx, x)));
+            x.thist = ctx.history.link(ctx, x);
+            x.state = n->out1;
             break;
         case TnfaState::Kind::RAN:
         case TnfaState::Kind::FIN:
+            stack.pop_back();
             break;
         }
     }
