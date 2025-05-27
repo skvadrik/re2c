@@ -622,7 +622,7 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
+                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
                         st.cur += 1
                         yystate = 25
                         continue yyl
@@ -683,7 +683,7 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
+                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
                         st.cur += 1
                         yystate = 30
                         continue yyl
@@ -786,7 +786,7 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
+                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
                         st.cur += 1
                         yystate = 30
                         continue yyl
@@ -815,15 +815,15 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
-                        st.yytm2 = st.yytm1
-                        st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
+                        st.yytm5 = add_mtag(mut &st.trie, st.yytm5, st.cur)
+                        st.yytm4 = st.yytm3
+                        st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.cur)
                         st.cur += 1
                         yystate = 34
                         continue yyl
                     }
                     else {
-                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
+                        st.yytm5 = add_mtag(mut &st.trie, st.yytm5, st.cur)
                         st.cur += 1
                         yystate = 35
                         continue yyl
@@ -842,7 +842,7 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.cur)
+                        st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.cur)
                         st.cur += 1
                         yystate = 30
                         continue yyl
@@ -889,8 +889,8 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm2 = st.yytm1
-                        st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
+                        st.yytm4 = st.yytm3
+                        st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.cur)
                         st.cur += 1
                         yystate = 34
                         continue yyl
@@ -908,7 +908,9 @@ yyl:
                 yych = st.buf[st.cur]
                 match yych {
                     0x09, 0x20 {
-                        st.yytm1 = st.yytm2
+                        st.yytm1 = st.yytm3
+                        st.yytm2 = st.yytm5
+                        st.yytm3 = st.yytm4
                         st.cur += 1
                         yystate = 32
                         continue yyl
@@ -918,6 +920,8 @@ yyl:
                             st.state = 70
                             return .lex_waiting
                         }
+                        st.yytm1 = st.yytm3
+                        st.yytm2 = st.yytm5
                         yystate = 37
                         continue yyl
                     }
@@ -925,7 +929,7 @@ yyl:
             }
             37 {
                 f1 = st.yytm1
-                f2 = st.yytm3
+                f2 = st.yytm2
                 st.state = yycheader
 //line "codegen/v/loop_switch/advanced.re":181
                 
@@ -935,7 +939,7 @@ yyl:
             st.tok = st.cur
             unsafe { goto loop }
 
-//line "codegen/v/loop_switch/advanced.v":939
+//line "codegen/v/loop_switch/advanced.v":943
             }
             38 {
                 yych = st.buf[st.cur]
@@ -1005,8 +1009,8 @@ yyl:
                         continue yyl
                     }
                     0x0D {
-                        st.yytm2 = st.yytm1
-                        st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.cur)
+                        st.yytm4 = st.yytm3
+                        st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.cur)
                         st.cur += 1
                         yystate = 34
                         continue yyl
@@ -1019,6 +1023,8 @@ yyl:
                 }
             }
             41 {
+                st.yytm1 = st.yytm3
+                st.yytm2 = st.yytm5
                 yystate = 37
                 continue yyl
             }
@@ -1049,7 +1055,7 @@ yyl:
                 st.state = yycheader
 //line "codegen/v/loop_switch/advanced.re":190
                 unsafe { goto end }
-//line "codegen/v/loop_switch/advanced.v":1053
+//line "codegen/v/loop_switch/advanced.v":1059
             }
             44 {
                 if st.lim <= st.cur {
@@ -1261,6 +1267,8 @@ yyl:
             }
             70 {
                 if st.lim <= st.cur {
+                    st.yytm1 = st.yytm3
+                    st.yytm2 = st.yytm5
                     yystate = 37
                     continue yyl
                 }
@@ -1328,14 +1336,14 @@ fn test(expect Status, packets []string) {
         state:  -1,
         trie:   []MtagElem{},
         
-//line "codegen/v/loop_switch/advanced.v":1332
+//line "codegen/v/loop_switch/advanced.v":1340
 
 		yyt1: tag_none,
 		yyt2: tag_none,
 //line "codegen/v/loop_switch/advanced.re":215
 
         
-//line "codegen/v/loop_switch/advanced.v":1339
+//line "codegen/v/loop_switch/advanced.v":1347
 
 		yytm1: mtag_root,
 		yytm10: mtag_root,

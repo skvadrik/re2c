@@ -273,6 +273,15 @@ static void find_fallback_states_with_eof_rule(Tdfa& dfa) {
     const size_t nsym = dfa.nchars;
 
     for (TdfaState* s : dfa.states) {
+        // With the end-of-input rule $ any non-final state is a fallthrough state: even if
+        // all ougoing transitions go to a final state, there's a chance that there will be
+        // the end of input and none of these transitions can be taken.
+        if (s->rule == Rule::NONE) {
+            s->fallthru = true;
+        }
+    }
+
+    for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE || s->rule == dfa.eof_rule) continue;
 
         // With the end-of-input rule $ a final state is a fallback state if it has outgoing

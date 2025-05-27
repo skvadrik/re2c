@@ -718,7 +718,7 @@ func yy23(st *State) int {
 			return yy24(st)
 		}
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
 		st.yycursor += 1
 		return yy26(st)
 	default:
@@ -780,7 +780,7 @@ func yy27(st *State) int {
 		st.yycursor += 1
 		return yy30(st)
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
 		st.yycursor += 1
 		return yy31(st)
 	default:
@@ -882,7 +882,7 @@ func yy32(st *State) int {
 		st.yycursor += 1
 		return yy30(st)
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
 		st.yycursor += 1
 		return yy31(st)
 	default:
@@ -915,13 +915,13 @@ func yy33(st *State) int {
 		st.yycursor += 1
 		return yy33(st)
 	case '\r':
-		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
-		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yytm5 = add_mtag(&st.trie, st.yytm5, st.yycursor)
+		st.yytm4 = st.yytm3
+		st.yytm4 = add_mtag(&st.trie, st.yytm4, st.yycursor)
 		st.yycursor += 1
 		return yy35(st)
 	default:
-		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
+		st.yytm5 = add_mtag(&st.trie, st.yytm5, st.yycursor)
 		st.yycursor += 1
 		return yy36(st)
 	}
@@ -944,7 +944,7 @@ func yy34(st *State) int {
 			return yy29(st)
 		}
 	case '\r':
-		st.yytm1 = add_mtag(&st.trie, st.yytm1, st.yycursor)
+		st.yytm3 = add_mtag(&st.trie, st.yytm3, st.yycursor)
 		st.yycursor += 1
 		return yy31(st)
 	default:
@@ -991,8 +991,8 @@ func yy36(st *State) int {
 		st.yycursor += 1
 		return yy39(st)
 	case '\r':
-		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yytm4 = st.yytm3
+		st.yytm4 = add_mtag(&st.trie, st.yytm4, st.yycursor)
 		st.yycursor += 1
 		return yy35(st)
 	default:
@@ -1009,7 +1009,9 @@ func yy37(st *State) int {
 	case '\t':
 		fallthrough
 	case ' ':
-		st.yytm1 = st.yytm2
+		st.yytm1 = st.yytm3
+		st.yytm2 = st.yytm5
+		st.yytm3 = st.yytm4
 		st.yycursor += 1
 		return yy33(st)
 	default:
@@ -1017,6 +1019,8 @@ func yy37(st *State) int {
 			st.yyst = 26
 			return lexWaiting
 		} else {
+			st.yytm1 = st.yytm3
+			st.yytm2 = st.yytm5
 			return yy38(st)
 		}
 	}
@@ -1024,7 +1028,7 @@ func yy37(st *State) int {
 
 func yy38(st *State) int {
 	st.f1 = st.yytm1
-	st.f2 = st.yytm3
+	st.f2 = st.yytm2
 	st.yyst = -1
 //line "codegen/go/recursive_functions/advanced.re":168
 	
@@ -1034,7 +1038,7 @@ func yy38(st *State) int {
 		st.token = st.yycursor
 		return lex(st)
 
-//line "codegen/go/recursive_functions/advanced.go":1038
+//line "codegen/go/recursive_functions/advanced.go":1042
 }
 
 func yy39(st *State) int {
@@ -1108,8 +1112,8 @@ func yy41(st *State) int {
 		st.yycursor += 1
 		return yy43(st)
 	case '\r':
-		st.yytm2 = st.yytm1
-		st.yytm2 = add_mtag(&st.trie, st.yytm2, st.yycursor)
+		st.yytm4 = st.yytm3
+		st.yytm4 = add_mtag(&st.trie, st.yytm4, st.yycursor)
 		st.yycursor += 1
 		return yy35(st)
 	default:
@@ -1119,6 +1123,8 @@ func yy41(st *State) int {
 }
 
 func yy42(st *State) int {
+	st.yytm1 = st.yytm3
+	st.yytm2 = st.yytm5
 	return yy38(st)
 }
 
@@ -1147,7 +1153,7 @@ func yy44(st *State) int {
 	st.yyst = -1
 //line "codegen/go/recursive_functions/advanced.re":176
 	return lexEnd
-//line "codegen/go/recursive_functions/advanced.go":1151
+//line "codegen/go/recursive_functions/advanced.go":1157
 }
 
 func yyfnheader(st *State) int {
@@ -1327,6 +1333,8 @@ func lex(st *State) int {
 		}
 	case 26:
 		if (st.yylimit <= st.yycursor) {
+			st.yytm1 = st.yytm3
+			st.yytm2 = st.yytm5
 			return yy38(st)
 		} else {
 			return yy37(st)
@@ -1379,14 +1387,14 @@ func test(packets []string) int {
 		yyst:     -1,
 		trie:     make([]mtagElem, 0),
 		
-//line "codegen/go/recursive_functions/advanced.go":1383
+//line "codegen/go/recursive_functions/advanced.go":1391
 
 		yyt1: tagNone,
 		yyt2: tagNone,
 //line "codegen/go/recursive_functions/advanced.re":195
 
 		
-//line "codegen/go/recursive_functions/advanced.go":1390
+//line "codegen/go/recursive_functions/advanced.go":1398
 
 		yytm1: mtagRoot,
 		yytm10: mtagRoot,

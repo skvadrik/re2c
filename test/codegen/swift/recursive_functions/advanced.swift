@@ -642,7 +642,7 @@ func yy23(_ s: State) throws(ParseError) -> State.Status {
         return try yy24(s)
       }
     case 0x0D:
-      s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
+      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.cursor += 1
       return try yy26(s)
     default:
@@ -704,7 +704,7 @@ func yy27(_ s: State) throws(ParseError) -> State.Status {
       s.cursor += 1
       return try yy30(s)
     case 0x0D:
-      s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
+      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.cursor += 1
       return try yy31(s)
     default:
@@ -806,7 +806,7 @@ func yy32(_ s: State) throws(ParseError) -> State.Status {
       s.cursor += 1
       return try yy30(s)
     case 0x0D:
-      s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
+      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.cursor += 1
       return try yy31(s)
     default:
@@ -839,13 +839,13 @@ func yy33(_ s: State) throws(ParseError) -> State.Status {
       s.cursor += 1
       return try yy33(s)
     case 0x0D:
-      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
-      s.yytm2 = s.yytm1
-      s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
+      s.yytm5 = s.add(tag: s.yytm5, value: s.cursor)
+      s.yytm4 = s.yytm3
+      s.yytm4 = s.add(tag: s.yytm4, value: s.cursor)
       s.cursor += 1
       return try yy35(s)
     default:
-      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
+      s.yytm5 = s.add(tag: s.yytm5, value: s.cursor)
       s.cursor += 1
       return try yy36(s)
   }
@@ -868,7 +868,7 @@ func yy34(_ s: State) throws(ParseError) -> State.Status {
         return try yy29(s)
       }
     case 0x0D:
-      s.yytm1 = s.add(tag: s.yytm1, value: s.cursor)
+      s.yytm3 = s.add(tag: s.yytm3, value: s.cursor)
       s.cursor += 1
       return try yy31(s)
     default:
@@ -915,8 +915,8 @@ func yy36(_ s: State) throws(ParseError) -> State.Status {
       s.cursor += 1
       return try yy39(s)
     case 0x0D:
-      s.yytm2 = s.yytm1
-      s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
+      s.yytm4 = s.yytm3
+      s.yytm4 = s.add(tag: s.yytm4, value: s.cursor)
       s.cursor += 1
       return try yy35(s)
     default:
@@ -933,7 +933,9 @@ func yy37(_ s: State) throws(ParseError) -> State.Status {
     case 0x09:
       fallthrough
     case 0x20:
-      s.yytm1 = s.yytm2
+      s.yytm1 = s.yytm3
+      s.yytm2 = s.yytm5
+      s.yytm3 = s.yytm4
       s.cursor += 1
       return try yy33(s)
     default:
@@ -941,6 +943,8 @@ func yy37(_ s: State) throws(ParseError) -> State.Status {
         s.state = 26
         return .waiting
       } else {
+        s.yytm1 = s.yytm3
+        s.yytm2 = s.yytm5
         return try yy38(s)
       }
   }
@@ -948,7 +952,7 @@ func yy37(_ s: State) throws(ParseError) -> State.Status {
 
 func yy38(_ s: State) throws(ParseError) -> State.Status {
   s.f1 = s.yytm1
-  s.f2 = s.yytm3
+  s.f2 = s.yytm2
   s.state = -1
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 114)
   
@@ -961,7 +965,7 @@ func yy38(_ s: State) throws(ParseError) -> State.Status {
 
     return .done
 
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 965)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 969)
 }
 
 func yy39(_ s: State) throws(ParseError) -> State.Status {
@@ -1035,8 +1039,8 @@ func yy41(_ s: State) throws(ParseError) -> State.Status {
       s.cursor += 1
       return try yy43(s)
     case 0x0D:
-      s.yytm2 = s.yytm1
-      s.yytm2 = s.add(tag: s.yytm2, value: s.cursor)
+      s.yytm4 = s.yytm3
+      s.yytm4 = s.add(tag: s.yytm4, value: s.cursor)
       s.cursor += 1
       return try yy35(s)
     default:
@@ -1046,6 +1050,8 @@ func yy41(_ s: State) throws(ParseError) -> State.Status {
 }
 
 func yy42(_ s: State) throws(ParseError) -> State.Status {
+  s.yytm1 = s.yytm3
+  s.yytm2 = s.yytm5
   return try yy38(s)
 }
 
@@ -1074,7 +1080,7 @@ func yy44(_ s: State) throws(ParseError) -> State.Status {
   s.state = -1
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 125)
   return .end
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1078)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1084)
 }
 
 func yyfnheader(_ s: State) throws(ParseError) -> State.Status {
@@ -1250,6 +1256,8 @@ func parse(_ s: State) throws(ParseError) -> State.Status {
       }
     case 26:
       if s.limit <= s.cursor {
+        s.yytm1 = s.yytm3
+        s.yytm2 = s.yytm5
         return try yy38(s)
       } else {
         return try yy37(s)
@@ -1305,7 +1313,7 @@ extension State {
         self.marker -= shift
         self.token = 0
         
-#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1309)
+#sourceLocation(file: "codegen/swift/recursive_functions/advanced.swift", line: 1317)
         if self.yyt1 != tagNone { self.yyt1 -= shift }
         if self.yyt2 != tagNone { self.yyt2 -= shift }
 #sourceLocation(file: "codegen/swift/recursive_functions/advanced.re", line: 148)

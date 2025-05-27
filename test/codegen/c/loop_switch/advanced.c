@@ -1236,7 +1236,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 23;
 						continue;
 					case '\r':
-						mtag(&c->yytm1, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 25;
 						continue;
@@ -1316,7 +1316,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 29;
 						continue;
 					case '\r':
-						mtag(&c->yytm1, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 30;
 						continue;
@@ -1462,7 +1462,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 29;
 						continue;
 					case '\r':
-						mtag(&c->yytm1, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 30;
 						continue;
@@ -1516,14 +1516,14 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 32;
 						continue;
 					case '\r':
-						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm5, c->token, c->yycursor, &c->mtp);
+						c->yytm4 = c->yytm3;
+						mtag(&c->yytm4, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 34;
 						continue;
 					default:
-						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm5, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 35;
 						continue;
@@ -1569,7 +1569,7 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 28;
 						continue;
 					case '\r':
-						mtag(&c->yytm1, c->token, c->yycursor, &c->mtp);
+						mtag(&c->yytm3, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 30;
 						continue;
@@ -1637,8 +1637,8 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 38;
 						continue;
 					case '\r':
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->token, c->yycursor, &c->mtp);
+						c->yytm4 = c->yytm3;
+						mtag(&c->yytm4, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 34;
 						continue;
@@ -1654,7 +1654,9 @@ static enum con_status parse_con_req(struct con_state* c)
 				switch (yych) {
 					case '\t':
 					case ' ':
-						c->yytm1 = c->yytm2;
+						c->yytm1 = c->yytm3;
+						c->yytm2 = c->yytm5;
+						c->yytm3 = c->yytm4;
 						++c->yycursor;
 						yystate = 32;
 						continue;
@@ -1663,12 +1665,14 @@ static enum con_status parse_con_req(struct con_state* c)
 							c->yystate = 70;
 							return CON_STATUS_WAITING;
 						}
+						c->yytm1 = c->yytm3;
+						c->yytm2 = c->yytm5;
 						yystate = 37;
 						continue;
 				}
 			case 37:
 				f1 = c->yytm1;
-				f2 = c->yytm3;
+				f2 = c->yytm2;
 				c->yystate = yycheader;
 #line 151 "codegen/c/loop_switch/advanced.re"
 				{
@@ -1683,7 +1687,7 @@ static enum con_status parse_con_req(struct con_state* c)
 
             return CON_STATUS_DONE;
         }
-#line 1687 "codegen/c/loop_switch/advanced.c"
+#line 1691 "codegen/c/loop_switch/advanced.c"
 			case 38:
 				yych = *c->yycursor;
 				switch (yych) {
@@ -1799,8 +1803,8 @@ static enum con_status parse_con_req(struct con_state* c)
 						yystate = 42;
 						continue;
 					case '\r':
-						c->yytm2 = c->yytm1;
-						mtag(&c->yytm2, c->token, c->yycursor, &c->mtp);
+						c->yytm4 = c->yytm3;
+						mtag(&c->yytm4, c->token, c->yycursor, &c->mtp);
 						++c->yycursor;
 						yystate = 34;
 						continue;
@@ -1810,6 +1814,8 @@ static enum con_status parse_con_req(struct con_state* c)
 						continue;
 				}
 			case 41:
+				c->yytm1 = c->yytm3;
+				c->yytm2 = c->yytm5;
 				yystate = 37;
 				continue;
 			case 42:
@@ -1836,7 +1842,7 @@ static enum con_status parse_con_req(struct con_state* c)
 				c->yystate = yycheader;
 #line 164 "codegen/c/loop_switch/advanced.re"
 				{ return CON_STATUS_END; }
-#line 1840 "codegen/c/loop_switch/advanced.c"
+#line 1846 "codegen/c/loop_switch/advanced.c"
 			case 44:
 				if (c->yylimit <= c->yycursor) {
 					yystate = 21;
@@ -2021,6 +2027,8 @@ static enum con_status parse_con_req(struct con_state* c)
 				continue;
 			case 70:
 				if (c->yylimit <= c->yycursor) {
+					c->yytm1 = c->yytm3;
+					c->yytm2 = c->yytm5;
 					yystate = 37;
 					continue;
 				}
@@ -2078,7 +2086,7 @@ int feed(struct con_state* c, const unsigned char* chunk, size_t len)
         c->yymarker -= shift;
         c->token -= shift;
         
-#line 2082 "codegen/c/loop_switch/advanced.c"
+#line 2090 "codegen/c/loop_switch/advanced.c"
 			if (c->yyt1) c->yyt1 -= shift;
 			if (c->yyt2) c->yyt2 -= shift;
 #line 185 "codegen/c/loop_switch/advanced.re"
@@ -2117,13 +2125,13 @@ int main(int argc, char** argv)
     c->yyaccept = -1;
     c->bufsize = CON_READ_BUF_LEN;
     
-#line 2121 "codegen/c/loop_switch/advanced.c"
+#line 2129 "codegen/c/loop_switch/advanced.c"
 	c->yyt1 = 0;
 	c->yyt2 = 0;
 #line 219 "codegen/c/loop_switch/advanced.re"
 
     
-#line 2127 "codegen/c/loop_switch/advanced.c"
+#line 2135 "codegen/c/loop_switch/advanced.c"
 	c->yytm1 = NULL;
 	c->yytm10 = NULL;
 	c->yytm2 = NULL;

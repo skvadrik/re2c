@@ -661,7 +661,7 @@ fn yy23(st: *State) Status {
             }
         },
         0x0D => {
-            st.yytm1 = add_mtag(st.trie, st.yytm1, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy26(st);
         },
@@ -723,7 +723,7 @@ fn yy27(st: *State) Status {
             return yy30(st);
         },
         0x0D => {
-            st.yytm1 = add_mtag(st.trie, st.yytm1, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -826,7 +826,7 @@ fn yy32(st: *State) Status {
             return yy30(st);
         },
         0x0D => {
-            st.yytm1 = add_mtag(st.trie, st.yytm1, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -858,14 +858,14 @@ fn yy33(st: *State) Status {
             return yy33(st);
         },
         0x0D => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(st.trie, st.yytm2, st.yycursor) catch none;
+            st.yytm5 = add_mtag(st.trie, st.yytm5, st.yycursor) catch none;
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
         else => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
+            st.yytm5 = add_mtag(st.trie, st.yytm5, st.yycursor) catch none;
             st.yycursor += 1;
             return yy36(st);
         },
@@ -887,7 +887,7 @@ fn yy34(st: *State) Status {
             }
         },
         0x0D => {
-            st.yytm1 = add_mtag(st.trie, st.yytm1, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -936,8 +936,8 @@ fn yy36(st: *State) Status {
             return yy39(st);
         },
         0x0D => {
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(st.trie, st.yytm2, st.yycursor) catch none;
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
@@ -955,7 +955,9 @@ fn yy37(st: *State) Status {
     switch (yych) {
         0x09,
         0x20 => {
-            st.yytm1 = st.yytm2;
+            st.yytm1 = st.yytm3;
+            st.yytm2 = st.yytm5;
+            st.yytm3 = st.yytm4;
             st.yycursor += 1;
             return yy33(st);
         },
@@ -964,6 +966,8 @@ fn yy37(st: *State) Status {
                 st.yystate = 26;
                 return Status.waiting;
             } else {
+                st.yytm1 = st.yytm3;
+                st.yytm2 = st.yytm5;
                 return yy38(st);
             }
         },
@@ -972,7 +976,7 @@ fn yy37(st: *State) Status {
 
 fn yy38(st: *State) Status {
     st.f1 = st.yytm1;
-    st.f2 = st.yytm3;
+    st.f2 = st.yytm2;
     st.yystate = -1;
     
         const folds = unwind(st, st.f1, st.f2) catch null;
@@ -1055,8 +1059,8 @@ fn yy41(st: *State) Status {
             return yy43(st);
         },
         0x0D => {
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(st.trie, st.yytm2, st.yycursor) catch none;
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
@@ -1068,6 +1072,8 @@ fn yy41(st: *State) Status {
 }
 
 fn yy42(st: *State) Status {
+    st.yytm1 = st.yytm3;
+    st.yytm2 = st.yytm5;
     return yy38(st);
 }
 
@@ -1219,8 +1225,13 @@ fn lex(st: *State) Status {
             else  {return yy36(st); }
         },
         26 => {
-            if (st.yylimit <= st.yycursor) { return yy38(st); }
-            else  {return yy37(st); }
+            if (st.yylimit <= st.yycursor) {
+                st.yytm1 = st.yytm3;
+                st.yytm2 = st.yytm5;
+                return yy38(st);
+            } else {
+                return yy37(st);
+            }
         },
         27 => {
             if (st.yylimit <= st.yycursor) { return yy29(st); }

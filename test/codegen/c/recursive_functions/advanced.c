@@ -1284,7 +1284,7 @@ static enum con_status yy23(struct con_state* c) {
 				return yy24(c);
 			}
 		case '\r':
-			mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy26(c);
 		default:
@@ -1365,7 +1365,7 @@ static enum con_status yy27(struct con_state* c) {
 			++c->cur;
 			return yy30(c);
 		case '\r':
-			mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy31(c);
 		default:
@@ -1508,7 +1508,7 @@ static enum con_status yy32(struct con_state* c) {
 			++c->cur;
 			return yy30(c);
 		case '\r':
-			mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy31(c);
 		default:
@@ -1561,13 +1561,13 @@ static enum con_status yy33(struct con_state* c) {
 			++c->cur;
 			return yy33(c);
 		case '\r':
-			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
-			c->yytm2 = c->yytm1;
-			mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm5, c->tok, c->cur, &c->mtp);
+			c->yytm4 = c->yytm3;
+			mtag(&c->yytm4, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy35(c);
 		default:
-			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm5, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy36(c);
 	}
@@ -1614,7 +1614,7 @@ static enum con_status yy34(struct con_state* c) {
 				return yy29(c);
 			}
 		case '\r':
-			mtag(&c->yytm1, c->tok, c->cur, &c->mtp);
+			mtag(&c->yytm3, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy31(c);
 		default:
@@ -1682,8 +1682,8 @@ static enum con_status yy36(struct con_state* c) {
 			++c->cur;
 			return yy39(c);
 		case '\r':
-			c->yytm2 = c->yytm1;
-			mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+			c->yytm4 = c->yytm3;
+			mtag(&c->yytm4, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy35(c);
 		default:
@@ -1698,7 +1698,9 @@ static enum con_status yy37(struct con_state* c) {
 	switch (yych) {
 		case '\t':
 		case ' ':
-			c->yytm1 = c->yytm2;
+			c->yytm1 = c->yytm3;
+			c->yytm2 = c->yytm5;
+			c->yytm3 = c->yytm4;
 			++c->cur;
 			return yy33(c);
 		default:
@@ -1706,6 +1708,8 @@ static enum con_status yy37(struct con_state* c) {
 				c->state = 26;
 				return CON_STATUS_WAITING;
 			} else {
+				c->yytm1 = c->yytm3;
+				c->yytm2 = c->yytm5;
 				return yy38(c);
 			}
 	}
@@ -1713,7 +1717,7 @@ static enum con_status yy37(struct con_state* c) {
 
 static enum con_status yy38(struct con_state* c) {
 	c->f1 = c->yytm1;
-	c->f2 = c->yytm3;
+	c->f2 = c->yytm2;
 	c->state = -1;
 #line 157 "codegen/c/recursive_functions/advanced.re"
 	
@@ -1728,7 +1732,7 @@ static enum con_status yy38(struct con_state* c) {
 
         return CON_STATUS_DONE;
 
-#line 1732 "codegen/c/recursive_functions/advanced.c"
+#line 1736 "codegen/c/recursive_functions/advanced.c"
 }
 
 static enum con_status yy39(struct con_state* c) {
@@ -1844,8 +1848,8 @@ static enum con_status yy41(struct con_state* c) {
 			++c->cur;
 			return yy43(c);
 		case '\r':
-			c->yytm2 = c->yytm1;
-			mtag(&c->yytm2, c->tok, c->cur, &c->mtp);
+			c->yytm4 = c->yytm3;
+			mtag(&c->yytm4, c->tok, c->cur, &c->mtp);
 			++c->cur;
 			return yy35(c);
 		default:
@@ -1855,6 +1859,8 @@ static enum con_status yy41(struct con_state* c) {
 }
 
 static enum con_status yy42(struct con_state* c) {
+	c->yytm1 = c->yytm3;
+	c->yytm2 = c->yytm5;
 	return yy38(c);
 }
 
@@ -1882,7 +1888,7 @@ static enum con_status yy44(struct con_state* c) {
 	c->state = -1;
 #line 170 "codegen/c/recursive_functions/advanced.re"
 	return CON_STATUS_END;
-#line 1886 "codegen/c/recursive_functions/advanced.c"
+#line 1892 "codegen/c/recursive_functions/advanced.c"
 }
 
 static enum con_status yyfnheader(struct con_state* c) {
@@ -1979,8 +1985,13 @@ static enum con_status parse_con_req(struct con_state* c) {
 			if (c->lim <= c->cur) return yy29(c);
 			else return yy36(c);
 		case 26:
-			if (c->lim <= c->cur) return yy38(c);
-			else return yy37(c);
+			if (c->lim <= c->cur) {
+				c->yytm1 = c->yytm3;
+				c->yytm2 = c->yytm5;
+				return yy38(c);
+			} else {
+				return yy37(c);
+			}
 		case 27:
 			if (c->lim <= c->cur) return yy29(c);
 			else return yy39(c);
@@ -2017,7 +2028,7 @@ int feed(struct con_state* c, const unsigned char* chunk, size_t len)
         c->mar -= shift;
         c->tok -= shift;
         
-#line 2021 "codegen/c/recursive_functions/advanced.c"
+#line 2032 "codegen/c/recursive_functions/advanced.c"
 			if (c->yyt1) c->yyt1 -= shift;
 			if (c->yyt2) c->yyt2 -= shift;
 #line 190 "codegen/c/recursive_functions/advanced.re"
@@ -2056,13 +2067,13 @@ int main(int argc, char** argv)
     c->cond = yycmedia_type;
     c->buf_size = CON_READ_BUF_LEN;
     
-#line 2060 "codegen/c/recursive_functions/advanced.c"
+#line 2071 "codegen/c/recursive_functions/advanced.c"
 	c->yyt1 = 0;
 	c->yyt2 = 0;
 #line 224 "codegen/c/recursive_functions/advanced.re"
 
     
-#line 2066 "codegen/c/recursive_functions/advanced.c"
+#line 2077 "codegen/c/recursive_functions/advanced.c"
 	c->yytm1 = NULL;
 	c->yytm10 = NULL;
 	c->yytm2 = NULL;

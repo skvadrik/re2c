@@ -602,7 +602,7 @@ fn yy23(mut st State) Status {
             }
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
             st.yycursor += 1
             return yy26(mut st)
         }
@@ -662,7 +662,7 @@ fn yy27(mut st State) Status {
             return yy30(mut st)
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
             st.yycursor += 1
             return yy31(mut st)
         }
@@ -760,7 +760,7 @@ fn yy32(mut st State) Status {
             return yy30(mut st)
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
             st.yycursor += 1
             return yy31(mut st)
         }
@@ -787,14 +787,14 @@ fn yy33(mut st State) Status {
             return yy33(mut st)
         }
         0x0D {
-            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
-            st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yytm5 = add_mtag(mut &st.trie, st.yytm5, st.yycursor)
+            st.yytm4 = st.yytm3
+            st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.yycursor)
             st.yycursor += 1
             return yy35(mut st)
         }
         else {
-            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
+            st.yytm5 = add_mtag(mut &st.trie, st.yytm5, st.yycursor)
             st.yycursor += 1
             return yy36(mut st)
         }
@@ -813,7 +813,7 @@ fn yy34(mut st State) Status {
             }
         }
         0x0D {
-            st.yytm1 = add_mtag(mut &st.trie, st.yytm1, st.yycursor)
+            st.yytm3 = add_mtag(mut &st.trie, st.yytm3, st.yycursor)
             st.yycursor += 1
             return yy31(mut st)
         }
@@ -858,8 +858,8 @@ fn yy36(mut st State) Status {
             return yy39(mut st)
         }
         0x0D {
-            st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yytm4 = st.yytm3
+            st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.yycursor)
             st.yycursor += 1
             return yy35(mut st)
         }
@@ -876,7 +876,9 @@ fn yy37(mut st State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
-            st.yytm1 = st.yytm2
+            st.yytm1 = st.yytm3
+            st.yytm2 = st.yytm5
+            st.yytm3 = st.yytm4
             st.yycursor += 1
             return yy33(mut st)
         }
@@ -885,6 +887,8 @@ fn yy37(mut st State) Status {
                 st.yystate = 26
                 return .lex_waiting
             } else {
+                st.yytm1 = st.yytm3
+                st.yytm2 = st.yytm5
                 return yy38(mut st)
             }
         }
@@ -893,7 +897,7 @@ fn yy37(mut st State) Status {
 
 fn yy38(mut st State) Status {
     st.f1 = st.yytm1
-    st.f2 = st.yytm3
+    st.f2 = st.yytm2
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":168
     
@@ -903,7 +907,7 @@ fn yy38(mut st State) Status {
         st.token = st.yycursor
         return lex(mut st)
 
-//line "codegen/v/recursive_functions/advanced.v":907
+//line "codegen/v/recursive_functions/advanced.v":911
 }
 
 fn yy39(mut st State) Status {
@@ -970,8 +974,8 @@ fn yy41(mut st State) Status {
             return yy43(mut st)
         }
         0x0D {
-            st.yytm2 = st.yytm1
-            st.yytm2 = add_mtag(mut &st.trie, st.yytm2, st.yycursor)
+            st.yytm4 = st.yytm3
+            st.yytm4 = add_mtag(mut &st.trie, st.yytm4, st.yycursor)
             st.yycursor += 1
             return yy35(mut st)
         }
@@ -983,6 +987,8 @@ fn yy41(mut st State) Status {
 }
 
 fn yy42(mut st State) Status {
+    st.yytm1 = st.yytm3
+    st.yytm2 = st.yytm5
     return yy38(mut st)
 }
 
@@ -1012,7 +1018,7 @@ fn yy44(mut st State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
-//line "codegen/v/recursive_functions/advanced.v":1016
+//line "codegen/v/recursive_functions/advanced.v":1022
 }
 
 fn yyfnheader(mut st State) Status {
@@ -1213,6 +1219,8 @@ fn lex(mut st State) Status {
         }
         26 {
             if st.yylimit <= st.yycursor {
+                st.yytm1 = st.yytm3
+                st.yytm2 = st.yytm5
                 return yy38(mut st)
             } else {
                 return yy37(mut st)
@@ -1273,14 +1281,14 @@ fn test(expect Status, packets []string) {
         yystate:  -1,
         trie:     []MtagElem{},
         
-//line "codegen/v/recursive_functions/advanced.v":1277
+//line "codegen/v/recursive_functions/advanced.v":1285
 
 		yyt1: tag_none,
 		yyt2: tag_none,
 //line "codegen/v/recursive_functions/advanced.re":199
 
         
-//line "codegen/v/recursive_functions/advanced.v":1284
+//line "codegen/v/recursive_functions/advanced.v":1292
 
 		yytm1: mtag_root,
 		yytm10: mtag_root,

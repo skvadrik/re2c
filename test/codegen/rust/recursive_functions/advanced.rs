@@ -656,7 +656,7 @@ fn yy23(st: &mut ConState) -> ConStatus {
             }
         }
         0x0D => {
-            st.yytm1 = add_mtag(&mut st.mtag_trie, st.yytm1, st.yycursor);
+            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
             st.yycursor += 1;
             yy26(st)
         }
@@ -718,7 +718,7 @@ fn yy27(st: &mut ConState) -> ConStatus {
             yy30(st)
         }
         0x0D => {
-            st.yytm1 = add_mtag(&mut st.mtag_trie, st.yytm1, st.yycursor);
+            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
             st.yycursor += 1;
             yy31(st)
         }
@@ -824,7 +824,7 @@ fn yy32(st: &mut ConState) -> ConStatus {
             yy30(st)
         }
         0x0D => {
-            st.yytm1 = add_mtag(&mut st.mtag_trie, st.yytm1, st.yycursor);
+            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
             st.yycursor += 1;
             yy31(st)
         }
@@ -856,14 +856,14 @@ fn yy33(st: &mut ConState) -> ConStatus {
             yy33(st)
         }
         0x0D => {
-            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(&mut st.mtag_trie, st.yytm2, st.yycursor);
+            st.yytm5 = add_mtag(&mut st.mtag_trie, st.yytm5, st.yycursor);
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(&mut st.mtag_trie, st.yytm4, st.yycursor);
             st.yycursor += 1;
             yy35(st)
         }
         _ => {
-            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
+            st.yytm5 = add_mtag(&mut st.mtag_trie, st.yytm5, st.yycursor);
             st.yycursor += 1;
             yy36(st)
         }
@@ -885,7 +885,7 @@ fn yy34(st: &mut ConState) -> ConStatus {
             }
         }
         0x0D => {
-            st.yytm1 = add_mtag(&mut st.mtag_trie, st.yytm1, st.yycursor);
+            st.yytm3 = add_mtag(&mut st.mtag_trie, st.yytm3, st.yycursor);
             st.yycursor += 1;
             yy31(st)
         }
@@ -934,8 +934,8 @@ fn yy36(st: &mut ConState) -> ConStatus {
             yy39(st)
         }
         0x0D => {
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(&mut st.mtag_trie, st.yytm2, st.yycursor);
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(&mut st.mtag_trie, st.yytm4, st.yycursor);
             st.yycursor += 1;
             yy35(st)
         }
@@ -953,7 +953,9 @@ fn yy37(st: &mut ConState) -> ConStatus {
     match yych {
         0x09 |
         0x20 => {
-            st.yytm1 = st.yytm2;
+            st.yytm1 = st.yytm3;
+            st.yytm2 = st.yytm5;
+            st.yytm3 = st.yytm4;
             st.yycursor += 1;
             yy33(st)
         }
@@ -962,6 +964,8 @@ fn yy37(st: &mut ConState) -> ConStatus {
                 st.yystate = 26;
                 return ConStatus::Waiting;
             } else {
+                st.yytm1 = st.yytm3;
+                st.yytm2 = st.yytm5;
                 yy38(st)
             }
         }
@@ -970,7 +974,7 @@ fn yy37(st: &mut ConState) -> ConStatus {
 
 fn yy38(st: &mut ConState) -> ConStatus {
     st.f1 = st.yytm1;
-    st.f2 = st.yytm3;
+    st.f2 = st.yytm2;
     st.yystate = -1;
     
         let mut folds: Vec::<String> = Vec::new();
@@ -1054,8 +1058,8 @@ fn yy41(st: &mut ConState) -> ConStatus {
             yy43(st)
         }
         0x0D => {
-            st.yytm2 = st.yytm1;
-            st.yytm2 = add_mtag(&mut st.mtag_trie, st.yytm2, st.yycursor);
+            st.yytm4 = st.yytm3;
+            st.yytm4 = add_mtag(&mut st.mtag_trie, st.yytm4, st.yycursor);
             st.yycursor += 1;
             yy35(st)
         }
@@ -1067,6 +1071,8 @@ fn yy41(st: &mut ConState) -> ConStatus {
 }
 
 fn yy42(st: &mut ConState) -> ConStatus {
+    st.yytm1 = st.yytm3;
+    st.yytm2 = st.yytm5;
     yy38(st)
 }
 
@@ -1297,6 +1303,8 @@ fn lex(st: &mut ConState) -> ConStatus {
         }
         26 => {
             if st.yylimit <= st.yycursor {
+                st.yytm1 = st.yytm3;
+                st.yytm2 = st.yytm5;
                 yy38(st)
             } else {
                 yy37(st)

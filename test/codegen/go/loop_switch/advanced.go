@@ -712,7 +712,7 @@ yyl:
 				yystate = 23
 				continue yyl
 			case '\r':
-				st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
+				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
 				st.cur += 1
 				yystate = 25
 				continue yyl
@@ -771,7 +771,7 @@ yyl:
 				yystate = 29
 				continue yyl
 			case '\r':
-				st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
+				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
 				st.cur += 1
 				yystate = 30
 				continue yyl
@@ -873,7 +873,7 @@ yyl:
 				yystate = 29
 				continue yyl
 			case '\r':
-				st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
+				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
 				st.cur += 1
 				yystate = 30
 				continue yyl
@@ -907,14 +907,14 @@ yyl:
 				yystate = 32
 				continue yyl
 			case '\r':
-				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
-				st.yytm2 = st.yytm1
-				st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
+				st.yytm5 = add_mtag(&st.trie, st.yytm5, st.cur)
+				st.yytm4 = st.yytm3
+				st.yytm4 = add_mtag(&st.trie, st.yytm4, st.cur)
 				st.cur += 1
 				yystate = 34
 				continue yyl
 			default:
-				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
+				st.yytm5 = add_mtag(&st.trie, st.yytm5, st.cur)
 				st.cur += 1
 				yystate = 35
 				continue yyl
@@ -936,7 +936,7 @@ yyl:
 				yystate = 28
 				continue yyl
 			case '\r':
-				st.yytm1 = add_mtag(&st.trie, st.yytm1, st.cur)
+				st.yytm3 = add_mtag(&st.trie, st.yytm3, st.cur)
 				st.cur += 1
 				yystate = 30
 				continue yyl
@@ -983,8 +983,8 @@ yyl:
 				yystate = 38
 				continue yyl
 			case '\r':
-				st.yytm2 = st.yytm1
-				st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
+				st.yytm4 = st.yytm3
+				st.yytm4 = add_mtag(&st.trie, st.yytm4, st.cur)
 				st.cur += 1
 				yystate = 34
 				continue yyl
@@ -1001,7 +1001,9 @@ yyl:
 			case '\t':
 				fallthrough
 			case ' ':
-				st.yytm1 = st.yytm2
+				st.yytm1 = st.yytm3
+				st.yytm2 = st.yytm5
+				st.yytm3 = st.yytm4
 				st.cur += 1
 				yystate = 32
 				continue yyl
@@ -1010,12 +1012,14 @@ yyl:
 					st.state = 70
 					return lexWaiting
 				}
+				st.yytm1 = st.yytm3
+				st.yytm2 = st.yytm5
 				yystate = 37
 				continue yyl
 			}
 		case 37:
 			f1 = st.yytm1
-			f2 = st.yytm3
+			f2 = st.yytm2
 			st.state = yycheader
 //line "codegen/go/loop_switch/advanced.re":175
 			{
@@ -1025,7 +1029,7 @@ yyl:
 			st.tok = st.cur
 			goto loop
 		}
-//line "codegen/go/loop_switch/advanced.go":1029
+//line "codegen/go/loop_switch/advanced.go":1033
 		case 38:
 			yych = st.data[st.cur]
 			switch (yych) {
@@ -1099,8 +1103,8 @@ yyl:
 				yystate = 42
 				continue yyl
 			case '\r':
-				st.yytm2 = st.yytm1
-				st.yytm2 = add_mtag(&st.trie, st.yytm2, st.cur)
+				st.yytm4 = st.yytm3
+				st.yytm4 = add_mtag(&st.trie, st.yytm4, st.cur)
 				st.cur += 1
 				yystate = 34
 				continue yyl
@@ -1110,6 +1114,8 @@ yyl:
 				continue yyl
 			}
 		case 41:
+			st.yytm1 = st.yytm3
+			st.yytm2 = st.yytm5
 			yystate = 37
 			continue yyl
 		case 42:
@@ -1137,7 +1143,7 @@ yyl:
 			st.state = yycheader
 //line "codegen/go/loop_switch/advanced.re":183
 			{ return lexEnd }
-//line "codegen/go/loop_switch/advanced.go":1141
+//line "codegen/go/loop_switch/advanced.go":1147
 		case 44:
 			if (st.cur >= st.lim) {
 				yystate = 21
@@ -1322,6 +1328,8 @@ yyl:
 			continue yyl
 		case 70:
 			if (st.cur >= st.lim) {
+				st.yytm1 = st.yytm3
+				st.yytm2 = st.yytm5
 				yystate = 37
 				continue yyl
 			}
@@ -1380,14 +1388,14 @@ func test(packets []string) int {
 		state:  -1,
 		trie:   make([]mtagElem, 0),
 		
-//line "codegen/go/loop_switch/advanced.go":1384
+//line "codegen/go/loop_switch/advanced.go":1392
 
 		yyt1: tagNone,
 		yyt2: tagNone,
 //line "codegen/go/loop_switch/advanced.re":203
 
 		
-//line "codegen/go/loop_switch/advanced.go":1391
+//line "codegen/go/loop_switch/advanced.go":1399
 
 		yytm1: mtagRoot,
 		yytm10: mtagRoot,
