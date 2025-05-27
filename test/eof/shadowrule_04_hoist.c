@@ -21,8 +21,8 @@ yy2:
 }
 
 
-// EMPTY rule is not shadowed and does match on empty input string. Tags are
-// not hoisted because of the untagged fallback transition to EMPTY.
+// EMPTY rule is shadowed and dead-code-eliminated.
+// Tags are not hoisted because of the untagged transition to EOF.
 
 {
 	YYCTYPE yych;
@@ -54,6 +54,58 @@ yy5:
 	{ /* R1 - here 'x' must be set */ }
 yy6:
 	{ /* EOF - here 'x' must not be set */ }
+}
+
+
+// EMPTY rule is not shadowed and does match on empty input string.
+// Tags are not hoisted because of the untagged transition to EOF.
+
+{
+	YYCTYPE yych;
+	YYMARKER = YYCURSOR;
+yyFillLabel2:
+	yych = *YYCURSOR;
+	if (yych <= 0x00) {
+		if (YYLIMIT <= YYCURSOR) {
+			if (YYFILL() == 0) goto yyFillLabel2;
+			goto yy12;
+		}
+		yyt1 = YYCURSOR;
+		goto yy9;
+	}
+	yyt1 = YYCURSOR;
+	goto yy9;
+yy8:
+	{ /* EMPTY - here 'x' must not be set */ }
+yy9:
+	++YYCURSOR;
+yyFillLabel3:
+	yych = *YYCURSOR;
+	if (yych >= 0x01) goto yy10;
+	if (YYLIMIT <= YYCURSOR) {
+		if (YYFILL() == 0) goto yyFillLabel3;
+		goto yy13;
+	}
+yy10:
+	++YYCURSOR;
+yyFillLabel4:
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy10;
+		default:
+			if (YYLIMIT <= YYCURSOR) {
+				if (YYFILL() == 0) goto yyFillLabel4;
+			}
+			goto yy11;
+	}
+yy11:
+	x = yyt1;
+	{ /* R1 - here 'x' must be set */ }
+yy12:
+	{ /* EOF - here 'x' must not be set */ }
+yy13:
+	YYCURSOR = YYMARKER;
+	goto yy8;
 }
 
 eof/shadowrule_04_hoist.re:6:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
