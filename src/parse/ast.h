@@ -4,6 +4,7 @@
 #include <stdint.h>
 #include <set>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 #include "src/constants.h"
@@ -107,8 +108,6 @@ struct AstNode {
 struct AstRule {
     const AstNode* ast;
     const SemAct* semact;
-
-    AstRule(const AstNode* a, const SemAct* s): ast(a), semact(s) {}
 };
 
 // Regular grammar (a set of rules: regular expressions associated with semantic actions).

@@ -2,6 +2,7 @@
 #define _RE2C_DFA_DFA_
 
 #include <stdint.h>
+#include <memory>
 #include <vector>
 #include <set>
 #include <string.h>
@@ -19,6 +20,7 @@ namespace re2c {
 
 struct Tnfa;
 struct opt_t;
+class Adfa;
 
 struct TdfaState {
     size_t* arcs;
@@ -79,6 +81,7 @@ Ret determinization(
 void minimization(Tdfa& dfa, Minimization type);
 void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill);
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg);
+void warn_dead_star_rules(const std::vector<std::unique_ptr<Adfa>>& dfas, Msg& msg);
 void insert_fallback_tags(Tdfa& dfa);
 void compact_and_optimize_tags(const opt_t* opts, Tdfa& dfa);
 void freeze_tags(Tdfa& dfa);

@@ -187,6 +187,7 @@ LOCAL_NODISCARD(Ret compile(int, char* argv[])) {
             for (const AstGram& gram : grams) {
                 CHECK_RET(ast_to_dfa(gram, output, b.dfas, dfa_alc));
             }
+            warn_dead_star_rules(b.dfas, output.msg);
             output.gen_stmt(code_dfas(out_alc));
         }
         if (globopts.line_dirs) output.gen_stmt(code_line_info_input(out_alc, input.cur_loc()));

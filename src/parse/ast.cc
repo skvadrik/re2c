@@ -149,6 +149,8 @@ const SemAct* Ast::sem_act(const loc_t& loc, const char* text, const char* cond,
     a->text = text;
     a->cond = cond;
     a->autogen = autogen;
+    a->is_star = false;
+    a->is_used = false;
     return a;
 }
 
@@ -383,6 +385,16 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     auto star = std::find_if(
             grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
     if (star != grams.end()) {
+        // Mark <*> actions before merging - this is needed for reachability analysis.
+        for (AstRule& r : star->rules) {
+            if (r.semact) r.semact->is_star = true;
+        }
+        for (const SemAct* a : star->defs) a->is_star = true;
+        for (const SemAct* a : star->eofs) a->is_star = true;
+        for (const SemAct* a : star->entry) a->is_star = true;
+        for (const SemAct* a : star->pre_rule) a->is_star = true;
+        for (const SemAct* a : star->post_rule) a->is_star = true;
+
         for (AstGram& g : grams) {
             if (g.name != "*" && g.name != ZERO_COND) {
                 append(g.rules, star->rules);
@@ -402,12 +414,12 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         if (!g.eofs.empty()) {
             g.eof_rule = g.rules.size();
             const SemAct* a = g.eofs[0];
-            g.rules.push_back(AstRule(ast.nil(a->loc), a));
+            g.rules.push_back({ast.nil(a->loc), a});
         }
         if (!g.defs.empty()) {
             g.def_rule = g.rules.size();
             const SemAct* a = g.defs[0];
-            g.rules.push_back(AstRule(ast.def(a->loc), a));
+            g.rules.push_back({ast.def(a->loc), a});
         }
     }
 

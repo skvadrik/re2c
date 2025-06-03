@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include "src/adfa/adfa.h"
 #include "src/dfa/dfa.h"
 #include "src/msg/msg.h"
 #include "src/msg/location.h"
@@ -174,8 +175,15 @@ static void warn_dead_rules(Tdfa& dfa, const std::string& cond, const bool* live
 
     for (size_t i = 0; i < nrules; ++i) {
         // default rule '*' should not be reported
-        if (i != dfa.def_rule && !live[i * nstates]) {
-            msg.warn.unreachable_rule(cond, dfa.rules[i]);
+        bool alive = (i == dfa.def_rule || live[i * nstates]);
+        Rule& r = dfa.rules[i];
+        if (r.semact && r.semact->is_star) {
+            // <*> rules are only reported if they are unreachable in all conditions,
+            // so the diagnostics must be delayed until all conditions are processed.
+            // If any of them mark the rule as reachable, it is not reported.
+            if (alive) r.semact->is_used = true;
+        } else if (!alive) {
+            msg.warn.unreachable_rule(cond, r);
         }
     }
 }
@@ -309,6 +317,12 @@ static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
     if (s0->rule != Rule::NONE && s0->rule != dfa.eof_rule && !s0->fallback) {
         s0->rule = dfa.eof_rule;
     }
+
+    for (Rule& r : dfa.rules) {
+        if (r.semact && r.semact->is_star) {
+            r.semact->is_used = true;
+        }
+    }
 }
 
 } // anonymous namespace
@@ -336,6 +350,24 @@ void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Ms
         find_fallback_states(dfa, fallthru);
 
         delete[] live;
+    }
+}
+
+void warn_dead_star_rules(const std::vector<std::unique_ptr<Adfa>>& dfas, Msg& msg) {
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        for (Rule& r : dfa->rules) {
+            if (r.semact && r.semact->is_star && !r.semact->is_used) {
+                msg.warn.unreachable_rule(dfa->cond, r);
+            }
+        }
+    }
+    // clear reachability info, as this action might be reused in another block
+    for (const std::unique_ptr<Adfa>& dfa : dfas) {
+        for (Rule& r : dfa->rules) {
+            if (r.semact && r.semact->is_star) {
+                r.semact->is_used = false;
+            }
+        }
     }
 }
 

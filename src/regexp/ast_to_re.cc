@@ -548,7 +548,7 @@ Ret RESpec::init(const std::vector<AstRule>& ast) {
         rule.htag = tags.size();
         for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);
         rule.ncap = ncap;
-        CHECK_RET(check_tags_used_once(*this, rule, tags));
+        CHECK_RET(check_tags_used_once(*this, rule, tags));;
     }
     return Ret::OK;
 }
