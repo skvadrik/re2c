@@ -123,8 +123,8 @@ const AstNode* Ast::iter(const AstNode* a, uint32_t n, uint32_t m) {
 
 const AstNode* Ast::diff(const AstNode* a1, const AstNode* a2) {
     AstNode* ast = make(a1->loc, AstKind::DIFF, a1->has_caps | a2->has_caps);
-    ast->cat.ast1 = a1;
-    ast->cat.ast2 = a2;
+    ast->diff.ast1 = a1;
+    ast->diff.ast2 = a2;
     return ast;
 }
 
