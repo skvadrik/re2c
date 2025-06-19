@@ -59,6 +59,7 @@ struct State {
     const uniq_vector_t<AcceptTrans>* accepts; // `yyaccept` transition table
 
     bool fallback;
+    bool fallthru;
     bool is_base;
 
     CodeGo go;
@@ -164,6 +165,7 @@ inline State::State()
         , save(NOSAVE)
         , accepts(nullptr)
         , fallback(false)
+        , fallthru(false)
         , is_base(false)
         , go() {
     init_go(&go);

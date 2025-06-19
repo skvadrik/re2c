@@ -94,6 +94,7 @@ Adfa::Adfa(Tdfa&& dfa,
         s->rule_tags = t->tcid[dfa.nchars];
         s->fall_tags = t->tcid[dfa.nchars + 1];
         s->fill = fill[i];
+        s->fallthru = t->fallthru;
         s->fallback = t->fallback; // see note [fallback states]
 
         bool end = true;
@@ -359,15 +360,14 @@ void Adfa::prepare(const opt_t* opts) {
     }
 
     // With end-of-input rule $ there is a default quasi-transition on YYFILL failure, so the
-    // default state is needed if there is at least one final state with at least one outgoing
-    // transition to a non-final state.
+    // default state is needed if there are any "fallthrough" states.
     if (!default_state && opts->fill_eof != NOEOF) {
-        bool have_fallback_states = false;
+        bool have_fallthru = false;
 
         for (State* s = head; s; s = s->next) {
-            have_fallback_states |= s->fallback;
+            have_fallthru |= s->fallthru;
 
-            if (!s->next && have_fallback_states) {
+            if (!s->next && have_fallthru) {
                 default_state = new State;
                 add_state_after(default_state, s);
                 break;

@@ -262,7 +262,7 @@ static void find_fallback_states(Tdfa& dfa, const bool* fallthru) {
 
     for (size_t i = 0; i < nstate; ++i) {
         TdfaState* s = dfa.states[i];
-        s->fallthru = fallthru[i];
+        s->fallthru = fallthru[i]; // fallthrough state is a state where none-rule is reachable
         if (s->rule == Rule::NONE) continue;
 
         // A final state is a fallback state if there are non-accepting paths from it (i.e. paths
