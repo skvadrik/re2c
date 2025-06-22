@@ -27,7 +27,7 @@ struct Rule {
     static constexpr size_t NONE = std::numeric_limits<size_t>::max();
 
     const SemAct* semact;
-    std::set<uint32_t> shadow;
+    std::set<const Rule*> shadow;
     size_t ltag; // first tag
     size_t htag; // next to last tag
     size_t ttag; // trailing context

@@ -140,10 +140,9 @@ void prune_and_copy_to_kbufs(ctx_t& ctx) {
     // mark dropped rules as shadowed
     if (f != nullptr && ctx.msg.warn.is_set(Warn::UNREACHABLE_RULES)) {
         std::vector<Rule>& rules = ctx.rules;
-        const uint32_t l = rules[f->state->rule].semact->loc.line;
         for (const clos_t& c : closure) {
             if (&c != f && c.state->kind == TnfaState::Kind::FIN) {
-                rules[c.state->rule].shadow.insert(l);
+                rules[c.state->rule].shadow.insert(&rules[f->state->rule]);
             }
         }
     }

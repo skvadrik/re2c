@@ -165,10 +165,10 @@ void Warn::unreachable_rule(const std::string& cond, const Rule& rule) {
         const size_t shadows = rule.shadow.size();
         if (shadows > 0) {
             const char* pl = shadows > 1 ? "s" : "";
-            std::set<uint32_t>::const_iterator i = rule.shadow.begin();
-            fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, *i);
+            std::set<const Rule*>::const_iterator i = rule.shadow.begin();
+            fprintf (stderr, "(shadowed by rule%s at line%s %u", pl, pl, (*i)->semact->loc.line);
             for (++i; i != rule.shadow.end(); ++i) {
-                fprintf(stderr, ", %u", *i);
+                fprintf(stderr, ", %u", (*i)->semact->loc.line);
             }
             fprintf(stderr, ")");
         }
