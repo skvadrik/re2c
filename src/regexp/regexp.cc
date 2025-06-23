@@ -12,6 +12,13 @@ Regexp* re_nil(RESpec& spec) {
     return x;
 }
 
+Regexp* re_end(RESpec& spec, const Range* r) {
+    Regexp* x = spec.ir_alc.alloct<Regexp>(1);
+    x->kind = Regexp::Kind::END;
+    x->end = r;
+    return x;
+}
+
 Regexp* re_sym(RESpec& spec, const Range* r) {
     Regexp* x = spec.ir_alc.alloct<Regexp>(1);
     x->kind = Regexp::Kind::SYM;

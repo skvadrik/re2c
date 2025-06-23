@@ -440,7 +440,12 @@ scan:
         RET_TOK(TOKEN_REGEXP);
     }
 
-    [*+?!()|;/\\=$] { RET_TOK(*tok); }
+    [$] {
+        yylval->regexp = ast.eof(tok_loc());
+        RET_TOK(TOKEN_REGEXP);
+    }
+
+    [*+?!()|;/\\=] { RET_TOK(*tok); }
 
     "(!" { RET_TOK(TOKEN_LPAREN_NEG); } // avoid parsing `!x` as action in `(!x)`
 

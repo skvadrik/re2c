@@ -109,3 +109,5 @@ yy13:
 }
 
 eof/shadowrule_04_hoist.re:6:12: warning: unreachable rule (shadowed by rule at line 5) [-Wunreachable-rules]
+eof/shadowrule_04_hoist.re:15:12: warning: *** PLEASE FIX ***: in the future $ will become part of a normal rule with position based precedence (https://github.com/skvadrik/re2c/issues/525), so the rule at line 15 will become unreachable (shadowed by the rule at line 14) and this warning will be turned to error [-Wdeprecated-eof-rule]
+eof/shadowrule_04_hoist.re:24:15: warning: *** PLEASE FIX ***: in the future $ will become part of a normal rule with position based precedence (https://github.com/skvadrik/re2c/issues/525), so the rule at line 24 will become unreachable (shadowed by the rule at line 23) and this warning will be turned to error [-Wdeprecated-eof-rule]

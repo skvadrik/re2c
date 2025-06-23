@@ -50,11 +50,17 @@ static void estimate_nfa_params(
         stack.pop_back();
 
         const Regexp* re = i.re;
-        if (re->kind == Regexp::Kind::NIL) {
+
+        switch (re->kind) {
+        case Regexp::Kind::NIL:
             size = depth = 0;
-        } else if (re->kind == Regexp::Kind::SYM || re->kind == Regexp::Kind::TAG) {
+            break;
+        case Regexp::Kind::SYM:
+        case Regexp::Kind::TAG:
+        case Regexp::Kind::END:
             size = depth = 1;
-        } else if (re->kind == Regexp::Kind::ALT) {
+            break;
+        case Regexp::Kind::ALT:
             if (i.succ == 0) {
                 // recurse into the left sub-regexp
                 stack.push_back({re, 0, 0, 1});
@@ -69,7 +75,8 @@ static void estimate_nfa_params(
                 size = 1 + i.size + size;
                 depth = 1 + std::max(i.depth, depth);
             }
-        } else if (re->kind == Regexp::Kind::CAT) {
+            break;
+        case Regexp::Kind::CAT:
             if (i.succ == 0) {
                 // recurse into the left sub-regexp
                 stack.push_back({re, 0, 0, 1});
@@ -84,7 +91,8 @@ static void estimate_nfa_params(
                 size = i.size + size;
                 depth = i.depth + depth;
             }
-        } else if (re->kind == Regexp::Kind::ITER) {
+            break;
+        case Regexp::Kind::ITER:
             if (i.succ == 0) {
                 // recurse into the sub-regexp
                 stack.push_back({re, 0, 0, 1});
@@ -96,6 +104,7 @@ static void estimate_nfa_params(
                 size = max == Ast::MANY ? size * min + 1 : size * max + (max - min);
                 depth = max == Ast::MANY ? depth * min + 1 : depth * max + (max - min);
             }
+            break;
         }
     }
     DCHECK(stack.empty());
@@ -184,8 +193,8 @@ struct DfsReToTnfa {
     TnfaState* end;
 };
 
-static void one_re_to_nfa(
-        Tnfa& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToTnfa>& stack) {
+static Ret one_re_to_nfa(
+        Tnfa& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToTnfa>& stack, Msg& msg) {
     // Start state of the last constructed sub-NFA (available after the stack item for it has been
     // popped off stack and the preceding stack item is being processed).
     TnfaState* start = nullptr;
@@ -204,6 +213,18 @@ static void one_re_to_nfa(
         switch (re.kind) {
         case Regexp::Kind::NIL:
             start = x.end;
+            stack.pop_back();
+            break;
+
+        case Regexp::Kind::END:
+            if (x.end->kind != TnfaState::Kind::FIN) {
+                RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
+                    "end of input marker $ in the middle of a rule is not supported"));
+            } else if (!nfa.rules[rule].is_oldstyle_eof) {
+                RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
+                    "only standalone $ rule is supported"));
+            }
+            start = nfa.make_ran(rule, x.end, re.end);
             stack.pop_back();
             break;
 
@@ -289,11 +310,13 @@ static void one_re_to_nfa(
     }
 
     nfa.root = (nfa.root == nullptr) ? start : nfa.make_alt(rule, nfa.root, start);
+
+    return Ret::OK;
 }
 
 } // anonymous namespace
 
-Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) {
+Ret re_to_nfa(Tnfa& nfa, RESpec&& spec, Msg& msg) {
     // Move ownership from regexp to TNFA.
     nfa.ir_alc = std::move(spec.ir_alc);
     nfa.charset = std::move(spec.charset);
@@ -321,7 +344,7 @@ Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) {
 
     std::vector<DfsReToTnfa> stack_re_to_nfa;
     for (size_t rule = 0; rule < spec.res.size(); ++rule) {
-        one_re_to_nfa(nfa, spec, static_cast<uint32_t>(rule), stack_re_to_nfa);
+        CHECK_RET(one_re_to_nfa(nfa, spec, static_cast<uint32_t>(rule), stack_re_to_nfa, msg));
     }
     DCHECK(nfa.nstates <= size);
 

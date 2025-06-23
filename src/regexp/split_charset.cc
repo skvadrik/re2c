@@ -27,8 +27,10 @@ void split_charset(RESpec& spec) {
         const Regexp* re = todo.top();
         todo.pop();
         switch (re->kind) {
-        case Regexp::Kind::NIL: break;
-        case Regexp::Kind::TAG: break;
+        case Regexp::Kind::NIL:
+        case Regexp::Kind::END:
+        case Regexp::Kind::TAG:
+            break;
         case Regexp::Kind::SYM:
             for (const Range* r = re->sym; r; r = r->next()) {
                 cs.insert(r->lower());
@@ -53,8 +55,12 @@ void split_charset(RESpec& spec) {
     cs.insert(0);
     cs.insert(opts->encoding.cunit_count());
     if (opts->fill_eof != NOEOF) {
+        // user-defined end-of-input symbol
         cs.insert(opts->fill_eof);
         cs.insert(opts->fill_eof + 1);
+        // internally used end-of-input symbol
+        cs.insert(opts->encoding.eof());
+        cs.insert(opts->encoding.eof() + 1);
     }
 
     spec.charset.insert(spec.charset.end(), cs.begin(), cs.end());

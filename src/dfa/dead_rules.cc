@@ -72,7 +72,7 @@ struct RevDfa {
     state_t* states;
     arc_t* arcs;
 
-    explicit RevDfa(const Tdfa& dfa)
+    RevDfa(const Tdfa& dfa, const opt_t* opts)
         : nstates(dfa.states.size()),
           nrules(dfa.rules.size()),
           states(new state_t[nstates]()),
@@ -84,6 +84,17 @@ struct RevDfa {
             const size_t r = dfa.states[i]->rule;
             s.rule = r == Rule::NONE ? nrules : r;
             s.fallthru = false;
+        }
+        if (opts->fill_eof != NOEOF) {
+            // End-of-input rules may be shadowed by normal rules with a smaller rule index.
+            // However, TDFA structure obscurs this fact due to the fake end-of-input transitions.
+            // To fix this, we overwrite the shadowed end-of-input rules in the reversed TDFA.
+            for (TdfaState* s : dfa.states) {
+                size_t e = s->arcs[dfa.nchars - 1];
+                if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule && s->rule != Rule::NONE) {
+                    states[e].rule = s->rule;
+                }
+            }
         }
         // init arcs
         arc_t* a = arcs;
@@ -157,6 +168,29 @@ static void liveness_analysis(const RevDfa& rdfa, bool* live) {
     }
 }
 
+// <*> rules are only reported if they are unreachable in all conditions, so the diagnostics
+// must be delayed until all conditions are processed.
+//
+// There's one exception: standalone end-of-input rule `$ { ... }` is reported if it's shadowed
+// in any condition. This is to catch behavioral changes caused by the introduction of generalized
+// $ (which used to be a special rule like default rule *, but now is part of a normal rule with
+// the usual precedence).
+//
+// An exception from exception: the error is not enforced in cases that did not change behavior:
+// if a standalone end-of-input rule is shadowed by another end-of-input rule or a non-<*> rule.
+//
+static bool delay_reporting(const Rule& r) {
+    if (!r.semact->is_star) {
+        return false;
+    } else if (r.is_oldstyle_eof) {
+        CHECK(r.shadow.size() == 1);
+        const Rule* s = *r.shadow.begin();
+        return (s->is_oldstyle_eof && !s->semact->is_star);
+    } else {
+        return true;
+    }
+}
+
 static void warn_dead_rules(Tdfa& dfa, const std::string& cond, const bool* live, Msg& msg) {
     const size_t nstates = dfa.states.size();
     const size_t nrules = dfa.rules.size();
@@ -174,15 +208,10 @@ static void warn_dead_rules(Tdfa& dfa, const std::string& cond, const bool* live
     }
 
     for (size_t i = 0; i < nrules; ++i) {
-        // default rule '*' should not be reported
-        bool alive = (i == dfa.def_rule || live[i * nstates]);
         Rule& r = dfa.rules[i];
-        if (r.semact && r.semact->is_star) {
-            // <*> rules are only reported if they are unreachable in all conditions,
-            // so the diagnostics must be delayed until all conditions are processed.
-            // If any of them mark the rule as reachable, it is not reported.
-            if (alive) r.semact->is_used = true;
-        } else if (!alive) {
+        if (live[i * nstates] || i == dfa.def_rule) { // default rule '*' should not be reported
+            r.semact->is_used = true;
+        } else if (!delay_reporting(r)) {
             msg.warn.unreachable_rule(cond, r);
         }
     }
@@ -233,9 +262,11 @@ static void warn_sentinel_in_midrule(
     delete[] bad;
 }
 
-static void remove_dead_final_states(Tdfa& dfa, const bool* fallthru) {
+static void remove_dead_final_states(Tdfa& dfa, const opt_t* opts, const bool* fallthru) {
     const size_t nsym = dfa.nchars;
 
+    // Find final states with shadowed rules and remove the rule. The state itself is still
+    // connected as there are other paths through it.
     for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE) continue;
 
@@ -252,6 +283,20 @@ static void remove_dead_final_states(Tdfa& dfa, const bool* fallthru) {
         if (shadowed) {
             s->rule = Rule::NONE;
             s->tcmd[nsym] = nullptr;
+        }
+    }
+
+    // Find final states with shadowed end-of-input rules and disconnect them.
+    // Unlike shadowed normal rules, final states for end-of-input rules become unreachable.
+    if (opts->fill_eof != NOEOF) {
+        for (TdfaState* s : dfa.states) {
+            size_t e = s->arcs[dfa.nchars - 1];
+            if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule
+                    // TODO: remove after deperecating old-style $
+                    && dfa.states[e]->rule != dfa.eof_rule) {
+                s->arcs[dfa.nchars - 1] = Tdfa::NIL;
+                dfa.states[e]->deleted = true;
+            }
         }
     }
 }
@@ -277,50 +322,16 @@ static void find_fallback_states(Tdfa& dfa, const bool* fallthru) {
     }
 }
 
-static void find_fallback_states_with_eof_rule(Tdfa& dfa) {
-    const size_t nsym = dfa.nchars;
-
-    for (TdfaState* s : dfa.states) {
-        // With the end-of-input rule $ any non-final state is a fallthrough state: even if
-        // all ougoing transitions go to a final state, there's a chance that there will be
-        // the end of input and none of these transitions can be taken.
-        if (s->rule == Rule::NONE) {
-            s->fallthru = true;
-        }
-    }
-
-    for (TdfaState* s : dfa.states) {
-        if (s->rule == Rule::NONE || s->rule == dfa.eof_rule) continue;
-
-        // With the end-of-input rule $ a final state is a fallback state if it has outgoing
-        // transitions to any non-accepting states (even if all possible paths on those transitions
-        // are accepting, there is a possibility of YYFILL failure on such path, which adds a
-        // default quasi-transition).
-        for (size_t c = 0; c < nsym; ++c) {
-            const size_t j = s->arcs[c];
-            if (j != Tdfa::NIL && dfa.states[j]->rule == Rule::NONE) {
-                s->fallback = true;
-                break;
-            }
-        }
-    }
-}
-
-static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
-    // The end-of-input rule $ is like a special symbol that is not covered by any of the rules.
-    // Therefore rules cannot be completely shadowed by other rules, with one exception: if a rule
-    // matches empty string and the initial state is not a fallback state (i.e. all outgoing paths
-    // are accepting), then this rule will never match (if the end of input happens in the initial
-    // state, then the $ rule takes priority, otherwise one of the longer rules will match).
-    DCHECK(!dfa.states.empty());
-    TdfaState* s0 = dfa.states[0];
-    if (s0->rule != Rule::NONE && s0->rule != dfa.eof_rule && !s0->fallback) {
-        s0->rule = dfa.eof_rule;
-    }
-
-    for (Rule& r : dfa.rules) {
-        if (r.semact && r.semact->is_star) {
-            r.semact->is_used = true;
+// Enforce old-style end-of-input rule. It used to be a special rule, similar to the default
+// rule *, and it had different inheritance and precedence order compared to normal rules.
+// Now with the introduction of generalized $ it can be used anywhere in a regexp, and it's
+// part of a normal rule with normal precedence. This breaks backwards compatibility, so for
+// the time being we enforce the old order.
+static void enforce_oldstyle_eof_rule(Tdfa& dfa, const opt_t* opts) {
+    if (opts->fill_eof != NOEOF && !dfa.states.empty()) {
+        size_t e = dfa.states[0]->arcs[dfa.nchars - 1];
+        if (e != Tdfa::NIL) {
+            dfa.states[e]->rule = dfa.eof_rule;
         }
     }
 }
@@ -330,12 +341,8 @@ static void remove_dead_final_states_with_eof_rule(Tdfa& dfa) {
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg) {
     if (cond == ZERO_COND) {
         // Skip zero condition `<>`, it's a special case that doesn't need end-of-input checks.
-    } else if (opts->fill_eof != NOEOF) {
-        // See note [end-of-input rule].
-        find_fallback_states_with_eof_rule(dfa);
-        remove_dead_final_states_with_eof_rule(dfa);
     } else {
-        const RevDfa rdfa(dfa);
+        const RevDfa rdfa(dfa, opts);
         const size_t ns = rdfa.nstates;
         const size_t nl = (rdfa.nrules + 1) * ns;
         bool* live = new bool[nl];
@@ -345,7 +352,8 @@ void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Ms
         liveness_analysis(rdfa, live);
 
         warn_dead_rules(dfa, cond, live, msg);
-        remove_dead_final_states(dfa, fallthru);
+        enforce_oldstyle_eof_rule(dfa, opts); // TODO: remove after deprecating old-style $
+        remove_dead_final_states(dfa, opts, fallthru);
         warn_sentinel_in_midrule(dfa, opts, cond, live, msg);
         find_fallback_states(dfa, fallthru);
 
@@ -356,7 +364,7 @@ void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Ms
 void warn_dead_star_rules(const std::vector<std::unique_ptr<Adfa>>& dfas, Msg& msg) {
     for (const std::unique_ptr<Adfa>& dfa : dfas) {
         for (Rule& r : dfa->rules) {
-            if (r.semact && r.semact->is_star && !r.semact->is_used) {
+            if (!r.semact->is_used && delay_reporting(r)) {
                 msg.warn.unreachable_rule(dfa->cond, r);
             }
         }

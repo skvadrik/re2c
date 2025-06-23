@@ -28,7 +28,7 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const Re
         stack.pop_back();
 
         const Regexp* re = i.re;
-        if (re->kind == Regexp::Kind::NIL) {
+        if (re->kind == Regexp::Kind::NIL || re->kind == Regexp::Kind::END) {
             null = true;
         } else if (re->kind == Regexp::Kind::SYM) {
             null = false;
@@ -75,6 +75,9 @@ static bool nullable(const RESpec& spec, std::vector<StackItem>& stack, const Re
 }
 
 static bool trivially_nullable(const RESpec& spec, const Regexp* re) {
+    // $ { ... }
+    if (re->kind == Regexp::Kind::END) return true;
+
     // "" { ... }
     if (re->kind == Regexp::Kind::NIL) return true;
 

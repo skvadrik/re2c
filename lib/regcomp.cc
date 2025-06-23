@@ -82,7 +82,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     }
 
     Tnfa* nfa = new Tnfa;
-    CHECK_RET(re_to_nfa(*nfa, std::move(re)));
+    CHECK_RET(re_to_nfa(*nfa, std::move(re), msg));
 
     DCHECK(nfa->rules.size() == 1);
     preg->re_nsub = nfa->rules[0].ncap + 1;

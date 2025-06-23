@@ -7,45 +7,25 @@
 #include "src/util/check.h"
 #include "src/util/string_utils.h"
 
-// note [end-of-input rule]
+// note [end-of-input symbol]
 //
-// The end-of-input rule $ is special and different from other rules, because it matches something
-// other than input characters: namely, the end of input.
+// End-of-input symbol $ may occur as part of a regexp in a normal rule. As a result, TDFA will
+// have a state that is accepting only if the end of input is reached in this state. Such states
+// differ from normal states in a few ways:
 //
-// Technically it can be implemented as a check on lexer entry, before matching any characters.
-// However, this is not very efficient, as the check would be done unconditionally and it would not
-// take advantage of the sentinel symbol that allows to scope the check to only one branch that
-// matches the sentinel.
+// - They cannot be fallback states (it's not possible to fallback to such state, as it's either
+//   an immediate end of input and match, or there's more input and no match).
 //
-// Therefore is is better to match the end-of-input rule in the same way as normal rules, by
-// matching the sentinel symbol in the initial state and then performing the end-of-input check. It
-// could be implemented as a rule that matches the empty string "", but this approach has a few
-// difficulties:
+// - With regard to unreachable rules, end-of-input final states cannot completely shadow normal
+//   final states, as there's always a possibility of no match (depending on the length of input).
 //
-//  - The initial state must not be merged with any other states (this may happen in case of a
-//    nullable loop), therefore the end-of-input rule must be present as a TNFA state (to prevent
-//    determinization from mapping other states to the initial TDFA state), and the initial TDFA
-//    state must be final (to prevent minimization from merging it with other states).
+// - With regard to undefined control flow, in any non-accepting state there's always a
+//   possibility of failure to default state, as there may be an unexpected end of input.
 //
-//  - There might be another rule that matches the empty string. If the end-of-input rule is in the
-//    initial state, it should take priority, but otherwise the other empty rule may still match if
-//    the longer rules fail and fallback. Technically there can be only one rule per TDFA state, so
-//    if the end-of-input rule collides with a normal rule, the normal one wins and the end-of-input
-//    rule is removed from a TDFA state (codegen has a special case for the initial state which
-//    reinstates the end-of-input rule and gives it priority over normal rules).
-//
-//  - Unlike other rules, end-of-input rule should not be considered a fallback point in case longer
-//    rules fail to match. It is not possible to fallback to it because it can only match at the end
-//    of input, and in that case the lexer should not try to match any longer rules (or it will be
-//    reading past the end of input).
-//
-//  - The end-of-input rule should not be considered accepting by undefined control flow analysis in
-//    the skeleton, as it may fail to match even if the lexer is in a final TDFA state.
-//
-//  - The end-of-input rule should not raise -Wmatch-empty-string warning.
-//
-//  - The end-of-input rule should not be reported as shadowed by other rules.
-//
+// Internally end-of-input symbol $ is implemented as a pseudo-transition on a fake code unit
+// outside of the current charset. This has the advantage that there's still at most one rule
+// per TDFA state (as opposed to having both a normal rule and an end-of-input rule), which is
+// convenient for algorithms like -Wunreachable-rules analysis and TDFA minimization.
 
 namespace re2c {
 
@@ -92,6 +72,10 @@ const AstNode* Ast::dot(const loc_t& loc) {
 
 const AstNode* Ast::def(const loc_t& loc) {
     return make(loc, AstKind::DEF, NO_CAPTURE);
+}
+
+const AstNode* Ast::eof(const loc_t& loc) {
+    return make(loc, AstKind::END, NO_CAPTURE);
 }
 
 const AstNode* Ast::alt(const AstNode* a1, const AstNode* a2) {
@@ -171,6 +155,7 @@ bool Ast::needs_wrap(const AstNode* a) {
     case AstKind::CLS:
     case AstKind::DOT:
     case AstKind::DEF:
+    case AstKind::END:
     case AstKind::TAG:
     case AstKind::CAP:
         return false;
@@ -292,6 +277,18 @@ static const loc_t& find_rule_location(const AstGram& g) {
     return NOWHERE;
 }
 
+bool is_oldstyle_eof(const AstNode* ast) {
+    return ast->kind == AstKind::CAP
+        && ast->cap.ast->kind == AstKind::END;
+}
+
+void AstGram::add_rule(AstRule&& r) {
+    if (is_oldstyle_eof(r.ast)) {
+        eofs.push_back(r.semact);
+    }
+    rules.push_back(std::move(r));
+}
+
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) {
     if (grams.empty()) return Ret::OK;
 
@@ -303,17 +300,10 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
                 str, incond(g.name).c_str(), g.what[0]->loc.line)); \
         }
         CHECK_SPECIAL(defs, "default rule");
-        CHECK_SPECIAL(eofs, "end of input rule");
         CHECK_SPECIAL(entry, "entry action");
         CHECK_SPECIAL(pre_rule, "pre-rule action");
         CHECK_SPECIAL(post_rule, "post-rule action");
 #undef CHECK_SPECIAL
-
-        if (g.rules.empty() && g.defs.empty() && !g.eofs.empty()) {
-            RET_FAIL(msg.error(g.eofs[0]->loc,
-                "end of input rule %swithout other rules doesn't make sense",
-                incond(g.name).c_str()));
-        }
     }
 
     if (!opts->start_conditions) {
@@ -408,14 +398,18 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         grams.erase(star);
     }
 
-    // Merge end of input rule $ and default rule * with the lowest priority.
     for (AstGram& g : grams) {
-        // See note [EOF rule handling].
+        // Find end-of-input rule $. TODO: drop this after deprecating old-style $ rule.
         if (!g.eofs.empty()) {
-            g.eof_rule = g.rules.size();
-            const SemAct* a = g.eofs[0];
-            g.rules.push_back({ast.nil(a->loc), a});
+            for (size_t i = 0; i < g.rules.size(); ++i) {
+                if (g.rules[i].semact == g.eofs[0]) {
+                    g.eof_rule = i;
+                    break;
+                }
+            }
+            CHECK(g.eof_rule != Rule::NONE);
         }
+        // Merge default rule * with the lowest priority.
         if (!g.defs.empty()) {
             g.def_rule = g.rules.size();
             const SemAct* a = g.defs[0];
@@ -430,20 +424,6 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         AstGram zero_copy(*zero);
         grams.erase(zero);
         grams.insert(grams.begin(), zero_copy);
-    }
-
-    // Check that `re2c:eof` configuration and the $ rule are used together. This must be done after
-    // merging rules inherited from other blocks and <*> condition (because they might add $ rule).
-    // Skip zero condition, as it's a special one that has no rules and always matches empty string.
-    for (const AstGram& g : grams) {
-        if (!g.eofs.empty() && opts->fill_eof == NOEOF) {
-            RET_FAIL(msg.error(g.eofs[0]->loc,
-                               "%s$ rule found, but `re2c:eof` configuration is not set",
-                               incond(g.name).c_str()));
-        } else if (g.eofs.empty() && opts->fill_eof != NOEOF && g.name != ZERO_COND) {
-            RET_FAIL(error("%s`re2c:eof` configuration is set, but no $ rule found",
-                           incond(g.name).c_str()));
-        }
     }
 
     return Ret::OK;

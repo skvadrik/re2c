@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "src/dfa/dfa.h"
+#include "src/options/opt.h"
 #include "src/util/check.h"
 
 // note [finding strongly connected components of DFA]
@@ -103,12 +104,13 @@ static void scc(const Tdfa& dfa, std::vector<bool>& trivial, std::vector<StackIt
     }
 }
 
-static void calc_fill(const Tdfa& dfa,
-                      const std::vector<bool>& trivial,
-                      std::vector<StackItem>& stack_dfs,
-                      std::vector<size_t>& fill) {
+static void calc_fill(const Tdfa& dfa, const opt_t* opts, const std::vector<bool>& trivial,
+        std::vector<StackItem>& stack_dfs, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     fill.resize(nstates, SCC_UND);
+
+    // Exclude transitions on the fake end-of-input symbol $.
+    const size_t nchars = dfa.nchars - (opts->fill_eof != NOEOF ? 1 : 0);
 
     stack_dfs.push_back({0, 0, SCC_INF});
 
@@ -131,12 +133,12 @@ static void calc_fill(const Tdfa& dfa,
         }
 
         // find the next successor state that hasn't been visited yet
-        for (; c < dfa.nchars; ++c) {
+        for (; c < nchars; ++c) {
             const size_t j = arcs[c];
             if (j != Tdfa::NIL) break;
         }
 
-        if (c < dfa.nchars) {
+        if (c < nchars) {
             // recurse into the next successor state
             stack_dfs.push_back({i, c + 1, SCC_INF});
             stack_dfs.push_back({arcs[c], 0, SCC_INF});
@@ -156,7 +158,7 @@ static void calc_fill(const Tdfa& dfa,
 
 } // anonymous namespace
 
-void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill) {
+void fillpoints(const Tdfa& dfa, const opt_t* opts, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     std::vector<bool> trivial(nstates, false);
     std::vector<StackItem> stack_dfs;
@@ -166,7 +168,7 @@ void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill) {
     scc(dfa, trivial, stack_dfs);
 
     // For each state, calculate YYFILL argument (the maximum path length to the next YYFILL state).
-    calc_fill(dfa, trivial, stack_dfs, fill);
+    calc_fill(dfa, opts,  trivial, stack_dfs, fill);
 }
 
 } // namespace re2c

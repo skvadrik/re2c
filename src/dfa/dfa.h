@@ -29,14 +29,16 @@ struct TdfaState {
     size_t rule;
     bool fallthru;
     bool fallback;
+    bool deleted;
 
     explicit TdfaState(size_t nchars)
-        : arcs(new size_t[nchars]),
-          tcmd(nullptr),
-          tcid(nullptr),
-          rule(Rule::NONE),
-          fallthru(false),
-          fallback(false) {
+            : arcs(new size_t[nchars])
+            , tcmd(nullptr)
+            , tcid(nullptr)
+            , rule(Rule::NONE)
+            , fallthru(false)
+            , fallback(false)
+            , deleted(false) {
         size_t sz = nchars + 2; // +2 for final and fallback epsilon-transitions
         tcmd = new tcmd_t* [sz];
         memset(tcmd, 0, sizeof (tcmd_t*) * sz);
@@ -79,7 +81,7 @@ struct Tdfa {
 Ret determinization(
         Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) NODISCARD;
 void minimization(Tdfa& dfa, Minimization type);
-void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill);
+void fillpoints(const Tdfa& dfa, const opt_t* opts, std::vector<size_t>& fill);
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg);
 void warn_dead_star_rules(const std::vector<std::unique_ptr<Adfa>>& dfas, Msg& msg);
 void insert_fallback_tags(Tdfa& dfa);

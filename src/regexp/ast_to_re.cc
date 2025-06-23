@@ -300,6 +300,7 @@ LOCAL_NODISCARD(Ret diff_to_range(RESpec& spec,
         switch (ast->kind) {
         case AstKind::NIL:
         case AstKind::DEF:
+        case AstKind::END:
         case AstKind::TAG:
         case AstKind::CAT:
         case AstKind::ITER:
@@ -416,6 +417,16 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             stack.pop_back();
             break;
 
+        case AstKind::END: // see note [end-of-input symbol]
+            if (opts->fill_eof == NOEOF) {
+                RET_FAIL(spec.msg.error(
+                    ast->loc, "rule contains $, but `re2c:eof` configuration is not set"));
+            }
+            range = spec.rangemgr.ran(opts->encoding.eof(), opts->encoding.eof() + 1);
+            re = re_end(spec, range);
+            stack.pop_back();
+            break;
+
         case AstKind::DIFF:
             CHECK_RET(diff_to_range(spec, stack_diff, ast, &range));
             CHECK_RET(re_class(spec, ast->loc, range, &re));
@@ -519,7 +530,6 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             }
             break;
         }
-
     }
 
     *presult = re;
@@ -548,7 +558,9 @@ Ret RESpec::init(const std::vector<AstRule>& ast) {
         rule.htag = tags.size();
         for (rule.ttag = ltag; rule.ttag < rule.htag && !trailing(tags[rule.ttag]); ++rule.ttag);
         rule.ncap = ncap;
-        CHECK_RET(check_tags_used_once(*this, rule, tags));;
+        rule.is_oldstyle_eof = is_oldstyle_eof(ast[i].ast);
+
+        CHECK_RET(check_tags_used_once(*this, rule, tags));
     }
     return Ret::OK;
 }

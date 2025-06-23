@@ -32,14 +32,25 @@ struct Rule {
     size_t htag; // next to last tag
     size_t ttag; // trailing context
     size_t ncap; // number of POSIX captures
+    bool is_oldstyle_eof; // standalone end-of-input rule `$ { ... }`
 
-    Rule(): semact(nullptr), shadow(), ltag(0), htag(0), ttag(0), ncap(0) {}
+    Rule();
     ~Rule() {}
     Rule(const Rule& r) = default;
     Rule& operator=(const Rule& r) = default;
     Rule(Rule&& r) = default;
     Rule& operator=(Rule&& r) = default;
 };
+
+inline Rule::Rule()
+    : semact(nullptr)
+    , shadow()
+    , ltag(0)
+    , htag(0)
+    , ttag(0)
+    , ncap(0)
+    , is_oldstyle_eof(false)
+{}
 
 } // namespace re2c
 

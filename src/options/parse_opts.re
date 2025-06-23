@@ -82,6 +82,7 @@ opt_warn: /*!local:re2c
     "swapped-range"          end { msg.warn.set(Warn::SWAPPED_RANGE,          option); goto opt; }
     "undefined-control-flow" end { msg.warn.set(Warn::UNDEFINED_CONTROL_FLOW, option); goto opt; }
     "unreachable-rules"      end { msg.warn.set(Warn::UNREACHABLE_RULES,      option); goto opt; }
+    "deprecated-eof-rule"    end { msg.warn.set(Warn::DEPRECATED_EOF_RULE,    option); goto opt; }
     "useless-escape"         end { msg.warn.set(Warn::USELESS_ESCAPE,         option); goto opt; }
     "sentinel-in-midrule"    end { msg.warn.set(Warn::SENTINEL_IN_MIDRULE,    option); goto opt; }
 */

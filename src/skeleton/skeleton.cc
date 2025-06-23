@@ -9,22 +9,25 @@ namespace re2c {
 struct opt_t;
 struct tcmd_t;
 
-Node::Node(): arcs(), rule(Rule::NONE), cmd(nullptr) {}
+Node::Node(): arcs(), rule(Rule::NONE), eof_rule(Rule::NONE), cmd(nullptr) {}
 
-void Node::init(const TdfaState* s,
-                const std::vector<uint32_t>& charset,
-                size_t nil,
-                IrAllocator& ir_alc) {
-    const size_t nc = charset.size() - 1;
-    for (uint32_t c = 0, l = 0; c < nc;) {
+void Node::init(Tdfa& dfa, const TdfaState* s, const std::vector<uint32_t>& charset,
+        const opt_t* opts, size_t nil, IrAllocator& ir_alc) {
+    // Exclude fake end-of-input symbol $ and omit all transitions on it from skeleton.
+    // These are not real transitions, so they would interfere with path cover, undefined
+    // control flow analysis, maximal path length etc.
+    const size_t nchars_no_eof = dfa.nchars - (opts->fill_eof != NOEOF ? 1 : 0);
 
+    for (uint32_t c = 0, l = 0; c < nchars_no_eof;) {
         size_t j = s->arcs[c];
         const tcmd_t* t = s->tcmd[c];
-        for (; ++c < nc && s->arcs[c] == j && s->tcmd[c] == t;);
+        for (; ++c < nchars_no_eof && s->arcs[c] == j && s->tcmd[c] == t;);
+
         if (j == Tdfa::NIL) j = nil;
 
-        // all arcs go to default node => this node is final
-        if (l == 0 && c == nc && j == nil) break;
+        // All arcs go to default node => this node is final. Note the use of `nchars`
+        // (including EOF) to hanlde correctly the case of a single `$ { ... }` rule,
+        if (l == 0 && c == dfa.nchars && j == nil) break;
 
         const uint32_t u = charset[c];
         Node::range_t* r = ir_alc.alloct<Node::range_t>(1);
@@ -46,7 +49,9 @@ void Node::init(const TdfaState* s,
     }
 
     rule = s->rule;
-    cmd = s->tcmd[nc];
+    eof_rule = opts->fill_eof != NOEOF && s->arcs[dfa.nchars - 1] != Tdfa::NIL
+        ? dfa.states[s->arcs[dfa.nchars - 1]]->rule : Rule::NONE;
+    cmd = s->tcmd[dfa.nchars];
 }
 
 bool Node::end() const {
@@ -81,7 +86,7 @@ Ret Skeleton::init() {
     // initialize nodes
     const size_t nil = nodes_count - 1;
     for (size_t i = 0; i < nil; ++i) {
-        nodes[i].init(dfa.states[i], dfa.charset, nil, dfa.ir_alc);
+        nodes[i].init(dfa, dfa.states[i], dfa.charset, opts, nil, dfa.ir_alc);
     }
 
     // initialize size of key

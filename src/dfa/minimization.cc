@@ -73,7 +73,7 @@ void minimization(Tdfa& dfa, Minimization type) {
 
     size_t* compact = new size_t[count];
     for (size_t i = 0, j = 0; i < count; ++i) {
-        if (i == part[i]) {
+        if (i == part[i] && !dfa.states[i]->deleted) {
             compact[i] = j++;
         }
     }
@@ -82,7 +82,7 @@ void minimization(Tdfa& dfa, Minimization type) {
     for (size_t i = 0; i < count; ++i) {
         TdfaState* s = dfa.states[i];
 
-        if (i == part[i]) {
+        if (i == part[i] && !s->deleted) {
             size_t* arcs = s->arcs;
             for (size_t c = 0; c < dfa.nchars; ++c) {
                 if (arcs[c] != Tdfa::NIL) {

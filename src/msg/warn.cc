@@ -127,8 +127,15 @@ void Warn::swapped_range(const loc_t& loc, uint32_t l, uint32_t u) {
 }
 
 void Warn::undefined_control_flow(
-    const Skeleton& skel, std::vector<path_t>& paths, bool overflow) {
-    if (mask[UNDEFINED_CONTROL_FLOW] & WARNING) {
+        const Skeleton& skel, std::vector<path_t>& paths, bool overflow) {
+    if (skel.opts->fill_eof != NOEOF && paths.size() == 1 && paths[0].len() == 0) {
+        // Hard error if `re2c:eof` is set but empty input is not covered.
+        error_accuml = true;
+        msg.warning_start(skel.loc, true);
+        fprintf(stderr,
+            "control flow %sis undefined for empty string '', use end-of-input rule $\n",
+            incond(skel.cond).c_str());
+    } else if (mask[UNDEFINED_CONTROL_FLOW] & WARNING) {
         const bool e = mask[UNDEFINED_CONTROL_FLOW] & ERROR;
         error_accuml |= e;
 
@@ -156,10 +163,17 @@ void Warn::undefined_control_flow(
 }
 
 void Warn::unreachable_rule(const std::string& cond, const Rule& rule) {
-    if (mask[UNREACHABLE_RULES] & WARNING) {
+    if (rule.is_oldstyle_eof) {
+        // Standalone end-of-input rule `$ { ... }` has a separate warning.
+        // This is to surface any issues caused by backwards incompatible changes in re2c-4.3,
+        // which introduced generalized $ and changed precedence of the end-of-input rule.
+        // Shadowed end-of-input rule means that there is definitely a breaking change
+        // (previously it could never be shadowed), so it's better to raise an explicit error
+        // than to have a silent change of behaviour.
+        deprecated_eof_rule(cond, rule);
+    } else if (mask[UNREACHABLE_RULES] & WARNING) {
         const bool e = mask[UNREACHABLE_RULES] & ERROR;
         error_accuml |= e;
-
         msg.warning_start(rule.semact->loc, e);
         fprintf(stderr, "unreachable rule %s", incond(cond).c_str());
         const size_t shadows = rule.shadow.size();
@@ -173,6 +187,32 @@ void Warn::unreachable_rule(const std::string& cond, const Rule& rule) {
             fprintf(stderr, ")");
         }
         msg.warning_end(names[UNREACHABLE_RULES], e);
+    }
+}
+
+void Warn::deprecated_eof_rule(const std::string& cond, const Rule& rule) {
+    CHECK(rule.is_oldstyle_eof);
+
+    if (mask[DEPRECATED_EOF_RULE] & WARNING) {
+        const bool e = mask[DEPRECATED_EOF_RULE] & ERROR;
+        error_accuml |= e;
+
+        msg.warning_start(rule.semact->loc, e);
+
+        CHECK(rule.shadow.size() == 1);
+        uint32_t l1 = rule.semact->loc.line;
+        uint32_t l2 = (*rule.shadow.begin())->semact->loc.line;
+
+        // Note that we cannot assume that the other rule is shadowed: it's not necessarily
+        // an end-of-input rule $, it can be a normal rule that matches empty string.
+        fprintf(stderr,
+            "*** PLEASE FIX ***: in the future $ will become part of a normal rule with "
+            "position based precedence (https://github.com/skvadrik/re2c/issues/525), "
+            "so the rule at line %u %swill become unreachable (shadowed by the rule at line %u) "
+            "and this warning will be turned to error",
+            l1, incond(cond).c_str(), l2);
+
+        msg.warning_end(names[DEPRECATED_EOF_RULE], e);
     }
 }
 

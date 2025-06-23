@@ -22,6 +22,7 @@ struct Skeleton;
     W(UNDEFINED_SYNTAX_CONFIG, "undefined-syntax-config", true) \
     W(SENTINEL_IN_MIDRULE, "sentinel-in-midrule", true) \
     W(UNREACHABLE_RULES, "unreachable-rules", true) \
+    W(DEPRECATED_EOF_RULE, "deprecated-eof-rule", true) \
     W(USELESS_ESCAPE, "useless-escape", true) \
     W(SWAPPED_RANGE, "swapped-range", true) \
     W(CONDITION_ORDER, "condition-order", true) \
@@ -75,6 +76,7 @@ class Warn {
     void swapped_range(const loc_t& loc, uint32_t l, uint32_t u);
     void undefined_control_flow(const Skeleton& skel, std::vector<path_t>& paths, bool overflow);
     void unreachable_rule(const std::string& cond, const Rule& rule);
+    void deprecated_eof_rule(const std::string& cond, const Rule& rule);
     void useless_escape(const loc_t& loc, const uint8_t* str, const uint8_t* end);
     void sentinel_in_midrule(const loc_t& loc, const std::string& cond, uint32_t sentinel);
     void undefined_syntax_config(const loc_t& loc, const char* name);

@@ -1,1 +1,1 @@
-re2c: error: `re2c:eof` configuration is set, but no $ rule found
+eof/eof_06.re:2:0: error: control flow is undefined for empty string '', use end-of-input rule $

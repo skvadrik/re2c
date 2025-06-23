@@ -300,3 +300,4 @@ eof/nullable_loop.re:27:4: warning: control flow is undefined for strings that m
 	'[\x0-\x9\xB-\x60\x62-\xFF]'
 	'\xA'
 , use default rule '*' [-Wundefined-control-flow]
+eof/nullable_loop.re:65:19: warning: unreachable rule (shadowed by rules at lines 63, 64, 66) [-Wunreachable-rules]

@@ -48,3 +48,4 @@ yy10:
 }
 
 eof/eof_fallthru.re:8:0: warning: control flow is undefined for strings that match '[\x0-\xFF]', use default rule '*' [-Wundefined-control-flow]
+eof/eof_fallthru.re:16:11: warning: *** PLEASE FIX ***: in the future $ will become part of a normal rule with position based precedence (https://github.com/skvadrik/re2c/issues/525), so the rule at line 16 will become unreachable (shadowed by the rule at line 15) and this warning will be turned to error [-Wdeprecated-eof-rule]

@@ -114,11 +114,14 @@ struct Node {
 
     arcs_t arcs;
     size_t rule;
+    size_t eof_rule;
     const tcmd_t* cmd;
 
     Node();
-    void init(const TdfaState* s,
+    void init(Tdfa& dfa,
+              const TdfaState* s,
               const std::vector<uint32_t>& charset,
+              const opt_t* opts,
               size_t nil,
               IrAllocator& ir_alc);
     bool end() const;

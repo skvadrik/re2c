@@ -52,7 +52,6 @@ Adfa::Adfa(Tdfa&& dfa,
         , state_count(0)
         , head(nullptr)
         , default_state(nullptr)
-        , eof_state(nullptr)
         , start_state(nullptr)
         , finstates(rules.size(), nullptr)
         , custom_start_label(nullptr)
@@ -74,7 +73,6 @@ Adfa::Adfa(Tdfa&& dfa,
         , post_rule_action(post_rule_action) {
 
     const size_t nstates = dfa.states.size();
-    const size_t nchars = dfa.nchars;
 
     State** i2s = new State*[nstates];
     for (size_t i = 0; i < nstates; ++i) {
@@ -83,6 +81,8 @@ Adfa::Adfa(Tdfa&& dfa,
 
     State** p = &head;
     for (size_t i = 0; i < nstates; ++i) {
+        size_t nchars = dfa.nchars;
+
         TdfaState* t = dfa.states[i];
         State* s = i2s[i];
 
@@ -91,11 +91,25 @@ Adfa::Adfa(Tdfa&& dfa,
         p = &s->next;
 
         s->rule = t->rule;
-        s->rule_tags = t->tcid[dfa.nchars];
-        s->fall_tags = t->tcid[dfa.nchars + 1];
+        s->rule_tags = t->tcid[nchars];
+        s->fall_tags = t->tcid[nchars + 1];
         s->fill = fill[i];
         s->fallthru = t->fallthru;
         s->fallback = t->fallback; // see note [fallback states]
+
+        if (opts->fill_eof != NOEOF) {
+            // Get rid of the pseudo-transitions on fake end-of-input symbol,
+            // but store a link to the final state and tags.
+            size_t eof_state = t->arcs[nchars - 1];
+            if (eof_state != Tdfa::NIL) {
+                TdfaState* e = dfa.states[eof_state];
+                s->eof_state = i2s[eof_state];
+                s->eof_tags = t->tcid[nchars - 1];
+                // There should be no final / fallback tags ($ must be at the end).
+                CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
+            }
+            --nchars;
+        }
 
         bool end = true;
         for (uint32_t c = 0; end && c < nchars; ++c) {
@@ -161,12 +175,18 @@ void Adfa::reorder() {
         State* s = todo.front();
         todo.pop();
         ord.push_back(s);
+        s->linked = true;
         for (uint32_t i = 0; i < s->go.span_count; ++i) {
             State* q = s->go.span[i].to;
-            if(q && done.insert(q).second) {
+            if (q && done.insert(q).second) {
                 todo.push(q);
             }
         }
+    }
+
+    for (State* s = head; s; s = s->next) {
+        // Must be a final state reachable only over removed end-of-input transition.
+        if (!s->linked) ord.push_back(s);
     }
 
     DCHECK(state_count == ord.size());
@@ -221,6 +241,8 @@ void Adfa::split(State* s) {
     move->go.tags = TCID0; // drop hoisted tags
     move->rule_tags = s->rule_tags;
     move->fall_tags = s->fall_tags;
+    move->eof_state = s->eof_state;
+    move->eof_tags = s->eof_tags;
     add_single_trans(s, move);
 }
 
@@ -318,7 +340,7 @@ void Adfa::find_base_state(const opt_t* opts) {
 void Adfa::prepare(const opt_t* opts) {
     // create rule states
     for (State* s = head; s; s = s->next) {
-        if (s->rule != Rule::NONE && s->rule != eof_rule) {
+        if (s->rule != Rule::NONE) {
             if (!finstates[s->rule]) {
                 State* n = new State;
                 n->kind = StateKind::RULE;
@@ -334,15 +356,11 @@ void Adfa::prepare(const opt_t* opts) {
             }
         }
 
-        // last state, add end-of-input rule $ if needed (see note [end-of-input rule])
-        // skip zero condition `<>` as it does not have end-of-input rule
-        if (!s->next && opts->fill_eof != NOEOF && cond != ZERO_COND) {
-            eof_state = new State;
-            eof_state->kind = StateKind::RULE;
-            eof_state->rule = eof_rule;
-            finstates[eof_rule] = eof_state;
-            add_state_after(eof_state, s);
-            break;
+        State* e = s->eof_state;
+        if (e != nullptr && !finstates[e->rule]) {
+            e->kind = StateKind::RULE;
+            finstates[e->rule] = e;
+            e->go.span_count = 0;
         }
     }
 
@@ -379,7 +397,6 @@ void Adfa::prepare(const opt_t* opts) {
     if (default_state) {
         for (State* s = head; s; s = s->next) {
             if (s->fallback) {
-                DCHECK(s->rule != eof_rule); // see note [end-of-input rule]
                 s->save = accepts.find_or_add({finstates[s->rule], s->fall_tags});
             }
         }

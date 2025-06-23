@@ -33,6 +33,7 @@ struct TnfaState {
         TnfaState* out2;  // second outgoing transition (only for ALT states)
         const Range* ran; // character range (only for RAN states)
         tag_info_t tag;   // tag information (number and sign, only for TAG states)
+        bool eof;         // for final states, true if this is an end-of-input state
     };
     uint32_t clos;        // GOR1: closure item for this stack
     uint32_t status : 2;  // GOR1: status (values 0, 1, 2)
@@ -78,7 +79,9 @@ struct Tnfa {
     }
 
     TnfaState* make_fin(uint32_t rule) {
-        return make(TnfaState::Kind::FIN, rule);
+        TnfaState* s = make(TnfaState::Kind::FIN, rule);
+        s->eof = false;
+        return s;
     }
 
   private:
@@ -98,7 +101,7 @@ struct Tnfa {
     FORBID_COPY(Tnfa);
 };
 
-Ret re_to_nfa(Tnfa& nfa, RESpec&& spec) NODISCARD;
+Ret re_to_nfa(Tnfa& nfa, RESpec&& spec, Msg& msg) NODISCARD;
 
 static constexpr uint32_t NONCORE = ~0u;
 

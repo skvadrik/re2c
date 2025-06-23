@@ -65,6 +65,7 @@ class Enc {
     inline uint32_t cpoint_count() const;
     inline uint32_t cunit_count() const;
     inline uint32_t cunit_size() const;
+    inline uint32_t eof() const;
     inline bool multibyte_cunit() const;
 
     uint32_t decode_unsafe(uint32_t c) const;
@@ -119,6 +120,10 @@ inline uint32_t Enc::cunit_count() const {
         return 0x110000;
     }
     return 0;
+}
+
+inline uint32_t Enc::eof() const {
+    return cunit_count();
 }
 
 inline uint32_t Enc::cunit_size() const {

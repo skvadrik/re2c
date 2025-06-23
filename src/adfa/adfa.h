@@ -54,6 +54,9 @@ struct State {
     tcid_t rule_tags;
     tcid_t fall_tags;
 
+    State* eof_state;
+    tcid_t eof_tags;
+
     size_t save; // `yyaccept` number for this state, if any
 
     const uniq_vector_t<AcceptTrans>* accepts; // `yyaccept` transition table
@@ -61,6 +64,7 @@ struct State {
     bool fallback;
     bool fallthru;
     bool is_base;
+    bool linked;
 
     CodeGo go;
 
@@ -92,7 +96,6 @@ struct Adfa {
 
     State* head;
     State* default_state;
-    State* eof_state;
     State* start_state;
     std::vector<State*> finstates;
 
@@ -162,11 +165,14 @@ inline State::State()
         , rule(Rule::NONE)
         , rule_tags(TCID0)
         , fall_tags(TCID0)
+        , eof_state(nullptr)
+        , eof_tags(TCID0)
         , save(NOSAVE)
         , accepts(nullptr)
         , fallback(false)
         , fallthru(false)
         , is_base(false)
+        , linked(false)
         , go() {
     init_go(&go);
 }

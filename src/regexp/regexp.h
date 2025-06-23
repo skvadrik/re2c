@@ -20,9 +20,10 @@ struct Rule;
 struct opt_t;
 
 struct Regexp {
-    enum class Kind: uint32_t {NIL, SYM, ALT, CAT, ITER, TAG} kind;
+    enum class Kind: uint32_t {NIL, SYM, ALT, CAT, ITER, TAG, END} kind;
     union {
         const Range* sym;
+        const Range* end;
         struct {
             Regexp* re1;
             Regexp* re2;
@@ -62,6 +63,7 @@ void insert_default_tags(RESpec& spec);
 void warn_nullable(const RESpec& spec, const std::string& cond);
 
 Regexp* re_nil(RESpec& spec);
+Regexp* re_end(RESpec& spec, const Range* r);
 Regexp* re_sym(RESpec& spec, const Range* r);
 Regexp* re_alt(RESpec& spec, Regexp* x, Regexp* y);
 Regexp* re_cat(RESpec& spec, Regexp* x, Regexp* y);

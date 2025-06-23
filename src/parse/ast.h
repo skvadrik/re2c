@@ -28,6 +28,7 @@ enum class AstKind: uint32_t {
     CLS,  // character class, like [ac-z], possibly negated, like [^ac-z]
     DOT,  // any character except newline
     DEF,  // default rule *, matches any code unit, see note [default regexp]
+    END,  // end-of-input rule $
     ALT,  // alternative of two nodes: x | y
     CAT,  // concatenation of two nodes: x y
     ITER, // generalized repetition of two nodes: x{n,m} or x{n,} or x{n} or x* or x+
@@ -135,6 +136,7 @@ struct AstGram {
     size_t eof_rule;
 
     explicit AstGram(const std::string& name);
+    void add_rule(AstRule&& r);
 };
 
 using AstGrams = std::vector<AstGram>;
@@ -199,6 +201,7 @@ class Ast {
     const AstNode* cls(const loc_t& loc, bool negated);
     const AstNode* dot(const loc_t& loc);
     const AstNode* def(const loc_t& loc);
+    const AstNode* eof(const loc_t& loc);
     const AstNode* alt(const AstNode* a1, const AstNode* a2);
     const AstNode* cat(const AstNode* a1, const AstNode* a2);
     const AstNode* iter(const AstNode* a, uint32_t n, uint32_t m);
@@ -224,6 +227,7 @@ Ret use_block(
     Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const std::string& name) NODISCARD;
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) NODISCARD;
 Ret parse(Input& input, Ast& ast, Opt& opts, AstGrams& grams) NODISCARD;
+bool is_oldstyle_eof(const AstNode* ast);
 
 } // namespace re2c
 

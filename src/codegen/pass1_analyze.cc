@@ -499,12 +499,16 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state == dfa.start_state) {
-        // End-of-input rule $ in the start state takes priority over any other rule.
-        fallback = dfa.eof_state;
-        falltags = TCID0;
+    if (state->eof_state
+            && (state->rule == Rule::NONE
+            || state->eof_state->rule < state->rule
+            // TODO: remove after deperecating old-style $
+            || state->eof_state->rule == dfa.eof_rule)) {
+        // EOF in EOF-accepting state: match the EOF rule in this state.
+        fallback = state->eof_state;
+        falltags = state->eof_tags;
     } else if (state->rule != Rule::NONE) {
-        // EOF in accepting state: match the rule in this state.
+        // EOF in non-EOF accepting state: match the non-EOF rule in this state.
         fallback = dfa.finstates[state->rule];
         falltags = state->rule_tags;
     } else {
