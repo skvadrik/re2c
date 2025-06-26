@@ -73,7 +73,11 @@ endif()
 # Cygwin and NetBSD.
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) # fail if the C++ compiler does not support this standard
-set(CMAKE_POSITION_INDEPENDENT_CODE ON) # make sure object libraries work with shared libraries
+
+# make sure object libraries work with shared libraries
+include(CheckPIESupported)
+check_pie_supported()
+set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # needed for POSIX file API
 ac_check_headers("sys/types.h")
