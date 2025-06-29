@@ -30,6 +30,13 @@
 ``-Wunreachable-rules``
     Warn about rules that are shadowed by other rules and will never match.
 
+``-Wdeprecated-eof_rule``
+    Warn about standalone end of input rules ``$`` that will be broken by the
+    future changes and require fixing. At the moment these rules take precedence
+    when conflicting with other rules, but after the introduction of generalized
+    end of input symbol ``$`` precedence order will change and these rules will
+    become shadowed by other rules.
+
 ``-Wuseless-escape``
     Warn if a symbol is escaped when it shouldn't be.
     By default, |re2c| silently ignores such escapes, but this may as well

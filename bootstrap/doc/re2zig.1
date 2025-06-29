@@ -1596,6 +1596,13 @@ priority, matches any code unit, and always consumes a single code unit.
 .B \fB\-Wunreachable\-rules\fP
 Warn about rules that are shadowed by other rules and will never match.
 .TP
+.B \fB\-Wdeprecated\-eof_rule\fP
+Warn about standalone end of input rules \fB$\fP that will be broken by the
+future changes and require fixing. At the moment these rules take precedence
+when conflicting with other rules, but after the introduction of generalized
+end of input symbol \fB$\fP precedence order will change and these rules will
+become shadowed by other rules.
+.TP
 .B \fB\-Wuseless\-escape\fP
 Warn if a symbol is escaped when it shouldn\(aqt be.
 By default, re2zig silently ignores such escapes, but this may as well
