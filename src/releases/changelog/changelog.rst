@@ -2,6 +2,16 @@ Changelog
 =========
 
 
+4.3 (2025-06-30)
+~~~~~~~~~~~~~~~~
+
+- Added warning ``-Wdeprecated-eof-rule``, this will be turned to error in the
+  future (`#525 <https://github.com/skvadrik/re2c/issues/525>`_).
+
+- Improved re2c performance (made determinization faster,
+  `#544 <https://github.com/skvadrik/re2c/discussions/544>`_).
+
+
 4.2 (2025-04-23)
 ~~~~~~~~~~~~~~~~
 
