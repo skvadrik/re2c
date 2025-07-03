@@ -1,11 +1,11 @@
-// re2c $INPUT -o $OUTPUT -c
+// re2c $INPUT -o $OUTPUT -c -Wno-error-deprecated-eof-rule
 
-// Test that rules are merged with correct priority. For normal rules
-// the earliest rule has the highest priority (either inherited or
-// local). For special rules *, $ and <!> local condition specific
-// rules have the highest priority, followed by inherited condition
-// specific rules, followed by local generic (star condition) rules,
-// followed by inherited generic rules.
+// Test that rules are merged with correct priority. For normal rules the
+// earliest rule has the highest priority (either inherited or local). For
+// special rules * and <!> local condition specific rules have the highest
+// priority, followed by inherited condition specific rules, followed by local
+// generic (star condition) rules, followed by inherited generic rules. End of
+// input rule used to be special but now it's just a normal rule.
 
 /*!re2c
     re2c:yyfill:enable = 0;
@@ -35,8 +35,8 @@
 */
 
 // Expect:
-//     c1: xdef1, eof,   f1()
-//     c2: def,   eof2,  f2(x)
+//     c1: xdef1, xeof,  f1()
+//     c2: def,   xeof2, f2(x)
 //     c3: def,   yeof3, f3(y)
 /*!re2c
     !use:x;
