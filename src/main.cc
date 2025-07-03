@@ -75,7 +75,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.
-    Tdfa dfa(dfa_alc, nfa.charset.size(), gram.def_rule, gram.eof_rule);
+    Tdfa dfa(dfa_alc, nfa.charset.size(), gram.def_rule);
     CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 
