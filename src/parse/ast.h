@@ -120,23 +120,19 @@ struct AstGram {
 
     // Special rules and actions specified in this block.
     std::vector<const SemAct*> defs;      // default rule `*`
-    std::vector<const SemAct*> eofs;      // end of input rule `$`
     std::vector<const SemAct*> entry;     // code executed at the start of matching `!entry`
     std::vector<const SemAct*> pre_rule;  // code preceding semantic action `!pre_rule` or `<!>`
     std::vector<const SemAct*> post_rule; // code following semantic action `!post_rule`
 
     // Special rules and actions inherited from other blocks.
     std::vector<const SemAct*> inherited_defs;
-    std::vector<const SemAct*> inherited_eofs;
     std::vector<const SemAct*> inherited_entry;
     std::vector<const SemAct*> inherited_pre_rule;
     std::vector<const SemAct*> inherited_post_rule;
 
     size_t def_rule;
-    size_t eof_rule;
 
     explicit AstGram(const std::string& name);
-    void add_rule(AstRule&& r);
 };
 
 using AstGrams = std::vector<AstGram>;

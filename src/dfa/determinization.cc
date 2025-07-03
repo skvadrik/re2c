@@ -21,7 +21,7 @@ template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
+Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule)
     : dfa_alc(dfa_alc)
     , ir_alc()
     , charset()
@@ -34,7 +34,6 @@ Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t
     , tcpool(dfa_alc)
     , maxtagver(0)
     , def_rule(def_rule)
-    , eof_rule(eof_rule)
 {}
 
 Ret determinization(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {

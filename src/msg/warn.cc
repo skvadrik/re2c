@@ -24,6 +24,8 @@ Warn::Warn(Msg& msg): mask(), error_accuml(false), msg(msg) {
 #define W(kind, name, on) mask[kind] = on ? WARNING : SILENT;
     RE2C_WARNINGS
 #undef W
+    // Turn some warnings to error by default.
+    mask[DEPRECATED_EOF_RULE] |= ERROR;
 }
 
 Ret Warn::check() const {
@@ -203,13 +205,8 @@ void Warn::deprecated_eof_rule(const std::string& cond, const Rule& rule) {
         uint32_t l1 = rule.semact->loc.line;
         uint32_t l2 = (*rule.shadow.begin())->semact->loc.line;
 
-        // Note that we cannot assume that the other rule is shadowed: it's not necessarily
-        // an end-of-input rule $, it can be a normal rule that matches empty string.
         fprintf(stderr,
-            "*** PLEASE FIX ***: in the future $ will become part of a normal rule with "
-            "position based precedence (https://github.com/skvadrik/re2c/issues/525), "
-            "so the rule at line %u %swill become unreachable (shadowed by the rule at line %u) "
-            "and this warning will be turned to error",
+            "unreachable end-of-input rule at line %u %s(shadowed by rule at line %u)",
             l1, incond(cond).c_str(), l2);
 
         msg.warning_end(names[DEPRECATED_EOF_RULE], e);

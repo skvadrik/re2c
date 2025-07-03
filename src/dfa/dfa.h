@@ -70,9 +70,8 @@ struct Tdfa {
     tcpool_t tcpool;
     tagver_t maxtagver;
     size_t def_rule;
-    size_t eof_rule;
 
-    Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule);
+    Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule);
     ~Tdfa();
 
     FORBID_COPY(Tdfa);

@@ -108,7 +108,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
             preg->regtrie = new regoff_trie_t(preg->mptdfa->tags.size());
         }
     } else {
-        Tdfa* dfa = new Tdfa(*new DfaAllocator(), nfa->charset.size(), Rule::NONE, Rule::NONE);
+        Tdfa* dfa = new Tdfa(*new DfaAllocator(), nfa->charset.size(), Rule::NONE);
         CHECK_RET(determinization(std::move(*nfa), *dfa, opt, msg, ""));
         preg->dfa = dfa;
         delete nfa;
