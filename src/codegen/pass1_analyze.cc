@@ -499,11 +499,7 @@ State* fallback_state_with_eof_rule(
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state->eof_state
-            && (state->rule == Rule::NONE
-            || state->eof_state->rule < state->rule
-            // TODO: remove after deperecating old-style $
-            || state->eof_state->rule == dfa.eof_rule)) {
+    if (state->eof_state && (state->rule == Rule::NONE || state->eof_state->rule < state->rule)) {
         // EOF in EOF-accepting state: match the EOF rule in this state.
         fallback = state->eof_state;
         falltags = state->eof_tags;

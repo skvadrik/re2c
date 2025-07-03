@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i --tags
+// re2c $INPUT -o $OUTPUT -i --tags -Wno-error-deprecated-eof-rule
 // EMPTY rule is shadowed and dead-code-eliminated. Empty string is a no-match.
 // Tags are hoisted.
 /*!re2c
@@ -6,8 +6,8 @@
 ""          { /* EMPTY - here 'x' must not be set */ }
 */
 
-// EMPTY rule is shadowed and dead-code-eliminated.
-// Tags are not hoisted because of the untagged transition to EOF.
+// EOF rule is shadowed and dead-code-eliminated.
+// Tags are not hoisted because of the untagged transition to EMPTY.
 /*!re2c
 re2c:eof = 0;
 @x [^] [a]* { /* R1 - here 'x' must be set */ }
@@ -15,8 +15,9 @@ re2c:eof = 0;
 $           { /* EOF - here 'x' must not be set */ }
 */
 
+// EOF rule is shadowed and dead-code-eliminated.
 // EMPTY rule is not shadowed and does match on empty input string.
-// Tags are not hoisted because of the untagged transition to EOF.
+// Tags are not hoisted because of the untagged transition to EMPTY.
 /*!re2c
 re2c:eof = 0;
 @x [^][^] [a]* { /* R1 - here 'x' must be set */ }

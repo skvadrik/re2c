@@ -1225,7 +1225,7 @@ yyreduce:
   case 14: /* rule: trailexpr TOKEN_CODE  */
 #line 112 "../src/parse/parser.ypp"
                        {
-    find_or_add_gram(grams, "").add_rule({(yyvsp[-1].regexp), (yyvsp[0].semact)});
+    find_or_add_gram(grams, "").rules.push_back({(yyvsp[-1].regexp), (yyvsp[0].semact)});
 }
 #line 1231 "src/parse/parser.cc"
     break;
@@ -1266,7 +1266,7 @@ yyreduce:
 #line 127 "../src/parse/parser.ypp"
                               {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_gram(grams, cond).add_rule({(yyvsp[-1].regexp), (yyvsp[0].semact)});
+        find_or_add_gram(grams, cond).rules.push_back({(yyvsp[-1].regexp), (yyvsp[0].semact)});
     }
     ast.temp_condlist.clear();
 }
