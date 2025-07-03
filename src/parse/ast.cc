@@ -172,20 +172,18 @@ bool Ast::needs_wrap(const AstNode* a) {
 }
 
 AstGram::AstGram(const std::string& name)
-    : name(name),
-      rules(),
-      defs(),
-      eofs(),
-      entry(),
-      pre_rule(),
-      post_rule(),
-      inherited_defs(),
-      inherited_eofs(),
-      inherited_entry(),
-      inherited_pre_rule(),
-      inherited_post_rule(),
-      def_rule(Rule::NONE),
-      eof_rule(Rule::NONE) {}
+    : name(name)
+    , rules()
+    , defs()
+    , entry()
+    , pre_rule()
+    , post_rule()
+    , inherited_defs()
+    , inherited_entry()
+    , inherited_pre_rule()
+    , inherited_post_rule()
+    , def_rule(Rule::NONE)
+{}
 
 AstBlock::AstBlock(const std::string& name, const opt_t* opts, const AstGrams& grams)
     : name(name), opts(opts), grams(grams) {}
@@ -257,7 +255,6 @@ Ret use_block(Input& input, const Ast& ast, Opt& opts, AstGrams& grams, const st
         // to redefine special rule within one block).
         append(gram.rules, g.rules);
         append(gram.inherited_defs, g.defs);
-        append(gram.inherited_eofs, g.eofs);
         append(gram.inherited_entry, g.entry);
         append(gram.inherited_pre_rule, g.pre_rule);
         append(gram.inherited_post_rule, g.post_rule);
@@ -272,13 +269,11 @@ static const loc_t& find_rule_location(const AstGram& g) {
 
     if (!g.rules.empty()) return g.rules[0].semact->loc;
     if (!g.defs.empty()) return g.defs[0]->loc;
-    if (!g.eofs.empty()) return g.eofs[0]->loc;
     if (!g.entry.empty()) return g.entry[0]->loc;
     if (!g.pre_rule.empty()) return g.pre_rule[0]->loc;
     if (!g.post_rule.empty()) return g.post_rule[0]->loc;
 
     if (!g.inherited_defs.empty()) return g.inherited_defs[0]->loc;
-    if (!g.inherited_eofs.empty()) return g.inherited_eofs[0]->loc;
     if (!g.inherited_entry.empty()) return g.inherited_entry[0]->loc;
     if (!g.inherited_pre_rule.empty()) return g.inherited_pre_rule[0]->loc;
     if (!g.inherited_post_rule.empty()) return g.inherited_post_rule[0]->loc;
@@ -290,13 +285,6 @@ static const loc_t& find_rule_location(const AstGram& g) {
 bool is_oldstyle_eof(const AstNode* ast) {
     return ast->kind == AstKind::CAP
         && ast->cap.ast->kind == AstKind::END;
-}
-
-void AstGram::add_rule(AstRule&& r) {
-    if (is_oldstyle_eof(r.ast)) {
-        eofs.push_back(r.semact);
-    }
-    rules.push_back(std::move(r));
 }
 
 Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, Ast& ast) {
@@ -374,7 +362,6 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     // Inherit special rules from other blocks (unless a local one is defined).
     for (AstGram& g : grams) {
         append(g.defs, g.inherited_defs);
-        append(g.eofs, g.inherited_eofs);
         append(g.entry, g.inherited_entry);
         append(g.pre_rule, g.inherited_pre_rule);
         append(g.post_rule, g.inherited_post_rule);
@@ -410,7 +397,6 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
             if (r.semact) r.semact->is_star = true;
         }
         for (const SemAct* a : star.defs) a->is_star = true;
-        for (const SemAct* a : star.eofs) a->is_star = true;
         for (const SemAct* a : star.entry) a->is_star = true;
         for (const SemAct* a : star.pre_rule) a->is_star = true;
         for (const SemAct* a : star.post_rule) a->is_star = true;
@@ -419,7 +405,6 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
             if (g.name != STAR_COND && g.name != ZERO_COND) {
                 append(g.rules, star.rules);
                 append(g.defs, star.defs);
-                append(g.eofs, star.eofs);
                 append(g.entry, star.entry);
                 append(g.pre_rule, star.pre_rule);
                 append(g.post_rule, star.post_rule);
@@ -429,16 +414,6 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     }
 
     for (AstGram& g : grams) {
-        // Find end-of-input rule $. TODO: drop this after deprecating old-style $ rule.
-        if (!g.eofs.empty()) {
-            for (size_t i = 0; i < g.rules.size(); ++i) {
-                if (g.rules[i].semact == g.eofs[0]) {
-                    g.eof_rule = i;
-                    break;
-                }
-            }
-            CHECK(g.eof_rule != Rule::NONE);
-        }
         // Merge default rule * with the lowest priority.
         if (!g.defs.empty()) {
             g.def_rule = g.rules.size();

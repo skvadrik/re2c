@@ -110,7 +110,6 @@ struct Adfa {
     std::set<std::string> mtagvars;
 
     const size_t def_rule;
-    const size_t eof_rule;
     const size_t key_size;
     size_t max_fill;
     size_t max_nmatch;

@@ -60,7 +60,6 @@ Adfa::Adfa(Tdfa&& dfa,
         , mtagnames()
         , mtagvars()
         , def_rule(dfa.def_rule)
-        , eof_rule(dfa.eof_rule)
         , key_size(key)
         , max_fill(0)
         , max_nmatch(0)

@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -ci
+// re2c $INPUT -o $OUTPUT -ci -Wno-error-deprecated-eof-rule
 
 /*!re2c
     re2c:eof = 0;
@@ -38,7 +38,7 @@
 
 // use block
 //   c1: error: *-eof-2 shadowed by c1-empty, error: *-eof shadowed by c1-empty
-//   c2: error: *-eof-2 shadowed by *-eof), *-a shadowed by c2-a but not reported because it's reachable in other conditions
+//   c2: error: *-eof-2 shadowed by *-eof, *-a shadowed by c2-a but not reported because it's reachable in other conditions
 //   c3: warning: *-eof-2 shadowed by c3-eof, *-eof shadowed by c3-eof but not reported because it's reachable in c1
 //   c4: warning: *-eof-2 shadowed by c4-eof, error: c4-eof-2 shadowed by c4-eof
 /*!use:re2c:x
@@ -58,7 +58,7 @@
 
 // use directive
 //   c1: error: *-eof-2 shadowed by c1-empty, error: *-eof shadowed by c1-empty
-//   c2: error: *-eof-2 shadowed by *-eof), *-a shadowed by c2-a but not reported because it's reachable in other conditions
+//   c2: error: *-eof-2 shadowed by *-eof, *-a shadowed by c2-a but not reported because it's reachable in other conditions
 //   c3: warning: *-eof-2 shadowed by c3-eof, *-eof shadowed by c3-eof but not reported because it's reachable in c1
 //   c4: warning: *-eof-2 shadowed by c4-eof, error: c4-eof-2 shadowed by c4-eof
 /*!re2c

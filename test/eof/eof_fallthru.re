@@ -1,4 +1,4 @@
-// re2c $INPUT -o $OUTPUT -i
+// re2c $INPUT -o $OUTPUT -i -Wno-error-deprecated-eof-rule
 
 /*!re2c
     re2c:eof = 0;
