@@ -360,7 +360,7 @@ if (yyt4 != -1) {yyt4 -= token;}
         // Run the lexer.
         Optional<ArrayList<SemVer>> vers = lexer.lex();
 
-        // Check resuts.
+        // Check results.
         assert vers.isPresent() && vers.get().size() == BUFSIZE;
         SemVer v = new SemVer(1, 22, 333);
         for (int i = 0; i < BUFSIZE; ++i) {
