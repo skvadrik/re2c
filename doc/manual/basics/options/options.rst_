@@ -4,7 +4,7 @@
 
 ``--api <simple | record | generic>``
     Specify the API used by the generated code to interface with used-defined
-    code. Option ``simple`` shold be used in simple cases when there's no need
+    code. Option ``simple`` should be used in simple cases when there's no need
     for buffer refilling and storing lexer state. Option ``record`` should be
     used when lexer state needs to be stored in a record (struct, class, etc.).
     Option ``generic`` should be used in complex cases when the other two APIs
