@@ -184,7 +184,7 @@ enum SymType {
 // C lexers (unfortunately) need information from the symbol table to return
 // the correct token type, because an identifier could be a type name. (This
 // ambiguity is a big source of trouble in C.) This is a fake "sym_type" that
-// always returns Identifer. It needs to be fixed to actually hook into the
+// always returns Identifier. It needs to be fixed to actually hook into the
 // parser's symbol table if this lexer is used in the real world.
 fn sym_type(_ident: &str) -> SymType {
     SymType::Identifier
