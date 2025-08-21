@@ -23,7 +23,7 @@ def _re2c_impl(ctx):
         tools = [ctx.executable._re2c_tool],
         inputs = ctx.files.srcs + ctx.files.data,
         command = """
-            "{re2c}" "{src}" -o "{out}" {re2c_args} {includes}
+            "{re2c}" --no-generation-date "{src}" -o "{out}" {re2c_args} {includes}
         """.format(
             re2c = ctx.executable._re2c_tool.path,
             src = srcs[0].path,
