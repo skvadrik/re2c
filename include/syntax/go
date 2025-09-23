@@ -121,6 +121,7 @@ re2c:YYCTYPE = "YYCTYPE";
 re2c:YYCTXMARKER = (.api.generic ? "YYCTXMARKER" : (.api.record ? yyrecord ".") "yyctxmarker");
 re2c:YYCURSOR = (.api.generic ? "YYCURSOR" : (.api.record ? yyrecord ".") "yycursor");
 re2c:YYDEBUG = "YYDEBUG";
+re2c:YYEND = "YYEND";
 re2c:YYFILL = "YYFILL";
 re2c:YYGETACCEPT = sigil "{var}";
 re2c:YYGETCOND = "YYGETCONDITION"; // historic default
@@ -404,6 +405,11 @@ code:yylessthan =
         : (.many
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
+
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND (.api_style.functions ? "()")
+        : YYLIMIT " == " YYCURSOR);
 
 code:yybm_filter = yych " & ~0xFF";
 

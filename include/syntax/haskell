@@ -121,6 +121,7 @@ re2c:YYCTYPE = "YYCTYPE";
 re2c:YYCTXMARKER = "_yyctxmarker";
 re2c:YYCURSOR = "_yycursor";
 re2c:YYDEBUG = "yydebug";
+re2c:YYEND = "yyend";
 re2c:YYFILL = "yyfill";
 re2c:YYGETACCEPT = "yygetaccept";
 re2c:YYGETCOND = "yygetcond";
@@ -413,6 +414,11 @@ code:yylessthan =
     (.api.record
         ? YYCURSOR " >= " YYLIMIT // YYFILL check can only be used with EOF rule $
         : YYLESSTHAN);
+
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND
+        : YYLIMIT " == " YYCURSOR);
 
 code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 
