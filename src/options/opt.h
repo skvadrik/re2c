@@ -308,6 +308,9 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::LESSTHAN, StxVarId::NEED, StxVarId::CURSOR, StxVarId::LIMIT, \
             StxVarId::RECORD}), ({}), ({StxLOpt::MANY}) \
     ) \
+    CODE_TEMPLATE(yyend, \
+        ({StxVarId::END, StxVarId::CURSOR, StxVarId::LIMIT}), ({}), ({}) \
+    ) \
     CODE_TEMPLATE(yybm_filter, \
         ({StxVarId::CHAR}), ({}), ({}) \
     ) \
@@ -375,6 +378,7 @@ using StxCodes = list_t<StxCode>;
     STX_LOCAL_VAR(CTXMARKER, "YYCTXMARKER") \
     STX_LOCAL_VAR(CURSOR, "YYCURSOR") \
     STX_LOCAL_VAR(DEBUG, "YYDEBUG") \
+    STX_LOCAL_VAR(END, "YYEND") \
     STX_LOCAL_VAR(GETACCEPT, "YYGETACCEPT") \
     STX_LOCAL_VAR(GETCOND, "YYGETCOND") \
     STX_LOCAL_VAR(GETSTATE, "YYGETSTATE") \
@@ -574,6 +578,7 @@ enum class StxVarId : uint32_t {
     MUTCODE(api_shift) \
     MUTCODE(api_stag_shift) \
     MUTCODE(api_mtag_shift) \
+    MUTCODE(api_end) \
     MUTCODE(api_fill) \
     MUTCODE(api_cond_get) \
     MUTCODE(api_cond_set) \
