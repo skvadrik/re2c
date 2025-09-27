@@ -388,7 +388,7 @@ static constexpr const char* DEFAULT_SYNTAX_JS =
     "code:yyend =\n"
     "    (.api.generic | .yyfill.enable\n"
     "        ? YYEND\n"
-    "        : YYLIMIT \" === \" YYCURSOR);\n"
+    "        : YYLIMIT \" <= \" YYCURSOR);\n"
     "\n"
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"

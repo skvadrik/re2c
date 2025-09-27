@@ -419,7 +419,7 @@ static constexpr const char* DEFAULT_SYNTAX_HASKELL =
     "code:yyend =\n"
     "    (.api.generic | .yyfill.enable\n"
     "        ? YYEND\n"
-    "        : YYLIMIT \" == \" YYCURSOR);\n"
+    "        : YYCURSOR \" >= \" YYLIMIT);\n"
     "\n"
     "code:yybm_filter = \"(\" yych \" .&. complement 0xFF) /= 0\";\n"
     "\n"
