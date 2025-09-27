@@ -398,7 +398,7 @@ static constexpr const char* DEFAULT_SYNTAX_OCAML =
     "code:yyend =\n"
     "    (.api.generic | .yyfill.enable\n"
     "        ? YYEND\n"
-    "        : YYLIMIT \" == \" YYCURSOR);\n"
+    "        : YYLIMIT \" <= \" YYCURSOR);\n"
     "\n"
     "code:yybm_filter = yych \" land ~0xFF\";\n"
     "\n"

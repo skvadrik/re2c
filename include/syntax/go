@@ -409,7 +409,7 @@ code:yylessthan =
 code:yyend =
     (.api.generic | .yyfill.enable
         ? YYEND (.api_style.functions ? "()")
-        : YYLIMIT " == " YYCURSOR);
+        : YYLIMIT " <= " YYCURSOR);
 
 code:yybm_filter = yych " & ~0xFF";
 
