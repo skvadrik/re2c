@@ -418,7 +418,7 @@ code:yylessthan =
 code:yyend =
     (.api.generic | .yyfill.enable
         ? YYEND
-        : YYLIMIT " == " YYCURSOR);
+        : YYCURSOR " >= " YYLIMIT);
 
 code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 

@@ -455,7 +455,7 @@ static constexpr const char* DEFAULT_SYNTAX_C =
     "code:yyend =\n"
     "    (.api.generic | .yyfill.enable\n"
     "        ? YYEND (.api_style.functions ? \"()\")\n"
-    "        : YYLIMIT \" == \" YYCURSOR);\n"
+    "        : YYLIMIT \" <= \" YYCURSOR);\n"
     "\n"
     "code:yybm_filter = yych \" & ~0xFF\";\n"
     "\n"
