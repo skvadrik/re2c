@@ -157,6 +157,34 @@ class GenLessThan : public RenderCallback {
     FORBID_COPY(GenLessThan);
 };
 
+class GenEnd : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenEnd(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::END:
+            os << opts->api_end;
+            break;
+        case StxVarId::CURSOR:
+            os << opts->api_cursor;
+            break;
+        case StxVarId::LIMIT:
+            os << opts->api_limit;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenEnd);
+};
+
 class GenEnumElem : public RenderCallback {
     std::ostream& os;
     const std::string& type;
@@ -891,6 +919,7 @@ static void gen_go(
         Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
 
     if (go->kind == CodeGo::Kind::DOT) {
         gen_godot(output, dfa, go->godot, from, stmts);
@@ -909,12 +938,22 @@ static void gen_go(
         append(stmts, code_skip(alc));
     }
 
+    CodeList* transition = nullptr;
     if (go->kind == CodeGo::Kind::SWITCH_IF) {
-        append(stmts, gen_goswif(output, dfa, go->goswif, from));
+        transition = gen_goswif(output, dfa, go->goswif, from);
     } else if (go->kind == CodeGo::Kind::LINEAR_IF) {
-        append(stmts, gen_goifl(output, dfa, go->goifl, from));
+        transition = gen_goifl(output, dfa, go->goifl, from);
     } else if (go->kind == CodeGo::Kind::CGOTO) {
-        append(stmts, gen_cgoto(output, dfa, go->cgoto, from));
+        transition = gen_cgoto(output, dfa, go->cgoto, from);
+    }
+
+    if (go->eof) {
+        CodeList* fallback = gen_fill_falllback(output, dfa, from, nullptr);
+        GenEnd callback(buf.stream(), opts);
+        const char* end_check = opts->gen_code_yyend(buf, callback);
+        gen_if(alc, opts, end_check, fallback, transition, stmts);
+    } else {
+        append(stmts, transition);
     }
 }
 
