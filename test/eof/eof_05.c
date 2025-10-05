@@ -3,6 +3,8 @@
 
 {
 	YYCTYPE yych;
+	if (YYEND()) goto yy1;
+yy1:
 	{}
 }
 

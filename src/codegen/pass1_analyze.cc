@@ -532,6 +532,21 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
+    // Determine if YYEND check is needed in this state. This depends on the end-of-input
+    // handling method:
+    //
+    // In the case of "sentinel with bounds checks" method, any state that has transitions
+    // on symbols can be excluded: the transition on sentinel always has YYLESSTHAN/YYFILL logic.
+    // So, YYEND is only needed in "end" states (those that have no transitions on symbols, but
+    // only a single pseudo-transition to a "rule" or "accept" state) with an end-of-input link,
+    // excluding the cases when the link target is the same as transition target.
+    //
+    // TODO: support other methods.
+    if (from->eof_state && endstate(from) && span[0].to != from->eof_state) {
+        from->go.eof = true;
+        from->eof_state->label->used = true;
+    }
+
     // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
     if (opts->fill_eof != NOEOF && !endstate(from)) {
         State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
@@ -618,6 +633,7 @@ void init_go(CodeGo* go) {
     go->span = nullptr;
     go->tags = TCID0;
     go->skip = false;
+    go->eof = false;
 }
 
 bool consume(const State* s) {
