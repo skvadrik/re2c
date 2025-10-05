@@ -101,10 +101,10 @@ Adfa::Adfa(Tdfa&& dfa,
             // but store a link to the final state and tags.
             size_t eof_state = t->arcs[nchars - 1];
             if (eof_state != Tdfa::NIL) {
-                TdfaState* e = dfa.states[eof_state];
                 s->eof_state = i2s[eof_state];
                 s->eof_tags = t->tcid[nchars - 1];
                 // There are no final / fallback tags (by TNFA construction $ is at the end).
+                TdfaState* e = dfa.states[eof_state];
                 CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
             }
             --nchars;
@@ -337,11 +337,12 @@ void Adfa::find_base_state(const opt_t* opts) {
 // wouldn't need to know tunneling results), but it's much worse for tunneling.
 
 void Adfa::prepare(const opt_t* opts) {
-    // create rule states
+    // create rule states for final states
     for (State* s = head; s; s = s->next) {
         if (s->rule != Rule::NONE) {
             if (!finstates[s->rule]) {
                 State* n = new State;
+                n->linked = true;
                 n->kind = StateKind::RULE;
                 n->rule = s->rule;
                 finstates[s->rule] = n;
@@ -354,12 +355,18 @@ void Adfa::prepare(const opt_t* opts) {
                 }
             }
         }
-
-        State* e = s->eof_state;
-        if (e != nullptr && !finstates[e->rule]) {
-            e->kind = StateKind::RULE;
-            finstates[e->rule] = e;
-            e->go.span_count = 0;
+    }
+    // fix end-of-input links to point to the newly created rule state
+    for (State* s = head; s; s = s->next) {
+        if (s->eof_state != nullptr) {
+            s->eof_state = finstates[s->eof_state->rule];
+        }
+    }
+    // remove unlinked states
+    for (State* s = head; s; s = s->next) {
+        for (State* t = s->next; t && !t->linked; t = s->next) {
+            s->next = t->next;
+            delete t;
         }
     }
 

@@ -239,9 +239,6 @@ static Ret one_re_to_nfa(
             if (!pp) {
                 RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
                     "end of input marker $ in the middle of a rule is not supported"));
-            } else if (!nfa.rules[rule].is_oldstyle_eof) {
-                RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
-                    "only standalone $ rule is supported"));
             }
             *pp = nfa.make_ran(rule, *pp, re.end);
             start = x.end;

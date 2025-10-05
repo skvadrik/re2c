@@ -7,7 +7,7 @@
 
 {
 	YYCTYPE yych;
-	if (YYEND()) goto yy1;
+	if (YYLIMIT <= YYCURSOR) goto yy1;
 yy1:
 	{ $ }
 }
@@ -17,13 +17,9 @@ yy1:
 
 {
 	YYCTYPE yych;
-yyFillLabel0:
 	yych = *YYCURSOR;
 	if (yych >= 0x01) goto yy3;
-	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL() == 0) goto yyFillLabel0;
-		goto yy4;
-	}
+	if (YYLIMIT <= YYCURSOR) goto yy4;
 yy3:
 	++YYCURSOR;
 	{ * }
@@ -36,21 +32,17 @@ yy4:
 
 {
 	YYCTYPE yych;
-yyFillLabel1:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy7;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel1;
-				goto yy8;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy8;
 			goto yy6;
 	}
 yy6:
 yy7:
 	++YYCURSOR;
-	if (YYEND()) goto yy9;
+	if (YYLIMIT <= YYCURSOR) goto yy9;
 	goto yy6;
 yy8:
 	{ $ }
@@ -63,15 +55,11 @@ yy9:
 
 {
 	YYCTYPE yych;
-yyFillLabel2:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy13;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel2;
-				goto yy14;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy14;
 			goto yy11;
 	}
 yy11:
@@ -80,7 +68,7 @@ yy12:
 	{ * }
 yy13:
 	++YYCURSOR;
-	if (YYEND()) goto yy15;
+	if (YYLIMIT <= YYCURSOR) goto yy15;
 	goto yy12;
 yy14:
 	{ $ }
@@ -93,15 +81,11 @@ yy15:
 
 {
 	YYCTYPE yych;
-yyFillLabel3:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy18;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel3;
-				goto yy19;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy19;
 			goto yy17;
 	}
 yy17:
@@ -109,7 +93,7 @@ yy17:
 	{ * }
 yy18:
 	++YYCURSOR;
-	if (YYEND()) goto yy20;
+	if (YYLIMIT <= YYCURSOR) goto yy20;
 	{ a }
 yy19:
 	{ $ }
@@ -122,15 +106,11 @@ yy20:
 
 {
 	YYCTYPE yych;
-yyFillLabel4:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy23;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel4;
-				goto yy24;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy24;
 			goto yy22;
 	}
 yy22:
@@ -148,15 +128,11 @@ yy24:
 
 {
 	YYCTYPE yych;
-yyFillLabel5:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy27;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel5;
-				goto yy28;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy28;
 			goto yy26;
 	}
 yy26:
@@ -174,16 +150,12 @@ yy28:
 
 {
 	YYCTYPE yych;
-yyFillLabel6:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy32;
 		case 'b': goto yy33;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel6;
-				goto yy35;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy35;
 			goto yy30;
 	}
 yy30:
@@ -192,7 +164,7 @@ yy31:
 	{ * }
 yy32:
 	++YYCURSOR;
-	if (YYEND()) goto yy34;
+	if (YYLIMIT <= YYCURSOR) goto yy34;
 	goto yy31;
 yy33:
 	++YYCURSOR;
@@ -207,16 +179,12 @@ yy35:
 
 {
 	YYCTYPE yych;
-yyFillLabel7:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy39;
 		case 'b': goto yy41;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel7;
-				goto yy42;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy42;
 			goto yy37;
 	}
 yy37:
@@ -229,7 +197,7 @@ yy40:
 	{ ba }
 yy41:
 	++YYCURSOR;
-	if (YYEND()) goto yy40;
+	if (YYLIMIT <= YYCURSOR) goto yy40;
 	goto yy38;
 yy42:
 	{ $ }
@@ -240,16 +208,12 @@ yy42:
 
 {
 	YYCTYPE yych;
-yyFillLabel8:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy46;
 		case 'b': goto yy47;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel8;
-				goto yy49;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy49;
 			goto yy44;
 	}
 yy44:
@@ -257,17 +221,12 @@ yy44:
 yy45:
 	{ * }
 yy46:
-	++YYCURSOR;
-yyFillLabel9:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	switch (yych) {
 		case 'c':
 		case 'z': goto yy47;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel9;
-				goto yy48;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy48;
 			goto yy45;
 	}
 yy47:
@@ -283,29 +242,20 @@ yy49:
 
 {
 	YYCTYPE yych;
-yyFillLabel10:
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'a': goto yy52;
 		default:
-			if (YYLIMIT <= YYCURSOR) {
-				if (YYFILL() == 0) goto yyFillLabel10;
-				goto yy55;
-			}
+			if (YYLIMIT <= YYCURSOR) goto yy55;
 			goto yy51;
 	}
 yy51:
 	++YYCURSOR;
 	{ * }
 yy52:
-	++YYCURSOR;
-yyFillLabel11:
-	yych = *YYCURSOR;
+	yych = *++YYCURSOR;
 	if (yych >= 0x01) goto yy53;
-	if (YYLIMIT <= YYCURSOR) {
-		if (YYFILL() == 0) goto yyFillLabel11;
-		goto yy54;
-	}
+	if (YYLIMIT <= YYCURSOR) goto yy54;
 yy53:
 	++YYCURSOR;
 yy54:
@@ -314,9 +264,9 @@ yy55:
 	{ $ }
 }
 
-eof/eof_at_the_end.re:8:0: warning: control flow is undefined for strings that match '[\x0-\xFF]', use default rule '*' [-Wundefined-control-flow]
-eof/eof_at_the_end.re:19:0: warning: control flow is undefined for strings that match 
+eof/eof_at_the_end_nofill.re:9:0: warning: control flow is undefined for strings that match '[\x0-\xFF]', use default rule '*' [-Wundefined-control-flow]
+eof/eof_at_the_end_nofill.re:20:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-eof/eof_at_the_end.re:44:10: warning: unreachable rule (shadowed by rule at line 43) [-Wunreachable-rules]
+eof/eof_at_the_end_nofill.re:45:10: warning: unreachable rule (shadowed by rule at line 44) [-Wunreachable-rules]
