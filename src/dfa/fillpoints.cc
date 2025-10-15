@@ -104,13 +104,13 @@ static void scc(const Tdfa& dfa, std::vector<bool>& trivial, std::vector<StackIt
     }
 }
 
-static void calc_fill(const Tdfa& dfa, const opt_t* opts, const std::vector<bool>& trivial,
+static void calc_fill(const Tdfa& dfa, const std::vector<bool>& trivial,
         std::vector<StackItem>& stack_dfs, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     fill.resize(nstates, SCC_UND);
 
     // Exclude transitions on the fake end-of-input symbol $.
-    const size_t nchars = dfa.nchars - (opts->fill_eof != NOEOF ? 1 : 0);
+    const size_t nchars = dfa.nchars - 1;
 
     stack_dfs.push_back({0, 0, SCC_INF});
 
@@ -158,7 +158,7 @@ static void calc_fill(const Tdfa& dfa, const opt_t* opts, const std::vector<bool
 
 } // anonymous namespace
 
-void fillpoints(const Tdfa& dfa, const opt_t* opts, std::vector<size_t>& fill) {
+void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill) {
     const size_t nstates = dfa.states.size();
     std::vector<bool> trivial(nstates, false);
     std::vector<StackItem> stack_dfs;
@@ -168,7 +168,7 @@ void fillpoints(const Tdfa& dfa, const opt_t* opts, std::vector<size_t>& fill) {
     scc(dfa, trivial, stack_dfs);
 
     // For each state, calculate YYFILL argument (the maximum path length to the next YYFILL state).
-    calc_fill(dfa, opts,  trivial, stack_dfs, fill);
+    calc_fill(dfa, trivial, stack_dfs, fill);
 }
 
 } // namespace re2c

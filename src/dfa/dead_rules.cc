@@ -54,6 +54,24 @@ namespace {
 
 struct tcmd_t;
 
+// Character count determins whether end-of-input $-transtions are used in rule liveness analysis.
+// This depends on the end-of-input handling method:
+//
+//   - For "sentinel with bounds checks" method $-transitions are used, and the end-of-input
+//     possibility is considered in every state (handled by YYFILL-and-rematch logic).
+//
+//   - For "bounds checks with padding" only $-transitions to final states are used, as we
+//     don't consider end-of-input possible due to YYMAXFILL padding and the non-return-on-fail
+//     behaviour of YYFILL.
+//
+//   - For other methods only $-transitions to final states are used, as YYFILL is disabled and
+//     there are no end-of-input checks at all (there is either a sentinel symbol, or custom
+//     user-defined logic via generic API).
+//
+static size_t nchars_by_eof_method(const Tdfa& dfa, const opt_t* opts, size_t eof_state) {
+    return dfa.nchars - (opts->fill_eof == NOEOF && eof_state == Tdfa::NIL ? 1 : 0);
+}
+
 // reversed DFA
 struct RevDfa {
     struct arc_t {
@@ -77,6 +95,7 @@ struct RevDfa {
           nrules(dfa.rules.size()),
           states(new state_t[nstates]()),
           arcs(new arc_t[nstates * dfa.nchars]) {
+
         // init states
         for (size_t i = 0; i < nstates; ++i) {
             state_t& s = states[i];
@@ -85,22 +104,23 @@ struct RevDfa {
             s.rule = r == Rule::NONE ? nrules : r;
             s.fallthru = false;
         }
-        if (opts->fill_eof != NOEOF) {
-            // End-of-input rules may be shadowed by normal rules with a smaller rule index.
-            // However, TDFA structure obscurs this fact due to the fake end-of-input transitions.
-            // To fix this, we overwrite the shadowed end-of-input rules in the reversed TDFA.
-            for (TdfaState* s : dfa.states) {
-                size_t e = s->arcs[dfa.nchars - 1];
-                if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule && s->rule != Rule::NONE) {
-                    states[e].rule = s->rule;
-                }
-            }
-        }
-        // init arcs
+
+        // init transitions
         arc_t* a = arcs;
         for (size_t i = 0; i < nstates; ++i) {
             TdfaState* s = dfa.states[i];
-            for (size_t c = 0; c < dfa.nchars; ++c) {
+            size_t e = s->arcs[dfa.nchars - 1];
+
+            // End-of-input rules may be shadowed by normal rules with a smaller rule index.
+            // However, TDFA structure obscurs this fact due to the $-transitions.
+            // To fix this, we overwrite the shadowed end-of-input rules in the reversed TDFA.
+            if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule) {
+                DCHECK(s->rule != Rule::NONE);
+                states[e].rule = s->rule;
+            }
+
+            size_t nchars = nchars_by_eof_method(dfa, opts, e);
+            for (size_t c = 0; c < nchars; ++c) {
                 const size_t j = s->arcs[c];
                 if (j != Tdfa::NIL) {
                     a->dest = i;
@@ -263,38 +283,33 @@ static void warn_sentinel_in_midrule(
 }
 
 static void remove_dead_final_states(Tdfa& dfa, const opt_t* opts, const bool* fallthru) {
-    const size_t nsym = dfa.nchars;
-
-    // Find final states with shadowed end-of-input rules and disconnect them.
-    // Unlike shadowed normal rules, final states for end-of-input rules become unreachable.
-    if (opts->fill_eof != NOEOF) {
-        for (TdfaState* s : dfa.states) {
-            size_t e = s->arcs[dfa.nchars - 1];
-            if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule) {
-                s->arcs[dfa.nchars - 1] = Tdfa::NIL;
-                dfa.states[e]->deleted = true;
-            }
-        }
-    }
-
-    // Find final states with shadowed rules and remove the rule. The state itself is still
-    // connected as there are other paths through it.
     for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE) continue;
 
-        // final state is useful iff there is at least one non-accepting path from this state
+        // Find final states with shadowed end-of-input rules and disconnect them.
+        // Unlike shadowed normal rules, final states for end-of-input rules become unreachable.
+        size_t e = s->arcs[dfa.nchars - 1];
+        if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule) {
+            dfa.states[e]->deleted = true;
+            s->arcs[dfa.nchars - 1] = e = Tdfa::NIL;
+            s->tcmd[dfa.nchars - 1] = nullptr;
+        }
+
+        // Find final states with shadowed rules and remove the rule (don't disconnect the
+        // state itself, as there are other paths through it).
+        // A final state is alive if there is a non-accepting path from it.
+        size_t nchars = nchars_by_eof_method(dfa, opts, e);
         bool shadowed = true;
-        for (size_t c = 0; c < nsym; ++c) {
+        for (size_t c = 0; c < nchars; ++c) {
             const size_t j = s->arcs[c];
             if (j == Tdfa::NIL || fallthru[j]) {
                 shadowed = false;
                 break;
             }
         }
-
         if (shadowed) {
             s->rule = Rule::NONE;
-            s->tcmd[nsym] = nullptr;
+            s->tcmd[dfa.nchars] = nullptr;
         }
     }
 }
