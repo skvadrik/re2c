@@ -80,7 +80,7 @@ struct Tdfa {
 Ret determinization(
         Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) NODISCARD;
 void minimization(Tdfa& dfa, Minimization type);
-void fillpoints(const Tdfa& dfa, const opt_t* opts, std::vector<size_t>& fill);
+void fillpoints(const Tdfa& dfa, std::vector<size_t>& fill);
 void cutoff_dead_rules(Tdfa& dfa, const opt_t* opts, const std::string& cond, Msg& msg);
 void warn_dead_star_rules(const std::vector<std::unique_ptr<Adfa>>& dfas, Msg& msg);
 void insert_fallback_tags(Tdfa& dfa);

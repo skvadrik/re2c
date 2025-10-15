@@ -494,10 +494,8 @@ static CodeList* gen_fill_falllback(
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    DCHECK(opts->fill_eof != NOEOF);
-
     tcid_t falltags;
-    const State* fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
+    const State* fallback = fallback_for_state(dfa, from, &falltags);
 
     if (from->go.tags != TCID0) {
         // Tags have been hoisted out of transitions into state (this means that tags on all

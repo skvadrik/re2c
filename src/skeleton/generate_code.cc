@@ -147,6 +147,7 @@ static void emit_skeleton_defines(Output& output, CodeList* code, const Adfa& df
     append(code, code_textraw(alc, opts->fill_eof == NOEOF
             ? "#define YYFILL(n) { goto loop_end; }"
             : "#define YYFILL(n) 1 /* fail */"));
+    append(code, code_textraw(alc, "#define YYEND() limit <= cursor"));
     append(code, code_newline(alc));
 }
 

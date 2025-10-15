@@ -418,10 +418,6 @@ LOCAL_NODISCARD(Ret ast_to_re(RESpec& spec,
             break;
 
         case AstKind::END: // see note [end-of-input symbol]
-            if (opts->fill_eof == NOEOF) {
-                RET_FAIL(spec.msg.error(
-                    ast->loc, "rule contains $, but `re2c:eof` configuration is not set"));
-            }
             range = spec.rangemgr.ran(opts->encoding.eof(), opts->encoding.eof() + 1);
             re = re_end(spec, range);
             stack.pop_back();

@@ -121,7 +121,6 @@ struct Node {
     void init(Tdfa& dfa,
               const TdfaState* s,
               const std::vector<uint32_t>& charset,
-              const opt_t* opts,
               size_t nil,
               IrAllocator& ir_alc);
     bool end() const;

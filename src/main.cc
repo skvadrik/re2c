@@ -104,7 +104,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
     // find strongly connected components and calculate argument to YYFILL
     std::vector<size_t> fill;
-    fillpoints(dfa, opts, fill);
+    fillpoints(dfa, fill);
 
     // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
     Adfa* adfa = new Adfa(std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, opts, msg,

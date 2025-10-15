@@ -43,6 +43,7 @@ error:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line125(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -211,6 +212,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line313(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -367,6 +369,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line320(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -521,6 +524,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line330(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -727,6 +731,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line339(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -887,6 +892,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line346(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;
@@ -1062,6 +1068,7 @@ end:
 #define YYSHIFT(o) cursor += o
 #define YYLESSTHAN(n) (limit - cursor) < n
 #define YYFILL(n) { goto loop_end; }
+#define YYEND() limit <= cursor
 
 static int action_line354(unsigned* pkix, const YYKEYTYPE* keys, const YYCTYPE* start, const YYCTYPE* token, const YYCTYPE** cursor, YYKEYTYPE rule_act) {
     const unsigned kix = *pkix;

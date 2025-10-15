@@ -48,7 +48,7 @@ Adfa::Adfa(Tdfa&& dfa,
         , msg(msg)
         , accepts()
         , lower_char(0)
-        , upper_char(charset.back())
+        , upper_char(charset.back() - 1) // -1 for the fake end-of-input symbol
         , state_count(0)
         , head(nullptr)
         , default_state(nullptr)
@@ -96,19 +96,17 @@ Adfa::Adfa(Tdfa&& dfa,
         s->fallthru = t->fallthru;
         s->fallback = t->fallback; // see note [fallback states]
 
-        if (opts->fill_eof != NOEOF) {
-            // Get rid of the pseudo-transitions on fake end-of-input symbol,
-            // but store a link to the final state and tags.
-            size_t eof_state = t->arcs[nchars - 1];
-            if (eof_state != Tdfa::NIL) {
-                s->eof_state = i2s[eof_state];
-                s->eof_tags = t->tcid[nchars - 1];
-                // There are no final / fallback tags (by TNFA construction $ is at the end).
-                TdfaState* e = dfa.states[eof_state];
-                CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
-            }
-            --nchars;
+        // Get rid of the pseudo-transitions on fake end-of-input symbol,
+        // but store a link to the final state and tags.
+        size_t eof_state = t->arcs[nchars - 1];
+        if (eof_state != Tdfa::NIL) {
+            s->eof_state = i2s[eof_state];
+            s->eof_tags = t->tcid[nchars - 1];
+            // There are no final / fallback tags (by TNFA construction $ is at the end).
+            TdfaState* e = dfa.states[eof_state];
+            CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
         }
+        --nchars;
 
         bool end = true;
         for (uint32_t c = 0; end && c < nchars; ++c) {
