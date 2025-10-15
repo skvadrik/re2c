@@ -160,8 +160,7 @@ struct Output {
 void init_go(CodeGo* go);
 bool endstate(const State* s);
 bool consume(const State* s);
-State* fallback_state_with_eof_rule(
-        const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags);
+State* fallback_for_state(const Adfa& dfa, const State* state, tcid_t* ptags);
 std::string bitmap_name(const opt_t* opts, const std::string& cond);
 CodeList* gen_bitmap(Output& output, const CodeBitmap* bitmap, const std::string& cond);
 void gen_tags(Scratchbuf& buf, const opt_t* opts, Code* code, const tagnames_t& tags);
