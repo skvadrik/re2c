@@ -492,10 +492,7 @@ static CodeGoCgoto* code_cgoto(Output& output, const Span* span, uint32_t span_c
     return x;
 }
 
-State* fallback_state_with_eof_rule(
-        const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
-    CHECK(opts->fill_eof != NOEOF);
-
+State* fallback_for_state(const Adfa& dfa, const State* state, tcid_t* ptags) {
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
@@ -532,24 +529,28 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
-    // Determine if YYEND check is needed in this state. This depends on the end-of-input
-    // handling method:
+    // YYEND check may be needed if this state has a $-link (a link to then end-of-input state).
+    // The details depend on the end-of-input handling method:
     //
-    // In the case of "sentinel with bounds checks" method, any state that has transitions
-    // on symbols can be excluded: the transition on sentinel always has YYLESSTHAN/YYFILL logic.
-    // So, YYEND is only needed in "end" states (those that have no transitions on symbols, but
-    // only a single pseudo-transition to a "rule" or "accept" state) with an end-of-input link,
-    // excluding the cases when the link target is the same as transition target.
+    // - If "sentinel with bounds checks" method is used, states that have transitions on
+    //   symbols don't need YYEND: sentinel transition already has YYLESSTHAN/YYFILL logic.
+    //   So, YYEND is only needed in "end" states (those that have a single pseudo-transition
+    //   to a "rule" or "accept" state), and only if $-link and transition target are different.
     //
-    // TODO: support other methods.
-    if (from->eof_state && endstate(from) && span[0].to != from->eof_state) {
+    // - If "bounds checks with padding" method is used, YYLESSTHAN/YYFILL are only emitted in
+    //   SCC states and rely on YYMAXFILL padding, so they can't replace YYEND checks.
+    //
+    // - For other methods YYFILL/YYLESSTHAN are disabled, so we need YYEND checks.
+    //
+    if (from->eof_state
+            && (opts->fill_eof == NOEOF || (endstate(from) && span[0].to != from->eof_state))) {
         from->go.eof = true;
         from->eof_state->label->used = true;
     }
 
     // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
     if (opts->fill_eof != NOEOF && !endstate(from)) {
-        State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
+        State* f = fallback_for_state(dfa, from, nullptr);
         if (f) f->label->used = true;
 
         // In goto/label rematch transitions target special YYFILL labels, not state labels.

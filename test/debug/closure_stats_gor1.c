@@ -115,21 +115,28 @@
 debug/closure_stats_gor1.re:2:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 47         prec: 3          length: 24        
 scans: 0          prec: 0          length: 0         
+scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:3:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 133        prec: 14         length: 66        
+scans: 0          prec: 0          length: 0         
 scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:4:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 617        prec: 84         length: 432       
 scans: 0          prec: 0          length: 0         
+scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:5:32: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 3841       prec: 584        length: 4980      
+scans: 0          prec: 0          length: 0         
 scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:6:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 27377      prec: 4368       length: 71004     
 scans: 0          prec: 0          length: 0         
+scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:7:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 207313     prec: 33824      length: 1086636   
 scans: 0          prec: 0          length: 0         
+scans: 0          prec: 0          length: 0         
 debug/closure_stats_gor1.re:8:35: warning: rule matches empty string [-Wmatch-empty-string]
 scans: 1614737    prec: 266304     length: 17060172  
+scans: 0          prec: 0          length: 0         
 scans: 0          prec: 0          length: 0         
