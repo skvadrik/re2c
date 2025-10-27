@@ -165,7 +165,7 @@ jobs:
       - name: Archive test artifacts
         # Run this step only if tests failed (otherwise there is nothing to upload).
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           # To ensure that jobs don't overwrite existing artifacts,
           # use a different name per job.
