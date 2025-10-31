@@ -514,6 +514,16 @@ State* fallback_for_state(const Adfa& dfa, const State* state, tcid_t* ptags) {
     return fallback;
 }
 
+static bool transitions_agree_with_eof(const State* s) {
+    for (const Span* p = s->go.span, *e = p + s->go.span_count; p != e; ++p) {
+        if (p->to != s->eof_state || p->tags != TCID0) {
+            // Found incompatible transitin that goes to some other state or has tags.
+            return false;
+        }
+    }
+    return true;
+}
+
 static void code_go(Output& output, const Adfa& dfa, State* from) {
     const opt_t* opts = output.block().opts;
 
@@ -529,21 +539,20 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
-    // YYEND check may be needed if this state has a $-link (a link to then end-of-input state).
+    // YYEND check may be needed if this state has a link to then end-of-input state, unless
+    // all transitions also go to the end-of-input state and agree on tags.
     // The details depend on the end-of-input handling method:
     //
-    // - If "sentinel with bounds checks" method is used, states that have transitions on
-    //   symbols don't need YYEND: sentinel transition already has YYLESSTHAN/YYFILL logic.
-    //   So, YYEND is only needed in "end" states (those that have a single pseudo-transition
-    //   to a "rule" or "accept" state), and only if $-link and transition target are different.
+    // - If "sentinel with bounds checks" method is used, states that have transitions on symbols
+    //   don't need YYEND: sentinel transition already has YYLESSTHAN/YYFILL logic, so YYEND is
+    //   only needed in "end" states (those with a single transition to a "rule"/"accept" state).
     //
     // - If "bounds checks with padding" method is used, YYLESSTHAN/YYFILL are only emitted in
     //   SCC states and rely on YYMAXFILL padding, so they can't replace YYEND checks.
     //
     // - For other methods YYFILL/YYLESSTHAN are disabled, so we need YYEND checks.
-    //
-    if (from->eof_state
-            && (opts->fill_eof == NOEOF || (endstate(from) && span[0].to != from->eof_state))) {
+    if (from->eof_state && !transitions_agree_with_eof(from)
+            && (opts->fill_eof == NOEOF || endstate(from))) {
         from->go.eof = true;
         from->eof_state->label->used = true;
     }

@@ -314,9 +314,9 @@ yy55:
 	{ $ }
 }
 
-eof/eof_at_the_end.re:8:0: warning: control flow is undefined for strings that match '[\x0-\xFF]', use default rule '*' [-Wundefined-control-flow]
-eof/eof_at_the_end.re:19:0: warning: control flow is undefined for strings that match 
+eof/generalized_eof.re:8:0: warning: control flow is undefined for strings that match '[\x0-\xFF]', use default rule '*' [-Wundefined-control-flow]
+eof/generalized_eof.re:19:0: warning: control flow is undefined for strings that match 
 	'[\x0-\x60\x62-\xFF]'
 	'\x61 [\x0-\xFF]'
 , use default rule '*' [-Wundefined-control-flow]
-eof/eof_at_the_end.re:44:10: warning: unreachable rule (shadowed by rule at line 43) [-Wunreachable-rules]
+eof/generalized_eof.re:44:10: warning: unreachable rule (shadowed by rule at line 43) [-Wunreachable-rules]

@@ -3,8 +3,8 @@
 
 {
 	YYCTYPE yych;
-	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	if (YYEND()) goto yy1;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
 	++YYCURSOR;
 	{}
 yy1:
