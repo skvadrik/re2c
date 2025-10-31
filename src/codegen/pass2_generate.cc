@@ -913,48 +913,6 @@ static void gen_godot(
     }
 }
 
-static void gen_go(
-        Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-    Scratchbuf& buf = output.scratchbuf;
-
-    if (go->kind == CodeGo::Kind::DOT) {
-        gen_godot(output, dfa, go->godot, from, stmts);
-        return;
-    }
-
-    DCHECK(consume(from) || go->tags == TCID0);
-    if (opts->fill_eof == NOEOF) {
-        // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
-        // Without the $ rule the are no strict requirements, but generating them here (after YYFILL
-        // label) allows to fuse skip and peek into one statement.
-        gen_set_tags(output, stmts, dfa, go->tags);
-    }
-
-    if (go->skip) {
-        append(stmts, code_skip(alc));
-    }
-
-    CodeList* transition = nullptr;
-    if (go->kind == CodeGo::Kind::SWITCH_IF) {
-        transition = gen_goswif(output, dfa, go->goswif, from);
-    } else if (go->kind == CodeGo::Kind::LINEAR_IF) {
-        transition = gen_goifl(output, dfa, go->goifl, from);
-    } else if (go->kind == CodeGo::Kind::CGOTO) {
-        transition = gen_cgoto(output, dfa, go->cgoto, from);
-    }
-
-    if (go->eof) {
-        CodeList* fallback = gen_fill_falllback(output, dfa, from, nullptr);
-        GenEnd callback(buf.stream(), opts);
-        const char* end_check = opts->gen_code_yyend(buf, callback);
-        gen_if(alc, opts, end_check, fallback, transition, stmts);
-    } else {
-        append(stmts, transition);
-    }
-}
-
 static CodeList* emit_accept_binary(Output& output,
                                     const Adfa& dfa,
                                     const char* var,
@@ -1155,13 +1113,46 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     }
 }
 
-static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts) {
+static void emit_state(
+        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    const CodeGo& go = s->go;
+    CodeList* transitions = code_list(alc);
+    DCHECK(consume(s) || go.tags == TCID0);
+    if (opts->fill_eof == NOEOF) {
+        // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
+        // Without the $ rule the are no strict requirements, but generating them here (after
+        // YYFILL label) allows to fuse skip and peek into one statement.
+        gen_set_tags(output, transitions, dfa, go.tags);
+    }
+    if (go.skip) {
+        append(transitions, code_skip(alc));
+    }
+    switch (s->go.kind) {
+    case CodeGo::Kind::SWITCH_IF:
+        append(transitions, gen_goswif(output, dfa, go.goswif, s));
+        break;
+    case CodeGo::Kind::LINEAR_IF:
+        append(transitions, gen_goifl(output, dfa, go.goifl, s));
+        break;
+    case CodeGo::Kind::CGOTO:
+        append(transitions, gen_cgoto(output, dfa, go.cgoto, s));
+        break;
+    case CodeGo::Kind::DOT:
+        UNREACHABLE();
+        break;
+    case CodeGo::Kind::EMPTY:
+        break;
+    }
+    append(transitions, continuation);
 
     switch (s->kind) {
     case StateKind::ENTRY:
         gen_action(output, dfa.entry_action, stmts);
+        append(stmts, transitions);
         break;
     case StateKind::MATCH: {
         bool is_start = s == dfa.start_state;
@@ -1180,20 +1171,38 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        gen_fill_and_label(output, stmts, dfa, s);
-        gen_peek(alc, s, stmts);
+
+        // YYEND must go before YYFILL, because YYFILL here is the no-return-on-end kind.
+        // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
+        CodeList* tail = code_list(alc);
+        gen_fill_and_label(output, tail, dfa, s);
+        gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
-            append(stmts, code_debug(alc, dfa.custom_start_label->index));
+            append(tail, code_debug(alc, dfa.custom_start_label->index));
         }
+        append(tail, transitions);
+
+        if (s->go.eof) {
+            CodeList* fallback = gen_fill_falllback(output, dfa, s, nullptr);
+            GenEnd callback(buf.stream(), opts);
+            const char* end_check = opts->gen_code_yyend(buf, callback);
+            gen_if(alc, opts, end_check, fallback, tail, stmts);
+        } else {
+            append(stmts, tail);
+        }
+
         break;
     }
     case StateKind::MOVE:
+        append(stmts, transitions);
         break;
     case StateKind::ACCEPT:
         emit_accept(output, stmts, dfa, *s->accepts);
+        append(stmts, transitions);
         break;
     case StateKind::RULE:
         emit_rule(output, stmts, dfa, s->rule);
+        append(stmts, transitions);
         break;
     }
 }
@@ -1854,8 +1863,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
                 append(stmts, code_debug(alc, s->label->index));
             }
         }
-        emit_action(output, dfa, s, stmts);
-        gen_go(output, dfa, &s->go, s, stmts);
+        emit_state(output, dfa, s, stmts, nullptr);
     }
 }
 
@@ -1872,16 +1880,14 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
 
         // Emit current state.
         if (opts->debug) append(body, code_debug(alc, label));
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
+        emit_state(output, dfa, s, body, nullptr);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state. This avoids looping through the
         // `yystate` switch only to return to the next case.
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
+            emit_state(output, dfa, s, body, nullptr);
         }
 
         append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
@@ -1917,17 +1923,17 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
 
         // Emit current state.
         if (opts->debug) append(body, code_debug(alc, s->label->index));
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state (such states may be added by the
         // tunneling pass).
+        State* s0 = s;
+        CodeList* tail = code_list(alc);
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
+            emit_state(output, dfa, s, tail, nullptr);
         }
+        emit_state(output, dfa, s0, body, tail);
 
         append(code, code_fndef(alc, f, fn->type, params, body));
     }
@@ -2142,7 +2148,9 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
                     append(code, code_text(alc, buf.flush()));
                 }
             }
-            gen_go(output, *dfa, &s->go, s, code);
+            if (s->go.kind == CodeGo::Kind::DOT) {
+                gen_godot(output, *dfa, s->go.godot, s, code);
+            }
         }
     }
 
