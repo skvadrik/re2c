@@ -23,4 +23,51 @@ yy2:
 	{ $ }
 }
 
+
+// *, a @x $ | a
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy5;
+		default: goto yy4;
+	}
+yy4:
+	++YYCURSOR;
+	{ * }
+yy5:
+	++YYCURSOR;
+	if (YYEND()) {
+		yyt1 = YYCURSOR;
+		goto yy6;
+	}
+	yyt1 = NULL;
+yy6:
+	x = yyt1;
+	{ a }
+}
+
+
+// *, a | a @x $
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy9;
+		default: goto yy8;
+	}
+yy8:
+	++YYCURSOR;
+	{ * }
+yy9:
+	++YYCURSOR;
+	yyt1 = NULL;
+	x = yyt1;
+	{ a }
+}
+
 eof/generalized_tags.re:8:6: warning: rule matches empty string [-Wmatch-empty-string]
