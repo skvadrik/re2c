@@ -102,6 +102,23 @@ void clear_caches(ctx_t& ctx) {
     }
 }
 
+// There's a very rare case when part of a rule ending in end-of-input marker $ is shadowed
+// by an overlapping alternative of the same rule, e.g. `[a] | [a] $`. -Wunreachable-rules
+// analysis cannot distinguish this from `[a] $ | [a]`, because in TDFA all precedence
+// information is erased. We have to find such cases here while TNFA state origins
+// are still known and prune the shadowed end-of-input state.
+static bool is_self_shadowed_eof_rule(
+        const kernel_t* kernel, TnfaState* s, uint32_t origin, uint32_t symbol, uint32_t eof) {
+    if (symbol == eof) {
+        for (uint32_t i = 0; i < kernel->size; ++i) {
+            if (kernel->state[i]->kind == TnfaState::Kind::FIN) {
+                if (origin > i && s->rule == kernel->state[i]->rule) return true;
+            }
+        }
+    }
+    return false;
+};
+
 template<typename ctx_t>
 void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.symbol = sym;
@@ -118,7 +135,7 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     // as a stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         TnfaState* s = transition(kernel->state[i], symbol);
-        if (s) {
+        if (s && !is_self_shadowed_eof_rule(kernel, s, i, symbol, ctx.opts->encoding.eof())) {
             reach.push_back(clos_t(s, i, HROOT));
         }
     }
