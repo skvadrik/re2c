@@ -102,22 +102,16 @@ void clear_caches(ctx_t& ctx) {
     }
 }
 
-// There's a very rare case when part of a rule ending in end-of-input marker $ is shadowed
-// by an overlapping alternative of the same rule, e.g. `[a] | [a] $`. -Wunreachable-rules
-// analysis cannot distinguish this from `[a] $ | [a]`, because in TDFA all precedence
-// information is erased. We have to find such cases here while TNFA state origins
-// are still known and prune the shadowed end-of-input state.
-static bool is_self_shadowed_eof_rule(
-        const kernel_t* kernel, TnfaState* s, uint32_t origin, uint32_t symbol, uint32_t eof) {
-    if (symbol == eof) {
-        for (uint32_t i = 0; i < kernel->size; ++i) {
-            if (kernel->state[i]->kind == TnfaState::Kind::FIN) {
-                if (origin > i && s->rule == kernel->state[i]->rule) return true;
-            }
+static TnfaState* find_final_kernel_state(const kernel_t* kernel, uint32_t* origin) {
+    for (uint32_t i = 0; i < kernel->size; ++i) {
+        TnfaState* s = kernel->state[i];
+        if (s->kind == TnfaState::Kind::FIN) {
+            *origin = i;
+            return s;
         }
     }
-    return false;
-};
+    return nullptr;
+}
 
 template<typename ctx_t>
 void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
@@ -128,6 +122,10 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.oldprectbl = kernel->prectbl;
     ctx.oldprecdim = kernel->size;
 
+    bool is_eof = symbol == ctx.opts->encoding.eof();
+    uint32_t f_origin = 0;
+    TnfaState* f = is_eof ? find_final_kernel_state(kernel, &f_origin) : nullptr;
+
     closure_t& reach = ctx.reach;
     reach.clear();
 
@@ -135,8 +133,18 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     // as a stack, and POSIX closure doesn't care (GOR1 pre-sorts configurations).
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         TnfaState* s = transition(kernel->state[i], symbol);
-        if (s && !is_self_shadowed_eof_rule(kernel, s, i, symbol, ctx.opts->encoding.eof())) {
-            reach.push_back(clos_t(s, i, HROOT));
+        if (s) {
+            // Detect unreachable end-of-input rules here, as we need TNFA origins in order
+            // to detect overlapping alternative of the same rule, like `[a] | [a]$` (in TDFA
+            // it becomes impossible to distinguish from `[a]$ | [a]` due to the construction
+            // based on fake end-of-input transitions). Also, detecting unreachable end-of-input
+            // states here spares us the hassle of deleting them later.
+            if (f && (f->rule < s->rule || (f->rule == s->rule && f_origin < i))) {
+                DCHECK(is_eof);
+                ctx.rules[s->rule].shadow.insert(&ctx.rules[f->rule]);
+            } else {
+                reach.push_back(clos_t(s, i, HROOT));
+            }
         }
     }
 }
