@@ -109,17 +109,7 @@ struct RevDfa {
         arc_t* a = arcs;
         for (size_t i = 0; i < nstates; ++i) {
             TdfaState* s = dfa.states[i];
-            size_t e = s->arcs[dfa.nchars - 1];
-
-            // End-of-input rules may be shadowed by normal rules with a smaller rule index.
-            // However, TDFA structure obscurs this fact due to the $-transitions.
-            // To fix this, we overwrite the shadowed end-of-input rules in the reversed TDFA.
-            if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule) {
-                DCHECK(s->rule != Rule::NONE);
-                states[e].rule = s->rule;
-            }
-
-            size_t nchars = nchars_by_eof_method(dfa, opts, e);
+            size_t nchars = nchars_by_eof_method(dfa, opts, s->arcs[dfa.nchars - 1]);
             for (size_t c = 0; c < nchars; ++c) {
                 const size_t j = s->arcs[c];
                 if (j != Tdfa::NIL) {
@@ -286,19 +276,10 @@ static void remove_dead_final_states(Tdfa& dfa, const opt_t* opts, const bool* f
     for (TdfaState* s : dfa.states) {
         if (s->rule == Rule::NONE) continue;
 
-        // Find final states with shadowed end-of-input rules and disconnect them.
-        // Unlike shadowed normal rules, final states for end-of-input rules become unreachable.
-        size_t e = s->arcs[dfa.nchars - 1];
-        if (e != Tdfa::NIL && dfa.states[e]->rule > s->rule) {
-            dfa.states[e]->deleted = true;
-            s->arcs[dfa.nchars - 1] = e = Tdfa::NIL;
-            s->tcmd[dfa.nchars - 1] = nullptr;
-        }
-
         // Find final states with shadowed rules and remove the rule (don't disconnect the
         // state itself, as there are other paths through it).
         // A final state is alive if there is a non-accepting path from it.
-        size_t nchars = nchars_by_eof_method(dfa, opts, e);
+        size_t nchars = nchars_by_eof_method(dfa, opts, s->arcs[dfa.nchars - 1]);
         bool shadowed = true;
         for (size_t c = 0; c < nchars; ++c) {
             const size_t j = s->arcs[c];

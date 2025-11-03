@@ -29,7 +29,6 @@ struct TdfaState {
     size_t rule;
     bool fallthru;
     bool fallback;
-    bool deleted;
 
     explicit TdfaState(size_t nchars)
             : arcs(new size_t[nchars])
@@ -37,8 +36,7 @@ struct TdfaState {
             , tcid(nullptr)
             , rule(Rule::NONE)
             , fallthru(false)
-            , fallback(false)
-            , deleted(false) {
+            , fallback(false) {
         size_t sz = nchars + 2; // +2 for final and fallback epsilon-transitions
         tcmd = new tcmd_t* [sz];
         memset(tcmd, 0, sizeof (tcmd_t*) * sz);
