@@ -24,7 +24,8 @@ yy2:
 }
 
 
-// *, a @x $ | a
+// a @x $ @y | a
+// positive tags in $ alternative
 
 {
 	YYCTYPE yych;
@@ -45,12 +46,14 @@ yy5:
 	}
 	yyt1 = NULL;
 yy6:
+	y = yyt1;
 	x = yyt1;
 	{ a }
 }
 
 
-// *, a | a @x $
+// a | a @x $ @y
+// positive tags in $ alternative, shadowed
 
 {
 	YYCTYPE yych;
@@ -66,7 +69,72 @@ yy8:
 yy9:
 	++YYCURSOR;
 	yyt1 = NULL;
+	y = yyt1;
 	x = yyt1;
+	{ a }
+}
+
+
+// a $ | @x a @y
+// negative tags in $ alternative
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy12;
+		default: goto yy11;
+	}
+yy11:
+	++YYCURSOR;
+	{ * }
+yy12:
+	++YYCURSOR;
+	if (YYEND()) {
+		yyt1 = NULL;
+		goto yy13;
+	}
+	yyt1 = YYCURSOR;
+yy13:
+	y = yyt1;
+	x = yyt1;
+	if (x != NULL) x -= 1;
+	{ a }
+}
+
+
+// @x [a] @y $ @z | @w [a] @u
+// positive and negative tags in $ alternative
+
+{
+	YYCTYPE yych;
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'a': goto yy16;
+		default: goto yy15;
+	}
+yy15:
+	++YYCURSOR;
+	{ * }
+yy16:
+	++YYCURSOR;
+	if (YYEND()) {
+		yyt1 = YYCURSOR;
+		yyt2 = NULL;
+		goto yy17;
+	}
+	yyt1 = NULL;
+	yyt2 = YYCURSOR;
+yy17:
+	z = yyt1;
+	u = yyt2;
+	x = yyt1;
+	y = yyt1;
+	w = yyt2;
+	if (x != NULL) x -= 1;
+	if (w != NULL) w -= 1;
 	{ a }
 }
 
