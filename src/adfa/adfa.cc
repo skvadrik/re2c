@@ -105,7 +105,7 @@ Adfa::Adfa(Tdfa&& dfa,
                 TdfaState* e = dfa.states[eof_state];
                 s->eof_state = i2s[eof_state];
                 s->eof_tags = t->tcid[nchars - 1];
-                // There should be no final / fallback tags ($ must be at the end).
+                // There are no final / fallback tags (by TNFA construction $ is at the end).
                 CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
             }
             --nchars;

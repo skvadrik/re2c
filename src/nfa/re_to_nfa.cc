@@ -193,6 +193,24 @@ struct DfsReToTnfa {
     TnfaState* end;
 };
 
+// $-transitions need to be at the end, right before TNFA final state (this guarantees that
+// $-transitions in TDFA don't have tags, which simplifies subsequent removal of $-transitions).
+// In regexp, however, $ can be followed by tags (in particular, by negative tags that are always
+// appended at the end of alternatives). TNFA construction moves $ past tags.
+TnfaState** move_eof_past_tags(TnfaState** pstart) {
+    for (TnfaState** pp = pstart, *p = *pp;; pp = &p->out1, p = *pp) {
+        if (p->kind == TnfaState::Kind::TAG) {
+            // ok, skip tags
+        } else if (p->kind == TnfaState::Kind::FIN) {
+            // ok, found final state: place $-transition right before it
+            return pp;
+        } else {
+            // error: there was something other than tags after $ in the regexp
+            return nullptr;
+        }
+    }
+}
+
 static Ret one_re_to_nfa(
         Tnfa& nfa, const RESpec& spec, uint32_t rule, std::vector<DfsReToTnfa>& stack, Msg& msg) {
     // Start state of the last constructed sub-NFA (available after the stack item for it has been
@@ -216,17 +234,20 @@ static Ret one_re_to_nfa(
             stack.pop_back();
             break;
 
-        case Regexp::Kind::END:
-            if (x.end->kind != TnfaState::Kind::FIN) {
+        case Regexp::Kind::END: {
+            TnfaState** pp = move_eof_past_tags(&x.end);
+            if (!pp) {
                 RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
                     "end of input marker $ in the middle of a rule is not supported"));
             } else if (!nfa.rules[rule].is_oldstyle_eof) {
                 RET_FAIL(msg.error(nfa.rules[rule].semact->loc,
                     "only standalone $ rule is supported"));
             }
-            start = nfa.make_ran(rule, x.end, re.end);
+            *pp = nfa.make_ran(rule, *pp, re.end);
+            start = x.end;
             stack.pop_back();
             break;
+        }
 
         case Regexp::Kind::SYM:
             start = nfa.make_ran(rule, x.end, re.sym);
