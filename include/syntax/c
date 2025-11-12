@@ -171,10 +171,11 @@ code:array_global = code:array_local;
 
 code:array_elem = array "[" index "]";
 
+// TODO: generate explicit values in goto/label mode
 code:enum =
     "enum " type " {" nl indent
-        [elem{0:-2}: topindent elem (.init ? " = " init) "," nl]
-        [elem{-1}:   topindent elem (.init ? " = " init) nl]
+        [elem{0:-2}: topindent elem (!.code_model.goto_label ? " = " init) "," nl]
+        [elem{-1}:   topindent elem (!.code_model.goto_label ? " = " init) nl]
     dedent "};" nl;
 
 code:enum_elem = name;

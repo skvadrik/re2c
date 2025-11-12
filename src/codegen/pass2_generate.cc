@@ -1454,11 +1454,7 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-static void gen_cond_enum(
-        Scratchbuf& buf,
-        OutAllocator& alc,
-        Code* code,
-        const opt_t* opts,
+static void gen_cond_enum(Scratchbuf& buf, OutAllocator& alc, Code* code, const opt_t* opts,
         const StartConds& conds) {
     DCHECK(opts->target == Target::CODE);
 
@@ -1468,19 +1464,16 @@ static void gen_cond_enum(
     if (code->fmt.format) {
         const char* fmt = code->fmt.format;
         const char* sep = code->fmt.separator;
-        uint32_t cond_number = 0;
         for (const StartCond& cond : conds) {
             if (sep != nullptr && &cond != first_cond) {
                 buf.cstr(sep);
             }
             std::ostringstream s(fmt);
-            // The main substitution (the one allowing unnamed sigil) must go last, or else it will
-            // erroneously substitute all the named ones.
-            size_t cid = opts->code_model == CodeModel::GOTO_LABEL ? cond_number : cond.number;
-            argsubst(s, opts->api_sigil, "num", false, cid);
+            // The main substitution (the one allowing unnamed sigil) must go last,
+            // or else it will erroneously substitute all the named ones.
+            argsubst(s, opts->api_sigil, "num", false, cond.number);
             argsubst(s, opts->api_sigil, "cond", true, cond.name);
             buf.str(s.str());
-            ++cond_number;
         }
         buf.cstr("\n");
 
@@ -1491,12 +1484,9 @@ static void gen_cond_enum(
         // prepare an array of enum member names
         const char** ids = alc.alloct<const char*>(conds.size()), **i = ids;
         for (const StartCond& cond : conds) *i++ = buf.str(cond.name).flush();
-        // prepare an array of enum member numbers (only needed in loop/switch or rec/func mode)
-        uint32_t* nums = nullptr;
-        if (opts->code_model != CodeModel::GOTO_LABEL) {
-            uint32_t* j = nums = alc.alloct<uint32_t>(conds.size());
-            for (const StartCond& cond : conds) *j++ = cond.number;
-        }
+        // prepare an array of enum member numbers
+        uint32_t* nums = alc.alloct<uint32_t>(conds.size()), *j = nums;
+        for (const StartCond& cond : conds) *j++ = cond.number;
         // construct enum code item in place of the old code item
         init_code_enum(code, opts->api_cond_type.c_str(), conds.size(), ids, nums);
     }
@@ -1565,6 +1555,17 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     if (conds.empty()) {
         code->kind = CodeKind::EMPTY;
         return Ret::OK;
+    }
+
+    // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
+    // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
+    // implicitly assigned consecutive numbers starting from zero. Note that conditions from
+    // different blocks may be merged together in this enum, and the enumeration is not per-block
+    // but global across all contributing blocks.
+    if (globopts->code_model == CodeModel::GOTO_LABEL) {
+        for (uint32_t i = 0; i < conds.size(); ++i) {
+            conds[i].number = i;
+        }
     }
 
     gen_cond_enum(buf, alc, code, globopts, conds);

@@ -101,7 +101,7 @@ using StxCodes = list_t<StxCode>;
         ({StxVarId::ARRAY, StxVarId::INDEX}), ({}), ({}) \
     ) \
     CODE_TEMPLATE(enum, \
-        ({StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), ({StxLOpt::INIT}) \
+        ({StxVarId::TYPE, StxVarId::INIT}), ({StxVarId::ELEM}), ({}) \
     ) \
     CODE_TEMPLATE(enum_elem, \
         ({StxVarId::NAME, StxVarId::TYPE}), ({}), ({}) \

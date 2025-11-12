@@ -717,6 +717,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
     Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;
     const opt_t* opts = block.opts;
+    StartConds& conds = block.conds;
 
     Code* code = block.code->head;
     if (code == nullptr || code->kind != CodeKind::DFAS) {
@@ -807,11 +808,8 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         }
 
         if (!dfa->cond.empty()) {
-            // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
-            // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
-            // implicitly assigned consecutive numbers starting from zero.
-            block.conds.push_back({dfa->cond,
-                    opts->code_model == CodeModel::GOTO_LABEL ? 0 : dfa->head->label->index});
+            DCHECK(dfa->head->label->used || opts->code_model == CodeModel::GOTO_LABEL);
+            conds.push_back({dfa->cond, dfa->head->label->index});
         }
     }
 

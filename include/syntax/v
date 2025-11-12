@@ -175,7 +175,7 @@ code:array_elem = array "[" index "]";
 code:enum = (.code_model.loop_switch
     ? [elem: "const " elem " = " init nl]
     : "enum " type " {" nl
-        indent [elem: topindent elem (.init ? " = " init) nl] dedent
+        indent [elem: topindent elem (!.code_model.goto_label ? " = " init) nl] dedent
     "}" nl);
 
 code:enum_elem = (!.code_model.loop_switch ? ".") name;

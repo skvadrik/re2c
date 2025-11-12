@@ -176,7 +176,7 @@ static constexpr const char* DEFAULT_SYNTAX_V =
     "code:enum = (.code_model.loop_switch\n"
     "    ? [elem: \"const \" elem \" = \" init nl]\n"
     "    : \"enum \" type \" {\" nl\n"
-    "        indent [elem: topindent elem (.init ? \" = \" init) nl] dedent\n"
+    "        indent [elem: topindent elem (!.code_model.goto_label ? \" = \" init) nl] dedent\n"
     "    \"}\" nl);\n"
     "\n"
     "code:enum_elem = (!.code_model.loop_switch ? \".\") name;\n"
