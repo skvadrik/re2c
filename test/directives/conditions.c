@@ -5,34 +5,34 @@
 
 // types:re2c (expect yycC1, yycC2, yycC3, YC1, YC2)
 enum YYCONDTYPE {
-	yycC1,
-	yycC2,
-	yycC3,
-	YC1,
-	YC2
+	yycC1 = 0,
+	yycC2 = 1,
+	yycC3 = 2,
+	YC1 = 3,
+	YC2 = 4
 };
 
 
 // types:re2c:x (expect yycC1, yycC3)
 enum YYCONDTYPE {
-	yycC1,
-	yycC3
+	yycC1 = 0,
+	yycC3 = 1
 };
 
 
 // types:re2c:y (expect YC1, YC2)
 enum YYCONDTYPE {
-	YC1,
-	YC2
+	YC1 = 0,
+	YC2 = 1
 };
 
 
 // types:re2c:y:x (expect YC1, YC2, yycC1, yycC3)
 enum YYCONDTYPE {
-	YC1,
-	YC2,
-	yycC1,
-	yycC3
+	YC1 = 0,
+	YC2 = 1,
+	yycC1 = 2,
+	yycC3 = 3
 };
 
 

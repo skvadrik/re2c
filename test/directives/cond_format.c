@@ -8,9 +8,9 @@
 // types:re2c
 #line 10 "directives/cond_format.c"
 enum YYCONDTYPE {
-	yycC1,
-	yycC2,
-	yycC3
+	yycC1 = 0,
+	yycC2 = 1,
+	yycC3 = 2
 };
 #line 6 "directives/cond_format.re"
 

@@ -56,10 +56,10 @@ void fputl(const char *s, size_t len, FILE *stream)
 
 #line 58 "conditions/condition_06.c"
 enum YYCONDTYPE {
-	EStateNormal,
-	EStateComment,
-	EStateSkiptoeol,
-	EStateString
+	EStateNormal = 0,
+	EStateComment = 1,
+	EStateSkiptoeol = 2,
+	EStateString = 3
 };
 #line 55 "conditions/condition_06.re"
 

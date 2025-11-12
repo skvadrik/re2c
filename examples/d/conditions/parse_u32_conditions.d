@@ -4,11 +4,11 @@ module main;
 
 enum ERROR = ulong.max;
 enum YYCond {
-    yycinit,
-    yycbin,
-    yycdec,
-    yychex,
-    yycoct
+    yycinit = 0,
+    yycbin = 1,
+    yycdec = 2,
+    yychex = 3,
+    yycoct = 4
 };
 
 

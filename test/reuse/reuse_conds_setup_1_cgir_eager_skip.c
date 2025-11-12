@@ -2,8 +2,8 @@
 // re2c $INPUT -o $OUTPUT -cgi --eager-skip
 
 enum YYCONDTYPE {
-	yycr1,
-	yycr2
+	yycr1 = 0,
+	yycr2 = 1
 };
 
 

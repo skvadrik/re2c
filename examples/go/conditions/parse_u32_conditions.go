@@ -10,11 +10,11 @@ var (
 )
 
 const (
-	yycinit = iota
-	yycbin
-	yycdec
-	yychex
-	yycoct
+	yycinit = 0
+	yycbin = 1
+	yycdec = 2
+	yychex = 3
+	yycoct = 4
 )
 
 

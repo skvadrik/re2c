@@ -3,8 +3,8 @@
 // re2c $INPUT -o $OUTPUT -cs
 #line 5 "conditions/condtype_decl.c"
 enum YYCONDTYPE {
-	yyca,
-	yycb
+	yyca = 0,
+	yycb = 1
 };
 #line 2 "conditions/condtype_decl.re"
 

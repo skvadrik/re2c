@@ -32,8 +32,8 @@ switch (YYGETSTATE()) {
 
 
 enum YYCONDTYPE {
-	yyca,
-	yycb
+	yyca = 0,
+	yycb = 1
 };
 
 

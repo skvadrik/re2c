@@ -44,8 +44,8 @@ struct out_t {
 
 
 enum YYCONDTYPE {
-	yycl,
-	yycn
+	yycl = 0,
+	yycn = 1
 };
 
 
