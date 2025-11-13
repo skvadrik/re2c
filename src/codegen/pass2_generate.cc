@@ -1591,26 +1591,35 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
 //     - dispatch is independent of condition order: either it uses explicit condition names or
 //       there's only one condition and dispatch shrinks to unconditional jump
 
+CodeList* gen_cond_goto_handler(Output& output, const StartCond& cond) {
+    const opt_t* opts = output.block().opts;
+    OutAllocator& alc = output.allocator;
+
+    CodeList* code = code_list(alc);
+    append(code, cond.defined
+        ? code_goto(alc, output.scratchbuf.str(opts->cond_label_prefix).str(cond.name).flush())
+        : code_abort(alc));
+    return code;
+}
+
 static CodeList* gen_cond_goto_binary(
         Output& output, const char* getcond, size_t lower, size_t upper) {
     OutputBlock& block = output.block();
-    const opt_t* opts = block.opts;
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    CodeList* stmts = code_list(alc);
     if (lower == upper) {
-        buf.str(opts->cond_label_prefix).str(block.conds[lower].name);
-        append(stmts, code_goto(alc, buf.flush()));
+        return gen_cond_goto_handler(output, block.conds[lower]);
     } else {
+        CodeList* stmts = code_list(alc);
         const size_t middle = lower + (upper - lower + 1) / 2;
         CodeList* if_then = gen_cond_goto_binary(output, getcond, lower, middle - 1);
         CodeList* if_else = gen_cond_goto_binary(output, getcond, middle, upper);
         const char* cond =
             buf.cstr(getcond).cstr(" ").cstr(block.binops[OP_CMP_LT]).cstr(" ").u64(middle).flush();
         append(stmts, code_if_then_else(alc, cond, if_then, if_else));
+        return stmts;
     }
-    return stmts;
 }
 
 static CodeList* gen_cond_goto(Output& output) {
@@ -1630,7 +1639,11 @@ static CodeList* gen_cond_goto(Output& output) {
     GenGetCond callback(buf.stream(), opts);
     const char* getcond = opts->gen_code_yygetcond(buf, callback);
 
-    if (opts->computed_gotos) {
+    // Can't use computed goto if one of the conditions is undefined.
+    bool use_cgoto = opts->computed_gotos && conds.end() ==
+            std::find_if(conds.begin(), conds.end(), [](const StartCond& c){ return !c.defined; });
+
+    if (use_cgoto) {
         const char* base = buf.str(opts->cond_label_prefix).str(conds[0].name).flush();
         append(stmts, code_cgoto(alc, opts->var_cond_table.c_str(), base, getcond));
     } else if (opts->nested_ifs) {
@@ -1638,13 +1651,9 @@ static CodeList* gen_cond_goto(Output& output) {
         append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
     } else {
         warn_cond_ord = false;
-
         CodeCases* ccases = code_cases(alc);
         for (const StartCond& cond : conds) {
-            CodeList* body = code_list(alc);
-            buf.str(opts->cond_label_prefix).str(cond.name);
-            append(body, code_goto(alc, buf.flush()));
-
+            CodeList* body = gen_cond_goto_handler(output, cond);
             append(ccases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
         }
         if (opts->cond_abort) {
