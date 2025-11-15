@@ -1493,34 +1493,44 @@ static void gen_cond_enum(Scratchbuf& buf, OutAllocator& alc, Code* code, const 
 }
 
 LOCAL_NODISCARD(Ret add_condition_from_block(
-        const OutputBlock& block, StartConds& conds, StartCond cond)) {
+        const OutputBlock& block, const opt_t* opts, StartConds& conds, StartCond cond)) {
     // Condition prefix is specific to the block that defines it. If a few blocks define conditions
     // with the same name, but a different prefix, they should have different enum entries.
     cond.name = block.opts->cond_enum_prefix + cond.name;
 
-    for (const StartCond& c : conds) {
-        if (c.name == cond.name) {
-            if (c.number == cond.number) {
-                // A duplicate condition, it's not an error but don't add it.
-                return Ret::OK;
-            } else {
-                // An error: conditions with idetical names but different numbers.
-                RET_FAIL(error("cannot generate condition enumeration: condition `%s` has "
-                               "different numbers in different blocks (use `re2c:condenumprefix` "
-                               "configuration to set per-block prefix)",
-                               cond.name.c_str()));
-            }
-        }
+    // In loop/switch or rec/func mode condition numbers are the numeric indices of their start
+    // DFA state. In goto/label mode conditions are renumbered: they are assigned consecutive
+    // numbers starting from zero. Conditions from different blocks are merged together in this
+    // enum, and the enumeration is not per-block but global across all contributing blocks.
+    bool renumber = opts->code_model == CodeModel::GOTO_LABEL;
+
+    auto same = std::find_if(conds.begin(), conds.end(),
+            [=](const StartCond& c){ return c.name == cond.name; });
+
+    if (same == conds.end()) {
+        // Ok, a new condition, add it.
+        if (renumber) cond.number = static_cast<uint32_t>(conds.size());
+        conds.push_back(cond);
+    } else if (same->number == cond.number || renumber) {
+        // Condition with the same name is already on the list: it's fine if the numbers agree,
+        // or if the numbers are reassigned (in goto/label mode). We don't care about `defined`
+        // flags here (they matter for condition dispatch, which is generated on per-block basis).
+    } else {
+        // Error: different conditions with identical names.
+        RET_FAIL(error(
+            "cannot generate condition enumeration: condition `%s` has different numbers in "
+            "different blocks (use `re2c:condenumprefix` configuration to set per-block prefix)",
+            cond.name.c_str()));
     }
 
-    conds.push_back(cond);
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret add_conditions_from_blocks(const blocks_t& blocks, StartConds& conds)) {
+LOCAL_NODISCARD(Ret add_conditions_from_blocks(
+        const blocks_t& blocks, const opt_t* opts, StartConds& conds)) {
     for (const OutputBlock* block : blocks) {
         for (const StartCond& cond : block->conds) {
-            CHECK_RET(add_condition_from_block(*block, conds, cond));
+            CHECK_RET(add_condition_from_block(*block, opts, conds, cond));
         }
     }
     return Ret::OK;
@@ -1542,12 +1552,12 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     StartConds conds;
     if (code->fmt.block_names == nullptr) {
         // Gather conditions from all blocks in the output and header files.
-        CHECK_RET(add_conditions_from_blocks(output.cblocks, conds));
-        CHECK_RET(add_conditions_from_blocks(output.hblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(output.cblocks, globopts, conds));
+        CHECK_RET(add_conditions_from_blocks(output.hblocks, globopts, conds));
     } else {
         // Gather conditions from the blocks on the list.
         CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "conditions"));
-        CHECK_RET(add_conditions_from_blocks(output.tmpblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(output.tmpblocks, globopts, conds));
     }
 
     // Do not generate empty condition enum. Some compilers or language standards allow it, but
@@ -1555,17 +1565,6 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     if (conds.empty()) {
         code->kind = CodeKind::EMPTY;
         return Ret::OK;
-    }
-
-    // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
-    // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
-    // implicitly assigned consecutive numbers starting from zero. Note that conditions from
-    // different blocks may be merged together in this enum, and the enumeration is not per-block
-    // but global across all contributing blocks.
-    if (globopts->code_model == CodeModel::GOTO_LABEL) {
-        for (uint32_t i = 0; i < conds.size(); ++i) {
-            conds[i].number = i;
-        }
     }
 
     gen_cond_enum(buf, alc, code, globopts, conds);

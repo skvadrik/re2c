@@ -3,21 +3,113 @@
 
 enum YYCONDTYPE {
 	yycx = 0,
-	yycy = 1
+	yycy = 1,
+	yycz = 2,
+	yycw = 3
 };
 
+
+// defined: x, y, z; undefined: w
 
 {
 	YYCTYPE yych;
 	switch (YYGETCONDITION()) {
 		case yycx: goto yyc_x;
-		case yycy: abort();
+		case yycy: goto yyc_y;
+		case yycz: goto yyc_z;
+		case yycw: abort();
 	}
 /* *********************************** */
 yyc_x:
 	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'w': goto yy2;
+		case 'y': goto yy3;
+		case 'z': goto yy4;
+		default: goto yy1;
+	}
+yy1:
+	++YYCURSOR;
+	{ * }
+yy2:
+	++YYCURSOR;
+	YYSETCONDITION(yycw);
+	{ x->w }
+yy3:
 	++YYCURSOR;
 	YYSETCONDITION(yycy);
-	{ x -> y }
+	{ x->y }
+yy4:
+	++YYCURSOR;
+	YYSETCONDITION(yycz);
+	{ x->z }
+/* *********************************** */
+yyc_y:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'y': goto yy7;
+		default: goto yy6;
+	}
+yy6:
+	++YYCURSOR;
+	{ * }
+yy7:
+	++YYCURSOR;
+	{ y }
+/* *********************************** */
+yyc_z:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'z': goto yy10;
+		default: goto yy9;
+	}
+yy9:
+	++YYCURSOR;
+	{ * }
+yy10:
+	++YYCURSOR;
+	{ z }
+}
+
+
+// defined: z, w
+
+{
+	YYCTYPE yych;
+	switch (YYGETCONDITION()) {
+		case yycz: goto yyc_z;
+		case yycw: goto yyc_w;
+	}
+/* *********************************** */
+yyc_z:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'z': goto yy14;
+		default: goto yy13;
+	}
+yy13:
+	++YYCURSOR;
+	{ * }
+yy14:
+	++YYCURSOR;
+	{ z }
+/* *********************************** */
+yyc_w:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	yych = *YYCURSOR;
+	switch (yych) {
+		case 'w': goto yy17;
+		default: goto yy16;
+	}
+yy16:
+	++YYCURSOR;
+	{ * }
+yy17:
+	++YYCURSOR;
+	{ w }
 }
 
