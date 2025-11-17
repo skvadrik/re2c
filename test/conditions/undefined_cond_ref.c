@@ -2,10 +2,10 @@
 // re2c $INPUT -o $OUTPUT -ic
 
 enum YYCONDTYPE {
-	yycx = 0,
-	yycy = 1,
-	yycz = 2,
-	yycw = 3
+	yycx,
+	yycy,
+	yycz,
+	yycw
 };
 
 

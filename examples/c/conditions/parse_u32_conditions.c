@@ -6,11 +6,11 @@
 
 static const uint64_t ERROR = UINT64_MAX;
 enum YYCONDTYPE {
-	yycinit = 0,
-	yycbin = 1,
-	yycdec = 2,
-	yychex = 3,
-	yycoct = 4
+	yycinit,
+	yycbin,
+	yycdec,
+	yychex,
+	yycoct
 };
 
 

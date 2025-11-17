@@ -43,8 +43,8 @@ yy3:
 
 #line 45 "conditions/condtype_forwdecl_cg.c"
 enum cond_t : int {
-	yyca = 0,
-	yycb = 1
+	yyca,
+	yycb
 };
 #line 19 "conditions/condtype_forwdecl_cg.re"
 

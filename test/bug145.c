@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 enum YYCONDTYPE {
-	yycinit = 0,
-	yycC2 = 1
+	yycinit,
+	yycC2
 };
 
 

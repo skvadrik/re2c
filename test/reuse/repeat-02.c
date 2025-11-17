@@ -3,8 +3,8 @@
 // multiple scanners
 
 enum YYCONDTYPE {
-	yycr1 = 0,
-	yycr2 = 1
+	yycr1,
+	yycr2
 };
 
 

@@ -174,7 +174,8 @@ code:array_elem = array "[" index "]";
 
 code:enum =
     "const (" nl indent
-        [elem: topindent elem " = " init nl]
+        [elem{0}:    topindent elem " = " (!.code_model.goto_label ? init : "iota") nl]
+        [elem{1:-1}: topindent elem (!.code_model.goto_label ? " = " init) nl]
     dedent ")" nl;
 
 code:enum_elem = name;

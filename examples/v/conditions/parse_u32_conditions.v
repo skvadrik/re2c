@@ -2,11 +2,11 @@
 // re2v $INPUT -o $OUTPUT -ci
 
 enum YYCONDTYPE {
-    yycinit = 0
-    yycbin = 1
-    yycdec = 2
-    yychex = 3
-    yycoct = 4
+    yycinit
+    yycbin
+    yycdec
+    yychex
+    yycoct
 }
 
 

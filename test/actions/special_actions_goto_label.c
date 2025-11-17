@@ -23,8 +23,8 @@ yy2:
 
 
 enum YYCONDTYPE {
-	yyca = 0,
-	yycb = 1
+	yyca,
+	yycb
 };
 
 

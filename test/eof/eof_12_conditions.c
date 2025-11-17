@@ -5,8 +5,8 @@
 
 
 enum YYCONDTYPE {
-	yycinit = 0,
-	yyccomment = 1
+	yycinit,
+	yyccomment
 };
 
 

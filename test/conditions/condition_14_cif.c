@@ -7,10 +7,10 @@
 #define	BSIZE	8192
 
 enum ScanContition {
-	EStateNormal = 0,
-	EStateComment = 1,
-	EStateSkiptoeol = 2,
-	EStateString = 3
+	EStateNormal,
+	EStateComment,
+	EStateSkiptoeol,
+	EStateString
 };
 
 

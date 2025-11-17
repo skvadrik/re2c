@@ -5,11 +5,11 @@ package main
 import "fmt"
 
 const (
-	yycinit = 0
-	yycbin = 1
-	yycdec = 2
-	yychex = 3
-	yycoct = 4
+	yycinit = iota
+	yycbin
+	yycdec
+	yychex
+	yycoct
 )
 
 
