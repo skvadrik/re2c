@@ -1,3 +1,4 @@
+#include <stddef.h>
 #include <limits>
 
 #include "src/msg/msg.h"
@@ -224,7 +225,7 @@ const opt_t* AstBlocks::last_opts() const {
     return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
-ssize_t find_gram_idx(AstGrams& grams, const std::string& name) {
+ptrdiff_t find_gram_idx(AstGrams& grams, const std::string& name) {
     auto i = std::find_if(grams.begin(), grams.end(),
             [&](const AstGram& g) { return g.name == name; });
     return (i == grams.end()) ? -1 : (i - grams.begin());
@@ -380,7 +381,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
     }
 
     // Find "*" condition (if any). The index stays valid after possible container resize below.
-    ssize_t star_idx = find_gram_idx(grams, STAR_COND);
+    ptrdiff_t star_idx = find_gram_idx(grams, STAR_COND);
 
     // Some conditions may occur only in `=>` and `:=>` but not on any condition list.
     // They might still be nonempty if `<*>` rules are merged to them, otherwise report an error.
