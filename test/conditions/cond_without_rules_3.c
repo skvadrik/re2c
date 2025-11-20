@@ -9,7 +9,7 @@ enum YYCONDTYPE {
 };
 
 
-// defined: x, y, z; undefined: w
+// conditions `x`, `y`, `z` have their own rules; condition `w` has only * rule - but that's fine
 
 {
 	YYCTYPE yych;
@@ -17,7 +17,7 @@ enum YYCONDTYPE {
 		case yycx: goto yyc_x;
 		case yycy: goto yyc_y;
 		case yycz: goto yyc_z;
-		case yycw: abort();
+		case yycw: goto yyc_w;
 	}
 /* *********************************** */
 yyc_x:
@@ -72,10 +72,15 @@ yy9:
 yy10:
 	++YYCURSOR;
 	{ z }
+/* *********************************** */
+yyc_w:
+	if (YYLIMIT <= YYCURSOR) YYFILL(1);
+	++YYCURSOR;
+	{ * }
 }
 
 
-// defined: z, w
+// conditions `z`, `w` have their own rules
 
 {
 	YYCTYPE yych;

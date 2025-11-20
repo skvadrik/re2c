@@ -81,7 +81,6 @@ class RenderCallback {
 struct StartCond {
     std::string name;
     uint32_t number;
-    bool defined;
 };
 using StartConds = std::vector<StartCond>;
 

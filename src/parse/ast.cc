@@ -29,6 +29,9 @@
 
 namespace re2c {
 
+const char* ZERO_COND = "0";
+static const char* STAR_COND = "*";
+
 Ast::Ast(AstAllocator& ast_alc, OutAllocator& out_alc)
     : ast_alc(ast_alc),
       out_alc(out_alc),
@@ -221,6 +224,12 @@ const opt_t* AstBlocks::last_opts() const {
     return blocks.empty() ? nullptr : blocks.back()->opts;
 }
 
+ssize_t find_gram_idx(AstGrams& grams, const std::string& name) {
+    auto i = std::find_if(grams.begin(), grams.end(),
+            [&](const AstGram& g) { return g.name == name; });
+    return (i == grams.end()) ? -1 : (i - grams.begin());
+}
+
 AstGram& find_or_add_gram(AstGrams& grams, const std::string& name) {
     for (AstGram& gram : grams) {
         if (gram.name == name) return gram;
@@ -332,7 +341,7 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         for (const AstGram& g : grams) { \
             if (g.action.empty()) { \
                 all_conds_have_it = false; \
-            } else if (g.name == "*") { \
+            } else if (g.name == STAR_COND) { \
                 star_action = g.action[0]; \
             } else if (g.rules.empty()) { \
                 RET_FAIL(msg.error(g.action[0]->loc, \
@@ -370,32 +379,52 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
         append(g.post_rule, g.inherited_post_rule);
     }
 
+    // Find "*" condition (if any). The index stays valid after possible container resize below.
+    ssize_t star_idx = find_gram_idx(grams, STAR_COND);
+
+    // Some conditions may occur only in `=>` and `:=>` but not on any condition list.
+    // They might still be nonempty if `<*>` rules are merged to them, otherwise report an error.
+    if (opts->start_conditions) {
+#define MAYBE_ADD_COND(a) \
+        if (!a->cond || find_gram_idx(grams, a->cond) >= 0) { \
+            /* ok, either no condition or an existing one */ \
+        } else if (star_idx >= 0) { \
+            grams.push_back(AstGram(a->cond)); \
+        } else { \
+            RET_FAIL(msg.error(a->loc, "reference to undefined condition '%s'", a->cond)); \
+        }
+        for (size_t i = 0; i < grams.size(); ++i) {
+            for (const AstRule& r : grams[i].rules) MAYBE_ADD_COND(r.semact);
+            for (const SemAct* a : grams[i].defs) MAYBE_ADD_COND(a);
+        }
+#undef MAYBE_ADD_COND
+    }
+
     // Merge <*> rules and actions to all conditions except zero condition <>.
     // Star rules must have lower priority than normal rules.
-    auto star = std::find_if(
-            grams.begin(), grams.end(), [](const AstGram& g) { return g.name == "*"; });
-    if (star != grams.end()) {
+    if (star_idx >= 0) {
+        AstGram& star = grams[static_cast<size_t>(star_idx)];
         // Mark <*> actions before merging - this is needed for reachability analysis.
-        for (AstRule& r : star->rules) {
+        for (AstRule& r : star.rules) {
             if (r.semact) r.semact->is_star = true;
         }
-        for (const SemAct* a : star->defs) a->is_star = true;
-        for (const SemAct* a : star->eofs) a->is_star = true;
-        for (const SemAct* a : star->entry) a->is_star = true;
-        for (const SemAct* a : star->pre_rule) a->is_star = true;
-        for (const SemAct* a : star->post_rule) a->is_star = true;
+        for (const SemAct* a : star.defs) a->is_star = true;
+        for (const SemAct* a : star.eofs) a->is_star = true;
+        for (const SemAct* a : star.entry) a->is_star = true;
+        for (const SemAct* a : star.pre_rule) a->is_star = true;
+        for (const SemAct* a : star.post_rule) a->is_star = true;
 
         for (AstGram& g : grams) {
-            if (g.name != "*" && g.name != ZERO_COND) {
-                append(g.rules, star->rules);
-                append(g.defs, star->defs);
-                append(g.eofs, star->eofs);
-                append(g.entry, star->entry);
-                append(g.pre_rule, star->pre_rule);
-                append(g.post_rule, star->post_rule);
+            if (g.name != STAR_COND && g.name != ZERO_COND) {
+                append(g.rules, star.rules);
+                append(g.defs, star.defs);
+                append(g.eofs, star.eofs);
+                append(g.entry, star.entry);
+                append(g.pre_rule, star.pre_rule);
+                append(g.post_rule, star.post_rule);
             }
         }
-        grams.erase(star);
+        grams.erase(grams.begin() + star_idx);
     }
 
     for (AstGram& g : grams) {
@@ -431,7 +460,5 @@ Ret check_and_merge_special_rules(AstGrams& grams, const opt_t* opts, Msg& msg, 
 
 // C++11 requres outer decl for ODR-used static constexpr data members (not needed in C++17).
 constexpr uint32_t Ast::MANY;
-
-const char* ZERO_COND = "0";
 
 } // namespace re2c

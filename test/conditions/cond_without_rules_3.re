@@ -2,7 +2,7 @@
 
 /*!conditions:re2c*/
 
-// defined: x, y, z; undefined: w
+// conditions `x`, `y`, `z` have their own rules; condition `w` has only * rule - but that's fine
 /*!re2c
     <x> [y] => y { x->y }
     <x> [z] => z { x->z }
@@ -12,7 +12,7 @@
     <*> * { * }
 */
 
-// defined: z, w
+// conditions `z`, `w` have their own rules
 /*!re2c
     <z> [z] { z }
     <w> [w] { w }
