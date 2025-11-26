@@ -14,7 +14,7 @@ static uint64_t parse_u32(const char *s) {
 
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '0': goto yy2;
@@ -97,7 +97,7 @@ yy9:
 bin:
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy11;
@@ -119,7 +119,7 @@ yy13:
 oct:
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy15;
@@ -147,7 +147,7 @@ yy17:
 dec:
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy19;
@@ -177,7 +177,7 @@ yy21:
 hex:
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy23;

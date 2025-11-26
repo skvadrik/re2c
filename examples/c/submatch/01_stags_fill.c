@@ -77,7 +77,7 @@ static bool lex(Input &in, std::vector<SemVer> &vers) {
     
 #line 79 "c/submatch/01_stags_fill.c"
 {
-	char yych;
+	unsigned char yych;
 yyFillLabel0:
 	yych = *in.cur;
 	switch (yych) {

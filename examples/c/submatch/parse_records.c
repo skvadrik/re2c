@@ -41,7 +41,7 @@ static int lex(const char *YYCURSOR) {
     yytm7 = -1;yytm8 = -1;
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy1;

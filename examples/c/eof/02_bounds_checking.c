@@ -23,7 +23,7 @@ loop:
     
 #line 25 "c/eof/02_bounds_checking.c"
 {
-	char yych;
+	unsigned char yych;
 	if (YYLIMIT <= YYCURSOR) goto fail;
 	yych = *YYCURSOR;
 	switch (yych) {

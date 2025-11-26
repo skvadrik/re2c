@@ -22,7 +22,7 @@ static What lex(const char *s) {
     
 #line 24 "c/reuse/usedir.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 'e': goto yy3;

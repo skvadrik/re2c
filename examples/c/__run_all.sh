@@ -22,7 +22,7 @@ for f in $(find -name '*.re'); do
         head -n $l "$ctest" > "$ctest".mod && mv "$ctest".mod "$ctest"
     fi
 
-    g++ -fsanitize=leak -fsanitize=address -g -Wall -oexample  "$ctest" \
+    g++ -fsanitize=leak -fsanitize=address -g -Wall -Wextra -oexample  "$ctest" \
         && ./example 2>/dev/null || { echo "*** error ***"; exit 1; }
 
     rm -f "$ctest" example

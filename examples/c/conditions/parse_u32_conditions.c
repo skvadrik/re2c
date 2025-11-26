@@ -21,7 +21,7 @@ static uint64_t parse_u32(const char *s) {
 
     
 {
-	char yych;
+	unsigned char yych;
 	switch (c) {
 		case yycinit: goto yyc_init;
 		case yycbin: goto yyc_bin;

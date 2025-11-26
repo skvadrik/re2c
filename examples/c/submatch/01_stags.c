@@ -31,7 +31,7 @@ const char *yyt4;
     
 #line 33 "c/submatch/01_stags.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '0':
