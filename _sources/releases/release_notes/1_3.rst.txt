@@ -1,0 +1,33 @@
+Release 1.3
+===========
+
+
+The bulk of the work in this release was concentrated on implementing an
+experimental submatch extraction algorithm. The new algorithm is based on
+staDFA: another type of automaton described in the paper *"staDFA: An Efficient
+Subexpression Matching Method"* by Mohammad Imran Chowdhury (2018).
+Like TDFA, staDFA performs operations on variables that hold submatch positions
+during the matching process. The main difference between the two automata types
+is that TDFA associates variable operations with
+transitions, while staDFA puts them in states. Now that we have an experimental
+implementation of staDFA in re2c, it is possible to compare its performance
+against TDFA. The initial experiments have shown that on average staDFA is
+slower and larger than TDFA(1): it has more variable operations and more states.
+It still remains to run proper benchmarks and formalize the modifications to
+the original algorithm that we had to make for correctness and performance.
+The new staDFA algorithm is enabled with ``--stadfa`` option.
+
+This release adds a new warning ``-Wsentinel-in-midrule`` that warns the user in
+the case when the sentinel symbol occurs in the middle of the rule -- this may
+cause reads past the end of buffer, crashes or memory corruption in the
+generated lexer. Complimentary to the warning there is a new configuration
+``re2c:sentinel`` that allows to specify which symbol is used as a sentinel
+(by default re2c assumes ``NULL``). It this configuration is used, then
+``-Wsentinel-in-midrule`` is an error.
+
+Some work has been done on reproducible builds.
+
+As usual, thanks to all the people who contributed to this release (including
+Chris Lamb, jcfp and Ondřej Čertík)!
+See the changelog :ref:`releases/changelog/changelog:1.3 (2019-12-14)` for
+details.

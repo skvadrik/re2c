@@ -1,0 +1,36 @@
+Release 0.15
+============
+
+This release started out in the spring of 2015 as a relatively simple code cleanup.
+
+It focused on the following problem: re2c used to repeat the whole generation process multiple times.
+Some parts of the generated program depend on the overall input statistics;
+they cannot be generated until the whole input has been processed.
+The usual strategy is to make stubs for all such things and fix them later.
+Instead, re2c used to process the whole input, gather statistics,
+discard the generated output, and regenerate it from scratch.
+Moreover, each generation pass further duplicated certain calculations (for similar reasons).
+As a result, the code generation phase was repeated four times.
+
+The problem here was not inefficiency: re2c is fast enough to allow the 4x overhead.
+The real problem was the complexity of the code: the developer has to think of multiple execution layers all the time.
+Some parts of code are only executed on certain layers and affect each other.
+Simple reasoning gets really hard.
+
+So the main purpose of this release was to simplify the code and make it easier to fix bugs and add new features.
+Very soon it became clear that some of the changes in code generation are hard to verify by hand.
+For example, even a minor rebalancing of ``if`` and ``switch`` statements
+may change the generated code significantly.
+It was clear that re2c needed an automatic verification tool,
+which lead to the idea of generating :ref:`skeleton programs <manual/manual_c:skeleton programs>`.
+
+Meanwhile some work was done on adding warnings,
+updating the build system and fixing various bugs.
+A heart-warming consequence of the code simplification is that re2c now uses re2c more extensively:
+not only the main program, but also the command-line options, inplace configurations,
+and all kinds of escaped strings are parsed with re2c.
+Website has also been updated (feel free to suggest improvements).
+
+See the changelog :ref:`releases/changelog/changelog:0.15 (2015-11-22)` for details.
+
+

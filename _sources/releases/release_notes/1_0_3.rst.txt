@@ -1,0 +1,6 @@
+Release 1.0.3
+=============
+
+Yet another minor bug-fix release.
+It fixes a build failure on Mac OS X (thanks to Ryan Shmidt for the bug report).
+See the changelog :ref:`releases/changelog/changelog:1.0.3 (2017-11-08)` for details.
