@@ -15,7 +15,7 @@ const char* help =
 "    --api <simple | record | generic>\n"
 "\n"
 "        Specify the API used by the generated code to interface with used-\n"
-"        defined code. Option simple shold be used in simple cases when there's\n"
+"        defined code. Option simple should be used in simple cases when there's\n"
 "        no need for buffer refilling and storing lexer state. Option record\n"
 "        should be used when lexer state needs to be stored in a record (struct,\n"
 "        class, etc.). Option generic should be used in complex cases when the\n"
