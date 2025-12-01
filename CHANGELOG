@@ -8,13 +8,13 @@ Changelog
 - Fixed bugs:
 
     + `#560 <https://github.com/skvadrik/re2c/issues/560>`_
-    (allow conditions that have no rules except for default rule)
+      (allow conditions that have no rules except for default rule)
 
     + `#561 <https://github.com/skvadrik/re2c/issues/561>`_
-    (use unsigned character type in C/C++ examples)
+      (use unsigned character type in C/C++ examples)
 
     + `#564 <https://github.com/skvadrik/re2c/issues/564>`_
-    (fix broken end of input rule $ with captures)
+      (fix broken end of input rule $ with captures)
 
 
 4.3 (2025-06-30)
