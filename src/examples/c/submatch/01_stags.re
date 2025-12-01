@@ -21,7 +21,7 @@ static int lex(const char *str, SemVer *ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:tags = 1;
 
         num = [0-9]+;

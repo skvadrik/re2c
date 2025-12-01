@@ -12,7 +12,7 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     
 #line 14 "c/generic_api/ifstream.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = in.peek();
 	switch (yych) {
 		case '\r': goto yy3;

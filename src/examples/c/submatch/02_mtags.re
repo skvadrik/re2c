@@ -65,7 +65,7 @@ static bool parse(const char *str, Ver &ver) {
 
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYSTAGP = "@@ = YYCURSOR;";
         re2c:define:YYSTAGN = "@@ = NULL;";
         re2c:define:YYMTAGP = "add_mtag(mt, @@, YYCURSOR);";

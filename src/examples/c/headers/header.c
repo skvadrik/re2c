@@ -10,7 +10,7 @@ long lex(LexerState* st) {
     const char *t;
     
 {
-	char yych;
+	unsigned char yych;
 	goto yy0;
 yy1:
 	++st->cur;

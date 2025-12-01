@@ -17,7 +17,7 @@ static int lex(const char *str, unsigned int len) {
     
 #line 19 "c/eof/05_fake_sentinel_eof_rule.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = cur < lim ? *cur : 0;
 	switch (yych) {
 		case ' ': goto yy3;

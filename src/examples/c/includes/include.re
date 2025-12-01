@@ -5,7 +5,7 @@
 Result lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:yyfill:enable = 0;
 
         *      { return FAIL; }

@@ -13,7 +13,7 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYGETCONDITION = "c";
         re2c:define:YYSETCONDITION = "c = @@;";
         re2c:yyfill:enable = 0;

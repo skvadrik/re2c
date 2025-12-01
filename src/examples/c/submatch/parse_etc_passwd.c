@@ -14,7 +14,7 @@ static int lex(const char *YYCURSOR) {
     for (;;) {
     
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy1;

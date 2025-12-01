@@ -43,7 +43,7 @@ const char *yyt5;
     
 #line 45 "c/submatch/03_captures.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '0':

@@ -12,7 +12,7 @@ static int lex(const char *str, unsigned int len) {
     
 #line 14 "c/eof/03_eof_rule.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case ' ': goto yy3;
