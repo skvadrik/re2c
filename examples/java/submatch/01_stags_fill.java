@@ -95,12 +95,12 @@ if (yyt4 != -1) {yyt4 -= token;}
             token = yycursor;
             
 {
-    byte yych = 0;
+    int yych = 0;
     int yystate = 0;
     yyl: while (true) {
         switch (yystate) {
             case 0:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x30:
                     case 0x31:
@@ -136,7 +136,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                 { return Optional.empty(); }
             case 3:
                 yymarker = yycursor;
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x2E:
                         yycursor += 1;
@@ -166,7 +166,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                         continue yyl;
                 }
             case 4:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x30:
                     case 0x31:
@@ -197,7 +197,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                 yystate = 2;
                 continue yyl;
             case 6:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x2E:
                         yycursor += 1;
@@ -227,7 +227,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                         continue yyl;
                 }
             case 7:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x0A:
                         yyt3 = yycursor;
@@ -278,7 +278,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                     continue loop;
                 }
             case 9:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x30:
                     case 0x31:
@@ -305,7 +305,7 @@ if (yyt4 != -1) {yyt4 -= token;}
                         continue yyl;
                 }
             case 10:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x0A:
                         yycursor += 1;

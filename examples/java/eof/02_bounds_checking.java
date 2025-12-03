@@ -6,10 +6,10 @@ class Main {
 
 
     // Expects yymaxfill-padded string.
-    static int lex(String str) {
+    static int lex(byte[] str) {
         // Pad string with yymaxfill zeroes at the end.
-        byte[] yyinput = new byte[str.length() + YYMAXFILL];
-        System.arraycopy(str.getBytes(), 0, yyinput, 0, str.length()); 
+        byte[] yyinput = new byte[str.length + YYMAXFILL];
+        System.arraycopy(str, 0, yyinput, 0, str.length); 
 
         int yycursor = 0;
         int yylimit = yyinput.length;
@@ -18,7 +18,7 @@ class Main {
         loop: while (true) {
             
 {
-    byte yych = 0;
+    int yych = 0;
     int yystate = 0;
     yyl: while (true) {
         switch (yystate) {
@@ -26,7 +26,7 @@ class Main {
                 if (yylimit <= yycursor) {
                     return -1;
                 }
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 yycursor += 1;
                 switch (yych) {
                     case 0x00:
@@ -45,7 +45,7 @@ class Main {
             case 1:
                 {
                     // Check that it is the sentinel, not some unexpected null.
-                    return (yycursor - 1 == str.length()) ? count : -1;
+                    return (yycursor - 1 == str.length) ? count : -1;
                 }
             case 2:
                 { return -1; }
@@ -53,7 +53,7 @@ class Main {
                 if (yylimit <= yycursor) {
                     return -1;
                 }
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x20:
                         yycursor += 1;
@@ -69,7 +69,7 @@ class Main {
                 if (yylimit <= yycursor) {
                     return -1;
                 }
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 yycursor += 1;
                 switch (yych) {
                     case 0x27:
@@ -101,9 +101,9 @@ class Main {
     }
 
     public static void main(String []args) {
-        assert lex("") == 0;
-        assert lex("'qu\0tes' 'are' 'fine: \\'' ") == 3;
-        assert lex("'unterminated\\'") == -1;
-        assert lex("'unexpected \00 null\\'") == -1;
+        assert lex("".getBytes()) == 0;
+        assert lex("'qu\0tes' 'are' 'fine: \\'' ".getBytes()) == 3;
+        assert lex("'unterminated\\'".getBytes()) == -1;
+        assert lex("'unexpected \00 null\\'".getBytes()) == -1;
     }
 };

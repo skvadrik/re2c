@@ -10,8 +10,9 @@ class Main {
         loop: while (true) {
             /*!re2c
                 re2c:api = generic;
-                re2c:YYCTYPE = "byte";
-                re2c:YYPEEK = "(yycursor < yyinput.length) ? yyinput[yycursor] : 0";
+                re2c:YYCTYPE = "int";
+                re2c:YYPEEK = "(yycursor < yyinput.length)"
+                              " ? Byte.toUnsignedInt(yyinput[yycursor]) : 0";
                 re2c:YYSKIP = "yycursor += 1;";
                 re2c:yyfill:enable = 0;
 

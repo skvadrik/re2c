@@ -11,12 +11,12 @@ class Main {
         loop: while (true) {
             
 {
-    byte yych = 0;
+    int yych = 0;
     int yystate = 0;
     yyl: while (true) {
         switch (yystate) {
             case 0:
-                yych = (yycursor < yyinput.length) ? yyinput[yycursor] : 0;
+                yych = (yycursor < yyinput.length) ? Byte.toUnsignedInt(yyinput[yycursor]) : 0;
                 yycursor += 1;
                 switch (yych) {
                     case 0x00:
@@ -62,7 +62,7 @@ class Main {
             case 2:
                 { return -1; }
             case 3:
-                yych = (yycursor < yyinput.length) ? yyinput[yycursor] : 0;
+                yych = (yycursor < yyinput.length) ? Byte.toUnsignedInt(yyinput[yycursor]) : 0;
                 switch (yych) {
                     case 0x20:
                         yycursor += 1;
@@ -75,7 +75,7 @@ class Main {
             case 4:
                 { continue loop; }
             case 5:
-                yych = (yycursor < yyinput.length) ? yyinput[yycursor] : 0;
+                yych = (yycursor < yyinput.length) ? Byte.toUnsignedInt(yyinput[yycursor]) : 0;
                 switch (yych) {
                     case 0x61:
                     case 0x62:

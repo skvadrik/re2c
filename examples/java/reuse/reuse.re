@@ -18,7 +18,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:YYCTYPE = "int"; // should be `byte`, but it's signed in Java
+            re2c:YYCTYPE = "int"; // Java lacks unsigned 8-bit integer type
             re2c:encoding:utf8 = 1;
         */
     }
