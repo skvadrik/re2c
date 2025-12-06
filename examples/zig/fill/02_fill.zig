@@ -8,6 +8,7 @@ const yymaxfill = 1;
 const bufsize = 4096;
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + yymaxfill]u8,
     yycursor: usize,
     yymarker: usize,
@@ -16,7 +17,7 @@ const State = struct {
     eof: bool
 };
 
-fn fill(st: *State, need: usize, file: anytype) i32 {
+fn fill(st: *State, need: usize) i32 {
     if (st.eof) { return -1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -31,7 +32,7 @@ fn fill(st: *State, need: usize, file: anytype) i32 {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
 
     // If read less than expected, this is the end of input.
     if (st.yylimit < bufsize) {
@@ -43,7 +44,7 @@ fn fill(st: *State, need: usize, file: anytype) i32 {
     return 0;
 }
 
-fn lex(yyrecord: *State, file: anytype) i32 {
+fn lex(yyrecord: *State) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
@@ -53,7 +54,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
     yyl: while (true) {
         switch (yystate) {
             0 => {
-                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
+                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1) != 0) return -2; } }
                 yych = yyrecord.yyinput[yyrecord.yycursor];
                 yyrecord.yycursor += 1;
                 switch (yych) {
@@ -81,7 +82,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
  },
             2 => { return -1; },
             3 => {
-                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
+                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1) != 0) return -2; } }
                 yych = yyrecord.yyinput[yyrecord.yycursor];
                 switch (yych) {
                     0x20 => {
@@ -97,7 +98,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
             },
             4 => { continue :loop; },
             5 => {
-                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
+                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1) != 0) return -2; } }
                 yych = yyrecord.yyinput[yyrecord.yycursor];
                 yyrecord.yycursor += 1;
                 switch (yych) {
@@ -117,7 +118,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
             },
             6 => { count += 1; continue :loop; },
             7 => {
-                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1, file) != 0) return -2; } }
+                if (yyrecord.yylimit <= yyrecord.yycursor) { { if (fill(yyrecord, 1) != 0) return -2; } }
                 yyrecord.yycursor += 1;
                 yystate = 5;
                 continue :yyl;
@@ -142,10 +143,12 @@ test {
 
     // Prepare lexer state: all offsets are at the end of buffer.
     // This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader - lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -156,7 +159,7 @@ test {
     @memset(st.yyinput[st.yylimit..st.yylimit + yymaxfill], 0); // zero-padding at the end
 
     // Run the lexer.
-    try std.testing.expectEqual(lex(&st, &br), count);
+    try std.testing.expectEqual(lex(&st), count);
 
     // Cleanup: remove input file.
     fr.close();

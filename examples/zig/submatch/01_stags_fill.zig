@@ -21,6 +21,7 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
 }
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -35,7 +36,7 @@ yyt3: usize,
     eof: bool
 };
 
-fn fill(st: *State, file: anytype) i32 {
+fn fill(st: *State) i32 {
     if (st.eof) { return -1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -57,7 +58,7 @@ if (st.yyt3 != none) st.yyt3 = @subWithOverflow(st.yyt3, st.token)[0];
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     // If read less than expected, this is the end of input.
@@ -66,8 +67,8 @@ if (st.yyt3 != none) st.yyt3 = @subWithOverflow(st.yyt3, st.token)[0];
     return 0;
 }
 
-fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
-    var vers = std.ArrayList(SemVer).init(std.testing.allocator);
+fn parse(st: *State) !std.ArrayList(SemVer) {
+    var vers = try std.ArrayList(SemVer).initCapacity(std.testing.allocator, 0);
 
     // Final tag variables available in semantic action.
     var t1: usize = 0;
@@ -93,7 +94,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 0;
                                 continue :yyl;
                             }
@@ -127,7 +128,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 3;
                                 continue :yyl;
                             }
@@ -148,7 +149,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 4;
                                 continue :yyl;
                             }
@@ -178,7 +179,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 6;
                                 continue :yyl;
                             }
@@ -211,7 +212,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 7;
                                 continue :yyl;
                             }
@@ -228,7 +229,7 @@ var t4: usize = 0;
                 t1 = st.yyt1;
                 t1 -= 1;
                 
-                try vers.append(SemVer {
+                try vers.append(std.testing.allocator, SemVer {
                     .major = s2n(st.yyinput[st.token..t1]),
                     .minor = s2n(st.yyinput[t2..t3]),
                     .patch = if (t4 == none) 0 else s2n(st.yyinput[t4..st.yycursor - 1]),
@@ -247,7 +248,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 9;
                                 continue :yyl;
                             }
@@ -272,7 +273,7 @@ var t4: usize = 0;
                     },
                     else => {
                         if (st.yylimit <= st.yycursor) {
-                            if (fill(st, file) == 0) {
+                            if (fill(st) == 0) {
                                 yystate = 10;
                                 continue :yyl;
                             }
@@ -301,10 +302,12 @@ test {
     fw.close();
 
     // Prepare lexer state: all offsets are at the end of buffer.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader - lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -320,16 +323,14 @@ test {
     st.yyinput[st.yylimit] = 0;
 
     // Manually construct expected result.
-    var expect = std.ArrayList(SemVer).init(std.testing.allocator);
-    for (0..bufsize) |_| try expect.append(SemVer{.major = 1, .minor = 22, .patch = 333});
+    var expect = [_]SemVer{SemVer{.major = 1, .minor = 22, .patch = 333}} ** bufsize;
 
     // Run the lexer.
-    var result = try parse(&st, &br);
-    try std.testing.expectEqualDeep(result, expect);
+    var result = try parse(&st);
+    try std.testing.expectEqualDeep(&expect, result.items);
 
     // Cleanup: free memory and remove input file.
-    expect.deinit();
-    result.deinit();
+    result.deinit(std.testing.allocator);
     fr.close();
     try std.fs.cwd().deleteFile(fname);
 }

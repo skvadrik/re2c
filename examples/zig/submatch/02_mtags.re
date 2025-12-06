@@ -18,7 +18,7 @@ const MtagElem = struct {
 
 // Append a single value to an m-tag history.
 fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
-    try trie.append(MtagElem{.elem = value, .pred = mtag});
+    try trie.append(std.testing.allocator, MtagElem{.elem = value, .pred = mtag});
     return trie.items.len - 1;
 }
 
@@ -41,7 +41,7 @@ fn unwind(trie: *std.ArrayList(MtagElem),
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
-        try ver.append(s2n(str[ex..ey]));
+        try ver.append(std.testing.allocator, s2n(str[ex..ey]));
     } else {
         // Both tags are none (this corresponds to zero repetitions).
         std.debug.assert(ex == none and ey == none);
@@ -57,8 +57,8 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
 fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
     var yycursor: usize = 0;
     var yymarker: usize = 0;
-    var mt = std.ArrayList(MtagElem).init(std.testing.allocator);
-    defer mt.deinit();
+    var mt = try std.ArrayList(MtagElem).initCapacity(std.testing.allocator, 0);
+    defer mt.deinit(std.testing.allocator);
 
     // Final tag variables available in semantic action.
     %{svars format = "var @@: usize = none;"; %}
@@ -77,8 +77,8 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
         num = [0-9]+;
 
         @t1 num @t2 ("." #t3 num #t4)* [\x00] {
-            var ver = std.ArrayList(u32).init(std.testing.allocator);
-            try ver.append(s2n(yyinput[t1..t2]));
+            var ver = try std.ArrayList(u32).initCapacity(std.testing.allocator, 0);
+            try ver.append(std.testing.allocator, s2n(yyinput[t1..t2]));
             try unwind(&mt, t3, t4, yyinput, &ver);
             return ver;
         }
@@ -88,20 +88,16 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
 
 test {
     var result = try parse("1");
-    var expect = std.ArrayList(u32).init(std.testing.allocator);
-    try expect.appendSlice(&[_]u32{1});
-    try std.testing.expectEqualDeep(result, expect);
-    expect.deinit();
-    result.deinit();
+    var expect = [_]u32{1};
+    try std.testing.expectEqualDeep(&expect, result.items);
+    result.deinit(std.testing.allocator);
 }
 
 test {
     var result = try parse("1.2.3.4.5.6.7");
-    var expect = std.ArrayList(u32).init(std.testing.allocator);
-    try expect.appendSlice(&[_]u32{1, 2, 3, 4, 5, 6, 7});
-    try std.testing.expectEqualDeep(result, expect);
-    expect.deinit();
-    result.deinit();
+    var expect = [_]u32{1, 2, 3, 4, 5, 6, 7};
+    try std.testing.expectEqualDeep(&expect, result.items);
+    result.deinit(std.testing.allocator);
 }
 
 test {
