@@ -12,6 +12,7 @@ const mtag_root = none - 1;
 
 const State = struct {
     allocator: std.mem.Allocator,
+    file: *std.io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -51,16 +52,16 @@ const MtagElem = struct {
 };
 
 // Append a single value to an m-tag history.
-fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
-    try trie.append(MtagElem{.elem = value, .pred = mtag});
-    return trie.items.len - 1;
+fn add_mtag(st: *State, mtag: usize, value: usize) !usize {
+    try st.trie.append(st.allocator, MtagElem{.elem = value, .pred = mtag});
+    return st.trie.items.len - 1;
 }
 
 // Recursively unwind tag histories and collect version components.
 fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     // Reached the root of the m-tag tree, stop recursion.
     if (x == mtag_root and y == mtag_root) {
-        return std.ArrayList([]const u8).init(st.allocator);
+        return try std.ArrayList([]const u8).initCapacity(st.allocator, 0);
     }
 
     // Unwind history further.
@@ -74,7 +75,7 @@ fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
         const s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
-        try ss.append(s);
+        try ss.append(st.allocator, s);
     } else {
         // Both tags are none (this corresponds to zero repetitions).
         std.debug.assert(ex == none and ey == none);
@@ -89,7 +90,7 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn fill(st: *State, file: anytype) Status {
+fn fill(st: *State) Status {
     const used = st.yylimit - st.token;
     const free = bufsize - used;
 
@@ -108,7 +109,7 @@ fn fill(st: *State, file: anytype) Status {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return Status.ready;
@@ -122,8 +123,8 @@ fn fill(st: *State, file: anytype) Status {
     re2c:variable:yyrecord = st;
     re2c:define:YYFN = ["lex;Status", "st;*State"];
     re2c:define:YYFILL = "return Status.waiting;";
-    re2c:define:YYMTAGP = "@@ = add_mtag(st.trie, @@, st.yycursor) catch none;";
-    re2c:define:YYMTAGN = "@@ = add_mtag(st.trie, @@, none) catch none;";
+    re2c:define:YYMTAGP = "@@ = add_mtag(st, @@, st.yycursor) catch none;";
+    re2c:define:YYMTAGN = "@@ = add_mtag(st, @@, none) catch none;";
 
     crlf  = '\r\n';
     sp    = ' ';
@@ -188,13 +189,15 @@ fn run(expect: Status, packets: []const []const u8) !void {
     var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
-    // of buffer. Normally file would be part of the state, but BufferedReader
-    // type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
-    var mt = std.ArrayList(MtagElem).init(std.testing.allocator);
-    defer mt.deinit();
+    // of buffer. Use unbuffered reader - lexer does its own buffering.
+    const alc = arena.allocator();
+    const zerobuf: [0]u8 = undefined;
+    var reader = fr.reader(&zerobuf);
+    var mt = try std.ArrayList(MtagElem).initCapacity(alc, 0);
+    defer mt.deinit(alc);
     var st = State{
-        .allocator = arena.allocator(),
+        .allocator = alc,
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -233,7 +236,7 @@ fn run(expect: Status, packets: []const []const u8) !void {
                 try fw.writeAll(packets[send]);
                 send += 1;
             }
-            status = fill(&st, &br);
+            status = fill(&st);
             std.log.debug("filled buffer [{s}], status {}", .{st.yyinput, status});
             if (status != Status.ready) {
                 break;
