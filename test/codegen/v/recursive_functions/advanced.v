@@ -149,7 +149,7 @@ fn fill(mut st &State) Status {
 
 
 //line "codegen/v/recursive_functions/advanced.v":152
-fn yy1(mut st State) Status {
+fn yy1(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
@@ -169,18 +169,18 @@ fn yy1(mut st State) Status {
     }
 }
 
-fn yy2(mut st State) Status {
+fn yy2(mut st &State) Status {
     return yy3(mut st)
 }
 
-fn yy3(mut st State) Status {
+fn yy3(mut st &State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":181
 }
 
-fn yy4(mut st State) Status {
+fn yy4(mut st &State) Status {
     st.yymarker = st.yycursor
     yych := st.yyinput[st.yycursor]
     match yych {
@@ -196,12 +196,12 @@ fn yy4(mut st State) Status {
     }
 }
 
-fn yy5(mut st State) Status {
+fn yy5(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     return yy6(mut st, yych)
 }
 
-fn yy6(mut st State, yych u8) Status {
+fn yy6(mut st &State, yych u8) Status {
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
             st.yycursor += 1
@@ -222,12 +222,12 @@ fn yy6(mut st State, yych u8) Status {
     }
 }
 
-fn yy7(mut st State) Status {
+fn yy7(mut st &State) Status {
     st.yycursor = st.yymarker
     return yy3(mut st)
 }
 
-fn yy8(mut st State) Status {
+fn yy8(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x09, 0x0D, 0x20, 0x3B {
@@ -242,12 +242,12 @@ fn yy8(mut st State) Status {
     }
 }
 
-fn yy9(mut st State) Status {
+fn yy9(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     return yy10(mut st, yych)
 }
 
-fn yy10(mut st State, yych u8) Status {
+fn yy10(mut st &State, yych u8) Status {
     match yych {
         0x09, 0x20 {
             st.yytm6 = st.yytm10
@@ -295,7 +295,7 @@ fn yy10(mut st State, yych u8) Status {
     }
 }
 
-fn yy11(mut st State) Status {
+fn yy11(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -321,7 +321,7 @@ fn yy11(mut st State) Status {
     }
 }
 
-fn yy12(mut st State) Status {
+fn yy12(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
@@ -339,7 +339,7 @@ fn yy12(mut st State) Status {
     }
 }
 
-fn yy13(mut st State) Status {
+fn yy13(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -362,7 +362,7 @@ fn yy13(mut st State) Status {
     }
 }
 
-fn yy14(mut st State) Status {
+fn yy14(mut st &State) Status {
     st.l1 = st.yyt1
     st.l2 = st.yyt2
     st.p1 = st.yytm3
@@ -387,7 +387,7 @@ fn yy14(mut st State) Status {
 //line "codegen/v/recursive_functions/advanced.v":388
 }
 
-fn yy15(mut st State) Status {
+fn yy15(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
@@ -410,7 +410,7 @@ fn yy15(mut st State) Status {
     }
 }
 
-fn yy16(mut st State) Status {
+fn yy16(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x21, 0x23...0x27, 0x2A...0x2B, 0x2D...0x2E, 0x30...0x39, 0x41...0x5A, 0x5E...0x7A, 0x7C, 0x7E {
@@ -434,7 +434,7 @@ fn yy16(mut st State) Status {
     }
 }
 
-fn yy17(mut st State) Status {
+fn yy17(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -471,7 +471,7 @@ fn yy17(mut st State) Status {
     }
 }
 
-fn yy18(mut st State) Status {
+fn yy18(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1F, 0x7F {
@@ -497,7 +497,7 @@ fn yy18(mut st State) Status {
     }
 }
 
-fn yy19(mut st State) Status {
+fn yy19(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -527,7 +527,7 @@ fn yy19(mut st State) Status {
     }
 }
 
-fn yy20(mut st State) Status {
+fn yy20(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -560,7 +560,7 @@ fn yy20(mut st State) Status {
     }
 }
 
-fn yy21(mut st State) Status {
+fn yy21(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
@@ -578,18 +578,18 @@ fn yy21(mut st State) Status {
     }
 }
 
-fn yy22(mut st State) Status {
+fn yy22(mut st &State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":586
 }
 
-fn yyfnmedia_type(mut st State) Status {
+fn yyfnmedia_type(mut st &State) Status {
     return yy1(mut st)
 }
 
-fn yy23(mut st State) Status {
+fn yy23(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
@@ -613,18 +613,18 @@ fn yy23(mut st State) Status {
     }
 }
 
-fn yy24(mut st State) Status {
+fn yy24(mut st &State) Status {
     return yy25(mut st)
 }
 
-fn yy25(mut st State) Status {
+fn yy25(mut st &State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":176
     return .lex_bad_packet
 //line "codegen/v/recursive_functions/advanced.v":625
 }
 
-fn yy26(mut st State) Status {
+fn yy26(mut st &State) Status {
     st.yyaccept = 0
     st.yymarker = st.yycursor
     yych := st.yyinput[st.yycursor]
@@ -644,7 +644,7 @@ fn yy26(mut st State) Status {
     }
 }
 
-fn yy27(mut st State) Status {
+fn yy27(mut st &State) Status {
     st.yyaccept = 0
     st.yymarker = st.yycursor
     yych := st.yyinput[st.yycursor]
@@ -673,7 +673,7 @@ fn yy27(mut st State) Status {
     }
 }
 
-fn yy28(mut st State) Status {
+fn yy28(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -691,7 +691,7 @@ fn yy28(mut st State) Status {
     }
 }
 
-fn yy29(mut st State) Status {
+fn yy29(mut st &State) Status {
     st.yycursor = st.yymarker
     if st.yyaccept == 0 {
         return yy25(mut st)
@@ -700,7 +700,7 @@ fn yy29(mut st State) Status {
     }
 }
 
-fn yy30(mut st State) Status {
+fn yy30(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x1E, 0x7F {
@@ -726,7 +726,7 @@ fn yy30(mut st State) Status {
     }
 }
 
-fn yy31(mut st State) Status {
+fn yy31(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
@@ -744,7 +744,7 @@ fn yy31(mut st State) Status {
     }
 }
 
-fn yy32(mut st State) Status {
+fn yy32(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
@@ -771,7 +771,7 @@ fn yy32(mut st State) Status {
     }
 }
 
-fn yy33(mut st State) Status {
+fn yy33(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
@@ -801,7 +801,7 @@ fn yy33(mut st State) Status {
     }
 }
 
-fn yy34(mut st State) Status {
+fn yy34(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x0C, 0x0E...0x1E, 0x7F {
@@ -824,7 +824,7 @@ fn yy34(mut st State) Status {
     }
 }
 
-fn yy35(mut st State) Status {
+fn yy35(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
@@ -842,7 +842,7 @@ fn yy35(mut st State) Status {
     }
 }
 
-fn yy36(mut st State) Status {
+fn yy36(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
@@ -870,7 +870,7 @@ fn yy36(mut st State) Status {
     }
 }
 
-fn yy37(mut st State) Status {
+fn yy37(mut st &State) Status {
     st.yyaccept = 1
     st.yymarker = st.yycursor
     yych := st.yyinput[st.yycursor]
@@ -895,7 +895,7 @@ fn yy37(mut st State) Status {
     }
 }
 
-fn yy38(mut st State) Status {
+fn yy38(mut st &State) Status {
     st.f1 = st.yytm1
     st.f2 = st.yytm2
     st.yystate = -1
@@ -910,7 +910,7 @@ fn yy38(mut st State) Status {
 //line "codegen/v/recursive_functions/advanced.v":911
 }
 
-fn yy39(mut st State) Status {
+fn yy39(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
@@ -940,7 +940,7 @@ fn yy39(mut st State) Status {
     }
 }
 
-fn yy40(mut st State) Status {
+fn yy40(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x0A {
@@ -958,7 +958,7 @@ fn yy40(mut st State) Status {
     }
 }
 
-fn yy41(mut st State) Status {
+fn yy41(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x00, 0x01...0x08, 0x0A...0x0C, 0x0E...0x1E, 0x7F {
@@ -986,13 +986,13 @@ fn yy41(mut st State) Status {
     }
 }
 
-fn yy42(mut st State) Status {
+fn yy42(mut st &State) Status {
     st.yytm1 = st.yytm3
     st.yytm2 = st.yytm5
     return yy38(mut st)
 }
 
-fn yy43(mut st State) Status {
+fn yy43(mut st &State) Status {
     yych := st.yyinput[st.yycursor]
     match yych {
         0x09, 0x20 {
@@ -1014,25 +1014,25 @@ fn yy43(mut st State) Status {
     }
 }
 
-fn yy44(mut st State) Status {
+fn yy44(mut st &State) Status {
     st.yystate = -1
 //line "codegen/v/recursive_functions/advanced.re":177
     return .lex_end
 //line "codegen/v/recursive_functions/advanced.v":1022
 }
 
-fn yyfnheader(mut st State) Status {
+fn yyfnheader(mut st &State) Status {
     return yy23(mut st)
 }
 
-fn yy0(mut st State) Status {
+fn yy0(mut st &State) Status {
     match st.yycond {
         .yycmedia_type { return yyfnmedia_type(mut st) }
         .yycheader { return yyfnheader(mut st) }
     }
 }
 
-fn lex(mut st State) Status {
+fn lex(mut st &State) Status {
     match st.yystate {
         -1 { return yy0(mut st) }
         0 {
@@ -1320,7 +1320,7 @@ fn test(expect Status, packets []string) {
     mut status := Status.lex_ready
     mut send := 0
     for {
-        status = lex(mut st)
+        status = lex(mut &st)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -1330,7 +1330,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break

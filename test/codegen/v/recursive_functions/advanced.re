@@ -119,7 +119,7 @@ fn fill(mut st &State) Status {
     re2c:tags = 1;
     re2c:tags:negative = "tag_none";
     re2c:variable:yyrecord = st;
-    re2c:define:YYFN = ["lex;Status", "mut st;State"];
+    re2c:define:YYFN = ["lex;Status", "mut st;&State"];
     re2c:define:YYFILL = "return .lex_waiting";
     re2c:define:YYMTAGP = "@@ = add_mtag(mut &st.trie, @@, st.yycursor)";
     re2c:define:YYMTAGN = "@@ = add_mtag(mut &st.trie, @@, tag_none)";
@@ -216,7 +216,7 @@ fn test(expect Status, packets []string) {
     mut status := Status.lex_ready
     mut send := 0
     for {
-        status = lex(mut st)
+        status = lex(mut &st)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -226,7 +226,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break
