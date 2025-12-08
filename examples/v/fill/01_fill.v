@@ -50,7 +50,7 @@ loop:
     yyrecord.token = yyrecord.yycursor
     
 //line "v/fill/01_fill.v":53
-    mut yych := 0
+    mut yych := u8(0)
 yyFillLabel0:
     yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {

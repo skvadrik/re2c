@@ -8,7 +8,7 @@ fn lex_tags(str string) int {
     mut x, mut y := 0, 0
     mut yyt1 := -1
     
-    mut yych := 0
+    mut yych := u8(0)
     mar = cur
     yych = str[cur]
     match yych {
@@ -54,7 +54,7 @@ fn lex_captures(str string) int {
     mut yyt1 := -1
 	mut yyt2 := -1
     
-    mut yych := 0
+    mut yych := u8(0)
     yych = str[cur]
     match yych {
         0x61 {

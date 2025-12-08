@@ -4,7 +4,7 @@
 fn lex(yyinput string) {
     mut yycursor := 0
     
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x31...0x39 { unsafe { goto yy2 } }

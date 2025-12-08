@@ -93,7 +93,7 @@ loop:
     st.token = st.yycursor
     
 //line "v/submatch/01_stags_fill.v":96
-    mut yych := 0
+    mut yych := u8(0)
 yyFillLabel0:
     yych = st.yyinput[st.yycursor]
     match yych {

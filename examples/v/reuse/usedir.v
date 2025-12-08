@@ -24,7 +24,7 @@ fn lex(yyinput string) What {
     mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/usedir.v":27
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x65 { unsafe { goto yy3 } }

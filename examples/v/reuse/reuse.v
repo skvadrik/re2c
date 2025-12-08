@@ -12,7 +12,7 @@ fn lex_utf8(yyinput []u8) int {
     mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/reuse.v":15
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0xE2 { unsafe { goto yy3 } }
@@ -97,7 +97,7 @@ fn lex_utf32(yyinput []u32) int {
     mut yycursor, mut yymarker := 0, 0
     
 //line "v/reuse/reuse.v":100
-    mut yych := 0
+    mut yych := u32(0)
     yych = yyinput[yycursor]
     if yych == 0x00002200 {
         unsafe { goto yy15 }

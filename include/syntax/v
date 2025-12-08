@@ -155,7 +155,7 @@ re2c:cond:goto = "unsafe { goto " sigil " }";
 
 // code templates --------------------------------------------------------------
 
-code:var_local = topindent "mut " name " := " init nl;
+code:var_local = topindent "mut " name " := " type "(" init ")" nl;
 code:var_global = <undefined>;
 
 code:const_local = topindent "const " name " = " init nl;

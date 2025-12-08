@@ -12,8 +12,8 @@ enum Result {
 fn lex(yyinput string) Result {
     mut yycursor, mut yymarker := 0, 0
     
-    mut yych := 0
-    mut yyaccept := 0
+    mut yych := u8(0)
+    mut yyaccept := u32(0)
     yych = yyinput[yycursor]
     match yych {
         0x2E { unsafe { goto yy3 } }

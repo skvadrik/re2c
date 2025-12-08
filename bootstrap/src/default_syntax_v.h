@@ -156,7 +156,7 @@ static constexpr const char* DEFAULT_SYNTAX_V =
     "\n"
     "// code templates --------------------------------------------------------------\n"
     "\n"
-    "code:var_local = topindent \"mut \" name \" := \" init nl;\n"
+    "code:var_local = topindent \"mut \" name \" := \" type \"(\" init \")\" nl;\n"
     "code:var_global = <undefined>;\n"
     "\n"
     "code:const_local = topindent \"const \" name \" = \" init nl;\n"

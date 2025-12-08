@@ -150,7 +150,7 @@ fn lex(mut st &State) Status {
 loop:
     
 //line "codegen/v/loop_switch/advanced.v":153
-    mut yystate := st.state
+    mut yystate := int(st.state)
 yyl:
     for {
         match yystate {

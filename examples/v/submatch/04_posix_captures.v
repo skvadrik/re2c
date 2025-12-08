@@ -40,7 +40,7 @@ mut yyt5 := 0
 
     
 //line "v/submatch/04_posix_captures.v":43
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x30...0x39 {
