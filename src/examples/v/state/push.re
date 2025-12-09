@@ -95,7 +95,7 @@ fn test(expect Status, packets []string) {
     mut send := 0
     mut recv := 0
     for {
-        status = lex(mut st, mut &recv)
+        status = lex(mut &st, mut &recv)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -105,7 +105,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug("filled buffer $st.yyinput, status $status")
             if status != .lex_ready {
                 break

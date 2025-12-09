@@ -62,13 +62,13 @@ class Lexer {
     }
 
     private static Status lex(State yyrecord) {
-        byte yych;
+        int yych;
         loop: while (true) {
             yyrecord.token = yyrecord.yycursor;
             /*!re2c
                 re2c:api = record;
-                re2c:YYCTYPE = "byte";
-                re2c:YYPEEK = "yyrecord.yyinput[yyrecord.yycursor]";
+                re2c:YYCTYPE = "int";
+                re2c:YYPEEK = "Byte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor])";
                 re2c:YYFILL = "return Status.WAITING;";
                 re2c:eof = 0;
 

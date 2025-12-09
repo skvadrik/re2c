@@ -118,7 +118,7 @@ fn main() {
 
     // Run the lexer.
     expect := []SemVer{len: bufsize, init: SemVer{1, 22, 333}}
-    result := parse(mut st) or { panic("parse failed") }
+    result := parse(mut &st) or { panic("parse failed") }
     if result != expect { panic("error") }
 
     // Cleanup: remove input file.

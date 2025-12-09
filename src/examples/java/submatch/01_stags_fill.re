@@ -81,8 +81,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = "byte";
-                re2c:YYPEEK = "yyinput[yycursor]";
+                re2c:YYCTYPE = "int";
+                re2c:YYPEEK = "Byte.toUnsignedInt(yyinput[yycursor])";
                 re2c:YYFILL = "fill() == 0";
                 re2c:eof = 0;
                 re2c:tags = 1;

@@ -63,7 +63,7 @@ class Lexer {
     }
 
     private static Status lex(State yyrecord) {
-        byte yych;
+        int yych;
         loop: while (true) {
             yyrecord.token = yyrecord.yycursor;
             
@@ -73,7 +73,7 @@ class Lexer {
         switch (yystate) {
             case -1:
             case 0:
-                yych = yyrecord.yyinput[yyrecord.yycursor];
+                yych = Byte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor]);
                 switch (yych) {
                     case 0x61:
                     case 0x62:
@@ -121,7 +121,7 @@ class Lexer {
                 { return Status.BAD_PACKET; }
             case 3:
                 yyrecord.yymarker = yyrecord.yycursor;
-                yych = yyrecord.yyinput[yyrecord.yycursor];
+                yych = Byte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor]);
                 switch (yych) {
                     case 0x3B:
                         yyrecord.yycursor += 1;
@@ -168,7 +168,7 @@ class Lexer {
                 yyrecord.yystate = -1;
                 { yyrecord.received += 1; continue loop; }
             case 5:
-                yych = yyrecord.yyinput[yyrecord.yycursor];
+                yych = Byte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor]);
                 switch (yych) {
                     case 0x3B:
                         yyrecord.yycursor += 1;

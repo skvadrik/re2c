@@ -23,7 +23,7 @@ fn parse_u32(yyinput string) ?u32 {
     }
 
     
-    mut yych := 0
+    mut yych := u8(0)
     match yycond {
         .yycinit { unsafe { goto yyc_init } }
         .yycbin { unsafe { goto yyc_bin } }

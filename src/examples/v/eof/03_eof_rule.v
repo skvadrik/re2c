@@ -10,7 +10,7 @@ fn lex(yyinput string) int {
 
 loop: 
 //line "v/eof/03_eof_rule.v":13
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x20 { unsafe { goto yy3 } }

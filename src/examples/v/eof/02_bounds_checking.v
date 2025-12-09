@@ -19,7 +19,7 @@ fn lex(str string) int {
 
 loop: 
 //line "v/eof/02_bounds_checking.v":22
-    mut yych := 0
+    mut yych := u8(0)
     if yylimit <= yycursor {
         return -1
     }

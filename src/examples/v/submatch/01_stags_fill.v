@@ -93,7 +93,7 @@ loop:
     st.token = st.yycursor
     
 //line "v/submatch/01_stags_fill.v":96
-    mut yych := 0
+    mut yych := u8(0)
 yyFillLabel0:
     yych = st.yyinput[st.yycursor]
     match yych {
@@ -277,7 +277,7 @@ fn main() {
 
     // Run the lexer.
     expect := []SemVer{len: bufsize, init: SemVer{1, 22, 333}}
-    result := parse(mut st) or { panic("parse failed") }
+    result := parse(mut &st) or { panic("parse failed") }
     if result != expect { panic("error") }
 
     // Cleanup: remove input file.

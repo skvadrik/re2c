@@ -4,10 +4,10 @@ class Main {
     /*!max:re2c*/
 
     // Expects yymaxfill-padded string.
-    static int lex(String str) {
+    static int lex(byte[] str) {
         // Pad string with yymaxfill zeroes at the end.
-        byte[] yyinput = new byte[str.length() + YYMAXFILL];
-        System.arraycopy(str.getBytes(), 0, yyinput, 0, str.length()); 
+        byte[] yyinput = new byte[str.length + YYMAXFILL];
+        System.arraycopy(str, 0, yyinput, 0, str.length); 
 
         int yycursor = 0;
         int yylimit = yyinput.length;
@@ -15,15 +15,15 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:YYCTYPE = "byte";
-                re2c:YYPEEK = "yyinput[yycursor]";
+                re2c:YYCTYPE = "int";
+                re2c:YYPEEK = "Byte.toUnsignedInt(yyinput[yycursor])";
                 re2c:YYFILL = "return -1;";
 
                 str = ['] ([^'\\] | [\\][^])* ['];
 
                 [\x00] {
                     // Check that it is the sentinel, not some unexpected null.
-                    return (yycursor - 1 == str.length()) ? count : -1;
+                    return (yycursor - 1 == str.length) ? count : -1;
                 }
                 str  { count += 1; continue loop; }
                 [ ]+ { continue loop; }
@@ -33,9 +33,9 @@ class Main {
     }
 
     public static void main(String []args) {
-        assert lex("") == 0;
-        assert lex("'qu\0tes' 'are' 'fine: \\'' ") == 3;
-        assert lex("'unterminated\\'") == -1;
-        assert lex("'unexpected \00 null\\'") == -1;
+        assert lex("".getBytes()) == 0;
+        assert lex("'qu\0tes' 'are' 'fine: \\'' ".getBytes()) == 3;
+        assert lex("'unterminated\\'".getBytes()) == -1;
+        assert lex("'unexpected \00 null\\'".getBytes()) == -1;
     }
 };

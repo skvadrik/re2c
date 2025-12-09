@@ -55,7 +55,7 @@ loop:
     yyrecord.token = yyrecord.yycursor
     
 //line "v/fill/02_fill.v":58
-    mut yych := 0
+    mut yych := u8(0)
     if yyrecord.yylimit <= yyrecord.yycursor {
         r := fill(mut yyrecord, 1); if r != 0 { return r }
     }
@@ -143,7 +143,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic("expected $count, got $n") }
 
     // Cleanup: remove input file.
