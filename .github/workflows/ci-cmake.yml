@@ -66,7 +66,7 @@ jobs:
 
       - name: Setup chocolatey Cache (Windows)
         if: startsWith(runner.os, 'Windows')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: C:\Users\runneradmin\AppData\Local\Temp\chocolatey
           key: ${{ runner.os }}-chocolatey-${{ matrix.os }}-${{ github.sha }}
@@ -76,7 +76,7 @@ jobs:
 
       - name: Setup apt cache (Linux)
         if: startsWith(runner.os, 'Linux')
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /var/cache/apt
           key: ${{ runner.os }}-apt-cache-${{ matrix.os }}-${{ github.sha }}
