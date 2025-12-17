@@ -843,6 +843,9 @@ variable named \fBstag\fP\&.
 .B \fB#mtag\fP
 An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
 variable named \fBmtag\fP\&.
+.TP
+.B \fB$\fP
+End of input.
 .UNINDENT
 .sp
 Character classes and string literals may contain the following escape
@@ -942,7 +945,8 @@ It contains primitives for generic operations:
 \fBYYSHIFT\fP,
 \fBYYSHIFTSTAG\fP,
 \fBYYSHIFTMTAG\fP,
-\fBYYLESSTHAN\fP\&.
+\fBYYLESSTHAN\fP,
+\fBYYEND\fP\&.
 .UNINDENT
 .sp
 Here is a full list of API primitives that may be used by the generated code in
@@ -1010,6 +1014,14 @@ An integral constant equal to the maximum value of the argument to
 A generic API primitive with one variable \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
 and only if there are less than \fBlen\fP input characters left.
+.TP
+.B \fBYYEND\fP
+A generic API primitive with no variables.
+It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
+and only if the \fIlogical\fP end of input has been reached (excluding any
+padding or sentinel symbols). \fBYYEND\fP is used to implement \fB$\fP symbol in
+regular expressions. It differs from \fBYYLESSTHAN\fP, which is used to ensure
+that the lexer won\(aqt read past the end of buffer.
 .TP
 .B \fBYYPEEK\fP
 A generic API primitive with no variables.
@@ -2175,6 +2187,10 @@ Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
 \fBneed\fP (the number of code units to check against). Conditional:
 \fB\&.many\fP (true if the \fBneed\fP is more than one).
 .TP
+.B \fBcode:yyend\fP
+\fBYYEND\fP expression, possibly specialized for different APIs.
+Supported variables: \fBYYEND\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP\&.
+.TP
 .B \fBcode:yybm_filter\fP
 Condition that is used to filter out \fByych\fP values that are not
 covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
@@ -2275,6 +2291,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2hs version.
+.TP
+.B \fB\&.yyfill.enable\fP
+True if \fBYYFILL\fP is enabled (\fBre2c:yyfill:enable = 1\fP).
 .TP
 .B \fB\&.yyfn.throw\fP
 True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.

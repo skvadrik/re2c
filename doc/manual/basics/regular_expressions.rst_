@@ -66,6 +66,9 @@
     An *m-tag*: saves all input positions at which ``#mtag`` matches in a
     variable named ``mtag``.
 
+``$``
+    End of input.
+
 Character classes and string literals may contain the following escape
 sequences: ``\a``, ``\b``, ``\f``, ``\n``, ``\r``, ``\t``, ``\v``, ``\\``,
 octal escapes ``\ooo`` and hexadecimal escapes ``\xhh``, ``\uhhhh`` and

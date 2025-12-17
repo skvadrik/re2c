@@ -41,7 +41,8 @@ program:
     ``YYSHIFT``,
     ``YYSHIFTSTAG``,
     ``YYSHIFTMTAG``,
-    ``YYLESSTHAN``.
+    ``YYLESSTHAN``,
+    ``YYEND``.
     For example, if the input is a byte slice ``buffer: &[u8]``, variables
     ``cursor``, ``limit``, ``marker`` and ``ctxmarker`` of type ``usize``
     represent input positions, and a constant ``NONE`` represents invalid
@@ -58,6 +59,7 @@ program:
           re2c:YYRESTORECTX = "cursor = ctxmarker;";
           re2c:YYRESTORETAG = "cursor = @@{tag};";
           re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+          re2c:YYEND        = "limit == cursor";
           re2c:YYSTAGP      = "@@{tag} = cursor;";
           re2c:YYSTAGN      = "@@{tag} = NONE;";
           re2c:YYSHIFT      = "cursor = (cursor as isize + @@{shift}) as usize;";
