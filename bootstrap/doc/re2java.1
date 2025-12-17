@@ -2539,10 +2539,10 @@ class Main {
     /*!max:re2c*/
 
     // Expects yymaxfill\-padded string.
-    static int lex(String str) {
+    static int lex(byte[] str) {
         // Pad string with yymaxfill zeroes at the end.
-        byte[] yyinput = new byte[str.length() + YYMAXFILL];
-        System.arraycopy(str.getBytes(), 0, yyinput, 0, str.length()); 
+        byte[] yyinput = new byte[str.length + YYMAXFILL];
+        System.arraycopy(str, 0, yyinput, 0, str.length); 
 
         int yycursor = 0;
         int yylimit = yyinput.length;
@@ -2550,15 +2550,15 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqreturn \-1;\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
                 [\ex00] {
                     // Check that it is the sentinel, not some unexpected null.
-                    return (yycursor \- 1 == str.length()) ? count : \-1;
+                    return (yycursor \- 1 == str.length) ? count : \-1;
                 }
                 str  { count += 1; continue loop; }
                 [ ]+ { continue loop; }
@@ -2568,10 +2568,10 @@ class Main {
     }
 
     public static void main(String []args) {
-        assert lex(\(dq\(dq) == 0;
-        assert lex(\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq) == 3;
-        assert lex(\(dq\(aqunterminated\e\e\(aq\(dq) == \-1;
-        assert lex(\(dq\(aqunexpected \e00 null\e\e\(aq\(dq) == \-1;
+        assert lex(\(dq\(dq.getBytes()) == 0;
+        assert lex(\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq.getBytes()) == 3;
+        assert lex(\(dq\(aqunterminated\e\e\(aq\(dq.getBytes()) == \-1;
+        assert lex(\(dq\(aqunexpected \e00 null\e\e\(aq\(dq.getBytes()) == \-1;
     }
 };
 
@@ -2606,8 +2606,9 @@ class Main {
         loop: while (true) {
             /*!re2c
                 re2c:api = generic;
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dq(yycursor < yyinput.length) ? yyinput[yycursor] : 0\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dq(yycursor < yyinput.length)\(dq
+                              \(dq ? Byte.toUnsignedInt(yyinput[yycursor]) : 0\(dq;
                 re2c:YYSKIP = \(dqyycursor += 1;\(dq;
                 re2c:yyfill:enable = 0;
 
@@ -2771,8 +2772,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
 
@@ -2919,8 +2920,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqif (fill(@@) != 0) { return \-2; }\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -3351,13 +3352,13 @@ class Lexer {
     }
 
     private static Status lex(State yyrecord) {
-        byte yych;
+        int yych;
         loop: while (true) {
             yyrecord.token = yyrecord.yycursor;
             /*!re2c
                 re2c:api = record;
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyrecord.yyinput[yyrecord.yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor])\(dq;
                 re2c:YYFILL = \(dqreturn Status.WAITING;\(dq;
                 re2c:eof = 0;
 
@@ -3541,7 +3542,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:YYCTYPE = \(dqint\(dq; // should be \(gabyte\(ga, but it\(aqs signed in Java
+            re2c:YYCTYPE = \(dqint\(dq; // Java lacks unsigned 8\-bit integer type
             re2c:encoding:utf8 = 1;
         */
     }
@@ -3825,8 +3826,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
                 re2c:tags = 1;

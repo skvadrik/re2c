@@ -2699,6 +2699,7 @@ const std = @import(\(dqstd\(dq);
 const bufsize = 4095;
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -2707,7 +2708,7 @@ const State = struct {
     eof: bool
 };
 
-fn fill(st: *State, file: anytype) i32 {
+fn fill(st: *State) i32 {
     if (st.eof) { return \-1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -2722,7 +2723,7 @@ fn fill(st: *State, file: anytype) i32 {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     // If read less than expected, this is the end of input.
@@ -2731,14 +2732,14 @@ fn fill(st: *State, file: anytype) i32 {
     return 0;
 }
 
-fn lex(yyrecord: *State, file: anytype) i32 {
+fn lex(yyrecord: *State) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
         %{
             re2c:api = record;
             re2c:eof = 0;
-            re2c:YYFILL = \(dqfill(yyrecord, file) == 0\(dq;
+            re2c:YYFILL = \(dqfill(yyrecord) == 0\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2762,10 +2763,12 @@ test {
     fw.close();
 
     // Prepare lexer state: all offsets are at the end of buffer.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader \- lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -2777,7 +2780,7 @@ test {
     st.yyinput[st.yylimit] = 0;
 
     // Run the lexer.
-    try std.testing.expectEqual(lex(&st, &br), count);
+    try std.testing.expectEqual(lex(&st), count);
 
     // Cleanup: remove input file.
     fr.close();
@@ -2844,6 +2847,7 @@ const std = @import(\(dqstd\(dq);
 const bufsize = 4096;
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + yymaxfill]u8,
     yycursor: usize,
     yymarker: usize,
@@ -2852,7 +2856,7 @@ const State = struct {
     eof: bool
 };
 
-fn fill(st: *State, need: usize, file: anytype) i32 {
+fn fill(st: *State, need: usize) i32 {
     if (st.eof) { return \-1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -2867,7 +2871,7 @@ fn fill(st: *State, need: usize, file: anytype) i32 {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
 
     // If read less than expected, this is the end of input.
     if (st.yylimit < bufsize) {
@@ -2879,13 +2883,13 @@ fn fill(st: *State, need: usize, file: anytype) i32 {
     return 0;
 }
 
-fn lex(yyrecord: *State, file: anytype) i32 {
+fn lex(yyrecord: *State) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
         %{
             re2c:api = record;
-            re2c:YYFILL = \(dq{ if (fill(yyrecord, @@, file) != 0) return \-2; }\(dq;
+            re2c:YYFILL = \(dq{ if (fill(yyrecord, @@) != 0) return \-2; }\(dq;
 
             str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
@@ -2913,10 +2917,12 @@ test {
 
     // Prepare lexer state: all offsets are at the end of buffer.
     // This immediately triggers YYFILL, as the YYLESSTHAN condition is true.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader \- lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -2927,7 +2933,7 @@ test {
     @memset(st.yyinput[st.yylimit..st.yylimit + yymaxfill], 0); // zero\-padding at the end
 
     // Run the lexer.
-    try std.testing.expectEqual(lex(&st, &br), count);
+    try std.testing.expectEqual(lex(&st), count);
 
     // Cleanup: remove input file.
     fr.close();
@@ -3268,6 +3274,7 @@ const Status = enum {
 const bufsize = 10;
 
 const State = struct {
+    file: std.fs.File.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -3277,7 +3284,7 @@ const State = struct {
     received: usize,
 };
 
-fn fill(st: *State, file: anytype) Status {
+fn fill(st: *State) Status {
     // Error: lexeme too long. In real life can reallocate a larger buffer.
     if (st.token < 1) { return Status.big_packet; }
 
@@ -3290,7 +3297,7 @@ fn fill(st: *State, file: anytype) Status {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.interface.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return Status.ready;
@@ -3321,10 +3328,10 @@ fn run(expect: Status, packets: []const []const u8) !void {
     var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
 
     // Initialize lexer state: \(gastate\(ga value is \-1, all offsets are at the end
-    // of buffer. Normally file would be part of the state, but BufferedReader
-    // type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // of buffer. Use unbuffered reader \- lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
     var st = State{
+        .file = fr.reader(&zerobuf),
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -3351,7 +3358,7 @@ fn run(expect: Status, packets: []const []const u8) !void {
                 try fw.writeAll(packets[send]);
                 send += 1;
             }
-            status = fill(&st, &br);
+            status = fill(&st);
             std.log.debug(\(dqfilled buffer [{s}], status {}\(dq, .{st.yyinput, status});
             if (status != Status.ready) {
                 break;
@@ -3702,6 +3709,7 @@ fn s2n(str: []const u8) u32 { // convert a pre\-parsed string to a number
 }
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -3713,7 +3721,7 @@ const State = struct {
     eof: bool
 };
 
-fn fill(st: *State, file: anytype) i32 {
+fn fill(st: *State) i32 {
     if (st.eof) { return \-1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -3732,7 +3740,7 @@ fn fill(st: *State, file: anytype) i32 {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     // If read less than expected, this is the end of input.
@@ -3741,8 +3749,8 @@ fn fill(st: *State, file: anytype) i32 {
     return 0;
 }
 
-fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
-    var vers = std.ArrayList(SemVer).init(std.testing.allocator);
+fn parse(st: *State) !std.ArrayList(SemVer) {
+    var vers = try std.ArrayList(SemVer).initCapacity(std.testing.allocator, 0);
 
     // Final tag variables available in semantic action.
     %{svars format = \(dqvar @@: usize = 0;\en\(dq; %}
@@ -3754,12 +3762,12 @@ fn parse(st: *State, file: anytype) !std.ArrayList(SemVer) {
             re2c:eof = 0;
             re2c:tags = 1;
             re2c:yyrecord = st;
-            re2c:YYFILL = \(dqfill(st, file) == 0\(dq;
+            re2c:YYFILL = \(dqfill(st) == 0\(dq;
 
             num = [0\-9]+;
 
             num @t1 \(dq.\(dq @t2 num @t3 (\(dq.\(dq @t4 num)? [\en] {
-                try vers.append(SemVer {
+                try vers.append(std.testing.allocator, SemVer {
                     .major = s2n(st.yyinput[st.token..t1]),
                     .minor = s2n(st.yyinput[t2..t3]),
                     .patch = if (t4 == none) 0 else s2n(st.yyinput[t4..st.yycursor \- 1]),
@@ -3783,10 +3791,12 @@ test {
     fw.close();
 
     // Prepare lexer state: all offsets are at the end of buffer.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader \- lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -3799,16 +3809,14 @@ test {
     st.yyinput[st.yylimit] = 0;
 
     // Manually construct expected result.
-    var expect = std.ArrayList(SemVer).init(std.testing.allocator);
-    for (0..bufsize) |_| try expect.append(SemVer{.major = 1, .minor = 22, .patch = 333});
+    var expect = [_]SemVer{SemVer{.major = 1, .minor = 22, .patch = 333}} ** bufsize;
 
     // Run the lexer.
-    var result = try parse(&st, &br);
-    try std.testing.expectEqualDeep(result, expect);
+    var result = try parse(&st);
+    try std.testing.expectEqualDeep(&expect, result.items);
 
     // Cleanup: free memory and remove input file.
-    expect.deinit();
-    result.deinit();
+    result.deinit(std.testing.allocator);
     fr.close();
     try std.fs.cwd().deleteFile(fname);
 }
@@ -3907,7 +3915,7 @@ const MtagElem = struct {
 
 // Append a single value to an m\-tag history.
 fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
-    try trie.append(MtagElem{.elem = value, .pred = mtag});
+    try trie.append(std.testing.allocator, MtagElem{.elem = value, .pred = mtag});
     return trie.items.len \- 1;
 }
 
@@ -3930,7 +3938,7 @@ fn unwind(trie: *std.ArrayList(MtagElem),
 
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
-        try ver.append(s2n(str[ex..ey]));
+        try ver.append(std.testing.allocator, s2n(str[ex..ey]));
     } else {
         // Both tags are none (this corresponds to zero repetitions).
         std.debug.assert(ex == none and ey == none);
@@ -3946,8 +3954,8 @@ fn s2n(str: []const u8) u32 { // convert a pre\-parsed string to a number
 fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
     var yycursor: usize = 0;
     var yymarker: usize = 0;
-    var mt = std.ArrayList(MtagElem).init(std.testing.allocator);
-    defer mt.deinit();
+    var mt = try std.ArrayList(MtagElem).initCapacity(std.testing.allocator, 0);
+    defer mt.deinit(std.testing.allocator);
 
     // Final tag variables available in semantic action.
     %{svars format = \(dqvar @@: usize = none;\(dq; %}
@@ -3966,8 +3974,8 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
         num = [0\-9]+;
 
         @t1 num @t2 (\(dq.\(dq #t3 num #t4)* [\ex00] {
-            var ver = std.ArrayList(u32).init(std.testing.allocator);
-            try ver.append(s2n(yyinput[t1..t2]));
+            var ver = try std.ArrayList(u32).initCapacity(std.testing.allocator, 0);
+            try ver.append(std.testing.allocator, s2n(yyinput[t1..t2]));
             try unwind(&mt, t3, t4, yyinput, &ver);
             return ver;
         }
@@ -3977,20 +3985,16 @@ fn parse(yyinput: [:0]const u8) !std.ArrayList(u32) {
 
 test {
     var result = try parse(\(dq1\(dq);
-    var expect = std.ArrayList(u32).init(std.testing.allocator);
-    try expect.appendSlice(&[_]u32{1});
-    try std.testing.expectEqualDeep(result, expect);
-    expect.deinit();
-    result.deinit();
+    var expect = [_]u32{1};
+    try std.testing.expectEqualDeep(&expect, result.items);
+    result.deinit(std.testing.allocator);
 }
 
 test {
     var result = try parse(\(dq1.2.3.4.5.6.7\(dq);
-    var expect = std.ArrayList(u32).init(std.testing.allocator);
-    try expect.appendSlice(&[_]u32{1, 2, 3, 4, 5, 6, 7});
-    try std.testing.expectEqualDeep(result, expect);
-    expect.deinit();
-    result.deinit();
+    var expect = [_]u32{1, 2, 3, 4, 5, 6, 7};
+    try std.testing.expectEqualDeep(&expect, result.items);
+    result.deinit(std.testing.allocator);
 }
 
 test {

@@ -3517,9 +3517,9 @@ data State a = State {
 %}
 
 %{use
-    re2c:YYFN = [\(dqlex32;Maybe Int\(dq, \(dqState{..};State (Array Int Int)\(dq];
+    re2c:YYFN = [\(dqlex32;Maybe Int\(dq, \(dqState{..};State (Array Int Word)\(dq];
     re2c:encoding:utf32 = 1;
-    re2c:YYCTYPE = Int;
+    re2c:YYCTYPE = Word;
 %}
 
 main :: IO ()

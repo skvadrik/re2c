@@ -84,7 +84,7 @@ In the output re2v replaced the block in the middle with the generated code:
 fn lex(yyinput string) {
     mut yycursor := 0
     
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x31...0x39 { unsafe { goto yy2 } }
@@ -2745,7 +2745,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic(\(dqexpected $count, got $n\(dq) }
 
     // Cleanup: remove input file.
@@ -2895,7 +2895,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic(\(dqexpected $count, got $n\(dq) }
 
     // Cleanup: remove input file.
@@ -3311,7 +3311,7 @@ fn test(expect Status, packets []string) {
     mut send := 0
     mut recv := 0
     for {
-        status = lex(mut st, mut &recv)
+        status = lex(mut &st, mut &recv)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -3321,7 +3321,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug(\(dqfilled buffer $st.yyinput, status $status\(dq)
             if status != .lex_ready {
                 break
@@ -3770,7 +3770,7 @@ fn main() {
 
     // Run the lexer.
     expect := []SemVer{len: bufsize, init: SemVer{1, 22, 333}}
-    result := parse(mut st) or { panic(\(dqparse failed\(dq) }
+    result := parse(mut &st) or { panic(\(dqparse failed\(dq) }
     if result != expect { panic(\(dqerror\(dq) }
 
     // Cleanup: remove input file.
@@ -3873,7 +3873,7 @@ struct MtagElem {
 type MtagTrie = []MtagElem
 
 // Append a single value to an m\-tag history.
-fn add_mtag(mut trie &MtagTrie, mtag int, value int) int {
+fn add_mtag(mut trie MtagTrie, mtag int, value int) int {
     trie = arrays.concat(trie, MtagElem{value, mtag})
     return trie.len \- 1
 }
@@ -3912,7 +3912,8 @@ fn s2n(s string) int { // convert pre\-parsed string to number
 
 fn parse(yyinput string) ?[]int {
     mut yycursor, mut yymarker := 0, 0
-    mut trie := []MtagElem{}
+//    mut trie := []MtagElem{}
+    mut trie := MtagTrie{}
 
     // Final tag variables available in semantic action.
     /*!svars:re2c format = \(aqmut @@ := tag_none\en\(aq; */
@@ -3925,8 +3926,8 @@ fn parse(yyinput string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:YYMTAGP = \(dq@@ = add_mtag(mut &trie, @@, yycursor)\(dq;
-        re2c:YYMTAGN = \(dq@@ = add_mtag(mut &trie, @@, tag_none)\(dq;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(mut trie, @@, yycursor)\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(mut trie, @@, tag_none)\(dq;
 
         num = [0\-9]+;
 
