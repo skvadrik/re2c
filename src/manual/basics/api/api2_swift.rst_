@@ -39,7 +39,8 @@ program:
     ``YYSHIFT``,
     ``YYSHIFTSTAG``,
     ``YYSHIFTMTAG``,
-    ``YYLESSTHAN``.
+    ``YYLESSTHAN``,
+    ``YYEND``.
     For example, if the input is a zero-terminated array of bytes
     ``buffer: [UInt8]``, variables ``cursor``, ``limit``, ``marker`` and
     ``ctxmarker`` of type ``Int`` represent input positions, and ``-1``
@@ -56,6 +57,7 @@ program:
           re2c:YYRESTORECTX = "cursor = ctxmarker";
           re2c:YYRESTORETAG = "cursor = ${tag}";
           re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+          re2c:YYEND        = "limit == cursor";
           re2c:YYSTAGP      = "@@{tag} = cursor";
           re2c:YYSTAGN      = "@@{tag} = -1";
           re2c:YYSHIFT      = "cursor += @@{shift}";

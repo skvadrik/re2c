@@ -41,6 +41,7 @@ program:
     ``YYSHIFTSTAG``,
     ``YYSHIFTMTAG``,
     ``YYLESSTHAN``.
+    ``YYEND``.
     Generic API supports two styles that determine the form in which the
     primitives should be defined:
 
@@ -67,6 +68,7 @@ program:
               re2c:YYRESTORECTX = "cursor = ctxmarker;";
               re2c:YYRESTORETAG = "cursor = ${tag};";
               re2c:YYLESSTHAN   = "limit - cursor < @@{len}";
+              re2c:YYEND        = "limit == cursor";
               re2c:YYSTAGP      = "@@{tag} = cursor;";
               re2c:YYSTAGN      = "@@{tag} = NULL;";
               re2c:YYSHIFT      = "cursor += @@{shift};";
@@ -93,6 +95,7 @@ program:
             #define  YYRESTORECTX()           cursor = ctxmarker
             #define  YYRESTORETAG(tag)        cursor = tag
             #define  YYLESSTHAN(len)          limit - cursor < len
+            #define  YYEND()                  limit == cursor
             #define  YYSTAGP(tag)             tag = cursor
             #define  YYSTAGN(tag)             tag = NULL
             #define  YYSHIFT(shift)           cursor += shift

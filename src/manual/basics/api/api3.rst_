@@ -63,6 +63,14 @@ order to interface with the outer program.
     It should be defined as an r-value of boolean type that equals ``true`` if
     and only if there are less than ``len`` input characters left.
 
+``YYEND``
+    A generic API primitive with no variables.
+    It should be defined as an r-value of boolean type that equals ``true`` if
+    and only if the *logical* end of input has been reached (excluding any
+    padding or sentinel symbols). ``YYEND`` is used to implement ``$`` symbol in
+    regular expressions. It differs from ``YYLESSTHAN``, which is used to ensure
+    that the lexer won't read past the end of buffer.
+
 ``YYPEEK``
     A generic API primitive with no variables.
     It should be defined as an r-value of type ``YYCTYPE`` that is equal to the
