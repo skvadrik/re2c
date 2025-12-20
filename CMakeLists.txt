@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.15)
-project(re2c VERSION 4.3.1 HOMEPAGE_URL "https://re2c.org/")
+project(re2c VERSION 4.4 HOMEPAGE_URL "https://re2c.org/")
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
