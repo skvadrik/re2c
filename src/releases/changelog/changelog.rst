@@ -2,6 +2,16 @@ Changelog
 =========
 
 
+4.4 (2025-12-20)
+~~~~~~~~~~~~~~~~
+
+- Added generalized end-of-input symbol ``$``
+  (`#525 <https://github.com/skvadrik/re2c/issues/525>`_).
+  This change may break old code with conflicitng end-of-input rules,
+  as they now have position-based precedence. The broken cases were
+  reported with ``-Wdeprecated-eof-rule`` since version 4.3.
+
+
 4.3.1 (2025-12-01)
 ~~~~~~~~~~~~~~~~~~
 
