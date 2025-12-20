@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 4.0 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-4-0">
+<h1>Release 4.0<a class="headerlink" href="#release-4-0" title="Permalink to this heading">¶</a></h1>
+<p>This release adds support for eight new languages (D, Haskell, Java, JavaScript,
+OCaml, Python, V, Zig). Code generation subsystem has been completely rewritten
+using <a class="reference internal" href="../../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a> — a technique
+for describing language backends. With so many new languages <em>re2c</em> now has a
+more generic meaning: <em>Regular Expressions to Code</em> rather than <em>Regular
+Expressions to C</em>. A new code generation model based on recursive functions has
+been added to enable support of functional languages. Much effort went into
+simplifying user interface: the former default API is now called <em>simple API</em>
+and supported for backends other than C/C++, and there is a new <em>record API</em> for
+cases when lexer state needs to be stored. Capturing groups can now be used with
+variables instead of arrays. Last but not least, re2c now has an
+<a class="reference external" href="https://re2c.org/playground">online playground</a>.</p>
+<p><strong>Syntax files.</strong></p>
+<p>Previously language-specific logic was hardcoded into re2c. This made it
+difficult to add new languages or tweak code generator for existing ones, as it
+required patching re2c and upstreaming the changes, or else maintaining a fork.
+Now all language-specific logic has been moved to <a class="reference internal" href="../../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a>
+— declarative configuration files that can be supplied by the user and don’t
+require rebuilding re2c. Adding support for a new language is as simple as
+writing a syntax file for it. One can partially override an existing syntax file
+or completely redefine everything from scratch, if needed. For examples of
+syntax files see <a class="reference external" href="https://github.com/skvadrik/re2c/tree/master/include/syntax">include/syntax</a>
+subdirectory.</p>
+<p><strong>API changes.</strong></p>
+<p>For a long time C/C++ was the only backend that supported default API, because
+pointer-like semantics of <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and other primitives was hardcoded into
+re2c. With the addition of syntax files, it is now possible to define
+API flavours individually for each language. For languages that don’t have
+pointer arithmetic <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and others should be defined as indices rather
+than pointers, and a new primitive <code class="docutils literal notranslate"><span class="pre">YYINPUT</span></code> should be used to define the
+indexed character sequence. The former default API is now called <em>simple API</em> to
+avoid confusion, as some languages historically default to generic API. Simple
+API is implemented for all languages except Haskell and OCaml, and it’s enabled
+by default for C, D, Java, JavaScript, Python, V and Zig. It can be explicitly
+enabled with <code class="docutils literal notranslate"><span class="pre">--api</span> <span class="pre">simple</span></code> option or <code class="docutils literal notranslate"><span class="pre">re2c:api</span> <span class="pre">=</span> <span class="pre">simple</span></code> configuration.</p>
+<p>There’s also a new <a class="reference internal" href="../../manual/manual_c.html#program-interface"><span class="std std-ref">record API</span></a> enabled
+with <code class="docutils literal notranslate"><span class="pre">--api</span> <span class="pre">record</span></code> option and <code class="docutils literal notranslate"><span class="pre">re2c:api</span> <span class="pre">=</span> <span class="pre">record</span></code> configuration that should
+be used in cases when lexer state needs to be stored in some form of a record (a
+struct, a class, an object — whatever it’s called in the target language).
+This is usually the case when <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is enabled, as it needs to update lexer
+state in a subroutine. Record API defines all operations via a single primitive
+<code class="docutils literal notranslate"><span class="pre">yyrecord</span></code> — a record with fields for <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and other primitives (as
+needed). The names of the fields are language specific, but for most languages
+they default to lowercase equivalents of the primitives (e.g. <code class="docutils literal notranslate"><span class="pre">yycursor</span></code> for
+<code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code>), and they can be changed with the corresponding configurations.
+The name of the record itself can be changed with <code class="docutils literal notranslate"><span class="pre">re2c:yyrecord</span></code>
+configuration. See <a class="reference external" href="https://github.com/search?q=repo%3Askvadrik%2Fre2c+path%3A%2F%5Eexamples%5C%2F%2F+%22re2c%3Aapi+%3D+record%22&amp;type=code">examples</a>
+that use record API.</p>
+<p>Some options and configurations have been renamed (old aliases still work),
+see the <a class="reference internal" href="../changelog/changelog.html#id25"><span class="std std-ref">changelog</span></a> for
+details. Configurations that have <code class="docutils literal notranslate"><span class="pre">define:</span></code> or <code class="docutils literal notranslate"><span class="pre">variable:</span></code> parts now
+have shorter aliases without these parts (e.g <code class="docutils literal notranslate"><span class="pre">re2c:YYCURSOR</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">re2c:define:YYCURSOR</span></code> and <code class="docutils literal notranslate"><span class="pre">re2c:yych</span></code> instead of <code class="docutils literal notranslate"><span class="pre">re2c:variable:yych</span></code>).
+The goal of this change is to make the naming scheme more consistent, as
+wide-scope <code class="docutils literal notranslate"><span class="pre">define:</span></code> and <code class="docutils literal notranslate"><span class="pre">variable:</span></code> prefixes were in conflict with
+narrow-scope prefixes like <code class="docutils literal notranslate"><span class="pre">tags:</span></code>, <code class="docutils literal notranslate"><span class="pre">cond:</span></code>, <code class="docutils literal notranslate"><span class="pre">yych:</span></code> etc.</p>
+<p><strong>Recursive functions.</strong></p>
+<p>This release adds a new code model based on recursive functions (enabled with
+<code class="docutils literal notranslate"><span class="pre">--recursive-functions</span></code> option). Previously re2c supported two code models.
+One is based on <code class="docutils literal notranslate"><span class="pre">goto</span></code> and labels (enabled with <code class="docutils literal notranslate"><span class="pre">--goto-label</span></code> option); it
+generates efficient code, and it’s the best option for languages that support
+<code class="docutils literal notranslate"><span class="pre">goto</span></code> statement. The other model is based on state-switch inside of a loop
+(enabled with <code class="docutils literal notranslate"><span class="pre">--loop-switch</span></code> option); it is for languages that don’t have
+<code class="docutils literal notranslate"><span class="pre">goto</span></code>, but do have variables and loops. However, functional languages like
+Haskell don’t have that — they have immutable bindings instead of variables
+and recursion instead of loops. Therefore a third code model was needed. Some
+languages support all three models, and some support just one (supported models,
+as well as the default one, are defined by the syntax files).</p>
+<p><strong>Captures with variables.</strong>
+Previously re2c always used POSIX-style <code class="docutils literal notranslate"><span class="pre">yypmatch</span></code> array to store submatch
+results with capturing groups (<code class="docutils literal notranslate"><span class="pre">--posix-captures</span></code> and <code class="docutils literal notranslate"><span class="pre">--leftmost-captures</span></code>
+options). However, it may be more convenient to use a scalar variable for each
+parenthesis instead of an array (some languages don’t even have mutable arrays
+in the standard library). This release adds <code class="docutils literal notranslate"><span class="pre">--posix-captvars</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--leftmost-captvars</span></code> options that store submatch results in variables with
+autogenerated names <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;l&lt;k&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;r&lt;k&gt;</span></code> for <code class="docutils literal notranslate"><span class="pre">k</span></code>-th capturing
+group, where <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;</span></code> is the value of <code class="docutils literal notranslate"><span class="pre">re2c:tags:prefix</span></code> configuration.
+There’re also new block types <code class="docutils literal notranslate"><span class="pre">svars</span></code> and <code class="docutils literal notranslate"><span class="pre">mvars</span></code> that are exactly like
+<code class="docutils literal notranslate"><span class="pre">stags</span></code> and <code class="docutils literal notranslate"><span class="pre">mtags</span></code>, except that they are expanded for the variables used
+in semantic action, not for the intermediate tag variables.</p>
+<p><strong>Block start/end markers.</strong>
+For a long time re2c supported Flex-style block start/end markers <code class="docutils literal notranslate"><span class="pre">%{</span></code> and
+<code class="docutils literal notranslate"><span class="pre">%}</span></code>. Now this syntax is extended to all kinds of blocks, e.g. <code class="docutils literal notranslate"><span class="pre">%{local</span></code> for
+a local block <code class="docutils literal notranslate"><span class="pre">/*!local:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">%{rules:foo</span></code> for a named rules block
+<code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:foo</span></code>, <code class="docutils literal notranslate"><span class="pre">%{getstate:x:y:z</span></code> for a special block
+<code class="docutils literal notranslate"><span class="pre">/*!getstate:re2c:x:y:z</span></code>, etc. The new syntax is primarily intended for
+languages that don’t have C-style multiline comments <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></code>.</p>
+<p><strong>Warnings on by default.</strong>
+Warnings that indicate serious issues with the code are now enabled by default.
+This includes
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wundefined-control-flow">-Wundefined-control-flow</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wsentinel-in-midrule">-Wsentinel-in-midrule</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wunreachable-rules">-Wunreachable-rules</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wuseless-escape">-Wuseless-escape</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wswapped-range">-Wswapped-range</a> and
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wcondition-order">-Wcondition-order</a>.
+If needed, each of them can be disabled with an explicit <code class="docutils literal notranslate"><span class="pre">-Wno-*</span></code> option.
+To enable less important warnings, use <code class="docutils literal notranslate"><span class="pre">-W</span></code>.
+A new warning <code class="docutils literal notranslate"><span class="pre">-Wundefined-syntax-config</span></code> has been added. It warns when a
+syntax config does not define some configurations — fix it by defining them or
+explicitly setting them to <code class="docutils literal notranslate"><span class="pre">&lt;undefined&gt;</span></code>.</p>
+<p><strong>Online playground</strong>
+Thanks to <a class="reference external" href="https://github.com/PolarGoose">PolarGoose</a>, re2c now has an online
+playground that allows one to load examples for all languages, edit, compile and
+share the code online.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="../changelog/changelog.html#id25"><span class="std std-ref">4.0 (2024-11-19)</span></a>.
+As always, thanks to all contributors!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

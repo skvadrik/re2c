@@ -1,0 +1,100 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 4.2 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-4-2">
+<h1>Release 4.2<a class="headerlink" href="#release-4-2" title="Permalink to this heading">¶</a></h1>
+<p>This release adds a new backend for Swift,
+a relative form of computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> for C/C++,
+exception specifications for recursive functions
+and some new benchmarks.</p>
+<p><strong>Swift backend.</strong>
+Code generation into Swift is now supported using the recently added
+<a class="reference internal" href="../../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a>. It can be enabled via
+<code class="docutils literal notranslate"><span class="pre">re2swift</span></code> binary or the new option <code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">swift</span></code>. See
+<a class="reference external" href="../playground/?example=swift/01_basic.re">Swift examples</a> on the playground
+and the full <a class="reference external" href="../manual/manual_swift.html">Swift manual</a> for details.</p>
+<p><strong>Relative computed goto.</strong>
+Computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> is a feature that is currently supported only by the C/C++
+backend. This release adds (<a class="reference external" href="https://github.com/skvadrik/re2c/pull/533">#533</a>)
+a new form of computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> which computes jump targets using offsets
+relative to a base label rather than absolute label. This makes the generated
+code easier to use in shared libraries, as it reduces the number of dynamic
+relocations, and by consequence, allows the data stored in computed <code class="docutils literal notranslate"><span class="pre">goto</span></code>
+table to be read-only.
+See <a class="reference external" href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a> for details.
+The new behaviour can be enabled with option <code class="docutils literal notranslate"><span class="pre">--computed-gotos-relative</span></code>
+or configuration <code class="docutils literal notranslate"><span class="pre">re2c:computed-gotos:relative</span></code> (or an alias
+<code class="docutils literal notranslate"><span class="pre">re2c:cgoto:relative</span></code>). Beware of a related
+<a class="reference external" href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=119158">GCC bug</a>.</p>
+<p><strong>Exception specifications.</strong>
+A new configuration <code class="docutils literal notranslate"><span class="pre">re2c:yyfn:throw</span></code> allows the user to specify
+exceptions thrown by the <code class="docutils literal notranslate"><span class="pre">YYFN</span></code> function. By default it’s an empty string,
+meaning no exception specification. The new configuration is available in syntax
+files in the form of <code class="docutils literal notranslate"><span class="pre">.yyfn.throw</span></code> conditional and <code class="docutils literal notranslate"><span class="pre">throw</span></code> variable in the
+function code templates <code class="docutils literal notranslate"><span class="pre">code:fndecl</span></code> and <code class="docutils literal notranslate"><span class="pre">code:fndef</span></code>.
+The primary motivation for this was the use in the Swift backend
+(<a class="reference external" href="https://github.com/skvadrik/re2c/pull/540">#540</a>).</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="../changelog/changelog.html#id10"><span class="std std-ref">4.2 (2025-04-23)</span></a>.
+As always, thanks to all contributors, especially
+<a class="reference external" href="https://github.com/ScrelliCopter">ScrelliCopter</a> who implemented the Swift
+backend and <a class="reference external" href="https://github.com/caffe3">caffe3</a> who whorked on computed
+<code class="docutils literal notranslate"><span class="pre">goto</span></code>!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,7 @@
+Release 1.0.1
+=============
+
+This is a minor bug-fix release.
+It fixes a build failure on Mac OS X (thanks to ilovezf for the bug report).
+See the changelog :ref:`releases/changelog/changelog:1.0.1 (2017-08-11)` for details.
+

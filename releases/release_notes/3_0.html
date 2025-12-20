@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 3.0 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-3-0">
+<h1>Release 3.0<a class="headerlink" href="#release-3-0" title="Permalink to this heading">¶</a></h1>
+<p>This release adds Rust support,
+a uniform naming scheme for options and configurations,
+small improvements in code generation
+and a few bug fixes.</p>
+<p><strong>Rust backend.</strong>
+It has been on the wish-list for quite a while, but the real work has started on
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/372">#372</a> with
+<a class="reference external" href="https://github.com/raekye/">raekye</a> doing the initial implementation and
+<a class="reference external" href="https://github.com/pmetzger/">pmetzger</a> porting the first examples.
+After a few weeks of brainstorming on <a class="reference external" href="https://www.oftc.net/">irc.oftc.net</a>
+(<code class="docutils literal notranslate"><span class="pre">#re2c</span></code>), followed by a few months of work, now the Rust backend is fully
+implemented and ready to use.
+See the <a class="reference internal" href="../../manual/manual_rust.html#introduction"><span class="std std-ref">re2rust manual</span></a> with examples.</p>
+<p>The main difficulty with Rust is that it has no <code class="docutils literal notranslate"><span class="pre">goto</span></code> statement, which makes
+the usual code generation approach impossible. Normally re2c uses <em>goto-label</em>
+approach: DFA states are blocks of code with labels, and transitions are
+<code class="docutils literal notranslate"><span class="pre">goto</span></code> statements. For Rust a different approach is needed: a DFA is
+represented with a switch on a numeric state variable, where each state is a
+separate case. Transitions set state variable to the target state index and loop
+to the start of the switch. The <em>loop-switch</em> approach can be used for other
+languages as well, therefore it has been added as an option <code class="docutils literal notranslate"><span class="pre">--loop-switch</span></code>
+(available for all backends and mandatory for Rust).
+The new approach is different enough to require multiple changes in code
+generation. In loop-switch mode it is impossible to jump into the middle of a
+state bypassing the skip statement, so the <code class="docutils literal notranslate"><span class="pre">--eager-skip</span></code> option is enforced,
+which moves skip statements to transitions. With conditions it is impossible to
+jump between different blocks, so DFAs for all conditions are merged into one
+switch, and condition numbers are the indices of the initial DFA states. In
+storable state mode it is impossible to jump from the <code class="docutils literal notranslate"><span class="pre">YYGETSTATE</span></code> switch to a
+DFA state, therefore a separate <code class="docutils literal notranslate"><span class="pre">getstate:re2c</span></code> detached from the lexer block
+is not supported. Most of these implementation details are hidden from the user.</p>
+<p><a class="reference internal" href="../../manual/manual_rust.html#program-interface"><span class="std std-ref">Generic API</span></a> is set by default
+for Rust, as the use of pointer arithmetic is unsafe and generally discouraged.
+The <code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> operation is automatically wrapped in <code class="docutils literal notranslate"><span class="pre">unsafe</span></code> because it should
+avoid bounds checks, which are done by the lexer in a
+<a class="reference internal" href="../../manual/manual_rust.html#handling-the-end-of-input"><span class="std std-ref">more efficient way</span></a>.
+To get rid of the automatic <code class="docutils literal notranslate"><span class="pre">unsafe</span></code> wrappers use option <code class="docutils literal notranslate"><span class="pre">--no-unsafe</span></code> or
+configuration <code class="docutils literal notranslate"><span class="pre">re2c:unsafe</span></code> on a per-block basis (this can help to verify
+lexer behavior in debug mode, for example).</p>
+<p>Initialization of <code class="docutils literal notranslate"><span class="pre">yych</span></code> in the generated code is prefixed with
+<code class="docutils literal notranslate"><span class="pre">#[allow(unused_assignments)]</span></code>. In fact initialization is not needed (<code class="docutils literal notranslate"><span class="pre">yych</span></code>
+is always set before it is used), but the Rust compiler cannot figure it out in
+cases with complex control flow and emits errors if initialization is missing.</p>
+<p>Rust backend and the new <code class="docutils literal notranslate"><span class="pre">re2rust</span></code> binary are enabled by default, but the
+build can be configured with <code class="docutils literal notranslate"><span class="pre">--enable-rust</span></code>, <code class="docutils literal notranslate"><span class="pre">--disable-rust</span></code> Autoconf
+options or <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2RUST</span></code> CMake option.</p>
+<p><strong>New aliases.</strong>
+Some configurations that have been added over the years are at odds with the
+general naming scheme. For example, most of condition-related configurations
+have <code class="docutils literal notranslate"><span class="pre">re2c:cond:</span></code> prefix, as in <code class="docutils literal notranslate"><span class="pre">re2c:cond:goto</span></code> or <code class="docutils literal notranslate"><span class="pre">re2c:cond:divider</span></code>,
+but for some reason <code class="docutils literal notranslate"><span class="pre">re2c:condprefix</span></code> has no column after <code class="docutils literal notranslate"><span class="pre">cond</span></code>. It is
+illogical, and it would be better to have <code class="docutils literal notranslate"><span class="pre">re2c:cond:prefix</span></code> instead. This
+release adds a bunch of such aliases. Of course, the old names still work, and
+there is no plan to remove them (the change does not break existing code).
+Likewise some options have new aliases. For a full list see the
+<a class="reference internal" href="../changelog/changelog.html#id28"><span class="std std-ref">changelog</span></a>.</p>
+<p><strong>Code generation.</strong>
+The changes in code generation are minor. The main difference is in the state
+enumeration: states without incoming transitions do not have numbers anymore.
+This was required for the loop-switch approach, so that switch cases can have
+consecutive labels. Other code generation changes include removal of unused
+<code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> statements and slightly different formatting.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="../changelog/changelog.html#id28"><span class="std std-ref">3.0 (2022-01-27)</span></a>.
+Huge thanks to all contributors, especially
+<a class="reference external" href="https://github.com/raekye/">raekye</a>  and
+<a class="reference external" href="https://github.com/pmetzger/">pmetzger</a>!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

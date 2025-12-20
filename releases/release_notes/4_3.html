@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 4.3 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-4-3">
+<h1>Release 4.3<a class="headerlink" href="#release-4-3" title="Permalink to this heading">¶</a></h1>
+<p>This release adds <code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> warning and improves
+compile-time performance.</p>
+<p><strong>Upcoming changes to the end-of-input rule.</strong>
+Normally, if there’s a conflict between two or more rules
+(meaning that they both match the same string) re2c chooses the first rule
+based on their position in the input file. The same goes for reused blocks:
+their rules are inserted at block start for <code class="docutils literal notranslate"><span class="pre">use:re2c</span></code> blocks, or at the
+point where <code class="docutils literal notranslate"><span class="pre">!use</span></code> directive is specified.
+Special rules (such as the default rule <code class="docutils literal notranslate"><span class="pre">*</span></code> and the end of input rule <code class="docutils literal notranslate"><span class="pre">$</span></code>)
+have different precedence and inheritance order. A block is not allowed to
+specify the same special rule more than once, and inherited special rules have
+lower priority compared to the block’s own special rules.</p>
+<p>In the future re2c will support generalized end of input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code> as part
+of a normal rule (rather than a special rule). At the moment the only supported
+form is a standalone rule <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>, but in the future re2c will support
+cases like <code class="docutils literal notranslate"><span class="pre">[a]</span> <span class="pre">$</span> <span class="pre">|</span> <span class="pre">[b]</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> etc. To allow this, <code class="docutils literal notranslate"><span class="pre">$</span></code> needs to have
+position based precedence and inheritance order. However, it will be a breaking
+change for cases that have conflicting rules.
+This release prepares for the migration: it does not change behaviour yet, but
+it add a warning <code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> for the cases that will be broken
+in the future. For now the warning can be disabled with
+<code class="docutils literal notranslate"><span class="pre">-Wno-deprecated-eof-rule</span></code>, however it is strongly recommended to fix it,
+as the warning will be turned to error in the future, and the generated code
+will change.</p>
+<p>See <a class="reference external" href="https://github.com/skvadrik/re2c/pull/525">#525</a> for more details.</p>
+<p><strong>Compile-time performance improvements.</strong>
+Internal TDFA construction code has been optimized: it now avoids some
+redundant copying, making the determinization process ~1.5 times faster
+for some Unicode scanners. The algorithm itself wasn’t changed.
+See <a class="reference external" href="https://github.com/skvadrik/re2c/pull/544">#544</a> for more details.</p>
+<p>See the changelog: <a class="reference internal" href="../changelog/changelog.html#id7"><span class="std std-ref">4.3 (2025-06-30)</span></a>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

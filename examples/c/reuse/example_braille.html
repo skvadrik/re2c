@@ -1,0 +1,304 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Braille patterns &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="braille-patterns">
+<h1>Braille patterns<a class="headerlink" href="#braille-patterns" title="Permalink to this heading">¶</a></h1>
+<p>This example is about encoding support in re2c.
+It’s a partial decoder from Grade-1 (uncontracted) Unicode English Braille to plain English.
+Grade-1 Braille is quite simple (compared to Grade-2 Braille).
+Patterns map directly to symbols (letters, digits, and punctuators) except for a couple of special patterns:
+the numeric mode indicator (⠼), the letter mode indicator (⠰), the capital letter indicator (⠠)
+and some others, which we omit here for the sake of simplicity (as well as a few ambiguous punctuation patterns).
+Grade-2 Braille allows contractions; those obey some rather complex rules (like those of a natural language)
+and are much harder to implement.</p>
+<p>The input may be encoded in UTF-8, UTF-16, UTF-32, or UCS-2:
+all of these encodings are capable of representing Braille patterns (code points <code class="docutils literal notranslate"><span class="pre">[0x2800</span> <span class="pre">-</span> <span class="pre">0x28ff]</span></code>).
+We use the <code class="docutils literal notranslate"><span class="pre">-r</span></code> option to reuse the same block of re2c rules with different encodings.
+The input to the example is the same Braille message
+in different encodings:
+<a class="reference download internal" download="" href="../../../_downloads/6e5de39f79cb596688522f0c2aa90a6d/braille.utf8.txt"><code class="xref download docutils literal notranslate"><span class="pre">braille.utf8.txt</span></code></a>,
+<a class="reference download internal" download="" href="../../../_downloads/154a879e3c1eb544e43ad06dcc24a0f6/braille.utf16.txt"><code class="xref download docutils literal notranslate"><span class="pre">braille.utf16.txt</span></code></a>,
+<a class="reference download internal" download="" href="../../../_downloads/366fc35f9f76a418ca9d202a263db63c/braille.utf32.txt"><code class="xref download docutils literal notranslate"><span class="pre">braille.utf32.txt</span></code></a> and
+<a class="reference download internal" download="" href="../../../_downloads/c30d04ee845e94edac85d5be0434db23/braille.ucs2.txt"><code class="xref download docutils literal notranslate"><span class="pre">braille.ucs2.txt</span></code></a>:</p>
+<p>⠠⠁⠇⠇⠀⠓⠥⠍⠁⠝⠀⠃⠑⠊⠝⠛⠎⠀⠁⠗⠑⠀⠃⠕⠗⠝⠀⠋⠗⠑⠑⠀⠁⠝⠙⠀⠑⠟⠥⠁⠇⠀⠊⠝⠀⠙⠊⠛⠝⠊⠞⠽⠀⠁⠝⠙⠀⠗⠊⠛⠓⠞⠎⠲⠀
+⠠⠞⠓⠑⠽⠀⠁⠗⠑⠀⠑⠝⠙⠕⠺⠑⠙⠀⠺⠊⠞⠓⠀⠗⠑⠁⠎⠕⠝⠀⠁⠝⠙⠀⠉⠕⠝⠎⠉⠊⠑⠝⠉⠑⠀⠁⠝⠙⠀⠎⠓⠕⠥⠇⠙⠀⠁⠉⠞⠀⠞⠕⠺⠁⠗⠙⠎⠀
+⠕⠝⠑⠀⠁⠝⠕⠞⠓⠑⠗⠀⠊⠝⠀⠁⠀⠎⠏⠊⠗⠊⠞⠀⠕⠋⠀⠃⠗⠕⠞⠓⠑⠗⠓⠕⠕⠙⠲</p>
+<p>It means <em>“All human beings are born free and equal in dignity and rights.
+They are endowed with reason and conscience and should act towards
+one another in a spirit of brotherhood.”</em></p>
+<p><a class="reference download internal" download="" href="../../../_downloads/e36d37b27b34e7fba1d09fe69fc0c7aa/braille.re"><code class="xref download docutils literal notranslate"><span class="pre">[braille.re]</span></code></a></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// re2c $INPUT -o $OUTPUT -cri</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;ctype.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="k">template</span><span class="o">&lt;</span><span class="k">typename</span><span class="w"> </span><span class="nc">char_t</span><span class="o">&gt;</span>
+<span class="k">struct</span><span class="w"> </span><span class="nc">input_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">len</span><span class="p">;</span>
+<span class="w">    </span><span class="n">char_t</span><span class="w"> </span><span class="o">*</span><span class="n">str</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">input_t</span><span class="p">(</span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">len</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span><span class="w"> </span><span class="n">str</span><span class="p">(</span><span class="nb">NULL</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SEEK_END</span><span class="p">);</span>
+<span class="w">        </span><span class="n">len</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ftell</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">char_t</span><span class="p">);</span>
+<span class="w">        </span><span class="n">fseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SEEK_SET</span><span class="p">);</span>
+<span class="w">        </span><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">char_t</span><span class="p">[</span><span class="n">len</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+<span class="w">        </span><span class="n">fread</span><span class="p">(</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">char_t</span><span class="p">),</span><span class="w"> </span><span class="n">len</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
+<span class="w">        </span><span class="n">str</span><span class="p">[</span><span class="n">len</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="o">~</span><span class="n">input_t</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">delete</span><span class="p">[]</span><span class="w"> </span><span class="n">str</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">input_t</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="o">&gt;</span><span class="w">  </span><span class="n">iutf8_t</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">input_t</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="o">&gt;</span><span class="w"> </span><span class="n">iutf16_t</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">input_t</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="o">&gt;</span><span class="w">   </span><span class="n">iutf32_t</span><span class="p">;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="n">input_t</span><span class="o">&lt;</span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="o">&gt;</span><span class="w"> </span><span class="n">iucs2_t</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">out_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">caps</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">out_t</span><span class="p">()</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">caps</span><span class="p">(</span><span class="nb">false</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">prt</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="n">c</span><span class="p">)</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;%c&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">caps</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">toupper</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="n">c</span><span class="p">);</span>
+<span class="w">        </span><span class="n">caps</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="n">err</span><span class="p">()</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot; ... error</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/*!rules:re2c</span>
+<span class="cm">    re2c:yyfill:enable = 0;</span>
+<span class="cm">    re2c:api:style = free-form;</span>
+<span class="cm">    re2c:encoding:utf8 = 1;</span>
+<span class="cm">    re2c:define:YYGETCONDITION = &quot;c&quot;;</span>
+<span class="cm">    re2c:define:YYSETCONDITION = &quot;c = @@;&quot;;</span>
+
+<span class="cm">    // letters</span>
+<span class="cm">    l = &quot;\u2830&quot;;</span>
+<span class="cm">    la = &quot;\u2801&quot;; lb = &quot;\u2803&quot;; lc = &quot;\u2809&quot;; ld = &quot;\u2819&quot;; le = &quot;\u2811&quot;;</span>
+<span class="cm">    lf = &quot;\u280b&quot;; lg = &quot;\u281b&quot;; lh = &quot;\u2813&quot;; li = &quot;\u280a&quot;; lj = &quot;\u281a&quot;;</span>
+<span class="cm">    lk = &quot;\u2805&quot;; ll = &quot;\u2807&quot;; lm = &quot;\u280d&quot;; ln = &quot;\u281d&quot;; lo = &quot;\u2815&quot;;</span>
+<span class="cm">    lp = &quot;\u280f&quot;; lq = &quot;\u281f&quot;; lr = &quot;\u2817&quot;; ls = &quot;\u280e&quot;; lt = &quot;\u281e&quot;;</span>
+<span class="cm">    lu = &quot;\u2825&quot;; lv = &quot;\u2827&quot;; lw = &quot;\u283a&quot;; lx = &quot;\u282d&quot;; ly = &quot;\u283d&quot;;</span>
+<span class="cm">    lz = &quot;\u2835&quot;;</span>
+
+<span class="cm">    // numbers</span>
+<span class="cm">    n = &quot;\u283c&quot;;</span>
+<span class="cm">    n1 = &quot;\u2801&quot;; n2 = &quot;\u2803&quot;; n3 = &quot;\u2809&quot;; n4 = &quot;\u2819&quot;; n5 = &quot;\u2811&quot;;</span>
+<span class="cm">    n6 = &quot;\u280b&quot;; n7 = &quot;\u281b&quot;; n8 = &quot;\u2813&quot;; n9 = &quot;\u280a&quot;; n0 = &quot;\u281a&quot;;</span>
+
+<span class="cm">    // punctuation</span>
+<span class="cm">    pcom = &quot;\u2802&quot;; psem = &quot;\u2806&quot;; pcln = &quot;\u2812&quot;;</span>
+<span class="cm">    pdot = &quot;\u2832&quot;; pxcl = &quot;\u2816&quot;; pqst = &quot;\u2826&quot;;</span>
+<span class="cm">    past = &quot;\u2814&quot;; pdsh = &quot;\u2804&quot;; phyp = &quot;\u2824&quot;;</span>
+
+<span class="cm">    // formatting</span>
+<span class="cm">    fcp = &quot;\u2820&quot;; fsp = &quot;\u2800&quot; | &quot;\x20&quot;; fnl = &quot;\n&quot; | &quot;\n\r&quot;;</span>
+
+<span class="cm">    &lt;*&gt; *      { out.err(); return; }</span>
+<span class="cm">    &lt;*&gt; &quot;\x00&quot; { if (YYCURSOR != in.str + in.len + 1) out.err(); return; }</span>
+
+<span class="cm">    &lt;*&gt; l :=&gt; l</span>
+<span class="cm">    &lt;l&gt; la { out.prt(&#39;a&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lb { out.prt(&#39;b&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lc { out.prt(&#39;c&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; ld { out.prt(&#39;d&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; le { out.prt(&#39;e&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lf { out.prt(&#39;f&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lg { out.prt(&#39;g&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lh { out.prt(&#39;h&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; li { out.prt(&#39;i&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lj { out.prt(&#39;j&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lk { out.prt(&#39;k&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; ll { out.prt(&#39;l&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lm { out.prt(&#39;m&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; ln { out.prt(&#39;n&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lo { out.prt(&#39;o&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lp { out.prt(&#39;p&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lq { out.prt(&#39;q&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lr { out.prt(&#39;r&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; ls { out.prt(&#39;s&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lt { out.prt(&#39;t&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lu { out.prt(&#39;u&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lv { out.prt(&#39;v&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lw { out.prt(&#39;w&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lx { out.prt(&#39;x&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; ly { out.prt(&#39;y&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;l&gt; lz { out.prt(&#39;z&#39;); goto yyc_l; }</span>
+
+<span class="cm">    &lt;*&gt; n :=&gt; n</span>
+<span class="cm">    &lt;n&gt; n1 { out.prt(&#39;1&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n2 { out.prt(&#39;2&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n3 { out.prt(&#39;3&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n4 { out.prt(&#39;4&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n5 { out.prt(&#39;5&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n6 { out.prt(&#39;6&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n7 { out.prt(&#39;7&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n8 { out.prt(&#39;8&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n9 { out.prt(&#39;9&#39;); goto yyc_n; }</span>
+<span class="cm">    &lt;n&gt; n0 { out.prt(&#39;0&#39;); goto yyc_n; }</span>
+
+<span class="cm">    &lt;*&gt; pcom { out.prt(&#39;,&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; psem { out.prt(&#39;;&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; pcln { out.prt(&#39;:&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; pdot { out.prt(&#39;.&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; pxcl { out.prt(&#39;!&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; pqst { out.prt(&#39;?&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; past { out.prt(&#39;*&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; pdsh { out.prt(&#39;\&#39;&#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; phyp { out.prt(&#39;-&#39;); goto yyc_l; }</span>
+
+<span class="cm">    &lt;*&gt; fcp { out.caps = true; goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; fsp { out.prt(&#39; &#39;); goto yyc_l; }</span>
+<span class="cm">    &lt;*&gt; fnl { out.prt(&#39;\n&#39;); goto yyc_l; }</span>
+<span class="cm">*/</span>
+
+<span class="cm">/*!types:re2c*/</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lex_utf8</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iutf8_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">.</span><span class="n">str</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">YYMARKER</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yycl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">out_t</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!use:re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned char&quot;;</span>
+<span class="cm">        re2c:encoding:utf8 = 1;</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lex_utf16</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iutf16_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yycl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">out_t</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!use:re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned int&quot;;</span>
+<span class="cm">        re2c:encoding:utf16 = 1;</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lex_utf32</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iutf32_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yycl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">out_t</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!use:re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned int&quot;;</span>
+<span class="cm">        re2c:encoding:utf32 = 1;</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">lex_ucs2</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">iucs2_t</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">short</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="p">.</span><span class="n">str</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yycl</span><span class="p">;</span>
+<span class="w">    </span><span class="n">out_t</span><span class="w"> </span><span class="n">out</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!use:re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned int&quot;;</span>
+<span class="cm">        re2c:encoding:ucs2 = 1;</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;braille.utf8.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rb&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;utf8:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">iutf8_t</span><span class="w"> </span><span class="n">in8</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">lex_utf8</span><span class="p">(</span><span class="n">in8</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;braille.utf16.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rb&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;utf16:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">iutf16_t</span><span class="w"> </span><span class="n">in16</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">lex_utf16</span><span class="p">(</span><span class="n">in16</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;braille.utf32.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rb&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;utf32:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">iutf32_t</span><span class="w"> </span><span class="n">in32</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">lex_utf32</span><span class="p">(</span><span class="n">in32</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="s">&quot;braille.ucs2.txt&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;rb&quot;</span><span class="p">));</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ucs2:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">iucs2_t</span><span class="w"> </span><span class="n">in2</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">lex_ucs2</span><span class="p">(</span><span class="n">in2</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile as <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">-cr</span> <span class="pre">-o</span> <span class="pre">braille.cc</span> <span class="pre">braille.re</span></code>. Notes:</p>
+<ul class="simple">
+<li><p>The reuse mode is enabled with the <code class="docutils literal notranslate"><span class="pre">-r</span></code> option.</p></li>
+<li><p>In the reuse mode, re2c expects a single <code class="docutils literal notranslate"><span class="pre">/*!rules:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> block
+followed by multiple <code class="docutils literal notranslate"><span class="pre">/*!use:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> blocks.
+All blocks can have their own configurations, definitions, and rules.</p></li>
+<li><p>Encoding can be enabled either with a command-line option or a configuration.</p></li>
+<li><p>Each encoding needs the appropriate code unit type (<code class="docutils literal notranslate"><span class="pre">YYCTYPE</span></code>).</p></li>
+<li><p>We use conditions to switch between numeric and normal modes.</p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,189 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 2.0 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-2-0">
+<h1>Release 2.0<a class="headerlink" href="#release-2-0" title="Permalink to this heading">¶</a></h1>
+<p>This release adds a Go code generation backend,
+an alternative CMake build system,
+free-form generic API,
+improvements in reuse mode and start conditions,
+and bugfixes in EOF rule implementation.</p>
+<p><strong>Go backend.</strong>
+The new Go code generation backend can be used either with a <code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">go</span></code> re2c
+option, or as a standalone re2go binary (which is identical to re2c with
+<code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">go</span></code> set by default).
+The documentation has been split into separate manpages for
+<a class="reference internal" href="../../manual/manual_c.html#user-manual-c-c"><span class="std std-ref">re2c</span></a> and
+<a class="reference internal" href="../../manual/manual_go.html#user-manual-go"><span class="std std-ref">re2go</span></a>; they are
+generated from the same text, but have language-specific examples.
+The re2go binary and manpage need to be enabled explicitly with a configuration
+parameter <code class="docutils literal notranslate"><span class="pre">--enable-golang</span></code> for Autotools or <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2GO=yes</span></code> for
+CMake.
+Unlike C, Go does not have pointer arithmetics, therefore re2go programs use
+integer indices instead of pointers and have
+<a class="reference internal" href="../../manual/manual_zig.html#generic-api"><span class="std std-ref">generic API</span></a> enabled by default.
+Almost all re2c features have been ported to re2go, with the exception of code
+generation options like <code class="docutils literal notranslate"><span class="pre">--computed-gotos</span></code> and <code class="docutils literal notranslate"><span class="pre">--case-ranges</span></code> that
+need unsupported language features.
+Behind the scenes adding a new backend required a
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/14c5bea6582f417e1cf60d5cb26823567435957c">full rewrite</a>
+of the code generation subsystem and quite a bit of work on documentation
+and testing.
+Thanks to <a class="reference external" href="https://github.com/meme">meme</a> for
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/272">discussing</a> the idea and
+providing an early implementation prototype.
+Feedback from the Go community is welcome!</p>
+<p><strong>CMake build system.</strong>
+Thanks to <a class="reference external" href="https://github.com/ligfx">ligfx</a> for
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/a530570e5164ae302f89b79f9e6b04032c697245">adding</a>
+a CMake-based build system. This has been discussed multiple times in the past,
+and a few <a class="reference external" href="https://github.com/skvadrik/re2c/issues/244">attempts</a> at an
+implementation have been made, but ligfx was the first to contribute a full
+working implementation.
+The existing Autotools-based build system continues to be used and maintained
+for the foreseeable future. In fact, both build systems are continuously tested
+on Travis CI.
+See the <a class="reference internal" href="../../build/build.html#build-install"><span class="std std-ref">build instructions</span></a> page for
+more details.</p>
+<p><strong>Free-form generic API.</strong>
+Generic API now supports
+<a class="reference internal" href="../../manual/manual_zig.html#generic-api"><span class="std std-ref">two styles</span></a>: function-like style is
+enabled with <code class="docutils literal notranslate"><span class="pre">re2c:api:style</span> <span class="pre">=</span> <span class="pre">functions;</span></code>, and free-form style is enabled
+with <code class="docutils literal notranslate"><span class="pre">re2c:api:style</span> <span class="pre">=</span> <span class="pre">free-form;</span></code>.
+Previously only the function-like style was supported, and free-form style
+could be enabled for a few selected APIs with configurations like
+<code class="docutils literal notranslate"><span class="pre">re2c:define:YYFILL:naked</span></code>, etc.
+Free-form style allows to define API primitives as arbitrary strings of code
+with interpolated arguments of the form <code class="docutils literal notranslate"><span class="pre">&#64;&#64;{name}</span></code>, or optionally just <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code>
+if there is a single argument. The <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code> marker can be redefined with
+<code class="docutils literal notranslate"><span class="pre">re2c:api:sigil</span></code> configuration.</p>
+<p><strong>Improved reuse mode and start conditions.</strong>
+The restriction on not using normal (non-conditional) blocks with
+<code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--start-conditions</span></code> option has been removed: now it is possible to have
+both conditional and normal blocks. The switch on conditions is now generated
+for every block rather than once per file, which allows to have multiple lexers
+in one file.
+The combination of <code class="docutils literal notranslate"><span class="pre">-r,</span> <span class="pre">--reuse</span></code> option with <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--start-conditions</span></code> and/or
+<code class="docutils literal notranslate"><span class="pre">-f,</span> <span class="pre">--storable-state</span></code> options
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/217158707e2bc52d27956470bf1291df63be5530">now uses correct</a>
+block-local options instead of global options in condition and state switch,
+and re2c now generates
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/8f8d71e3104e52ab87940d322492d34bffff2c7a">unique labels</a>
+in each reuse block.</p>
+<p><strong>Fixes in EOF rule.</strong>
+A bug that caused
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/284">missing fallback states</a>
+with EOF rule
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/9bb515e7374e4e96499d562f5e0207f02500fcd2">has been fixed</a>.
+Re2c no longer generates
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/280">overlapping labels</a>
+when EOF rule is used with multiple blocks.</p>
+<p><strong>Developer changes.</strong>
+The way re2c bootstraps itself
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/967540566b8677c81f60ae6f14287b9e117125a4">has been simplified</a>:
+instead of always trying to regenerate lexer files if the re2c binary exists in
+the build directory, re2c now does this only when configured explicitly with
+<code class="docutils literal notranslate"><span class="pre">--enable-lexers</span></code> for Autotools or <code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_LEXERS=yes</span></code> for CMake.
+This configuration requires passing an explicit <code class="docutils literal notranslate"><span class="pre">RE2C_FOR_BUILD</span></code> variable that
+contains a path to the re2c executable that will be used to regenerate lexers.
+The new bootstrapping scheme allows to avoid build problems caused by
+dynamically changing dependency graph, as well as hard-to-recover errors when a
+bad re2c build was used to rebuild itself in a vicious loop.
+Another developer-visible change is a
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/303ef4783707fd7616dd0cd984217c881e9dbb39">rework of the testing framework</a>,
+which now uses in-line comments instead of hard-coding options in test filenames.</p>
+<p><strong>Backwards incompatible changes.</strong>
+In a few rare/undocumented cases re2c behavior has been changed in a way that
+may break existing code:</p>
+<ul class="simple">
+<li><p>Generic APIs <code class="docutils literal notranslate"><span class="pre">YYSHIFT</span></code>/<code class="docutils literal notranslate"><span class="pre">YYSHIFTSTAG</span></code>/<code class="docutils literal notranslate"><span class="pre">YYSHIFTMTAG</span></code>
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/92cbf8fb76133dde062962ecf2856e143714b715">have been added</a>.
+Their meaning is to shift the cursor/tag position by a specified offset.
+The new APIs enable fixed-tags optimization with generic API, which is
+becoming more important as the generic API is getting used more often.
+Programs that use both generic API and tags or POSIX capturing groups may need
+to define the new APIs.</p></li>
+<li><p>Generic APIs <code class="docutils literal notranslate"><span class="pre">YYSTAGPD</span></code>/<code class="docutils literal notranslate"><span class="pre">YYMTAGPD</span></code> have been removed. They were used only
+with the recently added experimental <code class="docutils literal notranslate"><span class="pre">--stadfa</span></code> option, and the removal is
+unlikely to break any existing code.</p></li>
+<li><p>In reuse mode configurations like <code class="docutils literal notranslate"><span class="pre">re2c:define:YYCTYPE</span></code> are
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/291">no longer reset</a>
+in each use block. The old behavior was kept only for backwards compatibility.
+It has caused confusion and inconvenience, as the configurations had to be
+repeatedly defined in each use block.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">re2c:flags:type-header</span></code> option now treats the header filename as
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/dc0df494c6ec528094cf59cd17768e08e9af0e6a">relative to the output</a>
+directory. The undocumented <code class="docutils literal notranslate"><span class="pre">re2c:flags:output</span></code> option has been removed.</p></li>
+<li><p>Some internal labels have been renamed, in particular the <code class="docutils literal notranslate"><span class="pre">yyFillLabel</span></code>
+prefix has been replaced with <code class="docutils literal notranslate"><span class="pre">yyfill</span></code>. This should not break any well-formed
+code, as these labels are not part of the user interface. Programs that relied
+on the old label names may restore them with the <code class="docutils literal notranslate"><span class="pre">re2c:label:yyFillLabel</span></code>
+configuration.</p></li>
+</ul>
+<p>As always, a warm thank you to all the people who contributed to this release,
+including
+<a class="reference external" href="https://github.com/ligfx">ligfx</a>,
+<a class="reference external" href="https://github.com/meme">meme</a>,
+<a class="reference external" href="https://github.com/ryandesign">ryandesign</a>,
+<a class="reference external" href="https://github.com/fanf2">fanf2</a>,
+<a class="reference external" href="https://github.com/samebchase">samebchase</a>
+and <a class="reference external" href="https://github.com/trofi">trofi</a>. :)</p>
+<p>See the changelog <a class="reference internal" href="../changelog/changelog.html#id40"><span class="std std-ref">2.0 (2020-07-20)</span></a> for details.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

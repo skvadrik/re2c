@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 4.1 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-4-1">
+<h1>Release 4.1<a class="headerlink" href="#release-4-1" title="Permalink to this heading">¶</a></h1>
+<p>This release adds <em>actions</em>, a few backend-specific improvements in code
+generation and a bunch of bug fixes. Benchmark code has been reworked in
+preparation to add multi-language benchmarks in the future.</p>
+<p><strong>Actions.</strong>
+<a class="reference internal" href="../../manual/manual_c.html#actions"><span class="std std-ref">Actions</span></a> are user defined blocks of code that
+can be attached to various parts of the generated code. This release adds three
+new actions. First, the <code class="docutils literal notranslate"><span class="pre">!entry</span></code> action is executed at the lexer entry, which
+can be used to emit set up code (it is similar to the zero condition <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">&gt;</span></code>,
+but the action is more flexible: it can be set individually per condition, and
+it allows one to bypass the initial condition dispatch and jump directly to the
+start of each condition). Second, the <code class="docutils literal notranslate"><span class="pre">!pre_rule</span></code> action is executed
+immediately <em>before</em> semantic action for each rule in the current block or
+condition. Third, the <code class="docutils literal notranslate"><span class="pre">!post_rule</span></code> action is like the previous one, except
+that it is executed immediately <em>after</em> each semantic action.</p>
+<p><strong>Backend-specific improvements.</strong>
+OCaml backend now uses <code class="docutils literal notranslate"><span class="pre">unsafe_get</span></code> instead of <code class="docutils literal notranslate"><span class="pre">get</span></code> as the default
+<code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> implementation – the generated lexer already performs end of input
+checks, so the bounds checks in <code class="docutils literal notranslate"><span class="pre">get</span></code> are redundant.
+Zig backend now uses <code class="docutils literal notranslate"><span class="pre">const</span></code> for <code class="docutils literal notranslate"><span class="pre">yych</span></code> declaration in
+<code class="docutils literal notranslate"><span class="pre">--recursive-functions</span></code> mode, as the variable is not mutated and declaring it
+as a variable is an error in the recent compiler versions.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="../changelog/changelog.html#id12"><span class="std std-ref">4.1 (2025-02-16)</span></a>.
+As always, thanks to all contributors, especially
+<a class="reference external" href="https://github.com/eilvelia">eilvelia</a>
+for great bug reports and discussion!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

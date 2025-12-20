@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 4.4 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-4-4">
+<h1>Release 4.4<a class="headerlink" href="#release-4-4" title="Permalink to this heading">¶</a></h1>
+<p>This release adds generalized end-of-input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code>.
+It is no longer a special rule – it can be used in regular expressions as
+part of a normal rule, and it works with all end-of-input handling methods
+regardless of the <code class="docutils literal notranslate"><span class="pre">re2c:eof</span></code> configuration.</p>
+<p>The implementation of generalized end-of-input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code> is based on a new
+API primitive <code class="docutils literal notranslate"><span class="pre">YYEND</span></code> and the corresponding syntax configuration
+<code class="docutils literal notranslate"><span class="pre">code:yyend</span></code>. The meaning of <code class="docutils literal notranslate"><span class="pre">YYEND</span></code> is the <em>logical</em> end of input. This
+differs from the <em>physical</em> end of input described by <code class="docutils literal notranslate"><span class="pre">YYLIMIT</span></code> and
+<code class="docutils literal notranslate"><span class="pre">YYLESSTHAN</span></code> – the latter may include padding that was not part of the
+original input. If <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is disabled, <code class="docutils literal notranslate"><span class="pre">code:yyend</span></code> has a default
+definition identical to <code class="docutils literal notranslate"><span class="pre">YYLESSTHAN</span></code>, so the user does not need to explicitly
+define <code class="docutils literal notranslate"><span class="pre">YYEND</span></code>. Otherwise, if <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is enabled, <code class="docutils literal notranslate"><span class="pre">code:yyend</span></code> does not
+provide a default definition and delegates to the user-defined <code class="docutils literal notranslate"><span class="pre">YYEND</span></code>.</p>
+<p>This change breaks backwards compatibility in cases when there are conflicting
+<code class="docutils literal notranslate"><span class="pre">$</span></code> rules, as they now have position-based precedence like other normal rules.
+Hopefully such cases are rare, and the users have been alerted by the
+<code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> warning in release 4.3.</p>
+<p>See the changelog: <a class="reference internal" href="../changelog/changelog.html#id1"><span class="std std-ref">4.4 (2025-12-20)</span></a>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

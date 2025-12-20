@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wempty-character-class &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wempty-character-class">
+<h1>-Wempty-character-class<a class="headerlink" href="#wempty-character-class" title="Permalink to this heading">¶</a></h1>
+<p>This warning is complementary to the
+<code class="docutils literal notranslate"><span class="pre">--empty-class</span> <span class="pre">&lt;match-empty</span> <span class="pre">|</span> <span class="pre">match-none</span> <span class="pre">|</span> <span class="pre">error&gt;</span></code> option.
+For bakward compatibility reasons the default is <code class="docutils literal notranslate"><span class="pre">match-empty</span></code>: empty
+character class <code class="docutils literal notranslate"><span class="pre">[]</span></code> matches empty string (that is, it always matches without
+consuming any input). This behaviour doesn’t make much sense, therefore re2c
+provides a warning <code class="docutils literal notranslate"><span class="pre">-Wempty-character-class</span></code>.
+Note that empty character class can be constructed in many ways, for example as
+a result of range negation or the difference operator. The code below (empty.re)
+demonstrates some of the possibilities:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    []                        { return 0; }</span>
+<span class="cm">    [^\x00-\xFF]              { return 1; }</span>
+<span class="cm">    [^] \ [^]                 { return 2; }</span>
+<span class="cm">    [abc] \ (&quot;a&quot; | &quot;b&quot; | &quot;c&quot;) { return 3; }</span>
+<span class="cm">    &quot;a&quot; \ [a-z]               { return 4; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c gives the following warnings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wempty-character-class empty.re -o empty.c
+empty.re:2:4: warning: empty character class [-Wempty-character-class]
+empty.re:3:4: warning: empty character class [-Wempty-character-class]
+empty.re:4:4: warning: empty character class [-Wempty-character-class]
+empty.re:5:4: warning: empty character class [-Wempty-character-class]
+empty.re:6:4: warning: empty character class [-Wempty-character-class]
+</pre></div>
+</div>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

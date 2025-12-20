@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wundefined-control-flow &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+    <h3>-Wundefined-control-flow</h3>
+    <div class="re2c-toc-local">
+        <ul>
+<li><a class="reference internal" href="#">-Wundefined-control-flow</a><ul>
+<li><a class="reference internal" href="#the-old-default-rule">The old default rule</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wundefined-control-flow">
+<h1>-Wundefined-control-flow<a class="headerlink" href="#wundefined-control-flow" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">-Wundefined-control-flow</span></code> warning re2c checks that every path in the
+generated DFA contains at least one accepting state. When the input matches
+such a path, lexer will eventually stop and execute the corresponding semantic
+action. However, if some path has no accepting state, then lexer behavior is
+undefined: it may loop forever, or read past the end of buffer, or jump to some
+other semantic action by accident. For example, consider this simple piece of
+code (a.re) that is supposed to match letter <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    &quot;a&quot; { return &#39;a&#39;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>The generated code looks like this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="n">YYCTYPE</span><span class="w"> </span><span class="n">yych</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">YYLIMIT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="p">)</span><span class="w"> </span><span class="n">YYFILL</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">yych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">yych</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">:</span><span class="w">       </span><span class="k">goto</span><span class="w"> </span><span class="n">yy3</span><span class="p">;</span>
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yy2</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="nl">yy2</span><span class="p">:</span>
+<span class="nl">yy3</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Clearly this is not what we want: this code matches any letter, not just <code class="docutils literal notranslate"><span class="pre">a</span></code>!
+This happens because we did not specify any handler for the remaining input symbols.
+If we run re2c with <code class="docutils literal notranslate"><span class="pre">-Wundefined-control-flow</span></code>, we will see that it complains about undefined control flow and recommends using default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a.re:3:2: warning: control flow is undefined for strings that match &#39;[\x0-\x60\x62-\xFF]&#39;, use the default &#39;*&#39; rule  [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>Let’s follow the advice and change the code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *   { return &#39;*&#39;; }</span>
+<span class="cm">    &quot;a&quot; { return &#39;a&#39;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>Now the generated code looks much better:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="n">YYCTYPE</span><span class="w"> </span><span class="n">yych</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">YYLIMIT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="p">)</span><span class="w"> </span><span class="n">YYFILL</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">yych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">yych</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">:</span><span class="w">       </span><span class="k">goto</span><span class="w"> </span><span class="n">yy4</span><span class="p">;</span>
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yy2</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="nl">yy2</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;*&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nl">yy4</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the default rule brings no overhead: it simply binds code to the
+default label. It should always be used, unless you are absolutely sure that
+your grammar covers all possible cases.</p>
+<section id="the-old-default-rule">
+<h2>The old default rule<a class="headerlink" href="#the-old-default-rule" title="Permalink to this heading">¶</a></h2>
+<p>When the world was young and re2c didn’t have the default <code class="docutils literal notranslate"><span class="pre">*</span></code> rule (that is,
+before re2c-0.13.7) everyone used <code class="docutils literal notranslate"><span class="pre">[^]</span></code> as the default rule, as in this
+example (any.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    // ... normal rules ...</span>
+<span class="cm">    [^] { return &quot;any&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[^]</span></code> is just an ordinary rule: it matches any character and has normal
+priority (so it should be the last rule). If other rules didn’t match, <code class="docutils literal notranslate"><span class="pre">[^]</span></code>
+will match and consume one character.</p>
+<p>But exactly what is a <em>character</em>? First, an abstract number that is assigned
+some sacred meaning within the current encoding — a <em>code point</em>. Second, a
+minimal piece of information (say, combination of bits) that can represent a
+unit of encoded text — a <em>code unit</em>. Rules are defined in terms of code points.
+Input is measured in code units. In fixed-width encodings (such as ASCII,
+EBCDIC, UCS-2, UTF-32, etc.), there is a one-to-one correspondence between code
+points and code units. In variable-width encodings (such as UTF-8, UTF-16,
+etc.), code points map to code unit sequences of different lengths.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">[^]</span></code> rule matches any code point. In fixed-width encodings, it covers all
+code units and consumes exactly one of them. In variable-width encodings, it
+consumes variable number of code units and may not match some of them. The
+example above compiles without warnings with any fixed-width encoding (ASCII by
+default). However, with the UTF-8 encoding
+<code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-i8</span> <span class="pre">-Wundefined-control-flow</span> <span class="pre">any.re`</span></code> complains:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>any.re:4:2: warning: control flow is undefined for strings that match
+        &#39;[\x80-\xC1\xF5-\xFF]&#39;
+        &#39;\xF0 [\x0-\x8F\xC0-\xFF]&#39;
+        &#39;[\xE1-\xEF] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;\xF4 [\x0-\x7F\x90-\xFF]&#39;
+        &#39;\xE0 [\x0-\x9F\xC0-\xFF]&#39;
+        &#39;[\xF1-\xF3] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;[\xC2-\xDF] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;\xE0 [\xA0-\xBF] [\x0-\x7F\xC0-\xFF]&#39;
+ ... and 7 more, use default rule &#39;*&#39; [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>It shows us the patterns that must never appear in valid UTF-8 encoded text. If
+the input is not valid UTF-8, lexer behavior is undefined. One would expect that
+with UTF-16 (another variable-width encoding), re2c would also report a warning,
+but it doesn’t. This is because by default, re2c treats Unicode surrogates as
+normal code points (for backwards compatibility reasons). If we tell re2c to
+exclude surrogates
+(<code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-ix</span> <span class="pre">--encoding-policy</span> <span class="pre">fail</span> <span class="pre">-Wundefined-control-flow`</span></code>), then we will
+get a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>any.re:4:2: warning: control flow is undefined for strings that match
+        &#39;[\xDC00-\xDFFF]&#39;
+        &#39;[\xD800-\xDBFF] [\x0-\xDBFF\xE000-\xFFFF]&#39;
+, use default rule &#39;*&#39; [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>As you see, it can get quite subtle. A good advice is, always use default rule
+<code class="docutils literal notranslate"><span class="pre">*</span></code>: it  matches any code unit regardless of encoding, consumes a single code
+unit no matter what and always has the lowest priority. Note that <code class="docutils literal notranslate"><span class="pre">*</span></code> is a
+built-in hack: it cannot be expressed through ordinary rules.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

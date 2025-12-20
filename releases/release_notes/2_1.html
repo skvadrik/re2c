@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 2.1 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-2-1">
+<h1>Release 2.1<a class="headerlink" href="#release-2-1" title="Permalink to this heading">¶</a></h1>
+<p>This release adds continuous integration with GitHub Actions, portability
+improvements, benchmarks, depfile generation and bugfixes.</p>
+<p><strong>GitHub Actions CI.</strong>
+<a class="reference external" href="https://github.com/sergeyklay">Serghei Iakovlev</a> has added continuous
+integration with GitHub Actions for Linux, macOS and Windows platforms.
+Now every change in re2c gets build and tested in various configurations on all
+three platforms, which (hopefully!) leads to fewer bugs and better support for
+these platforms. GitHub Actions complement the existing Travis CI.</p>
+<p><strong>Benchmarks.</strong>
+A lot of work has been done on adding infrastructure for benchmarks. Previously
+re2c had some benchmarks, but they were not integrated into the build system,
+and as a result somewhat difficult to build and run. Now there is a new
+benchmark subsystem, which includes three groups.
+The first group contains AOT-compiled benchmarks (a.k.a. lexer generators):
+regular expressions that are compiled ahead of time to C code, which is further
+compiled to native code. The currently supported generators are re2c, ragel and
+kleenex.
+The second group contains JIT-compiled benchmarks: library algorithms that are
+based on deterministic automata.
+Finally, the third group contains interpreted benchmarks: library algorithms
+that are based on non-deterministic automata.
+Benchmarks are fully integrated in both build systems (they are enabled with
+Autotools options <code class="docutils literal notranslate"><span class="pre">--enable-benchmarks</span></code>, <code class="docutils literal notranslate"><span class="pre">--enable-benchmarks-regenerate</span></code>
+and CMake options <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_BENCHMARKS</span></code>, <code class="docutils literal notranslate"><span class="pre">-DRE2C_REGEN_BENCHMARKS</span></code>).
+All benchmarks are regularly built and ran on CI.
+There is also a <a class="reference external" href="https://github.com/skvadrik/re2c/blob/master/benchmarks/json2pgfplot.py">script</a>
+for rendering benchmark results as bar charts.</p>
+<p>For lexer generators, benchmark results show that re2c-TDFA(1) and ragel are the
+fastest algorithms. Their performance is very close, but in non-deterministic
+cases ragel gives incorrect results due to its inability to remember multiple
+parallel versions of one tag. On the other hand, kleenex programs are much
+shorter and easier to read.</p>
+<p><strong>Dependency files.</strong>
+This release adds a <code class="docutils literal notranslate"><span class="pre">--depfile</span></code> option that allows one to generate dependency
+(.d) files. This is needed in order to track build dependencies in the presence
+of <code class="docutils literal notranslate"><span class="pre">/*!include:re2c*/</span></code> directives. The generated depfiles have the same format
+as the ones generated with GCC <code class="docutils literal notranslate"><span class="pre">-MF</span></code> option.</p>
+<p>There are also a few other improvements and bugfixes, see the full changelog
+<a class="reference internal" href="../changelog/changelog.html#id32"><span class="std std-ref">2.1 (2021-03-26)</span></a> for details.</p>
+<p>A big warm thank you to all the people who contributed to this release!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>
