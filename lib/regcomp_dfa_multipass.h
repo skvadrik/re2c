@@ -151,7 +151,7 @@ static void determinization_multipass(Tnfa&& nfa, MpTdfa& mptdfa) {
     Msg msg;
     // Determinization context lifetime must cover regexec, as some of the data stored in the
     // context is used during matching.
-    Tdfa dfa(mptdfa.alc, nfa.charset.size(), Rule::NONE, Rule::NONE);
+    Tdfa dfa(mptdfa.alc, nfa.charset.size(), Rule::NONE);
     ctx_t ctx(std::move(nfa), dfa, mptdfa.opts, msg, "");
 
     std::vector<tchar_t> tfrag;

@@ -49,7 +49,7 @@ static Status lex(State *st, unsigned int *recv) {
         st->tok = st->cur;
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = "char";
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYCURSOR = "st->cur";
         re2c:define:YYMARKER = "st->mar";
         re2c:define:YYLIMIT = "st->lim";

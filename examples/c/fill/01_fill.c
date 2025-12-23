@@ -43,7 +43,7 @@ loop:
     
 #line 45 "c/fill/01_fill.c"
 {
-	char yych;
+	unsigned char yych;
 yyFillLabel0:
 	yych = *in->cur;
 	switch (yych) {

@@ -62,11 +62,11 @@ re2c:yych:literals = hex; // zig does not recognize '\f' escape sequence => use 
 re2c:yych:emit = (.code_model.recursive_functions ? 0 : 1);
 re2c:yybm = "yybm";
 re2c:yybm:hex = 0;
-re2c:yyfill = "";
 re2c:yystable = ""; // deprecated
 re2c:header = "";
 re2c:eof = -1;
 re2c:sentinel = -1;
+re2c:yyfill = "";
 re2c:yyfill:enable = 1;
 re2c:yyfill:parameter = 1;
 re2c:yyfill:check = 1;
@@ -122,6 +122,7 @@ re2c:YYCTXMARKER = (.api.record ? yyrecord ".") "yyctxmarker";
 re2c:YYCTYPE = "u8";
 re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
 re2c:YYDEBUG = "yydebug";
+re2c:YYEND = "yyend";
 re2c:YYFILL = "yyfill";
 re2c:YYGETACCEPT = sigil "{var}";
 re2c:YYGETCOND = "yygetcond";
@@ -420,6 +421,11 @@ code:yylessthan =
         : (.many
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
+
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND
+        : YYLIMIT " <= " YYCURSOR);
 
 code:yybm_filter = yych " & ~0xFF";
 

@@ -10,7 +10,7 @@ static void convert_newlines(std::ifstream &in, std::ostringstream &out) {
     /*!re2c
         re2c:api= custom;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYPEEK = "in.peek()";
         re2c:define:YYSKIP = "{ in.ignore(); if (in.eof()) return; }";
         re2c:define:YYBACKUP = "mar = in.tellg();";

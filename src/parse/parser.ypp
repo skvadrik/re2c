@@ -110,7 +110,7 @@ enddef: ';' | TOKEN_FID_END;
 
 rule
 : trailexpr TOKEN_CODE {
-    find_or_add_gram(grams, "").add_rule({$1, $2});
+    find_or_add_gram(grams, "").rules.push_back({$1, $2});
 }
 | '*' TOKEN_CODE {
     find_or_add_gram(grams, "").defs.push_back($2);
@@ -126,7 +126,7 @@ rule
 }
 | TOKEN_CLIST trailexpr ccode {
     for (const std::string& cond : ast.temp_condlist) {
-        find_or_add_gram(grams, cond).add_rule({$2, $3});
+        find_or_add_gram(grams, cond).rules.push_back({$2, $3});
     }
     ast.temp_condlist.clear();
 }

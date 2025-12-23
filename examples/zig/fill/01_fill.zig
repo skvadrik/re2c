@@ -6,6 +6,7 @@ const std = @import("std");
 const bufsize = 4095;
 
 const State = struct {
+    file: *std.Io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -14,7 +15,7 @@ const State = struct {
     eof: bool
 };
 
-fn fill(st: *State, file: anytype) i32 {
+fn fill(st: *State) i32 {
     if (st.eof) { return -1; } // unexpected EOF
 
     // Error: lexeme too long. In real life can reallocate a larger buffer.
@@ -29,7 +30,7 @@ fn fill(st: *State, file: anytype) i32 {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     // If read less than expected, this is the end of input.
@@ -38,7 +39,7 @@ fn fill(st: *State, file: anytype) i32 {
     return 0;
 }
 
-fn lex(yyrecord: *State, file: anytype) i32 {
+fn lex(yyrecord: *State) i32 {
     var count: i32 = 0;
     loop: while (true) {
         yyrecord.token = yyrecord.yycursor;
@@ -62,7 +63,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
-                            if (fill(yyrecord, file) == 0) {
+                            if (fill(yyrecord) == 0) {
                                 yystate = 0;
                                 continue :yyl;
                             }
@@ -90,7 +91,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
-                            if (fill(yyrecord, file) == 0) {
+                            if (fill(yyrecord) == 0) {
                                 yystate = 3;
                                 continue :yyl;
                             }
@@ -109,7 +110,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                     continue :yyl;
                 }
                 if (yyrecord.yylimit <= yyrecord.yycursor) {
-                    if (fill(yyrecord, file) == 0) {
+                    if (fill(yyrecord) == 0) {
                         yystate = 5;
                         continue :yyl;
                     }
@@ -139,7 +140,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                     },
                     else => {
                         if (yyrecord.yylimit <= yyrecord.yycursor) {
-                            if (fill(yyrecord, file) == 0) {
+                            if (fill(yyrecord) == 0) {
                                 yystate = 6;
                                 continue :yyl;
                             }
@@ -157,7 +158,7 @@ fn lex(yyrecord: *State, file: anytype) i32 {
                 yych = yyrecord.yyinput[yyrecord.yycursor];
                 if (yych <= 0x00) {
                     if (yyrecord.yylimit <= yyrecord.yycursor) {
-                        if (fill(yyrecord, file) == 0) {
+                        if (fill(yyrecord) == 0) {
                             yystate = 9;
                             continue :yyl;
                         }
@@ -197,10 +198,12 @@ test {
     fw.close();
 
     // Prepare lexer state: all offsets are at the end of buffer.
-    var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
-    // Normally file would be part of the state struct, but BufferedReader type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // Use unbuffered reader - lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
+    var fr = try std.fs.cwd().openFile(fname, .{.mode = .read_only});
+    var reader = fr.reader(&zerobuf);
     var st = State{
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -212,7 +215,7 @@ test {
     st.yyinput[st.yylimit] = 0;
 
     // Run the lexer.
-    try std.testing.expectEqual(lex(&st, &br), count);
+    try std.testing.expectEqual(lex(&st), count);
 
     // Cleanup: remove input file.
     fr.close();

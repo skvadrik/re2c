@@ -21,7 +21,7 @@ template<typename ctx_t> static Ret determinization(ctx_t& ctx) NODISCARD;
 template<typename ctx_t> static void clear_caches(ctx_t& ctx);
 template<typename ctx_t> static void warn_nondeterministic_tags(const ctx_t& ctx);
 
-Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t eof_rule)
+Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule)
     : dfa_alc(dfa_alc)
     , ir_alc()
     , charset()
@@ -34,7 +34,6 @@ Tdfa::Tdfa(DfaAllocator& dfa_alc, size_t charset_bounds, size_t def_rule, size_t
     , tcpool(dfa_alc)
     , maxtagver(0)
     , def_rule(def_rule)
-    , eof_rule(eof_rule)
 {}
 
 Ret determinization(Tnfa&& nfa, Tdfa& dfa, const opt_t* opts, Msg& msg, const std::string& cond) {
@@ -103,6 +102,17 @@ void clear_caches(ctx_t& ctx) {
     }
 }
 
+static TnfaState* find_final_kernel_state(const kernel_t* kernel, uint32_t* origin) {
+    for (uint32_t i = 0; i < kernel->size; ++i) {
+        TnfaState* s = kernel->state[i];
+        if (s->kind == TnfaState::Kind::FIN) {
+            *origin = i;
+            return s;
+        }
+    }
+    return nullptr;
+}
+
 template<typename ctx_t>
 void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.symbol = sym;
@@ -112,6 +122,10 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     ctx.oldprectbl = kernel->prectbl;
     ctx.oldprecdim = kernel->size;
 
+    bool is_eof = symbol == ctx.opts->encoding.eof();
+    uint32_t f_origin = 0;
+    TnfaState* f = is_eof ? find_final_kernel_state(kernel, &f_origin) : nullptr;
+
     closure_t& reach = ctx.reach;
     reach.clear();
 
@@ -120,7 +134,17 @@ void reach_on_symbol(ctx_t& ctx, uint32_t sym) {
     for (uint32_t i = static_cast<uint32_t>(kernel->size); i --> 0; ) {
         TnfaState* s = transition(kernel->state[i], symbol);
         if (s) {
-            reach.push_back(clos_t(s, i, HROOT));
+            // Detect unreachable end-of-input rules here, as we need TNFA origins in order
+            // to detect overlapping alternative of the same rule, like `[a] | [a]$` (in TDFA
+            // it becomes impossible to distinguish from `[a]$ | [a]` due to the construction
+            // based on fake end-of-input transitions). Also, detecting unreachable end-of-input
+            // states here spares us the hassle of deleting them later.
+            if (f && (f->rule < s->rule || (f->rule == s->rule && f_origin < i))) {
+                DCHECK(is_eof);
+                ctx.rules[s->rule].shadow.insert(&ctx.rules[f->rule]);
+            } else {
+                reach.push_back(clos_t(s, i, HROOT));
+            }
         }
     }
 }

@@ -856,6 +856,9 @@ variable named \fBstag\fP\&.
 .B \fB#mtag\fP
 An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
 variable named \fBmtag\fP\&.
+.TP
+.B \fB$\fP
+End of input.
 .UNINDENT
 .sp
 Character classes and string literals may contain the following escape
@@ -964,7 +967,8 @@ It contains primitives for generic operations:
 \fBYYSHIFT\fP,
 \fBYYSHIFTSTAG\fP,
 \fBYYSHIFTMTAG\fP,
-\fBYYLESSTHAN\fP\&.
+\fBYYLESSTHAN\fP,
+\fBYYEND\fP\&.
 .UNINDENT
 .sp
 Here is a full list of API primitives that may be used by the generated code in
@@ -1032,6 +1036,14 @@ An integral constant equal to the maximum value of the argument to
 A generic API primitive with one variable \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
 and only if there are less than \fBlen\fP input characters left.
+.TP
+.B \fBYYEND\fP
+A generic API primitive with no variables.
+It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
+and only if the \fIlogical\fP end of input has been reached (excluding any
+padding or sentinel symbols). \fBYYEND\fP is used to implement \fB$\fP symbol in
+regular expressions. It differs from \fBYYLESSTHAN\fP, which is used to ensure
+that the lexer won\(aqt read past the end of buffer.
 .TP
 .B \fBYYPEEK\fP
 A generic API primitive with no variables.
@@ -1216,7 +1228,7 @@ Show help message.
 .TP
 .B \fB\-\-api <simple | record | generic>\fP
 Specify the API used by the generated code to interface with used\-defined
-code. Option \fBsimple\fP shold be used in simple cases when there\(aqs no need
+code. Option \fBsimple\fP should be used in simple cases when there\(aqs no need
 for buffer refilling and storing lexer state. Option \fBrecord\fP should be
 used when lexer state needs to be stored in a record (struct, class, etc.).
 Option \fBgeneric\fP should be used in complex cases when the other two APIs
@@ -2197,6 +2209,10 @@ Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
 \fBneed\fP (the number of code units to check against). Conditional:
 \fB\&.many\fP (true if the \fBneed\fP is more than one).
 .TP
+.B \fBcode:yyend\fP
+\fBYYEND\fP expression, possibly specialized for different APIs.
+Supported variables: \fBYYEND\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP\&.
+.TP
 .B \fBcode:yybm_filter\fP
 Condition that is used to filter out \fByych\fP values that are not
 covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
@@ -2297,6 +2313,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2java version.
+.TP
+.B \fB\&.yyfill.enable\fP
+True if \fBYYFILL\fP is enabled (\fBre2c:yyfill:enable = 1\fP).
 .TP
 .B \fB\&.yyfn.throw\fP
 True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.
@@ -2539,10 +2558,10 @@ class Main {
     /*!max:re2c*/
 
     // Expects yymaxfill\-padded string.
-    static int lex(String str) {
+    static int lex(byte[] str) {
         // Pad string with yymaxfill zeroes at the end.
-        byte[] yyinput = new byte[str.length() + YYMAXFILL];
-        System.arraycopy(str.getBytes(), 0, yyinput, 0, str.length()); 
+        byte[] yyinput = new byte[str.length + YYMAXFILL];
+        System.arraycopy(str, 0, yyinput, 0, str.length); 
 
         int yycursor = 0;
         int yylimit = yyinput.length;
@@ -2550,15 +2569,15 @@ class Main {
 
         loop: while (true) {
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqreturn \-1;\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
 
                 [\ex00] {
                     // Check that it is the sentinel, not some unexpected null.
-                    return (yycursor \- 1 == str.length()) ? count : \-1;
+                    return (yycursor \- 1 == str.length) ? count : \-1;
                 }
                 str  { count += 1; continue loop; }
                 [ ]+ { continue loop; }
@@ -2568,10 +2587,10 @@ class Main {
     }
 
     public static void main(String []args) {
-        assert lex(\(dq\(dq) == 0;
-        assert lex(\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq) == 3;
-        assert lex(\(dq\(aqunterminated\e\e\(aq\(dq) == \-1;
-        assert lex(\(dq\(aqunexpected \e00 null\e\e\(aq\(dq) == \-1;
+        assert lex(\(dq\(dq.getBytes()) == 0;
+        assert lex(\(dq\(aqqu\e0tes\(aq \(aqare\(aq \(aqfine: \e\e\(aq\(aq \(dq.getBytes()) == 3;
+        assert lex(\(dq\(aqunterminated\e\e\(aq\(dq.getBytes()) == \-1;
+        assert lex(\(dq\(aqunexpected \e00 null\e\e\(aq\(dq.getBytes()) == \-1;
     }
 };
 
@@ -2606,8 +2625,9 @@ class Main {
         loop: while (true) {
             /*!re2c
                 re2c:api = generic;
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dq(yycursor < yyinput.length) ? yyinput[yycursor] : 0\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dq(yycursor < yyinput.length)\(dq
+                              \(dq ? Byte.toUnsignedInt(yyinput[yycursor]) : 0\(dq;
                 re2c:YYSKIP = \(dqyycursor += 1;\(dq;
                 re2c:yyfill:enable = 0;
 
@@ -2771,8 +2791,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
 
@@ -2919,8 +2939,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqif (fill(@@) != 0) { return \-2; }\(dq;
 
                 str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -3351,13 +3371,13 @@ class Lexer {
     }
 
     private static Status lex(State yyrecord) {
-        byte yych;
+        int yych;
         loop: while (true) {
             yyrecord.token = yyrecord.yycursor;
             /*!re2c
                 re2c:api = record;
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyrecord.yyinput[yyrecord.yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyrecord.yyinput[yyrecord.yycursor])\(dq;
                 re2c:YYFILL = \(dqreturn Status.WAITING;\(dq;
                 re2c:eof = 0;
 
@@ -3541,7 +3561,7 @@ class Main {
         int yycursor = 0;
         int yymarker = 0;
         /*!use:re2c
-            re2c:YYCTYPE = \(dqint\(dq; // should be \(gabyte\(ga, but it\(aqs signed in Java
+            re2c:YYCTYPE = \(dqint\(dq; // Java lacks unsigned 8\-bit integer type
             re2c:encoding:utf8 = 1;
         */
     }
@@ -3825,8 +3845,8 @@ class Lexer {
         loop: while (true) {
             token = yycursor;
             /*!re2c
-                re2c:YYCTYPE = \(dqbyte\(dq;
-                re2c:YYPEEK = \(dqyyinput[yycursor]\(dq;
+                re2c:YYCTYPE = \(dqint\(dq;
+                re2c:YYPEEK = \(dqByte.toUnsignedInt(yyinput[yycursor])\(dq;
                 re2c:YYFILL = \(dqfill() == 0\(dq;
                 re2c:eof = 0;
                 re2c:tags = 1;
@@ -3861,7 +3881,7 @@ class Lexer {
         // Run the lexer.
         Optional<ArrayList<SemVer>> vers = lexer.lex();
 
-        // Check resuts.
+        // Check results.
         assert vers.isPresent() && vers.get().size() == BUFSIZE;
         SemVer v = new SemVer(1, 22, 333);
         for (int i = 0; i < BUFSIZE; ++i) {

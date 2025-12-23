@@ -6,7 +6,7 @@ fn lex(str string) {
     mut cursor := 0
     
 //line "codegen/v/01_basic_s.v":9
-    mut yych := 0
+    mut yych := u8(0)
     yych = str[cursor]
     if yych <= 0x30 {
         unsafe { goto yy1 }

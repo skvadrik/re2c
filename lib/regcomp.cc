@@ -72,7 +72,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
     insert_default_tags(re);
 
     if ((cflags & REG_NFA) == 0) {
-        preg->char2class = new size_t[256];
+        preg->char2class = new size_t[257]; // ASCII + end-of-input $ symbol
         split_charset(re);
         for (uint32_t i = 1, j = 0; i < re.charset.size(); ++i) {
             for (; j < re.charset[i]; ++j) {
@@ -108,7 +108,7 @@ int regcomp(regex_t* preg, const char* pattern, int cflags) {
             preg->regtrie = new regoff_trie_t(preg->mptdfa->tags.size());
         }
     } else {
-        Tdfa* dfa = new Tdfa(*new DfaAllocator(), nfa->charset.size(), Rule::NONE, Rule::NONE);
+        Tdfa* dfa = new Tdfa(*new DfaAllocator(), nfa->charset.size(), Rule::NONE);
         CHECK_RET(determinization(std::move(*nfa), *dfa, opt, msg, ""));
         preg->dfa = dfa;
         delete nfa;

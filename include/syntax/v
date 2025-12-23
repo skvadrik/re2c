@@ -62,11 +62,11 @@ re2c:yych:literals = hex;
 re2c:yych:emit = (.code_model.recursive_functions ? 0 : 1);
 re2c:yybm = "yybm";
 re2c:yybm:hex = 0;
-re2c:yyfill = "";
 re2c:yystable = ""; // deprecated
 re2c:header = "";
 re2c:eof = -1;
 re2c:sentinel = -1;
+re2c:yyfill = "";
 re2c:yyfill:enable = 1;
 re2c:yyfill:parameter = 1;
 re2c:yyfill:check = 1;
@@ -122,6 +122,7 @@ re2c:YYCTYPE = "u8";
 re2c:YYCTXMARKER = (.api.record ? yyrecord ".") "yyctxmarker";
 re2c:YYCURSOR = (.api.record ? yyrecord ".") "yycursor";
 re2c:YYDEBUG = "yydebug";
+re2c:YYEND = "yyend";
 re2c:YYFILL = "yyfill";
 re2c:YYGETACCEPT = sigil "{var}";
 re2c:YYGETCOND = "yygetcond";
@@ -155,7 +156,7 @@ re2c:cond:goto = "unsafe { goto " sigil " }";
 
 // code templates --------------------------------------------------------------
 
-code:var_local = topindent "mut " name " := " init nl;
+code:var_local = topindent "mut " name " := " type "(" init ")" nl;
 code:var_global = <undefined>;
 
 code:const_local = topindent "const " name " = " init nl;
@@ -175,7 +176,7 @@ code:array_elem = array "[" index "]";
 code:enum = (.code_model.loop_switch
     ? [elem: "const " elem " = " init nl]
     : "enum " type " {" nl
-        indent [elem: topindent elem (.init ? " = " init) nl] dedent
+        indent [elem: topindent elem (!.code_model.goto_label ? " = " init) nl] dedent
     "}" nl);
 
 code:enum_elem = (!.code_model.loop_switch ? ".") name;
@@ -406,6 +407,11 @@ code:yylessthan =
         : (.many
             ? "(" YYLIMIT " - " YYCURSOR ") < " need
             : YYLIMIT " <= " YYCURSOR));
+
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND
+        : YYLIMIT " <= " YYCURSOR);
 
 code:yybm_filter = yych " & ~0xFF";
 

@@ -14,7 +14,7 @@ fn lex(str string) int {
 
 loop: 
 //line "v/eof/04_fake_sentinel.v":17
-    mut yych := 0
+    mut yych := u8(0)
     yych = peek(str, cur)
     match yych {
         0x00 { unsafe { goto yy1 } }

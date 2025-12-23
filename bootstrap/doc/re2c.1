@@ -56,11 +56,10 @@ decimal number:
 // re2c $INPUT \-o $OUTPUT \-i \-\-case\-ranges
 #include <assert.h>
 
-int lex(const char *s) {
-    const char *YYCURSOR = s;
+int lex(const char* YYCURSOR) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
 
         [1\-9][0\-9]* { return 0; }
         *           { return 1; }
@@ -87,11 +86,10 @@ In the output re2c replaced the block in the middle with the generated code:
 // re2c $INPUT \-o $OUTPUT \-i \-\-case\-ranges
 #include <assert.h>
 
-int lex(const char *s) {
-    const char *YYCURSOR = s;
+int lex(const char* YYCURSOR) {
     
 {
-    char yych;
+    unsigned char yych;
     yych = *YYCURSOR;
     switch (yych) {
         case \(aq1\(aq ... \(aq9\(aq: goto yy2;
@@ -821,6 +819,9 @@ variable named \fBstag\fP\&.
 .B \fB#mtag\fP
 An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
 variable named \fBmtag\fP\&.
+.TP
+.B \fB$\fP
+End of input.
 .UNINDENT
 .sp
 Character classes and string literals may contain the following escape
@@ -931,6 +932,7 @@ This API contains primitives for generic operations:
 \fBYYSHIFTSTAG\fP,
 \fBYYSHIFTMTAG\fP,
 \fBYYLESSTHAN\fP\&.
+\fBYYEND\fP\&.
 Generic API supports two styles that determine the form in which the
 primitives should be defined:
 .nf
@@ -962,6 +964,7 @@ API can be defined in terms of pointers \fBcursor\fP, \fBlimit\fP,
   re2c:YYRESTORECTX = \(dqcursor = ctxmarker;\(dq;
   re2c:YYRESTORETAG = \(dqcursor = ${tag};\(dq;
   re2c:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
+  re2c:YYEND        = \(dqlimit == cursor\(dq;
   re2c:YYSTAGP      = \(dq@@{tag} = cursor;\(dq;
   re2c:YYSTAGN      = \(dq@@{tag} = NULL;\(dq;
   re2c:YYSHIFT      = \(dqcursor += @@{shift};\(dq;
@@ -996,6 +999,7 @@ generic API can be defined in terms of pointers \fBcursor\fP, \fBlimit\fP,
 #define  YYRESTORECTX()           cursor = ctxmarker
 #define  YYRESTORETAG(tag)        cursor = tag
 #define  YYLESSTHAN(len)          limit \- cursor < len
+#define  YYEND()                  limit == cursor
 #define  YYSTAGP(tag)             tag = cursor
 #define  YYSTAGN(tag)             tag = NULL
 #define  YYSHIFT(shift)           cursor += shift
@@ -1072,6 +1076,14 @@ An integral constant equal to the maximum value of the argument to
 A generic API primitive with one variable \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
 and only if there are less than \fBlen\fP input characters left.
+.TP
+.B \fBYYEND\fP
+A generic API primitive with no variables.
+It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
+and only if the \fIlogical\fP end of input has been reached (excluding any
+padding or sentinel symbols). \fBYYEND\fP is used to implement \fB$\fP symbol in
+regular expressions. It differs from \fBYYLESSTHAN\fP, which is used to ensure
+that the lexer won\(aqt read past the end of buffer.
 .TP
 .B \fBYYPEEK\fP
 A generic API primitive with no variables.
@@ -1256,7 +1268,7 @@ Show help message.
 .TP
 .B \fB\-\-api <simple | record | generic>\fP
 Specify the API used by the generated code to interface with used\-defined
-code. Option \fBsimple\fP shold be used in simple cases when there\(aqs no need
+code. Option \fBsimple\fP should be used in simple cases when there\(aqs no need
 for buffer refilling and storing lexer state. Option \fBrecord\fP should be
 used when lexer state needs to be stored in a record (struct, class, etc.).
 Option \fBgeneric\fP should be used in complex cases when the other two APIs
@@ -2237,6 +2249,10 @@ Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
 \fBneed\fP (the number of code units to check against). Conditional:
 \fB\&.many\fP (true if the \fBneed\fP is more than one).
 .TP
+.B \fBcode:yyend\fP
+\fBYYEND\fP expression, possibly specialized for different APIs.
+Supported variables: \fBYYEND\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP\&.
+.TP
 .B \fBcode:yybm_filter\fP
 Condition that is used to filter out \fByych\fP values that are not
 covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
@@ -2337,6 +2353,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2c version.
+.TP
+.B \fB\&.yyfill.enable\fP
+True if \fBYYFILL\fP is enabled (\fBre2c:yyfill:enable = 1\fP).
 .TP
 .B \fB\&.yyfn.throw\fP
 True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.
@@ -2460,7 +2479,7 @@ static int lex(const char *YYCURSOR) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:yyfill:enable = 0;
 
         *      { return \-1; }
@@ -2516,7 +2535,7 @@ static int lex(const char *str, unsigned int len) {
 
     for (;;) {
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:yyfill:enable = 0;
         re2c:eof = 0;
 
@@ -2588,7 +2607,7 @@ static int lex(const char *str, unsigned int len) {
 loop:
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYFILL = \(dqgoto fail;\(dq;
 
         str = [\(aq] ([^\(aq\e\e] | [\e\e][^])* [\(aq];
@@ -2656,7 +2675,7 @@ static int lex(const char *str, unsigned int len) {
         re2c:yyfill:enable = 0;
         re2c:api = custom;
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYPEEK = \(dqcur < lim ? *cur : 0\(dq;  // fake null
         re2c:define:YYSKIP = \(dq++cur;\(dq;
 
@@ -2813,7 +2832,7 @@ loop:
         in\->tok = in\->cur;
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYCURSOR = in\->cur;
         re2c:define:YYMARKER = in\->mar;
         re2c:define:YYLIMIT = in\->lim;
@@ -2960,7 +2979,7 @@ loop:
         in\->tok = in\->cur;
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYCURSOR = in\->cur;
         re2c:define:YYLIMIT = in\->lim;
         re2c:define:YYFILL = \(dqif (fill(in, @@) != 0) return \-1;\(dq;
@@ -3051,7 +3070,7 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
 
         end = \(dq\ex00\(dq;
 
@@ -3213,7 +3232,7 @@ static uint64_t parse_u32(const char *s) {
 
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYGETCONDITION = \(dqc\(dq;
         re2c:define:YYSETCONDITION = \(dqc = @@;\(dq;
         re2c:yyfill:enable = 0;
@@ -3353,7 +3372,7 @@ static Status lex(State *st, unsigned int *recv) {
         st\->tok = st\->cur;
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = \(dqchar\(dq;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYCURSOR = \(dqst\->cur\(dq;
         re2c:define:YYMARKER = \(dqst\->mar\(dq;
         re2c:define:YYLIMIT = \(dqst\->lim\(dq;
@@ -3508,7 +3527,7 @@ static What lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
 
         !use:fish;
         !use:colors;
@@ -3702,7 +3721,7 @@ static int lex(const char *str, SemVer *ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:tags = 1;
 
         num = [0\-9]+;
@@ -3809,7 +3828,7 @@ static bool lex(Input &in, std::vector<SemVer> &vers) {
     /*!re2c
         re2c:eof = 0;
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYCURSOR = in.cur;
         re2c:define:YYMARKER = in.mar;
         re2c:define:YYLIMIT = in.lim;
@@ -3896,7 +3915,7 @@ static int lex(const char *str, SemVer *ver) {
 
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:captvars = 1;
 
         num = [0\-9]+;
@@ -3999,7 +4018,7 @@ static bool parse(const char *str, Ver &ver) {
 
     /*!re2c
         re2c:api:style = free\-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYSTAGP = \(dq@@ = YYCURSOR;\(dq;
         re2c:define:YYSTAGN = \(dq@@ = NULL;\(dq;
         re2c:define:YYMTAGP = \(dqadd_mtag(mt, @@, YYCURSOR);\(dq;
@@ -4100,7 +4119,7 @@ Below is an example of a lexer for UTF8 encoded Unicode identifiers.
 static int lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
-        re2c:define:YYCTYPE = \(aqunsigned char\(aq;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:yyfill:enable = 0;
 
         // Simplified \(dqUnicode Identifier and Pattern Syntax\(dq
@@ -4184,7 +4203,7 @@ float { return OK; }
 Result lex(const char *s) {
     const char *YYCURSOR = s, *YYMARKER;
     /*!re2c
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:yyfill:enable = 0;
 
         *      { return FAIL; }
@@ -4242,7 +4261,7 @@ long lex(LexerState* st) {
     /*!re2c
         re2c:header = \(dqlexer/state.h\(dq;
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = \(dqunsigned char\(dq;
         re2c:define:YYCURSOR = \(dqst\->cur\(dq;
         re2c:tags = 1;
         re2c:tags:expression = \(dqst\->@@\(dq;

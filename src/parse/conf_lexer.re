@@ -198,6 +198,7 @@ Ret Input::lex_conf(Opt& opts) {
     "define:"? "YYINPUT"                     { RET_CONF_CODE(api_input); }
     "define:"? "YYCURSOR"                    { RET_CONF_CODE(api_cursor); }
     "define:"? "YYDEBUG"                     { RET_CONF_CODE(api_debug); }
+    "define:"? "YYEND"                       { RET_CONF_CODE(api_end); }
     "define:"? "YYFILL"                      { RET_CONF_CODE(api_fill); }
     "define:"? "YYFILL@len"                  { RET_CONF_STR(fill_param); }
     "define:"? "YYFILL:naked"                { RET_CONF_BOOL(fill_naked); }
@@ -658,6 +659,7 @@ start:
     "code:yygetstate"             { RET_CODE(code_yygetstate); }
     "code:yysetstate"             { RET_CODE(code_yysetstate); }
     "code:yylessthan"             { RET_CODE(code_yylessthan); }
+    "code:yyend"                  { RET_CODE(code_yyend); }
     "code:yybm_filter"            { RET_CODE(code_yybm_filter); }
     "code:yybm_match"             { RET_CODE(code_yybm_match); }
     "code:yytarget_filter"        { RET_CODE(code_yytarget_filter); }
@@ -716,6 +718,7 @@ start:
     "YYCTXMARKER"  { RET_VAR(StxVarId::CTXMARKER); }
     "YYCURSOR"     { RET_VAR(StxVarId::CURSOR); }
     "YYDEBUG"      { RET_VAR(StxVarId::DEBUG); }
+    "YYEND"        { RET_VAR(StxVarId::END); }
     "YYGETACCEPT"  { RET_VAR(StxVarId::GETACCEPT); }
     "YYGETCOND"    { RET_VAR(StxVarId::GETCOND); }
     "YYGETSTATE"   { RET_VAR(StxVarId::GETSTATE); }
@@ -783,6 +786,7 @@ start:
     ".monadic"             { RET_GOPT(StxGOpt::MONADIC); }
     ".loop_label"          { RET_GOPT(StxGOpt::LOOP_LABEL); }
     ".cgoto.relative"      { RET_GOPT(StxGOpt::CGOTO_RELATIVE); }
+    ".yyfill.enable"       { RET_GOPT(StxGOpt::FILL_ENABLE); }
     ".yyfn.throw"          { RET_GOPT(StxGOpt::FN_THROW); }
 
     // Local conditionals (specific to each code template in syntax file).

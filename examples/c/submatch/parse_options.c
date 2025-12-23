@@ -44,7 +44,7 @@ static int lex(const char *s) {
     for (;;) {
     
 {
-	char yych;
+	unsigned char yych;
 	unsigned int yyaccept = 0;
 	yych = *s;
 	switch (yych) {

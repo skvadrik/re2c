@@ -6,8 +6,8 @@ fn lex(str string) {
     mut cursor := 0
     
 //line "codegen/v/loop_switch/basic.v":9
-    mut yych := 0
-    mut yystate := 0
+    mut yych := u8(0)
+    mut yystate := u32(0)
 yyl:
     for {
         match yystate {

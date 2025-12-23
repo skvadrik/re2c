@@ -61,11 +61,11 @@ re2c:yych:literals = hex;
 re2c:yych:emit = (.code_model.recursive_functions ? 0 : 1);
 re2c:yybm = "yybm";
 re2c:yybm:hex = 0;
-re2c:yyfill = "yyfill";
 re2c:yystable = ""; // deprecated
 re2c:header = "";
 re2c:eof = -1;
 re2c:sentinel = -1;
+re2c:yyfill = "yyfill";
 re2c:yyfill:enable = 1;
 re2c:yyfill:parameter = 1;
 re2c:yyfill:check = 1;
@@ -121,6 +121,7 @@ re2c:YYCTYPE = "YYCTYPE";
 re2c:YYCTXMARKER = "_yyctxmarker";
 re2c:YYCURSOR = "_yycursor";
 re2c:YYDEBUG = "yydebug";
+re2c:YYEND = "yyend";
 re2c:YYFILL = "yyfill";
 re2c:YYGETACCEPT = "yygetaccept";
 re2c:YYGETCOND = "yygetcond";
@@ -413,6 +414,11 @@ code:yylessthan =
     (.api.record
         ? YYCURSOR " >= " YYLIMIT // YYFILL check can only be used with EOF rule $
         : YYLESSTHAN);
+
+code:yyend =
+    (.api.generic | .yyfill.enable
+        ? YYEND
+        : YYCURSOR " >= " YYLIMIT);
 
 code:yybm_filter = "(" yych " .&. complement 0xFF) /= 0";
 

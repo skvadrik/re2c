@@ -96,6 +96,7 @@ LOCAL_NODISCARD(Ret fix_mutopt(
         real.api_shift = defaults.api_shift;
         real.api_stag_shift = defaults.api_stag_shift;
         real.api_mtag_shift = defaults.api_mtag_shift;
+        real.api_end = defaults.api_end;
         real.api_fill = defaults.api_fill;
         real.api_less_than = defaults.api_less_than;
         real.api_cond_type = defaults.api_cond_type;
@@ -853,6 +854,8 @@ static bool eval_cond(
             return !opts->label_loop.empty();
         case StxGOpt::CGOTO_RELATIVE:
             return opts->computed_gotos_relative;
+        case StxGOpt::FILL_ENABLE:
+            return opts->fill_enable;
         case StxGOpt::FN_THROW:
             return !opts->fn_throw.empty();
         }

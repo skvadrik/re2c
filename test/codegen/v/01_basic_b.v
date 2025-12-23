@@ -6,7 +6,7 @@ fn lex(str string) {
     mut cursor := 0
     
 //line "codegen/v/01_basic_b.v":9
-    mut yych := 0
+    mut yych := u8(0)
     yybm := [
           0,   0,   0,   0,   0,   0,   0,   0,
           0,   0,   0,   0,   0,   0,   0,   0,

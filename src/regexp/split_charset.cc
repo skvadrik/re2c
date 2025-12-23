@@ -58,10 +58,10 @@ void split_charset(RESpec& spec) {
         // user-defined end-of-input symbol
         cs.insert(opts->fill_eof);
         cs.insert(opts->fill_eof + 1);
-        // internally used end-of-input symbol
-        cs.insert(opts->encoding.eof());
-        cs.insert(opts->encoding.eof() + 1);
     }
+    // internal end-of-input symbol
+    cs.insert(opts->encoding.eof());
+    cs.insert(opts->encoding.eof() + 1);
 
     spec.charset.insert(spec.charset.end(), cs.begin(), cs.end());
 }

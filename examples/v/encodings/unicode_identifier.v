@@ -7,8 +7,8 @@
 fn lex(yyinput string) int {
     mut yycursor, mut yymarker := 0, 0
     
-    mut yych := 0
-    mut yyaccept := 0
+    mut yych := u8(0)
+    mut yyaccept := u32(0)
     yych = yyinput[yycursor]
     if yych <= 0xD6 {
         if yych <= 0xC3 {

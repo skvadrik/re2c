@@ -47,7 +47,7 @@ loop:
         in->tok = in->cur;
     /*!re2c
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYCURSOR = in->cur;
         re2c:define:YYLIMIT = in->lim;
         re2c:define:YYFILL = "if (fill(in, @@) != 0) return -1;";

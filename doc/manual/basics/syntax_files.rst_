@@ -513,6 +513,10 @@ language configurations, inplace configurations and code templates.
       ``need`` (the number of code units to check against). Conditional:
       ``.many`` (true if the ``need`` is more than one).
 
+  ``code:yyend``
+      ``YYEND`` expression, possibly specialized for different APIs.
+      Supported variables: ``YYEND``, ``YYCURSOR``, ``YYLIMIT``.
+
   ``code:yybm_filter``
       Condition that is used to filter out ``yych`` values that are not
       covered by the ``yybm`` table (used with ``--bitmaps`` option).
@@ -609,6 +613,9 @@ language configurations, inplace configurations and code templates.
 
   ``.version``
       True if the generated fingerprint should contain |re2c| version.
+
+  ``.yyfill.enable``
+      True if ``YYFILL`` is enabled (``re2c:yyfill:enable = 1``).
 
   ``.yyfn.throw``
       True if ``re2c:yyfn:throw`` configuration is defined to a nonempty string.

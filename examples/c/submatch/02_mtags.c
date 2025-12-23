@@ -76,7 +76,7 @@ int yytm3 = MTAG_ROOT;int yytm4 = MTAG_ROOT;
     
 #line 78 "c/submatch/02_mtags.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case '0':

@@ -492,18 +492,11 @@ static CodeGoCgoto* code_cgoto(Output& output, const Span* span, uint32_t span_c
     return x;
 }
 
-State* fallback_state_with_eof_rule(
-        const Adfa& dfa, const opt_t* opts, const State* state, tcid_t* ptags) {
-    CHECK(opts->fill_eof != NOEOF);
-
+State* fallback_for_state(const Adfa& dfa, const State* state, tcid_t* ptags) {
     State* fallback = nullptr;
     tcid_t falltags = TCID0;
 
-    if (state->eof_state
-            && (state->rule == Rule::NONE
-            || state->eof_state->rule < state->rule
-            // TODO: remove after deperecating old-style $
-            || state->eof_state->rule == dfa.eof_rule)) {
+    if (state->eof_state && (state->rule == Rule::NONE || state->eof_state->rule <= state->rule)) {
         // EOF in EOF-accepting state: match the EOF rule in this state.
         fallback = state->eof_state;
         falltags = state->eof_tags;
@@ -521,6 +514,16 @@ State* fallback_state_with_eof_rule(
     return fallback;
 }
 
+static bool transitions_agree_with_eof(const State* s) {
+    for (const Span* p = s->go.span, *e = p + s->go.span_count; p != e; ++p) {
+        if (p->to != s->eof_state || p->tags != TCID0) {
+            // Found incompatible transitin that goes to some other state or has tags.
+            return false;
+        }
+    }
+    return true;
+}
+
 static void code_go(Output& output, const Adfa& dfa, State* from) {
     const opt_t* opts = output.block().opts;
 
@@ -536,9 +539,27 @@ static void code_go(Output& output, const Adfa& dfa, State* from) {
 
     if (go->span_count == 0) return;
 
+    // YYEND check may be needed if this state has a link to then end-of-input state, unless
+    // all transitions also go to the end-of-input state and agree on tags.
+    // The details depend on the end-of-input handling method:
+    //
+    // - If "sentinel with bounds checks" method is used, states that have transitions on symbols
+    //   don't need YYEND: sentinel transition already has YYLESSTHAN/YYFILL logic, so YYEND is
+    //   only needed in "end" states (those with a single transition to a "rule"/"accept" state).
+    //
+    // - If "bounds checks with padding" method is used, YYLESSTHAN/YYFILL are only emitted in
+    //   SCC states and rely on YYMAXFILL padding, so they can't replace YYEND checks.
+    //
+    // - For other methods YYFILL/YYLESSTHAN are disabled, so we need YYEND checks.
+    if (from->eof_state && !transitions_agree_with_eof(from)
+            && (opts->fill_eof == NOEOF || endstate(from))) {
+        from->go.eof = true;
+        from->eof_state->label->used = true;
+    }
+
     // With end-of-input rule $ mark as used targets of fallback and rematch transitons.
     if (opts->fill_eof != NOEOF && !endstate(from)) {
-        State* f = fallback_state_with_eof_rule(dfa, opts, from, nullptr);
+        State* f = fallback_for_state(dfa, from, nullptr);
         if (f) f->label->used = true;
 
         // In goto/label rematch transitions target special YYFILL labels, not state labels.
@@ -622,6 +643,7 @@ void init_go(CodeGo* go) {
     go->span = nullptr;
     go->tags = TCID0;
     go->skip = false;
+    go->eof = false;
 }
 
 bool consume(const State* s) {
@@ -717,6 +739,7 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
     Adfas& dfas = block.dfas;
     OutAllocator& alc = output.allocator;
     const opt_t* opts = block.opts;
+    StartConds& conds = block.conds;
 
     Code* code = block.code->head;
     if (code == nullptr || code->kind != CodeKind::DFAS) {
@@ -807,11 +830,8 @@ LOCAL_NODISCARD(Ret codegen_analyze_block(Output& output)) {
         }
 
         if (!dfa->cond.empty()) {
-            // In loop/switch or rec/func mode, condition numbers are the numeric indices of their
-            // start DFA state. Otherwise we do not assign explicit numbers, and conditions are
-            // implicitly assigned consecutive numbers starting from zero.
-            block.conds.push_back({dfa->cond,
-                    opts->code_model == CodeModel::GOTO_LABEL ? 0 : dfa->head->label->index});
+            DCHECK(dfa->head->label->used || opts->code_model == CodeModel::GOTO_LABEL);
+            conds.push_back({dfa->cond, dfa->head->label->index});
         }
     }
 

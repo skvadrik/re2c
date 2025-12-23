@@ -88,7 +88,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic("expected $count, got $n") }
 
     // Cleanup: remove input file.

@@ -157,6 +157,34 @@ class GenLessThan : public RenderCallback {
     FORBID_COPY(GenLessThan);
 };
 
+class GenEnd : public RenderCallback {
+    std::ostringstream& os;
+    const opt_t* opts;
+
+  public:
+    GenEnd(std::ostringstream& os, const opt_t* opts)
+        : os(os), opts(opts) {}
+
+    void render_var(StxVarId var) override {
+        switch (var) {
+        case StxVarId::END:
+            os << opts->api_end;
+            break;
+        case StxVarId::CURSOR:
+            os << opts->api_cursor;
+            break;
+        case StxVarId::LIMIT:
+            os << opts->api_limit;
+            break;
+        default:
+            UNREACHABLE();
+            break;
+        }
+    }
+
+    FORBID_COPY(GenEnd);
+};
+
 class GenEnumElem : public RenderCallback {
     std::ostream& os;
     const std::string& type;
@@ -466,10 +494,8 @@ static CodeList* gen_fill_falllback(
     OutAllocator& alc = output.allocator;
     Scratchbuf& buf = output.scratchbuf;
 
-    DCHECK(opts->fill_eof != NOEOF);
-
     tcid_t falltags;
-    const State* fallback = fallback_state_with_eof_rule(dfa, opts, from, &falltags);
+    const State* fallback = fallback_for_state(dfa, from, &falltags);
 
     if (from->go.tags != TCID0) {
         // Tags have been hoisted out of transitions into state (this means that tags on all
@@ -887,37 +913,6 @@ static void gen_godot(
     }
 }
 
-static void gen_go(
-        Output& output, const Adfa& dfa, const CodeGo* go, const State* from, CodeList* stmts) {
-    const opt_t* opts = output.block().opts;
-    OutAllocator& alc = output.allocator;
-
-    if (go->kind == CodeGo::Kind::DOT) {
-        gen_godot(output, dfa, go->godot, from, stmts);
-        return;
-    }
-
-    DCHECK(consume(from) || go->tags == TCID0);
-    if (opts->fill_eof == NOEOF) {
-        // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
-        // Without the $ rule the are no strict requirements, but generating them here (after YYFILL
-        // label) allows to fuse skip and peek into one statement.
-        gen_set_tags(output, stmts, dfa, go->tags);
-    }
-
-    if (go->skip) {
-        append(stmts, code_skip(alc));
-    }
-
-    if (go->kind == CodeGo::Kind::SWITCH_IF) {
-        append(stmts, gen_goswif(output, dfa, go->goswif, from));
-    } else if (go->kind == CodeGo::Kind::LINEAR_IF) {
-        append(stmts, gen_goifl(output, dfa, go->goifl, from));
-    } else if (go->kind == CodeGo::Kind::CGOTO) {
-        append(stmts, gen_cgoto(output, dfa, go->cgoto, from));
-    }
-}
-
 static CodeList* emit_accept_binary(Output& output,
                                     const Adfa& dfa,
                                     const char* var,
@@ -1118,13 +1113,46 @@ static void emit_rule(Output& output, CodeList* stmts, const Adfa& dfa, size_t r
     }
 }
 
-static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeList* stmts) {
+static void emit_state(
+        Output& output, const Adfa& dfa, const State* s, CodeList* stmts, CodeList* continuation) {
     const opt_t* opts = output.block().opts;
     OutAllocator& alc = output.allocator;
+    Scratchbuf& buf = output.scratchbuf;
+
+    const CodeGo& go = s->go;
+    CodeList* transitions = code_list(alc);
+    DCHECK(consume(s) || go.tags == TCID0);
+    if (opts->fill_eof == NOEOF) {
+        // With the end-of-input rule $ tag operations *must* be generated before YYFILL label.
+        // Without the $ rule the are no strict requirements, but generating them here (after
+        // YYFILL label) allows to fuse skip and peek into one statement.
+        gen_set_tags(output, transitions, dfa, go.tags);
+    }
+    if (go.skip) {
+        append(transitions, code_skip(alc));
+    }
+    switch (s->go.kind) {
+    case CodeGo::Kind::SWITCH_IF:
+        append(transitions, gen_goswif(output, dfa, go.goswif, s));
+        break;
+    case CodeGo::Kind::LINEAR_IF:
+        append(transitions, gen_goifl(output, dfa, go.goifl, s));
+        break;
+    case CodeGo::Kind::CGOTO:
+        append(transitions, gen_cgoto(output, dfa, go.cgoto, s));
+        break;
+    case CodeGo::Kind::DOT:
+        UNREACHABLE();
+        break;
+    case CodeGo::Kind::EMPTY:
+        break;
+    }
+    append(transitions, continuation);
 
     switch (s->kind) {
     case StateKind::ENTRY:
         gen_action(output, dfa.entry_action, stmts);
+        append(stmts, transitions);
         break;
     case StateKind::MATCH: {
         bool is_start = s == dfa.start_state;
@@ -1143,20 +1171,38 @@ static void emit_action(Output& output, const Adfa& dfa, const State* s, CodeLis
         if (backup) {
             append(stmts, code_backup(alc));
         }
-        gen_fill_and_label(output, stmts, dfa, s);
-        gen_peek(alc, s, stmts);
+
+        // YYEND must go before YYFILL, because YYFILL here is the no-return-on-end kind.
+        // All code from YYFILL up to transitions belongs to the ELSE branch of YYEND.
+        CodeList* tail = code_list(alc);
+        gen_fill_and_label(output, tail, dfa, s);
+        gen_peek(alc, s, tail);
         if (is_start && dfa.custom_start_label && opts->debug) {
-            append(stmts, code_debug(alc, dfa.custom_start_label->index));
+            append(tail, code_debug(alc, dfa.custom_start_label->index));
         }
+        append(tail, transitions);
+
+        if (s->go.eof) {
+            CodeList* fallback = gen_fill_falllback(output, dfa, s, nullptr);
+            GenEnd callback(buf.stream(), opts);
+            const char* end_check = opts->gen_code_yyend(buf, callback);
+            gen_if(alc, opts, end_check, fallback, tail, stmts);
+        } else {
+            append(stmts, tail);
+        }
+
         break;
     }
     case StateKind::MOVE:
+        append(stmts, transitions);
         break;
     case StateKind::ACCEPT:
         emit_accept(output, stmts, dfa, *s->accepts);
+        append(stmts, transitions);
         break;
     case StateKind::RULE:
         emit_rule(output, stmts, dfa, s->rule);
+        append(stmts, transitions);
         break;
     }
 }
@@ -1454,11 +1500,7 @@ LOCAL_NODISCARD(Ret expand_tags_directive(Output& output, Code* code)) {
     return Ret::OK;
 }
 
-static void gen_cond_enum(
-        Scratchbuf& buf,
-        OutAllocator& alc,
-        Code* code,
-        const opt_t* opts,
+static void gen_cond_enum(Scratchbuf& buf, OutAllocator& alc, Code* code, const opt_t* opts,
         const StartConds& conds) {
     DCHECK(opts->target == Target::CODE);
 
@@ -1468,19 +1510,16 @@ static void gen_cond_enum(
     if (code->fmt.format) {
         const char* fmt = code->fmt.format;
         const char* sep = code->fmt.separator;
-        uint32_t cond_number = 0;
         for (const StartCond& cond : conds) {
             if (sep != nullptr && &cond != first_cond) {
                 buf.cstr(sep);
             }
             std::ostringstream s(fmt);
-            // The main substitution (the one allowing unnamed sigil) must go last, or else it will
-            // erroneously substitute all the named ones.
-            size_t cid = opts->code_model == CodeModel::GOTO_LABEL ? cond_number : cond.number;
-            argsubst(s, opts->api_sigil, "num", false, cid);
+            // The main substitution (the one allowing unnamed sigil) must go last,
+            // or else it will erroneously substitute all the named ones.
+            argsubst(s, opts->api_sigil, "num", false, cond.number);
             argsubst(s, opts->api_sigil, "cond", true, cond.name);
             buf.str(s.str());
-            ++cond_number;
         }
         buf.cstr("\n");
 
@@ -1491,46 +1530,53 @@ static void gen_cond_enum(
         // prepare an array of enum member names
         const char** ids = alc.alloct<const char*>(conds.size()), **i = ids;
         for (const StartCond& cond : conds) *i++ = buf.str(cond.name).flush();
-        // prepare an array of enum member numbers (only needed in loop/switch or rec/func mode)
-        uint32_t* nums = nullptr;
-        if (opts->code_model != CodeModel::GOTO_LABEL) {
-            uint32_t* j = nums = alc.alloct<uint32_t>(conds.size());
-            for (const StartCond& cond : conds) *j++ = cond.number;
-        }
+        // prepare an array of enum member numbers
+        uint32_t* nums = alc.alloct<uint32_t>(conds.size()), *j = nums;
+        for (const StartCond& cond : conds) *j++ = cond.number;
         // construct enum code item in place of the old code item
         init_code_enum(code, opts->api_cond_type.c_str(), conds.size(), ids, nums);
     }
 }
 
 LOCAL_NODISCARD(Ret add_condition_from_block(
-        const OutputBlock& block, StartConds& conds, StartCond cond)) {
+        const OutputBlock& block, const opt_t* opts, StartConds& conds, StartCond cond)) {
     // Condition prefix is specific to the block that defines it. If a few blocks define conditions
     // with the same name, but a different prefix, they should have different enum entries.
     cond.name = block.opts->cond_enum_prefix + cond.name;
 
-    for (const StartCond& c : conds) {
-        if (c.name == cond.name) {
-            if (c.number == cond.number) {
-                // A duplicate condition, it's not an error but don't add it.
-                return Ret::OK;
-            } else {
-                // An error: conditions with idetical names but different numbers.
-                RET_FAIL(error("cannot generate condition enumeration: condition `%s` has "
-                               "different numbers in different blocks (use `re2c:condenumprefix` "
-                               "configuration to set per-block prefix)",
-                               cond.name.c_str()));
-            }
-        }
+    // In loop/switch or rec/func mode condition numbers are the numeric indices of their start
+    // DFA state. In goto/label mode conditions are renumbered: they are assigned consecutive
+    // numbers starting from zero. Conditions from different blocks are merged together in this
+    // enum, and the enumeration is not per-block but global across all contributing blocks.
+    bool renumber = opts->code_model == CodeModel::GOTO_LABEL;
+
+    auto same = std::find_if(conds.begin(), conds.end(),
+            [=](const StartCond& c){ return c.name == cond.name; });
+
+    if (same == conds.end()) {
+        // Ok, a new condition, add it.
+        if (renumber) cond.number = static_cast<uint32_t>(conds.size());
+        conds.push_back(cond);
+    } else if (same->number == cond.number || renumber) {
+        // Condition with the same name is already on the list: it's fine if the numbers agree,
+        // or if the numbers are reassigned (in goto/label mode). We don't care about `defined`
+        // flags here (they matter for condition dispatch, which is generated on per-block basis).
+    } else {
+        // Error: different conditions with identical names.
+        RET_FAIL(error(
+            "cannot generate condition enumeration: condition `%s` has different numbers in "
+            "different blocks (use `re2c:condenumprefix` configuration to set per-block prefix)",
+            cond.name.c_str()));
     }
 
-    conds.push_back(cond);
     return Ret::OK;
 }
 
-LOCAL_NODISCARD(Ret add_conditions_from_blocks(const blocks_t& blocks, StartConds& conds)) {
+LOCAL_NODISCARD(Ret add_conditions_from_blocks(
+        const blocks_t& blocks, const opt_t* opts, StartConds& conds)) {
     for (const OutputBlock* block : blocks) {
         for (const StartCond& cond : block->conds) {
-            CHECK_RET(add_condition_from_block(*block, conds, cond));
+            CHECK_RET(add_condition_from_block(*block, opts, conds, cond));
         }
     }
     return Ret::OK;
@@ -1552,12 +1598,12 @@ LOCAL_NODISCARD(Ret expand_cond_enum(Output& output, Code* code)) {
     StartConds conds;
     if (code->fmt.block_names == nullptr) {
         // Gather conditions from all blocks in the output and header files.
-        CHECK_RET(add_conditions_from_blocks(output.cblocks, conds));
-        CHECK_RET(add_conditions_from_blocks(output.hblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(output.cblocks, globopts, conds));
+        CHECK_RET(add_conditions_from_blocks(output.hblocks, globopts, conds));
     } else {
         // Gather conditions from the blocks on the list.
         CHECK_RET(find_blocks(output, code->fmt.block_names, output.tmpblocks, "conditions"));
-        CHECK_RET(add_conditions_from_blocks(output.tmpblocks, conds));
+        CHECK_RET(add_conditions_from_blocks(output.tmpblocks, globopts, conds));
     }
 
     // Do not generate empty condition enum. Some compilers or language standards allow it, but
@@ -1599,8 +1645,8 @@ static CodeList* gen_cond_goto_binary(
 
     CodeList* stmts = code_list(alc);
     if (lower == upper) {
-        buf.str(opts->cond_label_prefix).str(block.conds[lower].name);
-        append(stmts, code_goto(alc, buf.flush()));
+        const char* label = buf.str(opts->cond_label_prefix).str(block.conds[lower].name).flush();
+        append(stmts, code_goto(alc, label));
     } else {
         const size_t middle = lower + (upper - lower + 1) / 2;
         CodeList* if_then = gen_cond_goto_binary(output, getcond, lower, middle - 1);
@@ -1637,13 +1683,10 @@ static CodeList* gen_cond_goto(Output& output) {
         append(stmts, gen_cond_goto_binary(output, getcond, 0, ncond - 1));
     } else {
         warn_cond_ord = false;
-
         CodeCases* ccases = code_cases(alc);
         for (const StartCond& cond : conds) {
             CodeList* body = code_list(alc);
-            buf.str(opts->cond_label_prefix).str(cond.name);
-            append(body, code_goto(alc, buf.flush()));
-
+            append(body, code_goto(alc, buf.str(opts->cond_label_prefix).str(cond.name).flush()));
             append(ccases, code_case_string(alc, body, gen_cond_enum_elem(buf, opts, cond.name)));
         }
         if (opts->cond_abort) {
@@ -1820,8 +1863,7 @@ void gen_dfa_as_blocks_with_labels(Output& output, const Adfa& dfa, CodeList* st
                 append(stmts, code_debug(alc, s->label->index));
             }
         }
-        emit_action(output, dfa, s, stmts);
-        gen_go(output, dfa, &s->go, s, stmts);
+        emit_state(output, dfa, s, stmts, nullptr);
     }
 }
 
@@ -1838,16 +1880,14 @@ void gen_dfa_as_switch_cases(Output& output, Adfa& dfa, CodeCases* cases) {
 
         // Emit current state.
         if (opts->debug) append(body, code_debug(alc, label));
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
+        emit_state(output, dfa, s, body, nullptr);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state. This avoids looping through the
         // `yystate` switch only to return to the next case.
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
+            emit_state(output, dfa, s, body, nullptr);
         }
 
         append(cases, code_case_number(alc, body, static_cast<int32_t>(label)));
@@ -1883,17 +1923,17 @@ static void gen_dfa_as_recursive_functions(Output& output, const Adfa& dfa, Code
 
         // Emit current state.
         if (opts->debug) append(body, code_debug(alc, s->label->index));
-        emit_action(output, dfa, s, body);
-        gen_go(output, dfa, &s->go, s, body);
 
         // As long as the following state has no incoming transitions (its label is unused),
         // generate it as a continuation of the current state (such states may be added by the
         // tunneling pass).
+        State* s0 = s;
+        CodeList* tail = code_list(alc);
         while (s->next && !s->next->label->used) {
             s = s->next;
-            emit_action(output, dfa, s, body);
-            gen_go(output, dfa, &s->go, s, body);
+            emit_state(output, dfa, s, tail, nullptr);
         }
+        emit_state(output, dfa, s0, body, tail);
 
         append(code, code_fndef(alc, f, fn->type, params, body));
     }
@@ -2108,7 +2148,9 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
                     append(code, code_text(alc, buf.flush()));
                 }
             }
-            gen_go(output, *dfa, &s->go, s, code);
+            if (s->go.kind == CodeGo::Kind::DOT) {
+                gen_godot(output, *dfa, s->go.godot, s, code);
+            }
         }
     }
 

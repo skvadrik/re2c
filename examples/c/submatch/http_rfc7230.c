@@ -249,7 +249,7 @@ static void print_headers(const char *tok,
         (int)(h5->dist - h4->dist), tok + h4->dist);
 }
 
-#define YYCTYPE        char
+#define YYCTYPE        unsigned char
 #define YYCURSOR       in->cur
 #define YYMARKER       in->mar
 #define YYLIMIT        in->lim
@@ -14009,7 +14009,7 @@ yy427:
 
 }
 
-int main(int argc, char **argv)
+int main()
 {
     const char *fname = "input";
     FILE *f;

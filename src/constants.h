@@ -205,6 +205,7 @@ enum class StxGOpt {
     MONADIC,
     LOOP_LABEL,
     CGOTO_RELATIVE,
+    FILL_ENABLE,
     FN_THROW
 };
 

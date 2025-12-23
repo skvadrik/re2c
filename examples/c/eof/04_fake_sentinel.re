@@ -16,7 +16,7 @@ static int lex(const char *str, unsigned int len) {
         re2c:yyfill:enable = 0;
         re2c:api = custom;
         re2c:api:style = free-form;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
         re2c:define:YYPEEK = "cur < lim ? *cur : 0";  // fake null
         re2c:define:YYSKIP = "++cur;";
 

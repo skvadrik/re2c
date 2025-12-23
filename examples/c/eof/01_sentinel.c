@@ -11,7 +11,7 @@ static int lex(const char *YYCURSOR) {
     
 #line 13 "c/eof/01_sentinel.c"
 {
-	char yych;
+	unsigned char yych;
 	yych = *YYCURSOR;
 	switch (yych) {
 		case 0x00: goto yy1;

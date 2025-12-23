@@ -15,6 +15,7 @@ const Status = enum {
 const bufsize = 10;
 
 const State = struct {
+    file: std.fs.File.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -24,7 +25,7 @@ const State = struct {
     received: usize,
 };
 
-fn fill(st: *State, file: anytype) Status {
+fn fill(st: *State) Status {
     // Error: lexeme too long. In real life can reallocate a larger buffer.
     if (st.token < 1) { return Status.big_packet; }
 
@@ -37,7 +38,7 @@ fn fill(st: *State, file: anytype) Status {
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.interface.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return Status.ready;
@@ -68,10 +69,10 @@ fn run(expect: Status, packets: []const []const u8) !void {
     var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
-    // of buffer. Normally file would be part of the state, but BufferedReader
-    // type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
+    // of buffer. Use unbuffered reader - lexer does its own buffering.
+    const zerobuf: [0]u8 = undefined;
     var st = State{
+        .file = fr.reader(&zerobuf),
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -98,7 +99,7 @@ fn run(expect: Status, packets: []const []const u8) !void {
                 try fw.writeAll(packets[send]);
                 send += 1;
             }
-            status = fill(&st, &br);
+            status = fill(&st);
             std.log.debug("filled buffer [{s}], status {}", .{st.yyinput, status});
             if (status != Status.ready) {
                 break;

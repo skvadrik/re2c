@@ -53,7 +53,7 @@ loop:
     
 #line 55 "c/fill/02_fill.c"
 {
-	char yych;
+	unsigned char yych;
 	if (in->lim <= in->cur) if (fill(in, 1) != 0) return -1;
 	yych = *in->cur;
 	switch (yych) {

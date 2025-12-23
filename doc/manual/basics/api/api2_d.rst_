@@ -38,4 +38,5 @@ program:
     ``YYSHIFT``,
     ``YYSHIFTSTAG``,
     ``YYSHIFTMTAG``,
-    ``YYLESSTHAN``.
+    ``YYLESSTHAN``,
+    ``YYEND``.

@@ -84,7 +84,7 @@ In the output re2v replaced the block in the middle with the generated code:
 fn lex(yyinput string) {
     mut yycursor := 0
     
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x31...0x39 { unsafe { goto yy2 } }
@@ -813,6 +813,9 @@ variable named \fBstag\fP\&.
 .B \fB#mtag\fP
 An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
 variable named \fBmtag\fP\&.
+.TP
+.B \fB$\fP
+End of input.
 .UNINDENT
 .sp
 Character classes and string literals may contain the following escape
@@ -921,7 +924,8 @@ It contains primitives for generic operations:
 \fBYYSHIFT\fP,
 \fBYYSHIFTSTAG\fP,
 \fBYYSHIFTMTAG\fP,
-\fBYYLESSTHAN\fP\&.
+\fBYYLESSTHAN\fP,
+\fBYYEND\fP\&.
 .UNINDENT
 .sp
 Here is a full list of API primitives that may be used by the generated code in
@@ -989,6 +993,14 @@ An integral constant equal to the maximum value of the argument to
 A generic API primitive with one variable \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
 and only if there are less than \fBlen\fP input characters left.
+.TP
+.B \fBYYEND\fP
+A generic API primitive with no variables.
+It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
+and only if the \fIlogical\fP end of input has been reached (excluding any
+padding or sentinel symbols). \fBYYEND\fP is used to implement \fB$\fP symbol in
+regular expressions. It differs from \fBYYLESSTHAN\fP, which is used to ensure
+that the lexer won\(aqt read past the end of buffer.
 .TP
 .B \fBYYPEEK\fP
 A generic API primitive with no variables.
@@ -1173,7 +1185,7 @@ Show help message.
 .TP
 .B \fB\-\-api <simple | record | generic>\fP
 Specify the API used by the generated code to interface with used\-defined
-code. Option \fBsimple\fP shold be used in simple cases when there\(aqs no need
+code. Option \fBsimple\fP should be used in simple cases when there\(aqs no need
 for buffer refilling and storing lexer state. Option \fBrecord\fP should be
 used when lexer state needs to be stored in a record (struct, class, etc.).
 Option \fBgeneric\fP should be used in complex cases when the other two APIs
@@ -2154,6 +2166,10 @@ Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
 \fBneed\fP (the number of code units to check against). Conditional:
 \fB\&.many\fP (true if the \fBneed\fP is more than one).
 .TP
+.B \fBcode:yyend\fP
+\fBYYEND\fP expression, possibly specialized for different APIs.
+Supported variables: \fBYYEND\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP\&.
+.TP
 .B \fBcode:yybm_filter\fP
 Condition that is used to filter out \fByych\fP values that are not
 covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
@@ -2254,6 +2270,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2v version.
+.TP
+.B \fB\&.yyfill.enable\fP
+True if \fBYYFILL\fP is enabled (\fBre2c:yyfill:enable = 1\fP).
 .TP
 .B \fB\&.yyfn.throw\fP
 True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.
@@ -2745,7 +2764,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic(\(dqexpected $count, got $n\(dq) }
 
     // Cleanup: remove input file.
@@ -2895,7 +2914,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic(\(dqexpected $count, got $n\(dq) }
 
     // Cleanup: remove input file.
@@ -3311,7 +3330,7 @@ fn test(expect Status, packets []string) {
     mut send := 0
     mut recv := 0
     for {
-        status = lex(mut st, mut &recv)
+        status = lex(mut &st, mut &recv)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -3321,7 +3340,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug(\(dqfilled buffer $st.yyinput, status $status\(dq)
             if status != .lex_ready {
                 break
@@ -3770,7 +3789,7 @@ fn main() {
 
     // Run the lexer.
     expect := []SemVer{len: bufsize, init: SemVer{1, 22, 333}}
-    result := parse(mut st) or { panic(\(dqparse failed\(dq) }
+    result := parse(mut &st) or { panic(\(dqparse failed\(dq) }
     if result != expect { panic(\(dqerror\(dq) }
 
     // Cleanup: remove input file.
@@ -3873,7 +3892,7 @@ struct MtagElem {
 type MtagTrie = []MtagElem
 
 // Append a single value to an m\-tag history.
-fn add_mtag(mut trie &MtagTrie, mtag int, value int) int {
+fn add_mtag(mut trie MtagTrie, mtag int, value int) int {
     trie = arrays.concat(trie, MtagElem{value, mtag})
     return trie.len \- 1
 }
@@ -3912,7 +3931,8 @@ fn s2n(s string) int { // convert pre\-parsed string to number
 
 fn parse(yyinput string) ?[]int {
     mut yycursor, mut yymarker := 0, 0
-    mut trie := []MtagElem{}
+//    mut trie := []MtagElem{}
+    mut trie := MtagTrie{}
 
     // Final tag variables available in semantic action.
     /*!svars:re2c format = \(aqmut @@ := tag_none\en\(aq; */
@@ -3925,8 +3945,8 @@ fn parse(yyinput string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:YYMTAGP = \(dq@@ = add_mtag(mut &trie, @@, yycursor)\(dq;
-        re2c:YYMTAGN = \(dq@@ = add_mtag(mut &trie, @@, tag_none)\(dq;
+        re2c:YYMTAGP = \(dq@@ = add_mtag(mut trie, @@, yycursor)\(dq;
+        re2c:YYMTAGN = \(dq@@ = add_mtag(mut trie, @@, tag_none)\(dq;
 
         num = [0\-9]+;
 

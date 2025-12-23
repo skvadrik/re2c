@@ -31,9 +31,9 @@ data State a = State {
 %}
 
 %{use
-    re2c:YYFN = ["lex32;Maybe Int", "State{..};State (Array Int Int)"];
+    re2c:YYFN = ["lex32;Maybe Int", "State{..};State (Array Int Word)"];
     re2c:encoding:utf32 = 1;
-    re2c:YYCTYPE = Int;
+    re2c:YYCTYPE = Word;
 %}
 
 main :: IO ()

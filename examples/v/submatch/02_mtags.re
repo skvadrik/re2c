@@ -16,7 +16,7 @@ struct MtagElem {
 type MtagTrie = []MtagElem
 
 // Append a single value to an m-tag history.
-fn add_mtag(mut trie &MtagTrie, mtag int, value int) int {
+fn add_mtag(mut trie MtagTrie, mtag int, value int) int {
     trie = arrays.concat(trie, MtagElem{value, mtag})
     return trie.len - 1
 }
@@ -55,7 +55,8 @@ fn s2n(s string) int { // convert pre-parsed string to number
 
 fn parse(yyinput string) ?[]int {
     mut yycursor, mut yymarker := 0, 0
-    mut trie := []MtagElem{}
+//    mut trie := []MtagElem{}
+    mut trie := MtagTrie{}
 
     // Final tag variables available in semantic action.
     /*!svars:re2c format = 'mut @@ := tag_none\n'; */
@@ -68,8 +69,8 @@ fn parse(yyinput string) ?[]int {
     /*!re2c
         re2c:tags = 1;
         re2c:yyfill:enable = 0;
-        re2c:YYMTAGP = "@@ = add_mtag(mut &trie, @@, yycursor)";
-        re2c:YYMTAGN = "@@ = add_mtag(mut &trie, @@, tag_none)";
+        re2c:YYMTAGP = "@@ = add_mtag(mut trie, @@, yycursor)";
+        re2c:YYMTAGN = "@@ = add_mtag(mut trie, @@, tag_none)";
 
         num = [0-9]+;
 

@@ -53,12 +53,12 @@ class Lexer {
             token = yycursor;
             
 {
-    byte yych = 0;
+    int yych = 0;
     int yystate = 0;
     yyl: while (true) {
         switch (yystate) {
             case 0:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x20:
                         yycursor += 1;
@@ -87,7 +87,7 @@ class Lexer {
             case 2:
                 { return -1; }
             case 3:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 switch (yych) {
                     case 0x20:
                         yycursor += 1;
@@ -107,7 +107,7 @@ class Lexer {
                 { continue loop; }
             case 5:
                 yymarker = yycursor;
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 if (yych >= 0x01) {
                     yystate = 7;
                     continue yyl;
@@ -124,7 +124,7 @@ class Lexer {
                 yystate = 6;
                 continue yyl;
             case 6:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 yystate = 7;
                 continue yyl;
             case 7:
@@ -153,7 +153,7 @@ class Lexer {
             case 8:
                 { count += 1; continue loop; }
             case 9:
-                yych = yyinput[yycursor];
+                yych = Byte.toUnsignedInt(yyinput[yycursor]);
                 if (yych <= 0x00) {
                     if (yylimit <= yycursor) {
                         if (fill() == 0) {

@@ -50,7 +50,7 @@ loop:
     yyrecord.token = yyrecord.yycursor
     
 //line "v/fill/01_fill.v":53
-    mut yych := 0
+    mut yych := u8(0)
 yyFillLabel0:
     yych = yyrecord.yyinput[yyrecord.yycursor]
     match yych {
@@ -178,7 +178,7 @@ fn main() {
     }
 
     // Run the lexer.
-    n := lex(mut st)
+    n := lex(mut &st)
     if n != count { panic("expected $count, got $n") }
 
     // Cleanup: remove input file.

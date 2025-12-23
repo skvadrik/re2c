@@ -9,7 +9,7 @@ fn lex(yyinput string) int {
 
 loop: 
 //line "v/eof/01_sentinel.v":12
-    mut yych := 0
+    mut yych := u8(0)
     yych = yyinput[yycursor]
     match yych {
         0x00 { unsafe { goto yy1 } }

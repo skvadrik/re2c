@@ -134,7 +134,7 @@ loop:
     in->tok = in->cur;
 
 {
-	char yych;
+	unsigned char yych;
 	unsigned int yyaccept = 0;
 	if ((in->lim - in->cur) < 72) if (fill(in, 72) != 0) return 2;
 	yych = *in->cur;
@@ -8887,7 +8887,7 @@ yy248:
 
 }
 
-int main(int argc, char **argv)
+int main()
 {
     const char *fname = "input";
     FILE *f;

@@ -1,11 +1,10 @@
 // re2c $INPUT -o $OUTPUT -i --case-ranges
 #include <assert.h>
 
-int lex(const char *s) {
-    const char *YYCURSOR = s;
+int lex(const char* YYCURSOR) {
     /*!re2c
         re2c:yyfill:enable = 0;
-        re2c:define:YYCTYPE = char;
+        re2c:define:YYCTYPE = "unsigned char";
 
         [1-9][0-9]* { return 0; }
         *           { return 1; }

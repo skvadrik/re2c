@@ -15,6 +15,7 @@ const yycheader: u32 = 23;
 
 const State = struct {
     allocator: std.mem.Allocator,
+    file: *std.io.Reader,
     yyinput: [bufsize + 1]u8,
     yycursor: usize,
     yymarker: usize,
@@ -66,16 +67,16 @@ const MtagElem = struct {
 };
 
 // Append a single value to an m-tag history.
-fn add_mtag(trie: *std.ArrayList(MtagElem), mtag: usize, value: usize) !usize {
-    try trie.append(MtagElem{.elem = value, .pred = mtag});
-    return trie.items.len - 1;
+fn add_mtag(st: *State, mtag: usize, value: usize) !usize {
+    try st.trie.append(st.allocator, MtagElem{.elem = value, .pred = mtag});
+    return st.trie.items.len - 1;
 }
 
 // Recursively unwind tag histories and collect version components.
 fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     // Reached the root of the m-tag tree, stop recursion.
     if (x == mtag_root and y == mtag_root) {
-        return std.ArrayList([]const u8).init(st.allocator);
+        return try std.ArrayList([]const u8).initCapacity(st.allocator, 0);
     }
 
     // Unwind history further.
@@ -89,7 +90,7 @@ fn unwind(st: *State, x: usize, y: usize) !std.ArrayList([]const u8) {
     if (ex != none and ey != none) {
         // Both tags are valid string indices, extract component.
         const s = try std.mem.Allocator.dupe(st.allocator, u8, st.yyinput[ex..ey]);
-        try ss.append(s);
+        try ss.append(st.allocator, s);
     } else {
         // Both tags are none (this corresponds to zero repetitions).
         std.debug.assert(ex == none and ey == none);
@@ -104,7 +105,7 @@ fn s2n(str: []const u8) u32 { // convert a pre-parsed string to a number
     return n;
 }
 
-fn fill(st: *State, file: anytype) Status {
+fn fill(st: *State) Status {
     const used = st.yylimit - st.token;
     const free = bufsize - used;
 
@@ -125,7 +126,7 @@ if (st.yyt2 != none) st.yyt2 = @subWithOverflow(st.yyt2, st.token)[0];
     st.token = 0;
 
     // Fill free space at the end of buffer with new data from file.
-    st.yylimit += file.read(st.yyinput[st.yylimit..bufsize]) catch 0;
+    st.yylimit += st.file.readSliceShort(st.yyinput[st.yylimit..bufsize]) catch 0;
     st.yyinput[st.yylimit] = 0; // append sentinel symbol
 
     return Status.ready;
@@ -260,26 +261,26 @@ fn yy10(st: *State, yych: u8) Status {
         0x09,
         0x20 => {
             st.yytm6 = st.yytm10;
-            st.yytm6 = add_mtag(st.trie, st.yytm6, none) catch none;
+            st.yytm6 = add_mtag(st, st.yytm6, none) catch none;
             st.yytm5 = st.yytm9;
-            st.yytm5 = add_mtag(st.trie, st.yytm5, none) catch none;
+            st.yytm5 = add_mtag(st, st.yytm5, none) catch none;
             st.yytm4 = st.yytm8;
-            st.yytm4 = add_mtag(st.trie, st.yytm4, none) catch none;
+            st.yytm4 = add_mtag(st, st.yytm4, none) catch none;
             st.yytm3 = st.yytm7;
-            st.yytm3 = add_mtag(st.trie, st.yytm3, none) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, none) catch none;
             st.yyt2 = st.yycursor;
             st.yycursor += 1;
             return yy11(st);
         },
         0x0D => {
             st.yytm6 = st.yytm10;
-            st.yytm6 = add_mtag(st.trie, st.yytm6, none) catch none;
+            st.yytm6 = add_mtag(st, st.yytm6, none) catch none;
             st.yytm5 = st.yytm9;
-            st.yytm5 = add_mtag(st.trie, st.yytm5, none) catch none;
+            st.yytm5 = add_mtag(st, st.yytm5, none) catch none;
             st.yytm4 = st.yytm8;
-            st.yytm4 = add_mtag(st.trie, st.yytm4, none) catch none;
+            st.yytm4 = add_mtag(st, st.yytm4, none) catch none;
             st.yytm3 = st.yytm7;
-            st.yytm3 = add_mtag(st.trie, st.yytm3, none) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, none) catch none;
             st.yyt2 = st.yycursor;
             st.yycursor += 1;
             return yy12(st);
@@ -374,7 +375,7 @@ fn yy13(st: *State) Status {
         0x5E...0x7A,
         0x7C,
         0x7E => {
-            st.yytm7 = add_mtag(st.trie, st.yytm7, st.yycursor) catch none;
+            st.yytm7 = add_mtag(st, st.yytm7, st.yycursor) catch none;
             st.yycursor += 1;
             return yy15(st);
         },
@@ -428,7 +429,7 @@ fn yy15(st: *State) Status {
             return yy15(st);
         },
         0x3D => {
-            st.yytm8 = add_mtag(st.trie, st.yytm8, st.yycursor) catch none;
+            st.yytm8 = add_mtag(st, st.yytm8, st.yycursor) catch none;
             st.yycursor += 1;
             return yy16(st);
         },
@@ -455,12 +456,12 @@ fn yy16(st: *State) Status {
         0x5E...0x7A,
         0x7C,
         0x7E => {
-            st.yytm9 = add_mtag(st.trie, st.yytm9, st.yycursor) catch none;
+            st.yytm9 = add_mtag(st, st.yytm9, st.yycursor) catch none;
             st.yycursor += 1;
             return yy17(st);
         },
         0x22 => {
-            st.yytm9 = add_mtag(st.trie, st.yytm9, st.yycursor) catch none;
+            st.yytm9 = add_mtag(st, st.yytm9, st.yycursor) catch none;
             st.yycursor += 1;
             return yy18(st);
         },
@@ -480,7 +481,7 @@ fn yy17(st: *State) Status {
     switch (yych) {
         0x09,
         0x20 => {
-            st.yytm10 = add_mtag(st.trie, st.yytm10, st.yycursor) catch none;
+            st.yytm10 = add_mtag(st, st.yytm10, st.yycursor) catch none;
             st.yycursor += 1;
             return yy19(st);
         },
@@ -489,7 +490,7 @@ fn yy17(st: *State) Status {
             st.yytm4 = st.yytm8;
             st.yytm5 = st.yytm9;
             st.yytm6 = st.yytm10;
-            st.yytm6 = add_mtag(st.trie, st.yytm6, st.yycursor) catch none;
+            st.yytm6 = add_mtag(st, st.yytm6, st.yycursor) catch none;
             st.yycursor += 1;
             return yy12(st);
         },
@@ -506,7 +507,7 @@ fn yy17(st: *State) Status {
             return yy17(st);
         },
         0x3B => {
-            st.yytm10 = add_mtag(st.trie, st.yytm10, st.yycursor) catch none;
+            st.yytm10 = add_mtag(st, st.yytm10, st.yycursor) catch none;
             st.yycursor += 1;
             return yy13(st);
         },
@@ -586,7 +587,7 @@ fn yy20(st: *State) Status {
     switch (yych) {
         0x09,
         0x20 => {
-            st.yytm10 = add_mtag(st.trie, st.yytm10, st.yycursor) catch none;
+            st.yytm10 = add_mtag(st, st.yytm10, st.yycursor) catch none;
             st.yycursor += 1;
             return yy19(st);
         },
@@ -595,12 +596,12 @@ fn yy20(st: *State) Status {
             st.yytm4 = st.yytm8;
             st.yytm5 = st.yytm9;
             st.yytm6 = st.yytm10;
-            st.yytm6 = add_mtag(st.trie, st.yytm6, st.yycursor) catch none;
+            st.yytm6 = add_mtag(st, st.yytm6, st.yycursor) catch none;
             st.yycursor += 1;
             return yy12(st);
         },
         0x3B => {
-            st.yytm10 = add_mtag(st.trie, st.yytm10, st.yycursor) catch none;
+            st.yytm10 = add_mtag(st, st.yytm10, st.yycursor) catch none;
             st.yycursor += 1;
             return yy13(st);
         },
@@ -661,7 +662,7 @@ fn yy23(st: *State) Status {
             }
         },
         0x0D => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy26(st);
         },
@@ -723,7 +724,7 @@ fn yy27(st: *State) Status {
             return yy30(st);
         },
         0x0D => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -826,7 +827,7 @@ fn yy32(st: *State) Status {
             return yy30(st);
         },
         0x0D => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -858,14 +859,14 @@ fn yy33(st: *State) Status {
             return yy33(st);
         },
         0x0D => {
-            st.yytm5 = add_mtag(st.trie, st.yytm5, st.yycursor) catch none;
+            st.yytm5 = add_mtag(st, st.yytm5, st.yycursor) catch none;
             st.yytm4 = st.yytm3;
-            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
+            st.yytm4 = add_mtag(st, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
         else => {
-            st.yytm5 = add_mtag(st.trie, st.yytm5, st.yycursor) catch none;
+            st.yytm5 = add_mtag(st, st.yytm5, st.yycursor) catch none;
             st.yycursor += 1;
             return yy36(st);
         },
@@ -887,7 +888,7 @@ fn yy34(st: *State) Status {
             }
         },
         0x0D => {
-            st.yytm3 = add_mtag(st.trie, st.yytm3, st.yycursor) catch none;
+            st.yytm3 = add_mtag(st, st.yytm3, st.yycursor) catch none;
             st.yycursor += 1;
             return yy31(st);
         },
@@ -937,7 +938,7 @@ fn yy36(st: *State) Status {
         },
         0x0D => {
             st.yytm4 = st.yytm3;
-            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
+            st.yytm4 = add_mtag(st, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
@@ -1060,7 +1061,7 @@ fn yy41(st: *State) Status {
         },
         0x0D => {
             st.yytm4 = st.yytm3;
-            st.yytm4 = add_mtag(st.trie, st.yytm4, st.yycursor) catch none;
+            st.yytm4 = add_mtag(st, st.yytm4, st.yycursor) catch none;
             st.yycursor += 1;
             return yy35(st);
         },
@@ -1265,13 +1266,15 @@ fn run(expect: Status, packets: []const []const u8) !void {
     var fr = try std.fs.cwd().openFile(fname, .{ .mode = .read_only});
 
     // Initialize lexer state: `state` value is -1, all offsets are at the end
-    // of buffer. Normally file would be part of the state, but BufferedReader
-    // type is unclear.
-    var br = std.io.bufferedReader(fr.reader());
-    var mt = std.ArrayList(MtagElem).init(std.testing.allocator);
-    defer mt.deinit();
+    // of buffer. Use unbuffered reader - lexer does its own buffering.
+    const alc = arena.allocator();
+    const zerobuf: [0]u8 = undefined;
+    var reader = fr.reader(&zerobuf);
+    var mt = try std.ArrayList(MtagElem).initCapacity(alc, 0);
+    defer mt.deinit(alc);
     var st = State{
-        .allocator = arena.allocator(),
+        .allocator = alc,
+        .file = &reader.interface,
         .yyinput = undefined,
         .yycursor = bufsize,
         .yymarker = bufsize,
@@ -1322,7 +1325,7 @@ fn run(expect: Status, packets: []const []const u8) !void {
                 try fw.writeAll(packets[send]);
                 send += 1;
             }
-            status = fill(&st, &br);
+            status = fill(&st);
             std.log.debug("filled buffer [{s}], status {}", .{st.yyinput, status});
             if (status != Status.ready) {
                 break;

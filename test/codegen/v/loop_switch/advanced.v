@@ -150,7 +150,7 @@ fn lex(mut st &State) Status {
 loop:
     
 //line "codegen/v/loop_switch/advanced.v":153
-    mut yystate := st.state
+    mut yystate := int(st.state)
 yyl:
     for {
         match yystate {
@@ -1367,7 +1367,7 @@ fn test(expect Status, packets []string) {
     mut status := Status.lex_ready
     mut send := 0
     for {
-        status = lex(mut st)
+        status = lex(mut &st)
         if status == .lex_end {
             break
         } else if status == .lex_waiting {
@@ -1377,7 +1377,7 @@ fn test(expect Status, packets []string) {
                 fw.flush()
                 send += 1
             }
-            status = fill(mut st)
+            status = fill(mut &st)
             log.debug("filled buffer $st.buf, status $status")
             if status != .lex_ready {
                 break

@@ -145,24 +145,24 @@ lex8 State{..} =
 
 
 #148 "haskell/reuse/reuse.hs"
-yy13 :: State (Array Int Int) -> Maybe Int
+yy13 :: State (Array Int Word) -> Maybe Int
 yy13 State{..} =
     let yych = (!) _yyinput _yycursor in
     let __ = _yycursor + 1 in let _yycursor = __ in
     if yych == 0x00002200 then yy16 State{..}
     else yy14 State{..}
 
-yy14 :: State (Array Int Int) -> Maybe Int
+yy14 :: State (Array Int Word) -> Maybe Int
 yy14 State{..} =
     yy15 State{..}
 
-yy15 :: State (Array Int Int) -> Maybe Int
+yy15 :: State (Array Int Word) -> Maybe Int
 yy15 State{..} =
 #24 "haskell/reuse/reuse.re"
     Nothing
 #164 "haskell/reuse/reuse.hs"
 
-yy16 :: State (Array Int Int) -> Maybe Int
+yy16 :: State (Array Int Word) -> Maybe Int
 yy16 State{..} =
     let _yymarker = _yycursor in
     let yych = (!) _yyinput _yycursor in
@@ -172,7 +172,7 @@ yy16 State{..} =
     else
         yy15 State{..}
 
-yy17 :: State (Array Int Int) -> Maybe Int
+yy17 :: State (Array Int Word) -> Maybe Int
 yy17 State{..} =
     let yych = (!) _yyinput _yycursor in
     if yych == 0x00000020 then
@@ -181,12 +181,12 @@ yy17 State{..} =
     else
         yy18 State{..}
 
-yy18 :: State (Array Int Int) -> Maybe Int
+yy18 :: State (Array Int Word) -> Maybe Int
 yy18 State{..} =
     let _yycursor = _yymarker in
     yy15 State{..}
 
-yy19 :: State (Array Int Int) -> Maybe Int
+yy19 :: State (Array Int Word) -> Maybe Int
 yy19 State{..} =
     let yych = (!) _yyinput _yycursor in
     if yych == 0x00002203 then
@@ -195,7 +195,7 @@ yy19 State{..} =
     else
         yy18 State{..}
 
-yy20 :: State (Array Int Int) -> Maybe Int
+yy20 :: State (Array Int Word) -> Maybe Int
 yy20 State{..} =
     let yych = (!) _yyinput _yycursor in
     if yych == 0x00000079 then
@@ -204,13 +204,13 @@ yy20 State{..} =
     else
         yy18 State{..}
 
-yy21 :: State (Array Int Int) -> Maybe Int
+yy21 :: State (Array Int Word) -> Maybe Int
 yy21 State{..} =
 #23 "haskell/reuse/reuse.re"
     Just _yycursor
 #212 "haskell/reuse/reuse.hs"
 
-lex32 :: State (Array Int Int) -> Maybe Int
+lex32 :: State (Array Int Word) -> Maybe Int
 lex32 State{..} =
     yy13 State{..}
 

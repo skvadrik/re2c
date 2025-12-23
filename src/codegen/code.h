@@ -158,6 +158,7 @@ struct CodeGo {
     Span* span;
     tcid_t tags;
     bool skip;
+    bool eof; // true if YYEND check is needed
     union {
         CodeGoSwIf* goswif;
         CodeGoCgoto* cgoto;

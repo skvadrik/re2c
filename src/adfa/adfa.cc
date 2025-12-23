@@ -48,7 +48,7 @@ Adfa::Adfa(Tdfa&& dfa,
         , msg(msg)
         , accepts()
         , lower_char(0)
-        , upper_char(charset.back())
+        , upper_char(charset.back() - 1) // -1 for the fake end-of-input symbol
         , state_count(0)
         , head(nullptr)
         , default_state(nullptr)
@@ -60,7 +60,6 @@ Adfa::Adfa(Tdfa&& dfa,
         , mtagnames()
         , mtagvars()
         , def_rule(dfa.def_rule)
-        , eof_rule(dfa.eof_rule)
         , key_size(key)
         , max_fill(0)
         , max_nmatch(0)
@@ -97,19 +96,17 @@ Adfa::Adfa(Tdfa&& dfa,
         s->fallthru = t->fallthru;
         s->fallback = t->fallback; // see note [fallback states]
 
-        if (opts->fill_eof != NOEOF) {
-            // Get rid of the pseudo-transitions on fake end-of-input symbol,
-            // but store a link to the final state and tags.
-            size_t eof_state = t->arcs[nchars - 1];
-            if (eof_state != Tdfa::NIL) {
-                TdfaState* e = dfa.states[eof_state];
-                s->eof_state = i2s[eof_state];
-                s->eof_tags = t->tcid[nchars - 1];
-                // There should be no final / fallback tags ($ must be at the end).
-                CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
-            }
-            --nchars;
+        // Get rid of the pseudo-transitions on fake end-of-input symbol,
+        // but store a link to the final state and tags.
+        size_t eof_state = t->arcs[nchars - 1];
+        if (eof_state != Tdfa::NIL) {
+            s->eof_state = i2s[eof_state];
+            s->eof_tags = t->tcid[nchars - 1];
+            // There are no final / fallback tags (by TNFA construction $ is at the end).
+            TdfaState* e = dfa.states[eof_state];
+            CHECK(e->tcid[nchars] == TCID0 && e->tcid[nchars + 1] == TCID0);
         }
+        --nchars;
 
         bool end = true;
         for (uint32_t c = 0; end && c < nchars; ++c) {
@@ -338,11 +335,12 @@ void Adfa::find_base_state(const opt_t* opts) {
 // wouldn't need to know tunneling results), but it's much worse for tunneling.
 
 void Adfa::prepare(const opt_t* opts) {
-    // create rule states
+    // create rule states for final states
     for (State* s = head; s; s = s->next) {
         if (s->rule != Rule::NONE) {
             if (!finstates[s->rule]) {
                 State* n = new State;
+                n->linked = true;
                 n->kind = StateKind::RULE;
                 n->rule = s->rule;
                 finstates[s->rule] = n;
@@ -355,12 +353,18 @@ void Adfa::prepare(const opt_t* opts) {
                 }
             }
         }
-
-        State* e = s->eof_state;
-        if (e != nullptr && !finstates[e->rule]) {
-            e->kind = StateKind::RULE;
-            finstates[e->rule] = e;
-            e->go.span_count = 0;
+    }
+    // fix end-of-input links to point to the newly created rule state
+    for (State* s = head; s; s = s->next) {
+        if (s->eof_state != nullptr) {
+            s->eof_state = finstates[s->eof_state->rule];
+        }
+    }
+    // remove unlinked states
+    for (State* s = head; s; s = s->next) {
+        for (State* t = s->next; t && !t->linked; t = s->next) {
+            s->next = t->next;
+            delete t;
         }
     }
 

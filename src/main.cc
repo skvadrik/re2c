@@ -75,7 +75,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
     DDUMP_NFA(opts, nfa);
 
     // Transmorm TNFA to TDFA.
-    Tdfa dfa(dfa_alc, nfa.charset.size(), gram.def_rule, gram.eof_rule);
+    Tdfa dfa(dfa_alc, nfa.charset.size(), gram.def_rule);
     CHECK_RET(determinization(std::move(nfa), dfa, opts, msg, cond));
     DDUMP_DFA_DET(opts, dfa);
 
@@ -104,7 +104,7 @@ LOCAL_NODISCARD(Ret ast_to_dfa(
 
     // find strongly connected components and calculate argument to YYFILL
     std::vector<size_t> fill;
-    fillpoints(dfa, opts, fill);
+    fillpoints(dfa, fill);
 
     // Transform TDFA to ADFA (DFA with actions, tunnel automaton).
     Adfa* adfa = new Adfa(std::move(dfa), fill, skeleton.sizeof_key, loc, name, cond, opts, msg,

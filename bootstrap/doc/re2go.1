@@ -822,6 +822,9 @@ variable named \fBstag\fP\&.
 .B \fB#mtag\fP
 An \fIm\-tag\fP: saves all input positions at which \fB#mtag\fP matches in a
 variable named \fBmtag\fP\&.
+.TP
+.B \fB$\fP
+End of input.
 .UNINDENT
 .sp
 Character classes and string literals may contain the following escape
@@ -932,7 +935,8 @@ It contains primitives for generic operations:
 \fBYYSHIFT\fP,
 \fBYYSHIFTSTAG\fP,
 \fBYYSHIFTMTAG\fP,
-\fBYYLESSTHAN\fP\&.
+\fBYYLESSTHAN\fP,
+\fBYYEND\fP\&.
 Generic API supports two styles that determine the form in which the
 primitives should be defined:
 .nf
@@ -964,6 +968,7 @@ API can be defined in terms of integer variables \fBcursor\fP, \fBlimit\fP,
   re2c:YYRESTORECTX = \(dqcursor = ctxmarker\(dq;
   re2c:YYRESTORETAG = \(dqcursor = ${tag}\(dq;
   re2c:YYLESSTHAN   = \(dqlimit \- cursor < @@{len}\(dq;
+  re2c:YYEND        = \(dqlimit == cursor\(dq;
   re2c:YYSTAGP      = \(dq@@{tag} = cursor\(dq;
   re2c:YYSTAGN      = \(dq@@{tag} = \-1\(dq;
   re2c:YYSHIFT      = \(dqcursor += @@{shift}\(dq;
@@ -997,6 +1002,7 @@ YYRESTORE := func() { cursor = marker }
 YYBACKUPCTX := func() { ctxmarker = cursor }
 YYRESTORECTX := func() { cursor = ctxmarker }
 YYLESSTHAN := func(n int) bool { return limit\-cursor < n }
+YYEND := func(n int) bool { return limit == cursor }
 YYSHIFT := func(n int) { cursor += n }
 .ft P
 .fi
@@ -1070,6 +1076,14 @@ An integral constant equal to the maximum value of the argument to
 A generic API primitive with one variable \fBlen\fP\&.
 It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
 and only if there are less than \fBlen\fP input characters left.
+.TP
+.B \fBYYEND\fP
+A generic API primitive with no variables.
+It should be defined as an r\-value of boolean type that equals \fBtrue\fP if
+and only if the \fIlogical\fP end of input has been reached (excluding any
+padding or sentinel symbols). \fBYYEND\fP is used to implement \fB$\fP symbol in
+regular expressions. It differs from \fBYYLESSTHAN\fP, which is used to ensure
+that the lexer won\(aqt read past the end of buffer.
 .TP
 .B \fBYYPEEK\fP
 A generic API primitive with no variables.
@@ -1254,7 +1268,7 @@ Show help message.
 .TP
 .B \fB\-\-api <simple | record | generic>\fP
 Specify the API used by the generated code to interface with used\-defined
-code. Option \fBsimple\fP shold be used in simple cases when there\(aqs no need
+code. Option \fBsimple\fP should be used in simple cases when there\(aqs no need
 for buffer refilling and storing lexer state. Option \fBrecord\fP should be
 used when lexer state needs to be stored in a record (struct, class, etc.).
 Option \fBgeneric\fP should be used in complex cases when the other two APIs
@@ -2235,6 +2249,10 @@ Supported variables: \fBYYLESSTHAN\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP,
 \fBneed\fP (the number of code units to check against). Conditional:
 \fB\&.many\fP (true if the \fBneed\fP is more than one).
 .TP
+.B \fBcode:yyend\fP
+\fBYYEND\fP expression, possibly specialized for different APIs.
+Supported variables: \fBYYEND\fP, \fBYYCURSOR\fP, \fBYYLIMIT\fP\&.
+.TP
 .B \fBcode:yybm_filter\fP
 Condition that is used to filter out \fByych\fP values that are not
 covered by the \fByybm\fP table (used with \fB\-\-bitmaps\fP option).
@@ -2335,6 +2353,9 @@ languages that have \(dqunsafe\(dq feature.
 .TP
 .B \fB\&.version\fP
 True if the generated fingerprint should contain re2go version.
+.TP
+.B \fB\&.yyfill.enable\fP
+True if \fBYYFILL\fP is enabled (\fBre2c:yyfill:enable = 1\fP).
 .TP
 .B \fB\&.yyfn.throw\fP
 True if \fBre2c:yyfn:throw\fP configuration is defined to a nonempty string.
