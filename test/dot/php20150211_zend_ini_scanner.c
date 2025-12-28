@@ -24,11 +24,13 @@ INITIAL -> 1
 1 -> 24 [label="[Y][y]"]
 1 -> 25 [label="[[]"]
 2 -> 3
+3 [style="dashed"]
 3 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E- ][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 3 -> 4 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
 3 -> 27 [label="[[]"]
 4 [label="dot/php20150211_zend_ini_scanner.re:482"]
 5 -> 6
+6 [style="dashed"]
 6 -> 7 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-:][<][>-0xFF]"]
 6 -> 5 [label="[0x09][ ]"]
 6 -> 8 [label="[0x0A]"]
@@ -41,6 +43,7 @@ INITIAL -> 1
 10 -> 9 [label="[0x00-0x09][0x0B-0xFF]"]
 10 -> 8 [label="[0x0A]"]
 11 -> 12
+12 [style="dashed"]
 12 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 12 -> 5 [label="[0x09]"]
 12 -> 8 [label="[0x0A]"]
@@ -53,10 +56,12 @@ INITIAL -> 1
 13 -> 14
 14 [label="dot/php20150211_zend_ini_scanner.re:556"]
 15 -> 16
+16 [style="dashed"]
 16 -> 15 [label="[0x00-0x09][0x0B-0x0C][0x0E-0xFF]"]
 16 -> 30 [label="[0x0A]"]
 16 -> 32 [label="[0x0D]"]
 17 -> 18
+18 [style="dashed"]
 18 -> 19 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 18 -> 17 [label="[0x09][ ]"]
 19 [label="dot/php20150211_zend_ini_scanner.re:492"]
@@ -75,6 +80,7 @@ INITIAL -> 1
 25 -> 26
 26 [label="dot/php20150211_zend_ini_scanner.re:407"]
 27 -> 28
+28 [style="dashed"]
 28 -> 29 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 28 -> 27 [label="[0x09][ ]"]
 29 [label="dot/php20150211_zend_ini_scanner.re:432"]
@@ -95,6 +101,7 @@ INITIAL -> 1
 37 -> 3 [label="[0x00-E][G-e][g-0xFF]"]
 37 -> 46 [label="[F][f]"]
 38 -> 39
+39 [style="dashed"]
 39 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 39 -> 50 [label="[0x09]"]
 39 -> 40 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
@@ -108,9 +115,11 @@ INITIAL -> 1
 43 -> 3 [label="[0x00-R][T-r][t-0xFF]"]
 43 -> 48 [label="[S][s]"]
 44 -> 45
+45 [style="dashed"]
 45 -> 35 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 45 -> 44 [label="[0x09][ ]"]
 46 -> 47
+47 [style="dashed"]
 47 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 47 -> 44 [label="[0x09]"]
 47 -> 35 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
@@ -121,11 +130,13 @@ INITIAL -> 1
 49 -> 3 [label="[0x00-K][M-k][m-0xFF]"]
 49 -> 53 [label="[L][l]"]
 50 -> 51
+51 [style="dashed"]
 51 -> 40 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 51 -> 50 [label="[0x09][ ]"]
 52 -> 3 [label="[0x00-D][F-d][f-0xFF]"]
 52 -> 38 [label="[E][e]"]
 53 -> 54
+54 [style="dashed"]
 54 -> 2 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 54 -> 56 [label="[0x09]"]
 54 -> 55 [label="[0x0A][0x0D][!-\"][$][&][(-)][;][=][^][{-~]"]
@@ -133,6 +144,7 @@ INITIAL -> 1
 54 -> 27 [label="[[]"]
 55 [label="dot/php20150211_zend_ini_scanner.re:478"]
 56 -> 57
+57 [style="dashed"]
 57 -> 55 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 57 -> 56 [label="[0x09][ ]"]
 ST_OFFSET -> 59
@@ -148,12 +160,14 @@ ST_OFFSET -> 59
 59 -> 78 [label="[\\]"]
 59 -> 79 [label="[0x5D]"]
 60 -> 61
+61 [style="dashed"]
 61 -> 60 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-:][<-[][^-0xFF]"]
 61 -> 62 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 61 -> 81 [label="[$]"]
 61 -> 78 [label="[\\]"]
 62 [label="dot/php20150211_zend_ini_scanner.re:574"]
 63 -> 64
+64 [style="dashed"]
 64 -> 60 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#][%-&][(-:][<-[][^-0xFF]"]
 64 -> 63 [label="[0x09][ ]"]
 64 -> 62 [label="[0x0A][0x0D]['][;]"]
@@ -174,6 +188,7 @@ ST_OFFSET -> 59
 71 -> 61 [label="[0x00-/][:-0xFF]"]
 71 -> 89 [label="[0-9]"]
 72 -> 73
+73 [style="dashed"]
 73 -> 60 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(--][/][:][<-[][^-0xFF]"]
 73 -> 74 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 73 -> 81 [label="[$]"]
@@ -182,6 +197,7 @@ ST_OFFSET -> 59
 73 -> 78 [label="[\\]"]
 74 [label="dot/php20150211_zend_ini_scanner.re:552"]
 75 -> 76
+76 [style="dashed"]
 76 -> 60 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-@][[][^][`][{-0xFF]"]
 76 -> 77 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 76 -> 81 [label="[$]"]
@@ -198,14 +214,17 @@ ST_OFFSET -> 59
 82 -> 74 [label="yyaccept=1"]
 82 -> 77 [label="yyaccept=2"]
 83 -> 84
+84 [style="dashed"]
 84 -> 60 [label="[0x00-#][%-[][0x5D-0xFF]"]
 84 -> 83 [label="[$][\\]"]
 85 -> 86
 86 [label="dot/php20150211_zend_ini_scanner.re:450"]
 87 -> 88
+88 [style="dashed"]
 88 -> 87 [label="[0x00-&][(-0xFF]"]
 88 -> 91 [label="[']"]
 89 -> 90
+90 [style="dashed"]
 90 -> 60 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-[][^-0xFF]"]
 90 -> 74 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 90 -> 81 [label="[$]"]
@@ -226,12 +245,14 @@ ST_SECTION_VALUE -> 94
 94 -> 113 [label="[\\]"]
 94 -> 114 [label="[0x5D]"]
 95 -> 96
+96 [style="dashed"]
 96 -> 95 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-:][<-[][^-0xFF]"]
 96 -> 97 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 96 -> 117 [label="[$]"]
 96 -> 113 [label="[\\]"]
 97 [label="dot/php20150211_zend_ini_scanner.re:574"]
 98 -> 99
+99 [style="dashed"]
 99 -> 95 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#][%-&][(-:][<-[][^-0xFF]"]
 99 -> 98 [label="[0x09][ ]"]
 99 -> 97 [label="[0x0A][0x0D]['][;][0x5D]"]
@@ -251,6 +272,7 @@ ST_SECTION_VALUE -> 94
 106 -> 96 [label="[0x00-/][:-0xFF]"]
 106 -> 125 [label="[0-9]"]
 107 -> 108
+108 [style="dashed"]
 108 -> 95 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(--][/][:][<-[][^-0xFF]"]
 108 -> 109 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 108 -> 117 [label="[$]"]
@@ -259,6 +281,7 @@ ST_SECTION_VALUE -> 94
 108 -> 113 [label="[\\]"]
 109 [label="dot/php20150211_zend_ini_scanner.re:552"]
 110 -> 111
+111 [style="dashed"]
 111 -> 95 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-@][[][^][`][{-0xFF]"]
 111 -> 112 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 111 -> 117 [label="[$]"]
@@ -267,6 +290,7 @@ ST_SECTION_VALUE -> 94
 112 [label="dot/php20150211_zend_ini_scanner.re:548"]
 113 -> 95
 114 -> 115
+115 [style="dashed"]
 115 -> 116 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 115 -> 114 [label="[0x09][ ]"]
 115 -> 127 [label="[0x0A]"]
@@ -279,14 +303,17 @@ ST_SECTION_VALUE -> 94
 118 -> 109 [label="yyaccept=1"]
 118 -> 112 [label="yyaccept=2"]
 119 -> 120
+120 [style="dashed"]
 120 -> 95 [label="[0x00-#][%-[][0x5D-0xFF]"]
 120 -> 119 [label="[$][\\]"]
 121 -> 122
 122 [label="dot/php20150211_zend_ini_scanner.re:450"]
 123 -> 124
+124 [style="dashed"]
 124 -> 123 [label="[0x00-&][(-0xFF]"]
 124 -> 129 [label="[']"]
 125 -> 126
+126 [style="dashed"]
 126 -> 95 [label="[0x00-0x09][0x0B-0x0C][0x0E-!][#][%-&][(-/][:][<-[][^-0xFF]"]
 126 -> 109 [label="[0x0A][0x0D][\"]['][;][0x5D]"]
 126 -> 117 [label="[$]"]
@@ -320,11 +347,13 @@ ST_VALUE -> 132
 133 -> 134
 134 [label="dot/php20150211_zend_ini_scanner.re:644"]
 135 -> 136
+136 [style="dashed"]
 136 -> 137 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 136 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-:][<][>-0x5D][_-{][}][0x7F-0xFF]"]
 136 -> 167 [label="[$]"]
 137 [label="dot/php20150211_zend_ini_scanner.re:570"]
 138 -> 139
+139 [style="dashed"]
 139 -> 140 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!][#-:][<-0xFF]"]
 139 -> 138 [label="[0x09][ ]"]
 139 -> 141 [label="[0x0A]"]
@@ -337,6 +366,7 @@ ST_VALUE -> 132
 143 -> 142 [label="[0x00-0x09][0x0B-0xFF]"]
 143 -> 141 [label="[0x0A]"]
 144 -> 145
+145 [style="dashed"]
 145 -> 146 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 145 -> 144 [label="[0x09][ ]"]
 146 [label="dot/php20150211_zend_ini_scanner.re:560"]
@@ -351,6 +381,7 @@ ST_VALUE -> 132
 151 -> 136 [label="[0x00-/][:-0xFF]"]
 151 -> 174 [label="[0-9]"]
 152 -> 153
+153 [style="dashed"]
 153 -> 154 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 153 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*--][/][:][<][>-0x5D][_-{][}][0x7F-0xFF]"]
 153 -> 167 [label="[$]"]
@@ -358,12 +389,14 @@ ST_VALUE -> 132
 153 -> 152 [label="[0-9]"]
 154 [label="dot/php20150211_zend_ini_scanner.re:552"]
 155 -> 156
+156 [style="dashed"]
 156 -> 155 [label="[0x00-0x09][0x0B-0x0C][0x0E-0xFF]"]
 156 -> 176 [label="[0x0A]"]
 156 -> 178 [label="[0x0D]"]
 157 -> 158
 158 [label="dot/php20150211_zend_ini_scanner.re:564"]
 159 -> 160
+160 [style="dashed"]
 160 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 160 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-/][:][<][>-@][[-0x5D][`][{][}][0x7F-0xFF]"]
 160 -> 167 [label="[$]"]
@@ -405,9 +438,11 @@ ST_VALUE -> 132
 170 -> 171
 171 [label="dot/php20150211_zend_ini_scanner.re:450"]
 172 -> 173
+173 [style="dashed"]
 173 -> 172 [label="[0x00-&][(-0xFF]"]
 173 -> 190 [label="[']"]
 174 -> 175
+175 [style="dashed"]
 175 -> 154 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
 175 -> 135 [label="[0x01-0x08][0x0B-0x0C][0x0E-0x1F][#][%][*-/][:][<][>-0x5D][_-{][}][0x7F-0xFF]"]
 175 -> 167 [label="[$]"]
@@ -448,6 +483,7 @@ ST_VALUE -> 132
 187 -> 159 [label="[0-9][A-R][T-Z][_][a-r][t-z]"]
 187 -> 184 [label="[S][s]"]
 188 -> 189
+189 [style="dashed"]
 189 -> 137 [label="[0x00]"]
 189 -> 135 [label="[0x01-#][%-[][0x5D-0xFF]"]
 189 -> 188 [label="[$]"]
@@ -459,6 +495,7 @@ ST_VALUE -> 132
 192 -> 159 [label="[0-9][A-R][T-Z][_][a-r][t-z]"]
 192 -> 195 [label="[S][s]"]
 193 -> 194
+194 [style="dashed"]
 194 -> 181 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 194 -> 193 [label="[0x09][ ]"]
 195 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
@@ -474,6 +511,7 @@ ST_VALUE -> 132
 197 -> 193 [label="[0x09][ ]"]
 197 -> 159 [label="[0-9][A-Z][_][a-z]"]
 198 -> 199
+199 [style="dashed"]
 199 -> 185 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 199 -> 198 [label="[0x09][ ]"]
 200 -> 161 [label="[0x00][0x09-0x0A][0x0D][ -\"][&-)][;][=][^][|][~]"]
@@ -486,6 +524,7 @@ ST_VALUE -> 132
 201 -> 159 [label="[0-9][A-Z][_][a-z]"]
 202 [label="dot/php20150211_zend_ini_scanner.re:478"]
 203 -> 204
+204 [style="dashed"]
 204 -> 202 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 204 -> 203 [label="[0x09][ ]"]
 ST_SECTION_RAW -> 206
@@ -493,12 +532,14 @@ ST_SECTION_RAW -> 206
 206 -> 210 [label="[0x0A][0x0D]"]
 206 -> 212 [label="[0x5D]"]
 207 -> 208
+208 [style="dashed"]
 208 -> 207 [label="[0x00-0x09][0x0B-0x0C][0x0E-\\][^-0xFF]"]
 208 -> 209 [label="[0x0A][0x0D][0x5D]"]
 209 [label="dot/php20150211_zend_ini_scanner.re:538"]
 210 -> 211
 211 [label="dot/php20150211_zend_ini_scanner.re:649"]
 212 -> 213
+213 [style="dashed"]
 213 -> 214 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 213 -> 212 [label="[0x09][ ]"]
 213 -> 215 [label="[0x0A]"]
@@ -514,6 +555,7 @@ ST_DOUBLE_QUOTES -> 218
 219 -> 220
 220 [label="dot/php20150211_zend_ini_scanner.re:588"]
 221 -> 222
+222 [style="dashed"]
 222 -> 223 [label="[0x00-0x08][0x0A-0x1F][!-0xFF]"]
 222 -> 221 [label="[0x09][ ]"]
 223 [label="dot/php20150211_zend_ini_scanner.re:583"]
@@ -526,6 +568,7 @@ ST_VARNAME -> 228
 228 -> 232 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][[][^][{-|][~]"]
 228 -> 234 [label="[}]"]
 229 -> 230
+230 [style="dashed"]
 230 -> 229 [label="[0x00-0x08][0x0B-0x0C][0x0E- ][#][%]['][*-:][<][>-Z][\\-0x5D][_-z][0x7F-0xFF]"]
 230 -> 231 [label="[0x09-0x0A][0x0D][!-\"][$][&][(-)][;][=][[][^][{-~]"]
 231 [label="dot/php20150211_zend_ini_scanner.re:455"]
@@ -551,10 +594,12 @@ ST_RAW -> 237
 245 -> 244 [label="[0x00-0x09][0x0B-0xFF]"]
 245 -> 243 [label="[0x0A]"]
 246 -> 247
+247 [style="dashed"]
 247 -> 246 [label="[0x00-0x09][0x0B-0x0C][0x0E-0xFF]"]
 247 -> 251 [label="[0x0A]"]
 247 -> 253 [label="[0x0D]"]
 248 -> 249
+249 [style="dashed"]
 249 -> 250 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-:][<-0xFF]"]
 249 -> 248 [label="[0x09][ ]"]
 249 -> 243 [label="[0x0A]"]

@@ -2147,6 +2147,9 @@ static void gen_block_dot(Output& output, const Adfas& dfas, CodeList* code) {
                             .cstr(":").u32(semact->loc.line).cstr("\"]");
                     append(code, code_text(alc, buf.flush()));
                 }
+            } else if (s->kind == StateKind::MOVE) {
+                buf.label(*s->label).cstr(" [style=\"dashed\"]");
+                append(code, code_text(alc, buf.flush()));
             }
             if (s->go.kind == CodeGo::Kind::DOT) {
                 gen_godot(output, *dfa, s->go.godot, s, code);

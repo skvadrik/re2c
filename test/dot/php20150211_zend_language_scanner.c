@@ -65,6 +65,7 @@ ST_IN_SCRIPTING -> 1
 2 -> 3
 3 [label="dot/php20150211_zend_language_scanner.re:2350"]
 4 -> 5
+5 [style="dashed"]
 5 -> 6 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 5 -> 4 [label="[0x09-0x0A][0x0D][ ]"]
 6 [label="dot/php20150211_zend_language_scanner.re:1264"]
@@ -110,6 +111,7 @@ ST_IN_SCRIPTING -> 1
 25 -> 117 [label="[X][x]"]
 26 [label="dot/php20150211_zend_language_scanner.re:1615"]
 27 -> 28
+28 [style="dashed"]
 28 -> 26 [label="[0x00--][/][:-D][F-d][f-0xFF]"]
 28 -> 106 [label="[.]"]
 28 -> 27 [label="[0-9]"]
@@ -163,6 +165,7 @@ ST_IN_SCRIPTING -> 1
 41 -> 160 [label="[L][l]"]
 41 -> 161 [label="[O][o]"]
 42 -> 43
+43 [style="dashed"]
 43 -> 35 [label="[0x00-/][:-@][[-^][`][{-~]"]
 43 -> 42 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 44 -> 43 [label="[0x00-E][G-L][O-R][T-e][g-l][o-r][t-0xFF]"]
@@ -218,6 +221,7 @@ ST_IN_SCRIPTING -> 1
 68 -> 192 [label="[=]"]
 69 [label="dot/php20150211_zend_language_scanner.re:1453"]
 70 -> 71
+71 [style="dashed"]
 71 -> 72 [label="[0x00-/][:-@][[-^][`][{-~]"]
 71 -> 70 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 72 [label="dot/php20150211_zend_language_scanner.re:1832"]
@@ -228,6 +232,7 @@ ST_IN_SCRIPTING -> 1
 77 -> 78
 78 [label="dot/php20150211_zend_language_scanner.re:1505"]
 79 -> 80
+80 [style="dashed"]
 80 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-@][C][E][G-H][J-N][P-Q][T][V-`][c][e][g-h][j-n][p-q][t][v-0xFF]"]
 80 -> 79 [label="[0x09][ ]"]
 80 -> 82 [label="[A][a]"]
@@ -282,6 +287,7 @@ ST_IN_SCRIPTING -> 1
 105 -> 81 [label="[0x00--][/-0xFF]"]
 105 -> 206 [label="[.]"]
 106 -> 107
+107 [style="dashed"]
 107 -> 108 [label="[0x00-/][:-D][F-d][f-0xFF]"]
 107 -> 106 [label="[0-9]"]
 107 -> 116 [label="[E][e]"]
@@ -471,19 +477,23 @@ ST_IN_SCRIPTING -> 1
 208 -> 81 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 208 -> 304 [label="[0x09-0x0A][0x0D][ ]"]
 209 -> 210
+210 [style="dashed"]
 210 -> 211 [label="[0x00-/][2-0xFF]"]
 210 -> 209 [label="[0-1]"]
 211 [label="dot/php20150211_zend_language_scanner.re:1587"]
 212 -> 81 [label="[0x00-/][:-0xFF]"]
 212 -> 213 [label="[0-9]"]
 213 -> 214
+214 [style="dashed"]
 214 -> 108 [label="[0x00-/][:-0xFF]"]
 214 -> 213 [label="[0-9]"]
 215 -> 216
+216 [style="dashed"]
 216 -> 217 [label="[0x00-/][:-@][G-`][g-0xFF]"]
 216 -> 215 [label="[0-9][A-F][a-f]"]
 217 [label="dot/php20150211_zend_language_scanner.re:1654"]
 218 -> 219
+219 [style="dashed"]
 219 -> 81 [label="[0x00-0x08][0x0A-0x1F][!][#-&][(-@][[-^][`][{-~]"]
 219 -> 218 [label="[0x09][ ]"]
 219 -> 306 [label="[\"]"]
@@ -651,6 +661,7 @@ ST_IN_SCRIPTING -> 1
 303 -> 81 [label="[0x00-D][F-d][f-0xFF]"]
 303 -> 388 [label="[E][e]"]
 304 -> 305
+305 [style="dashed"]
 305 -> 112 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 305 -> 304 [label="[0x09-0x0A][0x0D][ ]"]
 306 -> 390 [label="[0x00-!][#-/][:-0xFF]"]
@@ -658,6 +669,7 @@ ST_IN_SCRIPTING -> 1
 307 -> 392 [label="[0x00-&][(-/][:-0xFF]"]
 307 -> 81 [label="['][0-9]"]
 308 -> 309
+309 [style="dashed"]
 309 -> 81 [label="[0x00-0x09][0x0B-0x0C][0x0E-/][:-@][[-^][`][{-~]"]
 309 -> 393 [label="[0x0A]"]
 309 -> 395 [label="[0x0D]"]
@@ -796,6 +808,7 @@ ST_IN_SCRIPTING -> 1
 378 -> 81 [label="[0x00-S][U-s][u-0xFF]"]
 378 -> 385 [label="[T][t]"]
 379 -> 380
+380 [style="dashed"]
 380 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 380 -> 379 [label="[0x09][ ]"]
 380 -> 381 [label="[)]"]
@@ -806,6 +819,7 @@ ST_IN_SCRIPTING -> 1
 384 -> 81 [label="[0x00-B][D-b][d-0xFF]"]
 384 -> 474 [label="[C][c]"]
 385 -> 386
+386 [style="dashed"]
 386 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 386 -> 385 [label="[0x09][ ]"]
 386 -> 475 [label="[)]"]
@@ -814,10 +828,12 @@ ST_IN_SCRIPTING -> 1
 388 -> 81 [label="[0x00-S][U-s][u-0xFF]"]
 388 -> 478 [label="[T][t]"]
 389 -> 390
+390 [style="dashed"]
 390 -> 81 [label="[0x00-!][#-/][:-@][[-^][`][{-~]"]
 390 -> 480 [label="[\"]"]
 390 -> 389 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 391 -> 392
+392 [style="dashed"]
 392 -> 81 [label="[0x00-&][(-/][:-@][[-^][`][{-~]"]
 392 -> 480 [label="[']"]
 392 -> 391 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
@@ -947,12 +963,14 @@ ST_IN_SCRIPTING -> 1
 463 -> 43 [label="[0x00-H][J-h][j-0xFF]"]
 463 -> 524 [label="[I][i]"]
 464 -> 465
+465 [style="dashed"]
 465 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 465 -> 464 [label="[0x09][ ]"]
 465 -> 525 [label="[)]"]
 466 -> 81 [label="[0x00-X][Z-x][z-0xFF]"]
 466 -> 527 [label="[Y][y]"]
 467 -> 468
+468 [style="dashed"]
 468 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 468 -> 467 [label="[0x09][ ]"]
 468 -> 469 [label="[)]"]
@@ -971,6 +989,7 @@ ST_IN_SCRIPTING -> 1
 477 -> 81 [label="[0x00-F][H-f][h-0xFF]"]
 477 -> 527 [label="[G][g]"]
 478 -> 479
+479 [style="dashed"]
 479 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 479 -> 478 [label="[0x09][ ]"]
 479 -> 533 [label="[)]"]
@@ -1062,6 +1081,7 @@ ST_IN_SCRIPTING -> 1
 525 -> 526
 526 [label="dot/php20150211_zend_language_scanner.re:1325"]
 527 -> 528
+528 [style="dashed"]
 528 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 528 -> 527 [label="[0x09][ ]"]
 528 -> 575 [label="[)]"]
@@ -1070,6 +1090,7 @@ ST_IN_SCRIPTING -> 1
 530 -> 81 [label="[0x00-Q][S-q][s-0xFF]"]
 530 -> 379 [label="[R][r]"]
 531 -> 532
+532 [style="dashed"]
 532 -> 81 [label="[0x00-0x08][0x0A-0x1F][!-(][*-0xFF]"]
 532 -> 531 [label="[0x09][ ]"]
 532 -> 577 [label="[)]"]
@@ -1314,12 +1335,14 @@ ST_LOOKING_FOR_PROPERTY -> 669
 670 -> 671
 671 [label="dot/php20150211_zend_language_scanner.re:1279"]
 672 -> 673
+673 [style="dashed"]
 673 -> 674 [label="[0x00-0x08][0x0B-0x0C][0x0E-0x1F][!-0xFF]"]
 673 -> 672 [label="[0x09-0x0A][0x0D][ ]"]
 674 [label="dot/php20150211_zend_language_scanner.re:1264"]
 675 -> 671 [label="[0x00-=][?-0xFF]"]
 675 -> 679 [label="[>]"]
 676 -> 677
+677 [style="dashed"]
 677 -> 678 [label="[0x00-/][:-@][[-^][`][{-~]"]
 677 -> 676 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 678 [label="dot/php20150211_zend_language_scanner.re:1273"]
@@ -1340,6 +1363,7 @@ ST_BACKQUOTE -> 682
 688 -> 684 [label="[0x00-#][%-0xFF]"]
 688 -> 694 [label="[$]"]
 689 -> 690
+690 [style="dashed"]
 690 -> 691 [label="[0x00-,][.-/][:-@][\\-^][`][{-~]"]
 690 -> 696 [label="[-]"]
 690 -> 689 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
@@ -1373,6 +1397,7 @@ ST_DOUBLE_QUOTES -> 704
 710 -> 706 [label="[0x00-#][%-0xFF]"]
 710 -> 716 [label="[$]"]
 711 -> 712
+712 [style="dashed"]
 712 -> 713 [label="[0x00-,][.-/][:-@][\\-^][`][{-~]"]
 712 -> 718 [label="[-]"]
 712 -> 711 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
@@ -1403,6 +1428,7 @@ ST_HEREDOC -> 726
 730 -> 728 [label="[0x00-#][%-0xFF]"]
 730 -> 736 [label="[$]"]
 731 -> 732
+732 [style="dashed"]
 732 -> 733 [label="[0x00-,][.-/][:-@][\\-^][`][{-~]"]
 732 -> 738 [label="[-]"]
 732 -> 731 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
@@ -1429,6 +1455,7 @@ ST_LOOKING_FOR_VARNAME -> 746
 749 -> 748 [label="[0x00-/][:-@][\\-^][`][{-|][~]"]
 749 -> 751 [label="[0-9][A-[][_][a-z][}][0x7F-0xFF]"]
 750 -> 751
+751 [style="dashed"]
 751 -> 752 [label="[0x00-/][:-@][\\-^][`][{-|][~]"]
 751 -> 750 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 751 -> 753 [label="[[][}]"]
@@ -1458,19 +1485,23 @@ ST_VAR_OFFSET -> 756
 764 -> 781 [label="[X][x]"]
 765 [label="dot/php20150211_zend_language_scanner.re:1682"]
 766 -> 767
+767 [style="dashed"]
 767 -> 765 [label="[0x00-/][:-0xFF]"]
 767 -> 766 [label="[0-9]"]
 768 -> 769
+769 [style="dashed"]
 769 -> 770 [label="[0x00-/][:-@][[-^][`][{-~]"]
 769 -> 768 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 770 [label="dot/php20150211_zend_language_scanner.re:1855"]
 771 -> 772
 772 [label="dot/php20150211_zend_language_scanner.re:1837"]
 773 -> 774
+774 [style="dashed"]
 774 -> 775 [label="[0x00-/][:-@][[-^][`][{-~]"]
 774 -> 773 [label="[0-9][A-Z][_][a-z][0x7F-0xFF]"]
 775 [label="dot/php20150211_zend_language_scanner.re:1832"]
 776 -> 777
+777 [style="dashed"]
 777 -> 778 [label="[0x00-/][:-0xFF]"]
 777 -> 776 [label="[0-9]"]
 778 [label="dot/php20150211_zend_language_scanner.re:1698"]
@@ -1480,9 +1511,11 @@ ST_VAR_OFFSET -> 756
 781 -> 780 [label="[0x00-/][:-@][G-`][g-0xFF]"]
 781 -> 784 [label="[0-9][A-F][a-f]"]
 782 -> 783
+783 [style="dashed"]
 783 -> 778 [label="[0x00-/][2-0xFF]"]
 783 -> 782 [label="[0-1]"]
 784 -> 785
+785 [style="dashed"]
 785 -> 778 [label="[0x00-/][:-@][G-`][g-0xFF]"]
 785 -> 784 [label="[0-9][A-F][a-f]"]
 INITIAL -> 787
