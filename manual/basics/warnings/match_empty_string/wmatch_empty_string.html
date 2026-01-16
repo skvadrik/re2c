@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wmatch-empty-string &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wmatch-empty-string">
+<h1>-Wmatch-empty-string<a class="headerlink" href="#wmatch-empty-string" title="Permalink to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">[-Wmatch-empty-string]</span></code> warns when a rule is nullable (matches an empty
+string). It was intended to prevent infinite looping in cases like the
+<a class="reference download internal" download="" href="../../../../_downloads/2b46cb5b3a6f542fe4e1851f66223bbf/hang.re"><code class="xref download docutils literal notranslate"><span class="pre">[hang.re]</span></code></a>
+example below. The program loops over its arguments (the outer <code class="docutils literal notranslate"><span class="pre">for</span></code> loop)
+and tries to lex each argument (the inner <code class="docutils literal notranslate"><span class="pre">for</span></code> loop). The lexer stops when
+all input has been consumed and it sees the terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. Arguments must
+consist of lowercase letters only.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">argc</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">];;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/*!re2c</span>
+<span class="cm">            re2c:define:YYCTYPE = char;</span>
+<span class="cm">            re2c:yyfill:enable = 0;</span>
+<span class="cm">            &quot;\x00&quot; { break; }</span>
+<span class="cm">            [a-z]* { continue; }</span>
+<span class="cm">        */</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;argv[%d]: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On well-formed input the program runs as expected. However, if one of the
+arguments contains a symbol diffrerent from lowercase letter, the program hangs
+forever:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wmatch-empty-string hang.re -o hang.c
+hang.re:11:19: warning: rule matches empty string [-Wmatch-empty-string]
+$ c++ -o hang hang.c
+$
+$ ./hang only lowercase letters
+argv[1]: only
+argv[2]: lowercase
+argv[3]: letters
+$
+$ ./hang right ?
+argv[1]: right
+^C
+</pre></div>
+</div>
+<p>Note that if we add default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>, the lexer won’t hang anymore: it will
+match the default rule instead of the nullable rule. The fix is easy: make the
+rule non-nullable (say, <code class="docutils literal notranslate"><span class="pre">[a-z]+</span></code>) and add default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>.</p>
+<p>In some cases matching an empty string makes perfect sense: for example, it
+might be used as a non-consuming default rule, or it might be used to lex an
+optional lexeme (if the corresponding rule doesn’t match, the lexer jumps to
+another block and resumes lexing at the same input position). All these cases
+are valid, so if <code class="docutils literal notranslate"><span class="pre">[-Wmatch-empty-string]</span></code> becomes annoying, it can be silenced
+with <code class="docutils literal notranslate"><span class="pre">[-Wno-match-empty-string]</span></code>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

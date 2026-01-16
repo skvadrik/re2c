@@ -1,0 +1,253 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>URI (RFC-3986) &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="uri-rfc-3986">
+<h1>URI (RFC-3986)<a class="headerlink" href="#uri-rfc-3986" title="Permalink to this heading">¶</a></h1>
+<p>This example was used as a benchmark in
+<a class="reference external" href="../../../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">“Tagged Deterministic Finite Automata with Lookahead”</a> paper;
+it is an RFC-3986 compliant URI parser.
+It uses s-tags.</p>
+<p><a class="reference download internal" download="" href="../../../_downloads/7bbfe71715bebba27dc1c3fac52f6cef/uri_rfc3986.re"><code class="xref download docutils literal notranslate"><span class="pre">[uri_rfc3986.re]</span></code></a></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// re2c $INPUT -o $OUTPUT -i</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string.h&gt;</span>
+
+<span class="cm">/*!re2c re2c:flags:tags = 1; */</span>
+<span class="cm">/*!max:re2c*/</span>
+<span class="k">static</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">SIZE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">file</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buf</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">lim</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">cur</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">mar</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">tok</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!stags:re2c format = &quot;char *@@;\n&quot;; */</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">eof</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="n">input_t</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">init_input</span><span class="p">(</span><span class="n">input_t</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">fname</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">SIZE</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">YYMAXFILL</span><span class="p">);</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SIZE</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">cur</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">mar</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!stags:re2c format = &quot;in-&gt;@@ = 0;\n&quot;; */</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">eof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">free_input</span><span class="p">(</span><span class="n">input_t</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">file</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">fill</span><span class="p">(</span><span class="n">input_t</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">need</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">size_t</span><span class="w"> </span><span class="n">free</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">eof</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">free</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">;</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">free</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">need</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">memmove</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="p">,</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="p">,</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="p">);</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">free</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">cur</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">free</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">mar</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">free</span><span class="p">;</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">free</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!stags:re2c format = &quot;if (in-&gt;@@) in-&gt;@@ -= free;\n&quot;; */</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">fread</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">free</span><span class="p">,</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">file</span><span class="p">);</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">buf</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">SIZE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">eof</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+<span class="w">        </span><span class="n">memset</span><span class="p">(</span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">YYMAXFILL</span><span class="p">);</span>
+<span class="w">        </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">lim</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">YYMAXFILL</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="n">input_t</span><span class="w"> </span><span class="o">*</span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="o">*</span><span class="n">count</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span>
+<span class="w">        </span><span class="o">*</span><span class="n">s1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">u1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h3</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h5</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">r1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p3</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">q1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">f1</span><span class="p">,</span>
+<span class="w">        </span><span class="o">*</span><span class="n">s2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">u2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h4</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">h6</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">r2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">p4</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">q2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">f2</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="nl">loop</span><span class="p">:</span>
+<span class="w">    </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">tok</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in</span><span class="o">-&gt;</span><span class="n">cur</span><span class="p">;</span>
+<span class="cm">/*!re2c</span>
+
+<span class="cm">    re2c:define:YYCTYPE = &quot;unsigned char&quot;;</span>
+<span class="cm">    re2c:define:YYCURSOR = in-&gt;cur;</span>
+<span class="cm">    re2c:define:YYMARKER = in-&gt;mar;</span>
+<span class="cm">    re2c:define:YYLIMIT = in-&gt;lim;</span>
+<span class="cm">    re2c:define:YYFILL = &quot;if (fill(in, @@) != 0) return 2;&quot;;</span>
+<span class="cm">    re2c:define:YYFILL:naked = 1;</span>
+<span class="cm">    re2c:tags:expression = &quot;in-&gt;@@&quot;;</span>
+
+<span class="cm">    end = &quot;\x00&quot;;</span>
+<span class="cm">    eol = &quot;\n&quot;;</span>
+
+<span class="cm">    alpha       = [a-zA-Z];</span>
+<span class="cm">    digit       = [0-9];</span>
+<span class="cm">    hexdigit    = [0-9a-fA-F];</span>
+<span class="cm">    unreserved  = alpha | digit | [-._~];</span>
+<span class="cm">    pct_encoded = &quot;%&quot; hexdigit{2};</span>
+<span class="cm">    sub_delims  = [!$&amp;&#39;()*+,;=];</span>
+<span class="cm">    pchar       = unreserved | pct_encoded | sub_delims | [:@];</span>
+
+<span class="cm">    scheme = @s1 alpha (alpha | digit | [-+.])* @s2;</span>
+<span class="cm">    userinfo = @u1 (unreserved | pct_encoded | sub_delims | &quot;:&quot;)* @u2;</span>
+<span class="cm">    dec_octet</span>
+<span class="cm">        = digit</span>
+<span class="cm">        | [\x31-\x39] digit</span>
+<span class="cm">        | &quot;1&quot; digit{2}</span>
+<span class="cm">        | &quot;2&quot; [\x30-\x34] digit</span>
+<span class="cm">        | &quot;25&quot; [\x30-\x35];</span>
+<span class="cm">    ipv4address = dec_octet &quot;.&quot; dec_octet &quot;.&quot; dec_octet &quot;.&quot; dec_octet;</span>
+<span class="cm">    h16         = hexdigit{1,4};</span>
+<span class="cm">    ls32        = h16 &quot;:&quot; h16 | ipv4address;</span>
+<span class="cm">    ipv6address</span>
+<span class="cm">        =                            (h16 &quot;:&quot;){6} ls32</span>
+<span class="cm">        |                       &quot;::&quot; (h16 &quot;:&quot;){5} ls32</span>
+<span class="cm">        | (               h16)? &quot;::&quot; (h16 &quot;:&quot;){4} ls32</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,1} h16)? &quot;::&quot; (h16 &quot;:&quot;){3} ls32</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,2} h16)? &quot;::&quot; (h16 &quot;:&quot;){2} ls32</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,3} h16)? &quot;::&quot;  h16 &quot;:&quot;     ls32</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,4} h16)? &quot;::&quot;              ls32</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,5} h16)? &quot;::&quot;              h16</span>
+<span class="cm">        | ((h16 &quot;:&quot;){0,6} h16)? &quot;::&quot;;</span>
+<span class="cm">    ipvfuture   = &quot;v&quot; hexdigit+ &quot;.&quot; (unreserved | sub_delims | &quot;:&quot; )+;</span>
+<span class="cm">    ip_literal  = &quot;[&quot; ( ipv6address | ipvfuture ) &quot;]&quot;;</span>
+<span class="cm">    reg_name    = (unreserved | pct_encoded | sub_delims)*;</span>
+<span class="cm">    host</span>
+<span class="cm">        = @h1 ip_literal  @h2</span>
+<span class="cm">        | @h3 ipv4address @h4</span>
+<span class="cm">        | @h5 reg_name    @h6;</span>
+<span class="cm">    port      = @r1 digit* @r2;</span>
+<span class="cm">    authority = (userinfo &quot;@&quot;)? host (&quot;:&quot; port)?;</span>
+<span class="cm">    path_abempty  = (&quot;/&quot; pchar*)*;</span>
+<span class="cm">    path_absolute = &quot;/&quot; (pchar+ (&quot;/&quot; pchar*)*)?;</span>
+<span class="cm">    path_rootless = pchar+ (&quot;/&quot; pchar*)*;</span>
+<span class="cm">    path_empty    = &quot;&quot;;</span>
+<span class="cm">    hier_part</span>
+<span class="cm">        = &quot;//&quot; authority @p1 path_abempty @p2</span>
+<span class="cm">        | @p3 (path_absolute | path_rootless | path_empty) @p4;</span>
+<span class="cm">    query    = @q1 (pchar | [/?])* @q2;</span>
+<span class="cm">    fragment = @f1 (pchar | [/?])* @f2;</span>
+<span class="cm">    uri = scheme &quot;:&quot; hier_part (&quot;?&quot; query)? (&quot;#&quot; fragment)?;</span>
+
+<span class="cm">    *   { return 1; }</span>
+<span class="cm">    end { *count = c; return 0; }</span>
+<span class="cm">    eol { goto loop; }</span>
+<span class="cm">    uri {</span>
+<span class="cm">        ++c;</span>
+<span class="cm">        fprintf(stderr, &quot;URI %ld:\n&quot;, c);</span>
+<span class="cm">        fprintf(stderr, &quot;  scheme:   %.*s\n&quot;, (int)(s2 - s1), s1);</span>
+<span class="cm">        if (u1) fprintf(stderr, &quot;  userinfo: %.*s\n&quot;, (int)(u2 - u1), u1);</span>
+<span class="cm">        if (h1) fprintf(stderr, &quot;  host:     %.*s (IP literal)\n&quot;, (int)(h2 - h1), h1);</span>
+<span class="cm">        if (h3) fprintf(stderr, &quot;  host:     %.*s (IPv4)\n&quot;, (int)(h4 - h3), h3);</span>
+<span class="cm">        if (h5) fprintf(stderr, &quot;  host:     %.*s (name)\n&quot;, (int)(h6 - h5), h5);</span>
+<span class="cm">        if (r1) fprintf(stderr, &quot;  port:     %.*s\n&quot;, (int)(r2 - r1), r1);</span>
+<span class="cm">        if (p1) fprintf(stderr, &quot;  path:     %.*s\n&quot;, (int)(p2 - p1), p1);</span>
+<span class="cm">        if (p3) fprintf(stderr, &quot;  path:     %.*s\n&quot;, (int)(p4 - p3), p3);</span>
+<span class="cm">        if (q1) fprintf(stderr, &quot;  query:    %.*s\n&quot;, (int)(q2 - q1), q1);</span>
+<span class="cm">        if (f1) fprintf(stderr, &quot;  fragment: %.*s\n&quot;, (int)(f2 - f1), f1);</span>
+<span class="cm">        fprintf(stderr, &quot;\n&quot;);</span>
+<span class="cm">        goto loop;</span>
+<span class="cm">    }</span>
+<span class="cm">*/</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">fname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;input&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// prepare input file</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;w&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;http://user:pass@127.0.0.1:8000/path/data?key=val&amp;key2=val2#frag1</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;rsync://rsync.kernel.org/pub/</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;http://re2c.org/manual/syntax/syntax.html#rules</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;ssh://[2001:db8:85a3::8a2e:370:7334]/</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// read input into buffer</span>
+<span class="w">    </span><span class="n">input_t</span><span class="w"> </span><span class="n">in</span><span class="p">;</span>
+<span class="w">    </span><span class="n">init_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="n">fname</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">long</span><span class="w"> </span><span class="n">count</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="o">&amp;</span><span class="n">in</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">count</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">count</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">4</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// cleanup</span>
+<span class="w">    </span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free_input</span><span class="p">(</span><span class="o">&amp;</span><span class="n">in</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile as <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">-o</span> <span class="pre">uri_rfc3986.c</span> <span class="pre">uri_rfc3986.re</span></code>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

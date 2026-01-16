@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Parsing options &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parsing-options">
+<h1>Parsing options<a class="headerlink" href="#parsing-options" title="Permalink to this heading">¶</a></h1>
+<p>This example shows how to parse command-line options
+with possible arguments, where each individual option may need its own argument format.
+Our parser handles errors and typos:
+for known options it reports ill-formed arguments;
+for unrecognized options it collects them and reports at the end of parsing.
+Our imaginary options are summarized below:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code>, <code class="docutils literal notranslate"><span class="pre">--verbose</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-l</span> <span class="pre">LIMIT</span></code>, <code class="docutils literal notranslate"><span class="pre">--limit=LIMIT</span></code>, where <code class="docutils literal notranslate"><span class="pre">LIMIT</span></code> is a decimal number followed by one of the suffixes <code class="docutils literal notranslate"><span class="pre">B</span></code>, <code class="docutils literal notranslate"><span class="pre">K</span></code>, <code class="docutils literal notranslate"><span class="pre">M</span></code> or <code class="docutils literal notranslate"><span class="pre">G</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-d</span> <span class="pre">DATE</span></code>, <code class="docutils literal notranslate"><span class="pre">--date=DATE</span></code>, where <code class="docutils literal notranslate"><span class="pre">DATE</span></code> has the form <code class="docutils literal notranslate"><span class="pre">DD/MM/YYYY</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-p</span> <span class="pre">PATH</span></code>, <code class="docutils literal notranslate"><span class="pre">--path=PATH</span></code>, where <code class="docutils literal notranslate"><span class="pre">PATH</span></code> is a <code class="docutils literal notranslate"><span class="pre">/</span></code>-separated file path</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span> <span class="pre">FORMAT</span></code>, <code class="docutils literal notranslate"><span class="pre">--format=FORMAT</span></code>, where <code class="docutils literal notranslate"><span class="pre">FORMAT</span></code> is a double-quoted format string</p></li>
+</ul>
+<p><a class="reference download internal" download="" href="../../../_downloads/fa4945cc025c4fd748c4d1def69c2fa1/parse_options.re"><code class="xref download docutils literal notranslate"><span class="pre">[options.re]</span></code></a></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// re2c $INPUT -o $OUTPUT -i</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;string&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">pair</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">unknown_t</span><span class="p">;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">options_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">date</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">path</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">format</span><span class="p">;</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">limit</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">bool</span><span class="w"> </span><span class="n">verbose</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">options_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="n">unknown_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">options:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  date:    %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">date</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  path:    %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  format:  %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">format</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  limit:   %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">limit</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  verbose: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">verbose</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="s">&quot;yes&quot;</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="s">&quot;no&quot;</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">unknown:</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">unknown_t</span><span class="o">::</span><span class="n">const_iterator</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">begin</span><span class="p">(),</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">end</span><span class="p">();</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">e</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;  %s: &#39;%s&#39;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="o">-&gt;</span><span class="n">first</span><span class="p">.</span><span class="n">c_str</span><span class="p">(),</span><span class="w"> </span><span class="n">i</span><span class="o">-&gt;</span><span class="n">second</span><span class="p">.</span><span class="n">c_str</span><span class="p">());</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">bad_arg</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;bad argument &#39;%.*s&#39; to option %.*s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v</span><span class="p">),</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k</span><span class="p">),</span><span class="w"> </span><span class="n">k</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">options_t</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
+<span class="w">    </span><span class="n">unknown_t</span><span class="w"> </span><span class="n">u</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">k</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">v</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!stags:re2c format = &#39;const char *@@;&#39;; */</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned char&quot;;</span>
+<span class="cm">        re2c:define:YYCURSOR = s;</span>
+<span class="cm">        re2c:define:YYMARKER = m;</span>
+<span class="cm">        re2c:yyfill:enable = 0;</span>
+<span class="cm">        re2c:tags = 1;</span>
+
+<span class="cm">        end    = &quot;\x00&quot;;</span>
+<span class="cm">        sp     = [ \t\n\r];</span>
+<span class="cm">        eq     = &quot;=&quot;;</span>
+<span class="cm">        wsp    = sp*;</span>
+<span class="cm">        char   = [^=] \ end;</span>
+<span class="cm">        ochar  = char \ sp;</span>
+<span class="cm">        pchar  = ochar \ [/];</span>
+<span class="cm">        str    = [&quot;] (char \ [&quot;] | [\][&quot;])* [&quot;];</span>
+<span class="cm">        opt    = ochar+;</span>
+<span class="cm">        arg    = ochar* | str;</span>
+<span class="cm">        date   = [0-9]{2} &quot;/&quot; [0-9]{2} &quot;/&quot; [0-9]{4};</span>
+<span class="cm">        path   = pchar* (&quot;/&quot; pchar*)*;</span>
+<span class="cm">        format = str;</span>
+<span class="cm">        limit  = [0-9]+ [BKMG]?;</span>
+
+<span class="cm">        *   { fprintf(stderr, &quot;error: %s\n&quot;, s); return 1; }</span>
+<span class="cm">        end { show(o, u); return 0; }</span>
+<span class="cm">        wsp { continue; }</span>
+
+<span class="cm">        &quot;-v&quot; | &quot;--verbose&quot;              { o.verbose = true; continue; }</span>
+<span class="cm">        (&quot;-l&quot; | &quot;--limit&quot;  eq) @v limit { o.limit  = std::string(v, s); continue; }</span>
+<span class="cm">        (&quot;-f&quot; | &quot;--format&quot; eq) @v str   { o.format = std::string(v, s); continue; }</span>
+<span class="cm">        (&quot;-d&quot; | &quot;--date&quot;   eq) @v date  { o.date   = std::string(v, s); continue; }</span>
+<span class="cm">        (&quot;-p&quot; | &quot;--path&quot;   eq) @v path  { o.path   = std::string(v, s); continue; }</span>
+
+<span class="cm">        @k (&quot;--&quot; (&quot;limit&quot; | &quot;format&quot; | &quot;date&quot; | &quot;path&quot;) | &quot;-&quot; [lfdp]) @v eq? arg {</span>
+<span class="cm">            bad_arg(k, v, s);</span>
+<span class="cm">            continue;</span>
+<span class="cm">        }</span>
+<span class="cm">        [-]{1,2} @k opt @v eq? arg {</span>
+<span class="cm">            u.push_back(std::make_pair(std::string(k, v), std::string(v, s)));</span>
+<span class="cm">            continue;</span>
+<span class="cm">        }</span>
+<span class="cm">    */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;-v --limit=8K -d08/08/1985 -p/usr/src/linux &quot;</span>
+<span class="w">        </span><span class="s">&quot;--format=</span><span class="se">\&quot;</span><span class="s">%s</span><span class="se">\&quot;</span><span class="s"> --limit -f=3 --verbos --d</span><span class="se">\&quot;</span><span class="s">19th May</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile as <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">-o</span> <span class="pre">options.c</span> <span class="pre">options.re</span></code>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

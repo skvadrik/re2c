@@ -1,0 +1,40 @@
+Release 0.16
+==============
+
+This release adds a very important step in the process of code generation:
+minimization of the underlying DFA (deterministic finite automaton).
+Simply speaking, this means that re2c now generates less code
+(while the generated code behaves exactly the same).
+
+DFA minimization is a very well-known technique
+and one might expect that any self-respecting lexer generator would definitely use it.
+So how could it be that re2c didn't?
+In fact, re2c did use a couple of self-invented tricks to compress the generated code
+(one interesting technique is the construction of a *tunnel* automaton).
+Some of these tricks were quite buggy (see `this bug report <https://bugs.gentoo.org/show_bug.cgi?id=518904>`_ for example).
+Now that re2c does canonical DFA minimization, all this stuff is obsolete and has been dropped.
+
+A lot of attention has been paid to the correctness of the DFA minimization.
+Usually, re2c uses a very simple criterion to validate changes:
+the generated code for all the tests in testsuite must remain the same.
+However, in the case of DFA minimization the generated code changes dramatically.
+It is impossible to verify the changes manually.
+
+One possible verification tool is the :ref:`skeleton<manual/manual_c:skeleton programs>` feature.
+Because skeleton is constructed prior to DFA minimization, it cannot be affected by any errors in its implementation.
+
+Another way to verify DFA minimization is by implementing two different algorithms
+and comparing the results. The minimization procedure has a very useful property:
+the miminal DFA is unique (with respect to state relabeling).
+We used the Moore and the so-called *table filling* algorithms:
+The Moore algorithm is fast, while table filling is very simple to implement.
+The ``--dfa-minimization <moore | table>`` option that allows choosing
+the particular algorithm (defaults to ``moore``), but it's only useful for debugging
+DFA minimization.
+
+A good side effect of messing with re2c internals is a significant speedup
+of code generation (see `this issue <https://github.com/skvadrik/re2c/issues/128>`_ for example).
+The test suite now runs twice as fast (at least).
+
+See the changelog :ref:`releases/changelog/changelog:0.16 (2016-01-21)` for details.
+

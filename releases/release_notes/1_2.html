@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 1.2 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-1-2">
+<h1>Release 1.2<a class="headerlink" href="#release-1-2" title="Permalink to this heading">¶</a></h1>
+<p>This release adds a handful of useful features and finalizes two-year
+research effort on POSIX disambiguation.</p>
+<p>First and foremost, <a class="reference internal" href="../../manual/manual_c.html#sentinel-with-bounds-checks"><span class="std std-ref">end of input rule</span></a>
+has been added to re2c. It is a new method of checking for the end of input,
+which aims at being both generic and simple to use. Historically re2c has a
+<a class="reference internal" href="../../manual/manual_c.html#handling-the-end-of-input"><span class="std std-ref">number of ways</span></a> to handle
+EOF situation. The simplest and the most efficient method is
+<a class="reference internal" href="../../manual/manual_c.html#sentinel"><span class="std std-ref">using a sentinel symbol</span></a>, but it
+has limited applicability. The most widely used and generic method is
+<a class="reference internal" href="../../manual/manual_c.html#bounds-checks-with-padding"><span class="std std-ref">bounds checking with padding</span></a>,
+but it is rather complex and requires input buffering.
+Finally, it is possible to define custom EOF handling methods
+by <a class="reference internal" href="../../manual/manual_c.html#custom-checks"><span class="std std-ref">using the generic API</span></a>. However,
+such methods are not necessarily correct and are likely to be slower than other
+methods. The new method, EOF rule, tries to combine the simplicity and
+efficiency of the sentinel symbol and the generality of bounds checking.
+Essentially, all the user is required to do is to specify an arbitrary “fake”
+sentinel using <code class="docutils literal notranslate"><span class="pre">re2c:eof</span></code> configuration (zero is usually a good choice), to
+define a special EOF rule <code class="docutils literal notranslate"><span class="pre">$</span></code>, and to make sure that the fake sentinel is
+always the last symbol in the input buffer. The lexer will then run without end
+of input checks until it hits the branch corresponding to the fake sentinel, at
+which point it will perform additional bounds checking. If indeed it is the end,
+the lexer will try to get more input. If this attempt fails, the lexer will
+either rollback to the last matched rule (or the default rule, if it has
+consumed some input but did not match), or else it will go to EOF rule.
+Depending on each particular case and the choice of sentinel, the performance of
+EOF rule may be slightly better or worse than bounds checking with padding.
+See the user manual for more details and examples.</p>
+<p>Another important new feature is the possibility to <a class="reference internal" href="../../manual/manual_c.html#include-files"><span class="std std-ref">include other files</span></a>. Re2c provides a directive
+<code class="docutils literal notranslate"><span class="pre">/*!include:re2c</span> <span class="pre">&quot;file.re&quot;</span> <span class="pre">*/</span></code>, where <code class="docutils literal notranslate"><span class="pre">file.re</span></code> is the name of the included
+file.
+Re2c looks for included files in the directory of the including file and in the
+include locations, which can be specified with <code class="docutils literal notranslate"><span class="pre">-I</span></code> option. Include files
+may have further includes of their own. Re2c provides some predefined include
+files that can be found in the <code class="docutils literal notranslate"><span class="pre">include/</span></code> sub-directory of the project. These
+files contain useful definitions and form something like a standard library
+for re2c. Currently there is one available include, <code class="docutils literal notranslate"><span class="pre">unicode_categories.re</span></code>.</p>
+<p>Re2c now allows to <a class="reference internal" href="../../manual/manual_c.html#header-files"><span class="std std-ref">generate header file</span></a>
+from the input file using option <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">--type-header</span></code> or
+<code class="docutils literal notranslate"><span class="pre">re2c:flags:t</span></code> and <code class="docutils literal notranslate"><span class="pre">re2c:flags:type-header</span></code> configurations and the newly
+added directives <code class="docutils literal notranslate"><span class="pre">/*!header:re2c:on*/</span></code> and <code class="docutils literal notranslate"><span class="pre">/*!header:re2c:off*/</span></code>.
+Header files may be needed in cases when re2c is used to generate definitions
+of constants, variables and structs that must be visible from other translation
+units.</p>
+<p>Re2c can now understand UTF8-encoded string literals and character classes in
+regular expressions. By default, re2c parses regular expressions like
+<code class="docutils literal notranslate"><span class="pre">&quot;∀x</span> <span class="pre">∃y&quot;</span></code> as a sequence of 1-byte ASCII code points
+<code class="docutils literal notranslate"><span class="pre">e2</span> <span class="pre">88</span> <span class="pre">80</span> <span class="pre">78</span> <span class="pre">20</span> <span class="pre">e2</span> <span class="pre">88</span> <span class="pre">83</span> <span class="pre">79</span></code> (hexadecimal), and the users have to escape
+Unicode symbols manually: <code class="docutils literal notranslate"><span class="pre">&quot;\u2200x</span> <span class="pre">\u2203y&quot;</span></code>. This is not what most users
+would expect, as demonstrated by multiple issues on the bugtracker. The new
+option <code class="docutils literal notranslate"><span class="pre">--input-encoding</span> <span class="pre">&lt;ascii</span> <span class="pre">|</span> <span class="pre">utf8&gt;</span></code> allows to change the default
+behavior and parse <code class="docutils literal notranslate"><span class="pre">&quot;∀x</span> <span class="pre">∃y&quot;</span></code> as a sequence of 4-byte Unicode code points
+<code class="docutils literal notranslate"><span class="pre">2200</span> <span class="pre">78</span> <span class="pre">20</span> <span class="pre">2203</span> <span class="pre">79</span></code> (hexadecimal). Note that the new option affects only
+parsing, and not the code generation.</p>
+<p>Re2c now allows to mix <a class="reference internal" href="../../manual/manual_c.html#reusable-blocks"><span class="std std-ref">reusable blocks</span></a>
+with normal blocks when <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">--reuse</span></code> option is used. This is very useful in
+cases when the input file contains many re2c blocks, and only some of them need
+to be reused (a good example is re2c own lexer, which has to use certain rules
+twice in order to generate ASCII and UTF8 lexer variants for
+<code class="docutils literal notranslate"><span class="pre">--input-encoding</span> <span class="pre">&lt;ascii</span> <span class="pre">|</span> <span class="pre">utf8&gt;</span></code> option).</p>
+<p>It is now possible to specify location format in re2c-generated messages with
+<code class="docutils literal notranslate"><span class="pre">--location-format</span> <span class="pre">&lt;gnu</span> <span class="pre">|</span> <span class="pre">msvc&gt;</span></code> option. As one might guess, possible
+arguments are GNU location format <code class="docutils literal notranslate"><span class="pre">filename:line:column:</span></code> (the default) and
+MSVC format <code class="docutils literal notranslate"><span class="pre">filename(line,column)</span></code>. This option might help IDE users.
+Another new option is <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> — it prints a short “success” message in
+case re2c exits successfully.</p>
+<p>Flex compatibility mode (enabled with <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">--flex-support</span></code> option) has been
+improved: parsing errors and incorrect operator precedence in some rare cases
+have been fixed. Historically re2c allows to mix flex-style code with re2c-style
+code, which creates certain difficulties for the parser. Such difficulties can
+be resolved by passing parts of the parser context to the lexer.</p>
+<p>The difference operator <code class="docutils literal notranslate"><span class="pre">/</span></code> is now applied to its operands before encoding
+expansion. Re2c supports difference only for character classes, and encoding
+expansion in case of a variable-length encoding may transform even a simple
+character class into a complex graph (see
+<a class="reference external" href="../../_images/utf8_any.png">the graph</a> for <code class="docutils literal notranslate"><span class="pre">[^]</span></code> in UTF8 for example).
+Applying expansion after difference makes <code class="docutils literal notranslate"><span class="pre">/</span></code> applicable in more cases.</p>
+<p>Re2c now generates the output file atomically: it first creates a temporary file
+and writes the generated output into it, and then renames the temporary file to
+the output file.</p>
+<p>Documentation has been rearranged and updated, and the website has been
+fixed to look somewhat better on mobile devices (hopefully).</p>
+<p>From developers standpoint, re2c now has better debugging capabilities. Debug
+code has been moved in a separate subsystem and is no longer built in release
+binaries (debug builds are enabled with <code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code> configure option).
+New debug options and passes have been added.</p>
+<p>This release has taken almost a year, mostly because of the time needed to
+formalize the extended algorithm for POSIX disambiguation and write a formal
+paper <a class="reference external" href="../../2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf">Efficient POSIX Submatch Extraction on NFA</a>.
+The algorithms described in the paper are implemented in an experimental
+library <code class="docutils literal notranslate"><span class="pre">libre2c</span></code>. The library is intended as a playground for experiments
+and research, not a replacement for existing libraries like RE2. Having re2c
+as a library is convenient for benchmarking, testing and creating bindings to
+other languages.
+To build the library and benchmarks, configure re2c with <code class="docutils literal notranslate"><span class="pre">--enable-libs</span></code> option.</p>
+<p>Many people have contributed to this release.
+Angelo Borsotti co-authored the paper; his hard work has revealed multiple
+shortcomings and deficiencies in the algorithms used in re2c.
+Henri Salo helped with fuzz-testing re2c using the American Fuzzy Lop.
+Denis Naumov helped with Windows portability issues.
+Sergei Trofimovich fixed a number of bugs;
+he and Serghei Iakovlev helped with the Travis CI infrastructure.
+Wesley Terpstra used re2c in the open-source
+<a class="reference external" href="https://github.com/sifive/wake">wake build tool</a>.
+Many thanks to them and all the others who contributed to this release!</p>
+<p>A lot of bugs have been fixed.
+See the changelog <a class="reference internal" href="../changelog/changelog.html#id58"><span class="std std-ref">1.2 (2019-08-02)</span></a> for details.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

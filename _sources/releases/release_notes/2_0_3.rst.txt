@@ -1,0 +1,7 @@
+Release 2.0.3
+=============
+
+This is a minor bugfix release.
+It fixes an issue when building re2c as a subproject of another CMake project
+(thanks to `Ivo Hanak <https://github.com/hanak>`_ for the bugreport).
+See the changelog :ref:`releases/changelog/changelog:2.0.3 (2020-08-22)` for details.

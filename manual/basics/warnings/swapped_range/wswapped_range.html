@@ -1,0 +1,79 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>-Wswapped-range &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="wswapped-range">
+<h1>-Wswapped-range<a class="headerlink" href="#wswapped-range" title="Permalink to this heading">¶</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">-Wswapped-range</span></code> warning is reported in cases when a character class contains
+a range which lower bound is greater than the upper bound. For some strange
+reason older versions of re2c did not consider this an error and silently
+swapped range bounds. Consider the following example (swapped.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *     { return &quot;*&quot;; }</span>
+<span class="cm">    [a-Z] { return &quot;is it what you wanted?&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c interprets this code as <code class="docutils literal notranslate"><span class="pre">[Z-a]</span></code>, but generates a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wswapped-range swapped.re -o swapped.c
+swapped.re:3:5: warning: range lower bound (0x61) is greater than upper bound (0x5A), swapping [-Wswapped-range]
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">[-Werror-swapped-range]</span></code> to make it an error.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

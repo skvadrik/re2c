@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 1.1 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-1-1">
+<h1>Release 1.1<a class="headerlink" href="#release-1-1" title="Permalink to this heading">¶</a></h1>
+<p>This release doesn’t bring in any serious user-visible changes;
+most of the work concentrated on the internal POSIX disambiguation algorithm
+used for submatch extraction with <code class="docutils literal notranslate"><span class="pre">--posix-captures</span></code> option.
+The old algorithm, introduced in <a class="reference external" href="./1_0.html">release 1.0</a>, was based on the work of Chris Kuklewicz
+(outlined on this <a class="reference external" href="https://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&amp;oldid=11475">haskell wiki page</a>
+and formalized in the paper <a class="reference external" href="http://re2c.org/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">Tagged Deterministic Finite Automata with Lookahead</a>).
+Kuklewicz algorithm was replaced with a totally different algorithm
+based on the work of Satoshi Okui and Taro Suzuki (described in the paper
+“Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions”, year 2013).
+The main effort in this release was in developing proper theoretical foundations for the new algorithm.
+As usual, there has been a couple of bug fixes.</p>
+<p>See the changelog <a class="reference internal" href="../changelog/changelog.html#id109"><span class="std std-ref">1.1 (2018-08-27)</span></a> for details.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

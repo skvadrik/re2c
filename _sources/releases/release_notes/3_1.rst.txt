@@ -1,0 +1,79 @@
+Release 3.1
+===========
+
+The main focus of this release has been on internal rather than user-facing
+changes. The codebase has been cleaned up and migrated to C++11, and the codegen
+subsystem has undergone considerable simplification and rewrite. Some new
+features have been added to improve submatch extraction with capturing groups
+(see below for more details).
+
+
+**Capturing groups.**
+Since release 1.0, re2c supported two ways of submatch extraction: tags with
+leftmost greedy semantics (enabled with ``--tags`` option or ``re2c:tags``
+configuration) and capturing groups with POSIX longest-match semantics (enabled
+with ``--posix-captures`` option or ``re2c:posix-captures`` configuration).
+Capturing group syntax is traditionally used in regular expression libraries, so
+it is preferable for some users. However, they found it
+`problematic <https://github.com/skvadrik/re2c/issues/438>`_ to use with large
+regular expressions: compile times are increased due to the complex POSIX
+disambiguation algorithm, and the generated code is bloated, as every pair of
+parentheses is a capturing group and it requires runtime operations to extract
+submatch boundaries. This release addresses both problems.
+First, it adds ``--leftmost-captures`` option and ``re2c:leftmost-captures``
+configuration that allow using capturing group syntax with leftmost greedy
+semantics. Second, it adds new syntax ``(! ...)`` for non-capturing groups, so
+that the user can mark only a few selected groups for submatch extraction, and
+avoid unnecessary overhead on other groups. It is also possible to flip defaults
+with ``--invert-captures`` option or ``re2c:invert_captures`` configuration, so
+that ``(...)`` is a capturing group and ``(! ...)`` is a non-capturing one.
+
+
+**TDFA paper and removal of experimental algorithms.**
+In previous releases, re2c added a few experimental algorithms for research
+purposes (alternative types of automata for submatch extraction, different
+approaches to POSIX disambiguation and epsilon-closure construction, etc.).
+All these algorithms have been shown less efficient in the `final TDFA paper
+<https://arxiv.org/abs/2206.01398>`_ (see the `benchmark results
+<https://re2c.org/benchmarks/benchmarks.html>`_). In this release the
+following experimental algorithms have been removed: staDFA, TDFA(0),
+backwards-matching, Kuklewicz POSIX disambiguation and GTOP shortest path
+finding. The corresponding options are deprecated: they are still accepted for
+backwards compatibility, but do nothing. This is part of the general effort to
+keep re2c codebase simpler and easier to maintain.
+
+
+**Codebase improvements.**
+Most of the work in this release has been dedicated to simplifying the codebase
+and migrating it to C++11 standard. Codegen subsystem in particular has been
+reorganized in four well-defined phases (analyze, generate, fixup, render) and
+separated from parsing phase. Errors are now handled in a uniform way by
+checking return codes and propagating them up the call stack. Memory allocation
+has been improved with the use of slab allocators instead of global free lists.
+Bison parsers now use pure API. Recursive functions that potentially cause stack
+overflow have been rewritten in iterative form, and re2c test suite now runs
+with 256K stack limit on CI. Finally, code style has been unified across the
+codebase.
+
+
+**Build system.**
+This release adds minimal Bazel integration: it is now possible to use re2c as a
+tool in other projects with Bazel build systems (see commit `3205c867
+<https://github.com/skvadrik/re2c/commit/3205c867>`_ for a usage example). This
+is *not* intended as a new build system alongside Autotools and CMake; Bazel
+integration is minimal and does not support developer build features like
+bootstrap, documentation, etc.
+
+
+**CI improvements.**
+Continuous testing on GithubActions is more extensive now: it covers both build
+systems (Autotools and CMake) as well as special validation modes, such as ASan,
+UBSan and Valgrind.
+
+
+For a full list of changes and bug fixes see the changelog
+:ref:`releases/changelog/changelog:3.1 (2023-07-19)`.
+As always, thanks to all contributors, especially
+`Sergei Trofimovich <https://github.com/trofi>`_,
+`Doug Cook  <https://github.com/idigdoug>`_ and
+`Marcus Boerger <https://github.com/helly25>`_!

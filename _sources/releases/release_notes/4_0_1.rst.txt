@@ -1,0 +1,7 @@
+Release 4.0.1
+=============
+
+This is a minor release that adds missing doc sources to the release tarballs
+(thanks to `jcfp  <https://github.com/jcfp>`_ for the bug report) and has a few
+changes in the build system and C/C++ examples.
+See the changelog :ref:`releases/changelog/changelog:4.0.1 (2024-11-25)` for details.

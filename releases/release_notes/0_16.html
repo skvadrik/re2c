@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 0.16 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-0-16">
+<h1>Release 0.16<a class="headerlink" href="#release-0-16" title="Permalink to this heading">¶</a></h1>
+<p>This release adds a very important step in the process of code generation:
+minimization of the underlying DFA (deterministic finite automaton).
+Simply speaking, this means that re2c now generates less code
+(while the generated code behaves exactly the same).</p>
+<p>DFA minimization is a very well-known technique
+and one might expect that any self-respecting lexer generator would definitely use it.
+So how could it be that re2c didn’t?
+In fact, re2c did use a couple of self-invented tricks to compress the generated code
+(one interesting technique is the construction of a <em>tunnel</em> automaton).
+Some of these tricks were quite buggy (see <a class="reference external" href="https://bugs.gentoo.org/show_bug.cgi?id=518904">this bug report</a> for example).
+Now that re2c does canonical DFA minimization, all this stuff is obsolete and has been dropped.</p>
+<p>A lot of attention has been paid to the correctness of the DFA minimization.
+Usually, re2c uses a very simple criterion to validate changes:
+the generated code for all the tests in testsuite must remain the same.
+However, in the case of DFA minimization the generated code changes dramatically.
+It is impossible to verify the changes manually.</p>
+<p>One possible verification tool is the <a class="reference internal" href="../../manual/manual_c.html#skeleton-programs"><span class="std std-ref">skeleton</span></a> feature.
+Because skeleton is constructed prior to DFA minimization, it cannot be affected by any errors in its implementation.</p>
+<p>Another way to verify DFA minimization is by implementing two different algorithms
+and comparing the results. The minimization procedure has a very useful property:
+the miminal DFA is unique (with respect to state relabeling).
+We used the Moore and the so-called <em>table filling</em> algorithms:
+The Moore algorithm is fast, while table filling is very simple to implement.
+The <code class="docutils literal notranslate"><span class="pre">--dfa-minimization</span> <span class="pre">&lt;moore</span> <span class="pre">|</span> <span class="pre">table&gt;</span></code> option that allows choosing
+the particular algorithm (defaults to <code class="docutils literal notranslate"><span class="pre">moore</span></code>), but it’s only useful for debugging
+DFA minimization.</p>
+<p>A good side effect of messing with re2c internals is a significant speedup
+of code generation (see <a class="reference external" href="https://github.com/skvadrik/re2c/issues/128">this issue</a> for example).
+The test suite now runs twice as fast (at least).</p>
+<p>See the changelog <a class="reference internal" href="../changelog/changelog.html#id147"><span class="std std-ref">0.16 (2016-01-21)</span></a> for details.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

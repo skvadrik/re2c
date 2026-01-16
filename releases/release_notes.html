@@ -1,0 +1,1132 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Releases &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-re2c.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+    <h3>Releases</h3>
+    <div class="re2c-toc-local">
+        <ul>
+<li><a class="reference internal" href="#">Releases</a><ul>
+<li><a class="reference internal" href="#release-4-4">Release 4.4</a></li>
+<li><a class="reference internal" href="#release-4-3-1">Release 4.3.1</a></li>
+<li><a class="reference internal" href="#release-4-3">Release 4.3</a></li>
+<li><a class="reference internal" href="#release-4-2">Release 4.2</a></li>
+<li><a class="reference internal" href="#release-4-1">Release 4.1</a></li>
+<li><a class="reference internal" href="#release-4-0-2">Release 4.0.2</a></li>
+<li><a class="reference internal" href="#release-4-0-1">Release 4.0.1</a></li>
+<li><a class="reference internal" href="#release-4-0">Release 4.0</a></li>
+<li><a class="reference internal" href="#release-3-1">Release 3.1</a></li>
+<li><a class="reference internal" href="#release-3-0">Release 3.0</a></li>
+<li><a class="reference internal" href="#release-2-2">Release 2.2</a></li>
+<li><a class="reference internal" href="#release-2-1-1">Release 2.1.1</a></li>
+<li><a class="reference internal" href="#release-2-1">Release 2.1</a></li>
+<li><a class="reference internal" href="#release-2-0-3">Release 2.0.3</a></li>
+<li><a class="reference internal" href="#release-2-0-2">Release 2.0.2</a></li>
+<li><a class="reference internal" href="#release-2-0-1">Release 2.0.1</a></li>
+<li><a class="reference internal" href="#release-2-0">Release 2.0</a></li>
+<li><a class="reference internal" href="#release-1-3">Release 1.3</a></li>
+<li><a class="reference internal" href="#release-1-2-1">Release 1.2.1</a></li>
+<li><a class="reference internal" href="#release-1-2">Release 1.2</a></li>
+<li><a class="reference internal" href="#release-1-1-1">Release 1.1.1</a></li>
+<li><a class="reference internal" href="#release-1-1">Release 1.1</a></li>
+<li><a class="reference internal" href="#release-1-0-3">Release 1.0.3</a></li>
+<li><a class="reference internal" href="#release-1-0-2">Release 1.0.2</a></li>
+<li><a class="reference internal" href="#release-1-0-1">Release 1.0.1</a></li>
+<li><a class="reference internal" href="#id15">Release 1.0</a></li>
+<li><a class="reference internal" href="#release-0-16">Release 0.16</a></li>
+<li><a class="reference internal" href="#release-0-15-3">Release 0.15.3</a></li>
+<li><a class="reference internal" href="#release-0-15-2">Release 0.15.2</a></li>
+<li><a class="reference internal" href="#release-0-15-1">Release 0.15.1</a></li>
+<li><a class="reference internal" href="#release-0-15">Release 0.15</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="releases">
+<h1>Releases<a class="headerlink" href="#releases" title="Permalink to this heading">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<section id="release-4-4">
+<h2>Release 4.4<a class="headerlink" href="#release-4-4" title="Permalink to this heading">¶</a></h2>
+<p>This release adds generalized end-of-input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code>.
+It is no longer a special rule – it can be used in regular expressions as
+part of a normal rule, and it works with all end-of-input handling methods
+regardless of the <code class="docutils literal notranslate"><span class="pre">re2c:eof</span></code> configuration.</p>
+<p>The implementation of generalized end-of-input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code> is based on a new
+API primitive <code class="docutils literal notranslate"><span class="pre">YYEND</span></code> and the corresponding syntax configuration
+<code class="docutils literal notranslate"><span class="pre">code:yyend</span></code>. The meaning of <code class="docutils literal notranslate"><span class="pre">YYEND</span></code> is the <em>logical</em> end of input. This
+differs from the <em>physical</em> end of input described by <code class="docutils literal notranslate"><span class="pre">YYLIMIT</span></code> and
+<code class="docutils literal notranslate"><span class="pre">YYLESSTHAN</span></code> – the latter may include padding that was not part of the
+original input. If <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is disabled, <code class="docutils literal notranslate"><span class="pre">code:yyend</span></code> has a default
+definition identical to <code class="docutils literal notranslate"><span class="pre">YYLESSTHAN</span></code>, so the user does not need to explicitly
+define <code class="docutils literal notranslate"><span class="pre">YYEND</span></code>. Otherwise, if <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is enabled, <code class="docutils literal notranslate"><span class="pre">code:yyend</span></code> does not
+provide a default definition and delegates to the user-defined <code class="docutils literal notranslate"><span class="pre">YYEND</span></code>.</p>
+<p>This change breaks backwards compatibility in cases when there are conflicting
+<code class="docutils literal notranslate"><span class="pre">$</span></code> rules, as they now have position-based precedence like other normal rules.
+Hopefully such cases are rare, and the users have been alerted by the
+<code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> warning in release 4.3.</p>
+<p>See the changelog: <a class="reference internal" href="changelog/changelog.html#id1"><span class="std std-ref">4.4 (2025-12-20)</span></a>.</p>
+</section>
+<section id="release-4-3-1">
+<h2>Release 4.3.1<a class="headerlink" href="#release-4-3-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that fixes bugs:
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/560">#560</a>
+(allow conditions that have no rules except for default rule),
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/561">#561</a>
+(use unsigned character type in C/C++ examples)
+and most importantly <a class="reference external" href="https://github.com/skvadrik/re2c/issues/564">#564</a>
+(fix broken end of input rule $ with captures) –
+the latter bug was inadvertently introduced in version 4.3.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id3"><span class="std std-ref">4.3.1 (2025-12-01)</span></a>.</p>
+</section>
+<section id="release-4-3">
+<h2>Release 4.3<a class="headerlink" href="#release-4-3" title="Permalink to this heading">¶</a></h2>
+<p>This release adds <code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> warning and improves
+compile-time performance.</p>
+<p><strong>Upcoming changes to the end-of-input rule.</strong>
+Normally, if there’s a conflict between two or more rules
+(meaning that they both match the same string) re2c chooses the first rule
+based on their position in the input file. The same goes for reused blocks:
+their rules are inserted at block start for <code class="docutils literal notranslate"><span class="pre">use:re2c</span></code> blocks, or at the
+point where <code class="docutils literal notranslate"><span class="pre">!use</span></code> directive is specified.
+Special rules (such as the default rule <code class="docutils literal notranslate"><span class="pre">*</span></code> and the end of input rule <code class="docutils literal notranslate"><span class="pre">$</span></code>)
+have different precedence and inheritance order. A block is not allowed to
+specify the same special rule more than once, and inherited special rules have
+lower priority compared to the block’s own special rules.</p>
+<p>In the future re2c will support generalized end of input symbol <code class="docutils literal notranslate"><span class="pre">$</span></code> as part
+of a normal rule (rather than a special rule). At the moment the only supported
+form is a standalone rule <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code>, but in the future re2c will support
+cases like <code class="docutils literal notranslate"><span class="pre">[a]</span> <span class="pre">$</span> <span class="pre">|</span> <span class="pre">[b]</span> <span class="pre">{</span> <span class="pre">...</span> <span class="pre">}</span></code> etc. To allow this, <code class="docutils literal notranslate"><span class="pre">$</span></code> needs to have
+position based precedence and inheritance order. However, it will be a breaking
+change for cases that have conflicting rules.
+This release prepares for the migration: it does not change behaviour yet, but
+it add a warning <code class="docutils literal notranslate"><span class="pre">-Wdeprecated-eof-rule</span></code> for the cases that will be broken
+in the future. For now the warning can be disabled with
+<code class="docutils literal notranslate"><span class="pre">-Wno-deprecated-eof-rule</span></code>, however it is strongly recommended to fix it,
+as the warning will be turned to error in the future, and the generated code
+will change.</p>
+<p>See <a class="reference external" href="https://github.com/skvadrik/re2c/pull/525">#525</a> for more details.</p>
+<p><strong>Compile-time performance improvements.</strong>
+Internal TDFA construction code has been optimized: it now avoids some
+redundant copying, making the determinization process ~1.5 times faster
+for some Unicode scanners. The algorithm itself wasn’t changed.
+See <a class="reference external" href="https://github.com/skvadrik/re2c/pull/544">#544</a> for more details.</p>
+<p>See the changelog: <a class="reference internal" href="changelog/changelog.html#id7"><span class="std std-ref">4.3 (2025-06-30)</span></a>.</p>
+</section>
+<section id="release-4-2">
+<h2>Release 4.2<a class="headerlink" href="#release-4-2" title="Permalink to this heading">¶</a></h2>
+<p>This release adds a new backend for Swift,
+a relative form of computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> for C/C++,
+exception specifications for recursive functions
+and some new benchmarks.</p>
+<p><strong>Swift backend.</strong>
+Code generation into Swift is now supported using the recently added
+<a class="reference internal" href="../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a>. It can be enabled via
+<code class="docutils literal notranslate"><span class="pre">re2swift</span></code> binary or the new option <code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">swift</span></code>. See
+<a class="reference external" href="../playground/?example=swift/01_basic.re">Swift examples</a> on the playground
+and the full <a class="reference external" href="../manual/manual_swift.html">Swift manual</a> for details.</p>
+<p><strong>Relative computed goto.</strong>
+Computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> is a feature that is currently supported only by the C/C++
+backend. This release adds (<a class="reference external" href="https://github.com/skvadrik/re2c/pull/533">#533</a>)
+a new form of computed <code class="docutils literal notranslate"><span class="pre">goto</span></code> which computes jump targets using offsets
+relative to a base label rather than absolute label. This makes the generated
+code easier to use in shared libraries, as it reduces the number of dynamic
+relocations, and by consequence, allows the data stored in computed <code class="docutils literal notranslate"><span class="pre">goto</span></code>
+table to be read-only.
+See <a class="reference external" href="https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html">https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html</a> for details.
+The new behaviour can be enabled with option <code class="docutils literal notranslate"><span class="pre">--computed-gotos-relative</span></code>
+or configuration <code class="docutils literal notranslate"><span class="pre">re2c:computed-gotos:relative</span></code> (or an alias
+<code class="docutils literal notranslate"><span class="pre">re2c:cgoto:relative</span></code>). Beware of a related
+<a class="reference external" href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=119158">GCC bug</a>.</p>
+<p><strong>Exception specifications.</strong>
+A new configuration <code class="docutils literal notranslate"><span class="pre">re2c:yyfn:throw</span></code> allows the user to specify
+exceptions thrown by the <code class="docutils literal notranslate"><span class="pre">YYFN</span></code> function. By default it’s an empty string,
+meaning no exception specification. The new configuration is available in syntax
+files in the form of <code class="docutils literal notranslate"><span class="pre">.yyfn.throw</span></code> conditional and <code class="docutils literal notranslate"><span class="pre">throw</span></code> variable in the
+function code templates <code class="docutils literal notranslate"><span class="pre">code:fndecl</span></code> and <code class="docutils literal notranslate"><span class="pre">code:fndef</span></code>.
+The primary motivation for this was the use in the Swift backend
+(<a class="reference external" href="https://github.com/skvadrik/re2c/pull/540">#540</a>).</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="changelog/changelog.html#id10"><span class="std std-ref">4.2 (2025-04-23)</span></a>.
+As always, thanks to all contributors, especially
+<a class="reference external" href="https://github.com/ScrelliCopter">ScrelliCopter</a> who implemented the Swift
+backend and <a class="reference external" href="https://github.com/caffe3">caffe3</a> who whorked on computed
+<code class="docutils literal notranslate"><span class="pre">goto</span></code>!</p>
+</section>
+<section id="release-4-1">
+<h2>Release 4.1<a class="headerlink" href="#release-4-1" title="Permalink to this heading">¶</a></h2>
+<p>This release adds <em>actions</em>, a few backend-specific improvements in code
+generation and a bunch of bug fixes. Benchmark code has been reworked in
+preparation to add multi-language benchmarks in the future.</p>
+<p><strong>Actions.</strong>
+<a class="reference internal" href="../manual/manual_c.html#actions"><span class="std std-ref">Actions</span></a> are user defined blocks of code that
+can be attached to various parts of the generated code. This release adds three
+new actions. First, the <code class="docutils literal notranslate"><span class="pre">!entry</span></code> action is executed at the lexer entry, which
+can be used to emit set up code (it is similar to the zero condition <code class="docutils literal notranslate"><span class="pre">&lt;</span> <span class="pre">&gt;</span></code>,
+but the action is more flexible: it can be set individually per condition, and
+it allows one to bypass the initial condition dispatch and jump directly to the
+start of each condition). Second, the <code class="docutils literal notranslate"><span class="pre">!pre_rule</span></code> action is executed
+immediately <em>before</em> semantic action for each rule in the current block or
+condition. Third, the <code class="docutils literal notranslate"><span class="pre">!post_rule</span></code> action is like the previous one, except
+that it is executed immediately <em>after</em> each semantic action.</p>
+<p><strong>Backend-specific improvements.</strong>
+OCaml backend now uses <code class="docutils literal notranslate"><span class="pre">unsafe_get</span></code> instead of <code class="docutils literal notranslate"><span class="pre">get</span></code> as the default
+<code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> implementation – the generated lexer already performs end of input
+checks, so the bounds checks in <code class="docutils literal notranslate"><span class="pre">get</span></code> are redundant.
+Zig backend now uses <code class="docutils literal notranslate"><span class="pre">const</span></code> for <code class="docutils literal notranslate"><span class="pre">yych</span></code> declaration in
+<code class="docutils literal notranslate"><span class="pre">--recursive-functions</span></code> mode, as the variable is not mutated and declaring it
+as a variable is an error in the recent compiler versions.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="changelog/changelog.html#id12"><span class="std std-ref">4.1 (2025-02-16)</span></a>.
+As always, thanks to all contributors, especially
+<a class="reference external" href="https://github.com/eilvelia">eilvelia</a>
+for great bug reports and discussion!</p>
+</section>
+<section id="release-4-0-2">
+<h2>Release 4.0.2<a class="headerlink" href="#release-4-0-2" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that fixes CMake build system bug
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/515">#515</a>
+(language-specific binaries erroneously defaulted to generating code for C, e.g.
+re2rust worked in the same way as re2c if <code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">rust</span></code> option wasn’t set).
+There are also numerous playground improvements.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id21"><span class="std std-ref">4.0.2 (2024-12-11)</span></a> for details.</p>
+</section>
+<section id="release-4-0-1">
+<h2>Release 4.0.1<a class="headerlink" href="#release-4-0-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that adds missing doc sources to the release tarballs
+(thanks to <a class="reference external" href="https://github.com/jcfp">jcfp</a> for the bug report) and has a few
+changes in the build system and C/C++ examples.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id23"><span class="std std-ref">4.0.1 (2024-11-25)</span></a> for details.</p>
+</section>
+<section id="release-4-0">
+<h2>Release 4.0<a class="headerlink" href="#release-4-0" title="Permalink to this heading">¶</a></h2>
+<p>This release adds support for eight new languages (D, Haskell, Java, JavaScript,
+OCaml, Python, V, Zig). Code generation subsystem has been completely rewritten
+using <a class="reference internal" href="../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a> — a technique
+for describing language backends. With so many new languages <em>re2c</em> now has a
+more generic meaning: <em>Regular Expressions to Code</em> rather than <em>Regular
+Expressions to C</em>. A new code generation model based on recursive functions has
+been added to enable support of functional languages. Much effort went into
+simplifying user interface: the former default API is now called <em>simple API</em>
+and supported for backends other than C/C++, and there is a new <em>record API</em> for
+cases when lexer state needs to be stored. Capturing groups can now be used with
+variables instead of arrays. Last but not least, re2c now has an
+<a class="reference external" href="https://re2c.org/playground">online playground</a>.</p>
+<p><strong>Syntax files.</strong></p>
+<p>Previously language-specific logic was hardcoded into re2c. This made it
+difficult to add new languages or tweak code generator for existing ones, as it
+required patching re2c and upstreaming the changes, or else maintaining a fork.
+Now all language-specific logic has been moved to <a class="reference internal" href="../manual/manual_c.html#syntax-files"><span class="std std-ref">syntax files</span></a>
+— declarative configuration files that can be supplied by the user and don’t
+require rebuilding re2c. Adding support for a new language is as simple as
+writing a syntax file for it. One can partially override an existing syntax file
+or completely redefine everything from scratch, if needed. For examples of
+syntax files see <a class="reference external" href="https://github.com/skvadrik/re2c/tree/master/include/syntax">include/syntax</a>
+subdirectory.</p>
+<p><strong>API changes.</strong></p>
+<p>For a long time C/C++ was the only backend that supported default API, because
+pointer-like semantics of <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and other primitives was hardcoded into
+re2c. With the addition of syntax files, it is now possible to define
+API flavours individually for each language. For languages that don’t have
+pointer arithmetic <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and others should be defined as indices rather
+than pointers, and a new primitive <code class="docutils literal notranslate"><span class="pre">YYINPUT</span></code> should be used to define the
+indexed character sequence. The former default API is now called <em>simple API</em> to
+avoid confusion, as some languages historically default to generic API. Simple
+API is implemented for all languages except Haskell and OCaml, and it’s enabled
+by default for C, D, Java, JavaScript, Python, V and Zig. It can be explicitly
+enabled with <code class="docutils literal notranslate"><span class="pre">--api</span> <span class="pre">simple</span></code> option or <code class="docutils literal notranslate"><span class="pre">re2c:api</span> <span class="pre">=</span> <span class="pre">simple</span></code> configuration.</p>
+<p>There’s also a new <a class="reference internal" href="../manual/manual_c.html#program-interface"><span class="std std-ref">record API</span></a> enabled
+with <code class="docutils literal notranslate"><span class="pre">--api</span> <span class="pre">record</span></code> option and <code class="docutils literal notranslate"><span class="pre">re2c:api</span> <span class="pre">=</span> <span class="pre">record</span></code> configuration that should
+be used in cases when lexer state needs to be stored in some form of a record (a
+struct, a class, an object — whatever it’s called in the target language).
+This is usually the case when <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> is enabled, as it needs to update lexer
+state in a subroutine. Record API defines all operations via a single primitive
+<code class="docutils literal notranslate"><span class="pre">yyrecord</span></code> — a record with fields for <code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code> and other primitives (as
+needed). The names of the fields are language specific, but for most languages
+they default to lowercase equivalents of the primitives (e.g. <code class="docutils literal notranslate"><span class="pre">yycursor</span></code> for
+<code class="docutils literal notranslate"><span class="pre">YYCURSOR</span></code>), and they can be changed with the corresponding configurations.
+The name of the record itself can be changed with <code class="docutils literal notranslate"><span class="pre">re2c:yyrecord</span></code>
+configuration. See <a class="reference external" href="https://github.com/search?q=repo%3Askvadrik%2Fre2c+path%3A%2F%5Eexamples%5C%2F%2F+%22re2c%3Aapi+%3D+record%22&amp;type=code">examples</a>
+that use record API.</p>
+<p>Some options and configurations have been renamed (old aliases still work),
+see the <a class="reference internal" href="changelog/changelog.html#id25"><span class="std std-ref">changelog</span></a> for
+details. Configurations that have <code class="docutils literal notranslate"><span class="pre">define:</span></code> or <code class="docutils literal notranslate"><span class="pre">variable:</span></code> parts now
+have shorter aliases without these parts (e.g <code class="docutils literal notranslate"><span class="pre">re2c:YYCURSOR</span></code> instead of
+<code class="docutils literal notranslate"><span class="pre">re2c:define:YYCURSOR</span></code> and <code class="docutils literal notranslate"><span class="pre">re2c:yych</span></code> instead of <code class="docutils literal notranslate"><span class="pre">re2c:variable:yych</span></code>).
+The goal of this change is to make the naming scheme more consistent, as
+wide-scope <code class="docutils literal notranslate"><span class="pre">define:</span></code> and <code class="docutils literal notranslate"><span class="pre">variable:</span></code> prefixes were in conflict with
+narrow-scope prefixes like <code class="docutils literal notranslate"><span class="pre">tags:</span></code>, <code class="docutils literal notranslate"><span class="pre">cond:</span></code>, <code class="docutils literal notranslate"><span class="pre">yych:</span></code> etc.</p>
+<p><strong>Recursive functions.</strong></p>
+<p>This release adds a new code model based on recursive functions (enabled with
+<code class="docutils literal notranslate"><span class="pre">--recursive-functions</span></code> option). Previously re2c supported two code models.
+One is based on <code class="docutils literal notranslate"><span class="pre">goto</span></code> and labels (enabled with <code class="docutils literal notranslate"><span class="pre">--goto-label</span></code> option); it
+generates efficient code, and it’s the best option for languages that support
+<code class="docutils literal notranslate"><span class="pre">goto</span></code> statement. The other model is based on state-switch inside of a loop
+(enabled with <code class="docutils literal notranslate"><span class="pre">--loop-switch</span></code> option); it is for languages that don’t have
+<code class="docutils literal notranslate"><span class="pre">goto</span></code>, but do have variables and loops. However, functional languages like
+Haskell don’t have that — they have immutable bindings instead of variables
+and recursion instead of loops. Therefore a third code model was needed. Some
+languages support all three models, and some support just one (supported models,
+as well as the default one, are defined by the syntax files).</p>
+<p><strong>Captures with variables.</strong>
+Previously re2c always used POSIX-style <code class="docutils literal notranslate"><span class="pre">yypmatch</span></code> array to store submatch
+results with capturing groups (<code class="docutils literal notranslate"><span class="pre">--posix-captures</span></code> and <code class="docutils literal notranslate"><span class="pre">--leftmost-captures</span></code>
+options). However, it may be more convenient to use a scalar variable for each
+parenthesis instead of an array (some languages don’t even have mutable arrays
+in the standard library). This release adds <code class="docutils literal notranslate"><span class="pre">--posix-captvars</span></code> and
+<code class="docutils literal notranslate"><span class="pre">--leftmost-captvars</span></code> options that store submatch results in variables with
+autogenerated names <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;l&lt;k&gt;</span></code> and <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;r&lt;k&gt;</span></code> for <code class="docutils literal notranslate"><span class="pre">k</span></code>-th capturing
+group, where <code class="docutils literal notranslate"><span class="pre">&lt;prefix&gt;</span></code> is the value of <code class="docutils literal notranslate"><span class="pre">re2c:tags:prefix</span></code> configuration.
+There’re also new block types <code class="docutils literal notranslate"><span class="pre">svars</span></code> and <code class="docutils literal notranslate"><span class="pre">mvars</span></code> that are exactly like
+<code class="docutils literal notranslate"><span class="pre">stags</span></code> and <code class="docutils literal notranslate"><span class="pre">mtags</span></code>, except that they are expanded for the variables used
+in semantic action, not for the intermediate tag variables.</p>
+<p><strong>Block start/end markers.</strong>
+For a long time re2c supported Flex-style block start/end markers <code class="docutils literal notranslate"><span class="pre">%{</span></code> and
+<code class="docutils literal notranslate"><span class="pre">%}</span></code>. Now this syntax is extended to all kinds of blocks, e.g. <code class="docutils literal notranslate"><span class="pre">%{local</span></code> for
+a local block <code class="docutils literal notranslate"><span class="pre">/*!local:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">%{rules:foo</span></code> for a named rules block
+<code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:foo</span></code>, <code class="docutils literal notranslate"><span class="pre">%{getstate:x:y:z</span></code> for a special block
+<code class="docutils literal notranslate"><span class="pre">/*!getstate:re2c:x:y:z</span></code>, etc. The new syntax is primarily intended for
+languages that don’t have C-style multiline comments <code class="docutils literal notranslate"><span class="pre">/*</span> <span class="pre">...</span> <span class="pre">*/</span></code>.</p>
+<p><strong>Warnings on by default.</strong>
+Warnings that indicate serious issues with the code are now enabled by default.
+This includes
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wundefined-control-flow">-Wundefined-control-flow</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wsentinel-in-midrule">-Wsentinel-in-midrule</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wunreachable-rules">-Wunreachable-rules</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wuseless-escape">-Wuseless-escape</a>,
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wswapped-range">-Wswapped-range</a> and
+<a class="reference external" href="../../manual/basics/warnings/warnings.html#wcondition-order">-Wcondition-order</a>.
+If needed, each of them can be disabled with an explicit <code class="docutils literal notranslate"><span class="pre">-Wno-*</span></code> option.
+To enable less important warnings, use <code class="docutils literal notranslate"><span class="pre">-W</span></code>.
+A new warning <code class="docutils literal notranslate"><span class="pre">-Wundefined-syntax-config</span></code> has been added. It warns when a
+syntax config does not define some configurations — fix it by defining them or
+explicitly setting them to <code class="docutils literal notranslate"><span class="pre">&lt;undefined&gt;</span></code>.</p>
+<p><strong>Online playground</strong>
+Thanks to <a class="reference external" href="https://github.com/PolarGoose">PolarGoose</a>, re2c now has an online
+playground that allows one to load examples for all languages, edit, compile and
+share the code online.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="changelog/changelog.html#id25"><span class="std std-ref">4.0 (2024-11-19)</span></a>.
+As always, thanks to all contributors!</p>
+</section>
+<section id="release-3-1">
+<h2>Release 3.1<a class="headerlink" href="#release-3-1" title="Permalink to this heading">¶</a></h2>
+<p>The main focus of this release has been on internal rather than user-facing
+changes. The codebase has been cleaned up and migrated to C++11, and the codegen
+subsystem has undergone considerable simplification and rewrite. Some new
+features have been added to improve submatch extraction with capturing groups
+(see below for more details).</p>
+<p><strong>Capturing groups.</strong>
+Since release 1.0, re2c supported two ways of submatch extraction: tags with
+leftmost greedy semantics (enabled with <code class="docutils literal notranslate"><span class="pre">--tags</span></code> option or <code class="docutils literal notranslate"><span class="pre">re2c:tags</span></code>
+configuration) and capturing groups with POSIX longest-match semantics (enabled
+with <code class="docutils literal notranslate"><span class="pre">--posix-captures</span></code> option or <code class="docutils literal notranslate"><span class="pre">re2c:posix-captures</span></code> configuration).
+Capturing group syntax is traditionally used in regular expression libraries, so
+it is preferable for some users. However, they found it
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/438">problematic</a> to use with large
+regular expressions: compile times are increased due to the complex POSIX
+disambiguation algorithm, and the generated code is bloated, as every pair of
+parentheses is a capturing group and it requires runtime operations to extract
+submatch boundaries. This release addresses both problems.
+First, it adds <code class="docutils literal notranslate"><span class="pre">--leftmost-captures</span></code> option and <code class="docutils literal notranslate"><span class="pre">re2c:leftmost-captures</span></code>
+configuration that allow using capturing group syntax with leftmost greedy
+semantics. Second, it adds new syntax <code class="docutils literal notranslate"><span class="pre">(!</span> <span class="pre">...)</span></code> for non-capturing groups, so
+that the user can mark only a few selected groups for submatch extraction, and
+avoid unnecessary overhead on other groups. It is also possible to flip defaults
+with <code class="docutils literal notranslate"><span class="pre">--invert-captures</span></code> option or <code class="docutils literal notranslate"><span class="pre">re2c:invert_captures</span></code> configuration, so
+that <code class="docutils literal notranslate"><span class="pre">(...)</span></code> is a capturing group and <code class="docutils literal notranslate"><span class="pre">(!</span> <span class="pre">...)</span></code> is a non-capturing one.</p>
+<p><strong>TDFA paper and removal of experimental algorithms.</strong>
+In previous releases, re2c added a few experimental algorithms for research
+purposes (alternative types of automata for submatch extraction, different
+approaches to POSIX disambiguation and epsilon-closure construction, etc.).
+All these algorithms have been shown less efficient in the <a class="reference external" href="https://arxiv.org/abs/2206.01398">final TDFA paper</a> (see the <a class="reference external" href="https://re2c.org/benchmarks/benchmarks.html">benchmark results</a>). In this release the
+following experimental algorithms have been removed: staDFA, TDFA(0),
+backwards-matching, Kuklewicz POSIX disambiguation and GTOP shortest path
+finding. The corresponding options are deprecated: they are still accepted for
+backwards compatibility, but do nothing. This is part of the general effort to
+keep re2c codebase simpler and easier to maintain.</p>
+<p><strong>Codebase improvements.</strong>
+Most of the work in this release has been dedicated to simplifying the codebase
+and migrating it to C++11 standard. Codegen subsystem in particular has been
+reorganized in four well-defined phases (analyze, generate, fixup, render) and
+separated from parsing phase. Errors are now handled in a uniform way by
+checking return codes and propagating them up the call stack. Memory allocation
+has been improved with the use of slab allocators instead of global free lists.
+Bison parsers now use pure API. Recursive functions that potentially cause stack
+overflow have been rewritten in iterative form, and re2c test suite now runs
+with 256K stack limit on CI. Finally, code style has been unified across the
+codebase.</p>
+<p><strong>Build system.</strong>
+This release adds minimal Bazel integration: it is now possible to use re2c as a
+tool in other projects with Bazel build systems (see commit <a class="reference external" href="https://github.com/skvadrik/re2c/commit/3205c867">3205c867</a> for a usage example). This
+is <em>not</em> intended as a new build system alongside Autotools and CMake; Bazel
+integration is minimal and does not support developer build features like
+bootstrap, documentation, etc.</p>
+<p><strong>CI improvements.</strong>
+Continuous testing on GithubActions is more extensive now: it covers both build
+systems (Autotools and CMake) as well as special validation modes, such as ASan,
+UBSan and Valgrind.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="changelog/changelog.html#id27"><span class="std std-ref">3.1 (2023-07-19)</span></a>.
+As always, thanks to all contributors, especially
+<a class="reference external" href="https://github.com/trofi">Sergei Trofimovich</a>,
+<a class="reference external" href="https://github.com/idigdoug">Doug Cook</a> and
+<a class="reference external" href="https://github.com/helly25">Marcus Boerger</a>!</p>
+</section>
+<section id="release-3-0">
+<h2>Release 3.0<a class="headerlink" href="#release-3-0" title="Permalink to this heading">¶</a></h2>
+<p>This release adds Rust support,
+a uniform naming scheme for options and configurations,
+small improvements in code generation
+and a few bug fixes.</p>
+<p><strong>Rust backend.</strong>
+It has been on the wish-list for quite a while, but the real work has started on
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/372">#372</a> with
+<a class="reference external" href="https://github.com/raekye/">raekye</a> doing the initial implementation and
+<a class="reference external" href="https://github.com/pmetzger/">pmetzger</a> porting the first examples.
+After a few weeks of brainstorming on <a class="reference external" href="https://www.oftc.net/">irc.oftc.net</a>
+(<code class="docutils literal notranslate"><span class="pre">#re2c</span></code>), followed by a few months of work, now the Rust backend is fully
+implemented and ready to use.
+See the <a class="reference internal" href="../manual/manual_rust.html#introduction"><span class="std std-ref">re2rust manual</span></a> with examples.</p>
+<p>The main difficulty with Rust is that it has no <code class="docutils literal notranslate"><span class="pre">goto</span></code> statement, which makes
+the usual code generation approach impossible. Normally re2c uses <em>goto-label</em>
+approach: DFA states are blocks of code with labels, and transitions are
+<code class="docutils literal notranslate"><span class="pre">goto</span></code> statements. For Rust a different approach is needed: a DFA is
+represented with a switch on a numeric state variable, where each state is a
+separate case. Transitions set state variable to the target state index and loop
+to the start of the switch. The <em>loop-switch</em> approach can be used for other
+languages as well, therefore it has been added as an option <code class="docutils literal notranslate"><span class="pre">--loop-switch</span></code>
+(available for all backends and mandatory for Rust).
+The new approach is different enough to require multiple changes in code
+generation. In loop-switch mode it is impossible to jump into the middle of a
+state bypassing the skip statement, so the <code class="docutils literal notranslate"><span class="pre">--eager-skip</span></code> option is enforced,
+which moves skip statements to transitions. With conditions it is impossible to
+jump between different blocks, so DFAs for all conditions are merged into one
+switch, and condition numbers are the indices of the initial DFA states. In
+storable state mode it is impossible to jump from the <code class="docutils literal notranslate"><span class="pre">YYGETSTATE</span></code> switch to a
+DFA state, therefore a separate <code class="docutils literal notranslate"><span class="pre">getstate:re2c</span></code> detached from the lexer block
+is not supported. Most of these implementation details are hidden from the user.</p>
+<p><a class="reference internal" href="../manual/manual_rust.html#program-interface"><span class="std std-ref">Generic API</span></a> is set by default
+for Rust, as the use of pointer arithmetic is unsafe and generally discouraged.
+The <code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> operation is automatically wrapped in <code class="docutils literal notranslate"><span class="pre">unsafe</span></code> because it should
+avoid bounds checks, which are done by the lexer in a
+<a class="reference internal" href="../manual/manual_rust.html#handling-the-end-of-input"><span class="std std-ref">more efficient way</span></a>.
+To get rid of the automatic <code class="docutils literal notranslate"><span class="pre">unsafe</span></code> wrappers use option <code class="docutils literal notranslate"><span class="pre">--no-unsafe</span></code> or
+configuration <code class="docutils literal notranslate"><span class="pre">re2c:unsafe</span></code> on a per-block basis (this can help to verify
+lexer behavior in debug mode, for example).</p>
+<p>Initialization of <code class="docutils literal notranslate"><span class="pre">yych</span></code> in the generated code is prefixed with
+<code class="docutils literal notranslate"><span class="pre">#[allow(unused_assignments)]</span></code>. In fact initialization is not needed (<code class="docutils literal notranslate"><span class="pre">yych</span></code>
+is always set before it is used), but the Rust compiler cannot figure it out in
+cases with complex control flow and emits errors if initialization is missing.</p>
+<p>Rust backend and the new <code class="docutils literal notranslate"><span class="pre">re2rust</span></code> binary are enabled by default, but the
+build can be configured with <code class="docutils literal notranslate"><span class="pre">--enable-rust</span></code>, <code class="docutils literal notranslate"><span class="pre">--disable-rust</span></code> Autoconf
+options or <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2RUST</span></code> CMake option.</p>
+<p><strong>New aliases.</strong>
+Some configurations that have been added over the years are at odds with the
+general naming scheme. For example, most of condition-related configurations
+have <code class="docutils literal notranslate"><span class="pre">re2c:cond:</span></code> prefix, as in <code class="docutils literal notranslate"><span class="pre">re2c:cond:goto</span></code> or <code class="docutils literal notranslate"><span class="pre">re2c:cond:divider</span></code>,
+but for some reason <code class="docutils literal notranslate"><span class="pre">re2c:condprefix</span></code> has no column after <code class="docutils literal notranslate"><span class="pre">cond</span></code>. It is
+illogical, and it would be better to have <code class="docutils literal notranslate"><span class="pre">re2c:cond:prefix</span></code> instead. This
+release adds a bunch of such aliases. Of course, the old names still work, and
+there is no plan to remove them (the change does not break existing code).
+Likewise some options have new aliases. For a full list see the
+<a class="reference internal" href="changelog/changelog.html#id28"><span class="std std-ref">changelog</span></a>.</p>
+<p><strong>Code generation.</strong>
+The changes in code generation are minor. The main difference is in the state
+enumeration: states without incoming transitions do not have numbers anymore.
+This was required for the loop-switch approach, so that switch cases can have
+consecutive labels. Other code generation changes include removal of unused
+<code class="docutils literal notranslate"><span class="pre">YYPEEK</span></code> statements and slightly different formatting.</p>
+<p>For a full list of changes and bug fixes see the changelog
+<a class="reference internal" href="changelog/changelog.html#id28"><span class="std std-ref">3.0 (2022-01-27)</span></a>.
+Huge thanks to all contributors, especially
+<a class="reference external" href="https://github.com/raekye/">raekye</a>  and
+<a class="reference external" href="https://github.com/pmetzger/">pmetzger</a>!</p>
+</section>
+<section id="release-2-2">
+<h2>Release 2.2<a class="headerlink" href="#release-2-2" title="Permalink to this heading">¶</a></h2>
+<p>This release adds scoping rules and improves code sharing between re2c blocks.
+It brings in a bunch of new features, most importantly named blocks, local
+blocks, scoped directives and the ability to include arbitrary blocks in the
+middle of another block. Much work has been done on improving testing and
+continuous integration.</p>
+<p><strong>Local blocks.</strong>
+This release adds a new kind of blocks: <code class="docutils literal notranslate"><span class="pre">/*!local:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code>, which are
+exactly like the usual <code class="docutils literal notranslate"><span class="pre">/*!re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> blocks, except that they do not add
+their named definitions and configurations to the global scope. The contents of
+a local block are not visible outside of the block and do not affect subsequent
+blocks.</p>
+<p><strong>Named blocks.</strong>
+Previously all re2c blocks were anonymous. Now it is possible to give block a
+name: for example, <code class="docutils literal notranslate"><span class="pre">/*!re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> defines a global block named
+<code class="docutils literal notranslate"><span class="pre">woot42</span></code>. The name can be used to refer to this block in other parts of the
+program (for example in
+<a class="reference internal" href="../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a>). Rules blocks can
+have names as well: a block <code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> can be mentioned in
+a use block <code class="docutils literal notranslate"><span class="pre">/*!use:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> or in a use directive <code class="docutils literal notranslate"><span class="pre">!use:woot42;</span></code>.
+Use blocks cannot have their own name; if you need to have a named block that
+reuses another block, do that with the new <code class="docutils literal notranslate"><span class="pre">!use</span></code> directive.</p>
+<p><strong>Block lists in directives.</strong>
+Previously re2c <a class="reference internal" href="../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a>
+such as <code class="docutils literal notranslate"><span class="pre">max:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">stags:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">getstate:re2c</span></code> etc. were global: they
+accumulated the information across all blocks in the file. Now it is possible to
+specify a list of colon-separated block names in each directive: for example
+<code class="docutils literal notranslate"><span class="pre">/*!&lt;directive&gt;:re2c:&lt;name1&gt;:&lt;name2&gt;...</span> <span class="pre">*/</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;name1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;name2&gt;</span></code> and
+so on are the names of re2c blocks defined somewhere in the file. This allows
+one to have scoped directives, and also multiple directives per file for
+different groups of blocks. For example, if the file defines named blocks
+<code class="docutils literal notranslate"><span class="pre">foo</span></code>, <code class="docutils literal notranslate"><span class="pre">bar</span></code> and <code class="docutils literal notranslate"><span class="pre">baz</span></code>, one can define all s-tag variables in blocks
+<code class="docutils literal notranslate"><span class="pre">foo</span></code> and <code class="docutils literal notranslate"><span class="pre">baz</span></code> with a directive <code class="docutils literal notranslate"><span class="pre">/*!stags:foo:baz</span> <span class="pre">...</span> <span class="pre">*/</span></code>.</p>
+<p><strong>In-block use directive.</strong>
+Now it is possible to <a class="reference internal" href="../manual/manual_c.html#reusable-blocks"><span class="std std-ref">use a block</span></a> in
+the middle of another block: for example, a rules block
+<code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> can be used in the middle of another block with
+a statement <code class="docutils literal notranslate"><span class="pre">!use:woot42;</span></code>. Rules, named definitions and configurations of the
+used block are added to those of the current block. The new use directive is
+more flexible than the old <code class="docutils literal notranslate"><span class="pre">/*!use:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> block, because there is no
+limitation on the number of used blocks, and they don’t have to be used at the
+beginning of a block.</p>
+<p><strong>In-block include directive.</strong>
+The existing <code class="docutils literal notranslate"><span class="pre">/*!include</span> <span class="pre">...</span> <span class="pre">*/</span></code> directive now has an
+<a class="reference internal" href="../manual/manual_c.html#include-files"><span class="std std-ref">in-block variant</span></a>. For example,
+<code class="docutils literal notranslate"><span class="pre">!include</span> <span class="pre">&quot;x/y/z.re&quot;;</span></code> includes a file <code class="docutils literal notranslate"><span class="pre">x/y/z.re</span></code> in the middle of a block.
+The in-block include directive works in the same way as the out-of-block one:
+the contents of the file are inserted verbatim in place of the directive.</p>
+<p><strong>Configurable directives.</strong>
+More <a class="reference internal" href="../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a> can now be
+customized with configurations that define the form of the generated code.
+Directives <code class="docutils literal notranslate"><span class="pre">max:re2c</span></code> and <code class="docutils literal notranslate"><span class="pre">maxnmatch:re2c</span></code> now have an optional <code class="docutils literal notranslate"><span class="pre">format</span></code>
+configuration that accepts a template string with interpolated variable
+<code class="docutils literal notranslate"><span class="pre">&#64;&#64;{max}</span></code> (or just <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code> for short), for example
+<code class="docutils literal notranslate"><span class="pre">/*!max:re2c</span> <span class="pre">format=&quot;int</span> <span class="pre">maxfill</span> <span class="pre">=</span> <span class="pre">&#64;&#64;;&quot;;</span> <span class="pre">*/</span></code> would generate code
+<code class="docutils literal notranslate"><span class="pre">maxfill</span> <span class="pre">=</span> <span class="pre">&lt;N&gt;;</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> is the <code class="docutils literal notranslate"><span class="pre">YYMAXFILL</span></code> value.
+Directive <code class="docutils literal notranslate"><span class="pre">types:re2c</span></code> now has optional configurations <code class="docutils literal notranslate"><span class="pre">format</span></code> and
+<code class="docutils literal notranslate"><span class="pre">separator</span></code>: the former accepts a template string with interpolated variables
+<code class="docutils literal notranslate"><span class="pre">&#64;&#64;{cond}</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;&#64;{num}</span></code> (the name and numeric index of each condition), and
+the latter specifies the glue text used to join different <code class="docutils literal notranslate"><span class="pre">format</span></code> pieces
+together.</p>
+<p><strong>Testing.</strong>
+<a class="reference external" href="https://github.com/sergeyklay">Serghei Iakovlev</a> ported the old and hairy
+testing script from Bash to Python 3. The new script covers more platforms and
+is much faster than the old one (and also easier to debug and modify).</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id29"><span class="std std-ref">2.2 (2021-08-01)</span></a> for
+details. As always, a big thanks to all contributors!</p>
+</section>
+<section id="release-2-1-1">
+<h2>Release 2.1.1<a class="headerlink" href="#release-2-1-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that adds a missing file to the release tarballs
+(thanks to <a class="reference external" href="https://github.com/david-geiger">david_david</a> for the bug report).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id30"><span class="std std-ref">2.1.1 (2021-03-27)</span></a> for details.</p>
+</section>
+<section id="release-2-1">
+<h2>Release 2.1<a class="headerlink" href="#release-2-1" title="Permalink to this heading">¶</a></h2>
+<p>This release adds continuous integration with GitHub Actions, portability
+improvements, benchmarks, depfile generation and bugfixes.</p>
+<p><strong>GitHub Actions CI.</strong>
+<a class="reference external" href="https://github.com/sergeyklay">Serghei Iakovlev</a> has added continuous
+integration with GitHub Actions for Linux, macOS and Windows platforms.
+Now every change in re2c gets build and tested in various configurations on all
+three platforms, which (hopefully!) leads to fewer bugs and better support for
+these platforms. GitHub Actions complement the existing Travis CI.</p>
+<p><strong>Benchmarks.</strong>
+A lot of work has been done on adding infrastructure for benchmarks. Previously
+re2c had some benchmarks, but they were not integrated into the build system,
+and as a result somewhat difficult to build and run. Now there is a new
+benchmark subsystem, which includes three groups.
+The first group contains AOT-compiled benchmarks (a.k.a. lexer generators):
+regular expressions that are compiled ahead of time to C code, which is further
+compiled to native code. The currently supported generators are re2c, ragel and
+kleenex.
+The second group contains JIT-compiled benchmarks: library algorithms that are
+based on deterministic automata.
+Finally, the third group contains interpreted benchmarks: library algorithms
+that are based on non-deterministic automata.
+Benchmarks are fully integrated in both build systems (they are enabled with
+Autotools options <code class="docutils literal notranslate"><span class="pre">--enable-benchmarks</span></code>, <code class="docutils literal notranslate"><span class="pre">--enable-benchmarks-regenerate</span></code>
+and CMake options <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_BENCHMARKS</span></code>, <code class="docutils literal notranslate"><span class="pre">-DRE2C_REGEN_BENCHMARKS</span></code>).
+All benchmarks are regularly built and ran on CI.
+There is also a <a class="reference external" href="https://github.com/skvadrik/re2c/blob/master/benchmarks/json2pgfplot.py">script</a>
+for rendering benchmark results as bar charts.</p>
+<p>For lexer generators, benchmark results show that re2c-TDFA(1) and ragel are the
+fastest algorithms. Their performance is very close, but in non-deterministic
+cases ragel gives incorrect results due to its inability to remember multiple
+parallel versions of one tag. On the other hand, kleenex programs are much
+shorter and easier to read.</p>
+<p><strong>Dependency files.</strong>
+This release adds a <code class="docutils literal notranslate"><span class="pre">--depfile</span></code> option that allows one to generate dependency
+(.d) files. This is needed in order to track build dependencies in the presence
+of <code class="docutils literal notranslate"><span class="pre">/*!include:re2c*/</span></code> directives. The generated depfiles have the same format
+as the ones generated with GCC <code class="docutils literal notranslate"><span class="pre">-MF</span></code> option.</p>
+<p>There are also a few other improvements and bugfixes, see the full changelog
+<a class="reference internal" href="changelog/changelog.html#id32"><span class="std std-ref">2.1 (2021-03-26)</span></a> for details.</p>
+<p>A big warm thank you to all the people who contributed to this release!</p>
+</section>
+<section id="release-2-0-3">
+<h2>Release 2.0.3<a class="headerlink" href="#release-2-0-3" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor bugfix release.
+It fixes an issue when building re2c as a subproject of another CMake project
+(thanks to <a class="reference external" href="https://github.com/hanak">Ivo Hanak</a> for the bugreport).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id36"><span class="std std-ref">2.0.3 (2020-08-22)</span></a> for details.</p>
+</section>
+<section id="release-2-0-2">
+<h2>Release 2.0.2<a class="headerlink" href="#release-2-0-2" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor bugfix release.
+It makes two changes.
+First, re2go is now built by default (can be turned off with
+<code class="docutils literal notranslate"><span class="pre">--disable-golang</span></code> for Autotools and <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2GO=no</span></code> for CMake).
+Second, CMake build files are now packaged into release tarball.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id38"><span class="std std-ref">2.0.2 (2020-08-08)</span></a> for details.</p>
+</section>
+<section id="release-2-0-1">
+<h2>Release 2.0.1<a class="headerlink" href="#release-2-0-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that fixes re2c version (as output by <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">-v</span></code>) for
+the CMake build system. Thanks <a class="reference external" href="https://github.com/marryjianjian">marryjianjian</a>
+for the bug report!
+See the changelog <a class="reference internal" href="changelog/changelog.html#id39"><span class="std std-ref">2.0.1 (2020-07-29)</span></a> for details.</p>
+</section>
+<section id="release-2-0">
+<h2>Release 2.0<a class="headerlink" href="#release-2-0" title="Permalink to this heading">¶</a></h2>
+<p>This release adds a Go code generation backend,
+an alternative CMake build system,
+free-form generic API,
+improvements in reuse mode and start conditions,
+and bugfixes in EOF rule implementation.</p>
+<p><strong>Go backend.</strong>
+The new Go code generation backend can be used either with a <code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">go</span></code> re2c
+option, or as a standalone re2go binary (which is identical to re2c with
+<code class="docutils literal notranslate"><span class="pre">--lang</span> <span class="pre">go</span></code> set by default).
+The documentation has been split into separate manpages for
+<a class="reference internal" href="../manual/manual_c.html#user-manual-c-c"><span class="std std-ref">re2c</span></a> and
+<a class="reference internal" href="../manual/manual_go.html#user-manual-go"><span class="std std-ref">re2go</span></a>; they are
+generated from the same text, but have language-specific examples.
+The re2go binary and manpage need to be enabled explicitly with a configuration
+parameter <code class="docutils literal notranslate"><span class="pre">--enable-golang</span></code> for Autotools or <code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2GO=yes</span></code> for
+CMake.
+Unlike C, Go does not have pointer arithmetics, therefore re2go programs use
+integer indices instead of pointers and have
+<a class="reference internal" href="../manual/manual_zig.html#generic-api"><span class="std std-ref">generic API</span></a> enabled by default.
+Almost all re2c features have been ported to re2go, with the exception of code
+generation options like <code class="docutils literal notranslate"><span class="pre">--computed-gotos</span></code> and <code class="docutils literal notranslate"><span class="pre">--case-ranges</span></code> that
+need unsupported language features.
+Behind the scenes adding a new backend required a
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/14c5bea6582f417e1cf60d5cb26823567435957c">full rewrite</a>
+of the code generation subsystem and quite a bit of work on documentation
+and testing.
+Thanks to <a class="reference external" href="https://github.com/meme">meme</a> for
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/272">discussing</a> the idea and
+providing an early implementation prototype.
+Feedback from the Go community is welcome!</p>
+<p><strong>CMake build system.</strong>
+Thanks to <a class="reference external" href="https://github.com/ligfx">ligfx</a> for
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/a530570e5164ae302f89b79f9e6b04032c697245">adding</a>
+a CMake-based build system. This has been discussed multiple times in the past,
+and a few <a class="reference external" href="https://github.com/skvadrik/re2c/issues/244">attempts</a> at an
+implementation have been made, but ligfx was the first to contribute a full
+working implementation.
+The existing Autotools-based build system continues to be used and maintained
+for the foreseeable future. In fact, both build systems are continuously tested
+on Travis CI.
+See the <a class="reference internal" href="../build/build.html#build-install"><span class="std std-ref">build instructions</span></a> page for
+more details.</p>
+<p><strong>Free-form generic API.</strong>
+Generic API now supports
+<a class="reference internal" href="../manual/manual_zig.html#generic-api"><span class="std std-ref">two styles</span></a>: function-like style is
+enabled with <code class="docutils literal notranslate"><span class="pre">re2c:api:style</span> <span class="pre">=</span> <span class="pre">functions;</span></code>, and free-form style is enabled
+with <code class="docutils literal notranslate"><span class="pre">re2c:api:style</span> <span class="pre">=</span> <span class="pre">free-form;</span></code>.
+Previously only the function-like style was supported, and free-form style
+could be enabled for a few selected APIs with configurations like
+<code class="docutils literal notranslate"><span class="pre">re2c:define:YYFILL:naked</span></code>, etc.
+Free-form style allows to define API primitives as arbitrary strings of code
+with interpolated arguments of the form <code class="docutils literal notranslate"><span class="pre">&#64;&#64;{name}</span></code>, or optionally just <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code>
+if there is a single argument. The <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code> marker can be redefined with
+<code class="docutils literal notranslate"><span class="pre">re2c:api:sigil</span></code> configuration.</p>
+<p><strong>Improved reuse mode and start conditions.</strong>
+The restriction on not using normal (non-conditional) blocks with
+<code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--start-conditions</span></code> option has been removed: now it is possible to have
+both conditional and normal blocks. The switch on conditions is now generated
+for every block rather than once per file, which allows to have multiple lexers
+in one file.
+The combination of <code class="docutils literal notranslate"><span class="pre">-r,</span> <span class="pre">--reuse</span></code> option with <code class="docutils literal notranslate"><span class="pre">-c,</span> <span class="pre">--start-conditions</span></code> and/or
+<code class="docutils literal notranslate"><span class="pre">-f,</span> <span class="pre">--storable-state</span></code> options
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/217158707e2bc52d27956470bf1291df63be5530">now uses correct</a>
+block-local options instead of global options in condition and state switch,
+and re2c now generates
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/8f8d71e3104e52ab87940d322492d34bffff2c7a">unique labels</a>
+in each reuse block.</p>
+<p><strong>Fixes in EOF rule.</strong>
+A bug that caused
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/284">missing fallback states</a>
+with EOF rule
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/9bb515e7374e4e96499d562f5e0207f02500fcd2">has been fixed</a>.
+Re2c no longer generates
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/280">overlapping labels</a>
+when EOF rule is used with multiple blocks.</p>
+<p><strong>Developer changes.</strong>
+The way re2c bootstraps itself
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/967540566b8677c81f60ae6f14287b9e117125a4">has been simplified</a>:
+instead of always trying to regenerate lexer files if the re2c binary exists in
+the build directory, re2c now does this only when configured explicitly with
+<code class="docutils literal notranslate"><span class="pre">--enable-lexers</span></code> for Autotools or <code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_LEXERS=yes</span></code> for CMake.
+This configuration requires passing an explicit <code class="docutils literal notranslate"><span class="pre">RE2C_FOR_BUILD</span></code> variable that
+contains a path to the re2c executable that will be used to regenerate lexers.
+The new bootstrapping scheme allows to avoid build problems caused by
+dynamically changing dependency graph, as well as hard-to-recover errors when a
+bad re2c build was used to rebuild itself in a vicious loop.
+Another developer-visible change is a
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/303ef4783707fd7616dd0cd984217c881e9dbb39">rework of the testing framework</a>,
+which now uses in-line comments instead of hard-coding options in test filenames.</p>
+<p><strong>Backwards incompatible changes.</strong>
+In a few rare/undocumented cases re2c behavior has been changed in a way that
+may break existing code:</p>
+<ul class="simple">
+<li><p>Generic APIs <code class="docutils literal notranslate"><span class="pre">YYSHIFT</span></code>/<code class="docutils literal notranslate"><span class="pre">YYSHIFTSTAG</span></code>/<code class="docutils literal notranslate"><span class="pre">YYSHIFTMTAG</span></code>
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/92cbf8fb76133dde062962ecf2856e143714b715">have been added</a>.
+Their meaning is to shift the cursor/tag position by a specified offset.
+The new APIs enable fixed-tags optimization with generic API, which is
+becoming more important as the generic API is getting used more often.
+Programs that use both generic API and tags or POSIX capturing groups may need
+to define the new APIs.</p></li>
+<li><p>Generic APIs <code class="docutils literal notranslate"><span class="pre">YYSTAGPD</span></code>/<code class="docutils literal notranslate"><span class="pre">YYMTAGPD</span></code> have been removed. They were used only
+with the recently added experimental <code class="docutils literal notranslate"><span class="pre">--stadfa</span></code> option, and the removal is
+unlikely to break any existing code.</p></li>
+<li><p>In reuse mode configurations like <code class="docutils literal notranslate"><span class="pre">re2c:define:YYCTYPE</span></code> are
+<a class="reference external" href="https://github.com/skvadrik/re2c/issues/291">no longer reset</a>
+in each use block. The old behavior was kept only for backwards compatibility.
+It has caused confusion and inconvenience, as the configurations had to be
+repeatedly defined in each use block.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">re2c:flags:type-header</span></code> option now treats the header filename as
+<a class="reference external" href="https://github.com/skvadrik/re2c/commit/dc0df494c6ec528094cf59cd17768e08e9af0e6a">relative to the output</a>
+directory. The undocumented <code class="docutils literal notranslate"><span class="pre">re2c:flags:output</span></code> option has been removed.</p></li>
+<li><p>Some internal labels have been renamed, in particular the <code class="docutils literal notranslate"><span class="pre">yyFillLabel</span></code>
+prefix has been replaced with <code class="docutils literal notranslate"><span class="pre">yyfill</span></code>. This should not break any well-formed
+code, as these labels are not part of the user interface. Programs that relied
+on the old label names may restore them with the <code class="docutils literal notranslate"><span class="pre">re2c:label:yyFillLabel</span></code>
+configuration.</p></li>
+</ul>
+<p>As always, a warm thank you to all the people who contributed to this release,
+including
+<a class="reference external" href="https://github.com/ligfx">ligfx</a>,
+<a class="reference external" href="https://github.com/meme">meme</a>,
+<a class="reference external" href="https://github.com/ryandesign">ryandesign</a>,
+<a class="reference external" href="https://github.com/fanf2">fanf2</a>,
+<a class="reference external" href="https://github.com/samebchase">samebchase</a>
+and <a class="reference external" href="https://github.com/trofi">trofi</a>. :)</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id40"><span class="std std-ref">2.0 (2020-07-20)</span></a> for details.</p>
+</section>
+<section id="release-1-3">
+<h2>Release 1.3<a class="headerlink" href="#release-1-3" title="Permalink to this heading">¶</a></h2>
+<p>The bulk of the work in this release was concentrated on implementing an
+experimental submatch extraction algorithm. The new algorithm is based on
+staDFA: another type of automaton described in the paper <em>“staDFA: An Efficient
+Subexpression Matching Method”</em> by Mohammad Imran Chowdhury (2018).
+Like TDFA, staDFA performs operations on variables that hold submatch positions
+during the matching process. The main difference between the two automata types
+is that TDFA associates variable operations with
+transitions, while staDFA puts them in states. Now that we have an experimental
+implementation of staDFA in re2c, it is possible to compare its performance
+against TDFA. The initial experiments have shown that on average staDFA is
+slower and larger than TDFA(1): it has more variable operations and more states.
+It still remains to run proper benchmarks and formalize the modifications to
+the original algorithm that we had to make for correctness and performance.
+The new staDFA algorithm is enabled with <code class="docutils literal notranslate"><span class="pre">--stadfa</span></code> option.</p>
+<p>This release adds a new warning <code class="docutils literal notranslate"><span class="pre">-Wsentinel-in-midrule</span></code> that warns the user in
+the case when the sentinel symbol occurs in the middle of the rule – this may
+cause reads past the end of buffer, crashes or memory corruption in the
+generated lexer. Complimentary to the warning there is a new configuration
+<code class="docutils literal notranslate"><span class="pre">re2c:sentinel</span></code> that allows to specify which symbol is used as a sentinel
+(by default re2c assumes <code class="docutils literal notranslate"><span class="pre">NULL</span></code>). It this configuration is used, then
+<code class="docutils literal notranslate"><span class="pre">-Wsentinel-in-midrule</span></code> is an error.</p>
+<p>Some work has been done on reproducible builds.</p>
+<p>As usual, thanks to all the people who contributed to this release (including
+Chris Lamb, jcfp and Ondřej Čertík)!
+See the changelog <a class="reference internal" href="changelog/changelog.html#id53"><span class="std std-ref">1.3 (2019-12-14)</span></a> for
+details.</p>
+</section>
+<section id="release-1-2-1">
+<h2>Release 1.2.1<a class="headerlink" href="#release-1-2-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor release that improves some of the features introduced in 1.2.
+First, it is now possible to reset <code class="docutils literal notranslate"><span class="pre">re2c:eof</span></code> configuration to the
+default value by setting it to <code class="docutils literal notranslate"><span class="pre">-1</span></code>. Second, re2c now installs standard
+include files to <code class="docutils literal notranslate"><span class="pre">$(datadir)/re2c/stdlib</span></code>, where <code class="docutils literal notranslate"><span class="pre">$(datadir)</span></code> is
+<code class="docutils literal notranslate"><span class="pre">/usr/share</span></code> by default (but can be configured otherwise). When looking for
+include files, re2c automatically tries this directory — there is no need
+to add it manually with <code class="docutils literal notranslate"><span class="pre">-I</span></code>.
+Both issues have been reported by Wesley W. Terpstra. Thank you!</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id55"><span class="std std-ref">1.2.1 (2019-08-11)</span></a> for details.</p>
+</section>
+<section id="release-1-2">
+<h2>Release 1.2<a class="headerlink" href="#release-1-2" title="Permalink to this heading">¶</a></h2>
+<p>This release adds a handful of useful features and finalizes two-year
+research effort on POSIX disambiguation.</p>
+<p>First and foremost, <a class="reference internal" href="../manual/manual_c.html#sentinel-with-bounds-checks"><span class="std std-ref">end of input rule</span></a>
+has been added to re2c. It is a new method of checking for the end of input,
+which aims at being both generic and simple to use. Historically re2c has a
+<a class="reference internal" href="../manual/manual_c.html#handling-the-end-of-input"><span class="std std-ref">number of ways</span></a> to handle
+EOF situation. The simplest and the most efficient method is
+<a class="reference internal" href="../manual/manual_c.html#sentinel"><span class="std std-ref">using a sentinel symbol</span></a>, but it
+has limited applicability. The most widely used and generic method is
+<a class="reference internal" href="../manual/manual_c.html#bounds-checks-with-padding"><span class="std std-ref">bounds checking with padding</span></a>,
+but it is rather complex and requires input buffering.
+Finally, it is possible to define custom EOF handling methods
+by <a class="reference internal" href="../manual/manual_c.html#custom-checks"><span class="std std-ref">using the generic API</span></a>. However,
+such methods are not necessarily correct and are likely to be slower than other
+methods. The new method, EOF rule, tries to combine the simplicity and
+efficiency of the sentinel symbol and the generality of bounds checking.
+Essentially, all the user is required to do is to specify an arbitrary “fake”
+sentinel using <code class="docutils literal notranslate"><span class="pre">re2c:eof</span></code> configuration (zero is usually a good choice), to
+define a special EOF rule <code class="docutils literal notranslate"><span class="pre">$</span></code>, and to make sure that the fake sentinel is
+always the last symbol in the input buffer. The lexer will then run without end
+of input checks until it hits the branch corresponding to the fake sentinel, at
+which point it will perform additional bounds checking. If indeed it is the end,
+the lexer will try to get more input. If this attempt fails, the lexer will
+either rollback to the last matched rule (or the default rule, if it has
+consumed some input but did not match), or else it will go to EOF rule.
+Depending on each particular case and the choice of sentinel, the performance of
+EOF rule may be slightly better or worse than bounds checking with padding.
+See the user manual for more details and examples.</p>
+<p>Another important new feature is the possibility to <a class="reference internal" href="../manual/manual_c.html#include-files"><span class="std std-ref">include other files</span></a>. Re2c provides a directive
+<code class="docutils literal notranslate"><span class="pre">/*!include:re2c</span> <span class="pre">&quot;file.re&quot;</span> <span class="pre">*/</span></code>, where <code class="docutils literal notranslate"><span class="pre">file.re</span></code> is the name of the included
+file.
+Re2c looks for included files in the directory of the including file and in the
+include locations, which can be specified with <code class="docutils literal notranslate"><span class="pre">-I</span></code> option. Include files
+may have further includes of their own. Re2c provides some predefined include
+files that can be found in the <code class="docutils literal notranslate"><span class="pre">include/</span></code> sub-directory of the project. These
+files contain useful definitions and form something like a standard library
+for re2c. Currently there is one available include, <code class="docutils literal notranslate"><span class="pre">unicode_categories.re</span></code>.</p>
+<p>Re2c now allows to <a class="reference internal" href="../manual/manual_c.html#header-files"><span class="std std-ref">generate header file</span></a>
+from the input file using option <code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">--type-header</span></code> or
+<code class="docutils literal notranslate"><span class="pre">re2c:flags:t</span></code> and <code class="docutils literal notranslate"><span class="pre">re2c:flags:type-header</span></code> configurations and the newly
+added directives <code class="docutils literal notranslate"><span class="pre">/*!header:re2c:on*/</span></code> and <code class="docutils literal notranslate"><span class="pre">/*!header:re2c:off*/</span></code>.
+Header files may be needed in cases when re2c is used to generate definitions
+of constants, variables and structs that must be visible from other translation
+units.</p>
+<p>Re2c can now understand UTF8-encoded string literals and character classes in
+regular expressions. By default, re2c parses regular expressions like
+<code class="docutils literal notranslate"><span class="pre">&quot;∀x</span> <span class="pre">∃y&quot;</span></code> as a sequence of 1-byte ASCII code points
+<code class="docutils literal notranslate"><span class="pre">e2</span> <span class="pre">88</span> <span class="pre">80</span> <span class="pre">78</span> <span class="pre">20</span> <span class="pre">e2</span> <span class="pre">88</span> <span class="pre">83</span> <span class="pre">79</span></code> (hexadecimal), and the users have to escape
+Unicode symbols manually: <code class="docutils literal notranslate"><span class="pre">&quot;\u2200x</span> <span class="pre">\u2203y&quot;</span></code>. This is not what most users
+would expect, as demonstrated by multiple issues on the bugtracker. The new
+option <code class="docutils literal notranslate"><span class="pre">--input-encoding</span> <span class="pre">&lt;ascii</span> <span class="pre">|</span> <span class="pre">utf8&gt;</span></code> allows to change the default
+behavior and parse <code class="docutils literal notranslate"><span class="pre">&quot;∀x</span> <span class="pre">∃y&quot;</span></code> as a sequence of 4-byte Unicode code points
+<code class="docutils literal notranslate"><span class="pre">2200</span> <span class="pre">78</span> <span class="pre">20</span> <span class="pre">2203</span> <span class="pre">79</span></code> (hexadecimal). Note that the new option affects only
+parsing, and not the code generation.</p>
+<p>Re2c now allows to mix <a class="reference internal" href="../manual/manual_c.html#reusable-blocks"><span class="std std-ref">reusable blocks</span></a>
+with normal blocks when <code class="docutils literal notranslate"><span class="pre">-r</span> <span class="pre">--reuse</span></code> option is used. This is very useful in
+cases when the input file contains many re2c blocks, and only some of them need
+to be reused (a good example is re2c own lexer, which has to use certain rules
+twice in order to generate ASCII and UTF8 lexer variants for
+<code class="docutils literal notranslate"><span class="pre">--input-encoding</span> <span class="pre">&lt;ascii</span> <span class="pre">|</span> <span class="pre">utf8&gt;</span></code> option).</p>
+<p>It is now possible to specify location format in re2c-generated messages with
+<code class="docutils literal notranslate"><span class="pre">--location-format</span> <span class="pre">&lt;gnu</span> <span class="pre">|</span> <span class="pre">msvc&gt;</span></code> option. As one might guess, possible
+arguments are GNU location format <code class="docutils literal notranslate"><span class="pre">filename:line:column:</span></code> (the default) and
+MSVC format <code class="docutils literal notranslate"><span class="pre">filename(line,column)</span></code>. This option might help IDE users.
+Another new option is <code class="docutils literal notranslate"><span class="pre">--verbose</span></code> — it prints a short “success” message in
+case re2c exits successfully.</p>
+<p>Flex compatibility mode (enabled with <code class="docutils literal notranslate"><span class="pre">-F</span> <span class="pre">--flex-support</span></code> option) has been
+improved: parsing errors and incorrect operator precedence in some rare cases
+have been fixed. Historically re2c allows to mix flex-style code with re2c-style
+code, which creates certain difficulties for the parser. Such difficulties can
+be resolved by passing parts of the parser context to the lexer.</p>
+<p>The difference operator <code class="docutils literal notranslate"><span class="pre">/</span></code> is now applied to its operands before encoding
+expansion. Re2c supports difference only for character classes, and encoding
+expansion in case of a variable-length encoding may transform even a simple
+character class into a complex graph (see
+<a class="reference external" href="../../_images/utf8_any.png">the graph</a> for <code class="docutils literal notranslate"><span class="pre">[^]</span></code> in UTF8 for example).
+Applying expansion after difference makes <code class="docutils literal notranslate"><span class="pre">/</span></code> applicable in more cases.</p>
+<p>Re2c now generates the output file atomically: it first creates a temporary file
+and writes the generated output into it, and then renames the temporary file to
+the output file.</p>
+<p>Documentation has been rearranged and updated, and the website has been
+fixed to look somewhat better on mobile devices (hopefully).</p>
+<p>From developers standpoint, re2c now has better debugging capabilities. Debug
+code has been moved in a separate subsystem and is no longer built in release
+binaries (debug builds are enabled with <code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code> configure option).
+New debug options and passes have been added.</p>
+<p>This release has taken almost a year, mostly because of the time needed to
+formalize the extended algorithm for POSIX disambiguation and write a formal
+paper <a class="reference external" href="../../2019_borsotti_trofimovich_efficient_posix_submatch_extraction_on_nfa.pdf">Efficient POSIX Submatch Extraction on NFA</a>.
+The algorithms described in the paper are implemented in an experimental
+library <code class="docutils literal notranslate"><span class="pre">libre2c</span></code>. The library is intended as a playground for experiments
+and research, not a replacement for existing libraries like RE2. Having re2c
+as a library is convenient for benchmarking, testing and creating bindings to
+other languages.
+To build the library and benchmarks, configure re2c with <code class="docutils literal notranslate"><span class="pre">--enable-libs</span></code> option.</p>
+<p>Many people have contributed to this release.
+Angelo Borsotti co-authored the paper; his hard work has revealed multiple
+shortcomings and deficiencies in the algorithms used in re2c.
+Henri Salo helped with fuzz-testing re2c using the American Fuzzy Lop.
+Denis Naumov helped with Windows portability issues.
+Sergei Trofimovich fixed a number of bugs;
+he and Serghei Iakovlev helped with the Travis CI infrastructure.
+Wesley Terpstra used re2c in the open-source
+<a class="reference external" href="https://github.com/sifive/wake">wake build tool</a>.
+Many thanks to them and all the others who contributed to this release!</p>
+<p>A lot of bugs have been fixed.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id58"><span class="std std-ref">1.2 (2019-08-02)</span></a> for details.</p>
+</section>
+<section id="release-1-1-1">
+<h2>Release 1.1.1<a class="headerlink" href="#release-1-1-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor bug-fix release.
+It fixes a crash with <code class="docutils literal notranslate"><span class="pre">-V</span></code> <code class="docutils literal notranslate"><span class="pre">--vernum</span></code> option.
+The crash was reported and fixed by Mike Gilbert,
+and later rediscovered by Daniel J. Luke and Perry E. Metzger.
+Sergei Trofimovich made a unit test, as the <code class="docutils literal notranslate"><span class="pre">-V</span></code> <code class="docutils literal notranslate"><span class="pre">--vernum</span></code> option has already caused some troubles in the past.
+See the changelog <a class="reference internal" href="changelog/changelog.html#id107"><span class="std std-ref">1.1.1 (2018-08-30)</span></a> for details.
+Thanks everyone!</p>
+</section>
+<section id="release-1-1">
+<h2>Release 1.1<a class="headerlink" href="#release-1-1" title="Permalink to this heading">¶</a></h2>
+<p>This release doesn’t bring in any serious user-visible changes;
+most of the work concentrated on the internal POSIX disambiguation algorithm
+used for submatch extraction with <code class="docutils literal notranslate"><span class="pre">--posix-captures</span></code> option.
+The old algorithm, introduced in <a class="reference external" href="./1_0.html">release 1.0</a>, was based on the work of Chris Kuklewicz
+(outlined on this <a class="reference external" href="https://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&amp;oldid=11475">haskell wiki page</a>
+and formalized in the paper <a class="reference external" href="http://re2c.org/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">Tagged Deterministic Finite Automata with Lookahead</a>).
+Kuklewicz algorithm was replaced with a totally different algorithm
+based on the work of Satoshi Okui and Taro Suzuki (described in the paper
+“Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions”, year 2013).
+The main effort in this release was in developing proper theoretical foundations for the new algorithm.
+As usual, there has been a couple of bug fixes.</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id109"><span class="std std-ref">1.1 (2018-08-27)</span></a> for details.</p>
+</section>
+<section id="release-1-0-3">
+<h2>Release 1.0.3<a class="headerlink" href="#release-1-0-3" title="Permalink to this heading">¶</a></h2>
+<p>Yet another minor bug-fix release.
+It fixes a build failure on Mac OS X (thanks to Ryan Shmidt for the bug report).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id111"><span class="std std-ref">1.0.3 (2017-11-08)</span></a> for details.</p>
+</section>
+<section id="release-1-0-2">
+<h2>Release 1.0.2<a class="headerlink" href="#release-1-0-2" title="Permalink to this heading">¶</a></h2>
+<p>This is another minor bug-fix release.
+It addresses some documentation issues (thanks to Ziris85 for the bug report).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id113"><span class="std std-ref">1.0.2 (2017-08-26)</span></a> for details.</p>
+</section>
+<section id="release-1-0-1">
+<h2>Release 1.0.1<a class="headerlink" href="#release-1-0-1" title="Permalink to this heading">¶</a></h2>
+<p>This is a minor bug-fix release.
+It fixes a build failure on Mac OS X (thanks to ilovezf for the bug report).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id115"><span class="std std-ref">1.0.1 (2017-08-11)</span></a> for details.</p>
+</section>
+<section id="id15">
+<h2>Release 1.0<a class="headerlink" href="#id15" title="Permalink to this heading">¶</a></h2>
+<p>This release is an important milestone in the history of re2c: it adds <em>submatch extraction</em>.
+It is a long-awaited feature; even as Peter Bumbulis released the first version of re2c back in 1993,
+he mentioned submatch extraction in his paper together with Donald D. Cowan
+<a class="reference external" href="../../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps">“RE2C: a more versatile scanner generator”</a>
+as a useful feature that soon should be added to re2c.
+It seemed back then that submatch extraction is relatively easy to implement;
+like many other useful extensions, it was deemed to be no more than syntactic sugar on top of canonical regular expressions.</p>
+<p>As it turned out, this is not so:
+the problem of <em>parsing</em> with regular expressions is inherently more complex than <em>recognition</em>,
+and submatch extraction cannot be implemented using traditional DFA-based approach.
+Many authors studied this subject and developed algorithms suitable for their particular settings and problem domains.
+Some of them used NFA-based approach,
+others suggested algorithms based on multiple DFA or multiple passes over a single DFA.
+For re2c most of these algorithms are too heavyweight:
+they require complication of the underlying computational model and incur overhead even in simple cases.</p>
+<p>However, one algorithm is outstanding in this respect:
+it is the algorithm invented by Ville Laurikari in 2000 and described in his paper
+<a class="reference external" href="http://laurikari.net/ville/spire2000-tnfa.pdf">“NFAs with Tagged Transitions, their Conversion to Deterministic Automata and Application to Regular Expressions”</a>.
+Laurikari algorithm is based on a single DFA extended with a fixed number of <em>registers</em>; it makes one pass over the input string,
+works in linear time and the required space does not depend on the input length.
+But what is most important, the added complexity depends on submatch detalization:
+on submatch-free regular expressions Laurikari automaton reduces to a simple DFA.</p>
+<p>When the work on submatch extraction feature started in early 2016,
+at first it seemed that Laurikari algorithm was still overly complicated.
+Re2c needed an algorithm that would support only <em>partial</em> submatch extraction,
+but the supported cases would be handled very efficiently.
+A lot of effort was spent on studying papers,
+and finally this lead to the development of a new algorithm.
+It soon became clear that the self-invented algorithm was in fact a special case of Laurikari algorithm,
+with one significant performance improvement: the use of lookahead symbol.
+Surprisingly, the original Laurikari algorithm has a strange deficiency:
+when recording submatches, the automata totally ignore the lookahead symbol
+and perform a lot of redundant operations that could be easily avoided.
+It was only logical to fix Laurikari algorithm.
+The new improved algorithm is described in the paper
+<a class="reference external" href="../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">“Tagged Deterministic Finite Automata with Lookahead”</a></p>
+<p>Submatch extraction in re2c comes in two flavors:
+POSIX-compliant capturing groups (with true POSIX semantics)
+and standalone <em>tags</em> that use leftmost greedy disambiguation.
+Both features require a number of new API primitives and configurations;
+and they are barely documented yet (though I managed to add a section in the manual).
+The paper cited above has some interesting benchmark results;
+articles and examples will follow in the nearest future.
+As usually, you may expect a number of small bug-fix releases in the 1.0.x series.</p>
+<p>The following people contributed to this release:</p>
+<ul class="simple">
+<li><p>Petr Skocik tidied up re2c documentation: fixed ubiquitous spelling errors
+and established synchronization system between the online documentation,
+manpage and help message displayed by re2c with <code class="docutils literal notranslate"><span class="pre">--help</span></code> option.</p></li>
+<li><p>Sergei Trofimovich wrote a <em>fuzzer</em> that generates random regular expressions
+and checks them on input data generated with re2c <code class="docutils literal notranslate"><span class="pre">--skeleton</span></code> option.
+This fuzzer is most helpful; it has already found tens of bugs in the early implementation of submatch extraction.
+Sergei also helped me with testing re2c on numerous platforms and computer architectures.</p></li>
+<li><p>Abs62,
+asmwarrior,
+Ben Smith,
+CRCinAU,
+Derick Rethans,
+Dimitri John Ledkov,
+Eldar Zakirov,
+jcfp,
+Jean-Claude Wippler,
+Jeff Trull,
+Jérôme Dumesnil,
+Jesse Buesking,
+Julian Andres Klode,
+Paulo Custodio,
+Perry E. Metzger,
+philippschaefer,
+Ross Burton,
+Rui Maciel,
+Ryan Mast,
+Samuel006,
+sirzooro,
+Tim Kelly
+— all these people contributed bug reports, patches and feedback. Thank you!</p></li>
+<li><p>Many thanks to the early user of the new features João Paredes for his patience and encouraging comments on the subject.</p></li>
+</ul>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id117"><span class="std std-ref">1.0 (2017-08-11)</span></a> for details.</p>
+</section>
+<section id="release-0-16">
+<h2>Release 0.16<a class="headerlink" href="#release-0-16" title="Permalink to this heading">¶</a></h2>
+<p>This release adds a very important step in the process of code generation:
+minimization of the underlying DFA (deterministic finite automaton).
+Simply speaking, this means that re2c now generates less code
+(while the generated code behaves exactly the same).</p>
+<p>DFA minimization is a very well-known technique
+and one might expect that any self-respecting lexer generator would definitely use it.
+So how could it be that re2c didn’t?
+In fact, re2c did use a couple of self-invented tricks to compress the generated code
+(one interesting technique is the construction of a <em>tunnel</em> automaton).
+Some of these tricks were quite buggy (see <a class="reference external" href="https://bugs.gentoo.org/show_bug.cgi?id=518904">this bug report</a> for example).
+Now that re2c does canonical DFA minimization, all this stuff is obsolete and has been dropped.</p>
+<p>A lot of attention has been paid to the correctness of the DFA minimization.
+Usually, re2c uses a very simple criterion to validate changes:
+the generated code for all the tests in testsuite must remain the same.
+However, in the case of DFA minimization the generated code changes dramatically.
+It is impossible to verify the changes manually.</p>
+<p>One possible verification tool is the <a class="reference internal" href="../manual/manual_c.html#skeleton-programs"><span class="std std-ref">skeleton</span></a> feature.
+Because skeleton is constructed prior to DFA minimization, it cannot be affected by any errors in its implementation.</p>
+<p>Another way to verify DFA minimization is by implementing two different algorithms
+and comparing the results. The minimization procedure has a very useful property:
+the miminal DFA is unique (with respect to state relabeling).
+We used the Moore and the so-called <em>table filling</em> algorithms:
+The Moore algorithm is fast, while table filling is very simple to implement.
+The <code class="docutils literal notranslate"><span class="pre">--dfa-minimization</span> <span class="pre">&lt;moore</span> <span class="pre">|</span> <span class="pre">table&gt;</span></code> option that allows choosing
+the particular algorithm (defaults to <code class="docutils literal notranslate"><span class="pre">moore</span></code>), but it’s only useful for debugging
+DFA minimization.</p>
+<p>A good side effect of messing with re2c internals is a significant speedup
+of code generation (see <a class="reference external" href="https://github.com/skvadrik/re2c/issues/128">this issue</a> for example).
+The test suite now runs twice as fast (at least).</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id147"><span class="std std-ref">0.16 (2016-01-21)</span></a> for details.</p>
+</section>
+<section id="release-0-15-3">
+<h2>Release 0.15.3<a class="headerlink" href="#release-0-15-3" title="Permalink to this heading">¶</a></h2>
+<p>This release fixes multiple build-time and run-time failures on OS X, FreeBSD, and Windows.
+Most of the problems were reported and fixed by Oleksii Taran (on OS X)
+and Sergei Trofimovich (on FreeBSD and Windows).
+Thank you for your help!</p>
+<p><a class="reference internal" href="../manual/manual_c.html#skeleton-programs"><span class="std std-ref">Skeleton</span></a> coverage has been improved.</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id151"><span class="std std-ref">0.15.3 (2015-12-02)</span></a> for details.</p>
+</section>
+<section id="release-0-15-2">
+<h2>Release 0.15.2<a class="headerlink" href="#release-0-15-2" title="Permalink to this heading">¶</a></h2>
+<p>This release fixes a bug in the build system:
+it adds a missing dependency of the lexer on the bison-generated header
+(<a class="reference external" href="https://bugs.gentoo.org/show_bug.cgi?id=566620">reported</a> on Gentoo bugtracker).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id155"><span class="std std-ref">0.15.2 (2015-11-23)</span></a> for details.</p>
+</section>
+<section id="release-0-15-1">
+<h2>Release 0.15.1<a class="headerlink" href="#release-0-15-1" title="Permalink to this heading">¶</a></h2>
+<p>This release fixes an error in the testing script
+(thanks to Sergei Trofimovich who reported the bug and suggested a quick fix).
+See the changelog <a class="reference internal" href="changelog/changelog.html#id156"><span class="std std-ref">0.15.1 (2015-11-22)</span></a> for details.</p>
+</section>
+<section id="release-0-15">
+<h2>Release 0.15<a class="headerlink" href="#release-0-15" title="Permalink to this heading">¶</a></h2>
+<p>This release started out in the spring of 2015 as a relatively simple code cleanup.</p>
+<p>It focused on the following problem: re2c used to repeat the whole generation process multiple times.
+Some parts of the generated program depend on the overall input statistics;
+they cannot be generated until the whole input has been processed.
+The usual strategy is to make stubs for all such things and fix them later.
+Instead, re2c used to process the whole input, gather statistics,
+discard the generated output, and regenerate it from scratch.
+Moreover, each generation pass further duplicated certain calculations (for similar reasons).
+As a result, the code generation phase was repeated four times.</p>
+<p>The problem here was not inefficiency: re2c is fast enough to allow the 4x overhead.
+The real problem was the complexity of the code: the developer has to think of multiple execution layers all the time.
+Some parts of code are only executed on certain layers and affect each other.
+Simple reasoning gets really hard.</p>
+<p>So the main purpose of this release was to simplify the code and make it easier to fix bugs and add new features.
+Very soon it became clear that some of the changes in code generation are hard to verify by hand.
+For example, even a minor rebalancing of <code class="docutils literal notranslate"><span class="pre">if</span></code> and <code class="docutils literal notranslate"><span class="pre">switch</span></code> statements
+may change the generated code significantly.
+It was clear that re2c needed an automatic verification tool,
+which lead to the idea of generating <a class="reference internal" href="../manual/manual_c.html#skeleton-programs"><span class="std std-ref">skeleton programs</span></a>.</p>
+<p>Meanwhile some work was done on adding warnings,
+updating the build system and fixing various bugs.
+A heart-warming consequence of the code simplification is that re2c now uses re2c more extensively:
+not only the main program, but also the command-line options, inplace configurations,
+and all kinds of escaped strings are parsed with re2c.
+Website has also been updated (feel free to suggest improvements).</p>
+<p>See the changelog <a class="reference internal" href="changelog/changelog.html#id157"><span class="std std-ref">0.15 (2015-11-22)</span></a> for details.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

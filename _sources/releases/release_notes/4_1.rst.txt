@@ -1,0 +1,32 @@
+Release 4.1
+===========
+
+This release adds *actions*, a few backend-specific improvements in code
+generation and a bunch of bug fixes. Benchmark code has been reworked in
+preparation to add multi-language benchmarks in the future.
+
+**Actions.**
+:ref:`Actions <manual/manual_c:actions>` are user defined blocks of code that
+can be attached to various parts of the generated code. This release adds three
+new actions. First, the ``!entry`` action is executed at the lexer entry, which
+can be used to emit set up code (it is similar to the zero condition ``< >``,
+but the action is more flexible: it can be set individually per condition, and
+it allows one to bypass the initial condition dispatch and jump directly to the
+start of each condition). Second, the ``!pre_rule`` action is executed
+immediately *before* semantic action for each rule in the current block or
+condition. Third, the ``!post_rule`` action is like the previous one, except
+that it is executed immediately *after* each semantic action.
+
+**Backend-specific improvements.**
+OCaml backend now uses ``unsafe_get`` instead of ``get`` as the default
+``YYPEEK`` implementation -- the generated lexer already performs end of input
+checks, so the bounds checks in ``get`` are redundant.
+Zig backend now uses ``const`` for ``yych`` declaration in
+``--recursive-functions`` mode, as the variable is not mutated and declaring it
+as a variable is an error in the recent compiler versions.
+
+For a full list of changes and bug fixes see the changelog
+:ref:`releases/changelog/changelog:4.1 (2025-02-16)`.
+As always, thanks to all contributors, especially
+`eilvelia <https://github.com/eilvelia>`_
+for great bug reports and discussion!

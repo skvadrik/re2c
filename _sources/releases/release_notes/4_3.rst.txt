@@ -1,0 +1,39 @@
+Release 4.3
+===========
+
+This release adds ``-Wdeprecated-eof-rule`` warning and improves
+compile-time performance.
+
+**Upcoming changes to the end-of-input rule.**
+Normally, if there's a conflict between two or more rules
+(meaning that they both match the same string) re2c chooses the first rule
+based on their position in the input file. The same goes for reused blocks:
+their rules are inserted at block start for ``use:re2c`` blocks, or at the
+point where ``!use`` directive is specified.
+Special rules (such as the default rule ``*`` and the end of input rule ``$``)
+have different precedence and inheritance order. A block is not allowed to
+specify the same special rule more than once, and inherited special rules have
+lower priority compared to the block's own special rules.
+
+In the future re2c will support generalized end of input symbol ``$`` as part
+of a normal rule (rather than a special rule). At the moment the only supported
+form is a standalone rule ``$ { ... }``, but in the future re2c will support
+cases like ``[a] $ | [b] { ... }`` etc. To allow this, ``$`` needs to have
+position based precedence and inheritance order. However, it will be a breaking
+change for cases that have conflicting rules.
+This release prepares for the migration: it does not change behaviour yet, but
+it add a warning ``-Wdeprecated-eof-rule`` for the cases that will be broken
+in the future. For now the warning can be disabled with
+``-Wno-deprecated-eof-rule``, however it is strongly recommended to fix it,
+as the warning will be turned to error in the future, and the generated code
+will change.
+
+See `#525 <https://github.com/skvadrik/re2c/pull/525>`_ for more details.
+
+**Compile-time performance improvements.**
+Internal TDFA construction code has been optimized: it now avoids some
+redundant copying, making the determinization process ~1.5 times faster
+for some Unicode scanners. The algorithm itself wasn't changed.
+See `#544 <https://github.com/skvadrik/re2c/pull/544>`_ for more details.
+
+See the changelog: :ref:`releases/changelog/changelog:4.3 (2025-06-30)`.

@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>&lt;no title&gt; &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p>Here is an example of a very simple program
+<a class="reference download internal" download="" href="../../../_downloads/b26d681f6b14172f1891d366372e6766/example.re.txt"><code class="xref download docutils literal notranslate"><span class="pre">[example.re]</span></code></a>
+that tries to match two-digit hexadecimal numbers:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *              {}</span>
+<span class="cm">    [0-9a-fA-F]{2} {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>We can see the generated DFA using <code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-D</span> <span class="pre">example.re</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Grankdir=LR</span> <span class="pre">-Tpng</span> <span class="pre">-o</span> <span class="pre">example.png`</span></code>:</p>
+<a class="reference internal image-reference" href="../../../_images/example.png"><img alt="../../../_images/example.png" src="../../../_images/example.png" style="width: 60%;" /></a>
+<p>Given this program, <code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-S</span> <span class="pre">-o</span> <span class="pre">example.c</span> <span class="pre">example.re`</span></code> generates three files:
+<code class="docutils literal notranslate"><span class="pre">example.c</span></code> (main program), <code class="docutils literal notranslate"><span class="pre">example.c.line4.input</span></code> (input data) and <code class="docutils literal notranslate"><span class="pre">example.c.line4.keys</span></code> (expected match results).
+First, let’s look at the generated strings
+<a class="reference download internal" download="" href="../../../_downloads/ec08dc1741973b1ce49f0aec7c814767/example.c.line4.input"><code class="xref download docutils literal notranslate"><span class="pre">[example.c.line4.input]</span></code></a>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ hexdump -v -e &#39;&quot;%08_ax &quot; 24/1 &quot;%02x &quot;&#39; -e &#39;&quot; |&quot; 24/1 &quot;%_p&quot; &quot;|\n&quot;&#39; example.c.line4.input
+00000000 00 01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12 13 14 15 16 17 |........................|
+00000018 18 19 1a 1b 1c 1d 1e 1f 20 21 22 23 24 25 26 27 28 29 2a 2b 2c 2d 2e 2f |........ !&quot;#$%&amp;&#39;()*+,-./|
+00000030 3a 3b 3c 3d 3e 3f 40 47 48 49 4a 4b 4c 4d 4e 4f 50 51 52 53 54 55 56 57 |:;&lt;=&gt;?@GHIJKLMNOPQRSTUVW|
+[ ... ]
+</pre></div>
+</div>
+<p>Byte sequences correspond to the paths in DFA.
+All strings are glued together, so it’s hard to tell where is the end of one string and the beginning of another.
+For that re2c generates keys <a class="reference download internal" download="" href="../../../_downloads/6c5dcbb14ecbca143bf25752d4329520/example.c.line4.keys"><code class="xref download docutils literal notranslate"><span class="pre">[example.c.line4.keys]</span></code></a>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$hexdump -v -e &#39;&quot;%08_ax &quot; 36/1 &quot;%02x &quot; &quot;\n&quot;&#39; example.c.line4.keys
+00000000 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000024 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+00000048 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe 01 01 fe
+[ ... ]
+</pre></div>
+</div>
+<p>A key is a triplet: string length, the length of matching prefix and the number of matching rule.
+(If tags are used, there is an additional key per each tag variable).
+Keys are packed into an array.
+In our case each key fits into 1 byte, but in case of a larger DFA they might take 2 or 4 bytes.
+The generated program <a class="reference download internal" download="" href="../../../_downloads/5d457c87e75a5d09850980c4c6fc5d21/example.c.txt"><code class="xref download docutils literal notranslate"><span class="pre">[example.c]</span></code></a>
+contains two auxilary functions: <code class="docutils literal notranslate"><span class="pre">read_file</span></code> and <code class="docutils literal notranslate"><span class="pre">action_line4</span></code>.
+<code class="docutils literal notranslate"><span class="pre">read_file</span></code> is used to map <code class="docutils literal notranslate"><span class="pre">.input</span></code> and <code class="docutils literal notranslate"><span class="pre">.keys</span></code> files into memory (this function is shared between all lexers).
+<code class="docutils literal notranslate"><span class="pre">action_line4</span></code> is a replacement for actions: it compares actual lexing results with the expected results.
+This function is specific to each lexer.
+Lexing is done by <code class="docutils literal notranslate"><span class="pre">lex_line4</span></code>: this function contains the generated DFA.
+The skeleton program is self-contained, so we can compile and run it:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ cc -o example example.c
+$ ./example
+$ echo $?
+0
+</pre></div>
+</div>
+<p>When everything is fine (there are no errors) the program outputs nothing and
+exits with zero. For the sake of example, let’s pretend that re2c has an error
+that results in a missing <code class="docutils literal notranslate"><span class="pre">case</span></code> statement:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>re2c<span class="w"> </span>-S<span class="w"> </span>-o<span class="w"> </span>example.c<span class="w"> </span>example.re
+$<span class="w"> </span>sed<span class="w"> </span>-i<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;s/case &#39;7&#39;://&quot;</span><span class="w"> </span>example.c
+$<span class="w"> </span>cc<span class="w"> </span>-o<span class="w"> </span>example<span class="w"> </span>example.c
+$<span class="w"> </span>./example
+error:<span class="w"> </span>lex_line4:<span class="w"> </span>at<span class="w"> </span>position<span class="w"> </span><span class="m">248</span><span class="w"> </span><span class="o">(</span>iteration<span class="w"> </span><span class="m">241</span><span class="o">)</span>:
+<span class="w">        </span>expected:<span class="w"> </span>match<span class="w"> </span>length<span class="w"> </span><span class="m">2</span>,<span class="w"> </span>rule<span class="w"> </span><span class="m">0</span>
+<span class="w">        </span>actual:<span class="w">   </span>match<span class="w"> </span>length<span class="w"> </span><span class="m">1</span>,<span class="w"> </span>rule<span class="w"> </span><span class="m">254</span>
+</pre></div>
+</div>
+<p>Viola! Now the lexer complains about discrepancy between expected and actual
+match results.</p>
+<p>One special case of failure detected by skeleton programs is undefined control
+flow in the lexer. Use <code class="docutils literal notranslate"><span class="pre">-Wundefined-control-flow</span></code> warning to catch all such
+cases in in your code (more details <a class="reference external" href="/manual/manual.html#wundefined-control-flow">here</a>).</p>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

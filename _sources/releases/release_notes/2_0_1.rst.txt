@@ -1,0 +1,8 @@
+Release 2.0.1
+=============
+
+This is a minor release that fixes re2c version (as output by ``re2c -v``) for
+the CMake build system. Thanks `marryjianjian <https://github.com/marryjianjian>`_
+for the bug report!
+See the changelog :ref:`releases/changelog/changelog:2.0.1 (2020-07-29)` for details.
+

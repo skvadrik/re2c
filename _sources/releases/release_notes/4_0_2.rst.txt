@@ -1,0 +1,9 @@
+Release 4.0.2
+=============
+
+This is a minor release that fixes CMake build system bug
+`#515 <https://github.com/skvadrik/re2c/issues/515>`_
+(language-specific binaries erroneously defaulted to generating code for C, e.g.
+re2rust worked in the same way as re2c if ``--lang rust`` option wasn't set).
+There are also numerous playground improvements.
+See the changelog :ref:`releases/changelog/changelog:4.0.2 (2024-12-11)` for details.

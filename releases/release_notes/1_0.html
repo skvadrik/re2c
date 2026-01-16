@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 1.0 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-1-0">
+<h1>Release 1.0<a class="headerlink" href="#release-1-0" title="Permalink to this heading">¶</a></h1>
+<p>This release is an important milestone in the history of re2c: it adds <em>submatch extraction</em>.
+It is a long-awaited feature; even as Peter Bumbulis released the first version of re2c back in 1993,
+he mentioned submatch extraction in his paper together with Donald D. Cowan
+<a class="reference external" href="../../1994_bumbulis_cowan_re2c_a_more_versatile_scanner_generator.ps">“RE2C: a more versatile scanner generator”</a>
+as a useful feature that soon should be added to re2c.
+It seemed back then that submatch extraction is relatively easy to implement;
+like many other useful extensions, it was deemed to be no more than syntactic sugar on top of canonical regular expressions.</p>
+<p>As it turned out, this is not so:
+the problem of <em>parsing</em> with regular expressions is inherently more complex than <em>recognition</em>,
+and submatch extraction cannot be implemented using traditional DFA-based approach.
+Many authors studied this subject and developed algorithms suitable for their particular settings and problem domains.
+Some of them used NFA-based approach,
+others suggested algorithms based on multiple DFA or multiple passes over a single DFA.
+For re2c most of these algorithms are too heavyweight:
+they require complication of the underlying computational model and incur overhead even in simple cases.</p>
+<p>However, one algorithm is outstanding in this respect:
+it is the algorithm invented by Ville Laurikari in 2000 and described in his paper
+<a class="reference external" href="http://laurikari.net/ville/spire2000-tnfa.pdf">“NFAs with Tagged Transitions, their Conversion to Deterministic Automata and Application to Regular Expressions”</a>.
+Laurikari algorithm is based on a single DFA extended with a fixed number of <em>registers</em>; it makes one pass over the input string,
+works in linear time and the required space does not depend on the input length.
+But what is most important, the added complexity depends on submatch detalization:
+on submatch-free regular expressions Laurikari automaton reduces to a simple DFA.</p>
+<p>When the work on submatch extraction feature started in early 2016,
+at first it seemed that Laurikari algorithm was still overly complicated.
+Re2c needed an algorithm that would support only <em>partial</em> submatch extraction,
+but the supported cases would be handled very efficiently.
+A lot of effort was spent on studying papers,
+and finally this lead to the development of a new algorithm.
+It soon became clear that the self-invented algorithm was in fact a special case of Laurikari algorithm,
+with one significant performance improvement: the use of lookahead symbol.
+Surprisingly, the original Laurikari algorithm has a strange deficiency:
+when recording submatches, the automata totally ignore the lookahead symbol
+and perform a lot of redundant operations that could be easily avoided.
+It was only logical to fix Laurikari algorithm.
+The new improved algorithm is described in the paper
+<a class="reference external" href="../../2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf">“Tagged Deterministic Finite Automata with Lookahead”</a></p>
+<p>Submatch extraction in re2c comes in two flavors:
+POSIX-compliant capturing groups (with true POSIX semantics)
+and standalone <em>tags</em> that use leftmost greedy disambiguation.
+Both features require a number of new API primitives and configurations;
+and they are barely documented yet (though I managed to add a section in the manual).
+The paper cited above has some interesting benchmark results;
+articles and examples will follow in the nearest future.
+As usually, you may expect a number of small bug-fix releases in the 1.0.x series.</p>
+<p>The following people contributed to this release:</p>
+<ul class="simple">
+<li><p>Petr Skocik tidied up re2c documentation: fixed ubiquitous spelling errors
+and established synchronization system between the online documentation,
+manpage and help message displayed by re2c with <code class="docutils literal notranslate"><span class="pre">--help</span></code> option.</p></li>
+<li><p>Sergei Trofimovich wrote a <em>fuzzer</em> that generates random regular expressions
+and checks them on input data generated with re2c <code class="docutils literal notranslate"><span class="pre">--skeleton</span></code> option.
+This fuzzer is most helpful; it has already found tens of bugs in the early implementation of submatch extraction.
+Sergei also helped me with testing re2c on numerous platforms and computer architectures.</p></li>
+<li><p>Abs62,
+asmwarrior,
+Ben Smith,
+CRCinAU,
+Derick Rethans,
+Dimitri John Ledkov,
+Eldar Zakirov,
+jcfp,
+Jean-Claude Wippler,
+Jeff Trull,
+Jérôme Dumesnil,
+Jesse Buesking,
+Julian Andres Klode,
+Paulo Custodio,
+Perry E. Metzger,
+philippschaefer,
+Ross Burton,
+Rui Maciel,
+Ryan Mast,
+Samuel006,
+sirzooro,
+Tim Kelly
+— all these people contributed bug reports, patches and feedback. Thank you!</p></li>
+<li><p>Many thanks to the early user of the new features João Paredes for his patience and encouraging comments on the subject.</p></li>
+</ul>
+<p>See the changelog <a class="reference internal" href="../changelog/changelog.html#id117"><span class="std std-ref">1.0 (2017-08-11)</span></a> for details.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

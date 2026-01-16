@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Build &amp; install &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/theme-re2c.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../manual/manual.html">User manual</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+    <h3>Build &amp; install</h3>
+    <div class="re2c-toc-local">
+        <ul>
+<li><a class="reference internal" href="#">Build &amp; install</a><ul>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#build-autotools">Build (Autotools)</a></li>
+<li><a class="reference internal" href="#build-cmake">Build (CMake)</a></li>
+<li><a class="reference internal" href="#test">Test</a></li>
+<li><a class="reference internal" href="#packages">Packages</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="build-install">
+<h1>Build &amp; install<a class="headerlink" href="#build-install" title="Permalink to this heading">¶</a></h1>
+<p>If you want to install re2c from a prebuilt package, skip to the bottom of the
+page for a list of all packages available on different systems. Below is a guide
+how to build re2c from source code.</p>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">¶</a></h2>
+<p>To build re2c from a release tarball one needs only a C++ compiler (supporting
+at least C++11) and Python 3 for build-time scripts and for testing. Building on
+Windows additionally requires either CMake or a Mingw build environment.</p>
+<p>To develop re2c one also needs CMake or Autotools (both build systems are
+maintained). Other dependencies include Bison (to rebuild parsers), Python 3
+Docutils (to rebuild documentation) and Sphinx (to rebuild the website).
+Benchmarks also use Google-benchmark, re2 and Java. A few helper scripts are
+written in Haskell, but they are not essential for re2c development.</p>
+<p>re2c is a self-hosting lexer generator, meaning that parts of its source code
+are written in re2c (namely, all the source files that have a <em>.re</em> extension).
+By default re2c builds from pre-generated bootstrap files. To build from source
+<em>.re</em> files, it is necessary to reconfigure the build and provide a path to an
+existing re2c binary that will be used for bootstrap (see the details below).</p>
+</section>
+<section id="build-autotools">
+<h2>Build (Autotools)<a class="headerlink" href="#build-autotools" title="Permalink to this heading">¶</a></h2>
+<p>If you are building from a release tarball, the configure script is already
+there. Otherwise it is necessary to generate it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ autoreconf -i -W all
+</pre></div>
+</div>
+<p>An in-tree build (objects are generated side by side with sources):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure &amp;&amp; make &amp;&amp; make install
+</pre></div>
+</div>
+<p>An out-of-tree build (objects are generated in a separate directory
+named <code class="docutils literal notranslate"><span class="pre">.build</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir .build &amp;&amp; cd .build &amp;&amp; ../configure &amp;&amp; make &amp;&amp; make install
+</pre></div>
+</div>
+<p>The configure script has many options (to see them all, run
+<code class="docutils literal notranslate"><span class="pre">configure</span> <span class="pre">--help</span></code>). The options specific to re2c are the following:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-debug</span></code>
+Enable debug checks in the re2c source code. Also enables debug options.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-dlang</span></code>
+Build re2d (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">d</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-golang</span></code>
+Build re2go (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">go</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-haskell</span></code>
+Build re2hs (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">haskell</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-java</span></code>
+Build re2java (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">java</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-js</span></code>
+Build re2js (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">js</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-ocaml</span></code>
+Build re2ocaml (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">ocaml</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-python</span></code>
+Build re2py (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">python</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-rust</span></code>
+Build re2rust (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">rust</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-swift</span></code>
+Build re2swift (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">swift</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-vlang</span></code>
+Build re2v (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">v</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-zig</span></code>
+Build re2zig (identical to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">zig</span></code>). This is on by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-lexers</span></code>
+Enable regeneration of lexers from <em>.re</em> files (as opposed to using
+pre-generated bootstrap files). This requires setting <code class="docutils literal notranslate"><span class="pre">RE2C_FOR_BUILD</span></code> to
+an existing re2c executable path.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-parsers</span></code>
+Enable regeneration of parsers from <em>.ypp</em> files with bison (as opposed to
+using pre-generated bootstrap files).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-syntax</span></code>
+Enable regeneration of default syntax files from the ones provided in
+include/ directory (as opposed to using pre-generated bootstrap files).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-docs</span></code>
+Enable regeneration of documentation (requires Python 3 Docutils).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-benchmarks</span></code>
+Build benchmarks (requires Google benchmarks library).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-benchmarks-regenerate</span></code>
+Regenerate C code for Ragel and Kleenex benchmarks (this will download and
+build Ragel and Kleenex). re2c benchmarks are always regenerated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--enable-libs</span></code>
+Build the experimental libre2c library that provides POSIX
+<code class="docutils literal notranslate"><span class="pre">regcomp</span></code>/<code class="docutils literal notranslate"><span class="pre">regexec</span></code>/<code class="docutils literal notranslate"><span class="pre">regfree</span></code> interface to re2c.</p></li>
+</ul>
+<p>Cross-compile re2c for Windows (for some Mingw versions you might have to use
+<code class="docutils literal notranslate"><span class="pre">-std=gnu++11</span></code> compiler option):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ ./configure --host i686-w64-ming32 \
+    LDFLAGS=&quot;-static -static-libstdc++ -static-libgcc&quot;
+</pre></div>
+</div>
+<p>There is a bunch of build scripts for specialized builds with Asan, Ubsan,
+GLIBCXX_DEBUG, etc. in the <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory.</p>
+</section>
+<section id="build-cmake">
+<h2>Build (CMake)<a class="headerlink" href="#build-cmake" title="Permalink to this heading">¶</a></h2>
+<p>re2c includes CMake presets for Linux, MacOS, and Windows. Use <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--list-presets</span></code> to see them.</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-fast</span></code> presets have minimal dependencies and build re2c using
+pre-generated manpages, lexers, and parsers.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">-full</span></code> presets have additional prerequisites (Docutils, Bison, and a
+pre-existing re2c binary) and re-generate the manpages, lexers, and parsers.</p></li>
+</ul>
+<p>If you just want to build re2c, use the <code class="docutils literal notranslate"><span class="pre">-release-ootree-fast</span></code> preset. The
+other presets are primarily of interest to developers.</p>
+<p>For example, to build the <code class="docutils literal notranslate"><span class="pre">windows-msvc-release-ootree-fast</span></code> preset:</p>
+<ul class="simple">
+<li><p>CD to the root of the re2c folder (the folder containing this README).</p></li>
+<li><p>Configure: <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--preset=windows-msvc-release-ootree-fast</span></code></p></li>
+<li><p>Build: <code class="docutils literal notranslate"><span class="pre">cmake</span> <span class="pre">--build</span> <span class="pre">--preset=windows-msvc-release-ootree-fast</span></code></p></li>
+<li><p>The binary will be in the <code class="docutils literal notranslate"><span class="pre">.build/&lt;preset-name&gt;</span></code> folder.</p></li>
+</ul>
+<p>CMake supports different build modes, which can be further customized with
+individual options. By default re2c builds with <code class="docutils literal notranslate"><span class="pre">-O2</span> <span class="pre">-g</span></code> and does not set any
+particular mode to allow the user complete freedom in overriding the build
+options. To enable a build mode at configure phase, use
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_BUILD_TYPE=&lt;mode&gt;</span></code> option (this works with single-config generators,
+such as Makefiles or Ninja). At build phase use <code class="docutils literal notranslate"><span class="pre">--config</span> <span class="pre">&lt;mode&gt;</span></code> option.
+The following modes are supported:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Release</span></code>
+This is an optimized <code class="docutils literal notranslate"><span class="pre">-O3</span> <span class="pre">-DNDEBUG</span></code> build without debug symbols, asserts
+and debug checks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Debug</span></code>
+This is a non-optimized <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">-DRE2C_DEBUG</span></code> build with debug symbols, asserts,
+and debug checks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RelWithDebInfo</span></code>
+This is an optimized <code class="docutils literal notranslate"><span class="pre">-O2</span> <span class="pre">-g</span> <span class="pre">-DNDEBUG</span></code> build with debug symbols, but
+without asserts and debug checks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MinSizeRel</span></code>
+This is an optimized for size <code class="docutils literal notranslate"><span class="pre">-Os</span> <span class="pre">-DNDEBUG</span></code> build without debug symbols,
+asserts and debug checks.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Asan</span></code>
+This is a non-optimized <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">-fsanitize=address</span></code> build that instruments the
+code with Address Sanitizer to check for memory errors.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Ubsan</span></code>
+This is a non-optimized <code class="docutils literal notranslate"><span class="pre">-g</span> <span class="pre">-fsanitize=undefined</span></code> build that instruments
+the code with Undefined Behavior Sanitizer to check for undefined behavior
+errors.</p></li>
+</ul>
+<p>A simple build (objects are generated in a separate build directory named
+<code class="docutils literal notranslate"><span class="pre">.build</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ mkdir .build &amp;&amp; cd .build &amp;&amp; cmake .. &amp;&amp; cmake --build .
+</pre></div>
+</div>
+<p>CMake supports a lot of configuration options. Here is the list of options
+specific to re2c:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2D=yes</span></code>
+Build re2d executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">d</span></code>). Enabled by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2GO=yes</span></code>
+Build re2go executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">go</span></code>). Enabled by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2HS=yes</span></code>
+Build re2hs executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">haskell</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2JAVA=yes</span></code>
+Build re2java executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">java</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2JS=yes</span></code>
+Build re2js executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">js</span></code>). Enabled by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2OCAML=yes</span></code>
+Build re2ocaml executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">ocaml</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2PY=yes</span></code>
+Build re2py executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">python</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2RUST=yes</span></code>
+Build re2rust executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">rust</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2SWIFT=yes</span></code>
+Build re2swift executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">swift</span></code>). Enabled by
+default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2V=yes</span></code>
+Build re2v executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">v</span></code>). Enabled by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_RE2ZIG=yes</span></code>
+Build re2zig executable (an alias to <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--lang</span> <span class="pre">zig</span></code>). Enabled by default.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_LEXERS=yes</span></code>
+Enable regeneration of lexers from <em>.re</em> files (as opposed to using
+pre-generated bootstrap files). This requires setting <code class="docutils literal notranslate"><span class="pre">-DRE2C_FOR_BUILD</span></code> to
+an existing re2c executable path.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_PARSERS=yes</span></code>
+Enable regeneration of parsers from <em>.ypp</em> files with bison (as opposed to
+using pre-generated bootstrap files).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_SYNTAX=yes</span></code>
+Enable regeneration of default syntax files from the ones provided in
+include/ directory (as opposed to using pre-generated bootstrap files).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_REBUILD_DOCS=yes</span></code>
+Enable regeneration of documentation (requires Python 3 Docutils).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_BENCHMARKS=yes</span></code>
+Build benchmarks (requires Google benchmarks library).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_REGEN_BENCHMARKS=yes</span></code>
+Regenerate C code for Ragel and Kleenex benchmarks (this will download and
+build Ragel and Kleenex). re2c benchmarks are always regenerated.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-DRE2C_BUILD_LIBS=yes</span></code>
+Build the experimental libre2c library that provides POSIX
+<code class="docutils literal notranslate"><span class="pre">regcomp</span></code>/<code class="docutils literal notranslate"><span class="pre">regexec</span></code>/<code class="docutils literal notranslate"><span class="pre">regfree</span></code> interface to re2c.</p></li>
+</ul>
+<p>Cross-compile re2c for Windows using Mingw:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cmake . -DCMAKE_TOOLCHAIN_FILE=cmake/Toolchain-cross-mingw32-linux.cmake \
+    -DCMAKE_EXE_LINKER_FLAGS=&quot;-static -static-libstdc++ -static-libgcc&quot; \
+    -DBUILD_SHARED_LIBS=no
+</pre></div>
+</div>
+<p>There is a bunch of build scripts for specialized builds with Asan, Ubsan,
+GLIBCXX_DEBUG, etc. in the <code class="docutils literal notranslate"><span class="pre">build</span></code> subdirectory.</p>
+</section>
+<section id="test">
+<h2>Test<a class="headerlink" href="#test" title="Permalink to this heading">¶</a></h2>
+<p>re2c has a main test suite and a number of unit tests. Run them all:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make check
+</pre></div>
+</div>
+<p>Run only the main test suite and watch the progress dumped on stdout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 run_tests.py -j&lt;N&gt;
+</pre></div>
+</div>
+<p>Run the main test suite with <code class="docutils literal notranslate"><span class="pre">--skeleton</span></code> re2c option:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 run_tests.py --skeleton
+</pre></div>
+</div>
+<p>Run the test suite under Valgrind (takes some time and memory):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python3 run_tests.py --valgrind
+</pre></div>
+</div>
+<p>Test Mingw builds with Wine:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make wtests
+</pre></div>
+</div>
+<p>Check the distribution (works with Autotools):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ make distcheck
+</pre></div>
+</div>
+<p>re2c provides a helper script <code class="docutils literal notranslate"><span class="pre">build/__alltest.sh</span></code> that builds and tests various
+re2c build flavours with Asan, Ubsan, GLIBCXX_DEBUG, etc. There is a couple of
+fuzz-testing Haskell scripts in the <em>fuzz</em> subdirectory; they are based on the
+QuickCheck library and can be easily modified to fuzz-test various aspects of
+re2c by comparing current re2c version against older versions or against other
+regular expression libraries.</p>
+</section>
+<section id="packages">
+<h2>Packages<a class="headerlink" href="#packages" title="Permalink to this heading">¶</a></h2>
+<p><a class="reference external" href="https://repology.org/project/re2c/versions">Repology</a>
+has a list of re2c packages for different systems:</p>
+<p><img alt="re2c" src="https://repology.org/badge/vertical-allrepos/re2c.svg" /></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

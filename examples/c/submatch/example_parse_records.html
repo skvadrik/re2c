@@ -1,0 +1,185 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Parsing records &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="parsing-records">
+<h1>Parsing records<a class="headerlink" href="#parsing-records" title="Permalink to this heading">¶</a></h1>
+<p>This example shows how to parse simple non-recursive structures and records.
+It uses both s-tags (for simple fields) and m-tags (for fields that contain multiple elements).
+Our imaginary records describe IRC users.
+Each record consists of a nickname followed by an opening curly brace, a list of attributes (one per line), and a closing curly brace.
+Attributes are name, country and a list of IRC channels.</p>
+<p><a class="reference download internal" download="" href="../../../_downloads/059776af7897d85a01b707b04aab941b/parse_records.re"><code class="xref download docutils literal notranslate"><span class="pre">[records.re]</span></code></a></p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="c1">// re2c $INPUT -o $OUTPUT -i</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+
+<span class="k">struct</span><span class="w"> </span><span class="nc">mtag_t</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">pred</span><span class="p">;</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">tag</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="k">typedef</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">mtag_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mtagpool_t</span><span class="p">;</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">mtag</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="o">*</span><span class="n">pt</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">t</span><span class="p">,</span><span class="w"> </span><span class="n">mtagpool_t</span><span class="w"> </span><span class="o">*</span><span class="n">tp</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">mtag_t</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="o">*</span><span class="n">pt</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">};</span>
+<span class="w">    </span><span class="o">*</span><span class="n">pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="n">tp</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">();</span>
+<span class="w">    </span><span class="n">tp</span><span class="o">-&gt;</span><span class="n">push_back</span><span class="p">(</span><span class="n">l</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">print_channels</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="n">mtagpool_t</span><span class="w"> </span><span class="o">&amp;</span><span class="n">tp</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">-1</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span>
+<span class="w">    </span><span class="n">print_channels</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span><span class="w"> </span><span class="n">tp</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">pred</span><span class="p">,</span><span class="w"> </span><span class="n">tp</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">pred</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">px</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tp</span><span class="p">[</span><span class="n">x</span><span class="p">].</span><span class="n">tag</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">py</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tp</span><span class="p">[</span><span class="n">y</span><span class="p">].</span><span class="n">tag</span><span class="p">;</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;    %.*s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">(</span><span class="n">py</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">px</span><span class="p">),</span><span class="w"> </span><span class="n">px</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cp">#define YYMTAGP(t) mtag(&amp;t, YYCURSOR, &amp;tp)</span>
+<span class="cp">#define YYMTAGN(t) mtag(&amp;t, NULL,     &amp;tp)</span>
+
+<span class="k">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYMARKER</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">n1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">n2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">a1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">a2</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">c1</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">c2</span><span class="p">;</span>
+<span class="w">    </span><span class="n">mtagpool_t</span><span class="w"> </span><span class="n">tp</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">h1</span><span class="p">,</span><span class="w"> </span><span class="n">h2</span><span class="p">;</span>
+<span class="w">    </span><span class="cm">/*!stags:re2c format = &quot;const char *@@;&quot;; */</span>
+<span class="w">    </span><span class="cm">/*!mtags:re2c format = &quot;int @@;&quot;; */</span>
+
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">tp</span><span class="p">.</span><span class="n">clear</span><span class="p">();</span>
+<span class="w">    </span><span class="cm">/*!mtags:re2c format = &quot;@@ = -1;&quot;; */</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = &quot;unsigned char&quot;;</span>
+<span class="cm">        re2c:yyfill:enable = 0;</span>
+<span class="cm">        re2c:tags = 1;</span>
+
+<span class="cm">        end     = &quot;\x00&quot;;</span>
+<span class="cm">        eol     = &quot;\n&quot;;</span>
+<span class="cm">        wsp     = [ \t]*;</span>
+<span class="cm">        eq      = wsp &quot;=&quot; wsp;</span>
+<span class="cm">        nick    = [a-zA-Z0-9_]+;</span>
+<span class="cm">        name    = [A-Z] (&quot;.&quot; | [a-z]+);</span>
+<span class="cm">        names   = name (wsp name)*;</span>
+<span class="cm">        country = [A-Za-z ]+;</span>
+<span class="cm">        channel = ([a-z0-9-]+ &quot;/&quot;)? &quot;#&quot; [a-z0-9-]+;</span>
+
+<span class="cm">        *         { fprintf(stderr, &quot;error: %s\n&quot;, YYCURSOR); return 1; }</span>
+<span class="cm">        end       { return 0; }</span>
+<span class="cm">        wsp | eol { continue; }</span>
+
+<span class="cm">        @n1 nick @n2 wsp &quot;{&quot; wsp eol</span>
+<span class="cm">            wsp &quot;name&quot;     eq @a1 names   @a2 wsp eol</span>
+<span class="cm">            wsp &quot;country&quot;  eq @c1 country @c2 wsp eol</span>
+<span class="cm">            wsp &quot;channels&quot; eq (wsp #h1 channel #h2 wsp &quot;;&quot;)* wsp eol</span>
+<span class="cm">        wsp &quot;}&quot; {</span>
+<span class="cm">            fprintf(stderr, &quot;\n%.*s\n&quot;, (int) (n2 - n1), n1);</span>
+<span class="cm">            fprintf(stderr, &quot;  name:     %.*s\n&quot;, (int) (a2 - a1), a1);</span>
+<span class="cm">            fprintf(stderr, &quot;  country:  %.*s\n&quot;, (int) (c2 - c1), c1);</span>
+<span class="cm">            fprintf(stderr, &quot;  channels:\n&quot;);</span>
+<span class="cm">            print_channels(tp, h1, h2);</span>
+<span class="cm">            continue;</span>
+<span class="cm">        }</span>
+<span class="cm">    */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">fname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;etc_passwd&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">FILE</span><span class="w"> </span><span class="o">*</span><span class="n">f</span><span class="p">;</span>
+
+<span class="w">    </span><span class="c1">// prepare input file</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;w&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fprintf</span><span class="p">(</span><span class="n">f</span><span class="p">,</span>
+<span class="w">        </span><span class="s">&quot;h4cker1970 {</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    name     = Jon Smith</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    country  = UK</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    channels = freenode/#gentoo-dev; freenode/#gentoo-arch; freenode/#alpha;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;mitek {</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    name     = Mitrofan Rygoravich</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    country  = Belarus</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;    channels = bynets/#haskell; freenode/#unix;</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span>
+<span class="w">        </span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// read input file into buffer</span>
+<span class="w">    </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fopen</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;r&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SEEK_END</span><span class="p">);</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">size_t</span><span class="w"> </span><span class="n">fsize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="p">)</span><span class="w"> </span><span class="n">ftell</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fseek</span><span class="p">(</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">SEEK_SET</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">buffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">fsize</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="n">fread</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">fsize</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">);</span>
+<span class="w">    </span><span class="n">buffer</span><span class="p">[</span><span class="n">fsize</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="n">fclose</span><span class="p">(</span><span class="n">f</span><span class="p">);</span>
+
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="n">buffer</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+
+<span class="w">    </span><span class="c1">// cleanup</span>
+<span class="w">    </span><span class="n">remove</span><span class="p">(</span><span class="n">fname</span><span class="p">);</span>
+<span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">buffer</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Compile as <code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">-o</span> <span class="pre">records.c</span> <span class="pre">records.re</span></code>.</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

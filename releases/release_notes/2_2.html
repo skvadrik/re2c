@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Release 2.2 &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/theme-re2c.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../manual/manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="release-2-2">
+<h1>Release 2.2<a class="headerlink" href="#release-2-2" title="Permalink to this heading">¶</a></h1>
+<p>This release adds scoping rules and improves code sharing between re2c blocks.
+It brings in a bunch of new features, most importantly named blocks, local
+blocks, scoped directives and the ability to include arbitrary blocks in the
+middle of another block. Much work has been done on improving testing and
+continuous integration.</p>
+<p><strong>Local blocks.</strong>
+This release adds a new kind of blocks: <code class="docutils literal notranslate"><span class="pre">/*!local:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code>, which are
+exactly like the usual <code class="docutils literal notranslate"><span class="pre">/*!re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> blocks, except that they do not add
+their named definitions and configurations to the global scope. The contents of
+a local block are not visible outside of the block and do not affect subsequent
+blocks.</p>
+<p><strong>Named blocks.</strong>
+Previously all re2c blocks were anonymous. Now it is possible to give block a
+name: for example, <code class="docutils literal notranslate"><span class="pre">/*!re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> defines a global block named
+<code class="docutils literal notranslate"><span class="pre">woot42</span></code>. The name can be used to refer to this block in other parts of the
+program (for example in
+<a class="reference internal" href="../../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a>). Rules blocks can
+have names as well: a block <code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> can be mentioned in
+a use block <code class="docutils literal notranslate"><span class="pre">/*!use:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> or in a use directive <code class="docutils literal notranslate"><span class="pre">!use:woot42;</span></code>.
+Use blocks cannot have their own name; if you need to have a named block that
+reuses another block, do that with the new <code class="docutils literal notranslate"><span class="pre">!use</span></code> directive.</p>
+<p><strong>Block lists in directives.</strong>
+Previously re2c <a class="reference internal" href="../../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a>
+such as <code class="docutils literal notranslate"><span class="pre">max:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">stags:re2c</span></code>, <code class="docutils literal notranslate"><span class="pre">getstate:re2c</span></code> etc. were global: they
+accumulated the information across all blocks in the file. Now it is possible to
+specify a list of colon-separated block names in each directive: for example
+<code class="docutils literal notranslate"><span class="pre">/*!&lt;directive&gt;:re2c:&lt;name1&gt;:&lt;name2&gt;...</span> <span class="pre">*/</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;name1&gt;</span></code>, <code class="docutils literal notranslate"><span class="pre">&lt;name2&gt;</span></code> and
+so on are the names of re2c blocks defined somewhere in the file. This allows
+one to have scoped directives, and also multiple directives per file for
+different groups of blocks. For example, if the file defines named blocks
+<code class="docutils literal notranslate"><span class="pre">foo</span></code>, <code class="docutils literal notranslate"><span class="pre">bar</span></code> and <code class="docutils literal notranslate"><span class="pre">baz</span></code>, one can define all s-tag variables in blocks
+<code class="docutils literal notranslate"><span class="pre">foo</span></code> and <code class="docutils literal notranslate"><span class="pre">baz</span></code> with a directive <code class="docutils literal notranslate"><span class="pre">/*!stags:foo:baz</span> <span class="pre">...</span> <span class="pre">*/</span></code>.</p>
+<p><strong>In-block use directive.</strong>
+Now it is possible to <a class="reference internal" href="../../manual/manual_c.html#reusable-blocks"><span class="std std-ref">use a block</span></a> in
+the middle of another block: for example, a rules block
+<code class="docutils literal notranslate"><span class="pre">/*!rules:re2c:woot42</span> <span class="pre">...</span> <span class="pre">*/</span></code> can be used in the middle of another block with
+a statement <code class="docutils literal notranslate"><span class="pre">!use:woot42;</span></code>. Rules, named definitions and configurations of the
+used block are added to those of the current block. The new use directive is
+more flexible than the old <code class="docutils literal notranslate"><span class="pre">/*!use:re2c</span> <span class="pre">...</span> <span class="pre">*/</span></code> block, because there is no
+limitation on the number of used blocks, and they don’t have to be used at the
+beginning of a block.</p>
+<p><strong>In-block include directive.</strong>
+The existing <code class="docutils literal notranslate"><span class="pre">/*!include</span> <span class="pre">...</span> <span class="pre">*/</span></code> directive now has an
+<a class="reference internal" href="../../manual/manual_c.html#include-files"><span class="std std-ref">in-block variant</span></a>. For example,
+<code class="docutils literal notranslate"><span class="pre">!include</span> <span class="pre">&quot;x/y/z.re&quot;;</span></code> includes a file <code class="docutils literal notranslate"><span class="pre">x/y/z.re</span></code> in the middle of a block.
+The in-block include directive works in the same way as the out-of-block one:
+the contents of the file are inserted verbatim in place of the directive.</p>
+<p><strong>Configurable directives.</strong>
+More <a class="reference internal" href="../../manual/manual_c.html#basics"><span class="std std-ref">directives</span></a> can now be
+customized with configurations that define the form of the generated code.
+Directives <code class="docutils literal notranslate"><span class="pre">max:re2c</span></code> and <code class="docutils literal notranslate"><span class="pre">maxnmatch:re2c</span></code> now have an optional <code class="docutils literal notranslate"><span class="pre">format</span></code>
+configuration that accepts a template string with interpolated variable
+<code class="docutils literal notranslate"><span class="pre">&#64;&#64;{max}</span></code> (or just <code class="docutils literal notranslate"><span class="pre">&#64;&#64;</span></code> for short), for example
+<code class="docutils literal notranslate"><span class="pre">/*!max:re2c</span> <span class="pre">format=&quot;int</span> <span class="pre">maxfill</span> <span class="pre">=</span> <span class="pre">&#64;&#64;;&quot;;</span> <span class="pre">*/</span></code> would generate code
+<code class="docutils literal notranslate"><span class="pre">maxfill</span> <span class="pre">=</span> <span class="pre">&lt;N&gt;;</span></code> where <code class="docutils literal notranslate"><span class="pre">&lt;N&gt;</span></code> is the <code class="docutils literal notranslate"><span class="pre">YYMAXFILL</span></code> value.
+Directive <code class="docutils literal notranslate"><span class="pre">types:re2c</span></code> now has optional configurations <code class="docutils literal notranslate"><span class="pre">format</span></code> and
+<code class="docutils literal notranslate"><span class="pre">separator</span></code>: the former accepts a template string with interpolated variables
+<code class="docutils literal notranslate"><span class="pre">&#64;&#64;{cond}</span></code> and <code class="docutils literal notranslate"><span class="pre">&#64;&#64;{num}</span></code> (the name and numeric index of each condition), and
+the latter specifies the glue text used to join different <code class="docutils literal notranslate"><span class="pre">format</span></code> pieces
+together.</p>
+<p><strong>Testing.</strong>
+<a class="reference external" href="https://github.com/sergeyklay">Serghei Iakovlev</a> ported the old and hairy
+testing script from Bash to Python 3. The new script covers more platforms and
+is much faster than the old one (and also easier to debug and modify).</p>
+<p>See the changelog <a class="reference internal" href="../changelog/changelog.html#id29"><span class="std std-ref">2.2 (2021-08-01)</span></a> for
+details. As always, a big thanks to all contributors!</p>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

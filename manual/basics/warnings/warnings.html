@@ -1,0 +1,657 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Warnings &#8212; re2c 4.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/theme-re2c.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/sphinx_highlight.js"></script>
+    <link rel="shortcut icon" href="../../../_static/favicon.ico"/>
+    <link rel="alternate" type="application/atom+xml" href="../../../feed/atom.xml" title="Atom 1.0" />
+    
+ 
+  </head><body>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="re2c-logo">
+    re2c
+</div>
+
+<h3><a href="../../../index.html">Home</a></h3>
+<div class="re2c-toc-global">
+    <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../manual.html">User manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../build/build.html">Build &amp; install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks/benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/release_notes.html">Release notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../releases/changelog/changelog.html">Changelog</a></li>
+</ul>
+
+</div>
+    <h3>Warnings</h3>
+    <div class="re2c-toc-local">
+        <ul>
+<li><a class="reference internal" href="#">Warnings</a><ul>
+<li><a class="reference internal" href="#wundefined-control-flow">-Wundefined-control-flow</a><ul>
+<li><a class="reference internal" href="#the-old-default-rule">The old default rule</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wunreachable-rules">-Wunreachable-rules</a></li>
+<li><a class="reference internal" href="#wcondition-order">-Wcondition-order</a></li>
+<li><a class="reference internal" href="#wuseless-escape">-Wuseless-escape</a></li>
+<li><a class="reference internal" href="#wswapped-range">-Wswapped-range</a></li>
+<li><a class="reference internal" href="#wempty-character-class">-Wempty-character-class</a></li>
+<li><a class="reference internal" href="#wmatch-empty-string">-Wmatch-empty-string</a></li>
+<li><a class="reference internal" href="#wnondeterministic-tags">-Wnondeterministic-tags</a></li>
+<li><a class="reference internal" href="#wsentinel-in-midrule">-Wsentinel-in-midrule</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="warnings">
+<span id="detailed-warnings"></span><h1>Warnings<a class="headerlink" href="#warnings" title="Permalink to this heading">¶</a></h1>
+<section id="wundefined-control-flow">
+<h2>-Wundefined-control-flow<a class="headerlink" href="#wundefined-control-flow" title="Permalink to this heading">¶</a></h2>
+<div class="toctree-wrapper compound">
+</div>
+<p>With <code class="docutils literal notranslate"><span class="pre">-Wundefined-control-flow</span></code> warning re2c checks that every path in the
+generated DFA contains at least one accepting state. When the input matches
+such a path, lexer will eventually stop and execute the corresponding semantic
+action. However, if some path has no accepting state, then lexer behavior is
+undefined: it may loop forever, or read past the end of buffer, or jump to some
+other semantic action by accident. For example, consider this simple piece of
+code (a.re) that is supposed to match letter <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    &quot;a&quot; { return &#39;a&#39;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>The generated code looks like this:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="n">YYCTYPE</span><span class="w"> </span><span class="n">yych</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">YYLIMIT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="p">)</span><span class="w"> </span><span class="n">YYFILL</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">yych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">yych</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">:</span><span class="w">       </span><span class="k">goto</span><span class="w"> </span><span class="n">yy3</span><span class="p">;</span>
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yy2</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="nl">yy2</span><span class="p">:</span>
+<span class="nl">yy3</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Clearly this is not what we want: this code matches any letter, not just <code class="docutils literal notranslate"><span class="pre">a</span></code>!
+This happens because we did not specify any handler for the remaining input symbols.
+If we run re2c with <code class="docutils literal notranslate"><span class="pre">-Wundefined-control-flow</span></code>, we will see that it complains about undefined control flow and recommends using default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>a.re:3:2: warning: control flow is undefined for strings that match &#39;[\x0-\x60\x62-\xFF]&#39;, use the default &#39;*&#39; rule  [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>Let’s follow the advice and change the code:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *   { return &#39;*&#39;; }</span>
+<span class="cm">    &quot;a&quot; { return &#39;a&#39;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>Now the generated code looks much better:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">        </span><span class="n">YYCTYPE</span><span class="w"> </span><span class="n">yych</span><span class="p">;</span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">YYLIMIT</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="p">)</span><span class="w"> </span><span class="n">YYFILL</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="w">        </span><span class="n">yych</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">yych</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">case</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">:</span><span class="w">       </span><span class="k">goto</span><span class="w"> </span><span class="n">yy4</span><span class="p">;</span>
+<span class="w">        </span><span class="k">default</span><span class="o">:</span><span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yy2</span><span class="p">;</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="nl">yy2</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;*&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="nl">yy4</span><span class="p">:</span>
+<span class="w">        </span><span class="o">++</span><span class="n">YYCURSOR</span><span class="p">;</span>
+<span class="w">        </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="sc">&#39;a&#39;</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the default rule brings no overhead: it simply binds code to the
+default label. It should always be used, unless you are absolutely sure that
+your grammar covers all possible cases.</p>
+<section id="the-old-default-rule">
+<h3>The old default rule<a class="headerlink" href="#the-old-default-rule" title="Permalink to this heading">¶</a></h3>
+<p>When the world was young and re2c didn’t have the default <code class="docutils literal notranslate"><span class="pre">*</span></code> rule (that is,
+before re2c-0.13.7) everyone used <code class="docutils literal notranslate"><span class="pre">[^]</span></code> as the default rule, as in this
+example (any.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    // ... normal rules ...</span>
+<span class="cm">    [^] { return &quot;any&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">[^]</span></code> is just an ordinary rule: it matches any character and has normal
+priority (so it should be the last rule). If other rules didn’t match, <code class="docutils literal notranslate"><span class="pre">[^]</span></code>
+will match and consume one character.</p>
+<p>But exactly what is a <em>character</em>? First, an abstract number that is assigned
+some sacred meaning within the current encoding — a <em>code point</em>. Second, a
+minimal piece of information (say, combination of bits) that can represent a
+unit of encoded text — a <em>code unit</em>. Rules are defined in terms of code points.
+Input is measured in code units. In fixed-width encodings (such as ASCII,
+EBCDIC, UCS-2, UTF-32, etc.), there is a one-to-one correspondence between code
+points and code units. In variable-width encodings (such as UTF-8, UTF-16,
+etc.), code points map to code unit sequences of different lengths.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">[^]</span></code> rule matches any code point. In fixed-width encodings, it covers all
+code units and consumes exactly one of them. In variable-width encodings, it
+consumes variable number of code units and may not match some of them. The
+example above compiles without warnings with any fixed-width encoding (ASCII by
+default). However, with the UTF-8 encoding
+<code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-i8</span> <span class="pre">-Wundefined-control-flow</span> <span class="pre">any.re`</span></code> complains:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>any.re:4:2: warning: control flow is undefined for strings that match
+        &#39;[\x80-\xC1\xF5-\xFF]&#39;
+        &#39;\xF0 [\x0-\x8F\xC0-\xFF]&#39;
+        &#39;[\xE1-\xEF] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;\xF4 [\x0-\x7F\x90-\xFF]&#39;
+        &#39;\xE0 [\x0-\x9F\xC0-\xFF]&#39;
+        &#39;[\xF1-\xF3] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;[\xC2-\xDF] [\x0-\x7F\xC0-\xFF]&#39;
+        &#39;\xE0 [\xA0-\xBF] [\x0-\x7F\xC0-\xFF]&#39;
+ ... and 7 more, use default rule &#39;*&#39; [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>It shows us the patterns that must never appear in valid UTF-8 encoded text. If
+the input is not valid UTF-8, lexer behavior is undefined. One would expect that
+with UTF-16 (another variable-width encoding), re2c would also report a warning,
+but it doesn’t. This is because by default, re2c treats Unicode surrogates as
+normal code points (for backwards compatibility reasons). If we tell re2c to
+exclude surrogates
+(<code class="docutils literal notranslate"><span class="pre">`re2c</span> <span class="pre">-ix</span> <span class="pre">--encoding-policy</span> <span class="pre">fail</span> <span class="pre">-Wundefined-control-flow`</span></code>), then we will
+get a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>any.re:4:2: warning: control flow is undefined for strings that match
+        &#39;[\xDC00-\xDFFF]&#39;
+        &#39;[\xD800-\xDBFF] [\x0-\xDBFF\xE000-\xFFFF]&#39;
+, use default rule &#39;*&#39; [-Wundefined-control-flow]
+</pre></div>
+</div>
+<p>As you see, it can get quite subtle. A good advice is, always use default rule
+<code class="docutils literal notranslate"><span class="pre">*</span></code>: it  matches any code unit regardless of encoding, consumes a single code
+unit no matter what and always has the lowest priority. Note that <code class="docutils literal notranslate"><span class="pre">*</span></code> is a
+built-in hack: it cannot be expressed through ordinary rules.</p>
+</section>
+</section>
+<section id="wunreachable-rules">
+<h2>-Wunreachable-rules<a class="headerlink" href="#wunreachable-rules" title="Permalink to this heading">¶</a></h2>
+<p>Sometimes the input grammar contains rules that will never match. This can
+happen for two reasons. First, some rules may be shadowed by other rules that
+match the same input, but have higher priority. Second, the rule itself may be
+infinitely greedy: it may consume as many input characters as it can get and
+never stop, and as a result never match. Both cases indicate a problem with
+the grammar, and <code class="docutils literal notranslate"><span class="pre">-Wunreachable-rules</span></code> detects and reports such rules.</p>
+<p>Let’s see an example of the first kind: shadowed rules (shadowed.re).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    &quot;&quot;          { return &quot;&quot;; }</span>
+<span class="cm">    *           { return &quot;*&quot;; }</span>
+<span class="cm">    &quot;a&quot; | &quot;b&quot;   { return &quot;a | b&quot;; }</span>
+<span class="cm">    &quot;a&quot;         { return &quot;a&quot;; }</span>
+<span class="cm">    [\x00-\xFF] { return &quot;[0 - 0xFF]&quot;; }</span>
+<span class="cm">    [^]         { return &quot;[^]&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>In this example the empty rule <code class="docutils literal notranslate"><span class="pre">&quot;&quot;</span></code> never matches, because any single code
+unit is matched by other rules, which take precedence due to the longerst match.
+Rule <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span></code> is shadowed by rule <code class="docutils literal notranslate"><span class="pre">&quot;a&quot;</span> <span class="pre">|</span> <span class="pre">&quot;b&quot;</span></code>, which also matches <code class="docutils literal notranslate"><span class="pre">a</span></code>, but
+takes precedence because it comes first. Similarly, rule <code class="docutils literal notranslate"><span class="pre">[^]</span></code> is shadowed by
+rule <code class="docutils literal notranslate"><span class="pre">[\x00-\xFF]</span></code>. Default rule <code class="docutils literal notranslate"><span class="pre">*</span></code> is also shadowed, but it’s an exception
+that is not reported (default case should always be handled). Shadowed rules
+normally do not appear in the generated code: re2c removes them during its dead
+code elimination pass.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wunreachable-rules shadowed.re -o shadowed.c
+shadowed.re:2:16: warning: unreachable rule (shadowed by rules at lines 4, 6) [-Wunreachable-rules]
+shadowed.re:5:16: warning: unreachable rule (shadowed by rule at line 4) [-Wunreachable-rules]
+shadowed.re:7:16: warning: unreachable rule (shadowed by rules at lines 4, 6) [-Wunreachable-rules]
+</pre></div>
+</div>
+<p>Now let’s see an example of second kind: infinitely greedy rule (greedy.re).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    [^]* { return &quot;greeedy&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>This rule will continue eating input characters until <code class="docutils literal notranslate"><span class="pre">YYFILL</span></code> fails, or until
+it reads past the end of buffer and causes memory access violation.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wunreachable-rules greedy.re -o greedy.c
+greedy.re:2:9: warning: unreachable rule  [-Wunreachable-rules]
+</pre></div>
+</div>
+</section>
+<section id="wcondition-order">
+<h2>-Wcondition-order<a class="headerlink" href="#wcondition-order" title="Permalink to this heading">¶</a></h2>
+<p>Some older re2c programs that use <code class="docutils literal notranslate"><span class="pre">-c</span> <span class="pre">--conditions</span></code> option rely on a fixed
+condition order instead of using <code class="docutils literal notranslate"><span class="pre">/*!types:re2c*/</span></code> directive or the
+<code class="docutils literal notranslate"><span class="pre">-t</span> <span class="pre">--type-header</span></code> option. This is incorrect and dangerous, as demonstrated by
+the following example <a class="reference download internal" download="" href="../../../_downloads/6fa07134ad07c72bd6ea2b7e3de62b2d/fixorder.re.txt"><code class="xref download docutils literal notranslate"><span class="pre">[fixorder.re]</span></code></a>. In this example
+the lexer has two conditions: <code class="docutils literal notranslate"><span class="pre">a</span></code> and <code class="docutils literal notranslate"><span class="pre">b</span></code>. It starts in condition <code class="docutils literal notranslate"><span class="pre">a</span></code>,
+which expects a sequence of letters <code class="docutils literal notranslate"><span class="pre">a</span></code> followed by a comma. The comma causes
+transition to condition <code class="docutils literal notranslate"><span class="pre">b</span></code>, which expects a sequence of letters <code class="docutils literal notranslate"><span class="pre">b</span></code>
+followed by an exclamation mark. Anything other input is an error. Nothing
+special, except that condition numbers are hardcoded manually (the mapping of
+conditions to numbers is toggled by <code class="docutils literal notranslate"><span class="pre">REVERSED_CONDITION_ORDER</span></code> define).</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="cp">#ifdef REVERSED_CONDITION_ORDER</span>
+<span class="cp">#    define yyca 1</span>
+<span class="cp">#    define yycb 0</span>
+<span class="cp">#else</span>
+<span class="cp">#    define yyca 0</span>
+<span class="cp">#    define yycb 1</span>
+<span class="cp">#endif</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;aaaa,bbb!&quot;</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">yyca</span><span class="p">;</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(;;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">        re2c:define:YYCTYPE = char;</span>
+<span class="cm">        re2c:yyfill:enable = 0;</span>
+<span class="cm">        re2c:define:YYSETCONDITION = &quot;c = @@;&quot;;</span>
+<span class="cm">        re2c:define:YYSETCONDITION:naked = 1;</span>
+<span class="cm">        re2c:define:YYGETCONDITION = c;</span>
+<span class="cm">        re2c:define:YYGETCONDITION:naked = 1;</span>
+
+<span class="cm">        &lt;*&gt; * { printf (&quot;error\n&quot;); break; }</span>
+
+<span class="cm">        &lt;a&gt; &quot;a&quot;      { printf (&quot;a&quot;); continue; }</span>
+<span class="cm">        &lt;a&gt; &quot;,&quot; =&gt; b { printf (&quot;,&quot;); continue; }</span>
+
+<span class="cm">        &lt;b&gt; &quot;!&quot; { printf (&quot;!\n&quot;); break; }</span>
+<span class="cm">        &lt;b&gt; &quot;b&quot; { printf (&quot;b&quot;); continue; }</span>
+<span class="cm">    */</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Let’s compile and run it.
+Everything works fine: we get <code class="docutils literal notranslate"><span class="pre">aaaa,bbb!</span></code> in both cases.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -c -o fixorder.c -Wcondition-order fixorder.re
+$
+$ c++ -o fixorder fixorder.c &amp;&amp; ./fixorder
+aaaa,bbb!
+$
+$ c++ -o fixorder fixorder.c -DREVERSED_CONDITION_ORDER &amp;&amp; ./fixorder
+aaaa,bbb!
+</pre></div>
+</div>
+<p>However, if we use the <code class="docutils literal notranslate"><span class="pre">-s</span></code> re2c option, the lexer becomes sensitive to condition order:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -cs -o fixorder.c -Wcondition-order fixorder.re
+fixorder.re:31:6: warning: looks like you use hardcoded numbers instead of autogenerated condition names:
+better add &#39;/*!types:re2c*/&#39; directive or &#39;-t, --type-header&#39; option and don&#39;t rely on fixed condition order. [-Wcondition-order]
+$
+$ c++ -o fixorder fixorder.c &amp;&amp; ./fixorder
+aaaa,bbb!
+$
+$ c++ -o fixorder fixorder.c -DREVERSED_CONDITION_ORDER &amp;&amp; ./fixorder
+error
+</pre></div>
+</div>
+<p>And we get a warning from re2c. The same behavior remains if we use <code class="docutils literal notranslate"><span class="pre">-g</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-b</span></code> option. Why is that? A look at the generated code explains everything.
+By default the initial dispatch on conditions is a <code class="docutils literal notranslate"><span class="pre">switch</span></code> statement:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="k">case</span><span class="w"> </span><span class="no">yyca</span><span class="p">:</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_a</span><span class="p">;</span>
+<span class="k">case</span><span class="w"> </span><span class="no">yycb</span><span class="p">:</span><span class="w"> </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Dispatch uses explicit condition names and works no matter what numbers are assigned to them.
+However, with the <code class="docutils literal notranslate"><span class="pre">-s</span></code> option, re2c generates an <code class="docutils literal notranslate"><span class="pre">if</span></code> statement instead of a <code class="docutils literal notranslate"><span class="pre">switch</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_a</span><span class="p">;</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">goto</span><span class="w"> </span><span class="n">yyc_b</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And with the <code class="docutils literal notranslate"><span class="pre">-g</span></code> option, it uses a jump table (computed <code class="docutils literal notranslate"><span class="pre">goto</span></code>):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="k">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="o">&amp;&amp;</span><span class="n">yyc_a</span><span class="p">,</span>
+<span class="w">        </span><span class="o">&amp;&amp;</span><span class="n">yyc_b</span><span class="p">,</span>
+<span class="p">};</span>
+<span class="k">goto</span><span class="w"> </span><span class="o">*</span><span class="n">yyctable</span><span class="p">[</span><span class="n">c</span><span class="p">];</span>
+</pre></div>
+</div>
+<p>The last two cases are sensitive to condition order. The fix is easy: as the
+warning suggests, use the <code class="docutils literal notranslate"><span class="pre">/*!types:re2c*/</span></code> directive or the
+<code class="docutils literal notranslate"><span class="pre">-t,</span> <span class="pre">--type-header</span></code> option.</p>
+</section>
+<section id="wuseless-escape">
+<h2>-Wuseless-escape<a class="headerlink" href="#wuseless-escape" title="Permalink to this heading">¶</a></h2>
+<p>Sometimes people escape characters that don’t need to be escaped — either
+because they (mistakenly) think that the character is special and must be
+escaped in the given context, or because they think that this escape sequence
+means something (when it actually doesn’t), or just by pure accident. With
+<code class="docutils literal notranslate"><span class="pre">-Wuseless-escape</span></code> option re2c warns about ignored escapes. Consider this
+example (escapes.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *                        {}</span>
+<span class="cm">    &quot;\a\A\&quot;\&#39;\[\]\-\x5d\377&quot; {}</span>
+<span class="cm">    &#39;\a\A\&quot;\&#39;\[\]\-\x5d\377&#39; {}</span>
+<span class="cm">    [\a\A\&quot;\&#39;\[\]\-\x5d\377] {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c reports a bunch of warnings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wuseless-escape escapes.re -o escapes.c
+escapes.re:3:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:3:11: warning: escape has no effect: &#39;\&#39;&#39; [-Wuseless-escape]
+escapes.re:3:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+escapes.re:3:15: warning: escape has no effect: &#39;\]&#39; [-Wuseless-escape]
+escapes.re:3:17: warning: escape has no effect: &#39;\-&#39; [-Wuseless-escape]
+escapes.re:4:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:4:9: warning: escape has no effect: &#39;\&quot;&#39; [-Wuseless-escape]
+escapes.re:4:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+escapes.re:4:15: warning: escape has no effect: &#39;\]&#39; [-Wuseless-escape]
+escapes.re:4:17: warning: escape has no effect: &#39;\-&#39; [-Wuseless-escape]
+escapes.re:5:7: warning: escape has no effect: &#39;\A&#39; [-Wuseless-escape]
+escapes.re:5:9: warning: escape has no effect: &#39;\&quot;&#39; [-Wuseless-escape]
+escapes.re:5:11: warning: escape has no effect: &#39;\&#39;&#39; [-Wuseless-escape]
+escapes.re:5:13: warning: escape has no effect: &#39;\[&#39; [-Wuseless-escape]
+</pre></div>
+</div>
+<p>This is because the <code class="docutils literal notranslate"><span class="pre">\A</span></code> and <code class="docutils literal notranslate"><span class="pre">\[</span></code> escapes are meaningless in all rules,
+<code class="docutils literal notranslate"><span class="pre">\-</span></code> makes sense only in a character class,
+and each type of closing quotes (<code class="docutils literal notranslate"><span class="pre">&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">'</span></code> and <code class="docutils literal notranslate"><span class="pre">]</span></code>) should only be escaped inside of a string delimited with the same quotes.
+Useless escapes are ignored: the escaped symbol is treated as not escaped (<code class="docutils literal notranslate"><span class="pre">\A</span></code> becomes <code class="docutils literal notranslate"><span class="pre">A</span></code>, etc.).
+The above example should be fixed as follows:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *                    {}</span>
+<span class="cm">    &quot;\aA\&quot;&#39;[]-\x5d\377&quot;  {}</span>
+<span class="cm">    &#39;\aA&quot;\&#39;[]-\x5d\377&#39;  {}</span>
+<span class="cm">    [\aA&quot;&#39;[\]\-\x5d\377] {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>More generally, re2c recognizes escapes in the following lexemes:</p>
+<ul class="simple">
+<li><p>double-quoted strings <code class="docutils literal notranslate"><span class="pre">&quot;</span> <span class="pre">...</span> <span class="pre">&quot;</span></code></p></li>
+<li><p>single-quoted strings <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">...</span> <span class="pre">'</span></code></p></li>
+<li><p>character classes <code class="docutils literal notranslate"><span class="pre">[</span> <span class="pre">...</span> <span class="pre">]</span></code> and <code class="docutils literal notranslate"><span class="pre">[^</span> <span class="pre">...</span> <span class="pre">]</span></code></p></li>
+</ul>
+<p>The following escapes are recognized:</p>
+<ul class="simple">
+<li><p>Closing quotes (<code class="docutils literal notranslate"><span class="pre">\&quot;</span></code> for double-quoted strings, <code class="docutils literal notranslate"><span class="pre">\'</span></code> for single-quoted strings, and <code class="docutils literal notranslate"><span class="pre">\]</span></code> for character classes).</p></li>
+<li><p>Dash <code class="docutils literal notranslate"><span class="pre">\-</span></code> in character classes.</p></li>
+<li><p>Octal escapes: <code class="docutils literal notranslate"><span class="pre">\ooo</span></code>, where <code class="docutils literal notranslate"><span class="pre">o</span></code> is in range <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">7]</span></code>
+(the largest octal escape is <code class="docutils literal notranslate"><span class="pre">\377</span></code>, which equals <code class="docutils literal notranslate"><span class="pre">0xFF</span></code>).</p></li>
+<li><p>Hexadecimal escapes: <code class="docutils literal notranslate"><span class="pre">\xhh</span></code>, <code class="docutils literal notranslate"><span class="pre">\Xhhhh</span></code>, <code class="docutils literal notranslate"><span class="pre">\uhhhh</span></code>, and <code class="docutils literal notranslate"><span class="pre">\Uhhhhhhhh</span></code>,
+where <code class="docutils literal notranslate"><span class="pre">h</span></code> is in range <code class="docutils literal notranslate"><span class="pre">[0</span> <span class="pre">-</span> <span class="pre">9]</span></code>, <code class="docutils literal notranslate"><span class="pre">[a</span> <span class="pre">-</span> <span class="pre">f]</span></code>, or <code class="docutils literal notranslate"><span class="pre">[A</span> <span class="pre">-</span> <span class="pre">F]</span></code>.</p></li>
+<li><p>Miscellaneous escapes: <code class="docutils literal notranslate"><span class="pre">\a</span></code>, <code class="docutils literal notranslate"><span class="pre">\b</span></code>, <code class="docutils literal notranslate"><span class="pre">\f</span></code>, <code class="docutils literal notranslate"><span class="pre">\n</span></code>, <code class="docutils literal notranslate"><span class="pre">\r</span></code>, <code class="docutils literal notranslate"><span class="pre">\t</span></code>, <code class="docutils literal notranslate"><span class="pre">\v</span></code>, <code class="docutils literal notranslate"><span class="pre">\\</span></code>.</p></li>
+</ul>
+<p>Ill-formed octal and hexadecimal escapes are treated as errors.
+An escape followed by a newline is also an error: multiline strings and character classes are not allowed.
+Any other ill-formed escapes are ignored.</p>
+</section>
+<section id="wswapped-range">
+<h2>-Wswapped-range<a class="headerlink" href="#wswapped-range" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">-Wswapped-range</span></code> warning is reported in cases when a character class contains
+a range which lower bound is greater than the upper bound. For some strange
+reason older versions of re2c did not consider this an error and silently
+swapped range bounds. Consider the following example (swapped.re):</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    *     { return &quot;*&quot;; }</span>
+<span class="cm">    [a-Z] { return &quot;is it what you wanted?&quot;; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c interprets this code as <code class="docutils literal notranslate"><span class="pre">[Z-a]</span></code>, but generates a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wswapped-range swapped.re -o swapped.c
+swapped.re:3:5: warning: range lower bound (0x61) is greater than upper bound (0x5A), swapping [-Wswapped-range]
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">[-Werror-swapped-range]</span></code> to make it an error.</p>
+</section>
+<section id="wempty-character-class">
+<h2>-Wempty-character-class<a class="headerlink" href="#wempty-character-class" title="Permalink to this heading">¶</a></h2>
+<p>This warning is complementary to the
+<code class="docutils literal notranslate"><span class="pre">--empty-class</span> <span class="pre">&lt;match-empty</span> <span class="pre">|</span> <span class="pre">match-none</span> <span class="pre">|</span> <span class="pre">error&gt;</span></code> option.
+For bakward compatibility reasons the default is <code class="docutils literal notranslate"><span class="pre">match-empty</span></code>: empty
+character class <code class="docutils literal notranslate"><span class="pre">[]</span></code> matches empty string (that is, it always matches without
+consuming any input). This behaviour doesn’t make much sense, therefore re2c
+provides a warning <code class="docutils literal notranslate"><span class="pre">-Wempty-character-class</span></code>.
+Note that empty character class can be constructed in many ways, for example as
+a result of range negation or the difference operator. The code below (empty.re)
+demonstrates some of the possibilities:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    []                        { return 0; }</span>
+<span class="cm">    [^\x00-\xFF]              { return 1; }</span>
+<span class="cm">    [^] \ [^]                 { return 2; }</span>
+<span class="cm">    [abc] \ (&quot;a&quot; | &quot;b&quot; | &quot;c&quot;) { return 3; }</span>
+<span class="cm">    &quot;a&quot; \ [a-z]               { return 4; }</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>re2c gives the following warnings:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wempty-character-class empty.re -o empty.c
+empty.re:2:4: warning: empty character class [-Wempty-character-class]
+empty.re:3:4: warning: empty character class [-Wempty-character-class]
+empty.re:4:4: warning: empty character class [-Wempty-character-class]
+empty.re:5:4: warning: empty character class [-Wempty-character-class]
+empty.re:6:4: warning: empty character class [-Wempty-character-class]
+</pre></div>
+</div>
+</section>
+<section id="wmatch-empty-string">
+<h2>-Wmatch-empty-string<a class="headerlink" href="#wmatch-empty-string" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">[-Wmatch-empty-string]</span></code> warns when a rule is nullable (matches an empty
+string). It was intended to prevent infinite looping in cases like the
+<a class="reference download internal" download="" href="../../../_downloads/2b46cb5b3a6f542fe4e1851f66223bbf/hang.re"><code class="xref download docutils literal notranslate"><span class="pre">[hang.re]</span></code></a>
+example below. The program loops over its arguments (the outer <code class="docutils literal notranslate"><span class="pre">for</span></code> loop)
+and tries to lex each argument (the inner <code class="docutils literal notranslate"><span class="pre">for</span></code> loop). The lexer stops when
+all input has been consumed and it sees the terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. Arguments must
+consist of lowercase letters only.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argc</span><span class="p">,</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">**</span><span class="n">argv</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">argc</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">];;)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="cm">/*!re2c</span>
+<span class="cm">            re2c:define:YYCTYPE = char;</span>
+<span class="cm">            re2c:yyfill:enable = 0;</span>
+<span class="cm">            &quot;\x00&quot; { break; }</span>
+<span class="cm">            [a-z]* { continue; }</span>
+<span class="cm">        */</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="n">printf</span><span class="p">(</span><span class="s">&quot;argv[%d]: %s</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">argv</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On well-formed input the program runs as expected. However, if one of the
+arguments contains a symbol diffrerent from lowercase letter, the program hangs
+forever:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wmatch-empty-string hang.re -o hang.c
+hang.re:11:19: warning: rule matches empty string [-Wmatch-empty-string]
+$ c++ -o hang hang.c
+$
+$ ./hang only lowercase letters
+argv[1]: only
+argv[2]: lowercase
+argv[3]: letters
+$
+$ ./hang right ?
+argv[1]: right
+^C
+</pre></div>
+</div>
+<p>Note that if we add default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>, the lexer won’t hang anymore: it will
+match the default rule instead of the nullable rule. The fix is easy: make the
+rule non-nullable (say, <code class="docutils literal notranslate"><span class="pre">[a-z]+</span></code>) and add default rule <code class="docutils literal notranslate"><span class="pre">*</span></code>.</p>
+<p>In some cases matching an empty string makes perfect sense: for example, it
+might be used as a non-consuming default rule, or it might be used to lex an
+optional lexeme (if the corresponding rule doesn’t match, the lexer jumps to
+another block and resumes lexing at the same input position). All these cases
+are valid, so if <code class="docutils literal notranslate"><span class="pre">[-Wmatch-empty-string]</span></code> becomes annoying, it can be silenced
+with <code class="docutils literal notranslate"><span class="pre">[-Wno-match-empty-string]</span></code>.</p>
+</section>
+<section id="wnondeterministic-tags">
+<h2>-Wnondeterministic-tags<a class="headerlink" href="#wnondeterministic-tags" title="Permalink to this heading">¶</a></h2>
+<p>Consider the following example, in which symbol <code class="docutils literal notranslate"><span class="pre">a</span></code> is repeated a few times,
+followed by a tag <code class="docutils literal notranslate"><span class="pre">t</span></code>, followed by three or more repetitions of <code class="docutils literal notranslate"><span class="pre">a</span></code>:</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/*!re2c</span>
+<span class="cm">    [a]* @t [a]{3,} {}</span>
+<span class="cm">*/</span>
+</pre></div>
+</div>
+<p>Because the repetition is greedy, it should consume as many symbols <code class="docutils literal notranslate"><span class="pre">a</span></code>
+before the tag as possible, leaving only the last three <code class="docutils literal notranslate"><span class="pre">a</span></code> after the tag.
+With <code class="docutils literal notranslate"><span class="pre">-Wnondeterministic-tags</span></code> re2c gives a warning:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c --tags -Wnondeterministic-tags example.re -o/dev/null
+example.re:2:24: warning: tag &#39;t&#39; has 4th degree of nondeterminism [-Wnondeterministic-tags]
+</pre></div>
+</div>
+<p>Nondeterminism degree means the maximum number of different versions of a tag
+that must be tracked simultaneously during matching. Higher degrees require
+more tag variables and operations on DFA transitions. Generally it is fine if
+some tags have degrees 2 or 3, but higher degrees may be a point of concern, as
+the transitions get cluttered with operations and the execution gets slower.</p>
+<p>To explain nondeterminism degrees in depth, let’s have a look at the generated
+NFA, its determinization process and the resulting DFA.
+NFA can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-nfa</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">nfa.svg</span></code>
+(note that debug options <code class="docutils literal notranslate"><span class="pre">--dump-&lt;xxx&gt;</span></code> only work if re2c was built in debug
+mode). Some of the NFA transitions are labeled with <code class="docutils literal notranslate"><span class="pre">97</span></code> (ASCII code for
+<code class="docutils literal notranslate"><span class="pre">a</span></code>); other are epsilon-transitions (they do not consume any symbols).
+Epsilon-transition from state 5 to state 4 is tagged.</p>
+<a class="reference internal image-reference" href="../../../_images/nfa.svg"><img alt="../../../_images/nfa.svg" src="../../../_images/nfa.svg" width="50%" /></a>
+<p>Determinization process can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-dfa-raw</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">determinization.svg</span></code>.
+It shows all possible paths through the NFA when matching a string of <code class="docutils literal notranslate"><span class="pre">a</span></code>
+symbols. Transitions are labeled with <code class="docutils literal notranslate"><span class="pre">1</span></code>, which means the first character
+class (in this case  just the symbol <code class="docutils literal notranslate"><span class="pre">a</span></code> — there would be more classes if
+the regular expression contained other symbols). Some transitions have tag
+operations: for example, <code class="docutils literal notranslate"><span class="pre">3↑</span></code> on transition from state 4 to state 3 means that
+the version of tag <code class="docutils literal notranslate"><span class="pre">t</span></code> changes from 1 to 3 (upper arrow means that version 3
+is set to the current input position). Boxes in-between transitions show subsets
+of NFA states at each step of determinization (after consuming one more <code class="docutils literal notranslate"><span class="pre">a</span></code>).
+Each NFA state is paired with a tag version. Exploring state sets at each step,
+we can see that the maximum number of different tag versions is 4 (<code class="docutils literal notranslate"><span class="pre">t1</span></code>,
+<code class="docutils literal notranslate"><span class="pre">t5</span></code>, <code class="docutils literal notranslate"><span class="pre">t4</span></code>, <code class="docutils literal notranslate"><span class="pre">t3</span></code>). Therefore tag <code class="docutils literal notranslate"><span class="pre">t</span></code> has 4th degree of nondeterminism.</p>
+<a class="reference internal image-reference" href="../../../_images/determinization.svg"><img alt="../../../_images/determinization.svg" src="../../../_images/determinization.svg" width="70%" /></a>
+<p>The resulting DFA (before optimizations) can be visualized with
+<code class="docutils literal notranslate"><span class="pre">re2c</span> <span class="pre">--dump-dfa-det</span> <span class="pre">--tags</span> <span class="pre">example.re</span> <span class="pre">2&gt;&amp;1</span> <span class="pre">1&gt;/dev/null</span> <span class="pre">|</span> <span class="pre">dot</span> <span class="pre">-Tsvg</span> <span class="pre">-o</span> <span class="pre">dfa.svg</span></code>.
+4Th degree of nondeterminism causes the relatively high number of copy
+operations on the looping transition in state 3.</p>
+<a class="reference internal image-reference" href="../../../_images/dfa.svg"><img alt="../../../_images/dfa.svg" src="../../../_images/dfa.svg" width="40%" /></a>
+<p>In this case it is sufficient to move tag <code class="docutils literal notranslate"><span class="pre">t</span></code> past the counted repetition
+(as in <code class="docutils literal notranslate"><span class="pre">[a]*[a]{3}</span> <span class="pre">&#64;t</span> <span class="pre">[a]*</span></code> or introduce another tag <code class="docutils literal notranslate"><span class="pre">u</span></code> on which <code class="docutils literal notranslate"><span class="pre">t</span></code>
+can be fixed (as in <code class="docutils literal notranslate"><span class="pre">[a]*</span> <span class="pre">&#64;t</span> <span class="pre">[a]{3}</span> <span class="pre">&#64;u</span> <span class="pre">[a]*</span></code>) in order to decrease
+nondeterminism degree to 1 (in the latter case <code class="docutils literal notranslate"><span class="pre">t</span></code> will not require any
+tag operations at all, because it will be computed from <code class="docutils literal notranslate"><span class="pre">u</span></code> by subtracting a
+fixed offset).</p>
+</section>
+<section id="wsentinel-in-midrule">
+<h2>-Wsentinel-in-midrule<a class="headerlink" href="#wsentinel-in-midrule" title="Permalink to this heading">¶</a></h2>
+<p>When using sentinel method of checking for the end of input, it is easy to
+forget that the sentinel symbol must not be allowed in the middle of the rule.
+For example, the following code tries to match single-quoted strings. It allows
+any character except the single quote to occur in the string, including
+terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code>. As a result, the generated lexer works as expected on
+well-formed input like <code class="docutils literal notranslate"><span class="pre">'aaa'\0</span></code>, but things go wrong on ill-formed input like
+<code class="docutils literal notranslate"><span class="pre">'aaa\0</span></code> (where the closing single quote is missing). Lexer reaches the
+terminating <code class="docutils literal notranslate"><span class="pre">NULL</span></code> and assumes it is a part of the single-quoted string, so
+it continues reading bytes from memory. Eventually the lexer terminates due to
+memory access violation, or worse — it accidentally hits a single quote and
+assumes this to be the end of the string.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">    re2c:define:YYCTYPE = char;</span>
+<span class="cm">    re2c:yyfill:enable = 0;</span>
+<span class="cm">    [&#39;] [^&#39;]* [&#39;] { return 0; }</span>
+<span class="cm">    *             { return 1; }</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;good&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;bad&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>On this code re2c reports a warning. It cannot be certain that <code class="docutils literal notranslate"><span class="pre">NULL</span></code> is the sentinel
+symbol, but this is by far the most common case.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wsentinel-in-midrule example.re -oexample.c
+example.re:9:18: warning: sentinel symbol 0 occurs in the middle of the rule
+    (note: if a different sentinel symbol is used, specify it with &#39;re2c:sentinel&#39; configuration) [-Wsentinel-in-midrule]
+</pre></div>
+</div>
+<p>However, re2c suggests us to define the sentinel symbol using <code class="docutils literal notranslate"><span class="pre">re2c:sentinel</span></code>
+configuration. Let’s do it.</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;assert.h&gt;</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">lex</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">YYCURSOR</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="cm">/*!re2c</span>
+<span class="cm">    re2c:define:YYCTYPE = char;</span>
+<span class="cm">    re2c:yyfill:enable = 0;</span>
+<span class="cm">    re2c:sentinel = 0;</span>
+<span class="cm">    [&#39;] [^&#39;]* [&#39;] { return 0; }</span>
+<span class="cm">    *             { return 1; }</span>
+<span class="cm">    */</span>
+<span class="p">}</span>
+
+<span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;good&#39;&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">(</span><span class="n">lex</span><span class="p">(</span><span class="s">&quot;&#39;bad&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The warning has turned into an error, as re2c is now certain that the code
+contains an error.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$ re2c -Wsentinel-in-midrule example.re -oexample.c
+example.re:10:18: error: sentinel symbol 0 occurs in the middle of the rule [-Werror-sentinel-in-midrule]
+</pre></div>
+</div>
+<p>The code can be fixed by excluding <code class="docutils literal notranslate"><span class="pre">NULL</span></code> from the set of symbols allowed in
+the middle of the string: <code class="docutils literal notranslate"><span class="pre">[']</span> <span class="pre">[^'\x00]*</span> <span class="pre">[']</span></code>. If it is necessary to allow
+all symbols, a more powerful EOF handling method should be used.</p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer" role="contentinfo">
+      Last updated on Jan 01, 1980.
+    </div>
+  </body>
+</html>

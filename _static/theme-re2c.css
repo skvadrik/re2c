@@ -1,0 +1,208 @@
+body {
+    background-color: white;
+    font-family: sans-serif;
+    margin: 0;
+    font-size: 16px;
+}
+
+div.document {
+    margin: 0 0 0 370px;
+    padding: 1em;
+    text-align: justify;
+    color: darkslategray;
+    line-height: 1.5;
+}
+div.document a { color: steelblue; }
+div.document h1,
+div.document h2,
+div.document h3,
+div.document h4,
+div.document h5,
+div.document h6 {
+    font-weight: normal;
+    padding: 1em 0 0 0;
+}
+div.document h1 { text-align: center; }
+div.document h2 { border-bottom: 1px solid; }
+div.document h3 { border-bottom: 1px solid lightgray; }
+div.document table, tr, td, th {
+    border: none;
+    padding: 0em 0.2em 0em 0.2em;
+}
+div.document img {
+    display: block;
+    /* border: 1px dotted; */
+    margin: auto;
+}
+div.document img.benchmark {
+    width: 1000px;
+    max-width: 100%;
+}
+div.document img.feed {
+    display: inline;
+    border: none;
+    width: 2em;
+    vertical-align: middle;
+}
+div.document img.math {
+    display: inline;
+    border: none;
+    vertical-align: middle;
+}
+div.document div.math img {
+    display: block;
+    border: none;
+    margin: auto;
+}
+div.document code {
+    font-family: monospace;
+    font-size: 14px;
+    padding: 1px 3px 1px 3px;
+    /*border: 1px solid gainsboro;*/
+    /*background-color: aliceblue;*/
+    color: #004080;
+}
+@media (max-width: 1000px) {
+    div.document code {
+        font-size: 13px;
+    }
+}
+/* :download: role; should look like a normal link rather than inline code block */
+div.document a code.download {
+    font-family: sans;
+    font-size: 100%;
+    padding: none;
+    border: none;
+    background-color: transparent;
+}
+/* remove spaces between list items (bullet lists) */
+div.document li > p {
+    margin: 2px 0 2px 0;
+}
+/* remove spaces between list items (data lists) */
+div.document dl > dd > p {
+    margin: 2px 0 2px 0;
+}
+
+div.footer {
+    margin: 0 0 0 370px;
+    padding: 1em;
+    float: right;
+    font-style: italic;
+    color: gainsboro;
+}
+
+div.sphinxsidebar {
+    border-right: 1px solid darkgray;
+    width: 370px;
+    text-align: left;
+    position: fixed;
+    background-color: gainsboro;
+    overflow: auto;
+    height: 100%;
+    color: #002255;
+}
+div.sphinxsidebar a { color: #002255; }
+div.sphinxsidebarwrapper {
+    padding: 1em;
+}
+div.sphinxsidebarwrapper ul {
+    list-style-type: disc;
+    padding: 0 0 0 1em;
+    margin: 0;
+    /* proportionally decrease font size for nested elements */
+    font-size: 90%;
+    color: darkgray;
+}
+div.sphinxsidebarwrapper h1,
+div.sphinxsidebarwrapper h2,
+div.sphinxsidebarwrapper h3,
+div.sphinxsidebarwrapper h4,
+div.sphinxsidebarwrapper h5,
+div.sphinxsidebarwrapper h6 {
+    padding: 0 0 0.1em 0;
+    border-bottom: 1px solid;
+}
+div.sphinxsidebarwrapper div.re2c-logo {
+    background-color: #c2ccd6;
+    font-family: monospace;
+    font-size: 150%;
+    font-style: italic;
+    color: gray;
+    text-align: center;
+    border: 1px solid darkgray;
+    overflow: hidden;
+}
+div.re2c-toc-global {
+    font-size: 120%;
+    line-height: 1.4;
+}
+/* hide first list element (page title) to make all other entries larger */
+div.re2c-toc-local > ul          { margin: 0; padding: 0; }
+div.re2c-toc-local > ul > li     { list-style-type: none; }
+div.re2c-toc-local > ul > li > a { display: none; }
+div.re2c-toc-local {
+    padding: 0.5em;
+    padding-left: 1em;
+    background-color: linen;
+    border: 1px solid darkgray;
+    overflow: auto;
+    font-size: 120%;
+    line-height: 1.4;
+}
+
+/* searchbox */
+input[type="text"] {
+    font-size: 100%;
+    padding: 0px 5px 0px 5px;
+    margin: 0px;
+    height: 2em;
+    width: 80%;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+    background-color: white;
+}
+input[type="submit"] {
+    font-size: 100%;
+    padding: 0px 5px 0px 5px;
+    margin: 0px;
+    height: 2em;
+    width: auto;
+    border: 1px solid darkgray;
+    border-radius: 7px;
+    font-weight: bold;
+    color: steelblue;
+    background-color: whitesmoke;
+}
+
+.headerlink { display: none; }
+
+a:focus { outline: none; }
+
+/* move sidebar on mobile phones */
+@media (max-width: 1000px) {
+    div.sphinxsidebar {
+        position: static;
+        width: auto;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid darkgray;
+        text-align: left;
+    }
+    div.document {
+        margin: 0;
+    }
+}
+@media (max-width: 1000px) {
+    body {
+        font-size: 15px;
+    }
+}
+
+::selection {
+    background: lightsteelblue;
+}
+
+pre {-moz-tab-size: 4;} /* Firefox */
+pre {tab-size: 4;}
+

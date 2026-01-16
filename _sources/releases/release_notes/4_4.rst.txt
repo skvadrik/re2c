@@ -1,0 +1,24 @@
+Release 4.4
+===========
+
+This release adds generalized end-of-input symbol ``$``.
+It is no longer a special rule -- it can be used in regular expressions as
+part of a normal rule, and it works with all end-of-input handling methods
+regardless of the ``re2c:eof`` configuration.
+
+The implementation of generalized end-of-input symbol ``$`` is based on a new
+API primitive ``YYEND`` and the corresponding syntax configuration
+``code:yyend``. The meaning of ``YYEND`` is the *logical* end of input. This
+differs from the *physical* end of input described by ``YYLIMIT`` and
+``YYLESSTHAN`` -- the latter may include padding that was not part of the
+original input. If ``YYFILL`` is disabled, ``code:yyend`` has a default
+definition identical to ``YYLESSTHAN``, so the user does not need to explicitly
+define ``YYEND``. Otherwise, if ``YYFILL`` is enabled, ``code:yyend`` does not
+provide a default definition and delegates to the user-defined ``YYEND``.
+
+This change breaks backwards compatibility in cases when there are conflicting
+``$`` rules, as they now have position-based precedence like other normal rules.
+Hopefully such cases are rare, and the users have been alerted by the
+``-Wdeprecated-eof-rule`` warning in release 4.3.
+
+See the changelog: :ref:`releases/changelog/changelog:4.4 (2025-12-20)`.

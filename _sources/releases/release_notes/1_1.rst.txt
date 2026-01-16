@@ -1,0 +1,18 @@
+Release 1.1
+=============
+
+This release doesn't bring in any serious user-visible changes;
+most of the work concentrated on the internal POSIX disambiguation algorithm
+used for submatch extraction with ``--posix-captures`` option.
+The old algorithm, introduced in `release 1.0 <./1_0.html>`_, was based on the work of Chris Kuklewicz
+(outlined on this `haskell wiki page <https://wiki.haskell.org/index.php?title=Regular_expressions/Bounded_space_proposal&oldid=11475>`_
+and formalized in the paper `Tagged Deterministic Finite Automata with Lookahead
+<http://re2c.org/2017_trofimovich_tagged_deterministic_finite_automata_with_lookahead.pdf>`_).
+Kuklewicz algorithm was replaced with a totally different algorithm
+based on the work of Satoshi Okui and Taro Suzuki (described in the paper
+"Disambiguation in Regular Expression Matching via Position Automata with Augmented Transitions", year 2013).
+The main effort in this release was in developing proper theoretical foundations for the new algorithm.
+As usual, there has been a couple of bug fixes.
+
+See the changelog :ref:`releases/changelog/changelog:1.1 (2018-08-27)` for details.
+
