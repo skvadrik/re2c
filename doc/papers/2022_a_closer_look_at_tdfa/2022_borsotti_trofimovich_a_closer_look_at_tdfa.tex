@@ -761,15 +761,15 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
         \For {each tag $t \in T$} {
             \If {$h_t = history(h, t) \neq \epsilon$} {
                 $v = regop \Xund rhs(r, h_t, t)$ \;
-                \BlankLine
-                \If {$V[t][v]$ is undefined } {
-                    $i = max \{R\} + 1$ \;
+                $i = V[t][v]$ \;
+                \If {$i$ is undefined } {
+                    $V[t][v] = i = max \{R\} + 1$ \;
                     $R = R \cup \{i\}$ \;
-                    $V[t][v] = i$ \;
+                }
+                \If {operation $i \leftarrow v$ is not in $O$} {
                     append operation $i \leftarrow v$ to $O$ \;
                 }
-                \BlankLine
-                $r[t] = V[t][v]$ \;
+                $r[t] = i$ \;
             }
         }
     }
