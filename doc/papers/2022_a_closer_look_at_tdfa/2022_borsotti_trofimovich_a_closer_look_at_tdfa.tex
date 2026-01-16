@@ -466,7 +466,7 @@ Figure \ref{fig:tdfa} in section \ref{section_tdfa} shows an example of TNFA sim
     \ElseIf {$e = e_1 \mid e_2$} {
         $(\Sigma, T_2, Q_2, q_2, q_f, \Delta_2) = \retonfa (e_2, q_f)$ \;
         $(\Sigma, T_2, Q'_2, q'_2, q_f, \Delta'_2) = \ntag (T_2, q_f)$ \;
-        $(\Sigma, T_1, Q_1, q_1, q'_2, \Delta_1) = \retonfa (e_2, q'_2)$ \;
+        $(\Sigma, T_1, Q_1, q_1, q'_2, \Delta_1) = \retonfa (e_1, q'_2)$ \;
         $(\Sigma, T_1, Q'_1, q'_1, q_2, \Delta'_1) = \ntag (T_1, q_2)$ \;
         $Q = Q_1 \cup Q'_1 \cup Q_2 \cup Q'_2 \cup \{q_0\}$ \;
         $\Delta = \Delta_1 \cup \Delta'_1 \cup \Delta_2 \cup \Delta'_2 \cup \{ (q_0,1,\epsilon,q_1), (q_0,2,\epsilon,q'_1) \}$ \;
@@ -722,7 +722,6 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
 
 \nonl\Fn {$\underline{step \Xund on \Xund symbol \big( (X, P), a \big)} \smallskip$} {
     $B:$ empty sequence of configurations \;
-    \BlankLine
     \For {$(q, r, l) \in X$ ordered by $q$ in the order of $P$} {
         \If {$\exists (q, a, p) \in \Delta \mid a \in \Sigma$} {
             append $(p, r, l, \epsilon)$ to $B$
@@ -758,7 +757,6 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
 
 \nonl\Fn {$\underline{transition \Xund regops \big( C, R, V \big)} \smallskip$} {
     $O:$ empty list of operations \;
-    \BlankLine
     \For {each $(q, r, h, l) \in C$} {
         \For {each tag $t \in T$} {
             \If {$h_t = history(h, t) \neq \epsilon$} {
@@ -775,20 +773,19 @@ and $l$ is the new sequence constructed by the $\epsilon$-closure.
             }
         }
     }
-    \BlankLine
     \Return $O$ \;
 }
 \vspace{2em}
 
 \nonl\Fn {$\underline{final \Xund regops \big( R_f, r, l \big)} \smallskip$} {
     $O:$ empty list of operations \;
-    \BlankLine
     \For {each tag $t \in T$} {
         \If {$l_t = history(l, t) \neq \epsilon$} {
             append $R_f[t] \leftarrow regop \Xund rhs(r, l_t, t)$ to $O$ \;
+        } \Else {
+            append $R_f[t] \leftarrow r[t]$ to $O$ \;
         }
     }
-    \BlankLine
     \Return $O$ \;
 }
 \vspace{2em}
