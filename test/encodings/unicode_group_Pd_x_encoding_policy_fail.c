@@ -14,69 +14,88 @@ Pd:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x2E39) {
-		if (yych <= 0x1400) {
+	if (yych <= 0x2E3F) {
+		if (yych <= 0x1805) {
 			if (yych <= 0x058A) {
-				if (yych == '-') goto yy2;
-				if (yych >= 0x058A) goto yy2;
+				if (yych == '-') goto yy3;
+				if (yych >= 0x058A) goto yy3;
 			} else {
-				if (yych == 0x05BE) goto yy2;
-				if (yych >= 0x1400) goto yy2;
+				if (yych <= 0x05BE) {
+					if (yych >= 0x05BE) goto yy3;
+				} else {
+					if (yych == 0x1400) goto yy3;
+				}
 			}
 		} else {
-			if (yych <= 0x2015) {
-				if (yych == 0x1806) goto yy2;
-				if (yych >= 0x2010) goto yy2;
-			} else {
-				if (yych <= 0x2E17) {
-					if (yych >= 0x2E17) goto yy2;
+			if (yych <= 0x2E17) {
+				if (yych <= 0x200F) {
+					if (yych <= 0x1806) goto yy3;
 				} else {
-					if (yych == 0x2E1A) goto yy2;
+					if (yych <= 0x2015) goto yy3;
+					if (yych >= 0x2E17) goto yy3;
+				}
+			} else {
+				if (yych <= 0x2E1A) {
+					if (yych >= 0x2E1A) goto yy3;
+				} else {
+					if (yych <= 0x2E39) goto yy1;
+					if (yych <= 0x2E3B) goto yy3;
 				}
 			}
 		}
 	} else {
-		if (yych <= 0x30A0) {
-			if (yych <= 0x301B) {
-				if (yych <= 0x2E3B) goto yy2;
-				if (yych == 0x2E40) goto yy2;
-			} else {
-				if (yych <= 0x302F) {
-					if (yych <= 0x301C) goto yy2;
+		if (yych <= 0xD802) {
+			if (yych <= 0x301C) {
+				if (yych <= 0x2E5C) {
+					if (yych <= 0x2E40) goto yy3;
 				} else {
-					if (yych <= 0x3030) goto yy2;
-					if (yych >= 0x30A0) goto yy2;
+					if (yych <= 0x2E5D) goto yy3;
+					if (yych >= 0x301C) goto yy3;
+				}
+			} else {
+				if (yych <= 0x3030) {
+					if (yych >= 0x3030) goto yy3;
+				} else {
+					if (yych == 0x30A0) goto yy3;
 				}
 			}
 		} else {
 			if (yych <= 0xFE58) {
-				if (yych <= 0xFE30) goto yy1;
-				if (yych <= 0xFE32) goto yy2;
-				if (yych >= 0xFE58) goto yy2;
+				if (yych <= 0xFE30) {
+					if (yych <= 0xD803) goto yy4;
+				} else {
+					if (yych <= 0xFE32) goto yy3;
+					if (yych >= 0xFE58) goto yy3;
+				}
 			} else {
 				if (yych <= 0xFE63) {
-					if (yych >= 0xFE63) goto yy2;
+					if (yych >= 0xFE63) goto yy3;
 				} else {
-					if (yych == 0xFF0D) goto yy2;
+					if (yych == 0xFF0D) goto yy3;
 				}
 			}
 		}
 	}
 yy1:
 	++YYCURSOR;
+yy2:
 #line 14 "encodings/unicode_group_Pd_x_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
-#line 70 "encodings/unicode_group_Pd_x_encoding_policy_fail.c"
-yy2:
+#line 85 "encodings/unicode_group_Pd_x_encoding_policy_fail.c"
+yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pd_x_encoding_policy_fail.re"
 	{ goto Pd; }
-#line 75 "encodings/unicode_group_Pd_x_encoding_policy_fail.c"
+#line 90 "encodings/unicode_group_Pd_x_encoding_policy_fail.c"
+yy4:
+	yych = *++YYCURSOR;
+	if (yych == 0xDEAD) goto yy3;
+	goto yy2;
 }
 #line 15 "encodings/unicode_group_Pd_x_encoding_policy_fail.re"
 
 }
-static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x0,0x0};
+static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x2e5d,0x2e5d,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x10ead,0x10ead,  0x0,0x0};
 static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -96,7 +115,7 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	unsigned int * buffer_Pd = new unsigned int [50];
+	unsigned int * buffer_Pd = new unsigned int [54];
 	YYCTYPE * s = (YYCTYPE *) buffer_Pd;
 	unsigned int buffer_len = encode_utf16 (chars_Pd, sizeof (chars_Pd) / sizeof (unsigned int), buffer_Pd);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */

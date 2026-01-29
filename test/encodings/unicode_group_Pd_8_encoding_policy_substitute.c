@@ -21,6 +21,7 @@ Pd:
 		case 0xE2: goto yy6;
 		case 0xE3: goto yy7;
 		case 0xEF: goto yy8;
+		case 0xF0: goto yy9;
 		default: goto yy1;
 	}
 yy1:
@@ -28,12 +29,12 @@ yy1:
 yy2:
 #line 14 "encodings/unicode_group_Pd_8_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
-#line 32 "encodings/unicode_group_Pd_8_encoding_policy_substitute.c"
+#line 33 "encodings/unicode_group_Pd_8_encoding_policy_substitute.c"
 yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Pd_8_encoding_policy_substitute.re"
 	{ goto Pd; }
-#line 37 "encodings/unicode_group_Pd_8_encoding_policy_substitute.c"
+#line 38 "encodings/unicode_group_Pd_8_encoding_policy_substitute.c"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -44,49 +45,55 @@ yy4:
 yy5:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x90: goto yy9;
-		case 0xA0: goto yy11;
+		case 0x90: goto yy10;
+		case 0xA0: goto yy12;
 		default: goto yy2;
 	}
 yy6:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80: goto yy12;
-		case 0xB8: goto yy13;
-		case 0xB9: goto yy9;
+		case 0x80: goto yy13;
+		case 0xB8: goto yy14;
+		case 0xB9: goto yy15;
 		default: goto yy2;
 	}
 yy7:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x80: goto yy14;
-		case 0x82: goto yy15;
+		case 0x80: goto yy16;
+		case 0x82: goto yy17;
 		default: goto yy2;
 	}
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xB8: goto yy16;
-		case 0xB9: goto yy17;
-		case 0xBC: goto yy18;
+		case 0xB8: goto yy18;
+		case 0xB9: goto yy19;
+		case 0xBC: goto yy20;
 		default: goto yy2;
 	}
 yy9:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x90: goto yy21;
+		default: goto yy2;
+	}
+yy10:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80: goto yy3;
-		default: goto yy10;
+		default: goto yy11;
 	}
-yy10:
+yy11:
 	YYCURSOR = YYMARKER;
 	goto yy2;
-yy11:
+yy12:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x86: goto yy3;
-		default: goto yy10;
+		default: goto yy11;
 	}
-yy12:
+yy13:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x90:
@@ -95,55 +102,74 @@ yy12:
 		case 0x93:
 		case 0x94:
 		case 0x95: goto yy3;
-		default: goto yy10;
+		default: goto yy11;
 	}
-yy13:
+yy14:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x97:
 		case 0x9A:
 		case 0xBA:
 		case 0xBB: goto yy3;
-		default: goto yy10;
-	}
-yy14:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x9C:
-		case 0xB0: goto yy3;
-		default: goto yy10;
+		default: goto yy11;
 	}
 yy15:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA0: goto yy3;
-		default: goto yy10;
+		case 0x80:
+		case 0x9D: goto yy3;
+		default: goto yy11;
 	}
 yy16:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB1:
-		case 0xB2: goto yy3;
-		default: goto yy10;
+		case 0x9C:
+		case 0xB0: goto yy3;
+		default: goto yy11;
 	}
 yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x98:
-		case 0xA3: goto yy3;
-		default: goto yy10;
+		case 0xA0: goto yy3;
+		default: goto yy11;
 	}
 yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
+		case 0xB1:
+		case 0xB2: goto yy3;
+		default: goto yy11;
+	}
+yy19:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x98:
+		case 0xA3: goto yy3;
+		default: goto yy11;
+	}
+yy20:
+	yych = *++YYCURSOR;
+	switch (yych) {
 		case 0x8D: goto yy3;
-		default: goto yy10;
+		default: goto yy11;
+	}
+yy21:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xBA: goto yy22;
+		default: goto yy11;
+	}
+yy22:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xAD: goto yy3;
+		default: goto yy11;
 	}
 }
 #line 15 "encodings/unicode_group_Pd_8_encoding_policy_substitute.re"
 
 }
-static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x0,0x0};
+static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x2e5d,0x2e5d,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x10ead,0x10ead,  0x0,0x0};
 static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -156,7 +182,7 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	unsigned int * buffer_Pd = new unsigned int [100];
+	unsigned int * buffer_Pd = new unsigned int [108];
 	YYCTYPE * s = (YYCTYPE *) buffer_Pd;
 	unsigned int buffer_len = encode_utf8 (chars_Pd, sizeof (chars_Pd) / sizeof (unsigned int), buffer_Pd);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */

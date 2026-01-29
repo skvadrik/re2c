@@ -21,11 +21,12 @@ Sk:
 		case 0xCB: goto yy5;
 		case 0xCD: goto yy6;
 		case 0xCE: goto yy7;
-		case 0xE1: goto yy8;
-		case 0xE3: goto yy9;
-		case 0xEA: goto yy10;
-		case 0xEF: goto yy11;
-		case 0xF0: goto yy12;
+		case 0xE0: goto yy8;
+		case 0xE1: goto yy9;
+		case 0xE3: goto yy10;
+		case 0xEA: goto yy11;
+		case 0xEF: goto yy12;
+		case 0xF0: goto yy13;
 		default: goto yy1;
 	}
 yy1:
@@ -33,12 +34,12 @@ yy1:
 yy2:
 #line 14 "encodings/unicode_group_Sk_8_encoding_policy_fail.re"
 	{ return YYCURSOR == limit; }
-#line 37 "encodings/unicode_group_Sk_8_encoding_policy_fail.c"
+#line 38 "encodings/unicode_group_Sk_8_encoding_policy_fail.c"
 yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Sk_8_encoding_policy_fail.re"
 	{ goto Sk; }
-#line 42 "encodings/unicode_group_Sk_8_encoding_policy_fail.c"
+#line 43 "encodings/unicode_group_Sk_8_encoding_policy_fail.c"
 yy4:
 	yych = *++YYCURSOR;
 	switch (yych) {
@@ -112,51 +113,63 @@ yy7:
 yy8:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xBE: goto yy13;
-		case 0xBF: goto yy15;
+		case 0xA2: goto yy14;
 		default: goto yy2;
 	}
 yy9:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x82: goto yy16;
+		case 0xBE: goto yy16;
+		case 0xBF: goto yy17;
 		default: goto yy2;
 	}
 yy10:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9C: goto yy17;
-		case 0x9E: goto yy18;
-		case 0xAD: goto yy19;
+		case 0x82: goto yy18;
 		default: goto yy2;
 	}
 yy11:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xAE: goto yy20;
-		case 0xAF: goto yy21;
-		case 0xBC: goto yy22;
-		case 0xBD: goto yy23;
-		case 0xBF: goto yy24;
+		case 0x9C: goto yy19;
+		case 0x9E: goto yy20;
+		case 0xAD: goto yy21;
 		default: goto yy2;
 	}
 yy12:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x9F: goto yy25;
+		case 0xAE: goto yy22;
+		case 0xAF: goto yy23;
+		case 0xBC: goto yy24;
+		case 0xBD: goto yy25;
+		case 0xBF: goto yy26;
 		default: goto yy2;
 	}
 yy13:
+	yych = *(YYMARKER = ++YYCURSOR);
+	switch (yych) {
+		case 0x9F: goto yy27;
+		default: goto yy2;
+	}
+yy14:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x88: goto yy3;
+		default: goto yy15;
+	}
+yy15:
+	YYCURSOR = YYMARKER;
+	goto yy2;
+yy16:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xBD:
 		case 0xBF: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
-yy14:
-	YYCURSOR = YYMARKER;
-	goto yy2;
-yy15:
+yy17:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -172,16 +185,16 @@ yy15:
 		case 0xAF:
 		case 0xBD:
 		case 0xBE: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
-yy16:
+yy18:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9B:
 		case 0x9C: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
-yy17:
+yy19:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x80:
@@ -209,22 +222,24 @@ yy17:
 		case 0x96:
 		case 0xA0:
 		case 0xA1: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
-yy18:
+yy20:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x89:
 		case 0x8A: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
-yy19:
+yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x9B: goto yy3;
-		default: goto yy14;
+		case 0x9B:
+		case 0xAA:
+		case 0xAB: goto yy3;
+		default: goto yy15;
 	}
-yy20:
+yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB2:
@@ -241,40 +256,41 @@ yy20:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy3;
-		default: goto yy14;
-	}
-yy21:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0x80:
-		case 0x81: goto yy3;
-		default: goto yy14;
-	}
-yy22:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBE: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x80: goto yy3;
-		default: goto yy14;
+		case 0x80:
+		case 0x81:
+		case 0x82: goto yy3;
+		default: goto yy15;
 	}
 yy24:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA3: goto yy3;
-		default: goto yy14;
+		case 0xBE: goto yy3;
+		default: goto yy15;
 	}
 yy25:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8F: goto yy26;
-		default: goto yy14;
+		case 0x80: goto yy3;
+		default: goto yy15;
 	}
 yy26:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0xA3: goto yy3;
+		default: goto yy15;
+	}
+yy27:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8F: goto yy28;
+		default: goto yy15;
+	}
+yy28:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xBB:
@@ -282,13 +298,13 @@ yy26:
 		case 0xBD:
 		case 0xBE:
 		case 0xBF: goto yy3;
-		default: goto yy14;
+		default: goto yy15;
 	}
 }
 #line 15 "encodings/unicode_group_Sk_8_encoding_policy_fail.re"
 
 }
-static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xab5b,0xab5b,  0xfbb2,0xfbc1,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x1f3fb,0x1f3ff,  0x0,0x0};
+static const unsigned int chars_Sk [] = {0x5e,0x5e,  0x60,0x60,  0xa8,0xa8,  0xaf,0xaf,  0xb4,0xb4,  0xb8,0xb8,  0x2c2,0x2c5,  0x2d2,0x2df,  0x2e5,0x2eb,  0x2ed,0x2ed,  0x2ef,0x2ff,  0x375,0x375,  0x384,0x385,  0x888,0x888,  0x1fbd,0x1fbd,  0x1fbf,0x1fc1,  0x1fcd,0x1fcf,  0x1fdd,0x1fdf,  0x1fed,0x1fef,  0x1ffd,0x1ffe,  0x309b,0x309c,  0xa700,0xa716,  0xa720,0xa721,  0xa789,0xa78a,  0xab5b,0xab5b,  0xab6a,0xab6b,  0xfbb2,0xfbc2,  0xff3e,0xff3e,  0xff40,0xff40,  0xffe3,0xffe3,  0x1f3fb,0x1f3ff,  0x0,0x0};
 static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -301,7 +317,7 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	unsigned int * buffer_Sk = new unsigned int [488];
+	unsigned int * buffer_Sk = new unsigned int [504];
 	YYCTYPE * s = (YYCTYPE *) buffer_Sk;
 	unsigned int buffer_len = encode_utf8 (chars_Sk, sizeof (chars_Sk) / sizeof (unsigned int), buffer_Sk);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */

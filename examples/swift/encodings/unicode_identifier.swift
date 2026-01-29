@@ -103,25 +103,22 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
           case 0xE4:
             yystate = 28
             continue yyl
-          case 0xE5...0xE8:
+          case 0xE5...0xE9:
             fallthrough
           case 0xEB...0xEC:
             yystate = 29
             continue yyl
-          case 0xE9:
+          case 0xEA:
             yystate = 30
             continue yyl
-          case 0xEA:
+          case 0xED:
             yystate = 31
             continue yyl
-          case 0xED:
+          case 0xEF:
             yystate = 32
             continue yyl
-          case 0xEF:
-            yystate = 33
-            continue yyl
           case 0xF0:
-            yystate = 34
+            yystate = 33
             continue yyl
           default:
             yystate = 1
@@ -150,11 +147,11 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xC2:
             yycursor += 1
-            yystate = 35
+            yystate = 34
             continue yyl
           case 0xC3:
             yycursor += 1
-            yystate = 37
+            yystate = 36
             continue yyl
           case 0xC4...0xCA:
             fallthrough
@@ -166,121 +163,117 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xDA:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xCB:
             yycursor += 1
-            yystate = 39
+            yystate = 38
             continue yyl
           case 0xCD:
             yycursor += 1
-            yystate = 40
+            yystate = 39
             continue yyl
           case 0xCE:
             yycursor += 1
-            yystate = 41
+            yystate = 40
             continue yyl
           case 0xCF:
             yycursor += 1
-            yystate = 42
+            yystate = 41
             continue yyl
           case 0xD2:
             yycursor += 1
-            yystate = 43
+            yystate = 42
             continue yyl
           case 0xD4:
             yycursor += 1
-            yystate = 44
+            yystate = 43
             continue yyl
           case 0xD5:
             yycursor += 1
-            yystate = 45
+            yystate = 44
             continue yyl
           case 0xD6:
             yycursor += 1
-            yystate = 46
+            yystate = 45
             continue yyl
           case 0xD7:
             yycursor += 1
-            yystate = 47
+            yystate = 46
             continue yyl
           case 0xD8:
             yycursor += 1
-            yystate = 48
+            yystate = 47
             continue yyl
           case 0xD9:
             yycursor += 1
-            yystate = 49
+            yystate = 48
             continue yyl
           case 0xDB:
             yycursor += 1
-            yystate = 50
+            yystate = 49
             continue yyl
           case 0xDC:
             yycursor += 1
-            yystate = 51
+            yystate = 50
             continue yyl
           case 0xDD:
             yycursor += 1
-            yystate = 52
+            yystate = 51
             continue yyl
           case 0xDE:
             yycursor += 1
-            yystate = 53
+            yystate = 52
             continue yyl
           case 0xDF:
             yycursor += 1
-            yystate = 54
+            yystate = 53
             continue yyl
           case 0xE0:
             yycursor += 1
-            yystate = 55
+            yystate = 54
             continue yyl
           case 0xE1:
             yycursor += 1
-            yystate = 56
+            yystate = 55
             continue yyl
           case 0xE2:
             yycursor += 1
-            yystate = 57
+            yystate = 56
             continue yyl
           case 0xE3:
             yycursor += 1
-            yystate = 58
+            yystate = 57
             continue yyl
           case 0xE4:
             yycursor += 1
-            yystate = 59
+            yystate = 58
             continue yyl
-          case 0xE5...0xE8:
+          case 0xE5...0xE9:
             fallthrough
           case 0xEB...0xEC:
             yycursor += 1
-            yystate = 60
-            continue yyl
-          case 0xE9:
-            yycursor += 1
-            yystate = 61
+            yystate = 59
             continue yyl
           case 0xEA:
             yycursor += 1
-            yystate = 62
+            yystate = 60
             continue yyl
           case 0xED:
             yycursor += 1
-            yystate = 63
+            yystate = 61
             continue yyl
           case 0xEF:
             yycursor += 1
-            yystate = 64
+            yystate = 62
             continue yyl
           case 0xF0:
             yycursor += 1
-            yystate = 65
+            yystate = 63
             continue yyl
           case 0xF3:
             yycursor += 1
-            yystate = 66
+            yystate = 64
             continue yyl
           default:
             yystate = 4
@@ -567,121 +560,125 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0xA0:
             yycursor += 1
-            yystate = 67
+            yystate = 65
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 68
+            yystate = 66
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 69
+            yystate = 67
+            continue yyl
+          case 0xA3:
+            yycursor += 1
+            yystate = 68
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 70
+            yystate = 69
             continue yyl
           case 0xA5:
             yycursor += 1
-            yystate = 71
+            yystate = 70
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 72
+            yystate = 71
             continue yyl
           case 0xA7:
             yycursor += 1
-            yystate = 73
+            yystate = 72
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 74
+            yystate = 73
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 75
+            yystate = 74
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 76
+            yystate = 75
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 77
+            yystate = 76
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 78
+            yystate = 77
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 79
+            yystate = 78
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 80
+            yystate = 79
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 81
+            yystate = 80
             continue yyl
           case 0xB0:
             yycursor += 1
-            yystate = 82
+            yystate = 81
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 83
+            yystate = 82
             continue yyl
           case 0xB2:
             yycursor += 1
-            yystate = 84
+            yystate = 83
             continue yyl
           case 0xB3:
             yycursor += 1
-            yystate = 85
+            yystate = 84
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 86
+            yystate = 85
             continue yyl
           case 0xB5:
             yycursor += 1
-            yystate = 87
+            yystate = 86
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 88
+            yystate = 87
             continue yyl
           case 0xB7:
             fallthrough
           case 0xB9:
             yycursor += 1
-            yystate = 89
+            yystate = 88
             continue yyl
           case 0xB8:
             yycursor += 1
-            yystate = 90
+            yystate = 89
             continue yyl
           case 0xBA:
             yycursor += 1
-            yystate = 91
+            yystate = 90
             continue yyl
           case 0xBB:
             yycursor += 1
-            yystate = 92
+            yystate = 91
             continue yyl
           case 0xBC:
             yycursor += 1
-            yystate = 93
+            yystate = 92
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 94
+            yystate = 93
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 95
+            yystate = 94
             continue yyl
           default:
             yystate = 2
@@ -694,19 +691,19 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x80:
             yycursor += 1
-            yystate = 96
+            yystate = 95
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 97
+            yystate = 96
             continue yyl
           case 0x82:
             yycursor += 1
-            yystate = 98
+            yystate = 97
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 99
+            yystate = 98
             continue yyl
           case 0x84...0x88:
             fallthrough
@@ -716,159 +713,159 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB8...0xBB:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x89:
             yycursor += 1
-            yystate = 100
+            yystate = 99
             continue yyl
           case 0x8A:
             yycursor += 1
-            yystate = 101
+            yystate = 100
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 102
+            yystate = 101
             continue yyl
           case 0x8C:
             yycursor += 1
-            yystate = 103
+            yystate = 102
             continue yyl
           case 0x8D:
             yycursor += 1
-            yystate = 104
+            yystate = 103
             continue yyl
           case 0x8E:
             yycursor += 1
-            yystate = 105
+            yystate = 104
             continue yyl
           case 0x8F:
             yycursor += 1
-            yystate = 106
+            yystate = 105
             continue yyl
           case 0x90:
             yycursor += 1
-            yystate = 107
+            yystate = 106
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 108
+            yystate = 107
             continue yyl
           case 0x9A:
             yycursor += 1
-            yystate = 109
+            yystate = 108
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 110
+            yystate = 109
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 111
+            yystate = 110
             continue yyl
           case 0x9D:
             yycursor += 1
-            yystate = 112
+            yystate = 111
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 113
+            yystate = 112
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 114
+            yystate = 113
             continue yyl
           case 0xA0:
             yycursor += 1
-            yystate = 115
+            yystate = 114
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 116
+            yystate = 115
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 117
+            yystate = 116
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 118
+            yystate = 117
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 119
+            yystate = 118
             continue yyl
           case 0xA5:
             yycursor += 1
-            yystate = 120
+            yystate = 119
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 121
+            yystate = 120
             continue yyl
           case 0xA7:
             yycursor += 1
-            yystate = 122
+            yystate = 68
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 123
+            yystate = 121
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 124
+            yystate = 122
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 125
+            yystate = 123
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 126
+            yystate = 124
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 127
+            yystate = 125
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 128
+            yystate = 126
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 129
+            yystate = 127
             continue yyl
           case 0xB0:
             yycursor += 1
-            yystate = 130
+            yystate = 128
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 131
+            yystate = 129
             continue yyl
           case 0xB2:
             yycursor += 1
-            yystate = 132
+            yystate = 130
             continue yyl
           case 0xB3:
             yycursor += 1
-            yystate = 133
+            yystate = 131
             continue yyl
           case 0xBC:
             yycursor += 1
-            yystate = 134
+            yystate = 132
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 135
+            yystate = 133
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 136
+            yystate = 134
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 137
+            yystate = 135
             continue yyl
           default:
             yystate = 2
@@ -881,59 +878,51 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x81:
             yycursor += 1
-            yystate = 138
+            yystate = 136
             continue yyl
           case 0x82:
             yycursor += 1
-            yystate = 139
+            yystate = 137
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 140
+            yystate = 138
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 141
+            yystate = 139
             continue yyl
           case 0x86:
             yycursor += 1
-            yystate = 142
+            yystate = 140
             continue yyl
-          case 0xB0:
+          case 0xB0...0xB2:
             yycursor += 1
-            yystate = 143
-            continue yyl
-          case 0xB1:
-            yycursor += 1
-            yystate = 144
-            continue yyl
-          case 0xB2:
-            yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xB3:
             yycursor += 1
-            yystate = 145
+            yystate = 141
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 146
+            yystate = 142
             continue yyl
           case 0xB5:
             yycursor += 1
-            yystate = 147
+            yystate = 143
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 148
+            yystate = 144
             continue yyl
           case 0xB7:
             yycursor += 1
-            yystate = 149
+            yystate = 145
             continue yyl
           case 0xB8:
             yycursor += 1
-            yystate = 150
+            yystate = 146
             continue yyl
           default:
             yystate = 2
@@ -946,37 +935,37 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x80:
             yycursor += 1
-            yystate = 151
+            yystate = 147
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 107
+            yystate = 106
             continue yyl
           case 0x82:
             yycursor += 1
-            yystate = 152
+            yystate = 148
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 153
+            yystate = 149
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 154
+            yystate = 150
             continue yyl
           case 0x85:
             fallthrough
           case 0x90...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x86:
             yycursor += 1
-            yystate = 155
+            yystate = 151
             continue yyl
           case 0x87:
             yycursor += 1
-            yystate = 156
+            yystate = 152
             continue yyl
           default:
             yystate = 2
@@ -987,15 +976,11 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         yymarker = yycursor
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0xB5:
+          case 0x80...0xB6:
             fallthrough
           case 0xB8...0xBF:
             yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xB6:
-            yycursor += 1
-            yystate = 118
+            yystate = 37
             continue yyl
           default:
             yystate = 2
@@ -1008,30 +993,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x80...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           default:
             yystate = 2
             continue yyl
         }
       case 30:
-        yyaccept = 1
-        yymarker = yycursor
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xBE:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xBF:
-            yycursor += 1
-            yystate = 157
-            continue yyl
-          default:
-            yystate = 2
-            continue yyl
-        }
-      case 31:
         yyaccept = 1
         yymarker = yycursor
         yych = yyinput[yycursor]
@@ -1046,130 +1014,130 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 158
+            yystate = 153
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 159
+            yystate = 154
             continue yyl
           case 0x98:
             yycursor += 1
-            yystate = 160
+            yystate = 155
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 161
+            yystate = 156
             continue yyl
           case 0x9A:
             yycursor += 1
-            yystate = 162
+            yystate = 157
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 157
+            yystate = 158
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 163
+            yystate = 159
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 164
+            yystate = 160
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 165
+            yystate = 161
             continue yyl
           case 0xA0:
             yycursor += 1
-            yystate = 166
+            yystate = 162
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 113
+            yystate = 112
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 167
+            yystate = 163
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 168
+            yystate = 164
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 169
+            yystate = 165
             continue yyl
           case 0xA5:
             yycursor += 1
-            yystate = 170
+            yystate = 166
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 171
+            yystate = 167
             continue yyl
           case 0xA7:
             yycursor += 1
-            yystate = 172
+            yystate = 168
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 173
+            yystate = 169
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 174
+            yystate = 170
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 175
+            yystate = 171
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 176
+            yystate = 172
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 177
+            yystate = 173
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 178
+            yystate = 174
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 179
+            yystate = 175
             continue yyl
           default:
             yystate = 2
             continue yyl
         }
-      case 32:
+      case 31:
         yyaccept = 1
         yymarker = yycursor
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 180
+            yystate = 176
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 181
+            yystate = 177
             continue yyl
           default:
             yystate = 2
             continue yyl
         }
-      case 33:
+      case 32:
         yyaccept = 1
         yymarker = yycursor
         yych = yyinput[yycursor]
@@ -1182,154 +1150,168 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xBA:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 182
+            yystate = 178
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 183
+            yystate = 179
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 184
+            yystate = 180
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 185
+            yystate = 181
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 53
+            yystate = 52
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 186
+            yystate = 182
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 187
+            yystate = 183
             continue yyl
           case 0xB5:
             yycursor += 1
-            yystate = 51
+            yystate = 50
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 188
+            yystate = 184
             continue yyl
           case 0xB7:
             yycursor += 1
-            yystate = 189
+            yystate = 185
             continue yyl
           case 0xB9:
             yycursor += 1
-            yystate = 190
+            yystate = 186
             continue yyl
           case 0xBB:
             yycursor += 1
-            yystate = 191
+            yystate = 187
             continue yyl
           case 0xBC:
             yycursor += 1
-            yystate = 192
+            yystate = 188
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 193
+            yystate = 189
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 194
+            yystate = 190
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 195
+            yystate = 191
             continue yyl
           default:
             yystate = 2
             continue yyl
         }
-      case 34:
+      case 33:
         yyaccept = 1
         yymarker = yycursor
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
             yycursor += 1
-            yystate = 196
+            yystate = 192
             continue yyl
           case 0x91:
             yycursor += 1
-            yystate = 197
+            yystate = 193
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 198
+            yystate = 194
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 199
+            yystate = 195
             continue yyl
           case 0x94:
             yycursor += 1
-            yystate = 200
+            yystate = 196
             continue yyl
           case 0x96:
             yycursor += 1
-            yystate = 201
+            yystate = 197
             continue yyl
           case 0x97:
             fallthrough
           case 0xA0...0xA9:
             fallthrough
           case 0xAD:
+            fallthrough
+          case 0xB0:
             yycursor += 1
-            yystate = 60
+            yystate = 59
             continue yyl
           case 0x98:
             yycursor += 1
-            yystate = 202
+            yystate = 198
+            continue yyl
+          case 0x9A:
+            yycursor += 1
+            yystate = 199
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 203
+            yystate = 200
             continue yyl
           case 0x9D:
             yycursor += 1
-            yystate = 204
+            yystate = 201
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 205
+            yystate = 202
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 206
+            yystate = 203
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 207
+            yystate = 204
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 208
+            yystate = 205
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 209
+            yystate = 206
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 210
+            yystate = 207
+            continue yyl
+          case 0xB1:
+            yycursor += 1
+            yystate = 208
+            continue yyl
+          case 0xB2:
+            yycursor += 1
+            yystate = 209
             continue yyl
           default:
             yystate = 2
             continue yyl
         }
-      case 35:
+      case 34:
         yych = yyinput[yycursor]
         switch yych {
           case 0xAA:
@@ -1341,10 +1323,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 36:
+      case 35:
         yycursor = yymarker
         if yyaccept == 0 {
           yystate = 4
@@ -1353,7 +1335,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
           yystate = 2
           continue yyl
         }
-      case 37:
+      case 36:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x96:
@@ -1365,10 +1347,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 38:
+      case 37:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBF:
@@ -1376,10 +1358,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 39:
+      case 38:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x81:
@@ -1395,10 +1377,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 40:
+      case 39:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB4:
@@ -1412,10 +1394,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 41:
+      case 40:
         yych = yyinput[yycursor]
         switch yych {
           case 0x86:
@@ -1431,10 +1413,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 42:
+      case 41:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB5:
@@ -1444,10 +1426,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 43:
+      case 42:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x81:
@@ -1459,10 +1441,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 44:
+      case 43:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAF:
@@ -1472,10 +1454,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 45:
+      case 44:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x96:
@@ -1487,10 +1469,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 46:
+      case 45:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -1502,10 +1484,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 47:
+      case 46:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x82:
@@ -1521,10 +1503,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 48:
+      case 47:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x9A:
@@ -1534,10 +1516,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 49:
+      case 48:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA9:
@@ -1547,10 +1529,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 50:
+      case 49:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x93:
@@ -1566,10 +1548,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 51:
+      case 50:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0xBF:
@@ -1577,10 +1559,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 52:
+      case 51:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
@@ -1590,10 +1572,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 53:
+      case 52:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB1:
@@ -1601,10 +1583,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 54:
+      case 53:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB5:
@@ -1616,23 +1598,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 55:
+      case 54:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0:
             yycursor += 1
-            yystate = 211
+            yystate = 210
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 212
+            yystate = 211
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 69
+            yystate = 212
             continue yyl
           case 0xA3:
             yycursor += 1
@@ -1640,7 +1622,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA5:
             yycursor += 1
@@ -1751,10 +1733,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 240
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 56:
+      case 55:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -1769,11 +1751,9 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xAE:
             fallthrough
-          case 0xB4...0xB6:
-            fallthrough
-          case 0xB8...0xBB:
+          case 0xB4...0xBB:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x81:
             yycursor += 1
@@ -1781,27 +1761,27 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x82:
             yycursor += 1
-            yystate = 162
+            yystate = 157
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 99
+            yystate = 98
             continue yyl
           case 0x89:
             yycursor += 1
-            yystate = 100
+            yystate = 99
             continue yyl
           case 0x8A:
             yycursor += 1
-            yystate = 101
+            yystate = 100
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 102
+            yystate = 101
             continue yyl
           case 0x8C:
             yycursor += 1
-            yystate = 103
+            yystate = 102
             continue yyl
           case 0x8D:
             yycursor += 1
@@ -1809,27 +1789,27 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x8E:
             yycursor += 1
-            yystate = 105
+            yystate = 104
             continue yyl
           case 0x8F:
             yycursor += 1
-            yystate = 106
+            yystate = 105
             continue yyl
           case 0x90:
             yycursor += 1
-            yystate = 107
+            yystate = 106
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 108
+            yystate = 107
             continue yyl
           case 0x9A:
             yycursor += 1
-            yystate = 109
+            yystate = 108
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 110
+            yystate = 109
             continue yyl
           case 0x9C:
             yycursor += 1
@@ -1849,7 +1829,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 116
+            yystate = 115
             continue yyl
           case 0xA2:
             yycursor += 1
@@ -1857,7 +1837,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 118
+            yystate = 117
             continue yyl
           case 0xA4:
             yycursor += 1
@@ -1869,7 +1849,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 121
+            yystate = 120
             continue yyl
           case 0xA7:
             yycursor += 1
@@ -1887,55 +1867,55 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yycursor += 1
             yystate = 253
             continue yyl
-          case 0xAD:
+          case 0xAB:
             yycursor += 1
             yystate = 254
             continue yyl
-          case 0xAF:
-            yycursor += 1
-            yystate = 113
-            continue yyl
-          case 0xB0:
+          case 0xAD:
             yycursor += 1
             yystate = 255
             continue yyl
-          case 0xB1:
+          case 0xAF:
+            yycursor += 1
+            yystate = 112
+            continue yyl
+          case 0xB0:
             yycursor += 1
             yystate = 256
             continue yyl
-          case 0xB2:
-            yycursor += 1
-            yystate = 132
-            continue yyl
-          case 0xB3:
+          case 0xB1:
             yycursor += 1
             yystate = 257
             continue yyl
-          case 0xB7:
+          case 0xB2:
+            yycursor += 1
+            yystate = 130
+            continue yyl
+          case 0xB3:
             yycursor += 1
             yystate = 258
             continue yyl
           case 0xBC:
             yycursor += 1
-            yystate = 134
+            yystate = 132
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 135
+            yystate = 133
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 136
+            yystate = 134
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 137
+            yystate = 135
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 57:
+      case 56:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -1948,7 +1928,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x82:
             yycursor += 1
-            yystate = 139
+            yystate = 137
             continue yyl
           case 0x83:
             yycursor += 1
@@ -1956,27 +1936,19 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 140
+            yystate = 138
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 141
+            yystate = 139
             continue yyl
           case 0x86:
             yycursor += 1
-            yystate = 142
+            yystate = 140
             continue yyl
-          case 0xB0:
+          case 0xB0...0xB2:
             yycursor += 1
-            yystate = 143
-            continue yyl
-          case 0xB1:
-            yycursor += 1
-            yystate = 144
-            continue yyl
-          case 0xB2:
-            yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xB3:
             yycursor += 1
@@ -1984,7 +1956,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 146
+            yystate = 142
             continue yyl
           case 0xB5:
             yycursor += 1
@@ -1992,7 +1964,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 148
+            yystate = 144
             continue yyl
           case 0xB7:
             yycursor += 1
@@ -2000,13 +1972,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xB8:
             yycursor += 1
-            yystate = 150
+            yystate = 146
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 58:
+      case 57:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -2015,7 +1987,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 107
+            yystate = 106
             continue yyl
           case 0x82:
             yycursor += 1
@@ -2023,74 +1995,55 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 153
+            yystate = 149
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 154
+            yystate = 150
             continue yyl
           case 0x85:
             fallthrough
           case 0x90...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x86:
             yycursor += 1
-            yystate = 155
+            yystate = 151
             continue yyl
           case 0x87:
             yycursor += 1
-            yystate = 156
+            yystate = 152
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
+            continue yyl
+        }
+      case 58:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xB6:
+            fallthrough
+          case 0xB8...0xBF:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          default:
+            yystate = 35
             continue yyl
         }
       case 59:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0xB5:
-            fallthrough
-          case 0xB8...0xBF:
+          case 0x80...0xBF:
             yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xB6:
-            yycursor += 1
-            yystate = 118
+            yystate = 37
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 60:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xBF:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 61:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xBE:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xBF:
-            yycursor += 1
-            yystate = 157
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 62:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x91:
@@ -2111,15 +2064,15 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 158
+            yystate = 153
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 159
+            yystate = 154
             continue yyl
           case 0x98:
             yycursor += 1
@@ -2131,19 +2084,19 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 53
+            yystate = 52
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 163
+            yystate = 159
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 164
+            yystate = 160
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 165
+            yystate = 161
             continue yyl
           case 0xA0:
             yycursor += 1
@@ -2151,7 +2104,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 113
+            yystate = 112
             continue yyl
           case 0xA3:
             yycursor += 1
@@ -2159,7 +2112,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 182
+            yystate = 178
             continue yyl
           case 0xA5:
             yycursor += 1
@@ -2183,40 +2136,40 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 177
+            yystate = 173
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 178
+            yystate = 174
             continue yyl
           case 0xAF:
             yycursor += 1
             yystate = 276
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 63:
+      case 61:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 180
+            yystate = 176
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 181
+            yystate = 177
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 64:
+      case 62:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA4...0xA8:
@@ -2227,15 +2180,15 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xBA:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 182
+            yystate = 178
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 183
+            yystate = 179
             continue yyl
           case 0xAC:
             yycursor += 1
@@ -2243,31 +2196,31 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 185
+            yystate = 181
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 53
+            yystate = 52
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 186
+            yystate = 182
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 187
+            yystate = 183
             continue yyl
           case 0xB5:
             yycursor += 1
-            yystate = 51
+            yystate = 50
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 188
+            yystate = 184
             continue yyl
           case 0xB7:
             yycursor += 1
-            yystate = 189
+            yystate = 185
             continue yyl
           case 0xB8:
             yycursor += 1
@@ -2279,7 +2232,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xBB:
             yycursor += 1
-            yystate = 191
+            yystate = 187
             continue yyl
           case 0xBC:
             yycursor += 1
@@ -2287,21 +2240,21 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 193
+            yystate = 189
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 194
+            yystate = 190
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 195
+            yystate = 191
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 65:
+      case 63:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -2314,80 +2267,102 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 198
+            yystate = 194
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 199
+            yystate = 283
             continue yyl
           case 0x94:
             yycursor += 1
-            yystate = 200
+            yystate = 196
             continue yyl
           case 0x96:
             yycursor += 1
-            yystate = 283
+            yystate = 284
             continue yyl
           case 0x97:
             fallthrough
           case 0xA0...0xA9:
             fallthrough
           case 0xAD:
+            fallthrough
+          case 0xB0:
             yycursor += 1
-            yystate = 60
+            yystate = 59
             continue yyl
           case 0x98:
             yycursor += 1
-            yystate = 202
+            yystate = 198
+            continue yyl
+          case 0x9A:
+            yycursor += 1
+            yystate = 199
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 284
-            continue yyl
-          case 0x9D:
-            yycursor += 1
             yystate = 285
             continue yyl
-          case 0x9E:
+          case 0x9C:
             yycursor += 1
             yystate = 286
             continue yyl
+          case 0x9D:
+            yycursor += 1
+            yystate = 287
+            continue yyl
+          case 0x9E:
+            yycursor += 1
+            yystate = 288
+            continue yyl
+          case 0x9F:
+            yycursor += 1
+            yystate = 289
+            continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 206
+            yystate = 203
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 207
+            yystate = 204
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 208
+            yystate = 205
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 209
+            yystate = 206
             continue yyl
           case 0xAF:
             yycursor += 1
-            yystate = 210
+            yystate = 207
+            continue yyl
+          case 0xB1:
+            yycursor += 1
+            yystate = 208
+            continue yyl
+          case 0xB2:
+            yycursor += 1
+            yystate = 209
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 66:
+      case 64:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0:
             yycursor += 1
-            yystate = 287
+            yystate = 290
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 67:
+      case 65:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -2401,36 +2376,51 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 68:
+      case 66:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x98:
             fallthrough
           case 0xA0...0xAA:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
+            continue yyl
+        }
+      case 67:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x87:
+            fallthrough
+          case 0x89...0x8E:
+            fallthrough
+          case 0xA0...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 68:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x89:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
             continue yyl
         }
       case 69:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0xA0...0xB4:
-            fallthrough
-          case 0xB6...0xBD:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 70:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84...0xB9:
@@ -2440,10 +2430,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 71:
+      case 70:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -2455,10 +2445,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 72:
+      case 71:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -2480,10 +2470,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 73:
+      case 72:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8E:
@@ -2499,10 +2489,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 74:
+      case 73:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x8A:
@@ -2522,10 +2512,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 75:
+      case 74:
         yych = yyinput[yycursor]
         switch yych {
           case 0x99...0x9C:
@@ -2537,10 +2527,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 76:
+      case 75:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x8D:
@@ -2560,10 +2550,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 77:
+      case 76:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -2575,10 +2565,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 78:
+      case 77:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x8C:
@@ -2598,10 +2588,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 79:
+      case 78:
         yych = yyinput[yycursor]
         switch yych {
           case 0x9C...0x9D:
@@ -2613,10 +2603,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 80:
+      case 79:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83:
@@ -2642,10 +2632,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 81:
+      case 80:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -2653,10 +2643,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 82:
+      case 81:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x8C:
@@ -2672,23 +2662,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 83:
+      case 82:
         yych = yyinput[yycursor]
         switch yych {
           case 0x98...0x9A:
+            fallthrough
+          case 0x9D:
             fallthrough
           case 0xA0...0xA1:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 84:
+      case 83:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -2708,13 +2700,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 85:
+      case 84:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x9E:
+          case 0x9D...0x9E:
             fallthrough
           case 0xA0...0xA1:
             fallthrough
@@ -2723,13 +2715,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 86:
+      case 85:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x85...0x8C:
+          case 0x84...0x8C:
             fallthrough
           case 0x8E...0x90:
             fallthrough
@@ -2740,10 +2732,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 87:
+      case 86:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8E:
@@ -2757,10 +2749,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 88:
+      case 87:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x96:
@@ -2774,10 +2766,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 89:
+      case 88:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -2785,10 +2777,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 90:
+      case 89:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0xB0:
@@ -2798,10 +2790,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 91:
+      case 90:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x82:
@@ -2823,10 +2815,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 92:
+      case 91:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -2838,10 +2830,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 93:
+      case 92:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -2849,10 +2841,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 94:
+      case 93:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -2862,10 +2854,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 95:
+      case 94:
         yych = yyinput[yycursor]
         switch yych {
           case 0x88...0x8C:
@@ -2873,10 +2865,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 96:
+      case 95:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAA:
@@ -2886,10 +2878,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 97:
+      case 96:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x95:
@@ -2907,10 +2899,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 98:
+      case 97:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x81:
@@ -2922,10 +2914,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 99:
+      case 98:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
@@ -2941,10 +2933,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 100:
+      case 99:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -2962,10 +2954,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 101:
+      case 100:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -2981,10 +2973,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 102:
+      case 101:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -2998,10 +2990,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 103:
+      case 102:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x90:
@@ -3013,10 +3005,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 104:
+      case 103:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9A:
@@ -3024,10 +3016,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 105:
+      case 104:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8F:
@@ -3037,10 +3029,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 106:
+      case 105:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB5:
@@ -3050,10 +3042,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 107:
+      case 106:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0xBF:
@@ -3061,10 +3053,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 108:
+      case 107:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAC:
@@ -3074,10 +3066,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 109:
+      case 108:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x9A:
@@ -3087,10 +3079,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 110:
+      case 109:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAA:
@@ -3100,25 +3092,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 111:
+      case 110:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0x8C:
+          case 0x80...0x91:
             fallthrough
-          case 0x8E...0x91:
-            fallthrough
-          case 0xA0...0xB1:
+          case 0x9F...0xB1:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 112:
+      case 111:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x91:
@@ -3130,10 +3120,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 113:
+      case 112:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB3:
@@ -3141,10 +3131,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 114:
+      case 113:
         yych = yyinput[yycursor]
         switch yych {
           case 0x97:
@@ -3154,10 +3144,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 115:
+      case 114:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xBF:
@@ -3165,10 +3155,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 116:
+      case 115:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB8:
@@ -3176,10 +3166,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 117:
+      case 116:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -3193,10 +3183,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 118:
+      case 117:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB5:
@@ -3204,10 +3194,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 119:
+      case 118:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9E:
@@ -3215,10 +3205,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 120:
+      case 119:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0xAD:
@@ -3228,10 +3218,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 121:
+      case 120:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAB:
@@ -3241,21 +3231,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 122:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0x89:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 123:
+      case 121:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x96:
@@ -3265,10 +3244,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 124:
+      case 122:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x94:
@@ -3276,10 +3255,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 125:
+      case 123:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA7:
@@ -3287,10 +3266,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 126:
+      case 124:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0xB3:
@@ -3298,21 +3277,21 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 127:
+      case 125:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x85...0x8B:
+          case 0x85...0x8C:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 128:
+      case 126:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83...0xA0:
@@ -3324,10 +3303,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 129:
+      case 127:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA5:
@@ -3335,10 +3314,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 130:
+      case 128:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA3:
@@ -3346,10 +3325,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 131:
+      case 129:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8D...0x8F:
@@ -3359,10 +3338,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 132:
+      case 130:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -3374,10 +3353,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 133:
+      case 131:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA9...0xAC:
@@ -3391,10 +3370,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 134:
+      case 132:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -3406,10 +3385,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 135:
+      case 133:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
@@ -3429,10 +3408,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 136:
+      case 134:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB4:
@@ -3444,10 +3423,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 137:
+      case 135:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82...0x84:
@@ -3467,10 +3446,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 138:
+      case 136:
         yych = yyinput[yycursor]
         switch yych {
           case 0xB1:
@@ -3480,10 +3459,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 139:
+      case 137:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x9C:
@@ -3491,10 +3470,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 140:
+      case 138:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82:
@@ -3522,10 +3501,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 141:
+      case 139:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x89:
@@ -3537,10 +3516,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 142:
+      case 140:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -3548,36 +3527,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 143:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xAE:
-            fallthrough
-          case 0xB0...0xBF:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 144:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0x9E:
-            fallthrough
-          case 0xA0...0xBF:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 145:
+      case 141:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA4:
@@ -3589,10 +3542,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 146:
+      case 142:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA5:
@@ -3606,10 +3559,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 147:
+      case 143:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA7:
@@ -3619,10 +3572,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 148:
+      case 144:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x96:
@@ -3638,10 +3591,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 149:
+      case 145:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -3655,10 +3608,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 150:
+      case 146:
         yych = yyinput[yycursor]
         switch yych {
           case 0xAF:
@@ -3666,10 +3619,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 151:
+      case 147:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0x87:
@@ -3683,10 +3636,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 152:
+      case 148:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x96:
@@ -3698,10 +3651,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 153:
+      case 149:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBA:
@@ -3711,10 +3664,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 154:
+      case 150:
         yych = yyinput[yycursor]
         switch yych {
           case 0x85...0xAF:
@@ -3724,23 +3677,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 155:
+      case 151:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8E:
             fallthrough
-          case 0xA0...0xBA:
+          case 0xA0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 156:
+      case 152:
         yych = yyinput[yycursor]
         switch yych {
           case 0xB0...0xBF:
@@ -3748,21 +3701,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 157:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xAF:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 158:
+      case 153:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8C:
@@ -3770,10 +3712,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 159:
+      case 154:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0xBD:
@@ -3781,10 +3723,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 160:
+      case 155:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8C:
@@ -3796,10 +3738,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 161:
+      case 156:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAE:
@@ -3809,10 +3751,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 162:
+      case 157:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
@@ -3822,10 +3764,21 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 163:
+      case 158:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xAF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 159:
         yych = yyinput[yycursor]
         switch yych {
           case 0x97...0x9F:
@@ -3835,10 +3788,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 164:
+      case 160:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -3848,23 +3801,29 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 165:
+      case 161:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x82...0x86:
+          case 0x80...0x8A:
             fallthrough
-          case 0xB7...0xBF:
+          case 0x90...0x91:
+            fallthrough
+          case 0x93:
+            fallthrough
+          case 0x95...0x99:
+            fallthrough
+          case 0xB2...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 166:
+      case 162:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x81:
@@ -3878,10 +3837,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 167:
+      case 163:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82...0xB3:
@@ -3889,10 +3848,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 168:
+      case 164:
         yych = yyinput[yycursor]
         switch yych {
           case 0xB2...0xB7:
@@ -3904,10 +3863,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 169:
+      case 165:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8A...0xA5:
@@ -3917,10 +3876,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 170:
+      case 166:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -3930,10 +3889,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 171:
+      case 167:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84...0xB2:
@@ -3941,10 +3900,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 172:
+      case 168:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8F:
@@ -3958,10 +3917,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 173:
+      case 169:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA8:
@@ -3969,10 +3928,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 174:
+      case 170:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x82:
@@ -3988,10 +3947,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 175:
+      case 171:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAF:
@@ -4005,10 +3964,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 176:
+      case 172:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -4024,10 +3983,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 177:
+      case 173:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x86:
@@ -4045,25 +4004,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 178:
+      case 174:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9A:
             fallthrough
-          case 0x9C...0xA7:
+          case 0x9C...0xA9:
             fallthrough
           case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 179:
+      case 175:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA2:
@@ -4071,10 +4030,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 180:
+      case 176:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA3:
@@ -4084,10 +4043,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 181:
+      case 177:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -4097,10 +4056,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 182:
+      case 178:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAD:
@@ -4110,10 +4069,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 183:
+      case 179:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x99:
@@ -4121,10 +4080,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 184:
+      case 180:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -4144,10 +4103,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 185:
+      case 181:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x81:
@@ -4159,10 +4118,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 186:
+      case 182:
         yych = yyinput[yycursor]
         switch yych {
           case 0x93...0xBF:
@@ -4170,10 +4129,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 187:
+      case 183:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBD:
@@ -4181,10 +4140,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 188:
+      case 184:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8F:
@@ -4194,10 +4153,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 189:
+      case 185:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -4207,10 +4166,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 190:
+      case 186:
         yych = yyinput[yycursor]
         switch yych {
           case 0xB0...0xB4:
@@ -4220,10 +4179,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 191:
+      case 187:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBC:
@@ -4231,10 +4190,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 192:
+      case 188:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA1...0xBA:
@@ -4242,10 +4201,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 193:
+      case 189:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x9A:
@@ -4255,10 +4214,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 194:
+      case 190:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBE:
@@ -4266,10 +4225,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 195:
+      case 191:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82...0x87:
@@ -4283,19 +4242,19 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 196:
+      case 192:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
             yycursor += 1
-            yystate = 288
+            yystate = 291
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 289
+            yystate = 292
             continue yyl
           case 0x82:
             fallthrough
@@ -4305,57 +4264,59 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 290
+            yystate = 293
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 291
+            yystate = 294
             continue yyl
           case 0x8A:
             yycursor += 1
-            yystate = 292
+            yystate = 295
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 293
+            yystate = 296
             continue yyl
           case 0x8C:
             yycursor += 1
-            yystate = 294
+            yystate = 297
             continue yyl
           case 0x8D:
             yycursor += 1
-            yystate = 295
+            yystate = 298
             continue yyl
           case 0x8E:
             yycursor += 1
-            yystate = 162
+            yystate = 157
             continue yyl
           case 0x8F:
             yycursor += 1
-            yystate = 296
+            yystate = 299
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 297
+            yystate = 300
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 298
+            yystate = 301
             continue yyl
           case 0x94:
             yycursor += 1
-            yystate = 299
+            yystate = 302
             continue yyl
           case 0x95:
-            fallthrough
-          case 0xB4:
             yycursor += 1
-            yystate = 130
+            yystate = 303
+            continue yyl
+          case 0x96:
+            yycursor += 1
+            yystate = 304
             continue yyl
           case 0x9C:
             yycursor += 1
@@ -4363,242 +4324,286 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x9D:
             yycursor += 1
-            yystate = 300
-            continue yyl
-          case 0xA0:
-            yycursor += 1
-            yystate = 301
-            continue yyl
-          case 0xA1:
-            yycursor += 1
-            yystate = 302
-            continue yyl
-          case 0xA2:
-            yycursor += 1
-            yystate = 119
-            continue yyl
-          case 0xA3:
-            yycursor += 1
-            yystate = 303
-            continue yyl
-          case 0xA4:
-            yycursor += 1
-            yystate = 304
-            continue yyl
-          case 0xA6:
-            yycursor += 1
             yystate = 305
             continue yyl
-          case 0xA8:
+          case 0x9E:
             yycursor += 1
             yystate = 306
             continue yyl
-          case 0xA9:
+          case 0xA0:
             yycursor += 1
             yystate = 307
             continue yyl
-          case 0xAA:
+          case 0xA1:
             yycursor += 1
             yystate = 308
             continue yyl
-          case 0xAB:
-            yycursor += 1
-            yystate = 309
-            continue yyl
-          case 0xAC:
+          case 0xA2:
             yycursor += 1
             yystate = 118
             continue yyl
-          case 0xAD:
+          case 0xA3:
+            yycursor += 1
+            yystate = 309
+            continue yyl
+          case 0xA4:
             yycursor += 1
             yystate = 310
             continue yyl
-          case 0xAE:
+          case 0xA6:
             yycursor += 1
             yystate = 311
             continue yyl
-          case 0xB1:
-            yycursor += 1
-            yystate = 142
-            continue yyl
-          case 0xB2...0xB3:
+          case 0xA8:
             yycursor += 1
             yystate = 312
             continue yyl
-          case 0xBC:
+          case 0xA9:
             yycursor += 1
             yystate = 313
             continue yyl
-          case 0xBD:
+          case 0xAA:
             yycursor += 1
             yystate = 314
             continue yyl
-          case 0xBF:
+          case 0xAB:
             yycursor += 1
             yystate = 315
             continue yyl
+          case 0xAC:
+            yycursor += 1
+            yystate = 117
+            continue yyl
+          case 0xAD:
+            yycursor += 1
+            yystate = 316
+            continue yyl
+          case 0xAE:
+            yycursor += 1
+            yystate = 317
+            continue yyl
+          case 0xB1:
+            yycursor += 1
+            yystate = 140
+            continue yyl
+          case 0xB2...0xB3:
+            yycursor += 1
+            yystate = 318
+            continue yyl
+          case 0xB4:
+            yycursor += 1
+            yystate = 128
+            continue yyl
+          case 0xBA:
+            yycursor += 1
+            yystate = 319
+            continue yyl
+          case 0xBC:
+            yycursor += 1
+            yystate = 320
+            continue yyl
+          case 0xBD:
+            yycursor += 1
+            yystate = 321
+            continue yyl
+          case 0xBE:
+            yycursor += 1
+            yystate = 322
+            continue yyl
+          case 0xBF:
+            yycursor += 1
+            yystate = 323
+            continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 197:
+      case 193:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
             yycursor += 1
-            yystate = 316
-            continue yyl
-          case 0x82:
-            yycursor += 1
-            yystate = 317
-            continue yyl
-          case 0x83:
-            yycursor += 1
-            yystate = 318
-            continue yyl
-          case 0x84:
-            yycursor += 1
-            yystate = 319
-            continue yyl
-          case 0x85:
-            yycursor += 1
-            yystate = 320
-            continue yyl
-          case 0x86:
-            yycursor += 1
-            yystate = 321
-            continue yyl
-          case 0x87:
-            yycursor += 1
-            yystate = 322
-            continue yyl
-          case 0x88:
-            yycursor += 1
-            yystate = 323
-            continue yyl
-          case 0x8A:
-            yycursor += 1
             yystate = 324
             continue yyl
-          case 0x8B:
-            yycursor += 1
-            yystate = 119
-            continue yyl
-          case 0x8C:
-            yycursor += 1
-            yystate = 78
-            continue yyl
-          case 0x8D:
+          case 0x81:
             yycursor += 1
             yystate = 325
             continue yyl
+          case 0x82:
+            yycursor += 1
+            yystate = 326
+            continue yyl
+          case 0x83:
+            yycursor += 1
+            yystate = 327
+            continue yyl
+          case 0x84:
+            yycursor += 1
+            yystate = 328
+            continue yyl
+          case 0x85:
+            yycursor += 1
+            yystate = 329
+            continue yyl
+          case 0x86:
+            yycursor += 1
+            yystate = 330
+            continue yyl
+          case 0x87:
+            yycursor += 1
+            yystate = 331
+            continue yyl
+          case 0x88:
+            yycursor += 1
+            yystate = 332
+            continue yyl
+          case 0x89:
+            yycursor += 1
+            yystate = 92
+            continue yyl
+          case 0x8A:
+            yycursor += 1
+            yystate = 333
+            continue yyl
+          case 0x8B:
+            yycursor += 1
+            yystate = 118
+            continue yyl
+          case 0x8C:
+            yycursor += 1
+            yystate = 77
+            continue yyl
+          case 0x8D:
+            yycursor += 1
+            yystate = 334
+            continue yyl
           case 0x90:
             yycursor += 1
-            yystate = 291
+            yystate = 294
             continue yyl
           case 0x91:
             yycursor += 1
-            yystate = 326
+            yystate = 335
             continue yyl
           case 0x92:
             fallthrough
           case 0x98:
             yycursor += 1
-            yystate = 157
+            yystate = 158
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 327
+            yystate = 336
             continue yyl
           case 0x96:
             yycursor += 1
-            yystate = 328
+            yystate = 337
             continue yyl
           case 0x97:
             yycursor += 1
-            yystate = 329
+            yystate = 338
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 330
+            yystate = 339
             continue yyl
           case 0x9A:
             yycursor += 1
-            yystate = 331
+            yystate = 340
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 104
+            yystate = 103
+            continue yyl
+          case 0x9D:
+            yycursor += 1
+            yystate = 88
             continue yyl
           case 0xA0:
             yycursor += 1
-            yystate = 332
+            yystate = 341
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 115
+            yystate = 114
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 333
-            continue yyl
-          case 0xA6:
-            yycursor += 1
-            yystate = 334
-            continue yyl
-          case 0xA7:
-            yycursor += 1
-            yystate = 335
-            continue yyl
-          case 0xA8:
-            yycursor += 1
-            yystate = 336
-            continue yyl
-          case 0xA9:
-            yycursor += 1
-            yystate = 337
-            continue yyl
-          case 0xAA:
-            yycursor += 1
-            yystate = 338
-            continue yyl
-          case 0xAB:
-            yycursor += 1
-            yystate = 116
-            continue yyl
-          case 0xB0:
-            yycursor += 1
-            yystate = 339
-            continue yyl
-          case 0xB1:
-            yycursor += 1
-            yystate = 340
-            continue yyl
-          case 0xB2:
-            yycursor += 1
-            yystate = 341
-            continue yyl
-          case 0xB4:
-            yycursor += 1
             yystate = 342
             continue yyl
-          case 0xB5:
+          case 0xA4:
             yycursor += 1
             yystate = 343
             continue yyl
-          case 0xB6:
+          case 0xA5:
             yycursor += 1
             yystate = 344
             continue yyl
-          case 0xBB:
+          case 0xA6:
             yycursor += 1
             yystate = 345
             continue yyl
+          case 0xA7:
+            yycursor += 1
+            yystate = 346
+            continue yyl
+          case 0xA8:
+            yycursor += 1
+            yystate = 347
+            continue yyl
+          case 0xA9:
+            yycursor += 1
+            yystate = 348
+            continue yyl
+          case 0xAA:
+            yycursor += 1
+            yystate = 349
+            continue yyl
+          case 0xAB:
+            yycursor += 1
+            yystate = 115
+            continue yyl
+          case 0xB0:
+            yycursor += 1
+            yystate = 350
+            continue yyl
+          case 0xB1:
+            yycursor += 1
+            yystate = 351
+            continue yyl
+          case 0xB2:
+            yycursor += 1
+            yystate = 352
+            continue yyl
+          case 0xB4:
+            yycursor += 1
+            yystate = 353
+            continue yyl
+          case 0xB5:
+            yycursor += 1
+            yystate = 354
+            continue yyl
+          case 0xB6:
+            yycursor += 1
+            yystate = 355
+            continue yyl
+          case 0xBB:
+            yycursor += 1
+            yystate = 356
+            continue yyl
+          case 0xBC:
+            yycursor += 1
+            yystate = 357
+            continue yyl
+          case 0xBE:
+            yycursor += 1
+            yystate = 358
+            continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 198:
+      case 194:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8D:
@@ -4607,55 +4612,67 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x92...0x94:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x8E:
             yycursor += 1
-            yystate = 183
+            yystate = 179
             continue yyl
           case 0x91:
             yycursor += 1
-            yystate = 328
+            yystate = 337
             continue yyl
           case 0x95:
             yycursor += 1
-            yystate = 346
+            yystate = 359
+            continue yyl
+          case 0xBE:
+            yycursor += 1
+            yystate = 50
+            continue yyl
+          case 0xBF:
+            yycursor += 1
+            yystate = 360
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 199:
+      case 195:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8F:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x90:
             yycursor += 1
-            yystate = 328
+            yystate = 158
+            continue yyl
+          case 0x91:
+            yycursor += 1
+            yystate = 361
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 200:
+      case 196:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x98:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 89
+            yystate = 88
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 201:
+      case 197:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xA7:
@@ -4664,70 +4681,89 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xBC:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 116
+            yystate = 115
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 119
+            yystate = 362
+            continue yyl
+          case 0xAA:
+            yycursor += 1
+            yystate = 190
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 347
+            yystate = 363
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 157
+            yystate = 158
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 348
+            yystate = 364
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 341
+            yystate = 352
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 349
+            yystate = 365
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 350
+            yystate = 366
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 351
+            yystate = 367
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 202:
+      case 198:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9E:
             fallthrough
-          case 0xA0...0xAA:
+          case 0xA0...0xB2:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 255
+            yystate = 256
             continue yyl
-          case 0xAB:
+          case 0xB3:
             yycursor += 1
-            yystate = 312
+            yystate = 368
+            continue yyl
+          case 0xB4:
+            yycursor += 1
+            yystate = 140
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 203:
+      case 199:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xBF:
+            yycursor += 1
+            yystate = 369
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 200:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -4736,152 +4772,176 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 119
+            yystate = 370
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 352
+            yystate = 371
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 353
+            yystate = 372
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 354
+            yystate = 373
             continue yyl
           case 0xB2:
             yycursor += 1
-            yystate = 355
+            yystate = 374
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 204:
+      case 201:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
             fallthrough
           case 0x96...0x99:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x91:
             yycursor += 1
-            yystate = 356
+            yystate = 375
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 357
+            yystate = 376
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 358
+            yystate = 377
             continue yyl
           case 0x94:
             yycursor += 1
-            yystate = 359
+            yystate = 378
             continue yyl
           case 0x95:
             yycursor += 1
-            yystate = 360
+            yystate = 379
             continue yyl
           case 0x9A:
             yycursor += 1
-            yystate = 361
+            yystate = 380
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 362
+            yystate = 381
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 363
+            yystate = 382
             continue yyl
           case 0x9D:
             yycursor += 1
-            yystate = 364
+            yystate = 383
             continue yyl
           case 0x9E:
             yycursor += 1
-            yystate = 365
+            yystate = 384
             continue yyl
           case 0x9F:
             yycursor += 1
-            yystate = 366
+            yystate = 385
+            continue yyl
+          case 0xBC:
+            yycursor += 1
+            yystate = 386
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 205:
+      case 202:
         yych = yyinput[yycursor]
         switch yych {
+          case 0x80:
+            yycursor += 1
+            yystate = 152
+            continue yyl
+          case 0x81:
+            yycursor += 1
+            yystate = 210
+            continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 367
+            yystate = 387
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 368
+            yystate = 388
+            continue yyl
+          case 0x8A:
+            yycursor += 1
+            yystate = 363
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 332
+            yystate = 341
+            continue yyl
+          case 0x93:
+            yycursor += 1
+            yystate = 389
+            continue yyl
+          case 0x9F:
+            yycursor += 1
+            yystate = 390
             continue yyl
           case 0xA0...0xA2:
             fallthrough
           case 0xA4:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 369
+            yystate = 391
             continue yyl
           case 0xA5:
             yycursor += 1
-            yystate = 370
+            yystate = 392
             continue yyl
           case 0xB8:
             yycursor += 1
-            yystate = 371
+            yystate = 393
             continue yyl
           case 0xB9:
             yycursor += 1
-            yystate = 372
+            yystate = 394
             continue yyl
           case 0xBA:
             yycursor += 1
-            yystate = 373
+            yystate = 395
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 206:
+      case 203:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9A:
             fallthrough
           case 0x9C...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 374
+            yystate = 396
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 207:
+      case 204:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9B:
@@ -4890,68 +4950,106 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xA1...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 291
+            yystate = 397
             continue yyl
           case 0xA0:
             yycursor += 1
-            yystate = 162
+            yystate = 157
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 208:
+      case 205:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB9:
             fallthrough
           case 0xBB...0xBF:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xBA:
             yycursor += 1
-            yystate = 375
+            yystate = 398
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
+            continue yyl
+        }
+      case 206:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xAE:
+            fallthrough
+          case 0xB0...0xB8:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0xAF:
+            yycursor += 1
+            yystate = 399
+            continue yyl
+          case 0xB9:
+            yycursor += 1
+            yystate = 400
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 207:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xA0...0xA7:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0xA8:
+            yycursor += 1
+            yystate = 400
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 208:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x8C:
+            fallthrough
+          case 0x8E...0xBF:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0x8D:
+            yycursor += 1
+            yystate = 401
+            continue yyl
+          default:
+            yystate = 35
             continue yyl
         }
       case 209:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0xAE:
+          case 0x80...0x8D:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
-          case 0xAF:
+          case 0x8E:
             yycursor += 1
-            yystate = 376
+            yystate = 158
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 210:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0xA0...0xA7:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xA8:
-            yycursor += 1
-            yystate = 377
-            continue yyl
-          default:
-            yystate = 36
-            continue yyl
-        }
-      case 211:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAD:
@@ -4959,33 +5057,50 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 212:
+      case 211:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9B:
             fallthrough
           case 0xA0...0xAA:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
+            continue yyl
+        }
+      case 212:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x87:
+            fallthrough
+          case 0x89...0x8E:
+            fallthrough
+          case 0x98...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
             continue yyl
         }
       case 213:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x93...0xA1:
+          case 0x80...0xA1:
             fallthrough
           case 0xA3...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 214:
@@ -5000,7 +5115,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 215:
@@ -5025,7 +5140,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 216:
@@ -5052,7 +5167,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 217:
@@ -5081,7 +5196,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 218:
@@ -5104,7 +5219,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 219:
@@ -5129,7 +5244,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 220:
@@ -5152,7 +5267,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 221:
@@ -5177,7 +5292,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 222:
@@ -5189,7 +5304,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x8B...0x8D:
             fallthrough
-          case 0x96...0x97:
+          case 0x95...0x97:
             fallthrough
           case 0x9C...0x9D:
             fallthrough
@@ -5202,7 +5317,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 223:
@@ -5233,7 +5348,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 224:
@@ -5254,7 +5369,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 225:
@@ -5268,12 +5383,12 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xAA...0xB9:
             fallthrough
-          case 0xBD...0xBF:
+          case 0xBC...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 226:
@@ -5289,6 +5404,8 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x98...0x9A:
             fallthrough
+          case 0x9D:
+            fallthrough
           case 0xA0...0xA3:
             fallthrough
           case 0xA6...0xAF:
@@ -5296,7 +5413,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 227:
@@ -5319,7 +5436,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 228:
@@ -5333,26 +5450,24 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x95...0x96:
             fallthrough
-          case 0x9E:
+          case 0x9D...0x9E:
             fallthrough
           case 0xA0...0xA3:
             fallthrough
           case 0xA6...0xAF:
             fallthrough
-          case 0xB1...0xB2:
+          case 0xB1...0xB3:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 229:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0x83:
-            fallthrough
-          case 0x85...0x8C:
+          case 0x80...0x8C:
             fallthrough
           case 0x8E...0x90:
             fallthrough
@@ -5361,7 +5476,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 230:
@@ -5384,13 +5499,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 231:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x82...0x83:
+          case 0x81...0x83:
             fallthrough
           case 0x85...0x96:
             fallthrough
@@ -5403,7 +5518,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 232:
@@ -5426,7 +5541,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 233:
@@ -5437,7 +5552,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 234:
@@ -5450,7 +5565,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 235:
@@ -5471,7 +5586,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 236:
@@ -5481,7 +5596,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x86:
             fallthrough
-          case 0x88...0x8D:
+          case 0x88...0x8E:
             fallthrough
           case 0x90...0x99:
             fallthrough
@@ -5490,7 +5605,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 237:
@@ -5513,7 +5628,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 238:
@@ -5528,7 +5643,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 239:
@@ -5543,7 +5658,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 240:
@@ -5554,7 +5669,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 241:
@@ -5567,7 +5682,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 242:
@@ -5580,22 +5695,20 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 243:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0x8C:
+          case 0x80...0x95:
             fallthrough
-          case 0x8E...0x94:
-            fallthrough
-          case 0xA0...0xB4:
+          case 0x9F...0xB4:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 244:
@@ -5612,7 +5725,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 245:
@@ -5629,7 +5742,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 246:
@@ -5637,14 +5750,14 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x8B...0x8D:
             fallthrough
-          case 0x90...0x99:
+          case 0x8F...0x99:
             fallthrough
           case 0xA0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 247:
@@ -5657,7 +5770,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 248:
@@ -5672,7 +5785,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 249:
@@ -5685,7 +5798,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 250:
@@ -5698,7 +5811,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 251:
@@ -5711,7 +5824,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 252:
@@ -5726,7 +5839,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 253:
@@ -5739,17 +5852,30 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
           case 0xA7:
             fallthrough
           case 0xB0...0xBD:
+            fallthrough
+          case 0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 254:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0x8B:
+          case 0x80...0x8E:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 255:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x8C:
             fallthrough
           case 0x90...0x99:
             fallthrough
@@ -5758,10 +5884,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 255:
+      case 256:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB7:
@@ -5769,10 +5895,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 256:
+      case 257:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x89:
@@ -5782,10 +5908,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 257:
+      case 258:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x92:
@@ -5795,20 +5921,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
-            continue yyl
-        }
-      case 258:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x80...0xB9:
-            fallthrough
-          case 0xBB...0xBF:
-            yycursor += 1
-            yystate = 3
-            continue yyl
-          default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 259:
@@ -5821,7 +5934,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 260:
@@ -5838,7 +5951,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 261:
@@ -5853,7 +5966,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 262:
@@ -5866,7 +5979,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 263:
@@ -5881,7 +5994,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 264:
@@ -5900,7 +6013,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 265:
@@ -5917,7 +6030,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 266:
@@ -5934,7 +6047,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 267:
@@ -5947,7 +6060,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 268:
@@ -5962,18 +6075,20 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 269:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA7:
+            fallthrough
+          case 0xAC:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 270:
@@ -5992,7 +6107,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 271:
@@ -6005,7 +6120,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 272:
@@ -6020,7 +6135,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 273:
@@ -6031,7 +6146,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 274:
@@ -6048,7 +6163,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 275:
@@ -6065,7 +6180,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 276:
@@ -6080,7 +6195,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 277:
@@ -6101,7 +6216,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 278:
@@ -6116,7 +6231,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 279:
@@ -6131,7 +6246,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 280:
@@ -6146,7 +6261,7 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 281:
@@ -6154,11 +6269,11 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
         switch yych {
           case 0x80:
             yycursor += 1
-            yystate = 288
+            yystate = 291
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 289
+            yystate = 292
             continue yyl
           case 0x82:
             fallthrough
@@ -6168,59 +6283,63 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 290
+            yystate = 293
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 291
+            yystate = 294
             continue yyl
           case 0x87:
             yycursor += 1
-            yystate = 378
+            yystate = 402
             continue yyl
           case 0x8A:
             yycursor += 1
-            yystate = 292
+            yystate = 295
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 379
+            yystate = 403
             continue yyl
           case 0x8C:
             yycursor += 1
-            yystate = 294
+            yystate = 297
             continue yyl
           case 0x8D:
             yycursor += 1
-            yystate = 380
+            yystate = 404
             continue yyl
           case 0x8E:
             yycursor += 1
-            yystate = 162
+            yystate = 157
             continue yyl
           case 0x8F:
             yycursor += 1
-            yystate = 296
+            yystate = 299
             continue yyl
           case 0x92:
             yycursor += 1
-            yystate = 381
+            yystate = 405
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 298
+            yystate = 301
             continue yyl
           case 0x94:
             yycursor += 1
-            yystate = 299
+            yystate = 302
             continue yyl
           case 0x95:
             yycursor += 1
-            yystate = 130
+            yystate = 303
+            continue yyl
+          case 0x96:
+            yycursor += 1
+            yystate = 304
             continue yyl
           case 0x9C:
             yycursor += 1
@@ -6228,86 +6347,102 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0x9D:
             yycursor += 1
-            yystate = 300
+            yystate = 305
+            continue yyl
+          case 0x9E:
+            yycursor += 1
+            yystate = 306
             continue yyl
           case 0xA0:
             yycursor += 1
-            yystate = 301
+            yystate = 307
             continue yyl
           case 0xA1:
             yycursor += 1
-            yystate = 302
+            yystate = 308
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 119
+            yystate = 118
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 303
+            yystate = 309
             continue yyl
           case 0xA4:
             yycursor += 1
-            yystate = 304
+            yystate = 310
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 305
+            yystate = 311
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 382
+            yystate = 406
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 307
+            yystate = 313
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 308
+            yystate = 314
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 383
+            yystate = 407
             continue yyl
           case 0xAC:
             yycursor += 1
-            yystate = 118
+            yystate = 117
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 310
+            yystate = 316
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 311
+            yystate = 317
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 142
+            yystate = 140
             continue yyl
           case 0xB2...0xB3:
             yycursor += 1
-            yystate = 312
+            yystate = 318
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 384
+            yystate = 408
+            continue yyl
+          case 0xBA:
+            yycursor += 1
+            yystate = 409
+            continue yyl
+          case 0xBB:
+            yycursor += 1
+            yystate = 410
             continue yyl
           case 0xBC:
             yycursor += 1
-            yystate = 313
+            yystate = 320
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 293
+            yystate = 411
+            continue yyl
+          case 0xBE:
+            yycursor += 1
+            yystate = 321
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 315
+            yystate = 323
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 282:
@@ -6323,149 +6458,196 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0x98:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x81:
             yycursor += 1
-            yystate = 385
+            yystate = 412
             continue yyl
           case 0x82:
             fallthrough
           case 0xA0:
             yycursor += 1
-            yystate = 290
+            yystate = 293
             continue yyl
           case 0x83:
             yycursor += 1
-            yystate = 386
+            yystate = 413
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 387
+            yystate = 414
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 388
+            yystate = 415
             continue yyl
           case 0x87:
             yycursor += 1
-            yystate = 389
+            yystate = 416
             continue yyl
           case 0x88:
             yycursor += 1
-            yystate = 390
+            yystate = 417
+            continue yyl
+          case 0x89:
+            yycursor += 1
+            yystate = 418
             continue yyl
           case 0x8A:
             yycursor += 1
-            yystate = 324
+            yystate = 333
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 391
+            yystate = 419
             continue yyl
           case 0x8C:
             yycursor += 1
-            yystate = 392
+            yystate = 420
             continue yyl
           case 0x8D:
             yycursor += 1
-            yystate = 393
+            yystate = 421
             continue yyl
           case 0x91:
             yycursor += 1
-            yystate = 394
+            yystate = 422
             continue yyl
           case 0x93:
             yycursor += 1
-            yystate = 395
+            yystate = 423
             continue yyl
           case 0x96:
             yycursor += 1
-            yystate = 396
+            yystate = 424
             continue yyl
           case 0x97:
             yycursor += 1
-            yystate = 397
+            yystate = 425
             continue yyl
           case 0x99:
             yycursor += 1
-            yystate = 398
+            yystate = 426
             continue yyl
           case 0x9A:
             fallthrough
           case 0xAB:
             yycursor += 1
-            yystate = 116
+            yystate = 115
             continue yyl
           case 0x9B:
             yycursor += 1
-            yystate = 122
+            yystate = 68
             continue yyl
           case 0x9C:
             yycursor += 1
-            yystate = 399
+            yystate = 427
+            continue yyl
+          case 0x9D:
+            yycursor += 1
+            yystate = 88
             continue yyl
           case 0xA2:
             yycursor += 1
-            yystate = 115
+            yystate = 114
             continue yyl
           case 0xA3:
             yycursor += 1
-            yystate = 400
+            yystate = 428
+            continue yyl
+          case 0xA4:
+            yycursor += 1
+            yystate = 429
+            continue yyl
+          case 0xA5:
+            yycursor += 1
+            yystate = 430
             continue yyl
           case 0xA6:
             yycursor += 1
-            yystate = 334
+            yystate = 345
             continue yyl
           case 0xA7:
             yycursor += 1
-            yystate = 401
+            yystate = 431
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 194
+            yystate = 190
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 402
+            yystate = 432
             continue yyl
           case 0xAA:
             yycursor += 1
-            yystate = 403
+            yystate = 433
             continue yyl
           case 0xB0:
             yycursor += 1
-            yystate = 404
+            yystate = 434
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 405
+            yystate = 435
             continue yyl
           case 0xB2:
             yycursor += 1
-            yystate = 406
+            yystate = 436
             continue yyl
           case 0xB4:
             yycursor += 1
-            yystate = 407
+            yystate = 437
             continue yyl
           case 0xB5:
             yycursor += 1
-            yystate = 408
+            yystate = 438
             continue yyl
           case 0xB6:
             yycursor += 1
-            yystate = 409
+            yystate = 439
             continue yyl
           case 0xBB:
             yycursor += 1
-            yystate = 315
+            yystate = 440
+            continue yyl
+          case 0xBC:
+            yycursor += 1
+            yystate = 441
+            continue yyl
+          case 0xBD:
+            yycursor += 1
+            yystate = 442
+            continue yyl
+          case 0xBE:
+            yycursor += 1
+            yystate = 358
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 283:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x8F:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0x90:
+            yycursor += 1
+            yystate = 158
+            continue yyl
+          case 0x91:
+            yycursor += 1
+            yystate = 368
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 284:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xA7:
@@ -6474,19 +6656,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xBC:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0xA8:
             yycursor += 1
-            yystate = 116
+            yystate = 115
             continue yyl
           case 0xA9:
             yycursor += 1
-            yystate = 410
+            yystate = 443
+            continue yyl
+          case 0xAA:
+            yycursor += 1
+            yystate = 190
             continue yyl
           case 0xAB:
             yycursor += 1
-            yystate = 120
+            yystate = 444
             continue yyl
           case 0xAC:
             yycursor += 1
@@ -6494,29 +6680,29 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             continue yyl
           case 0xAD:
             yycursor += 1
-            yystate = 411
+            yystate = 445
             continue yyl
           case 0xAE:
             yycursor += 1
-            yystate = 341
+            yystate = 352
             continue yyl
           case 0xBD:
             yycursor += 1
-            yystate = 412
+            yystate = 446
             continue yyl
           case 0xBE:
             yycursor += 1
-            yystate = 413
+            yystate = 447
             continue yyl
           case 0xBF:
             yycursor += 1
-            yystate = 351
+            yystate = 448
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 284:
+      case 285:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -6525,178 +6711,228 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             fallthrough
           case 0xB0:
             yycursor += 1
-            yystate = 38
+            yystate = 37
             continue yyl
           case 0x84:
             yycursor += 1
-            yystate = 119
+            yystate = 370
             continue yyl
           case 0x85:
             yycursor += 1
-            yystate = 352
+            yystate = 371
             continue yyl
           case 0x8B:
             yycursor += 1
-            yystate = 353
+            yystate = 372
             continue yyl
           case 0xB1:
             yycursor += 1
-            yystate = 354
+            yystate = 373
             continue yyl
           case 0xB2:
             yycursor += 1
-            yystate = 414
+            yystate = 449
             continue yyl
           default:
-            yystate = 36
-            continue yyl
-        }
-      case 285:
-        yych = yyinput[yycursor]
-        switch yych {
-          case 0x85:
-            yycursor += 1
-            yystate = 415
-            continue yyl
-          case 0x86:
-            yycursor += 1
-            yystate = 416
-            continue yyl
-          case 0x89:
-            yycursor += 1
-            yystate = 417
-            continue yyl
-          case 0x90:
-            fallthrough
-          case 0x96...0x99:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0x91:
-            yycursor += 1
-            yystate = 356
-            continue yyl
-          case 0x92:
-            yycursor += 1
-            yystate = 357
-            continue yyl
-          case 0x93:
-            yycursor += 1
-            yystate = 358
-            continue yyl
-          case 0x94:
-            yycursor += 1
-            yystate = 359
-            continue yyl
-          case 0x95:
-            yycursor += 1
-            yystate = 360
-            continue yyl
-          case 0x9A:
-            yycursor += 1
-            yystate = 361
-            continue yyl
-          case 0x9B:
-            yycursor += 1
-            yystate = 362
-            continue yyl
-          case 0x9C:
-            yycursor += 1
-            yystate = 363
-            continue yyl
-          case 0x9D:
-            yycursor += 1
-            yystate = 364
-            continue yyl
-          case 0x9E:
-            yycursor += 1
-            yystate = 365
-            continue yyl
-          case 0x9F:
-            yycursor += 1
-            yystate = 418
-            continue yyl
-          case 0xA8:
-            yycursor += 1
-            yystate = 419
-            continue yyl
-          case 0xA9:
-            yycursor += 1
-            yystate = 420
-            continue yyl
-          case 0xAA:
-            yycursor += 1
-            yystate = 421
-            continue yyl
-          default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 286:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80:
+          case 0xBC:
             yycursor += 1
-            yystate = 422
+            yystate = 178
             continue yyl
-          case 0x84:
+          case 0xBD:
             yycursor += 1
-            yystate = 423
-            continue yyl
-          case 0x85:
-            yycursor += 1
-            yystate = 424
-            continue yyl
-          case 0x8B:
-            yycursor += 1
-            yystate = 425
-            continue yyl
-          case 0xA0...0xA2:
-            fallthrough
-          case 0xA4:
-            yycursor += 1
-            yystate = 38
-            continue yyl
-          case 0xA3:
-            yycursor += 1
-            yystate = 426
-            continue yyl
-          case 0xA5:
-            yycursor += 1
-            yystate = 427
-            continue yyl
-          case 0xB8:
-            yycursor += 1
-            yystate = 371
-            continue yyl
-          case 0xB9:
-            yycursor += 1
-            yystate = 372
-            continue yyl
-          case 0xBA:
-            yycursor += 1
-            yystate = 373
+            yystate = 88
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 287:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x84...0x86:
+          case 0x85:
             yycursor += 1
-            yystate = 38
+            yystate = 450
             continue yyl
-          case 0x87:
+          case 0x86:
             yycursor += 1
-            yystate = 157
+            yystate = 451
+            continue yyl
+          case 0x89:
+            yycursor += 1
+            yystate = 452
+            continue yyl
+          case 0x90:
+            fallthrough
+          case 0x96...0x99:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0x91:
+            yycursor += 1
+            yystate = 375
+            continue yyl
+          case 0x92:
+            yycursor += 1
+            yystate = 376
+            continue yyl
+          case 0x93:
+            yycursor += 1
+            yystate = 377
+            continue yyl
+          case 0x94:
+            yycursor += 1
+            yystate = 378
+            continue yyl
+          case 0x95:
+            yycursor += 1
+            yystate = 379
+            continue yyl
+          case 0x9A:
+            yycursor += 1
+            yystate = 380
+            continue yyl
+          case 0x9B:
+            yycursor += 1
+            yystate = 381
+            continue yyl
+          case 0x9C:
+            yycursor += 1
+            yystate = 382
+            continue yyl
+          case 0x9D:
+            yycursor += 1
+            yystate = 383
+            continue yyl
+          case 0x9E:
+            yycursor += 1
+            yystate = 384
+            continue yyl
+          case 0x9F:
+            yycursor += 1
+            yystate = 453
+            continue yyl
+          case 0xA8:
+            yycursor += 1
+            yystate = 454
+            continue yyl
+          case 0xA9:
+            yycursor += 1
+            yystate = 455
+            continue yyl
+          case 0xAA:
+            yycursor += 1
+            yystate = 456
+            continue yyl
+          case 0xBC:
+            yycursor += 1
+            yystate = 386
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
       case 288:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80:
+            yycursor += 1
+            yystate = 457
+            continue yyl
+          case 0x81:
+            yycursor += 1
+            yystate = 210
+            continue yyl
+          case 0x82:
+            yycursor += 1
+            yystate = 458
+            continue yyl
+          case 0x84:
+            yycursor += 1
+            yystate = 459
+            continue yyl
+          case 0x85:
+            yycursor += 1
+            yystate = 460
+            continue yyl
+          case 0x8A:
+            yycursor += 1
+            yystate = 461
+            continue yyl
+          case 0x8B:
+            yycursor += 1
+            yystate = 397
+            continue yyl
+          case 0x93:
+            yycursor += 1
+            yystate = 462
+            continue yyl
+          case 0x9F:
+            yycursor += 1
+            yystate = 390
+            continue yyl
+          case 0xA0...0xA2:
+            fallthrough
+          case 0xA4:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0xA3:
+            yycursor += 1
+            yystate = 463
+            continue yyl
+          case 0xA5:
+            yycursor += 1
+            yystate = 464
+            continue yyl
+          case 0xB8:
+            yycursor += 1
+            yystate = 393
+            continue yyl
+          case 0xB9:
+            yycursor += 1
+            yystate = 394
+            continue yyl
+          case 0xBA:
+            yycursor += 1
+            yystate = 395
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 289:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xAF:
+            yycursor += 1
+            yystate = 465
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 290:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x84...0x86:
+            yycursor += 1
+            yystate = 37
+            continue yyl
+          case 0x87:
+            yycursor += 1
+            yystate = 158
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 291:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8B:
@@ -6712,10 +6948,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 289:
+      case 292:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8D:
@@ -6725,10 +6961,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 290:
+      case 293:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBA:
@@ -6736,10 +6972,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 291:
+      case 294:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB4:
@@ -6747,10 +6983,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 292:
+      case 295:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9C:
@@ -6760,10 +6996,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 293:
+      case 296:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x90:
@@ -6771,10 +7007,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 294:
+      case 297:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9F:
@@ -6784,10 +7020,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 295:
+      case 298:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
@@ -6797,10 +7033,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 296:
+      case 299:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -6812,10 +7048,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 297:
+      case 300:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
@@ -6825,10 +7061,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 298:
+      case 301:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x93:
@@ -6838,10 +7074,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 299:
+      case 302:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA7:
@@ -6851,10 +7087,48 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 300:
+      case 303:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xA3:
+            fallthrough
+          case 0xB0...0xBA:
+            fallthrough
+          case 0xBC...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 304:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x8A:
+            fallthrough
+          case 0x8C...0x92:
+            fallthrough
+          case 0x94...0x95:
+            fallthrough
+          case 0x97...0xA1:
+            fallthrough
+          case 0xA3...0xB1:
+            fallthrough
+          case 0xB3...0xB9:
+            fallthrough
+          case 0xBB...0xBC:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 305:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -6864,10 +7138,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 301:
+      case 306:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x85:
+            fallthrough
+          case 0x87...0xB0:
+            fallthrough
+          case 0xB2...0xBA:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 307:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
@@ -6885,10 +7174,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 302:
+      case 308:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -6898,10 +7187,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 303:
+      case 309:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xB2:
@@ -6911,10 +7200,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 304:
+      case 310:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -6924,10 +7213,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 305:
+      case 311:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB7:
@@ -6937,10 +7226,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 306:
+      case 312:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -6954,10 +7243,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 307:
+      case 313:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xBC:
@@ -6965,10 +7254,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 308:
+      case 314:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9C:
@@ -6976,10 +7265,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 309:
+      case 315:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -6989,10 +7278,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 310:
+      case 316:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x95:
@@ -7002,10 +7291,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 311:
+      case 317:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x91:
@@ -7013,10 +7302,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 312:
+      case 318:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB2:
@@ -7024,10 +7313,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 313:
+      case 319:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xA9:
+            fallthrough
+          case 0xB0...0xB1:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 320:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9C:
@@ -7039,32 +7341,49 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 314:
+      case 321:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 315:
+      case 322:
         yych = yyinput[yycursor]
         switch yych {
+          case 0x80...0x81:
+            fallthrough
+          case 0xB0...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 323:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x84:
+            fallthrough
           case 0xA0...0xB6:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 316:
+      case 324:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83...0xB7:
@@ -7072,10 +7391,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 317:
+      case 325:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xB1...0xB2:
+            fallthrough
+          case 0xB5:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 326:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83...0xAF:
@@ -7083,10 +7415,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 318:
+      case 327:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0xA8:
@@ -7094,10 +7426,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 319:
+      case 328:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83...0xA6:
@@ -7105,13 +7437,15 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 320:
+      case 329:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84:
+            fallthrough
+          case 0x87:
             fallthrough
           case 0x90...0xB2:
             fallthrough
@@ -7120,10 +7454,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 321:
+      case 330:
         yych = yyinput[yycursor]
         switch yych {
           case 0x83...0xB2:
@@ -7131,10 +7465,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 322:
+      case 331:
         yych = yyinput[yycursor]
         switch yych {
           case 0x81...0x84:
@@ -7146,23 +7480,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 323:
+      case 332:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x91:
             fallthrough
           case 0x93...0xAB:
+            fallthrough
+          case 0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 324:
+      case 333:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -7180,10 +7516,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 325:
+      case 334:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -7193,23 +7529,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 326:
+      case 335:
         yych = yyinput[yycursor]
         switch yych {
           case 0x87...0x8A:
             fallthrough
-          case 0x9F:
+          case 0x9F...0xA1:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 327:
+      case 336:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84...0x85:
@@ -7219,10 +7555,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 328:
+      case 337:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAE:
@@ -7230,10 +7566,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 329:
+      case 338:
         yych = yyinput[yycursor]
         switch yych {
           case 0x98...0x9B:
@@ -7241,10 +7577,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 330:
+      case 339:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84:
@@ -7252,10 +7588,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 331:
+      case 340:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAA:
@@ -7265,10 +7601,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 332:
+      case 341:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAB:
@@ -7276,10 +7612,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 333:
+      case 342:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9F:
@@ -7289,10 +7625,42 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 334:
+      case 343:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x86:
+            fallthrough
+          case 0x89:
+            fallthrough
+          case 0x8C...0x93:
+            fallthrough
+          case 0x95...0x96:
+            fallthrough
+          case 0x98...0xAF:
+            fallthrough
+          case 0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 344:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x81:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 345:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xA7:
@@ -7302,10 +7670,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 335:
+      case 346:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x90:
@@ -7317,10 +7685,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 336:
+      case 347:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -7332,10 +7700,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 337:
+      case 348:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90:
@@ -7345,23 +7713,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 338:
+      case 349:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x89:
             fallthrough
           case 0x9D:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 339:
+      case 350:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -7371,10 +7741,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 340:
+      case 351:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -7384,10 +7754,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 341:
+      case 352:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8F:
@@ -7395,10 +7765,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 342:
+      case 353:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -7410,10 +7780,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 343:
+      case 354:
         yych = yyinput[yycursor]
         switch yych {
           case 0x86:
@@ -7427,10 +7797,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 344:
+      case 355:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x89:
@@ -7440,10 +7810,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 345:
+      case 356:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xB2:
@@ -7451,10 +7821,36 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 346:
+      case 357:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x82:
+            fallthrough
+          case 0x84...0x90:
+            fallthrough
+          case 0x92...0xB3:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 358:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xB0:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 359:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -7462,10 +7858,45 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 347:
+      case 360:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xB0:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 361:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x81...0x86:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 362:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x9E:
+            fallthrough
+          case 0xB0...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 363:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0xAD:
@@ -7473,10 +7904,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 348:
+      case 364:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -7488,10 +7919,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 349:
+      case 365:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
@@ -7501,10 +7932,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 350:
+      case 366:
         yych = yyinput[yycursor]
         switch yych {
           case 0x93...0x9F:
@@ -7512,10 +7943,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 351:
+      case 367:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA0...0xA1:
@@ -7525,13 +7956,54 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 352:
+      case 368:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x95:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 369:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xB0...0xB3:
+            fallthrough
+          case 0xB5...0xBB:
+            fallthrough
+          case 0xBD...0xBE:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 370:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xA2:
+            fallthrough
+          case 0xB2:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 371:
         yych = yyinput[yycursor]
         switch yych {
           case 0x90...0x92:
+            fallthrough
+          case 0x95:
             fallthrough
           case 0xA4...0xA7:
             fallthrough
@@ -7540,10 +8012,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 353:
+      case 372:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xBB:
@@ -7551,10 +8023,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 354:
+      case 373:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAA:
@@ -7564,10 +8036,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 355:
+      case 374:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -7577,10 +8049,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 356:
+      case 375:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x94:
@@ -7590,10 +8062,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 357:
+      case 376:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9C:
@@ -7615,10 +8087,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 358:
+      case 377:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -7628,10 +8100,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 359:
+      case 378:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
@@ -7649,10 +8121,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 360:
+      case 379:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -7666,10 +8138,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 361:
+      case 380:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA5:
@@ -7679,10 +8151,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 362:
+      case 381:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -7696,10 +8168,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 363:
+      case 382:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x94:
@@ -7711,10 +8183,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 364:
+      case 383:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8E:
@@ -7726,10 +8198,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 365:
+      case 384:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -7741,10 +8213,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 366:
+      case 385:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x82:
@@ -7754,10 +8226,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 367:
+      case 386:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x9E:
+            fallthrough
+          case 0xA5...0xAA:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 387:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAC:
@@ -7767,10 +8252,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 368:
+      case 388:
         yych = yyinput[yycursor]
         switch yych {
           case 0x8E:
@@ -7778,10 +8263,38 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 369:
+      case 389:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x90...0xAB:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 390:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xA0...0xA6:
+            fallthrough
+          case 0xA8...0xAB:
+            fallthrough
+          case 0xAD...0xAE:
+            fallthrough
+          case 0xB0...0xBE:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 391:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -7789,10 +8302,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 370:
+      case 392:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -7802,10 +8315,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 371:
+      case 393:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -7829,10 +8342,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 372:
+      case 394:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82:
@@ -7876,10 +8389,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 373:
+      case 395:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x89:
@@ -7895,21 +8408,32 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 374:
+      case 396:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0x96:
+          case 0x80...0x9F:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 375:
+      case 397:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xB9:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 398:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA1:
@@ -7919,21 +8443,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 376:
+      case 399:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA0:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 377:
+      case 400:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
@@ -7941,10 +8467,23 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 378:
+      case 401:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x8A:
+            fallthrough
+          case 0x90...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 402:
         yych = yyinput[yycursor]
         switch yych {
           case 0xBD:
@@ -7952,10 +8491,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 379:
+      case 403:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x90:
@@ -7965,10 +8504,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 380:
+      case 404:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
@@ -7978,10 +8517,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 381:
+      case 405:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9D:
@@ -7993,10 +8532,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 382:
+      case 406:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -8016,10 +8555,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 383:
+      case 407:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -8029,10 +8568,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 384:
+      case 408:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA7:
@@ -8042,27 +8581,68 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 385:
+      case 409:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0xA9:
+            fallthrough
+          case 0xAB...0xAC:
+            fallthrough
+          case 0xB0...0xB1:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 410:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xBD...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 411:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x90:
+            fallthrough
+          case 0xB0...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 412:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
             fallthrough
-          case 0xA6...0xAF:
+          case 0xA6...0xB5:
             fallthrough
           case 0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 386:
+      case 413:
         yych = yyinput[yycursor]
         switch yych {
+          case 0x82:
+            fallthrough
           case 0x90...0xA8:
             fallthrough
           case 0xB0...0xB9:
@@ -8070,10 +8650,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 387:
+      case 414:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB4:
@@ -8083,13 +8663,13 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 388:
+      case 415:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x84...0x86:
+          case 0x84...0x87:
             fallthrough
           case 0x90...0xB3:
             fallthrough
@@ -8098,42 +8678,53 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 389:
+      case 416:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
             fallthrough
           case 0x89...0x8C:
             fallthrough
-          case 0x90...0x9A:
+          case 0x8E...0x9A:
             fallthrough
           case 0x9C:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 390:
+      case 417:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x91:
             fallthrough
           case 0x93...0xB7:
             fallthrough
-          case 0xBE:
+          case 0xBE...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 391:
+      case 418:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x81:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 419:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAA:
@@ -8143,10 +8734,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 392:
+      case 420:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -8168,10 +8759,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 393:
+      case 421:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -8193,25 +8784,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 394:
+      case 422:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
             fallthrough
           case 0x90...0x99:
             fallthrough
-          case 0x9E...0x9F:
+          case 0x9E...0xA1:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 395:
+      case 423:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x85:
@@ -8223,10 +8814,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 396:
+      case 424:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB5:
@@ -8236,10 +8827,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 397:
+      case 425:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -8249,10 +8840,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 398:
+      case 426:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -8264,10 +8855,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 399:
+      case 427:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9A:
@@ -8279,10 +8870,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 400:
+      case 428:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xA9:
@@ -8292,10 +8883,46 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 401:
+      case 429:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x86:
+            fallthrough
+          case 0x89:
+            fallthrough
+          case 0x8C...0x93:
+            fallthrough
+          case 0x95...0x96:
+            fallthrough
+          case 0x98...0xB5:
+            fallthrough
+          case 0xB7...0xB8:
+            fallthrough
+          case 0xBB...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 430:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x83:
+            fallthrough
+          case 0x90...0x99:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 431:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x97:
@@ -8307,10 +8934,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 402:
+      case 432:
         yych = yyinput[yycursor]
         switch yych {
           case 0x87:
@@ -8320,23 +8947,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 403:
+      case 433:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x99:
             fallthrough
           case 0x9D:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 404:
+      case 434:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -8348,10 +8977,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 405:
+      case 435:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80:
@@ -8363,10 +8992,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 406:
+      case 436:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8F:
@@ -8378,10 +9007,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 407:
+      case 437:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -8399,10 +9028,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 408:
+      case 438:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -8418,10 +9047,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 409:
+      case 439:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8E:
@@ -8435,23 +9064,79 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 410:
+      case 440:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xA0...0xB6:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 441:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x90:
+            fallthrough
+          case 0x92...0xBA:
+            fallthrough
+          case 0xBE...0xBF:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 442:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x82:
+            fallthrough
+          case 0x90...0x99:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 443:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x9E:
             fallthrough
           case 0xA0...0xA9:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 411:
+      case 444:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x80...0x89:
+            fallthrough
+          case 0x90...0xAD:
+            fallthrough
+          case 0xB0...0xB4:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 445:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x83:
@@ -8465,10 +9150,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 412:
+      case 446:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8A:
@@ -8478,10 +9163,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 413:
+      case 447:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x87:
@@ -8491,10 +9176,25 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 414:
+      case 448:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xA0...0xA1:
+            fallthrough
+          case 0xA3...0xA4:
+            fallthrough
+          case 0xB0...0xB1:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 449:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x88:
@@ -8506,10 +9206,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 415:
+      case 450:
         yych = yyinput[yycursor]
         switch yych {
           case 0xA5...0xA9:
@@ -8521,10 +9221,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 416:
+      case 451:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x82:
@@ -8536,10 +9236,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 417:
+      case 452:
         yych = yyinput[yycursor]
         switch yych {
           case 0x82...0x84:
@@ -8547,10 +9247,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 418:
+      case 453:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x82:
@@ -8562,10 +9262,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 419:
+      case 454:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xB6:
@@ -8575,10 +9275,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 420:
+      case 455:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAC:
@@ -8588,10 +9288,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 421:
+      case 456:
         yych = yyinput[yycursor]
         switch yych {
           case 0x84:
@@ -8603,10 +9303,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 422:
+      case 457:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x86:
@@ -8618,14 +9318,27 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
           case 0xA3...0xA4:
             fallthrough
           case 0xA6...0xAA:
+            fallthrough
+          case 0xB0...0xBF:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 423:
+      case 458:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x8F:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 459:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0xAC:
@@ -8635,10 +9348,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 424:
+      case 460:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x89:
@@ -8648,21 +9361,32 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 425:
+      case 461:
         yych = yyinput[yycursor]
         switch yych {
-          case 0x80...0xB9:
+          case 0x90...0xAE:
             yycursor += 1
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 426:
+      case 462:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0x90...0xB9:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
+            continue yyl
+        }
+      case 463:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x84:
@@ -8672,10 +9396,10 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
             continue yyl
         }
-      case 427:
+      case 464:
         yych = yyinput[yycursor]
         switch yych {
           case 0x80...0x8B:
@@ -8685,7 +9409,18 @@ func lex(_ yyinput: UnsafePointer<UInt8>) -> Bool {
             yystate = 3
             continue yyl
           default:
-            yystate = 36
+            yystate = 35
+            continue yyl
+        }
+      case 465:
+        yych = yyinput[yycursor]
+        switch yych {
+          case 0xB0...0xB9:
+            yycursor += 1
+            yystate = 3
+            continue yyl
+          default:
+            yystate = 35
             continue yyl
         }
       default: fatalError("internal lexer error")

@@ -86,28 +86,29 @@ yy10:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
 		case 0x82: goto yy20;
+		case 0x83: goto yy21;
 		default: goto yy2;
 	}
 yy11:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xA0: goto yy21;
+		case 0xA0: goto yy22;
 		default: goto yy2;
 	}
 yy12:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0xB7: goto yy22;
-		case 0xB9: goto yy23;
-		case 0xBC: goto yy24;
-		case 0xBF: goto yy25;
+		case 0xB7: goto yy23;
+		case 0xB9: goto yy24;
+		case 0xBC: goto yy25;
+		case 0xBF: goto yy26;
 		default: goto yy2;
 	}
 yy13:
 	yych = *(YYMARKER = ++YYCURSOR);
 	switch (yych) {
-		case 0x91: goto yy26;
-		case 0x9E: goto yy27;
+		case 0x91: goto yy27;
+		case 0x9E: goto yy28;
 		default: goto yy2;
 	}
 yy14:
@@ -185,28 +186,34 @@ yy20:
 yy21:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xB8: goto yy3;
+		case 0x80: goto yy3;
 		default: goto yy15;
 	}
 yy22:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xBC: goto yy3;
+		case 0xB8: goto yy3;
 		default: goto yy15;
 	}
 yy23:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0xA9: goto yy3;
+		case 0xBC: goto yy3;
 		default: goto yy15;
 	}
 yy24:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x84: goto yy3;
+		case 0xA9: goto yy3;
 		default: goto yy15;
 	}
 yy25:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x84: goto yy3;
+		default: goto yy15;
+	}
+yy26:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xA0:
@@ -215,20 +222,20 @@ yy25:
 		case 0xA6: goto yy3;
 		default: goto yy15;
 	}
-yy26:
-	yych = *++YYCURSOR;
-	switch (yych) {
-		case 0xBF: goto yy28;
-		default: goto yy15;
-	}
 yy27:
 	yych = *++YYCURSOR;
 	switch (yych) {
-		case 0x8B: goto yy18;
-		case 0xB2: goto yy29;
+		case 0xBF: goto yy29;
 		default: goto yy15;
 	}
 yy28:
+	yych = *++YYCURSOR;
+	switch (yych) {
+		case 0x8B: goto yy18;
+		case 0xB2: goto yy30;
+		default: goto yy15;
+	}
+yy29:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0x9D:
@@ -237,7 +244,7 @@ yy28:
 		case 0xA0: goto yy3;
 		default: goto yy15;
 	}
-yy29:
+yy30:
 	yych = *++YYCURSOR;
 	switch (yych) {
 		case 0xB0: goto yy3;
@@ -247,7 +254,7 @@ yy29:
 #line 15 "encodings/unicode_group_Sc_8_encoding_policy_substitute.re"
 
 }
-static const unsigned int chars_Sc [] = {0x24,0x24,  0xa2,0xa5,  0x58f,0x58f,  0x60b,0x60b,  0x7fe,0x7ff,  0x9f2,0x9f3,  0x9fb,0x9fb,  0xaf1,0xaf1,  0xbf9,0xbf9,  0xe3f,0xe3f,  0x17db,0x17db,  0x20a0,0x20bf,  0xa838,0xa838,  0xfdfc,0xfdfc,  0xfe69,0xfe69,  0xff04,0xff04,  0xffe0,0xffe1,  0xffe5,0xffe6,  0x11fdd,0x11fe0,  0x1e2ff,0x1e2ff,  0x1ecb0,0x1ecb0,  0x0,0x0};
+static const unsigned int chars_Sc [] = {0x24,0x24,  0xa2,0xa5,  0x58f,0x58f,  0x60b,0x60b,  0x7fe,0x7ff,  0x9f2,0x9f3,  0x9fb,0x9fb,  0xaf1,0xaf1,  0xbf9,0xbf9,  0xe3f,0xe3f,  0x17db,0x17db,  0x20a0,0x20c0,  0xa838,0xa838,  0xfdfc,0xfdfc,  0xfe69,0xfe69,  0xff04,0xff04,  0xffe0,0xffe1,  0xffe5,0xffe6,  0x11fdd,0x11fe0,  0x1e2ff,0x1e2ff,  0x1ecb0,0x1ecb0,  0x0,0x0};
 static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -260,7 +267,7 @@ static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int range
 
 int main ()
 {
-	unsigned int * buffer_Sc = new unsigned int [252];
+	unsigned int * buffer_Sc = new unsigned int [256];
 	YYCTYPE * s = (YYCTYPE *) buffer_Sc;
 	unsigned int buffer_len = encode_utf8 (chars_Sc, sizeof (chars_Sc) / sizeof (unsigned int), buffer_Sc);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */

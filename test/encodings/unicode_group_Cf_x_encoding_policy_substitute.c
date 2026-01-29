@@ -14,7 +14,7 @@ Cf:
 {
 	YYCTYPE yych;
 	yych = *YYCURSOR;
-	if (yych <= 0x202E) {
+	if (yych <= 0x2029) {
 		if (yych <= 0x070E) {
 			if (yych <= 0x0605) {
 				if (yych == 0x00AD) goto yy3;
@@ -27,23 +27,30 @@ Cf:
 				}
 			}
 		} else {
-			if (yych <= 0x180D) {
-				if (yych <= 0x070F) goto yy3;
-				if (yych == 0x08E2) goto yy3;
-			} else {
-				if (yych <= 0x200A) {
-					if (yych <= 0x180E) goto yy3;
+			if (yych <= 0x08E2) {
+				if (yych <= 0x088F) {
+					if (yych <= 0x070F) goto yy3;
 				} else {
+					if (yych <= 0x0891) goto yy3;
+					if (yych >= 0x08E2) goto yy3;
+				}
+			} else {
+				if (yych <= 0x180E) {
+					if (yych >= 0x180E) goto yy3;
+				} else {
+					if (yych <= 0x200A) goto yy1;
 					if (yych <= 0x200F) goto yy3;
-					if (yych >= 0x202A) goto yy3;
 				}
 			}
 		}
 	} else {
 		if (yych <= 0xD82E) {
 			if (yych <= 0x206F) {
-				if (yych <= 0x205F) goto yy1;
-				if (yych != 0x2065) goto yy3;
+				if (yych <= 0x205F) {
+					if (yych <= 0x202E) goto yy3;
+				} else {
+					if (yych != 0x2065) goto yy3;
+				}
 			} else {
 				if (yych <= 0xD804) {
 					if (yych >= 0xD804) goto yy4;
@@ -74,12 +81,12 @@ yy1:
 yy2:
 #line 14 "encodings/unicode_group_Cf_x_encoding_policy_substitute.re"
 	{ return YYCURSOR == limit; }
-#line 78 "encodings/unicode_group_Cf_x_encoding_policy_substitute.c"
+#line 85 "encodings/unicode_group_Cf_x_encoding_policy_substitute.c"
 yy3:
 	++YYCURSOR;
 #line 13 "encodings/unicode_group_Cf_x_encoding_policy_substitute.re"
 	{ goto Cf; }
-#line 83 "encodings/unicode_group_Cf_x_encoding_policy_substitute.c"
+#line 90 "encodings/unicode_group_Cf_x_encoding_policy_substitute.c"
 yy4:
 	yych = *++YYCURSOR;
 	if (yych == 0xDCBD) goto yy3;
@@ -88,7 +95,7 @@ yy4:
 yy5:
 	yych = *++YYCURSOR;
 	if (yych <= 0xDC2F) goto yy2;
-	if (yych <= 0xDC38) goto yy3;
+	if (yych <= 0xDC3F) goto yy3;
 	goto yy2;
 yy6:
 	yych = *++YYCURSOR;
@@ -110,7 +117,7 @@ yy8:
 #line 15 "encodings/unicode_group_Cf_x_encoding_policy_substitute.re"
 
 }
-static const unsigned int chars_Cf [] = {0xad,0xad,  0x600,0x605,  0x61c,0x61c,  0x6dd,0x6dd,  0x70f,0x70f,  0x8e2,0x8e2,  0x180e,0x180e,  0x200b,0x200f,  0x202a,0x202e,  0x2060,0x2064,  0x2066,0x206f,  0xfeff,0xfeff,  0xfff9,0xfffb,  0x110bd,0x110bd,  0x110cd,0x110cd,  0x13430,0x13438,  0x1bca0,0x1bca3,  0x1d173,0x1d17a,  0xe0001,0xe0001,  0xe0020,0xe007f,  0x0,0x0};
+static const unsigned int chars_Cf [] = {0xad,0xad,  0x600,0x605,  0x61c,0x61c,  0x6dd,0x6dd,  0x70f,0x70f,  0x890,0x891,  0x8e2,0x8e2,  0x180e,0x180e,  0x200b,0x200f,  0x202a,0x202e,  0x2060,0x2064,  0x2066,0x206f,  0xfeff,0xfeff,  0xfff9,0xfffb,  0x110bd,0x110bd,  0x110cd,0x110cd,  0x13430,0x1343f,  0x1bca0,0x1bca3,  0x1d173,0x1d17a,  0xe0001,0xe0001,  0xe0020,0xe007f,  0x0,0x0};
 static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
 {
 	unsigned int * const s_start = s;
@@ -130,7 +137,7 @@ static unsigned int encode_utf16 (const unsigned int * ranges, unsigned int rang
 
 int main ()
 {
-	unsigned int * buffer_Cf = new unsigned int [324];
+	unsigned int * buffer_Cf = new unsigned int [342];
 	YYCTYPE * s = (YYCTYPE *) buffer_Cf;
 	unsigned int buffer_len = encode_utf16 (chars_Cf, sizeof (chars_Cf) / sizeof (unsigned int), buffer_Cf);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
