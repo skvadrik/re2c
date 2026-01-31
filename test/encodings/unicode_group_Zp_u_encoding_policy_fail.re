@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Zp:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Zp = [\u2029-\u2029];
+		Zp = [\u2029];
 		Zp { goto Zp; }
 		* { return YYCURSOR == limit; }
 	*/

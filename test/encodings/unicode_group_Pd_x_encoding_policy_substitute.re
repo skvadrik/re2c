@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Pd:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Pd = [\x2d-\x2d\u058a-\u058a\u05be-\u05be\u1400-\u1400\u1806-\u1806\u2010-\u2015\u2e17-\u2e17\u2e1a-\u2e1a\u2e3a-\u2e3b\u2e40-\u2e40\u2e5d-\u2e5d\u301c-\u301c\u3030-\u3030\u30a0-\u30a0\ufe31-\ufe32\ufe58-\ufe58\ufe63-\ufe63\uff0d-\uff0d\U00010ead-\U00010ead];
+		Pd = [\x2d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a-\u2e3b\u2e40\u2e5d\u301c\u3030\u30a0\ufe31-\ufe32\ufe58\ufe63\uff0d\U00010ead];
 		Pd { goto Pd; }
 		* { return YYCURSOR == limit; }
 	*/

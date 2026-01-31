@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Sk:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Sk = [\x5e-\x5e\x60-\x60\xa8-\xa8\xaf-\xaf\xb4-\xb4\xb8-\xb8\u02c2-\u02c5\u02d2-\u02df\u02e5-\u02eb\u02ed-\u02ed\u02ef-\u02ff\u0375-\u0375\u0384-\u0385\u0888-\u0888\u1fbd-\u1fbd\u1fbf-\u1fc1\u1fcd-\u1fcf\u1fdd-\u1fdf\u1fed-\u1fef\u1ffd-\u1ffe\u309b-\u309c\ua700-\ua716\ua720-\ua721\ua789-\ua78a\uab5b-\uab5b\uab6a-\uab6b\ufbb2-\ufbc2\uff3e-\uff3e\uff40-\uff40\uffe3-\uffe3\U0001f3fb-\U0001f3ff];
+		Sk = [\x5e\x60\xa8\xaf\xb4\xb8\u02c2-\u02c5\u02d2-\u02df\u02e5-\u02eb\u02ed\u02ef-\u02ff\u0375\u0384-\u0385\u0888\u1fbd\u1fbf-\u1fc1\u1fcd-\u1fcf\u1fdd-\u1fdf\u1fed-\u1fef\u1ffd-\u1ffe\u309b-\u309c\ua700-\ua716\ua720-\ua721\ua789-\ua78a\uab5b\uab6a-\uab6b\ufbb2-\ufbc2\uff3e\uff40\uffe3\U0001f3fb-\U0001f3ff];
 		Sk { goto Sk; }
 		* { return YYCURSOR == limit; }
 	*/

@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Pi:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Pi = [\xab-\xab\u2018-\u2018\u201b-\u201c\u201f-\u201f\u2039-\u2039\u2e02-\u2e02\u2e04-\u2e04\u2e09-\u2e09\u2e0c-\u2e0c\u2e1c-\u2e1c\u2e20-\u2e20];
+		Pi = [\xab\u2018\u201b-\u201c\u201f\u2039\u2e02\u2e04\u2e09\u2e0c\u2e1c\u2e20];
 		Pi { goto Pi; }
 		* { return YYCURSOR == limit; }
 	*/

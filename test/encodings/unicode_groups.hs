@@ -40,11 +40,9 @@ show_int c = case c of
 
 
 show_range_re2c :: (Int, Int) -> String
-show_range_re2c (l, h) = concat
-    [ show_int l
-    , "-"
-    , show_int h
-    ]
+show_range_re2c (l, h) = case l == h of
+    True  -> show_int l
+    False -> concat [show_int l, "-", show_int h]
 
 
 show_range_c :: (Int, Int) -> String

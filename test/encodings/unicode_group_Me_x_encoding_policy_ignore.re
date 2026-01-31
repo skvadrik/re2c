@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Me:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Me = [\u0488-\u0489\u1abe-\u1abe\u20dd-\u20e0\u20e2-\u20e4\ua670-\ua672];
+		Me = [\u0488-\u0489\u1abe\u20dd-\u20e0\u20e2-\u20e4\ua670-\ua672];
 		Me { goto Me; }
 		* { return YYCURSOR == limit; }
 	*/

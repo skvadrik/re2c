@@ -9,7 +9,7 @@ bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
 Sm:
 	/*!re2c
 		re2c:yyfill:enable = 0;
-		Sm = [\x2b-\x2b\x3c-\x3e\x7c-\x7c\x7e-\x7e\xac-\xac\xb1-\xb1\xd7-\xd7\xf7-\xf7\u03f6-\u03f6\u0606-\u0608\u2044-\u2044\u2052-\u2052\u207a-\u207c\u208a-\u208c\u2118-\u2118\u2140-\u2144\u214b-\u214b\u2190-\u2194\u219a-\u219b\u21a0-\u21a0\u21a3-\u21a3\u21a6-\u21a6\u21ae-\u21ae\u21ce-\u21cf\u21d2-\u21d2\u21d4-\u21d4\u21f4-\u22ff\u2320-\u2321\u237c-\u237c\u239b-\u23b3\u23dc-\u23e1\u25b7-\u25b7\u25c1-\u25c1\u25f8-\u25ff\u266f-\u266f\u27c0-\u27c4\u27c7-\u27e5\u27f0-\u27ff\u2900-\u2982\u2999-\u29d7\u29dc-\u29fb\u29fe-\u2aff\u2b30-\u2b44\u2b47-\u2b4c\ufb29-\ufb29\ufe62-\ufe62\ufe64-\ufe66\uff0b-\uff0b\uff1c-\uff1e\uff5c-\uff5c\uff5e-\uff5e\uffe2-\uffe2\uffe9-\uffec\U0001d6c1-\U0001d6c1\U0001d6db-\U0001d6db\U0001d6fb-\U0001d6fb\U0001d715-\U0001d715\U0001d735-\U0001d735\U0001d74f-\U0001d74f\U0001d76f-\U0001d76f\U0001d789-\U0001d789\U0001d7a9-\U0001d7a9\U0001d7c3-\U0001d7c3\U0001eef0-\U0001eef1];
+		Sm = [\x2b\x3c-\x3e\x7c\x7e\xac\xb1\xd7\xf7\u03f6\u0606-\u0608\u2044\u2052\u207a-\u207c\u208a-\u208c\u2118\u2140-\u2144\u214b\u2190-\u2194\u219a-\u219b\u21a0\u21a3\u21a6\u21ae\u21ce-\u21cf\u21d2\u21d4\u21f4-\u22ff\u2320-\u2321\u237c\u239b-\u23b3\u23dc-\u23e1\u25b7\u25c1\u25f8-\u25ff\u266f\u27c0-\u27c4\u27c7-\u27e5\u27f0-\u27ff\u2900-\u2982\u2999-\u29d7\u29dc-\u29fb\u29fe-\u2aff\u2b30-\u2b44\u2b47-\u2b4c\ufb29\ufe62\ufe64-\ufe66\uff0b\uff1c-\uff1e\uff5c\uff5e\uffe2\uffe9-\uffec\U0001d6c1\U0001d6db\U0001d6fb\U0001d715\U0001d735\U0001d74f\U0001d76f\U0001d789\U0001d7a9\U0001d7c3\U0001eef0-\U0001eef1];
 		Sm { goto Sm; }
 		* { return YYCURSOR == limit; }
 	*/
