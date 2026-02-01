@@ -230,7 +230,7 @@ Block scan(const YYCTYPE * start, const YYCTYPE * const limit, Block blk)
 	}
 	/*!re2c
 		Basic_Latin = [\x00-\x7f];
-		Latin___Supplement = [\x80-\u00ff];
+		Latin___Supplement = [\x80-\xff];
 		Latin_Extended_A = [\u0100-\u017f];
 		Latin_Extended_B = [\u0180-\u024f];
 		IPA_Extensions = [\u0250-\u02af];
@@ -333,8 +333,8 @@ Block scan(const YYCTYPE * start, const YYCTYPE * const limit, Block blk)
 		Small_Form_Variants = [\ufe50-\ufe6f];
 		Arabic_Presentation_Forms_B = [\ufe70-\ufeff];
 		Halfwidth_and_Fullwidth_Forms = [\uff00-\uffef];
-		Specials = [\ufff0-\U0000ffff];
-		All = [\x00-\u074f\u0780-\u07bf\u0900-\u137f\u13a0-\u18af\u1900-\u197f\u19e0-\u19ff\u1d00-\u1d7f\u1e00-\u2bff\u2e80-\u2fdf\u2ff0-\u31bf\u31f0-\ua4cf\uac00-\ud7af\ud800-\ufe0f\ufe20-\U0000ffff];
+		Specials = [\ufff0-\uffff];
+		All = [\x00-\u074f\u0780-\u07bf\u0900-\u137f\u13a0-\u18af\u1900-\u197f\u19e0-\u19ff\u1d00-\u1d7f\u1e00-\u2bff\u2e80-\u2fdf\u2ff0-\u31bf\u31f0-\ua4cf\uac00-\ud7af\ud800-\ufe0f\ufe20-\uffff];
 
 	*/
 Basic_Latin:

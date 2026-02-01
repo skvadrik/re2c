@@ -34,9 +34,9 @@ import           Text.Printf                         (printf)
 
 show_int :: Int -> String
 show_int c = case c of
-    _ | c < 0xFF   -> printf "\\x%02x" c
-    _ | c < 0xFFFF -> printf "\\u%04x" c
-    _              -> printf "\\U%08x" c
+    _ | c <= 0xFF   -> printf "\\x%02x" c
+    _ | c <= 0xFFFF -> printf "\\u%04x" c
+    _               -> printf "\\U%08x" c
 
 
 show_range_re2c :: (Int, Int) -> String
