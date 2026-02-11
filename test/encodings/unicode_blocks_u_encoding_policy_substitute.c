@@ -7,7 +7,7 @@
 enum Block
 {
 	Basic_Latin,
-	Latin___Supplement,
+	Latin_1_Supplement,
 	Latin_Extended_A,
 	Latin_Extended_B,
 	IPA_Extensions,
@@ -122,7 +122,7 @@ Block scan(const YYCTYPE * start, const YYCTYPE * const limit, Block blk)
 	switch (blk)
 	{
 		case Basic_Latin: goto Basic_Latin ;
-		case Latin___Supplement: goto Latin___Supplement ;
+		case Latin_1_Supplement: goto Latin_1_Supplement ;
 		case Latin_Extended_A: goto Latin_Extended_A ;
 		case Latin_Extended_B: goto Latin_Extended_B ;
 		case IPA_Extensions: goto IPA_Extensions ;
@@ -252,7 +252,7 @@ yy1:
 #line 345 "encodings/unicode_blocks_u_encoding_policy_substitute.re"
 
 
-Latin___Supplement:
+Latin_1_Supplement:
 	
 #line 258 "encodings/unicode_blocks_u_encoding_policy_substitute.c"
 {
@@ -263,12 +263,12 @@ Latin___Supplement:
 yy3:
 	++YYCURSOR;
 #line 351 "encodings/unicode_blocks_u_encoding_policy_substitute.re"
-	{ if (YYCURSOR == limit) return Latin___Supplement; else return Error; }
+	{ if (YYCURSOR == limit) return Latin_1_Supplement; else return Error; }
 #line 268 "encodings/unicode_blocks_u_encoding_policy_substitute.c"
 yy4:
 	++YYCURSOR;
 #line 350 "encodings/unicode_blocks_u_encoding_policy_substitute.re"
-	{ goto Latin___Supplement; }
+	{ goto Latin_1_Supplement; }
 #line 273 "encodings/unicode_blocks_u_encoding_policy_substitute.c"
 }
 #line 352 "encodings/unicode_blocks_u_encoding_policy_substitute.re"
@@ -2598,7 +2598,7 @@ yy313:
 
 }
 static const unsigned int chars_Basic_Latin [] = {0x0,0x7f,  0x80,0x80};
-static const unsigned int chars_Latin___Supplement [] = {0x80,0xff,  0x0,0x0};
+static const unsigned int chars_Latin_1_Supplement [] = {0x80,0xff,  0x0,0x0};
 static const unsigned int chars_Latin_Extended_A [] = {0x100,0x17f,  0x0,0x0};
 static const unsigned int chars_Latin_Extended_B [] = {0x180,0x24f,  0x0,0x0};
 static const unsigned int chars_IPA_Extensions [] = {0x250,0x2af,  0x0,0x0};
@@ -2724,14 +2724,14 @@ int main()
 		printf ("test 'Basic_Latin' failed\n");
 	delete [] buffer_Basic_Latin;
 
-	unsigned int * buffer_Latin___Supplement = new unsigned int [129];
-	YYCTYPE * s_Latin___Supplement = (YYCTYPE *) buffer_Latin___Supplement;
-	unsigned int buffer_Latin___Supplement_len = encode_utf32 (chars_Latin___Supplement, sizeof (chars_Latin___Supplement) / sizeof (unsigned int), buffer_Latin___Supplement);
+	unsigned int * buffer_Latin_1_Supplement = new unsigned int [129];
+	YYCTYPE * s_Latin_1_Supplement = (YYCTYPE *) buffer_Latin_1_Supplement;
+	unsigned int buffer_Latin_1_Supplement_len = encode_utf32 (chars_Latin_1_Supplement, sizeof (chars_Latin_1_Supplement) / sizeof (unsigned int), buffer_Latin_1_Supplement);
 	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
-	for (unsigned int i = 0; i < buffer_Latin___Supplement_len; ++i) s_Latin___Supplement[i] = buffer_Latin___Supplement[i];
-	if (scan (s_Latin___Supplement, s_Latin___Supplement + buffer_Latin___Supplement_len, Latin___Supplement) != Latin___Supplement)
-		printf ("test 'Latin___Supplement' failed\n");
-	delete [] buffer_Latin___Supplement;
+	for (unsigned int i = 0; i < buffer_Latin_1_Supplement_len; ++i) s_Latin_1_Supplement[i] = buffer_Latin_1_Supplement[i];
+	if (scan (s_Latin_1_Supplement, s_Latin_1_Supplement + buffer_Latin_1_Supplement_len, Latin_1_Supplement) != Latin_1_Supplement)
+		printf ("test 'Latin_1_Supplement' failed\n");
+	delete [] buffer_Latin_1_Supplement;
 
 	unsigned int * buffer_Latin_Extended_A = new unsigned int [129];
 	YYCTYPE * s_Latin_Extended_A = (YYCTYPE *) buffer_Latin_Extended_A;

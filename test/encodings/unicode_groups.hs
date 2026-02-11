@@ -21,7 +21,7 @@ to stdout in form "test 'XXX' failed".
 
 -}
 
-import           Data.Char                           (ord, isAlpha)
+import           Data.Char                           (ord, isAlpha, isAlphaNum)
 import qualified Data.CharSet                  as CS (fromCharSet, toAscList, union, empty, complement)
 import           Data.CharSet                  as CS (CharSet)
 import           Data.CharSet.Unicode.Category       (Category(..), categories)
@@ -77,7 +77,7 @@ show_charset cs =
 
 
 prettify :: String -> String
-prettify = map (\ c -> if isAlpha c then c else '_')
+prettify = map (\ c -> if isAlphaNum c then c else '_')
 
 
 outer :: CharSet -> Char
@@ -231,6 +231,19 @@ gen_test_category (Category _ name cs _) =
         writeFile file32_fail       (content "unsigned int"   opt32_fail       include_utf32 charset_size_utf32 encode_function_utf32)
 
 
+gen_blocks :: [Block] -> IO ()
+gen_blocks blocks =
+    let f :: Block -> String
+        f (Block name charset) =
+            let name' = prettify name
+                (charset', _) = show_charset charset
+            in name' ++ " = " ++ charset' ++ ";"
+
+        content = unlines $ ["/*!re2c"] ++ map f blocks ++ ["*/"]
+
+    in  writeFile "unicode_blocks.re.inc" content
+
+
 gen_test_blocks :: IO ()
 gen_test_blocks =
     let (blocknames, charsets) = unzip $ map (\ (Block name cs) -> (prettify name, cs)) blocks
@@ -346,4 +359,5 @@ main :: IO ()
 main = do
     gen_categories categories
     mapM_ gen_test_category categories
+    gen_blocks blocks
     gen_test_blocks
