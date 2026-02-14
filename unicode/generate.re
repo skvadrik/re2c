@@ -8,8 +8,15 @@
 #include <string>
 #include <vector>
 
+struct Block {
+    std::string name;
+    uint32_t first;
+    uint32_t last;
+};
+
 using Cat = std::vector<std::pair<uint32_t, uint32_t>>;
 using CatMap = std::map<std::string, Cat>;
+using Blocks = std::vector<Block>;
 
 constexpr uint32_t NONE = ~0u;
 constexpr uint32_t MAX = 0x10FFFF;
@@ -17,14 +24,18 @@ constexpr uint32_t MAX = 0x10FFFF;
 /*!re2c
     re2c:yyfill:enable = 0;
     re2c:YYCTYPE = uint8_t;
+    re2c:YYCURSOR = in.cursor;
+    re2c:YYMARKER = in.marker;
 */
 
 struct Input {
     uint8_t* buffer;
+    uint8_t* cursor;
+    uint8_t* marker;
 
-    Input(): buffer(nullptr) {}
+    Input(): buffer(nullptr), cursor(nullptr), marker(nullptr) {}
 
-    ~Input() { delete(buffer); }
+    ~Input() { free(buffer); }
 
     bool init(const char* fname) {
         FILE* fdata = fopen(fname, "rb");
@@ -42,6 +53,8 @@ struct Input {
         buffer[fdata_size] = 0;
 
         fclose(fdata);
+
+        cursor = buffer;
         return true;
     }
 };
@@ -64,24 +77,32 @@ static void add(Cat& cat, uint32_t first, uint32_t last) {
     }
 }
 
+static uint32_t parse_hex(Input& in) {
+    uint32_t cp = 0;
+    in.marker = in.cursor;
+loop:
+    /*!re2c
+        [0-9] { cp = cp * 16 + (in.cursor[-1] - '0');      goto loop; }
+        [A-F] { cp = cp * 16 + (in.cursor[-1] - 'A' + 10); goto loop; }
+        "" { return in.cursor > in.marker ? cp : NONE; }
+    */
+}
+
 static int gen_categories() {
     Input in;
     if (!in.init("UnicodeData.txt")) return 1;
 
     CatMap categories;
 
-    const uint8_t* YYCURSOR = in.buffer;
-    const uint8_t* YYMARKER;
     const uint8_t* token;
     size_t line = 0;
     std::string cat;
-    uint32_t first = NONE, last = NONE, prev = 0;
+    uint32_t first = NONE, last = NONE, prev = 0, cp;
 
     // Example:
     //   0000;<control>;Cc;0;BN;;;;;N;NULL;;;;
 loop:
-    token = YYCURSOR;
-    uint32_t cp = 0;
+    token = in.cursor;
     /*!re2c
         [\x00] {
             if (prev <= MAX) {
@@ -92,9 +113,9 @@ loop:
         "" { goto cpoint; }
     */
 cpoint:
+    cp = parse_hex(in);
+    if (cp == NONE) goto error;
     /*!re2c
-        [0-9] { cp = cp * 16 + (YYCURSOR[-1] - '0');      goto cpoint; }
-        [A-F] { cp = cp * 16 + (YYCURSOR[-1] - 'A' + 10); goto cpoint; }
         [;] { goto desc; }
         * { goto error; }
     */
@@ -106,9 +127,9 @@ desc:
         * { goto error; }
     */
 cat:
-    token = YYCURSOR;
+    token = in.cursor;
     /*!re2c
-        [A-Z][a-z]? { cat.assign((const char*)token, YYCURSOR - token); goto rest; }
+        [A-Z][a-z]? { cat.assign((const char*)token, in.cursor - token); goto rest; }
         * { goto error; }
     */
 rest:
@@ -130,7 +151,7 @@ rest:
     */
 
 error:
-    fprintf(stderr, "parsing UnicodeData.txt: error at line %lu; '%.*s'\n", line, 100, YYCURSOR);
+    fprintf(stderr, "parsing UnicodeData.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
     return 1;
 
 end:
@@ -164,30 +185,102 @@ end:
         tmp.clear();
     }
 
-    FILE* fcategories = fopen("unicode_categories.re", "wb");
-    if (fcategories == nullptr) {
+    FILE* f = fopen("unicode_categories.re", "wb");
+    if (f == nullptr) {
         fprintf(stderr, "cannot open unicode_categories.re\n");
         return 1;
     }
-
-    fprintf(fcategories, "/*!""re2c\n");
+    fprintf(f, "/*!""re2c\n");
     for (const auto& i : categories) {
-        fprintf(fcategories, "%s = [", i.first.c_str());
+        fprintf(f, "%s = [", i.first.c_str());
         for (const auto& p : i.second) {
-            print_char(fcategories, p.first);
+            print_char(f, p.first);
             if (p.second > p.first) {
-                fprintf(fcategories, "-");
-                print_char(fcategories, p.second);
+                fprintf(f, "-");
+                print_char(f, p.second);
             }
         }
-        fprintf(fcategories, "];\n");
+        fprintf(f, "];\n");
     }
-    fprintf(fcategories, "*/\n");
+    fprintf(f, "*/\n");
+    fclose(f);
 
-    fclose(fcategories);
+    return 0;
+}
+
+static int gen_blocks() {
+    Input in;
+    if (!in.init("Blocks.txt")) return 1;
+
+    Blocks blocks;
+
+    const uint8_t* token;
+    size_t line = 0;
+    std::string block;
+    uint32_t first = NONE, last = NONE;
+
+    // Example:
+    //   # comments
+    //   0000..007F; Basic Latin
+loop:
+    /*!re2c
+        "# EOF\n" { goto end; }
+        ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
+        "" { goto first; }
+    */
+first:
+    first = parse_hex(in);
+    /*!re2c
+        ".." { goto last; }
+        * { goto error; }
+    */
+last:
+    last = parse_hex(in);
+    /*!re2c
+        "; " { goto block; }
+        * { goto error; }
+    */
+block:
+    token = in.cursor;
+    /*!re2c
+        [A-Z][A-Za-z0-9_ -]* [\n] {
+            if (first == NONE || last == NONE) goto error;
+
+            ++line;
+            block.assign((const char*)token, in.cursor - token - 1);
+            for (size_t i = 0; i < block.size(); ++i) {
+                if (!isdigit(block[i]) && !isalpha(block[i])) {
+                    block[i] = '_';
+                }
+            }
+            blocks.push_back({block, first, last});
+            goto loop;
+        }
+        * { goto error; }
+    */
+error:
+    fprintf(stderr, "parsing Blocks.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
+    return 1;
+end:
+    FILE* f = fopen("unicode_blocks.re", "wb");
+    if (f == nullptr) {
+        fprintf(stderr, "cannot open unicode_blocks.re\n");
+        return 1;
+    }
+    fprintf(f, "/*!""re2c\n");
+    for (const Block& b : blocks) {
+        fprintf(f, "%s = [", b.name.c_str());
+        print_char(f, b.first);
+        fprintf(f, "-");
+        print_char(f, b.last);
+        fprintf(f, "];\n");
+    }
+    fprintf(f, "*/\n");
+    fclose(f);
     return 0;
 }
 
 int main() {
     gen_categories();
+    gen_blocks();
 }
