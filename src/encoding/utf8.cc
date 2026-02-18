@@ -12,8 +12,8 @@ namespace utf8 {
 // Now that we have catenation of byte ranges [l1-h1]...[lN-hN], we want to add it to existing
 // range, merging suffixes on the fly.
 static void add_continuous( RangeSuffix*& root, IrAllocator& alc, rune l, rune h, uint32_t n) {
-    uint32_t lcs[MAX_RUNE_LENGTH];
-    uint32_t hcs[MAX_RUNE_LENGTH];
+    uint8_t lcs[MAX_RUNE_LENGTH];
+    uint8_t hcs[MAX_RUNE_LENGTH];
     rune_to_bytes(lcs, l);
     rune_to_bytes(hcs, h);
 
@@ -94,7 +94,7 @@ static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, r
 static Regexp* symbol(RESpec& spec, rune r) {
     RangeMgr& rm = spec.rangemgr;
 
-    uint32_t chars[MAX_RUNE_LENGTH];
+    uint8_t chars[MAX_RUNE_LENGTH];
     const uint32_t chars_count = rune_to_bytes(chars, r);
     Regexp* re = re_sym(spec, rm.sym(chars[0]));
     for (uint32_t i = 1; i < chars_count; ++i) {
@@ -123,17 +123,17 @@ Regexp* range(RESpec& spec, const Range* r) {
     return to_regexp(spec, root);
 }
 
-uint32_t rune_to_bytes(uint32_t* str, rune c) {
+uint8_t rune_to_bytes(uint8_t* str, rune c) {
     // one byte sequence: 0-0x7F => 0xxxxxxx
     if (c <= MAX_1BYTE_RUNE) {
-        str[0] = PREFIX_1BYTE | c;
+        str[0] = static_cast<uint8_t>(PREFIX_1BYTE | c);
         return 1;
     }
 
     // two byte sequence: 0x80-0x7FF => 110xxxxx 10xxxxxx
     if (c <= MAX_2BYTE_RUNE) {
-        str[0] = PREFIX_2BYTE | (c >> 1*SHIFT);
-        str[1] = INFIX        | (c & MASK);
+        str[0] = static_cast<uint8_t>(PREFIX_2BYTE | (c >> 1*SHIFT));
+        str[1] = static_cast<uint8_t>(INFIX        | (c & MASK));
         return 2;
     }
 
@@ -146,17 +146,17 @@ uint32_t rune_to_bytes(uint32_t* str, rune c) {
 
     // three byte sequence: 0x800 - 0xFFFF => 1110xxxx 10xxxxxx 10xxxxxx
     if (c <= MAX_3BYTE_RUNE) {
-        str[0] = PREFIX_3BYTE | (c >> 2*SHIFT);
-        str[1] = INFIX        | ((c >> 1*SHIFT) & MASK);
-        str[2] = INFIX        | (c & MASK);
+        str[0] = static_cast<uint8_t>(PREFIX_3BYTE | (c >> 2*SHIFT));
+        str[1] = static_cast<uint8_t>(INFIX        | ((c >> 1*SHIFT) & MASK));
+        str[2] = static_cast<uint8_t>(INFIX        | (c & MASK));
         return 3;
     }
 
     // four byte sequence (21-bit value): 0x10000 - 0x1FFFFF => 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
-    str[0] = PREFIX_4BYTE | (c >> 3*SHIFT);
-    str[1] = INFIX        | ((c >> 2*SHIFT) & MASK);
-    str[2] = INFIX        | ((c >> 1*SHIFT) & MASK);
-    str[3] = INFIX        | (c & MASK);
+    str[0] = static_cast<uint8_t>(PREFIX_4BYTE | (c >> 3*SHIFT));
+    str[1] = static_cast<uint8_t>(INFIX        | ((c >> 2*SHIFT) & MASK));
+    str[2] = static_cast<uint8_t>(INFIX        | ((c >> 1*SHIFT) & MASK));
+    str[3] = static_cast<uint8_t>(INFIX        | (c & MASK));
     return 4;
 }
 
