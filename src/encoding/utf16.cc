@@ -108,15 +108,15 @@ static void split_by_rune_length(RangeSuffix*& root, IrAllocator& alc, rune l, r
             add_continuous1(root, alc, l, h);
         } else {
             add_continuous1(root, alc, l, MAX_1WORD_RUNE);
-            const uint32_t h_ld = lead_surr(h);
-            const uint32_t h_tr = trail_surr(h);
+            const uint16_t h_ld = lead_surr(h);
+            const uint16_t h_tr = trail_surr(h);
             split_by_continuity(root, alc, MIN_LEAD_SURR, h_ld, MIN_TRAIL_SURR, h_tr);
         }
     } else {
-        const uint32_t l_ld = lead_surr(l);
-        const uint32_t l_tr = trail_surr(l);
-        const uint32_t h_ld = lead_surr(h);
-        const uint32_t h_tr = trail_surr(h);
+        const uint16_t l_ld = lead_surr(l);
+        const uint16_t l_tr = trail_surr(l);
+        const uint16_t h_ld = lead_surr(h);
+        const uint16_t h_tr = trail_surr(h);
         split_by_continuity(root, alc, l_ld, h_ld, l_tr, h_tr);
     }
 }

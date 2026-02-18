@@ -19,13 +19,13 @@ static constexpr uint32_t MIN_TRAIL_SURR = 0xDC00u;
 static constexpr uint32_t MAX_TRAIL_SURR = 0xDFFFu;
 
 // leading surrogate of UTF-16 symbol
-inline constexpr uint32_t lead_surr(rune r) {
-    return ((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR;
+inline constexpr uint16_t lead_surr(rune r) {
+    return static_cast<uint16_t>(((r - 0x10000u) / 0x400u) + MIN_LEAD_SURR);
 }
 
 // trailing surrogate of UTF-16 symbol
-inline constexpr uint32_t trail_surr(rune r) {
-    return ((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR;
+inline constexpr uint16_t trail_surr(rune r) {
+    return static_cast<uint16_t>(((r - 0x10000u) % 0x400u) + MIN_TRAIL_SURR);
 }
 
 Regexp* range(RESpec& spec, const Range* r);
