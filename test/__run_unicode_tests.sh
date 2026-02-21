@@ -28,7 +28,6 @@ for fre in encodings/unicode_{blocks,group_*}_{8,x,u}_encoding_policy_{ignore,su
         -I $srcdir \
         -I $blddir \
         -I $srcdir/src/encoding \
-        -I $srcdir/src/encoding \
         $srcdir/src/encoding/range_suffix.cc \
         $srcdir/src/encoding/utf8.cc \
         $srcdir/src/encoding/utf16.cc \

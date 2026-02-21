@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <algorithm>
+#include <array>
 #include <map>
 #include <string>
 #include <vector>
@@ -224,7 +225,7 @@ static int gen_blocks() {
     //   0000..007F; Basic Latin
 loop:
     /*!re2c
-        "# EOF\n" { goto end; }
+        "# EOF\n" [\x00] { goto end; }
         ([#] [^\x00\n]*)? [\n] { ++line; goto loop; }
         "" { goto first; }
     */
@@ -262,21 +263,135 @@ error:
     fprintf(stderr, "parsing Blocks.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
     return 1;
 end:
+    auto gen_defs = [&](FILE* f) {
+        fprintf(f, "/*!""re2c\n");
+        for (const Block& b : blocks) {
+            fprintf(f, "%s = [", b.name.c_str());
+            print_char(f, b.first);
+            fprintf(f, "-");
+            print_char(f, b.last);
+            fprintf(f, "];\n");
+        }
+        fprintf(f, "*/\n");
+    };
+
     FILE* f = fopen("unicode_blocks.re", "wb");
     if (f == nullptr) {
         fprintf(stderr, "cannot open unicode_blocks.re\n");
         return 1;
     }
-    fprintf(f, "/*!""re2c\n");
-    for (const Block& b : blocks) {
-        fprintf(f, "%s = [", b.name.c_str());
-        print_char(f, b.first);
-        fprintf(f, "-");
-        print_char(f, b.last);
-        fprintf(f, "];\n");
-    }
-    fprintf(f, "*/\n");
+    gen_defs(f);
     fclose(f);
+
+    Cat all;
+    for (const Block& b : blocks) {
+        assert(b.first <= b.last);
+        add(all, b.first, b.last);
+    }
+
+    const std::array<std::string, 3> encodings = {"8", "x", "u"};
+    const std::array<std::string, 3> policies = {"ignore", "substitute", "fail"};
+    for (const std::string& encoding : encodings) {
+        uint32_t max_cunits_per_cpoint = encoding == "8" ? 6 : encoding == "x" ? 2 : 1;
+        uint32_t bits = encoding == "8" ? 8 : encoding == "x" ? 16 : 32;
+        for (const std::string& policy : policies) {
+            std::string fname = "unicode_blocks_" + encoding + "_encoding_policy_" + policy + ".re";
+            FILE* f = fopen(fname.c_str(), "wb");
+            if (f == nullptr) {
+                fprintf(stderr, "cannot open %s\n", fname.c_str());
+                return 1;
+            }
+            fprintf(f, "// re2c $INPUT -o $OUTPUT -%s --encoding-policy %s\n", encoding.c_str(), policy.c_str());
+            fprintf(f, "#include <stdint.h>\n");
+            fprintf(f, "#include <stdio.h>\n");
+            if (encoding == "8") {
+                fprintf(f, "#include \"utf8.h\"\n");
+                fprintf(f, "#define YYCTYPE uint8_t\n");
+            } else if (encoding == "x") {
+                fprintf(f, "#include \"utf16.h\"\n");
+                fprintf(f, "#define YYCTYPE uint16_t\n");
+            } else if (encoding == "u") {
+                fprintf(f, "#define YYCTYPE uint32_t\n");
+            }
+            fprintf(f, "\n");
+            fprintf(f, "enum Block {\n");
+            for (const Block& b : blocks) {
+                fprintf(f, "\t%s,\n", b.name.c_str());
+            }
+            fprintf(f, "\tError\n");
+            fprintf(f, "};\n");
+            fprintf(f, "\n");
+            fprintf(f, "Block scan(const YYCTYPE* start, const YYCTYPE* const limit, Block blk) {\n");
+            fprintf(f, "\t__attribute__((unused)) const YYCTYPE* YYMARKER;\n");
+            fprintf(f, "#define YYCURSOR start\n");
+            fprintf(f, "\tswitch (blk) {\n");
+            for (const Block& b : blocks) {
+                fprintf(f, "\t\tcase %s: goto %s;\n", b.name.c_str(), b.name.c_str());
+            }
+            fprintf(f, "\t\tdefault: return Error;\n");
+            fprintf(f, "\t}\n");
+            gen_defs(f);
+            for (const Block& b : blocks) {
+                const char *s = b.name.c_str();
+                fprintf(f, "%s:\n", s);
+                fprintf(f, "\t/*""!re2c\n");
+                fprintf(f, "\t\tre2c:yyfill:enable = 0;\n");
+                fprintf(f, "\t\t%s { goto %s; }\n", s, s);
+                fprintf(f, "\t\t* { if (YYCURSOR - 1 == limit) return %s; else return Error; }\n", s);
+                fprintf(f, "\t*/\n");
+            }
+            fprintf(f, "}\n");
+            fprintf(f, "\n");
+            for (const Block& b : blocks) {
+                fprintf(f, "static const uint32_t chars_%s[] = {0x%x,0x%x};\n", b.name.c_str(), b.first, b.last);
+            }
+            fprintf(f, "\n");
+            if (encoding == "8") {
+                fprintf(f, "static uint32_t encode_utf8(uint32_t first, uint32_t last, uint8_t* s) {\n");
+                fprintf(f, "\tuint8_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = first; i <= last; ++i) s += re2c::utf8::rune_to_bytes(s, i);\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) *s++ = (first == 0) ? 0xFF : 0;\n", max_cunits_per_cpoint);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            } else if (encoding == "x") {
+                fprintf(f, "static uint32_t encode_utf16(uint32_t first, uint32_t last, uint16_t* s) {\n");
+                fprintf(f, "\tuint16_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = first; i <= last; ++i) {\n");
+                fprintf(f, "\t\tif (i <= re2c::utf16::MAX_1WORD_RUNE) {\n");
+                fprintf(f, "\t\t\t*s++ = i;\n");
+                fprintf(f, "\t\t} else {\n");
+                fprintf(f, "\t\t\t*s++ = re2c::utf16::lead_surr(i);\n");
+                fprintf(f, "\t\t\t*s++ = re2c::utf16::trail_surr(i);\n");
+                fprintf(f, "\t\t}\n");
+                fprintf(f, "\t}\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) *s++ = (first == 0) ? 0xFFFF : 0;\n", max_cunits_per_cpoint);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            } else if (encoding == "u") {
+                fprintf(f, "static uint32_t encode_utf32(uint32_t first, uint32_t last, uint32_t* s) {\n");
+                fprintf(f, "\tuint32_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = first; i <= last; ++i) *s++ = i;\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) *s++ = (first == 0) ? 0xFFFFffff : 0;\n", max_cunits_per_cpoint);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            }
+            fprintf(f, "\n");
+            fprintf(f, "int main() {\n");
+            for (const Block& b : blocks) {
+                const char *s = b.name.c_str();
+                fprintf(f, "\tYYCTYPE *buffer_%s = new YYCTYPE[%u];\n", s, (b.last - b.first + 1) * max_cunits_per_cpoint + max_cunits_per_cpoint);
+                fprintf(f, "\tuint32_t buffer_%s_len = encode_utf%d(chars_%s[0], chars_%s[1], buffer_%s) - %u;\n", s, bits, s, s, s, max_cunits_per_cpoint);
+                fprintf(f, "\tif (scan(buffer_%s, buffer_%s + buffer_%s_len, %s) != %s)\n", s, s, s, s, s);
+                fprintf(f, "\t\tprintf(\"test '%s' failed\\n\");\n", s);
+                fprintf(f, "\tdelete[] buffer_%s;\n", s);
+                fprintf(f, "\n");
+            }
+            fprintf(f, "\treturn 0;\n");
+            fprintf(f, "}\n");
+            fclose(f);
+        }
+    }
+
     return 0;
 }
 

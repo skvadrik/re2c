@@ -24,3 +24,4 @@ clean:
 install: $(GEN)
 	mv unicode_categories.re ../include/unicode_categories.re
 	mv unicode_blocks.re ../include/unicode_blocks.re
+	mv unicode_blocks_{8,x,u}_encoding_policy_{ignore,substitute,fail}.re ../test/encodings
