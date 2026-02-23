@@ -89,11 +89,9 @@ loop:
     */
 }
 
-static int gen_categories() {
+static bool parse_categories(CatMap& categories) {
     Input in;
-    if (!in.init("UnicodeData.txt")) return 1;
-
-    CatMap categories;
+    if (!in.init("UnicodeData.txt")) return false;
 
     const uint8_t* token;
     size_t line = 0;
@@ -153,7 +151,7 @@ rest:
 
 error:
     fprintf(stderr, "parsing UnicodeData.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
-    return 1;
+    return false;
 
 end:
     std::map<std::string, std::vector<std::string>> derived_categories;
@@ -186,11 +184,16 @@ end:
         tmp.clear();
     }
 
+    return true;
+}
+
+static bool gen_include_file_categories(const CatMap& categories) {
     FILE* f = fopen("unicode_categories.re", "wb");
     if (f == nullptr) {
         fprintf(stderr, "cannot open unicode_categories.re\n");
-        return 1;
+        return false;
     }
+
     fprintf(f, "/*!""re2c\n");
     for (const auto& i : categories) {
         fprintf(f, "%s = [", i.first.c_str());
@@ -204,16 +207,14 @@ end:
         fprintf(f, "];\n");
     }
     fprintf(f, "*/\n");
-    fclose(f);
 
-    return 0;
+    fclose(f);
+    return true;
 }
 
-static int gen_blocks() {
+static bool parse_blocks(Blocks& blocks) {
     Input in;
-    if (!in.init("Blocks.txt")) return 1;
-
-    Blocks blocks;
+    if (!in.init("Blocks.txt")) return false;
 
     const uint8_t* token;
     size_t line = 0;
@@ -261,34 +262,35 @@ block:
     */
 error:
     fprintf(stderr, "parsing Blocks.txt: error at line %lu; '%.*s'\n", line, 100, in.cursor);
-    return 1;
+    return false;
 end:
-    auto gen_defs = [&](FILE* f) {
-        fprintf(f, "/*!""re2c\n");
-        for (const Block& b : blocks) {
-            fprintf(f, "%s = [", b.name.c_str());
-            print_char(f, b.first);
-            fprintf(f, "-");
-            print_char(f, b.last);
-            fprintf(f, "];\n");
-        }
-        fprintf(f, "*/\n");
-    };
+    return true;
+}
 
+static void print_block_defs(FILE* f, const Blocks& blocks) {
+    fprintf(f, "/*!""re2c\n");
+    for (const Block& b : blocks) {
+        fprintf(f, "%s = [", b.name.c_str());
+        print_char(f, b.first);
+        fprintf(f, "-");
+        print_char(f, b.last);
+        fprintf(f, "];\n");
+    }
+    fprintf(f, "*/\n");
+}
+
+static bool gen_include_file_blocks(const Blocks& blocks) {
     FILE* f = fopen("unicode_blocks.re", "wb");
     if (f == nullptr) {
         fprintf(stderr, "cannot open unicode_blocks.re\n");
-        return 1;
+        return false;
     }
-    gen_defs(f);
+    print_block_defs(f, blocks);
     fclose(f);
+    return true;
+}
 
-    Cat all;
-    for (const Block& b : blocks) {
-        assert(b.first <= b.last);
-        add(all, b.first, b.last);
-    }
-
+static bool gen_tests_blocks(const Blocks& blocks) {
     const std::array<std::string, 3> encodings = {"8", "x", "u"};
     const std::array<std::string, 3> policies = {"ignore", "substitute", "fail"};
     for (const std::string& encoding : encodings) {
@@ -299,7 +301,7 @@ end:
             FILE* f = fopen(fname.c_str(), "wb");
             if (f == nullptr) {
                 fprintf(stderr, "cannot open %s\n", fname.c_str());
-                return 1;
+                return false;
             }
             fprintf(f, "// re2c $INPUT -o $OUTPUT -%s --encoding-policy %s\n", encoding.c_str(), policy.c_str());
             fprintf(f, "#include <stdint.h>\n");
@@ -330,7 +332,7 @@ end:
             }
             fprintf(f, "\t\tdefault: return Error;\n");
             fprintf(f, "\t}\n");
-            gen_defs(f);
+            print_block_defs(f, blocks);
             for (const Block& b : blocks) {
                 const char *s = b.name.c_str();
                 fprintf(f, "%s:\n", s);
@@ -391,11 +393,16 @@ end:
             fclose(f);
         }
     }
-
-    return 0;
+    return true;
 }
 
 int main() {
-    gen_categories();
-    gen_blocks();
+    CatMap categories;
+    if (!parse_categories(categories)) return 1;
+    if (!gen_include_file_categories(categories)) return 1;
+
+    Blocks blocks;
+    if (!parse_blocks(blocks)) return 1;
+    if (!gen_include_file_blocks(blocks)) return 1;
+    if (!gen_tests_blocks(blocks)) return 1;
 }
