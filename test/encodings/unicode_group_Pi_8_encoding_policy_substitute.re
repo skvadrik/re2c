@@ -1,39 +1,35 @@
 // re2c $INPUT -o $OUTPUT -8 --encoding-policy substitute
+#include <stdint.h>
 #include <stdio.h>
 #include "utf8.h"
-#define YYCTYPE unsigned char
-bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
-{
-	__attribute__((unused)) const YYCTYPE * YYMARKER; // silence compiler warnings when YYMARKER is not used
-#	define YYCURSOR start
+#define YYCTYPE uint8_t
+
+bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {
+	__attribute__((unused)) const YYCTYPE* YYMARKER;
+#define YYCURSOR start
 Pi:
-	/*!re2c
-		re2c:yyfill:enable = 0;
-		Pi = [\xab\u2018\u201b-\u201c\u201f\u2039\u2e02\u2e04\u2e09\u2e0c\u2e1c\u2e20];
+/*!re2c
+	re2c:yyfill:enable = 0;
+	Pi = [\xab\u2018\u201b-\u201c\u201f\u2039\u2e02\u2e04\u2e09\u2e0c\u2e1c\u2e20];
 		Pi { goto Pi; }
-		* { return YYCURSOR == limit; }
+		* { return YYCURSOR - 1 == limit; }
 	*/
 }
-static const unsigned int chars_Pi [] = {0xab,0xab,  0x2018,0x2018,  0x201b,0x201c,  0x201f,0x201f,  0x2039,0x2039,  0x2e02,0x2e02,  0x2e04,0x2e04,  0x2e09,0x2e09,  0x2e0c,0x2e0c,  0x2e1c,0x2e1c,  0x2e20,0x2e20,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
-{
-	unsigned int * const s_start = s;
-	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
-		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
-			s += re2c::utf8::rune_to_bytes (s, j);
-	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
-	return s - s_start + 1;
+
+static const uint32_t chars_Pi[] = {0xab,0xab,0x2018,0x2018,0x201b,0x201c,0x201f,0x201f,0x2039,0x2039,0x2e02,0x2e02,0x2e04,0x2e04,0x2e09,0x2e09,0x2e0c,0x2e0c,0x2e1c,0x2e1c,0x2e20,0x2e20,};
+
+static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {
+	uint8_t* const s0 = s;
+	for (uint32_t i = 0; i < ranges_count; i += 2)
+		for (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) s += re2c::utf8::rune_to_bytes(s, j);
+	for (uint32_t i = 0; i < 6; ++i) s[i] = 0;
+	return s - s0;
 }
 
-int main ()
-{
-	unsigned int * buffer_Pi = new unsigned int [52];
-	YYCTYPE * s = (YYCTYPE *) buffer_Pi;
-	unsigned int buffer_len = encode_utf8 (chars_Pi, sizeof (chars_Pi) / sizeof (unsigned int), buffer_Pi);
-	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
-	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Pi[i];
-	if (!scan (s, s + buffer_len))
-		printf("test 'Pi' failed\n");
-	delete [] buffer_Pi;
+int main() {
+	YYCTYPE* buffer_Pi = new YYCTYPE[78];
+	uint32_t buffer_Pi_len = encode_utf8(chars_Pi, sizeof(chars_Pi) / sizeof(uint32_t), buffer_Pi);
+	if (!scan(buffer_Pi, buffer_Pi + buffer_Pi_len)) printf("test 'Pi' failed\n");
+	delete[] buffer_Pi;
 	return 0;
 }

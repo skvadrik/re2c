@@ -1,39 +1,35 @@
 // re2c $INPUT -o $OUTPUT -8 --encoding-policy substitute
+#include <stdint.h>
 #include <stdio.h>
 #include "utf8.h"
-#define YYCTYPE unsigned char
-bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
-{
-	__attribute__((unused)) const YYCTYPE * YYMARKER; // silence compiler warnings when YYMARKER is not used
-#	define YYCURSOR start
+#define YYCTYPE uint8_t
+
+bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {
+	__attribute__((unused)) const YYCTYPE* YYMARKER;
+#define YYCURSOR start
 Pd:
-	/*!re2c
-		re2c:yyfill:enable = 0;
-		Pd = [\x2d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a-\u2e3b\u2e40\u2e5d\u301c\u3030\u30a0\ufe31-\ufe32\ufe58\ufe63\uff0d\U00010ead];
+/*!re2c
+	re2c:yyfill:enable = 0;
+	Pd = [\x2d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a-\u2e3b\u2e40\u2e5d\u301c\u3030\u30a0\ufe31-\ufe32\ufe58\ufe63\uff0d\U00010ead];
 		Pd { goto Pd; }
-		* { return YYCURSOR == limit; }
+		* { return YYCURSOR - 1 == limit; }
 	*/
 }
-static const unsigned int chars_Pd [] = {0x2d,0x2d,  0x58a,0x58a,  0x5be,0x5be,  0x1400,0x1400,  0x1806,0x1806,  0x2010,0x2015,  0x2e17,0x2e17,  0x2e1a,0x2e1a,  0x2e3a,0x2e3b,  0x2e40,0x2e40,  0x2e5d,0x2e5d,  0x301c,0x301c,  0x3030,0x3030,  0x30a0,0x30a0,  0xfe31,0xfe32,  0xfe58,0xfe58,  0xfe63,0xfe63,  0xff0d,0xff0d,  0x10ead,0x10ead,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
-{
-	unsigned int * const s_start = s;
-	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
-		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
-			s += re2c::utf8::rune_to_bytes (s, j);
-	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
-	return s - s_start + 1;
+
+static const uint32_t chars_Pd[] = {0x2d,0x2d,0x58a,0x58a,0x5be,0x5be,0x1400,0x1400,0x1806,0x1806,0x2010,0x2015,0x2e17,0x2e17,0x2e1a,0x2e1a,0x2e3a,0x2e3b,0x2e40,0x2e40,0x2e5d,0x2e5d,0x301c,0x301c,0x3030,0x3030,0x30a0,0x30a0,0xfe31,0xfe32,0xfe58,0xfe58,0xfe63,0xfe63,0xff0d,0xff0d,0x10ead,0x10ead,};
+
+static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {
+	uint8_t* const s0 = s;
+	for (uint32_t i = 0; i < ranges_count; i += 2)
+		for (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) s += re2c::utf8::rune_to_bytes(s, j);
+	for (uint32_t i = 0; i < 6; ++i) s[i] = 0;
+	return s - s0;
 }
 
-int main ()
-{
-	unsigned int * buffer_Pd = new unsigned int [108];
-	YYCTYPE * s = (YYCTYPE *) buffer_Pd;
-	unsigned int buffer_len = encode_utf8 (chars_Pd, sizeof (chars_Pd) / sizeof (unsigned int), buffer_Pd);
-	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
-	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Pd[i];
-	if (!scan (s, s + buffer_len))
-		printf("test 'Pd' failed\n");
-	delete [] buffer_Pd;
+int main() {
+	YYCTYPE* buffer_Pd = new YYCTYPE[162];
+	uint32_t buffer_Pd_len = encode_utf8(chars_Pd, sizeof(chars_Pd) / sizeof(uint32_t), buffer_Pd);
+	if (!scan(buffer_Pd, buffer_Pd + buffer_Pd_len)) printf("test 'Pd' failed\n");
+	delete[] buffer_Pd;
 	return 0;
 }

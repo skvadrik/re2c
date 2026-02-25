@@ -1,39 +1,35 @@
 // re2c $INPUT -o $OUTPUT -8 --encoding-policy fail
+#include <stdint.h>
 #include <stdio.h>
 #include "utf8.h"
-#define YYCTYPE unsigned char
-bool scan(const YYCTYPE * start, const YYCTYPE * const limit)
-{
-	__attribute__((unused)) const YYCTYPE * YYMARKER; // silence compiler warnings when YYMARKER is not used
-#	define YYCURSOR start
+#define YYCTYPE uint8_t
+
+bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {
+	__attribute__((unused)) const YYCTYPE* YYMARKER;
+#define YYCURSOR start
 Zl:
-	/*!re2c
-		re2c:yyfill:enable = 0;
-		Zl = [\u2028];
+/*!re2c
+	re2c:yyfill:enable = 0;
+	Zl = [\u2028];
 		Zl { goto Zl; }
-		* { return YYCURSOR == limit; }
+		* { return YYCURSOR - 1 == limit; }
 	*/
 }
-static const unsigned int chars_Zl [] = {0x2028,0x2028,  0x0,0x0};
-static unsigned int encode_utf8 (const unsigned int * ranges, unsigned int ranges_count, unsigned int * s)
-{
-	unsigned int * const s_start = s;
-	for (unsigned int i = 0; i < ranges_count - 2; i += 2)
-		for (unsigned int j = ranges[i]; j <= ranges[i + 1]; ++j)
-			s += re2c::utf8::rune_to_bytes (s, j);
-	re2c::utf8::rune_to_bytes (s, ranges[ranges_count - 1]);
-	return s - s_start + 1;
+
+static const uint32_t chars_Zl[] = {0x2028,0x2028,};
+
+static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {
+	uint8_t* const s0 = s;
+	for (uint32_t i = 0; i < ranges_count; i += 2)
+		for (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) s += re2c::utf8::rune_to_bytes(s, j);
+	for (uint32_t i = 0; i < 6; ++i) s[i] = 0;
+	return s - s0;
 }
 
-int main ()
-{
-	unsigned int * buffer_Zl = new unsigned int [8];
-	YYCTYPE * s = (YYCTYPE *) buffer_Zl;
-	unsigned int buffer_len = encode_utf8 (chars_Zl, sizeof (chars_Zl) / sizeof (unsigned int), buffer_Zl);
-	/* convert 32-bit code units to YYCTYPE; reuse the same buffer */
-	for (unsigned int i = 0; i < buffer_len; ++i) s[i] = buffer_Zl[i];
-	if (!scan (s, s + buffer_len))
-		printf("test 'Zl' failed\n");
-	delete [] buffer_Zl;
+int main() {
+	YYCTYPE* buffer_Zl = new YYCTYPE[12];
+	uint32_t buffer_Zl_len = encode_utf8(chars_Zl, sizeof(chars_Zl) / sizeof(uint32_t), buffer_Zl);
+	if (!scan(buffer_Zl, buffer_Zl + buffer_Zl_len)) printf("test 'Zl' failed\n");
+	delete[] buffer_Zl;
 	return 0;
 }
