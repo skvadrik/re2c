@@ -214,110 +214,107 @@ static bool gen_include_file_categories(const CatMap& categories) {
 
 static bool gen_tests_categories(const CatMap& categories) {
     const std::array<std::string, 3> encodings = {"8", "x", "u"};
-    const std::array<std::string, 3> policies = {"ignore", "substitute", "fail"};
     for (const std::string& encoding : encodings) {
         uint32_t max_cunits_per_cpoint = encoding == "8" ? 6 : encoding == "x" ? 2 : 1;
         uint32_t bits = encoding == "8" ? 8 : encoding == "x" ? 16 : 32;
-        for (const std::string& policy : policies) {
-            for (const auto& i: categories) {
-                const char* cat = i.first.c_str();
-                std::string fname = "unicode_group_" + i.first + "_" + encoding + "_encoding_policy_" + policy + ".re";
-                FILE* f = fopen(fname.c_str(), "wb");
-                if (f == nullptr) {
-                    fprintf(stderr, "cannot open %s\n", fname.c_str());
-                    return false;
-                }
-                fprintf(f, "// re2c $INPUT -o $OUTPUT -%s --encoding-policy %s\n", encoding.c_str(), policy.c_str());
-                fprintf(f, "#include <stdint.h>\n");
-                fprintf(f, "#include <stdio.h>\n");
-                if (encoding == "8") {
-                    fprintf(f, "#include \"utf8.h\"\n");
-                    fprintf(f, "#define YYCTYPE uint8_t\n");
-                } else if (encoding == "x") {
-                    fprintf(f, "#include \"utf16.h\"\n");
-                    fprintf(f, "#define YYCTYPE uint16_t\n");
-                } else if (encoding == "u") {
-                    fprintf(f, "#define YYCTYPE uint32_t\n");
-                }
-                fprintf(f, "\n");
-                fprintf(f, "bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {\n");
-                fprintf(f, "\t__attribute__((unused)) const YYCTYPE* YYMARKER;\n");
-                fprintf(f, "#define YYCURSOR start\n");
-                fprintf(f, "%s:\n", cat);
-                fprintf(f, "/*""!re2c\n");
-                fprintf(f, "\tre2c:yyfill:enable = 0;\n");
-                fprintf(f, "\t%s = [", cat);
-                for (const auto& p : i.second) {
-                    print_char(f, p.first);
-                    if (p.second > p.first) {
-                        fprintf(f, "-");
-                        print_char(f, p.second);
-                    }
-                }
-                fprintf(f, "];\n");
-                fprintf(f, "\t\t%s { goto %s; }\n", cat, cat);
-                fprintf(f, "\t\t* { return YYCURSOR - 1 == limit; }\n");
-                fprintf(f, "\t*/\n");
-                fprintf(f, "}\n");
-                fprintf(f, "\n");
-                fprintf(f, "static const uint32_t chars_%s[] = {", cat);
-                for (const auto& p : i.second) {
-                    fprintf(f, "0x%x,0x%x,", p.first, p.second);
-                }
-                fprintf(f, "};\n");
-                fprintf(f, "\n");
-
-                uint32_t cat_size = 0;
-                for (const auto& p : i.second) cat_size += p.second - p.first + 1;
-
-                uint32_t outer = 0;
-                for (const auto& p : i.second) {
-                    if (outer < p.first) break;
-                    outer = p.second + 1;
-                }
-
-                if (encoding == "8") {
-                    fprintf(f, "static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {\n");
-                    fprintf(f, "\tuint8_t* const s0 = s;\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
-                    fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) s += re2c::utf8::rune_to_bytes(s, j);\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
-                    fprintf(f, "\treturn s - s0;\n");
-                    fprintf(f, "}\n");
-                } else if (encoding == "x") {
-                    fprintf(f, "static uint32_t encode_utf16(const uint32_t* ranges, uint32_t ranges_count, uint16_t* s) {\n");
-                    fprintf(f, "\tuint16_t* const s0 = s;\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
-                    fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j)\n");
-                    fprintf(f, "\t\t\tif (j <= re2c::utf16::MAX_1WORD_RUNE) {\n");
-                    fprintf(f, "\t\t\t\t*s++ = j;\n");
-                    fprintf(f, "\t\t\t} else {\n");
-                    fprintf(f, "\t\t\t\t*s++ = re2c::utf16::lead_surr(j);\n");
-                    fprintf(f, "\t\t\t\t*s++ = re2c::utf16::trail_surr(j);\n");
-                    fprintf(f, "\t\t\t}\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
-                    fprintf(f, "\treturn s - s0;\n");
-                    fprintf(f, "}\n");
-                } else if (encoding == "u") {
-                    fprintf(f, "static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint32_t* s) {\n");
-                    fprintf(f, "\tuint32_t* const s0 = s;\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
-                    fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) *s++ = j;\n");
-                    fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
-                    fprintf(f, "\treturn s - s0;\n");
-                    fprintf(f, "}\n");
-                }
-                fprintf(f, "\n");
-                fprintf(f, "int main() {\n");
-                fprintf(f, "\tYYCTYPE* buffer_%s = new YYCTYPE[%u];\n", cat, (cat_size + 1) * max_cunits_per_cpoint);
-                fprintf(f, "\tuint32_t buffer_%s_len = encode_utf%d(chars_%s, sizeof(chars_%s) / sizeof(uint32_t), buffer_%s);\n", cat, bits, cat, cat, cat);
-                fprintf(f, "\tif (!scan(buffer_%s, buffer_%s + buffer_%s_len)) printf(\"test '%s' failed\\n\");\n", cat, cat, cat, cat);
-                fprintf(f, "\tdelete[] buffer_%s;\n", cat);
-                fprintf(f, "\treturn 0;\n");
-                fprintf(f, "}\n");
-
-                fclose(f);
+        for (const auto& i: categories) {
+            const char* cat = i.first.c_str();
+            std::string fname = "unicode_group_" + i.first + "_" + encoding + ".re";
+            FILE* f = fopen(fname.c_str(), "wb");
+            if (f == nullptr) {
+                fprintf(stderr, "cannot open %s\n", fname.c_str());
+                return false;
             }
+            fprintf(f, "// re2c $INPUT -o $OUTPUT -%s\n", encoding.c_str());
+            fprintf(f, "#include <stdint.h>\n");
+            fprintf(f, "#include <stdio.h>\n");
+            if (encoding == "8") {
+                fprintf(f, "#include \"utf8.h\"\n");
+                fprintf(f, "#define YYCTYPE uint8_t\n");
+            } else if (encoding == "x") {
+                fprintf(f, "#include \"utf16.h\"\n");
+                fprintf(f, "#define YYCTYPE uint16_t\n");
+            } else if (encoding == "u") {
+                fprintf(f, "#define YYCTYPE uint32_t\n");
+            }
+            fprintf(f, "\n");
+            fprintf(f, "bool scan(const YYCTYPE* start, const YYCTYPE* const limit) {\n");
+            fprintf(f, "\t__attribute__((unused)) const YYCTYPE* YYMARKER;\n");
+            fprintf(f, "#define YYCURSOR start\n");
+            fprintf(f, "%s:\n", cat);
+            fprintf(f, "/*""!re2c\n");
+            fprintf(f, "\tre2c:yyfill:enable = 0;\n");
+            fprintf(f, "\t%s = [", cat);
+            for (const auto& p : i.second) {
+                print_char(f, p.first);
+                if (p.second > p.first) {
+                    fprintf(f, "-");
+                    print_char(f, p.second);
+                }
+            }
+            fprintf(f, "];\n");
+            fprintf(f, "\t\t%s { goto %s; }\n", cat, cat);
+            fprintf(f, "\t\t* { return YYCURSOR - 1 == limit; }\n");
+            fprintf(f, "\t*/\n");
+            fprintf(f, "}\n");
+            fprintf(f, "\n");
+            fprintf(f, "static const uint32_t chars_%s[] = {", cat);
+            for (const auto& p : i.second) {
+                fprintf(f, "0x%x,0x%x,", p.first, p.second);
+            }
+            fprintf(f, "};\n");
+            fprintf(f, "\n");
+
+            uint32_t cat_size = 0;
+            for (const auto& p : i.second) cat_size += p.second - p.first + 1;
+
+            uint32_t outer = 0;
+            for (const auto& p : i.second) {
+                if (outer < p.first) break;
+                outer = p.second + 1;
+            }
+
+            if (encoding == "8") {
+                fprintf(f, "static uint32_t encode_utf8(const uint32_t* ranges, uint32_t ranges_count, uint8_t* s) {\n");
+                fprintf(f, "\tuint8_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
+                fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) s += re2c::utf8::rune_to_bytes(s, j);\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            } else if (encoding == "x") {
+                fprintf(f, "static uint32_t encode_utf16(const uint32_t* ranges, uint32_t ranges_count, uint16_t* s) {\n");
+                fprintf(f, "\tuint16_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
+                fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j)\n");
+                fprintf(f, "\t\t\tif (j <= re2c::utf16::MAX_1WORD_RUNE) {\n");
+                fprintf(f, "\t\t\t\t*s++ = j;\n");
+                fprintf(f, "\t\t\t} else {\n");
+                fprintf(f, "\t\t\t\t*s++ = re2c::utf16::lead_surr(j);\n");
+                fprintf(f, "\t\t\t\t*s++ = re2c::utf16::trail_surr(j);\n");
+                fprintf(f, "\t\t\t}\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            } else if (encoding == "u") {
+                fprintf(f, "static uint32_t encode_utf32(const uint32_t* ranges, uint32_t ranges_count, uint32_t* s) {\n");
+                fprintf(f, "\tuint32_t* const s0 = s;\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < ranges_count; i += 2)\n");
+                fprintf(f, "\t\tfor (uint32_t j = ranges[i]; j <= ranges[i + 1]; ++j) *s++ = j;\n");
+                fprintf(f, "\tfor (uint32_t i = 0; i < %u; ++i) s[i] = %u;\n", max_cunits_per_cpoint, outer);
+                fprintf(f, "\treturn s - s0;\n");
+                fprintf(f, "}\n");
+            }
+            fprintf(f, "\n");
+            fprintf(f, "int main() {\n");
+            fprintf(f, "\tYYCTYPE* buffer_%s = new YYCTYPE[%u];\n", cat, (cat_size + 1) * max_cunits_per_cpoint);
+            fprintf(f, "\tuint32_t buffer_%s_len = encode_utf%d(chars_%s, sizeof(chars_%s) / sizeof(uint32_t), buffer_%s);\n", cat, bits, cat, cat, cat);
+            fprintf(f, "\tif (!scan(buffer_%s, buffer_%s + buffer_%s_len)) printf(\"test '%s' failed\\n\");\n", cat, cat, cat, cat);
+            fprintf(f, "\tdelete[] buffer_%s;\n", cat);
+            fprintf(f, "\treturn 0;\n");
+            fprintf(f, "}\n");
+
+            fclose(f);
         }
     }
     return true;
